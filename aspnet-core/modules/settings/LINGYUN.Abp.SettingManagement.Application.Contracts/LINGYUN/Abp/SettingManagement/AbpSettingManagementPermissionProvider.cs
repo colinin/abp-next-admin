@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Localization;
+using Volo.Abp.SettingManagement.Localization;
+
+namespace LINGYUN.Abp.SettingManagement
+{
+    public class AbpSettingManagementPermissionProvider : PermissionDefinitionProvider
+    {
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            var settingPermissionGroup = context.AddGroup(AbpSettingManagementPermissions.GroupName, L("Permission:SettingManagement"));
+            
+            settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Default, L("Permission:Settings"));
+            settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Update, L("Permission:Update"));
+        }
+
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<AbpSettingManagementResource>(name);
+        }
+    }
+}

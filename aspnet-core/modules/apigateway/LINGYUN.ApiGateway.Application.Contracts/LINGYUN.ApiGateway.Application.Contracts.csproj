@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\ApiGateway\Localization\ApplicationContracts\en.json" />
+    <None Remove="LINGYUN\ApiGateway\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\ApiGateway\Localization\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="LINGYUN\ApiGateway\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="2.7.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.ApiGateway.Domain.Shared\LINGYUN.ApiGateway.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

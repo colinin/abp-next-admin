@@ -1,0 +1,11 @@
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\bin\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.Contracts.dll
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.csprojAssemblyReference.cache
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.AssemblyInfoInputs.cache
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.AssemblyInfo.cs
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\bin\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.deps.json
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\bin\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.dll
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\bin\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.pdb
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\bin\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.Contracts.pdb
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.csproj.CopyComplete
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.dll
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\Multicolin.Abp.SettingManagement.Application\obj\Debug\netstandard2.0\Multicolin.Abp.SettingManagement.Application.pdb

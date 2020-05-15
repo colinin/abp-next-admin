@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.CAP" Version="3.0.3" />
+    <PackageReference Include="Volo.Abp.Caching" Version="2.7.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.ApiGateway.Domain.Shared\LINGYUN.ApiGateway.Domain.Shared.csproj" />
+  </ItemGroup>
+  
+</Project>

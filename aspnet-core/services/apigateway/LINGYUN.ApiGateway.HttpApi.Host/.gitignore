@@ -1,0 +1,4 @@
+bin
+obj
+Logs
+appsettings.*.json

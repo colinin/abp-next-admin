@@ -1,0 +1,16 @@
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.deps.json
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.dll
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.pdb
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.csprojAssemblyReference.cache
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.AssemblyInfoInputs.cache
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.AssemblyInfo.cs
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.dll
+D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.pdb
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.deps.json
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.dll
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\bin\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.pdb
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.csprojAssemblyReference.cache
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.AssemblyInfoInputs.cache
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.AssemblyInfo.cs
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.dll
+D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\obj\Debug\netstandard2.0\LINGYUN.Abp.PermissionManagement.Application.pdb
