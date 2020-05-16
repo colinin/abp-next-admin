@@ -20,4 +20,3 @@ D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Application.Contracts.csproj.CopyComplete
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Application.Contracts.dll
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Application.Contracts.pdb
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Application.Contracts.csproj.CoreCompileInputs.cache

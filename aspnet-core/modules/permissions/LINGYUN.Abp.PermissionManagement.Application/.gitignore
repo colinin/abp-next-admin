@@ -1,0 +1,7 @@
+bin
+obj
+Logs
+appsettings.*.json
+node_modules
+yarn.lock
+package-lock.json

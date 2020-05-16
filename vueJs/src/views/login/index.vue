@@ -197,13 +197,7 @@ export default class extends Vue {
           this.$router.push({
             path: this.redirect || '/'
           })
-        }).catch(err => {
-          console.log(err)
-          Message({
-            message: err.message,
-            type: 'error',
-            duration: 5 * 1000
-          })
+        }).catch(() => {
           setTimeout(() => {
             this.loading = false
           }, 0.5 * 1000)

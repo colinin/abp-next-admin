@@ -61,6 +61,7 @@ export class PagedAndSortedResultRequestDto implements IPagedResultRequest, ISor
   sorting: string | undefined
 
   constructor() {
+    this.sorting = ''
     this.skipCount = 1
     this.maxResultCount = 30
   }
@@ -185,4 +186,30 @@ export interface IHasDeletionTime extends ISoftDelete {
 export interface ISoftDelete {
   /** 是否已删除 */
   isDeleted: boolean
+}
+
+/** 作用于接口 */
+export interface IScope {
+  /** 作用域 */
+  scope: string
+}
+
+/** 密钥 */
+export interface ISecret {
+  /** 密钥类型 */
+  type: string
+  /** 密钥值 */
+  value: string
+  /** 密钥说明 */
+  description: string | undefined
+  /** 过期日期 */
+  expiration: Date | undefined
+}
+
+/** 令牌 */
+export interface IClaim {
+  /** 类型 */
+  type: string
+  /** 数值 */
+  value: string
 }

@@ -71,7 +71,9 @@ export default {
     apigateway: '网关管理',
     group: '路由分组',
     global: '全局配置',
-    route: '路由配置'
+    route: '路由配置',
+    identityServer: '身份认证服务器',
+    clients: '客户端管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -358,5 +360,33 @@ export default {
     ipBlockedList: 'Ip黑名单',
     authenticationProviderKey: '身份认证程序',
     allowedScopes: '允许认证范围'
+  },
+  identityServer: {
+    otherOpera: '更多操作',
+    enabled: '启用客户端',
+    disbled: '停用客户端',
+    deleteClient: '删除客户端',
+    updateClient: '编辑客户端',
+    updateClientByName: '编辑客户端  {name}',
+    createClient: '创建客户端',
+    clientId: '客户端标识',
+    clientName: '客户端名称',
+    description: '客户端说明',
+    protocolType: '协议类型',
+    requirePkce: '需要Pkce',
+    allowPlainTextPkce: '允许纯文本Pkce',
+    allowOfflineAccess: '允许离线访问',
+    allowedScopes: '允许的作用域',
+    redirectUris: '重定向Uri',
+    allowedGrantTypes: '允许的授权类型',
+    allowAccessTokensViaBrowser: '允许通过浏览器访问令牌',
+    identityTokenLifetime: '身份令牌有效期(s)',
+    accessTokenLifetime: '访问令牌有效期(s)',
+    authorizationCodeLifetime: '授权码有效期(s)',
+    absoluteRefreshTokenLifetime: '绝对刷新令牌有效期(s)',
+    slidingRefreshTokenLifetime: '滚动刷新令牌有效期(s)',
+    deviceCodeLifetime: '设备授权码有效期(s)',
+    clientClaimsPrefix: '客户端声明前缀',
+    basicOptions: '基本设置'
   }
 }

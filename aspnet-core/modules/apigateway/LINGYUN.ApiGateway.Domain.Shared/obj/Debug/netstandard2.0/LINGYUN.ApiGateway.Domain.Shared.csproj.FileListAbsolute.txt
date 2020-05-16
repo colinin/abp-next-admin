@@ -14,4 +14,3 @@ D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Domain.Shared\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Domain.Shared.AssemblyInfo.cs
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Domain.Shared\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Domain.Shared.dll
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Domain.Shared\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Domain.Shared.pdb
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.Domain.Shared\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.Domain.Shared.csproj.CoreCompileInputs.cache

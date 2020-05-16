@@ -352,6 +352,33 @@ export const asyncRoutes: RouteConfig[] = [
         }
       }
     ]
+  },
+  {
+    path: '/identityServer',
+    component: Layout,
+    meta: {
+      title: 'identityServer',
+      icon: 'manager',
+      roles: ['IdentityServer.Clients'],
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: 'clients',
+        component: () => import('@/views/admin/identityServer/client/index.vue'),
+        name: 'clients',
+        meta: {
+          title: 'clients',
+          icon: 'clients',
+          roles: ['IdentityServer.Clients']
+        }
+      }
+    ]
+  },
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "error-page-404" */ '@/views/error-page/404.vue'),
+    meta: { hidden: true }
   }
 ]
 

@@ -46,17 +46,25 @@ service.interceptors.response.use(
         {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'error'
         }).then(() => {
         UserModule.ResetToken()
         location.reload() // To prevent bugs from vue-router
+        return Promise.reject(error)
       })
     }
     if (error.response.status === 429) {
-      console.log(error.response.data)
       Message({
         message: '您的操作过快,请稍后再试!',
         type: 'warning',
+        duration: 5 * 1000
+      })
+      return Promise.reject(error)
+    }
+    if (error.response.status === 400 && error.response.data.error_description) {
+      Message({
+        message: error.response.data.error_description,
+        type: 'error',
         duration: 5 * 1000
       })
       return Promise.reject(error)

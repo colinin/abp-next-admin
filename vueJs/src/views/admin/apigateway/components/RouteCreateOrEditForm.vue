@@ -31,6 +31,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item
+              v-popover:popRouteName
               prop="reRouteName"
               :label="$t('apiGateWay.reRouteName')"
             >
@@ -550,8 +551,8 @@ export default class extends Vue {
     }
   }
 
-  private onSubmitEdit(formName: string) {
-    const routeEditForm = this.$refs[formName] as any
+  private onSubmitEdit() {
+    const routeEditForm = this.$refs.formRoute as any
     routeEditForm.validate(async(valid: boolean) => {
       if (valid) {
         if (this.routeId) {

@@ -70,11 +70,21 @@
       <el-table-column
         :label="$t('apiGateWay.upstreamPathTemplate')"
         prop="upstreamPathTemplate"
-        width="110px"
+        width="250px"
         align="center"
       >
         <template slot-scope="{row}">
           <span>{{ row.upstreamPathTemplate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('apiGateWay.downstreamPathTemplate')"
+        prop="downstreamPathTemplate"
+        width="250px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.downstreamPathTemplate }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -85,7 +95,16 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.upstreamHttpMethod }}</span>
+          <span>
+            <el-tag
+              v-for="(method, index) in row.upstreamHttpMethod"
+              :key="index"
+              :type="method | httpMethodsFilter"
+              style="margin-right: 4px;margin-top: 4px;"
+            >
+              {{ method }}
+            </el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -95,17 +114,15 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.downstreamHostAndPorts }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('apiGateWay.downstreamPathTemplate')"
-        prop="downstreamPathTemplate"
-        width="200px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.downstreamPathTemplate }}</span>
+          <span>
+            <el-tag
+              v-for="(address) in row.downstreamHostAndPorts"
+              :key="address.host"
+              style="margin-right: 4px;margin-top: 4px;"
+            >
+              {{ address.host + ':' + address.port }}
+            </el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -115,7 +132,11 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.downstreamScheme }}</span>
+          <span>
+            <el-tag type="info">
+              {{ row.downstreamScheme }}
+            </el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -208,6 +229,18 @@ import ApiGatewayService, { RouteGroupAppIdDto, ReRouteGetByPagedDto, ReRouteDto
   },
   methods: {
     checkPermission
+  },
+  filters: {
+    httpMethodsFilter(httpMethod: string) {
+      const statusMap: { [key: string]: string } = {
+        GET: '',
+        POST: 'success',
+        PUT: 'warning',
+        PATCH: 'warning',
+        DELETE: 'danger'
+      }
+      return statusMap[httpMethod.toUpperCase()]
+    }
   }
 })
 export default class extends Vue {

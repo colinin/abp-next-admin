@@ -1,0 +1,17 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:IdentityServer": "IdentityServer",
+    "Permissions:Create": "Create",
+    "Permissions:Update": "Update",
+    "Permissions:Enabled": "Enabled",
+    "Permissions:Disabled": "Disabled",
+    "Permissions:Delete": "Delete",
+    "Permissions:Clients": "Clients",
+    "Permissions:Clients:Claims": "Client claim",
+    "ClientIdExisted": "Client id: {0} already exists!",
+    "ClientClaimNotFound": "Client claim: {0} not found!",
+    "ClientSecretNotFound": "Client secret: {0} not found!",
+    "ClientPropertyNotFound": "Client property: {0} not found!"
+  }
+}

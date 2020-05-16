@@ -41,6 +41,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\LINGYUN.ApiGateway.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.IdentityServer.Application\LINGYUN.IdentityServer.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.IdentityServer.HttpApi\LINGYUN.IdentityServer.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\permissions\LINGYUN.Abp.PermissionManagement.Application\LINGYUN.Abp.PermissionManagement.Application.csproj" />
   </ItemGroup>
 

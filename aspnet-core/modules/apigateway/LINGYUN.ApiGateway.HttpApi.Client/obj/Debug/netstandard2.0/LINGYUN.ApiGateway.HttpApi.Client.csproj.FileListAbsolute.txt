@@ -20,7 +20,6 @@ D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\bin\Debug\netstandard2.0\LINGYUN.ApiGateway.Application.Contracts.pdb
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\bin\Debug\netstandard2.0\LINGYUN.ApiGateway.Domain.Shared.pdb
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.HttpApi.Client.csprojAssemblyReference.cache
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.HttpApi.Client.csproj.CoreCompileInputs.cache
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.HttpApi.Client.AssemblyInfoInputs.cache
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.HttpApi.Client.AssemblyInfo.cs
 D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\obj\Debug\netstandard2.0\LINGYUN.ApiGateway.HttpApi.Client.csproj.CopyComplete

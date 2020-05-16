@@ -1,10 +1,12 @@
-﻿using LINGYUN.ApiGateway;
+﻿using IdentityServer4.Validation;
+using LINGYUN.ApiGateway;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -35,6 +37,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
+using LINGYUN.Abp.IdentityServer;
 
 using AbpPermissionManagementApplicationModule = LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule;
 
@@ -42,6 +45,8 @@ namespace AuthServer.Host
 {
     [DependsOn(
         typeof(ApiGatewayApplicationContractsModule),
+        typeof(AbpIdentityServerApplicationModule),
+        typeof(AbpIdentityServerHttpApiModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
@@ -158,8 +163,8 @@ namespace AuthServer.Host
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
             app.UseMultiTenancy();
-            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
+            app.UseIdentityServer();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -167,7 +172,6 @@ namespace AuthServer.Host
             });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
-
             SeedData(context);
         }
 
