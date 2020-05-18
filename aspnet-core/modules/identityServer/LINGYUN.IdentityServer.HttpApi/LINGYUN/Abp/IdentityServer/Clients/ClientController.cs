@@ -44,10 +44,9 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [HttpPut]
-        [Route("{Id}")]
-        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateDto clientUpdate)
+        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput)
         {
-            return await ClientAppService.UpdateAsync(clientUpdate);
+            return await ClientAppService.UpdateAsync(clientUpdateInput);
         }
 
         [HttpPost]

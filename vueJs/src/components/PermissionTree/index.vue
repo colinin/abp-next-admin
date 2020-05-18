@@ -77,14 +77,19 @@ export default class extends Vue {
     }, 10)
   }
 
-  /** 初始化权限树
-   * @param permission 权限数据
-   */
-  private initilzePermissionTree(permission: PermissionDto) {
+  /** 重置权限树 */
+  public resetPermissions() {
     this.permissionTreeData.splice(0)
     this.permissionCheckedKeys.splice(0)
     this.permissionExpandedKeys.splice(0)
     this.permissionEditData.splice(0)
+  }
+
+  /** 初始化权限树
+   * @param permission 权限数据
+   */
+  private initilzePermissionTree(permission: PermissionDto) {
+    this.resetPermissions()
     const permissionTree = new PermissionTree()
     permissionTree.id = permission.entityDisplayName
     permissionTree.label = '权限设置'
@@ -121,46 +126,43 @@ export default class extends Vue {
    * @param permissions 权限列表
    */
   private generatePermission(permissionTree: PermissionTree, permissions: Permission[]) {
+    const parentPermissions = permissions.filter(p => !p.parentName)
+    parentPermissions.forEach((permission) => {
+      const permissionTreeItem = new PermissionTree()
+      permissionTreeItem.id = permission.name
+      permissionTreeItem.label = permission.displayName
+      permissionTreeItem.disabled = this.readonly
+      this.permissionEditData.push(permission)
+      const subPermissions = permissions.filter(p => p.parentName === permission.name)
+      this.generateSubPermission(permissionTreeItem, subPermissions, permissions)
+      permissionTree.children.push(permissionTreeItem)
+    })
+  }
+
+  /** 递归生成子节点权限树
+   * @param permissionTree 父权限树
+   * @param permissions 当前遍历权限节点
+   * @param parentPermissions 当前遍历权限的父权限节点
+   * @description abp框架定义所有子节点都在第三级里面.所以需要传递父节点来判断当前循环的权限的子权限节点
+   */
+  private generateSubPermission(permissionTree: PermissionTree, permissions: Permission[], parentPermissions: Permission[]) {
     permissions.forEach((permission) => {
       const permissionTreeItem = new PermissionTree()
       permissionTreeItem.id = permission.name
       permissionTreeItem.label = permission.displayName
       permissionTreeItem.disabled = this.readonly
-      // 如果拥有此权限,选中树节点
-      // 一个bug,abp返回的权限根节点也是有效的,那这里需要处理下,存在父节点的情况下才会选中
-      if (permission.isGranted) {
-        if (permission.parentName) {
+      this.permissionEditData.push(permission)
+      // 查询当前权限里面的子节点
+      const subPermissions = parentPermissions.filter(p => p.parentName === permission.name)
+      // 生成下一级权限树
+      if (subPermissions.length > 0) {
+        this.generateSubPermission(permissionTreeItem, subPermissions, permissions)
+      } else { // 如果存在下一级权限，那么在下一级循环里面添加选中,避免选中当前根节点
+        if (permission.isGranted) {
           this.permissionCheckedKeys.push(permissionTreeItem.id)
-        } else {
-          // 2020-05-08 如果存在第四级权限，会出现第三级全部未选中bug
-          // 查出该节点下的所有子节点
-          const childrenPermissions = new Array<Permission>()
-          permissions.forEach(p => {
-            if (p.parentName === permission.name) {
-              childrenPermissions.push(p)
-            }
-          })
-          // 如果没有子节点,选中当前节点
-          if (childrenPermissions.length === 0) {
-            this.permissionCheckedKeys.push(permissionTreeItem.id)
-          } else if (childrenPermissions.every(children => children?.isGranted)) {
-            // 如果所有子节点都为授权状态,选中当前节点
-            this.permissionCheckedKeys.push(permissionTreeItem.id)
-          }
         }
       }
-      // 存在父级，则加入父级权限树
-      if (permission.parentName) {
-        const parentTree = permissionTree.children.find(tree => tree.id === permission.parentName)
-        if (parentTree) {
-          permissionTreeItem.parent = parentTree.id
-          parentTree.children.push(permissionTreeItem)
-        }
-      } else {
-        permissionTree.children.push(permissionTreeItem)
-      }
-      // 加入编辑权限列表
-      this.permissionEditData.push({ name: permission.name, isGranted: permission.isGranted })
+      permissionTree.children.push(permissionTreeItem)
     })
   }
 

@@ -80,6 +80,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public int DeviceCodeLifetime { get; set; }
 
+        public string ConcurrencyStamp { get; set; }
+
         public List<ClientScopeDto> AllowedScopes { get; set; }
 
         public List<ClientSecretDto> ClientSecrets { get; set; }

@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         Task<ClientDto> CreateAsync(ClientCreateDto clientCreate);
 
-        Task<ClientDto> UpdateAsync(ClientUpdateDto clientUpdate);
+        Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput);
 
         Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput);
 

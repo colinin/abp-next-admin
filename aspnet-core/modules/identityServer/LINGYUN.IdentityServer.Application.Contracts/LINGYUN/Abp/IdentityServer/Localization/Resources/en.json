@@ -1,14 +1,17 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "Permission:IdentityServer": "IdentityServer",
+    "Permissions:IdentityServer": "IdentityServer",
     "Permissions:Create": "Create",
     "Permissions:Update": "Update",
     "Permissions:Enabled": "Enabled",
     "Permissions:Disabled": "Disabled",
     "Permissions:Delete": "Delete",
+    "Permissions:ManagePermissions": "Permissions",
     "Permissions:Clients": "Clients",
     "Permissions:Clients:Claims": "Client claim",
+    "Permissions:Clients:Secrets": "Client secret",
+    "Permissions:Clients:Properties": "Client property",
     "ClientIdExisted": "Client id: {0} already exists!",
     "ClientClaimNotFound": "Client claim: {0} not found!",
     "ClientSecretNotFound": "Client secret: {0} not found!",

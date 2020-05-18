@@ -1,9 +1,0 @@
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\bin\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.deps.json
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\bin\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.dll
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\bin\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.pdb
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.csprojAssemblyReference.cache
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.AssemblyInfoInputs.cache
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.AssemblyInfo.cs
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.dll
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.pdb
-D:\Projects\MicroService\CRM\Multicolin.MicroService\modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\obj\Debug\netstandard2.0\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj.CoreCompileInputs.cache

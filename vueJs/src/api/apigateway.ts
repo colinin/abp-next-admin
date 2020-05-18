@@ -153,37 +153,37 @@ export class RateLimitRuleOptions {
 }
 
 export class QoSOptions {
-  timeoutValue?: number
-  durationOfBreak?: number
-  exceptionsAllowedBeforeBreaking?: number
+  timeoutValue?: number = 30000
+  durationOfBreak?: number = 60000
+  exceptionsAllowedBeforeBreaking?: number = 50
 }
 
 export class LoadBalancerOptions {
-  type?: string
-  key?: string
-  expiry?: number
+  type?: string = ''
+  key?: string = ''
+  expiry?: number = 0
 }
 
 export class HostAndPort {
-  host!: string
-  port!: number
+  host = ''
+  port?: number = 80
 }
 
 export class HttpHandlerOptions {
-  useProxy!: boolean
-  useTracing!: boolean
-  allowAutoRedirect!: boolean
-  useCookieContainer!: boolean
-  maxConnectionsPerServer!: number
+  useProxy = false
+  useTracing = false
+  allowAutoRedirect = false
+  useCookieContainer = false
+  maxConnectionsPerServer?: number = 0
 }
 
 export class FileCacheOptions {
-  ttlSeconds?: number
-  region?: string
+  ttlSeconds?: number = 0
+  region?: string = ''
 }
 
 export class AuthenticationOptions {
-  authenticationProviderKey!: string
+  authenticationProviderKey?: string = ''
   allowedScopes?: string[]
   constructor() {
     this.allowedScopes = new Array<string>()
@@ -200,10 +200,10 @@ export class SecurityOptions {
 }
 
 export class GlobalConfigurationBase {
-  baseUrl!: string
-  requestIdKey!: string
-  downstreamScheme?: string
-  downstreamHttpVersion?: string
+  baseUrl = ''
+  requestIdKey?: string = ''
+  downstreamScheme?: string = ''
+  downstreamHttpVersion?: string = ''
   qoSOptions!: QoSOptions
   rateLimitOptions!: RateLimitOptions
   httpHandlerOptions!: HttpHandlerOptions
@@ -237,7 +237,7 @@ export class GlobalConfigurationDto extends GlobalConfigurationBase {
 }
 
 export class GlobalConfigurationCreateDto extends GlobalConfigurationBase {
-  appId!: string
+  appId = ''
 }
 
 export class GlobalConfigurationUpdateDto extends GlobalConfigurationBase {
@@ -268,22 +268,22 @@ export class RouteGroupDto extends FullAuditedEntityDto {
 }
 
 export class RouteGroupCreateDto {
-  name!: string
-  appId!: string
-  appName!: string
-  isActive!: boolean
-  appIpAddress?: string
-  description?: string
+  name = ''
+  appId = ''
+  appName = ''
+  isActive = true
+  appIpAddress?: string = ''
+  description?: string = ''
   constructor() {
     this.isActive = true
   }
 }
 
 export class RouteGroupUpdateDto {
-  name!: string
-  appId!: string
-  isActive!: boolean
-  description?: string
+  name = ''
+  appId = ''
+  isActive = true
+  description?: string = ''
 }
 
 export class RouteGroupGetByPagedDto extends PagedAndSortedResultRequestDto {
@@ -296,10 +296,10 @@ export class RouteGroupGetByPagedDto extends PagedAndSortedResultRequestDto {
 }
 
 export class ReRouteBase {
-  reRouteName!: string
-  downstreamPathTemplate!: string
+  reRouteName = ''
+  downstreamPathTemplate = ''
   changeDownstreamPathTemplate?: {[key: string]: string}
-  upstreamPathTemplate!: string
+  upstreamPathTemplate = ''
   upstreamHttpMethod!: string[]
   addHeadersToRequest?: {[key: string]: string}
   upstreamHeaderTransform?: {[key: string]: string}
@@ -307,20 +307,20 @@ export class ReRouteBase {
   addClaimsToRequest?: {[key: string]: string}
   routeClaimsRequirement?: {[key: string]: string}
   addQueriesToRequest?: {[key: string]: string}
-  requestIdKey?: string
-  reRouteIsCaseSensitive?: boolean
-  serviceName?: string
-  serviceNamespace?: string
-  downstreamScheme?: string
+  requestIdKey? = ''
+  reRouteIsCaseSensitive? = true
+  serviceName? = ''
+  serviceNamespace? = ''
+  downstreamScheme? = ''
   downstreamHostAndPorts!: HostAndPort[]
-  upstreamHost!: string
-  key?: string
+  upstreamHost = ''
+  key? = ''
   delegatingHandlers?: string[]
-  priority?: number
-  timeout?: number
-  dangerousAcceptAnyServerCertificateValidator?: boolean
-  downstreamHttpVersion?: string
-  downstreamHttpMethod?: string
+  priority? = 0
+  timeout? = 30000
+  dangerousAcceptAnyServerCertificateValidator?: boolean = true
+  downstreamHttpVersion? = ''
+  downstreamHttpMethod? = ''
   securityOptions?: SecurityOptions
   qoSOptions?: QoSOptions
   rateLimitOptions?: RateLimitRuleOptions
@@ -395,11 +395,11 @@ export class ReRouteDto extends ReRouteBase {
 }
 
 export class ReRouteCreateDto extends ReRouteBase {
-  appId!: string
+  appId = ''
 }
 
 export class ReRouteUpdateDto extends ReRouteBase {
-  reRouteId!: string
+  reRouteId = ''
   concurrencyStamp!: string
 }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.Clients;
 
@@ -7,9 +6,6 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 {
     public class ClientUpdateDto 
     {
-        [Required]
-        public Guid Id { get; set; }
-
         [Required]
         [StringLength(1000)]
         public string ConcurrencyStamp { get; set; }

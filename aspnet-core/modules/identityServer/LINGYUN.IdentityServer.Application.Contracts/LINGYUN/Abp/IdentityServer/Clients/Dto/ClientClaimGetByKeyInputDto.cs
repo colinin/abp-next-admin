@@ -12,5 +12,9 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [Required]
         [StringLength(ClientClaimConsts.TypeMaxLength)]
         public string Type { get; set; }
+
+        [Required]
+        [StringLength(ClientClaimConsts.ValueMaxLength)]
+        public string Value { get; set; }
     }
 }

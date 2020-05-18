@@ -12,10 +12,27 @@
             public const string Delete = Default + ".Delete";
             public const string Enabled = Default + ".Enabled";
             public const string Disabled = Default + ".Disabled";
+            public const string ManagePermissions = Default + ".ManagePermissions";
 
             public static class Claims
             {
                 public const string Default = Clients.Default + ".Claims";
+                public const string Create = Default + ".Create";
+                public const string Update = Default + ".Update";
+                public const string Delete = Default + ".Delete";
+            }
+
+            public static class Secrets
+            {
+                public const string Default = Clients.Default + ".Secrets";
+                public const string Create = Default + ".Create";
+                public const string Update = Default + ".Update";
+                public const string Delete = Default + ".Delete";
+            }
+
+            public static class Properties
+            {
+                public const string Default = Clients.Default + ".Properties";
                 public const string Create = Default + ".Create";
                 public const string Update = Default + ".Update";
                 public const string Delete = Default + ".Delete";

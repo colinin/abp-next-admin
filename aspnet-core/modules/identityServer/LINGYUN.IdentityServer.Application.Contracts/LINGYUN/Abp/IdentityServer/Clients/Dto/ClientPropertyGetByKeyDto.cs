@@ -12,5 +12,9 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [Required]
         [StringLength(ClientPropertyConsts.KeyMaxLength)]
         public string Key { get; set; }
+
+        [Required]
+        [StringLength(ClientPropertyConsts.ValueMaxLength)]
+        public string Value { get; set; }
     }
 }

@@ -193,6 +193,7 @@
         >
           <el-input-tag
             v-model="apiGateWayRoute.upstreamHttpMethod"
+            :type-filter="httpMethodsFilter"
           />
         </el-form-item>
         <el-form-item
@@ -529,6 +530,13 @@ export default class extends Vue {
   private appIdOptions!: RouteGroupAppIdDto[]
 
   private apiGateWayRoute: ReRouteDto
+  private httpMethodsFilter: { [key: string]: string } = {
+    GET: '',
+    POST: 'success',
+    PUT: 'warning',
+    PATCH: 'warning',
+    DELETE: 'danger'
+  }
 
   get isEditRoute() {
     if (this.routeId) {

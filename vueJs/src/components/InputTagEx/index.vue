@@ -108,11 +108,15 @@ export default class extends Vue {
       return false
     }
     tag = tag.trim()
-    if (!regExpValidate[this.validate].test(tag)) {
-      // validate
-      return false
+    if (this.validate !== 'none') {
+      if (regExpValidate[this.validate] && !regExpValidate[this.validate].test(tag)) {
+        return false
+      }
     }
-    if (!this.data.every(d => d[this.label] === tag)) {
+    if (this.data.length === 0) {
+      this.data.push({ [this.label]: tag })
+      return true
+    } else if (!this.data.some(d => d[this.label] === tag)) {
       this.data.push({ [this.label]: tag })
       return true
     }

@@ -84,19 +84,22 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         public virtual async Task DeleteClaimAsync(ClientClaimGetByKeyInputDto clientClaimGetByKey)
         {
             var client = await ClientRepository.GetAsync(clientClaimGetByKey.ClientId);
-            client.Claims.RemoveAll(claim => claim.Type.Equals(clientClaimGetByKey.Type));
+            client.RemoveClaim(clientClaimGetByKey.Value, clientClaimGetByKey.Type);
+            await ClientRepository.UpdateAsync(client);
         }
 
         public virtual async Task DeletePropertyAsync(ClientPropertyGetByKeyDto clientPropertyGetByKey)
         {
             var client = await ClientRepository.GetAsync(clientPropertyGetByKey.ClientId);
-            client.Properties.RemoveAll(property => property.Key.Equals(clientPropertyGetByKey.Key));
+            client.RemoveProperty(clientPropertyGetByKey.Key, clientPropertyGetByKey.Value);
+            await ClientRepository.UpdateAsync(client);
         }
 
         public virtual async Task DeleteSecretAsync(ClientSecretGetByTypeDto clientSecretGetByType)
         {
             var client = await ClientRepository.GetAsync(clientSecretGetByType.ClientId);
-            client.ClientSecrets.RemoveAll(secret => secret.Type.Equals(clientSecretGetByType.Type));
+            client.RemoveSecret(clientSecretGetByType.Value, clientSecretGetByType.Type);
+            await ClientRepository.UpdateAsync(client);
         }
 
         public virtual async Task<ClientDto> GetAsync(ClientGetByIdInputDto clientGetById)
@@ -118,69 +121,69 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 ObjectMapper.Map<List<Client>, List<ClientDto>>(clients));
         }
 
-        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateDto clientUpdate)
+        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput)
         {
-            var client = await ClientRepository.GetAsync(clientUpdate.Id);
+            var client = await ClientRepository.GetAsync(clientUpdateInput.Id);
 
             #region Basic Property
-            client.ConcurrencyStamp = clientUpdate.ConcurrencyStamp;
-            client.ClientId = clientUpdate.ClientId ?? client.ClientId;
-            client.ClientUri = clientUpdate.ClientUri ?? client.ClientUri;
-            client.ClientName = clientUpdate.ClientName ?? client.ClientName;
-            client.AbsoluteRefreshTokenLifetime = clientUpdate.AbsoluteRefreshTokenLifetime
+            client.ConcurrencyStamp = clientUpdateInput.Client.ConcurrencyStamp;
+            client.ClientId = clientUpdateInput.Client.ClientId ?? client.ClientId;
+            client.ClientUri = clientUpdateInput.Client.ClientUri ?? client.ClientUri;
+            client.ClientName = clientUpdateInput.Client.ClientName ?? client.ClientName;
+            client.AbsoluteRefreshTokenLifetime = clientUpdateInput.Client.AbsoluteRefreshTokenLifetime
                 ?? client.AbsoluteRefreshTokenLifetime;
-            client.AccessTokenLifetime = clientUpdate.AccessTokenLifetime
+            client.AccessTokenLifetime = clientUpdateInput.Client.AccessTokenLifetime
                 ?? client.AccessTokenLifetime;
-            client.AccessTokenType = clientUpdate.AccessTokenType ?? client.AccessTokenType;
-            client.AllowAccessTokensViaBrowser = clientUpdate.AllowAccessTokensViaBrowser
+            client.AccessTokenType = clientUpdateInput.Client.AccessTokenType ?? client.AccessTokenType;
+            client.AllowAccessTokensViaBrowser = clientUpdateInput.Client.AllowAccessTokensViaBrowser
                 ?? client.AllowAccessTokensViaBrowser;
-            client.AllowOfflineAccess = clientUpdate.AllowOfflineAccess
+            client.AllowOfflineAccess = clientUpdateInput.Client.AllowOfflineAccess
                 ?? client.AllowOfflineAccess;
-            client.AllowPlainTextPkce = clientUpdate.AllowPlainTextPkce ?? client.AllowPlainTextPkce;
-            client.AllowRememberConsent = clientUpdate.AllowRememberConsent ?? client.AllowRememberConsent;
-            client.AlwaysIncludeUserClaimsInIdToken = clientUpdate.AlwaysIncludeUserClaimsInIdToken
+            client.AllowPlainTextPkce = clientUpdateInput.Client.AllowPlainTextPkce ?? client.AllowPlainTextPkce;
+            client.AllowRememberConsent = clientUpdateInput.Client.AllowRememberConsent ?? client.AllowRememberConsent;
+            client.AlwaysIncludeUserClaimsInIdToken = clientUpdateInput.Client.AlwaysIncludeUserClaimsInIdToken
                 ?? client.AlwaysIncludeUserClaimsInIdToken;
-            client.AlwaysSendClientClaims = clientUpdate.AlwaysSendClientClaims ?? client.AlwaysSendClientClaims;
-            client.AuthorizationCodeLifetime = clientUpdate.AuthorizationCodeLifetime
+            client.AlwaysSendClientClaims = clientUpdateInput.Client.AlwaysSendClientClaims ?? client.AlwaysSendClientClaims;
+            client.AuthorizationCodeLifetime = clientUpdateInput.Client.AuthorizationCodeLifetime
                 ?? client.AuthorizationCodeLifetime;
-            client.BackChannelLogoutSessionRequired = clientUpdate.BackChannelLogoutSessionRequired
+            client.BackChannelLogoutSessionRequired = clientUpdateInput.Client.BackChannelLogoutSessionRequired
                 ?? client.BackChannelLogoutSessionRequired;
 
-            client.BackChannelLogoutUri = clientUpdate.BackChannelLogoutUri
+            client.BackChannelLogoutUri = clientUpdateInput.Client.BackChannelLogoutUri
                 ?? client.BackChannelLogoutUri;
-            client.ClientClaimsPrefix = clientUpdate.ClientClaimsPrefix ?? client.ClientClaimsPrefix;
-            client.ConsentLifetime = clientUpdate.ConsentLifetime ?? client.ConsentLifetime;
-            client.Description = clientUpdate.Description ?? client.Description;
-            client.DeviceCodeLifetime = clientUpdate.DeviceCodeLifetime ?? client.DeviceCodeLifetime;
-            client.Enabled = clientUpdate.Enabled ?? client.Enabled;
-            client.EnableLocalLogin = clientUpdate.EnableLocalLogin ?? client.EnableLocalLogin;
-            client.FrontChannelLogoutSessionRequired = clientUpdate.FrontChannelLogoutSessionRequired
+            client.ClientClaimsPrefix = clientUpdateInput.Client.ClientClaimsPrefix ?? client.ClientClaimsPrefix;
+            client.ConsentLifetime = clientUpdateInput.Client.ConsentLifetime ?? client.ConsentLifetime;
+            client.Description = clientUpdateInput.Client.Description ?? client.Description;
+            client.DeviceCodeLifetime = clientUpdateInput.Client.DeviceCodeLifetime ?? client.DeviceCodeLifetime;
+            client.Enabled = clientUpdateInput.Client.Enabled ?? client.Enabled;
+            client.EnableLocalLogin = clientUpdateInput.Client.EnableLocalLogin ?? client.EnableLocalLogin;
+            client.FrontChannelLogoutSessionRequired = clientUpdateInput.Client.FrontChannelLogoutSessionRequired
                 ?? client.FrontChannelLogoutSessionRequired;
-            client.FrontChannelLogoutUri = clientUpdate.FrontChannelLogoutUri ?? client.FrontChannelLogoutUri;
+            client.FrontChannelLogoutUri = clientUpdateInput.Client.FrontChannelLogoutUri ?? client.FrontChannelLogoutUri;
 
-            client.IdentityTokenLifetime = clientUpdate.IdentityTokenLifetime ?? client.IdentityTokenLifetime;
-            client.IncludeJwtId = clientUpdate.IncludeJwtId ?? client.IncludeJwtId;
-            client.LogoUri = clientUpdate.LogoUri ?? client.LogoUri;
-            client.PairWiseSubjectSalt = clientUpdate.PairWiseSubjectSalt ?? client.PairWiseSubjectSalt;
-            client.ProtocolType = clientUpdate.ProtocolType ?? client.ProtocolType;
-            client.RefreshTokenExpiration = clientUpdate.RefreshTokenExpiration ?? client.RefreshTokenExpiration;
-            client.RefreshTokenUsage = clientUpdate.RefreshTokenUsage ?? client.RefreshTokenUsage;
-            client.RequireClientSecret = clientUpdate.RequireClientSecret ?? client.RequireClientSecret;
-            client.RequireConsent = clientUpdate.RequireConsent ?? client.RequireConsent;
+            client.IdentityTokenLifetime = clientUpdateInput.Client.IdentityTokenLifetime ?? client.IdentityTokenLifetime;
+            client.IncludeJwtId = clientUpdateInput.Client.IncludeJwtId ?? client.IncludeJwtId;
+            client.LogoUri = clientUpdateInput.Client.LogoUri ?? client.LogoUri;
+            client.PairWiseSubjectSalt = clientUpdateInput.Client.PairWiseSubjectSalt ?? client.PairWiseSubjectSalt;
+            client.ProtocolType = clientUpdateInput.Client.ProtocolType ?? client.ProtocolType;
+            client.RefreshTokenExpiration = clientUpdateInput.Client.RefreshTokenExpiration ?? client.RefreshTokenExpiration;
+            client.RefreshTokenUsage = clientUpdateInput.Client.RefreshTokenUsage ?? client.RefreshTokenUsage;
+            client.RequireClientSecret = clientUpdateInput.Client.RequireClientSecret ?? client.RequireClientSecret;
+            client.RequireConsent = clientUpdateInput.Client.RequireConsent ?? client.RequireConsent;
 
-            client.RequirePkce = clientUpdate.RequirePkce ?? client.RequirePkce;
-            client.SlidingRefreshTokenLifetime = clientUpdate.SlidingRefreshTokenLifetime
+            client.RequirePkce = clientUpdateInput.Client.RequirePkce ?? client.RequirePkce;
+            client.SlidingRefreshTokenLifetime = clientUpdateInput.Client.SlidingRefreshTokenLifetime
                 ?? client.SlidingRefreshTokenLifetime;
-            client.UpdateAccessTokenClaimsOnRefresh = clientUpdate.UpdateAccessTokenClaimsOnRefresh
+            client.UpdateAccessTokenClaimsOnRefresh = clientUpdateInput.Client.UpdateAccessTokenClaimsOnRefresh
                 ?? client.UpdateAccessTokenClaimsOnRefresh;
 
-            client.UserCodeType = clientUpdate.UserCodeType ?? client.UserCodeType;
-            client.UserSsoLifetime = clientUpdate.UserSsoLifetime ?? client.UserSsoLifetime;
+            client.UserCodeType = clientUpdateInput.Client.UserCodeType ?? client.UserCodeType;
+            client.UserSsoLifetime = clientUpdateInput.Client.UserSsoLifetime ?? client.UserSsoLifetime;
             #endregion
 
             #region AllowScope
 
-            foreach(var scope in clientUpdate.AllowedScopes)
+            foreach(var scope in clientUpdateInput.Client.AllowedScopes)
             {
                 var clientScope = client.FindScope(scope.Scope);
                 if (clientScope == null)
@@ -193,7 +196,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region RedirectUris
 
-            foreach(var redirect in clientUpdate.RedirectUris)
+            foreach(var redirect in clientUpdateInput.Client.RedirectUris)
             {
                 var clientRedirect = client.FindRedirectUri(redirect.RedirectUri);
                 if(clientRedirect == null)
@@ -206,7 +209,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region AllowedGrantTypes
 
-            foreach (var grantType in clientUpdate.AllowedGrantTypes)
+            foreach (var grantType in clientUpdateInput.Client.AllowedGrantTypes)
             {
                 var clientGrantType = client.FindGrantType(grantType.GrantType);
                 if (clientGrantType == null)
@@ -219,7 +222,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region AllowedCorsOrigins
 
-            foreach (var corgOrigin in clientUpdate.AllowedCorsOrigins)
+            foreach (var corgOrigin in clientUpdateInput.Client.AllowedCorsOrigins)
             {
                 var clientCorsOrigin = client.FindCorsOrigin(corgOrigin.Origin);
                 if (clientCorsOrigin == null)
@@ -232,7 +235,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region PostLogoutRedirectUris
 
-            foreach (var logoutRedirect in clientUpdate.PostLogoutRedirectUris)
+            foreach (var logoutRedirect in clientUpdateInput.Client.PostLogoutRedirectUris)
             {
                 var clientLogoutRedirect = client.FindPostLogoutRedirectUri(logoutRedirect.PostLogoutRedirectUri);
                 if (clientLogoutRedirect == null)
@@ -245,7 +248,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region IdentityProviderRestrictions
 
-            foreach (var provider in clientUpdate.IdentityProviderRestrictions)
+            foreach (var provider in clientUpdateInput.Client.IdentityProviderRestrictions)
             {
                 var clientIdentityProvider = client.FindIdentityProviderRestriction(provider.Provider);
                 if (clientIdentityProvider == null)

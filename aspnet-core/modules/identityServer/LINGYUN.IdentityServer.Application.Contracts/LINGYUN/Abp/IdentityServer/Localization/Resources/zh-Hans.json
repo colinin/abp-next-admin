@@ -1,13 +1,16 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Permission:IdentityServer": "IdentityServer管理",
+    "Permissions:IdentityServer": "IdentityServer管理",
     "Permissions:Create": "新增",
     "Permissions:Update": "修改",
     "Permissions:Enabled": "启用",
     "Permissions:Disabled": "停用",
     "Permissions:Delete": "删除",
+    "Permissions:ManagePermissions": "更改权限",
     "Permissions:Clients": "客户端管理",
+    "Permissions:Clients:Secrets": "客户端密钥",
+    "Permissions:Clients:Properties": "客户端属性",
     "Permissions:Clients:Claims": "客户端声明",
     "ClientIdExisted": "客户端标识: {0} 已经存在!",
     "ClientClaimNotFound": "客户端声明: {0} 不存在!",
