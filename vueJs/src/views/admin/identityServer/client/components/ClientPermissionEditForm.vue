@@ -9,6 +9,7 @@
       <PermissionTree
         ref="PermissionTree"
         :expanded="false"
+        :horizontally="true"
         :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
         :permission="clientPermission"
         @onPermissionChanged="onPermissionChanged"
@@ -52,14 +53,17 @@ import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/pe
   }
 })
 export default class extends Vue {
+  /** 客户端标识 */
   @Prop({ default: '' })
   private clientId!: string
 
+  /** 客户端权限 */
   private clientPermission: PermissionDto
+  /** 是否已加载权限 */
   private hasLoadPermission: boolean
-  /** 角色权限已变更 */
+  /** 客户端权限已变更 */
   private clientPermissionChanged: boolean
-  /** 变更角色权限数据 */
+  /** 变更客户端权限数据 */
   private editClientPermissions: IPermission[]
 
   constructor() {
@@ -70,6 +74,7 @@ export default class extends Vue {
     this.editClientPermissions = new Array<IPermission>()
   }
 
+  /** 监听客户端标识变更事件,刷新客户端权限数据 */
   @Watch('clientId', { immediate: true })
   private onClientIdChanged() {
     if (this.clientId) {
@@ -80,12 +85,15 @@ export default class extends Vue {
     }
   }
 
-  /** 角色权限树变更事件 */
+  /** 客户端权限树变更事件
+   * @param permissions 变更权限数据
+   */
   private onPermissionChanged(permissions: IPermission[]) {
     this.clientPermissionChanged = true
     this.editClientPermissions = permissions
   }
 
+  /** 保存客户端权限 */
   private onSaveClientPemissions() {
     if (this.clientPermissionChanged) {
       const setClientPermissions = new UpdatePermissionsDto()
@@ -96,6 +104,7 @@ export default class extends Vue {
     }
   }
 
+  /** 取消操作 */
   private onCancel() {
     const permissionTree = this.$refs.PermissionTree as PermissionTree
     permissionTree.resetPermissions()

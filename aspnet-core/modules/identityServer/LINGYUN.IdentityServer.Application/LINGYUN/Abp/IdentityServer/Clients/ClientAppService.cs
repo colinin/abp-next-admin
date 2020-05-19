@@ -1,15 +1,18 @@
-﻿using System;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Security.Encryption;
+using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
+    [Authorize(AbpIdentityServerPermissions.Clients.Default)]
     public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppService
     {
         private IStringEncryptionService _encryptionService;
@@ -22,6 +25,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             ClientRepository = clientRepository;
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Create)]
         public virtual async Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate)
         {
             var client = await ClientRepository.GetAsync(clientClaimCreate.ClientId);
@@ -32,6 +36,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<ClientClaim, ClientClaimDto>(clientClaim);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Create)]
         public virtual async Task<ClientPropertyDto> AddPropertyAsync(ClientPropertyCreateDto clientPropertyCreate)
         {
             var client = await ClientRepository.GetAsync(clientPropertyCreate.ClientId);
@@ -42,12 +47,30 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<ClientProperty, ClientPropertyDto>(clientProperty);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Create)]
         public virtual async Task<ClientSecretDto> AddSecretAsync(ClientSecretCreateDto clientSecretCreate)
         {
             var client = await ClientRepository.GetAsync(clientSecretCreate.ClientId);
 
-            var clientSecretValue = EncryptionService.Encrypt(clientSecretCreate.Value);
+            var clientSecretValue = clientSecretCreate.Value;
 
+            // 如果是 SharedSecret 类型的密钥
+            // 采用 IdentityServer4 服务器扩展方法加密
+            if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(clientSecretCreate.Type))
+            {
+                if(clientSecretCreate.HashType == HashType.Sha256)
+                {
+                    clientSecretValue = clientSecretCreate.Value.Sha256();
+                }
+                else if (clientSecretCreate.HashType == HashType.Sha512)
+                {
+                    clientSecretValue = clientSecretCreate.Value.Sha512();
+                }
+            }
+            else
+            {
+                clientSecretValue = EncryptionService.Encrypt(clientSecretCreate.Value);
+            }
             client.AddSecret(clientSecretValue, clientSecretCreate.Expiration, 
                 clientSecretCreate.Type, clientSecretCreate.Description);
             
@@ -56,6 +79,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<ClientSecret, ClientSecretDto>(clientSecret);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Create)]
         public virtual async Task<ClientDto> CreateAsync(ClientCreateDto clientCreate)
         {
             var clientIdExists = await ClientRepository.CheckClientIdExistAsync(clientCreate.ClientId);
@@ -76,11 +100,13 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Delete)]
         public virtual async Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput)
         {
             await ClientRepository.DeleteAsync(clientGetByIdInput.Id);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Delete)]
         public virtual async Task DeleteClaimAsync(ClientClaimGetByKeyInputDto clientClaimGetByKey)
         {
             var client = await ClientRepository.GetAsync(clientClaimGetByKey.ClientId);
@@ -88,6 +114,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             await ClientRepository.UpdateAsync(client);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Delete)]
         public virtual async Task DeletePropertyAsync(ClientPropertyGetByKeyDto clientPropertyGetByKey)
         {
             var client = await ClientRepository.GetAsync(clientPropertyGetByKey.ClientId);
@@ -95,12 +122,14 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             await ClientRepository.UpdateAsync(client);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Delete)]
         public virtual async Task DeleteSecretAsync(ClientSecretGetByTypeDto clientSecretGetByType)
         {
             var client = await ClientRepository.GetAsync(clientSecretGetByType.ClientId);
             client.RemoveSecret(clientSecretGetByType.Value, clientSecretGetByType.Type);
             await ClientRepository.UpdateAsync(client);
         }
+
 
         public virtual async Task<ClientDto> GetAsync(ClientGetByIdInputDto clientGetById)
         {
@@ -121,6 +150,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 ObjectMapper.Map<List<Client>, List<ClientDto>>(clients));
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Update)]
         public virtual async Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput)
         {
             var client = await ClientRepository.GetAsync(clientUpdateInput.Id);
@@ -183,78 +213,60 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region AllowScope
 
-            foreach(var scope in clientUpdateInput.Client.AllowedScopes)
+            client.RemoveAllScopes();
+            foreach (var scope in clientUpdateInput.Client.AllowedScopes)
             {
-                var clientScope = client.FindScope(scope.Scope);
-                if (clientScope == null)
-                {
-                    client.AddScope(scope.Scope);
-                }
+                client.AddScope(scope.Scope);
             }
 
             #endregion
 
             #region RedirectUris
 
-            foreach(var redirect in clientUpdateInput.Client.RedirectUris)
+            client.RemoveAllRedirectUris();
+            foreach (var redirect in clientUpdateInput.Client.RedirectUris)
             {
-                var clientRedirect = client.FindRedirectUri(redirect.RedirectUri);
-                if(clientRedirect == null)
-                {
-                    client.AddRedirectUri(redirect.RedirectUri);
-                }
+                client.AddRedirectUri(redirect.RedirectUri);
             }
 
             #endregion
 
             #region AllowedGrantTypes
 
+            client.RemoveAllAllowedGrantTypes();
             foreach (var grantType in clientUpdateInput.Client.AllowedGrantTypes)
             {
-                var clientGrantType = client.FindGrantType(grantType.GrantType);
-                if (clientGrantType == null)
-                {
-                    client.AddGrantType(grantType.GrantType);
-                }
+                client.AddGrantType(grantType.GrantType);
             }
 
             #endregion
 
             #region AllowedCorsOrigins
 
+            client.RemoveAllCorsOrigins();
             foreach (var corgOrigin in clientUpdateInput.Client.AllowedCorsOrigins)
             {
-                var clientCorsOrigin = client.FindCorsOrigin(corgOrigin.Origin);
-                if (clientCorsOrigin == null)
-                {
-                    client.AddCorsOrigin(corgOrigin.Origin);
-                }
+                client.AddCorsOrigin(corgOrigin.Origin);
             }
 
             #endregion
 
             #region PostLogoutRedirectUris
 
+            client.RemoveAllPostLogoutRedirectUris();
             foreach (var logoutRedirect in clientUpdateInput.Client.PostLogoutRedirectUris)
             {
-                var clientLogoutRedirect = client.FindPostLogoutRedirectUri(logoutRedirect.PostLogoutRedirectUri);
-                if (clientLogoutRedirect == null)
-                {
-                    client.AddPostLogoutRedirectUri(logoutRedirect.PostLogoutRedirectUri);
-                }
+                client.AddPostLogoutRedirectUri(logoutRedirect.PostLogoutRedirectUri);
             }
 
             #endregion
 
             #region IdentityProviderRestrictions
 
+            client.RemoveAllIdentityProviderRestrictions();
             foreach (var provider in clientUpdateInput.Client.IdentityProviderRestrictions)
             {
-                var clientIdentityProvider = client.FindIdentityProviderRestriction(provider.Provider);
-                if (clientIdentityProvider == null)
-                {
-                    client.AddIdentityProviderRestriction(provider.Provider);
-                }
+                client.AddIdentityProviderRestriction(provider.Provider);
             }
 
             #endregion
@@ -264,6 +276,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Update)]
         public virtual async Task<ClientClaimDto> UpdateClaimAsync(ClientClaimUpdateDto clientClaimUpdate)
         {
             var client = await ClientRepository.GetAsync(clientClaimUpdate.ClientId);
@@ -278,6 +291,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<ClientClaim, ClientClaimDto>(clientClaim);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Update)]
         public virtual async Task<ClientPropertyDto> UpdatePropertyAsync(ClientPropertyUpdateDto clientPropertyUpdate)
         {
             var client = await ClientRepository.GetAsync(clientPropertyUpdate.ClientId);
@@ -294,6 +308,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<ClientProperty, ClientPropertyDto>(clientProperty);
         }
 
+        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Update)]
         public virtual async Task<ClientSecretDto> UpdateSecretAsync(ClientSecretUpdateDto clientSecretUpdate)
         {
             var client = await ClientRepository.GetAsync(clientSecretUpdate.ClientId);
@@ -305,7 +320,26 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 throw new UserFriendlyException(
                     L[AbpIdentityServerErrorConsts.ClientSecretNotFound, clientSecretUpdate.Type]);
             }
-            clientSecret.Value = EncryptionService.Encrypt(clientSecretUpdate.Value);
+            var clientSecretValue = clientSecret.Value;
+
+            // 如果是 SharedSecret 类型的密钥
+            // 采用 IdentityServer4 服务器扩展方法加密
+            if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(clientSecretUpdate.Type))
+            {
+                if (clientSecretUpdate.HashType == HashType.Sha256)
+                {
+                    clientSecretValue = clientSecretUpdate.Value.Sha256();
+                }
+                else if (clientSecretUpdate.HashType == HashType.Sha512)
+                {
+                    clientSecretValue = clientSecretUpdate.Value.Sha512();
+                }
+            }
+            else
+            {
+                clientSecretValue = EncryptionService.Encrypt(clientSecretUpdate.Value);
+            }
+            clientSecret.Value = clientSecretValue;
 
             return ObjectMapper.Map<ClientSecret, ClientSecretDto>(clientSecret);
         }

@@ -158,12 +158,12 @@ namespace AuthServer.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
             app.UseMultiTenancy();
-            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

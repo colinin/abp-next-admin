@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 
 /* eslint-disable */
@@ -40,11 +40,15 @@ const regExpValidate: { [key: string]: RegExp } = {
 /* eslint-enable */
 
 @Component({
-  name: 'ElInputTagEx'
+  name: 'ElInputTagEx',
+  model: {
+    prop: 'value',
+    event: 'change'
+  }
 })
 export default class extends Vue {
   @Prop({ default: () => new Array<any>() })
-  private data!: any[]
+  private value!: any[]
 
   @Prop({ default: 'key' })
   private label!: string
@@ -59,12 +63,19 @@ export default class extends Vue {
   private validate!: string
   // 'none' | 'email' | 'phone' | 'ipaddress' | 'ip:port' | 'key:value' | 'url'
 
+  private data: any[]
   private size = AppModule.size
   public newTag: string
 
   constructor() {
     super()
     this.newTag = ''
+    this.data = new Array<any>()
+  }
+
+  @Watch('value', { immediate: true })
+  private onValueChanged() {
+    this.data = this.value
   }
 
   private foucusTagInput() {
@@ -137,7 +148,7 @@ export default class extends Vue {
   }
 
   private tagChange() {
-    this.$emit('input', this.data)
+    this.$emit('change', this.data)
   }
 }
 </script>

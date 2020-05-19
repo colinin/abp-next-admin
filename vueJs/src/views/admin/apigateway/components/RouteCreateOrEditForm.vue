@@ -4,8 +4,11 @@
     label-width="100px"
     :model="apiGateWayRoute"
   >
-    <el-tabs>
-      <el-tab-pane :label="$t('apiGateWay.basicOptions')">
+    <el-tabs v-model="activeTablePane">
+      <el-tab-pane
+        :label="$t('apiGateWay.basicOptions')"
+        name="basicOptions"
+      >
         <el-row>
           <el-col :span="24">
             <el-form-item
@@ -118,7 +121,10 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="路由转发">
+      <el-tab-pane
+        :label="$t('apiGateWay.routingForward')"
+        name="routingForward"
+      >
         <el-row>
           <el-col :span="12">
             <el-form-item
@@ -205,7 +211,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane label="请求处理">
+      <el-tab-pane
+        :label="$t('apiGateWay.requestProcessing')"
+        name="requestProcessing"
+      >
         <el-form-item
           prop="addClaimsToRequest"
           :label="$t('apiGateWay.addClaimsToRequest')"
@@ -279,7 +288,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane :label="$t('apiGateWay.httpOptions')">
+      <el-tab-pane
+        :label="$t('apiGateWay.httpOptions')"
+        name="httpOptions"
+      >
         <el-form-item
           prop="httpHandlerOptions.maxConnectionsPerServer"
           :label="$t('apiGateWay.maxConnectionsPerServer')"
@@ -337,7 +349,10 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane :label="$t('apiGateWay.qoSOptions')">
+      <el-tab-pane
+        :label="$t('apiGateWay.qoSOptions')"
+        name="qoSOptions"
+      >
         <el-form-item
           prop="qoSOptions.timeoutValue"
           :label="$t('apiGateWay.timeoutValue')"
@@ -367,7 +382,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane :label="$t('apiGateWay.loadBalancerOptions')">
+      <el-tab-pane
+        :label="$t('apiGateWay.loadBalancerOptions')"
+        name="loadBalancerOptions"
+      >
         <el-form-item
           prop="loadBalancerOptions.type"
           :label="$t('apiGateWay.loadBalancerType')"
@@ -409,7 +427,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane label="流量控制">
+      <el-tab-pane
+        :label="$t('apiGateWay.rateLimitOptions')"
+        name="rateLimitOptions"
+      >
         <el-row>
           <el-col :span="6">
             <el-form-item
@@ -451,7 +472,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane label="安全认证">
+      <el-tab-pane
+        :label="$t('apiGateWay.authorization')"
+        name="authorization"
+      >
         <el-form-item
           prop="authenticationOptions.authenticationProviderKey"
           :label="$t('apiGateWay.authenticationProviderKey')"
@@ -529,6 +553,7 @@ export default class extends Vue {
   @Prop({ default: () => new Array<RouteGroupAppIdDto>() })
   private appIdOptions!: RouteGroupAppIdDto[]
 
+  private activeTablePane: string
   private apiGateWayRoute: ReRouteDto
   private httpMethodsFilter: { [key: string]: string } = {
     GET: '',
@@ -547,6 +572,7 @@ export default class extends Vue {
 
   constructor() {
     super()
+    this.activeTablePane = 'basicOptions'
     this.apiGateWayRoute = new ReRouteDto()
   }
 
@@ -556,6 +582,8 @@ export default class extends Vue {
       ApiGateWayService.getReRouteByRouteId(routeId).then(route => {
         this.apiGateWayRoute = route
       })
+    } else {
+      this.apiGateWayRoute = new ReRouteDto()
     }
   }
 
@@ -575,8 +603,9 @@ export default class extends Vue {
           createRouteDto.appId = this.apiGateWayRoute.appId
           this.apiGateWayRoute = await ApiGateWayService.createReRoute(createRouteDto)
         }
-        this.$message('successful')
+        this.$message.success(this.$t('successful').toString())
         routeEditForm.resetFields()
+        this.activeTablePane = 'basicOptions'
         this.$emit('closed', true)
       }
     })
@@ -585,6 +614,7 @@ export default class extends Vue {
   private onCancel() {
     const routeEditForm = this.$refs.formRoute as any
     routeEditForm.resetFields()
+    this.activeTablePane = 'basicOptions'
     this.$emit('closed')
   }
 }

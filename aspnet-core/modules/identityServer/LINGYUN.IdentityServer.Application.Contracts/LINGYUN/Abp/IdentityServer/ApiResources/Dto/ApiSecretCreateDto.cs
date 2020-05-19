@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer;
 
-namespace LINGYUN.Abp.IdentityServer.Clients
+namespace LINGYUN.Abp.IdentityServer.ApiResources
 {
-    public class ClientSecretUpdateDto
+    public class ApiSecretCreateDto
     {
         [Required]
-        public Guid ClientId { get; set; }
+        public Guid ApiResourceId { get; set; }
 
         [Required]
         [StringLength(SecretConsts.TypeMaxLength)]
@@ -23,5 +23,10 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         public string Description { get; set; }
 
         public DateTime? Expiration { get; set; }
+
+        public ApiSecretCreateDto()
+        {
+            HashType = 0;
+        }
     }
 }

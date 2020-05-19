@@ -38,5 +38,28 @@
                 public const string Delete = Default + ".Delete";
             }
         }
+
+        public static class ApiResources
+        {
+            public const string Default = GroupName + ".ApiResources";
+            public const string Create = Default + ".Create";
+            public const string Update = Default + ".Update";
+            public const string Delete = Default + ".Delete";
+            public static class Scope
+            {
+                public const string Default = ApiResources.Default + ".Scope";
+                public const string Create = Default + ".Create";
+                public const string Update = Default + ".Update";
+                public const string Delete = Default + ".Delete";
+            }
+
+            public static class Secrets
+            {
+                public const string Default = ApiResources.Default + ".Secrets";
+                public const string Create = Default + ".Create";
+                public const string Update = Default + ".Update";
+                public const string Delete = Default + ".Delete";
+            }
+        }
     }
 }

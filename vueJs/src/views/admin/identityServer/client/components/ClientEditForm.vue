@@ -126,7 +126,6 @@
         >
           <el-input-tag-ex
             v-model="client.allowedScopes"
-            :data="client.allowedScopes"
             label="scope"
           />
         </el-form-item>
@@ -136,7 +135,6 @@
         >
           <el-input-tag-ex
             v-model="client.redirectUris"
-            :data="client.redirectUris"
             label="redirectUri"
             validate="url"
           />
@@ -148,7 +146,6 @@
         >
           <el-input-tag-ex
             v-model="client.allowedGrantTypes"
-            :data="client.allowedGrantTypes"
             label="grantType"
           />
         </el-form-item>
@@ -219,6 +216,8 @@
         >
           <el-input-tag-ex
             v-model="client.postLogoutRedirectUris"
+            label="postLogoutRedirectUri"
+            validate="url"
           />
         </el-form-item>
         <el-form-item
@@ -228,6 +227,7 @@
         >
           <el-input-tag-ex
             v-model="client.identityProviderRestrictions"
+            label="provider"
           />
         </el-form-item>
         <el-form-item
@@ -365,6 +365,8 @@
         >
           <el-input-tag-ex
             v-model="client.allowedCorsOrigins"
+            label="origin"
+            validate="url"
           />
         </el-form-item>
         <el-row>
@@ -593,13 +595,12 @@ export default class extends Vue {
         const updateClient = new ClientUpdate()
         updateClient.id = this.clientId
         updateClient.client.setClient(this.client)
-        ClientService.updateClient(updateClient).then(client => {
-          this.client = client
-          const successMessage = this.l('identityServer.updateClientSuccess', { id: client.clientId })
+        ClientService.updateClient(updateClient).then(clientDto => {
+          this.client = clientDto
+          const successMessage = this.l('identityServer.updateClientSuccess', { id: this.client.clientId })
           this.$message.success(successMessage)
           clientEditForm.resetFields()
-          this.$emit('clientChanged')
-          this.$emit('closed')
+          this.$emit('closed', true)
         })
       }
     })
@@ -608,11 +609,16 @@ export default class extends Vue {
   private onCancel() {
     const clientEditForm = this.$refs.formClient as any
     clientEditForm.resetFields()
-    this.$emit('closed')
+    this.$emit('closed', false)
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
+  }
+
+  private test(v: any) {
+    console.log(v)
+    console.log(this.client.redirectUris)
   }
 }
 </script>

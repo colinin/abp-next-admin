@@ -33,6 +33,7 @@
           <el-button
             type="primary"
             style="width:180px"
+            :disabled="!checkPermission(['IdentityServer.Clients.Properties.Create'])"
             @click="onSaveClientProperty"
           >
             {{ $t('identityServer.createProperty') }}
@@ -81,7 +82,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.Clients.Update'])"
+            :disabled="!checkPermission(['IdentityServer.Clients.Properties.Delete'])"
             size="mini"
             type="primary"
             @click="handleDeleteClientProperty(row.key, row.value)"

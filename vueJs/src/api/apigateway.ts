@@ -311,7 +311,7 @@ export class ReRouteBase {
   reRouteIsCaseSensitive? = true
   serviceName? = ''
   serviceNamespace? = ''
-  downstreamScheme? = ''
+  downstreamScheme? = 'HTTP'
   downstreamHostAndPorts!: HostAndPort[]
   upstreamHost = ''
   key? = ''

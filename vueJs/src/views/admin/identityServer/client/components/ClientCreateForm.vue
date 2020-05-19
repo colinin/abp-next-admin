@@ -65,14 +65,10 @@
 <script lang="ts">
 import ClientService, { ClientCreate } from '@/api/clients'
 import { Component, Vue } from 'vue-property-decorator'
-import { checkPermission } from '@/utils/permission'
 import ElInputTagEx from '@/components/InputTagEx/index.vue'
 
 @Component({
   name: 'ClientCreateForm',
-  methods: {
-    checkPermission
-  },
   components: {
     ElInputTagEx
   }

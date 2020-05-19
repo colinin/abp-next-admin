@@ -79,9 +79,15 @@ export class ClientGetByPaged extends PagedAndSortedResultRequestDto {
   filter?: string
 }
 
+export enum HashType {
+  Sha256,
+  Sha512
+}
+
 export class ClientSecret {
   type = ''
   value = ''
+  hashType = HashType.Sha256
   description? = ''
   expiration? = undefined
 }
@@ -126,6 +132,7 @@ export class ClientSecretCreate extends ClientSecret {
   constructor() {
     super()
     this.type = 'SharedSecret'
+    this.hashType = HashType.Sha256
   }
 }
 
@@ -209,6 +216,10 @@ export class Client extends FullAuditedEntityDto {
     this.identityProviderRestrictions = new Array<ClientIdPRestriction>()
     this.claims = new Array<ClientClaim>()
     this.properties = new Array<ClientProperty>()
+  }
+
+  public static empty() {
+    return new Client()
   }
 }
 

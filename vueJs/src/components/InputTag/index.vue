@@ -22,7 +22,6 @@
         v-model="newTag"
         :size="size"
         :class="[size ? 'tag-input--' + size : 'tag-input']"
-        @keydown.delete.stop="removeLastTag"
         @keydown="addNew"
         @blur="addNew"
       >

@@ -187,12 +187,16 @@ export default class extends Vue {
   /** 自定义权限树子节点渲染 */
   private renderContent(h: any, context: { node: any, data: PermissionTree}) {
     if (this.horizontally) {
-      let className = ''
-      if (context.data && context.data.parent) {
-        className = 'horizontally'
+      if (context.data.children.length > 0) {
+        return h(
+          'span',
+          { class: 'el-tree-node__label' },
+          [context.node.label]
+        )
+      } else {
         return h(
           'div',
-          { class: className },
+          { class: 'horizontally' },
           [context.node.label])
       }
     }

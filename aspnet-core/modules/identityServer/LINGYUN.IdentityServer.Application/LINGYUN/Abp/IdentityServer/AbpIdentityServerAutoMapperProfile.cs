@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using LINGYUN.Abp.IdentityServer.ApiResources;
 using LINGYUN.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 
 namespace LINGYUN.Abp.IdentityServer
@@ -18,6 +20,12 @@ namespace LINGYUN.Abp.IdentityServer
             CreateMap<ClientRedirectUri, ClientRedirectUriDto>();
             CreateMap<ClientScope, ClientScopeDto>();
             CreateMap<Client, ClientDto>();
+
+            CreateMap<ApiSecret, ApiSecretDto>();
+            CreateMap<ApiScope, ApiScopeDto>();
+            CreateMap<ApiScopeClaim, ApiScopeClaimDto>();
+            CreateMap<ApiResourceClaim, ApiResourceClaimDto>();
+            CreateMap<ApiResource, ApiResourceDto>();
         }
     }
 }

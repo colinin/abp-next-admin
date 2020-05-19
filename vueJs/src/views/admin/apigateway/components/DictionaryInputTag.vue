@@ -62,7 +62,6 @@ export default class extends Vue {
 
   @Watch('value', { immediate: true })
   private onValueChanged(val: any) {
-    console.log('onValueChanged')
     if (!val) {
       this.innerTags = new Array<string>()
     } else {

@@ -62,6 +62,19 @@
         </template>
       </el-table-column>
       <el-table-column
+        :label="$t('identityServer.clientStatus')"
+        prop="enabled"
+        sortable
+        width="140px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <el-tag :type="row.enabled | statusFilter">
+            {{ formatStatusText(row.enabled) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         :label="$t('identityServer.identityTokenLifetime')"
         prop="identityTokenLifetime"
         width="170px"
@@ -212,7 +225,6 @@
       custom-class="modal-form"
       :show-close="false"
       @closed="handleClientCreateFormClosed"
-      @clientChanged="handleGetClients"
     >
       <ClientCreateForm
         ref="formCreateClient"
@@ -329,7 +341,18 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
     ClientPermissionEditForm
   },
   methods: {
-    checkPermission
+    checkPermission,
+    local(name: string) {
+      return this.$t(name)
+    }
+  },
+  filters: {
+    statusFilter(status: boolean) {
+      if (status) {
+        return 'success'
+      }
+      return 'warning'
+    }
   }
 })
 export default class extends Vue {
@@ -354,7 +377,7 @@ export default class extends Vue {
     this.showEditClientDialog = false
     this.showCreateClientDialog = false
     this.showEditClientPermissionDialog = false
-    this.editClient = new Client()
+    this.editClient = Client.empty()
     this.clientList = new Array<Client>()
     this.showEditClientSecretDialog = false
     this.showEditClientClaimDialog = false
@@ -381,7 +404,7 @@ export default class extends Vue {
   }
 
   private handleShowCreateClientForm() {
-    this.editClient = new Client()
+    this.editClient = Client.empty()
     this.editClientTitle = this.$t('identityServer.createClient')
     this.showCreateClientDialog = true
   }
@@ -394,6 +417,7 @@ export default class extends Vue {
 
   private handleClientCreateFormClosed(changed: boolean) {
     this.editClientTitle = ''
+    this.editClient = Client.empty()
     this.showCreateClientDialog = false
     const frmClient = this.$refs.formCreateClient as ClientCreateForm
     frmClient.resetFields()
@@ -404,6 +428,7 @@ export default class extends Vue {
 
   private handleClientEditFormClosed(changed: boolean) {
     this.editClientTitle = ''
+    this.editClient = Client.empty()
     this.showEditClientDialog = false
     if (changed) {
       this.handleGetClients()
@@ -429,6 +454,7 @@ export default class extends Vue {
   }
 
   private handleClientPermissionEditFormClosed() {
+    this.editClient = Client.empty()
     this.showEditClientPermissionDialog = false
   }
 
@@ -470,6 +496,16 @@ export default class extends Vue {
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
+  }
+
+  private formatStatusText(status: boolean) {
+    let statusText = ''
+    if (status) {
+      statusText = this.l('enabled')
+    } else {
+      statusText = this.l('disbled')
+    }
+    return statusText
   }
 }
 </script>

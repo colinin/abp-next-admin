@@ -64,7 +64,6 @@ export default class extends Vue {
 
   @Watch('value', { immediate: true })
   private onHostAndPortsChanged(val: HostAndPort[]) {
-    console.log(val)
     if (Array.isArray(val)) {
       if (val.length === 0) {
         this.innerTags = new Array<string>()

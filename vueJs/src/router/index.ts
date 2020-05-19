@@ -372,6 +372,16 @@ export const asyncRoutes: RouteConfig[] = [
           icon: 'clients',
           roles: ['IdentityServer.Clients']
         }
+      },
+      {
+        path: 'apiresources',
+        component: () => import('@/views/admin/identityServer/api-resources/index.vue'),
+        name: 'apiresources',
+        meta: {
+          title: 'apiresources',
+          icon: 'apiresources',
+          roles: ['IdentityServer.ApiResources']
+        }
       }
     ]
   },

@@ -70,7 +70,7 @@ export class PagedAndSortedResultRequestDto implements IPagedResultRequest, ISor
 /** 创建实体审计对象 */
 export class CreationAuditedEntityDto implements IMayHaveCreator {
   creatorId: string | undefined
-  creatorTime!: Date
+  creationTime!: Date
 }
 
 /** 实体审计对象 */
@@ -78,7 +78,7 @@ export class AuditedEntityDto implements CreationAuditedEntityDto, IModification
   lastModifierId: string | undefined
   lastModificationTime: Date | undefined
   creatorId: string | undefined
-  creatorTime!: Date
+  creationTime!: Date
 }
 
 /** 所有实体审计对象 */
@@ -86,7 +86,7 @@ export class FullAuditedEntityDto implements AuditedEntityDto, IDeletionAuditedO
   lastModifierId: string | undefined
   lastModificationTime: Date | undefined
   creatorId: string | undefined
-  creatorTime!: Date
+  creationTime!: Date
   deleterId!: string
   deletionTime: Date | undefined
   isDeleted!: boolean
@@ -155,7 +155,7 @@ export interface IMayHaveCreator extends IHasCreationTime {
 /** 创建时间接口 */
 export interface IHasCreationTime {
   /** 创建时间 */
-  creatorTime: Date
+  creationTime: Date
 }
 
 /** 修改人接口 */

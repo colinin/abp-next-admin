@@ -2,17 +2,17 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form
-        ref="formClientSecret"
+        ref="formApiSecret"
         label-width="100px"
-        :model="clientSecret"
-        :rules="clientSecretRules"
+        :model="apiSecret"
+        :rules="apiSecretRules"
       >
         <el-form-item
           prop="type"
           :label="$t('identityServer.secretType')"
         >
           <el-select
-            v-model="clientSecret.type"
+            v-model="apiSecret.type"
             class="full-select"
             :placeholder="$t('pleaseSelectBy', {key: $t('identityServer.secretType')})"
           >
@@ -54,9 +54,9 @@
             :content="$t('identityServer.hashOnlySharedSecret')"
           />
           <el-select
-            v-model="clientSecret.hashType"
+            v-model="apiSecret.hashType"
             v-popover:popHashType
-            :disabled="clientSecret.type !== 'SharedSecret'"
+            :disabled="apiSecret.type !== 'SharedSecret'"
             class="full-select"
             :placeholder="$t('pleaseSelectBy', {key: $t('identityServer.secretHashType')})"
           >
@@ -77,7 +77,7 @@
           :label="$t('identityServer.secretValue')"
         >
           <el-input
-            v-model="clientSecret.value"
+            v-model="apiSecret.value"
             :placeholder="$t('pleaseInputBy', {key: $t('identityServer.secretValue')})"
           />
         </el-form-item>
@@ -86,7 +86,7 @@
           :label="$t('identityServer.secretDescription')"
         >
           <el-input
-            v-model="clientSecret.description"
+            v-model="apiSecret.description"
           />
         </el-form-item>
         <el-form-item
@@ -94,7 +94,7 @@
           :label="$t('identityServer.expiration')"
         >
           <el-date-picker
-            v-model="clientSecret.expiration"
+            v-model="apiSecret.expiration"
             class="full-select"
             type="datetime"
           />
@@ -107,10 +107,10 @@
           <el-button
             type="primary"
             style="width:180px"
-            :disabled="!checkPermission(['IdentityServer.Clients.Secrets.Create'])"
-            @click="onSaveClientSecret"
+            :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
+            @click="onSaveApiSecret"
           >
-            {{ $t('identityServer.createSecret') }}
+            {{ $t('identityServer.createApiSecret') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -119,8 +119,8 @@
     <el-divider />
 
     <el-table
-      row-key="clientId"
-      :data="clientSecrets"
+      row-key="value"
+      :data="apiSecrets"
       border
       fit
       highlight-current-row
@@ -176,12 +176,12 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.Clients.Secrets.Delete'])"
+            :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets.Delete'])"
             size="mini"
             type="primary"
-            @click="handleDeleteClientSecret(row.type, row.value)"
+            @click="handleDeleteApiSecret(row.type, row.value)"
           >
-            {{ $t('identityServer.deleteSecret') }}
+            {{ $t('identityServer.deleteApiSecret') }}
           </el-button>
         </template>
       </el-table-column>
@@ -190,13 +190,13 @@
 </template>
 
 <script lang="ts">
-import ClientService, { ClientSecret, ClientSecretCreate } from '@/api/clients'
+import ApiResourceService, { ApiSecret, ApiSecretCreate } from '@/api/apiresources'
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
-  name: 'ClientSecretEditForm',
+  name: 'ApiSecretEditForm',
   filters: {
     dateTimeFilter(datetime: string) {
       if (datetime) {
@@ -212,14 +212,14 @@ import { checkPermission } from '@/utils/permission'
 })
 export default class extends Vue {
   @Prop({ default: '' })
-  private clientId!: string
+  private apiResourceId!: string
 
-  @Prop({ default: () => new Array<ClientSecret>() })
-  private clientSecrets!: ClientSecret[]
+  @Prop({ default: () => new Array<ApiSecret>() })
+  private apiSecrets!: ApiSecret[]
 
-  private clientSecretChanged: boolean
-  private clientSecret: ClientSecretCreate
-  private clientSecretRules = {
+  private apiSecretChanged: boolean
+  private apiSecret: ApiSecretCreate
+  private apiSecretRules = {
     type: [
       { required: true, message: this.l('pleaseSelectBy', { key: this.l('identityServer.secretType') }), trigger: 'change' }
     ],
@@ -230,50 +230,50 @@ export default class extends Vue {
 
   constructor() {
     super()
-    this.clientSecretChanged = false
-    this.clientSecret = new ClientSecretCreate()
+    this.apiSecretChanged = false
+    this.apiSecret = ApiSecretCreate.empty()
   }
 
-  @Watch('clientId', { immediate: true })
-  private onClientIdChanged() {
-    this.clientSecret.clientId = this.clientId
+  @Watch('apiResourceId', { immediate: true })
+  private onApiResourceIdChanged() {
+    this.apiSecret.apiResourceId = this.apiResourceId
   }
 
-  private handleDeleteClientSecret(type: string, value: string) {
-    this.$confirm(this.l('identityServer.deleteSecretByType', { type: value }),
-      this.l('identityServer.deleteSecret'), {
+  private handleDeleteApiSecret(type: string, value: string) {
+    this.$confirm(this.l('identityServer.deleteApiSecretByType', { type: value }),
+      this.l('identityServer.deleteApiSecret'), {
         callback: (action) => {
           if (action === 'confirm') {
-            ClientService.deleteClientSecret(this.clientId, type, value).then(() => {
-              const deleteSecretIndex = this.clientSecrets.findIndex(secret => secret.type === type)
-              this.clientSecrets.splice(deleteSecretIndex, 1)
-              this.$message.success(this.l('identityServer.deleteSecretSuccess', { type: value }))
-              this.$emit('clientSecretChanged')
+            ApiResourceService.deleteApiSecret(this.apiResourceId, type, value).then(() => {
+              const deleteSecretIndex = this.apiSecrets.findIndex(secret => secret.type === type)
+              this.apiSecrets.splice(deleteSecretIndex, 1)
+              this.$message.success(this.l('identityServer.deleteApiSecretSuccess', { type: value }))
+              this.$emit('apiSecretChanged')
             })
           }
         }
       })
   }
 
-  private onSaveClientSecret() {
-    const frmClientSecret = this.$refs.formClientSecret as any
-    frmClientSecret.validate((valid: boolean) => {
+  private onSaveApiSecret() {
+    const frmApiSecret = this.$refs.formApiSecret as any
+    frmApiSecret.validate((valid: boolean) => {
       if (valid) {
-        this.clientSecret.clientId = this.clientId
-        ClientService.addClientSecret(this.clientSecret).then(secret => {
-          this.clientSecrets.push(secret)
-          const successMessage = this.l('identityServer.createSecretSuccess', { type: this.clientSecret.type })
+        this.apiSecret.apiResourceId = this.apiResourceId
+        ApiResourceService.addApiSecret(this.apiSecret).then(secret => {
+          this.apiSecrets.push(secret)
+          const successMessage = this.l('identityServer.createApiSecretSuccess', { type: this.apiSecret.type })
           this.$message.success(successMessage)
-          frmClientSecret.resetFields()
-          this.$emit('clientSecretChanged')
+          frmApiSecret.resetFields()
+          this.$emit('apiSecretChanged')
         })
       }
     })
   }
 
   public resetFields() {
-    const frmClientSecret = this.$refs.formClientSecret as any
-    frmClientSecret.resetFields()
+    const frmApiSecret = this.$refs.formApiSecret as any
+    frmApiSecret.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

@@ -13,6 +13,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [StringLength(SecretConsts.TypeMaxLength)]
         public string Type { get; set; }
 
+        public HashType HashType { get; set; }
+
         [Required]
         [StringLength(SecretConsts.ValueMaxLength)]
         public string Value { get; set; }
@@ -21,5 +23,10 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         public string Description { get; set; }
 
         public DateTime? Expiration { get; set; }
+
+        public ClientSecretCreateDto()
+        {
+            HashType = 0;
+        }
     }
 }
