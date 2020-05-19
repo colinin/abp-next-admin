@@ -172,6 +172,13 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
+                :command="{key: 'clone', row}"
+                :disabled="!checkPermission(['IdentityServer.Clients.Clone'])"
+              >
+                {{ $t('identityServer.cloneClint') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                divided
                 :command="{key: 'claim', row}"
                 :disabled="!checkPermission(['IdentityServer.Clients.Claims'])"
               >
@@ -229,6 +236,23 @@
       <ClientCreateForm
         ref="formCreateClient"
         @closed="handleClientCreateFormClosed"
+      />
+    </el-dialog>
+
+    <el-dialog
+      v-el-draggable-dialog
+      width="800px"
+      :visible.sync="showCloneClientDialog"
+      :title="$t('identityServer.cloneClint')"
+      custom-class="modal-form"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <ClientCloneForm
+        ref="formCloneClient"
+        :client-id="editClient.id"
+        @closed="handleClientCloneFormClosed"
       />
     </el-dialog>
 
@@ -322,6 +346,7 @@ import { checkPermission } from '@/utils/permission'
 import { Component, Vue } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 import ClientEditForm from './components/ClientEditForm.vue'
+import ClientCloneForm from './components/ClientCloneForm.vue'
 import ClientCreateForm from './components/ClientCreateForm.vue'
 import ClientSecretEditForm from './components/ClientSecretEditForm.vue'
 import ClientClaimEditForm from './components/ClientClaimEditForm.vue'
@@ -334,6 +359,7 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
   components: {
     Pagination,
     ClientEditForm,
+    ClientCloneForm,
     ClientCreateForm,
     ClientClaimEditForm,
     ClientSecretEditForm,
@@ -361,13 +387,15 @@ export default class extends Vue {
   private editClientTitle: any
   private clientList: Client[]
   private clientListLoading: boolean
+  private clientGetPagedFilter: ClientGetByPaged
+
   private showEditClientDialog: boolean
+  private showCloneClientDialog: boolean
   private showCreateClientDialog: boolean
   private showEditClientSecretDialog: boolean
   private showEditClientClaimDialog: boolean
   private showEditClientPropertyDialog: boolean
   private showEditClientPermissionDialog: boolean
-  private clientGetPagedFilter: ClientGetByPaged
 
   constructor() {
     super()
@@ -379,6 +407,7 @@ export default class extends Vue {
     this.showEditClientPermissionDialog = false
     this.editClient = Client.empty()
     this.clientList = new Array<Client>()
+    this.showCloneClientDialog = false
     this.showEditClientSecretDialog = false
     this.showEditClientClaimDialog = false
     this.showEditClientPropertyDialog = false
@@ -420,6 +449,17 @@ export default class extends Vue {
     this.editClient = Client.empty()
     this.showCreateClientDialog = false
     const frmClient = this.$refs.formCreateClient as ClientCreateForm
+    frmClient.resetFields()
+    if (changed) {
+      this.handleGetClients()
+    }
+  }
+
+  private handleClientCloneFormClosed(changed: boolean) {
+    this.editClientTitle = ''
+    this.editClient = Client.empty()
+    this.showCloneClientDialog = false
+    const frmClient = this.$refs.formCloneClient as ClientCloneForm
     frmClient.resetFields()
     if (changed) {
       this.handleGetClients()
@@ -475,6 +515,9 @@ export default class extends Vue {
   private handleCommand(command: {key: string, row: Client}) {
     this.editClient = command.row
     switch (command.key) {
+      case 'clone' :
+        this.showCloneClientDialog = true
+        break
       case 'secret' :
         this.showEditClientSecretDialog = true
         break

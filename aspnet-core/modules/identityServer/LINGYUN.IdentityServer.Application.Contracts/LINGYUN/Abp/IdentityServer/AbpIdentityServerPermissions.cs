@@ -10,6 +10,7 @@
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
+            public const string Clone = Default + ".Clone";
             public const string Enabled = Default + ".Enabled";
             public const string Disabled = Default + ".Disabled";
             public const string ManagePermissions = Default + ".ManagePermissions";

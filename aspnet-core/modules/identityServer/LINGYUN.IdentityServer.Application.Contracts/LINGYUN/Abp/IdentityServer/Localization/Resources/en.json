@@ -4,6 +4,7 @@
     "Permissions:IdentityServer": "IdentityServer",
     "Permissions:Create": "Create",
     "Permissions:Update": "Update",
+    "Permissions:Clone": "Clone",
     "Permissions:Enabled": "Enabled",
     "Permissions:Disabled": "Disabled",
     "Permissions:Delete": "Delete",

@@ -25,6 +25,11 @@ export default class ClientService {
     return ApiService.Post<Client>(_url, payload, serviceUrl)
   }
 
+  public static cloneClient(payload: ClientClone) {
+    const _url = '/api/IdentityServer/Clients/Clone'
+    return ApiService.Post<Client>(_url, payload, serviceUrl)
+  }
+
   public static updateClient(payload: ClientUpdate) {
     const _url = '/api/IdentityServer/Clients'
     return ApiService.Put<Client>(_url, payload, serviceUrl)
@@ -152,6 +157,25 @@ export class ClientCreate {
 
   constructor() {
     this.allowedGrantTypes = new Array<ClientGrantType>()
+  }
+}
+
+export class ClientClone {
+  sourceClientId = ''
+  clientId = ''
+  clientName = ''
+  description? = ''
+  copyAllowedGrantType = true
+  copyRedirectUri = true
+  copyAllowedScope = true
+  copyClaim = true
+  copyAllowedCorsOrigin = true
+  copyPostLogoutRedirectUri = true
+  copyPropertie = true
+  copyIdentityProviderRestriction = true
+
+  public static empty() {
+    return new ClientClone()
   }
 }
 

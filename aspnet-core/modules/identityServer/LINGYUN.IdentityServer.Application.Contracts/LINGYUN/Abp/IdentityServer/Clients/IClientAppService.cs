@@ -14,6 +14,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput);
 
+        Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput);
+
         Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput);
 
         Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate);

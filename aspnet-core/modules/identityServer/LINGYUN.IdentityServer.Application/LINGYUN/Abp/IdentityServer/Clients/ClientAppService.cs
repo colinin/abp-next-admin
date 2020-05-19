@@ -276,6 +276,126 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
+        /// <summary>
+        /// 克隆客户端
+        /// </summary>
+        /// <remarks>
+        /// 实现参考 Skoruba.IdentityServer4.Admin 项目
+        /// https://github.com/skoruba/IdentityServer4.Admin.git
+        /// </remarks>
+        /// <param name="clientCloneInput"></param>
+        /// <returns></returns>
+        [Authorize(AbpIdentityServerPermissions.Clients.Clone)]
+        public virtual async Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput)
+        {
+            var clientIdExists = await ClientRepository.CheckClientIdExistAsync(clientCloneInput.ClientId);
+            if (clientIdExists)
+            {
+                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ClientIdExisted, clientCloneInput.ClientId]);
+            }
+            var srcClient = await ClientRepository.GetAsync(clientCloneInput.SourceClientId);
+
+            var client = new Client(GuidGenerator.Create(), clientCloneInput.ClientId);
+            client.ClientName = clientCloneInput.ClientName;
+            client.Description = clientCloneInput.Description;
+            client.AbsoluteRefreshTokenLifetime = srcClient.AbsoluteRefreshTokenLifetime;
+            client.AccessTokenLifetime = srcClient.AccessTokenLifetime;
+            client.AccessTokenType = srcClient.AccessTokenType;
+            client.AllowAccessTokensViaBrowser = srcClient.AllowAccessTokensViaBrowser;
+            client.AllowOfflineAccess = srcClient.AllowOfflineAccess;
+            client.AllowPlainTextPkce = srcClient.AllowPlainTextPkce;
+            client.AllowRememberConsent = srcClient.AllowRememberConsent;
+            client.AlwaysIncludeUserClaimsInIdToken = srcClient.AlwaysIncludeUserClaimsInIdToken;
+            client.AlwaysSendClientClaims = srcClient.AlwaysSendClientClaims;
+            client.AuthorizationCodeLifetime = srcClient.AuthorizationCodeLifetime;
+            client.BackChannelLogoutSessionRequired = srcClient.BackChannelLogoutSessionRequired;
+
+            client.BackChannelLogoutUri = srcClient.BackChannelLogoutUri;
+            client.ClientClaimsPrefix = srcClient.ClientClaimsPrefix;
+            client.ConsentLifetime = srcClient.ConsentLifetime;
+            client.DeviceCodeLifetime = srcClient.DeviceCodeLifetime;
+            client.Enabled = srcClient.Enabled;
+            client.EnableLocalLogin = srcClient.EnableLocalLogin;
+            client.FrontChannelLogoutSessionRequired = srcClient.FrontChannelLogoutSessionRequired;
+            client.FrontChannelLogoutUri = srcClient.FrontChannelLogoutUri;
+
+            client.IdentityTokenLifetime = srcClient.IdentityTokenLifetime;
+            client.IncludeJwtId = srcClient.IncludeJwtId;
+            client.LogoUri = srcClient.LogoUri;
+            client.PairWiseSubjectSalt = srcClient.PairWiseSubjectSalt;
+            client.ProtocolType = srcClient.ProtocolType;
+            client.RefreshTokenExpiration = srcClient.RefreshTokenExpiration;
+            client.RefreshTokenUsage = srcClient.RefreshTokenUsage;
+            client.RequireClientSecret = srcClient.RequireClientSecret;
+            client.RequireConsent = srcClient.RequireConsent;
+
+            client.RequirePkce = srcClient.RequirePkce;
+            client.SlidingRefreshTokenLifetime = srcClient.SlidingRefreshTokenLifetime;
+            client.UpdateAccessTokenClaimsOnRefresh = srcClient.UpdateAccessTokenClaimsOnRefresh;
+
+            client.UserCodeType = srcClient.UserCodeType;
+            client.UserSsoLifetime = srcClient.UserSsoLifetime;
+
+            if (clientCloneInput.CopyAllowedCorsOrigin)
+            {
+                foreach(var corsOrigin in srcClient.AllowedCorsOrigins)
+                {
+                    client.AddCorsOrigin(corsOrigin.Origin);
+                }
+            }
+            if (clientCloneInput.CopyAllowedGrantType)
+            {
+                foreach (var grantType in srcClient.AllowedGrantTypes)
+                {
+                    client.AddGrantType(grantType.GrantType);
+                }
+            }
+            if (clientCloneInput.CopyAllowedScope)
+            {
+                foreach (var scope in srcClient.AllowedScopes)
+                {
+                    client.AddScope(scope.Scope);
+                }
+            }
+            if (clientCloneInput.CopyClaim)
+            {
+                foreach (var claim in srcClient.Claims)
+                {
+                    client.AddClaim(claim.Value, claim.Type);
+                }
+            }
+            if (clientCloneInput.CopyIdentityProviderRestriction)
+            {
+                foreach (var provider in srcClient.IdentityProviderRestrictions)
+                {
+                    client.AddIdentityProviderRestriction(provider.Provider);
+                }
+            }
+            if (clientCloneInput.CopyPostLogoutRedirectUri)
+            {
+                foreach (var uri in srcClient.PostLogoutRedirectUris)
+                {
+                    client.AddPostLogoutRedirectUri(uri.PostLogoutRedirectUri);
+                }
+            }
+            if (clientCloneInput.CopyPropertie)
+            {
+                foreach (var property in srcClient.Properties)
+                {
+                    client.AddProperty(property.Key, property.Value);
+                }
+            }
+            if (clientCloneInput.CopyRedirectUri)
+            {
+                foreach (var uri in srcClient.RedirectUris)
+                {
+                    client.AddRedirectUri(uri.RedirectUri);
+                }
+            }
+            client = await ClientRepository.InsertAsync(client);
+            return ObjectMapper.Map<Client, ClientDto>(client);
+        }
+
         [Authorize(AbpIdentityServerPermissions.Clients.Claims.Update)]
         public virtual async Task<ClientClaimDto> UpdateClaimAsync(ClientClaimUpdateDto clientClaimUpdate)
         {

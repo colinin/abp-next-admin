@@ -9,7 +9,6 @@
       <PermissionTree
         ref="PermissionTree"
         :expanded="false"
-        :horizontally="true"
         :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
         :permission="clientPermission"
         @onPermissionChanged="onPermissionChanged"

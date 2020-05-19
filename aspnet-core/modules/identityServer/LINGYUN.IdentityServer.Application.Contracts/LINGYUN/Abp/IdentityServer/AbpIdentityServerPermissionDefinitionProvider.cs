@@ -14,6 +14,7 @@ namespace LINGYUN.Abp.IdentityServer
             var clientPermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.Clients.Default, L("Permissions:Clients"));
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Create, L("Permissions:Create"));
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Update, L("Permissions:Update"));
+            clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Clone, L("Permissions:Clone"));
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Enabled, L("Permissions:Enabled"));
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Disabled, L("Permissions:Disabled"));
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Delete, L("Permissions:Delete"));

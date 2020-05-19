@@ -50,6 +50,13 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [HttpPost]
+        [Route("Clone")]
+        public virtual async Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput)
+        {
+            return await ClientAppService.CloneAsync(clientCloneInput);
+        }
+
+        [HttpPost]
         [Route("Claims")]
         public virtual async Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate)
         {

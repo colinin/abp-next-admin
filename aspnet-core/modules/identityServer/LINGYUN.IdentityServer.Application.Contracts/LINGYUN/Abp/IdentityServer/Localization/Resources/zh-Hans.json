@@ -4,6 +4,7 @@
     "Permissions:IdentityServer": "IdentityServer管理",
     "Permissions:Create": "新增",
     "Permissions:Update": "修改",
+    "Permissions:Clone": "克隆",
     "Permissions:Enabled": "启用",
     "Permissions:Disabled": "停用",
     "Permissions:Delete": "删除",
