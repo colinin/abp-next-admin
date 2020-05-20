@@ -120,6 +120,50 @@ export default class ApiGateWay {
     _url += '?appId=' + appId
     return ApiService.Delete(_url, serviceUrl)
   }
+
+  public static getAggregateReRoutes(payload: AggregateReRouteGetByPaged) {
+    let _url = '/api/ApiGateway/Aggregates'
+    _url += '?appId=' + payload.appId
+    _url += '&filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
+    _url += '&skipCount=' + payload.skipCount
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<PagedResultDto<AggregateReRoute>>(_url, serviceUrl)
+  }
+
+  public static getAggregateReRouteByRouteId(routeId: string) {
+    let _url = '/api/ApiGateway/Aggregates/'
+    _url += routeId
+    return ApiService.Get<AggregateReRoute>(_url, serviceUrl)
+  }
+
+  public static createAggregateReRoute(payload: AggregateReRouteCreate) {
+    const _url = '/api/ApiGateway/Aggregates'
+    return ApiService.Post<AggregateReRoute>(_url, payload, serviceUrl)
+  }
+
+  public static updateAggregateReRoute(payload: AggregateReRouteUpdate) {
+    const _url = '/api/ApiGateway/Aggregates'
+    return ApiService.Put<AggregateReRoute>(_url, payload, serviceUrl)
+  }
+
+  public static deleteAggregateReRoute(routeId: string) {
+    let _url = '/api/ApiGateway/Aggregates'
+    _url += '?routeId=' + routeId
+    return ApiService.Delete(_url, serviceUrl)
+  }
+
+  public static createAggregateRouteConfig(payload: AggregateReRouteConfigCreate) {
+    const _url = '/api/ApiGateway/Aggregates/RouteConfig'
+    return ApiService.Post<AggregateReRouteConfig>(_url, payload, serviceUrl)
+  }
+
+  public static deleteAggregateRouteConfig(routeId: string, routeKey: string) {
+    let _url = '/api/ApiGateway/Aggregates/RouteConfig'
+    _url += '?routeId=' + routeId
+    _url += '&ReRouteKey=' + routeKey
+    return ApiService.Delete(_url, serviceUrl)
+  }
 }
 
 export class ServiceDiscoveryProvider {
@@ -410,5 +454,102 @@ export class ReRouteGetByPagedDto extends PagedAndSortedResultRequestDto {
     super()
     this.filter = ''
     this.sorting = 'ReRouteName'
+  }
+}
+
+export class AggregateReRouteConfig {
+  reRouteKey = ''
+  parameter = ''
+  jsonPath = ''
+}
+
+export class AggregateReRouteConfigCreate extends AggregateReRouteConfig {
+  routeId = ''
+}
+
+export class AggregateReRouteBase {
+  reRouteKeys!: string[]
+  upstreamPathTemplate = ''
+  upstreamHost = ''
+  reRouteIsCaseSensitive = true
+  aggregator = ''
+  priority?: number
+  upstreamHttpMethod!: string[]
+
+  constructor() {
+    this.reRouteKeys = new Array<string>()
+    this.upstreamHttpMethod = new Array<string>()
+  }
+}
+
+export class AggregateReRoute extends AggregateReRouteBase {
+  appId = ''
+  name = ''
+  reRouteId = ''
+  concurrencyStamp = ''
+  reRouteKeysConfig!: AggregateReRouteConfig[]
+
+  constructor() {
+    super()
+    this.reRouteKeysConfig = new Array<AggregateReRouteConfig>()
+  }
+
+  public static empty() {
+    return new AggregateReRoute()
+  }
+}
+
+export class AggregateReRouteCreate extends AggregateReRouteBase {
+  appId = ''
+  name = ''
+
+  public static empty() {
+    return new AggregateReRouteCreate()
+  }
+
+  public static create(route: AggregateReRoute) {
+    const aggregateRoute = new AggregateReRouteCreate()
+    aggregateRoute.appId = route.appId
+    aggregateRoute.name = route.name
+    aggregateRoute.aggregator = route.aggregator
+    aggregateRoute.priority = route.priority
+    aggregateRoute.reRouteIsCaseSensitive = route.reRouteIsCaseSensitive
+    aggregateRoute.reRouteKeys = route.reRouteKeys
+    aggregateRoute.upstreamHost = route.upstreamHost
+    aggregateRoute.upstreamHttpMethod = route.upstreamHttpMethod
+    aggregateRoute.upstreamPathTemplate = route.upstreamPathTemplate
+    return aggregateRoute
+  }
+}
+
+export class AggregateReRouteUpdate extends AggregateReRouteBase {
+  routeId = ''
+  concurrencyStamp = ''
+
+  public static empty() {
+    return new AggregateReRouteUpdate()
+  }
+
+  public static create(route: AggregateReRoute) {
+    const aggregateRoute = new AggregateReRouteUpdate()
+    aggregateRoute.aggregator = route.aggregator
+    aggregateRoute.concurrencyStamp = route.concurrencyStamp
+    aggregateRoute.priority = route.priority
+    aggregateRoute.reRouteIsCaseSensitive = route.reRouteIsCaseSensitive
+    aggregateRoute.reRouteKeys = route.reRouteKeys
+    aggregateRoute.routeId = route.reRouteId
+    aggregateRoute.upstreamHost = route.upstreamHost
+    aggregateRoute.upstreamHttpMethod = route.upstreamHttpMethod
+    aggregateRoute.upstreamPathTemplate = route.upstreamPathTemplate
+    return aggregateRoute
+  }
+}
+
+export class AggregateReRouteGetByPaged extends PagedAndSortedResultRequestDto {
+  appId = ''
+  filter = ''
+
+  public static empty() {
+    return new AggregateReRouteGetByPaged()
   }
 }

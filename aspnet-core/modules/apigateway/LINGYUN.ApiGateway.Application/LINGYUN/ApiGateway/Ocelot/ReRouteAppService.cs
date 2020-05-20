@@ -46,7 +46,7 @@ namespace LINGYUN.ApiGateway.Ocelot
         public async Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto routeUpdateDto)
         {
             var reRoute = await _reRouteRepository.GetByReRouteIdAsync(long.Parse(routeUpdateDto.ReRouteId));
-
+            reRoute.SetRouteName(routeUpdateDto.ReRouteName);
             reRoute.DangerousAcceptAnyServerCertificateValidator = routeUpdateDto.DangerousAcceptAnyServerCertificateValidator;
             reRoute.DownstreamScheme = routeUpdateDto.DownstreamScheme;
             reRoute.Key = routeUpdateDto.Key;

@@ -290,6 +290,16 @@ export const asyncRoutes: RouteConfig[] = [
           icon: 'route',
           roles: ['ApiGateway.Route']
         }
+      },
+      {
+        path: 'aggregateRoute',
+        component: () => import('@/views/admin/apigateway/aggregateRoute.vue'),
+        name: 'aggregateRoute',
+        meta: {
+          title: 'aggregateRoute',
+          icon: 'aggregateRoute',
+          roles: ['ApiGateway.AggregateRoute']
+        }
       }
     ]
   },

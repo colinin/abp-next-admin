@@ -16,8 +16,8 @@ namespace LINGYUN.ApiGateway.Ocelot
         public virtual string ReRouteKeys { get; private set; }
         public virtual string UpstreamPathTemplate { get; private set; }
         public virtual string UpstreamHost { get; private set; }
-        public virtual bool ReRouteIsCaseSensitive { get; private set; }
-        public virtual string Aggregator { get; private set; }
+        public virtual bool ReRouteIsCaseSensitive { get; set; }
+        public virtual string Aggregator { get; set; }
         public virtual int? Priority { get; set; }
         public virtual string UpstreamHttpMethod { get; private set; }
         public virtual ICollection<AggregateReRouteConfig> ReRouteKeysConfig { get; private set; }
@@ -26,26 +26,27 @@ namespace LINGYUN.ApiGateway.Ocelot
             ReRouteKeysConfig = new List<AggregateReRouteConfig>();
         }
 
-        public AggregateReRoute SetUpstreamPath(string host, string path, string appId)
+        public AggregateReRoute(string name, long routeId, string aggregator, string appId) : this()
         {
             AppId = appId;
-            UpstreamHost = host;
-            UpstreamPathTemplate = path;
-            return this;
-        }
-
-        public AggregateReRoute(string name, long routeId, string aggregator) : this()
-        {
             Name = name;
             ReRouteId = routeId;
             Aggregator = aggregator;
+            ReRouteKeys = "";
+            UpstreamHttpMethod = "";
+        }
+
+        public void SetUpstream(string host, string template)
+        {
+            UpstreamHost = host;
+            UpstreamPathTemplate = template;
         }
 
         public AggregateReRoute AddUpstreamHttpMethod(string method)
         {
             if (!UpstreamHttpMethod.Contains(method))
             {
-                UpstreamHttpMethod += "," + method;
+                UpstreamHttpMethod += method + ",";
             }
             return this;
         }
@@ -60,11 +61,17 @@ namespace LINGYUN.ApiGateway.Ocelot
             return this;
         }
 
+        public AggregateReRoute RemoveAllUpstreamHttpMethod()
+        {
+            UpstreamHttpMethod = "";
+            return this;
+        }
+
         public AggregateReRoute AddRouteKey(string key)
         {
             if (!ReRouteKeys.Contains(key))
             {
-                ReRouteKeys += "," + key;
+                ReRouteKeys += key + ",";
             }
             return this;
         }
@@ -77,6 +84,17 @@ namespace LINGYUN.ApiGateway.Ocelot
                 ReRouteKeys = ReRouteKeys.Replace(removeKey, "");
             }
             return this;
+        }
+
+        public AggregateReRoute RemoveAllRouteKey()
+        {
+            ReRouteKeys = "";
+            return this;
+        }
+
+        public AggregateReRouteConfig FindReRouteConfig(string routeKey)
+        {
+            return ReRouteKeysConfig.FirstOrDefault(cfg => cfg.ReRouteKey.Equals(routeKey));
         }
 
         public AggregateReRoute AddReRouteConfig(string routeKey, string paramter, string jsonPath)
@@ -93,6 +111,12 @@ namespace LINGYUN.ApiGateway.Ocelot
         public AggregateReRoute RemoveReRouteConfig(string routeKey)
         {
             ReRouteKeysConfig.RemoveAll(k => k.ReRouteKey.Equals(routeKey));
+            return this;
+        }
+
+        public AggregateReRoute RemoveAllReRouteConfig()
+        {
+            ReRouteKeysConfig.Clear();
             return this;
         }
     }

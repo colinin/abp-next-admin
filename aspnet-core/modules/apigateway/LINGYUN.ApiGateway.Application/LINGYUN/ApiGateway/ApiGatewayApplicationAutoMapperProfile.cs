@@ -64,12 +64,18 @@ namespace LINGYUN.ApiGateway
             CreateMap<AggregateReRouteConfig, AggregateReRouteConfigDto>();
 
             CreateMap<AggregateReRoute, AggregateReRouteDto>()
-                .ForMember(dto => dto.ReRouteKeys, map => map.MapFrom(m => !m.ReRouteKeys.IsNullOrWhiteSpace() && m.ReRouteKeys.Contains(",") 
-                ? m.ReRouteKeys.Split(',').ToList()
-                : new List<string>()))
-                .ForMember(dto => dto.UpstreamHttpMethod, map => map.MapFrom(m => !m.UpstreamHttpMethod.IsNullOrWhiteSpace() && m.UpstreamHttpMethod.Contains(",")
-                ? m.UpstreamHttpMethod.Split(',').ToList()
-                : new List<string>()));
+                .ForMember(dto => dto.ReRouteKeys, map => map.MapFrom(m => MapperList(m.ReRouteKeys)))
+                .ForMember(dto => dto.UpstreamHttpMethod, map => map.MapFrom(m => MapperList(m.UpstreamHttpMethod)));
+
+            CreateMap<AggregateReRouteCreateDto, AggregateReRoute>()
+                .ForCtorParam("name", x => x.MapFrom(m => m.Name))
+                .ForCtorParam("routeId", x => x.MapFrom(m => snowflakeIdGenerator.NextId()))
+                .ForCtorParam("aggregator", x => x.MapFrom(m => m.Aggregator))
+                .ForCtorParam("appId", x => x.MapFrom(m => m.AppId))
+                .ForMember(src => src.ExtraProperties, x => x.Ignore())
+                .ForMember(src => src.ReRouteKeys, x => x.Ignore())
+                .ForMember(src => src.ReRouteKeysConfig, x => x.Ignore())
+                .ForMember(src => src.UpstreamHttpMethod, x => x.Ignore());
 
             CreateMap<GlobalConfiguration, GlobalConfigurationDto>();
 

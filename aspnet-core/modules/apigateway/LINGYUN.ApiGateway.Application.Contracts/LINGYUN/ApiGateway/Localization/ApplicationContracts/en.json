@@ -7,9 +7,11 @@
     "Permissions:Route": "Route",
     "Permissions:DynamicRoute": "Dynamic",
     "Permissions:AggregateRoute": "Aggregate",
+    "Permissions:ManageRouteConfig": "Route config",
     "Permissions:Update": "Update",
     "Permissions:Export": "Export",
     "Permissions:Import": "Import",
-    "Permissions:Delete": "Delete"
+    "Permissions:Delete": "Delete",
+    "AggregateReRouteExists": "Aggregate name: {0} already exists!"
   }
 }

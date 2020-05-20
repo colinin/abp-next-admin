@@ -51,6 +51,7 @@
             public const string Delete = Default + ".Delete";
             public const string Export = Default + ".Export";
             public const string Import = Default + ".Import";
+            public const string ManageRouteConfig = Default + ".ManageRouteConfig";
         }
     }
 }

@@ -34,7 +34,6 @@
         <el-row>
           <el-col :span="12">
             <el-form-item
-              v-popover:popRouteName
               prop="reRouteName"
               :label="$t('apiGateWay.reRouteName')"
             >

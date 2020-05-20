@@ -29,5 +29,44 @@ namespace LINGYUN.ApiGateway.Ocelot
         {
             return await AggregateReRouteAppService.GetPagedListAsync(aggregateRouteGetByPaged);
         }
+
+        [HttpGet]
+        [Route("{RouteId}")]
+        public async Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        {
+            return await AggregateReRouteAppService.GetAsync(aggregateRouteGetByRouteId);
+        }
+
+        [HttpPost]
+        public async Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto aggregateReRouteCreate)
+        {
+            return await AggregateReRouteAppService.CreateAsync(aggregateReRouteCreate);
+        }
+
+        [HttpPut]
+        public async Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto aggregateReRouteUpdate)
+        {
+            return await AggregateReRouteAppService.UpdateAsync(aggregateReRouteUpdate);
+        }
+
+        [HttpDelete]
+        public async Task DeleteAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        {
+            await AggregateReRouteAppService.DeleteAsync(aggregateRouteGetByRouteId);
+        }
+
+        [HttpPost]
+        [Route("RouteConfig")]
+        public async Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto aggregateReRouteConfigCreate)
+        {
+            return await AggregateReRouteAppService.AddRouteConfigAsync(aggregateReRouteConfigCreate);
+        }
+
+        [HttpDelete]
+        [Route("RouteConfig")]
+        public async Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto aggregateReRouteConfigGetByKey)
+        {
+            await AggregateReRouteAppService.DeleteRouteConfigAsync(aggregateReRouteConfigGetByKey);
+        }
     }
 }

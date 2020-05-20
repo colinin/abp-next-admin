@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="LINGYUN\Abp\TenantManagement\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="2.7.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="2.7.0" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using Ocelot.Extenssions;
+using Ocelot.Middleware.Multiplexer;
 using Ocelot.Provider.Polly;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
@@ -54,7 +55,10 @@ namespace LINGYUN.ApiGateway
                     options.ApiSecret = configuration["AuthServer:ApiSecret"];
                 });
 
-            context.Services.AddOcelot().AddPolly();
+            context.Services
+                .AddOcelot()
+                .AddPolly()
+                .AddSingletonDefinedAggregator<AbpApiDefinitionAggregator>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

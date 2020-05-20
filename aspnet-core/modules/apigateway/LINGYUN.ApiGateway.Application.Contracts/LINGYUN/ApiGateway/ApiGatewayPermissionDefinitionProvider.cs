@@ -45,6 +45,7 @@ namespace LINGYUN.ApiGateway
             aggregateRoute.AddChild(ApiGatewayPermissions.AggregateRoute.Export, L("Permissions:Export"), MultiTenancySides.Host);
             aggregateRoute.AddChild(ApiGatewayPermissions.AggregateRoute.Import, L("Permissions:Import"), MultiTenancySides.Host);
             aggregateRoute.AddChild(ApiGatewayPermissions.AggregateRoute.Delete, L("Permissions:Delete"), MultiTenancySides.Host);
+            aggregateRoute.AddChild(ApiGatewayPermissions.AggregateRoute.ManageRouteConfig, L("Permissions:ManageRouteConfig"), MultiTenancySides.Host);
         }
 
         protected virtual LocalizableString L(string name)
