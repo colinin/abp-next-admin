@@ -359,7 +359,7 @@ export const asyncRoutes: RouteConfig[] = [
     meta: {
       title: 'identityServer',
       icon: 'manager',
-      roles: ['IdentityServer.Clients'],
+      roles: ['IdentityServer.Clients', 'IdentityServer.ApiResources', 'IdentityServer.IdentityResources'],
       alwaysShow: true
     },
     children: [
@@ -381,6 +381,16 @@ export const asyncRoutes: RouteConfig[] = [
           title: 'apiresources',
           icon: 'apiresources',
           roles: ['IdentityServer.ApiResources']
+        }
+      },
+      {
+        path: 'identityresources',
+        component: () => import('@/views/admin/identityServer/identity-resources/index.vue'),
+        name: 'identityresources',
+        meta: {
+          title: 'identityresources',
+          icon: 'identityresources',
+          roles: ['IdentityServer.IdentityResources']
         }
       }
     ]

@@ -53,11 +53,11 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// </summary>
         public bool CopyPostLogoutRedirectUri { get; set; }
         /// <summary>
-        /// 客户端 IdP 限制
+        /// 复制客户端属性
         /// </summary>
         public bool CopyPropertie { get; set; }
         /// <summary>
-        /// 复制客户端属性
+        /// 复制客户端 IdP 限制
         /// </summary>
         public bool CopyIdentityProviderRestriction { get; set; }
         public ClientCloneInputDto()

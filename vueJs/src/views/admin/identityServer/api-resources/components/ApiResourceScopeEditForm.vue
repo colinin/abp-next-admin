@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form
+        v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
         ref="formApiScope"
         label-width="120px"
         :model="apiScope"
@@ -58,7 +59,7 @@
         </el-form-item>
         <el-form-item
           prop="userClaims"
-          :label="$t('identityServer.apiResourceUserClaims')"
+          :label="$t('identityServer.resourceUserClaims')"
         >
           <el-input-tag-ex
             v-model="apiScope.userClaims"
@@ -73,16 +74,14 @@
           <el-button
             type="primary"
             style="width:180px"
-            :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
             @click="onSaveApiScope"
           >
             {{ $t('identityServer.createApiScope') }}
           </el-button>
         </el-form-item>
+        <el-divider />
       </el-form>
     </div>
-
-    <el-divider />
 
     <el-table
       row-key="value"

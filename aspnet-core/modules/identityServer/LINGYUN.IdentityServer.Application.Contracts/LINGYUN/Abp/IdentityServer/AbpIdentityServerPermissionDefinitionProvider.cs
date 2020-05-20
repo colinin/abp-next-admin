@@ -55,6 +55,17 @@ namespace LINGYUN.Abp.IdentityServer
             apiResourceSecretPermissions.AddChild(AbpIdentityServerPermissions.ApiResources.Secrets.Create, L("Permissions:Create"));
             apiResourceSecretPermissions.AddChild(AbpIdentityServerPermissions.ApiResources.Secrets.Update, L("Permissions:Update"));
             apiResourceSecretPermissions.AddChild(AbpIdentityServerPermissions.ApiResources.Secrets.Delete, L("Permissions:Delete"));
+
+            // 身份资源权限
+            var identityResourcePermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.IdentityResources.Default, L("Permissions:IdentityResources"));
+            identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.Create, L("Permissions:Create"));
+            identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.Update, L("Permissions:Update"));
+            identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.Delete, L("Permissions:Delete"));
+
+            // 身份资源属性权限
+            var identityResourcePropertyPermissiosn = identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.Properties.Default, L("Permissions:IdentityResources:Properties"));
+            identityResourcePropertyPermissiosn.AddChild(AbpIdentityServerPermissions.IdentityResources.Properties.Create, L("Permissions:Create"));
+            identityResourcePropertyPermissiosn.AddChild(AbpIdentityServerPermissions.IdentityResources.Properties.Delete, L("Permissions:Delete"));
         }
 
         protected virtual LocalizableString L(string name)

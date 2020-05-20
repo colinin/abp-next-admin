@@ -576,7 +576,7 @@ export default class extends Vue {
 
   constructor() {
     super()
-    this.client = new Client()
+    this.client = Client.empty()
   }
 
   @Watch('clientId', { immediate: true })
@@ -585,6 +585,8 @@ export default class extends Vue {
       ClientService.getClientById(id).then(client => {
         this.client = client
       })
+    } else {
+      this.client = Client.empty()
     }
   }
 
@@ -614,11 +616,6 @@ export default class extends Vue {
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
-  }
-
-  private test(v: any) {
-    console.log(v)
-    console.log(this.client.redirectUris)
   }
 }
 </script>

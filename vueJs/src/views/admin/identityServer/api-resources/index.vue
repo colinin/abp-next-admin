@@ -40,7 +40,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column
-        :label="$t('identityServer.apiResourceName')"
+        :label="$t('identityServer.resourceName')"
         prop="name"
         sortable
         width="150px"
@@ -51,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.apiResourceDisplayName')"
+        :label="$t('identityServer.resourceDisplayName')"
         prop="displayName"
         sortable
         width="200px"
@@ -62,7 +62,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.apiResourceStatus')"
+        :label="$t('identityServer.resourceStatus')"
         prop="enabled"
         sortable
         width="140px"
@@ -75,7 +75,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.apiResourceDescription')"
+        :label="$t('identityServer.resourceDescription')"
         prop="description"
         sortable
         width="200px"
@@ -86,7 +86,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('creationTime')"
+        :label="$t('global.creationTime')"
         prop="creationTime"
         width="170px"
         align="center"
@@ -100,7 +100,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('lastModificationTime')"
+        :label="$t('global.lastModificationTime')"
         prop="lastModificationTime"
         width="170px"
         align="center"
@@ -114,7 +114,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('operaActions')"
+        :label="$t('global.operaActions')"
         align="center"
         width="250px"
         fixed="right"

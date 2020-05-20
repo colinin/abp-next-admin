@@ -4,8 +4,11 @@
     label-width="80px"
     :model="userProfile"
   >
-    <el-tabs>
-      <el-tab-pane :label="$t('userProfile.basic')">
+    <el-tabs v-model="activedTabPane">
+      <el-tab-pane
+        :label="$t('userProfile.basic')"
+        name="basic"
+      >
         <el-form-item
           prop="userName"
           :label="$t('users.userName')"
@@ -52,7 +55,10 @@
           />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane :label="$t('userProfile.security')">
+      <el-tab-pane
+        :label="$t('userProfile.security')"
+        name="security"
+      >
         <el-form-item
           v-if="!hasEditUser"
           prop="password"
@@ -91,7 +97,10 @@
           <el-switch v-model="userProfile.lockoutEnabled" />
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane :label="$t('userProfile.roles')">
+      <el-tab-pane
+        :label="$t('userProfile.roles')"
+        name="roles"
+      >
         <el-transfer
           v-model="userRoles"
           :titles="[$t('userProfile.roleList'),$t('userProfile.hasRoles')]"
@@ -103,7 +112,7 @@
         :label="$t('userProfile.permission')"
       >
         <PermissionTree
-          v-if="allowedChangePermissions()"
+          ref="permissionTree"
           :expanded="false"
           :readonly="!checkPermission(['AbpIdentity.Users.ManagePermissions'])"
           :permission="userPermission"
@@ -171,8 +180,11 @@ export default class extends Vue {
   /** 变更用户权限数据 */
   private editUserPermissions: IPermission[]
 
+  private activedTabPane: string
+
   constructor() {
     super()
+    this.activedTabPane = 'basic'
     this.userPassword = ''
     this.hasEditUser = false
     this.userRolesChanged = false
@@ -312,12 +324,20 @@ export default class extends Vue {
   }
 
   private onCancel() {
+    this.resetForm()
     this.$emit('onClose')
   }
 
-  private resetForm(formName: string) {
-    const userProfileForm = this.$refs[formName] as any
+  private resetForm() {
+    this.activedTabPane = 'basic'
+    this.userRoles = new Array<string>()
+    const userProfileForm = this.$refs.profile as any
     userProfileForm.resetFields()
+    if (this.hasLoadPermission) {
+      const userPermission = this.$refs.permissionTree as PermissionTree
+      userPermission.resetPermissions()
+      this.hasLoadPermission = false
+    }
   }
 
   private createAddUserDto() {

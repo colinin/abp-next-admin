@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form
+        v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
         ref="formApiSecret"
         label-width="100px"
         :model="apiSecret"
@@ -107,16 +108,14 @@
           <el-button
             type="primary"
             style="width:180px"
-            :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
             @click="onSaveApiSecret"
           >
             {{ $t('identityServer.createApiSecret') }}
           </el-button>
         </el-form-item>
+        <el-divider />
       </el-form>
     </div>
-
-    <el-divider />
 
     <el-table
       row-key="value"

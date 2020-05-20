@@ -16,9 +16,15 @@
     "Permissions:ApiResources": "ApiResources",
     "Permissions:ApiResources:Scope": "Api scope",
     "Permissions:ApiResources:Secrets": "Api secret",
+    "Permissions:IdentityResources": "IdentityResources",
+    "Permissions:IdentityResources:Properties": "Identity property",
     "ClientIdExisted": "Client id: {0} already exists!",
+    "ApiResourceNameExisted": "Api resource name: {0} already exists!",
+    "IdentityResourceNameExisted": "Identity resource name: {0} already exists!",
+    "IdentityResourcePropertyExisted": "Identity resource property: {0} already exists!",
     "ClientClaimNotFound": "Client claim: {0} not found!",
     "ClientSecretNotFound": "Client secret: {0} not found!",
-    "ClientPropertyNotFound": "Client property: {0} not found!"
+    "ClientPropertyNotFound": "Client property: {0} not found!",
+    "IdentityResourcePropertyNotFound": "Identity resource property: {0} not found!"
   }
 }

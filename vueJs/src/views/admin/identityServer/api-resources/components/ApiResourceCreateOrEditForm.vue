@@ -9,7 +9,7 @@
       >
         <el-form-item
           prop="enabled"
-          :label="$t('identityServer.enabledApiResource')"
+          :label="$t('identityServer.enabledResource')"
         >
           <el-switch
             v-model="apiResource.enabled"
@@ -17,17 +17,17 @@
         </el-form-item>
         <el-form-item
           prop="name"
-          :label="$t('identityServer.apiResourceName')"
+          :label="$t('identityServer.resourceName')"
         >
           <el-input
             v-model="apiResource.name"
             :readonly="isEdit"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.apiResourceName')})"
+            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.resourceName')})"
           />
         </el-form-item>
         <el-form-item
           prop="displayName"
-          :label="$t('identityServer.apiResourceDisplayName')"
+          :label="$t('identityServer.resourceDisplayName')"
         >
           <el-input
             v-model="apiResource.displayName"
@@ -35,7 +35,7 @@
         </el-form-item>
         <el-form-item
           prop="description"
-          :label="$t('identityServer.apiResourceDescription')"
+          :label="$t('identityServer.resourceDescription')"
         >
           <el-input
             v-model="apiResource.description"
@@ -43,7 +43,7 @@
         </el-form-item>
         <el-form-item
           prop="userClaims"
-          :label="$t('identityServer.apiResourceUserClaims')"
+          :label="$t('identityServer.resourceUserClaims')"
         >
           <el-input-tag-ex
             v-model="apiResource.userClaims"
@@ -113,6 +113,8 @@ export default class extends Vue {
       ApiResourceService.getApiResourceById(this.apiResourceId).then(resource => {
         this.apiResource = resource
       })
+    } else {
+      this.apiResource = ApiResource.empty()
     }
   }
 

@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.IdentityServer.ApiResources;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
@@ -40,6 +41,11 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         [Authorize(AbpIdentityServerPermissions.ApiResources.Create)]
         public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto apiResourceCreate)
         {
+            var apiResourceExists = await ApiResourceRepository.CheckNameExistAsync(apiResourceCreate.Name);
+            if (apiResourceExists)
+            {
+                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ApiResourceNameExisted, apiResourceCreate.Name]);
+            }
             var apiResource = new ApiResource(GuidGenerator.Create(), apiResourceCreate.Name, 
                 apiResourceCreate.DisplayName, apiResourceCreate.Description);
             apiResource.Enabled = apiResourceCreate.Enabled;

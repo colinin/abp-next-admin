@@ -52,6 +52,7 @@ export interface IPermission {
   isGranted: boolean
 }
 
+/** 分页排序查询对象 */
 export class PagedAndSortedResultRequestDto implements IPagedResultRequest, ISortedResultRequest {
   /** 查询页码 */
   skipCount: number
