@@ -309,7 +309,7 @@ export const asyncRoutes: RouteConfig[] = [
     meta: {
       title: 'admin',
       icon: 'manager',
-      roles: ['AbpIdentity.Users', 'AbpIdentity.Roles'], // you can set roles in root nav
+      roles: ['AbpIdentity.Users', 'AbpIdentity.Roles', 'AbpSettingManagement.Settings', 'AbpTenantManagement.Tenants'], // you can set roles in root nav
       alwaysShow: true // will always show the root menu
     },
     children: [
@@ -341,6 +341,16 @@ export const asyncRoutes: RouteConfig[] = [
           title: 'roles',
           icon: 'role',
           roles: ['AbpIdentity.Roles']
+        }
+      },
+      {
+        path: 'tenants',
+        component: () => import('@/views/admin/tenants/index.vue'),
+        name: 'tenants',
+        meta: {
+          title: 'tenants',
+          icon: 'tenants',
+          roles: ['AbpTenantManagement.Tenants']
         }
       }
     ]

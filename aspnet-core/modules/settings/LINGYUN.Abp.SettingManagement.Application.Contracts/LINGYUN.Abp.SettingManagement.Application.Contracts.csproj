@@ -7,13 +7,11 @@
 
   <ItemGroup>
     <None Remove="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\en.json" />
-    <None Remove="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\zh-CN.json" />
     <None Remove="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\zh-CN.json" />
     <EmbeddedResource Include="LINGYUN\Abp\SettingManagement\Localization\ApplicationContracts\zh-Hans.json" />
   </ItemGroup>
 

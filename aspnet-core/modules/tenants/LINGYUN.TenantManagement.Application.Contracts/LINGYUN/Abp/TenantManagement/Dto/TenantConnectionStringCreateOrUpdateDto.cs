@@ -7,9 +7,6 @@ namespace LINGYUN.Abp.TenantManagement
     public class TenantConnectionStringCreateOrUpdateDto
     {
         [Required]
-        public Guid Id { get; set; }
-
-        [Required]
         [StringLength(TenantConnectionStringConsts.MaxNameLength)]
         public string Name { get; set; }
 

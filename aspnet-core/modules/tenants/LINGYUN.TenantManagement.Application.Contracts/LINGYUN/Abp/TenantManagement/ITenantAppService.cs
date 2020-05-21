@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.TenantManagement
 
         Task<ListResultDto<TenantConnectionStringDto>> GetConnectionStringAsync(Guid id);
 
-        Task SetConnectionStringAsync(TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate);
+        Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate);
 
         Task DeleteConnectionStringAsync(TenantConnectionGetByNameInputDto tenantConnectionGetByName);
     }

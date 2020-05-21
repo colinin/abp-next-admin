@@ -115,10 +115,12 @@ class User extends VuexModule implements IUserState {
     }
     await UserApiService.userLogout(getRefreshToken())
     removeToken()
+    removeTenant()
     resetRouter()
     // Reset visited views and cached views
     TagsViewModule.delAllViews()
     PermissionModule.ResetPermissions()
+    PermissionModule.ResetRoutes()
     this.SET_TOKEN('')
     this.SET_ROLES([])
   }

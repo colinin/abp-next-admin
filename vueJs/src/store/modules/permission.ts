@@ -78,6 +78,10 @@ class Permission extends VuexModule implements IPermissionState {
   @Action ResetPermissions() {
     this.SET_AUTHPERMISSIONS([])
   }
+
+  @Action ResetRoutes() {
+    this.SET_ROUTES([])
+  }
 }
 
 export const PermissionModule = getModule(Permission)

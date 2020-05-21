@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.SettingManagement
             {
                 options.Resources
                 .Get<AbpSettingManagementResource>()
-                .AddVirtualJson("/Multicolin/Abp/SettingManagement/Localization/ApplicationContracts");
+                .AddVirtualJson("/LINGYUN/Abp/SettingManagement/Localization/ApplicationContracts");
             });
         }
     }

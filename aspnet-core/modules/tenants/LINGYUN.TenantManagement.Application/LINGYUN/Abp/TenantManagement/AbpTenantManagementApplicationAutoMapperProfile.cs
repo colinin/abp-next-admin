@@ -7,6 +7,8 @@ namespace LINGYUN.Abp.TenantManagement
     {
         public AbpTenantManagementApplicationAutoMapperProfile()
         {
+            CreateMap<TenantConnectionString, TenantConnectionStringDto>();
+
             CreateMap<Tenant, TenantDto>()
                 .MapExtraProperties();
         }

@@ -72,8 +72,6 @@ service.interceptors.response.use(
     let message = error.message
     if (error.response.headers._abperrorformat) {
       message = error.response.data.error.message + error.response.data.error.details
-    } else if (error.response.headers._abperrorformat) {
-      message = error.response.data.error_description
     }
 
     Message({

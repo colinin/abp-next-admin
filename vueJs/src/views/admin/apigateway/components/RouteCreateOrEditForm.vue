@@ -146,30 +146,24 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item
-              prop="upstreamPathTemplate"
-              :label="$t('apiGateWay.upstreamPathTemplate')"
-            >
-              <el-input
-                v-model="apiGateWayRoute.upstreamPathTemplate"
-                :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.upstreamPathTemplate')})"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item
-              prop="downstreamPathTemplate"
-              :label="$t('apiGateWay.downstreamPathTemplate')"
-            >
-              <el-input
-                v-model="apiGateWayRoute.downstreamPathTemplate"
-                :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.downstreamPathTemplate')})"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item
+          prop="upstreamPathTemplate"
+          :label="$t('apiGateWay.upstreamPathTemplate')"
+        >
+          <el-input
+            v-model="apiGateWayRoute.upstreamPathTemplate"
+            :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.upstreamPathTemplate')})"
+          />
+        </el-form-item>
+        <el-form-item
+          prop="downstreamPathTemplate"
+          :label="$t('apiGateWay.downstreamPathTemplate')"
+        >
+          <el-input
+            v-model="apiGateWayRoute.downstreamPathTemplate"
+            :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.downstreamPathTemplate')})"
+          />
+        </el-form-item>
         <el-row>
           <el-col :span="12">
             <el-form-item

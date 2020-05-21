@@ -13,8 +13,8 @@ namespace LINGYUN.Abp.SettingManagement
         {
             var settingPermissionGroup = context.AddGroup(AbpSettingManagementPermissions.GroupName, L("Permission:SettingManagement"));
             
-            settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Default, L("Permission:Settings"));
-            settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Update, L("Permission:Update"));
+            var settingPermissions = settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Default, L("Permission:Settings"));
+            settingPermissions.AddChild(AbpSettingManagementPermissions.Settings.Update, L("Permission:Update"));
         }
 
         private static LocalizableString L(string name)

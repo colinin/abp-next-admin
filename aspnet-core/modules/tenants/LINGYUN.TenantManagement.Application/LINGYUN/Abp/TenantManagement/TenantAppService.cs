@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Common.EventBus.Tenants;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Data;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement;
 
@@ -12,16 +13,16 @@ namespace LINGYUN.Abp.TenantManagement
     [Authorize(TenantManagementPermissions.Tenants.Default)]
     public class TenantAppService : TenantManagementAppServiceBase, ITenantAppService
     {
-        protected IDataSeeder DataSeeder { get; }
+        protected IDistributedEventBus EventBus { get; }
         protected ITenantRepository TenantRepository { get; }
         protected ITenantManager TenantManager { get; }
 
         public TenantAppService(
             ITenantRepository tenantRepository,
             ITenantManager tenantManager,
-            IDataSeeder dataSeeder)
+            IDistributedEventBus eventBus)
         {
-            DataSeeder = dataSeeder;
+            EventBus = eventBus;
             TenantRepository = tenantRepository;
             TenantManager = tenantManager;
         }
@@ -58,16 +59,16 @@ namespace LINGYUN.Abp.TenantManagement
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
-            using (CurrentTenant.Change(tenant.Id, tenant.Name))
+            var createEventData = new CreateEventData
             {
-                //TODO: Handle database creation?
-
-                await DataSeeder.SeedAsync(
-                                new DataSeedContext(tenant.Id)
-                                    .WithProperty("AdminEmail", input.AdminEmailAddress)
-                                    .WithProperty("AdminPassword", input.AdminPassword)
-                                );
-            }
+                Id = tenant.Id,
+                Name = tenant.Name,
+                AdminEmailAddress = input.AdminEmailAddress,
+                AdminPassword = input.AdminPassword
+            };
+            // 因为项目各自独立，租户增加时添加管理用户必须通过事件总线
+            // 而 TenantEto 对象没有包含所需的用户名密码，需要独立发布事件
+            await EventBus.PublishAsync(createEventData);
 
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
@@ -75,10 +76,18 @@ namespace LINGYUN.Abp.TenantManagement
         [Authorize(TenantManagementPermissions.Tenants.Update)]
         public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
-            var tenant = await TenantRepository.GetAsync(id);
+            var tenant = await TenantRepository.GetAsync(id, false);
+            var updateEventData = new UpdateEventData
+            {
+                Id = tenant.Id,
+                OriginName = tenant.Name,
+                Name = input.Name
+            };
             await TenantManager.ChangeNameAsync(tenant, input.Name);
             input.MapExtraPropertiesTo(tenant);
             await TenantRepository.UpdateAsync(tenant);
+
+            await EventBus.PublishAsync(updateEventData);
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
@@ -90,8 +99,12 @@ namespace LINGYUN.Abp.TenantManagement
             {
                 return;
             }
-
+            var deleteEventData = new DeleteEventData
+            {
+                Id = id
+            };
             await TenantRepository.DeleteAsync(tenant);
+            await EventBus.PublishAsync(deleteEventData);
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
@@ -118,10 +131,16 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task SetConnectionStringAsync(TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate)
+        public virtual async Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate)
         {
-            var tenant = await TenantRepository.GetAsync(tenantConnectionStringCreateOrUpdate.Id);
+            var tenant = await TenantRepository.GetAsync(id);
             tenant.SetConnectionString(tenantConnectionStringCreateOrUpdate.Name, tenantConnectionStringCreateOrUpdate.Value);
+            
+            return new TenantConnectionStringDto
+            {
+                Name = tenantConnectionStringCreateOrUpdate.Name,
+                Value = tenantConnectionStringCreateOrUpdate.Value
+            };
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]

@@ -465,6 +465,10 @@ export class AggregateReRouteConfig {
 
 export class AggregateReRouteConfigCreate extends AggregateReRouteConfig {
   routeId = ''
+
+  public static empty() {
+    return new AggregateReRouteConfigCreate()
+  }
 }
 
 export class AggregateReRouteBase {

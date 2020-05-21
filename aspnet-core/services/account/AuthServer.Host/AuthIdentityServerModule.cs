@@ -1,12 +1,13 @@
-﻿using IdentityServer4.Validation;
-using LINGYUN.ApiGateway;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -25,26 +26,18 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
-using LINGYUN.Abp.IdentityServer;
-
-using AbpPermissionManagementApplicationModule = LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule;
-
 namespace AuthServer.Host
 {
     [DependsOn(
-        typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpIdentityServerApplicationModule),
         typeof(AbpIdentityServerHttpApiModule),
         typeof(AbpAccountApplicationModule),
@@ -53,6 +46,7 @@ namespace AuthServer.Host
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
+        typeof(AbpCAPEventBusModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
@@ -60,15 +54,27 @@ namespace AuthServer.Host
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule)
         )]
     public class AuthIdentityServerModule : AbpModule
     {
         private const string DefaultCorsPolicyName = "Default";
+
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+
+            PreConfigure<CapOptions>(options =>
+            {
+                options
+                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+            });
+        }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

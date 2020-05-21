@@ -1,4 +1,0 @@
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\tenants\LINGYUN.TenantManagement.Application\bin\Debug\netstandard2.0\LINGYUN.TenantManagement.Application.deps.json
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\tenants\LINGYUN.TenantManagement.Application\bin\Debug\netstandard2.0\LINGYUN.TenantManagement.Application.dll
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\tenants\LINGYUN.TenantManagement.Application\obj\Debug\netstandard2.0\LINGYUN.TenantManagement.Application.AssemblyInfoInputs.cache
-D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\tenants\LINGYUN.TenantManagement.Application\obj\Debug\netstandard2.0\LINGYUN.TenantManagement.Application.AssemblyInfo.cs

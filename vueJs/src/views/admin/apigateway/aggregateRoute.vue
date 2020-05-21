@@ -140,14 +140,33 @@
           >
             {{ $t('apiGateWay.updateAggregateRoute') }}
           </el-button>
-          <el-button
-            :disabled="!checkPermission(['ApiGateway.AggregateRoute.Delete'])"
-            size="mini"
-            type="warning"
-            @click="handleDeleteAggregateRoute(row.reRouteId, row.name)"
+          <el-dropdown
+            class="options"
+            @command="handleCommand"
           >
-            {{ $t('apiGateWay.deleteAggregateRoute') }}
-          </el-button>
+            <el-button
+              v-permission="['ApiGateway.AggregateRoute']"
+              size="mini"
+              type="info"
+            >
+              {{ $t('global.otherOpera') }}<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                :command="{key: 'config', row}"
+                :disabled="!checkPermission(['ApiGateway.AggregateRoute.ManageRouteConfig'])"
+              >
+                {{ $t('apiGateWay.routeKeysConfig') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                divided
+                :command="{key: 'delete', row}"
+                :disabled="!checkPermission(['ApiGateway.AggregateRoute.Delete'])"
+              >
+                {{ $t('apiGateWay.deleteAggregateRoute') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -177,6 +196,20 @@
         @closed="handleAggregateRouteEditFormClosed"
       />
     </el-dialog>
+
+    <el-dialog
+      v-el-draggable-dialog
+      width="800px"
+      :visible.sync="showEditAggregateRouteConfigDialog"
+      :title="$t('apiGateWay.routeKeysConfig')"
+      custom-class="modal-form"
+      :show-close="false"
+    >
+      <AggregateRouteConfigEditForm
+        :aggregate-route-id="editAggregateRouteId"
+        @closed="handleAggregateRouteConfigFormClosed"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -184,6 +217,7 @@
 import { checkPermission } from '@/utils/permission'
 import { Component, Vue } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
+import AggregateRouteConfigEditForm from './components/AggregateRouteConfigEditForm.vue'
 import AggregateRouteCreateOrEditForm from './components/AggregateRouteCreateOrEditForm.vue'
 import ApiGatewayService, { RouteGroupAppIdDto, AggregateReRoute, AggregateReRouteGetByPaged } from '@/api/apigateway'
 
@@ -191,6 +225,7 @@ import ApiGatewayService, { RouteGroupAppIdDto, AggregateReRoute, AggregateReRou
   name: 'AggregateRoute',
   components: {
     Pagination,
+    AggregateRouteConfigEditForm,
     AggregateRouteCreateOrEditForm
   },
   methods: {
@@ -215,9 +250,11 @@ export default class extends Vue {
   private editRouteTitle: any
   private aggregateRouteList: AggregateReRoute[]
   private aggregateRouteListLoading: boolean
-  private showEditAggregateRouteDialog: boolean
   private aggregateRouteGetPagedFilter: AggregateReRouteGetByPaged
   private routeGroupAppIdOptions: RouteGroupAppIdDto[]
+
+  private showEditAggregateRouteDialog: boolean
+  private showEditAggregateRouteConfigDialog: boolean
 
   constructor() {
     super()
@@ -225,10 +262,12 @@ export default class extends Vue {
     this.routesCount = 0
     this.editRouteTitle = ''
     this.aggregateRouteListLoading = false
-    this.showEditAggregateRouteDialog = false
     this.aggregateRouteList = new Array<AggregateReRoute>()
     this.aggregateRouteGetPagedFilter = new AggregateReRouteGetByPaged()
     this.routeGroupAppIdOptions = new Array<RouteGroupAppIdDto>()
+
+    this.showEditAggregateRouteDialog = false
+    this.showEditAggregateRouteConfigDialog = false
   }
 
   mounted() {
@@ -254,6 +293,18 @@ export default class extends Vue {
 
   private handleSortChange(column: any) {
     this.aggregateRouteGetPagedFilter.sorting = column.prop
+  }
+
+  private handleCommand(command: {key: string, row: AggregateReRoute }) {
+    this.editAggregateRouteId = command.row.reRouteId
+    switch (command.key) {
+      case 'config':
+        this.showEditAggregateRouteConfigDialog = true
+        break
+      case 'delete':
+        this.handleDeleteAggregateRoute(this.editAggregateRouteId, command.row.name)
+        break
+    }
   }
 
   private handleDeleteAggregateRoute(reRouteId: string, name: string) {
@@ -288,8 +339,20 @@ export default class extends Vue {
     }
   }
 
+  private handleAggregateRouteConfigFormClosed() {
+    this.editAggregateRouteId = ''
+    this.showEditAggregateRouteConfigDialog = false
+  }
+
   private l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
   }
 }
 </script>
+
+<style scoped>
+.options {
+  vertical-align: top;
+  margin-left: 20px;
+}
+</style>

@@ -1,7 +1,7 @@
 import { IPermission } from './types'
 import ApiService from './serviceBase'
 
-const serviceUrl = process.env.VUE_APP_BASE_IDENTITY_SERVICE
+const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class PermissionService {
   /** 获取指定权限提供者的权限数据
