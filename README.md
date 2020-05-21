@@ -31,6 +31,8 @@
 
 [abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
+[EasyAbp/Cap](https://github.com/EasyAbp/Abp.EventBus.CAP) (EasyAbp)
+
 Typescript 版本:
 
 [Armour/vue-typescript-admin-mock-server](https://github.com/armour/vue-typescript-admin-mock-server) (mock server for this project)

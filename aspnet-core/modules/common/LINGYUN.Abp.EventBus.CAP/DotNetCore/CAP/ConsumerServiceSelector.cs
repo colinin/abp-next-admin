@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using DotNetCore.CAP.Internal;
+﻿using DotNetCore.CAP.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -10,12 +9,12 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
-namespace EasyAbp.Abp.EventBus.Cap
+namespace DotNetCore.CAP
 {
     [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
     [ExposeServices(typeof(IConsumerServiceSelector), typeof(ConsumerServiceSelector))]
 
-    public class ConsumerServiceSelector : DotNetCore.CAP.Internal.ConsumerServiceSelector
+    public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
     {
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IServiceProvider ServiceProvider { get; }
