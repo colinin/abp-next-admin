@@ -39,7 +39,7 @@ namespace LINGYUN.Platform.EventBus.Handlers
                 // TODO: 租户貌似不存在了,删除应该会失败
                 using (CurrentTenant.Change(eventData.Id))
                 {
-                    var grantPermissions = await PermissionGrantRepository.GetListAsync("R", "admin");
+                    // var grantPermissions = await PermissionGrantRepository.GetListAsync("R", "admin");
 
                     // EfCore MySql 批量删除还是一条一条的语句?
                     // PermissionGrantRepository.GetDbSet().RemoveRange(grantPermissions);
@@ -65,18 +65,18 @@ namespace LINGYUN.Platform.EventBus.Handlers
 
         protected virtual string BuildMySqlBatchDeleteScript(string tableName, Guid tenantId)
         {
-            var batchRmovePermissionSql = new StringBuilder(128);
-            batchRmovePermissionSql.AppendLine($"DELETE FROM `{tableName}` WHERE `TenantId` = '{tenantId}'");
-            batchRmovePermissionSql.AppendLine("AND `ProviderName`='R' AND `ProviderKey`='admin'");
-            return batchRmovePermissionSql.ToString();
+            var batchRemovePermissionSql = new StringBuilder(128);
+            batchRemovePermissionSql.AppendLine($"DELETE FROM `{tableName}` WHERE `TenantId` = '{tenantId}'");
+            batchRemovePermissionSql.AppendLine("AND `ProviderName`='R' AND `ProviderKey`='admin'");
+            return batchRemovePermissionSql.ToString();
         }
 
         protected virtual string BuildSqlServerBatchDeleteScript(string tableName, Guid tenantId)
         {
-            var batchRmovePermissionSql = new StringBuilder(128);
-            batchRmovePermissionSql.AppendLine($"DELETE {tableName} WHERE TenantId = '{tenantId}'");
-            batchRmovePermissionSql.AppendLine("AND ProviderName='R' AND ProviderKey='admin'");
-            return batchRmovePermissionSql.ToString();
+            var batchRemovePermissionSql = new StringBuilder(128);
+            batchRemovePermissionSql.AppendLine($"DELETE {tableName} WHERE TenantId = '{tenantId}'");
+            batchRemovePermissionSql.AppendLine("AND ProviderName='R' AND ProviderKey='admin'");
+            return batchRemovePermissionSql.ToString();
         }
     }
 }

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.IdentityServer.Application.Contracts\LINGYUN.IdentityServer.Application.Contracts.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

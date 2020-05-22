@@ -77,34 +77,34 @@ namespace LINGYUN.Platform.EventBus.Handlers
 
         protected virtual string BuildMySqlBatchInsertScript(string tableName, Guid tenantId, string[] permissions)
         {
-            var batchRmovePermissionSql = new StringBuilder(128);
-            batchRmovePermissionSql.AppendLine($"INSERT INTO `{tableName}`(`Id`, `TenantId`, `Name`, `ProviderName`, `ProviderKey`)");
-            batchRmovePermissionSql.AppendLine("VALUES");
+            var batchInsertPermissionSql = new StringBuilder(128);
+            batchInsertPermissionSql.AppendLine($"INSERT INTO `{tableName}`(`Id`, `TenantId`, `Name`, `ProviderName`, `ProviderKey`)");
+            batchInsertPermissionSql.AppendLine("VALUES");
             for (int i = 0; i < permissions.Length; i++)
             {
-                batchRmovePermissionSql.AppendLine($"(UUID(), '{tenantId}','{permissions[i]}','R','admin')");
+                batchInsertPermissionSql.AppendLine($"(UUID(), '{tenantId}','{permissions[i]}','R','admin')");
                 if(i < permissions.Length - 1)
                 {
-                    batchRmovePermissionSql.AppendLine(",");
+                    batchInsertPermissionSql.AppendLine(",");
                 }
             }
-            return batchRmovePermissionSql.ToString();
+            return batchInsertPermissionSql.ToString();
         }
 
         protected virtual string BuildSqlServerBatchInsertScript(string tableName, Guid tenantId, string[] permissions)
         {
-            var batchRmovePermissionSql = new StringBuilder(128);
-            batchRmovePermissionSql.AppendLine($"INSERT INTO {tableName}(Id, TenantId, Name, ProviderName, ProviderKey)");
-            batchRmovePermissionSql.Append("VALUES");
+            var batchInsertPermissionSql = new StringBuilder(128);
+            batchInsertPermissionSql.AppendLine($"INSERT INTO {tableName}(Id, TenantId, Name, ProviderName, ProviderKey)");
+            batchInsertPermissionSql.Append("VALUES");
             for (int i = 0; i < permissions.Length; i++)
             {
-                batchRmovePermissionSql.AppendLine($"(NEWID(), '{tenantId}','{permissions[i]}','R','admin')");
+                batchInsertPermissionSql.AppendLine($"(NEWID(), '{tenantId}','{permissions[i]}','R','admin')");
                 if (i < permissions.Length - 1)
                 {
-                    batchRmovePermissionSql.AppendLine(",");
+                    batchInsertPermissionSql.AppendLine(",");
                 }
             }
-            return batchRmovePermissionSql.ToString();
+            return batchInsertPermissionSql.ToString();
         }
     }
 }

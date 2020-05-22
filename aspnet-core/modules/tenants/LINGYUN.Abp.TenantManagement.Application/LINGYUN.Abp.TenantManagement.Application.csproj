@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\LINGYUN.Common.EventBus\LINGYUN.Common.EventBus.csproj" />
-    <ProjectReference Include="..\LINGYUN.TenantManagement.Application.Contracts\LINGYUN.TenantManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.TenantManagement.Application.Contracts\LINGYUN.Abp.TenantManagement.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

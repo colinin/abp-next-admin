@@ -1,9 +1,9 @@
 import { ListResultDto } from './types'
 import ApiService from './serviceBase'
 
-const IdentityService = process.env.VUE_APP_BASE_IDENTITY_SERVICE
+const IdentityService = process.env.VUE_APP_BASE_API
 
-export class SettingApiService {
+export default class SettingApiService {
   /** 
    * 获取配置
    * @param providerName 配置提供者名称
@@ -14,7 +14,7 @@ export class SettingApiService {
     let _url = '/api/abp/setting'
     _url += '?providerName=' + providerName
     _url += '?providerKey=' + providerKey
-    return ApiService.Get<ListResultDto<SettingDto>>(_url, IdentityService)
+    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
   }
 
   /**
@@ -24,7 +24,7 @@ export class SettingApiService {
    * @param payload       配置变更信息
    * @returns Promise对象
    */
-  public setSettings(providerName: string, providerKey: string, payload: SettingsUpdateDto) {
+  public setSettings(providerName: string, providerKey: string, payload: SettingsUpdate) {
     let _url = '/api/abp/setting'
     _url += '?providerName=' + providerName
     _url += '?providerKey=' + providerKey
@@ -33,14 +33,14 @@ export class SettingApiService {
 }
 
 export class SettingBase {
-    /** 名称 */
-    name!: string
-      /** 当前设置值 */
+  /** 名称 */
+  name!: string
+  /** 当前设置值 */
   value!: string
 }
 
 /** 设置对象 */
-export class SettingDto extends SettingBase{
+export class Setting extends SettingBase{
   /** 显示名称 */
   displayName!: string
   /** 说明 */
@@ -50,14 +50,14 @@ export class SettingDto extends SettingBase{
 }
 
 /** 配置变更对象 */
-export class SettingUpdateDto extends SettingBase {}
+export class SettingUpdate extends SettingBase {}
 
 /** 配置变更集合对象 */
-export class SettingsUpdateDto {
+export class SettingsUpdate {
   /** 配置集合 */
-  settings: SettingUpdateDto[]
+  settings: SettingUpdate[]
   
   constructor() {
-    this.settings = new Array<SettingUpdateDto>()
+    this.settings = new Array<SettingUpdate>()
   }
 } 

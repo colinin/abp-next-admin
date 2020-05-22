@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import SettingService, { Setting } from '@/api/settings'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
@@ -29,10 +30,27 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class extends Vue {
 
+  private settings: Setting[]
+
+  constructor() {
+    super()
+    this.settings = new Array<Setting>()
+  }
+
+  mounted() {
+    this.handleGetSettings()
+  }
+
+  private handleGetSettings() {
+    SettingService.getSettings('G', '').then(settings => {
+      this.settings = settings.items
+      console.log(this.settings)
+    })
+  }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-tabs__item {
   width: 160px;
 }
