@@ -290,6 +290,8 @@ export default {
     updateRoute: '编辑路由',
     updateRouteByApp: '编辑路由  {name}',
     deleteRoute: '删除路由',
+    deleteRouteByName: '删除路由  {name}',
+    deleteRouteSuccess: '路由 {name} 已删除!',
     groupName: '路由组名',
     pleaseInputGroupName: '请输入路由组名称',
     appId: '应用标识',
@@ -555,7 +557,7 @@ export default {
     deleteConnection: '删除连接',
     setTenantConnectionSuccess: '租户连接  {name} 已添加!',
     deleteTenantConnectionName: '删除租户连接  {name}',
-    deleteTenantConnectionSuccess: '租户连接  {name} 已删除!',
+    deleteTenantConnectionSuccess: '租户连接  {name} 已删除!'
   },
   global: {
     name: '名称',

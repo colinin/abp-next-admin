@@ -1,7 +1,7 @@
 import ApiService from './serviceBase'
 import { ListResultDto } from './types'
 
-const IdentityServiceUrl = process.env.VUE_APP_BASE_IDENTITY_SERVICE
+const IdentityServiceUrl = process.env.VUE_APP_BASE_API
 
 export default class RoleService {
   public static getRoles() {

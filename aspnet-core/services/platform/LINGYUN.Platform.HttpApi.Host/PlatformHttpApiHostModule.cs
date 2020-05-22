@@ -17,11 +17,15 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using Volo.Abp;
+using Volo.Abp.Account;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -41,18 +45,25 @@ namespace LINGYUN.Platform
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpIdentityApplicationContractsModule),
-        typeof(AbpIdentityServerApplicationContractsModule),
+        typeof(AbpIdentityHttpApiModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
+        typeof(AbpIdentityServerApplicationModule),
+        typeof(AbpIdentityServerHttpApiModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAutofacModule)
         )]
@@ -151,6 +162,8 @@ namespace LINGYUN.Platform
             app.UseRouting();
             // 认证
             app.UseAuthentication();
+            // jwt
+            app.UseJwtTokenMiddleware();
             // 多租户
             app.UseMultiTenancy();
             // Swagger

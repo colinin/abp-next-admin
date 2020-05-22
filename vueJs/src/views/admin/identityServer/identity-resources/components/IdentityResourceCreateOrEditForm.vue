@@ -21,7 +21,7 @@
         >
           <el-input
             v-model="identityResource.name"
-            :readonly="isEdit"
+            :disabled="isEdit"
             :placeholder="$t('pleaseInputBy', {key: $t('identityServer.resourceName')})"
           />
         </el-form-item>
@@ -176,6 +176,8 @@ export default class extends Vue {
 
   public resetFields() {
     this.identityResource = IdentityResource.empty()
+    const frmIdentityResource = this.$refs.formIdentityResource as any
+    frmIdentityResource.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

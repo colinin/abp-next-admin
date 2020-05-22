@@ -178,7 +178,7 @@
             :disabled="!checkPermission(['ApiGateway.Route.Delete'])"
             size="mini"
             type="warning"
-            @click="handleCreateOrEditRoute(row.reRouteId, row.reRouteName)"
+            @click="handleDeleteRoute(row.reRouteId, row.reRouteName)"
           >
             {{ $t('apiGateWay.deleteRoute') }}
           </el-button>
@@ -290,6 +290,20 @@ export default class extends Vue {
     this.routeGetPagedFilter.sorting = column.prop
   }
 
+  private handleDeleteRoute(reRouteId: number, reRouteName: string) {
+    this.$confirm(this.l('apiGateWay.deleteRouteByName', { name: reRouteName }),
+      this.l('apiGateWay.deleteRoute'), {
+        callback: (action) => {
+          if (action === 'confirm') {
+            ApiGatewayService.deleteReRoute(reRouteId).then(() => {
+              this.$message.success(this.l('apiGateWay.deleteRouteSuccess', { name: reRouteName }))
+              this.handleGetRoutes()
+            })
+          }
+        }
+      })
+  }
+
   private handleCreateOrEditRoute(reRouteId: number, reRouteName: string) {
     this.editRouteId = reRouteId
     this.editRouteTitle = this.$t('apiGateWay.createRoute')
@@ -306,6 +320,10 @@ export default class extends Vue {
     if (changed && this.routeGetPagedFilter.appId) {
       this.handleGetRoutes()
     }
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>

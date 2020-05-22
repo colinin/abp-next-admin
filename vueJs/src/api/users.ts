@@ -3,7 +3,7 @@ import { pagerFormat } from '@/utils/index'
 import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto } from '@/api/types'
 import ApiService from './serviceBase'
 
-const IdentityServiceUrl = process.env.VUE_APP_BASE_IDENTITY_SERVICE
+const IdentityServiceUrl = process.env.VUE_APP_BASE_API
 const IdentityServerUrl = process.env.VUE_APP_BASE_IDENTITY_SERVER
 
 export default class UserApiService {

@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -8,23 +7,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Linq;
 using Volo.Abp;
-using Volo.Abp.Account;
-using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
@@ -34,28 +27,19 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
-using Volo.Abp.UI.Navigation.Urls;
 namespace AuthServer.Host
 {
     [DependsOn(
-        typeof(AbpIdentityServerApplicationModule),
-        typeof(AbpIdentityServerHttpApiModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpAutofacModule),
         typeof(AbpCAPEventBusModule),
+        typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityApplicationModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule)
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule)
         )]
     public class AuthIdentityServerModule : AbpModule
     {
@@ -86,14 +70,6 @@ namespace AuthServer.Host
                 options.UseMySQL();
             });
 
-            context.Services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthServer API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
-                });
-
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
@@ -106,18 +82,14 @@ namespace AuthServer.Host
                 options.ApplicationName = "AuthServer";
             });
 
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            });
-
-            context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                });
+            // context.Services.AddAuthentication();
+            //context.Services.AddAuthentication()
+            //    .AddIdentityServerAuthentication(options =>
+            //    {
+            //        options.Authority = configuration["AuthServer:Authority"];
+            //        options.RequireHttpsMetadata = false;
+            //        options.ApiName = configuration["AuthServer:ApiName"];
+            //    });
 
             Configure<AbpMultiTenancyOptions>(options =>
             {
@@ -167,17 +139,9 @@ namespace AuthServer.Host
             app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
-            app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
             app.UseMultiTenancy();
             app.UseIdentityServer();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support AuthServer API");
-            });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
             SeedData(context);
         }
 
