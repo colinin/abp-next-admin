@@ -23,6 +23,7 @@
         >
           <el-input
             v-model="tenant.adminEmailAddress"
+            :placeholder="$t('pleaseInputBy', {key: $t('tenant.adminEmailAddress')})"
           />
         </el-form-item>
         <el-form-item
@@ -32,6 +33,7 @@
         >
           <el-input
             v-model="tenant.adminPassword"
+            :placeholder="$t('pleaseInputBy', {key: $t('tenant.adminPassword')})"
           />
         </el-form-item>
 
@@ -84,6 +86,9 @@ export default class extends Vue {
     adminEmailAddress: [
       { required: true, message: this.l('pleaseInputBy', { key: this.l('tenant.adminEmailAddress') }), trigger: 'blur' },
       { type: 'email', message: this.l('pleaseInputBy', { key: this.l('global.correctEmailAddress') }), trigger: 'blur' }
+    ],
+    adminPassword: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('tenant.adminPassword') }), trigger: 'blur' }
     ]
   }
 
@@ -133,6 +138,8 @@ export default class extends Vue {
 
   private reset() {
     this.tenant = TenantCreateOrEdit.empty()
+    const frmTenant = this.$refs.formTenant as any
+    frmTenant.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

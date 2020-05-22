@@ -572,6 +572,7 @@ export default {
     pleaseInputBy: '请输入{key}',
     pleaseSelectBy: '请选择{key}',
     none: '未定义',
+    charLengthRange: '长度在 {min} 到 {max} 个字符!',
     questingDeleteByMessage: '是否要删除{message}?',
     delNotRecoverData: '请注意,删除后不可恢复!',
     whetherDeleteData: '是否删除选择的记录 {name} ?',
@@ -584,6 +585,7 @@ export default {
     otherOpera: '更多操作',
     cancel: '取 消',
     confirm: '确 定',
-    correctEmailAddress: '正确的邮件地址'
+    correctEmailAddress: '正确的邮件地址',
+    correctPhoneNumber: '正确的手机号码'
   }
 }

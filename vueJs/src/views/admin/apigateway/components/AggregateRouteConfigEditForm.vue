@@ -166,8 +166,8 @@ export default class extends Vue {
   }
 
   private onSaveAggregateRouteConfig() {
-    const frmIdentityProperty = this.$refs.formIdentityProperty as any
-    frmIdentityProperty.validate((valid: boolean) => {
+    const frmAggregateRouteConfig = this.$refs.formAggregateRouteConfig as any
+    frmAggregateRouteConfig.validate((valid: boolean) => {
       if (valid) {
         this.routeConfig.routeId = this.aggregateRoute.reRouteId
         ApiGatewayService.createAggregateRouteConfig(this.routeConfig).then(routeConfig => {

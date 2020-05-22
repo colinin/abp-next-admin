@@ -43,7 +43,7 @@
         :label="$t('tenant.id')"
         prop="id"
         sortable
-        width="150px"
+        width="310px"
         align="center"
       >
         <template slot-scope="{row}">

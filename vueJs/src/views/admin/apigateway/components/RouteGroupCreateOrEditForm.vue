@@ -3,6 +3,7 @@
     ref="formRouteGroup"
     label-width="80px"
     :model="apiGateWayRouteGroup"
+    :rules="apiGateWayRouteGroupRules"
   >
     <el-form-item
       prop="name"
@@ -87,6 +88,18 @@ export default class extends Vue {
 
   private apiGateWayRouteGroup: RouteGroupDto
 
+  private apiGateWayRouteGroupRules = {
+    appId: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.appId') }), trigger: 'blur' }
+    ],
+    name: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.groupName') }), trigger: 'blur' }
+    ],
+    appName: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.appName') }), trigger: 'blur' }
+    ]
+  }
+
   constructor() {
     super()
     this.apiGateWayRouteGroup = new RouteGroupDto()
@@ -133,6 +146,10 @@ export default class extends Vue {
     const routerEditForm = this.$refs.formRouteGroup as any
     routerEditForm.resetFields()
     this.$emit('closed', false)
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>

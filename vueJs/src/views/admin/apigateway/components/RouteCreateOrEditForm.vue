@@ -3,6 +3,7 @@
     ref="formRoute"
     label-width="100px"
     :model="apiGateWayRoute"
+    :rules="apiGateWayRouteRules"
   >
     <el-tabs v-model="activeTablePane">
       <el-tab-pane
@@ -50,7 +51,6 @@
             >
               <el-input
                 v-model="apiGateWayRoute.requestIdKey"
-                :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.requestIdKey')})"
               />
             </el-form-item>
           </el-col>
@@ -129,6 +129,7 @@
             <el-form-item
               prop="downstreamScheme"
               :label="$t('apiGateWay.downstreamScheme')"
+              label-width="120px"
             >
               <el-input
                 v-model="apiGateWayRoute.downstreamScheme"
@@ -139,6 +140,7 @@
             <el-form-item
               prop="downstreamHttpVersion"
               :label="$t('apiGateWay.downstreamHttpVersion')"
+              label-width="120px"
             >
               <el-input
                 v-model="apiGateWayRoute.downstreamHttpVersion"
@@ -149,6 +151,7 @@
         <el-form-item
           prop="upstreamPathTemplate"
           :label="$t('apiGateWay.upstreamPathTemplate')"
+          label-width="120px"
         >
           <el-input
             v-model="apiGateWayRoute.upstreamPathTemplate"
@@ -158,6 +161,7 @@
         <el-form-item
           prop="downstreamPathTemplate"
           :label="$t('apiGateWay.downstreamPathTemplate')"
+          label-width="120px"
         >
           <el-input
             v-model="apiGateWayRoute.downstreamPathTemplate"
@@ -169,6 +173,7 @@
             <el-form-item
               prop="downstreamHttpMethod"
               :label="$t('apiGateWay.downstreamHttpMethod')"
+              label-width="120px"
             >
               <el-input
                 v-model="apiGateWayRoute.downstreamHttpMethod"
@@ -189,6 +194,7 @@
         <el-form-item
           prop="upstreamHttpMethod"
           :label="$t('apiGateWay.upstreamHttpMethod')"
+          label-width="120px"
         >
           <el-input-tag
             v-model="apiGateWayRoute.upstreamHttpMethod"
@@ -198,6 +204,7 @@
         <el-form-item
           prop="downstreamHostAndPorts"
           :label="$t('apiGateWay.downstreamHostAndPorts')"
+          label-width="120px"
         >
           <host-and-port-input-tag
             v-model="apiGateWayRoute.downstreamHostAndPorts"
@@ -563,6 +570,45 @@ export default class extends Vue {
     return false
   }
 
+  private validateRequiredArrayValue = (rule: any, value: string[], callback: any, errorMessage: string) => {
+    if (!value || value.length === 0) {
+      callback(new Error(errorMessage))
+    } else {
+      callback()
+    }
+  }
+
+  private apiGateWayRouteRules = {
+    appId: [
+      { required: true, message: this.l('pleaseSelectBy', { key: this.l('apiGateWay.appId') }), trigger: 'blur' }
+    ],
+    reRouteName: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.reRouteName') }), trigger: 'blur' }
+    ],
+    downstreamPathTemplate: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.downstreamPathTemplate') }), trigger: 'blur' }
+    ],
+    upstreamPathTemplate: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.upstreamPathTemplate') }), trigger: 'blur' }
+    ],
+    upstreamHttpMethod: [
+      {
+        required: true,
+        validator: (rule: any, value: string[], callback: any) =>
+          this.validateRequiredArrayValue(rule, value, callback, this.l('pleaseInputBy', { key: this.l('apiGateWay.upstreamHttpMethod') })),
+        trigger: 'blur'
+      }
+    ],
+    downstreamHostAndPorts: [
+      {
+        required: true,
+        validator: (rule: any, value: string[], callback: any) =>
+          this.validateRequiredArrayValue(rule, value, callback, this.l('pleaseInputBy', { key: this.l('apiGateWay.downstreamHostAndPorts') })),
+        trigger: 'blur'
+      }
+    ]
+  }
+
   constructor() {
     super()
     this.activeTablePane = 'basicOptions'
@@ -609,6 +655,10 @@ export default class extends Vue {
     routeEditForm.resetFields()
     this.activeTablePane = 'basicOptions'
     this.$emit('closed')
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>

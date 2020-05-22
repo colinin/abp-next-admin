@@ -1,8 +1,9 @@
 <template>
   <el-form
     ref="formAggregateRoute"
-    label-width="100px"
+    label-width="120px"
     :model="aggregateRoute"
+    :rules="aggregateRouteRules"
   >
     <el-row>
       <el-col :span="24">
@@ -58,7 +59,6 @@
         >
           <el-input
             v-model="aggregateRoute.upstreamHost"
-            :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.upstreamHost')})"
           />
         </el-form-item>
       </el-col>
@@ -89,7 +89,6 @@
     >
       <el-input-tag
         v-model="aggregateRoute.upstreamHttpMethod"
-        :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.upstreamHttpMethod')})"
       />
     </el-form-item>
     <el-form-item
@@ -98,7 +97,6 @@
     >
       <el-input-tag
         v-model="aggregateRoute.reRouteKeys"
-        :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.reRouteKeys')})"
       />
     </el-form-item>
 
@@ -149,6 +147,29 @@ export default class extends Vue {
     return false
   }
 
+  private validateReRouteKeys = (rule: any, value: string[], callback: any) => {
+    if (!value || value.length === 0) {
+      callback(new Error(this.l('pleaseInputBy', { key: this.l('apiGateWay.reRouteKeys') })))
+    } else {
+      callback()
+    }
+  }
+
+  private aggregateRouteRules = {
+    appId: [
+      { required: true, message: this.l('pleaseSelectBy', { key: this.l('apiGateWay.appId') }), trigger: 'blur' }
+    ],
+    name: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.aggregateRouteName') }), trigger: 'blur' }
+    ],
+    upstreamPathTemplate: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.upstreamPathTemplate') }), trigger: 'blur' }
+    ],
+    reRouteKeys: [
+      { required: true, validator: this.validateReRouteKeys, trigger: 'blur' }
+    ]
+  }
+
   constructor() {
     super()
     this.aggregateRoute = AggregateReRoute.empty()
@@ -166,21 +187,24 @@ export default class extends Vue {
   }
 
   private onSaveAggregateRoute() {
-    if (this.isEditRoute) {
-      const updateAggregateRoute = AggregateReRouteUpdate.create(this.aggregateRoute)
-      ApiGatewayService.updateAggregateReRoute(updateAggregateRoute).then(route => {
-        this.aggregateRoute = route
+    const frmAggregateRoute = this.$refs.formAggregateRoute as any
+    frmAggregateRoute.validate((valid: boolean) => {
+      if (valid) {
+        if (this.isEditRoute) {
+          const updateAggregateRoute = AggregateReRouteUpdate.create(this.aggregateRoute)
+          ApiGatewayService.updateAggregateReRoute(updateAggregateRoute).then(route => {
+            this.aggregateRoute = route
+          })
+        } else {
+          const createAggregateRoute = AggregateReRouteCreate.create(this.aggregateRoute)
+          ApiGatewayService.createAggregateReRoute(createAggregateRoute).then(route => {
+            this.aggregateRoute = route
+          })
+        }
         this.reset()
         this.$emit('closed', true)
-      })
-    } else {
-      const createAggregateRoute = AggregateReRouteCreate.create(this.aggregateRoute)
-      ApiGatewayService.createAggregateReRoute(createAggregateRoute).then(route => {
-        this.aggregateRoute = route
-        this.reset()
-        this.$emit('closed', true)
-      })
-    }
+      }
+    })
   }
 
   private onCancel() {
@@ -192,6 +216,10 @@ export default class extends Vue {
     this.aggregateRoute = AggregateReRoute.empty()
     const formAggregateRoute = this.$refs.formAggregateRoute as any
     formAggregateRoute.resetFields()
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>

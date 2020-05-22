@@ -1,8 +1,9 @@
 <template>
   <el-form
     ref="profile"
-    label-width="80px"
+    label-width="110px"
     :model="userProfile"
+    :rules="userProfileRules"
   >
     <el-tabs v-model="activedTabPane">
       <el-tab-pane
@@ -69,17 +70,6 @@
             v-model="userPassword"
             type="password"
             :placeholder="$t('userProfile.pleaseInputPassword')"
-          />
-        </el-form-item>
-        <el-form-item
-          v-if="!hasEditUser"
-          prop="password"
-          label-width="100px"
-          :label="$t('userProfile.confirmPassword')"
-        >
-          <el-input
-            type="password"
-            :placeholder="$t('userProfile.pleaseConfirmPassword')"
           />
         </el-form-item>
         <el-form-item
@@ -210,26 +200,34 @@ export default class extends Vue {
     }
   }
 
-  private rules = {
+  private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {
+    const phoneReg = /^1[34578]\d{9}$/
+    if (!value || !phoneReg.test(value)) {
+      callback(new Error(this.l('global.pleaseInputBy', { key: this.l('global.correctPhoneNumber') })))
+    } else {
+      callback()
+    }
+  }
+
+  private userProfileRules = {
     userName: [
-      { required: true, message: '请输入用户账户', trigger: 'blur' },
-      { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+      { required: true, message: this.l('userProfile.pleaseInputUserName'), trigger: 'blur' },
+      { min: 3, max: 20, message: this.l('global.charLengthRange', { min: 3, max: 20 }), trigger: 'blur' }
     ],
     name: [
-      { required: true, message: '请输入用户名称', trigger: 'blur' },
-      { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+      { required: true, message: this.l('userProfile.pleaseInputName'), trigger: 'blur' },
+      { min: 3, max: 50, message: this.l('global.charLengthRange', { min: 3, max: 50 }), trigger: 'blur' }
     ],
     email: [
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+      { required: true, message: this.l('userProfile.pleaseInputEmail'), trigger: 'blur' },
+      { type: 'email', message: this.l('global.pleaseInputBy', { key: this.l('global.correctEmailAddress') }), trigger: ['blur', 'change'] }
     ],
     password: [
-      { required: true, message: '请输入用户密码', trigger: 'blur' },
-      { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+      { required: true, message: this.l('userProfile.pleaseInputPassword'), trigger: 'blur' },
+      { min: 6, max: 15, message: this.l('global.charLengthRange', { min: 6, max: 15 }), trigger: 'blur' }
     ],
     phoneNumber: [
-      { required: true, message: '请输入联系方式', trigger: 'blur' },
-      { type: 'phone', message: '请输入正确的手机号码', trigger: ['blur', 'change'] }
+      { required: true, validator: this.validatePhoneNumberValue, trigger: 'blur' }
     ]
   }
 
@@ -366,6 +364,10 @@ export default class extends Vue {
     updateUserInput.roles = this.userRoles
     updateUserInput.concurrencyStamp = this.userProfile.concurrencyStamp
     return updateUserInput
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>

@@ -76,6 +76,7 @@ export default class extends Vue {
   @Watch('value', { immediate: true })
   private onValueChanged() {
     this.data = this.value
+    this.$parent.$emit('validate', this.data)
   }
 
   private foucusTagInput() {

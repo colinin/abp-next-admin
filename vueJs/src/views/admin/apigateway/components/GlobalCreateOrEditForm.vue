@@ -3,6 +3,7 @@
     ref="formGlobal"
     label-width="100px"
     :model="globalConfiguration"
+    :rules="globalConfigurationRules"
   >
     <el-tabs>
       <el-tab-pane :label="$t('apiGateWay.basicOptions')">
@@ -391,6 +392,15 @@ export default class extends Vue {
     return false
   }
 
+  private globalConfigurationRules = {
+    appId: [
+      { required: true, message: this.l('pleaseSelectBy', { key: this.l('apiGateWay.appId') }), trigger: 'blur' }
+    ],
+    baseUrl: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.baseUrl') }), trigger: 'blur' }
+    ]
+  }
+
   mounted() {
     ApiGatewayService.getRouteGroupAppIds().then(appKeys => {
       this.routeGroupAppIdOptions = appKeys.items
@@ -436,6 +446,10 @@ export default class extends Vue {
     const formGlobal = this.$refs.formGlobal as any
     formGlobal.resetFields()
     this.$emit('closed', false)
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
   }
 }
 </script>
