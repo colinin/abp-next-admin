@@ -570,8 +570,8 @@ export default class extends Vue {
     return false
   }
 
-  private validateRequiredArrayValue = (rule: any, value: string[], callback: any, errorMessage: string) => {
-    if (!value || value.length === 0) {
+  private validateRequiredArrayValue = (rule: any, value: any[], callback: any, errorMessage: string) => {
+    if (!value || !Array.isArray(value) || value.length === 0) {
       callback(new Error(errorMessage))
     } else {
       callback()
@@ -594,7 +594,7 @@ export default class extends Vue {
     upstreamHttpMethod: [
       {
         required: true,
-        validator: (rule: any, value: string[], callback: any) =>
+        validator: (rule: any, value: any[], callback: any) =>
           this.validateRequiredArrayValue(rule, value, callback, this.l('pleaseInputBy', { key: this.l('apiGateWay.upstreamHttpMethod') })),
         trigger: 'blur'
       }
@@ -602,7 +602,7 @@ export default class extends Vue {
     downstreamHostAndPorts: [
       {
         required: true,
-        validator: (rule: any, value: string[], callback: any) =>
+        validator: (rule: any, value: any[], callback: any) =>
           this.validateRequiredArrayValue(rule, value, callback, this.l('pleaseInputBy', { key: this.l('apiGateWay.downstreamHostAndPorts') })),
         trigger: 'blur'
       }
