@@ -47,39 +47,13 @@ namespace LINYUN.Abp.Sms.Aliyun
                 Action = Options.ActionName,
                 Version = Options.DefaultVersion
             };
-            if (smsMessage.Properties.TryGetValue("TemplateCode", out object template))
-            {
-                request.AddQueryParameters("TemplateCode", template.ToString());
-                smsMessage.Properties.Remove("TemplateCode");
-            }
-            else
-            {
-                Check.NotNullOrWhiteSpace(Options.DefaultTemplateCode, nameof(Options.DefaultTemplateCode));
-                request.AddQueryParameters("TemplateCode", Options.DefaultTemplateCode);
-            }
-
-            if (smsMessage.Properties.TryGetValue("SignName", out object signName))
-            {
-                request.AddQueryParameters("SignName", signName.ToString());
-                smsMessage.Properties.Remove("SignName");
-            }
-            else
-            {
-                Check.NotNullOrWhiteSpace(Options.DefaultSignName, nameof(Options.DefaultSignName));
-                request.AddQueryParameters("SignName", Options.DefaultSignName);
-            }
-            if (Environment.IsDevelopment())
-            {
-                Check.NotNullOrWhiteSpace(Options.DeveloperPhoneNumber, nameof(Options.DeveloperPhoneNumber));
-                request.AddQueryParameters("PhoneNumbers", Options.DeveloperPhoneNumber);
-            }
-            else
-            {
-                request.AddQueryParameters("PhoneNumbers", smsMessage.PhoneNumber);
-            }
+            TryAddTemplateCode(request, smsMessage);
+            TryAddSignName(request, smsMessage);
+            TryAddSendPhone(request, smsMessage);
 
             var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
             request.AddQueryParameters("TemplateParam", queryParamJson);
+
             try
             {
                 IClientProfile profile = DefaultProfile.GetProfile(Options.RegionId, Options.AccessKeyId, Options.AccessKeySecret);
@@ -110,6 +84,47 @@ namespace LINYUN.Abp.Sms.Aliyun
             }
 
             return Task.CompletedTask;
+        }
+
+        private void TryAddTemplateCode(CommonRequest request, SmsMessage smsMessage)
+        {
+            if (smsMessage.Properties.TryGetValue("TemplateCode", out object template))
+            {
+                request.AddQueryParameters("TemplateCode", template.ToString());
+                smsMessage.Properties.Remove("TemplateCode");
+            }
+            else
+            {
+                Check.NotNullOrWhiteSpace(Options.DefaultTemplateCode, nameof(Options.DefaultTemplateCode));
+                request.AddQueryParameters("TemplateCode", Options.DefaultTemplateCode);
+            }
+        }
+
+        private void TryAddSignName(CommonRequest request, SmsMessage smsMessage)
+        {
+            if (smsMessage.Properties.TryGetValue("SignName", out object signName))
+            {
+                request.AddQueryParameters("SignName", signName.ToString());
+                smsMessage.Properties.Remove("SignName");
+            }
+            else
+            {
+                Check.NotNullOrWhiteSpace(Options.DefaultSignName, nameof(Options.DefaultSignName));
+                request.AddQueryParameters("SignName", Options.DefaultSignName);
+            }
+        }
+
+        private void TryAddSendPhone(CommonRequest request, SmsMessage smsMessage)
+        {
+            if (Environment.IsDevelopment())
+            {
+                Check.NotNullOrWhiteSpace(Options.DeveloperPhoneNumber, nameof(Options.DeveloperPhoneNumber));
+                request.AddQueryParameters("PhoneNumbers", Options.DeveloperPhoneNumber);
+            }
+            else
+            {
+                request.AddQueryParameters("PhoneNumbers", smsMessage.PhoneNumber);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.IdentityServer
 {
     [DependsOn(typeof(AbpIdentityServerDomainModule))]
-    public class AbpIdentityServerSmValidatorModule : AbpModule
+    public class AbpIdentityServerSmsValidatorModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.IdentityServer
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpIdentityServerSmValidatorModule>();
+                options.FileSets.AddEmbedded<AbpIdentityServerSmsValidatorModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>

@@ -36,7 +36,7 @@ namespace AuthServer.Host
         typeof(AbpAutofacModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
-        typeof(AbpIdentityServerSmValidatorModule),
+        typeof(AbpIdentityServerSmsValidatorModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
