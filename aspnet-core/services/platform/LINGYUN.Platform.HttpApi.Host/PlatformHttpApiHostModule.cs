@@ -6,9 +6,11 @@ using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform.MultiTenancy;
+using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -47,6 +49,8 @@ namespace LINGYUN.Platform
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
+        typeof(Abp.Account.AbpAccountApplicationModule),
+        typeof(Abp.Account.AbpAccountHttpApiModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAccountHttpApiModule),
         typeof(AbpIdentityServerApplicationModule),
@@ -65,6 +69,7 @@ namespace LINGYUN.Platform
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpCAPEventBusModule),
+        typeof(AbpAliyunSmsModule),
         typeof(AbpAutofacModule)
         )]
     public class PlatformHttpApiHostModule : AbpModule
@@ -81,6 +86,11 @@ namespace LINGYUN.Platform
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 });
+            });
+
+            PreConfigure<IdentityBuilder>(builder =>
+            {
+                builder.AddDefaultTokenProviders();
             });
         }
 
@@ -176,7 +186,7 @@ namespace LINGYUN.Platform
             // 审计日志
             app.UseAuditing();
             // 路由
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

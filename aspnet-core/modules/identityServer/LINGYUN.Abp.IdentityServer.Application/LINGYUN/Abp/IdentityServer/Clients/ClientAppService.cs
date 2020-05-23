@@ -87,10 +87,12 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             {
                 throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ClientIdExisted, clientCreate.ClientId]);
             }
-            var client = new Client(GuidGenerator.Create(), clientCreate.ClientId);
-            client.ClientName = clientCreate.ClientName;
-            client.Description = clientCreate.Description;
-            foreach(var grantType in clientCreate.AllowedGrantTypes)
+            var client = new Client(GuidGenerator.Create(), clientCreate.ClientId)
+            {
+                ClientName = clientCreate.ClientName,
+                Description = clientCreate.Description
+            };
+            foreach (var grantType in clientCreate.AllowedGrantTypes)
             {
                 client.AddGrantType(grantType.GrantType);
             }
@@ -295,46 +297,48 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             }
             var srcClient = await ClientRepository.GetAsync(clientCloneInput.SourceClientId);
 
-            var client = new Client(GuidGenerator.Create(), clientCloneInput.ClientId);
-            client.ClientName = clientCloneInput.ClientName;
-            client.Description = clientCloneInput.Description;
-            client.AbsoluteRefreshTokenLifetime = srcClient.AbsoluteRefreshTokenLifetime;
-            client.AccessTokenLifetime = srcClient.AccessTokenLifetime;
-            client.AccessTokenType = srcClient.AccessTokenType;
-            client.AllowAccessTokensViaBrowser = srcClient.AllowAccessTokensViaBrowser;
-            client.AllowOfflineAccess = srcClient.AllowOfflineAccess;
-            client.AllowPlainTextPkce = srcClient.AllowPlainTextPkce;
-            client.AllowRememberConsent = srcClient.AllowRememberConsent;
-            client.AlwaysIncludeUserClaimsInIdToken = srcClient.AlwaysIncludeUserClaimsInIdToken;
-            client.AlwaysSendClientClaims = srcClient.AlwaysSendClientClaims;
-            client.AuthorizationCodeLifetime = srcClient.AuthorizationCodeLifetime;
-            client.BackChannelLogoutSessionRequired = srcClient.BackChannelLogoutSessionRequired;
+            var client = new Client(GuidGenerator.Create(), clientCloneInput.ClientId)
+            {
+                ClientName = clientCloneInput.ClientName,
+                Description = clientCloneInput.Description,
+                AbsoluteRefreshTokenLifetime = srcClient.AbsoluteRefreshTokenLifetime,
+                AccessTokenLifetime = srcClient.AccessTokenLifetime,
+                AccessTokenType = srcClient.AccessTokenType,
+                AllowAccessTokensViaBrowser = srcClient.AllowAccessTokensViaBrowser,
+                AllowOfflineAccess = srcClient.AllowOfflineAccess,
+                AllowPlainTextPkce = srcClient.AllowPlainTextPkce,
+                AllowRememberConsent = srcClient.AllowRememberConsent,
+                AlwaysIncludeUserClaimsInIdToken = srcClient.AlwaysIncludeUserClaimsInIdToken,
+                AlwaysSendClientClaims = srcClient.AlwaysSendClientClaims,
+                AuthorizationCodeLifetime = srcClient.AuthorizationCodeLifetime,
+                BackChannelLogoutSessionRequired = srcClient.BackChannelLogoutSessionRequired,
 
-            client.BackChannelLogoutUri = srcClient.BackChannelLogoutUri;
-            client.ClientClaimsPrefix = srcClient.ClientClaimsPrefix;
-            client.ConsentLifetime = srcClient.ConsentLifetime;
-            client.DeviceCodeLifetime = srcClient.DeviceCodeLifetime;
-            client.Enabled = srcClient.Enabled;
-            client.EnableLocalLogin = srcClient.EnableLocalLogin;
-            client.FrontChannelLogoutSessionRequired = srcClient.FrontChannelLogoutSessionRequired;
-            client.FrontChannelLogoutUri = srcClient.FrontChannelLogoutUri;
+                BackChannelLogoutUri = srcClient.BackChannelLogoutUri,
+                ClientClaimsPrefix = srcClient.ClientClaimsPrefix,
+                ConsentLifetime = srcClient.ConsentLifetime,
+                DeviceCodeLifetime = srcClient.DeviceCodeLifetime,
+                Enabled = srcClient.Enabled,
+                EnableLocalLogin = srcClient.EnableLocalLogin,
+                FrontChannelLogoutSessionRequired = srcClient.FrontChannelLogoutSessionRequired,
+                FrontChannelLogoutUri = srcClient.FrontChannelLogoutUri,
 
-            client.IdentityTokenLifetime = srcClient.IdentityTokenLifetime;
-            client.IncludeJwtId = srcClient.IncludeJwtId;
-            client.LogoUri = srcClient.LogoUri;
-            client.PairWiseSubjectSalt = srcClient.PairWiseSubjectSalt;
-            client.ProtocolType = srcClient.ProtocolType;
-            client.RefreshTokenExpiration = srcClient.RefreshTokenExpiration;
-            client.RefreshTokenUsage = srcClient.RefreshTokenUsage;
-            client.RequireClientSecret = srcClient.RequireClientSecret;
-            client.RequireConsent = srcClient.RequireConsent;
+                IdentityTokenLifetime = srcClient.IdentityTokenLifetime,
+                IncludeJwtId = srcClient.IncludeJwtId,
+                LogoUri = srcClient.LogoUri,
+                PairWiseSubjectSalt = srcClient.PairWiseSubjectSalt,
+                ProtocolType = srcClient.ProtocolType,
+                RefreshTokenExpiration = srcClient.RefreshTokenExpiration,
+                RefreshTokenUsage = srcClient.RefreshTokenUsage,
+                RequireClientSecret = srcClient.RequireClientSecret,
+                RequireConsent = srcClient.RequireConsent,
 
-            client.RequirePkce = srcClient.RequirePkce;
-            client.SlidingRefreshTokenLifetime = srcClient.SlidingRefreshTokenLifetime;
-            client.UpdateAccessTokenClaimsOnRefresh = srcClient.UpdateAccessTokenClaimsOnRefresh;
+                RequirePkce = srcClient.RequirePkce,
+                SlidingRefreshTokenLifetime = srcClient.SlidingRefreshTokenLifetime,
+                UpdateAccessTokenClaimsOnRefresh = srcClient.UpdateAccessTokenClaimsOnRefresh,
 
-            client.UserCodeType = srcClient.UserCodeType;
-            client.UserSsoLifetime = srcClient.UserSsoLifetime;
+                UserCodeType = srcClient.UserCodeType,
+                UserSsoLifetime = srcClient.UserSsoLifetime
+            };
 
             if (clientCloneInput.CopyAllowedCorsOrigin)
             {

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\Abp\Account\Localization\Resources\en.json" />
+    <None Remove="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.Account.Domain.Shared\LINGYUN.Abp.Account.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

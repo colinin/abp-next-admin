@@ -11,12 +11,21 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace DotNetCore.CAP
 {
+    /// <summary>
+    /// 消费者查找器
+    /// </summary>
     [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
     [ExposeServices(typeof(IConsumerServiceSelector), typeof(ConsumerServiceSelector))]
 
     public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
     {
+        /// <summary>
+        /// Abp分布式事件配置
+        /// </summary>
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+        /// <summary>
+        /// 服务提供者
+        /// </summary>
         protected IServiceProvider ServiceProvider { get; }
 
         /// <summary>
@@ -27,7 +36,11 @@ namespace DotNetCore.CAP
             ServiceProvider = serviceProvider;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         }
-
+        /// <summary>
+        /// 查找消费者集合
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         protected override IEnumerable<ConsumerExecutorDescriptor> FindConsumersFromInterfaceTypes(IServiceProvider provider)
         {
             var executorDescriptorList =
@@ -55,7 +68,12 @@ namespace DotNetCore.CAP
             }
             return executorDescriptorList;
         }
-
+        /// <summary>
+        /// 获取事件处理器集合
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="typeInfo"></param>
+        /// <returns></returns>
         protected virtual IEnumerable<ConsumerExecutorDescriptor> GetHandlerDescription(Type eventType, Type typeInfo)
         {
             var serviceTypeInfo = typeof(IDistributedEventHandler<>)

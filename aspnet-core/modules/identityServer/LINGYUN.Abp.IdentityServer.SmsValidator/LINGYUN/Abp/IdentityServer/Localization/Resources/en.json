@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "InvalidGrant:GrantTypeInvalid": "Type of authorization not allowed!",
+    "InvalidGrant:PhoneVerifyInvalid": "phone verification code failed!",
+    "InvalidGrant:PhoneOrTokenCodeNotFound": "Phone number or verify code not found!",
+    "InvalidGrant:PhoneNumberNotRegister": "The registered mobile phone number is not registered!"
+  }
+}

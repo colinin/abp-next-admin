@@ -115,7 +115,7 @@
             :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowUserProfile(row)"
+            @click="handleShowEditUserForm(row)"
           >
             {{ $t('users.updateUser') }}
           </el-button>
@@ -159,13 +159,25 @@
     />
 
     <el-dialog
-      :visible.sync="showUserProfile"
+      :visible.sync="showEditUserDialog"
       custom-class="profile"
-      :title="userProfileTitle"
+      :title="$t('users.updateUserBy', {name: editUser.name})"
       :show-close="false"
     >
-      <UserProfile
-        :user-id="editUserId"
+      <UserEditForm
+        :user-id="editUser.id"
+        @onClose="handleCloseUserProfile"
+        @onUserProfileChanged="handleUserProfileChanged"
+      />
+    </el-dialog>
+
+    <el-dialog
+      :visible.sync="showCreateUserDialog"
+      custom-class="profile"
+      :title="$t('users.createUser')"
+      :show-close="false"
+    >
+      <UserCreateForm
         @onClose="handleCloseUserProfile"
         @onUserProfileChanged="handleUserProfileChanged"
       />
@@ -178,14 +190,16 @@ import { Component, Vue } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 import { dateFormat } from '@/utils'
 import UserApiService, { UserDataDto, UsersGetPagedDto } from '@/api/users'
-import UserProfile from './components/UserProfile.vue'
+import UserCreateForm from './components/UserCreateForm.vue'
+import UserEditForm from './components/UserEditForm.vue'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
   name: 'UserList',
   components: {
     Pagination,
-    UserProfile
+    UserEditForm,
+    UserCreateForm
   },
   filters: {
     dateTimeFilter(datetime: string) {
@@ -205,26 +219,26 @@ export default class extends Vue {
   /** 最大用户数量 */
   private totalCount: number
   /** 当前编辑用户 */
-  private editUserId: string
-  /** 是否显示用户详情页 */
-  private showUserProfile: boolean
-  /** 用户详情页标题 */
-  private userProfileTitle: any
+  private editUser: UserDataDto
   /** 排序组别 */
   private sortRule: { prop: string, sort: string }
   /** 查询用户过滤参数 */
   private getUserQuery: UsersGetPagedDto
 
+  private showCreateUserDialog: boolean
+  private showEditUserDialog: boolean
+
   constructor() {
     super()
     this.totalCount = 0
-    this.editUserId = ''
-    this.showUserProfile = false
+    this.editUser = new UserDataDto()
     this.userListLoading = false
-    this.userProfileTitle = ''
     this.sortRule = { prop: '', sort: '' }
     this.getUserQuery = new UsersGetPagedDto()
     this.userList = new Array<UserDataDto>()
+
+    this.showEditUserDialog = false
+    this.showCreateUserDialog = false
   }
 
   mounted() {
@@ -248,31 +262,24 @@ export default class extends Vue {
     console.log('handleLockUser' + row.id)
   }
 
-  /** 展现用户详情页
-   * @param row 操作行数据,可以转换为 UserDataDto 对象
-   */
-  private handleShowUserProfile(row: any) {
-    this.editUserId = row.id
-    this.userProfileTitle = this.$t('users.updateUser', { namec: row.name })
-    this.showUserProfile = true
+  private handleShowEditUserForm(row: UserDataDto) {
+    this.editUser = row
+    this.showEditUserDialog = true
   }
 
-  /** 响应用户详情页关闭事件 */
   private handleCloseUserProfile() {
-    this.editUserId = ''
-    this.showUserProfile = false
+    this.editUser = new UserDataDto()
+    this.showCreateUserDialog = false
+    this.showEditUserDialog = false
   }
 
-  /** 响应用户详情页变更事件 */
   private handleUserProfileChanged() {
     this.handleGetUsers()
   }
 
-  /** 新增用户事件,打开用户详情页 */
   private handleCreateUser() {
-    this.editUserId = ''
-    this.userProfileTitle = this.$t('users.createUser')
-    this.showUserProfile = true
+    this.editUser = new UserDataDto()
+    this.showCreateUserDialog = true
   }
 
   /** 响应更多操作命令 */

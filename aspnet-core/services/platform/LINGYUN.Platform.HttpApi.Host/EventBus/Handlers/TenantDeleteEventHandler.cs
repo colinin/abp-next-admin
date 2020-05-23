@@ -33,33 +33,31 @@ namespace LINGYUN.Platform.EventBus.Handlers
 
         public async Task HandleEventAsync(DeleteEventData eventData)
         {
-            using (var unitOfWork = UnitOfWorkManager.Begin())
+            using var unitOfWork = UnitOfWorkManager.Begin();
+            // 订阅租户删除事件,删除管理员角色所有权限
+            // TODO: 租户貌似不存在了,删除应该会失败
+            using (CurrentTenant.Change(eventData.Id))
             {
-                // 订阅租户删除事件,删除管理员角色所有权限
-                // TODO: 租户貌似不存在了,删除应该会失败
-                using (CurrentTenant.Change(eventData.Id))
+                // var grantPermissions = await PermissionGrantRepository.GetListAsync("R", "admin");
+
+                // EfCore MySql 批量删除还是一条一条的语句?
+                // PermissionGrantRepository.GetDbSet().RemoveRange(grantPermissions);
+                var permissionEntityType = PermissionGrantRepository.GetDbContext().Model.FindEntityType(typeof(PermissionGrant));
+                var permissionTableName = permissionEntityType.GetTableName();
+                var batchRmovePermissionSql = string.Empty;
+                if (PermissionGrantRepository.GetDbContext().Database.IsMySql())
                 {
-                    // var grantPermissions = await PermissionGrantRepository.GetListAsync("R", "admin");
-
-                    // EfCore MySql 批量删除还是一条一条的语句?
-                    // PermissionGrantRepository.GetDbSet().RemoveRange(grantPermissions);
-                    var permissionEntityType = PermissionGrantRepository.GetDbContext().Model.FindEntityType(typeof(PermissionGrant));
-                    var permissionTableName = permissionEntityType.GetTableName();
-                    var batchRmovePermissionSql = string.Empty;
-                    if (PermissionGrantRepository.GetDbContext().Database.IsMySql())
-                    {
-                        batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Id);
-                    }
-                    else
-                    {
-                        batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Id);
-                    }
-
-                    await PermissionGrantRepository.GetDbContext().Database
-                        .ExecuteSqlRawAsync(batchRmovePermissionSql);
-
-                    await unitOfWork.CompleteAsync();
+                    batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Id);
                 }
+                else
+                {
+                    batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Id);
+                }
+
+                await PermissionGrantRepository.GetDbContext().Database
+                    .ExecuteSqlRawAsync(batchRmovePermissionSql);
+
+                await unitOfWork.CompleteAsync();
             }
         }
 

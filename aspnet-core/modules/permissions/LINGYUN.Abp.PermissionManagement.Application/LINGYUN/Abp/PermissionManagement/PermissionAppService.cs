@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
@@ -21,13 +22,16 @@ namespace LINGYUN.Abp.PermissionManagement
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         protected PermissionManagementOptions Options { get; }
+        protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         public PermissionAppService(
+            IDistributedCache<PermissionGrantCacheItem> cache,
             IPermissionGrantRepository permissionGrantRepository,
             IPermissionDefinitionManager permissionDefinitionManager,
             IOptions<PermissionManagementOptions> options)
         {
+            Cache = cache;
             Options = options.Value;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
@@ -140,6 +144,10 @@ namespace LINGYUN.Abp.PermissionManagement
                         await PermissionGrantRepository.DeleteAsync(editPermission.Id);
                     }
                 }
+                // 同步变更缓存里的权限配置
+                var cacheKey = CalculateCacheKey(permission.Name, providerName, providerKey);
+                var cacheItem = new PermissionGrantCacheItem(permission.Name, permission.IsGranted);
+                await Cache.SetAsync(cacheKey, cacheItem);
             }
         }
 
@@ -152,6 +160,11 @@ namespace LINGYUN.Abp.PermissionManagement
             }
 
             await AuthorizationService.CheckAsync(policyName);
+        }
+
+        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
+        {
+            return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);
         }
     }
 }

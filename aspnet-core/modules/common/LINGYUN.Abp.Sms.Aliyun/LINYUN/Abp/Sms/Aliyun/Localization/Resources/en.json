@@ -1,0 +1,29 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "SendMessageFailed": "Text message sending failed:{0}",
+    "SMS_TEMPLATE_ILLEGAL": "template is not valid (not present or blocked)",
+    "SMS_SIGNATURE_ILLEGAL": "the signature is not valid (not present or blocked)",
+    "MOBILE_NUMBER_ILLEGAL": "invalid phone number ",
+    "TEMPLATE_MISSING_PARAMETERS": "template variable missing corresponding parameter value ",
+    "EXTEND_CODE_ERROR": "Error using extension code",
+    "DOMESTIC_NUMBER_NOT_SUPPORTED": "the template for international/Hong Kong, Macao and Taiwan messages does not support the sending of domestic Numbers",
+    "DAY_LIMIT_CONTROL": "trigger daily send limit ",
+    "SMS_CONTENT_ILLEGAL": "SMS content contains prohibited content ",
+    "SMS_SIGN_ILLEGAL": "signature is not allowed ",
+    "RAM_PERMISSION_DENY": "RAM permission DENY",
+    "OUT_OF_SERVICE": "business down ",
+    "PRODUCT_UN_SUBSCRIPT": "ali cloud customers who have not opened cloud communication products",
+    "PRODUCT_UNSUBSCRIBE": "product not opened ",
+    "ACCOUNT_NOT_EXISTS": "the account does not exist ",
+    "ACCOUNT_ABNORMAL": "account abnormal ",
+    "INVALID_PARAMETERS": "parameter exception ",
+    "SYSTEM_ERROR": "system error ",
+    "INVALID_JSON_PARAM": "invalid JSON parameter, only accept string value ",
+    "BLACK_KEY_CONTROL_LIMIT": "blacklist control ",
+    "PARAM_LENGTH_LIMIT": "the parameter exceeds the length limit ",
+    "PARAM_NOT_SUPPORT_URL": "unsupported URL",
+    "AMOUNT_NOT_ENOUGH": "insufficient account balance ",
+    "TEMPLATE_PARAMS_ILLEGAL": "template variable contains illegal keyword"
+  }
+}

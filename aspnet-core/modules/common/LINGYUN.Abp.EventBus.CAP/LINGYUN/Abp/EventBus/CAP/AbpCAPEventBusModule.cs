@@ -5,9 +5,16 @@ using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.EventBus.CAP
 {
+    /// <summary>
+    /// AbpCAPEventBusModule
+    /// </summary>
     [DependsOn(typeof(AbpEventBusModule))]
     public class AbpCAPEventBusModule : AbpModule
     {
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();

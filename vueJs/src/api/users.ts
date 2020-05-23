@@ -263,7 +263,7 @@ export class UserUpdateDto implements IUserData {
   /** 用户账户 */
   userName!: string;
   /** 用户简称 */
-  surname!: string;
+  surname?: string;
   /** 邮件地址 */
   email!: string;
   /** 联系方式 */
@@ -319,7 +319,7 @@ export interface IUserData {
   /** 用户账户 */
   userName: string
   /** 用户简称 */
-  surname: string
+  surname?: string
   /** 邮件地址 */
   email: string
   /** 联系方式 */

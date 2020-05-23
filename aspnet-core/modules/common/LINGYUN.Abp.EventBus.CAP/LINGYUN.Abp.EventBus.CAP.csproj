@@ -3,11 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>2.8.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\LocalNuget</OutputPath>
+    <DocumentationFile>D:\Projects\MicroService\CRM\Vue\vue-abp\aspnet-core\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.CAP" Version="3.0.3" />
-    <PackageReference Include="Volo.Abp.EventBus" Version="2.7.0" />
+    <PackageReference Include="Volo.Abp.EventBus" Version="2.8.0" />
   </ItemGroup>
 
 </Project>

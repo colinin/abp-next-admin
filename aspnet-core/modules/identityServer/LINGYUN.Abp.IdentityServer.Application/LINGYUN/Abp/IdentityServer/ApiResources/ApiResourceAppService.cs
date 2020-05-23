@@ -46,10 +46,12 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             {
                 throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ApiResourceNameExisted, apiResourceCreate.Name]);
             }
-            var apiResource = new ApiResource(GuidGenerator.Create(), apiResourceCreate.Name, 
-                apiResourceCreate.DisplayName, apiResourceCreate.Description);
-            apiResource.Enabled = apiResourceCreate.Enabled;
-            foreach(var userClaim in apiResourceCreate.UserClaims)
+            var apiResource = new ApiResource(GuidGenerator.Create(), apiResourceCreate.Name,
+                apiResourceCreate.DisplayName, apiResourceCreate.Description)
+            {
+                Enabled = apiResourceCreate.Enabled
+            };
+            foreach (var userClaim in apiResourceCreate.UserClaims)
             {
                 apiResource.AddUserClaim(userClaim.Type);
             }

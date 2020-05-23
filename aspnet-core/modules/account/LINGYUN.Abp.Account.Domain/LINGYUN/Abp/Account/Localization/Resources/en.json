@@ -1,0 +1,11 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:SmsRegisterTemplateCode": "Register sms template",
+    "Description:SmsRegisterTemplateCode": "When the user registers, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
+    "DisplayName:SmsSigninTemplateCode": "Signin sms template",
+    "Description:SmsSigninTemplateCode": "When the user logs in, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
+    "DisplayName:PhoneVerifyCodeExpiration": "SMS verification code validity",
+    "Description:PhoneVerifyCodeExpiration": "The valid time for the user to send SMS verification code, unit m, default 3m"
+  }
+}

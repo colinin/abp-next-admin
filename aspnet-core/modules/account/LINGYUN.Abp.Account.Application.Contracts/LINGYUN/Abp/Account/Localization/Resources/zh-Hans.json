@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "PhoneNumberNotRegisterd": "手机号码未注册!",
+    "PhoneVerifyCodeInvalid": "手机验证码无效或已经过期!",
+    "PhoneVerifyCodeNotRepeatSend": "手机验证码不能在 {0} 分钟内重复发送!"
+  }
+}

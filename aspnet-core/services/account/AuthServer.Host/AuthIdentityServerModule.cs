@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -27,6 +28,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+
 namespace AuthServer.Host
 {
     [DependsOn(
@@ -34,6 +36,7 @@ namespace AuthServer.Host
         typeof(AbpAutofacModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpIdentityServerSmValidatorModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
@@ -149,12 +152,8 @@ namespace AuthServer.Host
         {
             AsyncHelper.RunSync(async () =>
             {
-                using (var scope = context.ServiceProvider.CreateScope())
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                }
+                using var scope = context.ServiceProvider.CreateScope();
+                await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
             });
         }
     }

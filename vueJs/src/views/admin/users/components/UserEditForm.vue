@@ -1,6 +1,6 @@
 <template>
   <el-form
-    ref="profile"
+    ref="formEditUser"
     label-width="110px"
     :model="userProfile"
     :rules="userProfileRules"
@@ -61,18 +61,6 @@
         name="security"
       >
         <el-form-item
-          v-if="!hasEditUser"
-          prop="password"
-          label-width="100px"
-          :label="$t('userProfile.password')"
-        >
-          <el-input
-            v-model="userPassword"
-            type="password"
-            :placeholder="$t('userProfile.pleaseInputPassword')"
-          />
-        </el-form-item>
-        <el-form-item
           prop="twoFactorEnabled"
           label-width="100px"
           :label="$t('users.twoFactorEnabled')"
@@ -122,7 +110,7 @@
         class="confirm"
         type="primary"
         style="width:100px"
-        @click="onSubmit('profile')"
+        @click="onSubmit"
       >
         {{ $t('table.confirm') }}
       </el-button>
@@ -134,8 +122,7 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import UserApiService, {
   UserDataDto,
-  UserUpdateDto,
-  UserCreateDto
+  UserUpdateDto
 } from '@/api/users'
 import RoleService from '@/api/roles'
 import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/permission'
@@ -157,10 +144,9 @@ export default class extends Vue {
   private roleList: {key: string, label: string, disabled: boolean}[]
   /** 用户组 */
   private userRoles: string[]
-  private userPassword: string
   private hasEditUser: boolean
   private userRolesChanged: boolean
-  private userProfile: UserDataDto
+  private userProfile: any
   /** 是否加载用户权限 */
   private hasLoadPermission: boolean
   /** 用户权限数据 */
@@ -175,7 +161,6 @@ export default class extends Vue {
   constructor() {
     super()
     this.activedTabPane = 'basic'
-    this.userPassword = ''
     this.hasEditUser = false
     this.userRolesChanged = false
     this.hasLoadPermission = false
@@ -274,8 +259,6 @@ export default class extends Vue {
     this.userRoles = userRoleDto.items.map(r => r.name)
     // 监听用户组变化
     this.$watch('userRoles', this.onUserRolesChanged)
-    // const data = await getSettings('U', UserModule.id)
-    // console.log(data)
   }
 
   private async handleGetUserPermissions(id: string) {
@@ -290,20 +273,14 @@ export default class extends Vue {
     this.editUserPermissions = permissions
   }
 
-  private onSubmit(formName: string) {
-    const userProfileForm = this.$refs[formName] as any
-    userProfileForm.validate(async(valid: boolean) => {
+  private onSubmit() {
+    const frmEditUser = this.$refs.formEditUser as any
+    frmEditUser.validate(async(valid: boolean) => {
       if (valid) {
-        if (!this.hasEditUser) {
-          const createUserInput = this.createAddUserDto()
-          this.userProfile = await UserApiService.createUser(createUserInput)
-          this.$message.success(this.$t('users.createUserSuccess', { name: this.userProfile.name }).toString())
-        } else {
-          const updateUserInput = this.createEditUserDto()
-          const user = await UserApiService.updateUser(this.userProfile.id, updateUserInput)
-          this.userProfile = user
-          this.$message.success(this.$t('users.updateUserSuccess', { name: this.userProfile.name }).toString())
-        }
+        const updateUserInput = this.createEditUserDto()
+        const user = await UserApiService.updateUser(this.userProfile.id, updateUserInput)
+        this.userProfile = user
+        this.$message.success(this.l('users.updateUserSuccess', { name: this.userProfile.name }))
         if (this.userRolesChanged) {
           await UserApiService.setUserRoles(this.userProfile.id, this.userRoles)
         }
@@ -312,7 +289,7 @@ export default class extends Vue {
           setUserPermissions.permissions = this.editUserPermissions
           await PermissionService.setPermissionsByKey('U', this.userProfile.id, setUserPermissions)
         }
-        userProfileForm.resetFields()
+        frmEditUser.resetFields()
         this.$emit('onUserProfileChanged', this.userProfile.id)
         this.onCancel()
       } else {
@@ -329,27 +306,13 @@ export default class extends Vue {
   private resetForm() {
     this.activedTabPane = 'basic'
     this.userRoles = new Array<string>()
-    const userProfileForm = this.$refs.profile as any
-    userProfileForm.resetFields()
+    const frmEditUser = this.$refs.formEditUser as any
+    frmEditUser.resetFields()
     if (this.hasLoadPermission) {
       const userPermission = this.$refs.permissionTree as PermissionTree
       userPermission.resetPermissions()
       this.hasLoadPermission = false
     }
-  }
-
-  private createAddUserDto() {
-    const createUserInput = new UserCreateDto()
-    createUserInput.name = this.userProfile.name
-    createUserInput.userName = this.userProfile.userName
-    createUserInput.password = this.userPassword
-    createUserInput.surname = this.userProfile.surname
-    createUserInput.email = this.userProfile.email
-    createUserInput.phoneNumber = this.userProfile.phoneNumber
-    createUserInput.twoFactorEnabled = this.userProfile.twoFactorEnabled
-    createUserInput.lockoutEnabled = this.userProfile.lockoutEnabled
-    createUserInput.roleNames = this.userRoles
-    return createUserInput
   }
 
   private createEditUserDto() {

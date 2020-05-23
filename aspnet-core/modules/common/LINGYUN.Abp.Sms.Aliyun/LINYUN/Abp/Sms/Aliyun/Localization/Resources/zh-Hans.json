@@ -1,0 +1,29 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "SendMessageFailed": "发送短信错误:{0}",
+    "SMS_TEMPLATE_ILLEGAL": "模板不合法(不存在或被拉黑)",
+    "SMS_SIGNATURE_ILLEGAL": "签名不合法(不存在或被拉黑)",
+    "MOBILE_NUMBER_ILLEGAL": "无效的电话号码",
+    "TEMPLATE_MISSING_PARAMETERS": "模板变量缺少对应参数值",
+    "EXTEND_CODE_ERROR": "扩展码使用错误",
+    "DOMESTIC_NUMBER_NOT_SUPPORTED": "国际/港澳台消息模板不支持发送境内号码",
+    "DAY_LIMIT_CONTROL": "触发日发送限额",
+    "SMS_CONTENT_ILLEGAL": "短信内容包含禁止发送内容",
+    "SMS_SIGN_ILLEGAL": "签名禁止使用",
+    "RAM_PERMISSION_DENY": "没有访问权限",
+    "OUT_OF_SERVICE": "业务停机",
+    "PRODUCT_UN_SUBSCRIPT": "未开通云通信产品的阿里云客户",
+    "PRODUCT_UNSUBSCRIBE": "产品未开通",
+    "ACCOUNT_NOT_EXISTS": "账户不存在",
+    "ACCOUNT_ABNORMAL": "账户异常",
+    "INVALID_PARAMETERS": "参数异常",
+    "SYSTEM_ERROR": "系统错误",
+    "INVALID_JSON_PARAM": "JSON参数不合法，只接受字符串值",
+    "BLACK_KEY_CONTROL_LIMIT": "黑名单管控",
+    "PARAM_LENGTH_LIMIT": "参数超出长度限制",
+    "PARAM_NOT_SUPPORT_URL": "不支持URL",
+    "AMOUNT_NOT_ENOUGH": "账户余额不足",
+    "TEMPLATE_PARAMS_ILLEGAL": "模版变量里包含非法关键字"
+  }
+}

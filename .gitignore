@@ -4,6 +4,11 @@ node_modules
 vue.config.js
 .env.production
 task
+obj
+bin
+Logs
+appsettings.json
+appsettings.*.json
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
