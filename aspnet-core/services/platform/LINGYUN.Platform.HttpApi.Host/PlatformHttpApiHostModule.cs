@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
@@ -70,6 +71,7 @@ namespace LINGYUN.Platform
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
+        typeof(AbpIdentityOverrideOptionsModule),
         typeof(AbpAutofacModule)
         )]
     public class PlatformHttpApiHostModule : AbpModule

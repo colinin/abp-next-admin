@@ -33,7 +33,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
       NProgress.done()
     } else {
       // Check whether the user has obtained his permission roles
-      if (PermissionModule.routes.length === 0) {
+      if (PermissionModule.authorizedPermissions.length === 0) {
         try {
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           const { sub } = await UserModule.GetUserInfo()

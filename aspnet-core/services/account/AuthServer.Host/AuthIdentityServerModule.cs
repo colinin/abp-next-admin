@@ -1,13 +1,16 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
 using System.Linq;
@@ -42,7 +45,8 @@ namespace AuthServer.Host
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule)
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpIdentityOverrideOptionsModule)
         )]
     public class AuthIdentityServerModule : AbpModule
     {

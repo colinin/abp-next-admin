@@ -25,7 +25,7 @@
         /// <summary>
         /// 默认版本号
         /// </summary>
-        public string DefaultVersion { get; set; } = "2017-05-25";
+        public string Version { get; set; } = "2017-05-25";
         /// <summary>
         /// 默认签名
         /// </summary>

@@ -118,6 +118,10 @@ export default class UserApiService {
     })
   }
 
+  public static refreshToken() {
+    
+  }
+
   public static userLogout(token: string | undefined) {
     if (token) {
       const _url = '/connect/revocation'

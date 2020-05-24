@@ -60,10 +60,10 @@ namespace LINGYUN.Abp.Account
             var userEmail = input.EmailAddress ?? input.PhoneNumber + "@abp.io";
             var userName = input.UserName ?? input.PhoneNumber;
             var user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id);
-
+            user.Name = input.Name ?? input.PhoneNumber;
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
-            await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber);
+            await UserManager.ChangePhoneNumberAsync(user, input.PhoneNumber, input.VerifyCode);
             await UserManager.SetEmailAsync(user, userEmail);
             await UserManager.AddDefaultRolesAsync(user);
 

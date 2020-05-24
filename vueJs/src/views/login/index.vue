@@ -28,63 +28,63 @@
           tabindex="1"
           autocomplete="on"
         />
+      </el-form-item>
 
-        <el-form-item prop="username">
+      <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon name="user" />
+        </span>
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          :placeholder="$t('login.username')"
+          name="username"
+          type="text"
+          tabindex="1"
+          autocomplete="on"
+        />
+      </el-form-item>
+
+      <el-tooltip
+        v-model="capsTooltip"
+        content="Caps lock is On"
+        placement="right"
+        manual
+      >
+        <el-form-item prop="password">
           <span class="svg-container">
-            <svg-icon name="user" />
+            <svg-icon name="password" />
           </span>
           <el-input
-            ref="username"
-            v-model="loginForm.username"
-            :placeholder="$t('login.username')"
-            name="username"
-            type="text"
-            tabindex="1"
+            :key="passwordType"
+            ref="password"
+            v-model="loginForm.password"
+            :type="passwordType"
+            :placeholder="$t('login.password')"
+            name="password"
+            tabindex="2"
             autocomplete="on"
+            @keyup.native="checkCapslock"
+            @blur="capsTooltip = false"
+            @keyup.enter.native="handleLogin"
           />
+          <span
+            class="show-pwd"
+            @click="showPwd"
+          >
+            <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
+          </span>
         </el-form-item>
+      </el-tooltip>
 
-        <el-tooltip
-          v-model="capsTooltip"
-          content="Caps lock is On"
-          placement="right"
-          manual
-        >
-          <el-form-item prop="password">
-            <span class="svg-container">
-              <svg-icon name="password" />
-            </span>
-            <el-input
-              :key="passwordType"
-              ref="password"
-              v-model="loginForm.password"
-              :type="passwordType"
-              :placeholder="$t('login.password')"
-              name="password"
-              tabindex="2"
-              autocomplete="on"
-              @keyup.native="checkCapslock"
-              @blur="capsTooltip = false"
-              @keyup.enter.native="handleLogin"
-            />
-            <span
-              class="show-pwd"
-              @click="showPwd"
-            >
-              <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-            </span>
-          </el-form-item>
-        </el-tooltip>
-
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width:100%; margin-bottom:30px;"
-          @click.native.prevent="handleLogin"
-        >
-          {{ $t('login.logIn') }}
-        </el-button>
-      </el-form-item>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%; margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >
+        {{ $t('login.logIn') }}
+      </el-button>
     </el-form>
 
     <el-dialog
@@ -104,9 +104,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { Dictionary } from 'vue-router/types/router'
-import { Form as ElForm, Input, Message } from 'element-ui'
+import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
-import { isValidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect/index.vue'
 import SocialSign from './components/SocialSignin.vue'
 

@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
-using Volo.Abp.Localization;
 using Volo.Abp.Sms;
 
 namespace LINYUN.Abp.Sms.Aliyun
@@ -45,7 +44,7 @@ namespace LINYUN.Abp.Sms.Aliyun
                 Method = MethodType.POST,
                 Domain = Options.Domain,
                 Action = Options.ActionName,
-                Version = Options.DefaultVersion
+                Version = Options.Version
             };
             TryAddTemplateCode(request, smsMessage);
             TryAddSignName(request, smsMessage);

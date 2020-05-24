@@ -59,7 +59,12 @@ class Permission extends VuexModule implements IPermissionState {
         }
       })
     })
-    this.SET_AUTHPERMISSIONS(authPermissions)
+    if (authPermissions.length === 0) {
+      // 防止没有任何权限无限刷新页面
+      this.SET_AUTHPERMISSIONS(['guest'])
+    } else {
+      this.SET_AUTHPERMISSIONS(authPermissions)
+    }
   }
 
   @Action

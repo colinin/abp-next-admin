@@ -1,8 +1,0 @@
-﻿{
-  "culture": "en",
-  "texts": {
-    "PhoneNumberNotRegisterd": "The registered mobile phone number is not registered!",
-    "PhoneVerifyCodeInvalid": "The phone verification code is invalid or expired!",
-    "PhoneVerifyCodeNotRepeatSend": "Phone verification code cannot be sent repeatedly within {0} minutes!"
-  }
-}

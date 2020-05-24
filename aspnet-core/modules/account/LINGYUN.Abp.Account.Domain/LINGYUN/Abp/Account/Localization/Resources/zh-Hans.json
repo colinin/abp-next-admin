@@ -1,6 +1,9 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "PhoneNumberNotRegisterd": "手机号码未注册!",
+    "PhoneVerifyCodeInvalid": "手机验证码无效或已经过期!",
+    "PhoneVerifyCodeNotRepeatSend": "手机验证码不能在 {0} 分钟内重复发送!",
     "DisplayName:SmsRegisterTemplateCode": "用户注册短信模板",
     "Description:SmsRegisterTemplateCode": "用户注册时发送短信验证码的模板号,填写对应云平台注册的模板号",
     "DisplayName:SmsSigninTemplateCode": "用户登录短信模板",

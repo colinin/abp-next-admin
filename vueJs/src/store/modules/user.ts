@@ -92,22 +92,6 @@ class User extends VuexModule implements IUserState {
     return userInfo
   }
 
-  // @Action
-  // public async ChangeRoles(role: string) {
-  //   // Dynamically modify permissions
-  //   const token = role + '-token'
-  //   this.SET_TOKEN(token)
-  //   setToken(token)
-  //   await this.GetUserInfo()
-  //   resetRouter()
-  //   // Generate dynamic accessible routes based on roles
-  //   // PermissionModule.GenerateRoutes(this.roles)
-  //   // Add generated routes
-  //   router.addRoutes(PermissionModule.dynamicRoutes)
-  //   // Reset visited views and cached views
-  //   TagsViewModule.delAllViews()
-  // }
-
   @Action
   public async LogOut() {
     if (this.token === '') {
@@ -123,6 +107,11 @@ class User extends VuexModule implements IUserState {
     PermissionModule.ResetRoutes()
     this.SET_TOKEN('')
     this.SET_ROLES([])
+  }
+
+  @Action
+  public RefreshSession() {
+    
   }
 }
 

@@ -11,6 +11,9 @@ namespace LINGYUN.Abp.Account
         [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
         public string PhoneNumber { get; set; }
 
+        [StringLength(IdentityUserConsts.MaxNameLength)]
+        public string Name { get; set; }
+
         [StringLength(IdentityUserConsts.MaxUserNameLength)]
         public string UserName { get; set; }
 
