@@ -23,12 +23,10 @@ namespace LINGYUN.Abp.PermissionManagement
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         protected PermissionManagementOptions Options { get; }
-        protected ICurrentClient CurrentClient { get; }
         protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         public PermissionAppService(
-            ICurrentClient currentClient,
             IDistributedCache<PermissionGrantCacheItem> cache,
             IPermissionGrantRepository permissionGrantRepository,
             IPermissionDefinitionManager permissionDefinitionManager,
@@ -36,7 +34,6 @@ namespace LINGYUN.Abp.PermissionManagement
         {
             Cache = cache;
             Options = options.Value;
-            CurrentClient = currentClient;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
         }
@@ -51,27 +48,6 @@ namespace LINGYUN.Abp.PermissionManagement
             var permissionGroups = PermissionDefinitionManager.GetGroups();
             IEnumerable<PermissionGrant> permissions = 
                 await PermissionGrantRepository.GetListAsync(providerName, providerKey);
-            
-            // 如果是当前用户权限,还需要查询角色权限
-            if (providerName.Equals("U"))
-            {
-                var userId = CurrentUser.GetId().ToString();
-                if (providerKey.Equals(userId))
-                {
-                    foreach (var role in CurrentUser.Roles)
-                    {
-                        var rolePermissions = await PermissionGrantRepository
-                                            .GetListAsync(RolePermissionValueProvider.ProviderName, role);
-                        permissions = permissions.Union(rolePermissions);
-                    }
-                }
-            }
-            if (!CurrentClient.Id.IsNullOrWhiteSpace())
-            {
-                var clientPermissions = await PermissionGrantRepository
-                                            .GetListAsync(ClientPermissionValueProvider.ProviderName, CurrentClient.Id);
-                permissions = permissions.Union(clientPermissions);
-            }
             foreach (var permissionGroup in permissionGroups)
             {
                 var groupDto = new PermissionGroupDto

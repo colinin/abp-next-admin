@@ -1,8 +1,8 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 import { RouteConfig } from 'vue-router'
 import { asyncRoutes, constantRoutes } from '@/router'
-import PermissionService, { PermissionGroup, IPermissionGrant } from '@/api/permission'
 import store from '@/store'
+import { AbpConfigurationModule } from '@/store/modules/abp'
 
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
@@ -50,15 +50,15 @@ class Permission extends VuexModule implements IPermissionState {
 
   @Action
   public async GetPermissions(userId: string) {
-    const permissions = await PermissionService.getPermissionsByKey('U', userId)
     const authPermissions = new Array<string>()
-    permissions.groups.forEach((group: PermissionGroup) => {
-      group.permissions.forEach((permission: IPermissionGrant) => {
-        if (permission.isGranted) {
-          authPermissions.push(permission.name)
+    const grantedPolicies = AbpConfigurationModule.configuration.auth.grantedPolicies
+    if (grantedPolicies) {
+      Object.keys(grantedPolicies).forEach(key => {
+        if (grantedPolicies[key]) {
+          authPermissions.push(key)
         }
       })
-    })
+    }
     if (authPermissions.length === 0) {
       // 防止没有任何权限无限刷新页面
       this.SET_AUTHPERMISSIONS(['guest'])
