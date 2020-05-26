@@ -9,6 +9,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
+using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
@@ -22,10 +23,12 @@ namespace LINGYUN.Abp.PermissionManagement
     public class PermissionAppService : ApplicationService, IPermissionAppService
     {
         protected PermissionManagementOptions Options { get; }
+        protected ICurrentClient CurrentClient { get; }
         protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
         public PermissionAppService(
+            ICurrentClient currentClient,
             IDistributedCache<PermissionGrantCacheItem> cache,
             IPermissionGrantRepository permissionGrantRepository,
             IPermissionDefinitionManager permissionDefinitionManager,
@@ -33,6 +36,7 @@ namespace LINGYUN.Abp.PermissionManagement
         {
             Cache = cache;
             Options = options.Value;
+            CurrentClient = currentClient;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
         }
@@ -61,6 +65,12 @@ namespace LINGYUN.Abp.PermissionManagement
                         permissions = permissions.Union(rolePermissions);
                     }
                 }
+            }
+            if (!CurrentClient.Id.IsNullOrWhiteSpace())
+            {
+                var clientPermissions = await PermissionGrantRepository
+                                            .GetListAsync(ClientPermissionValueProvider.ProviderName, CurrentClient.Id);
+                permissions = permissions.Union(clientPermissions);
             }
             foreach (var permissionGroup in permissionGroups)
             {

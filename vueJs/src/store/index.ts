@@ -7,10 +7,12 @@ import { IErrorLogState } from './modules/error-log'
 import { IPermissionState } from './modules/permission'
 import { ISettingsState } from './modules/settings'
 import { IRoleState } from './modules/role'
+import { IAbpConfigurationState } from './modules/abp'
 
 Vue.use(Vuex)
 
 export interface IRootState {
+  abp: IAbpConfigurationState
   app: IAppState
   user: IUserState
   tagsView: ITagsViewState

@@ -23,30 +23,12 @@
       >
         English
       </el-dropdown-item>
-      <el-dropdown-item
-        :disabled="language==='es'"
-        command="es"
-      >
-        Español
-      </el-dropdown-item>
-      <el-dropdown-item
-        :disabled="language==='ja'"
-        command="ja"
-      >
-        日本語
-      </el-dropdown-item>
-      <el-dropdown-item
-        :disabled="language==='ko'"
-        command="ko"
-      >
-        한국어
-      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 
 @Component({
@@ -57,9 +39,35 @@ export default class extends Vue {
     return AppModule.language
   }
 
+  /**
+   * 监听abp配置状态,增强本地化
+   */
+  @Watch('$store.state.abpconfiguration.configuration')
+  private onAbpConfigurationChanged() {
+    const abpConfig = this.$store.state.abpconfiguration.configuration
+    if (abpConfig) {
+      const { twoLetterIsoLanguageName } = abpConfig.localization.currentCulture
+      const resources: { [key: string]: any} = {}
+      Object.keys(abpConfig.localization.values).forEach(key => {
+        const resource = abpConfig.localization.values[key]
+
+        if (typeof resource !== 'object') return
+
+        Object.keys(resource).forEach(key2 => {
+          if (/'{|{/g.test(resource[key2])) {
+            resource[key2] = resource[key2].replace(/'{|{/g, '{{').replace(/}'|}/g, '}}')
+          }
+        })
+        resources[key] = resource
+      })
+      this.$i18n.mergeLocaleMessage(twoLetterIsoLanguageName as string, resources)
+      console.log(this.$i18n)
+    }
+  }
+
   private handleSetLanguage(lang: string) {
-    this.$i18n.locale = lang
     AppModule.SetLanguage(lang)
+    this.$i18n.locale = lang
     this.$message({
       message: 'Switch Language Success',
       type: 'success'

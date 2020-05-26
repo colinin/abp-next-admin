@@ -6,16 +6,10 @@ import { getLanguage } from '@/utils/cookies'
 // element-ui built-in lang
 import elementEnLocale from 'element-ui/lib/locale/lang/en'
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'
-import elementEsLocale from 'element-ui/lib/locale/lang/es'
-import elementJaLocale from 'element-ui/lib/locale/lang/ja'
-import elementKoLocale from 'element-ui/lib/locale/lang/ko'
 
 // User defined lang
 import enLocale from './en'
 import zhLocale from './zh'
-import esLocale from './es'
-import jaLocale from './ja'
-import koLocale from './ko'
 
 Vue.use(VueI18n)
 
@@ -27,18 +21,6 @@ const messages = {
   zh: {
     ...zhLocale,
     ...elementZhLocale
-  },
-  es: {
-    ...esLocale,
-    ...elementEsLocale
-  },
-  ja: {
-    ...jaLocale,
-    ...elementJaLocale
-  },
-  ko: {
-    ...koLocale,
-    ...elementKoLocale
   }
 }
 

@@ -166,9 +166,9 @@ export default class extends Vue {
       if (valid) {
         UserApiService.createUser(this.createUser).then(user => {
           this.$message.success(this.l('users.createUserSuccess', { name: user.name }))
-          this.$emit('onUserProfileChanged', user.id)
           this.resetForm()
           this.onCancel()
+          this.$emit('onUserProfileChanged', user.id)
         })
       }
     })

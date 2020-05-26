@@ -290,8 +290,8 @@ export default class extends Vue {
           await PermissionService.setPermissionsByKey('U', this.userProfile.id, setUserPermissions)
         }
         frmEditUser.resetFields()
-        this.$emit('onUserProfileChanged', this.userProfile.id)
         this.onCancel()
+        this.$emit('onUserProfileChanged', this.userProfile.id)
       } else {
         return false
       }

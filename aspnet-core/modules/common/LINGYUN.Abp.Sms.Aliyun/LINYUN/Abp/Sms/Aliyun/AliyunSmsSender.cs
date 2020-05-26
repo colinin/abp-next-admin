@@ -49,9 +49,7 @@ namespace LINYUN.Abp.Sms.Aliyun
             TryAddTemplateCode(request, smsMessage);
             TryAddSignName(request, smsMessage);
             TryAddSendPhone(request, smsMessage);
-
-            var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
-            request.AddQueryParameters("TemplateParam", queryParamJson);
+            TryAddTemplateParam(request, smsMessage);
 
             try
             {
@@ -123,6 +121,15 @@ namespace LINYUN.Abp.Sms.Aliyun
             else
             {
                 request.AddQueryParameters("PhoneNumbers", smsMessage.PhoneNumber);
+            }
+        }
+
+        private void TryAddTemplateParam(CommonRequest request, SmsMessage smsMessage)
+        {
+            if (smsMessage.Properties.Count > 0)
+            {
+                var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
+                request.AddQueryParameters("TemplateParam", queryParamJson);
             }
         }
     }

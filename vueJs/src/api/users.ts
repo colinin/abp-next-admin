@@ -118,8 +118,53 @@ export default class UserApiService {
     })
   }
 
-  public static refreshToken() {
-    
+  public static sendPhoneVerifyCode(phoneVerify: PhoneVerify) {
+    const _url = '/api/account/phone/verify'
+    return ApiService.HttpRequest<any>({
+      baseURL: IdentityServiceUrl,
+      url: _url,
+      method: 'POST',
+      data: phoneVerify
+    })
+  }
+
+  public static userLoginWithPhone(loginData: UserLoginPhoneData) {
+    const _url = '/connect/token'
+    const login = {
+      grant_type: 'phone_verify',
+      phone_number: loginData.phoneNumber,
+      phone_verify_code: loginData.verifyCode,
+      client_id: process.env.VUE_APP_CLIENT_ID,
+      client_secret: process.env.VUE_APP_CLIENT_SECRET
+    }
+    return ApiService.HttpRequest<UserLoginResult>({
+      baseURL: IdentityServerUrl,
+      url: _url,
+      method: 'POST',
+      data: qs.stringify(login),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+  }
+
+  public static refreshToken(token: string) {
+    const _url = '/connect/token'
+    const refresh = {
+      grant_type: 'refresh_token',
+      refresh_token: token,
+      client_id: process.env.VUE_APP_CLIENT_ID,
+      client_secret: process.env.VUE_APP_CLIENT_SECRET
+    }
+    return ApiService.HttpRequest<UserLoginResult>({
+      baseURL: IdentityServerUrl,
+      url: _url,
+      method: 'POST',
+      data: qs.stringify(refresh),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
   }
 
   public static userLogout(token: string | undefined) {
@@ -172,6 +217,24 @@ export class UserLoginData {
   userName!: string
   /** 用户密码 */
   password!: string
+}
+
+export enum VerifyType {
+  register = 0,
+  signin   = 10
+}
+
+export class PhoneVerify {
+  phoneNumber!: string
+  verifyType!:VerifyType
+}
+
+/** 用户手机登录对象 */
+export class UserLoginPhoneData {
+  /** 手机号码 */
+  phoneNumber!: string
+  /** 手机验证码 */
+  verifyCode!: string
 }
 
 /** 用户信息对象 由IdentityServer提供 */

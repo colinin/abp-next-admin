@@ -90,12 +90,22 @@ export default {
   login: {
     title: '系统登录',
     logIn: '登录',
+    userLogin: '用户密码登录',
+    phoneLogin: '手机免密登录',
     tenantName: '租户',
     username: '账号',
     password: '密码',
+    phoneNumber: '手机号码',
+    phoneVerifyCode: '手机验证码',
+    sendVerifyCode: '发送验证码',
+    afterSendVerifyCode: ' s后重新发送',
     any: '随便填',
     thirdparty: '第三方登录',
-    thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
+    thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！',
+    tokenExprition: '身份令牌已过期,请重新登录!',
+    confirmLogout: '确认登出',
+    relogin: '重新登录',
+    cancel: '取消'
   },
   documentation: {
     documentation: '文档',
@@ -586,6 +596,7 @@ export default {
     cancel: '取 消',
     confirm: '确 定',
     correctEmailAddress: '正确的邮件地址',
-    correctPhoneNumber: '正确的手机号码'
+    correctPhoneNumber: '正确的手机号码',
+    operatingFast: '您的操作过快,请稍后再试!'
   }
 }

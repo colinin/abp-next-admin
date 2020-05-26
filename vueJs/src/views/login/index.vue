@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
+      ref="formLogin"
       :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      autocomplete="on"
+      :rules="loginFormRules"
       label-position="left"
+      label-width="0px"
+      class="demo-ruleForm login-page"
     >
       <div class="title-container">
         <h3 class="title">
@@ -14,143 +14,173 @@
         </h3>
         <lang-select class="set-language" />
       </div>
-
-      <el-form-item prop="tenantName">
-        <span class="svg-container">
-          <svg-icon name="tree" />
-        </span>
-        <el-input
-          ref="tenantName"
-          v-model="loginForm.tenantName"
-          :placeholder="$t('login.tenantName')"
-          name="tenantName"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon name="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          :placeholder="$t('login.username')"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip
-        v-model="capsTooltip"
-        content="Caps lock is On"
-        placement="right"
-        manual
+      <el-tabs
+        stretch
+        @tab-click="handleLoginTabChanged"
       >
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon name="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            :placeholder="$t('login.password')"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span
-            class="show-pwd"
-            @click="showPwd"
-          >
-            <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
-
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%; margin-bottom:30px;"
-        @click.native.prevent="handleLogin"
-      >
-        {{ $t('login.logIn') }}
-      </el-button>
+        <el-tab-pane :label="$t('login.userLogin')">
+          <div v-if="loginType === 'password'">
+            <el-form-item
+              prop="username"
+            >
+              <el-input
+                v-model="loginForm.username"
+                prefix-icon="el-icon-user"
+                type="text"
+                auto-complete="off"
+                tabindex="1"
+                :placeholder="$t('global.pleaseInputBy', {key: $t('login.username')})"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="password"
+            >
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                prefix-icon="el-icon-lock"
+                :type="passwordType"
+                :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
+                name="password"
+                tabindex="2"
+                @keyup.enter.native="handleUserLogin"
+              />
+              <span
+                class="show-pwd"
+                @click="showPwd"
+              >
+                <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
+              </span>
+            </el-form-item>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('login.phoneLogin')">
+          <div v-if="loginType === 'phone'">
+            <el-form-item
+              prop="phoneNumber"
+            >
+              <el-input
+                ref="loginItemPhone"
+                v-model="loginForm.phoneNumber"
+                prefix-icon="el-icon-mobile-phone"
+                type="text"
+                maxlength="11"
+                auto-complete="off"
+                :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneNumber')})"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="verifyCode"
+            >
+              <el-row>
+                <el-col :span="16">
+                  <el-input
+                    v-model="loginForm.verifyCode"
+                    auto-complete="off"
+                    :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneVerifyCode')})"
+                    prefix-icon="el-icon-key"
+                    style="margin:-right: 10px;"
+                  />
+                </el-col>
+                <el-col :span="8">
+                  <el-button
+                    ref="sendButton"
+                    style="margin-left: 10px;width: 132px;"
+                    :disabled="sending"
+                    @click="handleSendPhoneVerifyCode"
+                  >
+                    {{ sendButtonName }}
+                  </el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      <el-form-item style="width:100%;">
+        <el-button
+          type="primary"
+          style="width:100%;"
+          :loading="logining"
+          @click="handleUserLogin"
+        >
+          {{ $t('login.logIn') }}
+        </el-button>
+      </el-form-item>
     </el-form>
-
-    <el-dialog
-      :title="$t('login.thirdparty')"
-      :visible.sync="showDialog"
-    >
-      {{ $t('login.thirdpartyTips') }}
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Input } from 'element-ui'
 import { Route } from 'vue-router'
-import { Dictionary } from 'vue-router/types/router'
-import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
+import { Dictionary } from 'vue-router/types/router'
 import LangSelect from '@/components/LangSelect/index.vue'
-import SocialSign from './components/SocialSignin.vue'
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import UserService, { PhoneVerify, VerifyType } from '@/api/users'
 
 @Component({
   name: 'Login',
   components: {
-    LangSelect,
-    SocialSign
+    LangSelect
   }
 })
 export default class extends Vue {
-  private validateUsername = (rule: any, value: string, callback: Function) => {
-    // if (!isValidUsername(value)) {
-    //   callback(new Error('Please enter the correct user name'))
-    // } else {
-    //   callback()
-    // }
-    callback()
-  }
-
-  private validatePassword = (rule: any, value: string, callback: Function) => {
-    // if (value.length < 6) {
-    //   callback(new Error('The password can not be less than 6 digits'))
-    // } else {
-    //   callback()
-    // }
-    callback()
-  }
-
-  private loginForm = {
-    tenantName: 'test-vue',
-    username: 'admin',
-    password: '1q2w3E*'
-  }
-
-  private loginRules = {
-    username: [{ validator: this.validateUsername, trigger: 'blur' }],
-    password: [{ validator: this.validatePassword, trigger: 'blur' }]
-  }
-
+  private loginType = 'password'
   private passwordType = 'password'
-  private loading = false
-  private showDialog = false
-  private capsTooltip = false
   private redirect?: string
+
+  private sendTimer: any
+  private sending = false
+  private sendButtonName = this.l('login.sendVerifyCode')
+  private logining = false
+  private loginForm = {
+    tenantName: '',
+    username: '',
+    password: '',
+    phoneNumber: '',
+    verifyCode: ''
+  }
+
+  private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {
+    const phoneReg = /^1[34578]\d{9}$/
+    if (!value || !phoneReg.test(value)) {
+      callback(new Error(this.l('global.pleaseInputBy', { key: this.l('global.correctPhoneNumber') })))
+    } else {
+      callback()
+    }
+  }
+
+  private loginFormRules = {
+    username: [
+      {
+        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.username') }), trigger: 'blur'
+      }
+    ],
+    password: [
+      {
+        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.password') }), trigger: 'blur'
+      }
+    ],
+    phoneNumber: [
+      {
+        required: true, validator: this.validatePhoneNumberValue, trigger: 'blur'
+      }
+    ],
+    verifyCode: [
+      {
+        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.phoneVerifyCode') }), trigger: 'blur'
+      }
+    ]
+  }
+
+  destroyed() {
+    if (this.sendTimer) {
+      clearInterval(this.sendTimer)
+    }
+  }
 
   @Watch('$route', { immediate: true })
   private onRouteChange(route: Route) {
@@ -160,19 +190,6 @@ export default class extends Vue {
     if (query) {
       this.redirect = query.redirect
     }
-  }
-
-  mounted() {
-    if (this.loginForm.username === '') {
-      (this.$refs.username as Input).focus()
-    } else if (this.loginForm.password === '') {
-      (this.$refs.password as Input).focus()
-    }
-  }
-
-  private checkCapslock(e: KeyboardEvent) {
-    const { key } = e
-    this.capsTooltip = key !== null && key.length === 1 && (key >= 'A' && key <= 'Z')
   }
 
   private showPwd() {
@@ -186,115 +203,120 @@ export default class extends Vue {
     })
   }
 
-  private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
+  private handleUserLogin() {
+    const frmLogin = this.$refs.formLogin as any
+    frmLogin.validate(async(valid: boolean) => {
       if (valid) {
-        this.loading = true
-        // await UserModule.Login(this.loginForm)
-        UserModule.Login(this.loginForm).then(() => {
-          // await UserModule.Login(this.loginForm)
-          this.$router.push({
-            path: this.redirect || '/'
-          })
-        }).catch(() => {
-          setTimeout(() => {
-            this.loading = false
-          }, 0.5 * 1000)
-        })
-      } else {
-        return false
+        this.logining = true
+        try {
+          if (this.loginType === 'password') {
+            const userLogin = {
+              tenantName: this.loginForm.tenantName,
+              username: this.loginForm.username,
+              password: this.loginForm.password
+            }
+            await UserModule.Login(userLogin)
+            this.$router.push({
+              path: this.redirect || '/'
+            })
+          } else {
+            const phoneLogin = {
+              tenantName: this.loginForm.tenantName,
+              phoneNumber: this.loginForm.phoneNumber,
+              verifyCode: this.loginForm.verifyCode
+            }
+            await UserModule.PhoneLogin(phoneLogin)
+            this.$router.push({
+              path: this.redirect || '/'
+            })
+          }
+        } catch {
+          this.resetLoginButton()
+        }
       }
     })
+  }
+
+  private handleSendPhoneVerifyCode() {
+    const frmLogin = this.$refs.formLogin as any
+    frmLogin.validateField('phoneNumber', (errorMsg: string) => {
+      if (!errorMsg) {
+        this.sending = true
+        const phoneVerify = new PhoneVerify()
+        phoneVerify.phoneNumber = this.loginForm.phoneNumber
+        phoneVerify.verifyType = VerifyType.signin
+        UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
+          let interValTime = 60
+          const sendingName = this.l('login.afterSendVerifyCode')
+          const sendedName = this.l('login.sendVerifyCode')
+          this.sendTimer = setInterval(() => {
+            this.sendButtonName = interValTime + sendingName
+            --interValTime
+            if (interValTime < 0) {
+              this.sendButtonName = sendedName
+              this.sending = false
+              clearInterval(this.sendTimer)
+            }
+          }, 1000)
+        }).catch(() => {
+          this.sending = false
+        })
+      }
+    })
+  }
+
+  private handleLoginTabChanged(tab: any) {
+    this.loginType = tab.paneName === '1' ? 'phone' : 'password'
+  }
+
+  private l(name: string, values?: any[] | { [key: string]: any }) {
+    return this.$t(name, values).toString()
+  }
+
+  private resetLoginButton() {
+    setTimeout(() => {
+      this.logining = false
+    }, 0.5 * 1000)
   }
 }
 </script>
 
-<style lang="scss">
-// References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
-@supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
-  .login-container .el-input {
-    input { color: $loginCursorColor; }
-    input::first-line { color: $lightGray; }
-  }
-}
-
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      height: 47px;
-      background: transparent;
-      border: 0px;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $lightGray;
-      caret-color: $loginCursorColor;
-      -webkit-appearance: none;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $loginBg inset !important;
-        -webkit-text-fill-color: #fff !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 .login-container {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  background-color: $loginBg;
-
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-  }
+    background-color: $loginBg;
 
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $darkGray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
     }
-  }
 
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $darkGray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
+    .title-container {
+      position: relative;
 
     .title {
       font-size: 26px;
       color: $lightGray;
-      margin: 0px auto 40px auto;
+      margin: 0px auto 20px auto;
       text-align: center;
       font-weight: bold;
+    }
+
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+
+      span {
+        &:first-of-type {
+          margin-right: 16px;
+        }
+      }
     }
 
     .set-language {
@@ -310,23 +332,30 @@ export default class extends Vue {
   .show-pwd {
     position: absolute;
     right: 10px;
-    top: 7px;
     font-size: 16px;
     color: $darkGray;
     cursor: pointer;
     user-select: none;
   }
+}
 
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
+.login-page {
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin: 130px auto;
+    width: 500px;
+    padding: 35px 35px 15px;
+    border: 1px solid #8c9494;
+    box-shadow: 0 0 25px #454646;
+    background-color:rgb(110, 115, 116);
 
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
+    .loginTab.el-tabs__item {
+      width: 180px;
     }
-  }
+}
+
+label.el-checkbox.rememberme {
+    margin: 0px 0px 15px;
+    text-align: left;
 }
 </style>

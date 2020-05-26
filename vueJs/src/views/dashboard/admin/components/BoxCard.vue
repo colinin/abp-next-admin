@@ -10,10 +10,6 @@
       <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">
     </div>
     <div style="position:relative;">
-      <pan-thumb
-        :image="avatar"
-        class="panThumb"
-      />
       <mallki
         class="mallki-text"
         text="vue-typescript-admin"
@@ -60,10 +56,6 @@ import Mallki from '@/components/TextHoverEffect/Mallki.vue'
 export default class extends Vue {
   get name() {
     return UserModule.name
-  }
-
-  get avatar() {
-    return UserModule.avatar
   }
 
   get roles() {
