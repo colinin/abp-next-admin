@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DotNetCore.CAP.Processor;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
@@ -8,7 +11,9 @@ namespace LINGYUN.Abp.EventBus.CAP
     /// <summary>
     /// AbpCAPEventBusModule
     /// </summary>
-    [DependsOn(typeof(AbpEventBusModule))]
+    [DependsOn(
+        typeof(AbpEventBusModule),
+        typeof(AbpBackgroundWorkersModule))]
     public class AbpCAPEventBusModule : AbpModule
     {
         /// <summary>
@@ -23,6 +28,20 @@ namespace LINGYUN.Abp.EventBus.CAP
                 configuration.GetSection("CAP:EventBus").Bind(options);
                 context.Services.ExecutePreConfiguredActions(options);
             });
+        }
+
+        /// <summary>
+        /// OnApplicationInitialization
+        /// </summary>
+        /// <param name="context"></param>
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.ServiceProvider
+                    .GetRequiredService<IBackgroundWorkerManager>()
+                    .Add(
+                        context.ServiceProvider
+                            .GetRequiredService<AbpCapExpiresMessageCleanupBackgroundWorker>()
+                    );
         }
     }
 }

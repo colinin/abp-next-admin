@@ -277,7 +277,7 @@ export class GlobalConfigurationBase {
 
 export class GlobalConfigurationDto extends GlobalConfigurationBase {
   appId!: string
-  itemId!: number
+  itemId!: string
 }
 
 export class GlobalConfigurationCreateDto extends GlobalConfigurationBase {
@@ -285,7 +285,7 @@ export class GlobalConfigurationCreateDto extends GlobalConfigurationBase {
 }
 
 export class GlobalConfigurationUpdateDto extends GlobalConfigurationBase {
-  itemId!: number
+  itemId!: string
 }
 
 export class GlobalGetByPagedDto extends PagedAndSortedResultRequestDto {

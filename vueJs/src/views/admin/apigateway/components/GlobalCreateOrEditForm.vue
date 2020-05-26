@@ -13,7 +13,7 @@
         >
           <el-select
             v-model="globalConfiguration.appId"
-            :readonly="hasEdit"
+            :disabled="hasEdit"
             class="global-select"
             :placeholder="$t('pleaseSelectBy', {name: $t('apiGateWay.appId')})"
           >
@@ -386,7 +386,7 @@ export default class extends Vue {
   }
 
   get hasEdit() {
-    if (this.globalConfiguration.itemId && this.globalConfiguration.itemId !== 0) {
+    if (this.globalConfiguration.itemId) {
       return true
     }
     return false
@@ -411,6 +411,8 @@ export default class extends Vue {
   private handleAppIdChanged(appId: string) {
     if (appId) {
       this.handleGetGlobalConfiguration()
+    } else {
+      this.globalConfiguration = new GlobalConfigurationDto()
     }
   }
 
@@ -443,6 +445,7 @@ export default class extends Vue {
   }
 
   private onCancel() {
+    this.appId = ''
     const formGlobal = this.$refs.formGlobal as any
     formGlobal.resetFields()
     this.$emit('closed', false)

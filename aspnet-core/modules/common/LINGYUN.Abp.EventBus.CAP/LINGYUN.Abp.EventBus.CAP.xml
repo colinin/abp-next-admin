@@ -39,6 +39,71 @@
             <param name="typeInfo"></param>
             <returns></returns>
         </member>
+        <member name="T:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker">
+            <summary>
+            过期消息清理任务
+            </summary>
+        </member>
+        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Options">
+            <summary>
+            过期消息清理配置
+            </summary>
+        </member>
+        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Initializer">
+            <summary>
+            Initializer
+            </summary>
+        </member>
+        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Storage">
+            <summary>
+            Storage
+            </summary>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+            <summary>
+            创建过期消息清理任务
+            </summary>
+            <param name="timer"></param>
+            <param name="storage"></param>
+            <param name="initializer"></param>
+            <param name="options"></param>
+            <param name="serviceScopeFactory"></param>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.DoWorkAsync(Volo.Abp.BackgroundWorkers.PeriodicBackgroundWorkerContext)">
+            <summary>
+            异步执行任务
+            </summary>
+            <param name="workerContext"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetCore.CAP.Processor.AbpCapProcessingServer">
+            <summary>
+            CapProcessingServer
+            </summary>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.#ctor(Microsoft.Extensions.Logging.ILogger{DotNetCore.CAP.Processor.AbpCapProcessingServer},Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider)">
+            <summary>
+            CapProcessingServer
+            </summary>
+            <param name="logger"></param>
+            <param name="loggerFactory"></param>
+            <param name="provider"></param>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Start">
+            <summary>
+            Start
+            </summary>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Pulse">
+            <summary>
+            Pulse
+            </summary>
+        </member>
+        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule">
             <summary>
             AbpCAPEventBusModule
@@ -47,6 +112,12 @@
         <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule.ConfigureServices(Volo.Abp.Modularity.ServiceConfigurationContext)">
             <summary>
             ConfigureServices
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule.OnApplicationInitialization(Volo.Abp.ApplicationInitializationContext)">
+            <summary>
+            OnApplicationInitialization
             </summary>
             <param name="context"></param>
         </member>
@@ -140,6 +211,23 @@
             </summary>
             <param name="eventType"></param>
             <returns></returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions">
+            <summary>
+            过期消息清理配置项
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions.ItemBatch">
+            <summary>
+            批量清理数量
+            default: 1000
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions.Interval">
+            <summary>
+            执行间隔(ms)
+            default: 3600000 (1 hours)
+            </summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions">
             <summary>

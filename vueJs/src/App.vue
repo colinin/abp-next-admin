@@ -6,6 +6,7 @@
 </template>
 
 <script lang="ts">
+import { AbpConfigurationModule } from '@/store/modules/abp'
 import { Component, Vue } from 'vue-property-decorator'
 import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.vue'
 
@@ -15,5 +16,13 @@ import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.
     ServiceWorkerUpdatePopup
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  mounted() {
+    this.initializeAbpConfiguration()
+  }
+
+  private async initializeAbpConfiguration() {
+    await AbpConfigurationModule.GetAbpConfiguration()
+  }
+}
 </script>

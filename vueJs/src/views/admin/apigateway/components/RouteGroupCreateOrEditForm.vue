@@ -97,6 +97,9 @@ export default class extends Vue {
     ],
     appName: [
       { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.appName') }), trigger: 'blur' }
+    ],
+    appIpAddress: [
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('apiGateWay.appIpAddress') }), trigger: 'blur' }
     ]
   }
 
@@ -143,6 +146,7 @@ export default class extends Vue {
   }
 
   private onCancel() {
+    this.apiGateWayRouteGroup = new RouteGroupDto()
     const routerEditForm = this.$refs.formRouteGroup as any
     routerEditForm.resetFields()
     this.$emit('closed', false)

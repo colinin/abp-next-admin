@@ -96,4 +96,14 @@ export class AbpConfiguration implements IAbpConfiguration {
   multiTenancy!: MultiTenancy
   objectExtensions!: any
   setting!: Setting
+
+  constructor() {
+    this.auth = new Auth()
+    this.setting = new Setting()
+    this.features = new Feature()
+    this.currentUser = new CurrentUser()
+    this.localization = new Localization()
+    this.multiTenancy = new MultiTenancy()
+    this.currentTenant = new CurrentTenant()
+  }
 }

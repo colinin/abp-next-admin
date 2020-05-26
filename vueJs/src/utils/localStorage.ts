@@ -16,9 +16,21 @@ export const removeAbpConfig = () => localStorage.removeItem(abpConfigKey)
 // User
 const tokenKey = 'vue_typescript_admin_token'
 const refreshTokenKey = 'vue_typescript_admin_refresh_token'
-export const getToken = () => localStorage.getItem(tokenKey)
+export function getToken() {
+  const tokenItem = localStorage.getItem(tokenKey)
+  if (tokenItem) {
+    return tokenItem
+  }
+  return ''
+}
 export const setToken = (token: string) => localStorage.setItem(tokenKey, token)
-export const getRefreshToken = () => localStorage.getItem(refreshTokenKey)
+export const getRefreshToken = () => {
+  const tokenItem = localStorage.getItem(refreshTokenKey)
+  if (tokenItem) {
+    return tokenItem
+  }
+  return ''
+}
 export const setRefreshToken = (token: string) => localStorage.setItem(refreshTokenKey, token)
 export const removeToken = () => {
   localStorage.removeItem(tokenKey)

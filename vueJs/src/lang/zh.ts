@@ -105,7 +105,8 @@ export default {
     tokenExprition: '身份令牌已过期,请重新登录!',
     confirmLogout: '确认登出',
     relogin: '重新登录',
-    cancel: '取消'
+    cancel: '取消',
+    tenantIsNotAvailable: '给定的租户不可用: {name}'
   },
   documentation: {
     documentation: '文档',

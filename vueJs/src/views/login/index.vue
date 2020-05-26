@@ -14,6 +14,10 @@
         </h3>
         <lang-select class="set-language" />
       </div>
+      <TenantSelect
+        v-if="isMultiEnabled"
+        v-model="loginForm.tenantName"
+      />
       <el-tabs
         stretch
         @tab-click="handleLoginTabChanged"
@@ -117,14 +121,17 @@ import { Input } from 'element-ui'
 import { Route } from 'vue-router'
 import { UserModule } from '@/store/modules/user'
 import { Dictionary } from 'vue-router/types/router'
+import TenantSelect from './components/TenantSelect.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import UserService, { PhoneVerify, VerifyType } from '@/api/users'
+import { AbpConfigurationModule } from '@/store/modules/abp'
 
 @Component({
   name: 'Login',
   components: {
-    LangSelect
+    LangSelect,
+    TenantSelect
   }
 })
 export default class extends Vue {
@@ -142,6 +149,10 @@ export default class extends Vue {
     password: '',
     phoneNumber: '',
     verifyCode: ''
+  }
+
+  get isMultiEnabled() {
+    return AbpConfigurationModule.configuration.multiTenancy.isEnabled
   }
 
   private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {
@@ -301,7 +312,6 @@ export default class extends Vue {
 
     .title {
       font-size: 26px;
-      color: $lightGray;
       margin: 0px auto 20px auto;
       text-align: center;
       font-weight: bold;
@@ -320,7 +330,6 @@ export default class extends Vue {
     }
 
     .set-language {
-      color: #fff;
       position: absolute;
       top: 3px;
       font-size: 18px;
@@ -347,7 +356,7 @@ export default class extends Vue {
     padding: 35px 35px 15px;
     border: 1px solid #8c9494;
     box-shadow: 0 0 25px #454646;
-    background-color:rgb(110, 115, 116);
+    background-color:rgb(247, 255, 255);
 
     .loginTab.el-tabs__item {
       width: 180px;

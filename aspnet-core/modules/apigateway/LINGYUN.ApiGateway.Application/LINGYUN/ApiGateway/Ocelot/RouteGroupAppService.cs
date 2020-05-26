@@ -60,11 +60,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         {
             using (DataFilter.Disable<IActivation>())
             {
-                var routerTupes = await RouterRepository.GetPagedListAsync(routerGetByPagedInput.Filter,
+                var (Routers, TotalCount) = await RouterRepository.GetPagedListAsync(routerGetByPagedInput.Filter,
                 routerGetByPagedInput.Sorting, routerGetByPagedInput.SkipCount, routerGetByPagedInput.MaxResultCount);
-                var routers = ObjectMapper.Map<List<RouteGroup>, List<RouteGroupDto>>(routerTupes.Routers);
+                var routers = ObjectMapper.Map<List<RouteGroup>, List<RouteGroupDto>>(Routers);
 
-                return new PagedResultDto<RouteGroupDto>(routerTupes.TotalCount, routers);
+                return new PagedResultDto<RouteGroupDto>(TotalCount, routers);
             }
         }
 
