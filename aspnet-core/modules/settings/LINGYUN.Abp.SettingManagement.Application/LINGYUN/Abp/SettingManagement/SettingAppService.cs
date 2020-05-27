@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Settings;
@@ -16,9 +17,14 @@ namespace LINGYUN.Abp.SettingManagement
     {
         protected ISettingManager SettingManager { get; }
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
-        public SettingAppService(ISettingManager settingManager,
+
+        protected IDistributedCache<SettingCacheItem> Cache { get; }
+        public SettingAppService(
+            ISettingManager settingManager,
+            IDistributedCache<SettingCacheItem> cache,
             ISettingDefinitionManager settingDefinitionManager)
         {
+            Cache = cache;
             SettingManager = settingManager;
             SettingDefinitionManager = settingDefinitionManager;
             LocalizationResource = typeof(AbpSettingManagementResource);
@@ -54,8 +60,17 @@ namespace LINGYUN.Abp.SettingManagement
         {
             foreach (var setting in input.Settings)
             {
-                await SettingManager.SetAsync(setting.Name, providerName, providerKey, setting.Value);
+                await SettingManager.SetAsync(setting.Name, setting.Value, providerName, providerKey);
+                // 同步变更缓存配置
+                var settingCacheKey = CalculateCacheKey(setting.Name, providerName, providerKey);
+                var settignCacheItem = new SettingCacheItem(setting.Value);
+                await Cache.SetAsync(settingCacheKey, settignCacheItem);
             }
+        }
+
+        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
+        {
+            return SettingCacheItem.CalculateCacheKey(name, providerName, providerKey);
         }
     }
 }

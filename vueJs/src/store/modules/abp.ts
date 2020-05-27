@@ -1,20 +1,22 @@
 import store from '@/store'
-import { getAbpConfig, setAbpConfig } from '@/utils/localStorage'
-import AbpConfigurationService, { IAbpConfiguration } from '@/api/abpconfiguration'
+import { getItemJson, setItem } from '@/utils/localStorage'
+import AbpConfigurationService, { IAbpConfiguration, AbpConfiguration as AbpConfig } from '@/api/abpconfiguration'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 
 export interface IAbpConfigurationState {
   configuration: IAbpConfiguration
 }
 
+const abpConfigurationKey = 'vue_admin_abp_configuration'
+
 @Module({ dynamic: true, store, name: 'abpconfiguration' })
 class AbpConfiguration extends VuexModule implements IAbpConfigurationState {
-  configuration = getAbpConfig()
+  configuration = getItemJson(abpConfigurationKey) || new AbpConfig()
 
   @Mutation
   private SET_ABPCONFIGURATION(configuration: IAbpConfiguration) {
     this.configuration = configuration
-    setAbpConfig(configuration)
+    setItem(abpConfigurationKey, JSON.stringify(configuration))
   }
 
   @Action({ rawError: true })

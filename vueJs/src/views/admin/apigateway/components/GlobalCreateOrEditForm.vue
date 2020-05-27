@@ -445,7 +445,7 @@ export default class extends Vue {
   }
 
   private onCancel() {
-    this.appId = ''
+    this.globalConfiguration = new GlobalConfigurationDto()
     const formGlobal = this.$refs.formGlobal as any
     formGlobal.resetFields()
     this.$emit('closed', false)

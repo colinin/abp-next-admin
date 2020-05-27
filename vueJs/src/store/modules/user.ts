@@ -1,7 +1,7 @@
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
 import UserApiService, { UserLoginData, UserLoginPhoneData } from '@/api/users'
 import TenantService from '@/api/tenant'
-import { getToken, setToken, removeToken, getRefreshToken, setRefreshToken } from '@/utils/localStorage'
+import { getItem, setItem, removeItem } from '@/utils/localStorage'
 import { resetRouter } from '@/router'
 import { TagsViewModule } from './tags-view'
 import { removeTenant, setTenant } from '@/utils/sessions'
@@ -11,15 +11,20 @@ import store from '@/store'
 
 export interface IUserState {
   token: string
+  refreshToken: string
   id: string
   name: string
   roles: string[]
   email: string
 }
 
+const tokenKey = 'vue_typescript_admin_token'
+const refreshTokenKey = 'vue_typescript_admin_refresh_token'
+
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements IUserState {
-  public token = getToken() || ''
+  public token = getItem(tokenKey)
+  public refreshToken = getItem(refreshTokenKey)
   public id = ''
   public name = ''
   public roles: string[] = []
@@ -28,7 +33,13 @@ class User extends VuexModule implements IUserState {
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token
-    setToken(token)
+    setItem(tokenKey, token)
+  }
+
+  @Mutation
+  private SET_REFRESHTOKEN(token: string) {
+    this.refreshToken = token
+    setItem(refreshTokenKey, token)
   }
 
   @Mutation
@@ -62,7 +73,7 @@ class User extends VuexModule implements IUserState {
     const loginResult = await UserApiService.userLogin(userLoginData)
     const token = loginResult.token_type + ' ' + loginResult.access_token
     this.SET_TOKEN(token)
-    setRefreshToken(loginResult.refresh_token)
+    this.SET_REFRESHTOKEN(loginResult.refresh_token)
     await this.PostLogin()
   }
 
@@ -77,13 +88,13 @@ class User extends VuexModule implements IUserState {
     const loginResult = await UserApiService.userLoginWithPhone(userLoginData)
     const token = loginResult.token_type + ' ' + loginResult.access_token
     this.SET_TOKEN(token)
-    setRefreshToken(loginResult.refresh_token)
+    this.SET_REFRESHTOKEN(loginResult.refresh_token)
     await this.PostLogin()
   }
 
   @Action
   public ResetToken() {
-    removeToken()
+    removeItem(tokenKey)
     removeTenant()
     this.SET_TOKEN('')
     this.SET_ROLES([])
@@ -106,13 +117,15 @@ class User extends VuexModule implements IUserState {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')
     }
-    const token = getRefreshToken()
+    const token = getItem(refreshTokenKey)
     if (token) {
       await UserApiService.userLogout(token)
     }
     this.SET_TOKEN('')
+    this.SET_REFRESHTOKEN('')
     this.SET_ROLES([])
-    removeToken()
+    removeItem(tokenKey)
+    removeItem(refreshTokenKey)
     removeTenant()
     resetRouter()
     // Reset visited views and cached views
@@ -124,12 +137,12 @@ class User extends VuexModule implements IUserState {
   @Action
   public RefreshSession() {
     return new Promise((resolve, reject) => {
-      const token = getToken()
+      const token = getItem(tokenKey)
       if (token) {
         UserApiService.refreshToken(token).then(result => {
           const token = result.token_type + ' ' + result.access_token
-          setRefreshToken(result.refresh_token)
           this.SET_TOKEN(token)
+          this.SET_REFRESHTOKEN(result.refresh_token)
           return resolve(result)
         }).catch(error => {
           return reject(error)

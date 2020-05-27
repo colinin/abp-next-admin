@@ -1,53 +1,37 @@
 <template>
   <el-tabs
     tab-position="left"
-    style="height: 200px;"
   >
     <el-tab-pane
-      label="系统配置"
+      :label="$t('settings.globalSetting')"
     >
-      系统配置
+      <GlobalSettingEditForm />
     </el-tab-pane>
     <el-tab-pane
-      label="租户配置"
+      :label="$t('settings.tenantSetting')"
     >
-      租户配置
+      {{ $t('settings.tenantSetting') }}
     </el-tab-pane>
     <el-tab-pane
-      label="用户配置"
+      :label="$t('settings.userSetting')"
     >
-      用户配置
+      {{ $t('settings.userSetting') }}
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang="ts">
-import SettingService, { Setting } from '@/api/settings'
 import { Component, Vue } from 'vue-property-decorator'
 
+import GlobalSettingEditForm from './components/GlobalSettingEditForm.vue'
+
 @Component({
-  name: 'Settings'
+  name: 'Settings',
+  components: {
+    GlobalSettingEditForm
+  }
 })
-export default class extends Vue {
-
-  private settings: Setting[]
-
-  constructor() {
-    super()
-    this.settings = new Array<Setting>()
-  }
-
-  mounted() {
-    this.handleGetSettings()
-  }
-
-  private handleGetSettings() {
-    SettingService.getSettings('G', '').then(settings => {
-      this.settings = settings.items
-      console.log(this.settings)
-    })
-  }
-}
+export default class extends Vue {}
 </script>
 
 <style lang="scss" scoped>

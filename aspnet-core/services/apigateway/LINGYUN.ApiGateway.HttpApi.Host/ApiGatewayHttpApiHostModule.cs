@@ -163,7 +163,7 @@ namespace LINGYUN.ApiGateway
             // 审计日志
             app.UseAuditing();
             // 路由
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

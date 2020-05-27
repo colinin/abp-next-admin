@@ -5,7 +5,12 @@ const serviceUrl = process.env.VUE_APP_BASE_API
 export default class AbpConfigurationService {
   public static getAbpConfiguration() {
     const _url = '/api/abp/application-configuration'
-    return ApiService.Get<AbpConfiguration>(_url, serviceUrl)
+    return ApiService.HttpRequest<AbpConfiguration>({
+      url: _url,
+      baseURL: serviceUrl,
+      method: 'GET',
+      timeout: 120000
+    })
   }
 }
 
@@ -65,15 +70,15 @@ export class Localization {
   currentCulture!: CurrentCulture
   defaultResourceName?: string
   languages!: Language[]
-  values!: {[key:string]: {[key:string]: string}}
+  values!: {[key:string]:{[key:string]:string}}
 }
 
 export class MultiTenancy {
-  isEnabled!: boolean
+  isEnabled = false
 }
 
 export class Setting {
-  values?: {[key:string]: string}
+  values?: {[key:string]:string}
 }
 
 export interface IAbpConfiguration {

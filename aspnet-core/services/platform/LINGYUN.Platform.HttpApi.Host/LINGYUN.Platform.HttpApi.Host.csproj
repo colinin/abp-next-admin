@@ -6,6 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="LINGYUN\Platform\Identity\Localization\en.json" />
+    <Content Remove="LINGYUN\Platform\Identity\Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Platform\Identity\Localization\en.json" />
+    <EmbeddedResource Include="LINGYUN\Platform\Identity\Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.3" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">

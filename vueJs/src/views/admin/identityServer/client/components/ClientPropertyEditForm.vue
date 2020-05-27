@@ -36,7 +36,7 @@
             :disabled="!checkPermission(['IdentityServer.Clients.Properties.Create'])"
             @click="onSaveClientProperty"
           >
-            {{ $t('identityServer.createProperty') }}
+            {{ $t('identityServer.createClientProperty') }}
           </el-button>
         </el-form-item>
       </el-form>

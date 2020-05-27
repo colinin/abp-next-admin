@@ -29,6 +29,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -40,6 +41,7 @@ using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.VirtualFileSystem;
 using AbpPermissionManagementApplicationModule = LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule;
 
 namespace LINGYUN.Platform
@@ -107,6 +109,11 @@ namespace LINGYUN.Platform
                 options.UseMySQL();
             });
 
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<PlatformHttpApiHostModule>("LINGYUN.Platform");
+            });
+
             // 多租户
             Configure<AbpMultiTenancyOptions>(options =>
             {
@@ -132,6 +139,10 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources
+                       .Get<IdentityResource>()
+                       .AddVirtualJson("/LINGYUN/Platform/Identity/Localization");
             });
 
             context.Services.AddAuthentication("Bearer")

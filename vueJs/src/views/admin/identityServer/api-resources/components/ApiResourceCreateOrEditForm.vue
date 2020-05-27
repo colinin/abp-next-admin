@@ -91,7 +91,7 @@ export default class extends Vue {
   private apiResource: ApiResource
   private apiResourceRules = {
     name: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.apiResourceName') }), trigger: 'blur' }
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.resourceName') }), trigger: 'blur' }
     ]
   }
 

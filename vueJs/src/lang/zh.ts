@@ -197,7 +197,13 @@ export default {
     showTagsView: '显示 Tags-View',
     showSidebarLogo: '显示侧边栏 Logo',
     fixedHeader: '固定 Header',
-    sidebarTextTheme: '侧边栏文字主题色'
+    sidebarTextTheme: '侧边栏文字主题色',
+    globalSetting: '公共设置',
+    tenantSetting: '租户设置',
+    userSetting: '用户设置',
+    passwordSecurity: '密码安全',
+    systemSetting: '系统配置',
+    userAccount: '用户账户'
   },
   task: {
     title: '任务管理'

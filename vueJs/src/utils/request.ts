@@ -4,7 +4,6 @@ import { MessageBox, Notification } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import { getTenant } from '@/utils/sessions'
 import { getLanguage } from '@/utils/cookies'
-import { getToken, getRefreshToken } from '@/utils/localStorage'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -18,10 +17,9 @@ service.interceptors.request.use(
     if (config.url === '/connect/token') {
       return config
     }
-    const token = getToken()
     // Add X-Access-Token header to every request, you can add other custom headers here
-    if (token) {
-      config.headers.Authorization = token
+    if (UserModule.token) {
+      config.headers.Authorization = UserModule.token
     }
     const tenantId = getTenant()
     if (tenantId) {
@@ -100,8 +98,7 @@ service.interceptors.response.use(
   (error) => {
     showError(error.response.data, error.response.status)
     if (error.response.status === 401) {
-      const token = getRefreshToken()
-      if (token) {
+      if (UserModule.refreshToken) {
         UserModule.RefreshSession().then(() => {
           return service.request(error.config)
         }).catch(() => {
@@ -110,7 +107,7 @@ service.interceptors.response.use(
             l('login.confirmLogout'),
             {
               confirmButtonText: l('login.relogin'),
-              cancelButtonText:  l('global.cancel'),
+              cancelButtonText: l('global.cancel'),
               type: 'error'
             }).then(() => {
             UserModule.ResetToken()
