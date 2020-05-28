@@ -1,14 +1,12 @@
-﻿namespace LINGYUN.Abp.Location
+﻿using System.Collections.Generic;
+
+namespace LINGYUN.Abp.Location
 {
     /// <summary>
     /// 正地址
     /// </summary>
-    public class PositiveLocation : Location
+    public class GecodeLocation : Location
     {
-        /// <summary>
-        /// 附加信息
-        /// </summary>
-        public int Precise { get; set; }
         /// <summary>
         /// 绝对精度
         /// </summary>
@@ -23,5 +21,19 @@
         /// 能精确理解的地址类型
         /// </summary>
         public string Level { get; set; }
+        /// <summary>
+        /// 附加信息
+        /// </summary>
+        public IDictionary<string, object> Additionals { get; }
+
+        public GecodeLocation()
+        {
+            Additionals = new Dictionary<string, object>();
+        }
+
+        public void AddAdditional(string key, object value)
+        {
+            Additionals.Add(key, value);
+        }
     }
 }

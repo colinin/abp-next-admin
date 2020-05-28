@@ -1,9 +1,11 @@
-﻿namespace LINGYUN.Abp.Location
+﻿using System.Collections.Generic;
+
+namespace LINGYUN.Abp.Location
 {
     /// <summary>
     /// 逆地址
     /// </summary>
-    public class InverseLocation
+    public class ReGeocodeLocation
     {
         /// <summary>
         /// 详细地址
@@ -41,5 +43,29 @@
         /// 门牌号
         /// </summary>
         public string Number { get; set; }
+        /// <summary>
+        /// Poi信息列表
+        /// </summary>
+        public IEnumerable<Poi> Pois { get; set; }
+        /// <summary>
+        /// 道路信息列表
+        /// </summary>
+        public IEnumerable<Road> Roads { get; set; }
+        /// <summary>
+        /// 附加信息
+        /// </summary>
+        public IDictionary<string, object> Additionals { get; }
+
+        public ReGeocodeLocation()
+        {
+            Pois = new Poi[0];
+            Roads = new Road[0];
+            Additionals = new Dictionary<string, object>();
+        }
+
+        public void AddAdditional(string key, object value)
+        {
+            Additionals.Add(key, value);
+        }
     }
 }

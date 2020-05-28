@@ -3,6 +3,7 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
+using LINGYUN.Abp.Location.Baidu;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
@@ -74,6 +75,9 @@ namespace LINGYUN.Platform
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
+#if DEBUG
+        typeof(AbpBaiduLocationModule),
+#endif
         typeof(AbpIdentityOverrideOptionsModule),
         typeof(AbpAutofacModule)
         )]

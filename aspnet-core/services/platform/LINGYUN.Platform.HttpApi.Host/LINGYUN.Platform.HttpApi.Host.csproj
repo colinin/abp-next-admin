@@ -56,6 +56,7 @@
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\LINGYUN.ApiGateway.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Identity.OverrideOptions\LINGYUN.Abp.Identity.OverrideOptions.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application\LINGYUN.Abp.IdentityServer.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.HttpApi\LINGYUN.Abp.IdentityServer.HttpApi.csproj" />
@@ -65,6 +66,10 @@
     <ProjectReference Include="..\..\..\modules\settings\LINGYUN.Abp.SettingManagement.HttpApi\LINGYUN.Abp.SettingManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.TenantManagement.Application\LINGYUN.Abp.TenantManagement.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.TenantManagement.HttpApi\LINGYUN.Abp.TenantManagement.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SignalR\" />
   </ItemGroup>
 
 </Project>

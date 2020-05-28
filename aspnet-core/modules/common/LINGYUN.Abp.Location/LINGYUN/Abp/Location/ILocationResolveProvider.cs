@@ -1,9 +1,11 @@
-﻿namespace LINGYUN.Abp.Location
+﻿using System.Threading.Tasks;
+
+namespace LINGYUN.Abp.Location
 {
     public interface ILocationResolveProvider
     {
-        PositiveLocation GetPositiveLocation(string address);
+        Task<GecodeLocation> GeocodeAsync(string address, string city = null);
 
-        InverseLocation GetInverseLocation(double lat, double lng);
+        Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50);
     }
 }

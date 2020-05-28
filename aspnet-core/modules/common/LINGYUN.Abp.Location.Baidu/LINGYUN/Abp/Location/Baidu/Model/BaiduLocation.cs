@@ -1,6 +1,6 @@
-﻿namespace LINGYUN.Abp.Location.Baidu.Http
+﻿namespace LINGYUN.Abp.Location.Baidu.Model
 {
-    public class Location
+    public class BaiduLocation
     {
         public double Lat { get; set; }
         public double Lng { get; set; }

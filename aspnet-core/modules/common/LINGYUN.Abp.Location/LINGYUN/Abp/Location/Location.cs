@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.Location
 {
-    public abstract class Location
+    public class Location
     {
         /// <summary>
         /// 地球半径（米）
