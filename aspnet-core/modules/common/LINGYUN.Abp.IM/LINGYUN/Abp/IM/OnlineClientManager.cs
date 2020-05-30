@@ -102,6 +102,7 @@ namespace LINGYUN.Abp.IM
 
             return GetAllClients()
                  .Where(c => c.UserId == context.UserId &&  c.TenantId == context.TenantId)
+                 .WhereIf(context.Roles.Length > 0, c => c.Roles.Any(role => context.Roles.Contains(role)))
                  .ToImmutableList();
         }
     }

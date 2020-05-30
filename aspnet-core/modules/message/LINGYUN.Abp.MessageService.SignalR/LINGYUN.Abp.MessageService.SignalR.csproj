@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.MessageService.Domain\LINGYUN.Abp.MessageService.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.MessageService.Messages
+﻿namespace LINGYUN.Abp.MessageService
 {
     /// <summary>
     /// 读取状态

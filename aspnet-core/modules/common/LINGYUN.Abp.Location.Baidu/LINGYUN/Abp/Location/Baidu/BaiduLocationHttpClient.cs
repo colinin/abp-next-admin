@@ -120,7 +120,7 @@ namespace LINGYUN.Abp.Location.Baidu
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
                 var localizerErrorMessage = baiduLocationResponse.GetErrorMessage().Localize(localizerFactory);
-                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage().Localize(localizerFactory);
+                var localizerErrorDescription = baiduLocationResponse.GetErrorDescription().Localize(localizerFactory);
                 var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
                 localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
                 if (Options.VisableErrorToClient)

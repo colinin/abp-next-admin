@@ -20,99 +20,86 @@
           v-model="loginForm.tenantName"
         />
       </el-form-item>
-      <el-tabs
-        stretch
-        @tab-click="handleLoginTabChanged"
+      <el-form-item
+        prop="username"
       >
-        <el-tab-pane :label="$t('login.userLogin')">
-          <div v-if="loginType === 'password'">
-            <el-form-item
-              prop="username"
+        <el-input
+          v-model="loginForm.username"
+          prefix-icon="el-icon-user"
+          type="text"
+          auto-complete="off"
+          tabindex="1"
+          :placeholder="$t('global.pleaseInputBy', {key: $t('login.username')})"
+        />
+      </el-form-item>
+      <el-form-item
+        prop="password"
+      >
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          prefix-icon="el-icon-lock"
+          :type="passwordType"
+          :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
+          name="password"
+          tabindex="2"
+          @keyup.enter.native="handleUserLogin"
+        />
+        <span
+          class="show-pwd"
+          @click="showPwd"
+        >
+          <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
+        </span>
+      </el-form-item>
+      <el-form-item
+        prop="phoneNumber"
+      >
+        <el-input
+          ref="loginItemPhone"
+          v-model="loginForm.phoneNumber"
+          prefix-icon="el-icon-mobile-phone"
+          type="text"
+          maxlength="11"
+          auto-complete="off"
+          :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneNumber')})"
+        />
+      </el-form-item>
+      <el-form-item
+        prop="verifyCode"
+      >
+        <el-row>
+          <el-col :span="16">
+            <el-input
+              v-model="loginForm.verifyCode"
+              auto-complete="off"
+              :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneVerifyCode')})"
+              prefix-icon="el-icon-key"
+              style="margin:-right: 10px;"
+            />
+          </el-col>
+          <el-col :span="8">
+            <el-button
+              ref="sendButton"
+              style="margin-left: 10px;width: 132px;"
+              :disabled="sending"
+              @click="handleSendPhoneVerifyCode"
             >
-              <el-input
-                v-model="loginForm.username"
-                prefix-icon="el-icon-user"
-                type="text"
-                auto-complete="off"
-                tabindex="1"
-                :placeholder="$t('global.pleaseInputBy', {key: $t('login.username')})"
-              />
-            </el-form-item>
-            <el-form-item
-              prop="password"
-            >
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model="loginForm.password"
-                prefix-icon="el-icon-lock"
-                :type="passwordType"
-                :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
-                name="password"
-                tabindex="2"
-                @keyup.enter.native="handleUserLogin"
-              />
-              <span
-                class="show-pwd"
-                @click="showPwd"
-              >
-                <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-              </span>
-            </el-form-item>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('login.phoneLogin')">
-          <div v-if="loginType === 'phone'">
-            <el-form-item
-              prop="phoneNumber"
-            >
-              <el-input
-                ref="loginItemPhone"
-                v-model="loginForm.phoneNumber"
-                prefix-icon="el-icon-mobile-phone"
-                type="text"
-                maxlength="11"
-                auto-complete="off"
-                :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneNumber')})"
-              />
-            </el-form-item>
-            <el-form-item
-              prop="verifyCode"
-            >
-              <el-row>
-                <el-col :span="16">
-                  <el-input
-                    v-model="loginForm.verifyCode"
-                    auto-complete="off"
-                    :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneVerifyCode')})"
-                    prefix-icon="el-icon-key"
-                    style="margin:-right: 10px;"
-                  />
-                </el-col>
-                <el-col :span="8">
-                  <el-button
-                    ref="sendButton"
-                    style="margin-left: 10px;width: 132px;"
-                    :disabled="sending"
-                    @click="handleSendPhoneVerifyCode"
-                  >
-                    {{ sendButtonName }}
-                  </el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+              {{ sendButtonName }}
+            </el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item
         label-width="100px"
-        label="没有用户?"
+        label="已有用户?"
       >
         <el-link
           type="success"
-          @click="handleRedirectRegister"
+          @click="handleRedirectLogin"
         >
-          注册
+          登录
         </el-link>
       </el-form-item>
 
@@ -138,11 +125,11 @@ import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import UserService, { PhoneVerify, VerifyType } from '@/api/users'
+import UserService, { PhoneVerify, VerifyType, UserRegisterData } from '@/api/users'
 import { AbpConfigurationModule } from '@/store/modules/abp'
 
 @Component({
-  name: 'Login',
+  name: 'Register',
   components: {
     LangSelect,
     TenantBox
@@ -228,8 +215,8 @@ export default class extends Vue {
     })
   }
 
-  private handleRedirectRegister() {
-    this.$router.replace('register')
+  private handleRedirectLogin() {
+    this.$router.replace('login')
   }
 
   private handleUserLogin() {

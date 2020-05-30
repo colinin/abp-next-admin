@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="LINGYUN\Abp\MessageService\Notifications\" />
+    <PackageReference Include="Volo.Abp.Core" Version="2.8.0" />
   </ItemGroup>
 
 </Project>

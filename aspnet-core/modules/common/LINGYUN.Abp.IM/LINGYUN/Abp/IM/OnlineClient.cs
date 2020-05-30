@@ -20,6 +20,8 @@ namespace LINGYUN.Abp.IM
 
         public Guid? UserId { get; set; }
 
+        public string[] Roles { get; set; }
+
         public DateTime ConnectTime { get; set; }
 
         private Dictionary<string, object> _properties;
@@ -39,16 +41,18 @@ namespace LINGYUN.Abp.IM
 
         public OnlineClient()
         {
+            Roles = new string[0];
             ConnectTime = DateTime.Now;
         }
 
-        public OnlineClient(string connectionId, string ipAddress, Guid? tenantId, Guid? userId)
+        public OnlineClient(string connectionId, string ipAddress, Guid? tenantId, Guid? userId, params string[] roles)
             : this()
         {
             ConnectionId = connectionId;
             IpAddress = ipAddress;
             TenantId = tenantId;
             UserId = userId;
+            Roles = roles;
 
             Properties = new Dictionary<string, object>();
         }

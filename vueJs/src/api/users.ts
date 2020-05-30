@@ -80,9 +80,9 @@ export default class UserApiService {
   }
 
   public static userRegister(registerData: UserRegisterData) {
-    const _url = '/api/account/register'
+    const _url = '/api/account/phone/register'
     return ApiService.HttpRequest<UserDataDto>({
-      baseURL: IdentityServerUrl,
+      baseURL: IdentityServiceUrl,
       url: _url,
       method: 'POST',
       data: registerData
@@ -201,10 +201,14 @@ export class UsersGetPagedDto extends PagedAndSortedResultRequestDto {
 
 /** 用户注册对象 */
 export class UserRegisterData {
-  /** 应用名称 */
-  appName!: string
+  /** 手机号码 */
+  phoneNumber!: string
+  /** 手机验证码 */
+  verifyCode!: string
+  /** 名称 */
+  name?: string
   /** 用户名 */
-  userName!: string
+  userName?: string
   /** 密码 */
   password!: string
   /** 邮件地址 */

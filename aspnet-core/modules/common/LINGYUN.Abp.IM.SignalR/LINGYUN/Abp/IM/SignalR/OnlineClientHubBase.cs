@@ -38,19 +38,14 @@ namespace LINGYUN.Abp.IM.SignalR
 
         protected virtual IOnlineClient CreateClientForCurrentConnection()
         {
-            return new OnlineClient(Context.ConnectionId, GetIpAddressOfClient(),
-                CurrentTenant.Id, CurrentUser.Id)
+            return new OnlineClient(Context.ConnectionId, GetClientIpAddress(),
+                CurrentTenant.Id, CurrentUser.Id, CurrentUser.Roles)
             {
                 ConnectTime = Clock.Now
             };
         }
 
-        protected virtual string GetIpAddressOfClient()
-        {
-            return HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-        }
-
-        protected virtual string GetClientIpAddress(HttpContext httpContext)
+        protected virtual string GetClientIpAddress()
         {
             try
             {

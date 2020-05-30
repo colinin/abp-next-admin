@@ -13,6 +13,8 @@ namespace LINGYUN.Abp.IM
 
         Guid? UserId { get; }
 
+        string[] Roles { get; }
+
         DateTime ConnectTime { get; }
 
         object this[string key] { get; set; }

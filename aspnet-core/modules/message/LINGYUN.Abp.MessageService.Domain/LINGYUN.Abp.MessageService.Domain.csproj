@@ -10,10 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LINGYUN\Abp\MessageService\Notifications\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 <template>
   <div v-if="globalSettingLoaded">
     <el-form
-      v-if="globalSettingLoaded"
       ref="formGlobalSetting"
       v-model="globalSetting"
       label-width="180px"
@@ -13,11 +12,24 @@
             prop="globalSetting['Abp.Localization.DefaultLanguage'].value"
             :label="globalSetting['Abp.Localization.DefaultLanguage'].displayName"
           >
-            <el-input
+            <el-select
+              v-model="globalSetting['Abp.Localization.DefaultLanguage'].value"
+              style="width: 100%;"
+              @change="(value) => handleSettingValueChanged('Abp.Localization.DefaultLanguage', value)"
+            >
+              <el-option
+                v-for="language in definedLanguages"
+                :key="language"
+                :label="language"
+                :value="language"
+                :disabled="language===globalSetting['Abp.Localization.DefaultLanguage'].value"
+              />
+            </el-select>
+            <!-- <el-input
               v-model="globalSetting['Abp.Localization.DefaultLanguage'].value"
               :placeholder="globalSetting['Abp.Localization.DefaultLanguage'].description"
               @input="(value) => handleSettingValueChanged('Abp.Localization.DefaultLanguage', value)"
-            />
+            /> -->
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
@@ -201,6 +213,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { AbpConfigurationModule } from '@/store/modules/abp'
 import SettingService, { Setting, SettingUpdate, SettingsUpdate } from '@/api/settings'
 
 const booleanStrings = ['True', 'true', 'False', 'false']
@@ -212,6 +225,13 @@ export default class extends Vue {
   private globalSettingLoaded = false
   private globalSetting: {[key: string]: Setting} = {}
   private globalSettingChangeKeys = new Array<string>()
+
+  get definedLanguages() {
+    const languages = AbpConfigurationModule.configuration.localization.languages.map((lang: any) => {
+      return lang.cultureName
+    })
+    return languages
+  }
 
   get allowIdentitySetting() {
     if (this.globalSetting['Abp.Identity.Password.RequiredLength']) {
