@@ -6,8 +6,6 @@
 
         public const int MaxDataLength = 1024 * 1024;
 
-        public const int MaxTypeNameLength = 256;
-
-        public const int MaxAssemblyQualifiedNameLength = 512;
+        public const int MaxTypeNameLength = 512;
     }
 }

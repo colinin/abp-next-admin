@@ -6,8 +6,8 @@ namespace LINGYUN.Abp.Notifications
     {
         public Guid? TenantId { get; set; }
         public string Name { get; set; }
+        public long Id { get; set; }
         public NotificationData Data { get; set; }
-        public DateTime? ExpirationTime { get; set; }
         public DateTime CreationTime { get; set; }
         public NotificationType NotificationType { get; set; }
         public NotificationSeverity NotificationSeverity { get; set; }

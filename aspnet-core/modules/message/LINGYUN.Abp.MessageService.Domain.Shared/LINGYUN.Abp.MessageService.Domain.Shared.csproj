@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="LINGYUN\Abp\MessageService\Notifications\" />
+    <PackageReference Include="Volo.Abp.Localization" Version="2.8.0" />
   </ItemGroup>
 
 </Project>

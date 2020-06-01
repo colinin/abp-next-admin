@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.Notifications
     {
         Task InsertUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName);
 
+        Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<Guid> userIds, string notificationName);
+
         Task DeleteUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName);
 
         Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(Guid? tenantId, string notificationName);
@@ -26,6 +28,8 @@ namespace LINGYUN.Abp.Notifications
 
         Task<NotificationInfo> GetNotificationOrNullAsync(Guid? tenantId, long notificationId);
 
-        Task ChangeUserNotificationReadStateAsync(Guid? tenantId, Guid userId, string notificationName, NotificationReadState readState);
+        Task<List<NotificationInfo>> GetUserNotificationsAsync(Guid? tenantId, Guid userId, NotificationReadState readState = NotificationReadState.UnRead, int maxResultCount = 10);
+
+        Task ChangeUserNotificationReadStateAsync(Guid? tenantId, Guid userId, long notificationId, NotificationReadState readState);
     }
 }

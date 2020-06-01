@@ -67,6 +67,8 @@ namespace LINGYUN.ApiGateway
             var env = context.GetEnvironment();
 
             app.UseAuditing();
+            // 启用ws协议
+            app.UseWebSockets();
             app.UseOcelot().Wait();
         }
 

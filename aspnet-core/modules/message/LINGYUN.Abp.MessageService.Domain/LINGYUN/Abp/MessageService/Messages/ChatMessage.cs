@@ -26,9 +26,5 @@ namespace LINGYUN.Abp.MessageService.Messages
         /// 发送状态
         /// </summary>
         public virtual SendStatus SendStatus { get; protected set; }
-        /// <summary>
-        /// 阅读状态
-        /// </summary>
-        public virtual ReadStatus ReadStatus { get; protected set; }
     }
 }

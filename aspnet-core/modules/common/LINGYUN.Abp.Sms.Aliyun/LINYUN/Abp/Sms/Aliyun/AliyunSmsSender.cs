@@ -115,7 +115,9 @@ namespace LINYUN.Abp.Sms.Aliyun
         {
             if (Environment.IsDevelopment())
             {
-                Check.NotNullOrWhiteSpace(Options.DeveloperPhoneNumber, nameof(Options.DeveloperPhoneNumber));
+                // check phone number length...
+                Check.NotNullOrWhiteSpace(Options.DeveloperPhoneNumber, nameof(Options.DeveloperPhoneNumber), 
+                    maxLength: 11, minLength: 11);
                 request.AddQueryParameters("PhoneNumbers", Options.DeveloperPhoneNumber);
             }
             else
