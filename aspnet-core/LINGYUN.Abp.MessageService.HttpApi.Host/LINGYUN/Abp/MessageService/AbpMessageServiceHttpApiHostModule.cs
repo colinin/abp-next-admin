@@ -3,14 +3,18 @@ using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.Notifications.SignalR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -28,6 +32,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
+        typeof(AbpMessageServiceHttpApiModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMessageServiceEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
@@ -82,6 +87,30 @@ namespace LINGYUN.Abp.MessageService
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             });
 
+            Configure<JwtBearerOptions>(options =>
+            {
+                // 处理signalr某些请求由querystring发送请求令牌
+                // https://docs.microsoft.com/zh-cn/aspnet/core/signalr/authn-and-authz?view=aspnetcore-3.1
+                options.Authority = configuration["AuthServer:Authority"];
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/signalr-hubs/notifications")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
@@ -98,7 +127,7 @@ namespace LINGYUN.Abp.MessageService
             {
                 options.Configuration = configuration["RedisCache:ConnectString"];
                 var instanceName = configuration["RedisCache:RedisPrefix"];
-                options.InstanceName = instanceName.IsNullOrEmpty() ? "Platform_Cache" : instanceName;
+                options.InstanceName = instanceName.IsNullOrEmpty() ? "MessageService_Cache" : instanceName;
             });
 
             if (!hostingEnvironment.IsDevelopment())
@@ -121,10 +150,14 @@ namespace LINGYUN.Abp.MessageService
             app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
+            // 加入自定义中间件
+            app.UseMiddleware<SignalRJwtTokenMiddleware>();
             // 认证
             app.UseAuthentication();
             // jwt
             app.UseJwtTokenMiddleware();
+            // 授权
+            app.UseAuthorization();
             // 多租户
             app.UseMultiTenancy();
             // Swagger

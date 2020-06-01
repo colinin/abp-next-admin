@@ -1,14 +1,19 @@
 ﻿using LINGYUN.Abp.RealTime.Client;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.SignalR;
+using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Notifications.SignalR
 {
     public abstract class OnlineClientHubBase : AbpHub
     {
+        private ICurrentPrincipalAccessor _currentPrincipalAccessor;
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyGetRequiredService(ref _currentPrincipalAccessor);
+
         private IOnlineClientManager _onlineClientManager;
         protected IOnlineClientManager OnlineClientManager => LazyGetRequiredService(ref _onlineClientManager);
 
@@ -45,11 +50,16 @@ namespace LINGYUN.Abp.Notifications.SignalR
 
         protected virtual IOnlineClient CreateClientForCurrentConnection()
         {
-            return new OnlineClient(Context.ConnectionId, GetClientIpAddress(),
-                CurrentTenant.Id, CurrentUser.Id)
+            // abp框架没有处理,需要切换一下用户身份令牌.否则无法获取用户信息
+            using (CurrentPrincipalAccessor.Change(Context.User))
             {
-                ConnectTime = Clock.Now
-            };
+                return new OnlineClient(Context.ConnectionId, GetClientIpAddress(),
+                    CurrentTenant.Id, CurrentUser.Id)
+                {
+                    ConnectTime = Clock.Now,
+                    UserName = CurrentUser.UserName
+                };
+            }
         }
 
         protected virtual string GetClientIpAddress()

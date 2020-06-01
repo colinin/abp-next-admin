@@ -23,6 +23,7 @@
           <size-select class="right-menu-item hover-effect" />
         </el-tooltip>
         <lang-select class="right-menu-item hover-effect" />
+        <notification class="right-menu-item hover-effect" />
       </template>
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
@@ -69,6 +70,7 @@ import HeaderSearch from '@/components/HeaderSearch/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import Screenfull from '@/components/Screenfull/index.vue'
 import SizeSelect from '@/components/SizeSelect/index.vue'
+import Notification from '@/components/Notification/index.vue'
 
 @Component({
   name: 'Navbar',
@@ -79,7 +81,8 @@ import SizeSelect from '@/components/SizeSelect/index.vue'
     HeaderSearch,
     LangSelect,
     Screenfull,
-    SizeSelect
+    SizeSelect,
+    Notification
   }
 })
 export default class extends Vue {

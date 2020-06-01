@@ -8,8 +8,7 @@ using Volo.Abp.Users;
 namespace LINGYUN.Abp.Notifications.SignalR.Hubs
 {
     [Authorize]
-    [HubRoute("notifications")]
-    public class AbpNotificationsHub : OnlineClientHubBase
+    public class NotificationsHub : OnlineClientHubBase
     {
         private INotificationStore _notificationStore;
         protected INotificationStore NotificationStore => LazyGetRequiredService(ref _notificationStore);

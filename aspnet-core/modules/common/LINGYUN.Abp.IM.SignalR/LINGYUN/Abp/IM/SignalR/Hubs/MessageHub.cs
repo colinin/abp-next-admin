@@ -10,12 +10,11 @@ using Volo.Abp.AspNetCore.SignalR;
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
     [Authorize]
-    [HubRoute("messages")]
-    public class AbpMessageHub : OnlineClientHubBase
+    public class MessageHub : OnlineClientHubBase
     {
         private readonly IMessageStore _messageStore;
 
-        public AbpMessageHub(
+        public MessageHub(
             IMessageStore messageStore)
         {
             _messageStore = messageStore;

@@ -16,11 +16,11 @@ namespace LINGYUN.Abp.Notifications.SignalR
 
         private readonly IOnlineClientManager _onlineClientManager;
 
-        private readonly IHubContext<AbpNotificationsHub> _hubContext;
+        private readonly IHubContext<NotificationsHub> _hubContext;
 
         public SignalRNotificationPublisher(
            IOnlineClientManager onlineClientManager,
-           IHubContext<AbpNotificationsHub> hubContext)
+           IHubContext<NotificationsHub> hubContext)
         {
             _hubContext = hubContext;
             _onlineClientManager = onlineClientManager;
