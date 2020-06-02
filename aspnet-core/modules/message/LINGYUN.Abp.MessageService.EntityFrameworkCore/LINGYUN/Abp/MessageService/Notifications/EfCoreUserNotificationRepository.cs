@@ -20,6 +20,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
         }
 
+        public async Task InsertUserNotificationsAsync(IEnumerable<UserNotification> userNotifications)
+        {
+            await DbSet.AddRangeAsync(userNotifications);
+        }
+
         public async Task ChangeUserNotificationReadStateAsync(Guid userId, long notificationId, NotificationReadState readState)
         {
             var userNofitication = await GetByIdAsync(userId, notificationId);

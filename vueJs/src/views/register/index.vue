@@ -2,8 +2,8 @@
   <div class="login-container">
     <el-form
       ref="formLogin"
-      :model="loginForm"
-      :rules="loginFormRules"
+      :model="registerForm"
+      :rules="registerFormRules"
       label-position="left"
       label-width="0px"
       class="demo-ruleForm login-page"
@@ -17,14 +17,14 @@
       <el-form-item label-width="0px">
         <tenant-box
           v-if="isMultiEnabled"
-          v-model="loginForm.tenantName"
+          v-model="registerForm.tenantName"
         />
       </el-form-item>
       <el-form-item
         prop="username"
       >
         <el-input
-          v-model="loginForm.username"
+          v-model="registerForm.username"
           prefix-icon="el-icon-user"
           type="text"
           auto-complete="off"
@@ -38,13 +38,13 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           prefix-icon="el-icon-lock"
           :type="passwordType"
           :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
           name="password"
           tabindex="2"
-          @keyup.enter.native="handleUserLogin"
+          @keyup.enter.native="handleUserRegister"
         />
         <span
           class="show-pwd"
@@ -58,7 +58,7 @@
       >
         <el-input
           ref="loginItemPhone"
-          v-model="loginForm.phoneNumber"
+          v-model="registerForm.phoneNumber"
           prefix-icon="el-icon-mobile-phone"
           type="text"
           maxlength="11"
@@ -72,7 +72,7 @@
         <el-row>
           <el-col :span="16">
             <el-input
-              v-model="loginForm.verifyCode"
+              v-model="registerForm.verifyCode"
               auto-complete="off"
               :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneVerifyCode')})"
               prefix-icon="el-icon-key"
@@ -93,13 +93,13 @@
       </el-form-item>
       <el-form-item
         label-width="100px"
-        label="已有用户?"
+        :label="$t('login.existsAccount')"
       >
         <el-link
           type="success"
           @click="handleRedirectLogin"
         >
-          登录
+          {{ $t('login.logIn') }}
         </el-link>
       </el-form-item>
 
@@ -107,10 +107,10 @@
         <el-button
           type="primary"
           style="width:100%;"
-          :loading="logining"
-          @click="handleUserLogin"
+          :loading="registing"
+          @click="handleUserRegister"
         >
-          {{ $t('login.logIn') }}
+          {{ $t('login.register') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -120,7 +120,6 @@
 <script lang="ts">
 import { Input } from 'element-ui'
 import { Route } from 'vue-router'
-import { UserModule } from '@/store/modules/user'
 import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
@@ -136,15 +135,14 @@ import { AbpConfigurationModule } from '@/store/modules/abp'
   }
 })
 export default class extends Vue {
-  private loginType = 'password'
   private passwordType = 'password'
   private redirect?: string
 
   private sendTimer: any
   private sending = false
   private sendButtonName = this.l('login.sendVerifyCode')
-  private logining = false
-  private loginForm = {
+  private registing = false
+  private registerForm = {
     tenantName: '',
     username: '',
     password: '',
@@ -165,7 +163,7 @@ export default class extends Vue {
     }
   }
 
-  private loginFormRules = {
+  private registerFormRules = {
     username: [
       {
         required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.username') }), trigger: 'blur'
@@ -219,33 +217,23 @@ export default class extends Vue {
     this.$router.replace('login')
   }
 
-  private handleUserLogin() {
+  private handleUserRegister() {
     const frmLogin = this.$refs.formLogin as any
     frmLogin.validate(async(valid: boolean) => {
       if (valid) {
-        this.logining = true
+        this.registing = true
         try {
-          if (this.loginType === 'password') {
-            const userLogin = {
-              tenantName: this.loginForm.tenantName,
-              username: this.loginForm.username,
-              password: this.loginForm.password
-            }
-            await UserModule.Login(userLogin)
-            this.$router.push({
-              path: this.redirect || '/'
-            })
-          } else {
-            const phoneLogin = {
-              tenantName: this.loginForm.tenantName,
-              phoneNumber: this.loginForm.phoneNumber,
-              verifyCode: this.loginForm.verifyCode
-            }
-            await UserModule.PhoneLogin(phoneLogin)
-            this.$router.push({
-              path: this.redirect || '/'
-            })
-          }
+          const userRegister = new UserRegisterData()
+          userRegister.phoneNumber = this.registerForm.phoneNumber
+          userRegister.verifyCode = this.registerForm.verifyCode
+          userRegister.name = this.registerForm.username
+          userRegister.userName = this.registerForm.username
+          userRegister.password = this.registerForm.password
+          UserService.userRegister(userRegister).then(() => {
+            this.handleRedirectLogin()
+          }).finally(() => {
+            this.resetLoginButton()
+          })
         } catch {
           this.resetLoginButton()
         }
@@ -259,8 +247,8 @@ export default class extends Vue {
       if (!errorMsg) {
         this.sending = true
         const phoneVerify = new PhoneVerify()
-        phoneVerify.phoneNumber = this.loginForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.signin
+        phoneVerify.phoneNumber = this.registerForm.phoneNumber
+        phoneVerify.verifyType = VerifyType.register
         UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
@@ -281,17 +269,13 @@ export default class extends Vue {
     })
   }
 
-  private handleLoginTabChanged(tab: any) {
-    this.loginType = tab.paneName === '1' ? 'phone' : 'password'
-  }
-
   private l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
   }
 
   private resetLoginButton() {
     setTimeout(() => {
-      this.logining = false
+      this.registing = false
     }, 0.5 * 1000)
   }
 }

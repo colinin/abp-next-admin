@@ -155,7 +155,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
             {
                 using (CurrentTenant.Change(notification.TenantId))
                 {
-                    var notify = new Notification(SnowflakeIdGenerator.Create(), notification.Name,
+                    var notifyId = SnowflakeIdGenerator.Create();
+                    // 保存主键，防止前端js long类型溢出
+                    notification.Data["id"] = notifyId.ToString();
+
+                    var notify = new Notification(notifyId, notification.Name,
                         notification.Data.GetType().AssemblyQualifiedName,
                         JsonSerializer.Serialize(notification.Data), notification.NotificationSeverity)
                     {
@@ -234,6 +238,17 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             using (CurrentTenant.Change(tenantId))
             return await UserSubscribeRepository.UserSubscribeExistsAysnc(notificationName, userId);
+        }
+
+        public async Task InsertUserNotificationsAsync(NotificationInfo notification, IEnumerable<Guid> userIds)
+        {
+            var userNofitications = new List<UserNotification>();
+            foreach(var userId in userIds)
+            {
+                var userNofitication = new UserNotification(notification.Id, userId);
+                userNofitications.Add(userNofitication);
+            }
+            await UserNotificationRepository.InsertUserNotificationsAsync(userNofitications);
         }
     }
 }

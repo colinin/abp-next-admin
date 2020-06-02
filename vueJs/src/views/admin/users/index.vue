@@ -327,9 +327,6 @@ export default class extends Vue {
   vertical-align: top;
   margin-left: 20px;
 }
-.el-dropdown + .el-dropdown {
-  margin-left: 15px;
-}
 .el-icon-arrow-down {
   font-size: 12px;
 }

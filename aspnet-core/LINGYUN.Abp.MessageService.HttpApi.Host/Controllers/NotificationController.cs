@@ -10,11 +10,11 @@ namespace LINGYUN.Abp.MessageService.Controllers
     [Route("api/app/notifications")]
     public class NotificationController : AbpController
     {
-        private readonly INotificationPublisher _notificationPublisher;
+        private readonly INotificationDispatcher _notificationDispatcher;
         public NotificationController(
-            INotificationPublisher notificationPublisher)
+            INotificationDispatcher notificationDispatcher)
         {
-            _notificationPublisher = notificationPublisher;
+            _notificationDispatcher = notificationDispatcher;
         }
 
         [HttpPost]
@@ -24,17 +24,19 @@ namespace LINGYUN.Abp.MessageService.Controllers
             var notificationInfo = new NotificationInfo
             {
                 TenantId = null,
-                NotificationSeverity = NotificationSeverity.Success,
+                NotificationSeverity = notification.Severity,
                 NotificationType = NotificationType.Application,
-                Id = 164589598456654164,
-                Name = "TestApplicationNotofication"
+                Id = new Random().Next(int.MinValue, int.MaxValue),
+                Name = "TestApplicationNotofication",
+                CreationTime = Clock.Now
             };
-            notificationInfo.Data.Properties["Title"] = notification.Title;
-            notificationInfo.Data.Properties["Message"] = notification.Message;
-            notificationInfo.Data.Properties["DateTime"] = notification.DateTime;
-            notificationInfo.Data.Properties["Severity"] = notification.Severity;
+            notificationInfo.Data.Properties["id"] = notificationInfo.Id.ToString();
+            notificationInfo.Data.Properties["title"] = notification.Title;
+            notificationInfo.Data.Properties["message"] = notification.Message;
+            notificationInfo.Data.Properties["datetime"] = Clock.Now;
+            notificationInfo.Data.Properties["severity"] = notification.Severity;
 
-            await _notificationPublisher.PublishAsync(notificationInfo, new List<Guid>() { notification.UserId });
+            await _notificationDispatcher.DispatcheAsync(notificationInfo);
         }
     }
 
@@ -42,7 +44,6 @@ namespace LINGYUN.Abp.MessageService.Controllers
     {
         public Guid UserId { get; set; }
         public string Title { get; set; }
-        public DateTime DateTime { get; set; } = DateTime.Now;
         public string Message { get; set; }
         public NotificationSeverity Severity { get; set; } = NotificationSeverity.Success;
     }

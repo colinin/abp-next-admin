@@ -78,7 +78,7 @@
       <el-table-column
         :label="$t('global.lastModificationTime')"
         prop="lastModificationTime"
-        width="170px"
+        width="230px"
         align="center"
       >
         <template slot-scope="{row}">
@@ -93,6 +93,7 @@
         :label="$t('global.operaActions')"
         align="center"
         width="250px"
+        min-width="250px"
         fixed="right"
       >
         <template slot-scope="{row}">
