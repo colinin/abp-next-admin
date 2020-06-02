@@ -30,14 +30,14 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             // 持久化
             await _messageStore.StoreMessageAsync(chatMessage);
 
-            if (!chatMessage.GroupName.IsNullOrWhiteSpace())
+            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
             {
                 try
                 {
-                    var signalRClient = Clients.Group(chatMessage.GroupName);
+                    var signalRClient = Clients.Group(chatMessage.GroupId);
                     if (signalRClient == null)
                     {
-                        Logger.LogDebug("Can not get group " + chatMessage.GroupName + " from SignalR hub!");
+                        Logger.LogDebug("Can not get group " + chatMessage.GroupId + " from SignalR hub!");
                         return;
                     }
 
@@ -45,13 +45,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWarning("Could not send message to group: {0}", chatMessage.GroupName);
+                    Logger.LogWarning("Could not send message to group: {0}", chatMessage.GroupId);
                     Logger.LogWarning("Send group message error: {0}", ex.Message);
                 }
             }
             else
             {
-                var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId);
+                var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
                 var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
                 foreach (var onlineClient in onlineClients)
                 {

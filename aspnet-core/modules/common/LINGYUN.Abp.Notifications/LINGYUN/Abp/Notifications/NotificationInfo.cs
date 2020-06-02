@@ -18,6 +18,8 @@ namespace LINGYUN.Abp.Notifications
             Data = new NotificationData();
             NotificationType = NotificationType.Application;
             NotificationSeverity = NotificationSeverity.Info;
+
+            CreationTime = DateTime.Now;
         }
     }
 }

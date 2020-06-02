@@ -7,5 +7,7 @@ namespace LINGYUN.Abp.IM.Group
         public Guid? TenantId { get; set; }
         public Guid UserId { get; set; }
         public long GroupId { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsSuperAdmin { get; set; }
     }
 }

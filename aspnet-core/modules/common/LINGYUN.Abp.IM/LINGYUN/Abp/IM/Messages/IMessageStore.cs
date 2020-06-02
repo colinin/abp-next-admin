@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.IM.Messages
         /// <param name="groupName"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
-        Task<List<ChatMessage>> GetGroupMessageAsync(Guid tenantId, string groupName, int maxResultCount = 10);
+        Task<List<ChatMessage>> GetGroupMessageAsync(Guid? tenantId, long groupId, string filter = "", MessageType type = MessageType.Text, int skipCount = 1, int maxResultCount = 10);
         /// <summary>
         /// 获取与某个用户的聊天记录
         /// </summary>
@@ -29,6 +29,7 @@ namespace LINGYUN.Abp.IM.Messages
         /// <param name="userId"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
-        Task<List<ChatMessage>> GetChatMessageAsync(Guid tenantId, Guid userId, int maxResultCount = 10);
+        Task<List<ChatMessage>> GetChatMessageAsync(Guid? tenantId, Guid sendUserId, Guid receiveUserId, string filter = "", MessageType type = MessageType.Text, int skipCount = 1, int maxResultCount = 10);
+
     }
 }

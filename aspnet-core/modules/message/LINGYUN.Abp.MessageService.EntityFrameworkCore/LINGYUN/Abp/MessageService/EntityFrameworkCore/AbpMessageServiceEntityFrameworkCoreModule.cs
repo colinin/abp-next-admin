@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.MessageService.Notifications;
+﻿using LINGYUN.Abp.MessageService.Messages;
+using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
@@ -18,6 +19,10 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 options.AddRepository<Notification, INotificationRepository>();
                 options.AddRepository<UserNotification, IUserNotificationRepository>();
                 options.AddRepository<UserSubscribe, IUserSubscribeRepository>();
+
+                options.AddRepository<ChatGroup, IGroupRepository>();
+                options.AddRepository<UserChatGroup, IUserChatGroupRepository>();
+                options.AddRepository<UserChatSetting, IUserChatSettingRepository>();
 
                 options.AddDefaultRepositories(includeAllEntities: true);
             });

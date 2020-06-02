@@ -41,7 +41,19 @@ If you want to get started with a minimal template code instead of integration s
 
 ## Screenshots
 
-![dashboard](./demo/dashboard.png)
+![Login](./vueJs/images/userLogin.png)
+
+![Tenants](./vueJs/images/tenant.png)
+
+![Roles](./vueJs/images/userRoles.png)
+
+![Permissions](./vueJs/images/userPermissions.png)
+
+![IM](./vueJs/images/im-notifications.png)
+
+![Clients](./vueJs/images/client.png)
+
+![Aggregate route](./vueJs/images/aggregate.png)
 
 ## Related Projects
 

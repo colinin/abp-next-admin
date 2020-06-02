@@ -1,9 +1,9 @@
-﻿namespace LINGYUN.Abp.MessageService
+﻿namespace LINGYUN.Abp.IM.Messages
 {
     /// <summary>
     /// 消息状态
     /// </summary>
-    public enum SendStatus : sbyte
+    public enum MessageSendState : sbyte
     {
         /// <summary>
         /// 已发送

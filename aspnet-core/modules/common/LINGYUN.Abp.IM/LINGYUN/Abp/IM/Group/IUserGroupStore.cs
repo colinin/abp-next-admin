@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.IM.Group
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IEnumerable<GroupChat>> GetUserGroupsAsync(Guid? tenantId, Guid userId);
+        Task<IEnumerable<Group>> GetUserGroupsAsync(Guid? tenantId, Guid userId);
         /// <summary>
         /// 获取通讯组所有用户
         /// </summary>
@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.IM.Group
         /// <param name="userId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId);
+        Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId, Guid acceptUserId);
         /// <summary>
         /// 用户退出通讯组
         /// </summary>

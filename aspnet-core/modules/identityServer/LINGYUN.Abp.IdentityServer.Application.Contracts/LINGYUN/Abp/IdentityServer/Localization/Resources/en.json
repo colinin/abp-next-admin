@@ -25,6 +25,7 @@
     "ClientClaimNotFound": "Client claim: {0} not found!",
     "ClientSecretNotFound": "Client secret: {0} not found!",
     "ClientPropertyNotFound": "Client property: {0} not found!",
-    "IdentityResourcePropertyNotFound": "Identity resource property: {0} not found!"
+    "IdentityResourcePropertyNotFound": "Identity resource property: {0} not found!",
+    "EncryptionNotImplemented": "Encryption type: {0} not implemented!"
   }
 }
