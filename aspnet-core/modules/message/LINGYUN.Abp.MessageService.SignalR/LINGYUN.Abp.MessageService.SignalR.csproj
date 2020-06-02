@@ -10,4 +10,8 @@
     <ProjectReference Include="..\LINGYUN.Abp.MessageService.Domain\LINGYUN.Abp.MessageService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LINGYUN\Abp\MessageService\SignalR\Notifications\" />
+  </ItemGroup>
+
 </Project>

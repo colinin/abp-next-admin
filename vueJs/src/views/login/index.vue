@@ -105,14 +105,15 @@
         </el-tab-pane>
       </el-tabs>
       <el-form-item
+        v-show="selfRegistration"
         label-width="100px"
-        label="没有用户?"
+        :label="$t('login.notAccount')"
       >
         <el-link
           type="success"
           @click="handleRedirectRegister"
         >
-          注册
+          {{ $t('login.register') }}
         </el-link>
       </el-form-item>
 
@@ -167,6 +168,14 @@ export default class extends Vue {
 
   get isMultiEnabled() {
     return AbpConfigurationModule.configuration.multiTenancy.isEnabled
+  }
+
+  get selfRegistration() {
+    const selfRegister = AbpConfigurationModule.configuration.setting.values['Abp.Account.IsSelfRegistrationEnabled']
+    if (selfRegister) {
+      return selfRegister === 'true'
+    }
+    return false
   }
 
   private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {

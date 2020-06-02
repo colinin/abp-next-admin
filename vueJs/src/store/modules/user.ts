@@ -137,7 +137,7 @@ class User extends VuexModule implements IUserState {
   @Action
   public RefreshSession() {
     return new Promise((resolve, reject) => {
-      const token = getItem(tokenKey)
+      const token = getItem(refreshTokenKey)
       if (token) {
         UserApiService.refreshToken(token).then(result => {
           const token = result.token_type + ' ' + result.access_token

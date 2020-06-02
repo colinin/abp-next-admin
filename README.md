@@ -19,11 +19,19 @@
 
 ## 截图
 
-![登录页](./images/userLogin.png)
+![登录页](./vueJs/images/userLogin.png)
 
-![角色页](./images/userRoles.png)
+![租户管理](./vueJs/images/tenant.png)
 
-![权限页](./images/userPermissions.png)
+![角色页](./vueJs/images/userRoles.png)
+
+![权限页](./vueJs/images/userPermissions.png)
+
+![即时通讯](./vueJs/images/im-notifications.png)
+
+![客户端管理](./vueJs/images/client.png)
+
+![聚合路由](./vueJs/images/aggregate.png)
 
 ## 相关项目
 

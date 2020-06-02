@@ -2,6 +2,6 @@
 {
     public interface ISnowflakeIdGenerator
     {
-        long NextId();
+        long Create();
     }
 }

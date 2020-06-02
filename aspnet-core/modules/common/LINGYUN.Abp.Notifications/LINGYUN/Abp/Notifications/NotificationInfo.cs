@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -6,8 +7,9 @@ namespace LINGYUN.Abp.Notifications
     {
         public Guid? TenantId { get; set; }
         public string Name { get; set; }
+        [JsonConverter(typeof(HexLongConverter))]
+        public long Id { get; set; }
         public NotificationData Data { get; set; }
-        public DateTime? ExpirationTime { get; set; }
         public DateTime CreationTime { get; set; }
         public NotificationType NotificationType { get; set; }
         public NotificationSeverity NotificationSeverity { get; set; }
@@ -16,6 +18,8 @@ namespace LINGYUN.Abp.Notifications
             Data = new NotificationData();
             NotificationType = NotificationType.Application;
             NotificationSeverity = NotificationSeverity.Info;
+
+            CreationTime = DateTime.Now;
         }
     }
 }

@@ -1,47 +1,40 @@
-﻿using LINGYUN.Abp.MessageService.Subscriptions;
-using LINGYUN.Abp.MessageService.Utils;
-using LINGYUN.Abp.Notifications;
+﻿using LINGYUN.Abp.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
     public class NotificationDispatcher : INotificationDispatcher, ITransientDependency
     {
-        protected IJsonSerializer JsonSerializer { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected ISubscribeStore SubscribeStore { get; }
         protected INotificationStore NotificationStore { get; }
-        protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager.Current;
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected INotificationPublisher NotificationPublisher { get; }
 
-        protected ISnowflakeIdGenerator SnowflakeIdGenerator { get; }
-
-        [UnitOfWork]
-        public virtual async Task DispatcheAsync(NotificationInfo notification)
+        public NotificationDispatcher(
+            INotificationStore notificationStore,
+            INotificationPublisher notificationPublisher)
         {
-            using (CurrentTenant.Change(notification.TenantId))
-            {
-                var subscribeUsers = await SubscribeStore.GetUserSubscribesAsync(notification.Name);
-                foreach(var userId in subscribeUsers)
-                {
-                    await NotificationStore.InsertUserNotificationAsync(notification, userId);
-                }
-                await CurrentUnitOfWork.SaveChangesAsync();
-
-                await NotifyAsync(notification.Data, notification.TenantId, subscribeUsers);
-            }
+            NotificationStore = notificationStore;
+            NotificationPublisher = notificationPublisher;
         }
 
-        protected virtual async Task NotifyAsync(NotificationData data, Guid? tenantId, IEnumerable<Guid> userIds)
+        public virtual async Task DispatcheAsync(NotificationInfo notification)
         {
-            await NotificationPublisher.PublishAsync(data, userIds, tenantId);
+            var subscribes = await NotificationStore.GetSubscriptionsAsync(notification.TenantId, notification.Name);
+            foreach (var subscribe in subscribes)
+            {
+                await NotificationStore.InsertUserNotificationAsync(notification, subscribe.UserId);
+            }
+
+            var subscribeUsers = subscribes.Select(s => s.UserId);
+            await NotifyAsync(notification, subscribeUsers);
+        }
+
+        protected virtual async Task NotifyAsync(NotificationInfo notification, IEnumerable<Guid> userIds)
+        {
+            await NotificationPublisher.PublishAsync(notification, userIds);
         }
     }
 }

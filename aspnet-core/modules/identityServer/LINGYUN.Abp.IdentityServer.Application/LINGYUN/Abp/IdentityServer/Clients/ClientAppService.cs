@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.IdentityServer.Clients;
-using Volo.Abp.Security.Encryption;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
@@ -15,9 +14,6 @@ namespace LINGYUN.Abp.IdentityServer.Clients
     [Authorize(AbpIdentityServerPermissions.Clients.Default)]
     public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppService
     {
-        private IStringEncryptionService _encryptionService;
-        protected IStringEncryptionService EncryptionService => LazyGetRequiredService(ref _encryptionService);
-
         protected IClientRepository ClientRepository { get; }
 
         public ClientAppService(IClientRepository clientRepository)
@@ -69,7 +65,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             }
             else
             {
-                clientSecretValue = EncryptionService.Encrypt(clientSecretCreate.Value);
+                // 其他类型的服务器加密方式暂时不提供
+                throw new UserFriendlyException(L["EncryptionNotImplemented", clientSecretCreate.Type]);
             }
             client.AddSecret(clientSecretValue, clientSecretCreate.Expiration, 
                 clientSecretCreate.Type, clientSecretCreate.Description);
@@ -461,7 +458,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             }
             else
             {
-                clientSecretValue = EncryptionService.Encrypt(clientSecretUpdate.Value);
+                throw new UserFriendlyException(L["EncryptionNotImplemented", clientSecretUpdate.Type]);
             }
             clientSecret.Value = clientSecretValue;
 

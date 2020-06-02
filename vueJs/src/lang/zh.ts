@@ -90,6 +90,9 @@ export default {
   login: {
     title: '系统登录',
     logIn: '登录',
+    register: '注册',
+    notAccount: '没有账户?',
+    existsAccount: '已有账户?',
     userLogin: '用户密码登录',
     phoneLogin: '手机免密登录',
     tenantName: '租户',

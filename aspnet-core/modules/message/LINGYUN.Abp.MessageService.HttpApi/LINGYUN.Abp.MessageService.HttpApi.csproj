@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+  
+<ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="2.8.0" />
+  </ItemGroup>
+
+</Project>

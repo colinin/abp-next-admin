@@ -25,6 +25,7 @@
     "ClientClaimNotFound": "客户端声明: {0} 不存在!",
     "ClientSecretNotFound": "客户端密钥: {0} 不存在!",
     "ClientPropertyNotFound": "客户端属性: {0} 不存在!",
-    "IdentityResourcePropertyNotFound": "身份资源属性: {0} 不存在!"
+    "IdentityResourcePropertyNotFound": "身份资源属性: {0} 不存在!",
+    "EncryptionNotImplemented":  "加密类型: {0} 未实现!"
   }
 }

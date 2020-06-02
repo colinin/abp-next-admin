@@ -9,10 +9,9 @@
       </el-col>
       <el-col :span="4">
         <el-link
-          type="info"
           @click="handleSwitchTenant"
         >
-          {{ $t('AbpUiMultiTenancy.SwitchTenant') }}
+          ({{ $t('AbpUiMultiTenancy.SwitchTenant') }})
         </el-link>
       </el-col>
     </el-row>

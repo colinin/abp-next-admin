@@ -90,6 +90,8 @@ export interface IAbpConfiguration {
   multiTenancy: MultiTenancy
   objectExtensions: any
   setting: Setting
+
+  getSetting(key: string): string | undefined
 }
 
 export class AbpConfiguration implements IAbpConfiguration {
@@ -110,5 +112,12 @@ export class AbpConfiguration implements IAbpConfiguration {
     this.localization = new Localization()
     this.multiTenancy = new MultiTenancy()
     this.currentTenant = new CurrentTenant()
+  }
+
+  public getSetting(key: string) {
+    if (this.setting.values && this.setting.values[key]) {
+      return this.setting.values[key]
+    }
+    return undefined
   }
 }
