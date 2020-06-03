@@ -1,19 +1,20 @@
 ﻿using LINGYUN.Abp.MessageService.Messages;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MessageService.EventBus
+namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {
-    public class UserCreateEventHandler : IDistributedEventHandler<EntityCreatedEto<UserEto>>
+    public class UserCreateJoinIMEventHandler : ILocalEventHandler<EntityCreatedEventData<UserEto>>, ITransientDependency
     {
         private readonly ICurrentTenant _currentTenant;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IUserChatSettingRepository _userChatSettingRepository;
-        public UserCreateEventHandler(
+        public UserCreateJoinIMEventHandler(
             ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
             IUserChatSettingRepository userChatSettingRepository)
@@ -27,7 +28,7 @@ namespace LINGYUN.Abp.MessageService.EventBus
         /// </summary>
         /// <param name="eventData"></param>
         /// <returns></returns>
-        public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
+        public async Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {

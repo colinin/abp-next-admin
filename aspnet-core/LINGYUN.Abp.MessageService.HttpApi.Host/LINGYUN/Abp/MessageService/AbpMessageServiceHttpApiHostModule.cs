@@ -1,20 +1,19 @@
-﻿using IdentityModel;
+﻿using DotNetCore.CAP;
+using IdentityModel;
+using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.Notifications.SignalR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
-using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -41,10 +40,26 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpIMSignalRModule),
         typeof(AbpNotificationsSignalRModule),
+        typeof(AbpCAPEventBusModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+
+            PreConfigure<CapOptions>(options =>
+            {
+                options
+                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();

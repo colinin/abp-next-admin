@@ -134,8 +134,12 @@ export default class extends Vue {
         this.connection.invoke('GetNotification', ReadState.UnRead, 10).then(result => {
           console.log(result)
           result.items.forEach((notify: any) => {
-            const notification = notify.data.properties
-            notification.id = notify.id
+            const notification = new Notification()
+            notification.id = notify.data.properties.id
+            notification.title = notify.data.properties.title
+            notification.message = notify.data.properties.message
+            notification.datetime = notify.creationTime
+            notification.severity = notify.notificationSeverity
             this.notifications.push(notification)
           })
         })
@@ -153,12 +157,17 @@ export default class extends Vue {
   private onNotificationReceived(data: any) {
     console.log('received signalr message...')
     console.log(data)
-    const notification = data.data.properties
+    const notification = new Notification()
+    notification.id = data.properties.id
+    notification.title = data.properties.title
+    notification.message = data.properties.message
+    notification.datetime = data.creationTime
+    notification.severity = data.notificationSeverity
     this.pushUserNotification(notification)
     this.$notify({
       title: notification.title,
       message: notification.message,
-      type: this.getNofiyType(data.notificationSeverity)
+      type: this.getNofiyType(notification.severity)
     })
   }
 
