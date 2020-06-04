@@ -18,18 +18,21 @@ namespace LINGYUN.Abp.Account
     {
         protected ISmsSender SmsSender { get; }
         protected IdentityUserManager UserManager { get; }
+        protected IdentityUserStore UserStore { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected IDistributedCache<AccountRegisterVerifyCacheItem> Cache { get; }
         protected PhoneNumberTokenProvider<IdentityUser> PhoneNumberTokenProvider { get; }
         public AccountAppService(
             ISmsSender smsSender,
             IdentityUserManager userManager,
+            IdentityUserStore userStore,
             IIdentityUserRepository userRepository,
             IDistributedCache<AccountRegisterVerifyCacheItem> cache,
             PhoneNumberTokenProvider<IdentityUser> phoneNumberTokenProvider)
         {
             Cache = cache;
             SmsSender = smsSender;
+            UserStore = userStore;
             UserManager = userManager;
             UserRepository = userRepository;
             PhoneNumberTokenProvider = phoneNumberTokenProvider;
@@ -57,16 +60,27 @@ namespace LINGYUN.Abp.Account
 
             await CheckSelfRegistrationAsync();
 
-            var userEmail = input.EmailAddress ?? input.PhoneNumber + "@abp.io";
+            // 需要用户输入邮箱?
+            //if (UserManager.Options.User.RequireUniqueEmail)
+            //{
+            //    if (input.EmailAddress.IsNullOrWhiteSpace())
+            //    {
+            //        throw new UserFriendlyException(L["RequiredEmailAddress"]);
+            //    }
+            //}
+
+            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
             var userName = input.UserName ?? input.PhoneNumber;
             var user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
                 Name = input.Name ?? input.PhoneNumber
             };
+            // 写入手机号要在创建用户之前,因为有一个自定义的手机号验证
+            await UserStore.SetPhoneNumberAsync(user, input.PhoneNumber);
+            await UserStore.SetPhoneNumberConfirmedAsync(user, true);
+
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
-            (await UserManager.SetEmailAsync(user, userEmail)).CheckErrors();
             (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
             await Cache.RemoveAsync(phoneVerifyCacheKey);

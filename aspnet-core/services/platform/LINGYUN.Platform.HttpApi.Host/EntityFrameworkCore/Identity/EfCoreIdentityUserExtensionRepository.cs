@@ -19,7 +19,12 @@ namespace LINGYUN.Platform.EntityFrameworkCore.Identity
         {
         }
 
-        public async Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber)
+        public virtual async Task<bool> PhoneNumberHasRegistedAsync(string phoneNumber)
+        {
+            return await DbSet.AnyAsync(x => x.PhoneNumberConfirmed && x.PhoneNumber.Equals(phoneNumber));
+        }
+
+        public virtual async Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber)
         {
             return await DbSet.Where(usr => usr.PhoneNumber.Equals(phoneNumber)).FirstOrDefaultAsync();
         }

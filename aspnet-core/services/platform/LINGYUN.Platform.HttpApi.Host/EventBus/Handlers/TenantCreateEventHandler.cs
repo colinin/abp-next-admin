@@ -70,7 +70,7 @@ namespace LINGYUN.Platform.EventBus.Handlers
                     }
                     await PermissionGrantRepository.GetDbContext().Database.ExecuteSqlRawAsync(batchInsertPermissionSql);
 
-                    await unitOfWork.CompleteAsync();
+                    await unitOfWork.SaveChangesAsync();
                 }
             }
         }

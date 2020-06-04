@@ -9,6 +9,9 @@
     "DisplayName:SmsSigninTemplateCode": "Signin sms template",
     "Description:SmsSigninTemplateCode": "When the user logs in, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
     "DisplayName:PhoneVerifyCodeExpiration": "SMS verification code validity",
-    "Description:PhoneVerifyCodeExpiration": "The valid time for the user to send SMS verification code, unit m, default 3m"
+    "Description:PhoneVerifyCodeExpiration": "The valid time for the user to send SMS verification code, unit m, default 3m",
+    "RequiredEmailAddress": "Email address required",
+    "InvalidPhoneNumber": "Invalid phone number",
+    "DuplicatePhoneNumber": "The phone number {0} has been registered!"
   }
 }

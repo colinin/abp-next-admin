@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.8.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\LocalNuget</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -44,26 +44,29 @@ namespace LINGYUN.Abp.MessageService.EventBus
         {
             // 获取默认语言
             var userDefaultCultureName = await _settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
-            if (!userDefaultCultureName.IsNullOrWhiteSpace())
+            if (userDefaultCultureName.IsNullOrWhiteSpace())
             {
-                CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(userDefaultCultureName);
+                userDefaultCultureName = CultureInfo.CurrentUICulture.Name;
                 // CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(userDefaultCultureName);
             }
-            // 订阅用户欢迎消息
-            await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
-                eventData.Entity.Id, UserNotificationNames.WelcomeToApplication);
-
-            var userWelcomeNotifiction = new NotificationInfo
+            using (CultureHelper.Use(userDefaultCultureName, userDefaultCultureName))
             {
-                CreationTime = DateTime.Now,
-                Name = UserNotificationNames.WelcomeToApplication,
-                NotificationSeverity = NotificationSeverity.Info,
-                NotificationType = NotificationType.System,
-                TenantId = eventData.Entity.TenantId
-            };
-            userWelcomeNotifiction.Data.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.UserName);
+                // 订阅用户欢迎消息
+                await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
+                    eventData.Entity.Id, UserNotificationNames.WelcomeToApplication);
 
-            await _notificationDispatcher.DispatcheAsync(userWelcomeNotifiction);
+                var userWelcomeNotifiction = new NotificationInfo
+                {
+                    CreationTime = DateTime.Now,
+                    Name = UserNotificationNames.WelcomeToApplication,
+                    NotificationSeverity = NotificationSeverity.Info,
+                    NotificationType = NotificationType.System,
+                    TenantId = eventData.Entity.TenantId
+                };
+                userWelcomeNotifiction.Data.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.UserName);
+
+                await _notificationDispatcher.DispatcheAsync(userWelcomeNotifiction);
+            }
         }
 
         //public async Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
