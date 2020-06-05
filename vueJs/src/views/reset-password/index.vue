@@ -1,64 +1,30 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="formLogin"
-      :model="registerForm"
-      :rules="registerFormRules"
+      ref="formResetPassword"
+      :model="resetPasswordForm"
+      :rules="resetPasswordFormRules"
       label-position="left"
       label-width="0px"
       class="demo-ruleForm login-page"
     >
       <div class="title-container">
         <h3 class="title">
-          {{ $t('login.title') }}
+          {{ $t('login.resetpassword') }}
         </h3>
         <lang-select class="set-language" />
       </div>
       <el-form-item label-width="0px">
         <tenant-box
           v-if="isMultiEnabled"
-          v-model="registerForm.tenantName"
+          v-model="resetPasswordForm.tenantName"
         />
-      </el-form-item>
-      <el-form-item
-        prop="username"
-      >
-        <el-input
-          v-model="registerForm.username"
-          prefix-icon="el-icon-user"
-          type="text"
-          auto-complete="off"
-          tabindex="1"
-          :placeholder="$t('global.pleaseInputBy', {key: $t('login.username')})"
-        />
-      </el-form-item>
-      <el-form-item
-        prop="password"
-      >
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="registerForm.password"
-          prefix-icon="el-icon-lock"
-          :type="passwordType"
-          :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
-          name="password"
-          tabindex="2"
-          @keyup.enter.native="handleUserRegister"
-        />
-        <span
-          class="show-pwd"
-          @click="showPwd"
-        >
-          <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-        </span>
       </el-form-item>
       <el-form-item
         prop="phoneNumber"
       >
         <el-input
-          ref="loginItemPhone"
-          v-model="registerForm.phoneNumber"
+          v-model="resetPasswordForm.phoneNumber"
           prefix-icon="el-icon-mobile-phone"
           type="text"
           maxlength="11"
@@ -72,7 +38,7 @@
         <el-row>
           <el-col :span="16">
             <el-input
-              v-model="registerForm.verifyCode"
+              v-model="resetPasswordForm.verifyCode"
               auto-complete="off"
               :placeholder="$t('global.pleaseInputBy', {key: $t('login.phoneVerifyCode')})"
               prefix-icon="el-icon-key"
@@ -92,6 +58,28 @@
         </el-row>
       </el-form-item>
       <el-form-item
+        prop="newPassword"
+      >
+        <el-input
+          :key="passwordType"
+          ref="newPassword"
+          v-model="resetPasswordForm.newPassword"
+          prefix-icon="el-icon-lock"
+          :type="passwordType"
+          :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
+          name="newPassword"
+          tabindex="2"
+          @keyup.enter.native="handleResetPassword"
+        />
+        <span
+          class="show-pwd"
+          @click="showPwd"
+        >
+          <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
+        </span>
+      </el-form-item>
+
+      <el-form-item
         label-width="100px"
         :label="$t('login.existsAccount')"
       >
@@ -107,10 +95,10 @@
         <el-button
           type="primary"
           style="width:100%;"
-          :loading="registing"
-          @click="handleUserRegister"
+          :loading="reseting"
+          @click="handleResetPassword"
         >
-          {{ $t('login.register') }}
+          {{ $t('login.resetpassword') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -124,7 +112,7 @@ import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import UserService, { PhoneVerify, VerifyType, UserRegisterData } from '@/api/users'
+import UserService, { PhoneVerify, VerifyType, UserResetPasswordData } from '@/api/users'
 import { AbpConfigurationModule } from '@/store/modules/abp'
 
 @Component({
@@ -141,11 +129,10 @@ export default class extends Vue {
   private sendTimer: any
   private sending = false
   private sendButtonName = this.l('login.sendVerifyCode')
-  private registing = false
-  private registerForm = {
+  private reseting = false
+  private resetPasswordForm = {
     tenantName: '',
-    username: '',
-    password: '',
+    newPassword: '',
     phoneNumber: '',
     verifyCode: ''
   }
@@ -163,13 +150,8 @@ export default class extends Vue {
     }
   }
 
-  private registerFormRules = {
-    username: [
-      {
-        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.username') }), trigger: 'blur'
-      }
-    ],
-    password: [
+  private resetPasswordFormRules = {
+    newPassword: [
       {
         required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.password') }), trigger: 'blur'
       }
@@ -209,7 +191,7 @@ export default class extends Vue {
       this.passwordType = 'password'
     }
     this.$nextTick(() => {
-      (this.$refs.password as Input).focus()
+      (this.$refs.newPassword as Input).focus()
     })
   }
 
@@ -217,19 +199,17 @@ export default class extends Vue {
     this.$router.replace('login')
   }
 
-  private handleUserRegister() {
-    const frmLogin = this.$refs.formLogin as any
-    frmLogin.validate(async(valid: boolean) => {
+  private handleResetPassword() {
+    const frmResetPassword = this.$refs.formResetPassword as any
+    frmResetPassword.validate(async(valid: boolean) => {
       if (valid) {
-        this.registing = true
+        this.reseting = true
         try {
-          const userRegister = new UserRegisterData()
-          userRegister.phoneNumber = this.registerForm.phoneNumber
-          userRegister.verifyCode = this.registerForm.verifyCode
-          userRegister.name = this.registerForm.username
-          userRegister.userName = this.registerForm.username
-          userRegister.password = this.registerForm.password
-          UserService.userRegister(userRegister).then(() => {
+          const userReserPassword = new UserResetPasswordData()
+          userReserPassword.phoneNumber = this.resetPasswordForm.phoneNumber
+          userReserPassword.verifyCode = this.resetPasswordForm.verifyCode
+          userReserPassword.newPassword = this.resetPasswordForm.newPassword
+          UserService.resetPassword(userReserPassword).then(() => {
             this.handleRedirectLogin()
           }).finally(() => {
             this.resetLoginButton()
@@ -242,13 +222,13 @@ export default class extends Vue {
   }
 
   private handleSendPhoneVerifyCode() {
-    const frmLogin = this.$refs.formLogin as any
-    frmLogin.validateField('phoneNumber', (errorMsg: string) => {
+    const frmResetPassword = this.$refs.formResetPassword as any
+    frmResetPassword.validateField('phoneNumber', (errorMsg: string) => {
       if (!errorMsg) {
         this.sending = true
         const phoneVerify = new PhoneVerify()
-        phoneVerify.phoneNumber = this.registerForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.Register
+        phoneVerify.phoneNumber = this.resetPasswordForm.phoneNumber
+        phoneVerify.verifyType = VerifyType.ResetPassword
         UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
@@ -275,7 +255,7 @@ export default class extends Vue {
 
   private resetLoginButton() {
     setTimeout(() => {
-      this.registing = false
+      this.reseting = false
     }, 0.5 * 1000)
   }
 }

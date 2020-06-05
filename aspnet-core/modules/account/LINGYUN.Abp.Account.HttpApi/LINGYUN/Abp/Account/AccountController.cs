@@ -32,5 +32,12 @@ namespace LINGYUN.Abp.Account
         {
             await AccountAppService.VerifyPhoneNumberAsync(input);
         }
+
+        [HttpPut]
+        [Route("reset-password")]
+        public virtual async Task ResetPasswordAsync(PasswordResetDto passwordReset)
+        {
+            await AccountAppService.ResetPasswordAsync(passwordReset);
+        }
     }
 }

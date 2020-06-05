@@ -24,9 +24,19 @@ namespace LINGYUN.Platform.EntityFrameworkCore.Identity
             return await DbSet.AnyAsync(x => x.PhoneNumberConfirmed && x.PhoneNumber.Equals(phoneNumber));
         }
 
+        public virtual async Task<Guid?> GetIdByPhoneNumberAsync(string phoneNumber)
+        {
+            return await DbSet
+                .Where(x => x.PhoneNumber.Equals(phoneNumber))
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+        }
+
         public virtual async Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber)
         {
-            return await DbSet.Where(usr => usr.PhoneNumber.Equals(phoneNumber)).FirstOrDefaultAsync();
+            return await DbSet.Where(usr => usr.PhoneNumber.Equals(phoneNumber))
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
     }
 }

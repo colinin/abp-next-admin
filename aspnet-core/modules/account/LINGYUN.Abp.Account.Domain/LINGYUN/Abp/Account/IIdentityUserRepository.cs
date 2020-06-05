@@ -10,5 +10,7 @@ namespace LINGYUN.Abp.Account
         Task<bool> PhoneNumberHasRegistedAsync(string phoneNumber);
 
         Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber);
+
+        Task<Guid?> GetIdByPhoneNumberAsync(string phoneNumber);
     }
 }

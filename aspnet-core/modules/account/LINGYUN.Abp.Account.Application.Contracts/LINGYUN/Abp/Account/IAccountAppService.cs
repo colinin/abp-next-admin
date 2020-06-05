@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.Account
     {
         Task<IdentityUserDto> RegisterAsync(RegisterVerifyDto input);
 
+        Task ResetPasswordAsync(PasswordResetDto passwordReset);
+
         Task VerifyPhoneNumberAsync(VerifyDto input);
     }
 }

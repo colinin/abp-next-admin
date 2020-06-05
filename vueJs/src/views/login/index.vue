@@ -104,18 +104,37 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-      <el-form-item
-        v-show="selfRegistration"
-        label-width="100px"
-        :label="$t('login.notAccount')"
-      >
-        <el-link
-          type="success"
-          @click="handleRedirectRegister"
-        >
-          {{ $t('login.register') }}
-        </el-link>
-      </el-form-item>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item
+            v-show="selfRegistration"
+            label-width="100px"
+            :label="$t('login.notAccount')"
+          >
+            <el-link
+              type="success"
+              @click="handleRedirectRegister"
+            >
+              {{ $t('login.register') }}
+            </el-link>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item
+            v-show="selfRegistration"
+            label-width="100px"
+            :label="$t('login.forgotPassword')"
+          >
+            <el-link
+              type="info"
+              @click="handleRedirectResetPassword"
+            >
+              {{ $t('login.resetpassword') }}
+            </el-link>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <el-form-item style="width:100%;">
         <el-button
@@ -167,7 +186,7 @@ export default class extends Vue {
   }
 
   get isMultiEnabled() {
-    return AbpConfigurationModule.configuration.multiTenancy.isEnabled
+    return AbpConfigurationModule.configuration?.multiTenancy?.isEnabled
   }
 
   get selfRegistration() {
@@ -241,6 +260,10 @@ export default class extends Vue {
     this.$router.replace('register')
   }
 
+  private handleRedirectResetPassword() {
+    this.$router.replace('reset-password')
+  }
+
   private handleUserLogin() {
     const frmLogin = this.$refs.formLogin as any
     frmLogin.validate(async(valid: boolean) => {
@@ -282,7 +305,7 @@ export default class extends Vue {
         this.sending = true
         const phoneVerify = new PhoneVerify()
         phoneVerify.phoneNumber = this.loginForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.signin
+        phoneVerify.verifyType = VerifyType.Signin
         UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
