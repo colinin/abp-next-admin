@@ -6,6 +6,7 @@
     "Messages:Group:1003": "管理员已禁止您发言!",
     "Messages:User:1001": "用户不接收匿名发言!",
     "Messages:User:1002": "用户已拒接所有消息!",
-    "Messages:User:1003": "用户拒绝您发送的消息!"
+    "Messages:User:1003": "用户拒绝您发送的消息!",
+    "WelcomeToApplicationFormUser": "用户:{0} 欢迎您的加入!"
   }
 }

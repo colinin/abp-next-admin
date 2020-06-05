@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.SignalR;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
@@ -30,46 +29,58 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             // 持久化
             await _messageStore.StoreMessageAsync(chatMessage);
 
-            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+            try
+            {
+                if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+                {
+                    await SendMessageToGroupAsync(chatMessage);
+                }
+                else
+                {
+                    await SendMessageToUserAsync(chatMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Could not send message, group: {0}, formUser: {1}, toUser: {2}",
+                    chatMessage.GroupId, chatMessage.FormUserName,
+                    chatMessage.ToUserId.HasValue ? chatMessage.ToUserId.ToString() : "None");
+                Logger.LogWarning("Send group message error: {0}", ex.Message);
+            }
+        }
+
+        protected virtual async Task SendMessageToGroupAsync(ChatMessage chatMessage)
+        {
+            var signalRClient = Clients.Group(chatMessage.GroupId);
+            if (signalRClient == null)
+            {
+                Logger.LogDebug("Can not get group " + chatMessage.GroupId + " from SignalR hub!");
+                return;
+            }
+
+            await signalRClient.SendAsync("getChatMessage", chatMessage);
+        }
+
+        protected virtual async Task SendMessageToUserAsync(ChatMessage chatMessage)
+        {
+            var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
+            var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
+            foreach (var onlineClient in onlineClients)
             {
                 try
                 {
-                    var signalRClient = Clients.Group(chatMessage.GroupId);
+                    var signalRClient = Clients.Client(onlineClient.ConnectionId);
                     if (signalRClient == null)
                     {
-                        Logger.LogDebug("Can not get group " + chatMessage.GroupId + " from SignalR hub!");
-                        return;
+                        Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
+                        continue;
                     }
-
                     await signalRClient.SendAsync("getChatMessage", chatMessage);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogWarning("Could not send message to group: {0}", chatMessage.GroupId);
-                    Logger.LogWarning("Send group message error: {0}", ex.Message);
-                }
-            }
-            else
-            {
-                var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
-                var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
-                foreach (var onlineClient in onlineClients)
-                {
-                    try
-                    {
-                        var signalRClient = Clients.Client(onlineClient.ConnectionId);
-                        if (signalRClient == null)
-                        {
-                            Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
-                            continue;
-                        }
-                        await signalRClient.SendAsync("getChatMessage", chatMessage);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogWarning("Could not send message to user: {0}", chatMessage.ToUserId);
-                        Logger.LogWarning("Send to user message error: {0}", ex.Message);
-                    }
+                    Logger.LogWarning("Could not send message to user: {0}", chatMessage.ToUserId);
+                    Logger.LogWarning("Send to user message error: {0}", ex.Message);
                 }
             }
         }

@@ -6,6 +6,7 @@
     "Messages:Group:1003": "The administrator has banned you from speaking!",
     "Messages:User:1001": "Users do not receive anonymous comments!",
     "Messages:User:1002": "The user has rejected all messages!",
-    "Messages:User:1003": "The user rejects the message you sent!"
+    "Messages:User:1003": "The user rejects the message you sent!",
+    "WelcomeToApplicationFormUser": "User :{0} welcome to join us!"
   }
 }
