@@ -30,6 +30,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
+import { AbpConfigurationModule } from '@/store/modules/abp'
 
 @Component({
   name: 'Login'

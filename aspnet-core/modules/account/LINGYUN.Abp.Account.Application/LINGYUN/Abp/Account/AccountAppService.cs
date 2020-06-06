@@ -8,6 +8,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Sms;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Account
 {
@@ -18,18 +19,21 @@ namespace LINGYUN.Abp.Account
     {
         protected ISmsSender SmsSender { get; }
         protected IdentityUserManager UserManager { get; }
+        protected IdentityUserStore UserStore { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected IDistributedCache<AccountRegisterVerifyCacheItem> Cache { get; }
         protected PhoneNumberTokenProvider<IdentityUser> PhoneNumberTokenProvider { get; }
         public AccountAppService(
             ISmsSender smsSender,
             IdentityUserManager userManager,
+            IdentityUserStore userStore,
             IIdentityUserRepository userRepository,
             IDistributedCache<AccountRegisterVerifyCacheItem> cache,
             PhoneNumberTokenProvider<IdentityUser> phoneNumberTokenProvider)
         {
             Cache = cache;
             SmsSender = smsSender;
+            UserStore = userStore;
             UserManager = userManager;
             UserRepository = userRepository;
             PhoneNumberTokenProvider = phoneNumberTokenProvider;
@@ -57,21 +61,60 @@ namespace LINGYUN.Abp.Account
 
             await CheckSelfRegistrationAsync();
 
-            var userEmail = input.EmailAddress ?? input.PhoneNumber + "@abp.io";
+            // 需要用户输入邮箱?
+            //if (UserManager.Options.User.RequireUniqueEmail)
+            //{
+            //    if (input.EmailAddress.IsNullOrWhiteSpace())
+            //    {
+            //        throw new UserFriendlyException(L["RequiredEmailAddress"]);
+            //    }
+            //}
+
+            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
             var userName = input.UserName ?? input.PhoneNumber;
             var user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
                 Name = input.Name ?? input.PhoneNumber
             };
+            // 写入手机号要在创建用户之前,因为有一个自定义的手机号验证
+            await UserStore.SetPhoneNumberAsync(user, input.PhoneNumber);
+            await UserStore.SetPhoneNumberConfirmedAsync(user, true);
+
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
-            (await UserManager.SetEmailAsync(user, userEmail)).CheckErrors();
             (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
             await Cache.RemoveAsync(phoneVerifyCacheKey);
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
+        // TODO: 是否有必要移动到ProfileService
+        /// <summary>
+        /// 重置用户密码
+        /// </summary>
+        /// <param name="passwordReset"></param>
+        /// <returns></returns>
+        public virtual async Task ResetPasswordAsync(PasswordResetDto passwordReset)
+        {
+            // 本来可以不需要的，令牌算法有一个有效期
+            // 不过这里采用令牌强制过期策略,避免一个令牌多次使用
+            var phoneVerifyCacheKey = NormalizeCacheKey(passwordReset.PhoneNumber);
+
+            var phoneVerifyCacheItem = await Cache.GetAsync(phoneVerifyCacheKey);
+            if (phoneVerifyCacheItem == null || !phoneVerifyCacheItem.VerifyCode.Equals(passwordReset.VerifyCode))
+            {
+                throw new UserFriendlyException(L["PhoneVerifyCodeInvalid"]);
+            }
+
+            var userId = await GetUserIdByPhoneNumberAsync(passwordReset.PhoneNumber);
+
+            var user = await UserManager.GetByIdAsync(userId);
+
+            (await UserManager.ResetPasswordAsync(user, phoneVerifyCacheItem.VerifyToken, passwordReset.NewPassword)).CheckErrors();
+
+
+            await Cache.RemoveAsync(phoneVerifyCacheKey);
         }
         /// <summary>
         /// 验证手机号码
@@ -110,18 +153,26 @@ namespace LINGYUN.Abp.Account
             {
                 PhoneNumber = input.PhoneNumber,
             };
-            if (input.VerifyType == PhoneNumberVerifyType.Register)
+            switch (input.VerifyType)
             {
-                var phoneVerifyCode = new Random().Next(100000, 999999);
-                verifyCacheItem.VerifyCode = phoneVerifyCode.ToString();
-                var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsRegisterTemplateCode);
-                await SendPhoneVerifyMessageAsync(templateCode, input.PhoneNumber, phoneVerifyCode.ToString());
+                case PhoneNumberVerifyType.Register:
+                    var phoneVerifyCode = new Random().Next(100000, 999999);
+                    verifyCacheItem.VerifyCode = phoneVerifyCode.ToString();
+                    var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsRegisterTemplateCode);
+                    await SendPhoneVerifyMessageAsync(templateCode, input.PhoneNumber, phoneVerifyCode.ToString());
+                    return;
+                case PhoneNumberVerifyType.Signin:
+                    var phoneSigninCode = await SendSigninVerifyCodeAsync(input.PhoneNumber);
+                    verifyCacheItem.VerifyCode = phoneSigninCode;
+                    break;
+                case PhoneNumberVerifyType.ResetPassword:
+                    var resetPasswordCode = new Random().Next(100000, 999999);
+                    verifyCacheItem.VerifyCode = resetPasswordCode.ToString();
+                    var resetPasswordToken = await SendResetPasswordVerifyCodeAsync(input.PhoneNumber, verifyCacheItem.VerifyCode);
+                    verifyCacheItem.VerifyToken = resetPasswordToken;
+                    break;
             }
-            else
-            {
-                var phoneVerifyCode = await SendSigninVerifyCodeAsync(input.PhoneNumber);
-                verifyCacheItem.VerifyCode = phoneVerifyCode;
-            }
+            
             var cacheOptions = new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(verifyCodeExpiration)
@@ -137,11 +188,7 @@ namespace LINGYUN.Abp.Account
         protected virtual async Task<string> SendSigninVerifyCodeAsync(string phoneNumber)
         {
             // 查找用户信息
-            var user = await UserRepository.FindByPhoneNumberAsync(phoneNumber);
-            if (user == null)
-            {
-                throw new UserFriendlyException(L["PhoneNumberNotRegisterd"]);
-            }
+            var user = await GetUserByPhoneNumberAsync(phoneNumber);
             // 获取登录验证码模板号
             var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsSigninTemplateCode);
             // 生成手机验证码
@@ -150,6 +197,42 @@ namespace LINGYUN.Abp.Account
             await SendPhoneVerifyMessageAsync(templateCode, user.PhoneNumber, phoneVerifyCode);
 
             return phoneVerifyCode;
+        }
+         
+        protected virtual async Task<string> SendResetPasswordVerifyCodeAsync(string phoneNumber, string phoneVerifyCode)
+        {
+            // 查找用户信息
+            var user = await GetUserByPhoneNumberAsync(phoneNumber);
+            // 获取登录验证码模板号
+            var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsResetPasswordTemplateCode);
+            // 生成重置密码验证码
+            var phoneVerifyToken = await UserManager.GeneratePasswordResetTokenAsync(user);
+            // 发送短信验证码
+            await SendPhoneVerifyMessageAsync(templateCode, user.PhoneNumber, phoneVerifyCode);
+
+            return phoneVerifyToken;
+        }
+
+        protected virtual async Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber)
+        {
+            // 查找用户信息
+            var user = await UserRepository.FindByPhoneNumberAsync(phoneNumber);
+            if (user == null)
+            {
+                throw new UserFriendlyException(L["PhoneNumberNotRegisterd"]);
+            }
+            return user;
+        }
+
+        protected virtual async Task<Guid> GetUserIdByPhoneNumberAsync(string phoneNumber)
+        {
+            // 查找用户信息
+            var userId = await UserRepository.GetIdByPhoneNumberAsync(phoneNumber);
+            if (!userId.HasValue)
+            {
+                throw new UserFriendlyException(L["PhoneNumberNotRegisterd"]);
+            }
+            return userId.Value;
         }
         /// <summary>
         /// 检查是否允许用户注册

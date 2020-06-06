@@ -20,6 +20,8 @@ namespace LINGYUN.Abp.Account
                     "SMS_190728520", L("DisplayName:SmsRegisterTemplateCode"), L("Description:SmsRegisterTemplateCode")),
                 new SettingDefinition(AccountSettingNames.SmsSigninTemplateCode, 
                     "SMS_190728516", L("DisplayName:SmsSigninTemplateCode"), L("Description:SmsSigninTemplateCode")),
+                new SettingDefinition(AccountSettingNames.SmsResetPasswordTemplateCode,
+                    "SMS_192530831", L("DisplayName:SmsResetPasswordTemplateCode"), L("Description:SmsResetPasswordTemplateCode")),
                 new SettingDefinition(AccountSettingNames.PhoneVerifyCodeExpiration,
                     "3", L("DisplayName:PhoneVerifyCodeExpiration"), L("Description:PhoneVerifyCodeExpiration")),
             };

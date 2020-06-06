@@ -57,7 +57,7 @@ namespace LINGYUN.Platform.EventBus.Handlers
                 await PermissionGrantRepository.GetDbContext().Database
                     .ExecuteSqlRawAsync(batchRmovePermissionSql);
 
-                await unitOfWork.CompleteAsync();
+                await unitOfWork.SaveChangesAsync();
             }
         }
 

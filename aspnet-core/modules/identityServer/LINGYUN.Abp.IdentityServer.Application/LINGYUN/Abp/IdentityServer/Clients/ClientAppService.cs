@@ -141,7 +141,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         {
             // Abp官方IdentityServer项目不支持Filter过滤...
             var clients = await ClientRepository.GetListAsync(clientGetByPaged.Sorting,
-                clientGetByPaged.SkipCount, clientGetByPaged.MaxResultCount, true);
+                clientGetByPaged.SkipCount, clientGetByPaged.MaxResultCount,
+                clientGetByPaged.Filter, true);
 
             var clientCount = await ClientRepository.GetCountAsync();
 

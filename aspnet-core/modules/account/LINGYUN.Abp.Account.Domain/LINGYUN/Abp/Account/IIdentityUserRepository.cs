@@ -7,6 +7,10 @@ namespace LINGYUN.Abp.Account
 {
     public interface IIdentityUserRepository : IReadOnlyRepository<IdentityUser, Guid>
     {
+        Task<bool> PhoneNumberHasRegistedAsync(string phoneNumber);
+
         Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber);
+
+        Task<Guid?> GetIdByPhoneNumberAsync(string phoneNumber);
     }
 }

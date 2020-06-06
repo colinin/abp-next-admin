@@ -15,5 +15,9 @@
         /// 用户登录短信验证码模板号
         /// </summary>
         public const string SmsSigninTemplateCode = GroupName + ".SmsSigninTemplateCode";
+        /// <summary>
+        /// 用户重置密码短信验证码模板号
+        /// </summary>
+        public const string SmsResetPasswordTemplateCode = GroupName + ".SmsResetPasswordTemplateCode";
     }
 }

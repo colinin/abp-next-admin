@@ -65,6 +65,12 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         {
             var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
             var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
+
+            // 需要捕捉每一个发送任务的异常吗?
+            // var onlineClientConnections = onlineClients.Select(c => c.ConnectionId).ToImmutableList();
+            // var signalRClient = Clients.Clients(onlineClientConnections);
+            // await signalRClient.SendAsync("getChatMessage", chatMessage);
+
             foreach (var onlineClient in onlineClients)
             {
                 try

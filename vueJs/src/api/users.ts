@@ -79,6 +79,16 @@ export default class UserApiService {
     })
   }
 
+  public static resetPassword(input: UserResetPasswordData) {
+    const _url = '/api/account/phone/reset-password'
+    return ApiService.HttpRequest({
+      baseURL: IdentityServiceUrl,
+      url: _url,
+      data: input,
+      method: 'PUT'
+    })
+  }
+
   public static userRegister(registerData: UserRegisterData) {
     const _url = '/api/account/phone/register'
     return ApiService.HttpRequest<UserDataDto>({
@@ -224,13 +234,23 @@ export class UserLoginData {
 }
 
 export enum VerifyType {
-  register = 0,
-  signin   = 10
+  Register = 0,
+  Signin   = 10,
+  ResetPassword = 20
 }
 
 export class PhoneVerify {
   phoneNumber!: string
   verifyType!:VerifyType
+}
+
+export class UserResetPasswordData {
+  /** 手机号码 */
+  phoneNumber!: string
+  /** 手机验证码 */
+  verifyCode!: string
+  /** 新密码 */
+  newPassword!: string
 }
 
 /** 用户手机登录对象 */

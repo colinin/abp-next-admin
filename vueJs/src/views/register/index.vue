@@ -151,7 +151,7 @@ export default class extends Vue {
   }
 
   get isMultiEnabled() {
-    return AbpConfigurationModule.configuration.multiTenancy.isEnabled
+    return AbpConfigurationModule.configuration?.multiTenancy?.isEnabled
   }
 
   private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {
@@ -248,7 +248,7 @@ export default class extends Vue {
         this.sending = true
         const phoneVerify = new PhoneVerify()
         phoneVerify.phoneNumber = this.registerForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.register
+        phoneVerify.verifyType = VerifyType.Register
         UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
