@@ -97,40 +97,18 @@ service.interceptors.response.use(
   },
   (error) => {
     showError(error.response.data, error.response.status)
-    if (error.response.status === 401) {
-      if (UserModule.refreshToken) {
-        UserModule.RefreshSession().then(() => {
-          return service.request(error.config)
-        }).catch(() => {
-          MessageBox.confirm(
-            l('login.tokenExprition'),
-            l('login.confirmLogout'),
-            {
-              confirmButtonText: l('login.relogin'),
-              cancelButtonText: l('global.cancel'),
-              type: 'error'
-            }).then(() => {
-            UserModule.ResetToken()
-            location.reload() // To prevent bugs from vue-router
-            return Promise.reject(error)
-          })
-        })
-      } else {
-        MessageBox.confirm(
-          l('login.tokenExprition'),
-          l('login.confirmLogout'),
-          {
-            confirmButtonText: l('login.relogin'),
-            cancelButtonText: l('global.cancel'),
-            type: 'error'
-          }).then(() => {
-          UserModule.ResetToken()
-          location.reload() // To prevent bugs from vue-router
-          return Promise.reject(error)
-        })
-      }
-    }
-    return Promise.reject(error)
+    MessageBox.confirm(
+      l('login.tokenExprition'),
+      l('login.confirmLogout'),
+      {
+        confirmButtonText: l('login.relogin'),
+        cancelButtonText: l('global.cancel'),
+        type: 'error'
+      }).then(() => {
+      UserModule.ResetToken()
+      location.reload() // To prevent bugs from vue-router
+      return Promise.reject(error)
+    })
   }
 )
 

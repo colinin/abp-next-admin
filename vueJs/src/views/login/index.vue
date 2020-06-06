@@ -122,7 +122,6 @@
         </el-col>
         <el-col :span="12">
           <el-form-item
-            v-show="selfRegistration"
             label-width="100px"
             :label="$t('login.forgotPassword')"
           >
@@ -346,7 +345,8 @@ export default class extends Vue {
 .login-container {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: $loginBg;
 
     .svg-container {

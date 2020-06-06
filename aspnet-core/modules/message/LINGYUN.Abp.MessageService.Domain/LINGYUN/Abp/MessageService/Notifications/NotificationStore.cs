@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             {
                 using (CurrentTenant.Change(notification.TenantId))
                 {
-                    var notify = await NotificationRepository.GetByIdAsync(notification.Id);
+                    var notify = await NotificationRepository.GetByIdAsync(notification.GetId());
                     await NotificationRepository.DeleteAsync(notify.Id);
 
                     await unitOfWork.SaveChangesAsync();
@@ -171,7 +171,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
                     await NotificationRepository.InsertAsync(notify);
 
-                    notification.Id = notify.NotificationId;
+                    notification.Id = notify.NotificationId.ToString();
 
                     await unitOfWork.SaveChangesAsync();
                 }
@@ -185,7 +185,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             {
                 using (CurrentTenant.Change(notification.TenantId))
                 {
-                    var userNotification = new UserNotification(notification.Id, userId);
+                    var userNotification = new UserNotification(notification.GetId(), userId);
                     await UserNotificationRepository.InsertAsync(userNotification);
 
                     await unitOfWork.SaveChangesAsync();
@@ -245,7 +245,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             var userNofitications = new List<UserNotification>();
             foreach(var userId in userIds)
             {
-                var userNofitication = new UserNotification(notification.Id, userId);
+                var userNofitication = new UserNotification(notification.GetId(), userId);
                 userNofitications.Add(userNofitication);
             }
             await UserNotificationRepository.InsertUserNotificationsAsync(userNofitications);

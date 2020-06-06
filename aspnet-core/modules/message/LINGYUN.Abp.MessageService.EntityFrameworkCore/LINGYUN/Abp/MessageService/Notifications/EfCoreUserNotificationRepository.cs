@@ -49,7 +49,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      join n in DbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                      where un.UserId.Equals(userId) && un.ReadStatus.Equals(readState)
-                                     select n)
+                                     orderby n.NotificationId descending
+                                           select n)
                                     .Take(maxResultCount)
                                     .ToListAsync();
             return userNofitications;

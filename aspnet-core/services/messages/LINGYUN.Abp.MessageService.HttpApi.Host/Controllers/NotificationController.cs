@@ -26,11 +26,9 @@ namespace LINGYUN.Abp.MessageService.Controllers
                 TenantId = null,
                 NotificationSeverity = notification.Severity,
                 NotificationType = NotificationType.Application,
-                Id = new Random().Next(int.MinValue, int.MaxValue),
                 Name = "TestApplicationNotofication",
                 CreationTime = Clock.Now
             };
-            notificationInfo.Data.Properties["id"] = notificationInfo.Id.ToString();
             notificationInfo.Data.Properties["title"] = notification.Title;
             notificationInfo.Data.Properties["message"] = notification.Message;
             notificationInfo.Data.Properties["datetime"] = Clock.Now;

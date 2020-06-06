@@ -7,8 +7,7 @@ namespace LINGYUN.Abp.Notifications
     {
         public Guid? TenantId { get; set; }
         public string Name { get; set; }
-        [JsonConverter(typeof(HexLongConverter))]
-        public long Id { get; set; }
+        public string Id { get; set; }
         public NotificationData Data { get; set; }
         public DateTime CreationTime { get; set; }
         public NotificationType NotificationType { get; set; }
@@ -20,6 +19,11 @@ namespace LINGYUN.Abp.Notifications
             NotificationSeverity = NotificationSeverity.Info;
 
             CreationTime = DateTime.Now;
+        }
+
+        public long GetId()
+        {
+            return long.Parse(Id);
         }
     }
 }

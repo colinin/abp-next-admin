@@ -610,5 +610,9 @@ export default {
     correctEmailAddress: '正确的邮件地址',
     correctPhoneNumber: '正确的手机号码',
     operatingFast: '您的操作过快,请稍后再试!'
+  },
+  messages: {
+    noNotifications: '没有通知',
+    noMessages: '没有消息'
   }
 }

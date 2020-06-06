@@ -9,6 +9,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Sms;
 using Volo.Abp.Uow;
+using Microsoft.AspNetCore.Cryptography;
 
 namespace LINGYUN.Abp.Account
 {
