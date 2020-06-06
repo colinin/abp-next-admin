@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\LINGYUN.ApiGateway.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
   </ItemGroup>
 
 </Project>

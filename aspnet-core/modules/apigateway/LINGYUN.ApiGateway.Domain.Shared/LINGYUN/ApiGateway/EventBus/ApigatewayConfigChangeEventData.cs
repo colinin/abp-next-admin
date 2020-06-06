@@ -2,18 +2,17 @@
 
 namespace LINGYUN.ApiGateway.EventBus
 {
-    public class ApigatewayConfigChangeCommand
+    public class ApigatewayConfigChangeEventData
     {
-        public const string EventName = nameof(ApigatewayConfigChangeCommand);
         public DateTime DateTime { get; set; }
         public string Method { get; set; }
         public string Object { get; set; }
-        protected ApigatewayConfigChangeCommand()
+        protected ApigatewayConfigChangeEventData()
         {
 
         }
 
-        public ApigatewayConfigChangeCommand(string @object, string @method)
+        public ApigatewayConfigChangeEventData(string @object, string @method)
         {
             DateTime = DateTime.Now;
             Object = @object;

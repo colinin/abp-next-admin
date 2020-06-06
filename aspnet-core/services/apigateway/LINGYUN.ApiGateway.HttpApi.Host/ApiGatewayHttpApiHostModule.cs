@@ -1,5 +1,7 @@
-﻿using DotNetCore.CAP.Messages;
+﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Messages;
 using IdentityModel;
+using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -35,10 +37,26 @@ namespace LINGYUN.ApiGateway
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpCAPEventBusModule),
         typeof(AbpAutofacModule)
         )]
     public class ApiGatewayHttpApiHostModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Services.GetConfiguration();
+
+            PreConfigure<CapOptions>(options =>
+            {
+                options
+                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -94,34 +112,6 @@ namespace LINGYUN.ApiGateway
                 options.Configuration = configuration["RedisCache:ConnectString"];
                 var instanceName = configuration["RedisCache:RedisPrefix"];
                 options.InstanceName = instanceName.IsNullOrEmpty() ? "ApiGateway_Cache" : instanceName;
-            });
-
-            context.Services.AddCap(x =>
-            {
-                x.UseEntityFramework<ApiGatewayDbContext>();
-
-                x.UseDashboard();
-
-                x.UseRabbitMQ(cfg =>
-                {
-                    cfg.HostName = configuration["CAP:RabbitMQ:Connect:Host"];
-                    cfg.VirtualHost = configuration["CAP:RabbitMQ:Connect:VirtualHost"];
-                    cfg.UserName = configuration["CAP:RabbitMQ:Connect:UserName"];
-                    cfg.Password = configuration["CAP:RabbitMQ:Connect:Password"];
-                    cfg.ExchangeName = configuration["CAP:RabbitMQ:Connect:ExchangeName"];
-                    cfg.Port = configuration.GetValue<int>("CAP:RabbitMQ:Connect:Port");
-                });
-
-                x.FailedRetryCount = 5;
-
-                x.FailedThresholdCallback = (type, message) =>
-                {
-                    // 是订阅者的错误
-                    if (type == MessageType.Subscribe)
-                    {
-                        Console.WriteLine(message);
-                    }
-                };
             });
 
             if (!hostingEnvironment.IsDevelopment())

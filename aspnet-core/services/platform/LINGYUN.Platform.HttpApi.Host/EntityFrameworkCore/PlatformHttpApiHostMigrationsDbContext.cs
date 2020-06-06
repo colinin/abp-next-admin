@@ -20,16 +20,16 @@ namespace LINGYUN.Platform.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.UseMySQL();
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureIdentityServer(options =>
             {
                 options.TablePrefix = "IdentityServer";
                 options.Schema = null;
-                options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
             });
-            modelBuilder.ConfigureTenantManagement();
-            modelBuilder.ConfigureSettingManagement();
-            modelBuilder.ConfigurePermissionManagement();
+            //modelBuilder.ConfigureTenantManagement();
+            //modelBuilder.ConfigureSettingManagement();
+            //modelBuilder.ConfigurePermissionManagement();
         }
     }
 }

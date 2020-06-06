@@ -4,6 +4,6 @@ namespace LINGYUN.ApiGateway.EventBus
 {
     public interface IOcelotConfigurationChangedEvent
     {
-        Task OnOcelotConfigurationChanged(ApigatewayConfigChangeCommand changeCommand);
+        Task OnOcelotConfigurationChanged(ApigatewayConfigChangeEventData changeCommand);
     }
 }

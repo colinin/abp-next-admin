@@ -1,15 +1,14 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.ApiGateway.Ocelot;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.ApiGateway.EventBus
 {
-    public class OcelotConfigurationChangedEvent : IOcelotConfigurationChangedEvent, ITransientDependency, ICapSubscribe
+    public class OcelotConfigurationChangedEvent : IDistributedEventHandler<ApigatewayConfigChangeEventData>, ITransientDependency
     {
         private readonly ILogger<OcelotConfigurationChangedEvent> _logger;
 
@@ -28,8 +27,7 @@ namespace LINGYUN.ApiGateway.EventBus
             _logger = logger;
         }
 
-        [CapSubscribe(ApigatewayConfigChangeCommand.EventName)]
-        public async Task OnOcelotConfigurationChanged(ApigatewayConfigChangeCommand changeCommand)
+        public async Task HandleEventAsync(ApigatewayConfigChangeEventData eventData)
         {
             var fileConfig = await _fileConfigRepo.Get();
 
@@ -46,7 +44,7 @@ namespace LINGYUN.ApiGateway.EventBus
                     _internalConfigRepo.AddOrReplace(config.Data);
                 }
             }
-            _logger.LogInformation("ocelot configuration changed on {0}", changeCommand.DateTime);
+            _logger.LogInformation("ocelot configuration changed on {0}", eventData.DateTime);
         }
     }
 }

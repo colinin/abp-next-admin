@@ -1,29 +1,28 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.ApiGateway.EventBus;
+﻿using LINGYUN.ApiGateway.EventBus;
 using LINGYUN.ApiGateway.Snowflake;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.ApiGateway.Ocelot
 {
     [Authorize(ApiGatewayPermissions.Global.Default)]
     public class GlobalConfigurationAppService : ApiGatewayApplicationServiceBase, IGlobalConfigurationAppService
     {
+        private IDistributedEventBus _eventBus;
+        protected IDistributedEventBus DistributedEventBus => LazyGetRequiredService(ref _eventBus);
+
         private readonly IRouteGroupChecker _routeGroupChecker;
         private readonly IGlobalConfigRepository _globalConfigRepository;
         private readonly ISnowflakeIdGenerator _snowflakeIdGenerator;
-        private readonly ICapPublisher _eventPublisher;
         public GlobalConfigurationAppService(
-            ICapPublisher eventPublisher,
             IRouteGroupChecker routeGroupChecker,
             ISnowflakeIdGenerator snowflakeIdGenerator,
             IGlobalConfigRepository globalConfigRepository
             )
         {
-            _eventPublisher = eventPublisher;
             _routeGroupChecker = routeGroupChecker;
             _snowflakeIdGenerator = snowflakeIdGenerator;
             _globalConfigRepository = globalConfigRepository;
@@ -56,7 +55,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             globalConfiguration = await _globalConfigRepository.InsertAsync(globalConfiguration, true);
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("Global", "Create"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("Global", "Create"));
 
             return ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfiguration);
         }
@@ -75,7 +74,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             globalConfiguration = await _globalConfigRepository.UpdateAsync(globalConfiguration, true);
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("Global", "Modify"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("Global", "Modify"));
 
             return ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfiguration);
         }
