@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
+    <None Remove="LINGYUN\Abp\IdentityServer\Localization\SmsValidator\en.json" />
+    <None Remove="LINGYUN\Abp\IdentityServer\Localization\SmsValidator\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\SmsValidator\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\SmsValidator\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>

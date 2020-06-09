@@ -51,21 +51,18 @@ namespace LINGYUN.Abp.MessageService.EventBus
             }
             using (CultureHelper.Use(userDefaultCultureName, userDefaultCultureName))
             {
+                var userIdentifer = new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName);
                 // 订阅用户欢迎消息
                 await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
-                    eventData.Entity.Id, UserNotificationNames.WelcomeToApplication);
+                    userIdentifer, UserNotificationNames.WelcomeToApplication);
 
-                var userWelcomeNotifiction = new NotificationInfo
-                {
-                    CreationTime = DateTime.Now,
-                    Name = UserNotificationNames.WelcomeToApplication,
-                    NotificationSeverity = NotificationSeverity.Info,
-                    NotificationType = NotificationType.System,
-                    TenantId = eventData.Entity.TenantId
-                };
-                userWelcomeNotifiction.Data.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.UserName);
+                var userWelcomeNotifictionData = new NotificationData();
 
-                await _notificationDispatcher.DispatcheAsync(userWelcomeNotifiction);
+                // 换成用户名称,而不是用户名
+                userWelcomeNotifictionData.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.Name);
+
+                await _notificationDispatcher.DispatchAsync(UserNotificationNames.WelcomeToApplication, 
+                    userWelcomeNotifictionData, eventData.Entity.TenantId);
             }
         }
 

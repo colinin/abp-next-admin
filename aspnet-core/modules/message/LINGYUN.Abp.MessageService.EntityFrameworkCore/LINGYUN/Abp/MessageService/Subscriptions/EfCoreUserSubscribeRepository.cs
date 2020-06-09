@@ -21,7 +21,10 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         public async Task<List<UserSubscribe>> GetSubscribesAsync(string notificationName)
         {
-            var userSubscribes = await DbSet.Where(x => x.NotificationName.Equals(notificationName)).ToListAsync();
+            var userSubscribes = await DbSet
+                .Distinct()
+                .Where(x => x.NotificationName.Equals(notificationName))
+                .ToListAsync();
 
             return userSubscribes;
         }
@@ -38,6 +41,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task<List<string>> GetUserSubscribesAsync(Guid userId)
         {
             var userSubscribeNames = await DbSet
+                .Distinct()
                 .Where(x => x.UserId.Equals(userId))
                 .Select(x => x.NotificationName)
                 .ToListAsync();
@@ -48,6 +52,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task<List<Guid>> GetUserSubscribesAsync(string notificationName)
         {
             var subscribeUsers = await DbSet
+                .Distinct()
                 .Where(x => x.NotificationName.Equals(notificationName))
                 .Select(x => x.UserId)
                 .ToListAsync();

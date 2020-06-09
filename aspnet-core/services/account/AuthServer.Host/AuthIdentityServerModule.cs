@@ -40,6 +40,7 @@ namespace AuthServer.Host
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpIdentityServerSmsValidatorModule),
+        typeof(AbpIdentityServerWeChatValidatorModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
@@ -149,6 +150,7 @@ namespace AuthServer.Host
             app.UseMultiTenancy();
             app.UseIdentityServer();
             app.UseAuditing();
+            //app.UseWeChatSignature();
             SeedData(context);
         }
 

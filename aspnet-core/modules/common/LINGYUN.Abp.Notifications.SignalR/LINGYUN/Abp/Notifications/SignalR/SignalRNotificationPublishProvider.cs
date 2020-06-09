@@ -6,33 +6,36 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Notifications.SignalR
 {
-    public class SignalRNotificationPublisher : INotificationPublisher, ISingletonDependency
+    public class SignalRNotificationPublishProvider : NotificationPublishProvider
     {
-        public ILogger<SignalRNotificationPublisher> Logger { protected get; set; }
+        public ILogger<SignalRNotificationPublishProvider> Logger { protected get; set; }
+
+        public override string Name => "SignalR";
 
         private readonly IOnlineClientManager _onlineClientManager;
 
         private readonly IHubContext<NotificationsHub> _hubContext;
 
-        public SignalRNotificationPublisher(
+        public SignalRNotificationPublishProvider(
            IOnlineClientManager onlineClientManager,
-           IHubContext<NotificationsHub> hubContext)
+           IHubContext<NotificationsHub> hubContext,
+           IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             _hubContext = hubContext;
             _onlineClientManager = onlineClientManager;
 
-            Logger = NullLogger<SignalRNotificationPublisher>.Instance;
+            Logger = NullLogger<SignalRNotificationPublishProvider>.Instance;
         }
 
-        public async Task PublishAsync(NotificationInfo notification, IEnumerable<Guid> userIds)
+        public override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
         {
-            foreach(var userId in userIds)
+            foreach(var identifier in identifiers)
             {
-                var onlineClientContext = new OnlineClientContext(notification.TenantId, userId);
+                var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
                 var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);
                 foreach (var onlineClient in onlineClients)
                 {
@@ -49,7 +52,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogWarning("Could not send notifications to user: {0}", userId);
+                        Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
                         Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
                     }
                 }

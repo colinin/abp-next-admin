@@ -38,6 +38,7 @@ namespace LINGYUN.Abp.MessageService.Messages
                                         TenantId = ug.TenantId,
                                         UserId = ug.UserId
                                     })
+                                    .Distinct()
                                     .AsNoTracking()
                                     .ToListAsync();
             return groupUsers;
@@ -73,7 +74,9 @@ namespace LINGYUN.Abp.MessageService.Messages
                                         GroupUserCount = ug.Count(),
                                         MaxUserLength = ug.Key.MaxUserCount,
                                         Name = ug.Key.Name
-                                    }).ToListAsync();
+                                    })
+                                    .Distinct()
+                                    .ToListAsync();
 
             return userGroups;
         }

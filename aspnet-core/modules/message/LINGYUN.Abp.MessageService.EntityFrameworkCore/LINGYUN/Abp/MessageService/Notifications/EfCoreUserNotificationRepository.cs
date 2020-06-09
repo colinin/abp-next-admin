@@ -51,8 +51,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      where un.UserId.Equals(userId) && un.ReadStatus.Equals(readState)
                                      orderby n.NotificationId descending
                                            select n)
-                                    .Take(maxResultCount)
-                                    .ToListAsync();
+                                           .Distinct()
+                                           .Take(maxResultCount)
+                                           .ToListAsync();
             return userNofitications;
         }
     }

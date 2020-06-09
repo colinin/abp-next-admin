@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -21,20 +20,16 @@ namespace LINGYUN.Abp.MessageService.Controllers
         [Route("Send")]
         public async Task SendNofitication([FromForm] SendNotification notification)
         {
-            var notificationInfo = new NotificationInfo
-            {
-                TenantId = null,
-                NotificationSeverity = notification.Severity,
-                NotificationType = NotificationType.Application,
-                Name = "TestApplicationNotofication",
-                CreationTime = Clock.Now
-            };
-            notificationInfo.Data.Properties["title"] = notification.Title;
-            notificationInfo.Data.Properties["message"] = notification.Message;
-            notificationInfo.Data.Properties["datetime"] = Clock.Now;
-            notificationInfo.Data.Properties["severity"] = notification.Severity;
+            var notificationData = new NotificationData();
+            notificationData.Properties["title"] = notification.Title;
+            notificationData.Properties["message"] = notification.Message;
+            notificationData.Properties["datetime"] = Clock.Now;
+            notificationData.Properties["severity"] = notification.Severity;
 
-            await _notificationDispatcher.DispatcheAsync(notificationInfo);
+            await _notificationDispatcher.DispatchAsync("TestApplicationNotofication", notificationData,
+                notificationSeverity: notification.Severity);
+
+            // await _notificationDispatcher.DispatcheAsync(notificationInfo);
         }
     }
 

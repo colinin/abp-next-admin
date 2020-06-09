@@ -141,11 +141,11 @@ export default class extends Vue {
   private createUserRules = {
     userName: [
       { required: true, message: this.l('userProfile.pleaseInputUserName'), trigger: 'blur' },
-      { min: 3, max: 20, message: this.l('global.charLengthRange', { min: 3, max: 20 }), trigger: 'blur' }
+      { min: 3, max: 128, message: this.l('global.charLengthRange', { min: 3, max: 128 }), trigger: 'blur' }
     ],
     name: [
       { required: true, message: this.l('userProfile.pleaseInputName'), trigger: 'blur' },
-      { min: 3, max: 50, message: this.l('global.charLengthRange', { min: 3, max: 50 }), trigger: 'blur' }
+      { min: 2, max: 256, message: this.l('global.charLengthRange', { min: 2, max: 256 }), trigger: 'blur' }
     ],
     email: [
       { required: true, message: this.l('userProfile.pleaseInputEmail'), trigger: 'blur' },

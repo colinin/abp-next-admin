@@ -194,14 +194,14 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         [UnitOfWork]
-        public async Task InsertUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName)
+        public async Task InsertUserSubscriptionAsync(Guid? tenantId, UserIdentifier identifier, string notificationName)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
                 using (CurrentTenant.Change(tenantId))
                 {
 
-                    var userSubscription = new UserSubscribe(notificationName, userId)
+                    var userSubscription = new UserSubscribe(notificationName, identifier.UserId, identifier.UserName)
                     {
                         CreationTime = Clock.Now
                     };
@@ -214,7 +214,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         [UnitOfWork]
-        public async Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<Guid> userIds, string notificationName)
+        public async Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
@@ -222,9 +222,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 {
                     var userSubscribes = new List<UserSubscribe>();
 
-                    foreach(var userId in userIds)
+                    foreach(var identifier in identifiers)
                     {
-                        userSubscribes.Add(new UserSubscribe(notificationName, userId));
+                        userSubscribes.Add(new UserSubscribe(notificationName, identifier.UserId, identifier.UserName));
                     }
 
                     await UserSubscribeRepository.InsertUserSubscriptionAsync(userSubscribes);

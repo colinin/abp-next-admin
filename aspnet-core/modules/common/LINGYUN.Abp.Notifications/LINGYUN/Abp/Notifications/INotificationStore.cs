@@ -6,9 +6,9 @@ namespace LINGYUN.Abp.Notifications
 {
     public interface INotificationStore
     {
-        Task InsertUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName);
+        Task InsertUserSubscriptionAsync(Guid? tenantId, UserIdentifier identifier, string notificationName);
 
-        Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<Guid> userIds, string notificationName);
+        Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName);
 
         Task DeleteUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName);
 

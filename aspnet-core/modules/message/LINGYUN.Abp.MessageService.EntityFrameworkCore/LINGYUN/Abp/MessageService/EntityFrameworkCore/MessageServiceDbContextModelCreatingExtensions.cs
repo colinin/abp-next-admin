@@ -49,6 +49,10 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "UserSubscribes", options.Schema);
 
                 b.Property(p => p.NotificationName).HasMaxLength(SubscribeConsts.MaxNotificationNameLength).IsRequired();
+                b.Property(p => p.UserName)
+                    .HasMaxLength(SubscribeConsts.MaxUserNameLength)
+                    .HasDefaultValue("/")// 不是必须的
+                    .IsRequired();
 
                 b.ConfigureCreationTime();
                 b.ConfigureMultiTenant();

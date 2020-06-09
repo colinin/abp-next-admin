@@ -35,6 +35,7 @@ namespace LINGYUN.Abp.MessageService.Messages
                 skipCount -= 1;
             }
             var groupMessages = await DbContext.Set<GroupMessage>()
+                .Distinct()
                 .Where(x => x.GroupId.Equals(groupId) && x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
                 .OrderByDescending(x => x.MessageId)
@@ -52,6 +53,7 @@ namespace LINGYUN.Abp.MessageService.Messages
                 skipCount -= 1;
             }
             var groupMessages = await DbContext.Set<GroupMessage>()
+                .Distinct()
                 .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId) && x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
                 .OrderByDescending(x => x.MessageId)
@@ -77,6 +79,7 @@ namespace LINGYUN.Abp.MessageService.Messages
                 skipCount -= 1;
             }
             var userMessages = await DbContext.Set<UserMessage>()
+                .Distinct()
                 .Where(x => x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId) && x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
                 .OrderByDescending(x => x.MessageId)

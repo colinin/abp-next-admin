@@ -10,6 +10,12 @@ namespace LINGYUN.Abp.Notifications.SignalR
         typeof(AbpAspNetCoreSignalRModule))]
     public class AbpNotificationsSignalRModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpNotificationOptions>(options =>
+            {
+                options.PublishProviders.Add<SignalRNotificationPublishProvider>();
+            });
+        }
     }
 }

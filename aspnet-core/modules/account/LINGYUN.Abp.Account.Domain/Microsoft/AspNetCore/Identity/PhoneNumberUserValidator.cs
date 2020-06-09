@@ -35,7 +35,9 @@ namespace Microsoft.AspNetCore.Identity
             var phoneNumber = await manager.GetPhoneNumberAsync(user);
             if (phoneNumber.IsNullOrWhiteSpace())
             {
-                throw new UserFriendlyException(_stringLocalizer["InvalidPhoneNumber"].Value, "InvalidPhoneNumber");
+                return;
+                // 如果用户没有手机号,不验证
+                //throw new UserFriendlyException(_stringLocalizer["InvalidPhoneNumber"].Value, "InvalidPhoneNumber");
             }
 
             var phoneNumberHasRegisted = await _identityUserRepository.PhoneNumberHasRegistedAsync(phoneNumber);
