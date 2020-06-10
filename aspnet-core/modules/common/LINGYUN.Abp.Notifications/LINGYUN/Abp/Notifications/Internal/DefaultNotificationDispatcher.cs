@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
 
 namespace LINGYUN.Abp.Notifications.Internal
 {
@@ -11,14 +12,20 @@ namespace LINGYUN.Abp.Notifications.Internal
     {
         public ILogger<DefaultNotificationDispatcher> Logger { get; set; }
 
+        private readonly IBackgroundJobManager _backgroundJobManager;
+
         private readonly INotificationStore _notificationStore;
         private readonly INotificationDefinitionManager _notificationDefinitionManager;
         private readonly INotificationPublishProviderManager _notificationPublishProviderManager;
         public DefaultNotificationDispatcher(
+            IBackgroundJobManager backgroundJobManager,
+
             INotificationStore notificationStore,
             INotificationDefinitionManager notificationDefinitionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
+            _backgroundJobManager = backgroundJobManager;
+
             _notificationStore = notificationStore;
             _notificationDefinitionManager = notificationDefinitionManager;
             _notificationPublishProviderManager = notificationPublishProviderManager;
@@ -100,21 +107,41 @@ namespace LINGYUN.Abp.Notifications.Internal
             // 发布通知
             foreach (var provider in providers)
             {
-                try
-                {
-                    Logger.LogDebug($"Sending notification with provider {provider.Name}");
+                await PublishAsync(provider, notificationInfo, subscriptionUserIdentifiers);
+            }
 
-                    await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
+            // TODO: 需要计算队列大小,根据情况是否需要并行发布消息
+            //Parallel.ForEach(providers, async (provider) =>
+            //{
+            //    await PublishAsync(provider, notificationInfo, subscriptionUserIdentifiers);
+            //});
+        }
 
-                    Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
-                }
-                catch(Exception ex)
-                {
-                    Logger.LogWarning($"Send notification error with provider {provider.Name}");
-                    Logger.LogWarning($"Error message:{ex.Message}");
+        protected async Task PublishAsync(INotificationPublishProvider provider, NotificationInfo notificationInfo, 
+            IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
+        {
+            try
+            {
+                Logger.LogDebug($"Sending notification with provider {provider.Name}");
 
-                    Logger.LogTrace(ex, $"Send notification error with provider { provider.Name}");
-                }
+                await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
+
+                Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning($"Send notification error with provider {provider.Name}");
+                Logger.LogWarning($"Error message:{ex.Message}");
+
+                Logger.LogTrace(ex, $"Send notification error with provider { provider.Name}");
+
+                Logger.LogDebug($"Send notification error, notification {notificationInfo.Name} entry queue");
+                // 发送失败的消息进入后台队列
+                await _backgroundJobManager.EnqueueAsync(
+                    new NotificationPublishJobArgs(notificationInfo.GetId(), 
+                    provider.GetType().AssemblyQualifiedName,
+                    subscriptionUserIdentifiers.ToList(),
+                    notificationInfo.TenantId));
             }
         }
     }

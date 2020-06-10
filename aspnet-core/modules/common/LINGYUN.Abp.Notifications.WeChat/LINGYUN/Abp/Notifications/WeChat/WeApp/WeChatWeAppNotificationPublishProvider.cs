@@ -31,6 +31,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             // 如果不是,需要自行处理openid获取逻辑
 
             // step2 调用微信消息推送接口
+
             foreach (var identifier in identifiers)
             {
                 await SendWeChatTemplateMessagAsync(notification, identifier);
@@ -42,17 +43,20 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var templateId = GetOrDefaultTemplateId(notification.Data);
             Logger.LogDebug($"Get wechat weapp template id: {templateId}");
 
-            var redirect = GetOrDefault(notification.Data, "RedirectPage", "");
-            Logger.LogDebug($"Get wechat weapp redirect page: {redirect}");
+            var redirect = GetOrDefault(notification.Data, "RedirectPage", null);
+            Logger.LogDebug($"Get wechat weapp redirect page: {redirect ?? "null"}");
 
             var weAppState = GetOrDefault(notification.Data, "WeAppState", Options.DefaultWeAppState);
-            Logger.LogDebug($"Get wechat weapp state: {weAppState}");
+            Logger.LogDebug($"Get wechat weapp state: {weAppState ?? null}");
 
             var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.DefaultWeAppLanguage);
-            Logger.LogDebug($"Get wechat weapp language: {weAppLang}");
+            Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
             var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(identifier.UserName,
                 templateId, redirect, weAppState, weAppLang);
+
+            // 写入模板数据
+            weChatWeAppNotificationData.WriteData(Options.DefaultMsgPrefix, notification.Data.Properties);
 
             Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
             // 发送小程序订阅消息
@@ -68,6 +72,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
         {
             if (data.Properties.TryGetValue(key, out object value))
             {
+                // 取得了数据就删除对应键值
+                data.Properties.Remove(key);
                 return value.ToString();
             }
             return defaultValue;

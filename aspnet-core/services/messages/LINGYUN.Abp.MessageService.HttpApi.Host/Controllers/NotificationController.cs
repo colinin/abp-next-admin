@@ -17,9 +17,22 @@ namespace LINGYUN.Abp.MessageService.Controllers
             _notificationDispatcher = notificationDispatcher;
         }
 
+        [HttpGet]
+        [Route("Test")]
+        public async Task<Dictionary<string, object>> Test()
+        {
+            await Task.CompletedTask;
+
+            return new Dictionary<string, object>()
+            {
+                {"thing2", "测试标题" },
+                {"name3", "测试人员" },
+            };
+        }
+
         [HttpPost]
         [Route("Send")]
-        public async Task SendNofitication([FromForm] SendNotification notification)
+        public async Task SendNofitication([FromBody] SendNotification notification)
         {
             var notificationData = new NotificationData();
             notificationData.Properties["title"] = notification.Title;

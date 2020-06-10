@@ -2,10 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Notifications
 {
+    [DependsOn(
+        typeof(AbpBackgroundJobsModule),
+        typeof(AbpJsonModule))]
     public class AbpNotificationModule : AbpModule
     {
 

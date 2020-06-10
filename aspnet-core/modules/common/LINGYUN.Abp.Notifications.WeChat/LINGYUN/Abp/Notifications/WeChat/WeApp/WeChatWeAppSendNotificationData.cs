@@ -1,4 +1,6 @@
 ﻿#pragma warning disable IDE1006 // 禁止编译器提示
+using System.Collections.Generic;
+
 namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 {
     public class WeChatWeAppSendNotificationData
@@ -29,6 +31,11 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
         /// 默认为zh_CN
         /// </summary>
         public string lang { get; set; }
+        /// <summary>
+        /// 模板内容，
+        /// 格式形如 { "key1": { "value": any }, "key2": { "value": any } }
+        /// </summary>
+        public Dictionary<string, WeChatNotificationData> data { get; set; }
 
         public WeChatWeAppSendNotificationData() { }
         public WeChatWeAppSendNotificationData(string openId, string templateId, string redirectPage = "", 
@@ -39,6 +46,41 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             page = redirectPage;
             miniprogram_state = state;
             lang = miniLang;
+
+            data = new Dictionary<string, WeChatNotificationData>();
+        }
+
+        public WeChatWeAppSendNotificationData WriteData(string prefix, string key, object value)
+        {
+            // 只截取符合标记的数据
+            if (key.StartsWith(prefix))
+            {
+                key = key.Replace(prefix, "");
+                if (!data.ContainsKey(key))
+                {
+                    data.Add(key, new WeChatNotificationData(value));
+                }
+            }
+            return this;
+        }
+
+        public WeChatWeAppSendNotificationData WriteData(string prefix, IDictionary<string, object> setData)
+        {
+            foreach(var kv in setData)
+            {
+                WriteData(prefix, kv.Key, kv.Value);
+            }
+            return this;
+        }
+    }
+
+    public class WeChatNotificationData
+    {
+        public object Value { get; }
+
+        public WeChatNotificationData(object value)
+        {
+            Value = value;
         }
     }
 }

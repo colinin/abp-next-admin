@@ -43,7 +43,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
         protected virtual async Task<string> MakeRequestAndGetResultAsync(string url, WeChatWeAppSendNotificationData notificationData)
         {
             var client = HttpClientFactory.CreateClient(SendNotificationClientName);
-            var requestContent = new StringContent(JsonSerializer.Serialize(notificationData));
+            var sendDataContent = JsonSerializer.Serialize(notificationData);
+            var requestContent = new StringContent(sendDataContent);
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
             {
                 Content = requestContent
