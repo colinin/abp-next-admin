@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications
 {
+    /// <summary>
+    /// 通知发送者接口
+    /// </summary>
     public interface INotificationDispatcher
     {
         /// <summary>

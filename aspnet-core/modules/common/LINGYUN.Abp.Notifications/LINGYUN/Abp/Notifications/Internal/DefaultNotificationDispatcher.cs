@@ -30,7 +30,14 @@ namespace LINGYUN.Abp.Notifications.Internal
             NotificationSeverity notificationSeverity = NotificationSeverity.Info)
         {
             // 获取自定义的通知
-            var defineNotification = _notificationDefinitionManager.Get(notificationName);
+            var defineNotification = _notificationDefinitionManager.GetOrNull(notificationName);
+
+            // 没有定义的通知,应该也要能发布、订阅,
+            // 比如订单之类的,是以订单编号为通知名称,这是动态的,没法自定义
+            if(defineNotification == null)
+            {
+                defineNotification = new NotificationDefinition(notificationName);
+            }
 
             var notificationInfo = new NotificationInfo
             {
@@ -75,31 +82,38 @@ namespace LINGYUN.Abp.Notifications.Internal
         protected async Task PublishFromProvidersAsync(IEnumerable<INotificationPublishProvider> providers,
             NotificationInfo notificationInfo)
         {
+            Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
             // 持久化通知
             await _notificationStore.InsertNotificationAsync(notificationInfo);
 
+            Logger.LogDebug($"Gets a list of user subscriptions {notificationInfo.Name}");
             // 获取用户订阅列表
             var userSubscriptions = await _notificationStore.GetSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
 
+            Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");
             // 持久化用户通知
             var subscriptionUserIdentifiers = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
 
             await _notificationStore.InsertUserNotificationsAsync(notificationInfo, 
                 subscriptionUserIdentifiers.Select(u => u.UserId));
 
-            // 发送通知
+            // 发布通知
             foreach (var provider in providers)
             {
                 try
                 {
+                    Logger.LogDebug($"Sending notification with provider {provider.Name}");
+
                     await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
+
+                    Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
                 }
                 catch(Exception ex)
                 {
-                    Logger.LogWarning("Send notification error with provider {0}", provider.Name);
-                    Logger.LogWarning("Error message:{0}", ex.Message);
+                    Logger.LogWarning($"Send notification error with provider {provider.Name}");
+                    Logger.LogWarning($"Error message:{ex.Message}");
 
-                    Logger.LogTrace(ex, "Send notification error with provider {0}", provider.Name);
+                    Logger.LogTrace(ex, $"Send notification error with provider { provider.Name}");
                 }
             }
         }

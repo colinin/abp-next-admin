@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IdentityServer.WeChatValidator;
+using LINGYUN.Abp.WeChat.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
@@ -8,7 +9,9 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpIdentityServerDomainModule))]
+    [DependsOn(
+        typeof(AbpWeChatAuthorizationModule),
+        typeof(AbpIdentityServerDomainModule))]
     public class AbpIdentityServerWeChatValidatorModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -23,7 +26,6 @@ namespace LINGYUN.Abp.IdentityServer
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<AbpWeChatValidatorOptions>(configuration.GetSection("AuthServer:WeChat"));
             Configure<WeChatSignatureOptions>(configuration.GetSection("WeChat:Signature"));
 
             context.Services.AddHttpClient(WeChatValidatorConsts.WeChatValidatorClientName, options =>

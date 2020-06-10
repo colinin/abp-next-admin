@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -26,6 +27,8 @@ namespace LINGYUN.Abp.MessageService.Controllers
             notificationData.Properties["datetime"] = Clock.Now;
             notificationData.Properties["severity"] = notification.Severity;
 
+            notificationData.Properties.AddIfNotContains(notification.Data);
+
             await _notificationDispatcher.DispatchAsync("TestApplicationNotofication", notificationData,
                 notificationSeverity: notification.Severity);
 
@@ -38,7 +41,9 @@ namespace LINGYUN.Abp.MessageService.Controllers
         public Guid UserId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
+        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
         public NotificationSeverity Severity { get; set; } = NotificationSeverity.Success;
+
     }
 
     public class TestApplicationNotificationData : NotificationData

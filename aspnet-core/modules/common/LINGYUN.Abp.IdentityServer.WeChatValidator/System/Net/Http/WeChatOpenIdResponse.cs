@@ -2,7 +2,7 @@
 
 namespace System.Net.Http
 {
-    public class WeChatTokenResponse : ProtocolResponse
+    public class WeChatOpenIdResponse : ProtocolResponse
     {
         /// <summary>
         /// 用户唯一标识

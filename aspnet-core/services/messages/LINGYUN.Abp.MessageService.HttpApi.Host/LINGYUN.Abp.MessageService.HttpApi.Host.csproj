@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj" />
   </ItemGroup>

@@ -5,6 +5,7 @@ using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.Notifications.SignalR;
+using LINGYUN.Abp.Notifications.WeChat.WeApp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpIMSignalRModule),
         typeof(AbpNotificationsSignalRModule),
+        typeof(AbpNotificationsWeChatWeAppModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAutofacModule)
         )]

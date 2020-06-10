@@ -7,7 +7,7 @@ namespace System.Net.Http
 {
     public static class HttpClientTokenRequestExtensions
     {
-        public static async Task<WeChatTokenResponse> RequestWeChatCodeTokenAsync(this HttpMessageInvoker client, WeChatTokenRequest request, CancellationToken cancellationToken = default)
+        public static async Task<WeChatOpenIdResponse> RequestWeChatCodeTokenAsync(this HttpMessageInvoker client, WeChatOpenIdRequest request, CancellationToken cancellationToken = default)
         {
             var getResuestUrlBuiilder = new StringBuilder();
             getResuestUrlBuiilder.Append(request.BaseUrl);
@@ -24,9 +24,9 @@ namespace System.Net.Http
             }
             catch (Exception ex)
             {
-                return ProtocolResponse.FromException<WeChatTokenResponse>(ex);
+                return ProtocolResponse.FromException<WeChatOpenIdResponse>(ex);
             }
-            return await ProtocolResponse.FromHttpResponseAsync<WeChatTokenResponse>(httpResponse).ConfigureAwait(false);
+            return await ProtocolResponse.FromHttpResponseAsync<WeChatOpenIdResponse>(httpResponse).ConfigureAwait(false);
         }
     }
 }

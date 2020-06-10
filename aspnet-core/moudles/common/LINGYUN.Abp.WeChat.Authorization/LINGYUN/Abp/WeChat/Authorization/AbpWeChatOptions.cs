@@ -1,6 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer
+﻿namespace LINGYUN.Abp.WeChat.Authorization
 {
-    public class AbpWeChatValidatorOptions
+    public class AbpWeChatOptions
     {
         public string AppId { get; set; }
         public string AppSecret { get; set; }

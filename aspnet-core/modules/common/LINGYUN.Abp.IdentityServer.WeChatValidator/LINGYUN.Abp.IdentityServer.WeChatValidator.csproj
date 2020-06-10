@@ -19,4 +19,8 @@
     <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="2.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\moudles\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
+  </ItemGroup>
+
 </Project>

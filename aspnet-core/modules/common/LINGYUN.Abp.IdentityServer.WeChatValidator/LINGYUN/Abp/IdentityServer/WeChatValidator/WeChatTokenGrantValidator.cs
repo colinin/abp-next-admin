@@ -3,6 +3,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
+using LINGYUN.Abp.WeChat.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
     public class WeChatTokenGrantValidator : IExtensionGrantValidator
     {
         protected ILogger<WeChatTokenGrantValidator> Logger { get; }
-        protected AbpWeChatValidatorOptions Options { get; }
+        protected AbpWeChatOptions Options { get; }
         protected IHttpClientFactory HttpClientFactory{ get; }
         protected IEventService EventService { get; }
         protected IIdentityUserRepository UserRepository { get; }
@@ -40,7 +41,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             SignInManager<IdentityUser> signInManager,
             IStringLocalizer<AbpIdentityServerResource> stringLocalizer,
             PhoneNumberTokenProvider<IdentityUser> phoneNumberTokenProvider,
-            IOptionsSnapshot<AbpWeChatValidatorOptions> options,
+            IOptions<AbpWeChatOptions> options,
             ILogger<WeChatTokenGrantValidator> logger)
         {
             Logger = logger;
@@ -77,7 +78,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                 return;
             }
             var httpClient = HttpClientFactory.CreateClient(WeChatValidatorConsts.WeChatValidatorClientName);
-            var httpRequest = new WeChatTokenRequest
+            var httpRequest = new WeChatOpenIdRequest
             {
                 Code = wechatCode,
                 AppId = Options.AppId,
@@ -85,19 +86,19 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                 BaseUrl = httpClient.BaseAddress.AbsoluteUri
             };
 
-            var wechatTokenResponse = await httpClient.RequestWeChatCodeTokenAsync(httpRequest);
-            if (wechatTokenResponse.IsError)
+            var wechatOpenIdResponse = await httpClient.RequestWeChatCodeTokenAsync(httpRequest);
+            if (wechatOpenIdResponse.IsError)
             {
                 Logger.LogWarning("Authentication failed for token: {0}, reason: invalid token", wechatCode);
-                Logger.LogWarning("WeChat auth failed, error: {0}", wechatTokenResponse.ErrorMessage);
+                Logger.LogWarning("WeChat auth failed, error: {0}", wechatOpenIdResponse.ErrorMessage);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant,
                     Localizer["InvalidGrant:WeChatTokenInvalid"]);
                 return;
             }
-            var currentUser = await UserManager.FindByNameAsync(wechatTokenResponse.OpenId);
+            var currentUser = await UserManager.FindByNameAsync(wechatOpenIdResponse.OpenId);
             if(currentUser == null)
             {
-                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatTokenResponse.OpenId);
+                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatOpenIdResponse.OpenId);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant,
                     Localizer["InvalidGrant:WeChatNotRegister"]);
                 return;
@@ -109,9 +110,9 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             {
                 additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
             }
-            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, wechatTokenResponse.OpenId));
+            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, wechatOpenIdResponse.OpenId));
 
-            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatTokenResponse.OpenId, null));
+            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenIdResponse.OpenId, null));
             context.Result = new GrantValidationResult(sub, 
                 WeChatValidatorConsts.AuthenticationMethods.BasedWeChatAuthentication, additionalClaims.ToArray());
         }

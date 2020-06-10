@@ -18,24 +18,26 @@ namespace LINGYUN.Abp.MessageService.EventBus
     {
         private readonly ISettingProvider _settingProvider;
         private readonly IStringLocalizer _stringLocalizer;
-        private readonly INotificationStore _notificationStore;
+
         private readonly INotificationDispatcher _notificationDispatcher;
+        private readonly INotificationSubscriptionManager _notificationSubscriptionManager;
 
         // 需要模拟用户令牌
         // 是否有必要
         // private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
         public UserCreateSendWelcomeEventHandler(
             ISettingProvider settingProvider,
-            INotificationStore notificationStore,
             INotificationDispatcher notificationDispatcher,
-            IStringLocalizer<MessageServiceResource> stringLocalizer
+            IStringLocalizer<MessageServiceResource> stringLocalizer,
+            INotificationSubscriptionManager notificationSubscriptionManager
             //ICurrentPrincipalAccessor currentPrincipalAccessor
             )
         {
             _settingProvider = settingProvider;
             _stringLocalizer = stringLocalizer;
-            _notificationStore = notificationStore;
+
             _notificationDispatcher = notificationDispatcher;
+            _notificationSubscriptionManager = notificationSubscriptionManager;
 
             //_currentPrincipalAccessor = currentPrincipalAccessor;
         }
@@ -53,8 +55,12 @@ namespace LINGYUN.Abp.MessageService.EventBus
             {
                 var userIdentifer = new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName);
                 // 订阅用户欢迎消息
-                await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
+                await _notificationSubscriptionManager.SubscribeAsync(eventData.Entity.TenantId,
                     userIdentifer, UserNotificationNames.WelcomeToApplication);
+
+                // Store未检查已订阅
+                //await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
+                //    userIdentifer, UserNotificationNames.WelcomeToApplication);
 
                 var userWelcomeNotifictionData = new NotificationData();
 
