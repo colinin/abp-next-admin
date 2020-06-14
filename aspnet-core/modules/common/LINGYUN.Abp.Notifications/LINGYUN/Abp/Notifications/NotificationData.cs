@@ -45,5 +45,83 @@ namespace LINGYUN.Abp.Notifications
         {
             _properties = new Dictionary<string, object>();
         }
+        /// <summary>
+        /// 写入标准数据
+        /// </summary>
+        /// <param name="title">标题</param>
+        /// <param name="message">内容</param>
+        /// <param name="createTime">创建时间</param>
+        /// <param name="formUser">来源用户</param>
+        /// <returns></returns>
+        public NotificationData WriteStandardData(string title, string message, DateTime createTime, string formUser)
+        {
+            TrySetData("title", title);
+            TrySetData("message", message);
+            TrySetData("formUser", formUser);
+            TrySetData("createTime", createTime);
+            return this;
+        }
+        /// <summary>
+        /// 写入标准数据
+        /// </summary>
+        /// <param name="prefix">数据前缀</param>
+        /// <param name="key">标识</param>
+        /// <param name="value">数据内容</param>
+        /// <returns></returns>
+        public NotificationData WriteStandardData(string prefix, string key, object value)
+        {
+            TrySetData(string.Concat(prefix, key), value);
+            return this;
+        }
+        /// <summary>
+        /// 转换为标准数据
+        /// </summary>
+        /// <param name="sourceData">原始数据</param>
+        /// <returns></returns>
+        public static NotificationData ToStandardData(NotificationData sourceData)
+        {
+            var data = new NotificationData();
+            data.TrySetData("title", sourceData.TryGetData("title"));
+            data.TrySetData("message", sourceData.TryGetData("message"));
+            data.TrySetData("formUser", sourceData.TryGetData("formUser"));
+            data.TrySetData("createTime", sourceData.TryGetData("createTime"));
+            return data;
+        }
+        /// <summary>
+        /// 转换为标准数据
+        /// </summary>
+        /// <param name="prefix">数据前缀</param>
+        /// <param name="sourceData">原始数据</param>
+        /// <returns></returns>
+        public static NotificationData ToStandardData(string prefix, NotificationData sourceData)
+        {
+            var data = ToStandardData(sourceData);
+
+            foreach(var property in sourceData.Properties)
+            {
+                if (property.Key.StartsWith(prefix))
+                {
+                    var key = property.Key.Replace(prefix, "");
+                    data.TrySetData(key, property.Value);
+                }
+            }
+            return data;
+        }
+
+        public object TryGetData(string key)
+        {
+            if (Properties.TryGetValue(key, out object value))
+            {
+                return value;
+            }
+            return null;
+        }
+        public void TrySetData(string key, object value)
+        {
+            if (value != null && !Properties.ContainsKey(key))
+            {
+                Properties[key] = value;
+            }
+        }
     }
 }

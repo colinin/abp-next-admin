@@ -55,8 +55,10 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(identifier.UserName,
                 templateId, redirect, weAppState, weAppLang);
 
+
             // 写入模板数据
-            weChatWeAppNotificationData.WriteData(Options.DefaultMsgPrefix, notification.Data.Properties);
+            weChatWeAppNotificationData.WriteStandardData(NotificationData.ToStandardData(Options.DefaultMsgPrefix, notification.Data));
+            // weChatWeAppNotificationData.WriteData(Options.DefaultMsgPrefix, notification.Data.Properties);
 
             Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
             // 发送小程序订阅消息
@@ -73,7 +75,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             if (data.Properties.TryGetValue(key, out object value))
             {
                 // 取得了数据就删除对应键值
-                data.Properties.Remove(key);
+                // data.Properties.Remove(key);
                 return value.ToString();
             }
             return defaultValue;

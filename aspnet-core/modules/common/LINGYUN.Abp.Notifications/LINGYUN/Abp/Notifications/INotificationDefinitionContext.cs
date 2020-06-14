@@ -2,7 +2,7 @@
 {
     public interface INotificationDefinitionContext
     {
-        NotificationDefinition GetOrNull(string name);
+        NotificationDefinition GetOrNull(string category);
 
         void Add(params NotificationDefinition[] definitions);
     }

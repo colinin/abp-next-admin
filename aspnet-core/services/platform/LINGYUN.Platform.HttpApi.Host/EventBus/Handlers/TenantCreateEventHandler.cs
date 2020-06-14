@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Common.EventBus.Tenants;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +44,9 @@ namespace LINGYUN.Platform.EventBus.Handlers
                 using (CurrentTenant.Change(eventData.Id, eventData.Name))
                 {
                     var definitionPermissions = PermissionDefinitionManager.GetPermissions();
-                    var grantPermissions = definitionPermissions.Select(p => p.Name).ToArray();
+                    var grantPermissions = definitionPermissions
+                        .Where(p => p.MultiTenancySide.HasFlag(MultiTenancySides.Tenant))
+                        .Select(p => p.Name).ToArray();
                     //var grantPermissions = new List<PermissionGrant>();
                     //foreach (var permission in definitionPermissions)
                     //{

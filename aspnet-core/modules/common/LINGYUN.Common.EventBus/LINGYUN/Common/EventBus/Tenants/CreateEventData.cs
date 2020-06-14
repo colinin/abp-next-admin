@@ -10,6 +10,8 @@ namespace LINGYUN.Common.EventBus.Tenants
 
         public string Name { get; set; }
 
+        public Guid AdminUserId { get; set; }
+
         public string AdminEmailAddress { get; set; }
 
         public string AdminPassword { get; set; }

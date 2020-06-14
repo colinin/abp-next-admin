@@ -12,11 +12,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
         public virtual long NotificationId { get; protected set; }
         public virtual NotificationReadState ReadStatus { get; protected set; }
         protected UserNotification() { }
-        public UserNotification(long notificationId, Guid userId)
+        public UserNotification(long notificationId, Guid userId, Guid? tenantId = null)
         {
             UserId = userId;
             NotificationId = notificationId;
             ReadStatus = NotificationReadState.UnRead;
+            TenantId = tenantId;
         }
 
         public void ChangeReadState(NotificationReadState readStatus)

@@ -14,16 +14,16 @@ const service = axios.create({
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
+    const tenantId = getTenant()
+    if (tenantId) {
+      config.headers.__tenant = tenantId
+    }
     if (config.url === '/connect/token') {
       return config
     }
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       config.headers.Authorization = UserModule.token
-    }
-    const tenantId = getTenant()
-    if (tenantId) {
-      config.headers.__tenant = tenantId
     }
     // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
     const language = getLanguage()

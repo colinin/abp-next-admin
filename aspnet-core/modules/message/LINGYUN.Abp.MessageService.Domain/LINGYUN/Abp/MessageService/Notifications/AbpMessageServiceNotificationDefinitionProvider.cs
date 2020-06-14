@@ -1,7 +1,8 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Notifications;
 using Volo.Abp.Localization;
-using Volo.Abp.Users.Notifications;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
@@ -13,6 +14,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 UserNotificationNames.WelcomeToApplication,
                 L("WelcomeToApplicationNotification"), 
                 L("WelcomeToApplicationNotification"), 
+                allowSubscriptionToClients: true));
+            context.Add(new NotificationDefinition(
+                TenantNotificationNames.NewTenantRegistered,
+                L("NewTenantRegisterdNotification"),
+                L("NewTenantRegisterdNotification"),
                 allowSubscriptionToClients: true));
         }
 

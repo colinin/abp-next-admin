@@ -3,6 +3,7 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.WeApp;
@@ -19,6 +20,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -58,7 +60,8 @@ namespace LINGYUN.Abp.MessageService
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+                })
+                .UseDashboard();
             });
         }
 
@@ -70,6 +73,14 @@ namespace LINGYUN.Abp.MessageService
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -102,6 +113,10 @@ namespace LINGYUN.Abp.MessageService
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources
+                       .Get<MessageServiceResource>()
+                       .AddVirtualJson("/LINGYUN/Abp/MessageService/Localization/HttpApiHost");
             });
 
             context.Services.AddAuthentication("Bearer")

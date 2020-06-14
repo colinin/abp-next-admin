@@ -1,19 +1,20 @@
-﻿using LINGYUN.Common.EventBus.Tenants;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Platform.EventBus.Handlers
 {
-    public class TenantDeleteEventHandler : IDistributedEventHandler<DeleteEventData>, ITransientDependency
+    public class TenantDeleteEventHandler : IDistributedEventHandler<EntityDeletedEto<TenantEto>>, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }
         protected IGuidGenerator GuidGenerator { get; }
@@ -31,12 +32,13 @@ namespace LINGYUN.Platform.EventBus.Handlers
             PermissionGrantRepository = permissionGrantRepository;
         }
 
-        public async Task HandleEventAsync(DeleteEventData eventData)
+        public async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
         {
             using var unitOfWork = UnitOfWorkManager.Begin();
             // 订阅租户删除事件,删除管理员角色所有权限
             // TODO: 租户貌似不存在了,删除应该会失败
-            using (CurrentTenant.Change(eventData.Id))
+            // 有缓存存在的话,可以获取到租户连接字符串
+            using (CurrentTenant.Change(eventData.Entity.Id))
             {
                 // var grantPermissions = await PermissionGrantRepository.GetListAsync("R", "admin");
 
@@ -47,11 +49,11 @@ namespace LINGYUN.Platform.EventBus.Handlers
                 var batchRmovePermissionSql = string.Empty;
                 if (PermissionGrantRepository.GetDbContext().Database.IsMySql())
                 {
-                    batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Id);
+                    batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Entity.Id);
                 }
                 else
                 {
-                    batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Id);
+                    batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Entity.Id);
                 }
 
                 await PermissionGrantRepository.GetDbContext().Database

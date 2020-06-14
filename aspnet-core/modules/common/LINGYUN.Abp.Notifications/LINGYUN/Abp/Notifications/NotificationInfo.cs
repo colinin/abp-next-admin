@@ -21,6 +21,17 @@ namespace LINGYUN.Abp.Notifications
             CreationTime = DateTime.Now;
         }
 
+        public long SetId(long id)
+        {
+            if (Id.IsNullOrWhiteSpace())
+            {
+                Id = id.ToString();
+                return id;
+            }
+
+            return GetId();
+        }
+
         public long GetId()
         {
             return long.Parse(Id);

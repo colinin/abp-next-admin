@@ -8,15 +8,34 @@ using Volo.Abp.BackgroundJobs;
 
 namespace LINGYUN.Abp.Notifications.Internal
 {
+    /// <summary>
+    /// Implements <see cref="INotificationDispatcher"/>.
+    /// </summary>
     internal class DefaultNotificationDispatcher : INotificationDispatcher
     {
+        /// <summary>
+        /// Reference to <see cref="ILogger<DefaultNotificationDispatcher>"/>.
+        /// </summary>
         public ILogger<DefaultNotificationDispatcher> Logger { get; set; }
-
+        /// <summary>
+        /// Reference to <see cref="IBackgroundJobManager"/>.
+        /// </summary>
         private readonly IBackgroundJobManager _backgroundJobManager;
-
+        /// <summary>
+        /// Reference to <see cref="INotificationStore"/>.
+        /// </summary>
         private readonly INotificationStore _notificationStore;
+        /// <summary>
+        /// Reference to <see cref="INotificationDefinitionManager"/>.
+        /// </summary>
         private readonly INotificationDefinitionManager _notificationDefinitionManager;
+        /// <summary>
+        /// Reference to <see cref="INotificationPublishProviderManager"/>.
+        /// </summary>
         private readonly INotificationPublishProviderManager _notificationPublishProviderManager;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultNotificationDispatcher"/> class.
+        /// </summary>
         public DefaultNotificationDispatcher(
             IBackgroundJobManager backgroundJobManager,
 
@@ -32,23 +51,30 @@ namespace LINGYUN.Abp.Notifications.Internal
 
             Logger = NullLogger<DefaultNotificationDispatcher>.Instance;
         }
-
-        public virtual async Task DispatchAsync(string notificationName, NotificationData data, Guid? tenantId = null, 
+        /// <summary>
+        /// 发送通知
+        /// </summary>
+        /// <param name="notificationName">通知名称</param>
+        /// <param name="data">通知数据</param>
+        /// <param name="tenantId">租户</param>
+        /// <param name="notificationSeverity">级别</param>
+        /// <returns></returns>
+        public virtual async Task DispatchAsync(NotificationName notificationName, NotificationData data, Guid? tenantId = null, 
             NotificationSeverity notificationSeverity = NotificationSeverity.Info)
         {
             // 获取自定义的通知
-            var defineNotification = _notificationDefinitionManager.GetOrNull(notificationName);
+            var defineNotification = _notificationDefinitionManager.Get(notificationName.CateGory);
 
-            // 没有定义的通知,应该也要能发布、订阅,
-            // 比如订单之类的,是以订单编号为通知名称,这是动态的,没法自定义
-            if(defineNotification == null)
-            {
-                defineNotification = new NotificationDefinition(notificationName);
-            }
+            //// 没有定义的通知,应该也要能发布、订阅,
+            //// 比如订单之类的,是以订单编号为通知名称,这是动态的,没法自定义
+            //if(defineNotification == null)
+            //{
+            //    defineNotification = new NotificationDefinition(notificationName.CateGory);
+            //}
 
             var notificationInfo = new NotificationInfo
             {
-                Name = defineNotification.Name,
+                Name = notificationName.Name,
                 CreationTime = DateTime.Now,
                 NotificationSeverity = notificationSeverity,
                 NotificationType = defineNotification.NotificationType,
@@ -66,14 +92,22 @@ namespace LINGYUN.Abp.Notifications.Internal
 
             await PublishFromProvidersAsync(providers, notificationInfo);
         }
-
+        /// <summary>
+        /// 发送通知
+        /// </summary>
+        /// <param name="notification">通知信息</param>
+        /// <returns></returns>
         public virtual async Task DispatchAsync(NotificationInfo notification)
         {
             // 获取自定义的通知
-            var defineNotification = _notificationDefinitionManager.Get(notification.Name);
+            var defineNotification = _notificationDefinitionManager.GetOrNull(notification.Name);
 
-            notification.NotificationType = defineNotification.NotificationType;
-            notification.Name = defineNotification.Name;
+            // 没有定义的通知,应该也要能发布、订阅,
+            // 比如订单之类的,是以订单编号为通知名称,这是动态的,没法自定义
+            if (defineNotification == null)
+            {
+                defineNotification = new NotificationDefinition(notification.Name);
+            }
 
             var providers = Enumerable
                   .Reverse(_notificationPublishProviderManager.Providers);
@@ -86,6 +120,12 @@ namespace LINGYUN.Abp.Notifications.Internal
             await PublishFromProvidersAsync(providers, notification);
         }
 
+        /// <summary>
+        /// 指定提供者发布通知
+        /// </summary>
+        /// <param name="providers">提供者列表</param>
+        /// <param name="notificationInfo">通知信息</param>
+        /// <returns></returns>
         protected async Task PublishFromProvidersAsync(IEnumerable<INotificationPublishProvider> providers,
             NotificationInfo notificationInfo)
         {
@@ -116,7 +156,13 @@ namespace LINGYUN.Abp.Notifications.Internal
             //    await PublishAsync(provider, notificationInfo, subscriptionUserIdentifiers);
             //});
         }
-
+        /// <summary>
+        /// 发布通知
+        /// </summary>
+        /// <param name="provider">通知发布者</param>
+        /// <param name="notificationInfo">通知信息</param>
+        /// <param name="subscriptionUserIdentifiers">订阅用户列表</param>
+        /// <returns></returns>
         protected async Task PublishAsync(INotificationPublishProvider provider, NotificationInfo notificationInfo, 
             IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
         {
@@ -124,6 +170,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
 
+                // 发布
                 await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
 
                 Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");

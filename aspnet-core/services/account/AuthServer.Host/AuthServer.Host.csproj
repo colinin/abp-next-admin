@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.4" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />

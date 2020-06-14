@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="LINGYUN\Abp\MessageService\Localization\HttpApiHost\en.json" />
+    <Content Remove="LINGYUN\Abp\MessageService\Localization\HttpApiHost\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\HttpApiHost\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\HttpApiHost\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
@@ -36,6 +47,7 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Common.EventBus\LINGYUN.Common.EventBus.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj" />
   </ItemGroup>

@@ -1,10 +1,16 @@
 ﻿using LINGYUN.Common.EventBus.Tenants;
-using System.Threading.Tasks;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Identity;
-using Volo.Abp.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Guids;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
+using IdentityRole = Volo.Abp.Identity.IdentityRole;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace AuthServer.Host.EventBus.Handlers
 {
@@ -12,32 +18,70 @@ namespace AuthServer.Host.EventBus.Handlers
     {
         protected ILogger<TenantCreateEventHandler> Logger { get; }
         protected ICurrentTenant CurrentTenant { get; }
-        protected IIdentityDataSeeder IdentityDataSeeder { get; }
+        protected IGuidGenerator GuidGenerator { get; }
+        protected IdentityUserManager IdentityUserManager { get; }
+        protected IdentityRoleManager IdentityRoleManager { get; }
 
         public TenantCreateEventHandler(
             ICurrentTenant currentTenant,
-            IIdentityDataSeeder identityDataSeeder,
+            IGuidGenerator guidGenerator,
+            IdentityUserManager identityUserManager,
+            IdentityRoleManager identityRoleManager,
             ILogger<TenantCreateEventHandler> logger)
         {
             Logger = logger;
             CurrentTenant = currentTenant;
-            IdentityDataSeeder = identityDataSeeder;
+            GuidGenerator = guidGenerator;
+            IdentityUserManager = identityUserManager;
+            IdentityRoleManager = identityRoleManager;
         }
 
+        [UnitOfWork]
         public async Task HandleEventAsync(CreateEventData eventData)
         {
             using (CurrentTenant.Change(eventData.Id, eventData.Name))
             {
-                var identitySeedResult = await IdentityDataSeeder
-                   .SeedAsync(eventData.AdminEmailAddress, eventData.AdminPassword, eventData.Id);
-                if (!identitySeedResult.CreatedAdminUser)
+                const string tenantAdminRoleName = "admin";
+                var tenantAdminRoleId = Guid.Empty; ;
+
+                if (!await IdentityRoleManager.RoleExistsAsync(tenantAdminRoleName))
                 {
-                    Logger.LogWarning("Tenant {0} admin user {1} not created!", eventData.Name, eventData.AdminEmailAddress);
+                    tenantAdminRoleId = GuidGenerator.Create();
+                    var tenantAdminRole = new IdentityRole(tenantAdminRoleId, tenantAdminRoleName, eventData.Id)
+                    {
+                        IsStatic = true,
+                        IsPublic = true
+                    };
+                    (await IdentityRoleManager.CreateAsync(tenantAdminRole)).CheckErrors();
                 }
-                if (!identitySeedResult.CreatedAdminRole)
+                else
                 {
-                    Logger.LogWarning("Tenant {0} admin role not created!", eventData.Name);
+                    var tenantAdminRole = await IdentityRoleManager.FindByNameAsync(tenantAdminRoleName);
+                    tenantAdminRoleId = tenantAdminRole.Id;
                 }
+
+                var tenantAdminUser = await IdentityUserManager.FindByNameAsync(eventData.AdminEmailAddress);
+                if (tenantAdminUser == null)
+                {
+                    tenantAdminUser = new IdentityUser(eventData.AdminUserId, eventData.AdminEmailAddress,
+                    eventData.AdminEmailAddress, eventData.Id);
+
+                    tenantAdminUser.AddRole(tenantAdminRoleId);
+
+                    // 创建租户管理用户
+                    (await IdentityUserManager.CreateAsync(tenantAdminUser)).CheckErrors();
+                    (await IdentityUserManager.AddPasswordAsync(tenantAdminUser, eventData.AdminPassword)).CheckErrors();
+                }
+                //var identitySeedResult = await IdentityDataSeeder
+                //   .SeedAsync(eventData.AdminEmailAddress, eventData.AdminPassword, eventData.Id);
+                //if (!identitySeedResult.CreatedAdminUser)
+                //{
+                //    Logger.LogWarning("Tenant {0} admin user {1} not created!", eventData.Name, eventData.AdminEmailAddress);
+                //}
+                //if (!identitySeedResult.CreatedAdminRole)
+                //{
+                //    Logger.LogWarning("Tenant {0} admin role not created!", eventData.Name);
+                //}
             }
         }
     }

@@ -55,5 +55,12 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="userId">用户标识</param>
         /// <returns></returns>
         Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, Guid userId);
+        /// <summary>
+        /// 获取用户订阅列表
+        /// </summary>
+        /// <param name="tenantId">租户</param>
+        /// <param name="userName">用户名</param>
+        /// <returns></returns>
+        Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, string userName);
     }
 }

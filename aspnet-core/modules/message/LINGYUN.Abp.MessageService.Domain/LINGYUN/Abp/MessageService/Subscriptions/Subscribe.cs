@@ -13,9 +13,10 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         protected Subscribe() { }
 
-        protected Subscribe(string notificationName)
+        protected Subscribe(string notificationName, Guid? tenantId = null)
         {
             NotificationName = notificationName;
+            TenantId = tenantId;
         }
     }
 }

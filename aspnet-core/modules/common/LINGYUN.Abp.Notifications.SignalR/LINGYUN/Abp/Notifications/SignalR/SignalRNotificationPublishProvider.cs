@@ -2,7 +2,6 @@
 using LINGYUN.Abp.RealTime.Client;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,8 +10,6 @@ namespace LINGYUN.Abp.Notifications.SignalR
 {
     public class SignalRNotificationPublishProvider : NotificationPublishProvider
     {
-        public ILogger<SignalRNotificationPublishProvider> Logger { protected get; set; }
-
         public override string Name => "SignalR";
 
         private readonly IOnlineClientManager _onlineClientManager;
@@ -27,13 +24,14 @@ namespace LINGYUN.Abp.Notifications.SignalR
         {
             _hubContext = hubContext;
             _onlineClientManager = onlineClientManager;
-
-            Logger = NullLogger<SignalRNotificationPublishProvider>.Instance;
         }
 
         public override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
         {
-            foreach(var identifier in identifiers)
+            // 返回标准数据给前端
+            notification.Data = NotificationData.ToStandardData(notification.Data);
+
+            foreach (var identifier in identifiers)
             {
                 var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
                 var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);

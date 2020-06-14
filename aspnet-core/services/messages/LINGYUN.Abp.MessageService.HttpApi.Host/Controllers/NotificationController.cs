@@ -42,7 +42,9 @@ namespace LINGYUN.Abp.MessageService.Controllers
 
             notificationData.Properties.AddIfNotContains(notification.Data);
 
-            await _notificationDispatcher.DispatchAsync("TestApplicationNotofication", notificationData,
+            var notificationName = NotificationNameNormalizer.NormalizerName("TestApplicationNotofication");
+
+            await _notificationDispatcher.DispatchAsync(notificationName, notificationData,
                 notificationSeverity: notification.Severity);
 
             // await _notificationDispatcher.DispatcheAsync(notificationInfo);

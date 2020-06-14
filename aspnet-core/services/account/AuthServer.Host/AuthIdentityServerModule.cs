@@ -18,6 +18,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
@@ -64,7 +65,8 @@ namespace AuthServer.Host
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+                })
+                .UseDashboard();
             });
         }
 
@@ -76,6 +78,14 @@ namespace AuthServer.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<AbpLocalizationOptions>(options =>

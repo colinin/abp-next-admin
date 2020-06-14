@@ -28,15 +28,15 @@ namespace LINGYUN.Abp.Notifications
             NotificationDefinitions = new Lazy<IDictionary<string, NotificationDefinition>>(CreateNotificationDefinitions, true);
         }
 
-        public virtual NotificationDefinition Get([NotNull] string name)
+        public virtual NotificationDefinition Get([NotNull] string category)
         {
-            Check.NotNull(name, nameof(name));
+            Check.NotNull(category, nameof(category));
 
-            var notification = GetOrNull(name);
+            var notification = GetOrNull(category);
 
             if (notification == null)
             {
-                throw new AbpException("Undefined notification: " + name);
+                throw new AbpException("Undefined notification category: " + category);
             }
 
             return notification;
@@ -47,9 +47,9 @@ namespace LINGYUN.Abp.Notifications
             return NotificationDefinitions.Value.Values.ToImmutableList();
         }
 
-        public virtual NotificationDefinition GetOrNull(string name)
+        public virtual NotificationDefinition GetOrNull(string category)
         {
-            return NotificationDefinitions.Value.GetOrDefault(name);
+            return NotificationDefinitions.Value.GetOrDefault(category);
         }
 
         protected virtual IDictionary<string, NotificationDefinition> CreateNotificationDefinitions()

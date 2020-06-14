@@ -21,13 +21,13 @@ namespace LINGYUN.Abp.Notifications
 
             foreach (var definition in definitions)
             {
-                Notifications[definition.Name] = definition;
+                Notifications[definition.CateGory] = definition;
             }
         }
 
-        public NotificationDefinition GetOrNull(string name)
+        public NotificationDefinition GetOrNull(string category)
         {
-            return Notifications.GetOrDefault(name);
+            return Notifications.GetOrDefault(category);
         }
     }
 }

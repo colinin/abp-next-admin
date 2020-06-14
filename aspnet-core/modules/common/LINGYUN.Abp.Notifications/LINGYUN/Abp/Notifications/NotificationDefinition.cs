@@ -4,15 +4,22 @@ using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Localization;
 
+/*
+ * 通知系统的设计不应该定死通知名称
+ * 而是规范通知的一些属性,因此不应该是自定义通知名称,而是定义通知的类目,类似于Catalog
+ * 或者Prefix
+ * 
+ */
+
 namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDefinition
     {
         /// <summary>
-        /// 通知名称
+        /// 通知类目
         /// </summary>
         [NotNull]
-        public string Name { get; set; }
+        public string CateGory { get; set; }
         /// <summary>
         /// 通知显示名称
         /// </summary>
@@ -42,14 +49,14 @@ namespace LINGYUN.Abp.Notifications
         public List<string> Providers { get; }
 
         public NotificationDefinition(
-           string name,
+           string category,
            ILocalizableString displayName = null,
            ILocalizableString description = null,
            NotificationType notificationType = NotificationType.Application,
            bool allowSubscriptionToClients = false)
         {
-            Name = name;
-            DisplayName = displayName ?? new FixedLocalizableString(name);
+            CateGory = category;
+            DisplayName = displayName ?? new FixedLocalizableString(category);
             Description = description;
             NotificationType = notificationType;
             AllowSubscriptionToClients = allowSubscriptionToClients;

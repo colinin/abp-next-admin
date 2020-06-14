@@ -10,7 +10,6 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
-using Volo.Abp.Users.Notifications;
 
 namespace LINGYUN.Abp.MessageService.EventBus
 {
@@ -64,11 +63,16 @@ namespace LINGYUN.Abp.MessageService.EventBus
 
                 var userWelcomeNotifictionData = new NotificationData();
 
-                // 换成用户名称,而不是用户名
-                userWelcomeNotifictionData.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.Name);
+                userWelcomeNotifictionData.WriteStandardData(
+                    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
+                    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
+                    DateTime.Now, eventData.Entity.UserName);
 
-                await _notificationDispatcher.DispatchAsync(UserNotificationNames.WelcomeToApplication, 
-                    userWelcomeNotifictionData, eventData.Entity.TenantId);
+                // 换成用户名称,而不是用户名
+                // userWelcomeNotifictionData.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.Name);
+
+                var noticeNormalizerName = NotificationNameNormalizer.NormalizerName(UserNotificationNames.WelcomeToApplication);
+                await _notificationDispatcher.DispatchAsync(noticeNormalizerName, userWelcomeNotifictionData, eventData.Entity.TenantId);
             }
         }
 

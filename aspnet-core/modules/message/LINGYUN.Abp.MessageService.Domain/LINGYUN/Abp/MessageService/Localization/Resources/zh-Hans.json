@@ -8,6 +8,7 @@
     "Messages:User:1002": "用户已拒接所有消息!",
     "Messages:User:1003": "用户拒绝您发送的消息!",
     "WelcomeToApplicationNotification": "用户欢迎通知",
+    "NewTenantRegisterdNotification": "租户创建通知",
     "WelcomeToApplicationFormUser": "用户:{0} 欢迎您的加入!"
   }
 }

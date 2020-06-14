@@ -25,6 +25,11 @@ namespace LINGYUN.Abp.Notifications.Internal
             return await _store.GetUserSubscriptionsAsync(tenantId, userId);
         }
 
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, string userName)
+        {
+            return await _store.GetUserSubscriptionsAsync(tenantId, userName);
+        }
+
         public virtual async Task<bool> IsSubscribedAsync(Guid? tenantId, Guid userId, string notificationName)
         {
             return await _store.IsSubscribedAsync(tenantId, userId, notificationName);

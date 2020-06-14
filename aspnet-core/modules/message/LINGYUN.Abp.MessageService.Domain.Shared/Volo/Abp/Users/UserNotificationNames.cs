@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Users.Notifications
+﻿namespace Volo.Abp.Users
 {
     public class UserNotificationNames
     {

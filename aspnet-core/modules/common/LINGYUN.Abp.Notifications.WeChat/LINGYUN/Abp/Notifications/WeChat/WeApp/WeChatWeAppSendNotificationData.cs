@@ -49,6 +49,22 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 
             data = new Dictionary<string, WeChatNotificationData>();
         }
+        /// <summary>
+        /// 写入标准数据
+        /// </summary>
+        /// <param name="writeData"></param>
+        /// <returns></returns>
+        public WeChatWeAppSendNotificationData WriteStandardData(NotificationData writeData)
+        {
+            foreach (var kv in writeData.Properties)
+            {
+                if (!data.ContainsKey(kv.Key))
+                {
+                    data.Add(kv.Key, new WeChatNotificationData(kv.Value));
+                }
+            }
+            return this;
+        }
 
         public WeChatWeAppSendNotificationData WriteData(string prefix, string key, object value)
         {

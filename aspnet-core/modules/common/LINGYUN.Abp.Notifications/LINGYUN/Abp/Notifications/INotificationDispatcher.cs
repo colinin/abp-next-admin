@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="tenantId">租户</param>
         /// <param name="notificationSeverity">级别</param>
         /// <returns></returns>
-        Task DispatchAsync(string notificationName, NotificationData data, Guid? tenantId = null, 
+        Task DispatchAsync(NotificationName notificationName, NotificationData data, Guid? tenantId = null, 
             NotificationSeverity notificationSeverity = NotificationSeverity.Info);
     }
 }

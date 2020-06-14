@@ -16,6 +16,8 @@ namespace LINGYUN.Abp.Notifications
 
         Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, Guid userId);
 
+        Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, string userName);
+
         Task<bool> IsSubscribedAsync(Guid? tenantId, Guid userId, string notificationName);
 
         Task InsertNotificationAsync(NotificationInfo notification);

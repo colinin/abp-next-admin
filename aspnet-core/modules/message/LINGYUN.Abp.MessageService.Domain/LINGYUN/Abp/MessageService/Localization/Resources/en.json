@@ -8,6 +8,7 @@
     "Messages:User:1002": "The user has rejected all messages!",
     "Messages:User:1003": "The user rejects the message you sent!",
     "WelcomeToApplicationNotification": "User Welcome Notice",
+    "NewTenantRegisterdNotification": "Tenants create notification",
     "WelcomeToApplicationFormUser": "User :{0} welcome to join us!"
   }
 }
