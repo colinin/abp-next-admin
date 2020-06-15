@@ -56,5 +56,15 @@ namespace LINGYUN.Abp.Notifications.Internal
         {
             await _store.DeleteUserSubscriptionAsync(tenantId, identifier.UserId, notificationName);
         }
+
+        public virtual async Task UnsubscribeAllAsync(Guid? tenantId, string notificationName)
+        {
+            await _store.DeleteAllUserSubscriptionAsync(tenantId, notificationName);
+        }
+
+        public virtual async Task UnsubscribeAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName)
+        {
+            await _store.DeleteUserSubscriptionAsync(tenantId, identifiers, notificationName);
+        }
     }
 }

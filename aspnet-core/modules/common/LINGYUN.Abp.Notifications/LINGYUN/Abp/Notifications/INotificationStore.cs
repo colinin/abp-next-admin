@@ -12,6 +12,10 @@ namespace LINGYUN.Abp.Notifications
 
         Task DeleteUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName);
 
+        Task DeleteAllUserSubscriptionAsync(Guid? tenantId, string notificationName);
+
+        Task DeleteUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName);
+
         Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(Guid? tenantId, string notificationName);
 
         Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, Guid userId);

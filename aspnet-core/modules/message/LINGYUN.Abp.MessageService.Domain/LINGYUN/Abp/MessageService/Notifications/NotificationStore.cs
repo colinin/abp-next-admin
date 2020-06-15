@@ -3,6 +3,7 @@ using LINGYUN.Abp.MessageService.Utils;
 using LINGYUN.Abp.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Json;
@@ -78,6 +79,20 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         [UnitOfWork]
+        public async Task DeleteAllUserSubscriptionAsync(Guid? tenantId, string notificationName)
+        {
+            using (var unitOfWork = _unitOfWorkManager.Begin())
+            using (CurrentTenant.Change(tenantId))
+            {
+                var userSubscribes = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
+
+                await UserSubscribeRepository.DeleteUserSubscriptionAsync(userSubscribes);
+
+                await unitOfWork.SaveChangesAsync();
+            }
+        }
+
+        [UnitOfWork]
         public async Task DeleteUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
@@ -85,6 +100,22 @@ namespace LINGYUN.Abp.MessageService.Notifications
             {
                 var userSubscribe = await UserSubscribeRepository.GetUserSubscribeAsync(notificationName, userId);
                 await UserSubscribeRepository.DeleteAsync(userSubscribe.Id);
+
+                await unitOfWork.SaveChangesAsync();
+            }
+        }
+
+        [UnitOfWork]
+        public async Task DeleteUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName)
+        {
+            using (var unitOfWork = _unitOfWorkManager.Begin())
+            using (CurrentTenant.Change(tenantId))
+            {
+                var userSubscribes = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
+
+                var removeUserSubscribes = userSubscribes.Where(us => identifiers.Any(id => id.UserId.Equals(us.UserId)));
+
+                await UserSubscribeRepository.DeleteUserSubscriptionAsync(removeUserSubscribes);
 
                 await unitOfWork.SaveChangesAsync();
             }

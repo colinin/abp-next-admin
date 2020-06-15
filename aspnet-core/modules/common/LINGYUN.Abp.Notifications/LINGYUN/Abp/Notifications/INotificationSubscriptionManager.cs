@@ -34,6 +34,13 @@ namespace LINGYUN.Abp.Notifications
         /// <returns></returns>
         Task SubscribeAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName);
         /// <summary>
+        /// 取消所有用户订阅
+        /// </summary>
+        /// <param name="tenantId">租户</param>
+        /// <param name="notificationName">通知名称</param>
+        /// <returns></returns>
+        Task UnsubscribeAllAsync(Guid? tenantId, string notificationName);
+        /// <summary>
         /// 取消订阅
         /// </summary>
         /// <param name="tenantId">租户</param>
@@ -41,6 +48,14 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="notificationName">通知名称</param>
         /// <returns></returns>
         Task UnsubscribeAsync(Guid? tenantId, UserIdentifier identifier, string notificationName);
+        /// <summary>
+        /// 取消订阅
+        /// </summary>
+        /// <param name="tenantId">租户</param>
+        /// <param name="identifiers">用户标识列表</param>
+        /// <param name="notificationName">通知名称</param>
+        /// <returns></returns>
+        Task UnsubscribeAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName);
         /// <summary>
         /// 获取通知被订阅用户列表
         /// </summary>

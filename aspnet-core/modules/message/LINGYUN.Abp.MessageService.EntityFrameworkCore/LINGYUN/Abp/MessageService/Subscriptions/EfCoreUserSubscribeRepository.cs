@@ -78,6 +78,12 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             await DbSet.AddRangeAsync(userSubscribes);
         }
 
+        public Task DeleteUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes)
+        {
+            DbSet.RemoveRange(userSubscribes);
+            return Task.CompletedTask;
+        }
+
         public async Task<bool> UserSubscribeExistsAysnc(string notificationName, Guid userId)
         {
             return await DbSet.AnyAsync(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName));
