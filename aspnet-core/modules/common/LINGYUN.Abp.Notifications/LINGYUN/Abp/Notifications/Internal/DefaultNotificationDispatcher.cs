@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.Abp.Notifications.Internal
 {
@@ -17,6 +18,10 @@ namespace LINGYUN.Abp.Notifications.Internal
         /// Reference to <see cref="ILogger<DefaultNotificationDispatcher>"/>.
         /// </summary>
         public ILogger<DefaultNotificationDispatcher> Logger { get; set; }
+        /// <summary>
+        /// Reference to <see cref="IDistributedEventBus"/>.
+        /// </summary>
+        public IDistributedEventBus DistributedEventBus { get; set; }
         /// <summary>
         /// Reference to <see cref="IBackgroundJobManager"/>.
         /// </summary>
@@ -49,6 +54,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             _notificationDefinitionManager = notificationDefinitionManager;
             _notificationPublishProviderManager = notificationPublishProviderManager;
 
+            DistributedEventBus = NullDistributedEventBus.Instance;
             Logger = NullLogger<DefaultNotificationDispatcher>.Instance;
         }
         /// <summary>
@@ -74,6 +80,7 @@ namespace LINGYUN.Abp.Notifications.Internal
 
             var notificationInfo = new NotificationInfo
             {
+                CateGory = notificationName.CateGory,
                 Name = notificationName.Name,
                 CreationTime = DateTime.Now,
                 NotificationSeverity = notificationSeverity,
@@ -91,6 +98,33 @@ namespace LINGYUN.Abp.Notifications.Internal
             }
 
             await PublishFromProvidersAsync(providers, notificationInfo);
+        }
+        /// <summary>
+        /// 发送通知事件
+        /// </summary>
+        /// <param name="notificationName"></param>
+        /// <param name="data"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="notificationSeverity"></param>
+        /// <returns></returns>
+        public virtual async Task DispatchEventAsync(NotificationName notificationName, NotificationData data, Guid? tenantId = null,
+            NotificationSeverity notificationSeverity = NotificationSeverity.Info)
+        {
+            // 获取自定义的通知
+            var defineNotification = _notificationDefinitionManager.Get(notificationName.CateGory);
+
+            var notificationEventData = new NotificationEventData
+            {
+                CateGory = notificationName.CateGory,
+                Name = notificationName.Name,
+                CreationTime = DateTime.Now,
+                NotificationSeverity = notificationSeverity,
+                NotificationType = defineNotification.NotificationType,
+                TenantId = tenantId,
+                Data = data
+            };
+            // 发布分布式通知事件,让消息中心统一处理
+            await DistributedEventBus.PublishAsync(notificationEventData);
         }
         /// <summary>
         /// 发送通知

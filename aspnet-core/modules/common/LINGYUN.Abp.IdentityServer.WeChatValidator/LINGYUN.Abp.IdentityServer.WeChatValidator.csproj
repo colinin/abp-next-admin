@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\moudles\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
   </ItemGroup>
 
 </Project>

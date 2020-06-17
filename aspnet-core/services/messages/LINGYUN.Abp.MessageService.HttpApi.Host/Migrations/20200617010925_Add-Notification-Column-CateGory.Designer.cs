@@ -3,15 +3,17 @@ using System;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MessageService.Migrations
 {
     [DbContext(typeof(MessageServiceHostMigrationsDbContext))]
-    partial class MessageServiceHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200617010925_Add-Notification-Column-CateGory")]
+    partial class AddNotificationColumnCateGory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

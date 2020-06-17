@@ -1,7 +1,11 @@
 ﻿using DotNetCore.CAP;
+using Hangfire;
 using IdentityModel;
+using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.IM.SignalR;
+using LINGYUN.Abp.MessageService.BackgroundJobs;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
@@ -20,6 +24,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Localization;
@@ -29,6 +34,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.MessageService
@@ -45,6 +51,8 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpNotificationsSignalRModule),
         typeof(AbpNotificationsWeChatWeAppModule),
         typeof(AbpCAPEventBusModule),
+        typeof(AbpBackgroundJobsHangfireModule),
+        typeof(AbpHangfireMySqlStorageModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule
@@ -147,6 +155,14 @@ namespace LINGYUN.Abp.MessageService
             }
         }
 
+        public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var backgroundJobManager = context.ServiceProvider.GetRequiredService<IBackgroundJobManager>();
+            // 五分钟执行一次的定时任务
+            AsyncHelper.RunSync(async () => await
+                backgroundJobManager.EnqueueAsync(CronGenerator.Minute(5), new NotificationCleanupExpritionJobArgs(200)));
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -177,6 +193,8 @@ namespace LINGYUN.Abp.MessageService
             });
             // 审计日志
             app.UseAuditing();
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
             // 路由
             app.UseConfiguredEndpoints();
         }

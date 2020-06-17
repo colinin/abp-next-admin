@@ -10,7 +10,7 @@
 
         public class ClaimTypes
         {
-            public const string OpenId = "wechat-id";
+            public const string OpenId = "wx-openid";
         }
 
         public class AuthenticationMethods

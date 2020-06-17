@@ -66,6 +66,17 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         [UnitOfWork]
+        public async Task DeleteNotificationAsync(int batchCount)
+        {
+            using (var unitOfWork = _unitOfWorkManager.Begin())
+            {
+                await NotificationRepository.DeleteExpritionAsync(batchCount);
+
+                await unitOfWork.SaveChangesAsync();
+            }
+        }
+
+        [UnitOfWork]
         public async Task DeleteUserNotificationAsync(Guid? tenantId, Guid userId, long notificationId)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
@@ -202,7 +213,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 // 保存主键，防止前端js long类型溢出
                 // notification.Data["id"] = notifyId.ToString();
 
-                var notify = new Notification(notifyId, notification.Name,
+                var notify = new Notification(notifyId, notification.CateGory, notification.Name,
                     notification.Data.GetType().AssemblyQualifiedName,
                     JsonSerializer.Serialize(notification.Data), notification.NotificationSeverity)
                 {
@@ -286,8 +297,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 var userNofitications = new List<UserNotification>();
                 foreach (var userId in userIds)
                 {
-                    var userNofitication = new UserNotification(notification.GetId(), userId, notification.TenantId);
-                    userNofitications.Add(userNofitication);
+                    // 重复检查
+                    // TODO:如果存在很多个订阅用户,这是个隐患
+                    if (!await UserNotificationRepository.AnyAsync(userId, notification.GetId()))
+                    {
+                        var userNofitication = new UserNotification(notification.GetId(), userId, notification.TenantId);
+                        userNofitications.Add(userNofitication);
+                    }
                 }
                 await UserNotificationRepository.InsertUserNotificationsAsync(userNofitications);
 

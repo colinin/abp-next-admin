@@ -28,6 +28,8 @@ namespace LINGYUN.Abp.Notifications
 
         Task DeleteNotificationAsync(NotificationInfo notification);
 
+        Task DeleteNotificationAsync(int batchCount);
+
         Task InsertUserNotificationAsync(NotificationInfo notification, Guid userId);
 
         Task InsertUserNotificationsAsync(NotificationInfo notification, IEnumerable<Guid> userIds);

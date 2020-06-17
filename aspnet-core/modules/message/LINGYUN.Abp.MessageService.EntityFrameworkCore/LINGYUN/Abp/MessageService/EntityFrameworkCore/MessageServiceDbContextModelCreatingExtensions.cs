@@ -25,13 +25,14 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "Notifications", options.Schema);
 
                 b.Property(p => p.NotificationName).HasMaxLength(NotificationConsts.MaxNameLength).IsRequired();
+                b.Property(p => p.NotificationCateGory).HasMaxLength(NotificationConsts.MaxCateGoryLength).IsRequired();
                 b.Property(p => p.NotificationTypeName).HasMaxLength(NotificationConsts.MaxTypeNameLength).IsRequired();
                 b.Property(p => p.NotificationData).HasMaxLength(NotificationConsts.MaxDataLength).IsRequired();
 
                 b.ConfigureMultiTenant();
                 b.ConfigureCreationTime();
 
-                b.HasIndex(p => p.NotificationName);
+                b.HasIndex(p => new { p.TenantId, p.NotificationName });
             });
 
             builder.Entity<UserNotification>(b =>

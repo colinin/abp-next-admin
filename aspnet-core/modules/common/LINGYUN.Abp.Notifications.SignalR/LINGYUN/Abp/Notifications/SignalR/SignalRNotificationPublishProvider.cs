@@ -10,7 +10,8 @@ namespace LINGYUN.Abp.Notifications.SignalR
 {
     public class SignalRNotificationPublishProvider : NotificationPublishProvider
     {
-        public override string Name => "SignalR";
+        public const string ProviderName = "SignalR";
+        public override string Name => ProviderName;
 
         private readonly IOnlineClientManager _onlineClientManager;
 

@@ -7,7 +7,6 @@ namespace LINGYUN.Abp.Notifications
         public ITypeList<INotificationDefinitionProvider> DefinitionProviders { get; }
 
         public ITypeList<INotificationPublishProvider> PublishProviders { get; }
-
         public AbpNotificationOptions()
         {
             PublishProviders = new TypeList<INotificationPublishProvider>();

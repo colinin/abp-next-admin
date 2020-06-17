@@ -43,6 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
