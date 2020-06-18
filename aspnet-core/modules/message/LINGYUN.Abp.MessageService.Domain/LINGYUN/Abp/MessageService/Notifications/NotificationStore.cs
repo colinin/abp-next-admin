@@ -95,9 +95,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (CurrentTenant.Change(tenantId))
             {
-                var userSubscribes = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
-
-                await UserSubscribeRepository.DeleteUserSubscriptionAsync(userSubscribes);
+                await UserSubscribeRepository.DeleteUserSubscriptionAsync(notificationName);
 
                 await unitOfWork.SaveChangesAsync();
             }
@@ -122,6 +120,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (CurrentTenant.Change(tenantId))
             {
+                // TODO:不追踪用户订阅实体?
                 var userSubscribes = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
 
                 var removeUserSubscribes = userSubscribes.Where(us => identifiers.Any(id => id.UserId.Equals(us.UserId)));

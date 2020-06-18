@@ -40,6 +40,10 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public bool AllowSubscriptionToClients { get; set; }
         /// <summary>
+        /// 存活类型
+        /// </summary>
+        public NotificationLifetime NotificationLifetime { get; set; }
+        /// <summary>
         /// 通知类型
         /// </summary>
         public NotificationType NotificationType { get; set; }
@@ -53,11 +57,13 @@ namespace LINGYUN.Abp.Notifications
            ILocalizableString displayName = null,
            ILocalizableString description = null,
            NotificationType notificationType = NotificationType.Application,
+           NotificationLifetime lifetime = NotificationLifetime.Persistent,
            bool allowSubscriptionToClients = false)
         {
             CateGory = category;
             DisplayName = displayName ?? new FixedLocalizableString(category);
             Description = description;
+            NotificationLifetime = lifetime;
             NotificationType = notificationType;
             AllowSubscriptionToClients = allowSubscriptionToClients;
 

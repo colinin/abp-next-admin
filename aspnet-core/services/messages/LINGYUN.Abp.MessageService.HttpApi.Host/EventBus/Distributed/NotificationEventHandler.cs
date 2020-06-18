@@ -96,6 +96,13 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             {
                 await PublishAsync(provider, notificationInfo, subscriptionUserIdentifiers);
             }
+
+            if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
+            {
+                // 一次性通知在发送完成后就取消用户订阅
+                await NotificationStore.DeleteAllUserSubscriptionAsync(notificationInfo.TenantId,
+                    notificationInfo.Name);
+            }
         }
         /// <summary>
         /// 发布通知

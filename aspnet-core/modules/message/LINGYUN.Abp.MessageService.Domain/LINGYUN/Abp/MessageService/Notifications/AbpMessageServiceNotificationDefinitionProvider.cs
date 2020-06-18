@@ -14,11 +14,15 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 UserNotificationNames.WelcomeToApplication,
                 L("WelcomeToApplicationNotification"), 
                 L("WelcomeToApplicationNotification"), 
+                notificationType: NotificationType.System,
+                lifetime: NotificationLifetime.OnlyOne,
                 allowSubscriptionToClients: true));
             context.Add(new NotificationDefinition(
                 TenantNotificationNames.NewTenantRegistered,
                 L("NewTenantRegisterdNotification"),
                 L("NewTenantRegisterdNotification"),
+                notificationType: NotificationType.System,
+                lifetime: NotificationLifetime.OnlyOne,
                 allowSubscriptionToClients: true));
         }
 

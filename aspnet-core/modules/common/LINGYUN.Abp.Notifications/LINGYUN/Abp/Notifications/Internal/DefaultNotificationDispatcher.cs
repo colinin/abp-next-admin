@@ -84,6 +84,7 @@ namespace LINGYUN.Abp.Notifications.Internal
                 Name = notificationName.Name,
                 CreationTime = DateTime.Now,
                 NotificationSeverity = notificationSeverity,
+                Lifetime = defineNotification.NotificationLifetime,
                 NotificationType = defineNotification.NotificationType,
                 TenantId = tenantId,
                 Data = data
@@ -98,6 +99,13 @@ namespace LINGYUN.Abp.Notifications.Internal
             }
 
             await PublishFromProvidersAsync(providers, notificationInfo);
+
+            if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
+            {
+                // 一次性通知在发送完成后就取消用户订阅
+                await _notificationStore.DeleteAllUserSubscriptionAsync(notificationInfo.TenantId,
+                    notificationInfo.Name);
+            }
         }
         /// <summary>
         /// 发送通知事件
@@ -119,6 +127,7 @@ namespace LINGYUN.Abp.Notifications.Internal
                 Name = notificationName.Name,
                 CreationTime = DateTime.Now,
                 NotificationSeverity = notificationSeverity,
+                Lifetime = defineNotification.NotificationLifetime,
                 NotificationType = defineNotification.NotificationType,
                 TenantId = tenantId,
                 Data = data
@@ -126,34 +135,6 @@ namespace LINGYUN.Abp.Notifications.Internal
             // 发布分布式通知事件,让消息中心统一处理
             await DistributedEventBus.PublishAsync(notificationEventData);
         }
-        /// <summary>
-        /// 发送通知
-        /// </summary>
-        /// <param name="notification">通知信息</param>
-        /// <returns></returns>
-        public virtual async Task DispatchAsync(NotificationInfo notification)
-        {
-            // 获取自定义的通知
-            var defineNotification = _notificationDefinitionManager.GetOrNull(notification.Name);
-
-            // 没有定义的通知,应该也要能发布、订阅,
-            // 比如订单之类的,是以订单编号为通知名称,这是动态的,没法自定义
-            if (defineNotification == null)
-            {
-                defineNotification = new NotificationDefinition(notification.Name);
-            }
-
-            var providers = Enumerable
-                  .Reverse(_notificationPublishProviderManager.Providers);
-
-            if (defineNotification.Providers.Any())
-            {
-                providers = providers.Where(p => defineNotification.Providers.Contains(p.Name));
-            }
-
-            await PublishFromProvidersAsync(providers, notification);
-        }
-
         /// <summary>
         /// 指定提供者发布通知
         /// </summary>

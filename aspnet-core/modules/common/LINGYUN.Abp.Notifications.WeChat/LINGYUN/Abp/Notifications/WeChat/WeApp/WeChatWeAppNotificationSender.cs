@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Authorization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -13,6 +15,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
     public class WeChatWeAppNotificationSender : IWeChatWeAppNotificationSender, ITransientDependency
     {
         public const string SendNotificationClientName = "WeChatWeAppSendNotificationClient";
+        public ILogger<WeChatWeAppNotificationSender> Logger { get; set; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IWeChatTokenProvider WeChatTokenProvider { get; }
@@ -24,6 +27,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             JsonSerializer = jsonSerializer;
             HttpClientFactory = httpClientFactory;
             WeChatTokenProvider = weChatTokenProvider;
+
+            Logger = NullLogger<WeChatWeAppNotificationSender>.Instance;
         }
 
         public virtual async Task SendAsync(WeChatWeAppSendNotificationData notificationData)
@@ -38,7 +43,14 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var requestUrl = BuildRequestUrl(weChatSendNotificationUrl, weChatSendNotificationPath, requestParamters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl, notificationData);
             var weChatSenNotificationResponse = JsonSerializer.Deserialize<WeChatSendNotificationResponse>(responseContent);
-            weChatSenNotificationResponse.ThrowIfNotSuccess();
+            
+            if (!weChatSenNotificationResponse.IsSuccessed)
+            {
+                Logger.LogWarning("Send wechat we app subscribe message failed");
+                Logger.LogWarning($"Error code: {weChatSenNotificationResponse.ErrorCode}, message: {weChatSenNotificationResponse.ErrorMessage}");
+            }
+            // 失败是否抛出异常
+            // weChatSenNotificationResponse.ThrowIfNotSuccess();
         }
         protected virtual async Task<string> MakeRequestAndGetResultAsync(string url, WeChatWeAppSendNotificationData notificationData)
         {
@@ -53,7 +65,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var response = await client.SendAsync(requestMessage);
             if (!response.IsSuccessStatusCode)
             {
-                throw new AbpException($"Baidu http request service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
+                throw new AbpException($"WeChat send subscribe message http request service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
             }
             var resultContent = await response.Content.ReadAsStringAsync();
 
@@ -82,6 +94,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 
         [JsonProperty("errmsg")]
         public string ErrorMessage { get; set; }
+
+        public bool IsSuccessed => ErrorCode == 0;
 
         public void ThrowIfNotSuccess()
         {

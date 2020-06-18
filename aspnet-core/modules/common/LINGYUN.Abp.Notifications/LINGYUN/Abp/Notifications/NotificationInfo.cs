@@ -10,11 +10,13 @@ namespace LINGYUN.Abp.Notifications
         public string Id { get; set; }
         public NotificationData Data { get; set; }
         public DateTime CreationTime { get; set; }
+        public NotificationLifetime Lifetime { get; set; }
         public NotificationType NotificationType { get; set; }
         public NotificationSeverity NotificationSeverity { get; set; }
         public NotificationInfo()
         {
             Data = new NotificationData();
+            Lifetime = NotificationLifetime.Persistent;
             NotificationType = NotificationType.Application;
             NotificationSeverity = NotificationSeverity.Info;
 
@@ -47,6 +49,7 @@ namespace LINGYUN.Abp.Notifications
                 Id = Id,
                 Name = Name,
                 CateGory = CateGory,
+                Lifetime = Lifetime,
                 NotificationType = NotificationType,
                 TenantId = TenantId
             };

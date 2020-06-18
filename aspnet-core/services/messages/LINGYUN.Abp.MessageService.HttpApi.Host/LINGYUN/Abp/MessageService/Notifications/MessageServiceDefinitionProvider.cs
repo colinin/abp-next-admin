@@ -2,7 +2,7 @@
 using LINGYUN.Abp.Notifications;
 using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.MessageService.LINGYUN.Abp.MessageService.Notifications
+namespace LINGYUN.Abp.MessageService.Notifications
 {
     public class MessageServiceDefinitionProvider : NotificationDefinitionProvider
     {
@@ -12,8 +12,9 @@ namespace LINGYUN.Abp.MessageService.LINGYUN.Abp.MessageService.Notifications
                 "TestApplicationNotofication", 
                 L("TestApplicationNotofication"),
                 L("TestApplicationNotofication"),
-                NotificationType.Application, 
-                true));
+                notificationType: NotificationType.Application, 
+                lifetime: NotificationLifetime.OnlyOne,
+                allowSubscriptionToClients: true));
         }
 
         protected LocalizableString L(string name)
