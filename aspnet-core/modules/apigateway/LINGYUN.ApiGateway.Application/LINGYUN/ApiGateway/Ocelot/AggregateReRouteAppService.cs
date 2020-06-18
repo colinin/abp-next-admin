@@ -74,7 +74,7 @@ namespace LINGYUN.ApiGateway.Ocelot
             }
             aggregateRoute = await _aggregateReRouteRepository.InsertAsync(aggregateRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("AggregateRoute", "Create"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(aggregateRoute.AppId, "AggregateRoute", "Create"));
 
             return ObjectMapper.Map<AggregateReRoute, AggregateReRouteDto>(aggregateRoute);
         }
@@ -104,7 +104,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             aggregateRoute = await _aggregateReRouteRepository.UpdateAsync(aggregateRoute, true);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("AggregateRoute", "Update"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(aggregateRoute.AppId, "AggregateRoute", "Update"));
 
             return ObjectMapper.Map<AggregateReRoute, AggregateReRouteDto>(aggregateRoute);
         }
@@ -116,7 +116,7 @@ namespace LINGYUN.ApiGateway.Ocelot
             var aggregateRoute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
             await _aggregateReRouteRepository.DeleteAsync(aggregateRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("AggregateRoute", "Delete"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(aggregateRoute.AppId, "AggregateRoute", "Delete"));
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.ManageRouteConfig)]
@@ -131,7 +131,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             await _aggregateReRouteRepository.UpdateAsync(aggregateRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("AggregateRoute", "AddRouteConfig"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(aggregateRoute.AppId, "AggregateRoute", "AddRouteConfig"));
 
             return ObjectMapper.Map<AggregateReRouteConfig, AggregateReRouteConfigDto>(aggregateRouteConfig);
         }
@@ -145,7 +145,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             await _aggregateReRouteRepository.UpdateAsync(aggregateRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("AggregateRoute", "DeleteRouteConfig"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(aggregateRoute.AppId, "AggregateRoute", "DeleteRouteConfig"));
         }
     }
 }

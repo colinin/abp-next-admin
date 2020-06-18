@@ -55,7 +55,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             globalConfiguration = await _globalConfigRepository.InsertAsync(globalConfiguration, true);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("Global", "Create"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(globalConfiguration.AppId, "Global", "Create"));
 
             return ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfiguration);
         }
@@ -74,7 +74,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             globalConfiguration = await _globalConfigRepository.UpdateAsync(globalConfiguration, true);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("Global", "Modify"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(globalConfiguration.AppId, "Global", "Modify"));
 
             return ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfiguration);
         }

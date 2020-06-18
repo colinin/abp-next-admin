@@ -36,7 +36,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             var reRouteDto = ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("ReRoute", "Create"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Create"));
 
             return reRouteDto;
         }
@@ -73,7 +73,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             var reRouteDto = ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("ReRoute", "Modify"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Modify"));
 
             return reRouteDto;
         }
@@ -115,9 +115,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         [Authorize(ApiGatewayPermissions.Route.Delete)]
         public async Task DeleteAsync(ReRouteGetByIdInputDto routeGetById)
         {
-            await _reRouteRepository.DeleteAsync(x => x.ReRouteId.Equals(routeGetById.RouteId));
+            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(routeGetById.RouteId);
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("ReRoute", "Delete"));
+            await _reRouteRepository.DeleteAsync(reRoute);
+
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Delete"));
         }
 
         [Authorize(ApiGatewayPermissions.Route.Delete)]
@@ -127,7 +129,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             await _reRouteRepository.DeleteAsync(x => x.AppId.Equals(routeGetByAppId.AppId));
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData("ReRoute", "Clean"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(routeGetByAppId.AppId, "ReRoute", "Clean"));
         }
 
         protected virtual void ApplyReRouteOptions(ReRoute reRoute, ReRouteDtoBase routeDto)
