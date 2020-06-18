@@ -85,6 +85,7 @@ namespace AuthServer.Host
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60);
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
@@ -116,13 +117,14 @@ namespace AuthServer.Host
 
             context.Services.AddStackExchangeRedisCache(options =>
             {
-                options.InstanceName = configuration["Redis:InstanceName"];
-                options.Configuration = configuration["Redis:Configuration"];
+                options.Configuration = configuration["RedisCache:ConnectString"];
+                var instanceName = configuration["RedisCache:RedisPrefix"];
+                options.InstanceName = instanceName.IsNullOrEmpty() ? "MessageService_Cache" : instanceName;
             });
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "AuthServer-Protection-Keys");
@@ -160,7 +162,10 @@ namespace AuthServer.Host
             app.UseMultiTenancy();
             app.UseIdentityServer();
             app.UseAuditing();
-            //app.UseWeChatSignature();
+
+            // 处理微信消息
+            // app.UseWeChatSignature();
+
             SeedData(context);
         }
 
