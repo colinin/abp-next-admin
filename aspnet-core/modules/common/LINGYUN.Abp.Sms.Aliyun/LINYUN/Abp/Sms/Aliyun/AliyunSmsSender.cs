@@ -2,6 +2,7 @@
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
 using Aliyun.Acs.Core.Profile;
+using LINGYUN.Abp.Aliyun.Authorization;
 using LINYUN.Abp.Sms.Aliyun.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,7 @@ namespace LINYUN.Abp.Sms.Aliyun
     [ExposeServices(typeof(ISmsSender), typeof(AliyunSmsSender))]
     public class AliyunSmsSender : ISmsSender
     {
+        protected AbpAliyunOptions AuthOptions { get; }
         protected AliyunSmsOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IHostEnvironment Environment { get; }
@@ -29,9 +31,12 @@ namespace LINYUN.Abp.Sms.Aliyun
             IHostEnvironment environment,
             IJsonSerializer jsonSerializer,
             IServiceProvider serviceProvider,
-            IOptions<AliyunSmsOptions> options)
+            IOptions<AliyunSmsOptions> options,
+            IOptions<AbpAliyunOptions> authOptions)
         {
             Options = options.Value;
+            AuthOptions = authOptions.Value;
+
             Environment = environment;
             JsonSerializer = jsonSerializer;
             ServiceProvider = serviceProvider;
@@ -53,7 +58,7 @@ namespace LINYUN.Abp.Sms.Aliyun
 
             try
             {
-                IClientProfile profile = DefaultProfile.GetProfile(Options.RegionId, Options.AccessKeyId, Options.AccessKeySecret);
+                IClientProfile profile = DefaultProfile.GetProfile(Options.RegionId, AuthOptions.AccessKeyId, AuthOptions.AccessKeySecret);
                 IAcsClient client = new DefaultAcsClient(profile);
                 CommonResponse response = client.GetCommonResponse(request);
                 var responseContent = Encoding.Default.GetString(response.HttpResponse.Content);

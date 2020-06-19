@@ -1,4 +1,5 @@
-﻿using LINYUN.Abp.Sms.Aliyun.Localization;
+﻿using LINGYUN.Abp.Aliyun.Authorization;
+using LINYUN.Abp.Sms.Aliyun.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -11,7 +12,8 @@ namespace LINYUN.Abp.Sms.Aliyun
     [DependsOn(
         typeof(AbpSmsModule), 
         typeof(AbpJsonModule), 
-        typeof(AbpLocalizationModule))]
+        typeof(AbpLocalizationModule),
+        typeof(AbpAliyunAuthorizationModule))]
     public class AbpAliyunSmsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
