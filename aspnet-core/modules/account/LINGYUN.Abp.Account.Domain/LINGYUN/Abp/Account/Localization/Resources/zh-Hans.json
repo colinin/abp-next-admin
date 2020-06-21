@@ -14,6 +14,7 @@
     "Description:PhoneVerifyCodeExpiration": "用户发送短信验证码的有效时长,单位m,默认3m",
     "RequiredEmailAddress": "邮件地址必须输入",
     "InvalidPhoneNumber": "手机号无效",
-    "DuplicatePhoneNumber": "手机号已经注册过!"
+    "DuplicatePhoneNumber": "手机号已经注册过!",
+    "DuplicateWeChat": "微信号已经注册过!"
   }
 }

@@ -15,9 +15,9 @@ namespace LINGYUN.Abp.WeChat.Authorization
             var configuration = context.Services.GetConfiguration();
             Configure<AbpWeChatOptions>(configuration.GetSection("WeChat:Auth"));
 
-            context.Services.AddHttpClient("WeChatTokenProviderClient", options =>
+            context.Services.AddHttpClient("WeChatRequestClient", options =>
             {
-                options.BaseAddress = new Uri("https://api.weixin.qq.com/cgi-bin/token");
+                options.BaseAddress = new Uri("https://api.weixin.qq.com");
             }).AddTransientHttpErrorPolicy(builder =>
                 builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
         }

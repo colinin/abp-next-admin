@@ -4,12 +4,16 @@ using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Account
 {
-    public class RegisterVerifyDto
+    public class WeChatRegisterDto
     {
         [Required]
-        [Phone]
-        [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
-        public string PhoneNumber { get; set; }
+        public string Code { get; set; }
+
+        [DisableAuditing]
+        [DataType(DataType.Password)]
+        [Required]
+        [StringLength(IdentityUserConsts.MaxPasswordLength)]
+        public string Password { get; set; }
 
         [StringLength(IdentityUserConsts.MaxNameLength)]
         public string Name { get; set; }
@@ -20,15 +24,5 @@ namespace LINGYUN.Abp.Account
         [EmailAddress]
         [StringLength(IdentityUserConsts.MaxEmailLength)]
         public string EmailAddress { get; set; }
-
-        [Required]
-        [StringLength(IdentityUserConsts.MaxPasswordLength)]
-        [DataType(DataType.Password)]
-        [DisableAuditing]
-        public string Password { get; set; }
-
-        [Required]
-        [StringLength(6)]
-        public string VerifyCode { get; set; }
     }
 }

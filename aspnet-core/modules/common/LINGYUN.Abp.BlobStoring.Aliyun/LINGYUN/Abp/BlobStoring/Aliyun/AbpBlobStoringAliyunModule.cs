@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
                 {
                     containerConfiguration.UseAliyun(aliyun =>
                     {
-                        aliyun.BucketName = configuration[AliyunBlobProviderConfigurationNames.BucketName];
+                        aliyun.BucketName = configuration[AliyunBlobProviderConfigurationNames.BucketName] ?? "";
                         aliyun.CreateBucketIfNotExists = configuration.GetSection(AliyunBlobProviderConfigurationNames.CreateBucketIfNotExists).Get<bool>();
                         aliyun.CreateBucketReferer = configuration.GetSection(AliyunBlobProviderConfigurationNames.CreateBucketReferer).Get<List<string>>();
                         aliyun.Endpoint = configuration[AliyunBlobProviderConfigurationNames.Endpoint];

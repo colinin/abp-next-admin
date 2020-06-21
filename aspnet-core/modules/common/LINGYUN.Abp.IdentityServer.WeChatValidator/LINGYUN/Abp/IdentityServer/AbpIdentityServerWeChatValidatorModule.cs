@@ -28,11 +28,6 @@ namespace LINGYUN.Abp.IdentityServer
 
             Configure<WeChatSignatureOptions>(configuration.GetSection("WeChat:Signature"));
 
-            context.Services.AddHttpClient(WeChatValidatorConsts.WeChatValidatorClientName, options =>
-            {
-                options.BaseAddress = new System.Uri("https://api.weixin.qq.com/sns/jscode2session");
-            });
-
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityServerWeChatValidatorModule>();

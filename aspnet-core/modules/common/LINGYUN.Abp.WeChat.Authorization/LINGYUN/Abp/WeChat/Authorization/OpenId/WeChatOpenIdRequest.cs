@@ -1,4 +1,4 @@
-﻿namespace System.Net.Http
+﻿namespace LINGYUN.Abp.WeChat.Authorization
 {
     public class WeChatOpenIdRequest
     {

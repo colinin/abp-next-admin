@@ -14,6 +14,7 @@
     "Description:PhoneVerifyCodeExpiration": "The valid time for the user to send SMS verification code, unit m, default 3m",
     "RequiredEmailAddress": "Email address required",
     "InvalidPhoneNumber": "Invalid phone number",
-    "DuplicatePhoneNumber": "The phone number {0} has been registered!"
+    "DuplicatePhoneNumber": "The phone number {0} has been registered!",
+    "DuplicateWeChat": "The wechat has been registered!"
   }
 }

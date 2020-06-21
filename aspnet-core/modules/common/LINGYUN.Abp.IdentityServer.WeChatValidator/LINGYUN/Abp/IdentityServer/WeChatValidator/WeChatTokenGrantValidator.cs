@@ -26,6 +26,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
         protected AbpWeChatOptions Options { get; }
         protected IHttpClientFactory HttpClientFactory{ get; }
         protected IEventService EventService { get; }
+        protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected UserManager<IdentityUser> UserManager { get; }
         protected SignInManager<IdentityUser> SignInManager { get; }
@@ -35,6 +36,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
 
         public WeChatTokenGrantValidator(
             IEventService eventService,
+            IWeChatOpenIdFinder weChatOpenIdFinder,
             IHttpClientFactory httpClientFactory,
             UserManager<IdentityUser> userManager,
             IIdentityUserRepository userRepository,
@@ -52,6 +54,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             SignInManager = signInManager;
             Localizer = stringLocalizer;
             UserRepository = userRepository;
+            WeChatOpenIdFinder = weChatOpenIdFinder;
             HttpClientFactory = httpClientFactory;
             PhoneNumberTokenProvider = phoneNumberTokenProvider;
         }
@@ -77,28 +80,11 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                     Localizer["InvalidGrant:WeChatCodeNotFound"]);
                 return;
             }
-            var httpClient = HttpClientFactory.CreateClient(WeChatValidatorConsts.WeChatValidatorClientName);
-            var httpRequest = new WeChatOpenIdRequest
-            {
-                Code = wechatCode,
-                AppId = Options.AppId,
-                Secret = Options.AppSecret,
-                BaseUrl = httpClient.BaseAddress.AbsoluteUri
-            };
-
-            var wechatOpenIdResponse = await httpClient.RequestWeChatCodeTokenAsync(httpRequest);
-            if (wechatOpenIdResponse.IsError)
-            {
-                Logger.LogWarning("Authentication failed for token: {0}, reason: invalid token", wechatCode);
-                Logger.LogWarning("WeChat auth failed, error: {0}", wechatOpenIdResponse.ErrorMessage);
-                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant,
-                    Localizer["InvalidGrant:WeChatTokenInvalid"]);
-                return;
-            }
-            var currentUser = await UserManager.FindByNameAsync(wechatOpenIdResponse.OpenId);
+            var whchatOpenId = await WeChatOpenIdFinder.FindAsync(wechatCode);
+            var currentUser = await UserManager.FindByLoginAsync("WeChat", whchatOpenId.OpenId);
             if(currentUser == null)
             {
-                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatOpenIdResponse.OpenId);
+                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", whchatOpenId.OpenId);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant,
                     Localizer["InvalidGrant:WeChatNotRegister"]);
                 return;
@@ -110,9 +96,9 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             {
                 additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
             }
-            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, wechatOpenIdResponse.OpenId));
+            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, whchatOpenId.OpenId));
 
-            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenIdResponse.OpenId, null));
+            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, whchatOpenId.OpenId, null));
             context.Result = new GrantValidationResult(sub, 
                 WeChatValidatorConsts.AuthenticationMethods.BasedWeChatAuthentication, additionalClaims.ToArray());
         }

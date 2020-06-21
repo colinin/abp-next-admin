@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.WeChat.Authorization
 
             Logger.LogDebug($"Not found in the cache, getting from the httpClient: {cacheKey}");
 
-            var client = HttpClientFactory.CreateClient("WeChatTokenProviderClient");
+            var client = HttpClientFactory.CreateClient("WeChatRequestClient");
 
             var request = new WeChatTokenRequest
             {
