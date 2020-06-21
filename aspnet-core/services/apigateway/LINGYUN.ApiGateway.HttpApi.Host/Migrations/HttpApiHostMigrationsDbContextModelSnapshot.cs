@@ -4,6 +4,7 @@ using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.ApiGateway.HttpApi.Host.Migrations
 {
@@ -14,7 +15,8 @@ namespace LINGYUN.ApiGateway.HttpApi.Host.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
+                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.ApiGateway.Ocelot.AggregateReRoute", b =>
@@ -603,7 +605,7 @@ namespace LINGYUN.ApiGateway.HttpApi.Host.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DownstreamPathTemplate", "UpstreamPathTemplate")
+                    b.HasIndex("AppId", "DownstreamPathTemplate", "UpstreamPathTemplate")
                         .IsUnique();
 
                     b.ToTable("AppApiGatewayReRoute");

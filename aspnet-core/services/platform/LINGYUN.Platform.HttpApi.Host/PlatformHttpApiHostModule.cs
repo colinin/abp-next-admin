@@ -26,6 +26,7 @@ using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity;
@@ -94,7 +95,8 @@ namespace LINGYUN.Platform
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+                })
+                .UseDashboard();
             });
 
             PreConfigure<IdentityBuilder>(builder =>
@@ -111,6 +113,14 @@ namespace LINGYUN.Platform
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>

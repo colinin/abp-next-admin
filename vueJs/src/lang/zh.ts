@@ -392,7 +392,8 @@ export default {
     enableRateLimiting: '启用流量控制',
     rateLimitCount: '最大请求数量',
     period: '速率限制时间',
-    periodTimespan: '允许错开时间重试',
+    periodTimespan: '允许错开时间重试(s)',
+    clientWhitelist: '客户端白名单',
     ipAllowedList: 'Ip白名单',
     ipBlockedList: 'Ip黑名单',
     authenticationProviderKey: '身份认证程序',
@@ -610,5 +611,9 @@ export default {
     correctEmailAddress: '正确的邮件地址',
     correctPhoneNumber: '正确的手机号码',
     operatingFast: '您的操作过快,请稍后再试!'
+  },
+  messages: {
+    noNotifications: '没有通知',
+    noMessages: '没有消息'
   }
 }

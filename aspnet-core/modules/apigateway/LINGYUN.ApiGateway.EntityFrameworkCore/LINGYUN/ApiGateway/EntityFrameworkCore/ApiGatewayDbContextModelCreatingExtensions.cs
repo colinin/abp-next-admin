@@ -304,7 +304,7 @@ namespace LINGYUN.ApiGateway.EntityFrameworkCore
                 e.Property(x => x.DownstreamHostAndPorts).HasMaxLength(1000);
                 e.Property(x => x.DelegatingHandlers).HasMaxLength(1000);
 
-                e.HasIndex(i => new { i.DownstreamPathTemplate, i.UpstreamPathTemplate }).IsUnique();
+                e.HasIndex(i => new { i.AppId, i.DownstreamPathTemplate, i.UpstreamPathTemplate }).IsUnique();
 
                 e.ConfigureConcurrencyStamp();
                 e.ConfigureExtraProperties();

@@ -15,14 +15,6 @@
         /// </summary>
         public string ActionName { get; set; } = "SendSms";
         /// <summary>
-        /// ApiKey
-        /// </summary>
-        public string AccessKeyId { get; set; }
-        /// <summary>
-        /// Api密钥
-        /// </summary>
-        public string AccessKeySecret { get; set; }
-        /// <summary>
         /// 默认版本号
         /// </summary>
         public string Version { get; set; } = "2017-05-25";

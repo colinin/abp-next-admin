@@ -14,16 +14,16 @@ const service = axios.create({
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
+    const tenantId = getTenant()
+    if (tenantId) {
+      config.headers.__tenant = tenantId
+    }
     if (config.url === '/connect/token') {
       return config
     }
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       config.headers.Authorization = UserModule.token
-    }
-    const tenantId = getTenant()
-    if (tenantId) {
-      config.headers.__tenant = tenantId
     }
     // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
     const language = getLanguage()
@@ -97,40 +97,18 @@ service.interceptors.response.use(
   },
   (error) => {
     showError(error.response.data, error.response.status)
-    if (error.response.status === 401) {
-      if (UserModule.refreshToken) {
-        UserModule.RefreshSession().then(() => {
-          return service.request(error.config)
-        }).catch(() => {
-          MessageBox.confirm(
-            l('login.tokenExprition'),
-            l('login.confirmLogout'),
-            {
-              confirmButtonText: l('login.relogin'),
-              cancelButtonText: l('global.cancel'),
-              type: 'error'
-            }).then(() => {
-            UserModule.ResetToken()
-            location.reload() // To prevent bugs from vue-router
-            return Promise.reject(error)
-          })
-        })
-      } else {
-        MessageBox.confirm(
-          l('login.tokenExprition'),
-          l('login.confirmLogout'),
-          {
-            confirmButtonText: l('login.relogin'),
-            cancelButtonText: l('global.cancel'),
-            type: 'error'
-          }).then(() => {
-          UserModule.ResetToken()
-          location.reload() // To prevent bugs from vue-router
-          return Promise.reject(error)
-        })
-      }
-    }
-    return Promise.reject(error)
+    MessageBox.confirm(
+      l('login.tokenExprition'),
+      l('login.confirmLogout'),
+      {
+        confirmButtonText: l('login.relogin'),
+        cancelButtonText: l('global.cancel'),
+        type: 'error'
+      }).then(() => {
+      UserModule.ResetToken()
+      location.reload() // To prevent bugs from vue-router
+      return Promise.reject(error)
+    })
   }
 )
 

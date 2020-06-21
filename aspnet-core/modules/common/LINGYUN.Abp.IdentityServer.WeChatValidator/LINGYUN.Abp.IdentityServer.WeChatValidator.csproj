@@ -6,7 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LINGYUN\Abp\IdentityServer\Localization\WeChatValidator\en.json" />
+    <None Remove="LINGYUN\Abp\IdentityServer\Localization\WeChatValidator\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\WeChatValidator\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\WeChatValidator\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,8 +15,14 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         Task<List<string>> GetUserSubscribesAsync(Guid userId);
 
+        Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(string userName);
+
         Task<List<Guid>> GetUserSubscribesAsync(string notificationName);
 
         Task InsertUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes);
+
+        Task DeleteUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes);
+
+        Task DeleteUserSubscriptionAsync(string notificationName);
     }
 }

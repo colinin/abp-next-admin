@@ -22,9 +22,9 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
         }
 
         [HubMethodName("ChangeState")]
-        public virtual async Task ChangeStateAsync(long id, NotificationReadState readState = NotificationReadState.Read)
+        public virtual async Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
         {
-            await NotificationStore.ChangeUserNotificationReadStateAsync(CurrentTenant.Id, CurrentUser.GetId(), id, readState);
+            await NotificationStore.ChangeUserNotificationReadStateAsync(CurrentTenant.Id, CurrentUser.GetId(), long.Parse(id), readState);
         }
 
 

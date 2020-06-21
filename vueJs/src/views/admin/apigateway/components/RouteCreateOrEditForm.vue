@@ -442,14 +442,15 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="18">
             <el-form-item
               :label="$t('apiGateWay.periodTimespan')"
               prop="rateLimitOptions.periodTimespan"
               label-width="150px"
             >
-              <el-switch
+              <el-input
                 v-model="apiGateWayRoute.rateLimitOptions.periodTimespan"
+                type="number"
               />
             </el-form-item>
           </el-col>
@@ -469,6 +470,14 @@
         >
           <el-input
             v-model="apiGateWayRoute.rateLimitOptions.period"
+          />
+        </el-form-item>
+        <el-form-item
+          prop="rateLimitOptions.clientWhitelist"
+          :label="$t('apiGateWay.clientWhitelist')"
+        >
+          <el-input-tag
+            v-model="apiGateWayRoute.rateLimitOptions.clientWhitelist"
           />
         </el-form-item>
       </el-tab-pane>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LINGYUN.Abp.WeChat.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Sms;
-using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Account
 {
@@ -17,6 +17,8 @@ namespace LINGYUN.Abp.Account
     /// </summary>
     public class AccountAppService : ApplicationService, IAccountAppService
     {
+        private IWeChatOpenIdFinder _weChatOpenIdFinder;
+        protected IWeChatOpenIdFinder WeChatOpenIdFinder => LazyGetRequiredService(ref _weChatOpenIdFinder);
         protected ISmsSender SmsSender { get; }
         protected IdentityUserManager UserManager { get; }
         protected IdentityUserStore UserStore { get; }
@@ -39,6 +41,32 @@ namespace LINGYUN.Abp.Account
             PhoneNumberTokenProvider = phoneNumberTokenProvider;
             LocalizationResource = typeof(Localization.AccountResource);
         }
+
+        public virtual async Task<IdentityUserDto> RegisterAsync(WeChatRegisterDto input)
+        {
+            await CheckSelfRegistrationAsync();
+
+            var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code);
+
+            var user = await UserManager.FindByLoginAsync("WeChat", wehchatOpenId.OpenId);
+            if (user == null)
+            {
+                var userName = input.UserName ?? wehchatOpenId.OpenId;
+                var userEmail = input.EmailAddress ?? $"{userName}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
+                
+                user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
+                {
+                    Name = input.Name ?? userName
+                };
+                (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+
+                (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
+
+                var userLogin = new UserLoginInfo("WeChat", wehchatOpenId.OpenId, "微信认证登录");
+                (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
+            }
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
         /// <summary>
         /// 用户注册
         /// </summary>
@@ -49,7 +77,7 @@ namespace LINGYUN.Abp.Account
         ///     如果没有此手机号的缓存记录或验证码不匹配,抛出验证码无效的异常
         ///     用户注册成功,清除缓存的验证码记录
         /// </remarks>
-        public virtual async Task<IdentityUserDto> RegisterAsync(RegisterVerifyDto input)
+        public virtual async Task<IdentityUserDto> RegisterAsync(PhoneNumberRegisterDto input)
         {
             var phoneVerifyCacheKey = NormalizeCacheKey(input.PhoneNumber);
 

@@ -63,6 +63,7 @@ namespace LINGYUN.Abp.TenantManagement
             {
                 Id = tenant.Id,
                 Name = tenant.Name,
+                AdminUserId = GuidGenerator.Create(),
                 AdminEmailAddress = input.AdminEmailAddress,
                 AdminPassword = input.AdminPassword
             };
@@ -99,12 +100,7 @@ namespace LINGYUN.Abp.TenantManagement
             {
                 return;
             }
-            var deleteEventData = new DeleteEventData
-            {
-                Id = id
-            };
             await TenantRepository.DeleteAsync(tenant);
-            await EventBus.PublishAsync(deleteEventData);
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]

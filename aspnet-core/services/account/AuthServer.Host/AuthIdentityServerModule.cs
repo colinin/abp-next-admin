@@ -18,6 +18,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
@@ -40,6 +41,7 @@ namespace AuthServer.Host
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpIdentityServerSmsValidatorModule),
+        typeof(AbpIdentityServerWeChatValidatorModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
@@ -63,7 +65,8 @@ namespace AuthServer.Host
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+                })
+                .UseDashboard();
             });
         }
 
@@ -75,6 +78,15 @@ namespace AuthServer.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60);
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -105,13 +117,14 @@ namespace AuthServer.Host
 
             context.Services.AddStackExchangeRedisCache(options =>
             {
-                options.InstanceName = configuration["Redis:InstanceName"];
-                options.Configuration = configuration["Redis:Configuration"];
+                options.Configuration = configuration["RedisCache:ConnectString"];
+                var instanceName = configuration["RedisCache:RedisPrefix"];
+                options.InstanceName = instanceName.IsNullOrEmpty() ? "MessageService_Cache" : instanceName;
             });
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "AuthServer-Protection-Keys");
@@ -149,6 +162,10 @@ namespace AuthServer.Host
             app.UseMultiTenancy();
             app.UseIdentityServer();
             app.UseAuditing();
+
+            // 处理微信消息
+            // app.UseWeChatSignature();
+
             SeedData(context);
         }
 

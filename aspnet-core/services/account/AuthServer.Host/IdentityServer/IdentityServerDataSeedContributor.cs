@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LINGYUN.Abp.IdentityServer.WeChatValidator;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
@@ -21,6 +23,7 @@ namespace Multicolin.Aftermarket.IdentityServer
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
+        private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IConfiguration _configuration;
@@ -30,11 +33,13 @@ namespace Multicolin.Aftermarket.IdentityServer
             IPermissionDataSeeder permissionDataSeeder,
             IApiResourceRepository apiResourceRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
+            IIdentityClaimTypeRepository identityClaimTypeRepository,
             IGuidGenerator guidGenerator)
         {
             _clientRepository = clientRepository;
             _permissionDataSeeder = permissionDataSeeder;
             _apiResourceRepository = apiResourceRepository;
+            _identityClaimTypeRepository = identityClaimTypeRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
@@ -52,6 +57,18 @@ namespace Multicolin.Aftermarket.IdentityServer
             await _identityResourceDataSeeder.CreateStandardResourcesAsync();
             await CreateApiResourcesAsync();
             await CreateClientsAsync();
+            await CreateWeChatClaimTypeAsync();
+        }
+
+        private async Task CreateWeChatClaimTypeAsync()
+        {
+            if (!await _identityClaimTypeRepository.AnyAsync(WeChatValidatorConsts.ClaimTypes.OpenId))
+            {
+                var wechatClaimType = new IdentityClaimType(_guidGenerator.Create(), WeChatValidatorConsts.ClaimTypes.OpenId,
+                    isStatic: true, description: "适用于微信认证的用户标识");
+
+                await _identityClaimTypeRepository.InsertAsync(wechatClaimType);
+            }
         }
 
         private async Task CreateApiResourcesAsync()

@@ -29,7 +29,9 @@ namespace LINGYUN.Abp.MessageService.Messages
             var groupAdmins = await (from gp in DbContext.Set<ChatGroup>()
                                      join gpa in DbContext.Set<ChatGroupAdmin>()
                                        on gp.GroupId equals gpa.GroupId
-                                     select gpa).ToListAsync();
+                                     select gpa)
+                                     .Distinct()
+                                     .ToListAsync();
             return groupAdmins;
         }
 

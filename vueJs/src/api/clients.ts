@@ -14,7 +14,8 @@ export default class ClientService {
 
   public static getClients(payload: ClientGetByPaged) {
     let _url = '/api/IdentityServer/Clients'
-    _url += '?sorting=' + payload.sorting
+    _url += '?filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + pagerFormat(payload.skipCount)
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<Client>>(_url, serviceUrl)
@@ -81,7 +82,7 @@ export default class ClientService {
 }
 
 export class ClientGetByPaged extends PagedAndSortedResultRequestDto {
-  filter?: string
+  filter = ''
 }
 
 export enum HashType {

@@ -10,7 +10,6 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
-using Volo.Abp.Users.Notifications;
 
 namespace LINGYUN.Abp.MessageService.EventBus
 {
@@ -18,24 +17,26 @@ namespace LINGYUN.Abp.MessageService.EventBus
     {
         private readonly ISettingProvider _settingProvider;
         private readonly IStringLocalizer _stringLocalizer;
-        private readonly INotificationStore _notificationStore;
+
         private readonly INotificationDispatcher _notificationDispatcher;
+        private readonly INotificationSubscriptionManager _notificationSubscriptionManager;
 
         // 需要模拟用户令牌
         // 是否有必要
         // private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
         public UserCreateSendWelcomeEventHandler(
             ISettingProvider settingProvider,
-            INotificationStore notificationStore,
             INotificationDispatcher notificationDispatcher,
-            IStringLocalizer<MessageServiceResource> stringLocalizer
+            IStringLocalizer<MessageServiceResource> stringLocalizer,
+            INotificationSubscriptionManager notificationSubscriptionManager
             //ICurrentPrincipalAccessor currentPrincipalAccessor
             )
         {
             _settingProvider = settingProvider;
             _stringLocalizer = stringLocalizer;
-            _notificationStore = notificationStore;
+
             _notificationDispatcher = notificationDispatcher;
+            _notificationSubscriptionManager = notificationSubscriptionManager;
 
             //_currentPrincipalAccessor = currentPrincipalAccessor;
         }
@@ -51,21 +52,27 @@ namespace LINGYUN.Abp.MessageService.EventBus
             }
             using (CultureHelper.Use(userDefaultCultureName, userDefaultCultureName))
             {
+                var userIdentifer = new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName);
                 // 订阅用户欢迎消息
-                await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
-                    eventData.Entity.Id, UserNotificationNames.WelcomeToApplication);
+                await _notificationSubscriptionManager.SubscribeAsync(eventData.Entity.TenantId,
+                    userIdentifer, UserNotificationNames.WelcomeToApplication);
 
-                var userWelcomeNotifiction = new NotificationInfo
-                {
-                    CreationTime = DateTime.Now,
-                    Name = UserNotificationNames.WelcomeToApplication,
-                    NotificationSeverity = NotificationSeverity.Info,
-                    NotificationType = NotificationType.System,
-                    TenantId = eventData.Entity.TenantId
-                };
-                userWelcomeNotifiction.Data.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.UserName);
+                // Store未检查已订阅
+                //await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
+                //    userIdentifer, UserNotificationNames.WelcomeToApplication);
 
-                await _notificationDispatcher.DispatcheAsync(userWelcomeNotifiction);
+                var userWelcomeNotifictionData = new NotificationData();
+
+                userWelcomeNotifictionData.WriteStandardData(
+                    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
+                    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
+                    DateTime.Now, eventData.Entity.UserName);
+
+                // 换成用户名称,而不是用户名
+                // userWelcomeNotifictionData.Properties["message"] = L("WelcomeToApplicationFormUser", eventData.Entity.Name);
+
+                var noticeNormalizerName = NotificationNameNormalizer.NormalizerName(UserNotificationNames.WelcomeToApplication);
+                await _notificationDispatcher.DispatchAsync(noticeNormalizerName, userWelcomeNotifictionData, eventData.Entity.TenantId);
             }
         }
 

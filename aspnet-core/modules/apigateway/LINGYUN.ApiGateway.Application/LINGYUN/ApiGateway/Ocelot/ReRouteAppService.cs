@@ -1,27 +1,26 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.ApiGateway.EventBus;
+﻿using LINGYUN.ApiGateway.EventBus;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.ApiGateway.Ocelot
 {
     [Authorize(ApiGatewayPermissions.Route.Default)]
     public class ReRouteAppService : ApiGatewayApplicationServiceBase, IReRouteAppService
     {
+        private IDistributedEventBus _eventBus;
+        protected IDistributedEventBus DistributedEventBus => LazyGetRequiredService(ref _eventBus);
+
         private readonly IRouteGroupChecker _routeGroupChecker;
         private readonly IReRouteRepository _reRouteRepository;
-        private readonly ICapPublisher _eventPublisher;
 
         public ReRouteAppService(
-            ICapPublisher eventPublisher,
             IRouteGroupChecker routeGroupChecker,
             IReRouteRepository reRouteRepository
             )
         {
-            _eventPublisher = eventPublisher;
             _routeGroupChecker = routeGroupChecker;
             _reRouteRepository = reRouteRepository;
         }
@@ -37,7 +36,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             var reRouteDto = ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("ReRoute", "Create"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Create"));
 
             return reRouteDto;
         }
@@ -74,7 +73,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             var reRouteDto = ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("ReRoute", "Modify"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Modify"));
 
             return reRouteDto;
         }
@@ -116,9 +115,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         [Authorize(ApiGatewayPermissions.Route.Delete)]
         public async Task DeleteAsync(ReRouteGetByIdInputDto routeGetById)
         {
-            await _reRouteRepository.DeleteAsync(x => x.ReRouteId.Equals(routeGetById.RouteId));
+            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(routeGetById.RouteId);
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("ReRoute", "Delete"));
+            await _reRouteRepository.DeleteAsync(reRoute);
+
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(reRoute.AppId, "ReRoute", "Delete"));
         }
 
         [Authorize(ApiGatewayPermissions.Route.Delete)]
@@ -128,7 +129,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
             await _reRouteRepository.DeleteAsync(x => x.AppId.Equals(routeGetByAppId.AppId));
 
-            await _eventPublisher.PublishAsync(ApigatewayConfigChangeCommand.EventName, new ApigatewayConfigChangeCommand("ReRoute", "Clean"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(routeGetByAppId.AppId, "ReRoute", "Clean"));
         }
 
         protected virtual void ApplyReRouteOptions(ReRoute reRoute, ReRouteDtoBase routeDto)

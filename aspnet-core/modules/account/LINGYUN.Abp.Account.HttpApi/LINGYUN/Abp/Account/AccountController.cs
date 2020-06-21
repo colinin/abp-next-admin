@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Account
 {
     [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
-    [Route("api/account/phone")]
+    [Route("api/account")]
     public class AccountController : AbpController, IAccountAppService
     {
         protected IAccountAppService AccountAppService { get; }
@@ -20,21 +20,28 @@ namespace LINGYUN.Abp.Account
         }
 
         [HttpPost]
-        [Route("register")]
-        public virtual async Task<IdentityUserDto> RegisterAsync(RegisterVerifyDto input)
+        [Route("wechat/register")]
+        public virtual async Task<IdentityUserDto> RegisterAsync(WeChatRegisterDto input)
         {
             return await AccountAppService.RegisterAsync(input);
         }
 
         [HttpPost]
-        [Route("verify")]
+        [Route("phone/register")]
+        public virtual async Task<IdentityUserDto> RegisterAsync(PhoneNumberRegisterDto input)
+        {
+            return await AccountAppService.RegisterAsync(input);
+        }
+
+        [HttpPost]
+        [Route("phone/verify")]
         public virtual async Task VerifyPhoneNumberAsync(VerifyDto input)
         {
             await AccountAppService.VerifyPhoneNumberAsync(input);
         }
 
         [HttpPut]
-        [Route("reset-password")]
+        [Route("phone/reset-password")]
         public virtual async Task ResetPasswordAsync(PasswordResetDto passwordReset)
         {
             await AccountAppService.ResetPasswordAsync(passwordReset);

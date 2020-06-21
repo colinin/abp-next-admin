@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.IdentityServer
             {
                 options.Resources
                     .Get<AbpIdentityServerResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/IdentityServer/Localization/Resources");
+                    .AddVirtualJson("/LINGYUN/Abp/IdentityServer/Localization/SmsValidator");
             });
         }
     }

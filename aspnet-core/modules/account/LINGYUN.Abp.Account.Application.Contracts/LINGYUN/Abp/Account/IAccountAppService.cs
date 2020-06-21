@@ -6,7 +6,9 @@ namespace LINGYUN.Abp.Account
 {
     public interface IAccountAppService : IApplicationService
     {
-        Task<IdentityUserDto> RegisterAsync(RegisterVerifyDto input);
+        Task<IdentityUserDto> RegisterAsync(PhoneNumberRegisterDto input);
+
+        Task<IdentityUserDto> RegisterAsync(WeChatRegisterDto input);
 
         Task ResetPasswordAsync(PasswordResetDto passwordReset);
 

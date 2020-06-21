@@ -21,7 +21,11 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         public async Task<List<UserSubscribe>> GetSubscribesAsync(string notificationName)
         {
-            var userSubscribes = await DbSet.Where(x => x.NotificationName.Equals(notificationName)).ToListAsync();
+            var userSubscribes = await DbSet
+                .Distinct()
+                .Where(x => x.NotificationName.Equals(notificationName))
+                .AsNoTracking()
+                .ToListAsync();
 
             return userSubscribes;
         }
@@ -30,6 +34,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         {
             var userSubscribe = await DbSet
                 .Where(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName))
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             return userSubscribe;
@@ -38,8 +43,20 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task<List<string>> GetUserSubscribesAsync(Guid userId)
         {
             var userSubscribeNames = await DbSet
+                .Distinct()
                 .Where(x => x.UserId.Equals(userId))
                 .Select(x => x.NotificationName)
+                .ToListAsync();
+
+            return userSubscribeNames;
+        }
+
+        public async Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(string userName)
+        {
+            var userSubscribeNames = await DbSet
+                .Distinct()
+                .Where(x => x.UserName.Equals(userName))
+                .AsNoTracking()
                 .ToListAsync();
 
             return userSubscribeNames;
@@ -48,6 +65,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task<List<Guid>> GetUserSubscribesAsync(string notificationName)
         {
             var subscribeUsers = await DbSet
+                .Distinct()
                 .Where(x => x.NotificationName.Equals(notificationName))
                 .Select(x => x.UserId)
                 .ToListAsync();
@@ -58,6 +76,18 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task InsertUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes)
         {
             await DbSet.AddRangeAsync(userSubscribes);
+        }
+
+        public async Task DeleteUserSubscriptionAsync(string notificationName)
+        {
+            var userSubscribes = await DbSet.Where(x => x.NotificationName.Equals(notificationName)).ToListAsync();
+            DbSet.RemoveRange(userSubscribes);
+        }
+
+        public Task DeleteUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes)
+        {
+            DbSet.RemoveRange(userSubscribes);
+            return Task.CompletedTask;
         }
 
         public async Task<bool> UserSubscribeExistsAysnc(string notificationName, Guid userId)

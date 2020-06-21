@@ -20,6 +20,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
         }
 
+        public async Task<bool> AnyAsync(Guid userId, long notificationId)
+        {
+            return await DbSet
+                .AnyAsync(x => x.NotificationId.Equals(notificationId) && x.UserId.Equals(userId));
+        }
+
         public async Task InsertUserNotificationsAsync(IEnumerable<UserNotification> userNotifications)
         {
             await DbSet.AddRangeAsync(userNotifications);
@@ -49,9 +55,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      join n in DbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                      where un.UserId.Equals(userId) && un.ReadStatus.Equals(readState)
-                                     select n)
-                                    .Take(maxResultCount)
-                                    .ToListAsync();
+                                     orderby n.NotificationId descending
+                                           select n)
+                                           .Distinct()
+                                           .Take(maxResultCount)
+                                           .ToListAsync();
             return userNofitications;
         }
     }

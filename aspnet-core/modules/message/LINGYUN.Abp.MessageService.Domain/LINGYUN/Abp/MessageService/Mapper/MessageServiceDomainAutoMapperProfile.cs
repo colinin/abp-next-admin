@@ -16,6 +16,8 @@ namespace LINGYUN.Abp.MessageService.Mapper
             CreateMap<Notification, NotificationInfo>()
                 .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId))
                 .ForMember(dto => dto.Name, map => map.MapFrom(src => src.NotificationName))
+                .ForMember(dto => dto.CateGory, map => map.MapFrom(src => src.NotificationCateGory))
+                .ForMember(dto => dto.Lifetime, map => map.Ignore())
                 .ForMember(dto => dto.NotificationType, map => map.MapFrom(src => src.Type))
                 .ForMember(dto => dto.NotificationSeverity, map => map.MapFrom(src => src.Severity))
                 .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>

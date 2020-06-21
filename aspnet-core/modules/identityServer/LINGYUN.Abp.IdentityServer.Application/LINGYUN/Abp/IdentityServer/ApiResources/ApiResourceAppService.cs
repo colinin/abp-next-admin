@@ -31,7 +31,8 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         public virtual async Task<PagedResultDto<ApiResourceDto>> GetAsync(ApiResourceGetByPagedInputDto apiResourceGetByPaged)
         {
             var apiResources = await ApiResourceRepository.GetListAsync(apiResourceGetByPaged.Sorting,
-                apiResourceGetByPaged.SkipCount, apiResourceGetByPaged.MaxResultCount);
+                apiResourceGetByPaged.SkipCount, apiResourceGetByPaged.MaxResultCount,
+                apiResourceGetByPaged.Filter);
             var apiResourceCount = await ApiResourceRepository.GetCountAsync();
 
             return new PagedResultDto<ApiResourceDto>(apiResourceCount,
