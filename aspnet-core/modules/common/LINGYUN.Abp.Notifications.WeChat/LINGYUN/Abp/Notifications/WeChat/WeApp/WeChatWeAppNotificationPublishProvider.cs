@@ -55,10 +55,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(identifier.UserName,
                 templateId, redirect, weAppState, weAppLang);
 
-
             // 写入模板数据
             weChatWeAppNotificationData.WriteStandardData(NotificationData.ToStandardData(Options.DefaultMsgPrefix, notification.Data));
-            // weChatWeAppNotificationData.WriteData(Options.DefaultMsgPrefix, notification.Data.Properties);
 
             Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
             // 发送小程序订阅消息
