@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -93,6 +94,29 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         public async Task<bool> UserSubscribeExistsAysnc(string notificationName, Guid userId)
         {
             return await DbSet.AnyAsync(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName));
+        }
+
+        public virtual async Task<List<UserSubscribe>> GetUserSubscribesAsync(Guid userId, string sorting = "Id", int skipCount = 1, int maxResultCount = 10)
+        {
+            var userSubscribes = await DbSet
+                 .Distinct()
+                 .Where(x => x.UserId.Equals(userId))
+                 .OrderBy(sorting ?? nameof(UserSubscribe.Id))
+                 .Page(skipCount, maxResultCount)
+                 .AsNoTracking()
+                 .ToListAsync();
+
+            return userSubscribes;
+        }
+
+        public virtual async Task<long> GetCountAsync(Guid userId)
+        {
+            var userSubscribedCount = await DbSet
+                 .Distinct()
+                 .Where(x => x.UserId.Equals(userId))
+                 .LongCountAsync();
+
+            return userSubscribedCount;
         }
     }
 }

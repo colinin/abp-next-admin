@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LINGYUN.Abp.IM.Messages;
-using LINGYUN.Abp.MessageService.Messages;
+using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using LINGYUN.Abp.Notifications;

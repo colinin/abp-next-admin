@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:MessageService": "Message service",
+    "Permission:Notification": "Notification",
+    "Permission:Delete": "Delete"
+  }
+}

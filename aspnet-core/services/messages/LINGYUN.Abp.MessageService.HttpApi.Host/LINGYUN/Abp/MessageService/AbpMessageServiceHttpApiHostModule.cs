@@ -40,6 +40,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
+        typeof(AbpMessageServiceApplicationModule),
         typeof(AbpMessageServiceHttpApiModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMessageServiceEntityFrameworkCoreModule),

@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.MessageService.Messages;
+﻿using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.EntityFrameworkCore;

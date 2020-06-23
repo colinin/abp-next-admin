@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -60,6 +61,37 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                            .Distinct()
                                            .Take(maxResultCount)
                                            .ToListAsync();
+            return userNofitications;
+        }
+
+        public virtual async Task<long> GetCountAsync(Guid userId, string filter = "", NotificationReadState readState = NotificationReadState.UnRead)
+        {
+            var userNofiticationCount = await (from un in DbContext.Set<UserNotification>()
+                                           join n in DbContext.Set<Notification>()
+                                               on un.NotificationId equals n.NotificationId
+                                           where un.UserId.Equals(userId) && un.ReadStatus.Equals(readState)
+                                           && (n.NotificationName.Contains(filter) || n.NotificationTypeName.Contains(filter)
+                                                || n.NotificationCateGory.Contains(filter))
+                                           select n)
+                                              .Distinct()
+                                              .LongCountAsync();
+            return userNofiticationCount;
+        }
+
+        public virtual async Task<List<Notification>> GetNotificationsAsync(Guid userId, string filter = "", string sorting = "NotificationId", NotificationReadState readState = NotificationReadState.UnRead, int skipCount = 1, int maxResultCount = 10)
+        {
+            var userNofitications = await (from un in DbContext.Set<UserNotification>()
+                                               join n in DbContext.Set<Notification>()
+                                                   on un.NotificationId equals n.NotificationId
+                                               where un.UserId.Equals(userId) && un.ReadStatus.Equals(readState)
+                                               && (n.NotificationName.Contains(filter) || n.NotificationTypeName.Contains(filter)
+                                                    || n.NotificationCateGory.Contains(filter))
+                                               orderby sorting ?? nameof(Notification.NotificationId) descending
+                                               select n)
+                                              .Distinct()
+                                              .Page(skipCount, maxResultCount)
+                                              .AsNoTracking()
+                                              .ToListAsync();
             return userNofitications;
         }
     }

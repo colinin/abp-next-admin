@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +27,13 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// </summary>
         public ILogger<NotificationEventHandler> Logger { get; set; }
         /// <summary>
+        /// Reference to <see cref="AbpNotificationOptions"/>.
+        /// </summary>
+        protected AbpNotificationOptions Options { get; }
+        /// <summary>
         /// Reference to <see cref="IBackgroundJobManager"/>.
         /// </summary>
-        protected IBackgroundJobManager BackgroundJobManager;
+        protected IBackgroundJobManager BackgroundJobManager { get; }
         /// <summary>
         /// Reference to <see cref="INotificationStore"/>.
         /// </summary>
@@ -43,12 +48,12 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// </summary>
         public NotificationEventHandler(
             IBackgroundJobManager backgroundJobManager,
-
+            IOptions<AbpNotificationOptions> options,
             INotificationStore notificationStore,
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
             BackgroundJobManager = backgroundJobManager;
-
+            Options = options.Value;
             NotificationStore = notificationStore;
             NotificationPublishProviderManager = notificationPublishProviderManager;
 
@@ -117,7 +122,12 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             try
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
-
+                var notifacationDataMapping = Options.NotificationDataMappings
+                        .GetMapItemOrNull(provider.Name, notificationInfo.CateGory);
+                if (notifacationDataMapping != null)
+                {
+                    notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
+                }
                 // 发布
                 await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
 
