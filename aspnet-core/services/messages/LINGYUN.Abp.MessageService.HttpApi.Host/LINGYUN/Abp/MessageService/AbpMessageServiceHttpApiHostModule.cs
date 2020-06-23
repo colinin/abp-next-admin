@@ -156,13 +156,13 @@ namespace LINGYUN.Abp.MessageService
             }
         }
 
-        public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var backgroundJobManager = context.ServiceProvider.GetRequiredService<IBackgroundJobManager>();
-            // 五分钟执行一次的定时任务
-            AsyncHelper.RunSync(async () => await
-                backgroundJobManager.EnqueueAsync(CronGenerator.Minute(5), new NotificationCleanupExpritionJobArgs(200)));
-        }
+        //public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
+        //{
+        //    var backgroundJobManager = context.ServiceProvider.GetRequiredService<IBackgroundJobManager>();
+        //    // 五分钟执行一次的定时任务
+        //    AsyncHelper.RunSync(async () => await
+        //        backgroundJobManager.EnqueueAsync(CronGenerator.Minute(5), new NotificationCleanupExpritionJobArgs(200)));
+        //}
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {

@@ -3,7 +3,7 @@
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
-        typeof(AbpMessageServiceApplicationContrantsModule),
+        typeof(AbpMessageServiceApplicationContractsModule),
         typeof(AbpMessageServiceDomainModule))]
     public class AbpMessageServiceApplicationModule : AbpModule
     {

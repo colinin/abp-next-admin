@@ -1,9 +1,11 @@
 ﻿using LINGYUN.Abp.Notifications.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 
@@ -23,6 +25,20 @@ namespace LINGYUN.Abp.Notifications
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddTransient<INotificationDispatcher, DefaultNotificationDispatcher>();
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpNotificationCleanupOptions>>().Value;
+            if (options.IsEnabled)
+            {
+                context.ServiceProvider
+                    .GetRequiredService<IBackgroundWorkerManager>()
+                    .Add(
+                        context.ServiceProvider
+                            .GetRequiredService<NotificationCleanupBackgroundWorker>()
+                    );
+            }
         }
 
         private static void AutoAddDefinitionProviders(IServiceCollection services)

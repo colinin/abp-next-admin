@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.IM.Group;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;

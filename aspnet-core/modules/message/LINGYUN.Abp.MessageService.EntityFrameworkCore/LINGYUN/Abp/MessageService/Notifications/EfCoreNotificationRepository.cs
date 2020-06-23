@@ -20,12 +20,15 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         public async Task DeleteExpritionAsync(int batchCount)
         {
-            var notifications = await DbSet
+            var batchDeleteNoticeWithIds = await DbSet
                 .Where(x => x.ExpirationTime <= DateTime.Now)
                 .Take(batchCount)
+                .Select(x => new Notification(x.Id))
+                .AsNoTracking()
                 .ToArrayAsync();
 
-            DbSet.RemoveRange(notifications);
+            DbSet.AttachRange(batchDeleteNoticeWithIds);
+            DbSet.RemoveRange(batchDeleteNoticeWithIds);
         }
 
         public async Task<Notification> GetByIdAsync(long notificationId)
