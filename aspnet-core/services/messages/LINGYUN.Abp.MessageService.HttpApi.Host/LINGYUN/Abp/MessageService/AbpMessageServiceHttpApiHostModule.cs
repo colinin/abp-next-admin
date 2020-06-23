@@ -3,6 +3,7 @@ using Hangfire;
 using IdentityModel;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.BackgroundJobs;
@@ -51,6 +52,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpIMSignalRModule),
         typeof(AbpNotificationsSignalRModule),
         typeof(AbpNotificationsWeChatWeAppModule),
+        typeof(AbpNotificationsExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpBackgroundJobsHangfireModule),
         typeof(AbpHangfireMySqlStorageModule),
@@ -82,6 +84,12 @@ namespace LINGYUN.Abp.MessageService
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            Configure<AbpExceptionHandlingOptions>(options =>
+            {
+                //  加入需要处理的异常类型
+                // options.Handlers.Add<Volo.Abp.Authorization.AbpAuthorizationException>();
             });
 
             Configure<AbpDistributedCacheOptions>(options =>
