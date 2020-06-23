@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.Authorization" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
+    <None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+    <ProjectReference Include="..\..\message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -4,6 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.Location.Baidu;
+using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
@@ -53,6 +54,7 @@ namespace LINGYUN.Platform
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(ApiGatewayApplicationContractsModule),
+        typeof(AbpMessageServiceApplicationContrantsModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(Abp.Account.AbpAccountApplicationModule),

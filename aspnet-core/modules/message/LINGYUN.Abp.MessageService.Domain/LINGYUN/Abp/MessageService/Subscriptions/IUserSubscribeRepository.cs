@@ -24,5 +24,9 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         Task DeleteUserSubscriptionAsync(IEnumerable<UserSubscribe> userSubscribes);
 
         Task DeleteUserSubscriptionAsync(string notificationName);
+
+        Task<List<UserSubscribe>> GetUserSubscribesAsync(Guid userId, string sorting = nameof(UserSubscribe.Id), int skipCount = 1, int maxResultCount = 10);
+
+        Task<long> GetCountAsync(Guid userId);
     }
 }

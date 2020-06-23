@@ -5,6 +5,7 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
+        typeof(AbpMessageServiceApplicationContrantsModule),
         typeof(AbpAspNetCoreMvcModule)
         )]
     public class AbpMessageServiceHttpApiModule : AbpModule

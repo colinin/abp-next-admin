@@ -16,6 +16,10 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         Task<List<Notification>> GetNotificationsAsync(Guid userId, NotificationReadState readState = NotificationReadState.UnRead, int maxResultCount = 10);
 
+        Task<long> GetCountAsync(Guid userId, string filter = "", NotificationReadState readState = NotificationReadState.UnRead);
+
+        Task<List<Notification>> GetNotificationsAsync(Guid userId, string filter = "", string sorting = nameof(Notification.NotificationId), NotificationReadState readState = NotificationReadState.UnRead, int skipCount = 1, int maxResultCount = 10);
+
         Task ChangeUserNotificationReadStateAsync(Guid userId, long notificationId, NotificationReadState readState);
     }
 }
