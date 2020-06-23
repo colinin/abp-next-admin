@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications.WeChat.WeApp
@@ -12,7 +13,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
     public class WeChatWeAppNotificationPublishProvider : NotificationPublishProvider
     {
         public override string Name => "WeChat.WeApp";
-
+        private INotificationSubscriptionManager _notificationSubscriptionManager;
+        protected INotificationSubscriptionManager NotificationSubscriptionManager => LazyGetRequiredService(ref _notificationSubscriptionManager);
         protected IWeChatWeAppNotificationSender NotificationSender { get; }
         protected AbpWeChatWeAppNotificationOptions Options { get; }
         public WeChatWeAppNotificationPublishProvider(
@@ -32,6 +34,16 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 
             // step2 调用微信消息推送接口
 
+            // 微信不支持推送到所有用户,需要获取订阅列表再发送
+            // 在小程序里用户订阅消息后通过 api/subscribes/subscribe 接口订阅对应模板消息
+            if (identifiers == null)
+            {
+                var userSubscriptions = await NotificationSubscriptionManager
+                    .GetSubscriptionsAsync(notification.TenantId, notification.Name);
+                identifiers = userSubscriptions
+                    .Select(us => new UserIdentifier(us.UserId, us.UserName));
+
+            }
             foreach (var identifier in identifiers)
             {
                 await SendWeChatTemplateMessagAsync(notification, identifier);

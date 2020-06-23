@@ -54,7 +54,7 @@ namespace LINGYUN.Platform
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpMessageServiceApplicationContrantsModule),
+        typeof(AbpMessageServiceApplicationContractsModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityApplicationModule),
         typeof(Abp.Account.AbpAccountApplicationModule),

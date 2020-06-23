@@ -19,6 +19,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
         public virtual DateTime? ExpirationTime { get; set; }
         public virtual DateTime CreationTime { get; set; }
         protected Notification(){}
+
+        public Notification(long id)
+        {
+            Id = id;
+        }
+
         public Notification(long id, string category, string name, string dataType, string data, NotificationSeverity severity = NotificationSeverity.Info)
         {
             NotificationId = id;

@@ -6,13 +6,13 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(typeof(AbpMessageServiceDomainSharedModule))]
-    public class AbpMessageServiceApplicationContrantsModule : AbpModule
+    public class AbpMessageServiceApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpMessageServiceApplicationContrantsModule>();
+                options.FileSets.AddEmbedded<AbpMessageServiceApplicationContractsModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>

@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.9.0</Version>
@@ -12,14 +12,12 @@
     <OutputPath>D:\LocalNuget</OutputPath>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.Http.Client" Version="2.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.MessageService.Domain\LINGYUN.Abp.MessageService.Domain.csproj" />
   </ItemGroup>
 
 </Project>
