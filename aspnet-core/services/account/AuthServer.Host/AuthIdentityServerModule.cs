@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
 using System.Linq;
+using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
@@ -29,6 +30,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -78,6 +80,14 @@ namespace AuthServer.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            // 加解密
+            Configure<AbpStringEncryptionOptions>(options =>
+            {
+                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
+                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
+                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
             });
 
             Configure<AbpDistributedCacheOptions>(options =>

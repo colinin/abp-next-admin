@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -24,6 +25,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
@@ -65,6 +67,14 @@ namespace LINGYUN.ApiGateway
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            // 加解密
+            Configure<AbpStringEncryptionOptions>(options =>
+            {
+                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
+                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
+                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
             });
 
             // 多租户

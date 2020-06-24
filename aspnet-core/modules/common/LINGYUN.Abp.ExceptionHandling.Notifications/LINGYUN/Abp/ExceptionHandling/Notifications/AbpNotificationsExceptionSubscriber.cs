@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.ExceptionHandling
+namespace LINGYUN.Abp.ExceptionHandling.Notifications
 {
     public class AbpNotificationsExceptionSubscriber : AbpExceptionSubscriberBase
     {

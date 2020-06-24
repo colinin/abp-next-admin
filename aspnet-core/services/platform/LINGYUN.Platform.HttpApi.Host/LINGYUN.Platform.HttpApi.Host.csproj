@@ -63,6 +63,7 @@
     <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\LINGYUN.ApiGateway.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Identity.OverrideOptions\LINGYUN.Abp.Identity.OverrideOptions.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
