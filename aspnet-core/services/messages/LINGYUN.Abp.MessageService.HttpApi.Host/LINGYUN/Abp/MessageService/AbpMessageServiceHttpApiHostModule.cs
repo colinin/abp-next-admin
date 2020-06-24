@@ -4,9 +4,9 @@ using IdentityModel;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
+using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.IM.SignalR;
-using LINGYUN.Abp.MessageService.BackgroundJobs;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
@@ -21,11 +21,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Localization;
@@ -33,9 +33,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.MessageService
@@ -84,6 +84,14 @@ namespace LINGYUN.Abp.MessageService
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            // 加解密
+            Configure<AbpStringEncryptionOptions>(options =>
+            {
+                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
+                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
+                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
             });
 
             Configure<AbpExceptionHandlingOptions>(options =>

@@ -1,6 +1,8 @@
 ﻿using DotNetCore.CAP;
 using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling;
+using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.Location.Baidu;
@@ -21,6 +23,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -42,6 +45,7 @@ using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
@@ -76,6 +80,7 @@ namespace LINGYUN.Platform
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
 #if DEBUG
@@ -116,6 +121,32 @@ namespace LINGYUN.Platform
             {
                 options.UseMySQL();
             });
+
+            // 加解密
+            Configure<AbpStringEncryptionOptions>(options =>
+            {
+                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
+                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
+                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
+            });
+
+            // 自定义需要处理的异常
+            Configure<AbpExceptionHandlingOptions>(options =>
+            {
+                //  加入需要处理的异常类型
+                options.Handlers.Add<AbpException>();
+            });
+            // 自定义需要发送邮件通知的异常类型
+            Configure<AbpEmailExceptionHandlingOptions>(options =>
+            {
+                // 是否发送堆栈信息
+                options.SendStackTrace = true;
+                // 未指定异常接收者的默认接收邮件
+                options.DefaultReceiveEmail = "colin.in@foxmail.com";
+                //  指定某种异常发送到哪个邮件
+                options.HandReceivedException<AbpException>("colin.in@foxmail.com");
+            });
+
 
             Configure<AbpDistributedCacheOptions>(options =>
             {

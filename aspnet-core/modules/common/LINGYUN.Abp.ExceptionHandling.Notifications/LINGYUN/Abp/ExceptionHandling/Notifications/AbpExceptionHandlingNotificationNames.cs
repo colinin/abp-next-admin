@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.ExceptionHandling
+﻿namespace LINGYUN.Abp.ExceptionHandling.Notifications
 {
     public class AbpExceptionHandlingNotificationNames
     {

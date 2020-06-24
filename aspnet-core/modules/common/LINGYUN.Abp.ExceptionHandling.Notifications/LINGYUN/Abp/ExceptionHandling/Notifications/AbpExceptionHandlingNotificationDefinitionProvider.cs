@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 
-namespace LINGYUN.Abp.ExceptionHandling
+namespace LINGYUN.Abp.ExceptionHandling.Notifications
 {
     public class AbpExceptionHandlingNotificationDefinitionProvider : NotificationDefinitionProvider
     {

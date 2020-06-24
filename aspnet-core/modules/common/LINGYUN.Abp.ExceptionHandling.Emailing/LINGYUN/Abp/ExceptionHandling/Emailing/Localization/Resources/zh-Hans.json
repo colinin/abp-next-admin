@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "SendEmailTitle": "应用程序异常推送",
+    "SendEmailHeader": "应用程序异常"
+  }
+}

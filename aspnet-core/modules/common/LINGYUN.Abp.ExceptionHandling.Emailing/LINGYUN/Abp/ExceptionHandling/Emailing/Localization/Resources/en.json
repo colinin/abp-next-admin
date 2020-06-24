@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "SendEmailTitle": "Application exception push",
+    "SendEmailHeader": "Application exception"
+  }
+}
