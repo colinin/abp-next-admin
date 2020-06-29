@@ -6,7 +6,18 @@ abp 多租户远程服务组件,引用此模块将首先从分布式缓存查询
 
 ## 配置使用
 
-模块按需引用，因为远程服务接口定义了授权策略，需要配置接口客户端授权
+模块按需引用
+
+如果远程服务接口定义了授权策略，需要配置接口客户端授权，并且启动项目需要引用**Volo.Abp.Http.Client.IdentityModel**模块
+
+``` shell
+ // .NET CLI
+ dotnet add package Volo.Abp.Http.Client.IdentityModel --version 2.9.0
+ 
+ // Package Manager
+Install-Package Volo.Abp.Http.Client.IdentityModel -Version 2.9.0
+ 
+```
 
 具体**RemoteServices**与**IdentityClients**配置请阅读abp文档
 
