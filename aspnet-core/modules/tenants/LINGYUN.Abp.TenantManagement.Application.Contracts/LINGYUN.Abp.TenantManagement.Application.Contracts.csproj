@@ -3,7 +3,25 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.9.0</Version>
+    <Authors>LINGYUN</Authors>
+    <Company />
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\LocalNuget</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
+    <None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="2.9.0" />

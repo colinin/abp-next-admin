@@ -6,6 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.9.0</Version>
     <Authors>LINGYUN</Authors>
+    <Company />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,7 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Core" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.Caching" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.TenantManagement.HttpApi.Client\LINGYUN.Abp.TenantManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
 </Project>

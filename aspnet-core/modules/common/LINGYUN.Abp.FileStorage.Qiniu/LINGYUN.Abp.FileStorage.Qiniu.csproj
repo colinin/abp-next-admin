@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.FileStorage\LINGYUN.Abp.FileStorage.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Qiniu\Http\" />
   </ItemGroup>
 

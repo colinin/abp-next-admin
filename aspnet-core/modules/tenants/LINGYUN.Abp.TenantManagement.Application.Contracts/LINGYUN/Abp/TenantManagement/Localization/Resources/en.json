@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TenantNotFoundById": "Tenant: {0} not found!",
+    "TenantNotFoundByName": "Tenant: {0} not found!"
+  }
+}
