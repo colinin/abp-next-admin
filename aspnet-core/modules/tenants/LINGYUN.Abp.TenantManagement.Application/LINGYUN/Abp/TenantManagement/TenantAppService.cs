@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectExtending;
@@ -29,7 +30,21 @@ namespace LINGYUN.Abp.TenantManagement
 
         public virtual async Task<TenantDto> GetAsync(Guid id)
         {
-            var tenant = await TenantRepository.GetAsync(id);
+            var tenant = await TenantRepository.FindAsync(id, false);
+            if(tenant == null)
+            {
+                throw new UserFriendlyException(L["TenantNotFoundById", id]);
+            }
+            return ObjectMapper.Map<Tenant, TenantDto>(tenant);
+        }
+
+        public virtual async Task<TenantDto> GetAsync(TenantGetByNameInputDto tenantGetByNameInput)
+        {
+            var tenant = await TenantRepository.FindByNameAsync(tenantGetByNameInput.Name, false);
+            if (tenant == null)
+            {
+                throw new UserFriendlyException(L["TenantNotFoundByName", tenantGetByNameInput.Name]);
+            }
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 

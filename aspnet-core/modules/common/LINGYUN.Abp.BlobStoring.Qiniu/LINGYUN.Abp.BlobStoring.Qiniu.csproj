@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace /><GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.9.0</Version>
+    <Authors>LINGYUN</Authors>
+    <Description>阿里云Oss对象存储Abp集成</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>D:\LocalNuget</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Qiniu.Shared" Version="7.2.15" />
+    <PackageReference Include="Volo.Abp.BlobStoring" Version="2.9.0" />
+  </ItemGroup>
+
+</Project>

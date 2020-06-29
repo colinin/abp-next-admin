@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TenantNotFoundById": "租户: {0} 不存在!",
+    "TenantNotFoundByName": "租户: {0} 不存在!"
+  }
+}
