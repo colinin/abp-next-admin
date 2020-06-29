@@ -1,4 +1,4 @@
-﻿using LINGYUN.Common.EventBus.Tenants;
+﻿using LINGYUN.Abp.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;

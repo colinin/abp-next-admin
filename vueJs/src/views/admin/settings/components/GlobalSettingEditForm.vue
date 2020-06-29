@@ -486,6 +486,162 @@
             </el-col>
           </el-row>
         </el-tab-pane>
+        <el-tab-pane
+          v-if="hasSettingExistsed('Abp.Mailing.Smtp.Host')"
+          :label="$t('settings.mailing')"
+        >
+          <el-form-item>
+            <el-popover
+              ref="SmtpHost"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.Host'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.Host'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpHost
+            >{{ globalSetting['Abp.Mailing.Smtp.Host'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.Smtp.Host'].value"
+              :placeholder="globalSetting['Abp.Mailing.Smtp.Host'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Host', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpPort"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.Port'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.Port'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpPort
+            >{{ globalSetting['Abp.Mailing.Smtp.Port'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.Smtp.Port'].value"
+              :placeholder="globalSetting['Abp.Mailing.Smtp.Port'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Port', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpUserName"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.UserName'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.UserName'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpUserName
+            >{{ globalSetting['Abp.Mailing.Smtp.UserName'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.Smtp.UserName'].value"
+              :placeholder="globalSetting['Abp.Mailing.Smtp.UserName'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.UserName', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpPassword"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.Password'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.Password'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpPassword
+            >{{ globalSetting['Abp.Mailing.Smtp.Password'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.Smtp.Password'].value"
+              :placeholder="globalSetting['Abp.Mailing.Smtp.Password'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Password', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpDomain"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.Domain'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.Domain'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpDomain
+            >{{ globalSetting['Abp.Mailing.Smtp.Domain'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.Smtp.Domain'].value"
+              :placeholder="globalSetting['Abp.Mailing.Smtp.Domain'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Domain', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpEnableSsl"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.EnableSsl'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.EnableSsl'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpEnableSsl
+            >{{ globalSetting['Abp.Mailing.Smtp.EnableSsl'].displayName }}</span>
+            <el-switch
+              v-model="globalSetting['Abp.Mailing.Smtp.EnableSsl'].value"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.EnableSsl', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="SmtpUseDefaultCredentials"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.Smtp.UseDefaultCredentials'].displayName"
+              :content="globalSetting['Abp.Mailing.Smtp.UseDefaultCredentials'].description"
+            />
+            <span
+              slot="label"
+              v-popover:SmtpUseDefaultCredentials
+            >{{ globalSetting['Abp.Mailing.Smtp.UseDefaultCredentials'].displayName }}</span>
+            <el-switch
+              v-model="globalSetting['Abp.Mailing.Smtp.UseDefaultCredentials'].value"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.UseDefaultCredentials', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="MailingDefaultFromAddress"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.DefaultFromAddress'].displayName"
+              :content="globalSetting['Abp.Mailing.DefaultFromAddress'].description"
+            />
+            <span
+              slot="label"
+              v-popover:MailingDefaultFromAddress
+            >{{ globalSetting['Abp.Mailing.DefaultFromAddress'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.DefaultFromAddress'].value"
+              :placeholder="globalSetting['Abp.Mailing.DefaultFromAddress'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.DefaultFromAddress', value)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-popover
+              ref="MailingDefaultFromDisplayName"
+              trigger="hover"
+              :title="globalSetting['Abp.Mailing.DefaultFromDisplayName'].displayName"
+              :content="globalSetting['Abp.Mailing.DefaultFromDisplayName'].description"
+            />
+            <span
+              slot="label"
+              v-popover:MailingDefaultFromDisplayName
+            >{{ globalSetting['Abp.Mailing.DefaultFromDisplayName'].displayName }}</span>
+            <el-input
+              v-model="globalSetting['Abp.Mailing.DefaultFromDisplayName'].value"
+              :placeholder="globalSetting['Abp.Mailing.DefaultFromDisplayName'].description"
+              @input="(value) => handleSettingValueChanged('Abp.Mailing.DefaultFromDisplayName', value)"
+            />
+          </el-form-item>
+        </el-tab-pane>
       </el-tabs>
 
       <el-form-item>
@@ -544,6 +700,7 @@ export default class extends Vue {
 
   private handleGetGlobalSettings() {
     SettingService.getSettings('G', '').then(settings => {
+      console.log(settings)
       settings.items.forEach(setting => {
         if (setting.value) {
           const value = setting.value.toLowerCase()
@@ -551,9 +708,11 @@ export default class extends Vue {
             setting.value = value === 'true'
           }
         } else {
-          const defaultValue = setting.defaultValue.toLowerCase()
-          if (booleanStrings.includes(defaultValue)) {
-            setting.value = defaultValue === 'true'
+          if (setting.defaultValue) {
+            const defaultValue = setting.defaultValue.toLowerCase()
+            if (booleanStrings.includes(defaultValue)) {
+              setting.value = defaultValue === 'true'
+            }
           }
         }
         this.globalSetting[setting.name] = setting

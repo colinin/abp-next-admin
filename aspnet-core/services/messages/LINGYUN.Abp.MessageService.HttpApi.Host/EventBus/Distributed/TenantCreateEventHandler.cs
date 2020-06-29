@@ -1,16 +1,16 @@
-﻿using LINGYUN.Common.EventBus.Tenants;
-using System.Threading.Tasks;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.MultiTenancy;
+﻿using LINGYUN.Abp.MessageService.Localization;
+using LINGYUN.Abp.MultiTenancy;
 using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.Localization;
-using LINGYUN.Abp.MessageService.Localization;
+using Microsoft.Extensions.Logging;
 using System;
-using Volo.Abp.Settings;
-using Volo.Abp.Localization;
 using System.Globalization;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {

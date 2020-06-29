@@ -1,9 +1,7 @@
 ﻿using System;
-using Volo.Abp.EventBus;
 
-namespace LINGYUN.Common.EventBus.Tenants
+namespace LINGYUN.Abp.MultiTenancy
 {
-    [EventName(TenantEventNames.Update)]
     public class UpdateEventData
     {
         public Guid Id { get; set; }

@@ -208,7 +208,8 @@ export default {
     userSetting: '用户设置',
     passwordSecurity: '密码安全',
     systemSetting: '系统配置',
-    userAccount: '用户账户'
+    userAccount: '用户账户',
+    mailing: "邮件配置"
   },
   task: {
     title: '任务管理'

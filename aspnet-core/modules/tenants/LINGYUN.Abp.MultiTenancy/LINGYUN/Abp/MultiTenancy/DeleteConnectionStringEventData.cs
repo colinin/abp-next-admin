@@ -1,9 +1,7 @@
 ﻿using System;
-using Volo.Abp.EventBus;
 
-namespace LINGYUN.Common.EventBus.Tenants
+namespace LINGYUN.Abp.MultiTenancy
 {
-    [EventName(TenantEventNames.DeleteConnectionString)]
     public class DeleteConnectionStringEventData
     {
         public Guid Id { get; set; }
