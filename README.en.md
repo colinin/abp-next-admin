@@ -1,43 +1,12 @@
-<p align="center">
-  <img width="120" src="public/img/icons/android-chrome-512x512.png">
-</p>
-
-<p align="center">
-  <a href="https://github.com/vuejs/vue">
-    <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen.svg" alt="vue">
-  </a>
-  <a href="https://github.com/ElemeFE/element">
-    <img src="https://img.shields.io/badge/element--ui-2.12.0-brightgreen.svg" alt="element-ui">
-  </a>
-  <a href="https://circleci.com/gh/Armour/vue-typescript-admin-template/tree/master">
-    <img src="https://circleci.com/gh/Armour/vue-typescript-admin-template/tree/master.svg?style=shield" alt="CircleCI">
-  </a>
-  <a href="http://makeapullrequest.com">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs Welcome">
-  </a>
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
-  </a>
-  <a href="https://github.com/Armour/Jarvis">
-    <img src="https://img.shields.io/badge/Hi-Jarvis-ff69b4.svg" alt="Template from jarvis">
-  </a>
-</p>
-
 English | [简体中文](./README.md)
 
 ## Overview
 
-[vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) is a production-ready front-end solution for admin interfaces based on [vue](https://github.com/vuejs/vue), [typescript](https://www.typescriptlang.org/) and UI Toolkit [element-ui](https://github.com/ElemeFE/element). The original Javascript version code [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin/) was written by [PanJiaChen](https://github.com/PanJiaChen), many thanks to him for the awesome open source project! :)
-
-If you want to get started with a minimal template code instead of integration solution, you can take a look at the [minimal](https://github.com/Armour/vue-typescript-admin-template/tree/minimal) branch.
+This is a [vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) -based Abp framework background management interface
 
 ## Documentation
 
 [Docs](https://armour.github.io/vue-typescript-admin-docs)
-
-## Live demo
-
-[Demo](https://armour.github.io/vue-typescript-admin-template)
 
 ## Screenshots
 
@@ -143,8 +112,7 @@ Javascript version:
 
 ## Preparation
 
-You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) locally. The project is based on [typescript](https://www.typescriptlang.org/), [vue](https://vuejs.org/index.html), [vuex](https://vuex.vuejs.org/), [vue-router](https://router.vuejs.org/), [vue-cli](https://github.com/vuejs/vue-cli) , [axios](https://github.com/axios/axios) and [element-ui](https://github.com/ElemeFE/element), all request data is simulated using [faker.js](https://github.com/Marak/Faker.js).
-Understanding and learning these knowledge in advance will greatly help you on using this project.
+You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) locally. The project is based on [typescript](https://www.typescriptlang.org/), [vue](https://vuejs.org/index.html), [vuex](https://vuex.vuejs.org/), [vue-router](https://router.vuejs.org/), [vue-cli](https://github.com/vuejs/vue-cli) , [axios](https://github.com/axios/axios) and [element-ui](https://github.com/ElemeFE/element), Understanding and learning these knowledge in advance will greatly help you on using this project.
 
 ## Project Structure
 
@@ -193,16 +161,89 @@ Understanding and learning these knowledge in advance will greatly help you on u
 
 With [yarn](https://yarnpkg.com/lang/en/) or [npm](https://www.npmjs.com/get-npm)
 
+
 #### Install dependencies
 
 ```bash
 yarn install
+
+```
+
+### Custom vue project config
+
+[.env.Github.production](./.env.Github.production)  变更为  .env.production
+</br>
+[vue.config.github.js ](./vue.config.github.js )   变更为  vue.config.js
+
+Modify the server address that the development environment will use for the proxy. Provide the following three addresses: IdentityService, IdentityServer, and ApiService
+
+```bash
+
+    proxy: {
+      [process.env.VUE_APP_BASE_IDENTITY_SERVER]: {
+        target: 'your identityService address',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVER]: ''
+        }
+      },
+      [process.env.VUE_APP_BASE_IDENTITY_SERVICE]: {
+        target: 'your identityServer address',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVICE]: ''
+        }
+      },
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'you api gateway address',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      }
+    }
+
+```
+
+Modify the actual address of the production environment, as above
+
+```bash
+
+# Base api
+# Remeber to change this to your production server address
+# Here I used my mock server for this project
+# VUE_APP_BASE_API = 'https://vue-typescript-admin-mock-server.armour.now.sh/mock-api/v1/'
+
+VUE_APP_BASE_API = 'your api gateway address'
+
+VUE_APP_BASE_IDENTITY_SERVICE = 'your identityService address'
+
+VUE_APP_BASE_IDENTITY_SERVER = 'your identityServer address'
+
+# client id
+VUE_APP_CLIENT_ID = 'vue-admin-element'
+# client secret
+VUE_APP_CLIENT_SECRET = '1q2w3e*'
+
+```
+
+### Compiles background services
+
+```shell
+cd aspnet-core/services
+
+start-all-service.bat
+
 ```
 
 #### Compiles and hot-reloads for development
 
-```bash
-yarn run serve
+```shell
+
+cd vueJs
+
+start-vue-admin.bat
+
 ```
 
 #### Compiles and minifies for production

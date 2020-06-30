@@ -3,19 +3,11 @@
 
 ## 总览
 
-[vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) 是一个后台前端解决方案，它基于 [vue](https://github.com/vuejs/vue), [typescript](https://www.typescriptlang.org/) 和 [element-ui](https://github.com/ElemeFE/element)实现。原始的 Javascript 版本的代码是由 [PanJiaChen](https://github.com/PanJiaChen) 开发维护的 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin/)， 十分感谢大佬对开源社区做出的贡献 :)
+这是一个基于 [vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) 的Abp框架后台管理界面
 
-如果你想从一个十分简单的基础模版开始，而不是直接使用这个功能丰富的集成方案的话，你可以看一看本项目的 [minimal](https://github.com/Armour/vue-typescript-admin-template/tree/minimal) 分支.
-
-通过这个前端框架，作者尝试集成后台abp框架，提供管理页面的支持
-
-## 线上文档
+## 前端文档
 
 [文档](https://armour.github.io/vue-typescript-admin-docs/zh)
-
-## 线上地址
-
-[示例](https://armour.github.io/vue-typescript-admin-template)
 
 ## 截图
 
@@ -129,7 +121,7 @@ Javascript 版本:
 
 ## 前序准备
 
-你需要在本地安装 [node](http://nodejs.org/) 和 [git](https://git-scm.com/)。本项目技术栈基于 [typescript](https://www.typescriptlang.org/)、[vue](https://cn.vuejs.org/index.html)、[vuex](https://vuex.vuejs.org/zh-cn/)、[vue-router](https://router.vuejs.org/zh-cn/) 、[vue-cli](https://github.com/vuejs/vue-cli) 、[axios](https://github.com/axios/axios) 和 [element-ui](https://github.com/ElemeFE/element)，所有的请求数据都使用[faker.js](https://github.com/Marak/Faker.js)进行模拟，提前了解和学习这些知识会对使用本项目有很大的帮助。
+你需要在本地安装 [node](http://nodejs.org/) 和 [git](https://git-scm.com/)。本项目技术栈基于 [typescript](https://www.typescriptlang.org/)、[vue](https://cn.vuejs.org/index.html)、[vuex](https://vuex.vuejs.org/zh-cn/)、[vue-router](https://router.vuejs.org/zh-cn/) 、[vue-cli](https://github.com/vuejs/vue-cli) 、[axios](https://github.com/axios/axios) 和 [element-ui](https://github.com/ElemeFE/element)，提前了解和学习这些知识会对使用本项目有很大的帮助。
 
 ## 目录结构
 
@@ -242,10 +234,23 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
+### 启动后台服务
+
+```shell
+cd aspnet-core/services
+
+start-all-service.bat
+
+```
+
 ### 启动本地开发环境（自带热启动）
 
-```bash
-yarn serve
+```shell
+
+cd vueJs
+
+start-vue-admin.bat
+
 ```
 
 ### 构建生产环境 (自带压缩)
