@@ -1,4 +1,4 @@
-﻿using LINGYUN.Common.EventBus.Tenants;
+﻿using LINGYUN.Abp.MultiTenancy;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;

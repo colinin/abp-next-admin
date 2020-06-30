@@ -36,8 +36,8 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Identity.OverrideOptions\LINGYUN.Abp.Identity.OverrideOptions.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj" />
-    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Common.EventBus\LINGYUN.Common.EventBus.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj" />
+    <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

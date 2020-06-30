@@ -80,5 +80,12 @@ namespace LINGYUN.Abp.TenantManagement
         {
             return TenantAppService.DeleteConnectionStringAsync(tenantConnectionGetByName);
         }
+
+        [HttpGet]
+        [Route("name/{name}")]
+        public virtual Task<TenantDto> GetAsync(TenantGetByNameInputDto tenantGetByNameInput)
+        {
+            return TenantAppService.GetAsync(tenantGetByNameInput);
+        }
     }
 }

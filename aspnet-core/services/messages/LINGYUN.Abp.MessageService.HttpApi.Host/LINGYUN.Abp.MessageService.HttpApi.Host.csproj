@@ -50,10 +50,10 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj" />
-    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Common.EventBus\LINGYUN.Common.EventBus.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.Application\LINGYUN.Abp.MessageService.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
 </Project>
