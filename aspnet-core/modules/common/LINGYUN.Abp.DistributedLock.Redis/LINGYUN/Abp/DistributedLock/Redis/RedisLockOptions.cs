@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace LINGYUN.Abp.Distributed.Redis
+namespace LINGYUN.Abp.DistributedLock.Redis
 {
     public class RedisLockOptions : IOptions<RedisLockOptions>
     {

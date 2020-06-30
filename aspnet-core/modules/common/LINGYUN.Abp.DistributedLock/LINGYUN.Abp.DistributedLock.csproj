@@ -12,4 +12,8 @@
     <OutputPath>D:\LocalNuget</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
+  </ItemGroup>
+
 </Project>

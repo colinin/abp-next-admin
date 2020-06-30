@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Distributed.Redis
+namespace LINGYUN.Abp.DistributedLock.Redis
 {
     public class AbpRedisLockModule : AbpModule
     {

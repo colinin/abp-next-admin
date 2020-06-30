@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Distributed
+namespace LINGYUN.Abp.DistributedLock
 {
     /// <summary>
     /// 分布式锁接口

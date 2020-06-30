@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Distributed.Redis
+namespace LINGYUN.Abp.DistributedLock.Redis
 {
     [ExposeServices(typeof(IDistributedLock))]
     [Dependency(ServiceLifetime.Singleton, TryRegister = true)]
