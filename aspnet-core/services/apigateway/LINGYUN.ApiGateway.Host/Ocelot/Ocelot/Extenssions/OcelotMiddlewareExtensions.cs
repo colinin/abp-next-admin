@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.Configuration;
 using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
-using Ocelot.Errors;
+using Ocelot.DependencyInjection;
 using Ocelot.Logging;
 using Ocelot.Middleware;
-using Ocelot.Middleware.Pipeline;
 using Ocelot.Responses;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,61 +25,52 @@ namespace Ocelot.Extenssions
 
         public static async Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder builder, Action<OcelotPipelineConfiguration> pipelineConfiguration)
         {
-            OcelotPipelineConfiguration ocelotPipelineConfiguration = new OcelotPipelineConfiguration();
-            pipelineConfiguration?.Invoke(ocelotPipelineConfiguration);
-            return await builder.UseOcelot(ocelotPipelineConfiguration);
+            var config = new OcelotPipelineConfiguration();
+            pipelineConfiguration?.Invoke(config);
+            return await builder.UseOcelot(config);
         }
 
         public static async Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder builder, OcelotPipelineConfiguration pipelineConfiguration)
         {
-            await CreateConfiguration(builder);
+            var configuration = await CreateConfiguration(builder);
+
             ConfigureDiagnosticListener(builder);
+
             return CreateOcelotPipeline(builder, pipelineConfiguration);
         }
 
-        public static Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder app, Action<IOcelotPipelineBuilder, OcelotPipelineConfiguration> builderAction)
-        {
-            return app.UseOcelot(builderAction, new OcelotPipelineConfiguration());
-        }
+        public static Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder app, Action<IApplicationBuilder, OcelotPipelineConfiguration> builderAction)
+            => UseOcelot(app, builderAction, new OcelotPipelineConfiguration());
 
-        public static async Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder app, Action<IOcelotPipelineBuilder, OcelotPipelineConfiguration> builderAction, OcelotPipelineConfiguration configuration)
+        public static async Task<IApplicationBuilder> UseOcelot(this IApplicationBuilder app, Action<IApplicationBuilder, OcelotPipelineConfiguration> builderAction, OcelotPipelineConfiguration configuration)
         {
             await CreateConfiguration(app);
+
             ConfigureDiagnosticListener(app);
-            OcelotPipelineBuilder ocelotPipelineBuilder = new OcelotPipelineBuilder(app.ApplicationServices);
-            builderAction?.Invoke(ocelotPipelineBuilder, configuration ?? new OcelotPipelineConfiguration());
-            OcelotRequestDelegate ocelotDelegate = ocelotPipelineBuilder.Build();
+
+            builderAction?.Invoke(app, configuration ?? new OcelotPipelineConfiguration());
+
             app.Properties["analysis.NextMiddlewareName"] = "TransitionToOcelotMiddleware";
-            app.Use(async delegate (HttpContext context, Func<Task> task)
-            {
-                DownstreamContext downstreamContext = new DownstreamContext(context);
-                await ocelotDelegate(downstreamContext);
-            });
+
             return app;
         }
 
         private static IApplicationBuilder CreateOcelotPipeline(IApplicationBuilder builder, OcelotPipelineConfiguration pipelineConfiguration)
         {
-            OcelotPipelineBuilder ocelotPipelineBuilder = new OcelotPipelineBuilder(builder.ApplicationServices);
-            ocelotPipelineBuilder.BuildOcelotPipeline(pipelineConfiguration);
-            OcelotRequestDelegate firstDelegate = ocelotPipelineBuilder.Build();
+            builder.BuildOcelotPipeline(pipelineConfiguration);
+
+            /*
+            inject first delegate into first piece of asp.net middleware..maybe not like this
+            then because we are updating the http context in ocelot it comes out correct for
+            rest of asp.net..
+            */
+
             builder.Properties["analysis.NextMiddlewareName"] = "TransitionToOcelotMiddleware";
-            builder.Use(async delegate (HttpContext context, Func<Task> task)
-            {
-                DownstreamContext downstreamContext = new DownstreamContext(context);
-                await firstDelegate(downstreamContext);
-            });
+
             return builder;
         }
-
         private static async Task<IInternalConfiguration> CreateConfiguration(IApplicationBuilder builder)
         {
-            /* 因为ABP框架中,Abp.HttpClient这个模块里面
-             * RemoteServiceOptions 是用的IOptionsSnapshot注入的,这里会出现一个异常
-             * 每个RemoteService服务必须在一个请求范围内
-             * 解决方案为重写DynamicHttpProxyInterceptor类,替换IOptions<RemoteServiceOptions>
-             * 网关不需要实现网关后台服务地址的实时更新
-            */
             var fileConfigRepo = builder.ApplicationServices.GetRequiredService<IFileConfigurationRepository>();
             var fileConfig = await fileConfigRepo.Get();
             // IOptionsMonitor<FileConfiguration> fileConfig = builder.ApplicationServices.GetService<IOptionsMonitor<FileConfiguration>>();
@@ -97,26 +85,39 @@ namespace Ocelot.Extenssions
             return GetOcelotConfigAndReturn(internalConfigRepo);
         }
 
+        private static bool AdministrationApiInUse(IAdministrationPath adminPath)
+        {
+            return adminPath != null;
+        }
+
+        private static bool IsError(Response response)
+        {
+            return response == null || response.IsError;
+        }
+
         private static IInternalConfiguration GetOcelotConfigAndReturn(IInternalConfigurationRepository provider)
         {
-            Response<IInternalConfiguration> response = provider.Get();
-            if (response?.Data == null || response.IsError)
+            var ocelotConfiguration = provider.Get();
+
+            if (ocelotConfiguration?.Data == null || ocelotConfiguration.IsError)
             {
-                ThrowToStopOcelotStarting(response);
+                ThrowToStopOcelotStarting(ocelotConfiguration);
             }
-            return response.Data;
+
+            return ocelotConfiguration.Data;
         }
 
         private static void ThrowToStopOcelotStarting(Response config)
         {
-            throw new Exception("Unable to start Ocelot, errors are: " + string.Join(",", ((IEnumerable<Error>)config.Errors).Select((Func<Error, string>)((Error x) => x.ToString()))));
+            throw new Exception($"Unable to start Ocelot, errors are: {string.Join(",", config.Errors.Select(x => x.ToString()))}");
         }
 
         private static void ConfigureDiagnosticListener(IApplicationBuilder builder)
         {
-            builder.ApplicationServices.GetService<IWebHostEnvironment>();
-            OcelotDiagnosticListener service = builder.ApplicationServices.GetService<OcelotDiagnosticListener>();
-            builder.ApplicationServices.GetService<DiagnosticListener>().SubscribeWithAdapter(service);
+            var env = builder.ApplicationServices.GetService<IWebHostEnvironment>();
+            var listener = builder.ApplicationServices.GetService<OcelotDiagnosticListener>();
+            var diagnosticListener = builder.ApplicationServices.GetService<DiagnosticListener>();
+            diagnosticListener.SubscribeWithAdapter(listener);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Ocelot.Configuration.Repository
         {
             var fileConfiguration = new FileConfiguration();
 
-            var globalConfiguration = await _globalConfigurationAppService.GetAsync(new GlobalGetByAppIdInputDto { AppId = ApiGatewayOptions.AppId});
+            var globalConfiguration = await _globalConfigurationAppService.GetAsync(new GlobalGetByAppIdInputDto { AppId = ApiGatewayOptions.AppId });
 
             fileConfiguration.GlobalConfiguration = _objectMapper.Map<GlobalConfigurationDto, FileGlobalConfiguration>(globalConfiguration);
 
@@ -46,9 +46,9 @@ namespace Ocelot.Configuration.Repository
 
             if (reRouteConfiguration != null && reRouteConfiguration.Items.Count > 0)
             {
-                foreach(var reRouteConfig in reRouteConfiguration.Items)
+                foreach (var reRouteConfig in reRouteConfiguration.Items)
                 {
-                    fileConfiguration.ReRoutes.Add(_objectMapper.Map<ReRouteDto, FileReRoute>(reRouteConfig));
+                    fileConfiguration.Routes.Add(_objectMapper.Map<ReRouteDto, FileRoute>(reRouteConfig));
                 }
             }
 
@@ -58,7 +58,7 @@ namespace Ocelot.Configuration.Repository
             {
                 foreach (var dynamicRouteConfig in dynamicReRouteConfiguration.Items)
                 {
-                    fileConfiguration.DynamicReRoutes.Add(_objectMapper.Map<DynamicReRouteDto, FileDynamicReRoute>(dynamicRouteConfig));
+                    fileConfiguration.DynamicRoutes.Add(_objectMapper.Map<DynamicReRouteDto, FileDynamicRoute>(dynamicRouteConfig));
                 }
             }
 
@@ -67,7 +67,7 @@ namespace Ocelot.Configuration.Repository
             {
                 foreach (var aggregateRouteConfig in aggregateReRouteConfiguration.Items)
                 {
-                    fileConfiguration.Aggregates.Add(_objectMapper.Map<AggregateReRouteDto, FileAggregateReRoute>(aggregateRouteConfig));
+                    fileConfiguration.Aggregates.Add(_objectMapper.Map<AggregateReRouteDto, FileAggregateRoute>(aggregateRouteConfig));
                 }
             }
 

@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.3" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.3" />
-    <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="3.0.3" />
-    <PackageReference Include="Ocelot.Provider.Polly" Version="15.0.6" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.4" />
+    <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="3.0.4" />
+    <PackageReference Include="Ocelot.Provider.Polly" Version="16.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
