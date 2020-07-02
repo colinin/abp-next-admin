@@ -5,7 +5,7 @@
     <RootNamespace />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.9.0</Version>
+    <Version>3.0.0</Version>
     <Description>通知接口的微信小程序发布者实现</Description>
   </PropertyGroup>
 

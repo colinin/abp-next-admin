@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.ApiResources
 {
@@ -10,11 +11,11 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         public Guid ApiResourceId { get; set; }
 
         [Required]
-        [StringLength(SecretConsts.TypeMaxLength)]
+        [DynamicStringLength(typeof(SecretConsts), nameof(SecretConsts.TypeMaxLength))]
         public string Type { get; set; }
 
         [Required]
-        [StringLength(SecretConsts.ValueMaxLength)]
+        [DynamicStringLength(typeof(SecretConsts), nameof(SecretConsts.ValueMaxLength))]
         public string Value { get; set; }
     }
 }

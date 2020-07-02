@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace /><GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.9.0</Version>
+    <Version>3.0.0</Version>
     <Authors>LINGYUN</Authors>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Emailing" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.Emailing" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

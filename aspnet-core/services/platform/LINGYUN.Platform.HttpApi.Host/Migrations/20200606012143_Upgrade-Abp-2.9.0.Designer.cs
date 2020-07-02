@@ -10,7 +10,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LINGYUN.Platform.Migrations
 {
     [DbContext(typeof(PlatformHttpApiHostMigrationsDbContext))]
-    [Migration("20200606012143_Upgrade-Abp-2.9.0")]
+    [Migration("20200606012143_Upgrade-Abp-3.0.0")]
     partial class UpgradeAbp290
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

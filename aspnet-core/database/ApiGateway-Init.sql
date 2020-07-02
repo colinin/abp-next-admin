@@ -694,7 +694,10 @@ CREATE TABLE `AppApiGatewayReRoute`  (
 -- ----------------------------
 -- Records of AppApiGatewayReRoute
 -- ----------------------------
-INSERT INTO `AppApiGatewayReRoute` VALUES (4, '{}', '430fb64b9c3949088aa32bddd86497d0', 1261299170387169280, '平台服务-权限管理', '/api/abp/permissions', '', NULL, '/api/abp/permissions', 'GET,PUT,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
+--2020-07-02 升级abp为3.0版本,因abp已修复权限性能问题，所以抛弃自行创建的权限服务
+--为了兼容前端,修改路由下游转发地址
+INSERT INTO `AppApiGatewayReRoute` VALUES (4, '{}', '430fb64b9c3949088aa32bddd86497d0', 1261299170387169280, '平台服务-权限管理', '/api/permission-management/permissions', '', NULL, '/api/abp/permissions', 'GET,PUT,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
+--INSERT INTO `AppApiGatewayReRoute` VALUES (4, '{}', '430fb64b9c3949088aa32bddd86497d0', 1261299170387169280, '平台服务-权限管理', '/api/abp/permissions', '', NULL, '/api/abp/permissions', 'GET,PUT,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
 INSERT INTO `AppApiGatewayReRoute` VALUES (5, '{}', '302b4871e4ba49efb39189944761d251', 1261585859064872960, '身份认证服务-客户端管理', '/api/IdentityServer/Clients', '', NULL, '/api/IdentityServer/Clients', 'POST,GET,PUT,', '', '', '', '', '', '', NULL, 1, '', NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
 INSERT INTO `AppApiGatewayReRoute` VALUES (6, '{}', '4d7c360bc40342c1b1cf16181e4ac2bb', 1261586605810368512, '身份认证服务-查询客户端', '/api/IdentityServer/Clients/{Id}', '', NULL, '/api/IdentityServer/Clients/{Id}', 'GET,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
 INSERT INTO `AppApiGatewayReRoute` VALUES (7, '{}', 'c222dcff22284b3e9ce9c424853705cd', 1261587558609436672, '服务网关管理-路由组管理', '/api/ApiGateway/RouteGroups', '', '', '/api/ApiGateway/RouteGroups', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');

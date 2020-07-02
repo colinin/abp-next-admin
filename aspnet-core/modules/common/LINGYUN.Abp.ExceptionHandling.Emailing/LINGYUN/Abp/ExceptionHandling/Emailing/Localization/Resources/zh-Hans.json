@@ -1,6 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "TextTemplate:ExceptionHandlingTemplates.SendEmail": "应用异常邮件发送模板",
     "SendEmailTitle": "应用程序异常推送",
     "SendEmailHeader": "应用程序异常"
   }

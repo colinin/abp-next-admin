@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.9.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

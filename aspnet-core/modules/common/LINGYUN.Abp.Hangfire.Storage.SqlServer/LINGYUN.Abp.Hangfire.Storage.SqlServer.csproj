@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.9.0</Version>
+    <Version>3.0.0</Version>
     <Authors>LINGYUN</Authors>
   </PropertyGroup>
 
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="HangFire.SqlServer" Version="1.7.11" />
-    <PackageReference Include="Volo.Abp.HangFire" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.HangFire" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

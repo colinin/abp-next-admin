@@ -227,6 +227,15 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
+### Initializes the api gateway database
+
+``` shell
+cd aspnet-core/database
+
+```
+Please use a tool such as **Navicat** to execute **apigateway-init.sql**
+
+
 ### Compiles background services
 
 ```shell

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.TenantManagement
 {
@@ -10,7 +11,7 @@ namespace LINGYUN.Abp.TenantManagement
         public Guid Id { get; set; }
 
         [Required]
-        [StringLength(TenantConnectionStringConsts.MaxNameLength)]
+        [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxNameLength))]
         public string Name { get; set; }
     }
 }

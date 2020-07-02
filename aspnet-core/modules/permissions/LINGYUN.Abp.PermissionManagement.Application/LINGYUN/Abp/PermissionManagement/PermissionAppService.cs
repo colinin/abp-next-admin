@@ -132,7 +132,7 @@ namespace LINGYUN.Abp.PermissionManagement
                 }
                 // 同步变更缓存里的权限配置
                 var cacheKey = CalculateCacheKey(permission.Name, providerName, providerKey);
-                var cacheItem = new PermissionGrantCacheItem(permission.Name, permission.IsGranted);
+                var cacheItem = new PermissionGrantCacheItem(permission.IsGranted);
                 await Cache.SetAsync(cacheKey, cacheItem);
             }
         }
