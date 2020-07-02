@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
@@ -14,13 +15,13 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         [StringLength(2000)]
         public string ConcurrencyStamp { get; set; }
 
-        [StringLength(IdentityResourceConsts.NameMaxLength)]
+        [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.NameMaxLength))]
         public string Name { get; set; }
 
-        [StringLength(IdentityResourceConsts.DisplayNameMaxLength)]
+        [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.DisplayNameMaxLength))]
         public string DisplayName { get; set; }
 
-        [StringLength(IdentityResourceConsts.DescriptionMaxLength)]
+        [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.DescriptionMaxLength))]
         public string Description { get; set; }
 
         public bool Enabled { get; set; }

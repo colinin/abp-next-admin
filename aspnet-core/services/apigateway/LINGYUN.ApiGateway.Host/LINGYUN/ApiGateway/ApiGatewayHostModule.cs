@@ -13,6 +13,7 @@ using Volo.Abp.AspNetCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.IdentityModel;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.ApiGateway
@@ -69,6 +70,12 @@ namespace LINGYUN.ApiGateway
                     options.ApiName = configuration["AuthServer:ApiName"];
                     options.ApiSecret = configuration["AuthServer:ApiSecret"];
                 });
+
+            Configure<IdentityModelHttpRequestMessageOptions>(options =>
+            {
+                // See https://github.com/abpframework/abp/pull/4564
+                options.ConfigureHttpRequestMessage = (requestMessage) => { };
+            });
 
             context.Services
                 .AddOcelot()

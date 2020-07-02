@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.Domain" Version="2.9.0" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,14 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.MultiTenancy.RemoteService
@@ -21,55 +18,69 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
     {
         public ILogger<TenantStore> Logger { protected get; set; }
         private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
-
+        private readonly ICurrentTenant _currentTenant;
         private readonly ITenantAppService _tenantAppService;
         public TenantStore(
+            ICurrentTenant currentTenant,
             ITenantAppService tenantAppService,
             IDistributedCache<TenantConfigurationCacheItem> cache)
         {
             _cache = cache;
+            _currentTenant = currentTenant;
             _tenantAppService = tenantAppService;
 
             Logger = NullLogger<TenantStore>.Instance;
         }
         public virtual TenantConfiguration Find(string name)
         {
-            var tenantCacheItem = AsyncHelper.RunSync(async () => await
+            using (_currentTenant.Change(null))
+            {
+                var tenantCacheItem = AsyncHelper.RunSync(async () => await
                 GetCacheItemByNameAsync(name));
 
-            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
-            {
-                ConnectionStrings = tenantCacheItem.ConnectionStrings
-            };
+                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+                {
+                    ConnectionStrings = tenantCacheItem.ConnectionStrings
+                };
+            }
         }
 
         public virtual TenantConfiguration Find(Guid id)
         {
-            var tenantCacheItem = AsyncHelper.RunSync(async () => await
-                GetCacheItemByIdAsync(id));
-
-            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+            using (_currentTenant.Change(null))
             {
-                ConnectionStrings = tenantCacheItem.ConnectionStrings
-            };
+                var tenantCacheItem = AsyncHelper.RunSync(async () => await
+                    GetCacheItemByIdAsync(id));
+
+                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+                {
+                    ConnectionStrings = tenantCacheItem.ConnectionStrings
+                };
+            }
         }
 
         public virtual async Task<TenantConfiguration> FindAsync(string name)
         {
-            var tenantCacheItem = await GetCacheItemByNameAsync(name);
-            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+            using (_currentTenant.Change(null))
             {
-                ConnectionStrings = tenantCacheItem.ConnectionStrings
-            };
+                var tenantCacheItem = await GetCacheItemByNameAsync(name);
+                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+                {
+                    ConnectionStrings = tenantCacheItem.ConnectionStrings
+                };
+            }
         }
 
         public virtual async Task<TenantConfiguration> FindAsync(Guid id)
         {
-            var tenantCacheItem = await GetCacheItemByIdAsync(id);
-            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+            using (_currentTenant.Change(null))
             {
-                ConnectionStrings = tenantCacheItem.ConnectionStrings
-            };
+                var tenantCacheItem = await GetCacheItemByIdAsync(id);
+                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+                {
+                    ConnectionStrings = tenantCacheItem.ConnectionStrings
+                };
+            }
         }
 
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)

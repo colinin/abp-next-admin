@@ -234,6 +234,15 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
+### 初始化网关数据库
+
+``` shell
+cd aspnet-core/database
+
+```
+请使用诸如**Navicat**工具执行**ApiGateway-Init.sql**
+
+
 ### 启动后台服务
 
 ```shell

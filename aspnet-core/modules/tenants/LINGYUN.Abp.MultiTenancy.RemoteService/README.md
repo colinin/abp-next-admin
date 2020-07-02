@@ -12,10 +12,10 @@ abp 多租户远程服务组件,引用此模块将首先从分布式缓存查询
 
 ``` shell
  // .NET CLI
- dotnet add package Volo.Abp.Http.Client.IdentityModel --version 2.9.0
+ dotnet add package Volo.Abp.Http.Client.IdentityModel --version 3.0.0
  
  // Package Manager
-Install-Package Volo.Abp.Http.Client.IdentityModel -Version 2.9.0
+Install-Package Volo.Abp.Http.Client.IdentityModel -Version 3.0.0
  
 ```
 

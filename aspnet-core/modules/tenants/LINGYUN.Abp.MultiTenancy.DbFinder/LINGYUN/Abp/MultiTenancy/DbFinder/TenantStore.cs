@@ -19,14 +19,16 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
     {
         public ILogger<TenantStore> Logger { protected get; set; }
         private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
-
+        private readonly IDataFilter _dataFilter;
         private readonly ITenantRepository _tenantRepository;
 
         public TenantStore(
+            IDataFilter dataFilter,
             ITenantRepository tenantRepository,
             IDistributedCache<TenantConfigurationCacheItem> cache)
         {
             _cache = cache;
+            _dataFilter = dataFilter;
             _tenantRepository = tenantRepository;
 
             Logger = NullLogger<TenantStore>.Instance;
@@ -89,24 +91,28 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             }
             Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
 
-            var tenant = await _tenantRepository.FindAsync(id, true);
-            if (tenant == null)
+            // 禁用租户过滤器
+            using (_dataFilter.Disable<IMultiTenant>())
             {
-                Logger.LogWarning($"Can not found tenant by id: {id}");
-                throw new AbpException($"Can not found tenant by id: {id}");
-            }
-            var connectionStrings = new ConnectionStrings();
-            foreach (var tenantConnectionString in tenant.ConnectionStrings)
-            {
-                connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
-            }
-            cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
+                var tenant = await _tenantRepository.FindAsync(id, true);
+                if (tenant == null)
+                {
+                    Logger.LogWarning($"Can not found tenant by id: {id}");
+                    throw new AbpException($"Can not found tenant by id: {id}");
+                }
+                var connectionStrings = new ConnectionStrings();
+                foreach (var tenantConnectionString in tenant.ConnectionStrings)
+                {
+                    connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
+                }
+                cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
 
-            Logger.LogDebug($"Setting the cache item: {cacheKey}");
-            await _cache.SetAsync(cacheKey, cacheItem);
-            Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
+                Logger.LogDebug($"Setting the cache item: {cacheKey}");
+                await _cache.SetAsync(cacheKey, cacheItem);
+                Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 
-            return cacheItem;
+                return cacheItem;
+            }
         }
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
         {
@@ -123,24 +129,27 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             }
             Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
 
-            var tenant = await _tenantRepository.FindByNameAsync(name);
-            if (tenant == null)
+            using (_dataFilter.Disable<IMultiTenant>())
             {
-                Logger.LogWarning($"Can not found tenant by name: {name}");
-                throw new AbpException($"Can not found tenant by name: {name}");
-            }
-            var connectionStrings = new ConnectionStrings();
-            foreach (var tenantConnectionString in tenant.ConnectionStrings)
-            {
-                connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
-            }
-            cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
+                var tenant = await _tenantRepository.FindByNameAsync(name);
+                if (tenant == null)
+                {
+                    Logger.LogWarning($"Can not found tenant by name: {name}");
+                    throw new AbpException($"Can not found tenant by name: {name}");
+                }
+                var connectionStrings = new ConnectionStrings();
+                foreach (var tenantConnectionString in tenant.ConnectionStrings)
+                {
+                    connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
+                }
+                cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
 
-            Logger.LogDebug($"Setting the cache item: {cacheKey}");
-            await _cache.SetAsync(cacheKey, cacheItem);
-            Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
+                Logger.LogDebug($"Setting the cache item: {cacheKey}");
+                await _cache.SetAsync(cacheKey, cacheItem);
+                Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 
-            return cacheItem;
+                return cacheItem;
+            }
         }
     }
 }

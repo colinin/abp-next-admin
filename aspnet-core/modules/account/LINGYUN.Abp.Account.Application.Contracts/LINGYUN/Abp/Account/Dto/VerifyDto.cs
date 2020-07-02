@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Identity;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Account
 {
@@ -6,6 +8,7 @@ namespace LINGYUN.Abp.Account
     {
         [Required]
         [Phone]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
         public string PhoneNumber { get; set; }
 
         [Required]

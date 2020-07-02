@@ -3,7 +3,6 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.Location.Baidu;
 using LINGYUN.Abp.MessageService;
@@ -27,7 +26,6 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -40,6 +38,7 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
@@ -49,8 +48,6 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
-using AbpPermissionManagementApplicationModule = LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule;
-
 namespace LINGYUN.Platform
 {
     [DependsOn(
@@ -86,7 +83,6 @@ namespace LINGYUN.Platform
 #if DEBUG
         typeof(AbpBaiduLocationModule),
 #endif
-        typeof(AbpIdentityOverrideOptionsModule),
         typeof(AbpAutofacModule)
         )]
     public class PlatformHttpApiHostModule : AbpModule
