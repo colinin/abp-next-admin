@@ -27,6 +27,7 @@ using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
@@ -124,6 +125,13 @@ namespace LINGYUN.Platform
                 options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
                 options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
                 options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
+            });
+
+            Configure<PermissionManagementOptions>(options =>
+            {
+                // Rename IdentityServer.Client.ManagePermissions
+                // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
+                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpIdentityServerPermissions.Clients.ManagePermissions;
             });
 
             // 自定义需要处理的异常
