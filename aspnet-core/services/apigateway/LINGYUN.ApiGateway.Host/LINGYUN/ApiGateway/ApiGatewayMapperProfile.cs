@@ -33,7 +33,8 @@ namespace LINGYUN.ApiGateway
             CreateMap<RateLimitOptionsDto, FileRateLimitOptions>()
                 .ForMember(flo => flo.HttpStatusCode, map => map.MapFrom(m => m.HttpStatusCode ?? 429));
 
-            CreateMap<ReRouteDto, FileReRoute>()
+            CreateMap<ReRouteDto, FileRoute>()
+                .ForMember(frr => frr.RouteIsCaseSensitive, map => map.MapFrom(m => m.ReRouteIsCaseSensitive))
                 .ForMember(frr => frr.FileCacheOptions, map => map.MapFrom(m => m.FileCacheOptions))
                 .ForMember(frr => frr.Priority, map => map.MapFrom(m => m.Priority ?? 0))
                 .ForMember(frr => frr.Timeout, map => map.MapFrom(m => m.Timeout ?? 0))
@@ -46,11 +47,15 @@ namespace LINGYUN.ApiGateway
                 .ForMember(fgc => fgc.RateLimitOptions, map => map.MapFrom(m => m.RateLimitOptions))
                 .ForMember(fgc => fgc.ServiceDiscoveryProvider, map => map.MapFrom(m => m.ServiceDiscoveryProvider));
 
-            CreateMap<DynamicReRouteDto, FileDynamicReRoute>();
+            CreateMap<DynamicReRouteDto, FileDynamicRoute>();
 
-            CreateMap<AggregateReRouteConfigDto, AggregateReRouteConfig>();
+            CreateMap<AggregateReRouteConfigDto, AggregateRouteConfig>()
+                .ForMember(arc => arc.RouteKey, map => map.MapFrom(m => m.ReRouteKey));
 
-            CreateMap<AggregateReRouteDto, FileAggregateReRoute>();
+            CreateMap<AggregateReRouteDto, FileAggregateRoute>()
+                .ForMember(far => far.RouteKeys, map => map.MapFrom(m => m.ReRouteKeys))
+                .ForMember(far => far.RouteKeysConfig, map => map.MapFrom(m => m.ReRouteKeysConfig))
+                .ForMember(far => far.RouteIsCaseSensitive, map => map.MapFrom(m => m.ReRouteIsCaseSensitive));
         }
 
         private Dictionary<string, string> MapperDictionary(string sourceString)
