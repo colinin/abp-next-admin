@@ -192,7 +192,7 @@ namespace LINGYUN.Abp.MessageService
             //路由
             app.UseRouting();
             // 加入自定义中间件
-            app.UseMiddleware<SignalRJwtTokenMiddleware>();
+            app.UseSignalRJwtToken();
             // 认证
             app.UseAuthentication();
             // jwt
