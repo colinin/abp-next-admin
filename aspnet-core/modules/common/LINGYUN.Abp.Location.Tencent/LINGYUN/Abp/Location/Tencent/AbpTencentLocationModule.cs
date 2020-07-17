@@ -1,4 +1,4 @@
-﻿using LINYUN.Abp.Location.Tencent.Localization;
+﻿using LINGYUN.Abp.Location.Tencent.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System;

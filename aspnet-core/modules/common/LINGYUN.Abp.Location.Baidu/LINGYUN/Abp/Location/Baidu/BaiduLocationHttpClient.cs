@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Location.Baidu.Response;
 using LINGYUN.Abp.Location.Baidu.Utils;
-using LINYUN.Abp.Location.Baidu.Localization;
+using LINGYUN.Abp.Location.Baidu.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;

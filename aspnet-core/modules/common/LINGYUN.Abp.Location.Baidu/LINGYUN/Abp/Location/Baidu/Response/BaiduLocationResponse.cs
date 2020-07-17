@@ -1,4 +1,4 @@
-﻿using LINYUN.Abp.Location.Baidu.Localization;
+﻿using LINGYUN.Abp.Location.Baidu.Localization;
 using Volo.Abp;
 using Volo.Abp.Localization;
 

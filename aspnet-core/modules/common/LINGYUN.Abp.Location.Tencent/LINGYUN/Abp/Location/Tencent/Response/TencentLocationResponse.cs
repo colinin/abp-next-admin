@@ -1,4 +1,4 @@
-﻿using LINYUN.Abp.Location.Tencent.Localization;
+﻿using LINGYUN.Abp.Location.Tencent.Localization;
 using Newtonsoft.Json;
 using Volo.Abp;
 using Volo.Abp.Localization;
