@@ -18,6 +18,14 @@ namespace LINGYUN.Platform.Controllers
         }
 
         [HttpGet]
+        [Route("IpGeocode")]
+        public async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        {
+            var location = await LocationResolveProvider.IPGeocodeAsync(ipAddress);
+            return location;
+        }
+
+        [HttpGet]
         [Route("Geocode")]
         public async Task<GecodeLocation> GeocodeAsync(string address)
         {
@@ -28,7 +36,7 @@ namespace LINGYUN.Platform.Controllers
         [HttpGet]
         [Route("ReGeocode")]
 
-        public async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng)
+        public async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int redius = 50)
         {
             var location = await LocationResolveProvider.ReGeocodeAsync(lat, lng);
             return location;

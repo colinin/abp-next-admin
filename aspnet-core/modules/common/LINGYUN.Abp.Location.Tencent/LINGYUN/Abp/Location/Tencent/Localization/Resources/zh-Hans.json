@@ -1,0 +1,11 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "ResolveLocationFailed": "解析地址出错,错误信息:{0}",
+    "Message:RETURN_0": "正常",
+    "Message:RETURN_110": "请求参数信息有误",
+    "Message:RETURN_306": "Key格式错误",
+    "Message:RETURN_310": "请求有护持信息请检查字符串",
+    "Message:RETURN_311": "请求来源未被授权"
+  }
+}

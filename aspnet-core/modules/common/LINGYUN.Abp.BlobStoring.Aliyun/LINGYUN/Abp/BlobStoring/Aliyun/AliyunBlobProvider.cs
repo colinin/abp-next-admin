@@ -63,11 +63,8 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
         {
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAliyunConfiguration();
-            if (!args.OverrideExisting && await BlobExistsAsync(args, blobName))
-            {
-                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the bucketName '{GetBucketName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
-            }
 
+            // 先检查Bucket
             if (configuration.CreateBucketIfNotExists)
             {
                 await CreateBucketIfNotExists(args, configuration.CreateBucketReferer);
@@ -76,11 +73,21 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             var bucketName = GetBucketName(args);
             var ossClient = GetOssClient(args);
 
-            if (args.OverrideExisting && await BlobExistsAsync(args, blobName))
+            // 是否已存在
+            if (await BlobExistsAsync(args, blobName))
             {
-                ossClient.DeleteObject(bucketName, blobName);
+                // 是否覆盖
+                if (!args.OverrideExisting)
+                {
+                    throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the bucketName '{GetBucketName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
+                }
+                else
+                {
+                    // 删除原文件
+                    ossClient.DeleteObject(bucketName, blobName);
+                }
             }
-
+            // 保存
             ossClient.PutObject(bucketName, blobName, args.BlobStream);
         }
 
