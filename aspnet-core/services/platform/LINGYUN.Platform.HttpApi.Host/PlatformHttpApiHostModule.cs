@@ -4,7 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.Location.Baidu;
+using LINGYUN.Abp.Location.Tencent;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
@@ -82,7 +82,7 @@ namespace LINGYUN.Platform
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
 #if DEBUG
-        typeof(AbpBaiduLocationModule),
+        typeof(AbpTencentLocationModule),
 #endif
         typeof(AbpAutofacModule)
         )]

@@ -29,7 +29,10 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// CAP消息发布接口
         /// </summary>
         protected readonly ICapPublisher CapPublisher;
-
+        /// <summary>
+        /// 自定义事件注册接口
+        /// </summary>
+        protected ICustomDistributedEventSubscriber CustomDistributedEventSubscriber { get; }
         /// <summary>
         /// 本地事件处理器工厂对象集合
         /// </summary>
@@ -44,11 +47,15 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="serviceScopeFactory"></param>
         /// <param name="distributedEventBusOptions"></param>
         /// <param name="capPublisher"></param>
+        /// <param name="customDistributedEventSubscriber"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
-            ICapPublisher capPublisher) : base(serviceScopeFactory)
+            ICapPublisher capPublisher,
+            ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
+            : base(serviceScopeFactory)
         {
             CapPublisher = capPublisher;
+            CustomDistributedEventSubscriber = customDistributedEventSubscriber;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
@@ -61,8 +68,9 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <returns></returns>
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
-            //This is handled by CAP ConsumerServiceSelector
-            throw new NotImplementedException();
+            // 自定义的事件订阅者,可以不需要事件注册的事件类型
+            CustomDistributedEventSubscriber.Subscribe(eventType, factory);
+            return new DisposeAction(() => CustomDistributedEventSubscriber.UnSubscribe(eventType, factory));
         }
         /// <summary>
         /// 退订事件
@@ -118,6 +126,7 @@ namespace LINGYUN.Abp.EventBus.CAP
         public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
         {
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
+            CustomDistributedEventSubscriber.UnSubscribe(eventType, factory);
         }
         /// <summary>
         /// 退订所有事件

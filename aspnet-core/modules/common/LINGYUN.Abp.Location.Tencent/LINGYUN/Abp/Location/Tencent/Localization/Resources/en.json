@@ -1,0 +1,11 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "ResolveLocationFailed": "Parse address error, error message :{0}",
+    "Message:RETURN_0": "OK",
+    "Message:RETURN_110": "The request parameter information is incorrect",
+    "Message:RETURN_306": "Key format error",
+    "Message:RETURN_310": "Check the string if the request has retention information",
+    "Message:RETURN_311": "The source of the request is not authorized"
+  }
+}
