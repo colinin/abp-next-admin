@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Location.Tencent.Response;
 using LINGYUN.Abp.Location.Tencent.Utils;
-using LINYUN.Abp.Location.Tencent.Localization;
+using LINGYUN.Abp.Location.Tencent.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
