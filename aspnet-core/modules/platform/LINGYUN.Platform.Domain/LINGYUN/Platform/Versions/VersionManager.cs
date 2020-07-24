@@ -25,9 +25,9 @@ namespace LINGYUN.Platform.Versions
             VersionRepository = versionRepository;
         }
 
-        public virtual async Task<bool> ExistsAsync(string version)
+        public virtual async Task<bool> ExistsAsync(PlatformType platformType, string version)
         {
-            return await VersionRepository.ExistsAsync(version);
+            return await VersionRepository.ExistsAsync(platformType, version);
         }
 
         public virtual async Task<AppVersion> GetByIdAsync(Guid id)
@@ -35,19 +35,19 @@ namespace LINGYUN.Platform.Versions
             return await VersionRepository.GetAsync(id);
         }
 
-        public virtual async Task<AppVersion> GetByVersionAsync(string version)
+        public virtual async Task<AppVersion> GetByVersionAsync(PlatformType platformType, string version)
         {
-            return await VersionRepository.GetByVersionAsync(version);
+            return await VersionRepository.GetByVersionAsync(platformType, version);
         }
 
-        public virtual async Task<long> GetCountAsync(string filter)
+        public virtual async Task<long> GetCountAsync(PlatformType platformType, string filter)
         {
-            return await VersionRepository.GetCountAsync(filter);
+            return await VersionRepository.GetCountAsync(platformType, filter);
         }
 
-        public virtual async Task<List<AppVersion>> GetPagedListAsync(string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10)
+        public virtual async Task<List<AppVersion>> GetPagedListAsync(PlatformType platformType, string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10)
         {
-            return await VersionRepository.GetPagedListAsync(filter, soring, includeDetails, skipCount, maxResultCount);
+            return await VersionRepository.GetPagedListAsync(platformType, filter, soring, includeDetails, skipCount, maxResultCount);
         }
 
         [UnitOfWork]
@@ -70,22 +70,26 @@ namespace LINGYUN.Platform.Versions
             await VersionRepository.DeleteAsync(id);
         }
 
-        public virtual async Task<AppVersion> GetLatestAsync()
+        public virtual async Task<AppVersion> GetLatestAsync(PlatformType platformType)
         {
-            return await VersionRepository.GetLatestVersionAsync();
+            return await VersionRepository.GetLatestVersionAsync(platformType);
         }
 
-        public virtual async Task<Stream> GetFileAsync(string version, string fileName, string fileVersion)
+        public virtual async Task<Stream> DownloadFileAsync(PlatformType platformType, string version, string filePath, string fileName, string fileVersion)
         {
+            var appVersion = await GetByVersionAsync(platformType, version);
+            var versionFile = appVersion.FindFile(filePath, fileName, fileVersion);
+            versionFile.Download();
             return await VersionBlobContainer.GetAsync(
-                VersionFile.NormalizeBlobName(version, fileName, fileVersion));
+                VersionFile.NormalizeBlobName(version, versionFile.Name, versionFile.Version, versionFile.Path));
         }
         public virtual async Task<Stream> GetFileAsync(VersionFile versionFile)
         {
-            return await GetFileAsync(versionFile.AppVersion.Version, versionFile.Name, versionFile.Version);
+            return await DownloadFileAsync(versionFile.AppVersion.PlatformType, versionFile.AppVersion.Version, versionFile.Path, 
+                versionFile.Name, versionFile.Version);
         }
 
-        public virtual async Task<string> AppendFileAsync(string version, string fileName, string fileVersion, byte[] data)
+        public virtual async Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data)
         {
             // 计算指纹
             var sha256 = new SHA256Managed();
@@ -93,21 +97,23 @@ namespace LINGYUN.Platform.Versions
             var sha256Hash = BitConverter.ToString(checkHash).Replace("-", string.Empty);
 
             await VersionBlobContainer
-                .SaveAsync(VersionFile.NormalizeBlobName(version, fileName, fileVersion), data, true);
+                .SaveAsync(VersionFile.NormalizeBlobName(version, fileName, fileVersion, filePath), data, true);
 
             return sha256Hash;
         }
 
         [UnitOfWork]
         public virtual async Task AppendFileAsync(Guid versionId, string fileSha256,
-            string fileName, string fileVersion,  long fileSize, FileType fileType = FileType.Stream)
+            string fileName, string fileVersion,  
+            long fileSize, string filePath = "", 
+            FileType fileType = FileType.Stream)
         {
             var appVersion = await VersionRepository.GetAsync(versionId);
             if (appVersion.FileExists(fileName))
             {
                 appVersion.RemoveFile(fileName);
             }
-            appVersion.AppendFile(fileName, fileVersion, fileSize, fileSha256, fileType);
+            appVersion.AppendFile(fileName, fileVersion, fileSize, fileSha256, filePath, fileType);
         }
 
         [UnitOfWork]

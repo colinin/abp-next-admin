@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace LINGYUN.Platform.Versions
 {
     [Area("platform")]
     [Route("api/platform/version")]
-    public class VersionController : PlatformControllerBase
+    public class VersionController : PlatformControllerBase, IVersionAppService
     {
         private readonly IVersionFileManager _versionFileManager;
         private readonly IVersionAppService _versionAppService;
@@ -102,8 +103,8 @@ namespace LINGYUN.Platform.Versions
                         }
                         // 上传最终合并的文件并取得SHA256指纹
                         var fileData = await mergeSavedFileStream.GetAllBytesAsync();
-                        versionFileCreate.SHA256 = await _versionFileManager.AppendFileAsync(versionFileCreate.Version,
-                            versionFileCreate.FileName, versionFileCreate.FileVersion, fileData);
+                        versionFileCreate.SHA256 = await _versionFileManager.SaveFileAsync(versionFileCreate.Version,
+                            versionFileCreate.FilePath, versionFileCreate.FileName, versionFileCreate.FileVersion, fileData);
                     }
                     // 添加到版本信息
                     await _versionAppService.AppendFileAsync(versionFileCreate);
@@ -146,9 +147,9 @@ namespace LINGYUN.Platform.Versions
 
         [HttpGet]
         [Route("lastest")]
-        public virtual async Task<VersionDto> GetLastestAsync()
+        public virtual async Task<VersionDto> GetLastestAsync([Required] PlatformType platformType)
         {
-            return await _versionAppService.GetLastestAsync();
+            return await _versionAppService.GetLastestAsync(platformType);
         }
 
         [HttpDelete]
@@ -172,8 +173,9 @@ namespace LINGYUN.Platform.Versions
             // 分块模式下载文件
 
             // 得到文件流
-            var fileStream = await _versionFileManager.GetFileAsync(
-                versionFileGet.Version, versionFileGet.FileName, versionFileGet.FileVersion);
+            var fileStream = await _versionFileManager.DownloadFileAsync(
+                versionFileGet.PlatformType, versionFileGet.Version, versionFileGet.FilePath, 
+                versionFileGet.FileName, versionFileGet.FileVersion);
             // 得到文件扩展名
             var fileExt = Path.GetExtension(versionFileGet.FileName);
             var provider = new FileExtensionContentTypeProvider();

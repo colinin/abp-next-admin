@@ -128,10 +128,15 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                     .HasColumnName(nameof(VersionFile.Version))
                     .HasMaxLength(VersionFileConsts.MaxVersionLength);
 
+                x.Property(p => p.Path)
+                    .HasColumnName(nameof(VersionFile.Path))
+                    .HasMaxLength(VersionFileConsts.MaxPathLength);
+
                 x.ConfigureAudited();
                 x.ConfigureMultiTenant();
 
-                x.HasIndex(i => new { i.Name, i.Version });
+                x.HasIndex(i => new { i.Path, i.Name, i.Version }).IsUnique();
+                
             });
         }
     }

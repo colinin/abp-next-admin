@@ -10,7 +10,13 @@ namespace LINGYUN.Platform.Versions
         public Guid VersionId { get; set; }
 
         [Required]
+        [StringLength(AppVersionConsts.MaxVersionLength)]
         public string Version { get; set; }
+        /// <summary>
+        /// 文件路径
+        /// </summary>
+        [StringLength(VersionFileConsts.MaxPathLength)] 
+        public string FilePath { get; set; }
         /// <summary>
         /// 文件名称
         /// </summary>

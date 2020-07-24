@@ -6,7 +6,7 @@ namespace LINGYUN.Platform.Versions
 {
     public interface IVersionAppService : IApplicationService
     {
-        Task<VersionDto> GetLastestAsync();
+        Task<VersionDto> GetLastestAsync(PlatformType platformType);
 
         Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged);
 

@@ -5,7 +5,7 @@ namespace LINGYUN.Platform.Versions
 {
     public interface IVersionFileManager
     {
-        Task<string> AppendFileAsync(string version, string fileName, string fileVersion, byte[] data);
-        Task<Stream> GetFileAsync(string version, string fileName, string fileVersion);
+        Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data);
+        Task<Stream> DownloadFileAsync(PlatformType platformType, string version, string filePath, string fileName, string fileVersion);
     }
 }

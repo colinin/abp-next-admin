@@ -20,17 +20,19 @@ namespace LINGYUN.Platform.Versions
         {
         }
 
-        public virtual async Task<long> GetCountAsync(string filter = "", CancellationToken cancellationToken = default)
+        public virtual async Task<long> GetCountAsync(PlatformType platformType, string filter = "", CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .Where(x => (platformType | x.PlatformType) == x.PlatformType)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Version.Contains(filter) || x.Title.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<AppVersion>> GetPagedListAsync(string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10, CancellationToken cancellationToken = default)
+        public virtual async Task<List<AppVersion>> GetPagedListAsync(PlatformType platformType, string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10, CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeIf(includeDetails, x => x.Files)
+                .Where(x => (platformType | x.PlatformType) == x.PlatformType)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Version.Contains(filter) || x.Title.Contains(filter))
                 .OrderBy(soring ?? "") // TODO: 排序待优化
                 .Page(skipCount, maxResultCount)
@@ -38,24 +40,25 @@ namespace LINGYUN.Platform.Versions
         }
 
 
-        public virtual async Task<bool> ExistsAsync(string version, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsAsync(PlatformType platformType, string version, CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .AnyAsync(x => x.Version.Equals(version), GetCancellationToken(cancellationToken));
+                .AnyAsync(x => (platformType | x.PlatformType) == x.PlatformType && x.Version.Equals(version), GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<AppVersion> GetByVersionAsync(string version, CancellationToken cancellationToken = default)
+        public virtual async Task<AppVersion> GetByVersionAsync(PlatformType platformType, string version, CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .Include(x => x.Files)
-                .Where(x => x.Version.Equals(version))
+                .Where(x => (platformType | x.PlatformType) == x.PlatformType && x.Version.Equals(version))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<AppVersion> GetLatestVersionAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<AppVersion> GetLatestVersionAsync(PlatformType platformType, CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .Include(x => x.Files)
+                .Where(x => (platformType | x.PlatformType) == x.PlatformType)
                 .OrderByDescending(x => x.CreationTime)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
