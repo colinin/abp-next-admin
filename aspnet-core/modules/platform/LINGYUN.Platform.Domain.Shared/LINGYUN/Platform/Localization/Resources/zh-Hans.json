@@ -1,0 +1,11 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "UploadFileSizeBeyondLimit": "上传文件大小不能超过 {0} MB!",
+    "NotAllowedFileExtensionName": "不被允许的文件扩展名: {0}!",
+    "DisplayName:VersionFileLimitLength": "文件限制大小",
+    "Description:VersionFileLimitLength": "上传文件的限制大小,单位(MB)",
+    "DisplayName:AllowVersionFileExtensions": "文件扩展名",
+    "Description:AllowVersionFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号"
+  }
+}

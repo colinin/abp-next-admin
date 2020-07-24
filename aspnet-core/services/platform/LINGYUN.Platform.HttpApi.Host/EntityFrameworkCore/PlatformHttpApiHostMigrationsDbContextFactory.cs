@@ -12,7 +12,7 @@ namespace LINGYUN.Platform.EntityFrameworkCore
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<PlatformHttpApiHostMigrationsDbContext>()
-                .UseMySql(configuration.GetConnectionString("AbpIdentityServer"));
+                .UseMySql(configuration.GetConnectionString("Default"));
 
             return new PlatformHttpApiHostMigrationsDbContext(builder.Options);
         }

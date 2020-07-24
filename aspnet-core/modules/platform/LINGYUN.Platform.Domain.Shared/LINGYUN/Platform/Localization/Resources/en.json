@@ -1,0 +1,11 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "UploadFileSizeBeyondLimit": "Upload file size cannot exceed {0} MB!",
+    "NotAllowedFileExtensionName": "Not allowed file extension: {0}!",
+    "DisplayName:VersionFileLimitLength": "File limit size",
+    "Description:VersionFileLimitLength": "Limit size of uploaded file in MB",
+    "DisplayName:AllowVersionFileExtensions": "File extension",
+    "Description:AllowVersionFileExtensions": "List of allowed extensions to upload files, with multiple extensions separated by, don't need a notation"
+  }
+}
