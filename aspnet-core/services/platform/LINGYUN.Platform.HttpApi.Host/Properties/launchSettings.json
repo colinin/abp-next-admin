@@ -3,7 +3,7 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:54521",
+      "applicationUrl": "http://localhost:64238",
       "sslPort": 0
     }
   },
@@ -11,7 +11,7 @@
     "LINGYUN.Platform.HttpApi.Host": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:30010",
+      "applicationUrl": "http://localhost:30025",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

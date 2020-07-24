@@ -1,4 +1,2 @@
-bin
-obj
-Logs
-appsettings.*.json
+.vs
+file-blob-storing

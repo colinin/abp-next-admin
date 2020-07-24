@@ -3,87 +3,55 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.Location.Tencent;
-using LINGYUN.Abp.MessageService;
-using LINGYUN.Abp.SettingManagement;
-using LINGYUN.Abp.TenantManagement;
-using LINGYUN.ApiGateway;
+using LINGYUN.Abp.Notifications;
+using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.MultiTenancy;
-using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Volo.Abp;
-using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.Identity;
-using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.Identity.Localization;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
+
 namespace LINGYUN.Platform
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(Abp.Account.AbpAccountApplicationModule),
-        typeof(Abp.Account.AbpAccountHttpApiModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAccountHttpApiModule),
-        typeof(AbpIdentityServerApplicationModule),
-        typeof(AbpIdentityServerHttpApiModule),
-        typeof(AbpSettingManagementApplicationModule),
-        typeof(AbpSettingManagementHttpApiModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(PlatformApplicationModule),
+        typeof(PlatformHttpApiModule),
+        typeof(PlatformEntityFrameworkCoreModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpNotificationModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpAliyunSmsModule),
-#if DEBUG
-        typeof(AbpTencentLocationModule),
-#endif
+        typeof(AbpBlobStoringFileSystemModule),
         typeof(AbpAutofacModule)
         )]
     public class PlatformHttpApiHostModule : AbpModule
@@ -102,11 +70,6 @@ namespace LINGYUN.Platform
                 })
                 .UseDashboard();
             });
-
-            PreConfigure<IdentityBuilder>(builder =>
-            {
-                builder.AddDefaultTokenProviders();
-            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -119,19 +82,29 @@ namespace LINGYUN.Platform
                 options.UseMySQL();
             });
 
+            Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = null;
+                options.Limits.MaxRequestBufferSize = null;
+            });
+
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.UseFileSystem(fileSystem =>
+                    {
+                        fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "file-blob-storing");
+                    });
+                });
+            });
+
             // 加解密
             Configure<AbpStringEncryptionOptions>(options =>
             {
                 options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
                 options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
                 options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
-            });
-
-            Configure<PermissionManagementOptions>(options =>
-            {
-                // Rename IdentityServer.Client.ManagePermissions
-                // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpIdentityServerPermissions.Clients.ManagePermissions;
             });
 
             // 自定义需要处理的异常
@@ -147,10 +120,9 @@ namespace LINGYUN.Platform
                 options.SendStackTrace = true;
                 // 未指定异常接收者的默认接收邮件
                 options.DefaultReceiveEmail = "colin.in@foxmail.com";
-                //  指定某种异常发送到哪个邮件
+                // 指定某种异常发送到哪个邮件
                 options.HandReceivedException<AbpException>("colin.in@foxmail.com");
             });
-
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
@@ -190,10 +162,6 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-                options.Resources
-                       .Get<IdentityResource>()
-                       .AddVirtualJson("/LINGYUN/Platform/Identity/Localization");
             });
 
             context.Services.AddAuthentication("Bearer")
@@ -224,6 +192,14 @@ namespace LINGYUN.Platform
             }
         }
 
+        //public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
+        //{
+        //    var backgroundJobManager = context.ServiceProvider.GetRequiredService<IBackgroundJobManager>();
+        //    // 五分钟执行一次的定时任务
+        //    AsyncHelper.RunSync(async () => await
+        //        backgroundJobManager.EnqueueAsync(CronGenerator.Minute(5), new NotificationCleanupExpritionJobArgs(200)));
+        //}
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -239,6 +215,8 @@ namespace LINGYUN.Platform
             app.UseAuthentication();
             // jwt
             app.UseJwtTokenMiddleware();
+            // 授权
+            app.UseAuthorization();
             // 多租户
             app.UseMultiTenancy();
             // Swagger
