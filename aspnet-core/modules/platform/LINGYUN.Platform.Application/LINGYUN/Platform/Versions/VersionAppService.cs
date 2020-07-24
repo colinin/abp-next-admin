@@ -18,17 +18,17 @@ namespace LINGYUN.Platform.Versions
         {
             await _versionManager.AppendFileAsync(versionFileCreate.VersionId,
                 versionFileCreate.SHA256, versionFileCreate.FileName, versionFileCreate.FileVersion,
-                versionFileCreate.TotalByte, versionFileCreate.FileType);
+                versionFileCreate.TotalByte, versionFileCreate.FilePath, versionFileCreate.FileType);
         }
 
         public virtual async Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
         {
-            if (await _versionManager.ExistsAsync(versionCreate.Version))
+            if (await _versionManager.ExistsAsync(versionCreate.PlatformType,versionCreate.Version))
             {
                 throw new UserFriendlyException("VersionAlreadyExists");
             }
             var version = new AppVersion(GuidGenerator.Create(), versionCreate.Title,
-                versionCreate.Version, CurrentTenant.Id)
+                versionCreate.Version, versionCreate.PlatformType, CurrentTenant.Id)
             {
                 Description = versionCreate.Description,
                 Level = versionCreate.Level
@@ -41,7 +41,7 @@ namespace LINGYUN.Platform.Versions
 
         public virtual async Task DeleteAsync(VersionDeleteDto versionDelete)
         {
-            var version = await _versionManager.GetByVersionAsync(versionDelete.Version);
+            var version = await _versionManager.GetByVersionAsync(versionDelete.PlatformType, versionDelete.Version);
             if (version != null)
             {
                 await _versionManager.DeleteAsync(version.Id);
@@ -50,8 +50,8 @@ namespace LINGYUN.Platform.Versions
 
         public virtual async Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
         {
-            var versionCount = await _versionManager.GetCountAsync(versionGetByPaged.Filter);
-            var versions = await _versionManager.GetPagedListAsync(versionGetByPaged.Filter,
+            var versionCount = await _versionManager.GetCountAsync(versionGetByPaged.PlatformType, versionGetByPaged.Filter);
+            var versions = await _versionManager.GetPagedListAsync(versionGetByPaged.PlatformType, versionGetByPaged.Filter,
                 versionGetByPaged.Sorting, true,
                 versionGetByPaged.SkipCount, versionGetByPaged.MaxResultCount);
 
@@ -66,9 +66,9 @@ namespace LINGYUN.Platform.Versions
             return ObjectMapper.Map<AppVersion, VersionDto>(version);
         }
 
-        public virtual async Task<VersionDto> GetLastestAsync()
+        public virtual async Task<VersionDto> GetLastestAsync(PlatformType platformType)
         {
-            var version = await _versionManager.GetLatestAsync();
+            var version = await _versionManager.GetLatestAsync(platformType);
 
             return ObjectMapper.Map<AppVersion, VersionDto>(version);
         }

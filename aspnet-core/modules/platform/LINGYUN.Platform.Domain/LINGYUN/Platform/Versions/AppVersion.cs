@@ -32,6 +32,10 @@ namespace LINGYUN.Platform.Versions
         /// </summary>
         public virtual ImportantLevel Level { get; set; }
         /// <summary>
+        /// 适应平台
+        /// </summary>
+        public virtual PlatformType PlatformType { get; protected set; }
+        /// <summary>
         /// 版本文件列表
         /// </summary>
         public virtual ICollection<VersionFile> Files { get; protected set; }
@@ -41,20 +45,26 @@ namespace LINGYUN.Platform.Versions
             Files = new List<VersionFile>();
         }
 
-        public AppVersion(Guid id, string title, string version, Guid? tenantId = null)
+        public AppVersion(Guid id, string title, string version, PlatformType platformType = PlatformType.None, Guid? tenantId = null)
         {
             Id = id;
             Title = title;
             Version = version;
             TenantId = tenantId;
+            PlatformType = platformType;
             Level = ImportantLevel.Low;
         }
 
-        public void AppendFile(string name, string version, long size, string sha256, FileType fileType = FileType.Stream)
+        public void AppendFile(string name, string version, long size, string sha256, 
+            string filePath = "", FileType fileType = FileType.Stream)
         {
             if (!FileExists(name))
             {
-                Files.Add(new VersionFile(name, version, size, sha256, fileType, TenantId));
+                var versionFile = new VersionFile(name, version, size, sha256, fileType, TenantId)
+                {
+                    Path = filePath
+                };
+                Files.Add(versionFile);
             }
         }
 
@@ -81,6 +91,18 @@ namespace LINGYUN.Platform.Versions
         {
             return Files.Where(x => x.Name.Equals(name)).FirstOrDefault();
         }
+
+        public VersionFile FindFile(string path, string name)
+        {
+            return Files.Where(x => x.Path.Equals(path) && x.Name.Equals(name)).FirstOrDefault();
+        }
+
+        public VersionFile FindFile(string path, string name, string version)
+        {
+            return Files.Where(x => x.Path.Equals(path) && x.Name.Equals(name) && x.Version.Equals(version))
+                .FirstOrDefault();
+        }
+
 
         public bool FileExists(string name)
         {

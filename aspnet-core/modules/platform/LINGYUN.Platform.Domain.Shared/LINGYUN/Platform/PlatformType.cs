@@ -39,7 +39,7 @@ namespace LINGYUN.Platform
         /// <summary>
         /// Web通用
         /// </summary>
-        Web = WebForm | WebMvc,
+        Web = WebForm | WebMvc | WebMvvm,
         /// <summary>
         /// Android
         /// </summary>
