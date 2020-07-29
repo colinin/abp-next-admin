@@ -12,7 +12,7 @@ using Volo.Abp.Identity;
 namespace LINGYUN.Abp.Identity
 {
     [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-    [Area("organization-unit")]
+    [Area("identity")]
     [ControllerName("organization-unit")]
     [Route("api/identity/organization-unit")]
     public class IOrganizationUnitController : AbpController, IOrganizationUnitAppService
