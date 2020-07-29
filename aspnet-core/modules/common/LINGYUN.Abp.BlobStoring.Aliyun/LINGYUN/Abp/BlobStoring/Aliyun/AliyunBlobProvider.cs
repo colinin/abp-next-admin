@@ -55,8 +55,9 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 
             var ossClient = GetOssClient(args);
             var ossObject = ossClient.GetObject(GetBucketName(args), blobName);
-            // 返回原始结果才会调用 Stream.ReadAsync();
-            return ossObject.Content;
+            var memoryStream = new MemoryStream();
+            await ossObject.Content.CopyToAsync(memoryStream);
+            return memoryStream;
         }
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)

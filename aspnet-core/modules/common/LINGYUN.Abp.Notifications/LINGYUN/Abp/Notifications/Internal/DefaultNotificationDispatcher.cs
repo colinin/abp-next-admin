@@ -190,7 +190,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
                 var notifacationDataMapping = _notificationOptions.NotificationDataMappings
-                        .GetMapItemOrNull(provider.Name, notificationInfo.CateGory);
+                        .GetMapItemOrNull(notificationInfo.CateGory, provider.Name);
                 if (notifacationDataMapping != null)
                 {
                     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.IO;
 using Volo.Abp.MultiTenancy;
@@ -94,7 +92,7 @@ namespace LINGYUN.Platform.Versions
             //路径存储模式 如果传递了绝对路径,需要计算短路径
             if (!filePath.IsNullOrWhiteSpace())
             {
-                return $"{appVersion}/{filePath.GetHash()}/{fileNameWithNotExten}/{fileVersion}/{fileName}";
+                return $"{appVersion}/{filePath.Md5()}/{fileNameWithNotExten}/{fileVersion}/{fileName}";
             }
             // 最终文件名为 应用版本号/文件名(不带扩展名)/文件版本/文件名
             // 例: 1.0.0.0/test-upload-text-file/1.0.0.0/test-upload-text-file.text

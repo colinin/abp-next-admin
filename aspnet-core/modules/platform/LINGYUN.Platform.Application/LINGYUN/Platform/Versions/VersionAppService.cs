@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using LINGYUN.Platform.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Platform.Versions
 {
+    [Authorize(PlatformPermissions.AppVersion.Default)]
     public class VersionAppService : PlatformApplicationServiceBase, IVersionAppService
     {
         private readonly VersionManager _versionManager;
@@ -14,6 +17,7 @@ namespace LINGYUN.Platform.Versions
             _versionManager = versionManager;
         }
 
+        [Authorize(PlatformPermissions.AppVersion.FileManager.Create)]
         public virtual async Task AppendFileAsync(VersionFileCreateDto versionFileCreate)
         {
             await _versionManager.AppendFileAsync(versionFileCreate.VersionId,
@@ -21,6 +25,7 @@ namespace LINGYUN.Platform.Versions
                 versionFileCreate.TotalByte, versionFileCreate.FilePath, versionFileCreate.FileType);
         }
 
+        [Authorize(PlatformPermissions.AppVersion.Create)]
         public virtual async Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
         {
             if (await _versionManager.ExistsAsync(versionCreate.PlatformType,versionCreate.Version))
@@ -39,6 +44,7 @@ namespace LINGYUN.Platform.Versions
             return ObjectMapper.Map<AppVersion, VersionDto>(version);
         }
 
+        [Authorize(PlatformPermissions.AppVersion.Delete)]
         public virtual async Task DeleteAsync(VersionDeleteDto versionDelete)
         {
             var version = await _versionManager.GetByVersionAsync(versionDelete.PlatformType, versionDelete.Version);
@@ -47,6 +53,7 @@ namespace LINGYUN.Platform.Versions
                 await _versionManager.DeleteAsync(version.Id);
             }
         }
+
 
         public virtual async Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
         {
@@ -58,6 +65,7 @@ namespace LINGYUN.Platform.Versions
             return new PagedResultDto<VersionDto>(versionCount,
                 ObjectMapper.Map<List<AppVersion>, List<VersionDto>>(versions));
         }
+
 
         public virtual async Task<VersionDto> GetAsync(VersionGetByIdDto versionGetById)
         {
@@ -73,16 +81,18 @@ namespace LINGYUN.Platform.Versions
             return ObjectMapper.Map<AppVersion, VersionDto>(version);
         }
 
+        [Authorize(PlatformPermissions.AppVersion.FileManager.Delete)]
         public virtual async Task RemoveAllFileAsync(VersionGetByIdDto versionGetById)
         {
             await _versionManager.RemoveAllFileAsync(versionGetById.Id);
         }
 
+        [Authorize(PlatformPermissions.AppVersion.FileManager.Delete)]
         public virtual async Task RemoveFileAsync(VersionFileDeleteDto versionFileDelete)
         {
             await _versionManager.RemoveFileAsync(versionFileDelete.VersionId, versionFileDelete.FileName);
         }
-        
+
         public virtual Task DownloadFileAsync(VersionFileGetDto versionFileGet)
         {
             // TODO: 是否需要定义此接口用于 abp-definition-api ?

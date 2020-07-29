@@ -1,0 +1,22 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:Platform": "平台服务",
+    "Permission:AppVersion": "版本管理",
+    "Permission:FileSystem": "文件系统",
+    "Permission:FileManager": "文件管理",
+    "Permission:CreateVersion": "创建版本",
+    "Permission:DeleteVersion": "删除版本",
+    "Permission:CreateFolder": "创建目录",
+    "Permission:DeleteFolder": "删除目录",
+    "Permission:RenameFolder": "目录改名",
+    "Permission:MoveFolder": "变更目录",
+    "Permission:CopyFolder": "复制目录",
+    "Permission:AppendFile": "添加文件",
+    "Permission:UpdateFile": "变更文件",
+    "Permission:DeleteFile": "删除文件",
+    "Permission:CopyFile": "复制文件",
+    "Permission:MoveFile": "移动文件",
+    "Permission:DownloadFile": "下载文件"
+  }
+}

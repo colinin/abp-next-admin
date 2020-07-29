@@ -6,7 +6,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.EntityFrameworkCore
 {
-    [ConnectionStringName(PlatformDbProperties.ConnectionStringName)]
+    [ConnectionStringName(AppPlatformDbProperties.ConnectionStringName)]
     public interface IPlatformDbContext : IEfCoreDbContext
     {
         DbSet<Route> Routes { get; set; }

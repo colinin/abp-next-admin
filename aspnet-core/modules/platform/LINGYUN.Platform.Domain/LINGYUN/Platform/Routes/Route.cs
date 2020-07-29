@@ -8,6 +8,9 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Routes
 {
+    // TODO: 因为abp的菜单设计模式是按照权限分配的,是否可以去掉路由的后台配置? 
+    // 按钮、菜单权限可以在子权限中定义
+    // 数据权限需要DbContext拦截器或者创建一个数据过滤仓储的抽象类,需要过滤数据权限的继承自此仓储
     public class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         /// <summary>

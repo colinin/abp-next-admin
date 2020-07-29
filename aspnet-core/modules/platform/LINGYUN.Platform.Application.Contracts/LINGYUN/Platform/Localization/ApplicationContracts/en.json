@@ -1,0 +1,22 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:Platform": "Platform service",
+    "Permission:AppVersion": "Version management",
+    "Permission:FileSystem": "File system",
+    "Permission:FileManager": "File management",
+    "Permission:CreateVersion": "Create version",
+    "Permission:DeleteVersion": "Delete version",
+    "Permission:CreateFolder": "Create directory",
+    "Permission:DeleteFolder": "Delete directory",
+    "Permission:RenameFolder": "Directory rename",
+    "Permission:MoveFolder": "Change directory",
+    "Permission:CopyFolder": "Copy directory",
+    "Permission:AppendFile": "Add files",
+    "Permission:UpdateFile": "Change file",
+    "Permission:DeleteFile": "Delete file",
+    "Permission:CopyFile": "Copy file",
+    "Permission:MoveFile": "Move file",
+    "Permission:DownloadFile": "Download file"
+  }
+}

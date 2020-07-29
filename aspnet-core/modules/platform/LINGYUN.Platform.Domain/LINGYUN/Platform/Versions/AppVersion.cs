@@ -103,7 +103,6 @@ namespace LINGYUN.Platform.Versions
                 .FirstOrDefault();
         }
 
-
         public bool FileExists(string name)
         {
             // TODO: Windows file system ?

@@ -11,6 +11,10 @@ namespace LINGYUN.Platform.Versions
         /// </summary>
         public DateTime CreationTime { get; set; }
         /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
         /// 版本号
         /// </summary>
         public string Version { get; set; }

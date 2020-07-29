@@ -14,6 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LINGYUN\Platform\Localization\ApplicationContracts\en.json" />
+    <None Remove="LINGYUN\Platform\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Platform\Localization\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="LINGYUN\Platform\Localization\ApplicationContracts\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="3.0.0" />
   </ItemGroup>
 

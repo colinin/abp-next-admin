@@ -1,4 +1,6 @@
-﻿using LINGYUN.Platform.Settings;
+﻿using LINGYUN.Platform.Permissions;
+using LINGYUN.Platform.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -31,6 +33,7 @@ namespace LINGYUN.Platform.Versions
 
         [HttpPost]
         [Route("file/append")]
+        [RequestSizeLimit(200_000_000)]
         public virtual async Task AppendFileAsync([FromQuery] VersionFileCreateDto versionFileCreate)
         {
             // 检查文件大小
@@ -168,6 +171,7 @@ namespace LINGYUN.Platform.Versions
 
         [HttpGet]
         [Route("file/download")]
+        [Authorize(PlatformPermissions.AppVersion.FileManager.Download)]
         public virtual async Task DownloadFileAsync(VersionFileGetDto versionFileGet)
         {
             // 分块模式下载文件
