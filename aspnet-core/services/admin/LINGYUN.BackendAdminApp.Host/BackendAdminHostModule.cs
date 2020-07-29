@@ -3,7 +3,6 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.Location.Tencent;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.SettingManagement;
@@ -33,7 +32,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
@@ -50,6 +48,7 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
+
 namespace LINGYUN.BackendAdmin
 {
     [DependsOn(
@@ -59,14 +58,14 @@ namespace LINGYUN.BackendAdmin
         typeof(AppPlatformApplicationContractModule),
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(Abp.Account.AbpAccountApplicationModule),
-        typeof(Abp.Account.AbpAccountHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
+        typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
+        typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
+        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
+        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAccountHttpApiModule),
-        typeof(AbpIdentityServerApplicationModule),
-        typeof(AbpIdentityServerHttpApiModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
         typeof(AbpPermissionManagementApplicationModule),
@@ -131,7 +130,8 @@ namespace LINGYUN.BackendAdmin
             {
                 // Rename IdentityServer.Client.ManagePermissions
                 // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpIdentityServerPermissions.Clients.ManagePermissions;
+                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = 
+                    LINGYUN.Abp.IdentityServer.AbpIdentityServerPermissions.Clients.ManagePermissions;
             });
 
             // 自定义需要处理的异常

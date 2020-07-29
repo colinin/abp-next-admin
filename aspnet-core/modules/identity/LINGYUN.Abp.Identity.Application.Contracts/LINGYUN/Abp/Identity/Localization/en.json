@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:OrganizationUnitManagement": "Organization unit management",
+    "Permission:ChangeRoles": "Change roles",
+    "Permission:ChangeUsers": "Change users"
+  }
+}

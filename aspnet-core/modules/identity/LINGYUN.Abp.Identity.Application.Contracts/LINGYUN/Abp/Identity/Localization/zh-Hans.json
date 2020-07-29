@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:OrganizationUnitManagement": "组织机构管理",
+    "Permission:ChangeRoles": "更改角色",
+    "Permission:ChangeUsers": "更改用户"
+  }
+}
