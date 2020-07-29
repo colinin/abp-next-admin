@@ -44,8 +44,6 @@
     <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.Autofac" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="3.0.0" />
-    <PackageReference Include="Volo.Abp.Identity.Application" Version="3.0.0" />
-    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.Account.Application" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.Account.HttpApi" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="3.0.0" />
@@ -64,6 +62,8 @@
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\LINGYUN.ApiGateway.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
@@ -80,5 +80,7 @@
   <ItemGroup>
     <Folder Include="SignalR\" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
