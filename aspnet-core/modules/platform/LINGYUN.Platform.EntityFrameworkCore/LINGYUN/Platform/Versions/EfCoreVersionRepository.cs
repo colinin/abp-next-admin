@@ -34,7 +34,8 @@ namespace LINGYUN.Platform.Versions
                 .IncludeIf(includeDetails, x => x.Files)
                 .Where(x => (platformType | x.PlatformType) == x.PlatformType)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Version.Contains(filter) || x.Title.Contains(filter))
-                .OrderBy(soring ?? "") // TODO: 排序待优化
+                .OrderByDescending(x => x.CreationTime)
+                .ThenBy(soring ?? nameof(AppVersion.Version)) // TODO: 排序待优化
                 .Page(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

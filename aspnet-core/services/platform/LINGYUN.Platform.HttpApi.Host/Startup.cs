@@ -7,7 +7,7 @@ namespace LINGYUN.Platform
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<PlatformHttpApiHostModule>();
+            services.AddApplication<AppPlatformHttpApiHostModule>();
         }
 
         public void Configure(IApplicationBuilder app)

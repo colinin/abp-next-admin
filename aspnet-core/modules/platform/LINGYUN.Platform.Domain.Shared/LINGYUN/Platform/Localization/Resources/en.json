@@ -1,6 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Platform.VersionFile:404": "File not found, name: {FileName}, version:{FileVersion}!",
     "UploadFileSizeBeyondLimit": "Upload file size cannot exceed {0} MB!",
     "NotAllowedFileExtensionName": "Not allowed file extension: {0}!",
     "DisplayName:VersionFileLimitLength": "File limit size",

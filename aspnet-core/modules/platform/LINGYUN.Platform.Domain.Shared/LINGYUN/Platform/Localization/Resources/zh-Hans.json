@@ -1,6 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Platform.VersionFile:404": "文件: {FileName}, 版本号:{FileVersion} 不存在!",
     "UploadFileSizeBeyondLimit": "上传文件大小不能超过 {0} MB!",
     "NotAllowedFileExtensionName": "不被允许的文件扩展名: {0}!",
     "DisplayName:VersionFileLimitLength": "文件限制大小",

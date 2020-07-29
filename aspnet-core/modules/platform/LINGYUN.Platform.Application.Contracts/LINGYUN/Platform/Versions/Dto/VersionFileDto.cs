@@ -5,6 +5,10 @@ namespace LINGYUN.Platform.Versions
     public class VersionFileDto
     {
         /// <summary>
+        /// 文件路径
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
         /// 文件名称
         /// </summary>
         public string Name { get; set; }

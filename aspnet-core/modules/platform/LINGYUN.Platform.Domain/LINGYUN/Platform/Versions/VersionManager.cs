@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Services;
@@ -79,14 +80,22 @@ namespace LINGYUN.Platform.Versions
         {
             var appVersion = await GetByVersionAsync(platformType, version);
             var versionFile = appVersion.FindFile(filePath, fileName, fileVersion);
+            if (versionFile == null)
+            {
+                throw new BusinessException(PlatformErrorCodes.VersionFileNotFound)
+                    .WithData("FileName", fileName)
+                    .WithData("FileVersion", fileVersion);
+            }
             versionFile.Download();
             return await VersionBlobContainer.GetAsync(
                 VersionFile.NormalizeBlobName(version, versionFile.Name, versionFile.Version, versionFile.Path));
         }
+
         public virtual async Task<Stream> GetFileAsync(VersionFile versionFile)
         {
-            return await DownloadFileAsync(versionFile.AppVersion.PlatformType, versionFile.AppVersion.Version, versionFile.Path, 
-                versionFile.Name, versionFile.Version);
+            versionFile.Download();
+            return await VersionBlobContainer.GetAsync(
+                VersionFile.NormalizeBlobName(versionFile.AppVersion.Version, versionFile.Name, versionFile.Version, versionFile.Path));
         }
 
         public virtual async Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data)
