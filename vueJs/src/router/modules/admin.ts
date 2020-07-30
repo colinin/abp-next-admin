@@ -50,6 +50,16 @@ const adminRouter: RouteConfig = {
         icon: 'tenants',
         roles: ['AbpTenantManagement.Tenants']
       }
+    },
+    {
+      path: 'organization-unit',
+      component: () => import('@/views/admin/organization-unit/index.vue'),
+      name: 'organization-unit',
+      meta: {
+        title: 'organizationUnit',
+        icon: 'tenants',
+        roles: ['AbpIdentity.OrganizationUnits']
+      }
     }
   ]
 }

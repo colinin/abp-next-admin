@@ -14,9 +14,9 @@ namespace LINGYUN.Abp.Identity
                         OrganizationUnitCreateDto,
                         OrganizationUnitUpdateDto>
     {
-        Task<OrganizationUnitDto> GetLastChildOrNullAsync([Required] Guid parentId);
+        Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId);
 
-        Task MoveAsync(OrganizationUnitMoveDto input);
+        Task MoveAsync(Guid id, OrganizationUnitMoveDto input);
 
         Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input);
 
