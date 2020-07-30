@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -13,13 +11,13 @@ namespace LINGYUN.Abp.Identity
 {
     [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
-    [ControllerName("organization-unit")]
-    [Route("api/identity/organization-unit")]
-    public class IOrganizationUnitController : AbpController, IOrganizationUnitAppService
+    [ControllerName("organization-units")]
+    [Route("api/identity/organization-units")]
+    public class OrganizationUnitController : AbpController, IOrganizationUnitAppService
     {
         protected IOrganizationUnitAppService OrganizationUnitAppService { get; }
 
-        public IOrganizationUnitController(
+        public OrganizationUnitController(
             IOrganizationUnitAppService organizationUnitAppService)
         {
             OrganizationUnitAppService = organizationUnitAppService;
@@ -68,7 +66,7 @@ namespace LINGYUN.Abp.Identity
 
         [HttpGet]
         [Route("last-children")]
-        public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync([Required] Guid parentId)
+        public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId)
         {
             return await OrganizationUnitAppService.GetLastChildOrNullAsync(parentId);
         }
@@ -95,9 +93,9 @@ namespace LINGYUN.Abp.Identity
 
         [HttpPut]
         [Route("{id}/move")]
-        public virtual async Task MoveAsync(OrganizationUnitMoveDto input)
+        public virtual async Task MoveAsync(Guid id, OrganizationUnitMoveDto input)
         {
-            await OrganizationUnitAppService.MoveAsync(input);
+            await OrganizationUnitAppService.MoveAsync(id, input);
         }
 
         [HttpDelete]

@@ -274,7 +274,7 @@ export default class extends Vue {
 
   /** 设置默认角色 */
   private handleSetDefaultRole(role: RoleDto, setDefault: boolean) {
-    console.log('handleSetDefaultRole:' + role.id)
+    // console.log('handleSetDefaultRole:' + role.id)
     const setDefaultRoleDto = new UpdateRoleDto()
     setDefaultRoleDto.name = role.name
     setDefaultRoleDto.isDefault = setDefault

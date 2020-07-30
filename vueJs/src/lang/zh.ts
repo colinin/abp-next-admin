@@ -77,7 +77,8 @@ export default {
     identityServer: '身份认证服务器',
     clients: '客户端管理',
     apiresources: 'Api资源管理',
-    identityresources: '身份资源管理'
+    identityresources: '身份资源管理',
+    organizationUnit: '组织机构管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -209,7 +210,7 @@ export default {
     passwordSecurity: '密码安全',
     systemSetting: '系统配置',
     userAccount: '用户账户',
-    mailing: "邮件配置"
+    mailing: '邮件配置'
   },
   task: {
     title: '任务管理'

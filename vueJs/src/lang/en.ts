@@ -77,7 +77,8 @@ export default {
     identityServer: 'identity server',
     clients: 'clients',
     apiresources: 'api resources',
-    identityresources: 'id resources'
+    identityresources: 'id resources',
+    organizationUnit: 'organization unit'
   },
   navbar: {
     logOut: 'Log Out',
@@ -209,7 +210,7 @@ export default {
     passwordSecurity: 'security',
     systemSetting: 'system',
     userAccount: 'user account',
-    mailing: "mailing"
+    mailing: 'mailing'
   },
   task: {
     title: 'task'

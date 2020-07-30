@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.Identity
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
         }
 
-        public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid parentId)
+        public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId)
         {
             var origanizationUnitLastChildren = await OrganizationUnitManager.GetLastChildOrNullAsync(parentId);
 
@@ -114,9 +114,9 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Update)]
-        public virtual async Task MoveAsync(OrganizationUnitMoveDto input)
+        public virtual async Task MoveAsync(Guid id, OrganizationUnitMoveDto input)
         {
-            await OrganizationUnitManager.MoveAsync(input.Id, input.ParentId);
+            await OrganizationUnitManager.MoveAsync(id, input.ParentId);
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Update)]
