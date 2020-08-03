@@ -235,6 +235,16 @@ cd aspnet-core/database
 ```
 Please use a tool such as **Navicat** to execute **apigateway-init.sql**
 
+### Configure the RabbitMQ
+
+Therefore project design for the micro service architecture, with the method of distributed event, communication between project USES is [DotNetCore/CAP](https://github.com/dotnetcore/CAP)
+
+The communication mode is **RabbitMQ Server**, so you need to install **RabbitMQ** in advance. Please refer to the official website for the specific installation mode
+
+
+
+Then you need to change the **CAP:RabbitMQ** configuration in the configuration file to set it to your own defined configuration. The **rabbitmq_management** plug-in is recommended for quick management of **RabbitMQ**
+
 
 ### Compiles background services
 
