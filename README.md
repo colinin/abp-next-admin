@@ -242,6 +242,13 @@ cd aspnet-core/database
 ```
 请使用诸如**Navicat**工具执行**ApiGateway-Init.sql**
 
+### 配置RabbitMQ
+
+因此项目设计为微服务架构，服务间通讯采用分布式事件的方式，项目采用的是[DotNetCore/CAP](https://github.com/dotnetcore/CAP)
+通讯方式为**RabbitMQ Server**，所以您需要事先安装**RabbitMQ**，具体安装方式请查阅官网
+
+然后您需要更改配置文件中的**CAP:RabbitMQ**配置项,设置为您自己定义的配置,推荐使用**rabbitmq_management**插件便于快速管理**RabbitMQ**
+
 
 ### 启动后台服务
 
