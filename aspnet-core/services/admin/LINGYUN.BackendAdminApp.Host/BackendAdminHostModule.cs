@@ -30,6 +30,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -47,6 +48,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.BackendAdmin
@@ -250,8 +252,21 @@ namespace LINGYUN.BackendAdmin
             });
             // 审计日志
             app.UseAuditing();
+            // 处理微信消息
+            // app.UseWeChatSignature();
             // 路由
             app.UseConfiguredEndpoints();
+
+            SeedData(context);
+        }
+
+        private void SeedData(ApplicationInitializationContext context)
+        {
+            AsyncHelper.RunSync(async () =>
+            {
+                using var scope = context.ServiceProvider.CreateScope();
+                await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
+            });
         }
     }
 }

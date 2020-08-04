@@ -169,9 +169,6 @@ namespace AuthServer.Host
             app.UseIdentityServer();
             app.UseAuditing();
 
-            // 处理微信消息
-            // app.UseWeChatSignature();
-
             SeedData(context);
         }
 
