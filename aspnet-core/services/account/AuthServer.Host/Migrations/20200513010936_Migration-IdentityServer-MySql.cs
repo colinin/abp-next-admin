@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LINGYUN.BackendAdmin.Migrations
+namespace AuthServer.Migrations
 {
     public partial class MigrationIdentityServerMySql : Migration
     {

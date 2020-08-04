@@ -1,20 +1,20 @@
-﻿using System.IO;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
-namespace LINGYUN.BackendAdmin.EntityFrameworkCore
+namespace AuthServer.EntityFrameworkCore
 {
-    public class BackendAdminHostMigrationsDbContextFactory : IDesignTimeDbContextFactory<BackendAdminHostMigrationsDbContext>
+    public class AuthServerHostMigrationsDbContextFactory : IDesignTimeDbContextFactory<AuthServerHostMigrationsDbContext>
     {
-        public BackendAdminHostMigrationsDbContext CreateDbContext(string[] args)
+        public AuthServerHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<BackendAdminHostMigrationsDbContext>()
+            var builder = new DbContextOptionsBuilder<AuthServerHostMigrationsDbContext>()
                 .UseMySql(configuration.GetConnectionString("Default"));
 
-            return new BackendAdminHostMigrationsDbContext(builder.Options);
+            return new AuthServerHostMigrationsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()
