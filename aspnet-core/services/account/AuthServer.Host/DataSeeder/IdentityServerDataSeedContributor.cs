@@ -16,7 +16,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
-namespace Multicolin.Aftermarket.IdentityServer
+namespace AuthServer.DataSeeder
 {
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
