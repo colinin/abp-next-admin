@@ -227,13 +227,27 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
-### Initializes the api gateway database
+### EntityFramework migration
+
+Please switch to the service project startup directory and execute the **dotnet EF ** command for database migration
+
+example:
 
 ``` shell
-cd aspnet-core/database
+
+cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
+
+dotnet ef database update
 
 ```
-Please use a tool such as **Navicat** to execute **apigateway-init.sql**
+
+
+### Initializes the apigateway database
+
+In the **2020-08-05 16:25:00** submission, the **apigateway-init.SQL** file has been read and written to the **DataSeeder** type. Starting the gateway management project will automatically initialize the gateway data.
+
+Make sure the **aspnet-core/Database/apigateway-init.sql** file exists
+
 
 ### Configure the RabbitMQ
 

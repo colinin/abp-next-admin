@@ -234,13 +234,24 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
-### 初始化网关数据库
+### EntityFramework 迁移
 
+请切换到服务项目启动目录, 执行 **dotnet ef** 命令进行数据库迁移
+
+例如：
 ``` shell
-cd aspnet-core/database
+
+cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
+
+dotnet ef database update
 
 ```
-请使用诸如**Navicat**工具执行**ApiGateway-Init.sql**
+
+
+### 初始化网关数据库
+
+在 **2020-08-05 16:25:00** 的提交中, 已经将**apigateway-init.sql**文件内容读取并写入**DataSeeder**类型, 启动网关管理项目会自动初始化网关数据, 
+请确保**aspnet-core/database/apigateway-init.sql**文件存在
 
 ### 配置RabbitMQ
 
