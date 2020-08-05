@@ -75,6 +75,10 @@ namespace LINGYUN.ApiGateway.Ocelot
             router.Name = routerUpdateDto.Name;
             router.IsActive = routerUpdateDto.IsActive;
             router.Description = routerUpdateDto.Description;
+            router.SwitchApp(routerUpdateDto.AppName, routerUpdateDto.AppIpAddress);
+
+            await RouterRepository.UpdateAsync(router);
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<RouteGroup, RouteGroupDto>(router);
         }

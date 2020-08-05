@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -32,20 +34,68 @@ namespace LINGYUN.Abp.SettingManagement
 
         public virtual async Task<ListResultDto<SettingDto>> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
         {
+            return await GetAllSettingAsync(providerName, providerKey);
+        }
+
+        [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
+        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateSettingsDto input)
+        {
+            foreach (var setting in input.Settings)
+            {
+                await SettingManager.SetAsync(setting.Name, setting.Value, providerName, providerKey);
+                // 同步变更缓存配置
+                var settingCacheKey = CalculateCacheKey(setting.Name, providerName, providerKey);
+                var settignCacheItem = new SettingCacheItem(setting.Value);
+                await Cache.SetAsync(settingCacheKey, settignCacheItem);
+            }
+        }
+
+        [AllowAnonymous]
+        public virtual async Task<ListResultDto<SettingDto>> GetAllGlobalAsync()
+        {
+            var globalSettings = await SettingManager.GetAllGlobalAsync();
+
+            return GetAllSetting(globalSettings);
+        }
+
+        public virtual async Task<ListResultDto<SettingDto>> GetAllForTenantAsync()
+        {
+            if (CurrentTenant.IsAvailable)
+            {
+                var tenantSettings = await SettingManager.GetAllForTenantAsync(CurrentTenant.Id.Value);
+                return GetAllSetting(tenantSettings);
+            }
+            return new ListResultDto<SettingDto>();
+        }
+
+        public virtual async Task<ListResultDto<SettingDto>> GetAllForUserAsync([Required] Guid userId)
+        {
+            var userSettings = await SettingManager.GetAllForUserAsync(userId);
+            return GetAllSetting(userSettings);
+        }
+
+        public virtual async Task<ListResultDto<SettingDto>> GetAllForCurrentUserAsync()
+        {
+            var userSettings = await SettingManager.GetAllForUserAsync(CurrentUser.Id.Value);
+            return GetAllSetting(userSettings);
+        }
+
+        protected virtual async Task<ListResultDto<SettingDto>> GetAllSettingAsync(
+            string providerName, string providerKey)
+        {
             var settingsDto = new List<SettingDto>();
             var settingDefinitions = SettingDefinitionManager.GetAll();
-            foreach(var setting in settingDefinitions)
+            foreach (var setting in settingDefinitions)
             {
                 if (setting.Providers.Any() && !setting.Providers.Contains(providerName))
                 {
                     continue;
                 }
 
-                // TODO: 是否遵循框架的限制?
-                //if (!setting.IsVisibleToClients)
-                //{
-                //    continue;
-                //}
+                if (!setting.IsVisibleToClients)
+                {
+                    continue;
+                }
 
                 var settingValue = await SettingManager.GetOrNullAsync(setting.Name, providerName, providerKey);
                 var settingInfo = new SettingDto
@@ -61,17 +111,30 @@ namespace LINGYUN.Abp.SettingManagement
             return new ListResultDto<SettingDto>(settingsDto);
         }
 
-        [Authorize(AbpSettingManagementPermissions.Settings.Update)]
-        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateSettingsDto input)
+        protected virtual ListResultDto<SettingDto> GetAllSetting(
+            List<SettingValue> settings)
         {
-            foreach (var setting in input.Settings)
+            var settingsDto = new List<SettingDto>();
+
+            foreach (var setting in settings)
             {
-                await SettingManager.SetAsync(setting.Name, setting.Value, providerName, providerKey);
-                // 同步变更缓存配置
-                var settingCacheKey = CalculateCacheKey(setting.Name, providerName, providerKey);
-                var settignCacheItem = new SettingCacheItem(setting.Value);
-                await Cache.SetAsync(settingCacheKey, settignCacheItem);
+                var settingDefinition = SettingDefinitionManager.Get(setting.Name);
+
+                if (!settingDefinition.IsVisibleToClients)
+                {
+                    continue;
+                }
+                var settingInfo = new SettingDto
+                {
+                    Name = setting.Name,
+                    Value = setting.Value,
+                    DefaultValue = settingDefinition.DefaultValue,
+                    Description = settingDefinition.Description.Localize(StringLocalizerFactory),
+                    DisplayName = settingDefinition.DisplayName.Localize(StringLocalizerFactory)
+                };
+                settingsDto.Add(settingInfo);
             }
+            return new ListResultDto<SettingDto>(settingsDto);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

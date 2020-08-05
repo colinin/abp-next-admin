@@ -11,9 +11,42 @@ export default class SettingApiService {
    * @returns 返回类型为 ListResultDto<SettingDto> 的配置列表
    */
   public static getSettings(providerName: string, providerKey: string) {
-    let _url = '/api/abp/setting'
+    let _url = '/api/settings'
     _url += '?providerName=' + providerName
     _url += '&providerKey=' + providerKey
+    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 获取公共配置
+   */
+  public static getGlobalSettings() {
+    const _url = '/api/settings/by-global'
+    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 获取当前租户配置
+   */
+  public static getCurrentTenantSettings() {
+    const _url = '/api/settings/by-current-tenant'
+    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 获取当前用户配置
+   */
+  public static getCurrentUserSettings() {
+    const _url = '/api/settings/by-current-user'
+    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 获取用户配置
+   */
+  public static getUserSettings(userId: string) {
+    let _url = '/api/settings/by-user'
+    _url += '?userId=' + userId
     return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
   }
 
@@ -25,7 +58,7 @@ export default class SettingApiService {
    * @returns Promise对象
    */
   public static setSettings(providerName: string, providerKey: string, payload: SettingsUpdate) {
-    let _url = '/api/abp/setting'
+    let _url = '/api/settings'
     _url += '?providerName=' + providerName
     _url += '&providerKey=' + providerKey
     return ApiService.Put<any>(_url, payload, IdentityService)

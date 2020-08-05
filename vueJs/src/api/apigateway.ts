@@ -30,8 +30,8 @@ export default class ApiGateWay {
   }
 
   public static deleteGlobalConfiguration(appId: number) {
-    let _url = '/api/ApiGateway/Globals/'
-    _url += appId
+    let _url = '/api/ApiGateway/Globals'
+    _url += '?appId=' + appId
     return ApiService.Delete(_url, serviceUrl)
   }
 
@@ -66,8 +66,8 @@ export default class ApiGateWay {
   }
 
   public static deleteRouteGroup(appId: string) {
-    let _url = '/api/ApiGateway/RouteGroups/'
-    _url += appId
+    let _url = '/api/ApiGateway/RouteGroups'
+    _url += '?appId=' + appId
     return ApiService.Delete(_url, serviceUrl)
   }
 
@@ -326,7 +326,9 @@ export class RouteGroupCreateDto {
 export class RouteGroupUpdateDto {
   name = ''
   appId = ''
+  appName = ''
   isActive = true
+  appIpAddress?: string = ''
   description?: string = ''
 }
 

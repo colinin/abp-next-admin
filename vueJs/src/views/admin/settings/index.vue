@@ -8,30 +8,51 @@
       <GlobalSettingEditForm />
     </el-tab-pane>
     <el-tab-pane
+      v-if="currentTenantId"
       :label="$t('settings.tenantSetting')"
     >
-      {{ $t('settings.tenantSetting') }}
+      <TenantSettingEditForm
+        :tenant-id="currentTenantId"
+      />
     </el-tab-pane>
     <el-tab-pane
       :label="$t('settings.userSetting')"
     >
-      {{ $t('settings.userSetting') }}
+      <UserSettingEditForm
+        :user-id="currentUserId"
+      />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-
+import { UserModule } from '@/store/modules/user'
+import { AbpConfigurationModule } from '@/store/modules/abp'
+import UserSettingEditForm from './components/UserSettingEditForm.vue'
+import TenantSettingEditForm from './components/TenantSettingEditForm.vue'
 import GlobalSettingEditForm from './components/GlobalSettingEditForm.vue'
 
 @Component({
   name: 'Settings',
   components: {
+    UserSettingEditForm,
+    TenantSettingEditForm,
     GlobalSettingEditForm
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  get currentTenantId() {
+    if (AbpConfigurationModule.configuration.currentTenant.isAvailable) {
+      return AbpConfigurationModule.configuration.currentTenant.id
+    }
+    return ''
+  }
+
+  get currentUserId() {
+    return UserModule.id
+  }
+}
 </script>
 
 <style lang="scss" scoped>

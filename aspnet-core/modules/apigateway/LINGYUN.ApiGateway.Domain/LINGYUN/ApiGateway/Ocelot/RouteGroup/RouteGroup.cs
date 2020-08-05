@@ -23,5 +23,11 @@ namespace LINGYUN.ApiGateway.Ocelot
             AppName = appName;
             AppIpAddress = appIp;
         }
+
+        public void SwitchApp(string appName, string appIp)
+        {
+            AppName = appName ?? AppName;
+            AppIpAddress = appIp ?? AppIpAddress;
+        }
     }
 }
