@@ -16,10 +16,24 @@ namespace LINGYUN.Platform.Settings
         {
             return new SettingDefinition[]
             {
-                new SettingDefinition(PlatformSettingNames.AppVersion.VersionFileLimitLength, AppVersionConsts.DefaultVersionFileLimitLength.ToString(),
-                    L("DisplayName:VersionFileLimitLength"), L("Description:VersionFileLimitLength"), isVisibleToClients: true),
-                new SettingDefinition(PlatformSettingNames.AppVersion.AllowVersionFileExtensions, AppVersionConsts.DefaultAllowVersionFileExtensions,
-                    L("DisplayName:AllowVersionFileExtensions"), L("Description:AllowVersionFileExtensions"), isVisibleToClients: true),
+                new SettingDefinition(
+                    name: PlatformSettingNames.AppVersion.VersionFileLimitLength, 
+                    defaultValue: AppVersionConsts.DefaultVersionFileLimitLength.ToString(),
+                    displayName: L("DisplayName:VersionFileLimitLength"), 
+                    description: L("Description:VersionFileLimitLength"), 
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    name: PlatformSettingNames.AppVersion.AllowVersionFileExtensions, 
+                    defaultValue: AppVersionConsts.DefaultAllowVersionFileExtensions,
+                    displayName: L("DisplayName:AllowVersionFileExtensions"), 
+                    description: L("Description:AllowVersionFileExtensions"), 
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
             };
         }
 

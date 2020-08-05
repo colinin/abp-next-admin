@@ -20,6 +20,7 @@
     >
       <el-input
         v-model="apiGateWayRouteGroup.appId"
+        :disabled="isEditRouteGroup"
         :placeholder="$t('apiGateWay.pleaseInputAppId')"
       />
     </el-form-item>
@@ -103,6 +104,10 @@ export default class extends Vue {
     ]
   }
 
+  get isEditRouteGroup() {
+    return this.appId !== ''
+  }
+
   constructor() {
     super()
     this.apiGateWayRouteGroup = new RouteGroupDto()
@@ -112,6 +117,7 @@ export default class extends Vue {
   private handleAppIdChange(val: any) {
     if (val) {
       ApiGateWayService.getRouteGroupByAppId(val).then(router => {
+        console.log(router)
         this.apiGateWayRouteGroup = router
       })
     }
@@ -125,7 +131,9 @@ export default class extends Vue {
           const updateRouterDto = new RouteGroupUpdateDto()
           updateRouterDto.name = this.apiGateWayRouteGroup.name
           updateRouterDto.appId = this.apiGateWayRouteGroup.appId
+          updateRouterDto.appName = this.apiGateWayRouteGroup.appName
           updateRouterDto.isActive = this.apiGateWayRouteGroup.isActive
+          updateRouterDto.appIpAddress = this.apiGateWayRouteGroup.appIpAddress
           updateRouterDto.description = this.apiGateWayRouteGroup.description
           this.apiGateWayRouteGroup = await ApiGateWayService.updateRouteGroup(updateRouterDto)
         } else {

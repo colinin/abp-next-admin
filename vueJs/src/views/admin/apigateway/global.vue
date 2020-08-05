@@ -130,7 +130,7 @@
             :disabled="!checkPermission(['ApiGateway.Global.Delete'])"
             size="mini"
             type="warning"
-            @click="handleDeleteGlobalConfiguration(row.itemId)"
+            @click="handleDeleteGlobalConfiguration(row.appId)"
           >
             {{ $t('apiGateWay.deleteGlobal') }}
           </el-button>
@@ -238,6 +238,7 @@ export default class extends Vue {
           await ApiGatewayService.deleteGlobalConfiguration(itemId)
           const successMessage = this.$t('dataHasBeenDeleted', { name: appId }).toString()
           this.$message.success(successMessage)
+          this.handledGetGlobalConfigurations()
         }
       }
     })

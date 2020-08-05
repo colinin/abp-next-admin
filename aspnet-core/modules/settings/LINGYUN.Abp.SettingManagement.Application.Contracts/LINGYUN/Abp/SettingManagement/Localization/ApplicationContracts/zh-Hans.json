@@ -3,6 +3,7 @@
   "texts": {
     "Permission:SettingManagement": "系统设置",
     "Permission:Settings": "配置管理",
-    "Permission:Update": "变更"
+    "Permission:Update": "变更",
+    "Permission:Manager": "管理"
   }
 }

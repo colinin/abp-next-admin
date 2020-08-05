@@ -1,6 +1,9 @@
-﻿using LINGYUN.ApiGateway.Ocelot;
+﻿using LINGYUN.ApiGateway.Data.Filter;
+using LINGYUN.ApiGateway.Ocelot;
 using LINGYUN.ApiGateway.Settings;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq.Expressions;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -9,6 +12,7 @@ namespace LINGYUN.ApiGateway.EntityFrameworkCore
     [ConnectionStringName("Default")]
     public class ApiGatewayDbContext : AbpDbContext<ApiGatewayDbContext>
     {
+        protected virtual bool IsActivationFilterEnabled => DataFilter?.IsEnabled<IActivation>() ?? false;
 
         public virtual DbSet<ReRoute> ReRoutes { get; set; }
 
@@ -47,6 +51,20 @@ namespace LINGYUN.ApiGateway.EntityFrameworkCore
                 options.TablePrefix = ApiGatewaySettingNames.DefaultDbTablePrefix;
                 options.Schema = ApiGatewaySettingNames.DefaultDbSchema;
             });
+        }
+
+        protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+        {
+            var expression = base.CreateFilterExpression<TEntity>();
+
+            if (typeof(IActivation).IsAssignableFrom(typeof(TEntity)))
+            {
+                Expression<Func<TEntity, bool>> expression2 = ((TEntity e) => !IsActivationFilterEnabled || EF.Property<bool>(e, "IsActive"));
+
+                expression = ((expression == null) ? expression2 : CombineExpressions(expression, expression2));
+            }
+
+            return expression;
         }
     }
 }

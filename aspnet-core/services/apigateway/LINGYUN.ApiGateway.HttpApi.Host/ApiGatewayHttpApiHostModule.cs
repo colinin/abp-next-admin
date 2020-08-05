@@ -18,6 +18,7 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Localization;
@@ -28,6 +29,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.ApiGateway
 {
@@ -164,6 +166,17 @@ namespace LINGYUN.ApiGateway
             app.UseAuditing();
             // 路由
             app.UseConfiguredEndpoints();
+
+            SeedData(context);
+        }
+
+        private void SeedData(ApplicationInitializationContext context)
+        {
+            AsyncHelper.RunSync(async () =>
+            {
+                using var scope = context.ServiceProvider.CreateScope();
+                await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
+            });
         }
     }
 }

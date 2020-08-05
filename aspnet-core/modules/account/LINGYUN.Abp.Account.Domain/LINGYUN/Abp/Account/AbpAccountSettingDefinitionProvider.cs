@@ -16,14 +16,42 @@ namespace LINGYUN.Abp.Account
         {
             return new SettingDefinition[]
             {
-                new SettingDefinition(AccountSettingNames.SmsRegisterTemplateCode, 
-                    "SMS_190728520", L("DisplayName:SmsRegisterTemplateCode"), L("Description:SmsRegisterTemplateCode")),
-                new SettingDefinition(AccountSettingNames.SmsSigninTemplateCode, 
-                    "SMS_190728516", L("DisplayName:SmsSigninTemplateCode"), L("Description:SmsSigninTemplateCode")),
-                new SettingDefinition(AccountSettingNames.SmsResetPasswordTemplateCode,
-                    "SMS_192530831", L("DisplayName:SmsResetPasswordTemplateCode"), L("Description:SmsResetPasswordTemplateCode")),
-                new SettingDefinition(AccountSettingNames.PhoneVerifyCodeExpiration,
-                    "3", L("DisplayName:PhoneVerifyCodeExpiration"), L("Description:PhoneVerifyCodeExpiration")),
+                new SettingDefinition(
+                    name: AccountSettingNames.SmsRegisterTemplateCode, 
+                    defaultValue: "SMS_190728520", 
+                    displayName: L("DisplayName:SmsRegisterTemplateCode"), 
+                    description: L("Description:SmsRegisterTemplateCode"),
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    name: AccountSettingNames.SmsSigninTemplateCode,
+                    defaultValue: "SMS_190728516",
+                    displayName: L("DisplayName:SmsSigninTemplateCode"),
+                    description: L("Description:SmsSigninTemplateCode"),
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    name: AccountSettingNames.SmsResetPasswordTemplateCode,
+                    defaultValue: "SMS_192530831",
+                    displayName: L("DisplayName:SmsResetPasswordTemplateCode"),
+                    description: L("Description:SmsResetPasswordTemplateCode"),
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    name: AccountSettingNames.PhoneVerifyCodeExpiration,
+                    defaultValue: "3", 
+                    displayName: L("DisplayName:PhoneVerifyCodeExpiration"), 
+                    description: L("Description:PhoneVerifyCodeExpiration"),
+                    isVisibleToClients: true)
+                .WithProviders(
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
             };
         }
 

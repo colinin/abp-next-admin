@@ -8,6 +8,12 @@ namespace LINGYUN.ApiGateway.Ocelot
         [StringLength(50)]
         public string AppId { get; set; }
 
+        [StringLength(100)]
+        public string AppName { get; set; }
+
+        [StringLength(256)]
+        public string AppIpAddress { get; set; }
+
         [StringLength(50)]
         public string Name { get; set; }
 

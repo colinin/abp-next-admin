@@ -264,6 +264,7 @@ export default class extends Vue {
           await ApiGatewayService.deleteRouteGroup(appId)
           const successMessage = this.$t('dataHasBeenDeleted', { name: appName }).toString()
           this.$message.success(successMessage)
+          this.handleGetRouteGroups()
         }
       }
     })
