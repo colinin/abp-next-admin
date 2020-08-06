@@ -176,37 +176,42 @@ Javascript 版本:
 yarn install
 ```
 
-### 更改配置文件名称
+### 更改配置文件
 
-[.env.Github.production](./.env.Github.production)  变更为  .env.production
-</br>
-[vue.config.github.js ](./vue.config.github.js )   变更为  vue.config.js
 
-修改开发环境用于代理的服务器地址,以下提供了三个分别为IdentityService、IdentityServer、ApiService地址,如果有网关的话可以只需要一个网关地址即可
+修改开发环境用于代理的服务器地址,以下提供了三个分别为IdentityServer、SignalT、ApiService地址
+如果自己变更了端口，需要改成自己的地址
 
 ```bash
 
     proxy: {
+      // change xxx-api/login => /mock-api/v1/login
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_IDENTITY_SERVER]: {
-        target: '你的identityService地址',
+        // IdentityServer4服务器地址，用于身份认证
+        target: 'http://localhost:44385',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVER]: ''
         }
       },
-      [process.env.VUE_APP_BASE_IDENTITY_SERVICE]: {
-        target: '你的identityServer服务器地址',
+      [process.env.VUE_APP_SIGNALR_SERVER]: {
+        // 消息服务SignalR地址，SignalR使用WebSocket通讯，因此需要单独一个代理地址
+        target: 'ws://localhost:30000',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVICE]: ''
-        }
+          ['^' + process.env.VUE_APP_SIGNALR_SERVER]: ''
+        },
+        logLevel: 'debug'
       },
       [process.env.VUE_APP_BASE_API]: {
-        target: '你的api网关地址',
+        // 其他所有业务都是通过网关代理，直接填写网关地址即可
+        target: 'http://localhost:30000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+        },
+        logLevel: 'debug'
       }
     }
 
@@ -221,12 +226,15 @@ yarn install
 # Here I used my mock server for this project
 # VUE_APP_BASE_API = 'https://vue-typescript-admin-mock-server.armour.now.sh/mock-api/v1/'
 
-VUE_APP_BASE_API = '你的api网关服务器地址'
+# 所有第一级请求路径为 /api 的为业务服务
+VUE_APP_BASE_API = '/api'
+# 所有第一级请求路径为 /signalr-hubs 的请求为SignalR请求
+VUE_APP_SIGNALR_SERVER = '/signalr-hubs'
+# 所有第一级请求路径为 /connect 的为 IdentityServer4 的请求
+VUE_APP_BASE_IDENTITY_SERVER = '/connect'
 
-VUE_APP_BASE_IDENTITY_SERVICE = '你的identityService服务器地址'
-
-VUE_APP_BASE_IDENTITY_SERVER = '你的identityServer服务器地址'
-
+# 默认的租户名称
+VUE_APP_TENANT_NAME = ''
 # 客户端标识
 VUE_APP_CLIENT_ID = 'vue-admin-element'
 # 客户端密钥

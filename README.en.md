@@ -171,35 +171,38 @@ yarn install
 
 ### Custom vue project config
 
-[.env.Github.production](./.env.Github.production)  变更为  .env.production
-</br>
-[vue.config.github.js ](./vue.config.github.js )   变更为  vue.config.js
-
 Modify the server address that the development environment will use for the proxy. Provide the following three addresses: IdentityService, IdentityServer, and ApiService
 
 ```bash
 
     proxy: {
+      // change xxx-api/login => /mock-api/v1/login
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_IDENTITY_SERVER]: {
-        target: 'your identityService address',
+        // IdentityServer4 Server address, used for authentication
+        target: 'http://localhost:44385',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVER]: ''
         }
       },
-      [process.env.VUE_APP_BASE_IDENTITY_SERVICE]: {
-        target: 'your identityServer address',
+      [process.env.VUE_APP_SIGNALR_SERVER]: {
+        // SignalR address for the messaging service, SignalR USES WebSocket communication, so a separate proxy address is required
+        target: 'ws://localhost:30000',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVICE]: ''
-        }
+          ['^' + process.env.VUE_APP_SIGNALR_SERVER]: ''
+        },
+        logLevel: 'debug'
       },
       [process.env.VUE_APP_BASE_API]: {
-        target: 'you api gateway address',
+        // All other business is through the gateway proxy, directly fill in the gateway address
+        target: 'http://localhost:30000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+        },
+        logLevel: 'debug'
       }
     }
 
@@ -214,12 +217,15 @@ Modify the actual address of the production environment, as above
 # Here I used my mock server for this project
 # VUE_APP_BASE_API = 'https://vue-typescript-admin-mock-server.armour.now.sh/mock-api/v1/'
 
-VUE_APP_BASE_API = 'your api gateway address'
+# Business services
+VUE_APP_BASE_API = '/api'
+# SignalR
+VUE_APP_SIGNALR_SERVER = '/signalr-hubs'
+# IdentityServer4
+VUE_APP_BASE_IDENTITY_SERVER = '/connect'
 
-VUE_APP_BASE_IDENTITY_SERVICE = 'your identityService address'
-
-VUE_APP_BASE_IDENTITY_SERVER = 'your identityServer address'
-
+# default tenant name
+VUE_APP_TENANT_NAME = ''
 # client id
 VUE_APP_CLIENT_ID = 'vue-admin-element'
 # client secret
