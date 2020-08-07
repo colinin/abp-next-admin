@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.FileManagement
         }
 
         [HttpPost]
-        [Route("files/upload")]
+        [Route("files")]
         public virtual async Task CreateFileAsync(FileCreateDto input)
         {
             // 检查文件大小
@@ -138,28 +138,28 @@ namespace LINGYUN.Abp.FileManagement
         }
 
         [HttpPost]
-        [Route("folders/add")]
+        [Route("folders")]
         public virtual async Task CreateFolderAsync(FolderCreateDto input)
         {
             await FileSystemAppService.CreateFolderAsync(input);
         }
 
         [HttpDelete]
-        [Route("files/delete")]
+        [Route("files")]
         public virtual async Task DeleteFileAsync(FileDeleteDto input)
         {
             await FileSystemAppService.DeleteFileAsync(input);
         }
 
         [HttpDelete]
-        [Route("folders/delete")]
+        [Route("folders")]
         public virtual async Task DeleteFolderAsync([Required, StringLength(255)] string path)
         {
             await FileSystemAppService.DeleteFolderAsync(path);
         }
 
         [HttpGet]
-        [Route("files/download")]
+        [Route("files")]
         public virtual async Task DownloadFileAsync(FileSystemGetDto input)
         {
             var fileStream = await FileSystemAppService.DownloadFileAsync(input);

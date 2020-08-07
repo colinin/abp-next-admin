@@ -1,4 +1,3 @@
-
 import ApiService from './serviceBase'
 import { pagerFormat } from '@/utils/index'
 import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'

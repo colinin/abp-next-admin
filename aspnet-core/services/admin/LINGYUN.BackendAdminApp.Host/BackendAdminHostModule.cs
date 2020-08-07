@@ -3,6 +3,7 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.FileManagement;
 using LINGYUN.Abp.Location.Tencent;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.SettingManagement;
@@ -59,6 +60,7 @@ namespace LINGYUN.BackendAdmin
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AppPlatformApplicationContractModule),
         typeof(ApiGatewayApplicationContractsModule),
+        typeof(AbpFileManagementApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),
         typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
         typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),

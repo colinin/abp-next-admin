@@ -142,12 +142,13 @@ namespace LINGYUN.Abp.FileManagement
                     Type = FileSystemType.File,
                     Name = fileInfo.Name,
                     Size = fileInfo.Length,
+                    Extension = fileInfo.Extension,
                     CreationTime = fileInfo.CreationTime,
                     LastModificationTime = fileInfo.LastWriteTime
                 };
-                if (fileInfo.Directory?.Parent != null && !fileInfo.Directory.Parent.Name.IsNullOrWhiteSpace())
+                if (fileInfo.Directory != null && !fileInfo.Directory.FullName.IsNullOrWhiteSpace())
                 {
-                    fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.Parent.FullName);
+                    fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.FullName);
                 }
                 return Task.FromResult(fileSystem);
             }
@@ -161,7 +162,7 @@ namespace LINGYUN.Abp.FileManagement
                     CreationTime = directoryInfo.CreationTime,
                     LastModificationTime = directoryInfo.LastWriteTime
                 };
-                if (directoryInfo.Parent != null && !directoryInfo.Parent.Name.IsNullOrWhiteSpace())
+                if (directoryInfo.Parent != null && !directoryInfo.Parent.FullName.IsNullOrWhiteSpace())
                 {
                     fileSystem.Parent = GetFileSystemRelativePath(directoryInfo.Parent.FullName);
                 }
@@ -207,25 +208,32 @@ namespace LINGYUN.Abp.FileManagement
                     CreationTime = fileSystemInfo.CreationTime,
                     LastModificationTime = fileSystemInfo.LastWriteTime,
                 };
+
                 if (fileSystemInfo is FileInfo fileInfo)
                 {
                     fileSystem.Type = FileSystemType.File;
                     fileSystem.Size = fileInfo.Length;
-                    if (fileInfo.Directory?.Parent != null && !fileInfo.Directory.Parent.Name.IsNullOrWhiteSpace())
+                    fileSystem.Extension = fileInfo.Extension;
+                    if (fileInfo.Directory != null && !fileInfo.Directory.FullName.IsNullOrWhiteSpace())
                     {
-                        fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.Parent.FullName);
+                        fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.FullName);
                     }
                 }
                 else if (fileSystemInfo is DirectoryInfo directory)
                 {
                     fileSystem.Type = FileSystemType.Folder;
-                    if (directory.Parent != null && !directory.Parent.Name.IsNullOrWhiteSpace())
+                    if (directory.Parent != null && !directory.Parent.FullName.IsNullOrWhiteSpace())
                     {
                         fileSystem.Parent = GetFileSystemRelativePath(directory.Parent.FullName);
                     }
                 }
                 fileSystems.Add(fileSystem);
             }
+
+            fileSystems = fileSystems
+                .OrderBy(f => f.Type)
+                .ThenBy(f => f.Name)
+                .ToList();
 
             return Task.FromResult(new PagedResultDto<FileSystemDto>(
                 fileSystemInfos.Length, fileSystems
@@ -288,12 +296,13 @@ namespace LINGYUN.Abp.FileManagement
                     Type = FileSystemType.File,
                     Name = fileInfo.Name,
                     Size = fileInfo.Length,
+                    Extension = fileInfo.Extension,
                     CreationTime = fileInfo.CreationTime,
                     LastModificationTime = fileInfo.LastWriteTime
                 };
-                if (fileInfo.Directory?.Parent != null && !fileInfo.Directory.Parent.Name.IsNullOrWhiteSpace())
+                if (fileInfo.Directory != null && !fileInfo.Directory.FullName.IsNullOrWhiteSpace())
                 {
-                    fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.Parent.FullName);
+                    fileSystem.Parent = GetFileSystemRelativePath(fileInfo.Directory.FullName);
                 }
                 return Task.FromResult(fileSystem);
             }
@@ -314,7 +323,7 @@ namespace LINGYUN.Abp.FileManagement
                     CreationTime = directoryInfo.CreationTime,
                     LastModificationTime = directoryInfo.LastWriteTime
                 };
-                if (directoryInfo.Parent != null && !directoryInfo.Parent.Name.IsNullOrWhiteSpace())
+                if (directoryInfo.Parent != null && !directoryInfo.Parent.FullName.IsNullOrWhiteSpace())
                 {
                     fileSystem.Parent = GetFileSystemRelativePath(directoryInfo.Parent.FullName);
                 }
@@ -322,10 +331,31 @@ namespace LINGYUN.Abp.FileManagement
             }
             throw new UserFriendlyException("文件或目录不存在!");
         }
-
+        /// <summary>
+        /// 获取文件系统相对路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         protected virtual string GetFileSystemRelativePath(string path)
         {
-            return path.Replace(Directory.GetCurrentDirectory(), "");
+            // 去除完整路径中的文件系统根目录
+            var fileSystemConfiguration = GetFileSystemBlobProviderConfiguration();
+            var blobPath = fileSystemConfiguration.BasePath;
+            path = path.Replace(blobPath, "");
+            // 去除租户或宿主目录
+            if (CurrentTenant.Id == null)
+            {
+                path = path.Replace("\\host", "");
+            }
+            else
+            {
+                path = path.Replace($"\\tenants\\{CurrentTenant.Id.Value.ToString("D")}", "");
+            }
+            // 去除完整路径中的容器根目录
+            var containerName = BlobContainerNameAttribute.GetContainerName<FileSystemContainer>();
+            path = path.Replace($"\\{containerName}", "");
+            
+            return path;
         }
 
         protected virtual string GetFileSystemPath(string path)
@@ -353,6 +383,14 @@ namespace LINGYUN.Abp.FileManagement
             else
             {
                 blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
+            }
+            var containerName = BlobContainerNameAttribute.GetContainerName<FileSystemContainer>();
+
+            blobPath = Path.Combine(blobPath, containerName);
+
+            if (!Directory.Exists(blobPath))
+            {
+                Directory.CreateDirectory(blobPath);
             }
 
             return blobPath;

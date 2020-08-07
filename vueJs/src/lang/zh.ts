@@ -78,7 +78,9 @@ export default {
     clients: '客户端管理',
     apiresources: 'Api资源管理',
     identityresources: '身份资源管理',
-    organizationUnit: '组织机构管理'
+    organizationUnit: '组织机构管理',
+    filemanagement: '文件管理',
+    filesystem: '文件系统'
   },
   navbar: {
     logOut: '退出登录',
@@ -617,5 +619,15 @@ export default {
   messages: {
     noNotifications: '没有通知',
     noMessages: '没有消息'
+  },
+  fileSystem: {
+    name: '名称',
+    creationTime: '创建时间',
+    lastModificationTime: '修改时间',
+    type: '类型',
+    folder: '文件夹',
+    fileType: '{exten}文件',
+    size: '大小',
+    root: '根目录'
   }
 }

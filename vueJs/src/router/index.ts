@@ -13,9 +13,9 @@ import taskRouter from './modules/task'
 import adminRouter from './modules/admin'
 import apigatewayRouter from './modules/apigateway'
 import identityServerRouter from './modules/identityServer'
+import fileManagementRouter from './modules/file-management'
 
 Vue.use(Router)
-
 /*
   Note: sub-menu only appear when children.length>=1
   Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -128,6 +128,7 @@ export const asyncRoutes: RouteConfig[] = [
   adminRouter,
   apigatewayRouter,
   identityServerRouter,
+  fileManagementRouter,
   {
     path: '*',
     component: () => import(/* webpackChunkName: "error-page-404" */ '@/views/error-page/404.vue'),
