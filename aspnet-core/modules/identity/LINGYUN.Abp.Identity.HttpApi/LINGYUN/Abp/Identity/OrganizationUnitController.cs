@@ -65,6 +65,13 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpGet]
+        [Route("root-node")]
+        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetRootAsync()
+        {
+            return await OrganizationUnitAppService.GetRootAsync();
+        }
+
+        [HttpGet]
         [Route("last-children")]
         public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId)
         {

@@ -49,22 +49,25 @@ namespace LINGYUN.Abp.Account
             var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code);
 
             var user = await UserManager.FindByLoginAsync("WeChat", wehchatOpenId.OpenId);
-            if (user == null)
+            if (user != null)
             {
-                var userName = input.UserName ?? wehchatOpenId.OpenId;
-                var userEmail = input.EmailAddress ?? $"{userName}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
-                
-                user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
-                {
-                    Name = input.Name ?? userName
-                };
-                (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
-
-                (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
-
-                var userLogin = new UserLoginInfo("WeChat", wehchatOpenId.OpenId, "微信认证登录");
-                (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
+                // 应该要抛出微信号已注册异常,而不是直接返回注册用户数据,否则造成用户信息泄露
+                throw new UserFriendlyException(L["DuplicateWeChat"]);
             }
+            var userName = input.UserName ?? wehchatOpenId.OpenId;
+            var userEmail = input.EmailAddress ?? $"{userName}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
+
+            user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
+            {
+                Name = input.Name ?? userName
+            };
+            (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+
+            (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
+
+            var userLogin = new UserLoginInfo("WeChat", wehchatOpenId.OpenId, "微信认证登录");
+            (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
+
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
         /// <summary>
