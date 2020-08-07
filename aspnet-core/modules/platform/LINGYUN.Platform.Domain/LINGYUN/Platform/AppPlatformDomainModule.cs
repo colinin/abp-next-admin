@@ -41,6 +41,8 @@ namespace LINGYUN.Platform
                 options.EtoMappings.Add<RoleRoute, RoleRouteEto>(typeof(AppPlatformDomainModule));
 
                 options.EtoMappings.Add<AppVersion, AppVersionEto>(typeof(AppPlatformDomainModule));
+
+                options.AutoEventSelectors.Add<AppVersion>();
             });
         }
         public override void PostConfigureServices(ServiceConfigurationContext context)

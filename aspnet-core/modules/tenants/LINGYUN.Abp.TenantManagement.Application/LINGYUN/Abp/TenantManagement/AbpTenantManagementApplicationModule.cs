@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement;
 
@@ -16,6 +17,11 @@ namespace LINGYUN.Abp.TenantManagement
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
+            });
+
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.Add<Tenant>();
             });
         }
     }

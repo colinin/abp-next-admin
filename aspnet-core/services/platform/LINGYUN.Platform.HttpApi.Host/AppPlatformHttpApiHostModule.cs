@@ -3,6 +3,7 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.FileManagement;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -40,6 +41,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Platform
 {
     [DependsOn(
+        typeof(AbpFileManagementApplicationModule),
+        typeof(AbpFileManagementHttpApiModule),
         typeof(AppPlatformApplicationModule),
         typeof(AppPlatformHttpApiModule),
         typeof(AppPlatformEntityFrameworkCoreModule),

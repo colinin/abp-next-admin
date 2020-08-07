@@ -42,6 +42,8 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+    <ProjectReference Include="..\..\..\modules\file-management\LINGYUN.Abp.FileManagement.Application\LINGYUN.Abp.FileManagement.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\file-management\LINGYUN.Abp.FileManagement.HttpApi\LINGYUN.Abp.FileManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.Application\LINGYUN.Platform.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj" />
