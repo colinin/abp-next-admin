@@ -58,6 +58,14 @@ namespace LINGYUN.Abp.Identity
             await OrganizationUnitManager.DeleteAsync(id);
         }
 
+        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetRootAsync()
+        {
+            var rootOriganizationUnits = await OrganizationUnitManager.FindChildrenAsync(null, recursive: false);
+
+            return new ListResultDto<OrganizationUnitDto>(
+                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(rootOriganizationUnits));
+        }
+
         public virtual async Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input)
         {
             var origanizationUnitChildren = await OrganizationUnitManager.FindChildrenAsync(input.Id, input.Recursive);

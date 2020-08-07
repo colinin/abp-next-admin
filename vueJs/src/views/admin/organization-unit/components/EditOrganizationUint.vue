@@ -48,7 +48,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import OrganizationUnitService, { OrganizationUnitCreate } from '@/api/organizationunit'
+import { ListResultDto } from '@/api/types'
+import OrganizationUnitService, { OrganizationUnitCreate, OrganizationUnit } from '@/api/organizationunit'
 
 class OrganizationUnitTree {
   id?: string
@@ -86,38 +87,29 @@ export default class extends Vue {
       rootOrganizationUnit.displayName = '组织机构'
       return resolve([rootOrganizationUnit])
     }
+    let organizationUnitItems = new ListResultDto<OrganizationUnit>()
     if (node.data.id === undefined) {
-      const result = await OrganizationUnitService.findOrganizationUnitLastChildren(node.data.id)
-      if (result) {
+      // 根节点
+      organizationUnitItems = await OrganizationUnitService.getRootOrganizationUnits()
+    } else {
+      // 子节点
+      organizationUnitItems = await OrganizationUnitService.findOrganizationUnitChildren(node.data.id, undefined)
+    }
+    if (organizationUnitItems.items.length !== 0) {
+      const organizationUnits = new Array<OrganizationUnitTree>()
+      organizationUnitItems.items.map((item) => {
         const organizationUnit = new OrganizationUnitTree()
-        organizationUnit.id = result.id
-        organizationUnit.parentId = result.parentId
-        organizationUnit.code = result.code
-        organizationUnit.displayName = result.displayName
+        organizationUnit.id = item.id
+        organizationUnit.parentId = item.parentId
+        organizationUnit.code = item.code
+        organizationUnit.displayName = item.displayName
+        organizationUnits.push(organizationUnit)
         const children = node.data.children as OrganizationUnitTree[]
-        if (!children.every(x => x.id === result.id)) {
+        if (!children.every(x => x.id === item.id)) {
           children.push(organizationUnit)
         }
-        return resolve([organizationUnit])
-      }
-    } else {
-      const result = await OrganizationUnitService.findOrganizationUnitChildren(node.data.id, undefined)
-      if (result.items.length !== 0) {
-        const organizationUnits = new Array<OrganizationUnitTree>()
-        result.items.map((item) => {
-          const organizationUnit = new OrganizationUnitTree()
-          organizationUnit.id = item.id
-          organizationUnit.parentId = item.parentId
-          organizationUnit.code = item.code
-          organizationUnit.displayName = item.displayName
-          organizationUnits.push(organizationUnit)
-          const children = node.data.children as OrganizationUnitTree[]
-          if (!children.every(x => x.id === item.id)) {
-            children.push(organizationUnit)
-          }
-        })
-        return resolve(organizationUnits)
-      }
+      })
+      return resolve(organizationUnits)
     }
     return resolve([])
   }

@@ -18,6 +18,8 @@ namespace LINGYUN.Abp.Identity
 
         Task MoveAsync(Guid id, OrganizationUnitMoveDto input);
 
+        Task<ListResultDto<OrganizationUnitDto>> GetRootAsync();
+
         Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input);
 
         Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input);

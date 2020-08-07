@@ -19,6 +19,15 @@ export default class OrganizationUnitService {
   }
 
   /**
+   * 查询组织机构根节点
+   * @returns 返回类型为 OrganizationUnit 的对象列表
+   */
+  public static getRootOrganizationUnits() {
+    const _url = '/api/identity/organization-units/root-node'
+    return ApiService.Get<PagedResultDto<OrganizationUnit>>(_url, serviceUrl)
+  }
+
+  /**
    * 查询组织机构列表
    * @param payload 分页查询对象
    * @returns 返回类型为 OrganizationUnit 的对象列表
