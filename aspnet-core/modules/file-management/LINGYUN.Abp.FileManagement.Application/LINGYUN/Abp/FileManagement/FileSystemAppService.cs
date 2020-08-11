@@ -126,7 +126,8 @@ namespace LINGYUN.Abp.FileManagement
             var fileSystemPath = GetFileSystemPath(input.Path);
             fileSystemPath = Path.Combine(fileSystemPath, input.Name);
             var blobName = GetFileSystemRelativePath(fileSystemPath);
-
+            // 去除第一个路径标识符
+            blobName = blobName.RemovePreFix("/", "\\");
             return await BlobContainer.GetAsync(blobName);
         }
 
@@ -181,10 +182,14 @@ namespace LINGYUN.Abp.FileManagement
                 fileSystemPath = GetFileSystemPath(input.Parent);
             }
             var directoryInfo = new DirectoryInfo(fileSystemPath);
-            // 查询全部
+            if (!directoryInfo.Exists)
+            {
+                return Task.FromResult(new PagedResultDto<FileSystemDto>(0, fileSystems));
+            }
+            // 查询全部文件系统
             var fileSystemInfos = directoryInfo.GetFileSystemInfos();
             // 指定搜索条件查询目录
-            FileSystemInfo[] fileSystemInfoSearchChildren;// = directoryInfo.GetDirectories(input.Filter ?? "*", SearchOption.TopDirectoryOnly);
+            FileSystemInfo[] fileSystemInfoSearchChildren;
             if (!input.Filter.IsNullOrWhiteSpace())
             {
                 var searchPattern = $"*{input.Filter}*";
@@ -341,20 +346,22 @@ namespace LINGYUN.Abp.FileManagement
             // 去除完整路径中的文件系统根目录
             var fileSystemConfiguration = GetFileSystemBlobProviderConfiguration();
             var blobPath = fileSystemConfiguration.BasePath;
-            path = path.Replace(blobPath, "");
             // 去除租户或宿主目录
             if (CurrentTenant.Id == null)
             {
-                path = path.Replace("\\host", "");
+                blobPath = Path.Combine(blobPath, "host");
             }
             else
             {
-                path = path.Replace($"\\tenants\\{CurrentTenant.Id.Value.ToString("D")}", "");
+                blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
             }
             // 去除完整路径中的容器根目录
             var containerName = BlobContainerNameAttribute.GetContainerName<FileSystemContainer>();
-            path = path.Replace($"\\{containerName}", "");
-            
+            if (path.Contains(containerName))
+            {
+                blobPath = Path.Combine(blobPath, containerName);
+            }
+            path = path.Replace(blobPath, "");
             return path;
         }
 
@@ -363,8 +370,10 @@ namespace LINGYUN.Abp.FileManagement
             var fileSystemConfiguration = GetFileSystemBlobProviderConfiguration();
             var blobPath = GetFileSystemBashPath();
 
-            if (fileSystemConfiguration.AppendContainerNameToBasePath)
+            if (!path.IsNullOrWhiteSpace() && fileSystemConfiguration.AppendContainerNameToBasePath)
             {
+                // 去除第一个路径标识符
+                path = path.RemovePreFix("/", "\\");
                 blobPath = Path.Combine(blobPath, path);
             }
 

@@ -8,7 +8,6 @@ namespace LINGYUN.Abp.FileManagement
         /// <summary>
         /// 文件名
         /// </summary>
-        [Required]
         [StringLength(255)]
         public string Name { get; set; }
         /// <summary>

@@ -6,7 +6,7 @@ const apigatewayRouter: RouteConfig = {
   component: Layout,
   meta: {
     title: 'apigateway',
-    icon: 'manager',
+    icon: 'api-gateway',
     roles: ['ApiGateway.RouteGroup', 'ApiGateway.Global', 'ApiGateway.Route', 'ApiGateway.DynamicRoute', 'ApiGateway.AggregateRoute'],
     alwaysShow: true
   },
@@ -27,7 +27,7 @@ const apigatewayRouter: RouteConfig = {
       name: 'global',
       meta: {
         title: 'global',
-        icon: 'global',
+        icon: 'global-setting',
         roles: ['ApiGateway.Global']
       }
     },
@@ -47,7 +47,7 @@ const apigatewayRouter: RouteConfig = {
       name: 'aggregateRoute',
       meta: {
         title: 'aggregateRoute',
-        icon: 'aggregateRoute',
+        icon: 'aggregate',
         roles: ['ApiGateway.AggregateRoute']
       }
     }

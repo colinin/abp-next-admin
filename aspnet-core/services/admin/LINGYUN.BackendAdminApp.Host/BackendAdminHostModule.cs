@@ -198,6 +198,16 @@ namespace LINGYUN.BackendAdmin
                 options.Resources
                        .Get<IdentityResource>()
                        .AddVirtualJson("/LINGYUN/BackendAdmin/Identity/Localization");
+                options
+                    .AddLanguagesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
+                options
+                    .AddLanguageFilesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
             });
 
             context.Services.AddAuthentication("Bearer")

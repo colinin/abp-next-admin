@@ -6,7 +6,7 @@ const identityServerRouter: RouteConfig = {
   component: Layout,
   meta: {
     title: 'identityServer',
-    icon: 'manager',
+    icon: 'identity-server',
     roles: ['IdentityServer.Clients', 'IdentityServer.ApiResources', 'IdentityServer.IdentityResources'],
     alwaysShow: true
   },
@@ -17,7 +17,7 @@ const identityServerRouter: RouteConfig = {
       name: 'clients',
       meta: {
         title: 'clients',
-        icon: 'clients',
+        icon: 'client',
         roles: ['IdentityServer.Clients']
       }
     },
@@ -27,7 +27,7 @@ const identityServerRouter: RouteConfig = {
       name: 'apiresources',
       meta: {
         title: 'apiresources',
-        icon: 'apiresources',
+        icon: 'api',
         roles: ['IdentityServer.ApiResources']
       }
     },
@@ -37,7 +37,7 @@ const identityServerRouter: RouteConfig = {
       name: 'identityresources',
       meta: {
         title: 'identityresources',
-        icon: 'identityresources',
+        icon: 'identity',
         roles: ['IdentityServer.IdentityResources']
       }
     }

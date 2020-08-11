@@ -165,6 +165,17 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options
+                    .AddLanguagesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
+                options
+                    .AddLanguageFilesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
             });
 
             context.Services.AddAuthentication("Bearer")

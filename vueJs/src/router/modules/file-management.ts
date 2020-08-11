@@ -6,8 +6,8 @@ const fileManagementRouter: RouteConfig = {
   component: Layout,
   meta: {
     title: 'filemanagement',
-    icon: 'manager',
-    roles: ['Abp.FileManagement.FileSystem'],
+    icon: 'file-manager',
+    roles: ['AbpFileManagement.FileSystem'],
     alwaysShow: true
   },
   children: [
@@ -17,8 +17,8 @@ const fileManagementRouter: RouteConfig = {
       name: 'filesystem',
       meta: {
         title: 'filesystem',
-        icon: 'file-system',
-        roles: ['Abp.FileManagement.FileSystem']
+        icon: 'file-storage',
+        roles: ['AbpFileManagement.FileSystem']
       }
     }
   ]

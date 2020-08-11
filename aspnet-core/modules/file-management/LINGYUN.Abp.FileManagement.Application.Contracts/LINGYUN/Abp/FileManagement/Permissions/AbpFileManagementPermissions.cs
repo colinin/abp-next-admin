@@ -2,7 +2,7 @@
 {
     public class AbpFileManagementPermissions
     {
-        public const string GroupName = "Abp.FileManagement";
+        public const string GroupName = "AbpFileManagement";
 
         /// <summary>
         /// 文件系统

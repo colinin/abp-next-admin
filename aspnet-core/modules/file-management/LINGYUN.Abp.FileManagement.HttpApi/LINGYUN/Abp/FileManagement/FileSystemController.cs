@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.FileManagement.Settings;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System;
@@ -47,7 +48,7 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpPost]
         [Route("files")]
-        public virtual async Task CreateFileAsync(FileCreateDto input)
+        public virtual async Task CreateFileAsync([FromQuery] FileCreateDto input, IFormFile file)
         {
             // 检查文件大小
             var fileSizeLimited = await SettingProvider
@@ -76,17 +77,15 @@ namespace LINGYUN.Abp.FileManagement
             {
                 throw new UserFriendlyException(L["NotAllowedFileExtensionName", fileExtensionName]);
             }
-            // 当前计算机临时目录
-            var tempFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Templates);
             // 以上传的文件名创建一个临时目录
-            tempFilePath = Path.Combine(tempFilePath, "lingyun-abp-file-management", Path.GetFileNameWithoutExtension(fileName));
+            var tempFilePath = Path.Combine(
+                Path.GetTempPath(),
+                "lingyun-abp-file-management",
+                "upload",
+                string.Concat(input.Path ?? "", input.Name).ToMd5());
+            DirectoryHelper.CreateIfNotExists(tempFilePath);
             // 以上传的分片索引创建临时文件
             var tempSavedFile = Path.Combine(tempFilePath, $"{input.CurrentByte}.{fileExtensionName}");
-            if (!Directory.Exists(tempFilePath))
-            {
-                // 临时目录不存在则创建
-                Directory.CreateDirectory(tempFilePath);
-            }
             try
             {
                 if (HttpContext.RequestAborted.IsCancellationRequested)
@@ -99,7 +98,7 @@ namespace LINGYUN.Abp.FileManagement
                 using (var fs = new FileStream(tempSavedFile, FileMode.Create, FileAccess.Write))
                 {
                     // 写入当前分片文件
-                    await Request.Body.CopyToAsync(fs);
+                    await file.CopyToAsync(fs);
                 }
 
                 if (input.CurrentByte == input.TotalByte)
@@ -160,46 +159,66 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpGet]
         [Route("files")]
-        public virtual async Task DownloadFileAsync(FileSystemGetDto input)
+        public virtual async Task<IActionResult> DownloadFileAsync(FileSystemDownloadDto input)
         {
-            var fileStream = await FileSystemAppService.DownloadFileAsync(input);
-
-            // 得到文件扩展名
-            var fileExt = Path.GetExtension(input.Name);
-            var provider = new FileExtensionContentTypeProvider();
-            // Http响应标头的文件类型
-            string memi = provider.Mappings[fileExt];
-            using (Response.Body)
+            var tempFileName = string.Concat(input.Path ?? "", input.Name);
+            tempFileName = tempFileName.ToMd5() + Path.GetExtension(input.Name);
+            // 以上传的文件名创建一个临时目录
+            var tempFilePath = Path.Combine(
+                Path.GetTempPath(),
+                "lingyun-abp-file-management",
+                "download");
+            DirectoryHelper.CreateIfNotExists(tempFilePath);
+            tempFilePath = Path.Combine(tempFilePath, tempFileName);
+            long contentLength = 0L;
+            // 单个分块大小 2MB
+            int bufferSize = 2 * 1024 * 1024;
+            using (new DisposeAction(() =>
             {
+                // 最终下载完毕后，删除临时文件
+                if (bufferSize + input.CurrentByte > contentLength)
+                {
+                    FileHelper.DeleteIfExists(tempFilePath);
+                }
+            }))
+            {
+                if (!System.IO.File.Exists(tempFilePath))
+                {
+                    var blobStream = await FileSystemAppService.DownloadFileAsync(input);
+                    using (var tempFileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        blobStream.Position = 0;
+                        await blobStream.CopyToAsync(tempFileStream);
+                    }
+                }
+                // 读取缓存文件
+                using var fileStream = new FileStream(tempFilePath, FileMode.Open, FileAccess.Read);
+                // 得到文件扩展名
+                var fileExt = Path.GetExtension(input.Name);
+                var provider = new FileExtensionContentTypeProvider();
                 // Http响应标头的文件类型
-                Response.ContentType = memi;
+                string memi = provider.Mappings[fileExt];
                 // 文件大小
-                byte[] contentBytes = await fileStream.GetAllBytesAsync();
-                long contentLength = contentBytes.Length;
-                // 指定响应内容大小
-                Response.ContentLength = contentLength;
-                // 单个分块大小 2MB
-                int bufferSize = 2 * 1024 * 1024;
-                // 分块总数
-                int contentByteCount = Math.DivRem(contentBytes.Length, bufferSize, out int modResult);
-                for (int index = 0; index < contentByteCount; index++)
+                contentLength = fileStream.Length;
+                if (bufferSize > contentLength)
+                {
+                    var currentTransferBytes = await fileStream.GetAllBytesAsync();
+                    // 写入响应流
+                    return File(currentTransferBytes, memi, input.Name);
+                }
+                else
                 {
                     // 当前分页传输字节
                     byte[] currentTransferBytes = new byte[bufferSize];
-                    if (index == contentByteCount - 1)
+                    if (input.CurrentByte + bufferSize >= contentLength)
                     {
-                        // 最后一个分块和余数大小一起传输
-                        if (modResult > 0)
-                        {
-                            currentTransferBytes = new byte[bufferSize + modResult];
-                        }
+                        currentTransferBytes = new byte[contentLength - input.CurrentByte];
                     }
-                    // 复制文件流中的当前分块区段
-                    Array.Copy(contentBytes, index * bufferSize, currentTransferBytes, 0, currentTransferBytes.Length);
+                    // 读取文件流中的当前分块区段
+                    fileStream.Seek(input.CurrentByte, SeekOrigin.Begin);
+                    await fileStream.ReadAsync(currentTransferBytes, 0, currentTransferBytes.Length);
                     // 写入响应流
-                    await Response.Body.WriteAsync(currentTransferBytes, 0, currentTransferBytes.Length);
-                    // 清空缓冲区
-                    await Response.Body.FlushAsync();
+                    return File(currentTransferBytes, memi, input.Name);
                 }
             }
         }

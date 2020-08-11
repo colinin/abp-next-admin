@@ -2,7 +2,7 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import { RouteConfig } from 'vue-router'
 import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'
-import { AbpConfigurationModule } from '@/store/modules/abp'
+import { AbpModule } from '@/store/modules/abp'
 
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
@@ -51,7 +51,7 @@ class Permission extends VuexModule implements IPermissionState {
   @Action
   public async GetPermissions(userId: string) {
     const authPermissions = new Array<string>()
-    const grantedPolicies = AbpConfigurationModule.configuration.auth.grantedPolicies
+    const grantedPolicies = AbpModule.configuration.auth.grantedPolicies
     if (grantedPolicies) {
       Object.keys(grantedPolicies).forEach(key => {
         if (grantedPolicies[key]) {

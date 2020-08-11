@@ -4,7 +4,6 @@ namespace LINGYUN.Abp.FileManagement
 {
     public class FileCopyOrMoveDto
     {
-        [Required]
         [StringLength(255)]
         public string Path { get; set; }
 

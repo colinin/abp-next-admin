@@ -1,5 +1,5 @@
 import axios from 'axios'
-import i18n from 'vue-i18n'
+import i18n from '@/lang/index'
 import { MessageBox, Notification } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import { getTenant } from '@/utils/sessions'
@@ -40,19 +40,19 @@ service.interceptors.request.use(
 )
 
 function l(name: string) {
-  return i18n.prototype.t(name).toString()
+  return i18n.tc(name)
 }
 
 function showError(error: any, status: number) {
   let message = ''
   let title = ''
-  if (typeof error === 'string') {
-    message = error
-  } else if (error.error.details) {
-    message = error.error.details
-    title = error.error.message
-  } else if (error.error.message) {
-    message = error.error.message
+  if (error && error.error) {
+    if (error.error.details) {
+      message = error.error.details
+      title = error.error.message
+    } else if (error.error.message) {
+      message = error.error.message
+    }
   } else {
     switch (status) {
       case 400:
@@ -60,23 +60,23 @@ function showError(error: any, status: number) {
         message = error.error_description
         break
       case 401:
-        title = l('AbpAccount.DefaultErrorMessage401')
-        message = l('AbpAccount:DefaultErrorMessage401Detail')
+        title = l('AbpUi.DefaultErrorMessage401')
+        message = l('AbpUi.DefaultErrorMessage401Detail')
         break
       case 403:
-        title = l('AbpAccount:DefaultErrorMessage403')
-        message = l('AbpAccount.DefaultErrorMessage403Detail')
+        title = l('AbpUi.DefaultErrorMessage403')
+        message = l('AbpUi.DefaultErrorMessage403Detail')
         break
       case 404:
-        title = l('AbpAccount.DefaultErrorMessage404')
-        message = l('AbpAccount.DefaultErrorMessage404Detail')
+        title = l('AbpUi.DefaultErrorMessage404')
+        message = l('AbpUi.DefaultErrorMessage404Detail')
         break
       case 429:
         message = l('global.operatingFast')
         break
       case 500:
-        title = l('AbpAccount.500Message')
-        message = l('AbpAccount.InternalServerErrorMessage')
+        title = l('AbpUi.500Message')
+        message = l('AbpUi.InternalServerErrorMessage')
         break
       default:
         break
@@ -96,19 +96,28 @@ service.interceptors.response.use(
     return response
   },
   (error) => {
-    showError(error.response.data, error.response.status)
-    MessageBox.confirm(
-      l('login.tokenExprition'),
-      l('login.confirmLogout'),
-      {
-        confirmButtonText: l('login.relogin'),
-        cancelButtonText: l('global.cancel'),
-        type: 'error'
-      }).then(() => {
-      UserModule.ResetToken()
-      location.reload() // To prevent bugs from vue-router
-      return Promise.reject(error)
-    })
+    if (error.response.status === 401) {
+      UserModule.RefreshSession().then(token => {
+        const config = error.response.config
+        config.headers.Authorization = token
+        return service(config)
+      }).catch(() => {
+        MessageBox.confirm(
+          l('login.tokenExprition'),
+          l('login.confirmLogout'),
+          {
+            confirmButtonText: l('login.relogin'),
+            cancelButtonText: l('global.cancel'),
+            type: 'error'
+          }).then(() => {
+          UserModule.ResetToken()
+          location.reload() // To prevent bugs from vue-router
+        })
+      })
+    } else {
+      showError(error.response.data, error.response.status)
+    }
+    return Promise.reject(error)
   }
 )
 

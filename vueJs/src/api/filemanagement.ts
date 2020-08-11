@@ -73,6 +73,19 @@ export default class FileManagementService {
     const _url = baseUrl + '/files/copy'
     return ApiService.Put<void>(_url, payload, serviceUrl)
   }
+
+  public static downlodFle(name: string, path: string | undefined, currentByte: number | undefined) {
+    let _url = baseUrl + '/files?name=' + name
+    if (path) {
+      _url += '&path=' + path
+    }
+    _url += '&currentByte=' + currentByte
+    return ApiService.HttpRequestWithOriginResponse(({
+      url: _url,
+      method: 'GET',
+      responseType: 'blob'
+    }))
+  }
 }
 
 export enum FileSystemType {

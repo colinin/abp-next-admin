@@ -633,7 +633,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { AbpConfigurationModule } from '@/store/modules/abp'
+import { AbpModule } from '@/store/modules/abp'
 import SettingService, { Setting, SettingUpdate, SettingsUpdate } from '@/api/settings'
 
 const booleanStrings = ['True', 'true', 'False', 'false']
@@ -652,7 +652,7 @@ export default class extends Vue {
   private settingChangeKeys = new Array<string>()
 
   get definedLanguages() {
-    const languages = AbpConfigurationModule.configuration.localization.languages.map((lang: any) => {
+    const languages = AbpModule.configuration.localization.languages.map((lang: any) => {
       return lang.cultureName
     })
     return languages

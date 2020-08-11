@@ -614,7 +614,8 @@ export default {
     confirm: '确 定',
     correctEmailAddress: '正确的邮件地址',
     correctPhoneNumber: '正确的手机号码',
-    operatingFast: '您的操作过快,请稍后再试!'
+    operatingFast: '您的操作过快,请稍后再试!',
+    request404: '您所请求的资源不存在!'
   },
   messages: {
     noNotifications: '没有通知',
@@ -626,8 +627,13 @@ export default {
     lastModificationTime: '修改时间',
     type: '类型',
     folder: '文件夹',
+    file: '文件',
     fileType: '{exten}文件',
     size: '大小',
-    root: '根目录'
+    root: '文件系统',
+    download: '下载文件',
+    upload: '上传文件',
+    deleteFolder: '删除目录',
+    deleteFile: '删除文件'
   }
 }

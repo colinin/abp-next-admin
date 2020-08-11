@@ -6,7 +6,7 @@ const adminRouter: RouteConfig = {
   component: Layout,
   meta: {
     title: 'admin',
-    icon: 'manager',
+    icon: 'admin',
     roles: ['AbpIdentity.Users', 'AbpIdentity.Roles', 'AbpSettingManagement.Settings', 'AbpTenantManagement.Tenants'], // you can set roles in root nav
     alwaysShow: true // will always show the root menu
   },
@@ -47,7 +47,7 @@ const adminRouter: RouteConfig = {
       name: 'tenants',
       meta: {
         title: 'tenants',
-        icon: 'tenants',
+        icon: 'tenant',
         roles: ['AbpTenantManagement.Tenants']
       }
     },
@@ -57,7 +57,7 @@ const adminRouter: RouteConfig = {
       name: 'organization-unit',
       meta: {
         title: 'organizationUnit',
-        icon: 'tenants',
+        icon: 'organization-unit',
         roles: ['AbpIdentity.OrganizationUnits']
       }
     }
