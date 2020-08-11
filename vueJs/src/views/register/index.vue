@@ -125,7 +125,7 @@ import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import UserService, { PhoneVerify, VerifyType, UserRegisterData } from '@/api/users'
-import { AbpConfigurationModule } from '@/store/modules/abp'
+import { AbpModule } from '@/store/modules/abp'
 
 @Component({
   name: 'Register',
@@ -151,7 +151,7 @@ export default class extends Vue {
   }
 
   get isMultiEnabled() {
-    return AbpConfigurationModule.configuration?.multiTenancy?.isEnabled
+    return AbpModule.configuration?.multiTenancy?.isEnabled
   }
 
   private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {

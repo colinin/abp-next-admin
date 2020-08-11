@@ -3,6 +3,7 @@
     tab-position="left"
   >
     <el-tab-pane
+      v-if="!currentTenantId"
       :label="$t('settings.globalSetting')"
     >
       <GlobalSettingEditForm />
@@ -28,7 +29,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
-import { AbpConfigurationModule } from '@/store/modules/abp'
+import { AbpModule } from '@/store/modules/abp'
 import UserSettingEditForm from './components/UserSettingEditForm.vue'
 import TenantSettingEditForm from './components/TenantSettingEditForm.vue'
 import GlobalSettingEditForm from './components/GlobalSettingEditForm.vue'
@@ -43,8 +44,8 @@ import GlobalSettingEditForm from './components/GlobalSettingEditForm.vue'
 })
 export default class extends Vue {
   get currentTenantId() {
-    if (AbpConfigurationModule.configuration.currentTenant.isAvailable) {
-      return AbpConfigurationModule.configuration.currentTenant.id
+    if (AbpModule.configuration.currentTenant.isAvailable) {
+      return AbpModule.configuration.currentTenant.id
     }
     return ''
   }

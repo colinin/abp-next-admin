@@ -6,7 +6,7 @@ import { resetRouter } from '@/router'
 import { TagsViewModule } from './tags-view'
 import { removeTenant, setTenant } from '@/utils/sessions'
 import { PermissionModule } from '@/store/modules/permission'
-import { AbpConfigurationModule } from '@/store/modules/abp'
+import { AbpModule } from '@/store/modules/abp'
 import store from '@/store'
 
 export interface IUserState {
@@ -137,13 +137,14 @@ class User extends VuexModule implements IUserState {
   @Action
   public RefreshSession() {
     return new Promise((resolve, reject) => {
-      const token = getItem(refreshTokenKey)
-      if (token) {
-        UserApiService.refreshToken(token).then(result => {
+      const refreshToken = getItem(refreshTokenKey)
+      const token = getItem(tokenKey)
+      if (token && refreshToken) {
+        UserApiService.refreshToken(token, refreshToken).then(result => {
           const token = result.token_type + ' ' + result.access_token
           this.SET_TOKEN(token)
           this.SET_REFRESHTOKEN(result.refresh_token)
-          return resolve(result)
+          return resolve(token)
         }).catch(error => {
           return reject(error)
         })
@@ -161,7 +162,7 @@ class User extends VuexModule implements IUserState {
 
   @Action
   private async PostLogin() {
-    await AbpConfigurationModule.GetAbpConfiguration()
+    await AbpModule.GetAbpConfiguration()
   }
 }
 

@@ -1,0 +1,25 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:FileManagement": "File management",
+    "Permission:FileSystem": "File system",
+    "Permission:FileManager": "Files",
+    "Permission:CreateFolder": "Create directory",
+    "Permission:DeleteFolder": "Delete directory",
+    "Permission:UpdateFolder": "Edit directory",
+    "Permission:MoveFolder": "Change directory",
+    "Permission:CopyFolder": "Copy directory",
+    "Permission:AppendFile": "Add files",
+    "Permission:UpdateFile": "Change file",
+    "Permission:DeleteFile": "Delete file",
+    "Permission:CopyFile": "Copy file",
+    "Permission:MoveFile": "Move file",
+    "Permission:DownloadFile": "Download file",
+    "UploadFileSizeBeyondLimit": "Upload file size cannot exceed {0} MB!",
+    "NotAllowedFileExtensionName": "Not allowed file extension: {0}!",
+    "DisplayName:FileLimitLength": "File limit size",
+    "Description:FileLimitLength": "Limit size of uploaded file in MB",
+    "DisplayName:AllowFileExtensions": "File extension",
+    "Description:AllowFileExtensions": "List of allowed extensions to upload files, with multiple extensions separated by, don't need a notation"
+  }
+}

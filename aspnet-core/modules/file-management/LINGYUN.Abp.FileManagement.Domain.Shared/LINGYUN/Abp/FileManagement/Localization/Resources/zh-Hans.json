@@ -1,0 +1,25 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:FileManagement": "文件管理",
+    "Permission:FileSystem": "文件系统",
+    "Permission:FileManager": "文件",
+    "Permission:CreateFolder": "创建目录",
+    "Permission:DeleteFolder": "删除目录",
+    "Permission:UpdateFolder": "修改目录",
+    "Permission:MoveFolder": "变更目录",
+    "Permission:CopyFolder": "复制目录",
+    "Permission:AppendFile": "添加文件",
+    "Permission:UpdateFile": "变更文件",
+    "Permission:DeleteFile": "删除文件",
+    "Permission:CopyFile": "复制文件",
+    "Permission:MoveFile": "移动文件",
+    "Permission:DownloadFile": "下载文件",
+    "UploadFileSizeBeyondLimit": "上传文件大小不能超过 {0} MB!",
+    "NotAllowedFileExtensionName": "不被允许的文件扩展名: {0}!",
+    "DisplayName:FileLimitLength": "文件限制大小",
+    "Description:FileLimitLength": "上传文件的限制大小,单位(MB)",
+    "DisplayName:AllowFileExtensions": "文件扩展名",
+    "Description:AllowFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号"
+  }
+}

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.FileManagement.Domain\LINGYUN.Abp.FileManagement.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -3,6 +3,7 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.FileManagement;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -40,6 +41,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Platform
 {
     [DependsOn(
+        typeof(AbpFileManagementApplicationModule),
+        typeof(AbpFileManagementHttpApiModule),
         typeof(AppPlatformApplicationModule),
         typeof(AppPlatformHttpApiModule),
         typeof(AppPlatformEntityFrameworkCoreModule),
@@ -162,6 +165,17 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options
+                    .AddLanguagesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
+                options
+                    .AddLanguageFilesMapOrUpdate(
+                        "vue-admin-element-ui",
+                        new NameValue("zh-Hans", "zh"),
+                        new NameValue("en", "en"));
             });
 
             context.Services.AddAuthentication("Bearer")

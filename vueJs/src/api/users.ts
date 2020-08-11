@@ -158,11 +158,11 @@ export default class UserApiService {
     })
   }
 
-  public static refreshToken(token: string) {
+  public static refreshToken(token: string, refreshToken: string) {
     const _url = '/connect/token'
     const refresh = {
       grant_type: 'refresh_token',
-      refresh_token: token,
+      refresh_token: refreshToken,
       client_id: process.env.VUE_APP_CLIENT_ID,
       client_secret: process.env.VUE_APP_CLIENT_SECRET
     }
@@ -172,7 +172,8 @@ export default class UserApiService {
       method: 'POST',
       data: qs.stringify(refresh),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': token
       }
     })
   }

@@ -185,13 +185,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFramework
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{52B5D4F7-237B-4E0A-A167-68442164F70A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.Application.Contracts", "modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj", "{F19C8B0F-A332-4190-9ABE-95790E0AE864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Application.Contracts", "modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj", "{F19C8B0F-A332-4190-9ABE-95790E0AE864}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.Application", "modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj", "{BB1B831F-4AC4-4DE5-A879-D5FC5B1CA9DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Application", "modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj", "{BB1B831F-4AC4-4DE5-A879-D5FC5B1CA9DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.HttpApi", "modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj", "{72DCA4CF-8B95-47C9-B02A-2671953B7987}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.HttpApi", "modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj", "{72DCA4CF-8B95-47C9-B02A-2671953B7987}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.HttpApi.Client", "modules\identity\LINGYUN.Abp.Identity.HttpApi.Client\LINGYUN.Abp.Identity.HttpApi.Client.csproj", "{7DDEAEA9-E392-469C-ACB6-908C5BAD669E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.HttpApi.Client", "modules\identity\LINGYUN.Abp.Identity.HttpApi.Client\LINGYUN.Abp.Identity.HttpApi.Client.csproj", "{7DDEAEA9-E392-469C-ACB6-908C5BAD669E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "file-management", "file-management", "{B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Application", "modules\file-management\LINGYUN.Abp.FileManagement.Application\LINGYUN.Abp.FileManagement.Application.csproj", "{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Application.Contracts", "modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj", "{86A67B8C-EFA0-4103-B60F-312F07C15A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.HttpApi", "modules\file-management\LINGYUN.Abp.FileManagement.HttpApi\LINGYUN.Abp.FileManagement.HttpApi.csproj", "{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Domain.Shared", "modules\file-management\LINGYUN.Abp.FileManagement.Domain.Shared\LINGYUN.Abp.FileManagement.Domain.Shared.csproj", "{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Domain", "modules\file-management\LINGYUN.Abp.FileManagement.Domain\LINGYUN.Abp.FileManagement.Domain.csproj", "{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -511,6 +523,26 @@ Global
 		{7DDEAEA9-E392-469C-ACB6-908C5BAD669E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDEAEA9-E392-469C-ACB6-908C5BAD669E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DDEAEA9-E392-469C-ACB6-908C5BAD669E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A67B8C-EFA0-4103-B60F-312F07C15A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A67B8C-EFA0-4103-B60F-312F07C15A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A67B8C-EFA0-4103-B60F-312F07C15A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A67B8C-EFA0-4103-B60F-312F07C15A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -608,6 +640,12 @@ Global
 		{BB1B831F-4AC4-4DE5-A879-D5FC5B1CA9DA} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{72DCA4CF-8B95-47C9-B02A-2671953B7987} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{7DDEAEA9-E392-469C-ACB6-908C5BAD669E} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
+		{B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{86A67B8C-EFA0-4103-B60F-312F07C15A7A} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
