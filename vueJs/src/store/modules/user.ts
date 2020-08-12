@@ -18,6 +18,7 @@ export interface IUserState {
   email: string
 }
 
+const scopeKey = 'vue_typescript_admin_scope'
 const tokenKey = 'vue_typescript_admin_token'
 const refreshTokenKey = 'vue_typescript_admin_refresh_token'
 
@@ -139,7 +140,7 @@ class User extends VuexModule implements IUserState {
     return new Promise((resolve, reject) => {
       const refreshToken = getItem(refreshTokenKey)
       const token = getItem(tokenKey)
-      if (token && refreshToken) {
+      if (refreshToken) {
         UserApiService.refreshToken(token, refreshToken).then(result => {
           const token = result.token_type + ' ' + result.access_token
           this.SET_TOKEN(token)

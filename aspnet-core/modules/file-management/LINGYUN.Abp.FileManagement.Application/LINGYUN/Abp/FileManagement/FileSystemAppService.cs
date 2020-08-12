@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LINGYUN.Abp.FileManagement.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -11,6 +13,7 @@ using Volo.Abp.BlobStoring.FileSystem;
 
 namespace LINGYUN.Abp.FileManagement
 {
+    [Authorize(AbpFileManagementPermissions.FileSystem.Default)]
     public class FileSystemAppService : FileManagementApplicationServiceBase, IFileSystemAppService
     {
         protected IBlobContainer<FileSystemContainer> BlobContainer { get; }
@@ -23,19 +26,20 @@ namespace LINGYUN.Abp.FileManagement
             BlobContainerConfigurationProvider = blobContainerConfigurationProvider;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Copy)]
         public virtual Task CopyFileAsync(FileCopyOrMoveDto input)
         {
             string fileSystemPath = GetFileSystemPath(input.Path);
             var fileFullName = Path.Combine(fileSystemPath, input.Name);
             if (!File.Exists(fileFullName))
             {
-                throw new UserFriendlyException("指定的文件不存在!");
+                throw new UserFriendlyException(L["FilePathNotFound"]);
             }
             var copyToFilePath = GetFileSystemPath(input.ToPath);
             var copyToFileFullName = Path.Combine(copyToFilePath, input.ToName ?? input.Name);
             if (File.Exists(copyToFileFullName))
             {
-                throw new UserFriendlyException("指定的路径中已经有相同的文件名存在!");
+                throw new UserFriendlyException(L["FilePathAlreadyExists"]);
             }
 
             File.Copy(fileFullName, copyToFileFullName);
@@ -43,6 +47,7 @@ namespace LINGYUN.Abp.FileManagement
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.Copy)]
         public virtual Task CopyFolderAsync([Required, StringLength(255)] string path, FolderCopyDto input)
         {
             string fileSystemPath = GetFileSystemPath(path);
@@ -61,17 +66,23 @@ namespace LINGYUN.Abp.FileManagement
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Create)]
         public virtual async Task CreateFileAsync(FileCreateDto input)
         {
             string fileSystemPath = GetFileSystemPath(input.Path);
-            var fileFullName = Path.Combine(fileSystemPath, input.Name);
-            if (File.Exists(fileFullName) && !input.Rewrite)
+            fileSystemPath = Path.Combine(fileSystemPath, input.FileName);
+            var blobName = GetFileSystemRelativePath(fileSystemPath);
+            // 去除第一个路径标识符
+            blobName = blobName.RemovePreFix("/", "\\");
+            if (!input.Rewrite && await BlobContainer.ExistsAsync(blobName))
             {
-                throw new UserFriendlyException("指定的文件已经存在!");
+                throw new UserFriendlyException(L["FilePathAlreadyExists"]);
             }
-            await BlobContainer.SaveAsync(input.Name, input.Data, input.Rewrite);
+            await BlobContainer.SaveAsync(blobName, input.Data, input.Rewrite);
+            Array.Clear(input.Data, 0, input.Data.Length);
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.Create)]
         public virtual Task CreateFolderAsync(FolderCreateDto input)
         {
             string fileSystemPath = GetFileSystemBashPath();
@@ -82,13 +93,14 @@ namespace LINGYUN.Abp.FileManagement
             var newFloderPath = Path.Combine(fileSystemPath, input.Path);
             if (Directory.Exists(newFloderPath))
             {
-                throw new UserFriendlyException("指定目录已经存在!");
+                throw new UserFriendlyException(L["PathAlreadyExists"]);
             }
             Directory.CreateDirectory(newFloderPath);
 
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Delete)]
         public virtual Task DeleteFileAsync(FileDeleteDto input)
         {
             var fileSystemPath = GetFileSystemPath(input.Path);
@@ -100,27 +112,29 @@ namespace LINGYUN.Abp.FileManagement
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.Delete)]
         public virtual Task DeleteFolderAsync([Required, StringLength(255)] string path)
         {
             string fileSystemPath = GetFileSystemPath(path);
             if (!Directory.Exists(fileSystemPath))
             {
-                throw new UserFriendlyException("指定目录不存在!");
+                throw new UserFriendlyException(L["FilePathNotFound"]);
             }
             var fileSystemChildrenPath = Directory.GetDirectories(fileSystemPath);
             if (fileSystemChildrenPath.Length > 0)
             {
-                throw new UserFriendlyException("指定的目录不为空,不可删除此目录!");
+                throw new UserFriendlyException(L["PathCannotBeDeletedWithNotEmpty"]);
             }
             var fileSystemPathFiles = Directory.GetFiles(fileSystemPath);
             if (fileSystemPathFiles.Length > 0)
             {
-                throw new UserFriendlyException("指定的目录不为空,不可删除此目录!");
+                throw new UserFriendlyException(L["PathCannotBeDeletedWithNotEmpty"]);
             }
             Directory.Delete(fileSystemPath);
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Download)]
         public virtual async Task<Stream> DownloadFileAsync(FileSystemGetDto input)
         {
             var fileSystemPath = GetFileSystemPath(input.Path);
@@ -169,7 +183,7 @@ namespace LINGYUN.Abp.FileManagement
                 }
                 return Task.FromResult(fileSystem);
             }
-            throw new UserFriendlyException("文件或目录不存在!");
+            throw new UserFriendlyException(L["FilePathNotFound"]);
         }
 
         public virtual Task<PagedResultDto<FileSystemDto>> GetListAsync(GetFileSystemListDto input)
@@ -245,19 +259,20 @@ namespace LINGYUN.Abp.FileManagement
             ));
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Move)]
         public virtual Task MoveFileAsync(FileCopyOrMoveDto input)
         {
             string fileSystemPath = GetFileSystemPath(input.Path);
             fileSystemPath = Path.Combine(fileSystemPath, input.Name);
             if (!File.Exists(fileSystemPath))
             {
-                throw new UserFriendlyException("指定目录不存在!");
+                throw new UserFriendlyException(L["FilePathNotFound"]);
             }
             var moveToFilePath = GetFileSystemPath(input.ToPath);
             moveToFilePath = Path.Combine(moveToFilePath, input.ToName ?? input.Name);
-            if (Directory.Exists(moveToFilePath))
+            if (File.Exists(moveToFilePath))
             {
-                throw new UserFriendlyException("指定的路径中已经有同名的文件存在!");
+                throw new UserFriendlyException(L["FilePathAlreadyExists"]);
             }
 
             File.Move(fileSystemPath, moveToFilePath);
@@ -265,17 +280,18 @@ namespace LINGYUN.Abp.FileManagement
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.Move)]
         public virtual Task MoveFolderAsync([Required, StringLength(255)] string path, FolderMoveDto input)
         {
             string fileSystemPath = GetFileSystemPath(path);
             if (!Directory.Exists(fileSystemPath))
             {
-                throw new UserFriendlyException("指定目录不存在!");
+                throw new UserFriendlyException(L["FilePathNotFound"]);
             }
             var moveToFilePath = GetFileSystemPath(input.MoveToPath);
             if (Directory.Exists(moveToFilePath))
             {
-                throw new UserFriendlyException("指定的路径中已经有同名的目录存在!");
+                throw new UserFriendlyException(L["FilePathAlreadyExists"]);
             }
 
             Directory.Move(fileSystemPath, moveToFilePath);
@@ -283,6 +299,7 @@ namespace LINGYUN.Abp.FileManagement
             return Task.CompletedTask;
         }
 
+        [Authorize(AbpFileManagementPermissions.FileSystem.Update)]
         public virtual Task<FileSystemDto> UpdateAsync([Required, StringLength(255)] string name, FileSystemUpdateDto input)
         {
             string fileSystemPath = GetFileSystemPath(name);
@@ -291,7 +308,7 @@ namespace LINGYUN.Abp.FileManagement
             {
                 if (File.Exists(renameFilePath))
                 {
-                    throw new UserFriendlyException("指定的文件名已经存在!");
+                    throw new UserFriendlyException(L["FilePathAlreadyExists"]);
                 }
                 File.Move(fileSystemPath, renameFilePath);
 
@@ -315,7 +332,7 @@ namespace LINGYUN.Abp.FileManagement
             {
                 if (Directory.Exists(renameFilePath))
                 {
-                    throw new UserFriendlyException("指定的路径中已经有同名的目录存在!");
+                    throw new UserFriendlyException(L["FilePathAlreadyExists"]);
                 }
 
                 Directory.Move(fileSystemPath, renameFilePath);
@@ -334,7 +351,7 @@ namespace LINGYUN.Abp.FileManagement
                 }
                 return Task.FromResult(fileSystem);
             }
-            throw new UserFriendlyException("文件或目录不存在!");
+            throw new UserFriendlyException(L["FilePathNotFound"]);
         }
         /// <summary>
         /// 获取文件系统相对路径
@@ -364,7 +381,11 @@ namespace LINGYUN.Abp.FileManagement
             path = path.Replace(blobPath, "");
             return path;
         }
-
+        /// <summary>
+        /// 获取合并的文件路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         protected virtual string GetFileSystemPath(string path)
         {
             var fileSystemConfiguration = GetFileSystemBlobProviderConfiguration();
@@ -379,7 +400,10 @@ namespace LINGYUN.Abp.FileManagement
 
             return blobPath;
         }
-
+        /// <summary>
+        /// 获取文件系统存储路径
+        /// </summary>
+        /// <returns></returns>
         protected virtual string GetFileSystemBashPath()
         {
             var fileSystemConfiguration = GetFileSystemBlobProviderConfiguration();

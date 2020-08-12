@@ -622,6 +622,7 @@ export default {
     noMessages: '没有消息'
   },
   fileSystem: {
+    setting: '文件系统',
     name: '名称',
     creationTime: '创建时间',
     lastModificationTime: '修改时间',
@@ -634,6 +635,13 @@ export default {
     download: '下载文件',
     upload: '上传文件',
     deleteFolder: '删除目录',
-    deleteFile: '删除文件'
+    deleteFile: '删除文件',
+    addFile: '添加文件',
+    addFolder: '添加目录',
+    uploadError: '上传失败',
+    uploading: '正在上传',
+    waitingUpload: '等待上传',
+    paused: '已暂停',
+    uploadSuccess: '上传成功'
   }
 }

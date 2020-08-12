@@ -1,4 +1,7 @@
-﻿using LINGYUN.Abp.FileManagement.Settings;
+﻿using LINGYUN.Abp.FileManagement.Localization;
+using LINGYUN.Abp.FileManagement.Permissions;
+using LINGYUN.Abp.FileManagement.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -30,6 +33,7 @@ namespace LINGYUN.Abp.FileManagement
         {
             SettingProvider = settingProvider;
             FileSystemAppService = fileSystemAppService;
+            LocalizationResource = typeof(AbpFileManagementResource);
         }
 
         [HttpPut]
@@ -48,21 +52,22 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpPost]
         [Route("files")]
-        public virtual async Task CreateFileAsync([FromQuery] FileCreateDto input, IFormFile file)
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Create)]
+        public virtual async Task CreateFileAsync([FromForm] FileUploadDto input)
         {
             // 检查文件大小
             var fileSizeLimited = await SettingProvider
                 .GetAsync(
                     AbpFileManagementSettingNames.FileLimitLength,
                     AbpFileManagementSettingNames.DefaultFileLimitLength);
-            if (fileSizeLimited * 1024 * 1024 < input.TotalByte)
+            if (fileSizeLimited * 1024 * 1024 < input.TotalSize)
             {
                 throw new UserFriendlyException(L["UploadFileSizeBeyondLimit", fileSizeLimited]);
             }
             // 采用分块模式上传文件
 
             // 保存分块到临时目录
-            var fileName = input.Name;
+            var fileName = input.FileName;
             // 文件扩展名
             var fileExtensionName = FileHelper.GetExtension(fileName);
             var fileAllowExtension = await SettingProvider
@@ -82,10 +87,10 @@ namespace LINGYUN.Abp.FileManagement
                 Path.GetTempPath(),
                 "lingyun-abp-file-management",
                 "upload",
-                string.Concat(input.Path ?? "", input.Name).ToMd5());
+                string.Concat(input.Path ?? "", input.FileName).ToMd5());
             DirectoryHelper.CreateIfNotExists(tempFilePath);
             // 以上传的分片索引创建临时文件
-            var tempSavedFile = Path.Combine(tempFilePath, $"{input.CurrentByte}.{fileExtensionName}");
+            var tempSavedFile = Path.Combine(tempFilePath, $"{input.ChunkNumber}.{fileExtensionName}");
             try
             {
                 if (HttpContext.RequestAborted.IsCancellationRequested)
@@ -94,34 +99,34 @@ namespace LINGYUN.Abp.FileManagement
                     Directory.Delete(tempFilePath, true);
                     return;
                 }
-                // 保存临时文件
-                using (var fs = new FileStream(tempSavedFile, FileMode.Create, FileAccess.Write))
+
+                if (input.File != null)
                 {
-                    // 写入当前分片文件
-                    await file.CopyToAsync(fs);
+                    // 保存临时文件
+                    using (var fs = new FileStream(tempSavedFile, FileMode.Create, FileAccess.Write))
+                    {
+                        // 写入当前分片文件
+                        await input.File.CopyToAsync(fs);
+                    }
                 }
 
-                if (input.CurrentByte == input.TotalByte)
+                if (input.ChunkNumber == input.TotalChunks)
                 {
                     // 合并文件
                     var mergeSavedFile = Path.Combine(tempFilePath, $"{fileName}");
                     // 获取并排序所有分片文件
                     var mergeFiles = Directory.GetFiles(tempFilePath).OrderBy(f => f.Length).ThenBy(f => f);
                     // 创建临时合并文件
-                    using (var mergeSavedFileStream = new FileStream(mergeSavedFile, FileMode.Create))
+                    input.Data = new byte[0];
+                    foreach (var mergeFile in mergeFiles)
                     {
-                        foreach (var mergeFile in mergeFiles)
-                        {
-                            // 读取当前文件字节
-                            var mergeFileBytes = await FileHelper.ReadAllBytesAsync(mergeFile);
-                            // 写入到合并文件流
-                            await mergeSavedFileStream.WriteAsync(mergeFileBytes, 0, mergeFileBytes.Length);
-                            // 删除已参与合并的临时文件分片
-                            FileHelper.DeleteIfExists(mergeFile);
-                        }
-                        // 读取文件数据
-                        var fileData = await mergeSavedFileStream.GetAllBytesAsync();
-                        input.Data = fileData;
+                        // 读取当前文件字节
+                        var mergeFileBytes = await FileHelper.ReadAllBytesAsync(mergeFile);
+                        // 写入到合并文件流
+                        input.Data = input.Data.Concat(mergeFileBytes).ToArray();
+                        Array.Clear(mergeFileBytes,0, mergeFileBytes.Length);
+                        // 删除已参与合并的临时文件分片
+                        FileHelper.DeleteIfExists(mergeFile);
                     }
                     await FileSystemAppService.CreateFileAsync(input);
                     // 文件保存之后删除临时文件目录
@@ -159,6 +164,7 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpGet]
         [Route("files")]
+        [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Download)]
         public virtual async Task<IActionResult> DownloadFileAsync(FileSystemDownloadDto input)
         {
             var tempFileName = string.Concat(input.Path ?? "", input.Name);

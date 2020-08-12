@@ -179,8 +179,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{F4615BCE-D5C1-407A-8681-8EEE92DEF9D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi.Host", "services\platform\LINGYUN.Platform.HttpApi.Host\LINGYUN.Platform.HttpApi.Host.csproj", "{8C2D5292-19D7-4355-BC23-5A3B1F4B219B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{F3D9B137-32DE-4018-8058-78AB17FCDF9C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{52B5D4F7-237B-4E0A-A167-68442164F70A}"
@@ -197,13 +195,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "file-management", "file-man
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Application", "modules\file-management\LINGYUN.Abp.FileManagement.Application\LINGYUN.Abp.FileManagement.Application.csproj", "{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Application.Contracts", "modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj", "{86A67B8C-EFA0-4103-B60F-312F07C15A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Application.Contracts", "modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj", "{86A67B8C-EFA0-4103-B60F-312F07C15A7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.HttpApi", "modules\file-management\LINGYUN.Abp.FileManagement.HttpApi\LINGYUN.Abp.FileManagement.HttpApi.csproj", "{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.HttpApi", "modules\file-management\LINGYUN.Abp.FileManagement.HttpApi\LINGYUN.Abp.FileManagement.HttpApi.csproj", "{854E1A42-FEA4-420E-9E83-0A39EE03F1ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Domain.Shared", "modules\file-management\LINGYUN.Abp.FileManagement.Domain.Shared\LINGYUN.Abp.FileManagement.Domain.Shared.csproj", "{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Domain.Shared", "modules\file-management\LINGYUN.Abp.FileManagement.Domain.Shared\LINGYUN.Abp.FileManagement.Domain.Shared.csproj", "{21FCEF89-9A3F-476E-833A-A9C2131B2AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Domain", "modules\file-management\LINGYUN.Abp.FileManagement.Domain\LINGYUN.Abp.FileManagement.Domain.csproj", "{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Domain", "modules\file-management\LINGYUN.Abp.FileManagement.Domain\LINGYUN.Abp.FileManagement.Domain.csproj", "{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi.Host", "services\platform\LINGYUN.Platform.HttpApi.Host\LINGYUN.Platform.HttpApi.Host.csproj", "{372123C3-3AFD-42C8-BB80-778322EA72C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -499,10 +499,6 @@ Global
 		{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C2D5292-19D7-4355-BC23-5A3B1F4B219B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C2D5292-19D7-4355-BC23-5A3B1F4B219B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C2D5292-19D7-4355-BC23-5A3B1F4B219B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C2D5292-19D7-4355-BC23-5A3B1F4B219B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3D9B137-32DE-4018-8058-78AB17FCDF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3D9B137-32DE-4018-8058-78AB17FCDF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3D9B137-32DE-4018-8058-78AB17FCDF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -543,6 +539,10 @@ Global
 		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372123C3-3AFD-42C8-BB80-778322EA72C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372123C3-3AFD-42C8-BB80-778322EA72C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372123C3-3AFD-42C8-BB80-778322EA72C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372123C3-3AFD-42C8-BB80-778322EA72C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -633,7 +633,6 @@ Global
 		{0655A0FB-59E8-4A9F-BAF5-47A89377F747} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{F4615BCE-D5C1-407A-8681-8EEE92DEF9D0} = {672E1170-7B18-474B-85C7-1961BF2A48AE}
-		{8C2D5292-19D7-4355-BC23-5A3B1F4B219B} = {E5D1B78A-1A8F-4D52-BF99-A4A863ADE898}
 		{F3D9B137-32DE-4018-8058-78AB17FCDF9C} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{52B5D4F7-237B-4E0A-A167-68442164F70A} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{F19C8B0F-A332-4190-9ABE-95790E0AE864} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
@@ -646,6 +645,7 @@ Global
 		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{21FCEF89-9A3F-476E-833A-A9C2131B2AE6} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{14ECCFD6-2DC1-4124-BE26-15E8D28E3E90} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{372123C3-3AFD-42C8-BB80-778322EA72C3} = {E5D1B78A-1A8F-4D52-BF99-A4A863ADE898}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

@@ -16,7 +16,7 @@
               v-for="(fileRoot, index) in fileSystemRoot"
               :key="index"
               class="file-system-breadcrumb"
-              @click.native="(event) => handleBreadCrumbClick(event, index)"
+              @click.native="(event) => onBreadCrumbClick(event, index)"
             >
               {{ fileRoot }}
             </el-breadcrumb-item>
@@ -35,9 +35,8 @@
       highlight-current-row
       style="width: 100%;"
       :row-class-name="tableRowClassName"
-      @selection-change="handleSelectionChanged"
-      @row-click="handleRowClick"
-      @row-dblclick="handleRowDoubleClick"
+      @row-click="onRowClick"
+      @row-dblclick="onRowDoubleClick"
     >
       <el-table-column
         type="selection"
@@ -158,6 +157,19 @@
       :limit.sync="fileSystemGetFilter.maxResultCount"
       @pagination="handleGetFileSystemList"
     />
+
+    <el-dialog
+      :visible.sync="showFileUploadDialog"
+      :title="$t('fileSystem.upload')"
+      :show-close="false"
+      @closed="onFileUploadFormClosed"
+    >
+      <file-upload-form
+        ref="fileUploadForm"
+        :path="lastFilePath"
+        @onFileUploaded="onFileUploaded"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -165,6 +177,7 @@
 import { dateFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
 import { Component, Vue } from 'vue-property-decorator'
+import FileUploadForm from './components/FileUploadForm.vue'
 import Pagination from '@/components/Pagination/index.vue'
 import FileSystemService, { FileSystem, FileSystemGetByPaged, FileSystemType } from '@/api/filemanagement'
 
@@ -175,7 +188,8 @@ const gbUnit = mbUnit * 1024
 @Component({
   name: 'FileManagement',
   components: {
-    Pagination
+    Pagination,
+    FileUploadForm
   },
   filters: {
     dateTimeFilter(datetime: string) {
@@ -233,6 +247,7 @@ const gbUnit = mbUnit * 1024
   }
 })
 export default class extends Vue {
+  private showFileUploadDialog!: boolean
   private downloading!: boolean
   private lastFilePath!: string
   private fileSystemRoot!: string[]
@@ -247,6 +262,7 @@ export default class extends Vue {
     this.fileSystemCount = 0
     this.downloading = false
     this.fileSystemListLoading = false
+    this.showFileUploadDialog = false
     this.fileSystemRoot = new Array<string>()
     this.fileSystemList = new Array<FileSystem>()
     this.fileSystemGetFilter = new FileSystemGetByPaged()
@@ -265,30 +281,6 @@ export default class extends Vue {
     }).finally(() => {
       this.fileSystemListLoading = false
     })
-  }
-
-  private handleSelectionChanged(selection: any, row: any) {
-    console.log(row)
-  }
-
-  private handleRowClick(row: any) {
-    const table = this.$refs.fileSystemTable as any
-    table.toggleRowSelection(row)
-  }
-
-  private handleRowDoubleClick(row: any) {
-    if (row.type === FileSystemType.Folder) {
-      this.fileSystemRoot.push(row.name)
-      this.navigationToFilePath()
-    }
-  }
-
-  private handleBreadCrumbClick(event: any, index: number) {
-    // 如果点击的索引为最后一个,不做响应
-    if ((index + 1) < this.fileSystemRoot.length) {
-      this.fileSystemRoot.splice(index + 1)
-      this.navigationToFilePath()
-    }
   }
 
   private navigationToFilePath() {
@@ -347,8 +339,8 @@ export default class extends Vue {
   }
 
   private handleUploadFile(path: string) {
-    console.log(path)
-    // TODO: 创建文件上传组件
+    this.lastFilePath = path
+    this.showFileUploadDialog = true
   }
 
   private handleDownloadFile(path: string, fileName: string, size: number) {
@@ -386,6 +378,38 @@ export default class extends Vue {
         callback(size)
       }
     })
+  }
+
+  private onRowClick(row: any) {
+    const table = this.$refs.fileSystemTable as any
+    table.toggleRowSelection(row)
+  }
+
+  private onRowDoubleClick(row: any) {
+    if (row.type === FileSystemType.Folder) {
+      this.fileSystemRoot.push(row.name)
+      this.navigationToFilePath()
+    }
+  }
+
+  private onBreadCrumbClick(event: any, index: number) {
+    // 如果点击的索引为最后一个,不做响应
+    if ((index + 1) < this.fileSystemRoot.length) {
+      this.fileSystemRoot.splice(index + 1)
+      this.navigationToFilePath()
+    } else {
+      this.handleGetFileSystemList()
+    }
+  }
+
+  private onFileUploaded() {
+    this.handleGetFileSystemList()
+  }
+
+  private onFileUploadFormClosed() {
+    this.showFileUploadDialog = false
+    const frmUpload = this.$refs.fileUploadForm as any
+    frmUpload.close()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

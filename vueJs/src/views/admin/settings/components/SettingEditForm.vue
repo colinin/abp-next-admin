@@ -614,6 +614,52 @@
             />
           </el-form-item>
         </el-tab-pane>
+        <el-tab-pane
+          v-if="hasSettingExistsed('Abp.FileManagement.FileLimitLength')"
+          :label="$t('fileSystem.setting')"
+        >
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.FileManagement.FileLimitLength')"
+            prop="Abp.FileManagement.FileLimitLength'].value"
+          >
+            <el-popover
+              ref="FileLimitLength"
+              trigger="hover"
+              :title="setting['Abp.FileManagement.FileLimitLength'].displayName"
+              :content="setting['Abp.FileManagement.FileLimitLength'].description"
+            />
+            <span
+              slot="label"
+              v-popover:FileLimitLength
+            >{{ setting['Abp.FileManagement.FileLimitLength'].displayName }}</span>
+            <el-input
+              v-model="setting['Abp.FileManagement.FileLimitLength'].value"
+              :placeholder="setting['Abp.FileManagement.FileLimitLength'].description"
+              type="number"
+              @input="(value) => handleSettingValueChanged('Abp.FileManagement.FileLimitLength', value)"
+            />
+          </el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.FileManagement.AllowFileExtensions')"
+            prop="Abp.FileManagement.AllowFileExtensions'].value"
+          >
+            <el-popover
+              ref="AllowFileExtensions"
+              trigger="hover"
+              :title="setting['Abp.FileManagement.AllowFileExtensions'].displayName"
+              :content="setting['Abp.FileManagement.AllowFileExtensions'].description"
+            />
+            <span
+              slot="label"
+              v-popover:AllowFileExtensions
+            >{{ setting['Abp.FileManagement.AllowFileExtensions'].displayName }}</span>
+            <el-input
+              v-model="setting['Abp.FileManagement.AllowFileExtensions'].value"
+              :placeholder="setting['Abp.FileManagement.AllowFileExtensions'].description"
+              @input="(value) => handleSettingValueChanged('Abp.FileManagement.AllowFileExtensions', value)"
+            />
+          </el-form-item>
+        </el-tab-pane>
       </el-tabs>
 
       <el-form-item
