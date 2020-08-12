@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using Volo.Abp.Auditing;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.FileManagement
 {
@@ -8,8 +10,9 @@ namespace LINGYUN.Abp.FileManagement
         /// <summary>
         /// 文件名
         /// </summary>
+        [Required]
         [StringLength(255)]
-        public string Name { get; set; }
+        public string FileName { get; set; }
         /// <summary>
         /// 文件路径
         /// </summary>
@@ -19,17 +22,8 @@ namespace LINGYUN.Abp.FileManagement
         /// 文件数据，前端无需传递此参数,由控制器传递
         /// </summary>
         [DisableAuditing]
+        [DisableValidation]// TODO: 需要禁用参数检查,否则会有一个框架方面的性能问题存在
         public byte[] Data { get; set; }
-        /// <summary>
-        /// 当前字节数
-        /// </summary>
-        [Required]
-        public int CurrentByte { get; set; }
-        /// <summary>
-        /// 最大字节数
-        /// </summary>
-        [Required]
-        public int TotalByte { get; set; }
         /// <summary>
         /// 是否覆盖文件
         /// </summary>

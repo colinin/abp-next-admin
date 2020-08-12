@@ -1,9 +1,10 @@
+import qs from 'qs'
 import ApiService from './serviceBase'
 import { PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
 const serviceUrl = process.env.VUE_APP_BASE_API
 const baseUrl = '/api/file-management/file-system'
-export const FileManagementUrl = serviceUrl + baseUrl
+export const FileUploadUrl = serviceUrl + baseUrl + '/files'
 
 export default class FileManagementService {
   public static getFileSystem(name: string, path: string | undefined) {
@@ -72,6 +73,23 @@ export default class FileManagementService {
   public static copyFile(payload: FileCopyOrMove) {
     const _url = baseUrl + '/files/copy'
     return ApiService.Put<void>(_url, payload, serviceUrl)
+  }
+
+  public static mergeFile(name: string, path: string | undefined) {
+    const _url = baseUrl + '/files'
+    const _data = {
+      path: path,
+      fileName: name,
+      mergeFile: true
+    }
+    return ApiService.HttpRequest<void>({
+      url: _url,
+      data: qs.stringify(_data),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
   }
 
   public static downlodFle(name: string, path: string | undefined, currentByte: number | undefined) {

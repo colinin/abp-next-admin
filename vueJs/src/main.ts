@@ -5,6 +5,8 @@ import ElementUI from 'element-ui'
 import ViewUI from 'view-design'
 import SvgIcon from 'vue-svgicon'
 
+import uploader from 'vue-simple-uploader'
+
 import '@/styles/element-variables.scss'
 import 'view-design/dist/styles/iview.css'
 import '@/styles/index.scss'
@@ -36,6 +38,8 @@ Vue.use(SvgIcon, {
   defaultWidth: '1em',
   defaultHeight: '1em'
 })
+
+Vue.use(uploader)
 
 // Register global directives
 Object.keys(directives).forEach(key => {

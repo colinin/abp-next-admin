@@ -139,7 +139,8 @@ namespace AuthServer.DataSeeder
                 "profile",
                 "role",
                 "phone",
-                "address"
+                "address",
+                "offline_access" // 加上刷新
             };
 
             var configurationSection = _configuration.GetSection("IdentityServer:Clients");
