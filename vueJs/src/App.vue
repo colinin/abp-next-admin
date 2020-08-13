@@ -17,7 +17,7 @@ import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.
   }
 })
 export default class extends Vue {
-  mounted() {
+  created() {
     this.initializeAbpConfiguration()
   }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LINGYUN.Abp.FileManagement.Localization;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.FileManagement
@@ -9,7 +7,7 @@ namespace LINGYUN.Abp.FileManagement
     {
         protected FileManagementApplicationServiceBase()
         {
-
+            LocalizationResource = typeof(AbpFileManagementResource);
         }
     }
 }

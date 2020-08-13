@@ -28,3 +28,6 @@ declare module 'vue-splitpane'
 
 // TODO vue-simple-uploader
 declare module 'vue-simple-uploader'
+
+// TODO vue-contextmenujs
+declare module 'vue-contextmenujs'

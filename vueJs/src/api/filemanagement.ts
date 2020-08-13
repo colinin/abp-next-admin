@@ -75,23 +75,6 @@ export default class FileManagementService {
     return ApiService.Put<void>(_url, payload, serviceUrl)
   }
 
-  public static mergeFile(name: string, path: string | undefined) {
-    const _url = baseUrl + '/files'
-    const _data = {
-      path: path,
-      fileName: name,
-      mergeFile: true
-    }
-    return ApiService.HttpRequest<void>({
-      url: _url,
-      data: qs.stringify(_data),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-  }
-
   public static downlodFle(name: string, path: string | undefined, currentByte: number | undefined) {
     let _url = baseUrl + '/files?name=' + name
     if (path) {
