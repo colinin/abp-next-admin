@@ -9,7 +9,7 @@ import Layout from '@/layout/index.vue'
 // import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
-import taskRouter from './modules/task'
+// import taskRouter from './modules/task'
 import adminRouter from './modules/admin'
 import apigatewayRouter from './modules/apigateway'
 import identityServerRouter from './modules/identityServer'
@@ -124,7 +124,6 @@ export const asyncRoutes: RouteConfig[] = [
       }
     ]
   },
-  taskRouter,
   adminRouter,
   apigatewayRouter,
   identityServerRouter,

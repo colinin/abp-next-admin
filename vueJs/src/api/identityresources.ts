@@ -7,7 +7,7 @@ const serviceUrl = process.env.VUE_APP_BASE_API
 
 /** 身份资源Api接口 */
 export default class IdentityResourceService {
-  /** 
+  /**
    * 获取身份资源
    * @param id 身份资源标识
    * @returns 返回类型为 IdentityResource 的对象
@@ -155,7 +155,7 @@ export class IdentityResourceCreate {
 
   /** 创建身份资源 */
   public static create(identityResource: IdentityResource) {
-    let resource = new IdentityResourceCreate()
+    const resource = new IdentityResourceCreate()
     resource.description = identityResource.description
     resource.displayName = identityResource.displayName
     resource.emphasize = identityResource.emphasize
@@ -198,7 +198,7 @@ export class IdentityResourceUpdate {
 
   /** 创建身份资源 */
   public static create(identityResource: IdentityResource) {
-    let resource = new IdentityResourceUpdate()
+    const resource = new IdentityResourceUpdate()
     resource.concurrencyStamp = identityResource.concurrencyStamp
     resource.description = identityResource.description
     resource.displayName = identityResource.displayName
@@ -221,11 +221,11 @@ export class IdentityResource extends FullAuditedEntityDto {
   name!: string
   /** 显示名称 */
   displayName?: string
- /** 说明 */
+  /** 说明 */
   description?: string
   /** 并发令牌 */
   concurrencyStamp!: string
- /** 启用 */
+  /** 启用 */
   enabled!: boolean
   /** 必须 */
   required!: boolean
@@ -240,7 +240,7 @@ export class IdentityResource extends FullAuditedEntityDto {
 
   /** 返回一个空对象 */
   public static empty() {
-    const resource =  new IdentityResource()
+    const resource = new IdentityResource()
     resource.enabled = true
     return resource
   }

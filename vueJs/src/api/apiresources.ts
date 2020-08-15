@@ -131,7 +131,7 @@ export class ApiScope {
   required!: boolean
   emphasize!: boolean
   showInDiscoveryDocument!: boolean
-  userClaims : ApiScopeClaim[]
+  userClaims: ApiScopeClaim[]
 
   constructor() {
     this.userClaims = new Array<ApiScopeClaim>()
@@ -146,7 +146,7 @@ export class ApiScopeCreate {
   required!: boolean
   emphasize!: boolean
   showInDiscoveryDocument!: boolean
-  userClaims : ApiScopeClaim[]
+  userClaims: ApiScopeClaim[]
 
   constructor() {
     this.apiResourceId = ''
