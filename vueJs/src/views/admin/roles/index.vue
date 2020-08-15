@@ -134,6 +134,14 @@
       </el-table-column>
     </el-table>
 
+    <pagination
+      v-show="roleCount>0"
+      :total="roleCount"
+      :page.sync="roleQueryFilter.skipCount"
+      :limit.sync="roleQueryFilter.maxResultCount"
+      @pagination="handleGetRoles"
+    />
+
     <el-dialog
       :visible="hasLoadPermission"
       custom-class="profile"
@@ -163,22 +171,26 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto } from '@/api/roles'
+import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
 import { checkPermission } from '@/utils/permission'
 import { IPermission } from '@/api/types'
+import Pagination from '@/components/Pagination/index.vue'
 import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/permission'
 import PermissionTree from '@/components/PermissionTree/index.vue'
 
 @Component({
   name: 'RoleList',
   components: {
-    PermissionTree
+    PermissionTree,
+    Pagination
   },
   methods: {
     checkPermission
   }
 })
 export default class extends Vue {
+  private roleCount: number
+  private roleQueryFilter: RoleGetPagedDto
   private roleList: RoleDto[]
   private roleListLoading: boolean
   /** 是否加载角色权限 */
@@ -192,10 +204,12 @@ export default class extends Vue {
 
   constructor() {
     super()
+    this.roleCount = 0
     this.roleListLoading = false
     this.hasLoadPermission = false
     this.rolePermissionChanged = false
     this.rolePermission = new PermissionDto()
+    this.roleQueryFilter = new RoleGetPagedDto()
     this.roleList = new Array<RoleDto>()
     this.editRolePermissions = new Array<IPermission>()
   }
@@ -207,8 +221,9 @@ export default class extends Vue {
   /** 获取角色权限列表 */
   private handleGetRoles() {
     this.roleListLoading = true
-    RoleService.getRoles().then(data => {
-      this.roleList = data.items
+    RoleService.getRoles(this.roleQueryFilter).then(res => {
+      this.roleList = res.items
+      this.roleCount = res.totalCount
       this.roleListLoading = false
     })
   }

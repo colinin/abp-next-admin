@@ -242,7 +242,7 @@ export default class extends Vue {
   }
 
   private handleGetRoles() {
-    RoleService.getRoles().then(data => {
+    RoleService.getAllRoles().then(data => {
       const roles = data.items.map((item: IRoleData) => {
         return {
           key: item.name,

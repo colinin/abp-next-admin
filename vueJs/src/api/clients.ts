@@ -15,7 +15,8 @@ export default class ClientService {
     let _url = '/api/IdentityServer/Clients'
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    _url += '&skipCount=' + pagerFormat(payload.skipCount)
+    // 因为abp设计的原因, 需要前端组合页面
+    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<Client>>(_url, serviceUrl)
   }

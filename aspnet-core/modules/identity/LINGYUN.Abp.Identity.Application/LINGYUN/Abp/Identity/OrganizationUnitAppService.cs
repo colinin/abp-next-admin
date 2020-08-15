@@ -99,6 +99,13 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
+        public virtual async Task<ListResultDto<string>> GetRoleNamesAsync(Guid id)
+        {
+            var inOrignizationUnitRoleNames = await UserRepository.GetRoleNamesInOrganizationUnitAsync(id);
+            return new ListResultDto<string>(inOrignizationUnitRoleNames);
+        }
+
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);

@@ -10,7 +10,8 @@ export default class UserApiService {
 
   public static getUsers(input: UsersGetPagedDto) {
     let _url = '/api/identity/users'
-    _url += '?skipCount=' + pagerFormat(input.skipCount)
+    // 因为abp设计的原因, 需要前端组合页面
+    _url += '?skipCount=' + pagerFormat(input.skipCount) * input.maxResultCount
     _url += '&maxResultCount=' + input.maxResultCount
     if (input.sorting) {
       _url += '&sorting=' + input.sorting
