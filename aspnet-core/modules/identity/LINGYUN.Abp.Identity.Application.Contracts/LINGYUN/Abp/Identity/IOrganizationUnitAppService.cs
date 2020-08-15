@@ -22,6 +22,8 @@ namespace LINGYUN.Abp.Identity
 
         Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input);
 
+        Task<ListResultDto<string>> GetRoleNamesAsync(Guid id);
+
         Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input);
 
         Task<ListResultDto<IdentityUserDto>> GetUsersAsync(OrganizationUnitGetUserDto input);

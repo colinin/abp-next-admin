@@ -22,7 +22,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import FileManagementAppService, { FileUploadUrl } from '@/api/filemanagement'
+import { FileUploadUrl } from '@/api/filemanagement'
+import { UserModule } from '@/store/modules/user'
 
 export class UploadOptions {
   target!: string
@@ -65,6 +66,7 @@ export default class extends Vue {
     this.options.target = FileUploadUrl
     this.options.successStatuses = [200, 201, 202, 204, 205]
     this.options.permanentErrors = [400, 401, 403, 404, 415, 500, 501]
+    this.options.headers.Authorization = UserModule.token
   }
 
   public close() {
@@ -95,8 +97,7 @@ export default class extends Vue {
   }
 
   private onFileUploadCompleted(file: any) {
-    console.log(file)
-    this.$emit('onFileUploaded')
+    this.$emit('onFileUploaded', file)
   }
 }
 </script>

@@ -78,7 +78,9 @@ export default {
     clients: 'clients',
     apiresources: 'api resources',
     identityresources: 'id resources',
-    organizationUnit: 'organization unit'
+    organizationUnit: 'organization unit',
+    filemanagement: 'file management',
+    filesystem: 'file system'
   },
   navbar: {
     logOut: 'Log Out',
@@ -612,10 +614,36 @@ export default {
     confirm: '确 定',
     correctEmailAddress: '正确的邮件地址',
     correctPhoneNumber: '正确的手机号码',
-    operatingFast: '您的操作过快,请稍后再试!'
+    operatingFast: '您的操作过快,请稍后再试!',
+    request404: '您所请求的资源不存在!'
   },
   messages: {
     noNotifications: '没有通知',
     noMessages: '没有消息'
+  },
+  fileSystem: {
+    setting: '文件系统',
+    name: '名称',
+    creationTime: '创建时间',
+    lastModificationTime: '修改时间',
+    type: '类型',
+    folder: '文件夹',
+    file: '文件',
+    fileType: '{exten}文件',
+    size: '大小',
+    root: '文件系统',
+    download: '下载文件',
+    upload: '上传文件',
+    deleteFolder: '删除目录',
+    deleteFile: '删除文件',
+    addFile: '添加文件',
+    addFolder: '添加目录',
+    uploadError: '上传失败',
+    uploading: '正在上传',
+    waitingUpload: '等待上传',
+    paused: '已暂停',
+    uploadSuccess: '上传成功',
+    folderNameIsRequired: '目录名称不能为空',
+    folderCreateSuccess: '目录 {name} 已创建!'
   }
 }

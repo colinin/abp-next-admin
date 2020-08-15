@@ -43,12 +43,24 @@
         </el-tree>
       </div>
     </el-card>
+
+    <el-dialog
+      :visible.sync="showUserReferenceDialog"
+      title="用户列表"
+      :show-close="false"
+      @closed="onUserReferenceDialogClosed"
+    >
+      <user-reference
+        ref="userReference"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ListResultDto } from '@/api/types'
+import UserReference from '../../components/UserReference.vue'
 import OrganizationUnitService, { OrganizationUnitCreate, OrganizationUnit } from '@/api/organizationunit'
 
 class OrganizationUnitTree {
@@ -67,6 +79,9 @@ class OrganizationUnitTree {
 
 @Component({
   name: 'EditOrganizationUint',
+  components: {
+    UserReference
+  },
   data() {
     return {
       organizationProps: {
@@ -78,6 +93,7 @@ class OrganizationUnitTree {
   }
 })
 export default class extends Vue {
+  private showUserReferenceDialog = false
   private async loadOrganizationUnit(node: any, resolve: any) {
     if (node.level === 0) {
       const rootOrganizationUnit = new OrganizationUnitTree()
@@ -153,7 +169,7 @@ export default class extends Vue {
         organizationUnit.displayName = res.displayName
         data.children.push(organizationUnit)
       })
-    })
+    }).catch(_ => _)
   }
 
   private handleRemoveOrganizationUnit(node: any, data: any) {
@@ -176,6 +192,11 @@ export default class extends Vue {
 
   private handleOrganizationUnitUserAdd(data: any) {
     console.log(data)
+    this.showUserReferenceDialog = true
+  }
+
+  private onUserReferenceDialogClosed() {
+    this.showUserReferenceDialog = false
   }
 
   private handleOrganizationUnitRoleAdd(data: any) {

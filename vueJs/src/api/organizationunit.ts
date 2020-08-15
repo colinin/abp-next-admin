@@ -120,7 +120,9 @@ export default class OrganizationUnitService {
     _url += '?id=' + payload.id
     _url += '&filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    _url += '&skipCount=' + pagerFormat(payload.skipCount)
+    // abp设计原因,需要前端计算分页
+    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    // _url += '&skipCount=' + pagerFormat(payload.skipCount)
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<RoleDto>>(_url, serviceUrl)
   }

@@ -85,6 +85,13 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpGet]
+        [Route("management-roles/{id}")]
+        public virtual async Task<ListResultDto<string>> GetRoleNamesAsync(Guid id)
+        {
+            return await OrganizationUnitAppService.GetRoleNamesAsync(id);
+        }
+
+        [HttpGet]
         [Route("management-roles")]
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input)
         {

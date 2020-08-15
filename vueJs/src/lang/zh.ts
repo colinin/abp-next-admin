@@ -642,6 +642,8 @@ export default {
     uploading: '正在上传',
     waitingUpload: '等待上传',
     paused: '已暂停',
-    uploadSuccess: '上传成功'
+    uploadSuccess: '上传成功',
+    folderNameIsRequired: '目录名称不能为空',
+    folderCreateSuccess: '目录 {name} 已创建!'
   }
 }

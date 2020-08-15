@@ -1,11 +1,22 @@
+import { pagerFormat } from '@/utils/index'
 import ApiService from './serviceBase'
-import { ListResultDto } from './types'
+import { ListResultDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
 const IdentityServiceUrl = process.env.VUE_APP_BASE_API
 
 export default class RoleService {
-  public static getRoles() {
+  public static getAllRoles() {
     return ApiService.Get<ListResultDto<RoleDto>>('/api/identity/roles', IdentityServiceUrl)
+  }
+
+  public static getRoles(payload: RoleGetPagedDto) {
+    let _url = '/api/identity/roles'
+    // 因为abp设计的原因, 需要前端组合页面
+    _url += '?skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    _url += '&maxResultCount=' + payload.maxResultCount
+    _url += '&sorting=' + payload.sorting
+    _url += '&filter=' + payload.filter
+    return ApiService.Get<PagedResultDto<RoleDto>>(_url, IdentityServiceUrl)
   }
 
   public static getRoleById(id: string) {
@@ -41,6 +52,10 @@ export class RoleDto extends RoleBaseDto {
   id!: string
   isStatic!: boolean
   concurrencyStamp?: string
+}
+
+export class RoleGetPagedDto extends PagedAndSortedResultRequestDto {
+  filter?: string
 }
 
 export class CreateRoleDto extends RoleBaseDto {

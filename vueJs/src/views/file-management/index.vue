@@ -37,6 +37,7 @@
       :row-class-name="tableRowClassName"
       @row-click="onRowClick"
       @row-dblclick="onRowDoubleClick"
+      @contextmenu.native="onContextMenu"
     >
       <el-table-column
         type="selection"
@@ -184,6 +185,7 @@ import FileSystemService, { FileSystem, FileSystemGetByPaged, FileSystemType } f
 const kbUnit = 1 * 1024
 const mbUnit = kbUnit * 1024
 const gbUnit = mbUnit * 1024
+const $contextmenu = Vue.prototype.$contextmenu
 
 @Component({
   name: 'FileManagement',
@@ -330,7 +332,11 @@ export default class extends Vue {
         break
       case 'upload':
         if (command.row.type === 0) {
-          this.handleUploadFile(command.row.name)
+          let path = command.row.name
+          if (command.row.parent) {
+            path = command.row.parent + '/' + path
+          }
+          this.handleUploadFile(path)
         } else {
           this.handleUploadFile(command.row.parent)
         }
@@ -381,6 +387,13 @@ export default class extends Vue {
   }
 
   private onRowClick(row: any) {
+    if (row.type === FileSystemType.Folder) {
+      let path = row.name
+      if (row.parent) {
+        path = row.parent + '/' + row.name
+      }
+      this.lastFilePath = path
+    }
     const table = this.$refs.fileSystemTable as any
     table.toggleRowSelection(row)
   }
@@ -410,6 +423,57 @@ export default class extends Vue {
     this.showFileUploadDialog = false
     const frmUpload = this.$refs.fileUploadForm as any
     frmUpload.close()
+  }
+
+  private onContextMenu(event: any) {
+    event.preventDefault()
+    $contextmenu({
+      items: [
+        {
+          label: this.$t('fileSystem.addFolder'),
+          disabled: !checkPermission(['AbpFileManagement.FileSystem.Create']),
+          onClick: () => {
+            let parent = ''
+            // 在根目录下
+            if (this.fileSystemRoot.length > 1) {
+              parent = this.fileSystemRoot.slice(1).join('/')
+            }
+            this.$prompt(this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString(),
+              this.$t('fileSystem.addFolder').toString(), {
+                showInput: true,
+                inputValidator: (val) => {
+                  return !(!val || val.length === 0)
+                },
+                inputErrorMessage: this.$t('fileSystem.folderNameIsRequired').toString(),
+                inputPlaceholder: this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString()
+              }).then((val: any) => {
+              FileSystemService.createFolder(val.value, parent).then(() => {
+                this.$message.success(this.$t('fileSystem.folderCreateSuccess', { name: val.value }).toString())
+                this.handleGetFileSystemList()
+              })
+            }).catch(_ => _)
+          },
+          divided: true
+        },
+        {
+          label: this.$t('fileSystem.upload'),
+          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Create']),
+          onClick: () => {
+            let path = ''
+            if (this.fileSystemRoot.length > 1) {
+              path = this.fileSystemRoot.slice(1).join('/')
+            }
+            this.lastFilePath = path
+            this.showFileUploadDialog = true
+          }
+        }
+      ],
+      event,
+      customClass: 'context-menu',
+      zIndex: 3,
+      minWidth: 150
+    })
+    return false
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

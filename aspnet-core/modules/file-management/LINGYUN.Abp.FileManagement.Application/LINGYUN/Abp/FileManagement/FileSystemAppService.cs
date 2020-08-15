@@ -379,6 +379,8 @@ namespace LINGYUN.Abp.FileManagement
                 blobPath = Path.Combine(blobPath, containerName);
             }
             path = path.Replace(blobPath, "");
+            path = path.Replace('/', Path.DirectorySeparatorChar);
+            path = path.Replace('\\', Path.DirectorySeparatorChar);
             return path;
         }
         /// <summary>
@@ -393,6 +395,8 @@ namespace LINGYUN.Abp.FileManagement
 
             if (!path.IsNullOrWhiteSpace() && fileSystemConfiguration.AppendContainerNameToBasePath)
             {
+                path = path.Replace('/', Path.DirectorySeparatorChar);
+                path = path.Replace('\\', Path.DirectorySeparatorChar);
                 // 去除第一个路径标识符
                 path = path.RemovePreFix("/", "\\");
                 blobPath = Path.Combine(blobPath, path);
