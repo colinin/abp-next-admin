@@ -70,7 +70,7 @@ export class Localization {
   currentCulture!: CurrentCulture
   defaultResourceName?: string
   languages!: Language[]
-  values!: {[key:string]:{[key:string]:string}}
+  values!: {[key:string]: {[key:string]: string}}
 }
 
 export class MultiTenancy {
@@ -78,7 +78,7 @@ export class MultiTenancy {
 }
 
 export class Setting {
-  values?: {[key:string]:string}
+  values?: {[key:string]: string}
 }
 
 export interface IAbpConfiguration {
