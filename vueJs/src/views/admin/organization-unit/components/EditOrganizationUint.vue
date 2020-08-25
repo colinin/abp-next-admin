@@ -34,33 +34,18 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item :command="{key: 'append', node: node, data: data}">新增机构</el-dropdown-item>
                 <el-dropdown-item :command="{key: 'remove', node: node, data: data}">删除机构</el-dropdown-item>
-
-                <el-dropdown-item :command="{key: 'add-user', node: node, data: data}">添加用户</el-dropdown-item>
-                <el-dropdown-item :command="{key: 'add-role', node: node, data: data}">添加角色</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </span>
         </el-tree>
       </div>
     </el-card>
-
-    <el-dialog
-      :visible.sync="showUserReferenceDialog"
-      title="用户列表"
-      :show-close="false"
-      @closed="onUserReferenceDialogClosed"
-    >
-      <user-reference
-        ref="userReference"
-      />
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ListResultDto } from '@/api/types'
-import UserReference from '../../components/UserReference.vue'
 import OrganizationUnitService, { OrganizationUnitCreate, OrganizationUnit } from '@/api/organizationunit'
 
 class OrganizationUnitTree {
@@ -79,9 +64,6 @@ class OrganizationUnitTree {
 
 @Component({
   name: 'EditOrganizationUint',
-  components: {
-    UserReference
-  },
   data() {
     return {
       organizationProps: {
@@ -138,12 +120,6 @@ export default class extends Vue {
       case 'remove' :
         this.handleRemoveOrganizationUnit(command.node, command.data)
         break
-      case 'add-user' :
-        this.handleOrganizationUnitUserAdd(command.data)
-        break
-      case 'add-role' :
-        this.handleOrganizationUnitRoleAdd(command.data)
-        break
       default: break
     }
   }
@@ -188,19 +164,6 @@ export default class extends Vue {
           }
         }
       })
-  }
-
-  private handleOrganizationUnitUserAdd(data: any) {
-    console.log(data)
-    this.showUserReferenceDialog = true
-  }
-
-  private onUserReferenceDialogClosed() {
-    this.showUserReferenceDialog = false
-  }
-
-  private handleOrganizationUnitRoleAdd(data: any) {
-    console.log(data)
   }
 
   private handleAllowDrag(draggingNode: any) {

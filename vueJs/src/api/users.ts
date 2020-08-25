@@ -1,7 +1,9 @@
 import qs from 'querystring'
 import { pagerFormat } from '@/utils/index'
 import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto } from '@/api/types'
+import { OrganizationUnit } from './organizationunit'
 import ApiService from './serviceBase'
+import { ListResultDto } from './types'
 
 const IdentityServiceUrl = process.env.VUE_APP_BASE_API
 const IdentityServerUrl = process.env.VUE_APP_BASE_IDENTITY_SERVER
@@ -56,6 +58,16 @@ export default class UserApiService {
     _url += '/' + userId
     _url += '/roles'
     return ApiService.Get<UserRoleDto>(_url, IdentityServiceUrl)
+  }
+
+  public static getUserOrganizationUnits(userId: string) {
+    const _url = '/api/identity/users/organization-units/' + userId
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl);
+  }
+
+  public static changeUserOrganizationUnits(roleId: string, payload: ChangeUserOrganizationUnitDto) {
+    const _url = '/api/identity/users/organization-units/' + roleId
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl);
   }
 
   public static setUserRoles(userId: string, roles: string[]) {
@@ -439,4 +451,8 @@ export interface IUserRole {
   isPublic: boolean
   /** 并发令牌 */
   concurrencyStamp: string | undefined
+}
+
+export class ChangeUserOrganizationUnitDto {
+  organizationUnitIds = new Array<string>()
 }

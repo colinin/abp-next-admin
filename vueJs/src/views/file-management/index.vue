@@ -108,7 +108,6 @@
         align="center"
         width="250"
         min-width="250"
-        fixed="right"
       >
         <template slot-scope="{row}">
           <el-button

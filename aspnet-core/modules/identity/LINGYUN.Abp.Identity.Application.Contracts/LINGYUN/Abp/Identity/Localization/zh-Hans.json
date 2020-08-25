@@ -3,6 +3,7 @@
   "texts": {
     "Permission:OrganizationUnitManagement": "组织机构管理",
     "Permission:ChangeRoles": "更改角色",
-    "Permission:ChangeUsers": "更改用户"
+    "Permission:ChangeUsers": "更改用户",
+    "Permission:ManageOrganizationUnits": "管理组织机构"
   }
 }

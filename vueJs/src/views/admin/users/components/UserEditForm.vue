@@ -86,6 +86,14 @@
         />
       </el-tab-pane>
       <el-tab-pane
+        :label="$t('userProfile.organizationUnits')"
+      >
+        <organization-unit-tree
+          :checked-organization-units="userOrganizationUnits"
+          @onOrganizationUnitsChanged="onOrganizationUnitsChanged"
+        />
+      </el-tab-pane>
+      <el-tab-pane
         v-if="allowedChangePermissions() && hasLoadPermission"
         :label="$t('userProfile.permission')"
       >
@@ -122,55 +130,49 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import UserApiService, {
   UserDataDto,
-  UserUpdateDto
+  UserUpdateDto,
+  ChangeUserOrganizationUnitDto
 } from '@/api/users'
 import RoleService from '@/api/roles'
 import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/permission'
 import PermissionTree from '@/components/PermissionTree/index.vue'
+import OrganizationUnitTree from '@/components/OrganizationUnitTree/index.vue'
 import { IRoleData, IPermission } from '@/api/types'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
   name: 'UserProfile',
   components: {
-    PermissionTree
+    PermissionTree,
+    OrganizationUnitTree
   },
   methods: {
     checkPermission
   }
 })
 export default class extends Vue {
-  @Prop({ default: '' }) private userId!: string
-  private roleList: {key: string, label: string, disabled: boolean}[]
+  @Prop({ default: '' })
+  private userId!: string
+
+  private roleList = new Array<{key: string, label: string, disabled: boolean}>()
   /** 用户组 */
-  private userRoles: string[]
-  private hasEditUser: boolean
-  private userRolesChanged: boolean
-  private userProfile: any
+  private userRoles = new Array<string>()
+  private hasEditUser = false
+  private userRolesChanged = false
+  private userProfile = new UserDataDto()
   /** 是否加载用户权限 */
-  private hasLoadPermission: boolean
+  private hasLoadPermission = false
   /** 用户权限数据 */
-  private userPermission: PermissionDto
+  private userPermission = new PermissionDto()
   /** 用户权限已变更 */
-  private userPermissionChanged: boolean
+  private userPermissionChanged = false
   /** 变更用户权限数据 */
-  private editUserPermissions: IPermission[]
+  private editUserPermissions = new Array<IPermission>()
+  /** 用户组织机构 */
+  private userOrganizationUnits = new Array<string>()
+  private userOrganizationUnitsChanged = false
 
-  private activedTabPane: string
-
-  constructor() {
-    super()
-    this.activedTabPane = 'basic'
-    this.hasEditUser = false
-    this.userRolesChanged = false
-    this.hasLoadPermission = false
-    this.userPermissionChanged = false
-    this.userRoles = new Array<string>()
-    this.userProfile = new UserDataDto()
-    this.userPermission = new PermissionDto()
-    this.editUserPermissions = new Array<IPermission>()
-    this.roleList = new Array<{key: string, label: string, disabled: boolean}>()
-  }
+  private activedTabPane = 'basic'
 
   @Watch('userId', { immediate: true })
   onUserIdChanged(userId: string) {
@@ -183,6 +185,17 @@ export default class extends Vue {
     if (val.length !== oldVal.length) {
       this.userRolesChanged = true
     }
+  }
+
+  onUserOrganizationUnitsChanged(val: string[], oldVal: string[]) {
+    if (val.length !== oldVal.length) {
+      this.userRolesChanged = true
+    }
+  }
+
+  onOrganizationUnitsChanged(checkedKeys: string[]) {
+    this.userOrganizationUnitsChanged = true
+    this.userOrganizationUnits = checkedKeys
   }
 
   private validatePhoneNumberValue = (rule: any, value: string, callback: any) => {
@@ -234,6 +247,7 @@ export default class extends Vue {
     UserApiService.getUserById(this.userId).then(user => {
       this.userProfile = user
       this.handleGetUserRoles(this.userId)
+      this.handleGetUserOrganizationUnits(this.userId)
       if (this.allowedChangePermissions()) {
         this.handleGetUserPermissions(this.userId)
       }
@@ -261,6 +275,12 @@ export default class extends Vue {
     this.$watch('userRoles', this.onUserRolesChanged)
   }
 
+  private handleGetUserOrganizationUnits(userId: string) {
+    UserApiService.getUserOrganizationUnits(userId).then(res => {
+      this.userOrganizationUnits = res.items.map(ou => ou.id)
+    })
+  }
+
   private async handleGetUserPermissions(id: string) {
     PermissionService.getPermissionsByKey('U', id).then(permission => {
       this.userPermission = permission
@@ -284,6 +304,11 @@ export default class extends Vue {
         if (this.userRolesChanged) {
           await UserApiService.setUserRoles(this.userProfile.id, this.userRoles)
         }
+        if (this.userOrganizationUnitsChanged) {
+          const changeUserOrganizationUnitDto = new ChangeUserOrganizationUnitDto()
+          changeUserOrganizationUnitDto.organizationUnitIds = this.userOrganizationUnits
+          await UserApiService.changeUserOrganizationUnits(this.userProfile.id, changeUserOrganizationUnitDto)
+        }
         if (this.userPermissionChanged) {
           const setUserPermissions = new UpdatePermissionsDto()
           setUserPermissions.permissions = this.editUserPermissions
@@ -306,6 +331,7 @@ export default class extends Vue {
   private resetForm() {
     this.activedTabPane = 'basic'
     this.userRoles = new Array<string>()
+    this.userOrganizationUnits = new Array<string>()
     const frmEditUser = this.$refs.formEditUser as any
     frmEditUser.resetFields()
     if (this.hasLoadPermission) {

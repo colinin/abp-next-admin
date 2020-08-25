@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -21,20 +20,6 @@ namespace LINGYUN.Abp.Identity
             IOrganizationUnitAppService organizationUnitAppService)
         {
             OrganizationUnitAppService = organizationUnitAppService;
-        }
-
-        [HttpPost]
-        [Route("management-roles")]
-        public virtual async Task AddRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input)
-        {
-            await OrganizationUnitAppService.AddRoleAsync(input);
-        }
-
-        [HttpPost]
-        [Route("management-users")]
-        public virtual async Task AddUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input)
-        {
-            await OrganizationUnitAppService.AddUserAsync(input);
         }
 
         [HttpPost]
@@ -110,20 +95,6 @@ namespace LINGYUN.Abp.Identity
         public virtual async Task MoveAsync(Guid id, OrganizationUnitMoveDto input)
         {
             await OrganizationUnitAppService.MoveAsync(id, input);
-        }
-
-        [HttpDelete]
-        [Route("management-roles")]
-        public virtual async Task RemoveRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input)
-        {
-            await OrganizationUnitAppService.RemoveRoleAsync(input);
-        }
-
-        [HttpDelete]
-        [Route("management-users")]
-        public virtual async Task RemoveUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input)
-        {
-            await OrganizationUnitAppService.RemoveUserAsync(input);
         }
 
         [HttpPut]

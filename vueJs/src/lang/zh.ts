@@ -250,6 +250,7 @@ export default {
     roleList: '角色列表',
     hasRoles: '已有角色',
     permission: '分配权限',
+    organizationUnits: '组织机构',
     password: '用户密码',
     confirmPassword: '确认用户密码',
     pleaseInputName: '请输入用户名称',
@@ -261,6 +262,7 @@ export default {
     pleaseConfirmPassword: '请再次输入用户密码'
   },
   roles: {
+    basic: '基本信息',
     refreshList: '刷新列表',
     id: '角色标识',
     name: '角色名称',
@@ -284,7 +286,9 @@ export default {
     roleHasBeenSetDefault: '{name} 已设置为默认角色!',
     createRoleSuccess: '角色 {name} 添加成功!',
     pleaseInputRoleName: '请输入角色名称',
-    roleNameIsRequired: '角色名称不能为空!'
+    roleNameIsRequired: '角色名称不能为空!',
+    organizationUnits: '组织机构',
+    updateRoleSuccess: '角色 {name} 修改成功!'
   },
   operaActions: '操作方法',
   queryFilter: '查询过滤',

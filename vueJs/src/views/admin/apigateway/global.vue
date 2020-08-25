@@ -115,7 +115,6 @@
         :label="$t('operaActions')"
         align="center"
         width="250px"
-        fixed="right"
       >
         <template slot-scope="{row}">
           <el-button

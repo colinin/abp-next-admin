@@ -24,7 +24,7 @@ export default class OrganizationUnitService {
    */
   public static getRootOrganizationUnits() {
     const _url = '/api/identity/organization-units/root-node'
-    return ApiService.Get<PagedResultDto<OrganizationUnit>>(_url, serviceUrl)
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, serviceUrl)
   }
 
   /**
