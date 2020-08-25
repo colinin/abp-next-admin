@@ -291,6 +291,18 @@ start-vue-admin.bat
 yarn run build:prod
 ```
 
+### About Docker container
+
+**Step 1**: build the background service, recommend running the batch file directly, parameters of the publish, the content, can see the batch **pay attention to the configuration file, after the release of service requires appsettings. Production. The json file**
+
+**Step 2**: Build the front-end, YARN/NPM build: PROD
+
+**Step 3**: Change nginx proxy server address, ./vueJs/docker/nginx/default.conf
+
+**Step 4**: Run command **sudo docker-compose down && sudo docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d**
+
+**Using A CI tool such as Jenkins is recommended to simplify this into a single step**
+
 #### Lints and fixes files
 
 ```bash
