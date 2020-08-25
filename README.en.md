@@ -293,9 +293,9 @@ yarn run build:prod
 
 ### About Docker container
 
-**Step 1**: build the background service, recommend running the batch file directly, parameters of the publish, the content, can see the batch **pay attention to the configuration file, after the release of service requires appsettings. Production. The json file**
+**Step 1**: build the background service, recommend running the batch file directly, parameters of the publish, the content, can see the batch **pay attention to the configuration file, after the release of service requires appsettings.Production.json**
 
-**Step 2**: Build the front-end, YARN/NPM build: PROD
+**Step 2**: Build the front-end, yarn/npm build:PROD
 
 **Step 3**: Change nginx proxy server address, ./vueJs/docker/nginx/default.conf
 
