@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -27,13 +26,5 @@ namespace LINGYUN.Abp.Identity
         Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input);
 
         Task<ListResultDto<IdentityUserDto>> GetUsersAsync(OrganizationUnitGetUserDto input);
-
-        Task AddRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input);
-
-        Task RemoveRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input);
-
-        Task AddUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input);
-
-        Task RemoveUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input);
     }
 }

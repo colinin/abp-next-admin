@@ -146,53 +146,5 @@ namespace LINGYUN.Abp.Identity
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
         }
-
-        [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task AddRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input)
-        {
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            if (!origanizationUnit.IsInRole(input.RoleId))
-            {
-                origanizationUnit.AddRole(input.RoleId);
-                await OrganizationUnitManager.UpdateAsync(origanizationUnit);
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
-        }
-
-        [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task RemoveRoleAsync(OrganizationUnitDtoAddOrRemoveRoleDto input)
-        {
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            if (origanizationUnit.IsInRole(input.RoleId))
-            {
-                origanizationUnit.RemoveRole(input.RoleId);
-                await OrganizationUnitManager.UpdateAsync(origanizationUnit);
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
-        }
-
-        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task AddUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input)
-        {
-            var identityUser = await UserRepository.GetAsync(input.UserId);
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            if (!identityUser.IsInOrganizationUnit(input.Id))
-            {
-                await UserManager.AddToOrganizationUnitAsync(identityUser, origanizationUnit);
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
-        }
-
-        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task RemoveUserAsync(OrganizationUnitDtoAddOrRemoveUserDto input)
-        {
-            var identityUser = await UserRepository.GetAsync(input.UserId);
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            if (identityUser.IsInOrganizationUnit(input.Id))
-            {
-                await UserManager.RemoveFromOrganizationUnitAsync(identityUser, origanizationUnit);
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
-        }
     }
 }

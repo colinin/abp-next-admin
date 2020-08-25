@@ -1,5 +1,6 @@
 import { pagerFormat } from '@/utils/index'
 import ApiService from './serviceBase'
+import { OrganizationUnit } from './organizationunit'
 import { ListResultDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
 const IdentityServiceUrl = process.env.VUE_APP_BASE_API
@@ -23,6 +24,16 @@ export default class RoleService {
     let _url = '/api/identity/roles/'
     _url += id
     return ApiService.Get<RoleDto>(_url, IdentityServiceUrl)
+  }
+
+  public static getRoleOrganizationUnits(roleId: string) {
+    const _url = '/api/identity/roles/organization-units/' + roleId
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl);
+  }
+
+  public static changeRoleOrganizationUnits(roleId: string, payload: ChangeRoleOrganizationUnitDto) {
+    const _url = '/api/identity/roles/organization-units/' + roleId
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl);
   }
 
   public static createRole(input: CreateRoleDto) {
@@ -74,4 +85,8 @@ export class UpdateRoleDto extends RoleBaseDto {
     this.isDefault = false
     this.isPublic = true
   }
+}
+
+export class ChangeRoleOrganizationUnitDto {
+  organizationUnitIds = new Array<string>()
 }

@@ -3,6 +3,7 @@
   "texts": {
     "Permission:OrganizationUnitManagement": "Organization unit management",
     "Permission:ChangeRoles": "Change roles",
-    "Permission:ChangeUsers": "Change users"
+    "Permission:ChangeUsers": "Change users",
+    "Permission:ManageOrganizationUnits": "Management organization units"
   }
 }

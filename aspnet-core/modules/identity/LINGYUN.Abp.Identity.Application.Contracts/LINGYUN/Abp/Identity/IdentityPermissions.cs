@@ -4,6 +4,16 @@ namespace LINGYUN.Abp.Identity
 {
     public class IdentityPermissions
     {
+        public static class Roles
+        {
+            public const string ManageOrganizationUnits = Volo.Abp.Identity.IdentityPermissions.Roles.Default + ".ManageOrganizationUnits";
+        }
+
+        public static class Users
+        {
+            public const string ManageOrganizationUnits = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ManageOrganizationUnits";
+        }
+
         public static class OrganizationUnits
         {
             public const string Default = Volo.Abp.Identity.IdentityPermissions.GroupName + ".OrganizationUnits";

@@ -91,17 +91,16 @@
         :label="$t('roles.operaActions')"
         align="center"
         width="250px"
-        max-width="250px"
-        fixed="right"
+        min-width="250px"
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
+            :disabled="!checkPermission(['AbpIdentity.Roles.Update'])"
             size="mini"
             type="primary"
-            @click="handleGetRolePermissions(row)"
+            @click="handleEditRole(row)"
           >
-            {{ $t('roles.permission') }}
+            {{ $t('roles.updateRole') }}
           </el-button>
           <el-dropdown
             class="options"
@@ -143,28 +142,15 @@
     />
 
     <el-dialog
-      :visible="hasLoadPermission"
+      :visible="showEditDialog"
       custom-class="profile"
-      :title="$t('roles.permission')"
+      title="编辑角色"
       :show-close="false"
     >
-      <PermissionTree
-        v-if="hasLoadPermission"
-        :expanded="false"
-        :readonly="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
-        :permission="rolePermission"
-        @onPermissionChanged="onPermissionChanged"
+      <role-edit-form
+        :role-id="editRoleId"
+        @onClosed="onEditRoleFormClosed"
       />
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button @click="handleRolePermissionClosed">{{ $t('table.cancel') }}</el-button>
-        <el-button
-          type="primary"
-          @click="handleRoleAuthPermission"
-        >{{ $t('table.confirm') }}</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -173,46 +159,29 @@
 import { Component, Vue } from 'vue-property-decorator'
 import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
 import { checkPermission } from '@/utils/permission'
-import { IPermission } from '@/api/types'
 import Pagination from '@/components/Pagination/index.vue'
-import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/permission'
 import PermissionTree from '@/components/PermissionTree/index.vue'
+import RoleEditForm from './components/RoleEditForm.vue'
 
 @Component({
   name: 'RoleList',
   components: {
     PermissionTree,
-    Pagination
+    Pagination,
+    RoleEditForm
   },
   methods: {
     checkPermission
   }
 })
 export default class extends Vue {
-  private roleCount: number
-  private roleQueryFilter: RoleGetPagedDto
-  private roleList: RoleDto[]
-  private roleListLoading: boolean
-  /** 是否加载角色权限 */
-  private hasLoadPermission: boolean
-  /** 角色权限数据 */
-  private rolePermission: PermissionDto
-  /** 角色权限已变更 */
-  private rolePermissionChanged: boolean
-  /** 变更角色权限数据 */
-  private editRolePermissions: IPermission[]
+  private roleCount = 0
+  private roleQueryFilter = new RoleGetPagedDto()
+  private roleList = new Array<RoleDto>()
+  private roleListLoading = false
 
-  constructor() {
-    super()
-    this.roleCount = 0
-    this.roleListLoading = false
-    this.hasLoadPermission = false
-    this.rolePermissionChanged = false
-    this.rolePermission = new PermissionDto()
-    this.roleQueryFilter = new RoleGetPagedDto()
-    this.roleList = new Array<RoleDto>()
-    this.editRolePermissions = new Array<IPermission>()
-  }
+  private showEditDialog = false
+  private editRoleId = ''
 
   mounted() {
     this.handleGetRoles()
@@ -268,23 +237,9 @@ export default class extends Vue {
     })
   }
 
-  /** 获取角色权限列表 */
-  private handleGetRolePermissions(role: RoleDto) {
-    PermissionService.getPermissionsByKey('R', role.name).then(permission => {
-      this.rolePermission = permission
-      this.hasLoadPermission = true
-    })
-  }
-
-  /** 角色授权 */
-  private async handleRoleAuthPermission() {
-    if (this.rolePermissionChanged) {
-      const setRolePermissions = new UpdatePermissionsDto()
-      setRolePermissions.permissions = this.editRolePermissions
-      await PermissionService.setPermissionsByKey('R', this.rolePermission.entityDisplayName, setRolePermissions)
-    }
-    this.rolePermission = new PermissionDto()
-    this.hasLoadPermission = false
+  private handleEditRole(role: RoleDto) {
+    this.editRoleId = role.id
+    this.showEditDialog = true
   }
 
   /** 设置默认角色 */
@@ -315,14 +270,9 @@ export default class extends Vue {
       })
   }
 
-  /** 角色权限树变更事件 */
-  private onPermissionChanged(permissions: IPermission[]) {
-    this.rolePermissionChanged = true
-    this.editRolePermissions = permissions
-  }
-
-  private handleRolePermissionClosed() {
-    this.hasLoadPermission = false
+  private onEditRoleFormClosed() {
+    this.editRoleId = ''
+    this.showEditDialog = false
   }
 }
 </script>

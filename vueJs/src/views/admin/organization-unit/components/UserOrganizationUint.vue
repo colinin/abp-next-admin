@@ -71,34 +71,23 @@
         <span>{{ row.creationTime | dateTimeFilter }}</span>
       </template>
     </el-table-column>
-    <el-table-column
-      :label="$t('global.operaActions')"
-      align="center"
-      width="200px"
-      min-width="200px"
-      fixed="right"
-    >
-      <template slot-scope="{row}">
-        <el-button
-          :disabled="!checkPermission(['AbpIdentity.OrganizationUnits.ManageUsers'])"
-          size="mini"
-          type="primary"
-          @click="handleRemoveUser(row)"
-        >
-          {{ $t('users.deleteUser') }}
-        </el-button>
-      </template>
-    </el-table-column>
   </el-table>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 import { UserDataDto } from '@/api/users'
+import { dateFormat } from '@/utils'
 import OrganizationUnitService from '@/api/organizationunit'
 
 @Component({
-  name: 'UserOrganizationUint'
+  name: 'UserOrganizationUint',
+  filters: {
+    dateTimeFilter(datetime: string) {
+      const date = new Date(datetime)
+      return dateFormat(date, 'YYYY-mm-dd HH:MM')
+    }
+  }
 })
 export default class extends Vue {
   @Prop({ default: '' })
@@ -117,14 +106,6 @@ export default class extends Vue {
     if (this.organizationUnitId) {
       OrganizationUnitService.organizationUnitGetUsers(this.organizationUnitId).then(res => {
         this.organizationUnitUsers = res.items
-      })
-    }
-  }
-
-  private handleRemoveUser(row: any) {
-    if (this.organizationUnitId) {
-      OrganizationUnitService.organizationUnitRemoveUser(this.organizationUnitId, row.id).then(() => {
-        this.$message.success('用户 ' + row.name + ' 已从机构移除!')
       })
     }
   }

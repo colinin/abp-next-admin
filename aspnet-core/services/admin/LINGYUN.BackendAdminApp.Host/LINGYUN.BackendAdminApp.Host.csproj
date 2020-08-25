@@ -64,6 +64,7 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
     <ProjectReference Include="..\..\..\modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
