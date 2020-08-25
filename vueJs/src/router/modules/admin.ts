@@ -13,7 +13,7 @@ const adminRouter: RouteConfig = {
   children: [
     {
       path: 'settings',
-      component: () => import('@/views/admin/settings/index.vue'),
+      component: () => import(/* webpackChunkName: "settings" */ '@/views/admin/settings/index.vue'),
       name: 'settings',
       meta: {
         title: 'settings',
@@ -23,7 +23,7 @@ const adminRouter: RouteConfig = {
     },
     {
       path: 'users',
-      component: () => import('@/views/admin/users/index.vue'),
+      component: () => import(/* webpackChunkName: "users" */ '@/views/admin/users/index.vue'),
       name: 'users',
       meta: {
         title: 'users',
@@ -33,7 +33,7 @@ const adminRouter: RouteConfig = {
     },
     {
       path: 'roles',
-      component: () => import('@/views/admin/roles/index.vue'),
+      component: () => import(/* webpackChunkName: "roles" */ '@/views/admin/roles/index.vue'),
       name: 'roles',
       meta: {
         title: 'roles',
@@ -43,7 +43,7 @@ const adminRouter: RouteConfig = {
     },
     {
       path: 'tenants',
-      component: () => import('@/views/admin/tenants/index.vue'),
+      component: () => import(/* webpackChunkName: "tenants" */ '@/views/admin/tenants/index.vue'),
       name: 'tenants',
       meta: {
         title: 'tenants',
@@ -53,7 +53,7 @@ const adminRouter: RouteConfig = {
     },
     {
       path: 'organization-unit',
-      component: () => import('@/views/admin/organization-unit/index.vue'),
+      component: () => import(/* webpackChunkName: "organization-unit" */ '@/views/admin/organization-unit/index.vue'),
       name: 'organization-unit',
       meta: {
         title: 'organizationUnit',

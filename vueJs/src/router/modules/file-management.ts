@@ -13,7 +13,7 @@ const fileManagementRouter: RouteConfig = {
   children: [
     {
       path: 'file-system',
-      component: () => import('@/views/file-management/index.vue'),
+      component: () => import(/* webpackChunkName: "file-system" */  '@/views/file-management/index.vue'),
       name: 'filesystem',
       meta: {
         title: 'filesystem',

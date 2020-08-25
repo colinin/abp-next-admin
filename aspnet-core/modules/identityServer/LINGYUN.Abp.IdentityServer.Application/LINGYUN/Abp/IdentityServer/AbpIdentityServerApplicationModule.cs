@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.AutoMapper;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.IdentityServer

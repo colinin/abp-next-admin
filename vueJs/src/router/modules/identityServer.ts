@@ -13,7 +13,7 @@ const identityServerRouter: RouteConfig = {
   children: [
     {
       path: 'clients',
-      component: () => import('@/views/admin/identityServer/client/index.vue'),
+      component: () => import(/* webpackChunkName: "clients" */ '@/views/admin/identityServer/client/index.vue'),
       name: 'clients',
       meta: {
         title: 'clients',
@@ -22,8 +22,8 @@ const identityServerRouter: RouteConfig = {
       }
     },
     {
-      path: 'apiresources',
-      component: () => import('@/views/admin/identityServer/api-resources/index.vue'),
+      path: 'api-resources',
+      component: () => import(/* webpackChunkName: "api-resources" */ '@/views/admin/identityServer/api-resources/index.vue'),
       name: 'apiresources',
       meta: {
         title: 'apiresources',
@@ -32,8 +32,8 @@ const identityServerRouter: RouteConfig = {
       }
     },
     {
-      path: 'identityresources',
-      component: () => import('@/views/admin/identityServer/identity-resources/index.vue'),
+      path: 'identity-resources',
+      component: () => import(/* webpackChunkName: "identity-resources" */ '@/views/admin/identityServer/identity-resources/index.vue'),
       name: 'identityresources',
       meta: {
         title: 'identityresources',

@@ -13,7 +13,7 @@ const apigatewayRouter: RouteConfig = {
   children: [
     {
       path: 'group',
-      component: () => import('@/views/admin/apigateway/group.vue'),
+      component: () => import(/* webpackChunkName: "group" */ '@/views/admin/apigateway/group.vue'),
       name: 'group',
       meta: {
         title: 'group',
@@ -23,7 +23,7 @@ const apigatewayRouter: RouteConfig = {
     },
     {
       path: 'global',
-      component: () => import('@/views/admin/apigateway/global.vue'),
+      component: () => import(/* webpackChunkName: "global" */ '@/views/admin/apigateway/global.vue'),
       name: 'global',
       meta: {
         title: 'global',
@@ -33,7 +33,7 @@ const apigatewayRouter: RouteConfig = {
     },
     {
       path: 'route',
-      component: () => import('@/views/admin/apigateway/route.vue'),
+      component: () => import(/* webpackChunkName: "route" */ '@/views/admin/apigateway/route.vue'),
       name: 'route',
       meta: {
         title: 'route',
@@ -42,8 +42,8 @@ const apigatewayRouter: RouteConfig = {
       }
     },
     {
-      path: 'aggregateRoute',
-      component: () => import('@/views/admin/apigateway/aggregateRoute.vue'),
+      path: 'aggregate-route',
+      component: () => import(/* webpackChunkName: "aggregate-route" */ '@/views/admin/apigateway/aggregateRoute.vue'),
       name: 'aggregateRoute',
       meta: {
         title: 'aggregateRoute',
