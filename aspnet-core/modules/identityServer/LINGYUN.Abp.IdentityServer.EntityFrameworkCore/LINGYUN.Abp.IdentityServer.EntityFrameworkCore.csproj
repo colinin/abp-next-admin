@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Domain\LINGYUN.Abp.IdentityServer.Domain.csproj" />
   </ItemGroup>
 

@@ -1,0 +1,65 @@
+version: '3.4'
+
+services:
+  admin-service:
+    build:
+      context: ./aspnet-core/services/Publish/admin
+    volumes: 
+      - /var/opt/abp/LogCenter/Admin:/app/Logs
+    restart: always
+
+  platform-service:
+    build:
+      context: ./aspnet-core/services/Publish/platform
+    volumes: 
+      - /var/opt/abp/LogCenter/Platform:/app/Logs
+      - /var/opt/abp/Data/Platform:/app/file-blob-storing
+    restart: always
+
+  messages-service:
+    build:
+      context: ./aspnet-core/services/Publish/messages
+    volumes: 
+      - /var/opt/abp/LogCenter/Messages:/app/Logs
+    restart: always
+    
+  identity-server:
+    build:
+      context: ./aspnet-core/services/Publish/identityserver
+    volumes: 
+      - /var/opt/abp/LogCenter/IdentityServer:/app/Logs
+    depends_on: 
+      - admin-service
+    restart: always
+  
+  apigateway-admin-service:
+    build:
+      context: ./aspnet-core/services/Publish/apigateway-admin
+    volumes: 
+      - /var/opt/abp/LogCenter/ApiGateway-Admin:/app/Logs
+    depends_on: 
+      - admin-service
+    restart: always
+
+  apigateway-host-service:
+    build:
+      context: ./aspnet-core/services/Publish/apigateway-host
+    volumes: 
+      - /var/opt/abp/LogCenter/ApiGateway-Host:/app/Logs
+    depends_on: 
+      - apigateway-admin-service
+    restart: always
+
+  abp-vue-admin-client:
+    build:
+      context: ./vueJs
+    volumes: 
+      - /var/opt/abp/Data/client/nginx:/etc/nginx/nginx.conf
+      - /var/opt/abp/Data/client/nginx/conf.d:/etc/nginx/conf.d/default.conf
+    restart: always
+    
+volumes:
+  dbdata:
+
+networks: 
+  linyun-abp:
