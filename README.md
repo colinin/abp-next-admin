@@ -294,6 +294,19 @@ start-vue-admin.bat
 yarn build:prod
 ```
 
+### 关于docker容器部署
+
+**第一步**: 构建后台服务,推荐直接运行批处理文件,参数为 --publish,具体可参见批处理内容,**注意配置文件,发布后的服务需要 appsettings.Production.json 文件**
+
+**第二步**: 构建前端, yarn/npm build:prod
+
+**第三步**: 变更nginx代理服务器地址, ./vueJs/docker/nginx/default.conf
+
+**第四步**: 运行此命令 **sudo docker-compose down && sudo docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d**
+
+**推荐使用 jenkins 之类的ci工具,可以将此简化为一个步骤**
+
+
 ### 代码格式检查以及自动修复
 
 ```bash
