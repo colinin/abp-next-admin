@@ -24,7 +24,15 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
             var notificationDispatcher = context.ServiceProvider.GetRequiredService<INotificationDispatcher>();
             var notificationName = NotificationNameNormalizer
                 .NormalizerName(AbpExceptionHandlingNotificationNames.NotificationName);
-            var notificationData = new NotificationData();
+            NotificationData notificationData;
+            if (CurrentTenant.IsAvailable)
+            {
+                notificationData = NotificationData.CreateTenantNotificationData(CurrentTenant.Id.Value);
+            }
+            else
+            {
+                notificationData = NotificationData.CreateNotificationData();
+            }
             // 写入通知数据
             //TODO：集成TextTemplate完成格式化的推送
             notificationData.WriteStandardData(

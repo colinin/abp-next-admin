@@ -30,31 +30,48 @@ namespace LINGYUN.Abp.Notifications.SignalR
 
         public override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
         {
-            // 返回标准数据给前端
-            notification.Data = NotificationData.ToStandardData(notification.Data);
-            foreach (var identifier in identifiers)
+            if (notification.Data.HasTenantNotification(out Guid tenantId))
             {
-                Logger.LogDebug($"Find online client with user {identifier.UserId} - {identifier.UserName}");
-                var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
-                var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);
-                foreach (var onlineClient in onlineClients)
+                // 返回标准数据给前端
+                notification.Data = NotificationData.ToStandardData(notification.Data);
+                var singalRGroup = _hubContext.Clients.Group(tenantId.ToString());
+                if (singalRGroup == null)
                 {
-                    try
+                    Logger.LogDebug("Can not get group " + tenantId + " from SignalR hub!");
+                    return;
+                }
+                // 租户通知群发
+                Logger.LogDebug($"Found a singalr group, begin senging notifications");
+                await singalRGroup.SendAsync("getNotification", notification);
+            }
+            else
+            {
+                // 返回标准数据给前端
+                notification.Data = NotificationData.ToStandardData(notification.Data);
+                foreach (var identifier in identifiers)
+                {
+                    Logger.LogDebug($"Find online client with user {identifier.UserId} - {identifier.UserName}");
+                    var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
+                    var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);
+                    foreach (var onlineClient in onlineClients)
                     {
-                        Logger.LogDebug($"Find online client {onlineClient.UserId} - {onlineClient.ConnectionId}");
-                        var signalRClient = _hubContext.Clients.Client(onlineClient.ConnectionId);
-                        if (signalRClient == null)
+                        try
                         {
-                            Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
-                            continue;
+                            Logger.LogDebug($"Find online client {onlineClient.UserId} - {onlineClient.ConnectionId}");
+                            var signalRClient = _hubContext.Clients.Client(onlineClient.ConnectionId);
+                            if (signalRClient == null)
+                            {
+                                Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
+                                continue;
+                            }
+                            Logger.LogDebug($"Found a singalr client, begin senging notifications");
+                            await signalRClient.SendAsync("getNotification", notification);
                         }
-                        Logger.LogDebug($"Found a singalr client, begin senging notifications");
-                        await signalRClient.SendAsync("getNotification", notification);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
-                        Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+                        catch (Exception ex)
+                        {
+                            Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
+                            Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+                        }
                     }
                 }
             }
