@@ -4,6 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FileManagement;
+using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +29,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -55,6 +58,8 @@ namespace LINGYUN.Platform
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
         )]
     public class AppPlatformHttpApiHostModule : AbpModule
@@ -129,10 +134,25 @@ namespace LINGYUN.Platform
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
+                // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
+                options.KeyPrefix = "LINGYUN.Abp.Application";
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<RedisCacheOptions>(options =>
+            {
+                var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+                // 单独一个缓存数据库
+                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
+                if (databaseConfig.Exists())
+                {
+                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
+                }
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = configuration["Redis:InstanceName"];
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -189,13 +209,6 @@ namespace LINGYUN.Platform
                     AbpClaimTypes.Role = JwtClaimTypes.Role;
                     AbpClaimTypes.Email = JwtClaimTypes.Email;
                 });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["RedisCache:ConnectString"];
-                var instanceName = configuration["RedisCache:RedisPrefix"];
-                options.InstanceName = instanceName.IsNullOrEmpty() ? "Platform_Cache" : instanceName;
-            });
 
             if (!hostingEnvironment.IsDevelopment())
             {

@@ -6,6 +6,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FileManagement;
 using LINGYUN.Abp.Location.Tencent;
 using LINGYUN.Abp.MessageService;
+using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,10 +33,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
@@ -87,6 +89,8 @@ namespace LINGYUN.BackendAdmin
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
         typeof(AbpTencentLocationModule),
+        typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
         )]
     public class BackendAdminHostModule : AbpModule
@@ -158,10 +162,25 @@ namespace LINGYUN.BackendAdmin
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
+                // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
+                options.KeyPrefix = "LINGYUN.Abp.Application";
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<RedisCacheOptions>(options =>
+            {
+                var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+                // 单独一个缓存数据库
+                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
+                if (databaseConfig.Exists())
+                {
+                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
+                }
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = configuration["Redis:InstanceName"];
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -221,13 +240,6 @@ namespace LINGYUN.BackendAdmin
                     AbpClaimTypes.Role = JwtClaimTypes.Role;
                     AbpClaimTypes.Email = JwtClaimTypes.Email;
                 });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["RedisCache:ConnectString"];
-                var instanceName = configuration["RedisCache:RedisPrefix"];
-                options.InstanceName = instanceName.IsNullOrEmpty() ? "BackendAdmin_Cache" : instanceName;
-            });
 
             if (!hostingEnvironment.IsDevelopment())
             {

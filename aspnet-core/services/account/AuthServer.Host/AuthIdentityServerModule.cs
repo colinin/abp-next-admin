@@ -1,10 +1,12 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IdentityServer;
+using LINGYUN.Abp.MultiTenancy.DbFinder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +19,7 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
@@ -39,6 +42,8 @@ namespace AuthServer.Host
         typeof(AbpAutofacModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpIdentityServerSmsValidatorModule),
         typeof(AbpIdentityServerWeChatValidatorModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
@@ -88,11 +93,25 @@ namespace AuthServer.Host
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
+                // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
+                options.KeyPrefix = "LINGYUN.Abp.Application";
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
-                options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60);
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<RedisCacheOptions>(options =>
+            {
+                var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+                // 单独一个缓存数据库
+                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
+                if (databaseConfig.Exists())
+                {
+                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
+                }
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = configuration["Redis:InstanceName"];
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -119,13 +138,6 @@ namespace AuthServer.Host
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = true;
-            });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["RedisCache:ConnectString"];
-                var instanceName = configuration["RedisCache:RedisPrefix"];
-                options.InstanceName = instanceName.IsNullOrEmpty() ? "MessageService_Cache" : instanceName;
             });
 
             if (!hostingEnvironment.IsDevelopment())

@@ -2,11 +2,13 @@
 using DotNetCore.CAP.Messages;
 using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +20,8 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
@@ -42,6 +46,8 @@ namespace LINGYUN.ApiGateway
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpCAPEventBusModule),
+        typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
         )]
     public class ApiGatewayHttpApiHostModule : AbpModule
@@ -77,6 +83,29 @@ namespace LINGYUN.ApiGateway
                 options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
                 options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
                 options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
+            });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
+                options.KeyPrefix = "LINGYUN.Abp.Application";
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(60);
+            });
+
+            Configure<RedisCacheOptions>(options =>
+            {
+                var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+                // 单独一个缓存数据库
+                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
+                if (databaseConfig.Exists())
+                {
+                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
+                }
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = configuration["Redis:InstanceName"];
             });
 
             // 多租户
@@ -118,13 +147,6 @@ namespace LINGYUN.ApiGateway
                     AbpClaimTypes.Role = JwtClaimTypes.Role;
                     AbpClaimTypes.Email = JwtClaimTypes.Email;
                 });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["RedisCache:ConnectString"];
-                var instanceName = configuration["RedisCache:RedisPrefix"];
-                options.InstanceName = instanceName.IsNullOrEmpty() ? "ApiGateway_Cache" : instanceName;
-            });
 
             if (!hostingEnvironment.IsDevelopment())
             {
