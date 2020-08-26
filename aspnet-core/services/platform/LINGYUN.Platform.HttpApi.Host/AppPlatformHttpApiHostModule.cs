@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Internal;
 using IdentityModel;
 using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
@@ -121,7 +122,7 @@ namespace LINGYUN.Platform
             Configure<AbpExceptionHandlingOptions>(options =>
             {
                 //  加入需要处理的异常类型
-                options.Handlers.Add<AbpException>();
+                options.Handlers.Add<AbpCAPExecutionFailedException>();
             });
             // 自定义需要发送邮件通知的异常类型
             Configure<AbpEmailExceptionHandlingOptions>(options =>
@@ -131,7 +132,7 @@ namespace LINGYUN.Platform
                 // 未指定异常接收者的默认接收邮件
                 options.DefaultReceiveEmail = "colin.in@foxmail.com";
                 // 指定某种异常发送到哪个邮件
-                options.HandReceivedException<AbpException>("colin.in@foxmail.com");
+                options.HandReceivedException<AbpCAPExecutionFailedException>("colin.in@foxmail.com");
             });
 
             Configure<AbpDistributedCacheOptions>(options =>
