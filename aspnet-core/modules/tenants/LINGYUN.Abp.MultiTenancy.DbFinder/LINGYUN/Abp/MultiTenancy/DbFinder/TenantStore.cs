@@ -19,16 +19,16 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
     {
         public ILogger<TenantStore> Logger { protected get; set; }
         private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
-        private readonly IDataFilter _dataFilter;
+        private readonly ICurrentTenant _currentTenant;
         private readonly ITenantRepository _tenantRepository;
 
         public TenantStore(
-            IDataFilter dataFilter,
+            ICurrentTenant currentTenant,
             ITenantRepository tenantRepository,
             IDistributedCache<TenantConfigurationCacheItem> cache)
         {
             _cache = cache;
-            _dataFilter = dataFilter;
+            _currentTenant = currentTenant;
             _tenantRepository = tenantRepository;
 
             Logger = NullLogger<TenantStore>.Instance;
@@ -91,8 +91,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             }
             Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
 
-            // 禁用租户过滤器
-            using (_dataFilter.Disable<IMultiTenant>())
+            using (_currentTenant.Change(null))
             {
                 var tenant = await _tenantRepository.FindAsync(id, true);
                 if (tenant == null)
@@ -129,7 +128,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             }
             Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
 
-            using (_dataFilter.Disable<IMultiTenant>())
+            using (_currentTenant.Change(null))
             {
                 var tenant = await _tenantRepository.FindByNameAsync(name);
                 if (tenant == null)

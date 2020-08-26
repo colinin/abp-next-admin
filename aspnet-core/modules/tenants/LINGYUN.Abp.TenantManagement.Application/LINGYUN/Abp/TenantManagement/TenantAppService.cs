@@ -146,7 +146,16 @@ namespace LINGYUN.Abp.TenantManagement
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.SetConnectionString(tenantConnectionStringCreateOrUpdate.Name, tenantConnectionStringCreateOrUpdate.Value);
-            
+            var updateEventData = new UpdateEventData
+            {
+                Id = tenant.Id,
+                OriginName = tenant.Name,
+                Name = tenant.Name
+            };
+            // abp当前版本(3.0.0)在EntityChangeEventHelper中存在一个问题,无法发送框架默认的Eto,预计3.1.0修复
+            // 发送自定义的事件数据来确保缓存被更新
+            await EventBus.PublishAsync(updateEventData);
+
             return new TenantConnectionStringDto
             {
                 Name = tenantConnectionStringCreateOrUpdate.Name,
@@ -160,6 +169,15 @@ namespace LINGYUN.Abp.TenantManagement
             var tenant = await TenantRepository.GetAsync(tenantConnectionGetByName.Id);
 
             tenant.RemoveConnectionString(tenantConnectionGetByName.Name);
+
+            var updateEventData = new UpdateEventData
+            {
+                Id = tenant.Id,
+                OriginName = tenant.Name,
+                Name = tenant.Name
+            };
+            await EventBus.PublishAsync(updateEventData);
+
             await TenantRepository.UpdateAsync(tenant);
         }
     }

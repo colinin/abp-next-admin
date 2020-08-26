@@ -39,6 +39,7 @@
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application\LINGYUN.ApiGateway.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.EntityFrameworkCore\LINGYUN.ApiGateway.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.HttpApi\LINGYUN.ApiGateway.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Domain.Entities.Events\LINGYUN.Abp.Domain.Entities.Events.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 using Hangfire;
 using IdentityModel;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
+using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
@@ -61,6 +62,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpHangfireMySqlStorageModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule

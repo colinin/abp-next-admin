@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -43,6 +44,7 @@ namespace AuthServer.Host
         typeof(AbpCAPEventBusModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpIdentityServerSmsValidatorModule),
         typeof(AbpIdentityServerWeChatValidatorModule),

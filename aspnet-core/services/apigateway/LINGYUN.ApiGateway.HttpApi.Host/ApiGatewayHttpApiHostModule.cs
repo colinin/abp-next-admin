@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using DotNetCore.CAP.Messages;
 using IdentityModel;
+using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
@@ -48,6 +49,7 @@ namespace LINGYUN.ApiGateway
         typeof(AbpCAPEventBusModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class ApiGatewayHttpApiHostModule : AbpModule
