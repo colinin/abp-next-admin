@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.RealTime.Client;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -26,6 +25,11 @@ namespace LINGYUN.Abp.Notifications.SignalR
             IOnlineClient onlineClient = CreateClientForCurrentConnection();
             Logger.LogDebug("A client is connected: " + onlineClient.ToString());
             OnlineClientManager.Add(onlineClient);
+            if (onlineClient.TenantId.HasValue)
+            {
+                // 以租户为分组，将用户加入租户通讯组
+                await Groups.AddToGroupAsync(onlineClient.ConnectionId, onlineClient.TenantId.Value.ToString());
+            }
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

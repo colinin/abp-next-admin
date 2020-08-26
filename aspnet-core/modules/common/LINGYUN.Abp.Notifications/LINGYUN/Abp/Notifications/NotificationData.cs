@@ -5,6 +5,10 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationData
     {
+        public const string NotificationKey = "N:G";
+        public const string UserIdNotificationKey = "N:UI";
+        public const string UserNameNotificationKey = "N:UN";
+        public const string TenantNotificationKey = "N:T";
         public virtual string Type => GetType().FullName;
 
         public object this[string key]
@@ -45,6 +49,29 @@ namespace LINGYUN.Abp.Notifications
         {
             _properties = new Dictionary<string, object>();
         }
+
+        public static NotificationData CreateNotificationData()
+        {
+            var data = new NotificationData();
+            data.TrySetData(NotificationKey, "AbpNotification");
+            return data;
+        }
+
+        public static NotificationData CreateUserNotificationData(Guid userId, string userName)
+        {
+            var data = new NotificationData();
+            data.TrySetData(UserIdNotificationKey, userId);
+            data.TrySetData(UserNameNotificationKey, userName);
+            return data;
+        }
+
+        public static NotificationData CreateTenantNotificationData(Guid tenantId)
+        {
+            var data = new NotificationData();
+            data.TrySetData(TenantNotificationKey, tenantId);
+            return data;
+        }
+
         /// <summary>
         /// 写入标准数据
         /// </summary>
@@ -122,6 +149,29 @@ namespace LINGYUN.Abp.Notifications
             {
                 Properties[key] = value;
             }
+        }
+
+        public bool HasUserNotification(out Guid userId, out string userName)
+        {
+            if (Properties.TryGetValue(UserIdNotificationKey, out object userKey))
+            {
+                userId = (Guid)userKey;
+                var name = TryGetData(UserNameNotificationKey);
+                userName = name != null ? name.ToString() : "";
+                return true;
+            }
+            userName = "";
+            return false;
+        }
+
+        public bool HasTenantNotification(out Guid tenantId)
+        {
+            if (Properties.TryGetValue(TenantNotificationKey, out object tenantKey))
+            {
+                tenantId = (Guid)tenantKey;
+                return true;
+            }
+            return false;
         }
     }
 }

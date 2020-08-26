@@ -6,29 +6,30 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
 {
     public class TenantUpdateEventHandler : IDistributedEventHandler<EntityUpdatedEto<TenantEto>>, ITransientDependency
     {
-        private readonly IDataFilter _dataFilter;
+        private readonly ICurrentTenant _currentTenant;
         private readonly ITenantRepository _tenantRepository;
         private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;
 
         public TenantUpdateEventHandler(
-            IDataFilter dataFilter,
+            ICurrentTenant currentTenant,
             ITenantRepository tenantRepository,
             IDistributedCache<TenantConfigurationCacheItem> cache)
         {
             _cache = cache;
-            _dataFilter = dataFilter;
+            _currentTenant = currentTenant;
             _tenantRepository = tenantRepository;
         }
 
+        [UnitOfWork]
         public virtual async Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
         {
-            // 禁用租户过滤器
-            using (_dataFilter.Disable<IMultiTenant>())
+            using (_currentTenant.Change(null))
             {
                 var tenant = await _tenantRepository.FindAsync(eventData.Entity.Id, true);
                 if (tenant == null)

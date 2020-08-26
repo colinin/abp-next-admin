@@ -39,6 +39,10 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// </summary>
         protected INotificationStore NotificationStore { get; }
         /// <summary>
+        /// Reference to <see cref="INotificationSubscriptionManager"/>.
+        /// </summary>
+        protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }
+        /// <summary>
         /// Reference to <see cref="INotificationPublishProviderManager"/>.
         /// </summary>
         protected INotificationPublishProviderManager NotificationPublishProviderManager { get; }
@@ -50,11 +54,13 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             IBackgroundJobManager backgroundJobManager,
             IOptions<AbpNotificationOptions> options,
             INotificationStore notificationStore,
+            INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
             BackgroundJobManager = backgroundJobManager;
             Options = options.Value;
             NotificationStore = notificationStore;
+            NotificationSubscriptionManager = notificationSubscriptionManager;
             NotificationPublishProviderManager = notificationPublishProviderManager;
 
             Logger = NullLogger<NotificationEventHandler>.Instance;
@@ -85,9 +91,16 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             // 持久化通知
             await NotificationStore.InsertNotificationAsync(notificationInfo);
 
+            // TODO: 某些情况下,不能直接在服务内订阅消息,目前只能通过将订阅内容放进消息内部,需要重构通知系统设计了
+            if (notificationInfo.Data.HasUserNotification(out Guid userId, out string userName))
+            {
+                await NotificationSubscriptionManager.SubscribeAsync(notificationInfo.TenantId,
+                    new UserIdentifier(userId, userName), notificationInfo.Name);
+            }
+
             Logger.LogDebug($"Gets a list of user subscriptions {notificationInfo.Name}");
             // 获取用户订阅列表
-            var userSubscriptions = await NotificationStore.GetSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
+            var userSubscriptions = await NotificationSubscriptionManager.GetSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
 
             Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");
             // 持久化用户通知

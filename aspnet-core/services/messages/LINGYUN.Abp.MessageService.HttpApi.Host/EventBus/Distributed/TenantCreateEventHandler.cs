@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                 // 管理用户订阅租户创建通知
                 await NotificationSubscriptionManager.SubscribeAsync(eventData.Id, tenantAdminUserIdentifier, noticeNormalizerName.Name);
 
-                var notificationData = new NotificationData();
+                var notificationData = NotificationData.CreateTenantNotificationData(eventData.Id);
                 notificationData.WriteStandardData(
                     L("NewTenantRegisteredNotificationTitle"),
                     L("NewTenantRegisteredNotificationMessage", eventData.Name),

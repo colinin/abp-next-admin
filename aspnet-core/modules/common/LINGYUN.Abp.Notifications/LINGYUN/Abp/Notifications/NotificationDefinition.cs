@@ -9,6 +9,11 @@ using Volo.Abp.Localization;
  * 而是规范通知的一些属性,因此不应该是自定义通知名称,而是定义通知的类目,类似于Catalog
  * 或者Prefix
  * 
+ * TODO: 2020-08-26 如果需要用户或者租户特定的消息该如何来发送通知?
+ *      是否追加字段：通知类别（宿主、租户、用户、通用）,主要可以在运行时判断发布消息的来源，
+ *      如果是用户通知（NotificationData[FormUser]）则只会查询用户对于用户通知的订阅（用户互动：站内信、私信、好友请求、留言等），优先级最低
+ *      租户通知（NotificationData[FormTenant]）则只会查询用户对于租户通知的订阅（系统发布、应用通知），优先级次于用户
+ *      全局通知（NotificationData[FormGlobal]）则查询用户对于全局通知的订阅（一般用于系统发布、应用通知），优先级最高
  */
 
 namespace LINGYUN.Abp.Notifications

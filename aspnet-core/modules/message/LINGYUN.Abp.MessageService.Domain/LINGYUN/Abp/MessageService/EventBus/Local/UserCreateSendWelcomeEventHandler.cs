@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.MessageService.EventBus
                 //await _notificationStore.InsertUserSubscriptionAsync(eventData.Entity.TenantId,
                 //    userIdentifer, UserNotificationNames.WelcomeToApplication);
 
-                var userWelcomeNotifictionData = new NotificationData();
+                var userWelcomeNotifictionData = NotificationData.CreateUserNotificationData(eventData.Entity.Id, eventData.Entity.UserName);
 
                 userWelcomeNotifictionData.WriteStandardData(
                     L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
