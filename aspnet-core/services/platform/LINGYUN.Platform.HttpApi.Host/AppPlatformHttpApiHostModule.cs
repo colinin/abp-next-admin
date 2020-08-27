@@ -122,7 +122,14 @@ namespace LINGYUN.Platform
             Configure<AbpExceptionHandlingOptions>(options =>
             {
                 //  加入需要处理的异常类型
-                options.Handlers.Add<AbpCAPExecutionFailedException>();
+                options.Handlers.Add<Volo.Abp.Data.AbpDbConcurrencyException>();
+                options.Handlers.Add<AbpInitializationException>();
+                options.Handlers.Add<ObjectDisposedException>();
+                options.Handlers.Add<StackOverflowException>();
+                options.Handlers.Add<OutOfMemoryException>();
+                options.Handlers.Add<System.Data.Common.DbException>();
+                options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
+                options.Handlers.Add<System.Data.DBConcurrencyException>();
             });
             // 自定义需要发送邮件通知的异常类型
             Configure<AbpEmailExceptionHandlingOptions>(options =>
@@ -131,8 +138,6 @@ namespace LINGYUN.Platform
                 options.SendStackTrace = true;
                 // 未指定异常接收者的默认接收邮件
                 options.DefaultReceiveEmail = "colin.in@foxmail.com";
-                // 指定某种异常发送到哪个邮件
-                options.HandReceivedException<AbpCAPExecutionFailedException>("colin.in@foxmail.com");
             });
 
             Configure<AbpDistributedCacheOptions>(options =>

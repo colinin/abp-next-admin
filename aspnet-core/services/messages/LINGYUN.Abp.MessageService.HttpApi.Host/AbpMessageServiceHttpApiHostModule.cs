@@ -105,7 +105,14 @@ namespace LINGYUN.Abp.MessageService
             Configure<AbpExceptionHandlingOptions>(options =>
             {
                 //  加入需要处理的异常类型
-                // options.Handlers.Add<Volo.Abp.Authorization.AbpAuthorizationException>();
+                options.Handlers.Add<Volo.Abp.Data.AbpDbConcurrencyException>();
+                options.Handlers.Add<AbpInitializationException>();
+                options.Handlers.Add<ObjectDisposedException>();
+                options.Handlers.Add<StackOverflowException>();
+                options.Handlers.Add<OutOfMemoryException>();
+                options.Handlers.Add<System.Data.Common.DbException>();
+                options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
+                options.Handlers.Add<System.Data.DBConcurrencyException>();
             });
 
             Configure<AbpDistributedCacheOptions>(options =>
