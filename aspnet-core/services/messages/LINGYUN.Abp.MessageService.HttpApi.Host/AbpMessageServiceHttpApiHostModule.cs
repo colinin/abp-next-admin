@@ -8,6 +8,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.IM.SignalR;
+using LINGYUN.Abp.MessageService.Authorization;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
@@ -253,7 +254,10 @@ namespace LINGYUN.Abp.MessageService
             // 审计日志
             app.UseAuditing();
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard(options =>
+            {
+                options.UseAuthorization(new HangfireDashboardAuthorizationFilter());
+            });
             // 路由
             app.UseConfiguredEndpoints();
         }
