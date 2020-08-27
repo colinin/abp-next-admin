@@ -1,7 +1,10 @@
-﻿using Hangfire.Annotations;
+﻿using Hangfire;
+using Hangfire.Annotations;
 using Hangfire.Dashboard;
-using LINGYUN.Abp.MessageService.Permissions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using NUglify.Helpers;
+using System.Linq;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Threading;
 
@@ -9,18 +12,42 @@ namespace LINGYUN.Abp.MessageService.Authorization
 {
     public class HangfireDashboardAuthorizationFilter : IDashboardAuthorizationFilter
     {
+        protected string[] AllowGrantPath { get; }
+        public HangfireDashboardAuthorizationFilter()
+        {
+            AllowGrantPath = new string[] { "/css", "/js", "/fonts", "/stats" };
+        }
+
         public bool Authorize([NotNull] DashboardContext context)
         {
+            // 本地请求
+            if (LocalRequestOnlyAuthorize(context))
+            {
+                return true;
+            }
+
+            // 放行路径
+            if (AllowGrantPath.Contains(context.Request.Path))
+            {
+                return true;
+            }
             var httpContext = context.GetHttpContext();
 
-            var permissionChecker = httpContext.RequestServices.GetService<IPermissionChecker>();
+            var options = httpContext.RequestServices.GetService<IOptions<HangfireDashboardRouteOptions>>()?.Value;
 
-            if (permissionChecker != null)
+            if (options != null)
             {
-                // 可以详细到每个页面授权,这里就免了
-                return AsyncHelper.RunSync(async () => await permissionChecker.IsGrantedAsync(AbpMessageServicePermissions.Hangfire.ManageQueue));
+                // 请求路径对应的权限检查
+                // TODO: 怎么来传递用户身份令牌?
+                var permission = options.GetPermission(context.Request.Path);
+                if (!permission.IsNullOrWhiteSpace())
+                {
+                    var permissionChecker = httpContext.RequestServices.GetRequiredService<IPermissionChecker>();
+                    return AsyncHelper.RunSync(async () => await permissionChecker.IsGrantedAsync(permission));
+                }
             }
-            return new LocalRequestsOnlyAuthorizationFilter().Authorize(context);
+
+            return false;
         }
 
         public override int GetHashCode()
@@ -41,6 +68,26 @@ namespace LINGYUN.Abp.MessageService.Authorization
                 return true;
             }
             return base.Equals(obj);
+        }
+
+        protected virtual bool LocalRequestOnlyAuthorize(DashboardContext context)
+        {
+            if (string.IsNullOrEmpty(context.Request.RemoteIpAddress))
+            {
+                return false;
+            }
+
+            if (context.Request.RemoteIpAddress == "127.0.0.1" || context.Request.RemoteIpAddress == "::1")
+            {
+                return true;
+            }
+
+            if (context.Request.RemoteIpAddress == context.Request.LocalIpAddress)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

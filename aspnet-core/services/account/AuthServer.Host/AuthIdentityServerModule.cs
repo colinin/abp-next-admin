@@ -183,7 +183,10 @@ namespace AuthServer.Host
             app.UseIdentityServer();
             app.UseAuditing();
 
-            SeedData(context);
+            if (context.GetEnvironment().IsDevelopment())
+            {
+                SeedData(context);
+            }
         }
 
         private void SeedData(ApplicationInitializationContext context)

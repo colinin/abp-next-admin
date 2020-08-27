@@ -306,7 +306,10 @@ namespace LINGYUN.BackendAdmin
             // 路由
             app.UseConfiguredEndpoints();
 
-            SeedData(context);
+            if (context.GetEnvironment().IsDevelopment())
+            {
+                SeedData(context);
+            }
         }
 
         private void SeedData(ApplicationInitializationContext context)

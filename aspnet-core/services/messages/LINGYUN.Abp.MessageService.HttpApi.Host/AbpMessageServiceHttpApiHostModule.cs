@@ -16,15 +16,18 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.WeApp;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +71,8 @@ namespace LINGYUN.Abp.MessageService
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule
     {
+        private const string DefaultCorsPolicyName = "Default";
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
@@ -190,6 +195,35 @@ namespace LINGYUN.Abp.MessageService
                     });
                 });
 
+            context.Services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .WithAbpExposedHeaders()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
+            Configure<HangfireDashboardRouteOptions>(options =>
+            {
+                options.WithOrigins(
+                    configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                    );
+            });
+
             // 支持本地化语言类型
             Configure<AbpLocalizationOptions>(options =>
             {
@@ -241,8 +275,12 @@ namespace LINGYUN.Abp.MessageService
             app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
+            // 跨域
+            app.UseCors(DefaultCorsPolicyName);
             // 加入自定义中间件
             app.UseSignalRJwtToken();
+            // TODO: 还有没有其他方法在iframe中传递身份令牌?
+            app.UseHangfireJwtToken();
             // 认证
             app.UseAuthentication();
             // jwt
@@ -263,6 +301,7 @@ namespace LINGYUN.Abp.MessageService
             app.UseHangfireServer();
             app.UseHangfireDashboard(options =>
             {
+                options.IgnoreAntiforgeryToken = true;
                 options.UseAuthorization(new HangfireDashboardAuthorizationFilter());
             });
             // 路由

@@ -7,6 +7,12 @@ namespace Hangfire
 {
     public static class HangfireApplicationBuilderExtensions
     {
+        public static IApplicationBuilder UseHangfireJwtToken(
+            [NotNull]  this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<HangfireJwtTokenMiddleware>();
+        }
+
         public static IApplicationBuilder UseHangfireDashboard(
             [NotNull] this IApplicationBuilder app,
             [CanBeNull] Action<DashboardOptions> setup = null)
