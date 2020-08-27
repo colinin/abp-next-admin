@@ -181,6 +181,25 @@ namespace LINGYUN.Platform
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Platform API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Scheme = "bearer",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT"
+                    });
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                            },
+                            new string[] { }
+                        }
+                    });
                 });
 
             // 支持本地化语言类型
