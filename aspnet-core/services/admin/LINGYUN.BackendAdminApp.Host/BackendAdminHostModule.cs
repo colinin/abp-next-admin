@@ -245,7 +245,7 @@ namespace LINGYUN.BackendAdmin
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "BackendAdmin-Protection-Keys");

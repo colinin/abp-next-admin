@@ -215,7 +215,7 @@ namespace LINGYUN.Platform
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "Platform-Protection-Keys");
