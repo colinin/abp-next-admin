@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="LINGYUN\Abp\MessageService\Localization\HttpApiHost\en.json" />
-    <Content Remove="LINGYUN\Abp\MessageService\Localization\HttpApiHost\zh-Hans.json" />
+    <Content Remove="Localization\HttpApiHost\en.json" />
+    <Content Remove="Localization\HttpApiHost\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\HttpApiHost\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\HttpApiHost\zh-Hans.json" />
+    <EmbeddedResource Include="Localization\HttpApiHost\en.json" />
+    <EmbeddedResource Include="Localization\HttpApiHost\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>

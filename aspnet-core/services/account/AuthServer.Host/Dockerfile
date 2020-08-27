@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS runtime
 LABEL maintainer="colin.in@foxmail.com"
 WORKDIR /app
 

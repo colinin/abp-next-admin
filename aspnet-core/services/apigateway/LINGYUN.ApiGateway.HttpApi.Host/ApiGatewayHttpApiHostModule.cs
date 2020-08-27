@@ -128,6 +128,25 @@ namespace LINGYUN.ApiGateway
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiGateway API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Scheme = "bearer",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT"
+                    });
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                            },
+                            new string[] { }
+                        }
+                    });
                 });
 
             // 支持本地化语言类型
@@ -152,7 +171,7 @@ namespace LINGYUN.ApiGateway
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "ApiGateway-Protection-Keys");
@@ -191,7 +210,10 @@ namespace LINGYUN.ApiGateway
             // 路由
             app.UseConfiguredEndpoints();
 
-            SeedData(context);
+            if (context.GetEnvironment().IsDevelopment())
+            {
+                SeedData(context);
+            }
         }
 
         private void SeedData(ApplicationInitializationContext context)

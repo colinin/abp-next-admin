@@ -8,6 +8,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.IM.SignalR;
+using LINGYUN.Abp.MessageService.Authorization;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
@@ -15,15 +16,18 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.WeApp;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -67,6 +71,8 @@ namespace LINGYUN.Abp.MessageService
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule
     {
+        private const string DefaultCorsPolicyName = "Default";
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
@@ -104,7 +110,14 @@ namespace LINGYUN.Abp.MessageService
             Configure<AbpExceptionHandlingOptions>(options =>
             {
                 //  加入需要处理的异常类型
-                // options.Handlers.Add<Volo.Abp.Authorization.AbpAuthorizationException>();
+                options.Handlers.Add<Volo.Abp.Data.AbpDbConcurrencyException>();
+                options.Handlers.Add<AbpInitializationException>();
+                options.Handlers.Add<ObjectDisposedException>();
+                options.Handlers.Add<StackOverflowException>();
+                options.Handlers.Add<OutOfMemoryException>();
+                options.Handlers.Add<System.Data.Common.DbException>();
+                options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
+                options.Handlers.Add<System.Data.DBConcurrencyException>();
             });
 
             Configure<AbpDistributedCacheOptions>(options =>
@@ -161,7 +174,55 @@ namespace LINGYUN.Abp.MessageService
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MessageService API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Scheme = "bearer",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT"
+                    });
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                            },
+                            new string[] { }
+                        }
+                    });
                 });
+
+            context.Services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .WithAbpExposedHeaders()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
+            Configure<HangfireDashboardRouteOptions>(options =>
+            {
+                options.WithOrigins(
+                    configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                    );
+            });
 
             // 支持本地化语言类型
             Configure<AbpLocalizationOptions>(options =>
@@ -171,7 +232,7 @@ namespace LINGYUN.Abp.MessageService
 
                 options.Resources
                        .Get<MessageServiceResource>()
-                       .AddVirtualJson("/LINGYUN/Abp/MessageService/Localization/HttpApiHost");
+                       .AddVirtualJson("/Localization/HttpApiHost");
             });
 
             context.Services.AddAuthentication("Bearer")
@@ -188,7 +249,7 @@ namespace LINGYUN.Abp.MessageService
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "MessageService-Protection-Keys");
@@ -214,8 +275,12 @@ namespace LINGYUN.Abp.MessageService
             app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
+            // 跨域
+            app.UseCors(DefaultCorsPolicyName);
             // 加入自定义中间件
             app.UseSignalRJwtToken();
+            // TODO: 还有没有其他方法在iframe中传递身份令牌?
+            app.UseHangfireJwtToken();
             // 认证
             app.UseAuthentication();
             // jwt
@@ -234,7 +299,11 @@ namespace LINGYUN.Abp.MessageService
             // 审计日志
             app.UseAuditing();
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard(options =>
+            {
+                options.IgnoreAntiforgeryToken = true;
+                options.UseAuthorization(new HangfireDashboardAuthorizationFilter());
+            });
             // 路由
             app.UseConfiguredEndpoints();
         }

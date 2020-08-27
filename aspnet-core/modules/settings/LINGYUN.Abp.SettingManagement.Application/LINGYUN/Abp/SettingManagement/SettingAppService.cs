@@ -92,10 +92,11 @@ namespace LINGYUN.Abp.SettingManagement
                     continue;
                 }
 
-                if (!setting.IsVisibleToClients)
-                {
-                    continue;
-                }
+                // 既然是配置服务,那必须能管理所有配置才对
+                //if (!setting.IsVisibleToClients)
+                //{
+                //    continue;
+                //}
 
                 var settingValue = await SettingManager.GetOrNullAsync(setting.Name, providerName, providerKey);
                 var settingInfo = new SettingDto

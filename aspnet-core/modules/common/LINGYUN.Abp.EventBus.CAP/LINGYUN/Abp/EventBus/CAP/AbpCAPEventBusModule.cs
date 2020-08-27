@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.EventBus.CAP
@@ -27,6 +28,18 @@ namespace LINGYUN.Abp.EventBus.CAP
             {
                 configuration.GetSection("CAP:EventBus").Bind(options);
                 context.Services.ExecutePreConfiguredActions(options);
+                //if (options.FailedThresholdCallback == null)
+                //{
+                //    options.FailedThresholdCallback = async (failed) =>
+                //    {
+                //        var exceptionNotifier = failed.ServiceProvider.GetService<IExceptionNotifier>();
+                //        if (exceptionNotifier != null)
+                //        {
+                //            // TODO: 作为异常处理?
+                //            await exceptionNotifier.NotifyAsync(new AbpCAPExecutionFailedException(failed.MessageType, failed.Message));
+                //        }
+                //    };
+                //}
             });
         }
 

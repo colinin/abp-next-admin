@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Internal;
 using IdentityModel;
 using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
@@ -121,7 +122,14 @@ namespace LINGYUN.Platform
             Configure<AbpExceptionHandlingOptions>(options =>
             {
                 //  加入需要处理的异常类型
-                options.Handlers.Add<AbpException>();
+                options.Handlers.Add<Volo.Abp.Data.AbpDbConcurrencyException>();
+                options.Handlers.Add<AbpInitializationException>();
+                options.Handlers.Add<ObjectDisposedException>();
+                options.Handlers.Add<StackOverflowException>();
+                options.Handlers.Add<OutOfMemoryException>();
+                options.Handlers.Add<System.Data.Common.DbException>();
+                options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
+                options.Handlers.Add<System.Data.DBConcurrencyException>();
             });
             // 自定义需要发送邮件通知的异常类型
             Configure<AbpEmailExceptionHandlingOptions>(options =>
@@ -130,8 +138,6 @@ namespace LINGYUN.Platform
                 options.SendStackTrace = true;
                 // 未指定异常接收者的默认接收邮件
                 options.DefaultReceiveEmail = "colin.in@foxmail.com";
-                // 指定某种异常发送到哪个邮件
-                options.HandReceivedException<AbpException>("colin.in@foxmail.com");
             });
 
             Configure<AbpDistributedCacheOptions>(options =>
@@ -180,6 +186,25 @@ namespace LINGYUN.Platform
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Platform API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Scheme = "bearer",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT"
+                    });
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                            },
+                            new string[] { }
+                        }
+                    });
                 });
 
             // 支持本地化语言类型
@@ -214,7 +239,7 @@ namespace LINGYUN.Platform
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                var redis = ConnectionMultiplexer.Connect(configuration["RedisCache:ConnectString"]);
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "Platform-Protection-Keys");
