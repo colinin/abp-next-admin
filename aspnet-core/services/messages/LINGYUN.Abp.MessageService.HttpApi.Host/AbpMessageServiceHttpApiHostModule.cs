@@ -190,7 +190,7 @@ namespace LINGYUN.Abp.MessageService
 
                 options.Resources
                        .Get<MessageServiceResource>()
-                       .AddVirtualJson("/LINGYUN/Abp/MessageService/Localization/HttpApiHost");
+                       .AddVirtualJson("/Localization/HttpApiHost");
             });
 
             context.Services.AddAuthentication("Bearer")

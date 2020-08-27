@@ -1,7 +1,0 @@
-﻿{
-  "culture": "zh-Hans",
-  "texts": {
-    "NewTenantRegisteredNotificationTitle": "租户创建通知",
-    "NewTenantRegisteredNotificationMessage": "新租户创建成功,租户名称:{0}!"
-  }
-}
