@@ -14,16 +14,13 @@ exit
 
 :publish
 dotnet publish -c Release -o ..\..\Publish\identityserver --no-cache --no-restore
-copy Dockerfile ..\..\Publish\account\Dockerfile
-pause
+copy Dockerfile ..\..\Publish\identityserver\Dockerfile
 exit
 
 :run
 dotnet run 
-pause
 exit
 
 :restore
 dotnet restore
-pause
 exit

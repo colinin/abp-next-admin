@@ -15,15 +15,12 @@ exit
 :publish
 dotnet publish -c Release -o ..\..\Publish\admin --no-cache --no-restore
 copy Dockerfile ..\..\Publish\admin\Dockerfile
-pause
 exit
 
 :run
 dotnet run 
-pause
 exit
 
 :restore
 dotnet restore
-pause
 exit

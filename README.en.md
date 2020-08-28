@@ -293,11 +293,11 @@ yarn run build:prod
 
 ### About Docker container
 
-**Step 1**: build the background service, recommend running the batch file directly, parameters of the publish, the content, can see the batch **pay attention to the configuration file, after the release of service requires appsettings.Production.json**
+**Step 1**: Building background services, powershell script: **./build/build-aspnetcore-release.ps1**,  **Warning: after the release of service need configuration file: appsettings.Production.json**
 
-**Step 2**: Build the front-end, yarn/npm build:PROD
+**Step 2**: Build the front-end, **./build/build-vue-element-admin.ps1**
 
-**Step 3**: Change nginx proxy server address, ./vueJs/docker/nginx/default.conf
+**Step 3**: Build after the release of the address of the default in **./aspnet-core/services/Publish**, change nginx proxy server address: **./client/docker/nginx/default.conf**
 
 **Step 4**: Run command **sudo docker-compose down && sudo docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d**
 
