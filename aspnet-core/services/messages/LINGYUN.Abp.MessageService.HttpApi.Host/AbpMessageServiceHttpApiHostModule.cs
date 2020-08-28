@@ -216,11 +216,20 @@ namespace LINGYUN.Abp.MessageService
 
             Configure<HangfireDashboardRouteOptions>(options =>
             {
+                if (configuration.GetSection("Hangfire:Dashboard:WhiteList").Exists())
+                {
+                    options.WithWhite(
+                        configuration["Hangfire:Dashboard:WhiteList"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                                .ToArray());
+                }
+                
                 options.WithOrigins(
                     configuration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
                     );
             });
 
