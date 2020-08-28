@@ -5,49 +5,67 @@ const IdentityService = process.env.VUE_APP_BASE_API
 
 export default class SettingApiService {
   /**
-   * 获取配置
-   * @param providerName 配置提供者名称
-   * @param providerKey 配置提供者标识
-   * @returns 返回类型为 ListResultDto<SettingDto> 的配置列表
+   * 获取公共配置
    */
-  public static getSettings(providerName: string, providerKey: string) {
-    let _url = '/api/settings'
-    _url += '?providerName=' + providerName
-    _url += '&providerKey=' + providerKey
+  public static getGlobalSettings() {
+    const _url = '/api/setting-management/settings/by-global'
     return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
   }
 
   /**
-   * 获取公共配置
+   * 设置公共配置
    */
-  public static getGlobalSettings() {
-    const _url = '/api/settings/by-global'
-    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  public static setGlobalSettings(payload: SettingsUpdate) {
+    const _url = '/api/setting-management/settings/by-global'
+    return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
   /**
    * 获取当前租户配置
    */
   public static getCurrentTenantSettings() {
-    const _url = '/api/settings/by-current-tenant'
+    const _url = '/api/setting-management/settings/by-current-tenant'
     return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 设置当前租户配置
+   */
+  public static setCurrentTenantSettings(payload: SettingsUpdate) {
+    const _url = '/api/setting-management/settings/by-current-tenant'
+    return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
   /**
    * 获取当前用户配置
    */
   public static getCurrentUserSettings() {
-    const _url = '/api/settings/by-current-user'
+    const _url = '/api/setting-management/settings/by-current-user'
     return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 设置当前用户配置
+   */
+  public static setCurrentUserSettings(payload: SettingsUpdate) {
+    const _url = '/api/setting-management/settings/by-current-user'
+    return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
   /**
    * 获取用户配置
    */
   public static getUserSettings(userId: string) {
-    let _url = '/api/settings/by-user'
-    _url += '?userId=' + userId
+    const _url = '/api/setting-management/settings/by-user/' + userId
     return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+  }
+
+  /**
+   * 设置当前用户配置
+   */
+  public static setUserSettings(userId: string, payload: SettingsUpdate) {
+    const _url = '/api/setting-management/settings/by-user/' + userId
+    return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
   /**

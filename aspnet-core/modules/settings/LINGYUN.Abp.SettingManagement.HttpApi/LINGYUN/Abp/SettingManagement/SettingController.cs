@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.SettingManagement
 {
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("settings")]
-    [Route("api/settings")]
+    [Area("settingManagement")]
+    [Route("api/setting-management/settings")]
     public class SettingController : AbpController, ISettingAppService
     {
         private readonly ISettingAppService _settingAppService;
@@ -28,14 +27,14 @@ namespace LINGYUN.Abp.SettingManagement
         }
 
         [HttpGet]
-        [Route("by-tenant")]
-        public virtual async Task<ListResultDto<SettingDto>> GetAllForTenantAsync()
+        [Route("by-current-tenant")]
+        public virtual async Task<ListResultDto<SettingDto>> GetAllForCurrentTenantAsync()
         {
-            return await _settingAppService.GetAllForTenantAsync();
+            return await _settingAppService.GetAllForCurrentTenantAsync();
         }
 
         [HttpGet]
-        [Route("by-user")]
+        [Route("by-user/{userId}")]
         public virtual async Task<ListResultDto<SettingDto>> GetAllForUserAsync([Required] Guid userId)
         {
             return await _settingAppService.GetAllForUserAsync(userId);
@@ -48,16 +47,32 @@ namespace LINGYUN.Abp.SettingManagement
             return await _settingAppService.GetAllGlobalAsync();
         }
 
-        [HttpGet]
-        public virtual async Task<ListResultDto<SettingDto>> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
+        [HttpPut]
+        [Route("by-current-user")]
+        public virtual async Task SetCurrentUserAsync(UpdateSettingsDto input)
         {
-            return await _settingAppService.GetAsync(providerName, providerKey);
+            await _settingAppService.SetCurrentUserAsync(input);
         }
 
         [HttpPut]
-        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateSettingsDto input)
+        [Route("by-current-tenant")]
+        public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
-            await _settingAppService.UpdateAsync(providerName, providerKey, input);
+            await _settingAppService.SetCurrentTenantAsync(input);
+        }
+
+        [HttpPut]
+        [Route("by-user/{userId}")]
+        public virtual async Task SetForUserAsync([Required] Guid userId, UpdateSettingsDto input)
+        {
+            await _settingAppService.SetForUserAsync(userId, input);
+        }
+
+        [HttpPut]
+        [Route("by-global")]
+        public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
+        {
+            await _settingAppService.SetGlobalAsync(input);
         }
     }
 }

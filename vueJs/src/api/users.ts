@@ -1,15 +1,13 @@
 import qs from 'querystring'
 import { pagerFormat } from '@/utils/index'
-import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto } from '@/api/types'
+import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto, ListResultDto } from '@/api/types'
 import { OrganizationUnit } from './organizationunit'
 import ApiService from './serviceBase'
-import { ListResultDto } from './types'
 
 const IdentityServiceUrl = process.env.VUE_APP_BASE_API
 const IdentityServerUrl = process.env.VUE_APP_BASE_IDENTITY_SERVER
 
 export default class UserApiService {
-
   public static getUsers(input: UsersGetPagedDto) {
     let _url = '/api/identity/users'
     // 因为abp设计的原因, 需要前端组合页面
@@ -62,12 +60,12 @@ export default class UserApiService {
 
   public static getUserOrganizationUnits(userId: string) {
     const _url = '/api/identity/users/organization-units/' + userId
-    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl);
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl)
   }
 
   public static changeUserOrganizationUnits(roleId: string, payload: ChangeUserOrganizationUnitDto) {
     const _url = '/api/identity/users/organization-units/' + roleId
-    return ApiService.Put<void>(_url, payload, IdentityServiceUrl);
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static setUserRoles(userId: string, roles: string[]) {
@@ -186,7 +184,7 @@ export default class UserApiService {
       data: qs.stringify(refresh),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': token
+        Authorization: token
       }
     })
   }
@@ -249,13 +247,13 @@ export class UserLoginData {
 
 export enum VerifyType {
   Register = 0,
-  Signin   = 10,
+  Signin = 10,
   ResetPassword = 20
 }
 
 export class PhoneVerify {
   phoneNumber!: string
-  verifyType!:VerifyType
+  verifyType!: VerifyType
 }
 
 export class UserResetPasswordData {

@@ -121,6 +121,45 @@
             </summary>
             <param name="context"></param>
         </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException">
+            <summary>
+            AbpECAPExecutionFailedException
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.MessageType">
+            <summary>
+            MessageType
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.Origin">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="prigin"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="prigin"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String,System.Exception)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="prigin"></param>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus">
             <summary>
             CAP分布式事件总线

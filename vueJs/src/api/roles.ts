@@ -28,12 +28,12 @@ export default class RoleService {
 
   public static getRoleOrganizationUnits(roleId: string) {
     const _url = '/api/identity/roles/organization-units/' + roleId
-    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl);
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl)
   }
 
   public static changeRoleOrganizationUnits(roleId: string, payload: ChangeRoleOrganizationUnitDto) {
     const _url = '/api/identity/roles/organization-units/' + roleId
-    return ApiService.Put<void>(_url, payload, IdentityServiceUrl);
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static createRole(input: CreateRoleDto) {

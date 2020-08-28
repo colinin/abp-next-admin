@@ -11,15 +11,18 @@ namespace LINGYUN.Abp.SettingManagement
     {
         Task<ListResultDto<SettingDto>> GetAllGlobalAsync();
 
-        Task<ListResultDto<SettingDto>> GetAllForTenantAsync();
+        Task SetGlobalAsync(UpdateSettingsDto input);
+
+        Task<ListResultDto<SettingDto>> GetAllForCurrentTenantAsync();
+
+        Task SetCurrentTenantAsync(UpdateSettingsDto input);
 
         Task<ListResultDto<SettingDto>> GetAllForUserAsync([Required] Guid userId);
 
+        Task SetForUserAsync([Required] Guid userId, UpdateSettingsDto input);
+
         Task<ListResultDto<SettingDto>> GetAllForCurrentUserAsync();
 
-        [Obsolete("The best way to do this is to separate the individual configurations")]
-        Task<ListResultDto<SettingDto>> GetAsync([NotNull] string providerName, [NotNull] string providerKey);
-
-        Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateSettingsDto input);
+        Task SetCurrentUserAsync(UpdateSettingsDto input);
     }
 }

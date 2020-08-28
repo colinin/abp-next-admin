@@ -12,6 +12,7 @@
           :label="$t('settings.systemSetting')"
         >
           <el-form-item
+            v-if="hasSettingExistsed('Abp.Localization.DefaultLanguage')"
             v-popover:DefaultLanguage
             prop="setting['Abp.Localization.DefaultLanguage'].value"
           >
@@ -64,7 +65,9 @@
           v-if="hasSettingExistsed('Abp.Identity.Password.RequiredLength')"
           :label="$t('settings.passwordSecurity')"
         >
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Identity.Password.RequiredLength')"
+          >
             <el-popover
               ref="PasswordRequiredLength"
               trigger="hover"
@@ -237,7 +240,9 @@
           v-if="hasSettingExistsed('Abp.Identity.SignIn.RequireConfirmedEmail')"
           :label="$t('settings.userAccount')"
         >
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Identity.SignIn.RequireConfirmedEmail')"
+          >
             <el-popover
               ref="SignInRequireConfirmedEmail"
               trigger="hover"
@@ -418,6 +423,7 @@
             <el-input
               v-model="setting['Abp.Account.PhoneVerifyCodeExpiration'].value"
               :placeholder="setting['Abp.Account.PhoneVerifyCodeExpiration'].description"
+              type="number"
               @input="(value) => handleSettingValueChanged('Abp.Account.PhoneVerifyCodeExpiration', value)"
             />
           </el-form-item>
@@ -462,7 +468,9 @@
           v-if="hasSettingExistsed('Abp.Mailing.Smtp.Host')"
           :label="$t('settings.mailing')"
         >
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.Host')"
+          >
             <el-popover
               ref="SmtpHost"
               trigger="hover"
@@ -479,7 +487,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Host', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.Port')"
+          >
             <el-popover
               ref="SmtpPort"
               trigger="hover"
@@ -493,10 +503,13 @@
             <el-input
               v-model="setting['Abp.Mailing.Smtp.Port'].value"
               :placeholder="setting['Abp.Mailing.Smtp.Port'].description"
+              type="number"
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Port', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.UserName')"
+          >
             <el-popover
               ref="SmtpUserName"
               trigger="hover"
@@ -513,7 +526,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.UserName', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.Password')"
+          >
             <el-popover
               ref="SmtpPassword"
               trigger="hover"
@@ -527,10 +542,13 @@
             <el-input
               v-model="setting['Abp.Mailing.Smtp.Password'].value"
               :placeholder="setting['Abp.Mailing.Smtp.Password'].description"
+              type="password"
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Password', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.Domain')"
+          >
             <el-popover
               ref="SmtpDomain"
               trigger="hover"
@@ -547,7 +565,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.Domain', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.EnableSsl')"
+          >
             <el-popover
               ref="SmtpEnableSsl"
               trigger="hover"
@@ -563,7 +583,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.EnableSsl', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.Smtp.UseDefaultCredentials')"
+          >
             <el-popover
               ref="SmtpUseDefaultCredentials"
               trigger="hover"
@@ -579,7 +601,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.Smtp.UseDefaultCredentials', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.DefaultFromAddress')"
+          >
             <el-popover
               ref="MailingDefaultFromAddress"
               trigger="hover"
@@ -596,7 +620,9 @@
               @input="(value) => handleSettingValueChanged('Abp.Mailing.DefaultFromAddress', value)"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item
+            v-if="hasSettingExistsed('Abp.Mailing.DefaultFromDisplayName')"
+          >
             <el-popover
               ref="MailingDefaultFromDisplayName"
               trigger="hover"
@@ -663,7 +689,7 @@
       </el-tabs>
 
       <el-form-item
-        v-if="setting"
+        v-if="settings.length>0"
       >
         <el-button
           type="primary"
@@ -678,23 +704,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 import { AbpModule } from '@/store/modules/abp'
-import SettingService, { Setting, SettingUpdate, SettingsUpdate } from '@/api/settings'
+import { Setting, SettingUpdate, SettingsUpdate } from '@/api/settings'
 
 const booleanStrings = ['True', 'true', 'False', 'false']
 
 @Component({
-  name: 'TenantSettingEditForm'
+  name: 'SettingEditForm'
 })
 export default class extends Vue {
-  @Prop({ default: '' })
-  private providerName!: string
-
-  @Prop({ default: '' })
-  private providerKey!: string
+  @Prop({ default: () => { return Array<Setting>() } })
+  private settings!: Setting[]
 
   private setting: {[key: string]: Setting} = {}
+
   private settingChangeKeys = new Array<string>()
 
   get definedLanguages() {
@@ -704,13 +728,10 @@ export default class extends Vue {
     return languages
   }
 
-  mounted() {
-    this.handleGetSettings()
-  }
-
-  private handleGetSettings() {
-    SettingService.getSettings(this.providerName, this.providerKey).then(settings => {
-      settings.items.forEach(setting => {
+  @Watch('settings', { immediate: true })
+  private onSettingChanged() {
+    if (this.settings.length > 0) {
+      this.settings.forEach(setting => {
         if (setting.value) {
           const value = setting.value.toLowerCase()
           if (booleanStrings.includes(value)) {
@@ -727,7 +748,7 @@ export default class extends Vue {
         this.setting[setting.name] = setting
       })
       this.$forceUpdate()
-    })
+    }
   }
 
   private hasSettingExistsed(key: string) {
@@ -754,9 +775,7 @@ export default class extends Vue {
       updateSettings.settings.push(updateSetting)
     })
     if (updateSettings.settings.length > 0) {
-      SettingService.setSettings(this.providerName, this.providerKey, updateSettings).then(() => {
-        this.$message.success(this.$t('AbpSettingManagement.SuccessfullySaved').toString())
-      })
+      this.$emit('onSettingSaving', updateSettings)
     }
   }
 }
