@@ -6,6 +6,7 @@ echo. 启动网关管理服务
 
 cd .\apigateway\LINGYUN.ApiGateway.HttpApi.Host
 
+echo %1
 if '%1' equ '--publish' goto publish
 if '%1' equ '--run' goto run
 if '%1' equ '--restore' goto restore
@@ -15,15 +16,12 @@ if '%1' equ '' goto run
 :publish
 dotnet publish -c Release -o ..\..\Publish\apigateway-admin --no-cache --no-restore
 copy Dockerfile ..\..\Publish\apigateway-admin \Dockerfile
-pause
 exit
 
 :run
 dotnet run 
-pause
 exit
 
 :restore
 dotnet restore
-pause
 exit

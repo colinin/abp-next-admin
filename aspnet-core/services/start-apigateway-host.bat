@@ -14,15 +14,12 @@ if '%1' equ '' goto run
 :publish
 dotnet publish -c Release -o ..\..\Publish\apigateway-host --no-cache --no-restore
 copy Dockerfile ..\..\Publish\apigateway-host\Dockerfile
-pause
 exit
 
 :run
 dotnet run 
-pause
 exit
 
 :restore
 dotnet restore
-pause
 exit
