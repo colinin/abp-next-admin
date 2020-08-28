@@ -128,7 +128,7 @@
           <el-button
             :disabled="!checkPermission(['ApiGateway.Global.Delete'])"
             size="mini"
-            type="warning"
+            type="danger"
             @click="handleDeleteGlobalConfiguration(row.appId)"
           >
             {{ $t('apiGateWay.deleteGlobal') }}

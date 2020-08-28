@@ -11,7 +11,7 @@ export default class PermissionService {
   * 新版本的简写为U、R、C等
   */
   public static getPermissionsByKey(providerName: string, providerKey: string) {
-    let _url = '/api/abp/permissions?'
+    let _url = '/api/permission-management/permissions?'
     _url += 'providerName=' + providerName
     _url += '&providerKey=' + providerKey
     return ApiService.Get<PermissionDto>(_url, serviceUrl)
@@ -23,7 +23,7 @@ export default class PermissionService {
   * @param payload 授权数据
   */
   public static setPermissionsByKey(providerName: string, providerKey: string, payload: UpdatePermissionsDto) {
-    let _url = '/api/abp/permissions?'
+    let _url = '/api/permission-management/permissions?'
     _url += 'providerName=' + providerName
     _url += '&providerKey=' + providerKey
     return ApiService.Put<any>(_url, payload, serviceUrl)

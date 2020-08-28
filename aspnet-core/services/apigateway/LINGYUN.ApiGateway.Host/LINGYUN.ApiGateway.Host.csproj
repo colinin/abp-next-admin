@@ -20,12 +20,14 @@
     <PackageReference Include="Volo.Abp.Autofac" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="3.0.0" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="3.0.0" />
     <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\LINGYUN.ApiGateway.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.IdentityModel\LINGYUN.Abp.IdentityModel.csproj" />
   </ItemGroup>
 
 </Project>
