@@ -1,6 +1,8 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.IdentityModel;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.Configuration.Repository;
@@ -8,10 +10,14 @@ using Ocelot.DependencyInjection;
 using Ocelot.Extenssions;
 using Ocelot.Middleware.Multiplexer;
 using Ocelot.Provider.Polly;
+using StackExchange.Redis;
+using System;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Modularity;
@@ -20,7 +26,9 @@ namespace LINGYUN.ApiGateway
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpCachedIdentityModelModule),
         typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutoMapperModule),
         typeof(ApiGatewayHttpApiClientModule),
         typeof(AbpCAPEventBusModule),
@@ -70,6 +78,29 @@ namespace LINGYUN.ApiGateway
                     options.ApiName = configuration["AuthServer:ApiName"];
                     options.ApiSecret = configuration["AuthServer:ApiSecret"];
                 });
+
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
+                options.KeyPrefix = "LINGYUN.Abp.Application";
+                // 滑动过期30天
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                // 绝对过期60天
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<RedisCacheOptions>(options =>
+            {
+                var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+                // 单独一个缓存数据库
+                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
+                if (databaseConfig.Exists())
+                {
+                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
+                }
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = configuration["Redis:InstanceName"];
+            });
 
             Configure<IdentityModelHttpRequestMessageOptions>(options =>
             {

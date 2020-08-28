@@ -145,7 +145,7 @@
           <el-button
             :disabled="!checkPermission(['ApiGateway.RouteGroup.Delete'])"
             size="mini"
-            type="warning"
+            type="danger"
             @click="handleDeleteRouteGroup(row.appId, row.appName)"
           >
             {{ $t('apiGateWay.deleteGroup') }}

@@ -22,27 +22,24 @@ namespace LINGYUN.Abp.IdentityModel
         typeof(IdentityModelAuthenticationService))]
     public class IdentityModelCachedAuthenticationService : IdentityModelAuthenticationService
     {
-        protected IStringEncryptionService EncryptionService { get; }
         protected IDistributedCache<IdentityModelAuthenticationCacheItem> Cache { get; }
         public IdentityModelCachedAuthenticationService(
             IOptions<AbpIdentityClientOptions> options, 
             ICancellationTokenProvider cancellationTokenProvider, 
             IHttpClientFactory httpClientFactory, 
             ICurrentTenant currentTenant,
-            IStringEncryptionService encryptionService,
             IDistributedCache<IdentityModelAuthenticationCacheItem> cache,
             IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions) 
             : base(options, cancellationTokenProvider, httpClientFactory, currentTenant, identityModelHttpRequestMessageOptions)
         {
             Cache = cache;
-            EncryptionService = encryptionService;
         }
 
         public override async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
             var accessTokenCacheItem = await GetCacheItemAsync(configuration);
             // 需要解密
-            return EncryptionService.Decrypt(accessTokenCacheItem.AccessToken);
+            return accessTokenCacheItem.AccessToken;
         }
 
         protected virtual async Task<IdentityModelAuthenticationCacheItem> GetCacheItemAsync(IdentityClientConfiguration configuration)
@@ -62,9 +59,7 @@ namespace LINGYUN.Abp.IdentityModel
             Logger.LogDebug($"Not found in the cache: {cacheKey}");
 
             var tokenResponse = await GetAccessTokenResponseAsync(configuration);
-            // 需要加密
-            var accessToken = EncryptionService.Encrypt(tokenResponse.AccessToken);
-            cacheItem = new IdentityModelAuthenticationCacheItem(accessToken);
+            cacheItem = new IdentityModelAuthenticationCacheItem(tokenResponse.AccessToken);
             var cacheEntryOptions = new DistributedCacheEntryOptions
             {
                 // 缓存前两分钟过期

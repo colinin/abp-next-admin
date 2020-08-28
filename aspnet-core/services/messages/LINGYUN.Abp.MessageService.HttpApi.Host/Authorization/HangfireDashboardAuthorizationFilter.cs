@@ -20,12 +20,6 @@ namespace LINGYUN.Abp.MessageService.Authorization
 
         public bool Authorize([NotNull] DashboardContext context)
         {
-            // 本地请求
-            if (LocalRequestOnlyAuthorize(context))
-            {
-                return true;
-            }
-
             // 放行路径
             if (AllowGrantPath.Contains(context.Request.Path))
             {
@@ -37,6 +31,12 @@ namespace LINGYUN.Abp.MessageService.Authorization
 
             if (options != null)
             {
+                // 白名单检查
+                if (!context.Request.RemoteIpAddress.IsNullOrWhiteSpace() 
+                    && options.IpAllow(context.Request.RemoteIpAddress))
+                {
+                    return true;
+                }
                 // 请求路径对应的权限检查
                 // TODO: 怎么来传递用户身份令牌?
                 var permission = options.GetPermission(context.Request.Path);
@@ -68,26 +68,6 @@ namespace LINGYUN.Abp.MessageService.Authorization
                 return true;
             }
             return base.Equals(obj);
-        }
-
-        protected virtual bool LocalRequestOnlyAuthorize(DashboardContext context)
-        {
-            if (string.IsNullOrEmpty(context.Request.RemoteIpAddress))
-            {
-                return false;
-            }
-
-            if (context.Request.RemoteIpAddress == "127.0.0.1" || context.Request.RemoteIpAddress == "::1")
-            {
-                return true;
-            }
-
-            if (context.Request.RemoteIpAddress == context.Request.LocalIpAddress)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

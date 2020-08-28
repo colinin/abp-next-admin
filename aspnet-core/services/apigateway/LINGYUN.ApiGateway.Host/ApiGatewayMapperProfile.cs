@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using LINGYUN.ApiGateway.Ocelot;
 using Ocelot.Configuration.File;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LINGYUN.ApiGateway
 {
@@ -56,67 +53,6 @@ namespace LINGYUN.ApiGateway
                 .ForMember(far => far.RouteKeys, map => map.MapFrom(m => m.ReRouteKeys))
                 .ForMember(far => far.RouteKeysConfig, map => map.MapFrom(m => m.ReRouteKeysConfig))
                 .ForMember(far => far.RouteIsCaseSensitive, map => map.MapFrom(m => m.ReRouteIsCaseSensitive));
-        }
-
-        private Dictionary<string, string> MapperDictionary(string sourceString)
-        {
-            var dictionary = new Dictionary<string, string>();
-
-            if (!string.IsNullOrWhiteSpace(sourceString))
-            {
-                var headers = sourceString.Split(',').ToList();
-
-                if (headers != null && headers.Count > 0)
-                {
-                    foreach (var header in headers)
-                    {
-                        var current = header.Split(':');
-                        if (current != null && current.Length == 2)
-                        {
-                            dictionary.Add(current[0], current[1]);
-                        }
-                    }
-                }
-            }
-            return dictionary;
-        }
-
-        private List<string> MapperList(string sourceString)
-        {
-            var list = new List<string>();
-            if (!string.IsNullOrWhiteSpace(sourceString))
-            {
-                var srcList = sourceString.Split(',');
-                foreach (var src in srcList)
-                {
-                    if (!src.IsNullOrWhiteSpace())
-                    {
-                        list.Add(src);
-                    }
-                }
-            }
-            return list;
-        }
-
-        private List<FileHostAndPort> MapperHostAndPortList(string sourceString)
-        {
-            var list = new List<FileHostAndPort>();
-            if (!string.IsNullOrWhiteSpace(sourceString))
-            {
-                var sourceList = sourceString.Split(',').ToList();
-                foreach (var source in sourceList)
-                {
-                    var current = source.Split(':');
-                    if (current != null && current.Length == 2)
-                    {
-                        var hostAndPort = new FileHostAndPort();
-                        hostAndPort.Host = current[0];
-                        hostAndPort.Port = int.Parse(current[1]);
-                        list.Add(hostAndPort);
-                    }
-                }
-            }
-            return list;
         }
     }
 }

@@ -1,4 +1,3 @@
-import qs from 'qs'
 import ApiService from './serviceBase'
 import { PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 

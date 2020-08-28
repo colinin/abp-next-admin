@@ -18,7 +18,6 @@ export interface IUserState {
   email: string
 }
 
-const scopeKey = 'vue_typescript_admin_scope'
 const tokenKey = 'vue_typescript_admin_token'
 const refreshTokenKey = 'vue_typescript_admin_refresh_token'
 

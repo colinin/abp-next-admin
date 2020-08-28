@@ -1,13 +1,14 @@
 <template>
   <SettingEditForm
-    provider-name="T"
-    :provider-key="tenantId"
+    :settings="settings"
+    @onSettingSaving="onSettingSaving"
   />
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import SettingEditForm from './SettingEditForm.vue'
+import SettingService, { Setting, SettingsUpdate } from '@/api/settings'
 
 @Component({
   name: 'TenantSettingEditForm',
@@ -16,7 +17,18 @@ import SettingEditForm from './SettingEditForm.vue'
   }
 })
 export default class extends Vue {
-  @Prop({ default: '' })
-  private tenantId?: string
+  private settings = new Array<Setting>()
+
+  mounted() {
+    SettingService.getCurrentTenantSettings().then(res => {
+      this.settings = res.items
+    })
+  }
+
+  private onSettingSaving(settings: SettingsUpdate) {
+    SettingService.setCurrentTenantSettings(settings).then(() => {
+      this.$message.success(this.$t('AbpSettingManagement.SuccessfullySaved').toString())
+    })
+  }
 }
 </script>

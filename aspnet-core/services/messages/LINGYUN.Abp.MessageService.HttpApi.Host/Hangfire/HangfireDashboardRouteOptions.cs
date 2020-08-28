@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Permissions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,12 +8,30 @@ namespace Hangfire
     public class HangfireDashboardRouteOptions
     {
         public IList<string> AllowFrameOrigins { get; }
+        /// <summary>
+        /// 白名单
+        /// 添加网关地址
+        /// </summary>
+        public IList<string> WhiteList { get; }
         public IDictionary<string, string> RoutePermissions { get; }
         public HangfireDashboardRouteOptions()
         {
+            WhiteList = new List<string>();
             AllowFrameOrigins = new List<string>();
             RoutePermissions = new Dictionary<string, string>();
             InitDefaultRoutes();
+            WithWhite("127.0.0.1");
+            WithWhite("::1");
+        }
+
+        public bool IpAllow(string ipaddress)
+        {
+            return WhiteList.Any(ip => ip == ipaddress);
+        }
+
+        public void WithWhite(params string[] wgites)
+        {
+            WhiteList.AddIfNotContains(wgites);
         }
 
         public void WithOrigins(params string[] origins)

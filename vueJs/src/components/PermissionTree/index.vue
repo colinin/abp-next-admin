@@ -134,7 +134,14 @@ export default class extends Vue {
       permissionTreeItem.disabled = this.readonly
       this.permissionEditData.push(permission)
       const subPermissions = permissions.filter(p => p.parentName === permission.name)
-      this.generateSubPermission(permissionTreeItem, subPermissions, permissions)
+      // 2020-08-28 如果这个权限没有子节点且已经授权,则选中节点
+      if (subPermissions.length === 0) {
+        if (permission.isGranted) {
+          this.permissionCheckedKeys.push(permissionTreeItem.id)
+        }
+      } else {
+        this.generateSubPermission(permissionTreeItem, subPermissions, permissions)
+      }
       permissionTree.children.push(permissionTreeItem)
     })
   }
