@@ -7,6 +7,7 @@ import SvgIcon from 'vue-svgicon'
 
 import uploader from 'vue-simple-uploader'
 import contextMenu from 'vue-contextmenujs'
+import VueEvents from 'vue-events'
 
 import '@/styles/element-variables.scss'
 import 'view-design/dist/styles/iview.css'
@@ -42,6 +43,7 @@ Vue.use(SvgIcon, {
 
 Vue.use(uploader)
 Vue.use(contextMenu)
+Vue.use(VueEvents)
 
 // Register global directives
 Object.keys(directives).forEach(key => {
