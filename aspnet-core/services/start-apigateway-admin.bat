@@ -14,7 +14,7 @@ if '%1' equ '' goto run
 
 :publish
 dotnet publish -c Release -o ..\..\Publish\apigateway-admin --no-cache --no-restore
-copy Dockerfile ..\..\Publish\apigateway-admin \Dockerfile
+copy Dockerfile ..\..\Publish\apigateway-admin\Dockerfile
 exit
 
 :run
