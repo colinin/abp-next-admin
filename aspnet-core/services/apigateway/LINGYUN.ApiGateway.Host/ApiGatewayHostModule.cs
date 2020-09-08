@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +25,6 @@ namespace LINGYUN.ApiGateway
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(AbpCachedIdentityModelModule),
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutoMapperModule),
@@ -49,7 +47,7 @@ namespace LINGYUN.ApiGateway
             PreConfigure<CapOptions>(options =>
             {
                 options
-                .UseInMemoryStorage()
+                .UseSqlite("Data Source=./event-bus-cap.db")
                 .UseDashboard()
                 .UseRabbitMQ(rabbitMQOptions =>
                 {

@@ -3,15 +3,17 @@ using System;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.ApiGateway.HttpApi.Host.Migrations
 {
     [DbContext(typeof(HttpApiHostMigrationsDbContext))]
-    partial class HttpApiHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200908020925_Upgrade-abp-3.1.0")]
+    partial class Upgradeabp310
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

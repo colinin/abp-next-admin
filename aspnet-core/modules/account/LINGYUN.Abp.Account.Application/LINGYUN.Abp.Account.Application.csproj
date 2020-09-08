@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Application" Version="3.0.0" />
-    <PackageReference Include="Volo.Abp.Sms" Version="3.0.0" />
+    <PackageReference Include="Volo.Abp.Account.Application" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Sms" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

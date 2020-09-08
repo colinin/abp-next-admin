@@ -10,6 +10,7 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.EventBus.CAP
@@ -47,12 +48,14 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="serviceScopeFactory"></param>
         /// <param name="distributedEventBusOptions"></param>
         /// <param name="capPublisher"></param>
+        /// <param name="currentTenant"></param>
         /// <param name="customDistributedEventSubscriber"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             ICapPublisher capPublisher,
+            ICurrentTenant currentTenant,
             ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
-            : base(serviceScopeFactory)
+            : base(serviceScopeFactory, currentTenant)
         {
             CapPublisher = capPublisher;
             CustomDistributedEventSubscriber = customDistributedEventSubscriber;

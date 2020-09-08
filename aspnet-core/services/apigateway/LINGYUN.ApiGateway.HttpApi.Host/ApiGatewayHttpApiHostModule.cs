@@ -1,14 +1,11 @@
 ﻿using DotNetCore.CAP;
-using DotNetCore.CAP.Messages;
 using IdentityModel;
-using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.Autofac;
@@ -49,7 +45,6 @@ namespace LINGYUN.ApiGateway
         typeof(AbpCAPEventBusModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class ApiGatewayHttpApiHostModule : AbpModule

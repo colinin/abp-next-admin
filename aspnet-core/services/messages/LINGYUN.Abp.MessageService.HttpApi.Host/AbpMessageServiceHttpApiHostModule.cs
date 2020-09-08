@@ -2,7 +2,6 @@
 using Hangfire;
 using IdentityModel;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
-using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
@@ -23,7 +22,6 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -66,7 +64,6 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpHangfireMySqlStorageModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpMessageServiceHttpApiHostModule : AbpModule
@@ -118,14 +115,6 @@ namespace LINGYUN.Abp.MessageService
                 options.Handlers.Add<System.Data.Common.DbException>();
                 options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
                 options.Handlers.Add<System.Data.DBConcurrencyException>();
-            });
-
-            Configure<AbpDistributedCacheOptions>(options =>
-            {
-                // 滑动过期30天
-                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
-                // 绝对过期60天
-                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>

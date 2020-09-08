@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 28/08/2020 17:46:18
+ Date: 08/09/2020 10:17:07
 */
 
 SET NAMES utf8mb4;
@@ -33,6 +33,7 @@ CREATE TABLE `__efmigrationshistory`  (
 INSERT INTO `__efmigrationshistory` VALUES ('20200513034946_Migration-ApiGateway-MySql', '3.1.3');
 INSERT INTO `__efmigrationshistory` VALUES ('20200513111130_Rename-Router-To-RouteGroup', '3.1.3');
 INSERT INTO `__efmigrationshistory` VALUES ('20200618090102_Modify-ReRoute-Index-Unique', '3.1.4');
+INSERT INTO `__efmigrationshistory` VALUES ('20200908020925_Upgrade-abp-3.1.0', '3.1.7');
 
 -- ----------------------------
 -- Table structure for appapigatewayaggregate
@@ -41,7 +42,7 @@ DROP TABLE IF EXISTS `appapigatewayaggregate`;
 CREATE TABLE `appapigatewayaggregate`  (
   `Id` int(0) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `ReRouteId` bigint(0) NOT NULL,
@@ -447,7 +448,7 @@ DROP TABLE IF EXISTS `appapigatewaydynamicreroute`;
 CREATE TABLE `appapigatewaydynamicreroute`  (
   `Id` int(0) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `DynamicReRouteId` bigint(0) NOT NULL,
   `ServiceName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `DownstreamHttpVersion` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -463,7 +464,7 @@ DROP TABLE IF EXISTS `appapigatewayglobalconfiguration`;
 CREATE TABLE `appapigatewayglobalconfiguration`  (
   `Id` int(0) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `ItemId` bigint(0) NOT NULL,
   `RequestIdKey` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `BaseUrl` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -885,7 +886,7 @@ DROP TABLE IF EXISTS `appapigatewayreroute`;
 CREATE TABLE `appapigatewayreroute`  (
   `Id` int(0) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `ReRouteId` bigint(0) NOT NULL,
   `ReRouteName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `DownstreamPathTemplate` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -1022,7 +1023,7 @@ DROP TABLE IF EXISTS `appapigatewayroutegroup`;
 CREATE TABLE `appapigatewayroutegroup`  (
   `Id` char(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `CreationTime` datetime(6) NOT NULL,
   `CreatorId` char(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `LastModificationTime` datetime(6) NULL DEFAULT NULL,

@@ -1,7 +1,5 @@
 ﻿using DotNetCore.CAP;
-using DotNetCore.CAP.Internal;
 using IdentityModel;
-using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -62,7 +60,6 @@ namespace LINGYUN.Platform
         typeof(AbpBlobStoringFileSystemModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class AppPlatformHttpApiHostModule : AbpModule

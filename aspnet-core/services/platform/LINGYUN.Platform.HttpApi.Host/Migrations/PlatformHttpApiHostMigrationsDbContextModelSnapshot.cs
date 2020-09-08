@@ -28,10 +28,10 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("DeleterId")
+                    b.Property<string>("DeleterId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("DeletionTime")
@@ -43,7 +43,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("RoleName")
@@ -52,10 +52,11 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
 
-                    b.Property<Guid>("RouteId")
+                    b.Property<string>("RouteId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -68,7 +69,7 @@ namespace LINGYUN.Platform.Migrations
 
             modelBuilder.Entity("LINGYUN.Platform.Routes.Route", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -91,11 +92,11 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("DeleterId")
+                    b.Property<string>("DeleterId")
                         .HasColumnName("DeleterId")
                         .HasColumnType("char(36)");
 
@@ -153,7 +154,7 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -169,13 +170,13 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
-                    b.Property<Guid?>("ParentId")
+                    b.Property<string>("ParentId")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("PlatformType")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -197,10 +198,10 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("DeleterId")
+                    b.Property<string>("DeleterId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("DeletionTime")
@@ -212,17 +213,19 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("RouteId")
+                    b.Property<string>("RouteId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -234,7 +237,7 @@ namespace LINGYUN.Platform.Migrations
 
             modelBuilder.Entity("LINGYUN.Platform.Versions.AppVersion", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -248,11 +251,11 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("DeleterId")
+                    b.Property<string>("DeleterId")
                         .HasColumnName("DeleterId")
                         .HasColumnType("char(36)");
 
@@ -279,7 +282,7 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -289,7 +292,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<int>("PlatformType")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -318,14 +321,15 @@ namespace LINGYUN.Platform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AppVersionId")
+                    b.Property<string>("AppVersionId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
@@ -339,7 +343,7 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -363,7 +367,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
