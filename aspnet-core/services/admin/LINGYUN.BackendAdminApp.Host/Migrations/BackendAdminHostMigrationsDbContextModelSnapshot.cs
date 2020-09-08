@@ -21,7 +21,7 @@ namespace LINGYUN.BackendAdmin.Migrations
 
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -40,7 +40,7 @@ namespace LINGYUN.BackendAdmin.Migrations
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -53,7 +53,7 @@ namespace LINGYUN.BackendAdmin.Migrations
 
             modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -84,7 +84,7 @@ namespace LINGYUN.BackendAdmin.Migrations
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -98,11 +98,11 @@ namespace LINGYUN.BackendAdmin.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("DeleterId")
+                    b.Property<string>("DeleterId")
                         .HasColumnName("DeleterId")
                         .HasColumnType("char(36)");
 
@@ -124,7 +124,7 @@ namespace LINGYUN.BackendAdmin.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -142,7 +142,7 @@ namespace LINGYUN.BackendAdmin.Migrations
 
             modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
                 {
-                    b.Property<Guid>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")

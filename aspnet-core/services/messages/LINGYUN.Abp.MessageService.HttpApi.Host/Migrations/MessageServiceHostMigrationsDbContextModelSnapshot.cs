@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
                         .HasMaxLength(512);
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -109,7 +109,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<long>("GroupId")
@@ -121,14 +121,15 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("LastModifierId")
+                    b.Property<string>("LastModifierId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -147,16 +148,17 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("ShieldUserId")
+                    b.Property<string>("ShieldUserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -182,7 +184,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<long>("GroupId")
@@ -199,7 +201,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -222,17 +224,19 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ShieldUserId")
+                    b.Property<string>("ShieldUserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -252,18 +256,19 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -294,11 +299,12 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<bool>("RequireAddFriendValition")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -323,13 +329,14 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<long>("MessageId")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("ReceiveUserId")
+                    b.Property<string>("ReceiveUserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<sbyte>("SendState")
@@ -340,7 +347,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -363,17 +370,19 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("CreatorId")
+                    b.Property<string>("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("FocusUserId")
+                    b.Property<string>("FocusUserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -422,7 +431,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<sbyte>("Severity")
                         .HasColumnType("tinyint");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -448,11 +457,12 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<int>("ReadStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -478,11 +488,12 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<string>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("UserName")

@@ -10,7 +10,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace AuthServer.Migrations
 {
     [DbContext(typeof(AuthServerHostMigrationsDbContext))]
-    [Migration("20200606012143_Upgrade-Abp-3.0.0")]
+    [Migration("20200606012143_Upgrade-Abp-2.9.0")]
     partial class UpgradeAbp290
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

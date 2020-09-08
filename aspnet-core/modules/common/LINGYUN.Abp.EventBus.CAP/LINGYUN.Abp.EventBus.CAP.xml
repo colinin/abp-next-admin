@@ -190,13 +190,14 @@
             本地事件集合
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.MultiTenancy.ICurrentTenant,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
             <summary>
             constructor
             </summary>
             <param name="serviceScopeFactory"></param>
             <param name="distributedEventBusOptions"></param>
             <param name="capPublisher"></param>
+            <param name="currentTenant"></param>
             <param name="customDistributedEventSubscriber"></param>
         </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Subscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">

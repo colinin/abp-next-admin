@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using IdentityModel;
-using LINGYUN.Abp.Domain.Entities.Events;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -91,7 +90,6 @@ namespace LINGYUN.BackendAdmin
         typeof(AbpTencentLocationModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpDddDomainEntitesEventsModule),
         typeof(AbpAutofacModule)
         )]
     public class BackendAdminHostModule : AbpModule
