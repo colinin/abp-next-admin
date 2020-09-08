@@ -79,6 +79,10 @@ namespace AuthServer.Host
                 })
                 .UseDashboard();
             });
+
+            PreConfigure<IIdentityServerBuilder>(builder =>
+            {
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -185,8 +189,10 @@ namespace AuthServer.Host
             app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseAuthentication();
             app.UseMultiTenancy();
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAuditing();
             app.UseConfiguredEndpoints();
 
