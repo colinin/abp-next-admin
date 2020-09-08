@@ -213,7 +213,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.EntityFrameworkCore", "modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj", "{6FE7E243-2D99-4567-8786-6C9283D608EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Domain.Entities.Events", "modules\common\LINGYUN.Abp.Domain.Entities.Events\LINGYUN.Abp.Domain.Entities.Events.csproj", "{AAD8EF65-1FBF-4F3F-8B33-8B76E1EBA4A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Domain.Entities.Events", "modules\common\LINGYUN.Abp.Domain.Entities.Events\LINGYUN.Abp.Domain.Entities.Events.csproj", "{AAD8EF65-1FBF-4F3F-8B33-8B76E1EBA4A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

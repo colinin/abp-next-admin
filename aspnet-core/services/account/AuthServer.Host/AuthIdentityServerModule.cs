@@ -16,7 +16,10 @@ using System;
 using System.Linq;
 using System.Text;
 using Volo.Abp;
+using Volo.Abp.Account;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -48,6 +51,9 @@ namespace AuthServer.Host
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpIdentityServerSmsValidatorModule),
         typeof(AbpIdentityServerWeChatValidatorModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
@@ -72,6 +78,10 @@ namespace AuthServer.Host
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 })
                 .UseDashboard();
+            });
+
+            PreConfigure<IIdentityServerBuilder>(builder =>
+            {
             });
         }
 
@@ -179,9 +189,12 @@ namespace AuthServer.Host
             app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseAuthentication();
             app.UseMultiTenancy();
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAuditing();
+            app.UseConfiguredEndpoints();
 
             if (context.GetEnvironment().IsDevelopment())
             {

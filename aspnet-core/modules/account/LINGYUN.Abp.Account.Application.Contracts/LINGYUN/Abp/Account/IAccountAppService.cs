@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.Account
 
         Task<IdentityUserDto> RegisterAsync(WeChatRegisterDto input);
 
-        Task ResetPasswordAsync(PasswordResetDto passwordReset);
+        Task ResetPasswordAsync(PasswordResetDto input);
 
         Task VerifyPhoneNumberAsync(VerifyDto input);
     }

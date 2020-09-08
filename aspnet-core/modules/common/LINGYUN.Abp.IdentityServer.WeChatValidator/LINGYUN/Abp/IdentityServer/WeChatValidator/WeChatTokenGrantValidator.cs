@@ -80,11 +80,11 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                     Localizer["InvalidGrant:WeChatCodeNotFound"]);
                 return;
             }
-            var whchatOpenId = await WeChatOpenIdFinder.FindAsync(wechatCode);
-            var currentUser = await UserManager.FindByLoginAsync("WeChat", whchatOpenId.OpenId);
+            var wechatOpenId = await WeChatOpenIdFinder.FindAsync(wechatCode);
+            var currentUser = await UserManager.FindByLoginAsync("WeChat", wechatOpenId.OpenId);
             if(currentUser == null)
             {
-                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", whchatOpenId.OpenId);
+                Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatOpenId.OpenId);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant,
                     Localizer["InvalidGrant:WeChatNotRegister"]);
                 return;
@@ -96,9 +96,9 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             {
                 additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
             }
-            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, whchatOpenId.OpenId));
+            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, wechatOpenId.OpenId));
 
-            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, whchatOpenId.OpenId, null));
+            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenId.OpenId, null));
             context.Result = new GrantValidationResult(sub, 
                 WeChatValidatorConsts.AuthenticationMethods.BasedWeChatAuthentication, additionalClaims.ToArray());
         }

@@ -113,7 +113,7 @@ export default class extends Vue {
             notification.datetime = notify.creationTime
             notification.severity = notify.notificationSeverity
             this.notifications.push(notification)
-            this.$emit('notificationReceived')
+            this.$events.emit('onNotificationReceived', notify)
           })
         })
       })
@@ -129,16 +129,14 @@ export default class extends Vue {
 
   private onNotificationReceived(notify: any) {
     console.log('received signalr message...')
-    console.log(notify)
     const notification = new Notification()
     notification.id = notify.id
     notification.title = notify.data.properties.title
     notification.message = notify.data.properties.message
     notification.datetime = notify.creationTime
     notification.severity = notify.notificationSeverity
-    console.log(notification)
     this.pushUserNotification(notification)
-    this.$emit('notificationReceived')
+    this.$events.emit('onNotificationReceived', notify)
     this.$notify({
       title: notification.title,
       message: notification.message,
@@ -150,12 +148,11 @@ export default class extends Vue {
     this.connection.invoke('ChangeState', notificationId, ReadState.Read).then(() => {
       const removeNotifyIndex = this.notifications.findIndex(n => n.id === notificationId)
       this.notifications.splice(removeNotifyIndex, 1)
-      this.$emit('notificationReadChanged')
+      this.$events.emit('onNotificationReadChanged')
     })
   }
 
   private pushUserNotification(notification: any) {
-    console.log(this.notifications)
     if (this.notifications.length === 20) {
       this.notifications.shift()
     }

@@ -21,10 +21,7 @@
           <el-tab-pane
             label="通知"
           >
-            <user-nofitications
-              @notificationReceived="notificationCount+=1"
-              @notificationReadChanged="notificationCount-=1"
-            />
+            <user-nofitications />
           </el-tab-pane>
           <el-tab-pane label="消息">
             {{ $t('messages.noMessages') }}
@@ -47,6 +44,15 @@ import UserNofitications from './components/UserNofitications.vue'
 })
 export default class extends Vue {
   private notificationCount = 0
+
+  created() {
+    this.$events.on('onNotificationReceived', () => {
+      this.notificationCount += 1
+    })
+    this.$events.on('onNotificationReadChanged', () => {
+      this.notificationCount -= 1
+    })
+  }
 }
 </script>
 
