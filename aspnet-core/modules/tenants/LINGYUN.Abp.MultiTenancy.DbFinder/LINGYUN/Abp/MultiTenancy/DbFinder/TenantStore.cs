@@ -39,6 +39,11 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             var tenantCacheItem = AsyncHelper.RunSync(async () => await 
                 GetCacheItemByNameAsync(name));
 
+            if (tenantCacheItem == null)
+            {
+                return null;
+            }
+
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
                 ConnectionStrings = tenantCacheItem.ConnectionStrings
@@ -50,6 +55,11 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             var tenantCacheItem = AsyncHelper.RunSync(async () => await
                 GetCacheItemByIdAsync(id));
 
+            if (tenantCacheItem == null)
+            {
+                return null;
+            }
+
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
                 ConnectionStrings = tenantCacheItem.ConnectionStrings
@@ -60,6 +70,11 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
         {
             var tenantCacheItem = await GetCacheItemByNameAsync(name);
 
+            if (tenantCacheItem == null)
+            {
+                return null;
+            }
+
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
                 ConnectionStrings = tenantCacheItem.ConnectionStrings
@@ -69,6 +84,11 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
         public virtual async Task<TenantConfiguration> FindAsync(Guid id)
         {
             var tenantCacheItem = await GetCacheItemByIdAsync(id);
+
+            if (tenantCacheItem == null)
+            {
+                return null;
+            }
 
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
@@ -97,7 +117,8 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
                 if (tenant == null)
                 {
                     Logger.LogWarning($"Can not found tenant by id: {id}");
-                    throw new AbpException($"Can not found tenant by id: {id}");
+                    // throw new AbpException($"Can not found tenant by id: {id}");
+                    return null;
                 }
                 var connectionStrings = new ConnectionStrings();
                 foreach (var tenantConnectionString in tenant.ConnectionStrings)
@@ -134,7 +155,8 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
                 if (tenant == null)
                 {
                     Logger.LogWarning($"Can not found tenant by name: {name}");
-                    throw new AbpException($"Can not found tenant by name: {name}");
+                    // throw new AbpException($"Can not found tenant by name: {name}");
+                    return null;
                 }
                 var connectionStrings = new ConnectionStrings();
                 foreach (var tenantConnectionString in tenant.ConnectionStrings)
