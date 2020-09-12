@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>LINGYUN.Abp.IdentityServer4</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Localization\en.json" />
+    <Content Remove="Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\en.json" />
+    <EmbeddedResource Include="Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
+    <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.4" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.7" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Account.Application" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Account.HttpApi" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application\LINGYUN.Abp.IdentityServer.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.EntityFrameworkCore\LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.HttpApi\LINGYUN.Abp.IdentityServer.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
+  </ItemGroup>
+
+</Project>

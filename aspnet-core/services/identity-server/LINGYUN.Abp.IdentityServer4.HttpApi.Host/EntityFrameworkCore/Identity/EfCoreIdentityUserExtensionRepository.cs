@@ -8,7 +8,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 
-namespace LINGYUN.Platform.EntityFrameworkCore.Identity
+namespace LINGYUN.Abp.IdentityServer4.Identity
 {
     public class EfCoreIdentityUserRepository : EfCoreRepository<IdentityDbContext, IdentityUser, Guid>, Abp.Account.IIdentityUserRepository,
         ITransientDependency

@@ -44,11 +44,10 @@
     <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.Autofac" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.Account.Application" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.Account.HttpApi" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="3.1.0" />
@@ -60,20 +59,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
-    <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.Application.Contracts\LINGYUN.ApiGateway.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
     <ProjectReference Include="..\..\..\modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
-    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj" />
+    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
-    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application\LINGYUN.Abp.IdentityServer.Application.csproj" />
-    <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.HttpApi\LINGYUN.Abp.IdentityServer.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj" />
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\settings\LINGYUN.Abp.SettingManagement.Application\LINGYUN.Abp.SettingManagement.Application.csproj" />
