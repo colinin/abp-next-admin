@@ -189,7 +189,7 @@ namespace LINGYUN.Abp.Account
                 case PhoneNumberVerifyType.Register:
                     var phoneVerifyCode = new Random().Next(100000, 999999);
                     verifyCacheItem.VerifyCode = phoneVerifyCode.ToString();
-                    var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsRegisterTemplateCode);
+                    var templateCode = await SettingProvider.GetOrDefaultAsync(AccountSettingNames.SmsRegisterTemplateCode, ServiceProvider);
                     await SendPhoneVerifyMessageAsync(templateCode, input.PhoneNumber, phoneVerifyCode.ToString());
                     return;
                 case PhoneNumberVerifyType.Signin:
@@ -221,7 +221,7 @@ namespace LINGYUN.Abp.Account
             // 查找用户信息
             var user = await GetUserByPhoneNumberAsync(phoneNumber);
             // 获取登录验证码模板号
-            var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsSigninTemplateCode);
+            var templateCode = await SettingProvider.GetOrDefaultAsync(AccountSettingNames.SmsSigninTemplateCode, ServiceProvider);
             // 生成手机验证码
             var phoneVerifyCode = await PhoneNumberTokenProvider.GenerateAsync("phone_verify", UserManager, user);
             // 发送短信验证码
@@ -235,7 +235,7 @@ namespace LINGYUN.Abp.Account
             // 查找用户信息
             var user = await GetUserByPhoneNumberAsync(phoneNumber);
             // 获取登录验证码模板号
-            var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsResetPasswordTemplateCode);
+            var templateCode = await SettingProvider.GetOrDefaultAsync(AccountSettingNames.SmsResetPasswordTemplateCode, ServiceProvider);
             // 生成重置密码验证码
             var phoneVerifyToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             // 发送短信验证码

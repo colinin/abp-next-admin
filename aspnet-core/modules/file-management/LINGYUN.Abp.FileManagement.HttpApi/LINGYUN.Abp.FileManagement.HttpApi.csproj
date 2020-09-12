@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj" />
   </ItemGroup>
 

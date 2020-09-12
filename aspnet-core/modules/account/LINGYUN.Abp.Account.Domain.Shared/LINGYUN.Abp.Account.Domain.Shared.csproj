@@ -6,6 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LINGYUN\Abp\Account\Localization\Resources\en.json" />
+    <None Remove="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.Localization" Version="3.1.0" />
   </ItemGroup>
 

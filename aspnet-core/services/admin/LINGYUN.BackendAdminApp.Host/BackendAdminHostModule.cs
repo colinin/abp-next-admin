@@ -16,7 +16,6 @@ using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,7 +64,8 @@ namespace LINGYUN.BackendAdmin
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpFileManagementApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),// 引用类似的包主要用于聚合权限管理
+        typeof(LINGYUN.Abp.Account.AbpAccountApplicationContractsModule),// 引用类似的包主要用于聚合权限管理和设置
+        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
@@ -106,11 +106,6 @@ namespace LINGYUN.BackendAdmin
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 })
                 .UseDashboard();
-            });
-
-            PreConfigure<IdentityBuilder>(builder =>
-            {
-                builder.AddDefaultTokenProviders();
             });
         }
 

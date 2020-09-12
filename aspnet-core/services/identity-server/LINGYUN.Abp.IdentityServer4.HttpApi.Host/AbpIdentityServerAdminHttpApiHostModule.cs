@@ -4,9 +4,11 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +61,7 @@ namespace LINGYUN.Abp.IdentityServer4
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
+        typeof(AbpAliyunSmsModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
@@ -78,6 +81,11 @@ namespace LINGYUN.Abp.IdentityServer4
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 })
                 .UseDashboard();
+            });
+
+            PreConfigure<IdentityBuilder>(builder =>
+            {
+                builder.AddDefaultTokenProviders();
             });
         }
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -51,6 +51,7 @@
     <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application\LINGYUN.Abp.IdentityServer.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.EntityFrameworkCore\LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.HttpApi\LINGYUN.Abp.IdentityServer.HttpApi.csproj" />

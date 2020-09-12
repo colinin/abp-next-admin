@@ -74,11 +74,7 @@ namespace LINGYUN.Abp.FileManagement
             // 文件扩展名
             var fileExtensionName = FileHelper.GetExtension(fileName);
             var fileAllowExtension = await SettingProvider
-                .GetOrNullAsync(AbpFileManagementSettingNames.AllowFileExtensions);
-            if (fileAllowExtension.IsNullOrWhiteSpace())
-            {
-                fileAllowExtension = AbpFileManagementSettingNames.DefaultAllowFileExtensions;
-            }
+                .GetOrDefaultAsync(AbpFileManagementSettingNames.AllowFileExtensions, ServiceProvider);
             // 检查文件扩展名
             if (!fileAllowExtension.Split(',')
                 .Any(fe => fe.Equals(fileExtensionName, StringComparison.CurrentCultureIgnoreCase)))
