@@ -39,15 +39,6 @@ namespace LINGYUN.Abp.SettingManagement
             foreach (var setting in input.Settings)
             {
                 await SettingManager.SetGlobalAsync(setting.Name, setting.Value);
-                var settingDefinition = SettingDefinitionManager.GetOrNull(setting.Name);
-                if (settingDefinition != null)
-                {
-                    foreach (var provider in settingDefinition.Providers)
-                    {
-                        // 同步变更缓存配置
-                        await SetCacheItemAsync(setting.Name, setting.Value, provider, null);
-                    }
-                }
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -61,8 +52,6 @@ namespace LINGYUN.Abp.SettingManagement
                 foreach (var setting in input.Settings)
                 {
                     await SettingManager.SetForTenantAsync(CurrentTenant.GetId(), setting.Name, setting.Value);
-                    // 同步变更缓存配置
-                    await SetCacheItemAsync(setting.Name, setting.Value, TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
                 }
 
                 await CurrentUnitOfWork.SaveChangesAsync();
@@ -75,8 +64,6 @@ namespace LINGYUN.Abp.SettingManagement
             foreach (var setting in input.Settings)
             {
                 await SettingManager.SetForUserAsync(userId, setting.Name, setting.Value);
-                // 同步变更缓存配置
-                await SetCacheItemAsync(setting.Name, setting.Value, UserSettingValueProvider.ProviderName, userId.ToString());
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -88,8 +75,6 @@ namespace LINGYUN.Abp.SettingManagement
             foreach (var setting in input.Settings)
             {
                 await SettingManager.SetForUserAsync(CurrentUser.GetId(), setting.Name, setting.Value);
-                // 同步变更缓存配置
-                await SetCacheItemAsync(setting.Name, setting.Value, UserSettingValueProvider.ProviderName, CurrentUser.GetId().ToString());
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -175,18 +160,6 @@ namespace LINGYUN.Abp.SettingManagement
             }
 
             return new ListResultDto<SettingDto>(settingsDto);
-        }
-
-        protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
-        {
-            return SettingCacheItem.CalculateCacheKey(name, providerName, providerKey);
-        }
-
-        protected virtual async Task SetCacheItemAsync(string name, string value, string providerName, string providerKey)
-        {
-            var settingCacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var settignCacheItem = new SettingCacheItem(value);
-            await Cache.SetAsync(settingCacheKey, settignCacheItem);
         }
     }
 }

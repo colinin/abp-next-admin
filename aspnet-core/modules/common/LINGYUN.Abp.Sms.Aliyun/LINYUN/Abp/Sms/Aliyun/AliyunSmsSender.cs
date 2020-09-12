@@ -90,7 +90,7 @@ namespace LINYUN.Abp.Sms.Aliyun
 
         private void TryAddTemplateCode(CommonRequest request, SmsMessage smsMessage)
         {
-            if (smsMessage.Properties.TryGetValue("TemplateCode", out object template))
+            if (smsMessage.Properties.TryGetValue("TemplateCode", out object template) && template != null)
             {
                 request.AddQueryParameters("TemplateCode", template.ToString());
                 smsMessage.Properties.Remove("TemplateCode");
@@ -104,7 +104,7 @@ namespace LINYUN.Abp.Sms.Aliyun
 
         private void TryAddSignName(CommonRequest request, SmsMessage smsMessage)
         {
-            if (smsMessage.Properties.TryGetValue("SignName", out object signName))
+            if (smsMessage.Properties.TryGetValue("SignName", out object signName) && signName != null)
             {
                 request.AddQueryParameters("SignName", signName.ToString());
                 smsMessage.Properties.Remove("SignName");

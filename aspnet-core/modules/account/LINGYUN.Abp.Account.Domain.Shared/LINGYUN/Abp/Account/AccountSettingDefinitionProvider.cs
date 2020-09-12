@@ -4,7 +4,7 @@ using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Account
 {
-    public class AbpAccountSettingDefinitionProvider : SettingDefinitionProvider
+    public class AccountSettingDefinitionProvider : SettingDefinitionProvider
     {
         public override void Define(ISettingDefinitionContext context)
         {

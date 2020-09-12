@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
     <ProjectReference Include="..\..\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Account.Domain\LINGYUN.Abp.Account.Domain.csproj" />
