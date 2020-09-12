@@ -9,6 +9,7 @@ cd .\messages\LINGYUN.Abp.MessageService.HttpApi.Host
 if '%1' equ '--publish' goto publish
 if '%1' equ '--run' goto run
 if '%1' equ '--restore' goto restore
+if '%1' equ '--ef-u' goto efu
 if '%1' equ '' goto run
 exit
 
@@ -23,4 +24,8 @@ exit
 
 :restore
 dotnet restore
+exit
+
+:efu
+dotnet ef database update
 exit

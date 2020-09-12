@@ -242,6 +242,12 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
+### 初始化 appsettings.json
+
+当前所有启动项目配置存储在 **./aspnet-core/configuration** 目录,请按照给定的项目名称复制到自己的项目目录(仅在您第一次克隆此仓库是这样做)
+
+确保配置文件与您的开发环境中间件的连接配置相同,例如RabbitMQ、MySql、Redis等
+
 ### EntityFramework 迁移
 
 请切换到服务项目启动目录, 执行 **dotnet ef** 命令进行数据库迁移
@@ -254,6 +260,8 @@ cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
 dotnet ef database update
 
 ```
+
+- 也可以使用快速迁移脚本文件: **./build/build-aspnetcore-ef-update.ps1**
 
 
 ### 初始化网关数据库
