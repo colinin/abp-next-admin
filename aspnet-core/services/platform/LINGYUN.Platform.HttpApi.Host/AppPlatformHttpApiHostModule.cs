@@ -31,6 +31,7 @@ using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -50,6 +51,7 @@ namespace LINGYUN.Platform
         typeof(AppPlatformHttpApiModule),
         typeof(AppPlatformEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),

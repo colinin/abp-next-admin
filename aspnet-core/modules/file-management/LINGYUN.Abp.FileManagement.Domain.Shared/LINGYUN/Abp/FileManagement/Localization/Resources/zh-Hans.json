@@ -26,6 +26,14 @@
     "DisplayName:FileLimitLength": "文件限制大小",
     "Description:FileLimitLength": "上传文件的限制大小,单位(MB)",
     "DisplayName:AllowFileExtensions": "文件扩展名",
-    "Description:AllowFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号"
+    "Description:AllowFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号",
+    "Features:FileManagement": "文件管理",
+    "Features:DisplayName:FileSystem": "文件系统",
+    "Features:DisplayName:DownloadFile": "下载文件",
+    "Features:Description:DownloadFile": "是否允许用户下载文件",
+    "Features:DisplayName:UploadFile": "上传文件",
+    "Features:Description:UploadFile": "是否允许用户上传文件",
+    "Features:DisplayName:MaxUploadFileCount": "上传文件数量",
+    "Features:Description:MaxUploadFileCount": "用户单次上传文件的限制数量"
   }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace LINGYUN.BackendAdmin.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ConfigureFeatureManagement();
             modelBuilder.ConfigureTenantManagement();
             modelBuilder.ConfigureSettingManagement();
             modelBuilder.ConfigurePermissionManagement();

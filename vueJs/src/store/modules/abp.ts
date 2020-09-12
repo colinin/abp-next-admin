@@ -29,12 +29,12 @@ class AbpConfiguration extends VuexModule implements IAbpState {
       if (typeof resource !== 'object') return
       Object.keys(resource).forEach(key2 => {
         if (/'{|{/g.test(resource[key2])) {
-          resource[key2] = resource[key2].replace(/'{|{/g, '{{').replace(/}'|}/g, '}}')
+          resource[key2] = resource[key2].replace(/'{|{/g, '{').replace(/}'|}/g, '}')
         }
       })
       resources[key] = resource
     })
-    i18n.mergeLocaleMessage(twoLetterIsoLanguageName as string, resources)
+    i18n.mergeLocaleMessage(twoLetterIsoLanguageName, resources)
   }
 
   @Action({ rawError: true })

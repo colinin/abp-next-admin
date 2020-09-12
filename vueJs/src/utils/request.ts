@@ -96,6 +96,7 @@ service.interceptors.response.use(
     return response
   },
   (error) => {
+    console.log(error.response)
     if (error.response.status === 401) {
       UserModule.RefreshSession().then(token => {
         const config = error.response.config

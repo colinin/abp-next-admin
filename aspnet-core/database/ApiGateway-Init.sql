@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 08/09/2020 10:17:07
+ Date: 12/09/2020 10:33:17
 */
 
 SET NAMES utf8mb4;
@@ -54,7 +54,7 @@ CREATE TABLE `appapigatewayaggregate`  (
   `Priority` int(0) NULL DEFAULT NULL,
   `UpstreamHttpMethod` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayaggregate
@@ -76,7 +76,7 @@ CREATE TABLE `appapigatewayaggregateconfig`  (
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_AppApiGatewayAggregateConfig_AggregateReRouteId`(`AggregateReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAggregateConfig_AppApiGatewayAggregate_Aggregat~` FOREIGN KEY (`AggregateReRouteId`) REFERENCES `appapigatewayaggregate` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayauthoptions
@@ -188,6 +188,7 @@ INSERT INTO `appapigatewayauthoptions` VALUES (121, 1299273770182737920, '', '')
 INSERT INTO `appapigatewayauthoptions` VALUES (122, 1299273978023084032, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (123, 1299274123225694208, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (124, 1299274222299348992, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (125, 1304238876758495232, '', '');
 
 -- ----------------------------
 -- Table structure for appapigatewaybalanceroptions
@@ -304,6 +305,7 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (124, NULL, 129927377018273792
 INSERT INTO `appapigatewaybalanceroptions` VALUES (125, NULL, 1299273978023084032, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (126, NULL, 1299274123225694208, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (127, NULL, 1299274222299348992, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (128, NULL, 1304238876758495232, '', '', 0);
 
 -- ----------------------------
 -- Table structure for appapigatewaycacheoptions
@@ -415,6 +417,7 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (121, 1299273770182737920, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (122, 1299273978023084032, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (123, 1299274123225694208, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (124, 1299274222299348992, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (125, 1304238876758495232, 0, '');
 
 -- ----------------------------
 -- Table structure for appapigatewaydiscovery
@@ -434,7 +437,7 @@ CREATE TABLE `appapigatewaydiscovery`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayDiscovery_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayDiscovery_AppApiGatewayGlobalConfiguration_Item~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaydiscovery
@@ -455,7 +458,7 @@ CREATE TABLE `appapigatewaydynamicreroute`  (
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayDynamicReRoute_DynamicReRouteId`(`DynamicReRouteId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayglobalconfiguration
@@ -475,7 +478,7 @@ CREATE TABLE `appapigatewayglobalconfiguration`  (
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayGlobalConfiguration_ItemId`(`ItemId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayglobalconfiguration
@@ -623,6 +626,7 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (124, NULL, 1299273770182737920, 0
 INSERT INTO `appapigatewayhttpoptions` VALUES (125, NULL, 1299273978023084032, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (126, NULL, 1299274123225694208, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (127, NULL, 1299274222299348992, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (128, NULL, 1304238876758495232, 0, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for appapigatewayqosoptions
@@ -739,6 +743,7 @@ INSERT INTO `appapigatewayqosoptions` VALUES (124, NULL, 1299273770182737920, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (125, NULL, 1299273978023084032, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (126, NULL, 1299274123225694208, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (127, NULL, 1299274222299348992, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (128, NULL, 1304238876758495232, 50, 60000, 30000);
 
 -- ----------------------------
 -- Table structure for appapigatewayratelimitoptions
@@ -755,7 +760,7 @@ CREATE TABLE `appapigatewayratelimitoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayRateLimitOptions_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitOptions_AppApiGatewayGlobalConfigurati~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitoptions
@@ -878,6 +883,7 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (121, 1299273770182737920, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (122, 1299273978023084032, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (123, 1299274123225694208, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (124, 1299274222299348992, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (125, 1304238876758495232, NULL, '', 0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewayreroute
@@ -1015,6 +1021,7 @@ INSERT INTO `appapigatewayreroute` VALUES (128, '{}', 'f8d2b2f0f1d649c2a07eeef23
 INSERT INTO `appapigatewayreroute` VALUES (129, '{}', '9785be7a29774b468e271b23009fe115', 1299273978023084032, '【消息服务】- Hangfire仪表板 - 重试', '/hangfire/retries', '', '', '/hangfire/retries', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (130, '{}', '9c0c1cd196bb45c0bc03fafb7a1eb8f2', 1299274123225694208, '【消息服务】- Hangfire仪表板 - 周期性作业', '/hangfire/recurring', '', '', '/hangfire/recurring', 'GET,POST,DELETE,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (131, '{}', '243bafe828be463ea63a3e2b521f9923', 1299274222299348992, '【消息服务】- Hangfire仪表板 - 服务器列表', '/hangfire/servers', '', '', '/hangfire/servers', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (132, '{}', '57a8ac1b41bb434cad38fbde0e2ba2f0', 1304238876758495232, '【后台管理】- 管理功能', '/api/feature-management/features', '', '', '/api/feature-management/features', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 
 -- ----------------------------
 -- Table structure for appapigatewayroutegroup
@@ -1156,6 +1163,7 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (121, 1299273770182737920, '12
 INSERT INTO `appapigatewaysecurityoptions` VALUES (122, 1299273978023084032, '127.0.0.1', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (123, 1299274123225694208, '127.0.0.1', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (124, 1299274222299348992, '127.0.0.1', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (125, 1304238876758495232, '', '');
 
 -- ----------------------------
 -- Table structure for cap.published
@@ -1173,6 +1181,11 @@ CREATE TABLE `cap.published`  (
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cap.published
+-- ----------------------------
+INSERT INTO `cap.published` VALUES (1304238878134226944, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-callback-name\":null,\"cap-msg-id\":\"1304238878134226944\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2020/9/11 10:02:34 +08:00\",\"cap-corr-id\":\"1304238878134226944\",\"cap-corr-seq\":\"0\"},\"Value\":{\"DateTime\":\"2020-09-11T10:02:34.7884591+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2020-09-11 10:02:35', '2020-09-12 10:02:35', 'Succeeded');
 
 -- ----------------------------
 -- Table structure for cap.received

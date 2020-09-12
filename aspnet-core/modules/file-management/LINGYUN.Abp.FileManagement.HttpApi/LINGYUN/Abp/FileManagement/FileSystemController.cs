@@ -15,6 +15,8 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.IO;
 using Volo.Abp.Settings;
+using Volo.Abp.Features;
+using LINGYUN.Abp.FileManagement.Features;
 
 namespace LINGYUN.Abp.FileManagement
 {
@@ -52,6 +54,7 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpPost]
         [Route("files")]
+        [RequiresFeature(AbpFileManagementFeatureNames.FileSystem.UploadFile)]
         [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Create)]
         public virtual async Task CreateFileAsync([FromForm] FileUploadDto input)
         {
@@ -164,6 +167,7 @@ namespace LINGYUN.Abp.FileManagement
 
         [HttpGet]
         [Route("files")]
+        [RequiresFeature(AbpFileManagementFeatureNames.FileSystem.DownloadFile)]
         [Authorize(AbpFileManagementPermissions.FileSystem.FileManager.Download)]
         public virtual async Task<IActionResult> DownloadFileAsync(FileSystemDownloadDto input)
         {

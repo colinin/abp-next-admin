@@ -382,6 +382,8 @@ export default class extends Vue {
         // 下载完成后的回调
         callback(size)
       }
+    }).catch(() => {
+      callback(size)
     })
   }
 

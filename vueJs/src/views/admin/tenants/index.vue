@@ -123,6 +123,12 @@
                 {{ $t('tenant.connectionOptions') }}
               </el-dropdown-item>
               <el-dropdown-item
+                :command="{key: 'feature', row}"
+                :disabled="!checkPermission(['AbpTenantManagement.Tenants.ManageFeatures'])"
+              >
+                管理功能
+              </el-dropdown-item>
+              <el-dropdown-item
                 divided
                 :command="{key: 'delete', row}"
                 :disabled="!checkPermission(['AbpTenantManagement.Tenants.Delete'])"
@@ -175,6 +181,12 @@
         @closed="handleTenantConnectionEditFormClosed"
       />
     </el-dialog>
+
+    <tenant-feature-editForm
+      :show-dialog="showFeatureEditFormDialog"
+      :tenant-id="editTenantId"
+      @closed="onFeatureEditFormClosed"
+    />
   </div>
 </template>
 
@@ -184,6 +196,7 @@ import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
+import TenantFeatureEditForm from './components/TenantFeatureEditForm.vue'
 import TenantCreateOrEditForm from './components/TenantCreateOrEditForm.vue'
 import TenantEditConnectionForm from './components/TenantEditConnectionForm.vue'
 
@@ -191,6 +204,7 @@ import TenantEditConnectionForm from './components/TenantEditConnectionForm.vue'
   name: 'RoleList',
   components: {
     Pagination,
+    TenantFeatureEditForm,
     TenantCreateOrEditForm,
     TenantEditConnectionForm
   },
@@ -213,6 +227,7 @@ export default class extends Vue {
 
   private showEditTenantConnectionDialog: boolean
   private showCreateOrEditTenantDialog: boolean
+  private showFeatureEditFormDialog = false
 
   constructor() {
     super()
@@ -244,6 +259,10 @@ export default class extends Vue {
       case 'connection' :
         this.editTenantId = command.row.id
         this.showEditTenantConnectionDialog = true
+        break
+      case 'feature' :
+        this.editTenantId = command.row.id
+        this.showFeatureEditFormDialog = true
         break
       case 'delete' :
         this.handleDeleteTenant(command.row.id, command.row.name)
@@ -289,6 +308,11 @@ export default class extends Vue {
 
   private handleSortChange(column: any) {
     this.tenantGetPagedFilter.sorting = column.prop
+  }
+
+  private onFeatureEditFormClosed() {
+    this.showFeatureEditFormDialog = false
+    this.editTenantId = ''
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
