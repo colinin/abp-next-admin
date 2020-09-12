@@ -53,12 +53,12 @@ namespace LINGYUN.Abp.FileManagement
             string fileSystemPath = GetFileSystemPath(path);
             if (!Directory.Exists(fileSystemPath))
             {
-                throw new UserFriendlyException("指定目录不存在!");
+                throw new UserFriendlyException(L["PathNotFound"]);
             }
             var copyToFilePath = GetFileSystemPath(input.CopyToPath);
             if (Directory.Exists(copyToFilePath))
             {
-                throw new UserFriendlyException("指定的路径中已经有同名的目录存在!");
+                throw new UserFriendlyException(L["FilePathAlreadyExists"]);
             }
 
             CopyDirectory(fileSystemPath, copyToFilePath);

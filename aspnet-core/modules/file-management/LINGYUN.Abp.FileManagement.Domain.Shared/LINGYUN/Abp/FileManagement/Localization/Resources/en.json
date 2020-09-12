@@ -26,6 +26,14 @@
     "DisplayName:FileLimitLength": "File limit size",
     "Description:FileLimitLength": "Limit size of uploaded file in MB",
     "DisplayName:AllowFileExtensions": "File extension",
-    "Description:AllowFileExtensions": "List of allowed extensions to upload files, with multiple extensions separated by, don't need a notation"
+    "Description:AllowFileExtensions": "List of allowed extensions to upload files, with multiple extensions separated by, don't need a notation",
+    "Features:FileManagement": "File management",
+    "Features:DisplayName:FileSystem": "File system",
+    "Features:DisplayName:DownloadFile": "Download file",
+    "Features:Description:DownloadFile": "Whether to allow users to download files",
+    "Features:DisplayName:UploadFile": "Upload file",
+    "Features:Description:UploadFile": "Whether to allow users to upload files",
+    "Features:DisplayName:MaxUploadFileCount": "Maximum number of upload files",
+    "Features:Description:MaxUploadFileCount": "Limit the number of files a user uploads at a time"
   }
 }
