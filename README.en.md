@@ -233,6 +233,12 @@ VUE_APP_CLIENT_SECRET = '1q2w3e*'
 
 ```
 
+### Initializes appsettings.json
+
+In directory **./aspnet-core/configuration** ,Copy the given settings file to your own project directory (only if you are cloning the repository for the first time)
+
+Make sure the configuration file is the same as the connection configuration of your development environment middleware, such as RabbitMQ, MySql, Redis, and so on
+
 ### EntityFramework migration
 
 Please switch to the service project startup directory and execute the **dotnet EF ** command for database migration
@@ -246,6 +252,8 @@ cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
 dotnet ef database update
 
 ```
+
+- You can also use quick migration script files: **./build/build-aspnetcore-ef-update.ps1**
 
 
 ### Initializes the apigateway database
