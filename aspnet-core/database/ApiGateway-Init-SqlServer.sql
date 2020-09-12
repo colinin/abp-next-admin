@@ -1,854 +1,1054 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 本机服务器
+ Source Server Type    : MySQL
+ Source Server Version : 80020
+ Source Host           : localhost:3306
+ Source Schema         : apigateway
+
+ Target Server Type    : SQL Server
+ Target Server Version : 14000000
+ File Encoding         : 65001
+
+ Date: 12/09/2020 16:22:13
+*/
+
+
+-- ----------------------------
+-- Table structure for __efmigrationshistory
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[__efmigrationshistory]') AND type IN ('U'))
+	DROP TABLE [apigateway].[__efmigrationshistory]
+GO
+
+CREATE TABLE [apigateway].[__efmigrationshistory] (
+  [MigrationId] varchar(95) NOT NULL,
+  [ProductVersion] varchar(32) NOT NULL
+)
+GO
+
+
+-- ----------------------------
+-- Records of __efmigrationshistory
+-- ----------------------------
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[__efmigrationshistory] VALUES (N'20200513034946_Migration-ApiGateway-MySql', N'3.1.3'), (N'20200513111130_Rename-Router-To-RouteGroup', N'3.1.3'), (N'20200618090102_Modify-ReRoute-Index-Unique', N'3.1.4'), (N'20200908020925_Upgrade-abp-3.1.0', N'3.1.7')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayaggregate
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayaggregate]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayaggregate]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayaggregate] (
+  [Id] int NOT NULL,
+  [ExtraProperties] nvarchar(max) NULL,
+  [ConcurrencyStamp] nvarchar(40) NULL,
+  [AppId] nvarchar(50) NOT NULL,
+  [Name] nvarchar(max) NULL,
+  [ReRouteId] bigint NOT NULL,
+  [ReRouteKeys] nvarchar(1000) NULL,
+  [UpstreamPathTemplate] nvarchar(1000) NULL,
+  [UpstreamHost] nvarchar(1000) NULL,
+  [ReRouteIsCaseSensitive] tinyint NOT NULL,
+  [Aggregator] nvarchar(256) NULL,
+  [Priority] int NULL,
+  [UpstreamHttpMethod] nvarchar(500) NULL
+)
+GO
+
 
 -- ----------------------------
 -- Records of appapigatewayaggregate
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayaggregate] ON
-INSERT INTO [appapigatewayaggregate]([Id],[ExtraProperties],[ConcurrencyStamp],[AppId],[Name],[ReRouteId],[ReRouteKeys],[UpstreamPathTemplate],[UpstreamHost],[ReRouteIsCaseSensitive],[Aggregator],[Priority],[UpstreamHttpMethod]) VALUES (5, '{}', '7ad8b6d6c53a4ed0843ea55478e7dd6e', 'TEST-APP', 'abp接口代理服务', 1263083077348196352, 'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,', '/api/abp/api-definition', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
-INSERT INTO [appapigatewayaggregate]([Id],[ExtraProperties],[ConcurrencyStamp],[AppId],[Name],[ReRouteId],[ReRouteKeys],[UpstreamPathTemplate],[UpstreamHost],[ReRouteIsCaseSensitive],[Aggregator],[Priority],[UpstreamHttpMethod]) VALUES (6, '{}', 'a28de19ee118498188cd4b3ed1f79ea4', 'TEST-APP', 'abp框架配置', 1263102116090970112, 'apigateway-configuration,platform-configuration,backend-admin-configuration,messages-configuration,', '/api/abp/application-configuration', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
-SET IDENTITY_INSERT [appapigatewayaggregate] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayaggregate] VALUES (N'5', N'{}', N'db569f15577848568bee9616d6b8b53c', N'TEST-APP', N'abp接口代理服务', N'1263083077348196352', N'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,identity-server-api-definition,', N'/api/abp/api-definition', N'', N'1', N'AbpApiDefinitionAggregator', NULL, N''), (N'6', N'{}', N'870a2c5df9b34f8c9514aef0250fbb47', N'TEST-APP', N'abp框架配置', N'1263102116090970112', N'apigateway-configuration,platform-configuration,backend-admin-configuration,messages-configuration,identity-server-configuration,', N'/api/abp/application-configuration', N'', N'1', N'AbpApiDefinitionAggregator', NULL, N'')
+GO
+
+COMMIT
+GO
+
 
 -- ----------------------------
+-- Table structure for appapigatewayaggregateconfig
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayaggregateconfig]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayaggregateconfig]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayaggregateconfig] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [ReRouteKey] nvarchar(256) NULL,
+  [Parameter] nvarchar(1000) NULL,
+  [JsonPath] nvarchar(256) NULL,
+  [AggregateReRouteId] int NULL
+)
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayauthoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayauthoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayauthoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayauthoptions] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [AuthenticationProviderKey] nvarchar(100) NULL,
+  [AllowedScopes] nvarchar(200) NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayauthoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayauthoptions] ON
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (3, 1261299170387169280, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (4, 1261585859064872960, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (5, 1261586605810368512, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (6, 1261587558609436672, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (7, 1261588213298348032, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (8, 1261588367619375104, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (9, 1261588628450557952, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (10, 1261588881564221440, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (11, 1261588983053795328, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (12, 1261589139039961088, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (13, 1261589197483393024, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (14, 1261589278857084928, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (15, 1261589420356124672, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (16, 1261589960393736192, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (17, 1261606600242085888, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (18, 1261606689601732608, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (19, 1261681880965038080, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (20, 1261682144920977408, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (21, 1262220447629058048, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (22, 1262230734939758592, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (23, 1262296916350869504, NULL, '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (24, 1262632376348594176, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (25, 1262632791869902848, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (26, 1262632904575045632, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (27, 1262632976616411136, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (28, 1262660336921235456, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (29, 1262660528277966848, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (30, 1262660706875625472, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (31, 1262660966393991168, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (32, 1262661109474283520, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (33, 1262663888804663296, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (34, 1262664024096133120, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (35, 1262664186252120064, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (36, 1262664357044178944, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (37, 1262664632928718848, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (38, 1262664751409418240, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (39, 1262664871274237952, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (40, 1262665026111164416, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (41, 1262665159905267712, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (42, 1262665329829105664, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (43, 1262665456471920640, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (44, 1262665628165754880, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (45, 1262666172682883072, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (47, 1262723402331885568, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (48, 1262935771746734080, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (49, 1262935906522304512, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (50, 1262936009924481024, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (52, 1263074419073593344, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (53, 1263075249394790400, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (54, 1263075593499684864, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (56, 1263101898440146944, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (57, 1263303878648569856, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (58, 1263304204797648896, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (59, 1263304872891555840, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (60, 1263305106250047488, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (61, 1263305244594970624, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (62, 1263305430536855552, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (63, 1263639172959174656, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (64, 1264799968944640000, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (65, 1264800070161584128, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (66, 1267360794414161920, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (67, 1267383367629807616, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (68, 1267817055527632896, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (69, 1267817221286526976, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (70, 1268893687085518848, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (91, 1285579388652576768, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (92, 1285580096881778688, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (93, 1285582774663864320, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (94, 1288657613998579712, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (95, 1288657941770854400, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (96, 1288658134067109888, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (97, 1288658305156964352, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (98, 1288658491216289792, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (99, 1288658638302142464, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (100, 1288658791784308736, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (101, 1290849478956199936, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (102, 1290849628051124224, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (103, 1290849798553776128, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (104, 1290849978032238592, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (105, 1291259822512693248, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (106, 1292620505149145088, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (107, 1292620665505775616, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (108, 1292620843398791168, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (109, 1292621027574874112, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (110, 1292621363161137152, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (111, 1292621494837116928, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (112, 1292621629260365824, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (113, 1292622526073864192, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (114, 1293470838745821184, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (115, 1293471661785706496, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (116, 1293472678392721408, '', '');
-INSERT INTO [appapigatewayauthoptions]([Id],[ReRouteId],[AuthenticationProviderKey],[AllowedScopes]) VALUES (117, 1293472857510473728, '', '');
-SET IDENTITY_INSERT [appapigatewayauthoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayauthoptions] VALUES (N'3', N'1261299170387169280', NULL, N''), (N'4', N'1261585859064872960', NULL, N''), (N'5', N'1261586605810368512', NULL, N''), (N'6', N'1261587558609436672', NULL, N''), (N'7', N'1261588213298348032', NULL, N''), (N'8', N'1261588367619375104', NULL, N''), (N'9', N'1261588628450557952', NULL, N''), (N'10', N'1261588881564221440', NULL, N''), (N'11', N'1261588983053795328', NULL, N''), (N'12', N'1261589139039961088', NULL, N''), (N'13', N'1261589197483393024', NULL, N''), (N'14', N'1261589278857084928', NULL, N''), (N'15', N'1261589420356124672', NULL, N''), (N'16', N'1261589960393736192', NULL, N''), (N'17', N'1261606600242085888', NULL, N''), (N'18', N'1261606689601732608', NULL, N''), (N'21', N'1262220447629058048', NULL, N''), (N'22', N'1262230734939758592', NULL, N''), (N'23', N'1262296916350869504', NULL, N''), (N'24', N'1262632376348594176', N'', N''), (N'25', N'1262632791869902848', N'', N''), (N'26', N'1262632904575045632', N'', N''), (N'27', N'1262632976616411136', N'', N''), (N'28', N'1262660336921235456', N'', N''), (N'29', N'1262660528277966848', N'', N''), (N'30', N'1262660706875625472', N'', N''), (N'31', N'1262660966393991168', N'', N''), (N'32', N'1262661109474283520', N'', N''), (N'33', N'1262663888804663296', N'', N''), (N'34', N'1262664024096133120', N'', N''), (N'35', N'1262664186252120064', N'', N''), (N'36', N'1262664357044178944', N'', N''), (N'37', N'1262664632928718848', N'', N''), (N'38', N'1262664751409418240', N'', N''), (N'39', N'1262664871274237952', N'', N''), (N'40', N'1262665026111164416', N'', N''), (N'41', N'1262665159905267712', N'', N''), (N'42', N'1262665329829105664', N'', N''), (N'43', N'1262665456471920640', N'', N''), (N'44', N'1262665628165754880', N'', N''), (N'45', N'1262666172682883072', N'', N''), (N'47', N'1262723402331885568', N'', N''), (N'48', N'1262935771746734080', N'', N''), (N'49', N'1262935906522304512', N'', N''), (N'50', N'1262936009924481024', N'', N''), (N'52', N'1263074419073593344', N'', N''), (N'53', N'1263075249394790400', N'', N''), (N'54', N'1263075593499684864', N'', N''), (N'56', N'1263101898440146944', N'', N''), (N'57', N'1263303878648569856', N'', N''), (N'58', N'1263304204797648896', N'', N''), (N'59', N'1263304872891555840', N'', N''), (N'60', N'1263305106250047488', N'', N''), (N'61', N'1263305244594970624', N'', N''), (N'62', N'1263305430536855552', N'', N''), (N'63', N'1263639172959174656', N'', N''), (N'64', N'1264799968944640000', N'', N''), (N'65', N'1264800070161584128', N'', N''), (N'66', N'1267360794414161920', N'', N''), (N'67', N'1267383367629807616', N'', N''), (N'68', N'1267817055527632896', N'', N''), (N'69', N'1267817221286526976', N'', N''), (N'70', N'1268893687085518848', N'', N''), (N'94', N'1288657613998579712', N'', N''), (N'95', N'1288657941770854400', N'', N''), (N'96', N'1288658134067109888', N'', N''), (N'97', N'1288658305156964352', N'', N''), (N'98', N'1288658491216289792', N'', N''), (N'99', N'1288658638302142464', N'', N''), (N'100', N'1288658791784308736', N'', N''), (N'101', N'1290849478956199936', N'', N''), (N'102', N'1290849628051124224', N'', N''), (N'103', N'1290849798553776128', N'', N''), (N'105', N'1291259822512693248', N'', N''), (N'106', N'1292620505149145088', N'', N''), (N'107', N'1292620665505775616', N'', N''), (N'108', N'1292620843398791168', N'', N''), (N'109', N'1292621027574874112', N'', N''), (N'110', N'1292621363161137152', N'', N''), (N'111', N'1292621494837116928', N'', N''), (N'112', N'1292621629260365824', N'', N''), (N'113', N'1292622526073864192', N'', N''), (N'114', N'1293470838745821184', N'', N''), (N'115', N'1293471661785706496', N'', N''), (N'116', N'1293472678392721408', N'', N''), (N'117', N'1293472857510473728', N'', N''), (N'118', N'1299273336009359360', N'', N''), (N'119', N'1299273436282585088', N'', N''), (N'120', N'1299273618470567936', N'', N''), (N'121', N'1299273770182737920', N'', N''), (N'122', N'1299273978023084032', N'', N''), (N'123', N'1299274123225694208', N'', N''), (N'124', N'1299274222299348992', N'', N''), (N'125', N'1304238876758495232', N'', N''), (N'126', N'1304678610343383040', N'', N''), (N'127', N'1304679169305694208', N'', N'')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewaybalanceroptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewaybalanceroptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewaybalanceroptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewaybalanceroptions] (
+  [Id] int NOT NULL,
+  [ItemId] bigint NULL,
+  [ReRouteId] bigint NULL,
+  [Type] nvarchar(100) NULL,
+  [Key] nvarchar(100) NULL,
+  [Expiry] int NULL
+)
+GO
+
 
 -- ----------------------------
 -- Records of appapigatewaybalanceroptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewaybalanceroptions] ON
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (1, 1260841964962947072, NULL, 'LeastConnection', NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (4, NULL, 1261299170387169280, 'LeastConnection', NULL, 60000);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (5, NULL, 1261585859064872960, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (6, NULL, 1261586605810368512, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (7, NULL, 1261587558609436672, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (8, NULL, 1261588213298348032, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (9, NULL, 1261588367619375104, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (10, NULL, 1261588628450557952, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (11, NULL, 1261588881564221440, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (12, NULL, 1261588983053795328, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (13, NULL, 1261589139039961088, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (14, NULL, 1261589197483393024, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (15, NULL, 1261589278857084928, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (16, NULL, 1261589420356124672, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (17, NULL, 1261589960393736192, 'LeastConnection', NULL, 60000);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (18, NULL, 1261606600242085888, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (19, NULL, 1261606689601732608, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (20, NULL, 1261681880965038080, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (21, NULL, 1261682144920977408, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (22, NULL, 1262220447629058048, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (23, NULL, 1262230734939758592, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (24, NULL, 1262296916350869504, NULL, NULL, NULL);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (25, NULL, 1262632376348594176, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (26, NULL, 1262632791869902848, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (27, NULL, 1262632904575045632, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (28, NULL, 1262632976616411136, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (29, NULL, 1262660336921235456, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (30, NULL, 1262660528277966848, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (31, NULL, 1262660706875625472, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (32, NULL, 1262660966393991168, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (33, NULL, 1262661109474283520, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (34, NULL, 1262663888804663296, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (35, NULL, 1262664024096133120, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (36, NULL, 1262664186252120064, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (37, NULL, 1262664357044178944, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (38, NULL, 1262664632928718848, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (39, NULL, 1262664751409418240, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (40, NULL, 1262664871274237952, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (41, NULL, 1262665026111164416, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (42, NULL, 1262665159905267712, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (43, NULL, 1262665329829105664, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (44, NULL, 1262665456471920640, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (45, NULL, 1262665628165754880, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (46, NULL, 1262666172682883072, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (48, NULL, 1262723402331885568, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (49, NULL, 1262935771746734080, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (50, NULL, 1262935906522304512, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (51, NULL, 1262936009924481024, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (53, NULL, 1263074419073593344, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (54, NULL, 1263075249394790400, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (55, NULL, 1263075593499684864, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (57, NULL, 1263101898440146944, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (58, NULL, 1263303878648569856, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (59, NULL, 1263304204797648896, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (60, NULL, 1263304872891555840, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (61, NULL, 1263305106250047488, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (62, NULL, 1263305244594970624, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (63, NULL, 1263305430536855552, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (64, NULL, 1263639172959174656, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (65, NULL, 1264799968944640000, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (66, NULL, 1264800070161584128, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (68, NULL, 1267360794414161920, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (69, NULL, 1267383367629807616, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (70, NULL, 1267817055527632896, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (71, NULL, 1267817221286526976, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (72, NULL, 1268893687085518848, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (94, NULL, 1285579388652576768, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (95, NULL, 1285580096881778688, 'LeastConnection', '', 60000);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (96, NULL, 1285582774663864320, 'LeastConnection', '', 60000);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (97, NULL, 1288657613998579712, 'LeastConnection', '', 60000);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (98, NULL, 1288657941770854400, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (99, NULL, 1288658134067109888, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (100, NULL, 1288658305156964352, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (101, NULL, 1288658491216289792, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (102, NULL, 1288658638302142464, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (103, NULL, 1288658791784308736, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (104, NULL, 1290849478956199936, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (105, NULL, 1290849628051124224, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (106, NULL, 1290849798553776128, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (107, NULL, 1290849978032238592, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (108, NULL, 1291259822512693248, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (109, NULL, 1292620505149145088, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (110, NULL, 1292620665505775616, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (111, NULL, 1292620843398791168, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (112, NULL, 1292621027574874112, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (113, NULL, 1292621363161137152, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (114, NULL, 1292621494837116928, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (115, NULL, 1292621629260365824, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (116, NULL, 1292622526073864192, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (117, NULL, 1293470838745821184, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (118, NULL, 1293471661785706496, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (119, NULL, 1293472678392721408, '', '', 0);
-INSERT INTO [appapigatewaybalanceroptions]([Id],[ItemId],[ReRouteId],[Type],[Key],[Expiry]) VALUES (120, NULL, 1293472857510473728, '', '', 0);
-SET IDENTITY_INSERT [appapigatewaybalanceroptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewaybalanceroptions] VALUES (N'1', N'1260841964962947072', NULL, N'LeastConnection', NULL, NULL), (N'4', NULL, N'1261299170387169280', N'LeastConnection', NULL, N'60000'), (N'5', NULL, N'1261585859064872960', NULL, NULL, NULL), (N'6', NULL, N'1261586605810368512', NULL, NULL, NULL), (N'7', NULL, N'1261587558609436672', NULL, NULL, NULL), (N'8', NULL, N'1261588213298348032', NULL, NULL, NULL), (N'9', NULL, N'1261588367619375104', NULL, NULL, NULL), (N'10', NULL, N'1261588628450557952', NULL, NULL, NULL), (N'11', NULL, N'1261588881564221440', NULL, NULL, NULL), (N'12', NULL, N'1261588983053795328', NULL, NULL, NULL), (N'13', NULL, N'1261589139039961088', NULL, NULL, NULL), (N'14', NULL, N'1261589197483393024', NULL, NULL, NULL), (N'15', NULL, N'1261589278857084928', NULL, NULL, NULL), (N'16', NULL, N'1261589420356124672', NULL, NULL, NULL), (N'17', NULL, N'1261589960393736192', N'LeastConnection', NULL, N'60000'), (N'18', NULL, N'1261606600242085888', NULL, NULL, NULL), (N'19', NULL, N'1261606689601732608', NULL, NULL, NULL), (N'22', NULL, N'1262220447629058048', NULL, NULL, NULL), (N'23', NULL, N'1262230734939758592', NULL, NULL, NULL), (N'24', NULL, N'1262296916350869504', NULL, NULL, NULL), (N'25', NULL, N'1262632376348594176', N'', N'', N'0'), (N'26', NULL, N'1262632791869902848', N'', N'', N'0'), (N'27', NULL, N'1262632904575045632', N'', N'', N'0'), (N'28', NULL, N'1262632976616411136', N'', N'', N'0'), (N'29', NULL, N'1262660336921235456', N'', N'', N'0'), (N'30', NULL, N'1262660528277966848', N'', N'', N'0'), (N'31', NULL, N'1262660706875625472', N'', N'', N'0'), (N'32', NULL, N'1262660966393991168', N'', N'', N'0'), (N'33', NULL, N'1262661109474283520', N'', N'', N'0'), (N'34', NULL, N'1262663888804663296', N'', N'', N'0'), (N'35', NULL, N'1262664024096133120', N'', N'', N'0'), (N'36', NULL, N'1262664186252120064', N'', N'', N'0'), (N'37', NULL, N'1262664357044178944', N'', N'', N'0'), (N'38', NULL, N'1262664632928718848', N'', N'', N'0'), (N'39', NULL, N'1262664751409418240', N'', N'', N'0'), (N'40', NULL, N'1262664871274237952', N'', N'', N'0'), (N'41', NULL, N'1262665026111164416', N'', N'', N'0'), (N'42', NULL, N'1262665159905267712', N'', N'', N'0'), (N'43', NULL, N'1262665329829105664', N'', N'', N'0'), (N'44', NULL, N'1262665456471920640', N'', N'', N'0'), (N'45', NULL, N'1262665628165754880', N'', N'', N'0'), (N'46', NULL, N'1262666172682883072', N'', N'', N'0'), (N'48', NULL, N'1262723402331885568', N'', N'', N'0'), (N'49', NULL, N'1262935771746734080', N'', N'', N'0'), (N'50', NULL, N'1262935906522304512', N'', N'', N'0'), (N'51', NULL, N'1262936009924481024', N'', N'', N'0'), (N'53', NULL, N'1263074419073593344', N'', N'', N'0'), (N'54', NULL, N'1263075249394790400', N'', N'', N'0'), (N'55', NULL, N'1263075593499684864', N'', N'', N'0'), (N'57', NULL, N'1263101898440146944', N'', N'', N'0'), (N'58', NULL, N'1263303878648569856', N'', N'', N'0'), (N'59', NULL, N'1263304204797648896', N'', N'', N'0'), (N'60', NULL, N'1263304872891555840', N'', N'', N'0'), (N'61', NULL, N'1263305106250047488', N'', N'', N'0'), (N'62', NULL, N'1263305244594970624', N'', N'', N'0'), (N'63', NULL, N'1263305430536855552', N'', N'', N'0'), (N'64', NULL, N'1263639172959174656', N'', N'', N'0'), (N'65', NULL, N'1264799968944640000', N'', N'', N'0'), (N'66', NULL, N'1264800070161584128', N'', N'', N'0'), (N'68', NULL, N'1267360794414161920', N'', N'', N'0'), (N'69', NULL, N'1267383367629807616', N'', N'', N'0'), (N'70', NULL, N'1267817055527632896', N'', N'', N'0'), (N'71', NULL, N'1267817221286526976', N'', N'', N'0'), (N'72', NULL, N'1268893687085518848', N'', N'', N'0'), (N'97', NULL, N'1288657613998579712', N'LeastConnection', N'', N'60000'), (N'98', NULL, N'1288657941770854400', N'', N'', N'0'), (N'99', NULL, N'1288658134067109888', N'', N'', N'0'), (N'100', NULL, N'1288658305156964352', N'', N'', N'0'), (N'101', NULL, N'1288658491216289792', N'', N'', N'0'), (N'102', NULL, N'1288658638302142464', N'', N'', N'0'), (N'103', NULL, N'1288658791784308736', N'', N'', N'0'), (N'104', NULL, N'1290849478956199936', N'', N'', N'0'), (N'105', NULL, N'1290849628051124224', N'', N'', N'0'), (N'106', NULL, N'1290849798553776128', N'', N'', N'0'), (N'108', NULL, N'1291259822512693248', N'', N'', N'0'), (N'109', NULL, N'1292620505149145088', N'', N'', N'0'), (N'110', NULL, N'1292620665505775616', N'', N'', N'0'), (N'111', NULL, N'1292620843398791168', N'', N'', N'0'), (N'112', NULL, N'1292621027574874112', N'', N'', N'0'), (N'113', NULL, N'1292621363161137152', N'', N'', N'0'), (N'114', NULL, N'1292621494837116928', N'', N'', N'0'), (N'115', NULL, N'1292621629260365824', N'', N'', N'0'), (N'116', NULL, N'1292622526073864192', N'', N'', N'0'), (N'117', NULL, N'1293470838745821184', N'', N'', N'0'), (N'118', NULL, N'1293471661785706496', N'', N'', N'0'), (N'119', NULL, N'1293472678392721408', N'', N'', N'0'), (N'120', NULL, N'1293472857510473728', N'', N'', N'0'), (N'121', NULL, N'1299273336009359360', N'', N'', N'0'), (N'122', NULL, N'1299273436282585088', N'', N'', N'0'), (N'123', NULL, N'1299273618470567936', N'', N'', N'0'), (N'124', NULL, N'1299273770182737920', N'', N'', N'0'), (N'125', NULL, N'1299273978023084032', N'', N'', N'0'), (N'126', NULL, N'1299274123225694208', N'', N'', N'0'), (N'127', NULL, N'1299274222299348992', N'', N'', N'0'), (N'128', NULL, N'1304238876758495232', N'', N'', N'0'), (N'129', NULL, N'1304678610343383040', N'', N'', N'0'), (N'130', NULL, N'1304679169305694208', N'', N'', N'0')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewaycacheoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewaycacheoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewaycacheoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewaycacheoptions] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [TtlSeconds] int NULL,
+  [Region] nvarchar(256) NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewaycacheoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewaycacheoptions] ON
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (3, 1261299170387169280, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (4, 1261585859064872960, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (5, 1261586605810368512, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (6, 1261587558609436672, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (7, 1261588213298348032, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (8, 1261588367619375104, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (9, 1261588628450557952, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (10, 1261588881564221440, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (11, 1261588983053795328, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (12, 1261589139039961088, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (13, 1261589197483393024, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (14, 1261589278857084928, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (15, 1261589420356124672, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (16, 1261589960393736192, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (17, 1261606600242085888, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (18, 1261606689601732608, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (19, 1261681880965038080, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (20, 1261682144920977408, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (21, 1262220447629058048, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (22, 1262230734939758592, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (23, 1262296916350869504, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (24, 1262632376348594176, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (25, 1262632791869902848, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (26, 1262632904575045632, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (27, 1262632976616411136, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (28, 1262660336921235456, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (29, 1262660528277966848, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (30, 1262660706875625472, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (31, 1262660966393991168, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (32, 1262661109474283520, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (33, 1262663888804663296, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (34, 1262664024096133120, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (35, 1262664186252120064, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (36, 1262664357044178944, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (37, 1262664632928718848, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (38, 1262664751409418240, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (39, 1262664871274237952, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (40, 1262665026111164416, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (41, 1262665159905267712, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (42, 1262665329829105664, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (43, 1262665456471920640, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (44, 1262665628165754880, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (45, 1262666172682883072, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (47, 1262723402331885568, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (48, 1262935771746734080, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (49, 1262935906522304512, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (50, 1262936009924481024, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (52, 1263074419073593344, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (53, 1263075249394790400, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (54, 1263075593499684864, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (56, 1263101898440146944, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (57, 1263303878648569856, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (58, 1263304204797648896, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (59, 1263304872891555840, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (60, 1263305106250047488, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (61, 1263305244594970624, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (62, 1263305430536855552, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (63, 1263639172959174656, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (64, 1264799968944640000, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (65, 1264800070161584128, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (66, 1267360794414161920, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (67, 1267383367629807616, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (68, 1267817055527632896, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (69, 1267817221286526976, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (70, 1268893687085518848, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (91, 1285579388652576768, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (92, 1285580096881778688, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (93, 1285582774663864320, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (94, 1288657613998579712, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (95, 1288657941770854400, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (96, 1288658134067109888, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (97, 1288658305156964352, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (98, 1288658491216289792, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (99, 1288658638302142464, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (100, 1288658791784308736, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (101, 1290849478956199936, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (102, 1290849628051124224, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (103, 1290849798553776128, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (104, 1290849978032238592, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (105, 1291259822512693248, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (106, 1292620505149145088, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (107, 1292620665505775616, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (108, 1292620843398791168, NULL, NULL);
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (109, 1292621027574874112, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (110, 1292621363161137152, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (111, 1292621494837116928, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (112, 1292621629260365824, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (113, 1292622526073864192, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (114, 1293470838745821184, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (115, 1293471661785706496, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (116, 1293472678392721408, 0, '');
-INSERT INTO [appapigatewaycacheoptions]([Id],[ReRouteId],[TtlSeconds],[Region]) VALUES (117, 1293472857510473728, 0, '');
-SET IDENTITY_INSERT [appapigatewaycacheoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewaycacheoptions] VALUES (N'3', N'1261299170387169280', NULL, NULL), (N'4', N'1261585859064872960', NULL, NULL), (N'5', N'1261586605810368512', NULL, NULL), (N'6', N'1261587558609436672', NULL, NULL), (N'7', N'1261588213298348032', NULL, NULL), (N'8', N'1261588367619375104', NULL, NULL), (N'9', N'1261588628450557952', NULL, NULL), (N'10', N'1261588881564221440', NULL, NULL), (N'11', N'1261588983053795328', NULL, NULL), (N'12', N'1261589139039961088', NULL, NULL), (N'13', N'1261589197483393024', NULL, NULL), (N'14', N'1261589278857084928', NULL, NULL), (N'15', N'1261589420356124672', NULL, NULL), (N'16', N'1261589960393736192', NULL, NULL), (N'17', N'1261606600242085888', NULL, NULL), (N'18', N'1261606689601732608', NULL, NULL), (N'21', N'1262220447629058048', NULL, NULL), (N'22', N'1262230734939758592', NULL, NULL), (N'23', N'1262296916350869504', NULL, NULL), (N'24', N'1262632376348594176', N'0', N''), (N'25', N'1262632791869902848', NULL, NULL), (N'26', N'1262632904575045632', NULL, NULL), (N'27', N'1262632976616411136', NULL, NULL), (N'28', N'1262660336921235456', N'0', N''), (N'29', N'1262660528277966848', N'0', N''), (N'30', N'1262660706875625472', N'0', N''), (N'31', N'1262660966393991168', N'0', N''), (N'32', N'1262661109474283520', N'0', N''), (N'33', N'1262663888804663296', N'0', N''), (N'34', N'1262664024096133120', N'0', N''), (N'35', N'1262664186252120064', N'0', N''), (N'36', N'1262664357044178944', N'0', N''), (N'37', N'1262664632928718848', N'0', N''), (N'38', N'1262664751409418240', N'0', N''), (N'39', N'1262664871274237952', N'0', N''), (N'40', N'1262665026111164416', N'0', N''), (N'41', N'1262665159905267712', N'0', N''), (N'42', N'1262665329829105664', N'0', N''), (N'43', N'1262665456471920640', N'0', N''), (N'44', N'1262665628165754880', N'0', N''), (N'45', N'1262666172682883072', N'0', N''), (N'47', N'1262723402331885568', N'0', N''), (N'48', N'1262935771746734080', N'0', N''), (N'49', N'1262935906522304512', N'0', N''), (N'50', N'1262936009924481024', N'0', N''), (N'52', N'1263074419073593344', NULL, NULL), (N'53', N'1263075249394790400', N'0', N''), (N'54', N'1263075593499684864', N'0', N''), (N'56', N'1263101898440146944', NULL, NULL), (N'57', N'1263303878648569856', NULL, NULL), (N'58', N'1263304204797648896', NULL, NULL), (N'59', N'1263304872891555840', NULL, NULL), (N'60', N'1263305106250047488', NULL, NULL), (N'61', N'1263305244594970624', NULL, NULL), (N'62', N'1263305430536855552', NULL, NULL), (N'63', N'1263639172959174656', NULL, NULL), (N'64', N'1264799968944640000', NULL, NULL), (N'65', N'1264800070161584128', NULL, NULL), (N'66', N'1267360794414161920', NULL, NULL), (N'67', N'1267383367629807616', NULL, NULL), (N'68', N'1267817055527632896', NULL, NULL), (N'69', N'1267817221286526976', NULL, NULL), (N'70', N'1268893687085518848', NULL, NULL), (N'94', N'1288657613998579712', NULL, NULL), (N'95', N'1288657941770854400', N'0', N''), (N'96', N'1288658134067109888', N'0', N''), (N'97', N'1288658305156964352', N'0', N''), (N'98', N'1288658491216289792', N'0', N''), (N'99', N'1288658638302142464', N'0', N''), (N'100', N'1288658791784308736', N'0', N''), (N'101', N'1290849478956199936', NULL, NULL), (N'102', N'1290849628051124224', NULL, NULL), (N'103', N'1290849798553776128', NULL, NULL), (N'105', N'1291259822512693248', N'0', N''), (N'106', N'1292620505149145088', N'0', N''), (N'107', N'1292620665505775616', N'0', N''), (N'108', N'1292620843398791168', NULL, NULL), (N'109', N'1292621027574874112', N'0', N''), (N'110', N'1292621363161137152', N'0', N''), (N'111', N'1292621494837116928', N'0', N''), (N'112', N'1292621629260365824', N'0', N''), (N'113', N'1292622526073864192', N'0', N''), (N'114', N'1293470838745821184', N'0', N''), (N'115', N'1293471661785706496', N'0', N''), (N'116', N'1293472678392721408', N'0', N''), (N'117', N'1293472857510473728', N'0', N''), (N'118', N'1299273336009359360', NULL, NULL), (N'119', N'1299273436282585088', NULL, NULL), (N'120', N'1299273618470567936', NULL, NULL), (N'121', N'1299273770182737920', NULL, NULL), (N'122', N'1299273978023084032', NULL, NULL), (N'123', N'1299274123225694208', NULL, NULL), (N'124', N'1299274222299348992', NULL, NULL), (N'125', N'1304238876758495232', N'0', N''), (N'126', N'1304678610343383040', NULL, NULL), (N'127', N'1304679169305694208', NULL, NULL)
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewaydiscovery
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewaydiscovery]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewaydiscovery]
+GO
+
+CREATE TABLE [apigateway].[appapigatewaydiscovery] (
+  [Id] int NOT NULL,
+  [ItemId] bigint NOT NULL,
+  [Host] nvarchar(50) NULL,
+  [Port] int NULL,
+  [Type] nvarchar(128) NULL,
+  [Token] nvarchar(256) NULL,
+  [ConfigurationKey] nvarchar(256) NULL,
+  [PollingInterval] int NULL,
+  [Namespace] nvarchar(128) NULL,
+  [Scheme] nvarchar(50) NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewaydiscovery
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewaydiscovery] ON
-INSERT INTO [appapigatewaydiscovery]([Id]
-      ,[ItemId]
-      ,[Host]
-      ,[Port]
-      ,[Type]
-      ,[Token]
-      ,[ConfigurationKey]
-      ,[PollingInterval]
-      ,[Namespace]
-      ,[Scheme]) VALUES (1, 1260841964962947072, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-SET IDENTITY_INSERT [appapigatewaydiscovery] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewaydiscovery] VALUES (N'1', N'1260841964962947072', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewaydynamicreroute
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewaydynamicreroute]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewaydynamicreroute]
+GO
+
+CREATE TABLE [apigateway].[appapigatewaydynamicreroute] (
+  [Id] int NOT NULL,
+  [ExtraProperties] nvarchar(max) NULL,
+  [ConcurrencyStamp] nvarchar(40) NULL,
+  [DynamicReRouteId] bigint NOT NULL,
+  [ServiceName] nvarchar(100) NOT NULL,
+  [DownstreamHttpVersion] nvarchar(30) NULL,
+  [AppId] nvarchar(50) NOT NULL
+)
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayglobalconfiguration
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayglobalconfiguration]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayglobalconfiguration]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayglobalconfiguration] (
+  [Id] int NOT NULL,
+  [ExtraProperties] nvarchar(max) NULL,
+  [ConcurrencyStamp] nvarchar(40) NULL,
+  [ItemId] bigint NOT NULL,
+  [RequestIdKey] nvarchar(100) NULL,
+  [BaseUrl] nvarchar(256) NOT NULL,
+  [DownstreamScheme] nvarchar(100) NULL,
+  [DownstreamHttpVersion] nvarchar(30) NULL,
+  [IsDeleted] tinyint NOT NULL,
+  [IsActive] tinyint NOT NULL,
+  [AppId] nvarchar(50) NOT NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayglobalconfiguration
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayglobalconfiguration] ON
-INSERT INTO [appapigatewayglobalconfiguration]([Id]
-      ,[ExtraProperties]
-      ,[ConcurrencyStamp]
-      ,[ItemId]
-      ,[RequestIdKey]
-      ,[BaseUrl]
-      ,[DownstreamScheme]
-      ,[DownstreamHttpVersion]
-      ,[IsDeleted]
-      ,[IsActive]
-      ,[AppId]) VALUES (1, '{}', 'f7973118f2c2425c8cc96b59883b99aa', 1260841964962947072, NULL, 'http://localhost:30000', 'HTTP', NULL, 0, 1, 'TEST-APP');
-SET IDENTITY_INSERT [appapigatewayglobalconfiguration] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayglobalconfiguration] VALUES (N'1', N'{}', N'f7973118f2c2425c8cc96b59883b99aa', N'1260841964962947072', NULL, N'http://localhost:30000', N'HTTP', NULL, N'0', N'1', N'TEST-APP')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayheaders
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayheaders]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayheaders]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayheaders] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [Key] nvarchar(50) NULL,
+  [Value] nvarchar(256) NULL
+)
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayhostandport
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayhostandport]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayhostandport]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayhostandport] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [Host] nvarchar(50) NOT NULL,
+  [Port] int NULL
+)
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayhttpoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayhttpoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayhttpoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayhttpoptions] (
+  [Id] int NOT NULL,
+  [ItemId] bigint NULL,
+  [ReRouteId] bigint NULL,
+  [MaxConnectionsPerServer] int NULL,
+  [AllowAutoRedirect] tinyint NOT NULL,
+  [UseCookieContainer] tinyint NOT NULL,
+  [UseTracing] tinyint NOT NULL,
+  [UseProxy] tinyint NOT NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayhttpoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayhttpoptions] ON
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (1, 1260841964962947072, NULL, NULL, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (4, NULL, 1261299170387169280, 1000, 1, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (5, NULL, 1261585859064872960, NULL, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (6, NULL, 1261586605810368512, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (7, NULL, 1261587558609436672, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (8, NULL, 1261588213298348032, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (9, NULL, 1261588367619375104, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (10, NULL, 1261588628450557952, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (11, NULL, 1261588881564221440, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (12, NULL, 1261588983053795328, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (13, NULL, 1261589139039961088, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (14, NULL, 1261589197483393024, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (15, NULL, 1261589278857084928, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (16, NULL, 1261589420356124672, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (17, NULL, 1261589960393736192, 1000, 1, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (18, NULL, 1261606600242085888, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (19, NULL, 1261606689601732608, NULL, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (20, NULL, 1261681880965038080, 100, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (21, NULL, 1261682144920977408, 100, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (22, NULL, 1262220447629058048, NULL, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (23, NULL, 1262230734939758592, NULL, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (24, NULL, 1262296916350869504, NULL, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (25, NULL, 1262632376348594176, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (26, NULL, 1262632791869902848, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (27, NULL, 1262632904575045632, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (28, NULL, 1262632976616411136, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (29, NULL, 1262660336921235456, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (30, NULL, 1262660528277966848, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (31, NULL, 1262660706875625472, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (32, NULL, 1262660966393991168, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (33, NULL, 1262661109474283520, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (34, NULL, 1262663888804663296, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (35, NULL, 1262664024096133120, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (36, NULL, 1262664186252120064, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (37, NULL, 1262664357044178944, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (38, NULL, 1262664632928718848, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (39, NULL, 1262664751409418240, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (40, NULL, 1262664871274237952, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (41, NULL, 1262665026111164416, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (42, NULL, 1262665159905267712, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (43, NULL, 1262665329829105664, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (44, NULL, 1262665456471920640, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (45, NULL, 1262665628165754880, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (46, NULL, 1262666172682883072, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (48, NULL, 1262723402331885568, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (49, NULL, 1262935771746734080, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (50, NULL, 1262935906522304512, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (51, NULL, 1262936009924481024, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (53, NULL, 1263074419073593344, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (54, NULL, 1263075249394790400, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (55, NULL, 1263075593499684864, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (57, NULL, 1263101898440146944, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (58, NULL, 1263303878648569856, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (59, NULL, 1263304204797648896, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (60, NULL, 1263304872891555840, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (61, NULL, 1263305106250047488, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (62, NULL, 1263305244594970624, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (63, NULL, 1263305430536855552, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (64, NULL, 1263639172959174656, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (65, NULL, 1264799968944640000, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (66, NULL, 1264800070161584128, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (68, NULL, 1267360794414161920, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (69, NULL, 1267383367629807616, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (70, NULL, 1267817055527632896, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (71, NULL, 1267817221286526976, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (72, NULL, 1268893687085518848, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (94, NULL, 1285579388652576768, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (95, NULL, 1285580096881778688, 1000, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (96, NULL, 1285582774663864320, 1000, 0, 0, 1, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (97, NULL, 1288657613998579712, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (98, NULL, 1288657941770854400, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (99, NULL, 1288658134067109888, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (100, NULL, 1288658305156964352, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (101, NULL, 1288658491216289792, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (102, NULL, 1288658638302142464, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (103, NULL, 1288658791784308736, 1000, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (104, NULL, 1290849478956199936, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (105, NULL, 1290849628051124224, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (106, NULL, 1290849798553776128, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (107, NULL, 1290849978032238592, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (108, NULL, 1291259822512693248, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (109, NULL, 1292620505149145088, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (110, NULL, 1292620665505775616, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (111, NULL, 1292620843398791168, 100, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (112, NULL, 1292621027574874112, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (113, NULL, 1292621363161137152, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (114, NULL, 1292621494837116928, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (115, NULL, 1292621629260365824, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (116, NULL, 1292622526073864192, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (117, NULL, 1293470838745821184, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (118, NULL, 1293471661785706496, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (119, NULL, 1293472678392721408, 0, 0, 0, 0, 0);
-INSERT INTO [appapigatewayhttpoptions]([Id],[ItemId],[ReRouteId],[MaxConnectionsPerServer],[AllowAutoRedirect],[UseCookieContainer],[UseTracing],[UseProxy]) VALUES (120, NULL, 1293472857510473728, 0, 0, 0, 0, 0);
-SET IDENTITY_INSERT [appapigatewayhttpoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayhttpoptions] VALUES (N'1', N'1260841964962947072', NULL, NULL, N'0', N'0', N'1', N'0'), (N'4', NULL, N'1261299170387169280', N'1000', N'1', N'0', N'1', N'0'), (N'5', NULL, N'1261585859064872960', NULL, N'0', N'0', N'1', N'0'), (N'6', NULL, N'1261586605810368512', NULL, N'0', N'0', N'0', N'0'), (N'7', NULL, N'1261587558609436672', NULL, N'0', N'0', N'0', N'0'), (N'8', NULL, N'1261588213298348032', NULL, N'0', N'0', N'0', N'0'), (N'9', NULL, N'1261588367619375104', NULL, N'0', N'0', N'0', N'0'), (N'10', NULL, N'1261588628450557952', NULL, N'0', N'0', N'0', N'0'), (N'11', NULL, N'1261588881564221440', NULL, N'0', N'0', N'0', N'0'), (N'12', NULL, N'1261588983053795328', NULL, N'0', N'0', N'0', N'0'), (N'13', NULL, N'1261589139039961088', NULL, N'0', N'0', N'0', N'0'), (N'14', NULL, N'1261589197483393024', NULL, N'0', N'0', N'0', N'0'), (N'15', NULL, N'1261589278857084928', NULL, N'0', N'0', N'0', N'0'), (N'16', NULL, N'1261589420356124672', NULL, N'0', N'0', N'0', N'0'), (N'17', NULL, N'1261589960393736192', N'1000', N'1', N'0', N'1', N'0'), (N'18', NULL, N'1261606600242085888', NULL, N'0', N'0', N'0', N'0'), (N'19', NULL, N'1261606689601732608', NULL, N'0', N'0', N'0', N'0'), (N'22', NULL, N'1262220447629058048', NULL, N'0', N'0', N'1', N'0'), (N'23', NULL, N'1262230734939758592', NULL, N'0', N'0', N'1', N'0'), (N'24', NULL, N'1262296916350869504', NULL, N'0', N'0', N'1', N'0'), (N'25', NULL, N'1262632376348594176', N'0', N'0', N'0', N'0', N'0'), (N'26', NULL, N'1262632791869902848', N'0', N'0', N'0', N'0', N'0'), (N'27', NULL, N'1262632904575045632', N'0', N'0', N'0', N'0', N'0'), (N'28', NULL, N'1262632976616411136', N'0', N'0', N'0', N'0', N'0'), (N'29', NULL, N'1262660336921235456', N'0', N'0', N'0', N'0', N'0'), (N'30', NULL, N'1262660528277966848', N'0', N'0', N'0', N'0', N'0'), (N'31', NULL, N'1262660706875625472', N'0', N'0', N'0', N'0', N'0'), (N'32', NULL, N'1262660966393991168', N'0', N'0', N'0', N'0', N'0'), (N'33', NULL, N'1262661109474283520', N'0', N'0', N'0', N'0', N'0'), (N'34', NULL, N'1262663888804663296', N'0', N'0', N'0', N'0', N'0'), (N'35', NULL, N'1262664024096133120', N'0', N'0', N'0', N'0', N'0'), (N'36', NULL, N'1262664186252120064', N'0', N'0', N'0', N'0', N'0'), (N'37', NULL, N'1262664357044178944', N'0', N'0', N'0', N'0', N'0'), (N'38', NULL, N'1262664632928718848', N'0', N'0', N'0', N'0', N'0'), (N'39', NULL, N'1262664751409418240', N'0', N'0', N'0', N'0', N'0'), (N'40', NULL, N'1262664871274237952', N'0', N'0', N'0', N'0', N'0'), (N'41', NULL, N'1262665026111164416', N'0', N'0', N'0', N'0', N'0'), (N'42', NULL, N'1262665159905267712', N'0', N'0', N'0', N'0', N'0'), (N'43', NULL, N'1262665329829105664', N'0', N'0', N'0', N'0', N'0'), (N'44', NULL, N'1262665456471920640', N'0', N'0', N'0', N'0', N'0'), (N'45', NULL, N'1262665628165754880', N'0', N'0', N'0', N'0', N'0'), (N'46', NULL, N'1262666172682883072', N'0', N'0', N'0', N'0', N'0'), (N'48', NULL, N'1262723402331885568', N'0', N'0', N'0', N'0', N'0'), (N'49', NULL, N'1262935771746734080', N'0', N'0', N'0', N'0', N'0'), (N'50', NULL, N'1262935906522304512', N'0', N'0', N'0', N'0', N'0'), (N'51', NULL, N'1262936009924481024', N'0', N'0', N'0', N'0', N'0'), (N'53', NULL, N'1263074419073593344', N'0', N'0', N'0', N'0', N'0'), (N'54', NULL, N'1263075249394790400', N'0', N'0', N'0', N'0', N'0'), (N'55', NULL, N'1263075593499684864', N'0', N'0', N'0', N'0', N'0'), (N'57', NULL, N'1263101898440146944', N'0', N'0', N'0', N'0', N'0'), (N'58', NULL, N'1263303878648569856', N'0', N'0', N'0', N'0', N'0'), (N'59', NULL, N'1263304204797648896', N'0', N'0', N'0', N'0', N'0'), (N'60', NULL, N'1263304872891555840', N'0', N'0', N'0', N'0', N'0'), (N'61', NULL, N'1263305106250047488', N'0', N'0', N'0', N'0', N'0'), (N'62', NULL, N'1263305244594970624', N'0', N'0', N'0', N'0', N'0'), (N'63', NULL, N'1263305430536855552', N'0', N'0', N'0', N'0', N'0'), (N'64', NULL, N'1263639172959174656', N'0', N'0', N'0', N'0', N'0'), (N'65', NULL, N'1264799968944640000', N'0', N'0', N'0', N'0', N'0'), (N'66', NULL, N'1264800070161584128', N'0', N'0', N'0', N'0', N'0'), (N'68', NULL, N'1267360794414161920', N'0', N'0', N'0', N'0', N'0'), (N'69', NULL, N'1267383367629807616', N'0', N'0', N'0', N'0', N'0'), (N'70', NULL, N'1267817055527632896', N'0', N'0', N'0', N'0', N'0'), (N'71', NULL, N'1267817221286526976', N'0', N'0', N'0', N'0', N'0'), (N'72', NULL, N'1268893687085518848', N'0', N'0', N'0', N'0', N'0'), (N'97', NULL, N'1288657613998579712', N'1000', N'0', N'0', N'0', N'0'), (N'98', NULL, N'1288657941770854400', N'1000', N'0', N'0', N'0', N'0'), (N'99', NULL, N'1288658134067109888', N'1000', N'0', N'0', N'0', N'0'), (N'100', NULL, N'1288658305156964352', N'1000', N'0', N'0', N'0', N'0'), (N'101', NULL, N'1288658491216289792', N'1000', N'0', N'0', N'0', N'0'), (N'102', NULL, N'1288658638302142464', N'1000', N'0', N'0', N'0', N'0'), (N'103', NULL, N'1288658791784308736', N'1000', N'0', N'0', N'0', N'0'), (N'104', NULL, N'1290849478956199936', N'0', N'0', N'0', N'0', N'0'), (N'105', NULL, N'1290849628051124224', N'0', N'0', N'0', N'0', N'0'), (N'106', NULL, N'1290849798553776128', N'0', N'0', N'0', N'0', N'0'), (N'108', NULL, N'1291259822512693248', N'0', N'0', N'0', N'0', N'0'), (N'109', NULL, N'1292620505149145088', N'0', N'0', N'0', N'0', N'0'), (N'110', NULL, N'1292620665505775616', N'0', N'0', N'0', N'0', N'0'), (N'111', NULL, N'1292620843398791168', N'100', N'0', N'0', N'0', N'0'), (N'112', NULL, N'1292621027574874112', N'0', N'0', N'0', N'0', N'0'), (N'113', NULL, N'1292621363161137152', N'0', N'0', N'0', N'0', N'0'), (N'114', NULL, N'1292621494837116928', N'0', N'0', N'0', N'0', N'0'), (N'115', NULL, N'1292621629260365824', N'0', N'0', N'0', N'0', N'0'), (N'116', NULL, N'1292622526073864192', N'0', N'0', N'0', N'0', N'0'), (N'117', NULL, N'1293470838745821184', N'0', N'0', N'0', N'0', N'0'), (N'118', NULL, N'1293471661785706496', N'0', N'0', N'0', N'0', N'0'), (N'119', NULL, N'1293472678392721408', N'0', N'0', N'0', N'0', N'0'), (N'120', NULL, N'1293472857510473728', N'0', N'0', N'0', N'0', N'0'), (N'121', NULL, N'1299273336009359360', N'0', N'0', N'0', N'0', N'0'), (N'122', NULL, N'1299273436282585088', N'0', N'0', N'0', N'0', N'0'), (N'123', NULL, N'1299273618470567936', N'0', N'0', N'0', N'0', N'0'), (N'124', NULL, N'1299273770182737920', N'0', N'0', N'0', N'0', N'0'), (N'125', NULL, N'1299273978023084032', N'0', N'0', N'0', N'0', N'0'), (N'126', NULL, N'1299274123225694208', N'0', N'0', N'0', N'0', N'0'), (N'127', NULL, N'1299274222299348992', N'0', N'0', N'0', N'0', N'0'), (N'128', NULL, N'1304238876758495232', N'0', N'0', N'0', N'0', N'0'), (N'129', NULL, N'1304678610343383040', N'0', N'0', N'0', N'0', N'0'), (N'130', NULL, N'1304679169305694208', N'0', N'0', N'0', N'0', N'0')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayqosoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayqosoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayqosoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayqosoptions] (
+  [Id] int NOT NULL,
+  [ItemId] bigint NULL,
+  [ReRouteId] bigint NULL,
+  [ExceptionsAllowedBeforeBreaking] int NULL,
+  [DurationOfBreak] int NULL,
+  [TimeoutValue] int NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayqosoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayqosoptions] ON
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (1, 1260841964962947072, NULL, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (4, NULL, 1261299170387169280, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (5, NULL, 1261585859064872960, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (6, NULL, 1261586605810368512, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (7, NULL, 1261587558609436672, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (8, NULL, 1261588213298348032, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (9, NULL, 1261588367619375104, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (10, NULL, 1261588628450557952, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (11, NULL, 1261588881564221440, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (12, NULL, 1261588983053795328, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (13, NULL, 1261589139039961088, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (14, NULL, 1261589197483393024, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (15, NULL, 1261589278857084928, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (16, NULL, 1261589420356124672, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (17, NULL, 1261589960393736192, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (18, NULL, 1261606600242085888, NULL, NULL, NULL);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (19, NULL, 1261606689601732608, NULL, NULL, NULL);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (20, NULL, 1261681880965038080, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (21, NULL, 1261682144920977408, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (22, NULL, 1262220447629058048, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (23, NULL, 1262230734939758592, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (24, NULL, 1262296916350869504, 60, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (25, NULL, 1262632376348594176, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (26, NULL, 1262632791869902848, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (27, NULL, 1262632904575045632, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (28, NULL, 1262632976616411136, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (29, NULL, 1262660336921235456, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (30, NULL, 1262660528277966848, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (31, NULL, 1262660706875625472, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (32, NULL, 1262660966393991168, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (33, NULL, 1262661109474283520, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (34, NULL, 1262663888804663296, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (35, NULL, 1262664024096133120, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (36, NULL, 1262664186252120064, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (37, NULL, 1262664357044178944, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (38, NULL, 1262664632928718848, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (39, NULL, 1262664751409418240, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (40, NULL, 1262664871274237952, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (41, NULL, 1262665026111164416, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (42, NULL, 1262665159905267712, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (43, NULL, 1262665329829105664, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (44, NULL, 1262665456471920640, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (45, NULL, 1262665628165754880, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (46, NULL, 1262666172682883072, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (48, NULL, 1262723402331885568, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (49, NULL, 1262935771746734080, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (50, NULL, 1262935906522304512, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (51, NULL, 1262936009924481024, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (53, NULL, 1263074419073593344, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (54, NULL, 1263075249394790400, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (55, NULL, 1263075593499684864, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (57, NULL, 1263101898440146944, 50, 60000, 120000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (58, NULL, 1263303878648569856, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (59, NULL, 1263304204797648896, 50, 60000, 120000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (60, NULL, 1263304872891555840, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (61, NULL, 1263305106250047488, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (62, NULL, 1263305244594970624, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (63, NULL, 1263305430536855552, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (64, NULL, 1263639172959174656, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (65, NULL, 1264799968944640000, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (66, NULL, 1264800070161584128, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (68, NULL, 1267360794414161920, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (69, NULL, 1267383367629807616, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (70, NULL, 1267817055527632896, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (71, NULL, 1267817221286526976, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (72, NULL, 1268893687085518848, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (94, NULL, 1285579388652576768, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (95, NULL, 1285580096881778688, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (96, NULL, 1285582774663864320, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (97, NULL, 1288657613998579712, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (98, NULL, 1288657941770854400, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (99, NULL, 1288658134067109888, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (100, NULL, 1288658305156964352, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (101, NULL, 1288658491216289792, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (102, NULL, 1288658638302142464, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (103, NULL, 1288658791784308736, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (104, NULL, 1290849478956199936, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (105, NULL, 1290849628051124224, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (106, NULL, 1290849798553776128, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (107, NULL, 1290849978032238592, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (108, NULL, 1291259822512693248, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (109, NULL, 1292620505149145088, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (110, NULL, 1292620665505775616, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (111, NULL, 1292620843398791168, 50, 60000, 1200000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (112, NULL, 1292621027574874112, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (113, NULL, 1292621363161137152, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (114, NULL, 1292621494837116928, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (115, NULL, 1292621629260365824, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (116, NULL, 1292622526073864192, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (117, NULL, 1293470838745821184, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (118, NULL, 1293471661785706496, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (119, NULL, 1293472678392721408, 50, 60000, 30000);
-INSERT INTO [appapigatewayqosoptions]([Id],[ItemId],[ReRouteId],[ExceptionsAllowedBeforeBreaking],[DurationOfBreak],[TimeoutValue]) VALUES (120, NULL, 1293472857510473728, 50, 60000, 30000);
-SET IDENTITY_INSERT [appapigatewayqosoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayqosoptions] VALUES (N'1', N'1260841964962947072', NULL, N'60', N'60000', N'30000'), (N'4', NULL, N'1261299170387169280', N'60', N'60000', N'30000'), (N'5', NULL, N'1261585859064872960', N'60', N'60000', N'30000'), (N'6', NULL, N'1261586605810368512', N'60', N'60000', N'30000'), (N'7', NULL, N'1261587558609436672', N'60', N'60000', N'30000'), (N'8', NULL, N'1261588213298348032', N'60', N'60000', N'30000'), (N'9', NULL, N'1261588367619375104', N'60', N'60000', N'30000'), (N'10', NULL, N'1261588628450557952', N'60', N'60000', N'30000'), (N'11', NULL, N'1261588881564221440', N'60', N'60000', N'30000'), (N'12', NULL, N'1261588983053795328', N'60', N'60000', N'30000'), (N'13', NULL, N'1261589139039961088', N'60', N'60000', N'30000'), (N'14', NULL, N'1261589197483393024', N'60', N'60000', N'30000'), (N'15', NULL, N'1261589278857084928', N'60', N'60000', N'30000'), (N'16', NULL, N'1261589420356124672', N'60', N'60000', N'30000'), (N'17', NULL, N'1261589960393736192', N'60', N'60000', N'30000'), (N'18', NULL, N'1261606600242085888', NULL, NULL, NULL), (N'19', NULL, N'1261606689601732608', NULL, NULL, NULL), (N'22', NULL, N'1262220447629058048', N'60', N'60000', N'30000'), (N'23', NULL, N'1262230734939758592', N'60', N'60000', N'30000'), (N'24', NULL, N'1262296916350869504', N'60', N'60000', N'30000'), (N'25', NULL, N'1262632376348594176', N'50', N'60000', N'30000'), (N'26', NULL, N'1262632791869902848', N'50', N'60000', N'30000'), (N'27', NULL, N'1262632904575045632', N'50', N'60000', N'30000'), (N'28', NULL, N'1262632976616411136', N'50', N'60000', N'30000'), (N'29', NULL, N'1262660336921235456', N'50', N'60000', N'30000'), (N'30', NULL, N'1262660528277966848', N'50', N'60000', N'30000'), (N'31', NULL, N'1262660706875625472', N'50', N'60000', N'30000'), (N'32', NULL, N'1262660966393991168', N'50', N'60000', N'30000'), (N'33', NULL, N'1262661109474283520', N'50', N'60000', N'30000'), (N'34', NULL, N'1262663888804663296', N'50', N'60000', N'30000'), (N'35', NULL, N'1262664024096133120', N'50', N'60000', N'30000'), (N'36', NULL, N'1262664186252120064', N'50', N'60000', N'30000'), (N'37', NULL, N'1262664357044178944', N'50', N'60000', N'30000'), (N'38', NULL, N'1262664632928718848', N'50', N'60000', N'30000'), (N'39', NULL, N'1262664751409418240', N'50', N'60000', N'30000'), (N'40', NULL, N'1262664871274237952', N'50', N'60000', N'30000'), (N'41', NULL, N'1262665026111164416', N'50', N'60000', N'30000'), (N'42', NULL, N'1262665159905267712', N'50', N'60000', N'30000'), (N'43', NULL, N'1262665329829105664', N'50', N'60000', N'30000'), (N'44', NULL, N'1262665456471920640', N'50', N'60000', N'30000'), (N'45', NULL, N'1262665628165754880', N'50', N'60000', N'30000'), (N'46', NULL, N'1262666172682883072', N'50', N'60000', N'30000'), (N'48', NULL, N'1262723402331885568', N'50', N'60000', N'30000'), (N'49', NULL, N'1262935771746734080', N'50', N'60000', N'30000'), (N'50', NULL, N'1262935906522304512', N'50', N'60000', N'30000'), (N'51', NULL, N'1262936009924481024', N'50', N'60000', N'30000'), (N'53', NULL, N'1263074419073593344', N'50', N'60000', N'30000'), (N'54', NULL, N'1263075249394790400', N'50', N'60000', N'30000'), (N'55', NULL, N'1263075593499684864', N'50', N'60000', N'30000'), (N'57', NULL, N'1263101898440146944', N'50', N'60000', N'120000'), (N'58', NULL, N'1263303878648569856', N'50', N'60000', N'30000'), (N'59', NULL, N'1263304204797648896', N'50', N'60000', N'120000'), (N'60', NULL, N'1263304872891555840', N'50', N'60000', N'30000'), (N'61', NULL, N'1263305106250047488', N'50', N'60000', N'30000'), (N'62', NULL, N'1263305244594970624', N'50', N'60000', N'30000'), (N'63', NULL, N'1263305430536855552', N'50', N'60000', N'30000'), (N'64', NULL, N'1263639172959174656', N'50', N'60000', N'30000'), (N'65', NULL, N'1264799968944640000', N'50', N'60000', N'30000'), (N'66', NULL, N'1264800070161584128', N'50', N'60000', N'30000'), (N'68', NULL, N'1267360794414161920', N'50', N'60000', N'30000'), (N'69', NULL, N'1267383367629807616', N'50', N'60000', N'30000'), (N'70', NULL, N'1267817055527632896', N'50', N'60000', N'30000'), (N'71', NULL, N'1267817221286526976', N'50', N'60000', N'30000'), (N'72', NULL, N'1268893687085518848', N'50', N'60000', N'30000'), (N'97', NULL, N'1288657613998579712', N'50', N'60000', N'30000'), (N'98', NULL, N'1288657941770854400', N'50', N'60000', N'30000'), (N'99', NULL, N'1288658134067109888', N'50', N'60000', N'30000'), (N'100', NULL, N'1288658305156964352', N'50', N'60000', N'30000'), (N'101', NULL, N'1288658491216289792', N'50', N'60000', N'30000'), (N'102', NULL, N'1288658638302142464', N'50', N'60000', N'30000'), (N'103', NULL, N'1288658791784308736', N'50', N'60000', N'30000'), (N'104', NULL, N'1290849478956199936', N'50', N'60000', N'30000'), (N'105', NULL, N'1290849628051124224', N'50', N'60000', N'30000'), (N'106', NULL, N'1290849798553776128', N'50', N'60000', N'30000'), (N'108', NULL, N'1291259822512693248', N'50', N'60000', N'30000'), (N'109', NULL, N'1292620505149145088', N'50', N'60000', N'30000'), (N'110', NULL, N'1292620665505775616', N'50', N'60000', N'30000'), (N'111', NULL, N'1292620843398791168', N'50', N'60000', N'1200000'), (N'112', NULL, N'1292621027574874112', N'50', N'60000', N'30000'), (N'113', NULL, N'1292621363161137152', N'50', N'60000', N'30000'), (N'114', NULL, N'1292621494837116928', N'50', N'60000', N'30000'), (N'115', NULL, N'1292621629260365824', N'50', N'60000', N'30000'), (N'116', NULL, N'1292622526073864192', N'50', N'60000', N'30000'), (N'117', NULL, N'1293470838745821184', N'50', N'60000', N'30000'), (N'118', NULL, N'1293471661785706496', N'50', N'60000', N'30000'), (N'119', NULL, N'1293472678392721408', N'50', N'60000', N'30000'), (N'120', NULL, N'1293472857510473728', N'50', N'60000', N'30000'), (N'121', NULL, N'1299273336009359360', N'50', N'60000', N'30000'), (N'122', NULL, N'1299273436282585088', N'50', N'60000', N'30000'), (N'123', NULL, N'1299273618470567936', N'50', N'60000', N'30000'), (N'124', NULL, N'1299273770182737920', N'50', N'60000', N'30000'), (N'125', NULL, N'1299273978023084032', N'50', N'60000', N'30000'), (N'126', NULL, N'1299274123225694208', N'50', N'60000', N'30000'), (N'127', NULL, N'1299274222299348992', N'50', N'60000', N'30000'), (N'128', NULL, N'1304238876758495232', N'50', N'60000', N'30000'), (N'129', NULL, N'1304678610343383040', N'50', N'60000', N'30000'), (N'130', NULL, N'1304679169305694208', N'50', N'60000', N'30000')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayratelimitoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayratelimitoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayratelimitoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayratelimitoptions] (
+  [Id] int NOT NULL,
+  [ItemId] bigint NOT NULL,
+  [ClientIdHeader] nvarchar(50) NULL,
+  [QuotaExceededMessage] nvarchar(256) NULL,
+  [RateLimitCounterPrefix] nvarchar(50) NULL,
+  [DisableRateLimitHeaders] tinyint NOT NULL,
+  [HttpStatusCode] int NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayratelimitoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayratelimitoptions] ON
-INSERT INTO [appapigatewayratelimitoptions]([Id]
-      ,[ItemId]
-      ,[ClientIdHeader]
-      ,[QuotaExceededMessage]
-      ,[RateLimitCounterPrefix]
-      ,[DisableRateLimitHeaders]
-      ,[HttpStatusCode]) VALUES (1, 1260841964962947072, 'ClientId', '您的操作过快,请稍后再试!', 'ocelot', 1, 429);
-SET IDENTITY_INSERT [appapigatewayratelimitoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayratelimitoptions] VALUES (N'1', N'1260841964962947072', N'ClientId', N'您的操作过快,请稍后再试!', N'ocelot', N'1', N'429')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayratelimitrule
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayratelimitrule]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayratelimitrule]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayratelimitrule] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NULL,
+  [DynamicReRouteId] bigint NULL,
+  [ClientWhitelist] nvarchar(1000) NULL,
+  [EnableRateLimiting] tinyint NOT NULL,
+  [Period] nvarchar(50) NULL,
+  [PeriodTimespan] float NULL,
+  [Limit] bigint NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayratelimitrule
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayratelimitrule] ON
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (3, 1261299170387169280, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (4, 1261585859064872960, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (5, 1261586605810368512, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (6, 1261587558609436672, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (7, 1261588213298348032, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (8, 1261588367619375104, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (9, 1261588628450557952, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (10, 1261588881564221440, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (11, 1261588983053795328, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (12, 1261589139039961088, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (13, 1261589197483393024, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (14, 1261589278857084928, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (15, 1261589420356124672, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (16, 1261589960393736192, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (17, 1261606600242085888, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (18, 1261606689601732608, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (19, 1261681880965038080, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (20, 1261682144920977408, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (21, 1262220447629058048, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (22, 1262230734939758592, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (23, 1262296916350869504, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (24, 1262632376348594176, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (25, 1262632791869902848, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (26, 1262632904575045632, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (27, 1262632976616411136, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (28, 1262660336921235456, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (29, 1262660528277966848, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (30, 1262660706875625472, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (31, 1262660966393991168, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (32, 1262661109474283520, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (33, 1262663888804663296, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (34, 1262664024096133120, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (35, 1262664186252120064, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (36, 1262664357044178944, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (37, 1262664632928718848, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (38, 1262664751409418240, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (39, 1262664871274237952, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (40, 1262665026111164416, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (41, 1262665159905267712, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (42, 1262665329829105664, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (43, 1262665456471920640, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (44, 1262665628165754880, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (45, 1262666172682883072, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (47, 1262723402331885568, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (48, 1262935771746734080, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (49, 1262935906522304512, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (50, 1262936009924481024, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (52, 1263074419073593344, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (53, 1263075249394790400, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (54, 1263075593499684864, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (56, 1263101898440146944, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (57, 1263303878648569856, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (58, 1263304204797648896, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (59, 1263304872891555840, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (60, 1263305106250047488, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (61, 1263305244594970624, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (62, 1263305430536855552, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (63, 1263639172959174656, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (64, 1264799968944640000, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (65, 1264800070161584128, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (66, 1267360794414161920, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (67, 1267383367629807616, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (68, 1267817055527632896, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (69, 1267817221286526976, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (70, 1268893687085518848, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (91, 1285579388652576768, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (92, 1285580096881778688, NULL, '', 1, '1m', 60, 200);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (93, 1285582774663864320, NULL, '', 1, '1m', 60, 200);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (94, 1288657613998579712, NULL, '', 1, '1m', 60, 200);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (95, 1288657941770854400, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (96, 1288658134067109888, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (97, 1288658305156964352, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (98, 1288658491216289792, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (99, 1288658638302142464, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (100, 1288658791784308736, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (101, 1290849478956199936, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (102, 1290849628051124224, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (103, 1290849798553776128, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (104, 1290849978032238592, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (105, 1291259822512693248, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (106, 1292620505149145088, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (107, 1292620665505775616, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (108, 1292620843398791168, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (109, 1292621027574874112, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (110, 1292621363161137152, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (111, 1292621494837116928, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (112, 1292621629260365824, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (113, 1292622526073864192, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (114, 1293470838745821184, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (115, 1293471661785706496, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (116, 1293472678392721408, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO [appapigatewayratelimitrule]([Id],[ReRouteId],[DynamicReRouteId],[ClientWhitelist],[EnableRateLimiting],[Period],[PeriodTimespan],[Limit]) VALUES (117, 1293472857510473728, NULL, '', 0, NULL, NULL, NULL);
-SET IDENTITY_INSERT [appapigatewayratelimitrule] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayratelimitrule] VALUES (N'3', N'1261299170387169280', NULL, N'', N'0', NULL, NULL, NULL), (N'4', N'1261585859064872960', NULL, N'', N'0', NULL, NULL, NULL), (N'5', N'1261586605810368512', NULL, N'', N'0', NULL, NULL, NULL), (N'6', N'1261587558609436672', NULL, N'', N'0', NULL, NULL, NULL), (N'7', N'1261588213298348032', NULL, N'', N'0', NULL, NULL, NULL), (N'8', N'1261588367619375104', NULL, N'', N'0', NULL, NULL, NULL), (N'9', N'1261588628450557952', NULL, N'', N'0', NULL, NULL, NULL), (N'10', N'1261588881564221440', NULL, N'', N'0', NULL, NULL, NULL), (N'11', N'1261588983053795328', NULL, N'', N'0', NULL, NULL, NULL), (N'12', N'1261589139039961088', NULL, N'', N'0', NULL, NULL, NULL), (N'13', N'1261589197483393024', NULL, N'', N'0', NULL, NULL, NULL), (N'14', N'1261589278857084928', NULL, N'', N'0', NULL, NULL, NULL), (N'15', N'1261589420356124672', NULL, N'', N'0', NULL, NULL, NULL), (N'16', N'1261589960393736192', NULL, N'', N'0', NULL, NULL, NULL), (N'17', N'1261606600242085888', NULL, N'', N'0', NULL, NULL, NULL), (N'18', N'1261606689601732608', NULL, N'', N'0', NULL, NULL, NULL), (N'21', N'1262220447629058048', NULL, N'', N'0', NULL, NULL, NULL), (N'22', N'1262230734939758592', NULL, N'', N'0', NULL, NULL, NULL), (N'23', N'1262296916350869504', NULL, N'', N'0', NULL, NULL, NULL), (N'24', N'1262632376348594176', NULL, N'', N'0', NULL, NULL, NULL), (N'25', N'1262632791869902848', NULL, N'', N'0', NULL, NULL, NULL), (N'26', N'1262632904575045632', NULL, N'', N'0', NULL, NULL, NULL), (N'27', N'1262632976616411136', NULL, N'', N'0', NULL, NULL, NULL), (N'28', N'1262660336921235456', NULL, N'', N'0', NULL, NULL, NULL), (N'29', N'1262660528277966848', NULL, N'', N'0', NULL, NULL, NULL), (N'30', N'1262660706875625472', NULL, N'', N'0', NULL, NULL, NULL), (N'31', N'1262660966393991168', NULL, N'', N'0', NULL, NULL, NULL), (N'32', N'1262661109474283520', NULL, N'', N'0', NULL, NULL, NULL), (N'33', N'1262663888804663296', NULL, N'', N'0', NULL, NULL, NULL), (N'34', N'1262664024096133120', NULL, N'', N'0', NULL, NULL, NULL), (N'35', N'1262664186252120064', NULL, N'', N'0', NULL, NULL, NULL), (N'36', N'1262664357044178944', NULL, N'', N'0', NULL, NULL, NULL), (N'37', N'1262664632928718848', NULL, N'', N'0', NULL, NULL, NULL), (N'38', N'1262664751409418240', NULL, N'', N'0', NULL, NULL, NULL), (N'39', N'1262664871274237952', NULL, N'', N'0', NULL, NULL, NULL), (N'40', N'1262665026111164416', NULL, N'', N'0', NULL, NULL, NULL), (N'41', N'1262665159905267712', NULL, N'', N'0', NULL, NULL, NULL), (N'42', N'1262665329829105664', NULL, N'', N'0', NULL, NULL, NULL), (N'43', N'1262665456471920640', NULL, N'', N'0', NULL, NULL, NULL), (N'44', N'1262665628165754880', NULL, N'', N'0', NULL, NULL, NULL), (N'45', N'1262666172682883072', NULL, N'', N'0', NULL, NULL, NULL), (N'47', N'1262723402331885568', NULL, N'', N'0', NULL, NULL, NULL), (N'48', N'1262935771746734080', NULL, N'', N'0', NULL, NULL, NULL), (N'49', N'1262935906522304512', NULL, N'', N'0', NULL, NULL, NULL), (N'50', N'1262936009924481024', NULL, N'', N'0', NULL, NULL, NULL), (N'52', N'1263074419073593344', NULL, N'', N'0', NULL, NULL, NULL), (N'53', N'1263075249394790400', NULL, N'', N'0', NULL, NULL, NULL), (N'54', N'1263075593499684864', NULL, N'', N'0', NULL, NULL, NULL), (N'56', N'1263101898440146944', NULL, N'', N'0', NULL, NULL, NULL), (N'57', N'1263303878648569856', NULL, N'', N'0', NULL, NULL, NULL), (N'58', N'1263304204797648896', NULL, N'', N'0', NULL, NULL, NULL), (N'59', N'1263304872891555840', NULL, N'', N'0', NULL, NULL, NULL), (N'60', N'1263305106250047488', NULL, N'', N'0', NULL, NULL, NULL), (N'61', N'1263305244594970624', NULL, N'', N'0', NULL, NULL, NULL), (N'62', N'1263305430536855552', NULL, N'', N'0', NULL, NULL, NULL), (N'63', N'1263639172959174656', NULL, N'', N'0', NULL, NULL, NULL), (N'64', N'1264799968944640000', NULL, N'', N'0', NULL, NULL, NULL), (N'65', N'1264800070161584128', NULL, N'', N'0', NULL, NULL, NULL), (N'66', N'1267360794414161920', NULL, N'', N'0', NULL, NULL, NULL), (N'67', N'1267383367629807616', NULL, N'', N'0', NULL, NULL, NULL), (N'68', N'1267817055527632896', NULL, N'', N'0', NULL, NULL, NULL), (N'69', N'1267817221286526976', NULL, N'', N'0', NULL, NULL, NULL), (N'70', N'1268893687085518848', NULL, N'', N'0', NULL, NULL, NULL), (N'94', N'1288657613998579712', NULL, N'', N'1', N'1m', N'60', N'200'), (N'95', N'1288657941770854400', NULL, N'', N'0', NULL, NULL, NULL), (N'96', N'1288658134067109888', NULL, N'', N'0', NULL, NULL, NULL), (N'97', N'1288658305156964352', NULL, N'', N'0', NULL, NULL, NULL), (N'98', N'1288658491216289792', NULL, N'', N'0', NULL, NULL, NULL), (N'99', N'1288658638302142464', NULL, N'', N'0', NULL, NULL, NULL), (N'100', N'1288658791784308736', NULL, N'', N'0', NULL, NULL, NULL), (N'101', N'1290849478956199936', NULL, N'', N'0', NULL, NULL, NULL), (N'102', N'1290849628051124224', NULL, N'', N'0', NULL, NULL, NULL), (N'103', N'1290849798553776128', NULL, N'', N'0', NULL, NULL, NULL), (N'105', N'1291259822512693248', NULL, N'', N'0', NULL, NULL, NULL), (N'106', N'1292620505149145088', NULL, N'', N'0', NULL, NULL, NULL), (N'107', N'1292620665505775616', NULL, N'', N'0', NULL, NULL, NULL), (N'108', N'1292620843398791168', NULL, N'', N'0', NULL, NULL, NULL), (N'109', N'1292621027574874112', NULL, N'', N'0', NULL, NULL, NULL), (N'110', N'1292621363161137152', NULL, N'', N'0', NULL, NULL, NULL), (N'111', N'1292621494837116928', NULL, N'', N'0', NULL, NULL, NULL), (N'112', N'1292621629260365824', NULL, N'', N'0', NULL, NULL, NULL), (N'113', N'1292622526073864192', NULL, N'', N'0', NULL, NULL, NULL), (N'114', N'1293470838745821184', NULL, N'', N'0', NULL, NULL, NULL), (N'115', N'1293471661785706496', NULL, N'', N'0', NULL, NULL, NULL), (N'116', N'1293472678392721408', NULL, N'', N'0', NULL, NULL, NULL), (N'117', N'1293472857510473728', NULL, N'', N'0', NULL, NULL, NULL), (N'118', N'1299273336009359360', NULL, N'', N'0', NULL, NULL, NULL), (N'119', N'1299273436282585088', NULL, N'', N'0', NULL, NULL, NULL), (N'120', N'1299273618470567936', NULL, N'', N'0', NULL, NULL, NULL), (N'121', N'1299273770182737920', NULL, N'', N'0', NULL, NULL, NULL), (N'122', N'1299273978023084032', NULL, N'', N'0', NULL, NULL, NULL), (N'123', N'1299274123225694208', NULL, N'', N'0', NULL, NULL, NULL), (N'124', N'1299274222299348992', NULL, N'', N'0', NULL, NULL, NULL), (N'125', N'1304238876758495232', NULL, N'', N'0', NULL, NULL, NULL), (N'126', N'1304678610343383040', NULL, N'', N'0', NULL, NULL, NULL), (N'127', N'1304679169305694208', NULL, N'', N'0', NULL, NULL, NULL)
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayreroute
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayreroute]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayreroute]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayreroute] (
+  [Id] int NOT NULL,
+  [ExtraProperties] nvarchar(max) NULL,
+  [ConcurrencyStamp] nvarchar(40) NULL,
+  [ReRouteId] bigint NOT NULL,
+  [ReRouteName] nvarchar(50) NOT NULL,
+  [DownstreamPathTemplate] nvarchar(100) NOT NULL,
+  [ChangeDownstreamPathTemplate] nvarchar(1000) NULL,
+  [DownstreamHttpMethod] nvarchar(100) NULL,
+  [UpstreamPathTemplate] nvarchar(100) NOT NULL,
+  [UpstreamHttpMethod] nvarchar(50) NOT NULL,
+  [AddHeadersToRequest] nvarchar(1000) NULL,
+  [UpstreamHeaderTransform] nvarchar(1000) NULL,
+  [DownstreamHeaderTransform] nvarchar(1000) NULL,
+  [AddClaimsToRequest] nvarchar(1000) NULL,
+  [RouteClaimsRequirement] nvarchar(1000) NULL,
+  [AddQueriesToRequest] nvarchar(1000) NULL,
+  [RequestIdKey] nvarchar(100) NULL,
+  [ReRouteIsCaseSensitive] tinyint NOT NULL,
+  [ServiceName] nvarchar(100) NULL,
+  [ServiceNamespace] nvarchar(100) NULL,
+  [DownstreamScheme] nvarchar(100) NULL,
+  [DownstreamHostAndPorts] nvarchar(1000) NULL,
+  [DelegatingHandlers] nvarchar(1000) NULL,
+  [UpstreamHost] nvarchar(100) NULL,
+  [Key] nvarchar(100) NULL,
+  [Priority] int NULL,
+  [Timeout] int NULL,
+  [DangerousAcceptAnyServerCertificateValidator] tinyint NOT NULL,
+  [DownstreamHttpVersion] nvarchar(30) NULL,
+  [AppId] nvarchar(50) NOT NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayreroute
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayreroute] ON
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (4, '{}', 'e4e1ea5c65ed4ab3baa912593372b51e', 1261299170387169280, '【平台服务】-权限管理', '/api/permission-management/permissions', '', NULL, '/api/abp/permissions', 'GET,PUT,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (5, '{}', 'd56f8c4547ec46219f5e7d2ec59e8bb3', 1261585859064872960, '【身份认证服务】-客户端管理', '/api/IdentityServer/Clients', '', NULL, '/api/IdentityServer/Clients', 'POST,GET,PUT,', '', '', 'X-Forwarded-For:{RemoteIpAddress},', '', '', '', NULL, 1, '', NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (6, '{}', '4d7c360bc40342c1b1cf16181e4ac2bb', 1261586605810368512, '【身份认证服务】-查询客户端', '/api/IdentityServer/Clients/{Id}', '', NULL, '/api/IdentityServer/Clients/{Id}', 'GET,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (7, '{}', 'c222dcff22284b3e9ce9c424853705cd', 1261587558609436672, '【服务网关管理】-路由组管理', '/api/ApiGateway/RouteGroups', '', '', '/api/ApiGateway/RouteGroups', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (8, '{}', '4828b753ef5a45b1a8c7903b7977006f', 1261588213298348032, '【服务网关管理】-查询单个路由组', '/api/ApiGateway/RouteGroups/By-AppId/{AppId}', '', '', '/api/ApiGateway/RouteGroups/By-AppId/{AppId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (9, '{}', '7813111dea414ea6a48c498726c82e06', 1261588367619375104, '【服务网关管理】-查询所有有效路由组', '/api/ApiGateway/RouteGroups/Actived', '', '', '/api/ApiGateway/RouteGroups/Actived', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (10, '{}', 'a91c7f67e7cd4d9ca61b7d657213eaaf', 1261588628450557952, '【服务网关管理】-基础配置', '/api/ApiGateway/Globals', '', '', '/api/ApiGateway/Globals', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (11, '{}', 'fc3401e7942f4e63870fdd512372bf7d', 1261588881564221440, '【服务网关管理】-查询单个基础配置', '/api/ApiGateway/Globals/By-AppId/{AppId}', '', '', '/api/ApiGateway/Globals/By-AppId/{AppId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (12, '{}', '1298ef932a4845c7856ab0344e15daa9', 1261588983053795328, '【服务网关管理】-路由配置', '/api/ApiGateway/Routes', '', '', '/api/ApiGateway/Routes', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (13, '{}', 'd857a7a270cc44b38dfbd3d9dc7e62e6', 1261589139039961088, '【服务网关管理】-通过标识查询路由', '/api/ApiGateway/Routes/By-RouteId/{RouteId}', '', '', '/api/ApiGateway/Routes/By-RouteId/{RouteId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (14, '{}', 'aecd3c83218e490e8a48214dacacc88c', 1261589197483393024, '【服务网关管理】-通过名称查询路由', '/api/ApiGateway/Routes/By-RouteName/{RouteName}', '', '', '/api/ApiGateway/Routes/By-RouteName/{RouteName}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (15, '{}', '73b62418ba424fa590113b58edf23e49', 1261589278857084928, '【服务网关管理】-通过应用标识查询路由', '/api/ApiGateway/Routes/By-AppId/{AppId}', '', '', '/api/ApiGateway/Routes/By-AppId/{AppId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (16, '{}', 'd096d74fb1d34619ba391dbd19a010ef', 1261589420356124672, '【服务网关管理】-清空应用标识下所有路由', '/api/ApiGateway/Routes/Clear', '', '', '/api/ApiGateway/Routes/Clear', 'DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, '', NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (17, '{}', '07fb9bc9e4604a24895dd60015856bc7', 1261589960393736192, '【服务网关管理】-通过应用标识查询动态路由', '/api/ApiGateway/DynamicRoutes/By-AppId/{AppId}', '', NULL, '/api/ApiGateway/DynamicRoutes/By-AppId/{AppId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (18, '{}', 'e659ebbf61534a978335cfeabdc0b375', 1261606600242085888, '【服务网关管理】-通过应用标识查询聚合路由', '/api/ApiGateway/Aggregates/by-AppId/{AppId}', '', NULL, '/api/ApiGateway/Aggregates/by-AppId/{AppId}', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (19, '{}', 'dd47edd7b03c42bc8666f4bded7cb991', 1261606689601732608, '【服务网关管理】-聚合路由', '/api/ApiGateway/Aggregates', '', NULL, '/api/ApiGateway/Aggregates', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (20, '{}', 'e9b65f34b85e4a52829204d1f687ec21', 1261681880965038080, '【任务管理】-任务列表', '/Task/Schedule/all', '', NULL, '/Task/Schedule/all', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '10.21.15.14:40060,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (21, '{}', '6b9a3d81ed454ac0af2e3ccb4be7bd17', 1261682144920977408, '【任务管理】-任务日志', '/Task/Schedule/logs', '', NULL, '/Task/Schedule/logs', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '10.21.15.14:40060,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (22, '{}', '5be66f8be176412a8e75aadd109b544a', 1262220447629058048, '【身份认证服务】-客户端密钥', '/api/IdentityServer/Clients/Secrets', '', NULL, '/api/IdentityServer/Clients/Secrets', 'PUT,POST,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (23, '{}', '1cb56a15863f464e9b79db0d18acf4ba', 1262230734939758592, '【身份认证服务】-客户端声明', '/api/IdentityServer/Clients/Claims', '', NULL, '/api/IdentityServer/Clients/Claims', 'PUT,POST,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (25, '{}', 'b6009df9b18c44b3aa2b77f27b0c2abb', 1262296916350869504, '【身份认证服务】-客户端属性', '/api/IdentityServer/Clients/Properties', '', NULL, '/api/IdentityServer/Clients/Properties', 'PUT,POST,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, NULL, 30000, 1, NULL, 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (26, '{}', '401a7a8e8a2f41c599b1b87b55249a32', 1262632376348594176, '【身份认证服务】-Api资源管理', '/api/IdentityServer/ApiResources', '', '', '/api/IdentityServer/ApiResources', 'GET,POST,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (27, '{}', 'c662a4c29e654f9da6eb73ee456b533a', 1262632791869902848, '【身份认证服务】-单个Api资源', '/api/IdentityServer/ApiResources/{Id}', '', '', '/api/IdentityServer/ApiResources/{Id}', 'GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (28, '{}', 'a0c2bdfdd0de4832b63d6dc3696c9c26', 1262632904575045632, '【身份认证服务】-Api资源密钥', '/api/IdentityServer/ApiResources/Secrets', '', '', '/api/IdentityServer/ApiResources/Secrets', 'DELETE,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (29, '{}', 'fb0e7ca974f243ce9f4034b39bdda326', 1262632976616411136, '【身份认证服务】-Api资源作用域', '/api/IdentityServer/ApiResources/Scopes', '', '', '/api/IdentityServer/ApiResources/Scopes', 'DELETE,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (30, '{}', '0f9875697b74420c9dc2eaf77099b210', 1262660336921235456, '【身份认证服务】-用户登录', '/api/account/login', '', '', '/api/account/login', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (31, '{}', 'a890c6ecc6a64c9fa313a0f6b5406e1c', 1262660528277966848, '【身份认证服务】-用户登出', '/api/account/logout', '', '', '/api/account/logout', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (32, '{}', '88de580b6beb4d9d9d4367840ba1fcea', 1262660706875625472, '【身份认证服务】-检查密码', '/api/account/checkPassword', '', '', '/api/account/checkPassword', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (33, '{}', '78f3c1adc7a54696af37a419eda47c62', 1262660966393991168, '【身份认证服务】-个人信息页', '/api/identity/my-profile', '', '', '/api/identity/my-profile', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (34, '{}', '95b23aa5cebb40598a78c0761cfd0b26', 1262661109474283520, '【身份认证服务】-修改密码', '/api/identity/my-profile/change-password', '', '', '/api/identity/my-profile/change-password', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (35, '{}', '4828f7c2aff8485189f37aba5de62d60', 1262663888804663296, '【身份认证管理】-角色管理', '/api/identity/roles', '', '', '/api/identity/roles', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (36, '{}', '0fddcd3b50a24c6795ec9034fdb44778', 1262664024096133120, '【身份认证服务】-角色列表', '/api/identity/roles/all', '', '', '/api/identity/roles/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (37, '{}', '191e555219e845069dfd93793263a840', 1262664186252120064, '【身份认证服务】-单个角色', '/api/identity/roles/{id}', '', '', '/api/identity/roles/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (38, '{}', 'c316858e82f74e6ca6e923d6b3a3fa76', 1262664357044178944, '【身份认证服务】-用户注册', '/api/account/register', '', '', '/api/account/register', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (39, '{}', 'db53b6f957914a10a6a97ba306b1f6ef', 1262664632928718848, '【身份认证服务】-单个用户', '/api/identity/users/{id}', '', '', '/api/identity/users/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (40, '{}', '1833434b8ce34f8ab791e7e950f4c61f', 1262664751409418240, '【身份认证服务】-用户管理', '/api/identity/users', '', '', '/api/identity/users', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (41, '{}', 'b3c963a1612144918bffaf272697498c', 1262664871274237952, '【身份认证服务】-用户角色', '/api/identity/users/{id}/roles', '', '', '/api/identity/users/{id}/roles', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (42, '{}', '33dd757b79cb4f52994af13bfb4f6783', 1262665026111164416, '【身份认证服务】-通过用户名查询用户', '/api/identity/users/by-username/{userName}', '', '', '/api/identity/users/by-username/{userName}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (43, '{}', 'e46fd6cb3a104da3aadfe0149fe4de68', 1262665159905267712, '【身份认证服务】-通过邮件查询用户', '/api/identity/users/by-email/{email}', '', '', '/api/identity/users/by-email/{email}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (44, '{}', '8c8ec5ad6aaa4145981ee7ac876c36c9', 1262665329829105664, '【身份认证服务】-通过标识查询用户', '/api/identity/users/lookup/{id}', '', '', '/api/identity/users/lookup/{id}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (45, '{}', 'f5c0c8c02c0846fdbe5015cd86f3d81b', 1262665456471920640, '【身份认证服务】-通过名称查询用户', '/api/identity/users/lookup/by-username/{userName}', '', '', '/api/identity/users/lookup/by-username/{userName}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (46, '{}', '4de0c9e0437f40ce81628de956af9c5e', 1262665628165754880, '【身份认证服务】-通过名称查询租户', '/api/abp/multi-tenancy/tenants/by-name/{name}', '', '', '/api/abp/multi-tenancy/tenants/by-name/{name}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (47, '{}', 'fa60a7253b2f4c80b9afad4e82ba6ba8', 1262666172682883072, '【身份认证服务】-通过标识查询租户', '/api/abp/multi-tenancy/tenants/by-id/{id}', '', '', '/api/abp/multi-tenancy/tenants/by-id/{id}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (49, '{}', '4114a097b9e04a9e90458edf02ef41c7', 1262723402331885568, '【身份认证服务】-克隆客户端', '/api/IdentityServer/Clients/Clone', '', '', '/api/IdentityServer/Clients/Clone', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (50, '{}', '2a9cc98d3ed0462d98c4bf0e946f410d', 1262935771746734080, '【身份认证服务】-身份资源管理', '/api/IdentityServer/IdentityResources', '', '', '/api/IdentityServer/IdentityResources', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (51, '{}', '4d36b0ea5b92473ea5de3e91ff155830', 1262935906522304512, '【身份认证服务】-查询身份资源', '/api/IdentityServer/IdentityResources/{Id}', '', '', '/api/IdentityServer/IdentityResources/{Id}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (52, '{}', '387df08693e54e91ac055a2324d4c10e', 1262936009924481024, '【身份认证服务】-身份资源属性', '/api/IdentityServer/IdentityResources/Properties', '', '', '/api/IdentityServer/IdentityResources/Properties', 'POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (54, '{}', '7b847d8434bc4d1db07fa8961d90c14a', 1263074419073593344, '【服务网关管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/apigateway/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30001,', '', '', 'apigateway-api-definition', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (55, '{}', 'ca2cedfa620045a9adef0be2f958c4bc', 1263075249394790400, '【服务网关管理】-查询聚合路由', '/api/ApiGateway/Aggregates/{RouteId}', '', '', '/api/ApiGateway/Aggregates/{RouteId}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30001,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (57, '{}', '98fbc99fc8644946ac0a72cc3dc5fd1f', 1263075593499684864, '【服务网关管理】-聚合路由配置', '/api/ApiGateway/Aggregates/RouteConfig', '', '', '/api/ApiGateway/Aggregates/RouteConfig', 'POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30001,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (59, '{}', 'c692b30c72d4424eb4740ac49f4e9373', 1263101898440146944, '【服务网关管理】-框架配置', '/api/abp/application-configuration', '', '', '/api/abp/apigateway/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30001,', '', '', 'apigateway-configuration', 0, 120000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (60, '{}', '8409117162504f71aa66982f05c38a80', 1263303878648569856, '【平台服务】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/platform/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'platform-api-definition', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (61, '{}', '9f520820071b4e14bc94ab57989cea1f', 1263304204797648896, '【平台服务】-框架配置', '/api/abp/application-configuration', '', '', '/api/abp/platform/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'platform-configuration', 0, 120000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (62, '{}', '9810656b884947e3897e776b47208352', 1263304872891555840, '【平台服务】-租户管理', '/api/multi-tenancy/tenants', '', '', '/api/multi-tenancy/tenants', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (63, '{}', '12254ca25e15420faa694f62148dd694', 1263305106250047488, '【平台服务】-特定租户管理', '/api/multi-tenancy/tenants/{id}', '', '', '/api/multi-tenancy/tenants/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (64, '{}', '27761205c6344bfebbafbc077781ab76', 1263305244594970624, '【平台服务】-租户连接字符串', '/api/multi-tenancy/tenants/{id}/connection-string', '', '', '/api/multi-tenancy/tenants/{id}/concatenation', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 2, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (65, '{}', 'af470c53a25340fd9248fd0309ad41ef', 1263305430536855552, '【平台服务】-特定租户连接字符串', '/api/multi-tenancy/tenants/{id}/connection-string/{name}', '', '', '/api/multi-tenancy/tenants/{id}/concatenation/{name}', 'GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (66, '{}', '50b18f8d4ddb4540b142877a7852f20d', 1263639172959174656, '【平台服务】- 公共配置', '/api/settings/by-global', '', '', '/api/settings/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (67, '{}', '858056ce80b8420084b60d62ef4aa25c', 1264799968944640000, '【平台服务】-验证手机号', '/api/account/phone/verify', '', '', '/api/account/phone/verify', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (68, '{}', 'd460979de403436e840de179767ed770', 1264800070161584128, '【平台服务】-手机号注册', '/api/account/phone/register', '', '', '/api/account/phone/register', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (69, '{}', '723c9b111f9f4a1aa804118cdde193d3', 1267360794414161920, '【消息服务】- 通知', '/signalr-hubs/notifications/{everything}', '', '', '/signalr-hubs/notifications/{everything}', 'POST,GET,OPTIONS,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:30020,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (70, '{}', 'f3aa2b42dd9f468aa5aae4ef64754427', 1267383367629807616, '【消息服务】- 通知0', '/signalr-hubs/notifications', '', '', '/signalr-hubs/notifications', 'GET,POST,PUT,DELETE,OPTIONS,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:30020,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (71, '{}', '99dc8259c50044008c8aede7442ddde3', 1267817055527632896, '【消息服务】- 聊天', '/signalr-hubs/message', '', '', '/signalr-hubs/message', 'GET,POST,PUT,DELETE,OPTIONS,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:30020,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (72, '{}', '4ec40b72d469474ba10ae02e8d3298bb', 1267817221286526976, '【消息服务】- 聊天1', '/signalr-hubs/message/{everything}', '', '', '/signalr-hubs/message/{everything}', 'GET,POST,PUT,DELETE,OPTIONS,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:30020,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (73, '{}', 'cfb5f09a12bf495fbcaf2fa5d9123a40', 1268893687085518848, '【身份认证服务-重置密码', '/api/account/phone/reset-password', '', '', '/api/account/phone/reset-password', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (97, '{}', 'f9e4d8f541b34ea7a22fa159b8cbcf6a', 1285579388652576768, '【SingalR】- 本地打印服务', '/document/print-single/{everything}', '', '', '/signalr-hubs/document/print-single/{everything}', 'GET,POST,PUT,DELETE,OPTIONS,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:36390,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (99, '{}', '4105470ee52345448e75b64983cd50cd', 1285580096881778688, '【SingalR】- 本地打印多个文档', '/document/print-multiple/{everything}', '', '', '/signalr-hubs/document/print-multiple/{everything}', 'GET,PUT,DELETE,OPTIONS,POST,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:36390,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (100, '{}', 'e4dfea0fab254653b3b4424f9cdfec9f', 1285582774663864320, '【SingalR】- 本地打印多个文档-0', '/document/print-multiple', '', '', '/signalr-hubs/document/print-multiple', 'GET,PUT,POST,DELETE,OPTIONS,', '', '', '', '', '', '', '', 1, '', '', 'ws', '127.0.0.1:36390,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (101, '{}', '997a4c27a433458aafed9b8aa252d957', 1288657613998579712, '【身份认证服务】- 组织机构列表', '/api/identity/organization-units', '', '', '/api/identity/organization-units', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (102, '{}', 'a2c6acc9882a425ab26bd3ad5a9c17c6', 1288657941770854400, '【身份认证服务】- 组织机构管理', '/api/identity/organization-units/{id}', '', '', '/api/identity/organization-units/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (103, '{}', '390acfb0e16943c6b61e731d47c282e9', 1288658134067109888, '【身份认证服务】- 组织机构移动', '/api/identity/organization-units/{id}/move', '', '', '/api/identity/organization-units/{id}/move', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (104, '{}', '3515e75becf9447492ad60466b27c397', 1288658305156964352, '【身份认证服务】- 查询组织机构子级', '/api/identity/organization-units/find-children', '', '', '/api/identity/organization-units/find-children', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (105, '{}', 'aab0a24d930f4f9687497e5ccaac2a31', 1288658491216289792, '【身份认证服务】- 查询组织机构最后一个子节点', '/api/identity/organization-units/last-children', '', '', '/api/identity/organization-units/last-children', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (106, '{}', 'edf67e297c6d494baf3ea66465418faf', 1288658638302142464, '【身份认证服务】- 组织机构角色管理', '/api/identity/organization-units/management-roles', '', '', '/api/identity/organization-units/management-roles', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (107, '{}', '21bcb13e71c648a98861ce9b6fb3e7b0', 1288658791784308736, '【身份认证服务】- 组织机构用户管理', '/api/identity/organization-units/management-users', '', '', '/api/identity/organization-units/management-users', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (108, '{}', '417a4518e0da4db0a2704511d6a8c343', 1290849478956199936, '【平台服务】- 当前租户配置', '/api/settings/by-tenant', '', '', '/api/settings/by-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (109, '{}', 'e937ff4ea11e4f0ca39d079c7a83b960', 1290849628051124224, '【平台服务】- 用户配置', '/api/settings/by-user', '', '', '/api/settings/by-user', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (110, '{}', '22212bc751b743678d9c2f095d05ce25', 1290849798553776128, '【平台服务】- 当前用户配置', '/api/settings/by-current-user', '', '', '/api/settings/by-current-user', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (111, '{}', '8dfa430d752a4b4a869ad401b3802a62', 1290849978032238592, '【平台服务】- 配置管理', '/api/settings', '', '', '/api/settings', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (112, '{}', '9844fed6507844f2ac64bd08649bd3a6', 1291259822512693248, '【身份认证服务】- 查询组织机构根节点', '/api/identity/organization-units/root-node', '', '', '/api/identity/organization-units/root-node', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (113, '{}', '24d8794cf8f943b4ac45d2bcccf7c128', 1292620505149145088, '【平台服务】- 文件系统', '/api/file-management/file-system', '', '', '/api/file-management/file-system', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (114, '{}', '0acf6762d3af43efb655107e0039f5fc', 1292620665505775616, '【平台服务】- 文件系统 - 目录管理', '/api/file-management/file-system/folders', '', '', '/api/file-management/file-system/folders', 'POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (115, '{}', '8b4363f70865419089b5f62ba35382df', 1292620843398791168, '【平台服务】- 文件系统 - 文件管理', '/api/file-management/file-system/files', '', '', '/api/file-management/file-system/files', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 1200000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (116, '{}', '7eb315567bbc470bbbfd26923c5d0aba', 1292621027574874112, '【平台服务】- 文件系统 - 复制目录', '/api/file-management/file-system/folders/copy', '', '', '/api/file-management/file-system/folders/copy', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (117, '{}', 'af5853680cff454fa66ff6022f18da23', 1292621363161137152, '【平台服务】- 文件系统 - 移动目录', '/api/file-management/file-system/folders/move', '', '', '/api/file-management/file-system/folders/move', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (118, '{}', '6daa6d8c8adb466899988fd8181c29a8', 1292621494837116928, '【平台服务】- 文件系统 - 复制文件', '/api/file-management/file-system/files/copy', '', '', '/api/file-management/file-system/files/copy', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (119, '{}', '9560caaa3bd9424984c44724aa54bfe9', 1292621629260365824, '【平台服务】- 文件系统 - 移动文件', '/api/file-management/file-system/files/move', '', '', '/api/file-management/file-system/files/move', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (120, '{}', 'fc2aaa6035484201b9014912930fb7cb', 1292622526073864192, '【平台服务】- 文件系统 - 详情页', '/api/file-management/file-system/profile', '', '', '/api/file-management/file-system/profile', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (121, '{}', 'c6c7b027000942dda8ba0d2e2d8cf705', 1293470838745821184, '【后台管理】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/backend-admin/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'backend-admin-configuration', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (122, '{}', 'becd4342079d4399abda5b5ba3b46fdc', 1293471661785706496, '【消息服务】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/messages/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', 'messages-configuration', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (123, '{}', 'c828140cee3043c18ffc274f6461f0f2', 1293472678392721408, '【后台管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/backend-admin/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'backend-admin-api-definition', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO [appapigatewayreroute]([Id],[ExtraProperties],[ConcurrencyStamp],[ReRouteId],[ReRouteName],[DownstreamPathTemplate],[ChangeDownstreamPathTemplate],[DownstreamHttpMethod],[UpstreamPathTemplate],[UpstreamHttpMethod],[AddHeadersToRequest],[UpstreamHeaderTransform],[DownstreamHeaderTransform],[AddClaimsToRequest],[RouteClaimsRequirement],[AddQueriesToRequest],[RequestIdKey],[ReRouteIsCaseSensitive],[ServiceName],[ServiceNamespace],[DownstreamScheme],[DownstreamHostAndPorts],[DelegatingHandlers],[UpstreamHost],[Key],[Priority],[Timeout],[DangerousAcceptAnyServerCertificateValidator],[DownstreamHttpVersion],[AppId]) VALUES (124, '{}', 'e683cff8066d4c2899a17d0f618f1a0b', 1293472857510473728, '【消息服务】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/messages/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', 'messages-api-definition', 0, 30000, 1, '', 'TEST-APP');
-SET IDENTITY_INSERT [appapigatewayreroute] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayreroute] VALUES (N'4', N'{}', N'84059fcecc91498b9beafac914865e2c', N'1261299170387169280', N'【后台管理】- 权限管理', N'/api/permission-management/permissions', N'', NULL, N'/api/permission-management/permissions', N'GET,PUT,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30010,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'5', N'{}', N'f168778a390d49d69d728ebd72b230ef', N'1261585859064872960', N'【身份认证服务】- 客户端管理', N'/api/IdentityServer/Clients', N'', NULL, N'/api/IdentityServer/Clients', N'POST,GET,PUT,', N'', N'', N'X-Forwarded-For:{RemoteIpAddress},', N'', N'', N'', NULL, N'1', N'', NULL, N'HTTP', N'127.0.0.1:30015,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'6', N'{}', N'd91d31c630dc4e4bae0fef8c3aa60427', N'1261586605810368512', N'【身份认证服务】- 查询客户端', N'/api/IdentityServer/Clients/{Id}', N'', NULL, N'/api/IdentityServer/Clients/{Id}', N'GET,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30015,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'7', N'{}', N'b4ce189320804dc6b87e602594e93d35', N'1261587558609436672', N'【服务网关管理】- 路由组管理', N'/api/ApiGateway/RouteGroups', N'', N'', N'/api/ApiGateway/RouteGroups', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'8', N'{}', N'8736fefa36da4b129f3fcf6aa095f2ce', N'1261588213298348032', N'【服务网关管理】- 查询单个路由组', N'/api/ApiGateway/RouteGroups/By-AppId/{AppId}', N'', N'', N'/api/ApiGateway/RouteGroups/By-AppId/{AppId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'9', N'{}', N'befd14ad39e244bc9dea7e0c01e642ce', N'1261588367619375104', N'【服务网关管理】- 查询所有有效路由组', N'/api/ApiGateway/RouteGroups/Actived', N'', N'', N'/api/ApiGateway/RouteGroups/Actived', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'10', N'{}', N'0a95945d77144ce69addb0d1e8d37837', N'1261588628450557952', N'【服务网关管理】- 基础配置', N'/api/ApiGateway/Globals', N'', N'', N'/api/ApiGateway/Globals', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'11', N'{}', N'70ee7f919bf44b42b549c905316bfd75', N'1261588881564221440', N'【服务网关管理】- 查询单个基础配置', N'/api/ApiGateway/Globals/By-AppId/{AppId}', N'', N'', N'/api/ApiGateway/Globals/By-AppId/{AppId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'12', N'{}', N'caf54542d561428a9123ebed88e4b2e9', N'1261588983053795328', N'【服务网关管理】- 路由配置', N'/api/ApiGateway/Routes', N'', N'', N'/api/ApiGateway/Routes', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'13', N'{}', N'df6c48fdaab44a37842992ae61c59dc5', N'1261589139039961088', N'【服务网关管理】- 通过标识查询路由', N'/api/ApiGateway/Routes/By-RouteId/{RouteId}', N'', N'', N'/api/ApiGateway/Routes/By-RouteId/{RouteId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'14', N'{}', N'aaeaedebd24a4011ad565b5559f84c5f', N'1261589197483393024', N'【服务网关管理】- 通过名称查询路由', N'/api/ApiGateway/Routes/By-RouteName/{RouteName}', N'', N'', N'/api/ApiGateway/Routes/By-RouteName/{RouteName}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'15', N'{}', N'559c9f1b2b8c44caac86f7a643a16aaa', N'1261589278857084928', N'【服务网关管理】- 通过应用标识查询路由', N'/api/ApiGateway/Routes/By-AppId/{AppId}', N'', N'', N'/api/ApiGateway/Routes/By-AppId/{AppId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'16', N'{}', N'00d0a12f403a4a919c99c534bd76d0d0', N'1261589420356124672', N'【服务网关管理】- 清空应用标识下所有路由', N'/api/ApiGateway/Routes/Clear', N'', N'', N'/api/ApiGateway/Routes/Clear', N'DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, N'', NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'17', N'{}', N'8c308f1386ad49c799cd281eb95170ac', N'1261589960393736192', N'【服务网关管理】- 通过应用标识查询动态路由', N'/api/ApiGateway/DynamicRoutes/By-AppId/{AppId}', N'', NULL, N'/api/ApiGateway/DynamicRoutes/By-AppId/{AppId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'18', N'{}', N'e659ebbf61534a978335cfeabdc0b375', N'1261606600242085888', N'【服务网关管理】- 通过应用标识查询聚合路由', N'/api/ApiGateway/Aggregates/by-AppId/{AppId}', N'', NULL, N'/api/ApiGateway/Aggregates/by-AppId/{AppId}', N'GET,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'19', N'{}', N'd665e4491b81413385858601d9cf9a1d', N'1261606689601732608', N'【服务网关管理】- 聚合路由', N'/api/ApiGateway/Aggregates', N'', NULL, N'/api/ApiGateway/Aggregates', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30001,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'22', N'{}', N'47c55e759d824450a987a705fd08387c', N'1262220447629058048', N'【身份认证服务】- 客户端密钥', N'/api/IdentityServer/Clients/Secrets', N'', NULL, N'/api/IdentityServer/Clients/Secrets', N'PUT,POST,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30015,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'23', N'{}', N'4da82cbff6ab48e185100526eaed22df', N'1262230734939758592', N'【身份认证服务】- 客户端声明', N'/api/IdentityServer/Clients/Claims', N'', NULL, N'/api/IdentityServer/Clients/Claims', N'PUT,POST,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30015,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'25', N'{}', N'b6009df9b18c44b3aa2b77f27b0c2abb', N'1262296916350869504', N'【身份认证服务】- 客户端属性', N'/api/IdentityServer/Clients/Properties', N'', NULL, N'/api/IdentityServer/Clients/Properties', N'PUT,POST,DELETE,', N'', N'', N'', N'', N'', N'', NULL, N'1', NULL, NULL, N'HTTP', N'127.0.0.1:30015,', N'', NULL, NULL, NULL, N'30000', N'1', NULL, N'TEST-APP'), (N'26', N'{}', N'401a7a8e8a2f41c599b1b87b55249a32', N'1262632376348594176', N'【身份认证服务】- Api资源管理', N'/api/IdentityServer/ApiResources', N'', N'', N'/api/IdentityServer/ApiResources', N'GET,POST,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'27', N'{}', N'c662a4c29e654f9da6eb73ee456b533a', N'1262632791869902848', N'【身份认证服务】- 单个Api资源', N'/api/IdentityServer/ApiResources/{Id}', N'', N'', N'/api/IdentityServer/ApiResources/{Id}', N'GET,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'28', N'{}', N'a0c2bdfdd0de4832b63d6dc3696c9c26', N'1262632904575045632', N'【身份认证服务】- Api资源密钥', N'/api/IdentityServer/ApiResources/Secrets', N'', N'', N'/api/IdentityServer/ApiResources/Secrets', N'DELETE,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'29', N'{}', N'fb0e7ca974f243ce9f4034b39bdda326', N'1262632976616411136', N'【身份认证服务】- Api资源作用域', N'/api/IdentityServer/ApiResources/Scopes', N'', N'', N'/api/IdentityServer/ApiResources/Scopes', N'DELETE,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'30', N'{}', N'0f9875697b74420c9dc2eaf77099b210', N'1262660336921235456', N'【身份认证服务】- 用户登录', N'/api/account/login', N'', N'', N'/api/account/login', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'31', N'{}', N'a890c6ecc6a64c9fa313a0f6b5406e1c', N'1262660528277966848', N'【身份认证服务】- 用户登出', N'/api/account/logout', N'', N'', N'/api/account/logout', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'32', N'{}', N'88de580b6beb4d9d9d4367840ba1fcea', N'1262660706875625472', N'【身份认证服务】- 检查密码', N'/api/account/checkPassword', N'', N'', N'/api/account/checkPassword', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'33', N'{}', N'78f3c1adc7a54696af37a419eda47c62', N'1262660966393991168', N'【身份认证服务】- 个人信息页', N'/api/identity/my-profile', N'', N'', N'/api/identity/my-profile', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'34', N'{}', N'95b23aa5cebb40598a78c0761cfd0b26', N'1262661109474283520', N'【身份认证服务】- 修改密码', N'/api/identity/my-profile/change-password', N'', N'', N'/api/identity/my-profile/change-password', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'35', N'{}', N'4828f7c2aff8485189f37aba5de62d60', N'1262663888804663296', N'【身份认证管理】- 角色管理', N'/api/identity/roles', N'', N'', N'/api/identity/roles', N'GET,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'36', N'{}', N'0fddcd3b50a24c6795ec9034fdb44778', N'1262664024096133120', N'【身份认证服务】- 角色列表', N'/api/identity/roles/all', N'', N'', N'/api/identity/roles/all', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'37', N'{}', N'191e555219e845069dfd93793263a840', N'1262664186252120064', N'【身份认证服务】- 单个角色', N'/api/identity/roles/{id}', N'', N'', N'/api/identity/roles/{id}', N'GET,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'38', N'{}', N'c316858e82f74e6ca6e923d6b3a3fa76', N'1262664357044178944', N'【身份认证服务】- 用户注册', N'/api/account/register', N'', N'', N'/api/account/register', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'39', N'{}', N'db53b6f957914a10a6a97ba306b1f6ef', N'1262664632928718848', N'【身份认证服务】- 单个用户', N'/api/identity/users/{id}', N'', N'', N'/api/identity/users/{id}', N'GET,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'40', N'{}', N'1833434b8ce34f8ab791e7e950f4c61f', N'1262664751409418240', N'【身份认证服务】- 用户管理', N'/api/identity/users', N'', N'', N'/api/identity/users', N'GET,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'41', N'{}', N'b3c963a1612144918bffaf272697498c', N'1262664871274237952', N'【身份认证服务】- 用户角色', N'/api/identity/users/{id}/roles', N'', N'', N'/api/identity/users/{id}/roles', N'GET,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'42', N'{}', N'33dd757b79cb4f52994af13bfb4f6783', N'1262665026111164416', N'【身份认证服务】- 通过用户名查询用户', N'/api/identity/users/by-username/{userName}', N'', N'', N'/api/identity/users/by-username/{userName}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'43', N'{}', N'e46fd6cb3a104da3aadfe0149fe4de68', N'1262665159905267712', N'【身份认证服务】- 通过邮件查询用户', N'/api/identity/users/by-email/{email}', N'', N'', N'/api/identity/users/by-email/{email}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'44', N'{}', N'8c8ec5ad6aaa4145981ee7ac876c36c9', N'1262665329829105664', N'【身份认证服务】- 通过标识查询用户', N'/api/identity/users/lookup/{id}', N'', N'', N'/api/identity/users/lookup/{id}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'45', N'{}', N'f5c0c8c02c0846fdbe5015cd86f3d81b', N'1262665456471920640', N'【身份认证服务】- 通过名称查询用户', N'/api/identity/users/lookup/by-username/{userName}', N'', N'', N'/api/identity/users/lookup/by-username/{userName}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'46', N'{}', N'4de0c9e0437f40ce81628de956af9c5e', N'1262665628165754880', N'【身份认证服务】- 通过名称查询租户', N'/api/abp/multi-tenancy/tenants/by-name/{name}', N'', N'', N'/api/abp/multi-tenancy/tenants/by-name/{name}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'47', N'{}', N'fa60a7253b2f4c80b9afad4e82ba6ba8', N'1262666172682883072', N'【身份认证服务】- 通过标识查询租户', N'/api/abp/multi-tenancy/tenants/by-id/{id}', N'', N'', N'/api/abp/multi-tenancy/tenants/by-id/{id}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'49', N'{}', N'4114a097b9e04a9e90458edf02ef41c7', N'1262723402331885568', N'【身份认证服务】- 克隆客户端', N'/api/IdentityServer/Clients/Clone', N'', N'', N'/api/IdentityServer/Clients/Clone', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'50', N'{}', N'2a9cc98d3ed0462d98c4bf0e946f410d', N'1262935771746734080', N'【身份认证服务】- 身份资源管理', N'/api/IdentityServer/IdentityResources', N'', N'', N'/api/IdentityServer/IdentityResources', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'51', N'{}', N'4d36b0ea5b92473ea5de3e91ff155830', N'1262935906522304512', N'【身份认证服务】- 查询身份资源', N'/api/IdentityServer/IdentityResources/{Id}', N'', N'', N'/api/IdentityServer/IdentityResources/{Id}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'52', N'{}', N'387df08693e54e91ac055a2324d4c10e', N'1262936009924481024', N'【身份认证服务】- 身份资源属性', N'/api/IdentityServer/IdentityResources/Properties', N'', N'', N'/api/IdentityServer/IdentityResources/Properties', N'POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'54', N'{}', N'7b847d8434bc4d1db07fa8961d90c14a', N'1263074419073593344', N'【服务网关管理】- 接口代理', N'/api/abp/api-definition', N'', N'', N'/api/abp/apigateway/api-definition', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30001,', N'', N'', N'apigateway-api-definition', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'55', N'{}', N'ca2cedfa620045a9adef0be2f958c4bc', N'1263075249394790400', N'【服务网关管理】- 查询聚合路由', N'/api/ApiGateway/Aggregates/{RouteId}', N'', N'', N'/api/ApiGateway/Aggregates/{RouteId}', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30001,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'57', N'{}', N'98fbc99fc8644946ac0a72cc3dc5fd1f', N'1263075593499684864', N'【服务网关管理】- 聚合路由配置', N'/api/ApiGateway/Aggregates/RouteConfig', N'', N'', N'/api/ApiGateway/Aggregates/RouteConfig', N'POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30001,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'59', N'{}', N'c692b30c72d4424eb4740ac49f4e9373', N'1263101898440146944', N'【服务网关管理】- 框架配置', N'/api/abp/application-configuration', N'', N'', N'/api/abp/apigateway/application-configuration', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30001,', N'', N'', N'apigateway-configuration', N'0', N'120000', N'1', N'', N'TEST-APP'), (N'60', N'{}', N'8409117162504f71aa66982f05c38a80', N'1263303878648569856', N'【平台服务】- 接口代理', N'/api/abp/api-definition', N'', N'', N'/api/abp/platform/api-definition', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'platform-api-definition', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'61', N'{}', N'9f520820071b4e14bc94ab57989cea1f', N'1263304204797648896', N'【平台服务】- 框架配置', N'/api/abp/application-configuration', N'', N'', N'/api/abp/platform/application-configuration', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'platform-configuration', N'0', N'120000', N'1', N'', N'TEST-APP'), (N'62', N'{}', N'59d2d5e16c1b4fc5ad044609bdc46115', N'1263304872891555840', N'【后台管理】- 租户管理', N'/api/multi-tenancy/tenants', N'', N'', N'/api/multi-tenancy/tenants', N'GET,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'63', N'{}', N'1c49816c03c24c229ab923abf59b7bb6', N'1263305106250047488', N'【后台管理】- 特定租户管理', N'/api/multi-tenancy/tenants/{id}', N'', N'', N'/api/multi-tenancy/tenants/{id}', N'GET,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'64', N'{}', N'24c95b3702e94340a85c0d8cb594cdcb', N'1263305244594970624', N'【后台管理】- 租户连接字符串', N'/api/multi-tenancy/tenants/{id}/connection-string', N'', N'', N'/api/multi-tenancy/tenants/{id}/concatenation', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'2', N'30000', N'1', N'', N'TEST-APP'), (N'65', N'{}', N'03c614b2785145dfb1547edf919190fc', N'1263305430536855552', N'【后台管理】- 特定租户连接字符串', N'/api/multi-tenancy/tenants/{id}/connection-string/{name}', N'', N'', N'/api/multi-tenancy/tenants/{id}/concatenation/{name}', N'GET,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'1', N'30000', N'1', N'', N'TEST-APP'), (N'66', N'{}', N'b6ec80673b354c239def3bdce31b4cc0', N'1263639172959174656', N'【后台管理】- 全局设置', N'/api/setting-management/settings/by-global', N'', N'', N'/api/setting-management/settings/by-global', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'67', N'{}', N'755b4dce5c34444785fa3b647fef4131', N'1264799968944640000', N'【身份认证服务】- 验证手机号', N'/api/account/phone/verify', N'', N'', N'/api/account/phone/verify', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'68', N'{}', N'535191c570ae453ab320012304d7a62c', N'1264800070161584128', N'【身份认证服务】- 手机号注册', N'/api/account/phone/register', N'', N'', N'/api/account/phone/register', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'69', N'{}', N'723c9b111f9f4a1aa804118cdde193d3', N'1267360794414161920', N'【消息服务】- 通知', N'/signalr-hubs/notifications/{everything}', N'', N'', N'/signalr-hubs/notifications/{everything}', N'POST,GET,OPTIONS,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'ws', N'127.0.0.1:30020,', N'', N'', N'', N'1', N'30000', N'1', N'', N'TEST-APP'), (N'70', N'{}', N'f3aa2b42dd9f468aa5aae4ef64754427', N'1267383367629807616', N'【消息服务】- 通知0', N'/signalr-hubs/notifications', N'', N'', N'/signalr-hubs/notifications', N'GET,POST,PUT,DELETE,OPTIONS,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'ws', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'71', N'{}', N'99dc8259c50044008c8aede7442ddde3', N'1267817055527632896', N'【消息服务】- 聊天', N'/signalr-hubs/message', N'', N'', N'/signalr-hubs/message', N'GET,POST,PUT,DELETE,OPTIONS,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'ws', N'127.0.0.1:30020,', N'', N'', N'', N'1', N'30000', N'1', N'', N'TEST-APP'), (N'72', N'{}', N'4ec40b72d469474ba10ae02e8d3298bb', N'1267817221286526976', N'【消息服务】- 聊天1', N'/signalr-hubs/message/{everything}', N'', N'', N'/signalr-hubs/message/{everything}', N'GET,POST,PUT,DELETE,OPTIONS,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'ws', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'73', N'{}', N'cfb5f09a12bf495fbcaf2fa5d9123a40', N'1268893687085518848', N'【身份认证服务】- 重置密码', N'/api/account/phone/reset-password', N'', N'', N'/api/account/phone/reset-password', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'1', N'30000', N'1', N'', N'TEST-APP'), (N'101', N'{}', N'997a4c27a433458aafed9b8aa252d957', N'1288657613998579712', N'【身份认证服务】- 组织机构列表', N'/api/identity/organization-units', N'', N'', N'/api/identity/organization-units', N'GET,POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'102', N'{}', N'a2c6acc9882a425ab26bd3ad5a9c17c6', N'1288657941770854400', N'【身份认证服务】- 组织机构管理', N'/api/identity/organization-units/{id}', N'', N'', N'/api/identity/organization-units/{id}', N'GET,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'1', N'30000', N'1', N'', N'TEST-APP'), (N'103', N'{}', N'390acfb0e16943c6b61e731d47c282e9', N'1288658134067109888', N'【身份认证服务】- 组织机构移动', N'/api/identity/organization-units/{id}/move', N'', N'', N'/api/identity/organization-units/{id}/move', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'104', N'{}', N'3515e75becf9447492ad60466b27c397', N'1288658305156964352', N'【身份认证服务】- 查询组织机构子级', N'/api/identity/organization-units/find-children', N'', N'', N'/api/identity/organization-units/find-children', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'105', N'{}', N'aab0a24d930f4f9687497e5ccaac2a31', N'1288658491216289792', N'【身份认证服务】- 查询组织机构最后一个子节点', N'/api/identity/organization-units/last-children', N'', N'', N'/api/identity/organization-units/last-children', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'106', N'{}', N'edf67e297c6d494baf3ea66465418faf', N'1288658638302142464', N'【身份认证服务】- 组织机构角色管理', N'/api/identity/organization-units/management-roles', N'', N'', N'/api/identity/organization-units/management-roles', N'GET,POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'107', N'{}', N'21bcb13e71c648a98861ce9b6fb3e7b0', N'1288658791784308736', N'【身份认证服务】- 组织机构用户管理', N'/api/identity/organization-units/management-users', N'', N'', N'/api/identity/organization-units/management-users', N'GET,POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'108', N'{}', N'1982bc6ffd92445b9b3f47067378d1fc', N'1290849478956199936', N'【后台管理】- 当前租户设置', N'/api/setting-management/settings/by-current-tenant', N'', N'', N'/api/setting-management/settings/by-current-tenant', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'109', N'{}', N'a7df3a04805d4cc8a6e6b3823c6dd468', N'1290849628051124224', N'【后台管理】- 用户设置', N'/api/setting-management/settings/by-user/{userId}', N'', N'', N'/api/setting-management/settings/by-user/{userId}', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'110', N'{}', N'ef6e38a529a345fab67f6a627cf20635', N'1290849798553776128', N'【后台管理】- 当前用户设置', N'/api/setting-management/settings/by-current-user', N'', N'', N'/api/setting-management/settings/by-current-user', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'112', N'{}', N'9844fed6507844f2ac64bd08649bd3a6', N'1291259822512693248', N'【身份认证服务】- 查询组织机构根节点', N'/api/identity/organization-units/root-node', N'', N'', N'/api/identity/organization-units/root-node', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'113', N'{}', N'24d8794cf8f943b4ac45d2bcccf7c128', N'1292620505149145088', N'【平台服务】- 文件系统', N'/api/file-management/file-system', N'', N'', N'/api/file-management/file-system', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'114', N'{}', N'0acf6762d3af43efb655107e0039f5fc', N'1292620665505775616', N'【平台服务】- 文件系统 - 目录管理', N'/api/file-management/file-system/folders', N'', N'', N'/api/file-management/file-system/folders', N'POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'115', N'{}', N'8b4363f70865419089b5f62ba35382df', N'1292620843398791168', N'【平台服务】- 文件系统 - 文件管理', N'/api/file-management/file-system/files', N'', N'', N'/api/file-management/file-system/files', N'GET,POST,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'1200000', N'1', N'', N'TEST-APP'), (N'116', N'{}', N'7eb315567bbc470bbbfd26923c5d0aba', N'1292621027574874112', N'【平台服务】- 文件系统 - 复制目录', N'/api/file-management/file-system/folders/copy', N'', N'', N'/api/file-management/file-system/folders/copy', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'117', N'{}', N'af5853680cff454fa66ff6022f18da23', N'1292621363161137152', N'【平台服务】- 文件系统 - 移动目录', N'/api/file-management/file-system/folders/move', N'', N'', N'/api/file-management/file-system/folders/move', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'118', N'{}', N'6daa6d8c8adb466899988fd8181c29a8', N'1292621494837116928', N'【平台服务】- 文件系统 - 复制文件', N'/api/file-management/file-system/files/copy', N'', N'', N'/api/file-management/file-system/files/copy', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'119', N'{}', N'9560caaa3bd9424984c44724aa54bfe9', N'1292621629260365824', N'【平台服务】- 文件系统 - 移动文件', N'/api/file-management/file-system/files/move', N'', N'', N'/api/file-management/file-system/files/move', N'PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'120', N'{}', N'fc2aaa6035484201b9014912930fb7cb', N'1292622526073864192', N'【平台服务】- 文件系统 - 详情页', N'/api/file-management/file-system/profile', N'', N'', N'/api/file-management/file-system/profile', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30025,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'121', N'{}', N'c6c7b027000942dda8ba0d2e2d8cf705', N'1293470838745821184', N'【后台管理】- 框架配置', N'/api/abp/application-configuration', N'', N'', N'/api/abp/backend-admin/application-configuration', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'backend-admin-configuration', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'122', N'{}', N'becd4342079d4399abda5b5ba3b46fdc', N'1293471661785706496', N'【消息服务】- 框架配置', N'/api/abp/application-configuration', N'', N'', N'/api/abp/messages/application-configuration', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'messages-configuration', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'123', N'{}', N'c828140cee3043c18ffc274f6461f0f2', N'1293472678392721408', N'【后台管理】- 接口代理', N'/api/abp/api-definition', N'', N'', N'/api/abp/backend-admin/api-definition', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'backend-admin-api-definition', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'124', N'{}', N'e683cff8066d4c2899a17d0f618f1a0b', N'1293472857510473728', N'【消息服务】- 接口代理', N'/api/abp/api-definition', N'', N'', N'/api/abp/messages/api-definition', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'messages-api-definition', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'125', N'{}', N'0e9c3bff5b58428eba97a5516140ba5e', N'1299273336009359360', N'【消息服务】- Hangfire仪表板 ', N'/hangfire', N'', N'', N'/hangfire', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'126', N'{}', N'e906924ad3a947cf8e6956e2dd258192', N'1299273436282585088', N'【消息服务】- Hangfire仪表板 - 主页', N'/hangfire/', N'', N'', N'/hangfire/', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'127', N'{}', N'e02f2049efbc4ee1ad6629bd0341ed2b', N'1299273618470567936', N'【消息服务】- Hangfire仪表板 - 状态', N'/hangfire/stats', N'', N'', N'/hangfire/stats', N'POST,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'128', N'{}', N'f8d2b2f0f1d649c2a07eeef23d6adb0e', N'1299273770182737920', N'【消息服务】- Hangfire仪表板 - 作业管理', N'/hangfire/jobs/{everything}', N'', N'', N'/hangfire/jobs/{everything}', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'129', N'{}', N'9785be7a29774b468e271b23009fe115', N'1299273978023084032', N'【消息服务】- Hangfire仪表板 - 重试', N'/hangfire/retries', N'', N'', N'/hangfire/retries', N'GET,POST,PUT,DELETE,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'130', N'{}', N'9c0c1cd196bb45c0bc03fafb7a1eb8f2', N'1299274123225694208', N'【消息服务】- Hangfire仪表板 - 周期性作业', N'/hangfire/recurring', N'', N'', N'/hangfire/recurring', N'GET,POST,DELETE,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'131', N'{}', N'243bafe828be463ea63a3e2b521f9923', N'1299274222299348992', N'【消息服务】- Hangfire仪表板 - 服务器列表', N'/hangfire/servers', N'', N'', N'/hangfire/servers', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30020,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'132', N'{}', N'57a8ac1b41bb434cad38fbde0e2ba2f0', N'1304238876758495232', N'【后台管理】- 管理功能', N'/api/feature-management/features', N'', N'', N'/api/feature-management/features', N'GET,PUT,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30010,', N'', N'', N'', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'133', N'{}', N'40a150f629b047f587c91a9436a699c0', N'1304678610343383040', N'【身份认证服务】- 接口代理', N'/api/abp/api-definition', N'', N'', N'/api/abp/identity-server/api-definition', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'identity-server-api-definition', N'0', N'30000', N'1', N'', N'TEST-APP'), (N'134', N'{}', N'3a2d5d538fa44ac690402fc5c4e1a401', N'1304679169305694208', N'【身份认证服务】- 框架配置', N'/api/abp/application-configuration', N'', N'', N'/api/abp/identity-server/application-configuration', N'GET,', N'', N'', N'', N'', N'', N'', N'', N'1', N'', N'', N'HTTP', N'127.0.0.1:30015,', N'', N'', N'identity-server-configuration', N'0', N'30000', N'1', N'', N'TEST-APP')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewayroutegroup
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewayroutegroup]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewayroutegroup]
+GO
+
+CREATE TABLE [apigateway].[appapigatewayroutegroup] (
+  [Id] char(36) NOT NULL,
+  [ExtraProperties] nvarchar(max) NULL,
+  [ConcurrencyStamp] nvarchar(40) NULL,
+  [CreationTime] datetime2(0) NOT NULL,
+  [CreatorId] char(36) NULL,
+  [LastModificationTime] datetime2(0) NULL,
+  [LastModifierId] char(36) NULL,
+  [IsDeleted] tinyint NOT NULL,
+  [DeleterId] char(36) NULL,
+  [DeletionTime] datetime2(0) NULL,
+  [Name] nvarchar(50) NOT NULL,
+  [AppId] nvarchar(50) NOT NULL,
+  [AppName] nvarchar(100) NOT NULL,
+  [AppIpAddress] nvarchar(256) NOT NULL,
+  [Description] nvarchar(256) NULL,
+  [IsActive] tinyint NOT NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewayroutegroup
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewayroutegroup] ON
-INSERT INTO [appapigatewayroutegroup]([Id]
-      ,[ExtraProperties]
-      ,[ConcurrencyStamp]
-      ,[CreationTime]
-      ,[CreatorId]
-      ,[LastModificationTime]
-      ,[LastModifierId]
-      ,[IsDeleted]
-      ,[DeleterId]
-      ,[DeletionTime]
-      ,[Name]
-      ,[AppId]
-      ,[AppName]
-      ,[AppIpAddress]
-      ,[Description]
-      ,[IsActive]) VALUES ('08d7f735-a83b-49ab-8cee-5d602502bea8', '{}', '83cac848676f4b658d5c9f7d802a497a', '2020-05-13 20:03:32.524271', NULL, '2020-08-05 15:43:28.205288', 'bf289dbb-838e-a89b-c622-39f51dcc4f43', 0, NULL, NULL, 'abp后台管理', 'TEST-APP', 'abp后台管理', '127.0.0.1', 'abp后台管理项目网关', 1);
-SET IDENTITY_INSERT [appapigatewayroutegroup] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewayroutegroup] VALUES (N'08d7f735-a83b-49ab-8cee-5d602502bea8', N'{}', N'83cac848676f4b658d5c9f7d802a497a', N'2020-05-13 20:03:32.524271', NULL, N'2020-08-05 15:43:28.205288', N'bf289dbb-838e-a89b-c622-39f51dcc4f43', N'0', NULL, NULL, N'abp后台管理', N'TEST-APP', N'abp后台管理', N'127.0.0.1', N'abp后台管理项目网关', N'1')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for appapigatewaysecurityoptions
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[appapigatewaysecurityoptions]') AND type IN ('U'))
+	DROP TABLE [apigateway].[appapigatewaysecurityoptions]
+GO
+
+CREATE TABLE [apigateway].[appapigatewaysecurityoptions] (
+  [Id] int NOT NULL,
+  [ReRouteId] bigint NOT NULL,
+  [IPAllowedList] nvarchar(1000) NULL,
+  [IPBlockedList] nvarchar(1000) NULL
+)
+GO
+
+
 -- ----------------------------
 -- Records of appapigatewaysecurityoptions
 -- ----------------------------
-SET IDENTITY_INSERT [appapigatewaysecurityoptions] ON
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (3, 1261299170387169280, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (4, 1261585859064872960, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (5, 1261586605810368512, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (6, 1261587558609436672, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (7, 1261588213298348032, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (8, 1261588367619375104, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (9, 1261588628450557952, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (10, 1261588881564221440, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (11, 1261588983053795328, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (12, 1261589139039961088, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (13, 1261589197483393024, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (14, 1261589278857084928, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (15, 1261589420356124672, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (16, 1261589960393736192, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (17, 1261606600242085888, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (18, 1261606689601732608, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (19, 1261681880965038080, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (20, 1261682144920977408, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (21, 1262220447629058048, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (22, 1262230734939758592, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (23, 1262296916350869504, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (24, 1262632376348594176, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (25, 1262632791869902848, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (26, 1262632904575045632, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (27, 1262632976616411136, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (28, 1262660336921235456, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (29, 1262660528277966848, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (30, 1262660706875625472, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (31, 1262660966393991168, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (32, 1262661109474283520, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (33, 1262663888804663296, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (34, 1262664024096133120, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (35, 1262664186252120064, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (36, 1262664357044178944, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (37, 1262664632928718848, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (38, 1262664751409418240, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (39, 1262664871274237952, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (40, 1262665026111164416, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (41, 1262665159905267712, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (42, 1262665329829105664, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (43, 1262665456471920640, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (44, 1262665628165754880, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (45, 1262666172682883072, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (47, 1262723402331885568, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (48, 1262935771746734080, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (49, 1262935906522304512, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (50, 1262936009924481024, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (52, 1263074419073593344, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (53, 1263075249394790400, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (54, 1263075593499684864, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (56, 1263101898440146944, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (57, 1263303878648569856, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (58, 1263304204797648896, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (59, 1263304872891555840, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (60, 1263305106250047488, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (61, 1263305244594970624, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (62, 1263305430536855552, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (63, 1263639172959174656, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (64, 1264799968944640000, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (65, 1264800070161584128, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (66, 1267360794414161920, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (67, 1267383367629807616, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (68, 1267817055527632896, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (69, 1267817221286526976, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (70, 1268893687085518848, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (91, 1285579388652576768, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (92, 1285580096881778688, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (93, 1285582774663864320, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (94, 1288657613998579712, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (95, 1288657941770854400, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (96, 1288658134067109888, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (97, 1288658305156964352, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (98, 1288658491216289792, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (99, 1288658638302142464, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (100, 1288658791784308736, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (101, 1290849478956199936, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (102, 1290849628051124224, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (103, 1290849798553776128, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (104, 1290849978032238592, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (105, 1291259822512693248, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (106, 1292620505149145088, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (107, 1292620665505775616, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (108, 1292620843398791168, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (109, 1292621027574874112, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (110, 1292621363161137152, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (111, 1292621494837116928, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (112, 1292621629260365824, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (113, 1292622526073864192, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (114, 1293470838745821184, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (115, 1293471661785706496, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (116, 1293472678392721408, '', '');
-INSERT INTO [appapigatewaysecurityoptions]([Id],[ReRouteId],[IPAllowedList],[IPBlockedList]) VALUES (117, 1293472857510473728, '', '');
-SET IDENTITY_INSERT [appapigatewaysecurityoptions] OFF
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[appapigatewaysecurityoptions] VALUES (N'3', N'1261299170387169280', N'', N''), (N'4', N'1261585859064872960', N'', N''), (N'5', N'1261586605810368512', N'', N''), (N'6', N'1261587558609436672', N'', N''), (N'7', N'1261588213298348032', N'', N''), (N'8', N'1261588367619375104', N'', N''), (N'9', N'1261588628450557952', N'', N''), (N'10', N'1261588881564221440', N'', N''), (N'11', N'1261588983053795328', N'', N''), (N'12', N'1261589139039961088', N'', N''), (N'13', N'1261589197483393024', N'', N''), (N'14', N'1261589278857084928', N'', N''), (N'15', N'1261589420356124672', N'', N''), (N'16', N'1261589960393736192', N'', N''), (N'17', N'1261606600242085888', N'', N''), (N'18', N'1261606689601732608', N'', N''), (N'21', N'1262220447629058048', N'', N''), (N'22', N'1262230734939758592', N'', N''), (N'23', N'1262296916350869504', N'', N''), (N'24', N'1262632376348594176', N'', N''), (N'25', N'1262632791869902848', N'', N''), (N'26', N'1262632904575045632', N'', N''), (N'27', N'1262632976616411136', N'', N''), (N'28', N'1262660336921235456', N'', N''), (N'29', N'1262660528277966848', N'', N''), (N'30', N'1262660706875625472', N'', N''), (N'31', N'1262660966393991168', N'', N''), (N'32', N'1262661109474283520', N'', N''), (N'33', N'1262663888804663296', N'', N''), (N'34', N'1262664024096133120', N'', N''), (N'35', N'1262664186252120064', N'', N''), (N'36', N'1262664357044178944', N'', N''), (N'37', N'1262664632928718848', N'', N''), (N'38', N'1262664751409418240', N'', N''), (N'39', N'1262664871274237952', N'', N''), (N'40', N'1262665026111164416', N'', N''), (N'41', N'1262665159905267712', N'', N''), (N'42', N'1262665329829105664', N'', N''), (N'43', N'1262665456471920640', N'', N''), (N'44', N'1262665628165754880', N'', N''), (N'45', N'1262666172682883072', N'', N''), (N'47', N'1262723402331885568', N'', N''), (N'48', N'1262935771746734080', N'', N''), (N'49', N'1262935906522304512', N'', N''), (N'50', N'1262936009924481024', N'', N''), (N'52', N'1263074419073593344', N'', N''), (N'53', N'1263075249394790400', N'', N''), (N'54', N'1263075593499684864', N'', N''), (N'56', N'1263101898440146944', N'', N''), (N'57', N'1263303878648569856', N'', N''), (N'58', N'1263304204797648896', N'', N''), (N'59', N'1263304872891555840', N'', N''), (N'60', N'1263305106250047488', N'', N''), (N'61', N'1263305244594970624', N'', N''), (N'62', N'1263305430536855552', N'', N''), (N'63', N'1263639172959174656', N'', N''), (N'64', N'1264799968944640000', N'', N''), (N'65', N'1264800070161584128', N'', N''), (N'66', N'1267360794414161920', N'', N''), (N'67', N'1267383367629807616', N'', N''), (N'68', N'1267817055527632896', N'', N''), (N'69', N'1267817221286526976', N'', N''), (N'70', N'1268893687085518848', N'', N''), (N'94', N'1288657613998579712', N'', N''), (N'95', N'1288657941770854400', N'', N''), (N'96', N'1288658134067109888', N'', N''), (N'97', N'1288658305156964352', N'', N''), (N'98', N'1288658491216289792', N'', N''), (N'99', N'1288658638302142464', N'', N''), (N'100', N'1288658791784308736', N'', N''), (N'101', N'1290849478956199936', N'', N''), (N'102', N'1290849628051124224', N'', N''), (N'103', N'1290849798553776128', N'', N''), (N'105', N'1291259822512693248', N'', N''), (N'106', N'1292620505149145088', N'', N''), (N'107', N'1292620665505775616', N'', N''), (N'108', N'1292620843398791168', N'', N''), (N'109', N'1292621027574874112', N'', N''), (N'110', N'1292621363161137152', N'', N''), (N'111', N'1292621494837116928', N'', N''), (N'112', N'1292621629260365824', N'', N''), (N'113', N'1292622526073864192', N'', N''), (N'114', N'1293470838745821184', N'', N''), (N'115', N'1293471661785706496', N'', N''), (N'116', N'1293472678392721408', N'', N''), (N'117', N'1293472857510473728', N'', N''), (N'118', N'1299273336009359360', N'127.0.0.1', N''), (N'119', N'1299273436282585088', N'127.0.0.1', N''), (N'120', N'1299273618470567936', N'127.0.0.1', N''), (N'121', N'1299273770182737920', N'127.0.0.1', N''), (N'122', N'1299273978023084032', N'127.0.0.1', N''), (N'123', N'1299274123225694208', N'127.0.0.1', N''), (N'124', N'1299274222299348992', N'127.0.0.1', N''), (N'125', N'1304238876758495232', N'', N''), (N'126', N'1304678610343383040', N'', N''), (N'127', N'1304679169305694208', N'', N'')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for cap.published
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[cap.published]') AND type IN ('U'))
+	DROP TABLE [apigateway].[cap.published]
+GO
+
+CREATE TABLE [apigateway].[cap.published] (
+  [Id] bigint NOT NULL,
+  [Version] nvarchar(20) NULL,
+  [Name] nvarchar(200) NOT NULL,
+  [Content] nvarchar(max) NULL,
+  [Retries] int NULL,
+  [Added] datetime2(0) NOT NULL,
+  [ExpiresAt] datetime2(0) NULL,
+  [StatusName] nvarchar(40) NOT NULL
+)
+GO
+
+
+-- ----------------------------
+-- Records of cap.published
+-- ----------------------------
+BEGIN TRANSACTION
+GO
+
+INSERT INTO [apigateway].[cap.published] VALUES (N'1304677152713691136', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677152713691136","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:04:07 +08:00","cap-corr-id":"1304677152713691136","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:04:07.591053+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:04:08', N'2020-09-13 15:04:08', N'Succeeded'), (N'1304677241599381504', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677241599381504","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:04:28 +08:00","cap-corr-id":"1304677241599381504","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:04:28.7842979+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:04:29', N'2020-09-13 15:04:29', N'Succeeded'), (N'1304677341490925568', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677341490925568","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:04:52 +08:00","cap-corr-id":"1304677341490925568","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:04:52.6018128+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:04:53', N'2020-09-13 15:04:53', N'Succeeded'), (N'1304677366732247040', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677366732247040","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:04:58 +08:00","cap-corr-id":"1304677366732247040","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:04:58.618885+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:04:59', N'2020-09-13 15:04:59', N'Succeeded'), (N'1304677384696451072', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677384696451072","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:02 +08:00","cap-corr-id":"1304677384696451072","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:02.9026848+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:03', N'2020-09-13 15:05:03', N'Succeeded'), (N'1304677409488982016', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677409488982016","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:08 +08:00","cap-corr-id":"1304677409488982016","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:08.8130362+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:09', N'2020-09-13 15:05:09', N'Succeeded'), (N'1304677434440896512', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677434440896512","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:14 +08:00","cap-corr-id":"1304677434440896512","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:14.7621855+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:15', N'2020-09-13 15:05:15', N'Succeeded'), (N'1304677452002447360', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677452002447360","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:18 +08:00","cap-corr-id":"1304677452002447360","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:18.9491824+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:19', N'2020-09-13 15:05:19', N'Succeeded'), (N'1304677469031321600', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677469031321600","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:23 +08:00","cap-corr-id":"1304677469031321600","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:23.0096431+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:23', N'2020-09-13 15:05:23', N'Succeeded'), (N'1304677485980504064', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677485980504064","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:27 +08:00","cap-corr-id":"1304677485980504064","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:27.0500617+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:27', N'2020-09-13 15:05:27', N'Succeeded'), (N'1304677506343849984', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304677506343849984","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:05:31 +08:00","cap-corr-id":"1304677506343849984","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:05:31.9052943+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:05:32', N'2020-09-13 15:05:32', N'Succeeded'), (N'1304678610850893824', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304678610850893824","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:09:55 +08:00","cap-corr-id":"1304678610850893824","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:09:55.2399503+08:00","AppId":"TEST-APP","Method":"Create","Object":"ReRoute"}}', N'0', N'2020-09-12 15:09:55', N'2020-09-13 15:09:55', N'Succeeded'), (N'1304678886014013440', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304678886014013440","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:11:00 +08:00","cap-corr-id":"1304678886014013440","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:11:00.8446866+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:11:01', N'2020-09-13 15:11:01', N'Succeeded'), (N'1304679169385385984', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304679169385385984","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:12:08 +08:00","cap-corr-id":"1304679169385385984","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:12:08.4050039+08:00","AppId":"TEST-APP","Method":"Create","Object":"ReRoute"}}', N'0', N'2020-09-12 15:12:08', N'2020-09-13 15:12:08', N'Succeeded'), (N'1304679342077464576', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304679342077464576","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:12:49 +08:00","cap-corr-id":"1304679342077464576","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:12:49.578245+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:12:50', N'2020-09-13 15:12:50', N'Succeeded'), (N'1304679403997974528', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304679403997974528","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:13:04 +08:00","cap-corr-id":"1304679403997974528","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:13:04.3414935+08:00","AppId":"TEST-APP","Method":"Modify","Object":"ReRoute"}}', N'0', N'2020-09-12 15:13:04', N'2020-09-13 15:13:04', N'Succeeded'), (N'1304679463473205248', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304679463473205248","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:13:18 +08:00","cap-corr-id":"1304679463473205248","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:13:18.5210634+08:00","AppId":"TEST-APP","Method":"Update","Object":"AggregateRoute"}}', N'0', N'2020-09-12 15:13:19', N'2020-09-13 15:13:19', N'Succeeded'), (N'1304679502023053312', N'v1', N'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', N'{"Headers":{"cap-callback-name":null,"cap-msg-id":"1304679502023053312","cap-msg-name":"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData","cap-msg-type":"Object","cap-senttime":"2020/9/12 15:13:27 +08:00","cap-corr-id":"1304679502023053312","cap-corr-seq":"0"},"Value":{"DateTime":"2020-09-12T15:13:27.7122246+08:00","AppId":"TEST-APP","Method":"Update","Object":"AggregateRoute"}}', N'0', N'2020-09-12 15:13:28', N'2020-09-13 15:13:28', N'Succeeded')
+GO
+
+COMMIT
+GO
+
+
+-- ----------------------------
+-- Table structure for cap.received
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[apigateway].[cap.received]') AND type IN ('U'))
+	DROP TABLE [apigateway].[cap.received]
+GO
+
+CREATE TABLE [apigateway].[cap.received] (
+  [Id] bigint NOT NULL,
+  [Version] nvarchar(20) NULL,
+  [Name] nvarchar(400) NOT NULL,
+  [Group] nvarchar(200) NULL,
+  [Content] nvarchar(max) NULL,
+  [Retries] int NULL,
+  [Added] datetime2(0) NOT NULL,
+  [ExpiresAt] datetime2(0) NULL,
+  [StatusName] nvarchar(50) NOT NULL
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table __efmigrationshistory
+-- ----------------------------
+ALTER TABLE [apigateway].[__efmigrationshistory] ADD PRIMARY KEY CLUSTERED ([MigrationId])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayaggregate
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayaggregate] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayaggregateconfig
+-- ----------------------------
+CREATE NONCLUSTERED INDEX [IX_AppApiGatewayAggregateConfig_AggregateReRouteId]
+ON [apigateway].[appapigatewayaggregateconfig] (
+  [AggregateReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayaggregateconfig
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayaggregateconfig] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayauthoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayAuthOptions_ReRouteId]
+ON [apigateway].[appapigatewayauthoptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayauthoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayauthoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewaybalanceroptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayBalancerOptions_ItemId]
+ON [apigateway].[appapigatewaybalanceroptions] (
+  [ItemId]
+)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayBalancerOptions_ReRouteId]
+ON [apigateway].[appapigatewaybalanceroptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewaybalanceroptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaybalanceroptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewaycacheoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayCacheOptions_ReRouteId]
+ON [apigateway].[appapigatewaycacheoptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewaycacheoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaycacheoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewaydiscovery
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayDiscovery_ItemId]
+ON [apigateway].[appapigatewaydiscovery] (
+  [ItemId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewaydiscovery
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaydiscovery] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewaydynamicreroute
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [AK_AppApiGatewayDynamicReRoute_DynamicReRouteId]
+ON [apigateway].[appapigatewaydynamicreroute] (
+  [DynamicReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewaydynamicreroute
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaydynamicreroute] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayglobalconfiguration
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [AK_AppApiGatewayGlobalConfiguration_ItemId]
+ON [apigateway].[appapigatewayglobalconfiguration] (
+  [ItemId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayglobalconfiguration
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayglobalconfiguration] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayheaders
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayheaders] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayhostandport
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayhostandport] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayhttpoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayHttpOptions_ItemId]
+ON [apigateway].[appapigatewayhttpoptions] (
+  [ItemId]
+)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayHttpOptions_ReRouteId]
+ON [apigateway].[appapigatewayhttpoptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayhttpoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayhttpoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayqosoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayQoSOptions_ItemId]
+ON [apigateway].[appapigatewayqosoptions] (
+  [ItemId]
+)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayQoSOptions_ReRouteId]
+ON [apigateway].[appapigatewayqosoptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayqosoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayqosoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayratelimitoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayRateLimitOptions_ItemId]
+ON [apigateway].[appapigatewayratelimitoptions] (
+  [ItemId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayratelimitoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayratelimitoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayratelimitrule
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayRateLimitRule_DynamicReRouteId]
+ON [apigateway].[appapigatewayratelimitrule] (
+  [DynamicReRouteId]
+)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayRateLimitRule_ReRouteId]
+ON [apigateway].[appapigatewayratelimitrule] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayratelimitrule
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayratelimitrule] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayreroute
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [AK_AppApiGatewayReRoute_ReRouteId]
+ON [apigateway].[appapigatewayreroute] (
+  [ReRouteId]
+)
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewayReRoute_AppId_DownstreamPathTemplate_UpstreamPa~]
+ON [apigateway].[appapigatewayreroute] (
+  [AppId],
+  [DownstreamPathTemplate],
+  [UpstreamPathTemplate]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayreroute
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayreroute] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewayroutegroup
+-- ----------------------------
+CREATE NONCLUSTERED INDEX [IX_AppApiGatewayRouteGroup_AppId_AppName_AppIpAddress]
+ON [apigateway].[appapigatewayroutegroup] (
+  [AppId],
+  [AppName],
+  [AppIpAddress]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewayroutegroup
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayroutegroup] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table appapigatewaysecurityoptions
+-- ----------------------------
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AppApiGatewaySecurityOptions_ReRouteId]
+ON [apigateway].[appapigatewaysecurityoptions] (
+  [ReRouteId]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table appapigatewaysecurityoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaysecurityoptions] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table cap.published
+-- ----------------------------
+CREATE NONCLUSTERED INDEX [IX_ExpiresAt]
+ON [apigateway].[cap.published] (
+  [ExpiresAt]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table cap.published
+-- ----------------------------
+ALTER TABLE [apigateway].[cap.published] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Indexes structure for table cap.received
+-- ----------------------------
+CREATE NONCLUSTERED INDEX [IX_ExpiresAt]
+ON [apigateway].[cap.received] (
+  [ExpiresAt]
+)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table cap.received
+-- ----------------------------
+ALTER TABLE [apigateway].[cap.received] ADD PRIMARY KEY CLUSTERED ([Id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayaggregateconfig
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayaggregateconfig] ADD CONSTRAINT [FK_AppApiGatewayAggregateConfig_AppApiGatewayAggregate_Aggregat~] FOREIGN KEY ([AggregateReRouteId]) REFERENCES [apigateway].[appapigatewayaggregate] ([Id])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayauthoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayauthoptions] ADD CONSTRAINT [FK_AppApiGatewayAuthOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewaybalanceroptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaybalanceroptions] ADD CONSTRAINT [FK_AppApiGatewayBalancerOptions_AppApiGatewayGlobalConfiguratio~] FOREIGN KEY ([ItemId]) REFERENCES [apigateway].[appapigatewayglobalconfiguration] ([ItemId])
+GO
+
+ALTER TABLE [apigateway].[appapigatewaybalanceroptions] ADD CONSTRAINT [FK_AppApiGatewayBalancerOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewaycacheoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaycacheoptions] ADD CONSTRAINT [FK_AppApiGatewayCacheOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewaydiscovery
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaydiscovery] ADD CONSTRAINT [FK_AppApiGatewayDiscovery_AppApiGatewayGlobalConfiguration_Item~] FOREIGN KEY ([ItemId]) REFERENCES [apigateway].[appapigatewayglobalconfiguration] ([ItemId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayhttpoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayhttpoptions] ADD CONSTRAINT [FK_AppApiGatewayHttpOptions_AppApiGatewayGlobalConfiguration_It~] FOREIGN KEY ([ItemId]) REFERENCES [apigateway].[appapigatewayglobalconfiguration] ([ItemId])
+GO
+
+ALTER TABLE [apigateway].[appapigatewayhttpoptions] ADD CONSTRAINT [FK_AppApiGatewayHttpOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayqosoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayqosoptions] ADD CONSTRAINT [FK_AppApiGatewayQoSOptions_AppApiGatewayGlobalConfiguration_Ite~] FOREIGN KEY ([ItemId]) REFERENCES [apigateway].[appapigatewayglobalconfiguration] ([ItemId])
+GO
+
+ALTER TABLE [apigateway].[appapigatewayqosoptions] ADD CONSTRAINT [FK_AppApiGatewayQoSOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayratelimitoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayratelimitoptions] ADD CONSTRAINT [FK_AppApiGatewayRateLimitOptions_AppApiGatewayGlobalConfigurati~] FOREIGN KEY ([ItemId]) REFERENCES [apigateway].[appapigatewayglobalconfiguration] ([ItemId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewayratelimitrule
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewayratelimitrule] ADD CONSTRAINT [FK_AppApiGatewayRateLimitRule_AppApiGatewayDynamicReRoute_Dynam~] FOREIGN KEY ([DynamicReRouteId]) REFERENCES [apigateway].[appapigatewaydynamicreroute] ([DynamicReRouteId])
+GO
+
+ALTER TABLE [apigateway].[appapigatewayratelimitrule] ADD CONSTRAINT [FK_AppApiGatewayRateLimitRule_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+
+
+-- ----------------------------
+-- Foreign Keys structure for table appapigatewaysecurityoptions
+-- ----------------------------
+ALTER TABLE [apigateway].[appapigatewaysecurityoptions] ADD CONSTRAINT [FK_AppApiGatewaySecurityOptions_AppApiGatewayReRoute_ReRouteId] FOREIGN KEY ([ReRouteId]) REFERENCES [apigateway].[appapigatewayreroute] ([ReRouteId])
+GO
+

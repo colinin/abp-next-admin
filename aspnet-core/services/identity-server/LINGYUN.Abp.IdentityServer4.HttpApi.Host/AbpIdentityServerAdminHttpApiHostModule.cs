@@ -3,20 +3,10 @@ using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.FileManagement;
-using LINGYUN.Abp.Location.Tencent;
-using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
-using LINGYUN.Abp.SettingManagement;
-using LINGYUN.Abp.TenantManagement;
-using LINGYUN.ApiGateway;
-using LINGYUN.BackendAdmin.MultiTenancy;
-using LINGYUN.Platform;
-using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,18 +16,15 @@ using StackExchange.Redis;
 using System;
 using System.Text;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
@@ -45,53 +32,38 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.BackendAdmin
+namespace LINGYUN.Abp.IdentityServer4
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AppPlatformApplicationContractModule),
-        typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpFileManagementApplicationContractsModule),
-        typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),// 引用类似的包主要用于聚合权限管理
-        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule),
-        typeof(AbpSettingManagementApplicationModule),
-        typeof(AbpSettingManagementHttpApiModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpFeatureManagementHttpApiModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpTenantManagementHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
+        typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
+        typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
+        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
+        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
-        typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
+        typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpAliyunSmsModule),
-        typeof(AbpTencentLocationModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
         )]
-    public class BackendAdminHostModule : AbpModule
+    public class AbpIdentityServerAdminHttpApiHostModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -106,11 +78,6 @@ namespace LINGYUN.BackendAdmin
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 })
                 .UseDashboard();
-            });
-
-            PreConfigure<IdentityBuilder>(builder =>
-            {
-                builder.AddDefaultTokenProviders();
             });
         }
 
@@ -136,7 +103,7 @@ namespace LINGYUN.BackendAdmin
             {
                 // Rename IdentityServer.Client.ManagePermissions
                 // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = 
+                options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] =
                     LINGYUN.Abp.IdentityServer.AbpIdentityServerPermissions.Clients.ManagePermissions;
             });
 
@@ -188,7 +155,7 @@ namespace LINGYUN.BackendAdmin
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BackendAdminHostModule>("LINGYUN.BackendAdmin");
+                options.FileSets.AddEmbedded<AbpIdentityServerAdminHttpApiHostModule>("LINGYUN.Abp.IdentityServer4");
             });
 
             // 多租户
@@ -206,7 +173,7 @@ namespace LINGYUN.BackendAdmin
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BackendAdmin API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "IdentityServer4 API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -238,17 +205,7 @@ namespace LINGYUN.BackendAdmin
 
                 options.Resources
                        .Get<IdentityResource>()
-                       .AddVirtualJson("/LINGYUN/BackendAdmin/Identity/Localization");
-                options
-                    .AddLanguagesMapOrUpdate(
-                        "vue-admin-element-ui",
-                        new NameValue("zh-Hans", "zh"),
-                        new NameValue("en", "en"));
-                options
-                    .AddLanguageFilesMapOrUpdate(
-                        "vue-admin-element-ui",
-                        new NameValue("zh-Hans", "zh"),
-                        new NameValue("en", "en"));
+                       .AddVirtualJson("/LINGYUN/Abp/IdentityServer4/Localization");
             });
 
             context.Services.AddAuthentication("Bearer")
@@ -294,28 +251,12 @@ namespace LINGYUN.BackendAdmin
             // Swagger可视化界面
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support BackendAdmin API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support IdentityServer4 API");
             });
             // 审计日志
             app.UseAuditing();
-            // 处理微信消息
-            // app.UseWeChatSignature();
             // 路由
             app.UseConfiguredEndpoints();
-
-            if (context.GetEnvironment().IsDevelopment())
-            {
-                SeedData(context);
-            }
-        }
-
-        private void SeedData(ApplicationInitializationContext context)
-        {
-            AsyncHelper.RunSync(async () =>
-            {
-                using var scope = context.ServiceProvider.CreateScope();
-                await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
-            });
         }
     }
 }
