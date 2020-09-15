@@ -5,7 +5,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace LINGYUN.BackendAdmin.EntityFrameworkCore
+namespace LINGYUN.Abp.BackendAdmin.EntityFrameworkCore
 {
     public class BackendAdminHostMigrationsDbContext : AbpDbContext<BackendAdminHostMigrationsDbContext>
     {

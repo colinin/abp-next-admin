@@ -10,7 +10,7 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
-using LINGYUN.BackendAdmin.MultiTenancy;
+using LINGYUN.Abp.BackendAdmin.MultiTenancy;
 using LINGYUN.Platform;
 using LINYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
@@ -54,7 +54,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.BackendAdmin
+namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
@@ -183,7 +183,7 @@ namespace LINGYUN.BackendAdmin
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BackendAdminHostModule>("LINGYUN.BackendAdmin");
+                options.FileSets.AddEmbedded<BackendAdminHostModule>("LINGYUN.Abp.BackendAdmin");
             });
 
             // 多租户
@@ -233,7 +233,7 @@ namespace LINGYUN.BackendAdmin
 
                 options.Resources
                        .Get<IdentityResource>()
-                       .AddVirtualJson("/LINGYUN/BackendAdmin/Identity/Localization");
+                       .AddVirtualJson("/Localization");
                 options
                     .AddLanguagesMapOrUpdate(
                         "vue-admin-element-ui",

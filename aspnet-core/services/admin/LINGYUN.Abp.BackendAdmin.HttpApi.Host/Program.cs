@@ -5,7 +5,7 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace LINGYUN.BackendAdmin
+namespace LINGYUN.Abp.BackendAdmin
 {
     public class Program
     {

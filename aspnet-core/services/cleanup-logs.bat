@@ -9,5 +9,5 @@ del .\apigateway\LINGYUN.ApiGateway.Host\Logs /Q
 del .\apigateway\LINGYUN.ApiGateway.HttpApi.Host\Logs /Q
 del .\account\AuthServer.Host\Logs /Q
 del .\messages\LINGYUN.Abp.MessageService.HttpApi.Host\Logs /Q
-del .\admin\LINGYUN.BackendAdminApp.Host\Logs /Q
+del .\admin\LINGYUN.Abp.BackendAdmin.HttpApi.Host\Logs /Q
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LINGYUN.BackendAdmin.Migrations
+namespace LINGYUN.Abp.BackendAdmin.Migrations
 {
     public partial class MigrationBackendAdminMySql : Migration
     {

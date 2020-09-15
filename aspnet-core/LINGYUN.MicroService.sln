@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TenantManagemen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{E5D1B78A-1A8F-4D52-BF99-A4A863ADE898}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.BackendAdminApp.Host", "services\admin\LINGYUN.BackendAdminApp.Host\LINGYUN.BackendAdminApp.Host.csproj", "{85090598-6B03-43D3-BE61-1E9777252D50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackendAdmin.HttpApi.Host", "services\admin\LINGYUN.Abp.BackendAdmin.HttpApi.Host\LINGYUN.Abp.BackendAdmin.HttpApi.Host.csproj", "{85090598-6B03-43D3-BE61-1E9777252D50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{8AC72641-30D3-4ACF-89FA-808FADC55C2E}"
 EndProject

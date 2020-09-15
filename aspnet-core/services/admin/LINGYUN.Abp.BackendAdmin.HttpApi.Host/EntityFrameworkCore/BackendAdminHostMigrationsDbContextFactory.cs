@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace LINGYUN.BackendAdmin.EntityFrameworkCore
+namespace LINGYUN.Abp.BackendAdmin.EntityFrameworkCore
 {
     public class BackendAdminHostMigrationsDbContextFactory : IDesignTimeDbContextFactory<BackendAdminHostMigrationsDbContext>
     {

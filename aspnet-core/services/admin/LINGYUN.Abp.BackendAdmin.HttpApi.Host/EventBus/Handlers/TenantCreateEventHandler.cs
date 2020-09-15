@@ -13,7 +13,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.BackendAdmin.EventBus.Handlers
+namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
 {
     public class TenantCreateEventHandler : IDistributedEventHandler<CreateEventData>, ITransientDependency
     {
