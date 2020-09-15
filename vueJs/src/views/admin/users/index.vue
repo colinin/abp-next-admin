@@ -6,6 +6,7 @@
         style="padding-left:0;"
       >{{ $t('users.queryFilter') }}</label>
       <el-input
+        v-model="dataFilter.filter"
         :placeholder="$t('users.filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -14,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetUsers"
+        @click="refreshPagedData"
       >
         {{ $t('users.searchList') }}
       </el-button>
@@ -29,14 +30,13 @@
     </div>
 
     <el-table
-      v-loading="userListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="userList"
+      :data="dataList"
       border
       fit
       highlight-current-row
       style="width: 100%;"
-      :default-sort="sortRule"
       @sort-change="handleSortChange"
     >
       <el-table-column
@@ -150,11 +150,11 @@
     </el-table>
 
     <Pagination
-      v-show="totalCount>0"
-      :total="totalCount"
-      :page.sync="getUserQuery.skipCount"
-      :limit.sync="getUserQuery.maxResultCount"
-      @pagination="handleGetUsers"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
 
     <el-dialog
@@ -185,7 +185,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import { dateFormat } from '@/utils'
 import UserApiService, { UserDataDto, UsersGetPagedDto } from '@/api/users'
@@ -210,48 +211,22 @@ import { checkPermission } from '@/utils/permission'
     checkPermission
   }
 })
-export default class extends Vue {
-  /** 用户列表加载中 */
-  private userListLoading: boolean
-  /** 用户列表 */
-  private userList: UserDataDto[]
-  /** 最大用户数量 */
-  private totalCount: number
+export default class extends mixins(DataListMiXin) {
   /** 当前编辑用户 */
-  private editUser: UserDataDto
-  /** 排序组别 */
-  private sortRule: { prop: string, sort: string }
-  /** 查询用户过滤参数 */
-  private getUserQuery: UsersGetPagedDto
+  private editUser = new UserDataDto()
 
-  private showCreateUserDialog: boolean
-  private showEditUserDialog: boolean
+  public dataFilter = new UsersGetPagedDto()
 
-  constructor() {
-    super()
-    this.totalCount = 0
-    this.editUser = new UserDataDto()
-    this.userListLoading = false
-    this.sortRule = { prop: '', sort: '' }
-    this.getUserQuery = new UsersGetPagedDto()
-    this.userList = new Array<UserDataDto>()
-
-    this.showEditUserDialog = false
-    this.showCreateUserDialog = false
-  }
+  private showCreateUserDialog = false
+  private showEditUserDialog = false
 
   mounted() {
-    this.handleGetUsers()
+    this.refreshPagedData()
   }
 
   /** 查询用户列表 */
-  private handleGetUsers() {
-    this.userListLoading = true
-    UserApiService.getUsers(this.getUserQuery).then(res => {
-      this.totalCount = res.totalCount
-      this.userList = res.items
-      this.userListLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return UserApiService.getUsers(filter)
   }
 
   /** 锁定用户
@@ -273,7 +248,7 @@ export default class extends Vue {
   }
 
   private handleUserProfileChanged() {
-    this.handleGetUsers()
+    this.refreshPagedData()
   }
 
   private handleCreateUser() {
@@ -302,16 +277,11 @@ export default class extends Vue {
           if (action === 'confirm') {
             UserApiService.deleteUser(row.id).then(() => {
               this.$message.success(this.$t('users.userHasBeenDeleted', { name: row.userName }).toString())
-              this.handleGetUsers()
+              this.refreshPagedData()
             })
           }
         }
       })
-  }
-
-  /** 响应表格排序事件 */
-  private handleSortChange(column: any) {
-    this.getUserQuery.sorting = column.sort
   }
 }
 </script>

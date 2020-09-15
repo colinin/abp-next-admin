@@ -87,7 +87,6 @@ export class TenantGetByPaged extends PagedAndSortedResultRequestDto {
     this.filter = ''
     this.sorting = ''
     this.skipCount = 1
-    this.maxResultCount = 25
   }
 }
 

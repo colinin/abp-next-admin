@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('queryFilter') }}</label>
       <el-input
-        v-model="globalConfigurationGetQuery.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -15,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handledGetGlobalConfigurations"
+        @click="refreshPagedData"
       >
         {{ $t('searchList') }}
       </el-button>
@@ -30,9 +30,9 @@
     </div>
 
     <el-table
-      v-loading="globalConfigurationsLoading"
+      v-loading="dataLoading"
       row-key="itemId"
-      :data="globalConfigurations"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -138,11 +138,11 @@
     </el-table>
 
     <Pagination
-      v-show="globalConfigurationsCount>0"
-      :total="globalConfigurationsCount"
-      :page.sync="globalConfigurationGetQuery.skipCount"
-      :limit.sync="globalConfigurationGetQuery.maxResultCount"
-      @pagination="handledGetGlobalConfigurations"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
 
     <el-dialog
@@ -162,10 +162,11 @@
 
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import GlobalCreateOrEditForm from './components/GlobalCreateOrEditForm.vue'
-import ApiGatewayService, { GlobalGetByPagedDto, GlobalConfigurationDto } from '@/api/apigateway'
+import ApiGatewayService, { GlobalGetByPagedDto } from '@/api/apigateway'
 
 @Component({
   name: 'GlobalRoute',
@@ -177,44 +178,26 @@ import ApiGatewayService, { GlobalGetByPagedDto, GlobalConfigurationDto } from '
     checkPermission
   }
 })
-export default class extends Vue {
-  private editGlobalConfigurationTitle!: any
-  private globalConfigurationsCount!: number
-  private globalConfigurationsLoading!: boolean
-  private showEditGlobalConfiguration!: boolean
-  private editGlobalConfigurationAppId!: string
-  private globalConfigurations!: GlobalConfigurationDto[]
-  private globalConfigurationGetQuery!: GlobalGetByPagedDto
+export default class extends mixins(DataListMiXin) {
+  private editGlobalConfigurationTitle = ''
+  private showEditGlobalConfiguration = false
+  private editGlobalConfigurationAppId = ''
 
-  constructor() {
-    super()
-    this.globalConfigurationsCount = 0
-    this.editGlobalConfigurationTitle = ''
-    this.editGlobalConfigurationAppId = ''
-    this.globalConfigurationsLoading = false
-    this.showEditGlobalConfiguration = false
-    this.globalConfigurationGetQuery = new GlobalGetByPagedDto()
-    this.globalConfigurations = new Array<GlobalConfigurationDto>()
-  }
+  public dataFilter = new GlobalGetByPagedDto()
 
   mounted() {
-    this.handledGetGlobalConfigurations()
+    this.refreshPagedData()
   }
 
-  private handledGetGlobalConfigurations() {
-    this.globalConfigurationsLoading = true
-    ApiGatewayService.getGlobalConfigurations(this.globalConfigurationGetQuery).then(globals => {
-      this.globalConfigurations = globals.items
-      this.globalConfigurationsCount = globals.totalCount
-      this.globalConfigurationsLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return ApiGatewayService.getGlobalConfigurations(filter)
   }
 
   private handleCreateOrEditGlobalConfiguration(appId: string) {
     this.editGlobalConfigurationAppId = appId
-    this.editGlobalConfigurationTitle = this.$t('apiGateWay.createGlobal')
+    this.editGlobalConfigurationTitle = this.l('apiGateWay.createGlobal')
     if (appId) {
-      this.editGlobalConfigurationTitle = this.$t('apiGateWay.updateGlobalByApp', { name: appId })
+      this.editGlobalConfigurationTitle = this.l('apiGateWay.updateGlobalByApp', { name: appId })
     }
     this.showEditGlobalConfiguration = true
   }
@@ -224,7 +207,7 @@ export default class extends Vue {
     this.editGlobalConfigurationTitle = ''
     this.showEditGlobalConfiguration = false
     if (changed) {
-      this.handledGetGlobalConfigurations()
+      this.refreshPagedData()
     }
   }
 
@@ -237,15 +220,10 @@ export default class extends Vue {
           await ApiGatewayService.deleteGlobalConfiguration(itemId)
           const successMessage = this.$t('dataHasBeenDeleted', { name: appId }).toString()
           this.$message.success(successMessage)
-          this.handledGetGlobalConfigurations()
+          this.refreshPagedData()
         }
       }
     })
-  }
-
-  /** 响应表格排序事件 */
-  private handleSortChange(column: any) {
-    this.globalConfigurationGetQuery.sorting = column.prop
   }
 }
 </script>

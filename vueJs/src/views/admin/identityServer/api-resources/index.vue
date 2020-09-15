@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('queryFilter') }}</label>
       <el-input
-        v-model="apiResourceGetPagedFilter.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -15,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetApiResources"
+        @click="refreshPagedData"
       >
         {{ $t('searchList') }}
       </el-button>
@@ -30,9 +30,9 @@
     </div>
 
     <el-table
-      v-loading="apiResourceListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="apiResourceList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -165,11 +165,11 @@
     </el-table>
 
     <Pagination
-      v-show="apiResourceListCount>0"
-      :total="apiResourceListCount"
-      :page.sync="apiResourceGetPagedFilter.skipCount"
-      :limit.sync="apiResourceGetPagedFilter.maxResultCount"
-      @pagination="handleGetApiResources"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
@@ -202,7 +202,7 @@
         ref="formApiSecret"
         :api-resource-id="editApiResource.id"
         :api-secrets="editApiResource.secrets"
-        @apiSecretChanged="handleGetApiResources"
+        @apiSecretChanged="refreshPagedData"
       />
     </el-dialog>
 
@@ -219,16 +219,17 @@
         ref="formApiScope"
         :api-resource-id="editApiResource.id"
         :api-scopes="editApiResource.scopes"
-        @apiSecretChanged="handleGetApiResources"
+        @apiSecretChanged="refreshPagedData"
       />
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
+import { checkPermission } from '@/utils/permission'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import ApiScopeEditForm from './components/ApiResourceScopeEditForm.vue'
 import ApiSecretEditForm from './components/ApiResourceSecretEditForm.vue'
@@ -262,48 +263,22 @@ import ApiResourceService, { ApiResource, ApiResourceGetByPaged } from '@/api/ap
     }
   }
 })
-export default class extends Vue {
-  private editApiResource: ApiResource
-  private apiResourceListCount: number
-  private editApiResourceTitle: any
-  private apiResourceList: ApiResource[]
-  private apiResourceListLoading: boolean
-  private apiResourceGetPagedFilter: ApiResourceGetByPaged
+export default class extends mixins(DataListMiXin) {
+  private editApiResource = new ApiResource()
+  private editApiResourceTitle = ''
 
-  private showEditApiScopeDialog: boolean
-  private showEditApiSecretDialog: boolean
-  private showEditApiResourceDialog: boolean
+  private showEditApiScopeDialog = false
+  private showEditApiSecretDialog = false
+  private showEditApiResourceDialog = false
 
-  constructor() {
-    super()
-    this.apiResourceListCount = 0
-    this.editApiResourceTitle = ''
-    this.apiResourceListLoading = false
-    this.editApiResource = new ApiResource()
-    this.apiResourceList = new Array<ApiResource>()
-    this.apiResourceGetPagedFilter = new ApiResourceGetByPaged()
-
-    this.showEditApiScopeDialog = false
-    this.showEditApiSecretDialog = false
-    this.showEditApiResourceDialog = false
-  }
+  public dataFilter = new ApiResourceGetByPaged()
 
   mounted() {
-    this.handleGetApiResources()
+    this.refreshPagedData()
   }
 
-  private handleGetApiResources() {
-    this.apiResourceListLoading = true
-    ApiResourceService.getApiResources(this.apiResourceGetPagedFilter).then(resources => {
-      this.apiResourceList = resources.items
-      this.apiResourceListCount = resources.totalCount
-    }).finally(() => {
-      this.apiResourceListLoading = false
-    })
-  }
-
-  private handleSortChange(column: any) {
-    this.apiResourceGetPagedFilter.sorting = column.prop
+  protected getPagedList(filter: any) {
+    return ApiResourceService.getApiResources(filter)
   }
 
   private handleShowEditApiResourceForm(resource: ApiResource) {
@@ -322,7 +297,7 @@ export default class extends Vue {
     this.editApiResource = ApiResource.empty()
     this.showEditApiResourceDialog = false
     if (changed) {
-      this.handleGetApiResources()
+      this.refreshPagedData()
     }
   }
 
@@ -345,7 +320,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             ApiResourceService.deleteApiResource(id).then(() => {
               this.$message.success(this.l('identityServer.deleteApiResourceSuccess', { name: name }))
-              this.handleGetApiResources()
+              this.refreshPagedData()
             })
           }
         }
@@ -366,10 +341,6 @@ export default class extends Vue {
         break
       default: break
     }
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 
   private formatStatusText(status: boolean) {

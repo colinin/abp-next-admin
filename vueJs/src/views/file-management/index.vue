@@ -27,9 +27,9 @@
 
     <el-table
       ref="fileSystemTable"
-      v-loading="fileSystemListLoading"
+      v-loading="dataLoading"
       row-key="name"
-      :data="fileSystemList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -38,6 +38,7 @@
       @row-click="onRowClick"
       @row-dblclick="onRowDoubleClick"
       @contextmenu.native="onContextMenu"
+      @sort-change="handleSortChange"
     >
       <el-table-column
         type="selection"
@@ -151,11 +152,11 @@
     </el-table>
 
     <Pagination
-      v-show="fileSystemCount>0"
-      :total="fileSystemCount"
-      :page.sync="fileSystemGetFilter.skipCount"
-      :limit.sync="fileSystemGetFilter.maxResultCount"
-      @pagination="handleGetFileSystemList"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
 
     <el-dialog
@@ -176,10 +177,12 @@
 <script lang="ts">
 import { dateFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
+import { Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import FileUploadForm from './components/FileUploadForm.vue'
 import Pagination from '@/components/Pagination/index.vue'
-import FileSystemService, { FileSystem, FileSystemGetByPaged, FileSystemType } from '@/api/filemanagement'
+import FileSystemService, { FileSystemGetByPaged, FileSystemType } from '@/api/filemanagement'
 
 const kbUnit = 1 * 1024
 const mbUnit = kbUnit * 1024
@@ -247,48 +250,28 @@ const $contextmenu = Vue.prototype.$contextmenu
     }
   }
 })
-export default class extends Vue {
-  private showFileUploadDialog!: boolean
-  private downloading!: boolean
-  private lastFilePath!: string
-  private fileSystemRoot!: string[]
-  private fileSystemList?: FileSystem[]
-  private fileSystemCount!: number
-  private fileSystemListLoading!: boolean
-  private fileSystemGetFilter!: FileSystemGetByPaged
+export default class extends mixins(DataListMiXin) {
+  private showFileUploadDialog = false
+  private downloading = false
+  private lastFilePath = ''
+  private fileSystemRoot = new Array<string>()
 
-  constructor() {
-    super()
-    this.lastFilePath = ''
-    this.fileSystemCount = 0
-    this.downloading = false
-    this.fileSystemListLoading = false
-    this.showFileUploadDialog = false
-    this.fileSystemRoot = new Array<string>()
-    this.fileSystemList = new Array<FileSystem>()
-    this.fileSystemGetFilter = new FileSystemGetByPaged()
-  }
+  public dataFilter = new FileSystemGetByPaged()
 
   mounted() {
     this.fileSystemRoot.push(this.$t('fileSystem.root').toString())
-    this.handleGetFileSystemList()
+    this.refreshPagedData()
   }
 
-  private handleGetFileSystemList() {
-    this.fileSystemListLoading = true
-    FileSystemService.getFileSystemList(this.fileSystemGetFilter).then(res => {
-      this.fileSystemCount = res.totalCount
-      this.fileSystemList = res.items
-    }).finally(() => {
-      this.fileSystemListLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return FileSystemService.getFileSystemList(filter)
   }
 
   private navigationToFilePath() {
     const fileSystemPathArray = this.fileSystemRoot.slice(1)
     const fileSystemPath = fileSystemPathArray.join('/')
-    this.fileSystemGetFilter.parent = fileSystemPath
-    this.handleGetFileSystemList()
+    this.dataFilter.parent = fileSystemPath
+    this.refreshPagedData()
   }
 
   private handleGoToLastFolder() {
@@ -311,12 +294,12 @@ export default class extends Vue {
               }
               FileSystemService.deleteFolder(path).then(() => {
                 this.$notify.success(this.l('global.dataHasBeenDeleted', { name: row.name }))
-                this.handleGetFileSystemList()
+                this.refreshPagedData()
               })
             } else {
               FileSystemService.deleteFile(row.parent, row.name).then(() => {
                 this.$notify.success(this.l('global.dataHasBeenDeleted', { name: row.name }))
-                this.handleGetFileSystemList()
+                this.refreshPagedData()
               })
             }
           }
@@ -412,12 +395,12 @@ export default class extends Vue {
       this.fileSystemRoot.splice(index + 1)
       this.navigationToFilePath()
     } else {
-      this.handleGetFileSystemList()
+      this.refreshPagedData()
     }
   }
 
   private onFileUploaded() {
-    this.handleGetFileSystemList()
+    this.refreshPagedData()
   }
 
   private onFileUploadFormClosed() {
@@ -450,7 +433,7 @@ export default class extends Vue {
               }).then((val: any) => {
               FileSystemService.createFolder(val.value, parent).then(() => {
                 this.$message.success(this.$t('fileSystem.folderCreateSuccess', { name: val.value }).toString())
-                this.handleGetFileSystemList()
+                this.refreshPagedData()
               })
             }).catch(_ => _)
           },
@@ -475,10 +458,6 @@ export default class extends Vue {
       minWidth: 150
     })
     return false
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

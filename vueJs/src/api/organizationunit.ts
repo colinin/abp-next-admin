@@ -204,7 +204,7 @@ export class OrganizationUnitGetRoleByPaged extends PagedAndSortedResultRequestD
   /** 主键标识 */
   id!: string
   /** 过滤字符 */
-  filter!: string
+  filter = ''
 }
 
 /** 组织机构创建对象 */

@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('global.queryFilter') }}</label>
       <el-input
-        v-model="identityResourceGetPagedFilter.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -15,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetIdentityResources"
+        @click="refreshPagedData"
       >
         {{ $t('global.searchList') }}
       </el-button>
@@ -30,9 +30,9 @@
     </div>
 
     <el-table
-      v-loading="identityResourceListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="identityResourceList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -159,11 +159,11 @@
     </el-table>
 
     <Pagination
-      v-show="identityResourceListCount>0"
-      :total="identityResourceListCount"
-      :page.sync="identityResourceGetPagedFilter.skipCount"
-      :limit.sync="identityResourceGetPagedFilter.maxResultCount"
-      @pagination="handleGetIdentityResources"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
@@ -204,9 +204,10 @@
 </template>
 
 <script lang="ts">
-import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
+import { checkPermission } from '@/utils/permission'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import IdentityPropertyEditForm from './components/IdentityResourcePropertyEditForm.vue'
 import IdentityResourceCreateOrEditForm from './components/IdentityResourceCreateOrEditForm.vue'
@@ -235,46 +236,21 @@ import IdentityResourceService, { IdentityResource, IdentityResourceGetByPaged }
     }
   }
 })
-export default class extends Vue {
-  private editIdentityResource: IdentityResource
-  private identityResourceListCount: number
-  private editIdentityResourceTitle: any
-  private identityResourceList: IdentityResource[]
-  private identityResourceListLoading: boolean
-  private identityResourceGetPagedFilter: IdentityResourceGetByPaged
+export default class extends mixins(DataListMiXin) {
+  private editIdentityResource = IdentityResource.empty()
+  private editIdentityResourceTitle = ''
 
-  private showEditIdentityPropertyDialog: boolean
-  private showEditIdentityResourceDialog: boolean
+  private showEditIdentityPropertyDialog = false
+  private showEditIdentityResourceDialog = false
 
-  constructor() {
-    super()
-    this.identityResourceListCount = 0
-    this.editIdentityResourceTitle = ''
-    this.identityResourceListLoading = false
-    this.editIdentityResource = IdentityResource.empty()
-    this.identityResourceList = new Array<IdentityResource>()
-    this.identityResourceGetPagedFilter = new IdentityResourceGetByPaged()
-
-    this.showEditIdentityPropertyDialog = false
-    this.showEditIdentityResourceDialog = false
-  }
+  public dataFilter = new IdentityResourceGetByPaged()
 
   mounted() {
-    this.handleGetIdentityResources()
+    this.refreshPagedData()
   }
 
-  private handleGetIdentityResources() {
-    this.identityResourceListLoading = true
-    IdentityResourceService.getIdentityResources(this.identityResourceGetPagedFilter).then(resources => {
-      this.identityResourceList = resources.items
-      this.identityResourceListCount = resources.totalCount
-    }).finally(() => {
-      this.identityResourceListLoading = false
-    })
-  }
-
-  private handleSortChange(column: any) {
-    this.identityResourceGetPagedFilter.sorting = column.prop
+  protected getPagedList(filter: any) {
+    return IdentityResourceService.getIdentityResources(filter)
   }
 
   private handleShowEditIdentityResourceForm(resource: IdentityResource) {
@@ -303,7 +279,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             IdentityResourceService.deleteIdentityResource(id).then(() => {
               this.$message.success(this.l('identityServer.deleteIdentityResourceSuccess', { name: name }))
-              this.handleGetIdentityResources()
+              this.refreshPagedData()
             })
           }
         }
@@ -323,10 +299,6 @@ export default class extends Vue {
     }
   }
 
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
-  }
-
   private formatStatusText(status: boolean) {
     let statusText = ''
     if (status) {
@@ -343,7 +315,7 @@ export default class extends Vue {
     this.showEditIdentityResourceDialog = false
     this.showEditIdentityPropertyDialog = false
     if (changed) {
-      this.handleGetIdentityResources()
+      this.refreshPagedData()
     }
   }
 }

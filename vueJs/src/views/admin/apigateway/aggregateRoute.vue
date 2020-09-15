@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('apiGateWay.appId') }}</label>
       <el-select
-        v-model="aggregateRouteGetPagedFilter.appId"
+        v-model="dataFilter.appId"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
         :placeholder="$t('pleaseSelectBy', {name: $t('apiGateWay.appId')})"
@@ -23,7 +23,7 @@
         style="padding-left:10px;"
       >{{ $t('queryFilter') }}</label>
       <el-input
-        v-model="aggregateRouteGetPagedFilter.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -32,7 +32,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetAggregateRoutes"
+        @click="refreshPagedData"
       >
         {{ $t('searchList') }}
       </el-button>
@@ -47,9 +47,9 @@
     </div>
 
     <el-table
-      v-loading="aggregateRouteListLoading"
+      v-loading="dataLoading"
       row-key="reRouteId"
-      :data="aggregateRouteList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -172,11 +172,11 @@
     </el-table>
 
     <Pagination
-      v-show="routesCount>0"
-      :total="routesCount"
-      :page.sync="aggregateRouteGetPagedFilter.skipCount"
-      :limit.sync="aggregateRouteGetPagedFilter.maxResultCount"
-      @pagination="handleGetAggregateRoutes"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
@@ -215,7 +215,8 @@
 
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import AggregateRouteConfigEditForm from './components/AggregateRouteConfigEditForm.vue'
 import AggregateRouteCreateOrEditForm from './components/AggregateRouteCreateOrEditForm.vue'
@@ -244,31 +245,15 @@ import ApiGatewayService, { RouteGroupAppIdDto, AggregateReRoute, AggregateReRou
     }
   }
 })
-export default class extends Vue {
-  private editAggregateRouteId: string
-  private routesCount: number
-  private editRouteTitle: any
-  private aggregateRouteList: AggregateReRoute[]
-  private aggregateRouteListLoading: boolean
-  private aggregateRouteGetPagedFilter: AggregateReRouteGetByPaged
-  private routeGroupAppIdOptions: RouteGroupAppIdDto[]
+export default class extends mixins(DataListMiXin) {
+  private editAggregateRouteId = ''
+  private editRouteTitle = ''
+  private routeGroupAppIdOptions = new Array<RouteGroupAppIdDto>()
 
-  private showEditAggregateRouteDialog: boolean
-  private showEditAggregateRouteConfigDialog: boolean
+  private showEditAggregateRouteDialog = false
+  private showEditAggregateRouteConfigDialog = false
 
-  constructor() {
-    super()
-    this.editAggregateRouteId = ''
-    this.routesCount = 0
-    this.editRouteTitle = ''
-    this.aggregateRouteListLoading = false
-    this.aggregateRouteList = new Array<AggregateReRoute>()
-    this.aggregateRouteGetPagedFilter = new AggregateReRouteGetByPaged()
-    this.routeGroupAppIdOptions = new Array<RouteGroupAppIdDto>()
-
-    this.showEditAggregateRouteDialog = false
-    this.showEditAggregateRouteConfigDialog = false
-  }
+  public dataFilter = new AggregateReRouteGetByPaged()
 
   mounted() {
     ApiGatewayService.getRouteGroupAppIds().then(appKeys => {
@@ -276,23 +261,14 @@ export default class extends Vue {
     })
   }
 
-  private handleGetAggregateRoutes() {
-    if (this.aggregateRouteGetPagedFilter.appId) {
-      this.aggregateRouteListLoading = true
-      ApiGatewayService.getAggregateReRoutes(this.aggregateRouteGetPagedFilter).then(routes => {
-        this.aggregateRouteList = routes.items
-        this.routesCount = routes.totalCount
-      }).finally(() => {
-        this.aggregateRouteListLoading = false
-      })
+  protected getPagedList(filter: any) {
+    if (filter.appId) {
+      return ApiGatewayService.getAggregateReRoutes(filter)
     } else {
       const errorMessage = this.$t('apiGateWay.appIdHasRequired').toString()
       this.$message.warning(errorMessage)
     }
-  }
-
-  private handleSortChange(column: any) {
-    this.aggregateRouteGetPagedFilter.sorting = column.prop
+    return this.getEmptyPagedList()
   }
 
   private handleCommand(command: {key: string, row: AggregateReRoute }) {
@@ -314,7 +290,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             ApiGatewayService.deleteAggregateReRoute(reRouteId).then(() => {
               this.$message.success(this.l('apiGateWay.deleteAggregateRouteSuccess', { name: name }))
-              this.handleGetAggregateRoutes()
+              this.refreshPagedData()
             })
           }
         }
@@ -323,9 +299,9 @@ export default class extends Vue {
 
   private handleCreateOrEditAggregateRoute(reRouteId: string, name: string) {
     this.editAggregateRouteId = reRouteId
-    this.editRouteTitle = this.$t('apiGateWay.createAggregateRoute')
+    this.editRouteTitle = this.l('apiGateWay.createAggregateRoute')
     if (reRouteId) {
-      this.editRouteTitle = this.$t('apiGateWay.updateAggregateRouteByName', { name: name })
+      this.editRouteTitle = this.l('apiGateWay.updateAggregateRouteByName', { name: name })
     }
     this.showEditAggregateRouteDialog = true
   }
@@ -334,18 +310,14 @@ export default class extends Vue {
     this.editAggregateRouteId = ''
     this.editRouteTitle = ''
     this.showEditAggregateRouteDialog = false
-    if (changed && this.aggregateRouteGetPagedFilter.appId) {
-      this.handleGetAggregateRoutes()
+    if (changed && this.dataFilter.appId) {
+      this.refreshPagedData()
     }
   }
 
   private handleAggregateRouteConfigFormClosed() {
     this.editAggregateRouteId = ''
     this.showEditAggregateRouteConfigDialog = false
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

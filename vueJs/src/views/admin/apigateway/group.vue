@@ -6,7 +6,7 @@
         style="padding-left:0;"
       >{{ $t('apiGateWay.appId') }}</label>
       <el-input
-        v-model="routeGroupQuery.appId"
+        v-model="dataFilter.appId"
         :placeholder="$t('apiGateWay.appId')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -16,7 +16,7 @@
         style="padding-left:10px;"
       >{{ $t('queryFilter') }}</label>
       <el-input
-        v-model="routeGroupQuery.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -25,7 +25,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetRouteGroups"
+        @click="refreshPagedData"
       >
         {{ $t('searchList') }}
       </el-button>
@@ -40,14 +40,13 @@
     </div>
 
     <el-table
-      v-loading="routeGroupListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="routeGroupList"
+      :data="dataList"
       border
       fit
       highlight-current-row
       style="width: 100%;"
-      :default-sort="sortRule"
       @sort-change="handleSortChange"
     >
       <el-table-column
@@ -155,11 +154,11 @@
     </el-table>
 
     <Pagination
-      v-show="routeGroupCount>0"
-      :total="routeGroupCount"
-      :page.sync="routeGroupQuery.skipCount"
-      :limit.sync="routeGroupQuery.maxResultCount"
-      @pagination="handleGetRouteGroups"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
 
     <el-dialog
@@ -179,10 +178,11 @@
 <script lang="ts">
 import { dateFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import RouteGroupCreateOrEditForm from './components/RouteGroupCreateOrEditForm.vue'
-import ApiGatewayService, { RouteGroupDto, RouteGroupGetByPagedDto } from '@/api/apigateway'
+import ApiGatewayService, { GlobalGetByPagedDto } from '@/api/apigateway'
 
 @Component({
   name: 'RouteGroup',
@@ -200,47 +200,26 @@ import ApiGatewayService, { RouteGroupDto, RouteGroupGetByPagedDto } from '@/api
     checkPermission
   }
 })
-export default class extends Vue {
-  private editRouteGroupAppId!: string
-  private editRouteGroupTitle!: any
-  private showEditRouteGroupDialog!: boolean
-  private routeGroupListLoading!: boolean
-  private routeGroupList?: RouteGroupDto[]
-  private routeGroupQuery!: RouteGroupGetByPagedDto
-  private routeGroupCount!: number
-  /** 排序组别 */
-  private sortRule!: { prop: string, sort: string }
+export default class extends mixins(DataListMiXin) {
+  private editRouteGroupAppId = ''
+  private editRouteGroupTitle = ''
+  private showEditRouteGroupDialog = false
 
-  constructor() {
-    super()
-    this.routeGroupCount = 0
-    this.editRouteGroupAppId = ''
-    this.editRouteGroupTitle = ''
-    this.routeGroupListLoading = false
-    this.showEditRouteGroupDialog = false
-    this.sortRule = { prop: '', sort: '' }
-    this.routeGroupList = new Array<RouteGroupDto>()
-    this.routeGroupQuery = new RouteGroupGetByPagedDto()
-  }
+  public dataFilter = new GlobalGetByPagedDto()
 
   mounted() {
-    this.handleGetRouteGroups()
+    this.refreshPagedData()
   }
 
-  private handleGetRouteGroups() {
-    this.routeGroupListLoading = true
-    ApiGatewayService.getRouteGroups(this.routeGroupQuery).then(groupData => {
-      this.routeGroupList = groupData.items
-      this.routeGroupCount = groupData.totalCount
-      this.routeGroupListLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return ApiGatewayService.getRouteGroups(filter)
   }
 
   private handleCreateOrEditRouteGroup(appId: string, appName: string) {
     this.editRouteGroupAppId = appId
-    this.editRouteGroupTitle = this.$t('apiGateWay.createGroup')
+    this.editRouteGroupTitle = this.l('apiGateWay.createGroup')
     if (appName) {
-      this.editRouteGroupTitle = this.$t('apiGateWay.updateGroupByApp', { name: appName })
+      this.editRouteGroupTitle = this.l('apiGateWay.updateGroupByApp', { name: appName })
     }
     this.showEditRouteGroupDialog = true
   }
@@ -250,7 +229,7 @@ export default class extends Vue {
     this.editRouteGroupTitle = ''
     this.showEditRouteGroupDialog = false
     if (hasChanged) {
-      this.handleGetRouteGroups()
+      this.refreshPagedData()
     }
   }
 
@@ -263,16 +242,10 @@ export default class extends Vue {
           await ApiGatewayService.deleteRouteGroup(appId)
           const successMessage = this.$t('dataHasBeenDeleted', { name: appName }).toString()
           this.$message.success(successMessage)
-          this.handleGetRouteGroups()
+          this.refreshPagedData()
         }
       }
     })
-  }
-
-  /** 响应表格排序事件 */
-  private handleSortChange(column: any) {
-    this.sortRule.prop = column.prop
-    this.sortRule.sort = column.sort
   }
 }
 </script>

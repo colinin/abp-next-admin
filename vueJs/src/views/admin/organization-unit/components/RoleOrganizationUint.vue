@@ -6,7 +6,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      :data="organizationUnitRoles"
+      :data="dataList"
     >
       <el-table-column
         :label="$t('roles.name')"
@@ -58,19 +58,20 @@
     </el-table>
 
     <pagination
-      v-show="organizationUnitRoleCount>0"
-      :total="organizationUnitRoleCount"
-      :page.sync="organizationUnitRoleFilter.skipCount"
-      :limit.sync="organizationUnitRoleFilter.maxResultCount"
-      @pagination="handleGetOrganizationUnitRoles"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import { Prop, Watch } from 'vue-property-decorator'
+import Component, { mixins } from 'vue-class-component'
 import OrganizationUnitService, { OrganizationUnitGetRoleByPaged } from '@/api/organizationunit'
-import { RoleDto } from '@/api/roles'
 import Pagination from '@/components/Pagination/index.vue'
 
 @Component({
@@ -79,36 +80,26 @@ import Pagination from '@/components/Pagination/index.vue'
     Pagination
   }
 })
-export default class extends Vue {
+export default class extends mixins(DataListMiXin) {
   @Prop({ default: '' })
   private organizationUnitId?: string
 
-  private organizationUnitRoleFilter: OrganizationUnitGetRoleByPaged
-  private organizationUnitRoleCount: number
-  private organizationUnitRoles: RoleDto[]
-
-  constructor() {
-    super()
-    this.organizationUnitRoleCount = 0
-    this.organizationUnitRoles = new Array<RoleDto>()
-    this.organizationUnitRoleFilter = new OrganizationUnitGetRoleByPaged()
-  }
+  public dataFilter = new OrganizationUnitGetRoleByPaged()
 
   @Watch('organizationUnitId', { immediate: true })
   private onOrganizationUnitIdChanged() {
-    this.organizationUnitRoles = new Array<RoleDto>()
+    this.dataList = new Array<any>()
     if (this.organizationUnitId) {
-      this.handleGetOrganizationUnitRoles()
+      this.dataFilter.id = this.organizationUnitId
+      this.refreshPagedData()
     }
   }
 
-  private handleGetOrganizationUnitRoles() {
+  protected getPagedList(filter: any) {
     if (this.organizationUnitId) {
-      this.organizationUnitRoleFilter.id = this.organizationUnitId
-      OrganizationUnitService.organizationUnitGetRoles(this.organizationUnitRoleFilter).then(res => {
-        this.organizationUnitRoles = res.items
-      })
+      return OrganizationUnitService.organizationUnitGetRoles(filter)
     }
+    return this.getEmptyPagedList()
   }
 }
 </script>
