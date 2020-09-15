@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import TenantService from '@/api/tenant'
+import TenantService from '@/api/tenant-management'
 import { setTenant, removeTenant } from '@/utils/sessions'
 
 @Component({
@@ -37,7 +37,7 @@ export default class extends Vue {
       }).then((val: any) => {
       removeTenant()
       if (val.value) {
-        TenantService.getTenantByName(val.value).then(tenant => {
+        TenantService.findTenantByName(val.value).then(tenant => {
           if (tenant.success) {
             setTenant(tenant.tenantId)
             this.$emit('input', tenant.name)

@@ -192,7 +192,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant'
+import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant-management'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'

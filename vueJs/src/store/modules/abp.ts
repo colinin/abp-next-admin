@@ -38,7 +38,7 @@ class AbpConfiguration extends VuexModule implements IAbpState {
   }
 
   @Action({ rawError: true })
-  public async GetAbpConfiguration() {
+  public async LoadAbpConfiguration() {
     const config = await AbpConfigurationService.getAbpConfiguration()
     this.SET_ABPCONFIGURATION(config)
     this.SET_ABPLOCALIZER(config)

@@ -5,20 +5,26 @@ import ApiService from './serviceBase'
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class TenantService {
-  public static getTenantByName(name: string) {
+  public static findTenantByName(name: string) {
     let _url = '/api/abp/multi-tenancy/tenants/by-name/'
     _url += name
     return ApiService.Get<FindTenantResult>(_url, serviceUrl)
   }
 
+  public static findTenantById(id: string) {
+    let _url = '/api/abp/multi-tenancy/tenants/by-id/'
+    _url += id
+    return ApiService.Get<FindTenantResult>(_url, serviceUrl)
+  }
+
   public static getTenantById(id: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id
     return ApiService.Get<TenantDto>(_url, serviceUrl)
   }
 
   public static getTenants(payload: TenantGetByPaged) {
-    let _url = '/api/multi-tenancy/tenants'
+    let _url = '/api/tenant-management/tenants'
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     // 因为abp设计的原因, 需要前端组合页面
@@ -28,43 +34,43 @@ export default class TenantService {
   }
 
   public static createTenant(payload: TenantCreateOrEdit) {
-    const _url = '/api/multi-tenancy/tenants'
+    const _url = '/api/tenant-management/tenants'
     return ApiService.Post<TenantDto>(_url, payload, serviceUrl)
   }
 
   public static changeTenantName(id: string, name: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id
     return ApiService.Put<TenantDto>(_url, { name: name }, serviceUrl)
   }
 
   public static deleteTenant(id: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id
     return ApiService.Delete(_url, serviceUrl)
   }
 
   public static getTenantConnections(id: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id + '/concatenation'
     return ApiService.Get<ListResultDto<TenantConnectionString>>(_url, serviceUrl)
   }
 
   public static getTenantConnectionByName(id: string, name: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id + '/concatenation/'
     _url += name
     return ApiService.Get<TenantConnectionString>(_url, serviceUrl)
   }
 
   public static setTenantConnection(id: string, payload: TenantConnectionString) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id + '/concatenation'
     return ApiService.Put<TenantConnectionString>(_url, payload, serviceUrl)
   }
 
   public static deleteTenantConnectionByName(id: string, name: string) {
-    let _url = '/api/multi-tenancy/tenants/'
+    let _url = '/api/tenant-management/tenants/'
     _url += id + '/concatenation/'
     _url += name
     return ApiService.Delete(_url, serviceUrl)
