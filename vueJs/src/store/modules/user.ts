@@ -1,6 +1,6 @@
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
 import UserApiService, { UserLoginData, UserLoginPhoneData } from '@/api/users'
-import TenantService from '@/api/tenant'
+import TenantService from '@/api/tenant-management'
 import { getItem, setItem, removeItem } from '@/utils/localStorage'
 import { resetRouter } from '@/router'
 import { TagsViewModule } from './tags-view'
@@ -156,13 +156,13 @@ class User extends VuexModule implements IUserState {
 
   @Action
   private async PreLogin(tenantName: string) {
-    const tenantResult = await TenantService.getTenantByName(tenantName)
+    const tenantResult = await TenantService.findTenantByName(tenantName)
     setTenant(tenantResult.tenantId)
   }
 
   @Action
   private async PostLogin() {
-    await AbpModule.GetAbpConfiguration()
+    await AbpModule.LoadAbpConfiguration()
   }
 }
 

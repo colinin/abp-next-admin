@@ -5,7 +5,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetRoles"
+        @click="refreshPagedData"
       >
         {{ $t('roles.refreshList') }}
       </el-button>
@@ -20,9 +20,9 @@
     </div>
 
     <el-table
-      v-loading="roleListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="roleList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -134,11 +134,11 @@
     </el-table>
 
     <pagination
-      v-show="roleCount>0"
-      :total="roleCount"
-      :page.sync="roleQueryFilter.skipCount"
-      :limit.sync="roleQueryFilter.maxResultCount"
-      @pagination="handleGetRoles"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
     />
 
     <el-dialog
@@ -156,7 +156,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
@@ -174,27 +175,19 @@ import RoleEditForm from './components/RoleEditForm.vue'
     checkPermission
   }
 })
-export default class extends Vue {
-  private roleCount = 0
-  private roleQueryFilter = new RoleGetPagedDto()
-  private roleList = new Array<RoleDto>()
-  private roleListLoading = false
-
+export default class extends mixins(DataListMiXin) {
   private showEditDialog = false
   private editRoleId = ''
 
+  public dataFilter = new RoleGetPagedDto()
+
   mounted() {
-    this.handleGetRoles()
+    this.refreshPagedData()
   }
 
   /** 获取角色权限列表 */
-  private handleGetRoles() {
-    this.roleListLoading = true
-    RoleService.getRoles(this.roleQueryFilter).then(res => {
-      this.roleList = res.items
-      this.roleCount = res.totalCount
-      this.roleListLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return RoleService.getRoles(filter)
   }
 
   /** 响应角色行操作事件 */
@@ -232,7 +225,7 @@ export default class extends Vue {
       RoleService.createRole(createRoleDto).then(role => {
         const message = this.$t('roles.createRoleSuccess', { name: role.name }).toString()
         this.$message.success(message)
-        this.handleGetRoles()
+        this.refreshPagedData()
       })
     })
   }
@@ -251,7 +244,7 @@ export default class extends Vue {
     setDefaultRoleDto.concurrencyStamp = role.concurrencyStamp
     RoleService.updateRole(role.id, setDefaultRoleDto).then(role => {
       this.$message.success(this.$t('roles.roleHasBeenSetDefault', { name: role.name }).toString())
-      this.handleGetRoles()
+      this.refreshPagedData()
     })
   }
 
@@ -263,7 +256,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             RoleService.deleteRole(role.id).then(() => {
               this.$message.success(this.$t('roles.roleHasBeenDeleted', { name: role.name }).toString())
-              this.handleGetRoles()
+              this.refreshPagedData()
             })
           }
         }

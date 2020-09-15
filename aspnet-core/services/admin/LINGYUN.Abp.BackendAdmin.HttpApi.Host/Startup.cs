@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LINGYUN.BackendAdmin
+namespace LINGYUN.Abp.BackendAdmin
 {
     public class Startup
     {

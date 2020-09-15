@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>LINGYUN.BackendAdmin</RootNamespace>
+    <RootNamespace>LINGYUN.Abp.BackendAdmin</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,13 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="LINGYUN\BackendAdmin\Identity\Localization\en.json" />
-    <Content Remove="LINGYUN\BackendAdmin\Identity\Localization\zh-Hans.json" />
+    <Content Remove="Localization\en.json" />
+    <Content Remove="Localization\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\BackendAdmin\Identity\Localization\en.json" />
-    <EmbeddedResource Include="LINGYUN\BackendAdmin\Identity\Localization\zh-Hans.json" />
+    <EmbeddedResource Include="Localization\en.json" />
+    <EmbeddedResource Include="Localization\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>

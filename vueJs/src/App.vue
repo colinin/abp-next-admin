@@ -22,7 +22,7 @@ export default class extends Vue {
   }
 
   private async initializeAbpConfiguration() {
-    await AbpModule.GetAbpConfiguration()
+    await AbpModule.LoadAbpConfiguration()
   }
 }
 </script>

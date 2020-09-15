@@ -5,7 +5,7 @@
     fit
     highlight-current-row
     style="width: 100%;"
-    :data="organizationUnitUsers"
+    :data="dataList"
   >
     <el-table-column
       :label="$t('users.userName')"
@@ -75,8 +75,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-import { UserDataDto } from '@/api/users'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
+import { Prop, Watch } from 'vue-property-decorator'
 import { dateFormat } from '@/utils'
 import OrganizationUnitService from '@/api/organizationunit'
 
@@ -89,25 +90,23 @@ import OrganizationUnitService from '@/api/organizationunit'
     }
   }
 })
-export default class extends Vue {
+export default class extends mixins(DataListMiXin) {
   @Prop({ default: '' })
   private organizationUnitId?: string
 
-  private organizationUnitUsers: UserDataDto[]
-
-  constructor() {
-    super()
-    this.organizationUnitUsers = new Array<UserDataDto>()
-  }
-
   @Watch('organizationUnitId', { immediate: true })
   private onOrganizationUnitIdChanged() {
-    this.organizationUnitUsers = new Array<UserDataDto>()
+    this.dataList = new Array<any>()
     if (this.organizationUnitId) {
-      OrganizationUnitService.organizationUnitGetUsers(this.organizationUnitId).then(res => {
-        this.organizationUnitUsers = res.items
-      })
+      this.refreshData()
     }
+  }
+
+  protected getList() {
+    if (this.organizationUnitId) {
+      return OrganizationUnitService.organizationUnitGetUsers(this.organizationUnitId)
+    }
+    return this.getEmptyList()
   }
 }
 </script>

@@ -34,8 +34,6 @@ export default class extends Vue {
 
   private onFormClosed() {
     this.$emit('closed')
-    const featureManagement = this.$refs.featureManagement as FeatureManagement
-    featureManagement.resetFeature()
   }
 }
 </script>

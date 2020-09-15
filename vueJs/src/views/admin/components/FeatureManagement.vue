@@ -19,6 +19,16 @@
             :prop="'features.' + fi + '.children.' + fci + '.value'"
             :rules="featureChildren.valueType.validator | inputRuleFilter(localizer)"
           >
+            <el-popover
+              :ref="'popover_' + fi + '_' + fci"
+              trigger="hover"
+              :title="featureChildren.displayName"
+              :content="featureChildren.description"
+            />
+            <span
+              slot="label"
+              v-popover="'popover_' + fi + '_' + fci"
+            >{{ featureChildren.displayName }}</span>
             <div
               v-if="featureChildren.valueType.name === 'ToggleStringValueType'"
             >
@@ -74,6 +84,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import FeatureManagementService, { ValueType, Feature, Features } from '@/api/feature-management'
+import { ElForm } from 'element-ui/types/form'
 
 /**
  * 适用于动态表单的功能节点列表
@@ -224,7 +235,8 @@ export default class extends Vue {
    * 重置表单数据
    */
   public resetFeature() {
-    this.features = new FeatureItems()
+    const frmFeature = this.$refs.frmFeature as ElForm
+    frmFeature.resetFields()
   }
 
   /**
@@ -234,7 +246,7 @@ export default class extends Vue {
     FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
       this.features = new FeatureItems()
       res.features.forEach(feature => {
-        const featureTrue = new FeatureItem(
+        const featureItem = new FeatureItem(
           feature.name,
           feature.value,
           feature.displayName,
@@ -245,12 +257,12 @@ export default class extends Vue {
         if (feature.parentName) {
           const children = this.features.features.find(f => f.name === feature.parentName)
           if (children) {
-            children.appendChildren(featureTrue)
+            children.appendChildren(featureItem)
           } else {
-            this.features.features.push(featureTrue)
+            this.features.features.push(featureItem)
           }
         } else {
-          this.features.features.push(featureTrue)
+          this.features.features.push(featureItem)
         }
       })
       // 需要手动选择一下?
@@ -299,6 +311,7 @@ export default class extends Vue {
    */
   private onClosed() {
     this.$emit('closed')
+    this.resetFeature()
   }
 }
 </script>

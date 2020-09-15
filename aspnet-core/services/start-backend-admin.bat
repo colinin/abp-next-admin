@@ -4,7 +4,7 @@ chcp 65001
 
 echo. 启动后台管理服务
 
-cd .\admin\LINGYUN.BackendAdminApp.Host
+cd .\admin\LINGYUN.Abp.BackendAdmin.HttpApi.Host
 
 if '%1' equ '--publish' goto publish
 if '%1' equ '--run' goto run

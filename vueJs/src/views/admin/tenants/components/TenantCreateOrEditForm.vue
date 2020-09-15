@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import TenantService, { TenantCreateOrEdit } from '@/api/tenant'
+import TenantService, { TenantCreateOrEdit } from '@/api/tenant-management'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 @Component({

@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "LINGYUN.BackendAdminApp.Host": {
+    "LINGYUN.Abp.BackendAdminApp.Host": {
       "commandName": "Project",
       "launchBrowser": false,
       "applicationUrl": "http://localhost:30010",

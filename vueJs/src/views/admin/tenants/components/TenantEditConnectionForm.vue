@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import TenantService, { TenantConnectionString } from '@/api/tenant'
+import TenantService, { TenantConnectionString } from '@/api/tenant-management'
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
 

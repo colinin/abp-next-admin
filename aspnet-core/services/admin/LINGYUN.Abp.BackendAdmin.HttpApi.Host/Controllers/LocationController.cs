@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
 #if DEBUG
-namespace LINGYUN.BackendAdmin.Controllers
+namespace LINGYUN.Abp.BackendAdmin.Controllers
 {
     [Route("Location")]
     public class LocationController : AbpController

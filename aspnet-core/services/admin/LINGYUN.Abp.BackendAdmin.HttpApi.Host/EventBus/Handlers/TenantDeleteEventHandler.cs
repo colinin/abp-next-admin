@@ -12,7 +12,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.BackendAdmin.EventBus.Handlers
+namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
 {
     public class TenantDeleteEventHandler : IDistributedEventHandler<EntityDeletedEto<TenantEto>>, ITransientDependency
     {

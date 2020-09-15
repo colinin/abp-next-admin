@@ -4,7 +4,7 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 
-namespace LINGYUN.BackendAdmin.MultiTenancy
+namespace LINGYUN.Abp.BackendAdmin.MultiTenancy
 {
     public class AuthorizationTenantResolveContributor : HttpTenantResolveContributorBase
     {

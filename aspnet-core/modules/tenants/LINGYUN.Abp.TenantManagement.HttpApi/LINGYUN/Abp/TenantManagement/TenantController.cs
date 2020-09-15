@@ -8,8 +8,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.TenantManagement
 {
     [RemoteService(Name = TenantManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("multi-tenancy")]
-    [Route("api/multi-tenancy/tenants")]
+    [Area("tenant-management")]
+    [Route("api/tenant-management/tenants")]
     public class TenantController : AbpController, ITenantAppService //TODO: Throws exception on validation if we inherit from Controller
     {
         protected ITenantAppService TenantAppService { get; }

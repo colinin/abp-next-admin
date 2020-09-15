@@ -66,7 +66,7 @@ export class RoleDto extends RoleBaseDto {
 }
 
 export class RoleGetPagedDto extends PagedAndSortedResultRequestDto {
-  filter?: string
+  filter = ''
 }
 
 export class CreateRoleDto extends RoleBaseDto {

@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('queryFilter') }}</label>
       <el-input
-        v-model="clientGetPagedFilter.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -15,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetClients"
+        @click="refreshPagedData"
       >
         {{ $t('searchList') }}
       </el-button>
@@ -30,9 +30,9 @@
     </div>
 
     <el-table
-      v-loading="clientListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="clientList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -216,11 +216,11 @@
     </el-table>
 
     <Pagination
-      v-show="clientListCount>0"
-      :total="clientListCount"
-      :page.sync="clientGetPagedFilter.skipCount"
-      :limit.sync="clientGetPagedFilter.maxResultCount"
-      @pagination="handleGetClients"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
@@ -285,7 +285,7 @@
         ref="formClientSecret"
         :client-id="editClient.id"
         :client-secrets="editClient.clientSecrets"
-        @clientSecretChanged="handleGetClients"
+        @clientSecretChanged="refreshPagedData"
       />
     </el-dialog>
 
@@ -297,7 +297,7 @@
       custom-class="modal-form"
       :show-close="false"
       @closed="handleClientClaimEditFormClosed"
-      @clientClaimChanged="handleGetClients"
+      @clientClaimChanged="refreshPagedData"
     >
       <ClientClaimEditForm
         ref="formClientClaim"
@@ -314,7 +314,7 @@
       custom-class="modal-form"
       :show-close="false"
       @closed="handleClientPropertyEditFormClosed"
-      @clientPropertyChanged="handleGetClients"
+      @clientPropertyChanged="refreshPagedData"
     >
       <ClientPropertyEditForm
         ref="formClientProperty"
@@ -343,7 +343,8 @@
 
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue } from 'vue-property-decorator'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import ClientEditForm from './components/ClientEditForm.vue'
 import ClientCloneForm from './components/ClientCloneForm.vue'
@@ -381,66 +382,37 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
     }
   }
 })
-export default class extends Vue {
-  private editClient: Client
-  private clientListCount: number
-  private editClientTitle: any
-  private clientList: Client[]
-  private clientListLoading: boolean
-  private clientGetPagedFilter: ClientGetByPaged
+export default class extends mixins(DataListMiXin) {
+  private editClient = Client.empty()
+  private editClientTitle = ''
 
-  private showEditClientDialog: boolean
-  private showCloneClientDialog: boolean
-  private showCreateClientDialog: boolean
-  private showEditClientSecretDialog: boolean
-  private showEditClientClaimDialog: boolean
-  private showEditClientPropertyDialog: boolean
-  private showEditClientPermissionDialog: boolean
+  private showEditClientDialog = false
+  private showCloneClientDialog = false
+  private showCreateClientDialog = false
+  private showEditClientSecretDialog = false
+  private showEditClientClaimDialog = false
+  private showEditClientPropertyDialog = false
+  private showEditClientPermissionDialog = false
 
-  constructor() {
-    super()
-    this.clientListCount = 0
-    this.editClientTitle = ''
-    this.clientListLoading = false
-    this.showEditClientDialog = false
-    this.showCreateClientDialog = false
-    this.showEditClientPermissionDialog = false
-    this.editClient = Client.empty()
-    this.clientList = new Array<Client>()
-    this.showCloneClientDialog = false
-    this.showEditClientSecretDialog = false
-    this.showEditClientClaimDialog = false
-    this.showEditClientPropertyDialog = false
-    this.clientGetPagedFilter = new ClientGetByPaged()
-  }
+  public dataFilter = new ClientGetByPaged()
 
   mounted() {
-    this.handleGetClients()
+    this.refreshPagedData()
   }
 
-  private handleGetClients() {
-    this.clientListLoading = true
-    ClientService.getClients(this.clientGetPagedFilter).then(routes => {
-      this.clientList = routes.items
-      this.clientListCount = routes.totalCount
-    }).finally(() => {
-      this.clientListLoading = false
-    })
-  }
-
-  private handleSortChange(column: any) {
-    this.clientGetPagedFilter.sorting = column.prop
+  protected getPagedList(filter: any) {
+    return ClientService.getClients(filter)
   }
 
   private handleShowCreateClientForm() {
     this.editClient = Client.empty()
-    this.editClientTitle = this.$t('identityServer.createClient')
+    this.editClientTitle = this.l('identityServer.createClient')
     this.showCreateClientDialog = true
   }
 
   private handleShowEditClientForm(client: Client) {
     this.editClient = client
-    this.editClientTitle = this.$t('identityServer.updateClientByName', { name: this.editClient.clientName })
+    this.editClientTitle = this.l('identityServer.updateClientByName', { name: this.editClient.clientName })
     this.showEditClientDialog = true
   }
 
@@ -451,7 +423,7 @@ export default class extends Vue {
     const frmClient = this.$refs.formCreateClient as ClientCreateForm
     frmClient.resetFields()
     if (changed) {
-      this.handleGetClients()
+      this.refreshPagedData()
     }
   }
 
@@ -462,7 +434,7 @@ export default class extends Vue {
     const frmClient = this.$refs.formCloneClient as ClientCloneForm
     frmClient.resetFields()
     if (changed) {
-      this.handleGetClients()
+      this.refreshPagedData()
     }
   }
 
@@ -471,7 +443,7 @@ export default class extends Vue {
     this.editClient = Client.empty()
     this.showEditClientDialog = false
     if (changed) {
-      this.handleGetClients()
+      this.refreshPagedData()
     }
   }
 
@@ -505,7 +477,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             ClientService.deleteClient(id).then(() => {
               this.$message.success(this.l('identityServer.deleteClientSuccess', { id: clientId }))
-              this.handleGetClients()
+              this.refreshPagedData()
             })
           }
         }
@@ -535,10 +507,6 @@ export default class extends Vue {
         break
       default: break
     }
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 
   private formatStatusText(status: boolean) {

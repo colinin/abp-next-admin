@@ -6,7 +6,7 @@
         style="padding-left:10px;"
       >{{ $t('global.queryFilter') }}</label>
       <el-input
-        v-model="tenantGetPagedFilter.filter"
+        v-model="dataFilter.filter"
         :placeholder="$t('filterString')"
         style="width: 250px;margin-left: 10px;"
         class="filter-item"
@@ -15,7 +15,7 @@
         class="filter-item"
         style="margin-left: 10px; text-alignt"
         type="primary"
-        @click="handleGetTenants"
+        @click="refreshPagedData"
       >
         {{ $t('global.searchList') }}
       </el-button>
@@ -30,9 +30,9 @@
     </div>
 
     <el-table
-      v-loading="tenantListLoading"
+      v-loading="dataLoading"
       row-key="id"
-      :data="tenantList"
+      :data="dataList"
       border
       fit
       highlight-current-row
@@ -142,11 +142,11 @@
     </el-table>
 
     <Pagination
-      v-show="tenantListCount>0"
-      :total="tenantListCount"
-      :page.sync="tenantGetPagedFilter.skipCount"
-      :limit.sync="tenantGetPagedFilter.maxResultCount"
-      @pagination="handleGetTenants"
+      v-show="dataTotal>0"
+      :total="dataTotal"
+      :page.sync="dataFilter.skipCount"
+      :limit.sync="dataFilter.maxResultCount"
+      @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
@@ -191,8 +191,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant'
+import DataListMiXin from '@/mixins/DataListMiXin'
+import Component, { mixins } from 'vue-class-component'
+import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant-management'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
@@ -218,40 +219,20 @@ import TenantEditConnectionForm from './components/TenantEditConnectionForm.vue'
     }
   }
 })
-export default class extends Vue {
-  private editTenantId: string
-  private tenantList: TenantDto[]
-  private tenantListCount: number
-  private tenantListLoading: boolean
-  private tenantGetPagedFilter: TenantGetByPaged
-
-  private showEditTenantConnectionDialog: boolean
-  private showCreateOrEditTenantDialog: boolean
+export default class extends mixins(DataListMiXin) {
+  private editTenantId = ''
+  private showEditTenantConnectionDialog = false
+  private showCreateOrEditTenantDialog = false
   private showFeatureEditFormDialog = false
 
-  constructor() {
-    super()
-    this.editTenantId = ''
-    this.tenantListCount = 0
-    this.tenantListLoading = false
-    this.tenantList = new Array<TenantDto>()
-    this.tenantGetPagedFilter = new TenantGetByPaged()
-
-    this.showCreateOrEditTenantDialog = false
-    this.showEditTenantConnectionDialog = false
-  }
+  public dataFilter = new TenantGetByPaged()
 
   mounted() {
-    this.handleGetTenants()
+    this.refreshPagedData()
   }
 
-  private handleGetTenants() {
-    this.tenantListLoading = true
-    TenantService.getTenants(this.tenantGetPagedFilter).then(tenants => {
-      this.tenantList = tenants.items
-      this.tenantListCount = tenants.totalCount
-      this.tenantListLoading = false
-    })
+  protected getPagedList(filter: any) {
+    return TenantService.getTenants(filter)
   }
 
   private handleCommand(command: {key: string, row: TenantDto}) {
@@ -283,7 +264,7 @@ export default class extends Vue {
           if (action === 'confirm') {
             TenantService.deleteTenant(id).then(() => {
               this.$message.success(this.l('tenant.deleteTenantSuccess', { name: name }))
-              this.handleGetTenants()
+              this.refreshPagedData()
             })
           }
         }
@@ -294,7 +275,7 @@ export default class extends Vue {
     this.showEditTenantConnectionDialog = false
     this.editTenantId = ''
     if (changed) {
-      this.handleGetTenants()
+      this.refreshPagedData()
     }
   }
 
@@ -302,21 +283,13 @@ export default class extends Vue {
     this.showCreateOrEditTenantDialog = false
     this.editTenantId = ''
     if (changed) {
-      this.handleGetTenants()
+      this.refreshPagedData()
     }
-  }
-
-  private handleSortChange(column: any) {
-    this.tenantGetPagedFilter.sorting = column.prop
   }
 
   private onFeatureEditFormClosed() {
     this.showFeatureEditFormDialog = false
     this.editTenantId = ''
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>
