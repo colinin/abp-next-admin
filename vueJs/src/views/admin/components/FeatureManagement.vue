@@ -246,7 +246,7 @@ export default class extends Vue {
     FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
       this.features = new FeatureItems()
       res.features.forEach(feature => {
-        const featureTrue = new FeatureItem(
+        const featureItem = new FeatureItem(
           feature.name,
           feature.value,
           feature.displayName,
@@ -257,12 +257,12 @@ export default class extends Vue {
         if (feature.parentName) {
           const children = this.features.features.find(f => f.name === feature.parentName)
           if (children) {
-            children.appendChildren(featureTrue)
+            children.appendChildren(featureItem)
           } else {
-            this.features.features.push(featureTrue)
+            this.features.features.push(featureItem)
           }
         } else {
-          this.features.features.push(featureTrue)
+          this.features.features.push(featureItem)
         }
       })
       // 需要手动选择一下?
