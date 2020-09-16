@@ -33,7 +33,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import Component, { mixins } from 'vue-class-component'
+import EventBusMiXin from '@/mixins/EventBusMiXin'
 import UserNofitications from './components/UserNofitications.vue'
 
 @Component({
@@ -42,14 +43,14 @@ import UserNofitications from './components/UserNofitications.vue'
     UserNofitications
   }
 })
-export default class extends Vue {
+export default class extends mixins(EventBusMiXin) {
   private notificationCount = 0
 
   created() {
-    this.$events.on('onNotificationReceived', () => {
+    this.subscribe('onNotificationReceived', () => {
       this.notificationCount += 1
     })
-    this.$events.on('onNotificationReadChanged', () => {
+    this.subscribe('onNotificationReadChanged', () => {
       this.notificationCount -= 1
     })
   }

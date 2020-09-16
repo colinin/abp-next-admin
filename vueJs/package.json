@@ -117,7 +117,6 @@
     "typescript": "^3.8.3",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-cli-plugin-style-resources-loader": "^0.1.4",
-    "vue-events": "^3.1.0",
     "vue-template-compiler": "^2.6.11",
     "vue-virtual-scroll-list": "^2.1.8",
     "webpack": "^4.42.1"

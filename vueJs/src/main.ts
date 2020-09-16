@@ -7,7 +7,7 @@ import SvgIcon from 'vue-svgicon'
 
 import uploader from 'vue-simple-uploader'
 import contextMenu from 'vue-contextmenujs'
-import VueEvents from 'vue-events'
+import VueEvents from '@/components/EventBus'
 
 import '@/styles/element-variables.scss'
 import 'view-design/dist/styles/iview.css'

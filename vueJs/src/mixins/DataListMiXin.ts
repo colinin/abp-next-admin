@@ -37,6 +37,8 @@ export default class DataListMiXin extends Vue {
    */
   protected refreshPagedData() {
     this.dataLoading = true
+    // 这里还可以处理对于过滤器的变动
+    // 例如 abp 框架的skipCount区别于常见的pageNumber
     this.getPagedList(this.dataFilter)
       .then(res => {
         this.dataList = res.items
@@ -52,9 +54,7 @@ export default class DataListMiXin extends Vue {
    */
   protected getList(filter: any): Promise<ListResultDto<any>> {
     console.log(filter)
-    return new Promise<ListResultDto<any>>((resolve) => {
-      return resolve(new ListResultDto<any>())
-    })
+    return this.getEmptyList()
   }
 
   /** 获取空数据 */
@@ -96,4 +96,6 @@ export default class DataListMiXin extends Vue {
   protected l(name: string, values?: any[] | { [key: string]: any }) {
     return this.$t(name, values).toString()
   }
+
+  /** 还可以添加 eventbus 的通用处理器 */
 }
