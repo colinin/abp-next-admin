@@ -8,7 +8,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class EventBusMiXin extends Vue {
   protected eventMap = new Array<string>()
 
-  /** 
+  /**
    * 组件销毁事件
    * 注销所有事件
    */
