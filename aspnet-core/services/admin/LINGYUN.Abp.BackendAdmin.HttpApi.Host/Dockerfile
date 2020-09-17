@@ -10,4 +10,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
 EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
 
-ENTRYPOINT ["dotnet", "LINGYUN.Abp.BackendAdminApp.Host.dll"]
+ENTRYPOINT ["dotnet", "LINGYUN.Abp.BackendAdmin.HttpApi.Host.dll"]
