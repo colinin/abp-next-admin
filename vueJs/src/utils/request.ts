@@ -18,19 +18,20 @@ service.interceptors.request.use(
     if (tenantId) {
       config.headers.__tenant = tenantId
     }
+    // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
+    // 顺序调整到token之前
+    const language = getLanguage()
+    if (language?.indexOf('zh') !== -1) {
+      config.headers['Accept-Language'] = 'zh-Hans'
+    } else {
+      config.headers['Accept-Language'] = language
+    }
     if (config.url === '/connect/token') {
       return config
     }
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       config.headers.Authorization = UserModule.token
-    }
-    // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
-    const language = getLanguage()
-    if (language?.indexOf('zh') !== -1) {
-      config.headers['Accept-Language'] = 'zh-Hans'
-    } else {
-      config.headers['Accept-Language'] = language
     }
     return config
   },
@@ -43,21 +44,21 @@ function l(name: string) {
   return i18n.tc(name)
 }
 
-function showError(error: any, status: number) {
+function showError(response: any) {
   let message = ''
   let title = ''
-  if (error && error.error) {
-    if (error.error.details) {
-      message = error.error.details
-      title = error.error.message
-    } else if (error.error.message) {
-      message = error.error.message
+  if (response.data && response.data.error) {
+    if (response.data.error.details) {
+      message = response.data.error.details
+      title = response.data.error.message
+    } else if (response.data.error.message) {
+      message = response.data.error.message
     }
   } else {
-    switch (status) {
+    switch (response.status) {
       case 400:
-        title = error.error
-        message = error.error_description
+        title = response.data.error
+        message = response.data.error_description
         break
       case 401:
         title = l('AbpUi.DefaultErrorMessage401')
@@ -79,6 +80,9 @@ function showError(error: any, status: number) {
         message = l('AbpUi.InternalServerErrorMessage')
         break
       default:
+        // 从响应中返回原始状态说明
+        title = response.statusText
+        message = response.status + ' ' + response.statusText
         break
     }
   }
@@ -116,7 +120,7 @@ service.interceptors.response.use(
         })
       })
     } else {
-      showError(error.response.data, error.response.status)
+      showError(error.response)
     }
     return Promise.reject(error)
   }

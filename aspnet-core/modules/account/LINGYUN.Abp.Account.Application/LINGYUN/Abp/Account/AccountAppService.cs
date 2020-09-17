@@ -191,7 +191,7 @@ namespace LINGYUN.Abp.Account
                     verifyCacheItem.VerifyCode = phoneVerifyCode.ToString();
                     var templateCode = await SettingProvider.GetOrDefaultAsync(AccountSettingNames.SmsRegisterTemplateCode, ServiceProvider);
                     await SendPhoneVerifyMessageAsync(templateCode, input.PhoneNumber, phoneVerifyCode.ToString());
-                    return;
+                    break;
                 case PhoneNumberVerifyType.Signin:
                     var phoneSigninCode = await SendSigninVerifyCodeAsync(input.PhoneNumber);
                     verifyCacheItem.VerifyCode = phoneSigninCode;
