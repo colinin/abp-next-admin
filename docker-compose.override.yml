@@ -8,6 +8,13 @@ services:
     ports:
       - "30010:80"
 
+  identity-server-admin:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "30015:80"
+
   platform-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -22,7 +29,7 @@ services:
     ports:
       - "30020:80"
 
-  identity-server:
+  identity-server-sts:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
