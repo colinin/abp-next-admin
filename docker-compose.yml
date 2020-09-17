@@ -1,43 +1,57 @@
 version: '3.4'
 
 services:
+  identity-server-sts:
+    build:
+      context: ./aspnet-core/services/Publish/identityserver
+    volumes: 
+      - /var/opt/abp/logs/ids-sts:/app/Logs
+    restart: always
+
+  identity-server-admin:
+    build:
+      context: ./aspnet-core/services/Publish/identityserver4-admin
+    volumes: 
+      - /var/opt/abp/logs/ids-admin:/app/Logs
+    depends_on: 
+      - identity-server-sts
+    restart: always
+
   admin-service:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes: 
-      - /var/opt/abp/LogCenter/Admin:/app/Logs
+      - /var/opt/abp/logs/backend-admin:/app/Logs
+    depends_on: 
+      - identity-server-sts
     restart: always
 
   platform-service:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes: 
-      - /var/opt/abp/LogCenter/Platform:/app/Logs
-      - /var/opt/abp/Data/Platform:/app/file-blob-storing
+      - /var/opt/abp/logs/platform:/app/Logs
+      - /var/opt/abp/data/platform:/app/file-blob-storing
+    depends_on: 
+      - identity-server-sts
     restart: always
 
   messages-service:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes: 
-      - /var/opt/abp/LogCenter/Messages:/app/Logs
-    restart: always
-    
-  identity-server:
-    build:
-      context: ./aspnet-core/services/Publish/identityserver
-    volumes: 
-      - /var/opt/abp/LogCenter/IdentityServer:/app/Logs
+      - /var/opt/abp/logs/messages:/app/Logs
     depends_on: 
-      - admin-service
+      - identity-server-sts
     restart: always
   
   apigateway-admin-service:
     build:
       context: ./aspnet-core/services/Publish/apigateway-admin
     volumes: 
-      - /var/opt/abp/LogCenter/ApiGateway-Admin:/app/Logs
+      - /var/opt/abp/logs/apigateway-admin:/app/Logs
     depends_on: 
+      - identity-server-sts
       - admin-service
     restart: always
 
@@ -45,8 +59,9 @@ services:
     build:
       context: ./aspnet-core/services/Publish/apigateway-host
     volumes: 
-      - /var/opt/abp/LogCenter/ApiGateway-Host:/app/Logs
+      - /var/opt/abp/logs/apigateway-host:/app/Logs
     depends_on: 
+      - identity-server-sts
       - apigateway-admin-service
     restart: always
 
@@ -54,8 +69,8 @@ services:
     build:
       context: ./vueJs
     volumes: 
-      - /var/opt/abp/Data/client/nginx:/etc/nginx/nginx.conf
-      - /var/opt/abp/Data/client/nginx/conf.d:/etc/nginx/conf.d/default.conf
+      - /var/opt/abp/data/client/nginx:/etc/nginx/nginx.conf
+      - /var/opt/abp/data/client/nginx/conf.d:/etc/nginx/conf.d/default.conf
     restart: always
     
 volumes:
