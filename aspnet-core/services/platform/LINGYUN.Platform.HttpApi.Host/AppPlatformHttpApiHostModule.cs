@@ -1,5 +1,4 @@
 ﻿using DotNetCore.CAP;
-using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -9,6 +8,7 @@ using LINGYUN.Abp.Notifications;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.MultiTenancy;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +25,7 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
@@ -219,29 +220,19 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-                options
-                    .AddLanguagesMapOrUpdate(
-                        "vue-admin-element-ui",
-                        new NameValue("zh-Hans", "zh"),
-                        new NameValue("en", "en"));
-                options
-                    .AddLanguageFilesMapOrUpdate(
-                        "vue-admin-element-ui",
-                        new NameValue("zh-Hans", "zh"),
-                        new NameValue("en", "en"));
             });
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-                    AbpClaimTypes.UserName = JwtClaimTypes.Name;
-                    AbpClaimTypes.Role = JwtClaimTypes.Role;
-                    AbpClaimTypes.Email = JwtClaimTypes.Email;
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             if (!hostingEnvironment.IsDevelopment())

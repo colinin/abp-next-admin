@@ -5,6 +5,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINYUN.Abp.Sms.Aliyun;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -21,6 +23,7 @@ using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -224,16 +227,17 @@ namespace LINGYUN.Abp.IdentityServer4
                        .AddVirtualJson("/LINGYUN/Abp/IdentityServer4/Localization");
             });
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-                    AbpClaimTypes.UserName = JwtClaimTypes.Name;
-                    AbpClaimTypes.Role = JwtClaimTypes.Role;
-                    AbpClaimTypes.Email = JwtClaimTypes.Email;
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             if (!hostingEnvironment.IsDevelopment())

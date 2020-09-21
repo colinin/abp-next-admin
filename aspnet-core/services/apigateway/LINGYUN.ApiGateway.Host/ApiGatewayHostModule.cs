@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ using System;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -21,6 +23,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.IdentityModel;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 
 namespace LINGYUN.ApiGateway
@@ -70,13 +73,17 @@ namespace LINGYUN.ApiGateway
 
             Configure<ApiGatewayOptions>(configuration.GetSection("ApiGateway"));
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.Authority = configuration["AuthServer:Host"];
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    options.ApiSecret = configuration["AuthServer:ApiSecret"];
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>

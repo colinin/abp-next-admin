@@ -53,6 +53,9 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.Security.Claims;
+using System.Collections.Generic;
 
 namespace LINGYUN.Abp.BackendAdmin
 {
@@ -254,16 +257,17 @@ namespace LINGYUN.Abp.BackendAdmin
                         new NameValue("en", "en"));
             });
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-                    AbpClaimTypes.UserName = JwtClaimTypes.Name;
-                    AbpClaimTypes.Role = JwtClaimTypes.Role;
-                    AbpClaimTypes.Email = JwtClaimTypes.Email;
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             if (!hostingEnvironment.IsDevelopment())

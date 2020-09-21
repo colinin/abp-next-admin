@@ -1,8 +1,8 @@
 ﻿using DotNetCore.CAP;
-using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +15,7 @@ using StackExchange.Redis;
 using System;
 using System.Text;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -159,17 +160,17 @@ namespace LINGYUN.ApiGateway
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             });
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.Authority = configuration["AuthServer:Host"];
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    options.ApiSecret = configuration["AuthServer:ApiSecret"];
-                    AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-                    AbpClaimTypes.UserName = JwtClaimTypes.Name;
-                    AbpClaimTypes.Role = JwtClaimTypes.Role;
-                    AbpClaimTypes.Email = JwtClaimTypes.Email;
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             if (!hostingEnvironment.IsDevelopment())
