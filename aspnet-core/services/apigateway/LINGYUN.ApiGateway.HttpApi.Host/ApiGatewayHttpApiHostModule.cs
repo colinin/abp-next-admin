@@ -198,6 +198,7 @@ namespace LINGYUN.ApiGateway
             app.UseRouting();
             // 认证
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             // 多租户
             // app.UseMultiTenancy();
             // 本地化

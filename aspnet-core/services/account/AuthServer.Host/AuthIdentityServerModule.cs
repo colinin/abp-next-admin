@@ -192,6 +192,7 @@ namespace AuthServer.Host
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             app.UseMultiTenancy();
             app.UseIdentityServer();
             app.UseAuthorization();

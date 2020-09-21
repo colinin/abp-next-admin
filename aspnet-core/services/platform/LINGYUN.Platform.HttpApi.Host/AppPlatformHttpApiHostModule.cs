@@ -265,6 +265,7 @@ namespace LINGYUN.Platform
             app.UseRouting();
             // 认证
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
             // 授权

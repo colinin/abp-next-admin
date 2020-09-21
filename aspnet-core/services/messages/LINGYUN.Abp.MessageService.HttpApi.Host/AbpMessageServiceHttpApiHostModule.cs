@@ -291,6 +291,7 @@ namespace LINGYUN.Abp.MessageService
             app.UseHangfireJwtToken();
             // 认证
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
             // 授权
