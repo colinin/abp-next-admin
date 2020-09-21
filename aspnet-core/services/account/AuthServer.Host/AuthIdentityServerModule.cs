@@ -77,10 +77,6 @@ namespace AuthServer.Host
                 })
                 .UseDashboard();
             });
-
-            PreConfigure<IIdentityServerBuilder>(builder =>
-            {
-            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -96,9 +92,17 @@ namespace AuthServer.Host
             // 加解密
             Configure<AbpStringEncryptionOptions>(options =>
             {
-                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
-                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
-                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
+                var encryptionConfiguration = configuration.GetSection("Encryption");
+                if (encryptionConfiguration.Exists())
+                {
+                    options.DefaultPassPhrase = encryptionConfiguration["PassPhrase"] ?? options.DefaultPassPhrase;
+                    options.DefaultSalt = encryptionConfiguration.GetSection("Salt").Exists()
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["Salt"])
+                        : options.DefaultSalt;
+                    options.InitVectorBytes = encryptionConfiguration.GetSection("InitVector").Exists() 
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["InitVector"])
+                        : options.InitVectorBytes;
+                }
             });
 
             Configure<AbpDistributedCacheOptions>(options =>

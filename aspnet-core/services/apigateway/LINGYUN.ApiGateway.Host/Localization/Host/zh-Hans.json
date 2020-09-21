@@ -1,0 +1,10 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "NoLoadBalancer": "无负载均衡",
+    "RoundRobin": "服务器轮询",
+    "LeastConnection": "总是空闲服务器",
+    "CookieStickySessions": "粘性会话类型",
+    "CustomLoadBalancer": "自定义负载均衡器 - {0}"
+  }
+}

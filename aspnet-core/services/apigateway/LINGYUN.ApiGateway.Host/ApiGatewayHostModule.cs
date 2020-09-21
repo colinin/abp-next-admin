@@ -1,6 +1,9 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.ApiGateway.Localization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,15 +14,21 @@ using Ocelot.Middleware.Multiplexer;
 using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
+using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.Security.Encryption;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.ApiGateway
 {
@@ -68,13 +77,17 @@ namespace LINGYUN.ApiGateway
 
             Configure<ApiGatewayOptions>(configuration.GetSection("ApiGateway"));
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.Authority = configuration["AuthServer:Host"];
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    options.ApiSecret = configuration["AuthServer:ApiSecret"];
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>
@@ -100,10 +113,53 @@ namespace LINGYUN.ApiGateway
                 options.InstanceName = configuration["Redis:InstanceName"];
             });
 
+            // 加解密
+            Configure<AbpStringEncryptionOptions>(options =>
+            {
+                var encryptionConfiguration = configuration.GetSection("Encryption");
+                if (encryptionConfiguration.Exists())
+                {
+                    options.DefaultPassPhrase = encryptionConfiguration["PassPhrase"] ?? options.DefaultPassPhrase;
+                    options.DefaultSalt = encryptionConfiguration.GetSection("Salt").Exists()
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["Salt"])
+                        : options.DefaultSalt;
+                    options.InitVectorBytes = encryptionConfiguration.GetSection("InitVector").Exists()
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["InitVector"])
+                        : options.InitVectorBytes;
+                }
+            });
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<ApiGatewayHostModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources
+                    .Get<ApiGatewayResource>()
+                    .AddVirtualJson("/Localization/Host");
+            });
+
             Configure<IdentityModelHttpRequestMessageOptions>(options =>
             {
                 // See https://github.com/abpframework/abp/pull/4564
                 options.ConfigureHttpRequestMessage = (requestMessage) => { };
+            });
+
+            var mvcBuilder = context.Services.AddMvc();
+            mvcBuilder.AddApplicationPart(typeof(ApiGatewayHostModule).Assembly);
+
+            Configure<AbpEndpointRouterOptions>(options =>
+            {
+                options.EndpointConfigureActions.Add(endpointContext =>
+                {
+                    endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                    endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                });
             });
 
             context.Services
@@ -117,6 +173,8 @@ namespace LINGYUN.ApiGateway
             var app = context.GetApplicationBuilder();
 
             app.UseAuditing();
+            app.UseRouting();
+            app.UseConfiguredEndpoints();
             // 启用ws协议
             app.UseWebSockets();
             app.UseOcelot().Wait();

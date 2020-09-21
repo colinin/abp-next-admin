@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using Hangfire;
-using IdentityModel;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
@@ -14,6 +13,7 @@ using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.WeApp;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -30,6 +30,7 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -99,9 +100,17 @@ namespace LINGYUN.Abp.MessageService
             // 加解密
             Configure<AbpStringEncryptionOptions>(options =>
             {
-                options.DefaultPassPhrase = "s46c5q55nxpeS8Ra";
-                options.InitVectorBytes = Encoding.ASCII.GetBytes("s83ng0abvd02js84");
-                options.DefaultSalt = Encoding.ASCII.GetBytes("sf&5)s3#");
+                var encryptionConfiguration = configuration.GetSection("Encryption");
+                if (encryptionConfiguration.Exists())
+                {
+                    options.DefaultPassPhrase = encryptionConfiguration["PassPhrase"] ?? options.DefaultPassPhrase;
+                    options.DefaultSalt = encryptionConfiguration.GetSection("Salt").Exists()
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["Salt"])
+                        : options.DefaultSalt;
+                    options.InitVectorBytes = encryptionConfiguration.GetSection("InitVector").Exists()
+                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["InitVector"])
+                        : options.InitVectorBytes;
+                }
             });
 
             Configure<AbpExceptionHandlingOptions>(options =>
@@ -233,16 +242,17 @@ namespace LINGYUN.Abp.MessageService
                        .AddVirtualJson("/Localization/HttpApiHost");
             });
 
-            context.Services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+            });
+
+            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
-                    AbpClaimTypes.UserId = JwtClaimTypes.Subject;
-                    AbpClaimTypes.UserName = JwtClaimTypes.Name;
-                    AbpClaimTypes.Role = JwtClaimTypes.Role;
-                    AbpClaimTypes.Email = JwtClaimTypes.Email;
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             if (!hostingEnvironment.IsDevelopment())

@@ -392,20 +392,15 @@
         >
           <el-select
             v-model="apiGateWayRoute.loadBalancerOptions.type"
+            clearable
             class="route-select"
             :placeholder="$t('pleaseSelectBy', {key: $t('apiGateWay.loadBalancerType')})"
           >
             <el-option
-              :label="$t('apiGateWay.leastConnection')"
-              value="LeastConnection"
-            />
-            <el-option
-              :label="$t('apiGateWay.roundRobin')"
-              value="RoundRobin"
-            />
-            <el-option
-              :label="$t('apiGateWay.noLoadBalance')"
-              value="NoLoadBalance"
+              v-for="provider in loadBalancerProviders"
+              :key="provider.type"
+              :label="provider.displayName"
+              :value="provider.type"
             />
           </el-select>
         </el-form-item>
@@ -545,7 +540,7 @@ import ElInputTag from '@/components/InputTag/index.vue'
 import HostAndPortInputTag from './HostAndPortInputTag.vue'
 import DictionaryInputTag from './DictionaryInputTag.vue'
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import ApiGateWayService, { RouteGroupAppIdDto, ReRouteDto, ReRouteCreateDto, ReRouteUpdateDto } from '@/api/apigateway'
+import ApiGateWayService, { LoadBalancerDescriptor, RouteGroupAppIdDto, ReRouteDto, ReRouteCreateDto, ReRouteUpdateDto } from '@/api/apigateway'
 
 @Component({
   name: 'RouteCreateOrEditForm',
@@ -564,6 +559,7 @@ export default class extends Vue {
 
   private activeTablePane: string
   private apiGateWayRoute: ReRouteDto
+  private loadBalancerProviders: LoadBalancerDescriptor[]
   private httpMethodsFilter: { [key: string]: string } = {
     GET: '',
     POST: 'success',
@@ -622,6 +618,13 @@ export default class extends Vue {
     super()
     this.activeTablePane = 'basicOptions'
     this.apiGateWayRoute = new ReRouteDto()
+    this.loadBalancerProviders = new Array<LoadBalancerDescriptor>()
+  }
+
+  mounted() {
+    ApiGateWayService.getLoadBalancerProviders().then(res => {
+      this.loadBalancerProviders = res.items
+    })
   }
 
   @Watch('routeId', { immediate: true })

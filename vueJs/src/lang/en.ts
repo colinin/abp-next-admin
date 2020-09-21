@@ -420,7 +420,8 @@ export default {
     createAggregateRouteConfig: '新建路由配置',
     aggregateRouteKey: '路由标识',
     aggregateParameter: '聚合参数',
-    aggregateJsonPath: 'Json路径'
+    aggregateJsonPath: 'Json路径',
+    definedAggregatorProviders: '聚合提供者'
   },
   identityServer: {
     otherOpera: '更多操作',
