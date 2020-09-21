@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LINGYUN.ApiGateway.Utils
