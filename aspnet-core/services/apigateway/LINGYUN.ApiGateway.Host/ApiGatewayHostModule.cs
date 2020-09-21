@@ -173,8 +173,18 @@ namespace LINGYUN.ApiGateway
             var app = context.GetApplicationBuilder();
 
             app.UseAuditing();
+            app.UseVirtualFiles();
             app.UseRouting();
-            app.UseConfiguredEndpoints();
+            app.UseAuthentication();
+            app.UseAbpClaimsMap();
+            app.MapWhen(
+                ctx => ctx.Request.Path.ToString().StartsWith("/api/ApiGateway/Basic/"),
+                appNext =>
+                {
+                    // 仅针对属于网关自己的控制器进入MVC管道
+                    appNext.UseRouting();
+                    appNext.UseConfiguredEndpoints();
+                });
             // 启用ws协议
             app.UseWebSockets();
             app.UseOcelot().Wait();
