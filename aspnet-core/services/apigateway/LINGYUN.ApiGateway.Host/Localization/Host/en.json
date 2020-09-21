@@ -1,0 +1,10 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "NoLoadBalancer": "No Load balancer",
+    "RoundRobin": "Round robin",
+    "LeastConnection": "Least connection",
+    "CookieStickySessions": "Cookie sticky sessions",
+    "CustomLoadBalancer": "Custom load balancer - {0}"
+  }
+}

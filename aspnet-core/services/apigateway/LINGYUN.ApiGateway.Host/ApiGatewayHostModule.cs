@@ -1,7 +1,9 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.ApiGateway.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,9 +24,11 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.ApiGateway
 {
@@ -125,10 +129,37 @@ namespace LINGYUN.ApiGateway
                 }
             });
 
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<ApiGatewayHostModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources
+                    .Get<ApiGatewayResource>()
+                    .AddVirtualJson("/Localization/Host");
+            });
+
             Configure<IdentityModelHttpRequestMessageOptions>(options =>
             {
                 // See https://github.com/abpframework/abp/pull/4564
                 options.ConfigureHttpRequestMessage = (requestMessage) => { };
+            });
+
+            var mvcBuilder = context.Services.AddMvc();
+            mvcBuilder.AddApplicationPart(typeof(ApiGatewayHostModule).Assembly);
+
+            Configure<AbpEndpointRouterOptions>(options =>
+            {
+                options.EndpointConfigureActions.Add(endpointContext =>
+                {
+                    endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                    endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                });
             });
 
             context.Services
@@ -142,6 +173,8 @@ namespace LINGYUN.ApiGateway
             var app = context.GetApplicationBuilder();
 
             app.UseAuditing();
+            app.UseRouting();
+            app.UseConfiguredEndpoints();
             // 启用ws协议
             app.UseWebSockets();
             app.UseOcelot().Wait();

@@ -27,16 +27,34 @@
         </el-form-item>
       </el-col>
     </el-row>
+    <el-form-item
+      prop="name"
+      :label="$t('apiGateWay.aggregateRouteName')"
+    >
+      <el-input
+        v-model="aggregateRoute.name"
+        :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.aggregateRouteName')})"
+      />
+    </el-form-item>
     <el-row>
       <el-col :span="12">
         <el-form-item
-          prop="name"
-          :label="$t('apiGateWay.aggregateRouteName')"
+          prop="aggregator"
+          :label="$t('apiGateWay.definedAggregatorProviders')"
         >
-          <el-input
-            v-model="aggregateRoute.name"
-            :placeholder="$t('pleaseInputBy', {key: $t('apiGateWay.aggregateRouteName')})"
-          />
+          <el-select
+            v-model="aggregateRoute.aggregator"
+            clearable
+            style="width: 100%"
+            :placeholder="$t('pleaseSelectBy', {name: $t('apiGateWay.definedAggregatorProviders')})"
+          >
+            <el-option
+              v-for="(provider, index) in definedAggregatorProviders"
+              :key="index"
+              :label="provider"
+              :value="provider"
+            />
+          </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -139,6 +157,7 @@ export default class extends Vue {
   private appIdOptions!: RouteGroupAppIdDto[]
 
   private aggregateRoute: AggregateReRoute
+  private definedAggregatorProviders = new Array<string>()
 
   get isEditRoute() {
     if (this.aggregateRouteId) {
@@ -173,6 +192,12 @@ export default class extends Vue {
   constructor() {
     super()
     this.aggregateRoute = AggregateReRoute.empty()
+  }
+
+  mounted() {
+    ApiGatewayService.getDefinedAggregatorProviders().then(res => {
+      this.definedAggregatorProviders = res.items
+    })
   }
 
   @Watch('aggregateRouteId', { immediate: true })

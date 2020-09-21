@@ -164,6 +164,17 @@ export default class ApiGateWay {
     _url += '&ReRouteKey=' + routeKey
     return ApiService.Delete(_url, serviceUrl)
   }
+
+  public static getDefinedAggregatorProviders() {
+    const _url = '/api/ApiGateway/Basic/Aggregators'
+    return ApiService.Get<ListResultDto<string>>(_url, serviceUrl)
+  }
+
+  public static getLoadBalancerProviders() {
+    const _url = '/api/ApiGateway/Basic/LoadBalancers'
+    return ApiService.Get<ListResultDto<LoadBalancerDescriptor>>(_url, serviceUrl)
+  }
+
 }
 
 export class ServiceDiscoveryProvider {
@@ -558,4 +569,9 @@ export class AggregateReRouteGetByPaged extends PagedAndSortedResultRequestDto {
   public static empty() {
     return new AggregateReRouteGetByPaged()
   }
+}
+
+export class LoadBalancerDescriptor {
+  type!: string
+  displayName!: string
 }

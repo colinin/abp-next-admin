@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Localization\Host\en.json" />
+    <EmbeddedResource Include="Localization\Host\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.4" />
     <PackageReference Include="DotNetCore.CAP.Sqlite" Version="3.0.4.2" />
@@ -20,6 +25,7 @@
     <PackageReference Include="Volo.Abp.Autofac" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.AspNetCore" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="3.1.0" />
     <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="3.1.0" />
   </ItemGroup>

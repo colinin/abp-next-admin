@@ -211,20 +211,15 @@
         >
           <el-select
             v-model="globalConfiguration.loadBalancerOptions.type"
+            clearable
             class="global-select"
             :placeholder="$t('pleaseSelectBy', {key: $t('apiGateWay.loadBalancerType')})"
           >
             <el-option
-              :label="$t('apiGateWay.leastConnection')"
-              value="LeastConnection"
-            />
-            <el-option
-              :label="$t('apiGateWay.roundRobin')"
-              value="RoundRobin"
-            />
-            <el-option
-              :label="$t('apiGateWay.noLoadBalance')"
-              value="NoLoadBalance"
+              v-for="provider in loadBalancerProviders"
+              :key="provider.type"
+              :label="provider.displayName"
+              :value="provider.type"
             />
           </el-select>
         </el-form-item>
@@ -360,6 +355,7 @@ import { checkPermission } from '@/utils/permission'
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import ApiGatewayService, {
   RouteGroupAppIdDto,
+  LoadBalancerDescriptor,
   GlobalConfigurationDto,
   GlobalConfigurationCreateDto,
   GlobalConfigurationUpdateDto
@@ -378,11 +374,13 @@ export default class extends Vue {
 
   private globalConfiguration: GlobalConfigurationDto
   private routeGroupAppIdOptions: RouteGroupAppIdDto[]
+  private loadBalancerProviders: LoadBalancerDescriptor[]
 
   constructor() {
     super()
     this.globalConfiguration = new GlobalConfigurationDto()
     this.routeGroupAppIdOptions = new Array<RouteGroupAppIdDto>()
+    this.loadBalancerProviders = new Array<LoadBalancerDescriptor>()
   }
 
   get hasEdit() {
@@ -404,6 +402,9 @@ export default class extends Vue {
   mounted() {
     ApiGatewayService.getRouteGroupAppIds().then(appKeys => {
       this.routeGroupAppIdOptions = appKeys.items
+    })
+    ApiGatewayService.getLoadBalancerProviders().then(res => {
+      this.loadBalancerProviders = res.items
     })
   }
 
