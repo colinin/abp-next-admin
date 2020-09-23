@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.Account
                 throw new UserFriendlyException(L["DuplicateWeChat"]);
             }
             var userName = input.UserName ?? wehchatOpenId.OpenId;
-            var userEmail = input.EmailAddress ?? $"{userName}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
+            var userEmail = input.EmailAddress ?? $"{userName}@default.io";//如果邮件地址不验证,随意写入一个
 
             user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
@@ -101,7 +101,7 @@ namespace LINGYUN.Abp.Account
             //    }
             //}
 
-            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@{new Random().Next(1000, 99999)}.com";//如果邮件地址不验证,随意写入一个
+            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@default.io";//如果邮件地址不验证,随意写入一个
             var userName = input.UserName ?? input.PhoneNumber;
             var user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
