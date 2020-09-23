@@ -262,6 +262,7 @@ namespace LINGYUN.Abp.IdentityServer4
             app.UseRouting();
             // 认证
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
             // 多租户

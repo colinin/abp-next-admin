@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.IdentityServer.WeChatValidator;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +13,7 @@ using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 
 namespace AuthServer.DataSeeder
@@ -62,9 +62,9 @@ namespace AuthServer.DataSeeder
 
         private async Task CreateWeChatClaimTypeAsync()
         {
-            if (!await _identityClaimTypeRepository.AnyAsync(WeChatValidatorConsts.ClaimTypes.OpenId))
+            if (!await _identityClaimTypeRepository.AnyAsync(WeChatClaimTypes.OpenId))
             {
-                var wechatClaimType = new IdentityClaimType(_guidGenerator.Create(), WeChatValidatorConsts.ClaimTypes.OpenId,
+                var wechatClaimType = new IdentityClaimType(_guidGenerator.Create(), WeChatClaimTypes.OpenId,
                     isStatic: true, description: "适用于微信认证的用户标识");
 
                 await _identityClaimTypeRepository.InsertAsync(wechatClaimType);

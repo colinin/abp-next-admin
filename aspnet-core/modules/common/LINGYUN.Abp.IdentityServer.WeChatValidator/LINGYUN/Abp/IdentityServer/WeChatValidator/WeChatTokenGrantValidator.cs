@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             {
                 additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
             }
-            additionalClaims.Add(new Claim(WeChatValidatorConsts.ClaimTypes.OpenId, wechatOpenId.OpenId));
+            additionalClaims.Add(new Claim(WeChatClaimTypes.OpenId, wechatOpenId.OpenId));
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenId.OpenId, null));
             context.Result = new GrantValidationResult(sub, 

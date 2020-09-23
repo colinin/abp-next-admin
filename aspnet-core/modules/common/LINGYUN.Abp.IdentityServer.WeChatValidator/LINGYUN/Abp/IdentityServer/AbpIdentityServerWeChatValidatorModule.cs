@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.IdentityServer.WeChatValidator;
+﻿using LINGYUN.Abp.IdentityServer.AspNetIdentity;
+using LINGYUN.Abp.IdentityServer.WeChatValidator;
 using LINGYUN.Abp.WeChat.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.IdentityServer;
@@ -18,6 +19,7 @@ namespace LINGYUN.Abp.IdentityServer
         {
             PreConfigure<IIdentityServerBuilder>(builder =>
             {
+                builder.AddProfileService<AbpWeChatProfileServicee>();
                 builder.AddExtensionGrantValidator<WeChatTokenGrantValidator>();
             });
         }

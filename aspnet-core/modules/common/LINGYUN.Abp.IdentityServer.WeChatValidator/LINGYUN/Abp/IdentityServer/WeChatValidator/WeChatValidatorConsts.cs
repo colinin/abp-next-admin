@@ -8,11 +8,6 @@
 
         public const string WeChatValidatorTokenName = "code";
 
-        public class ClaimTypes
-        {
-            public const string OpenId = "wx-openid";
-        }
-
         public class AuthenticationMethods
         {
             public const string BasedWeChatAuthentication = "wca";
