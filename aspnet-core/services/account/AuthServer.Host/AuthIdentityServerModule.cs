@@ -37,6 +37,7 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.UI.Navigation.Urls;
 
 namespace AuthServer.Host
 {
@@ -138,6 +139,11 @@ namespace AuthServer.Host
             {
                 // options.IsEnabledForGetRequests = true;
                 options.ApplicationName = "AuthServer";
+            });
+
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
 
             // context.Services.AddAuthentication();
