@@ -9,9 +9,25 @@ namespace Volo.Abp.Users
         /// </summary>
         /// <param name="currentUser"></param>
         /// <returns></returns>
-        public static string FindWeChatId(this ICurrentUser currentUser)
+        public static string FindWeChatOpenId(this ICurrentUser currentUser)
         {
             var weChatClaim = currentUser.FindClaim(WeChatClaimTypes.OpenId);
+            if (weChatClaim == null)
+            {
+                return null;
+            }
+
+            return weChatClaim.Value;
+        }
+
+        /// <summary>
+        /// 获取微信用户主体id,如果不存在返回空值
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <returns></returns>
+        public static string FindWeChatUnionId(this ICurrentUser currentUser)
+        {
+            var weChatClaim = currentUser.FindClaim(WeChatClaimTypes.UnionId);
             if (weChatClaim == null)
             {
                 return null;

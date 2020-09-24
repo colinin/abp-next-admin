@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace LINGYUN.Abp.IdentityServer.AspNetIdentity
 {
@@ -15,7 +17,7 @@ namespace LINGYUN.Abp.IdentityServer.AspNetIdentity
         protected ICurrentTenant CurrentTenant { get; }
         public AbpWeChatProfileServicee(
             IdentityUserManager userManager,
-            Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
+            IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
             ICurrentTenant currentTenant)
             : base(userManager, claimsFactory)
         {
@@ -30,10 +32,8 @@ namespace LINGYUN.Abp.IdentityServer.AspNetIdentity
                 await base.GetProfileDataAsync(context);
 
                 // TODO: 可以从令牌获取openid, 安全性呢?
-                if (context.RequestedClaimTypes.Any(rc => rc.Contains(WeChatClaimTypes.OpenId)))
-                {
-                    context.IssuedClaims.Add(context.Subject.FindFirst(WeChatClaimTypes.OpenId));
-                }
+                TryAddWeChatClaim(context, WeChatClaimTypes.OpenId);
+                TryAddWeChatClaim(context, WeChatClaimTypes.UnionId);
             }
         }
 
@@ -43,6 +43,18 @@ namespace LINGYUN.Abp.IdentityServer.AspNetIdentity
             using (CurrentTenant.Change(context.Subject.FindTenantId()))
             {
                 await base.IsActiveAsync(context);
+            }
+        }
+
+        protected virtual void TryAddWeChatClaim(ProfileDataRequestContext context, string weChatClaimType)
+        {
+            if (context.RequestedClaimTypes.Any(rc => rc.Contains(weChatClaimType)))
+            {
+                var weChatClaim = context.Subject.FindFirst(weChatClaimType);
+                if (weChatClaim != null)
+                {
+                    context.IssuedClaims.Add(weChatClaim);
+                }
             }
         }
     }
