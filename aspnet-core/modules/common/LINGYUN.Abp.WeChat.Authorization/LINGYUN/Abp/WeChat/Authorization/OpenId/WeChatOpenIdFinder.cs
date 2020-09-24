@@ -41,6 +41,8 @@ namespace LINGYUN.Abp.WeChat.Authorization
         }
         public virtual async Task<WeChatOpenId> FindAsync(string code)
         {
+            // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
+            // 或者前端保存code,通过传递code来获取
             return (await GetCacheItemAsync(code, CurrentTenant.Id)).WeChatOpenId;
         }
 
@@ -82,7 +84,7 @@ namespace LINGYUN.Abp.WeChat.Authorization
             {
                 // 微信官方文档表示 session_key的有效期是3天
                 // https://developers.weixin.qq.com/community/develop/doc/000c2424654c40bd9c960e71e5b009
-                AbsoluteExpiration = DateTimeOffset.Now.AddDays(3)
+                AbsoluteExpiration = DateTimeOffset.Now.AddDays(3).AddSeconds(-120)
                 // SlidingExpiration = TimeSpan.FromDays(3),
             };
 
