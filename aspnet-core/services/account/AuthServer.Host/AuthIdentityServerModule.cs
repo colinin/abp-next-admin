@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using IdentityServer4;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System;
 using System.Linq;
@@ -147,13 +149,7 @@ namespace AuthServer.Host
             });
 
             // context.Services.AddAuthentication();
-            //context.Services.AddAuthentication()
-            //    .AddIdentityServerAuthentication(options =>
-            //    {
-            //        options.Authority = configuration["AuthServer:Authority"];
-            //        options.RequireHttpsMetadata = false;
-            //        options.ApiName = configuration["AuthServer:ApiName"];
-            //    });
+            context.Services.AddAuthentication().AddCookie("Cookie");
 
             Configure<AbpMultiTenancyOptions>(options =>
             {
