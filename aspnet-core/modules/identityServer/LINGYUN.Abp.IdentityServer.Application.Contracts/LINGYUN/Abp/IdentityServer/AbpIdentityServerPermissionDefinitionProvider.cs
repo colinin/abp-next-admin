@@ -11,8 +11,18 @@ namespace LINGYUN.Abp.IdentityServer
         {
             // TODO: 身份认证服务器应该只能主机管辖
             // 增加 MultiTenancySides.Host
-            var identityServerGroup = context.AddGroup(AbpIdentityServerPermissions.GroupName, L("Permissions:IdentityServer"), MultiTenancySides.Host);
+            // var identityServerGroup = context.AddGroup(AbpIdentityServerPermissions.GroupName, L("Permissions:IdentityServer"), MultiTenancySides.Host);
 
+            // 与 LINGYUN.Abp.FeatureManagement.Client 模块搭配,这样干可以不依赖于模块优先级
+            var identityServerGroup = context.GetGroupOrNull(AbpIdentityServerPermissions.GroupName);
+            if (identityServerGroup == null)
+            {
+                identityServerGroup = context
+                    .AddGroup(
+                        name: AbpIdentityServerPermissions.GroupName,
+                        displayName: L("Permissions:IdentityServer"),
+                        multiTenancySide: MultiTenancySides.Host);
+            }
             // 客户端权限
             var clientPermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.Clients.Default, L("Permissions:Clients"), MultiTenancySides.Host);
             clientPermissions.AddChild(AbpIdentityServerPermissions.Clients.Create, L("Permissions:Create"), MultiTenancySides.Host);
