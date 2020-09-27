@@ -4,6 +4,8 @@
     {
         public const string GroupName = "Abp.Features.Validation.Tests";
 
-        public const string TestFeature1 = GroupName + ".TestFeature1";
+        public const string TestLimitFeature = GroupName + ".TestLimitFeature";
+
+        public const string TestIntervalFeature = GroupName + ".TestIntervalFeature";
     }
 }

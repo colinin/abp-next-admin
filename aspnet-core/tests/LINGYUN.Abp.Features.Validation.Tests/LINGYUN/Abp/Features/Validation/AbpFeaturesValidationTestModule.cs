@@ -13,9 +13,13 @@ namespace LINGYUN.Abp.Features.Validation
         {
             Configure<FakeFeatureOptions>(options =>
             {
-                options.Map(TestFeatureNames.TestFeature1, (feature) =>
+                options.Map(TestFeatureNames.TestLimitFeature, (feature) =>
                 {
                     return 2.ToString();
+                });
+                options.Map(TestFeatureNames.TestIntervalFeature, (feature) =>
+                {
+                    return 1.ToString();
                 });
             });
         }

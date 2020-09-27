@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,34 +12,58 @@ namespace LINGYUN.Abp.Features.Validation
     [ExposeServices(typeof(IRequiresLimitFeatureChecker))]
     public class FakeRequiresFeatureLimitChecker : IRequiresLimitFeatureChecker
     {
-        private readonly IDictionary<string, int> limitFeatures;
+        private readonly IDictionary<string, LimitFeature> limitFeatures;
 
         public FakeRequiresFeatureLimitChecker()
         {
-            limitFeatures = new Dictionary<string, int>();
+            limitFeatures = new Dictionary<string, LimitFeature>();
         }
 
         public virtual Task CheckAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
         {
-            if (!limitFeatures.ContainsKey(context.Feature))
+            if (limitFeatures.ContainsKey(context.LimitFeature))
             {
-                limitFeatures.Add(context.Feature, 0);
+                if (limitFeatures[context.LimitFeature].ExprieTime <= DateTime.Now)
+                {
+                    limitFeatures.Remove(context.LimitFeature);
+                    return Task.CompletedTask;
+                }
+                if (limitFeatures[context.LimitFeature].Limit + 1 > context.Limit)
+                {
+                    throw new AbpAuthorizationException("已经超出功能次数限制,请联系管理员");
+                }
             }
-            if (limitFeatures[context.Feature] > context.Limit)
-            {
-                throw new AbpAuthorizationException("已经超出功能次数限制,请联系管理员");
-            }
+            
             return Task.CompletedTask;
         }
 
         public Task ProcessAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
         {
-            if (!limitFeatures.ContainsKey(context.Feature))
+            if (!limitFeatures.ContainsKey(context.LimitFeature))
             {
-                limitFeatures.Add(context.Feature, 1);
+                limitFeatures.Add(context.LimitFeature, new LimitFeature(1, DateTime.Now.AddSeconds(context.GetEffectTicks())));
             }
-            limitFeatures[context.Feature] += 1;
+            else
+            {
+                limitFeatures[context.LimitFeature].Invoke(1);
+            }
             return Task.CompletedTask;
+        }
+    }
+
+    public class LimitFeature
+    {
+        public int Limit { get; private set; }
+        public DateTime ExprieTime { get; }
+        public LimitFeature(int limit, DateTime exprieTime)
+        {
+            Limit = limit;
+            ExprieTime = exprieTime;
+        }
+
+        public void Invoke(int count)
+        {
+            Limit += count;
         }
     }
 }

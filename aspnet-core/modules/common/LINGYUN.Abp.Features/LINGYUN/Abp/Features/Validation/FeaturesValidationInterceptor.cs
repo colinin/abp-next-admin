@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.Options;
+using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
@@ -11,14 +12,17 @@ namespace LINGYUN.Abp.Features.Validation
     public class FeaturesValidationInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IFeatureChecker _featureChecker;
+        private readonly AbpFeaturesValidationOptions _options;
         private readonly IRequiresLimitFeatureChecker _limitFeatureChecker;
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
 
         public FeaturesValidationInterceptor(
             IFeatureChecker featureChecker,
             IRequiresLimitFeatureChecker limitFeatureChecker,
-            IFeatureDefinitionManager featureDefinitionManager)
+            IFeatureDefinitionManager featureDefinitionManager,
+            IOptions<AbpFeaturesValidationOptions> options)
         {
+            _options = options.Value;
             _featureChecker = featureChecker;
             _limitFeatureChecker = limitFeatureChecker;
             _featureDefinitionManager = featureDefinitionManager;
@@ -41,10 +45,12 @@ namespace LINGYUN.Abp.Features.Validation
                 return;
             }
 
+            // 获取功能限制上限
+            var limit = await _featureChecker.GetAsync(limitFeature.LimitFeature, limitFeature.DefaultLimit);
             // 获取功能限制时长
-            var limit = await _featureChecker.GetAsync(limitFeature.Feature, limitFeature.DefaultLimit);
-
-            var limitFeatureContext = new RequiresLimitFeatureContext(limitFeature.Feature, limitFeature.Policy, limit);
+            var interval = await _featureChecker.GetAsync(limitFeature.IntervalFeature, limitFeature.DefaultInterval);
+            // 必要的上下文参数
+            var limitFeatureContext = new RequiresLimitFeatureContext(limitFeature.LimitFeature, _options, limitFeature.Policy, interval, limit);
             // 检查次数限制
             await PreCheckFeatureAsync(limitFeatureContext);
             // 执行代理方法
@@ -69,14 +75,22 @@ namespace LINGYUN.Abp.Features.Validation
             var limitFeature = methodInfo.GetCustomAttribute<RequiresLimitFeatureAttribute>(false);
             if (limitFeature != null)
             {
-                var featureDefinition = _featureDefinitionManager.GetOrNull(limitFeature.Feature);
-                if (featureDefinition != null &&
-                    typeof(NumericValueValidator).IsAssignableFrom(featureDefinition.ValueType.Validator.GetType()))
+                // 限制次数定义的不是范围参数,则不参与限制功能
+                var featureLimitDefinition = _featureDefinitionManager.GetOrNull(limitFeature.LimitFeature);
+                if (featureLimitDefinition == null ||
+                    !typeof(NumericValueValidator).IsAssignableFrom(featureLimitDefinition.ValueType.Validator.GetType()))
                 {
-                    return limitFeature;
+                    return null;
+                }
+                // 时长刻度定义的不是范围参数,则不参与限制功能
+                var featureIntervalDefinition = _featureDefinitionManager.GetOrNull(limitFeature.IntervalFeature);
+                if (featureIntervalDefinition == null ||
+                    !typeof(NumericValueValidator).IsAssignableFrom(featureIntervalDefinition.ValueType.Validator.GetType()))
+                {
+                    return null;
                 }
             }
-            return null;
+            return limitFeature;
         }
     }
 }

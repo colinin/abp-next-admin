@@ -10,6 +10,11 @@ namespace LINGYUN.Abp.Features.Validation
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.OnRegistred(FeaturesValidationInterceptorRegistrar.RegisterIfNeeded);
+
+            Configure<AbpFeaturesValidationOptions>(options =>
+            {
+                options.MapDefaultEffectPolicys();
+            });
         }
     }
 }

@@ -1,26 +1,30 @@
 ﻿namespace LINGYUN.Abp.Features.Validation
 {
-    public enum LimitPolicy
+    public enum LimitPolicy : byte
     {
+        /// <summary>
+        /// 按分钟限制
+        /// </summary>
+        Minute = 0,
         /// <summary>
         /// 按小时限制
         /// </summary>
-        Hours = 0,
+        Hours = 10,
         /// <summary>
         /// 按天限制
         /// </summary>
-        Days = 1,
+        Days = 20,
         /// <summary>
         /// 按周限制
         /// </summary>
-        Weeks = 2,
+        Weeks = 30,
         /// <summary>
         /// 按月限制
         /// </summary>
-        Month = 3,
+        Month = 40,
         /// <summary>
         /// 按年限制
         /// </summary>
-        Years = 4
+        Years = 50
     }
 }

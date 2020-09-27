@@ -9,8 +9,12 @@ namespace LINGYUN.Abp.Features.Validation
         {
             var featureGroup = context.AddGroup(TestFeatureNames.GroupName);
             featureGroup.AddFeature(
-                name: TestFeatureNames.TestFeature1,
+                name: TestFeatureNames.TestLimitFeature,
                 defaultValue: 100.ToString(),
+                valueType: new ToggleStringValueType(new NumericValueValidator(1, 1000)));
+            featureGroup.AddFeature(
+                name: TestFeatureNames.TestIntervalFeature,
+                defaultValue: 1.ToString(),
                 valueType: new ToggleStringValueType(new NumericValueValidator(1, 1000)));
         }
     }

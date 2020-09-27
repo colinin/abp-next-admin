@@ -99,9 +99,9 @@ namespace LINGYUN.Abp.Features.Validation.Redis
         {
             if (_currentTenant.IsAvailable)
             {
-                return $"{_instance}t:RequiresLimitFeature;t:{_currentTenant.Id};f:{context.Feature}";
+                return $"{_instance}t:RequiresLimitFeature;t:{_currentTenant.Id};f:{context.LimitFeature}";
             }
-            return $"{_instance}c:RequiresLimitFeature;f:{context.Feature}";
+            return $"{_instance}c:RequiresLimitFeature;f:{context.LimitFeature}";
         }
 
         private void RegistenConnectionEvent(ConnectionMultiplexer connection)
