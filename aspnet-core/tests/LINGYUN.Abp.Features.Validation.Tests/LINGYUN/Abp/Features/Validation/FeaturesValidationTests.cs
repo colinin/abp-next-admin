@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization;
 using Volo.Abp.MultiTenancy;
@@ -23,14 +24,16 @@ namespace LINGYUN.Abp.Features.Validation
             using (CurrentTenant.Change(ParseNullableGuid(tenantId)))
             {
                 // it's ok
-                await TestValidationFeatureClass.Test1HoursAsync();
-                await TestValidationFeatureClass.Test1HoursAsync();
-                await TestValidationFeatureClass.Test1HoursAsync();
+                await TestValidationFeatureClass.Test1MinuteAsync();
+                await TestValidationFeatureClass.Test1MinuteAsync();
 
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    await TestValidationFeatureClass.Test1HoursAsync();
+                    await TestValidationFeatureClass.Test1MinuteAsync();
                 });
+
+                Thread.Sleep(61000);
+                await TestValidationFeatureClass.Test1MinuteAsync();
             }
         }
 

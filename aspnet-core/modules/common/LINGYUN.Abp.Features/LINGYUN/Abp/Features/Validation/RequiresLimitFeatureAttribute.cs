@@ -1,10 +1,15 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
+using Volo.Abp;
 
 namespace LINGYUN.Abp.Features.Validation
 {
     /// <summary>
     /// 单个功能的调用量限制
     /// </summary>
+    /// <remarks>
+    /// 需要对于限制时长和限制上限功能区分,以便于更细粒度的限制
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class RequiresLimitFeatureAttribute : Attribute
     {
@@ -17,18 +22,33 @@ namespace LINGYUN.Abp.Features.Validation
         /// </summary>
         public int DefaultLimit { get; }
         /// <summary>
-        /// 功能名称
+        /// 限制上限名称
         /// </summary>
-        public string Feature { get; }
+        public string LimitFeature { get; }
+        /// <summary>
+        /// 默认限制时长
+        /// </summary>
+        public int DefaultInterval { get; }
+        /// <summary>
+        /// 限制时长名称
+        /// </summary>
+        public string IntervalFeature { get; }
 
         public RequiresLimitFeatureAttribute(
-            string feature,
+            [NotNull] string limitFeature,
+            [NotNull] string intervalFeature,
             LimitPolicy policy = LimitPolicy.Month,
-            int defaultLimit = 1)
+            int defaultLimit = 1,
+            int defaultInterval = 1)
         {
-            DefaultLimit = defaultLimit;
+            Check.NotNullOrWhiteSpace(limitFeature, nameof(limitFeature));
+            Check.NotNullOrWhiteSpace(intervalFeature, nameof(intervalFeature));
+
             Policy = policy;
-            Feature = feature;
+            LimitFeature = limitFeature;
+            DefaultLimit = defaultLimit;
+            IntervalFeature = intervalFeature;
+            DefaultInterval = defaultInterval;
         }
     }
 }
