@@ -113,7 +113,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.HttpApi", "modules\message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj", "{9E12ADBF-713B-4FE7-B71F-52B5078A57CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChatValidator", "modules\common\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj", "{02043AD5-5E06-4EDD-8162-983E766C38EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChatValidator", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj", "{02043AD5-5E06-4EDD-8162-983E766C38EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.WeApp", "modules\common\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj", "{85EF4251-EFC4-4CC9-912B-EA5DB1E2E359}"
 EndProject
@@ -217,7 +217,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "modules\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation", "modules\common\LINGYUN.Abp.Features\LINGYUN.Abp.Features.Validation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation", "modules\common\LINGYUN.Abp.Features.Validation\LINGYUN.Abp.Features.Validation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation.Redis", "modules\common\LINGYUN.Abp.Features.Validation.Redis\LINGYUN.Abp.Features.Validation.Redis.csproj", "{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6}"
 EndProject

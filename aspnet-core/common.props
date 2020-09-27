@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup> 
+    <LangVersion>latest</LangVersion> 
+    <Version>3.1.0</Version>
+    <Authors>LINGYUN</Authors>
+    <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
+    <PackageProjectUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>$(SolutionDir)LocalNuget</OutputPath>
+  </PropertyGroup>
+
+</Project>
