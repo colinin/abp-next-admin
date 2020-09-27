@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
   
-<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.1.0" />
   </ItemGroup>
   
-<ItemGroup>
-  <ProjectReference Include="..\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
-</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
+  </ItemGroup>
 
 </Project>

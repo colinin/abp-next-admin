@@ -1,16 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  
+  <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0</Version>
-    <Authors>LINGYUN</Authors>
     <Description>阿里云Oss对象存储Abp集成</Description>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>D:\LocalNuget</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

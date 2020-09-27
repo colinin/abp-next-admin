@@ -1,17 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0</Version>
-    <Authors>LINGYUN</Authors>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>D:\LocalNuget</OutputPath>
-  </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="3.1.0" />

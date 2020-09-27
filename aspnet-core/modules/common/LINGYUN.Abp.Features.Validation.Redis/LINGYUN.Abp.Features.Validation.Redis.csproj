@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
-    <LangVersion>8.0</LangVersion>
+    <Description>功能限制验证组件Redis实现</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Features\LINGYUN.Abp.Features.Validation.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.Features.Validation\LINGYUN.Abp.Features.Validation.csproj" />
   </ItemGroup>
 
 </Project>

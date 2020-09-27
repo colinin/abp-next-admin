@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features\LINGYUN.Abp.Features.Validation.csproj" />
+    <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features.Validation\LINGYUN.Abp.Features.Validation.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>
 
