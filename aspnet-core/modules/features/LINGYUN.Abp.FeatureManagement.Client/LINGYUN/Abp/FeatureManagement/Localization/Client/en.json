@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permissions:IdentityServer": "IdentityServer",
+    "Permissions:ManageFeatures": "Manage features"
+  }
+}

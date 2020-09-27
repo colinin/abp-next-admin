@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\FeatureManagement\Localization\Client\*.json" />
+    <Content Remove="LINGYUN\Abp\FeatureManagement\Localization\Client\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Authorization" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
+  </ItemGroup>
+
+</Project>
