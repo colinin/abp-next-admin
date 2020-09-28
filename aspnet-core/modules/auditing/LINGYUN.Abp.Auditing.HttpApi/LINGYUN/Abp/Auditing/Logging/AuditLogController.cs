@@ -28,6 +28,13 @@ namespace LINGYUN.Abp.Auditing.Logging
         }
 
         [HttpGet]
+        [Route("{id}")]
+        public virtual async Task<AuditLogDto> GetAsync(Guid id)
+        {
+            return await AuditLogAppService.GetAsync(id);
+        }
+
+        [HttpGet]
         public virtual async Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input)
         {
             return await AuditLogAppService.GetListAsync(input);

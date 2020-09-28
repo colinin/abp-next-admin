@@ -20,6 +20,13 @@ namespace LINGYUN.Abp.Auditing.Security
             SecurityLogRepository = securityLogRepository;
         }
 
+        public virtual async Task<SecurityLogDto> GetAsync(Guid id)
+        {
+            var securityLog = await SecurityLogRepository.GetAsync(id, includeDetails: true);
+
+            return ObjectMapper.Map<IdentitySecurityLog, SecurityLogDto>(securityLog);
+        }
+
         public virtual async Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)
         {
             var securityLogCount = await SecurityLogRepository
@@ -32,7 +39,8 @@ namespace LINGYUN.Abp.Auditing.Security
                 .GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
                     input.StartTime, input.EndTime,
                     input.ApplicationName, input.Identity, input.ActionName,
-                    input.UserId, input.UserName, input.ClientId, input.CorrelationId
+                    input.UserId, input.UserName, input.ClientId, input.CorrelationId,
+                    includeDetails: false
                 );
 
             return new PagedResultDto<SecurityLogDto>(securityLogCount,

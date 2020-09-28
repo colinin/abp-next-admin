@@ -229,7 +229,7 @@
     />
 
     <security-log-dialog
-      :security-log="securityLog"
+      :security-log-id="securityLogId"
       :show-dialog="showSecurityLog"
       @closed="onSecurityLogDialogClosed"
     />
@@ -255,8 +255,7 @@ import SecurityLogDialog from './components/SecurityLogDialog.vue'
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private securityLog = new SecurityLog()
-
+  private securityLogId = ''
   private showSecurityLog = false
   public dataFilter = new SecurityLogGetPaged()
 
@@ -269,7 +268,7 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleShowSecurityLogDialog(securityLog: SecurityLog) {
-    this.securityLog = securityLog
+    this.securityLogId = securityLog.id
     this.showSecurityLog = true
   }
 

@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 28/09/2020 18:35:48
+ Date: 28/09/2020 20:41:21
 */
 
 SET NAMES utf8mb4;
@@ -435,7 +435,7 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (127, 1304679169305694208, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (128, 1310460417141817344, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (129, 1310502391475519488, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (130, 1310515546943569920, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (131, 1310515735292985344, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (131, 1310515735292985344, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaydiscovery
@@ -1062,8 +1062,8 @@ INSERT INTO `appapigatewayreroute` VALUES (133, '{}', '40a150f629b047f587c91a943
 INSERT INTO `appapigatewayreroute` VALUES (134, '{}', '3a2d5d538fa44ac690402fc5c4e1a401', 1304679169305694208, '【身份认证服务】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/identity-server/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', 'identity-server-configuration', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (135, '{}', '2ecfe7483bc94c28ad0769b654eb765d', 1310460417141817344, '【后台管理】- 审计日志列表', '/api/auditing/audit-log', '', '', '/api/auditing/audit-log', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (136, '{}', '744e340c0024462d88458b7ea9605b3c', 1310502391475519488, '【后台服务】- 安全日志列表', '/api/auditing/security-log', '', '', '/api/auditing/security-log', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (137, '{}', 'ba9455ce031148e98c5ea19317548b16', 1310515546943569920, '【后台服务】- 删除安全日志', '/api/auditing/security-log/{id}', '', '', '/api/auditing/security-log/{id}', 'DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (138, '{}', '2ea67855ef7448859d4d3f2a9a8faa15', 1310515735292985344, '【后台管理】- 删除审计日志', '/api/auditing/audit-log/{id}', '', '', '/api/auditing/audit-log/{id}', 'DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (137, '{}', 'a99639f4172547c4ba9b4f4ca5cb4ab9', 1310515546943569920, '【后台服务】- 安全日志', '/api/auditing/security-log/{id}', '', '', '/api/auditing/security-log/{id}', 'DELETE,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (138, '{}', 'c3ebc82d55f640fb9d70a911e97e4ec1', 1310515735292985344, '【后台管理】- 审计日志', '/api/auditing/audit-log/{id}', '', '', '/api/auditing/audit-log/{id}', 'DELETE,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 
 -- ----------------------------
 -- Table structure for appapigatewayroutegroup

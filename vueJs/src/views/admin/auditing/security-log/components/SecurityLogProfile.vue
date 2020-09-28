@@ -107,7 +107,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import { SecurityLog } from '@/api/auditing'
+import AuditingService, { SecurityLog } from '@/api/auditing'
 import { dateFormat } from '@/utils'
 
 @Component({
@@ -121,11 +121,10 @@ import { dateFormat } from '@/utils'
   }
 })
 export default class extends Vue {
-  @Prop({
-    default: () => { return {} }
-  })
-  private securityLog!: SecurityLog
+  @Prop({ default: '' })
+  private securityLogId!: string
 
+  private securityLog = new SecurityLog()
   private activedTabItem = 'application'
 
   get hasExtraProperties() {
@@ -135,9 +134,14 @@ export default class extends Vue {
     return false
   }
 
-  @Watch('securityLog')
+  @Watch('securityLogId', { immediate: true })
   private onSecurityLogChanged() {
-    this.activedTabItem = 'application'
+    if (this.securityLogId) {
+      AuditingService.getSecurityLogById(this.securityLogId).then(res => {
+        this.securityLog = res
+        this.activedTabItem = 'application'
+      })
+    }
   }
 }
 </script>

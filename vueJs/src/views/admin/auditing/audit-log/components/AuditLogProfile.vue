@@ -204,7 +204,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import { Action, AuditLog } from '@/api/auditing'
+import AuditingService, { Action, AuditLog } from '@/api/auditing'
 import { dateFormat } from '@/utils'
 import JsonEditor from '@/components/JsonEditor/index.vue'
 
@@ -244,16 +244,20 @@ import JsonEditor from '@/components/JsonEditor/index.vue'
   }
 })
 export default class extends Vue {
-  @Prop({
-    default: () => { return {} }
-  })
-  private auditLog!: AuditLog
+  @Prop({ default: '' })
+  private auditLogId!: string
 
+  private auditLog = new AuditLog()
   private activedTabItem = 'application'
 
-  @Watch('auditLog')
-  private onAuditLogChanged() {
-    this.activedTabItem = 'application'
+  @Watch('auditLogId', { immediate: true })
+  private onAuditLogIdChanged() {
+    if (this.auditLogId) {
+      AuditingService.getAuditLogById(this.auditLogId).then(res => {
+        this.auditLog = res
+        this.activedTabItem = 'application'
+      })
+    }
   }
 
   get hasExtraProperties() {
