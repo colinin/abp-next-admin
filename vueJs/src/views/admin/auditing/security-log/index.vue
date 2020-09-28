@@ -200,7 +200,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['Abp.Auditing.SecurityLog'])"
+            :disabled="!checkPermission(['AbpAuditing.SecurityLog'])"
             size="mini"
             type="primary"
             @click="handleShowSecurityLogDialog(row)"
@@ -208,7 +208,7 @@
             查看日志
           </el-button>
           <el-button
-            :disabled="!checkPermission(['Abp.Auditing.SecurityLog.Delete'])"
+            :disabled="!checkPermission(['AbpAuditing.SecurityLog.Delete'])"
             size="mini"
             type="danger"
             @click="handleDeleteSecurityLog(row.id)"

@@ -12,7 +12,7 @@ using Volo.Abp.Features;
 namespace LINGYUN.Abp.Auditing.Logging
 {
     [Authorize(AuditingPermissionNames.AuditLog.Default)]
-    [RequiresFeature(AuditingFeatureNames.AuditLog.Default)]
+    [RequiresFeature(AuditingFeatureNames.Logging.AuditLog)]
     public class AuditLogAppService : AuditingApplicationServiceBase, IAuditLogAppService
     {
         protected IAuditLogRepository AuditLogRepository { get; }
