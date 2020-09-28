@@ -5,6 +5,11 @@ import { PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class AuditingService {
+  public static getAuditLogById(id: string) {
+    const _url = '/api/auditing/audit-log/' + id
+    return ApiService.Get<AuditLog>(_url, serviceUrl)
+  }
+  
   public static getAuditLogs(payload: AuditLogGetPaged) {
     let _url = '/api/auditing/audit-log?'
     payload.skipCount = abpPagerFormat(payload.skipCount, payload.maxResultCount)
@@ -15,6 +20,11 @@ export default class AuditingService {
   public static deleteAuditLog(id: string) {
     const _url = '/api/auditing/audit-log/' + id
     return ApiService.Delete(_url, serviceUrl)
+  }
+
+  public static getSecurityLogById(id: string) {
+    const _url = '/api/auditing/security-log/' + id
+    return ApiService.Get<SecurityLog>(_url, serviceUrl)
   }
 
   public static getSecurityLogs(payload: SecurityLogGetPaged) {

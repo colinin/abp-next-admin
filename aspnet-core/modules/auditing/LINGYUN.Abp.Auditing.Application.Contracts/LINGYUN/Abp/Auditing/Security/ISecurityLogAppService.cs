@@ -9,6 +9,8 @@ namespace LINGYUN.Abp.Auditing.Security
     {
         Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input);
 
+        Task<SecurityLogDto> GetAsync(Guid id);
+
         Task DeleteAsync(Guid id);
     }
 }

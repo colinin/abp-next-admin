@@ -6,12 +6,11 @@
     :close-on-click-modal="true"
     @close="onFormClosed"
   >
-    <audit-log-profile :audit-log="auditLog" />
+    <audit-log-profile :audit-log-id="auditLogId" />
   </el-dialog>
 </template>
 
 <script lang="ts">
-import { AuditLog } from '@/api/auditing'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import AuditLogProfile from './AuditLogProfile.vue'
 
@@ -25,13 +24,10 @@ export default class extends Vue {
   @Prop({ default: false })
   private showDialog!: boolean
 
-  @Prop({
-    default: () => { return {} }
-  })
-  private auditLog!: AuditLog
+  @Prop({ default: '' })
+  private auditLogId!: string
 
   private onFormClosed() {
-    console.log('关闭窗口')
     this.$emit('closed')
   }
 }

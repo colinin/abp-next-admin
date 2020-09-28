@@ -268,7 +268,7 @@
     />
 
     <audit-log-dialog
-      :audit-log="auditLog"
+      :audit-log-id="auditLogId"
       :show-dialog="showAuditLog"
       @closed="onAuditLogDialogClosed"
     />
@@ -319,7 +319,7 @@ const statusMap: { [key: string]: string } = {
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private auditLog = new AuditLog()
+  private auditLogId = ''
 
   private showAuditLog = false
   public dataFilter = new AuditLogGetPaged()
@@ -333,7 +333,7 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleShowAuditLogDialog(auditLog: AuditLog) {
-    this.auditLog = auditLog
+    this.auditLogId = auditLog.id
     this.showAuditLog = true
   }
 

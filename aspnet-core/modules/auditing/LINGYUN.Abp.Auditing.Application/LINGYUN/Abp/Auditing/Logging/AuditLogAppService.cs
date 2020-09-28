@@ -22,6 +22,13 @@ namespace LINGYUN.Abp.Auditing.Logging
             AuditLogRepository = auditLogRepository;
         }
 
+        public virtual async Task<AuditLogDto> GetAsync(Guid id)
+        {
+            var auditLog = await AuditLogRepository.GetAsync(id, includeDetails: true);
+
+            return ObjectMapper.Map<AuditLog, AuditLogDto>(auditLog);
+        }
+
         public virtual async Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input)
         {
             var auditLogCount = await AuditLogRepository
@@ -30,21 +37,21 @@ namespace LINGYUN.Abp.Auditing.Logging
                     input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration,
                     input.HasException, input.HttpStatusCode);
 
-            var auditLog = await AuditLogRepository
+            var auditLogs = await AuditLogRepository
                 .GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
                 input.StartTime, input.EndTime,
                     input.HttpMethod, input.Url, input.UserName, input.ApplicationName,
                     input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration,
-                    input.HasException, input.HttpStatusCode, true);
+                    input.HasException, input.HttpStatusCode, includeDetails: false);
 
             return new PagedResultDto<AuditLogDto>(auditLogCount,
-                ObjectMapper.Map<List<AuditLog>, List<AuditLogDto>>(auditLog));
+                ObjectMapper.Map<List<AuditLog>, List<AuditLogDto>>(auditLogs));
         }
 
         [Authorize(AuditingPermissionNames.AuditLog.Delete)]
         public virtual async Task DeleteAsync([Required] Guid id)
         {
-            var auditLog = await AuditLogRepository.GetAsync(id, false);
+            var auditLog = await AuditLogRepository.GetAsync(id);
             await AuditLogRepository.DeleteAsync(auditLog);
 
             await CurrentUnitOfWork.SaveChangesAsync();

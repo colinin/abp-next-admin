@@ -6,12 +6,11 @@
     :close-on-click-modal="true"
     @close="onFormClosed"
   >
-    <security-log-profile :security-log="securityLog" />
+    <security-log-profile :security-log-id="securityLogId" />
   </el-dialog>
 </template>
 
 <script lang="ts">
-import { SecurityLog } from '@/api/auditing'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import SecurityLogProfile from './SecurityLogProfile.vue'
 
@@ -25,10 +24,8 @@ export default class extends Vue {
   @Prop({ default: false })
   private showDialog!: boolean
 
-  @Prop({
-    default: () => { return {} }
-  })
-  private securityLog!: SecurityLog
+  @Prop({ default: '' })
+  private securityLogId!: string
 
   private onFormClosed() {
     this.$emit('closed')
