@@ -1,0 +1,14 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permissions:Auditing": "内部审计",
+    "Permissions:AuditLog": "审计日志",
+    "Permissions:SecurityLog": "安全日志",
+    "Permissions:DeleteLog": "删除日志",
+    "Features:Auditing": "内部审计",
+    "Features:DisplayName:AuditLog": "审计日志",
+    "Features:Description:AuditLog": "是否启用审计日志功能",
+    "Features:DisplayName:SecurityLog": "安全日志",
+    "Features:Description:SecurityLog": "是否启用安全日志功能"
+  }
+}

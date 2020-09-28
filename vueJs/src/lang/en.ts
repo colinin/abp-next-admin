@@ -80,7 +80,10 @@ export default {
     identityresources: 'id resources',
     organizationUnit: 'organization unit',
     filemanagement: 'file management',
-    filesystem: 'file system'
+    filesystem: 'file system',
+    auditing: 'auditing',
+    auditLog: 'audit log',
+    securityLog: 'security log'
   },
   navbar: {
     logOut: 'Log Out',

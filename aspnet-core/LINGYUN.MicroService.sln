@@ -227,9 +227,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Valida
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "features", "features", "{08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FeatureManagement.Client", "modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{7071E78B-755B-410A-830B-AA05D7168944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Client", "modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{7071E78B-755B-410A-830B-AA05D7168944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Features.Client", "modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{87B65CBD-0FF4-4FB5-9ABC-161911A71179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client", "modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{87B65CBD-0FF4-4FB5-9ABC-161911A71179}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.Application.Contracts", "modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj", "{F40F88F1-CA90-4A79-B772-80E287E25982}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.Application", "modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj", "{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.HttpApi", "modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj", "{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -613,6 +621,18 @@ Global
 		{87B65CBD-0FF4-4FB5-9ABC-161911A71179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87B65CBD-0FF4-4FB5-9ABC-161911A71179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87B65CBD-0FF4-4FB5-9ABC-161911A71179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F40F88F1-CA90-4A79-B772-80E287E25982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F40F88F1-CA90-4A79-B772-80E287E25982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F40F88F1-CA90-4A79-B772-80E287E25982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F40F88F1-CA90-4A79-B772-80E287E25982}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -729,6 +749,10 @@ Global
 		{08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{7071E78B-755B-410A-830B-AA05D7168944} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
 		{87B65CBD-0FF4-4FB5-9ABC-161911A71179} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
+		{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{F40F88F1-CA90-4A79-B772-80E287E25982} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
+		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
+		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

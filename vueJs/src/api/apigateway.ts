@@ -174,7 +174,6 @@ export default class ApiGateWay {
     const _url = '/api/ApiGateway/Basic/LoadBalancers'
     return ApiService.Get<ListResultDto<LoadBalancerDescriptor>>(_url, serviceUrl)
   }
-
 }
 
 export class ServiceDiscoveryProvider {

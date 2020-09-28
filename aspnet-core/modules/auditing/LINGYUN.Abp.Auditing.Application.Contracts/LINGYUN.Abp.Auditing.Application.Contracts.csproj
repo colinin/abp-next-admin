@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Auditing\Localization\Resources\*.json" />
+    <Content Remove="LINGYUN\Abp\Auditing\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Features" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Authorization" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="3.1.0" />
+  </ItemGroup>
+
+</Project>
