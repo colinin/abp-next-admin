@@ -16,6 +16,7 @@ using System;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -40,6 +41,7 @@ namespace LINGYUN.ApiGateway
         typeof(ApiGatewayEntityFrameworkCoreModule),
         typeof(ApiGatewayHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),

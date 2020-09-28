@@ -11,6 +11,7 @@ import Layout from '@/layout/index.vue'
 // import nestedRouter from './modules/nested'
 // import taskRouter from './modules/task'
 import adminRouter from './modules/admin'
+import auditingRouter from './modules/auditing'
 import apigatewayRouter from './modules/apigateway'
 import identityServerRouter from './modules/identityServer'
 import fileManagementRouter from './modules/file-management'
@@ -125,6 +126,7 @@ export const asyncRoutes: RouteConfig[] = [
     ]
   },
   adminRouter,
+  auditingRouter,
   apigatewayRouter,
   identityServerRouter,
   fileManagementRouter,

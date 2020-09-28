@@ -1,18 +1,18 @@
 ﻿using DotNetCore.CAP;
-using IdentityModel;
+using LINGYUN.Abp.Auditing;
+using LINGYUN.Abp.BackendAdmin.MultiTenancy;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FileManagement;
-using LINGYUN.Abp.Location.Tencent;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
-using LINGYUN.Abp.BackendAdmin.MultiTenancy;
 using LINGYUN.Platform;
 using LINYUN.Abp.Sms.Aliyun;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +27,8 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -53,9 +55,6 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Security.Claims;
-using System.Collections.Generic;
 
 namespace LINGYUN.Abp.BackendAdmin
 {
@@ -76,11 +75,14 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpAuditingApplicationModule),
+        typeof(AbpAuditingHttpApiModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
         typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
@@ -89,7 +91,6 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
-        typeof(AbpTencentLocationModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)

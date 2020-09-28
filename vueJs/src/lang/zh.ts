@@ -80,7 +80,10 @@ export default {
     identityresources: '身份资源管理',
     organizationUnit: '组织机构管理',
     filemanagement: '文件管理',
-    filesystem: '文件系统'
+    filesystem: '文件系统',
+    auditing: '内部审计',
+    auditLog: '审计日志',
+    securityLog: '安全日志'
   },
   navbar: {
     logOut: '退出登录',

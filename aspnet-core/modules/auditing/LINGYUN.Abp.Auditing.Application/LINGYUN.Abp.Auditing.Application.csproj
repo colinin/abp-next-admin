@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

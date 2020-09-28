@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permissions:Auditing": "Auditing",
+    "Permissions:AuditLog": "Audit log",
+    "Permissions:SecurityLog": "Security log",
+    "Permissions:DeleteLog": "Delete",
+    "Features:Auditing": "Auditing",
+    "Features:DisplayName:AuditLog": "Audit log",
+    "Features:Description:AuditLog": "Whether to enable audit logging",
+    "Features:DisplayName:SecurityLog": "Security log",
+    "Features:Description:SecurityLog": "Whether to enable security logging"
+  }
+}

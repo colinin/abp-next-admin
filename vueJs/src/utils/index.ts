@@ -1,6 +1,22 @@
+export function urlStringify(payload: any) {
+  let urlParam = ''
+  Object.keys(payload).forEach(key => {
+    urlParam += '&' + key + '=' + payload[key]
+  })
+  urlParam = urlParam.substring(1)
+  return urlParam
+}
+
 export function pagerFormat(page: number) {
   if (page > 0) {
     return page - 1
+  }
+  return 0
+}
+
+export function abpPagerFormat(skipCount: number, maxResultCount: number) {
+  if (skipCount > 0) {
+    return (skipCount - 1) * maxResultCount
   }
   return 0
 }
@@ -13,7 +29,8 @@ export function dateFormat(date: Date, fmt: string) {
     'd+': date.getDate().toString(),
     'H+': date.getHours().toString(),
     'M+': date.getMinutes().toString(),
-    'S+': date.getSeconds().toString()
+    'S+': date.getSeconds().toString(),
+    'NS+': date.getMilliseconds().toString()
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
   }
   for (const k in opt) {
