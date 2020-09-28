@@ -11,7 +11,7 @@ using Volo.Abp.Identity;
 namespace LINGYUN.Abp.Auditing.Security
 {
     [Authorize(AuditingPermissionNames.SecurityLog.Default)]
-    [RequiresFeature(AuditingFeatureNames.SecurityLog.Default)]
+    [RequiresFeature(AuditingFeatureNames.Logging.SecurityLog)]
     public class SecurityLogAppService : AuditingApplicationServiceBase, ISecurityLogAppService
     {
         protected IIdentitySecurityLogRepository SecurityLogRepository { get; }
