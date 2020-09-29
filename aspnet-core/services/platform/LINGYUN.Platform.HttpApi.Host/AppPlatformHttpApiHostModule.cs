@@ -26,6 +26,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
@@ -182,6 +183,19 @@ namespace LINGYUN.Platform
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = true;
+            });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = "Platform";
+                // 是否启用实体变更记录
+                var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
+                if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
+                {
+                    options
+                    .EntityHistorySelectors
+                    .AddAllEntities();
+                }
             });
 
             Configure<AbpTenantResolveOptions>(options =>

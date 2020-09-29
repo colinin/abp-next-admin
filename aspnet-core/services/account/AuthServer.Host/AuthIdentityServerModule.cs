@@ -140,7 +140,7 @@ namespace AuthServer.Host
             Configure<AbpAuditingOptions>(options =>
             {
                 // options.IsEnabledForGetRequests = true;
-                options.ApplicationName = "AuthServer";
+                options.ApplicationName = "Identity-Server-STS";
             });
 
             Configure<AppUrlOptions>(options =>

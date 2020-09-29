@@ -16,6 +16,7 @@ using System;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -120,6 +121,19 @@ namespace LINGYUN.ApiGateway
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = false;
+            });
+
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = "ApiGateWay-Admin";
+                // 是否启用实体变更记录
+                var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
+                if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
+                {
+                    options
+                    .EntityHistorySelectors
+                    .AddAllEntities();
+                }
             });
 
             //Configure<AbpTenantResolveOptions>(options =>

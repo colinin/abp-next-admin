@@ -298,7 +298,7 @@ export default {
   filterString: '过滤字符',
   searchList: '查询列表',
   creationTime: '创建时间',
-  successful: '提交成功',
+  successful: '操作成功',
   pleaseInputBy: '请输入{key}',
   pleaseSelectBy: '请选择{key}',
   none: '未定义',
