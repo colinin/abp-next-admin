@@ -3,22 +3,22 @@
     <el-form label-width="100px">
       <el-tabs v-model="activedTabItem">
         <el-tab-pane
-          label="应用信息"
+          :label="$t('AbpAuditLogging.Application')"
           name="application"
         >
-          <el-form-item label="应用名称">
+          <el-form-item :label="$t('AbpAuditLogging.ApplicationName')">
             <el-input
               v-model="auditLog.applicationName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="租户标识">
+          <el-form-item :label="$t('AbpAuditLogging.TenantId')">
             <el-input
               v-model="auditLog.tenantId"
               readonly
             />
           </el-form-item>
-          <el-form-item label="租户名称">
+          <el-form-item :label="$t('AbpAuditLogging.TenantName')">
             <el-input
               v-model="auditLog.tenantName"
               readonly
@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item
             v-if="auditLog.impersonatorTenantId !== null"
-            label="模拟租户"
+            :label="$t('AbpAuditLogging.ImpersonatorTenantId')"
           >
             <el-input
               v-model="auditLog.impersonatorTenantId"
@@ -35,10 +35,10 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          label="用户信息"
+          :label="$t('AbpAuditLogging.UserInfo')"
           name="userInfo"
         >
-          <el-form-item label="用户标识">
+          <el-form-item :label="$t('AbpAuditLogging.UserId')">
             <el-input
               v-model="auditLog.userId"
               readonly
@@ -46,38 +46,38 @@
           </el-form-item>
           <el-form-item
             v-if="auditLog.impersonatorUserId !== null"
-            label="模拟用户"
+            :label="$t('AbpAuditLogging.ImpersonatorUserId')"
           >
             <el-input
               v-model="auditLog.impersonatorUserId"
               readonly
             />
           </el-form-item>
-          <el-form-item label="用户名称">
+          <el-form-item :label="$t('AbpAuditLogging.UserName')">
             <el-input
               v-model="auditLog.userName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端标识">
+          <el-form-item :label="$t('AbpAuditLogging.ClientId')">
             <el-input
               v-model="auditLog.clientId"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端名称">
+          <el-form-item :label="$t('AbpAuditLogging.ClientName')">
             <el-input
               v-model="auditLog.clientName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端地址">
+          <el-form-item :label="$t('AbpAuditLogging.ClientIpAddress')">
             <el-input
               v-model="auditLog.clientIpAddress"
               readonly
             />
           </el-form-item>
-          <el-form-item label="浏览器信息">
+          <el-form-item :label="$t('AbpAuditLogging.BrowserInfo')">
             <el-input
               v-model="auditLog.browserInfo"
               type="textarea"
@@ -86,40 +86,40 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          label="操作信息"
+          :label="$t('AbpAuditLogging.Operation')"
           name="operation"
         >
-          <el-form-item label="请求路径">
+          <el-form-item :label="$t('AbpAuditLogging.RequestUrl')">
             <el-input
               v-model="auditLog.url"
               readonly
             />
           </el-form-item>
-          <el-form-item label="操作方法">
+          <el-form-item :label="$t('AbpAuditLogging.HttpMethod')">
             <el-input
               v-model="auditLog.httpMethod"
               readonly
             />
           </el-form-item>
-          <el-form-item label="调用时间">
+          <el-form-item :label="$t('AbpAuditLogging.ExecutionTime')">
             <el-input
               :value="getFormatDateTime(auditLog.executionTime)"
               readonly
             />
           </el-form-item>
-          <el-form-item label="响应时间">
+          <el-form-item :label="$t('AbpAuditLogging.ExecutionDuration')">
             <el-input
               v-model="auditLog.executionDuration"
               readonly
             />
           </el-form-item>
-          <el-form-item label="响应状态">
+          <el-form-item :label="$t('AbpAuditLogging.HttpStatusCode')">
             <el-input
               v-model="auditLog.httpStatusCode"
               readonly
             />
           </el-form-item>
-          <el-form-item label="调用链标识">
+          <el-form-item :label="$t('AbpAuditLogging.CorrelationId')">
             <el-input
               v-model="auditLog.correlationId"
               readonly
@@ -127,7 +127,7 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          label="调用方法"
+          :label="$t('AbpAuditLogging.InvokeMethod')"
           name="methodInvoke"
           style="height:300px;overflow-y:auto;overflow-x:hidden;"
         >
@@ -140,25 +140,25 @@
               placement="top"
             >
               <el-card>
-                <el-form-item label="调用服务">
+                <el-form-item :label="$t('AbpAuditLogging.ServiceName')">
                   <el-input
                     v-model="action.serviceName"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="方法名称">
+                <el-form-item :label="$t('AbpAuditLogging.MethodName')">
                   <el-input
                     v-model="action.methodName"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="响应时间">
+                <el-form-item :label="$t('AbpAuditLogging.ExecutionDuration')">
                   <el-input
                     v-model="action.executionDuration"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="参数列表">
+                <el-form-item :label="$t('AbpAuditLogging.Parameters')">
                   <json-editor
                     :value="getFormatJsonValue(action.parameters)"
                   />
@@ -169,7 +169,7 @@
         </el-tab-pane>
         <el-tab-pane
           v-if="getEntitiesChanges.length > 0"
-          label="实体变更"
+          :label="$t('AbpAuditLogging.EntitiesChanged')"
           name="entitiesChanged"
           style="height:300px;overflow-y:auto;overflow-x:hidden;"
         >
@@ -182,31 +182,31 @@
               placement="top"
             >
               <el-card>
-                <el-form-item label="变更类型">
+                <el-form-item :label="$t('AbpAuditLogging.ChangeType')">
                   <el-input
-                    :value="entity.changeType | entityChangeTypeNameFilter"
+                    :value="getEntityChangeTypeName(entity.changeType)"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="实体类型">
+                <el-form-item :label="$t('AbpAuditLogging.EntityTypeFullName')">
                   <el-input
                     v-model="entity.entityTypeFullName"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="实体标识">
+                <el-form-item :label="$t('AbpAuditLogging.EntityId')">
                   <el-input
                     v-model="entity.entityId"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="租户标识">
+                <el-form-item :label="$t('AbpAuditLogging.TenantId')">
                   <el-input
                     v-model="entity.entityTenantId"
                     readonly
                   />
                 </el-form-item>
-                <el-form-item label="属性变更">
+                <el-form-item :label="$t('AbpAuditLogging.PropertyChanges')">
                   <el-table
                     row-key="id"
                     :data="entity.propertyChanges"
@@ -216,7 +216,7 @@
                     style="width: 100%;"
                   >
                     <el-table-column
-                      label="属性名称"
+                      :label="$t('AbpAuditLogging.PropertyName')"
                       prop="propertyName"
                       sortable
                       width="200px"
@@ -226,7 +226,7 @@
                       </template>
                     </el-table-column>
                     <el-table-column
-                      label="当前值"
+                      :label="$t('AbpAuditLogging.NewValue')"
                       prop="newValue"
                       sortable
                       width="320px"
@@ -236,7 +236,7 @@
                       </template>
                     </el-table-column>
                     <el-table-column
-                      label="原始值"
+                      :label="$t('AbpAuditLogging.OriginalValue')"
                       prop="originalValue"
                       sortable
                       width="320px"
@@ -246,7 +246,7 @@
                       </template>
                     </el-table-column>
                     <el-table-column
-                      label="属性类型"
+                      :label="$t('AbpAuditLogging.PropertyTypeFullName')"
                       prop="propertyTypeFullName"
                       sortable
                       width="500px"
@@ -263,10 +263,10 @@
         </el-tab-pane>
         <el-tab-pane
           v-if="hasException"
-          label="异常信息"
+          :label="$t('AbpAuditLogging.Exception')"
           name="exception"
         >
-          <el-form-item label="异常堆栈">
+          <el-form-item :label="$t('AbpAuditLogging.StackTrack')">
             <el-input
               v-model="auditLog.exceptions"
               type="textarea"
@@ -277,7 +277,7 @@
         </el-tab-pane>
         <el-tab-pane
           v-if="hasExtraProperties"
-          label="附加信息"
+          :label="$t('AbpAuditLogging.Additional')"
           name="extraProperties"
         >
           <el-form-item
@@ -303,9 +303,9 @@ import { dateFormat } from '@/utils'
 import JsonEditor from '@/components/JsonEditor/index.vue'
 
 const entityChangeTypeNameMap: { [key: number]: string } = {
-  [ChangeType.Created]: '新增',
-  [ChangeType.Updated]: '修改',
-  [ChangeType.Deleted]: '删除'
+  [ChangeType.Created]: 'AbpAuditLogging.Created',
+  [ChangeType.Updated]: 'AbpAuditLogging.Updated',
+  [ChangeType.Deleted]: 'AbpAuditLogging.Deleted'
 }
 const entityChangeTypeTimelineMap: { [key: number]: string } = {
   [ChangeType.Created]: 'success',
@@ -331,9 +331,6 @@ const entityChangeTypeTimelineMap: { [key: number]: string } = {
       }
       return 'primary'
     },
-    entityChangeTypeNameFilter(type: ChangeType) {
-      return entityChangeTypeNameMap[type]
-    },
     entityChangeTypeTimelineFilter(type: ChangeType) {
       return entityChangeTypeTimelineMap[type]
     }
@@ -350,6 +347,11 @@ const entityChangeTypeTimelineMap: { [key: number]: string } = {
           return JSON.parse(jsonString)
         }
         return null
+      }
+    },
+    getEntityChangeTypeName() {
+      return (type: ChangeType) => {
+        return this.$t(entityChangeTypeNameMap[type])
       }
     }
   }

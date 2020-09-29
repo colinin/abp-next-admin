@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible="showDialog"
-    title="管理功能"
+    :title="$t('AbpTenantManagement.Permission:ManageFeatures')"
     width="800px"
     :show-close="false"
     @closed="onFormClosed"

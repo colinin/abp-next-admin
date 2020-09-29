@@ -5,26 +5,26 @@
         <el-collapse>
           <el-collapse-item>
             <template slot="title">
-              <span class="data-filter-collapse-title">查询条件</span>
+              <span class="data-filter-collapse-title">{{ $t('queryFilter') }}</span>
             </template>
             <el-form label-width="100px">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label="应用名称">
+                  <el-form-item :label="$t('AbpAuditLogging.ApplicationName')">
                     <el-input
                       v-model="dataFilter.applicationName"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="用户名称">
+                  <el-form-item :label="$t('AbpAuditLogging.UserName')">
                     <el-input
                       v-model="dataFilter.userName"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="客户端标识">
+                  <el-form-item :label="$t('AbpAuditLogging.ClientId')">
                     <el-input
                       v-model="dataFilter.clientId"
                     />
@@ -32,31 +32,22 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="16">
-                  <el-form-item label="主体名称">
+                <el-col :span="8">
+                  <el-form-item :label="$t('AbpAuditLogging.Identity')">
                     <el-input
                       v-model="dataFilter.identity"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="方法名称">
+                  <el-form-item :label="$t('AbpAuditLogging.ActionName')">
                     <el-input
                       v-model="dataFilter.actionName"
                     />
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="客户端标识">
-                    <el-input
-                      v-model="dataFilter.clientId"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="调用链">
+                <el-col :span="8">
+                  <el-form-item :label="$t('AbpAuditLogging.CorrelationId')">
                     <el-input
                       v-model="dataFilter.correlationId"
                     />
@@ -65,10 +56,10 @@
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="开始时间">
+                  <el-form-item :label="$t('AbpAuditLogging.StartTime')">
                     <el-date-picker
                       v-model="dataFilter.startTime"
-                      placeholder="选择日期时间"
+                      :placeholder="$t('AbpAuditLogging.SelectDateTime')"
                       type="datetime"
                       default-time="00:00:00"
                       style="width: 100%"
@@ -77,10 +68,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="结束时间">
+                  <el-form-item :label="$t('AbpAuditLogging.EndTime')">
                     <el-date-picker
                       v-model="dataFilter.endTime"
-                      placeholder="选择日期时间"
+                      :placeholder="$t('AbpAuditLogging.SelectDateTime')"
                       type="datetime"
                       default-time="23:59:59"
                       style="width: 100%"
@@ -96,7 +87,7 @@
                 @click="refreshPagedData"
               >
                 <i class="el-icon-search" />
-                查询日志
+                {{ $t('AbpAuditLogging.SecrchLog') }}
               </el-button>
             </el-form>
           </el-collapse-item>
@@ -116,7 +107,7 @@
       @row-dblclick="onRowDoubleClicked"
     >
       <el-table-column
-        label="应用程序"
+        :label="$t('AbpAuditLogging.ApplicationName')"
         prop="applicationName"
         sortable
         width="200px"
@@ -127,7 +118,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="操作用户"
+        :label="$t('AbpAuditLogging.UserName')"
         prop="userName"
         sortable
         width="200px"
@@ -138,7 +129,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="客户端标识"
+        :label="$t('AbpAuditLogging.ClientId')"
         prop="clientId"
         sortable
         width="200px"
@@ -149,7 +140,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="客户端名称"
+        :label="$t('AbpAuditLogging.ClientName')"
         prop="clientName"
         sortable
         width="200px"
@@ -160,7 +151,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="客户端地址"
+        :label="$t('AbpAuditLogging.ClientIpAddress')"
         prop="clientIpAddress"
         sortable
         width="200px"
@@ -171,7 +162,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="认证服务器"
+        :label="$t('AbpAuditLogging.Identity')"
         prop="identity"
         sortable
         width="200px"
@@ -182,7 +173,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="方法名称"
+        :label="$t('AbpAuditLogging.ActionName')"
         prop="action"
         sortable
         width="200px"
@@ -205,7 +196,7 @@
             type="primary"
             @click="handleShowSecurityLogDialog(row)"
           >
-            查看日志
+            {{ $t('AbpAuditLogging.ShowLogDialog') }}
           </el-button>
           <el-button
             :disabled="!checkPermission(['AbpAuditing.SecurityLog.Delete'])"
@@ -213,7 +204,7 @@
             type="danger"
             @click="handleDeleteSecurityLog(row.id)"
           >
-            删除日志
+            {{ $t('AbpAuditLogging.DeleteLog') }}
           </el-button>
         </template>
       </el-table-column>
@@ -273,12 +264,12 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleDeleteSecurityLog(id: string) {
-    this.$confirm('是否要删除选定的安全日志记录?',
-      '删除安全日志', {
+    this.$confirm(this.l('questingDeleteByMessage', { message: id }),
+      this.l('AbpAuditLogging.DeleteLog'), {
         callback: (action) => {
           if (action === 'confirm') {
             AuditingService.deleteSecurityLog(id).then(() => {
-              this.$message.success('删除成功!')
+              this.$message.success(this.l('successful'))
               this.refreshPagedData()
             })
           }

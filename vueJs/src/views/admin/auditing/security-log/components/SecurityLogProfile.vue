@@ -3,16 +3,16 @@
     <el-form label-width="100px">
       <el-tabs v-model="activedTabItem">
         <el-tab-pane
-          label="应用信息"
+          :label="$t('AbpAuditLogging.Application')"
           name="application"
         >
-          <el-form-item label="应用名称">
+          <el-form-item :label="$t('AbpAuditLogging.ApplicationName')">
             <el-input
               v-model="securityLog.applicationName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="租户名称">
+          <el-form-item :label="$t('AbpAuditLogging.TenantName')">
             <el-input
               v-model="securityLog.tenantName"
               readonly
@@ -20,40 +20,40 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          label="用户信息"
+          :label="$t('AbpAuditLogging.UserInfo')"
           name="userInfo"
         >
-          <el-form-item label="用户标识">
+          <el-form-item :label="$t('AbpAuditLogging.UserId')">
             <el-input
               v-model="securityLog.userId"
               readonly
             />
           </el-form-item>
-          <el-form-item label="用户名称">
+          <el-form-item :label="$t('AbpAuditLogging.UserName')">
             <el-input
               v-model="securityLog.userName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端标识">
+          <el-form-item :label="$t('AbpAuditLogging.ClientId')">
             <el-input
               v-model="securityLog.clientId"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端名称">
+          <el-form-item :label="$t('AbpAuditLogging.ClientName')">
             <el-input
               v-model="securityLog.clientName"
               readonly
             />
           </el-form-item>
-          <el-form-item label="客户端地址">
+          <el-form-item :label="$t('AbpAuditLogging.ClientIpAddress')">
             <el-input
               v-model="securityLog.clientIpAddress"
               readonly
             />
           </el-form-item>
-          <el-form-item label="浏览器信息">
+          <el-form-item :label="$t('AbpAuditLogging.BrowserInfo')">
             <el-input
               v-model="securityLog.browserInfo"
               type="textarea"
@@ -62,22 +62,22 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          label="操作信息"
+          :label="$t('AbpAuditLogging.Operation')"
           name="operation"
         >
-          <el-form-item label="主体名称">
+          <el-form-item :label="$t('AbpAuditLogging.Identity')">
             <el-input
               v-model="securityLog.identity"
               readonly
             />
           </el-form-item>
-          <el-form-item label="方法名称">
+          <el-form-item :label="$t('AbpAuditLogging.ActionName')">
             <el-input
               v-model="securityLog.action"
               readonly
             />
           </el-form-item>
-          <el-form-item label="创建时间">
+          <el-form-item :label="$t('AbpAuditLogging.CreationTime')">
             <el-input
               :value="getFormatDateTime(securityLog.creationTime)"
               readonly
@@ -86,7 +86,7 @@
         </el-tab-pane>
         <el-tab-pane
           v-if="hasExtraProperties"
-          label="附加信息"
+          :label="$t('AbpAuditLogging.Additional')"
           name="extraProperties"
         >
           <el-form-item

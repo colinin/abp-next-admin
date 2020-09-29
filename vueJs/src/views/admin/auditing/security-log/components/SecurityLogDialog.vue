@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible="showDialog"
-    title="安全日志"
+    :title="$t('AbpAuditLogging.SecurityLog')"
     width="800px"
     :close-on-click-modal="true"
     @close="onFormClosed"
