@@ -136,7 +136,7 @@
               v-for="(action, index) in getActions"
               :key="index"
               :timestamp="getFormatDateTime(action.executionTime)"
-              :type="auditLog.httpStatusCode | httpStatusCodeFilter"
+              :type="auditLog.httpStatusCode | httpStatusCodeTimelineFilter"
               placement="top"
             >
               <el-card>
@@ -162,6 +162,100 @@
                   <json-editor
                     :value="getFormatJsonValue(action.parameters)"
                   />
+                </el-form-item>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
+        </el-tab-pane>
+        <el-tab-pane
+          v-if="getEntitiesChanges.length > 0"
+          label="实体变更"
+          name="entitiesChanged"
+          style="height:300px;overflow-y:auto;overflow-x:hidden;"
+        >
+          <el-timeline>
+            <el-timeline-item
+              v-for="(entity, index) in getEntitiesChanges"
+              :key="index"
+              :timestamp="getFormatDateTime(entity.changeTime)"
+              :type="entity.changeType | entityChangeTypeTimelineFilter"
+              placement="top"
+            >
+              <el-card>
+                <el-form-item label="变更类型">
+                  <el-input
+                    :value="entity.changeType | entityChangeTypeNameFilter"
+                    readonly
+                  />
+                </el-form-item>
+                <el-form-item label="实体类型">
+                  <el-input
+                    v-model="entity.entityTypeFullName"
+                    readonly
+                  />
+                </el-form-item>
+                <el-form-item label="实体标识">
+                  <el-input
+                    v-model="entity.entityId"
+                    readonly
+                  />
+                </el-form-item>
+                <el-form-item label="租户标识">
+                  <el-input
+                    v-model="entity.entityTenantId"
+                    readonly
+                  />
+                </el-form-item>
+                <el-form-item label="属性变更">
+                  <el-table
+                    row-key="id"
+                    :data="entity.propertyChanges"
+                    border
+                    fit
+                    highlight-current-row
+                    style="width: 100%;"
+                  >
+                    <el-table-column
+                      label="属性名称"
+                      prop="propertyName"
+                      sortable
+                      width="200px"
+                    >
+                      <template slot-scope="{row}">
+                        <span>{{ row.propertyName }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="当前值"
+                      prop="newValue"
+                      sortable
+                      width="320px"
+                    >
+                      <template slot-scope="{row}">
+                        <span>{{ row.newValue }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="原始值"
+                      prop="originalValue"
+                      sortable
+                      width="320px"
+                    >
+                      <template slot-scope="{row}">
+                        <span>{{ row.originalValue }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="属性类型"
+                      prop="propertyTypeFullName"
+                      sortable
+                      width="500px"
+                    >
+                      <template slot-scope="{row}">
+                        <span>{{ row.propertyTypeFullName }}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
                 </el-form-item>
               </el-card>
             </el-timeline-item>
@@ -204,9 +298,20 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import AuditingService, { Action, AuditLog } from '@/api/auditing'
+import AuditingService, { Action, AuditLog, EntityChange, ChangeType } from '@/api/auditing'
 import { dateFormat } from '@/utils'
 import JsonEditor from '@/components/JsonEditor/index.vue'
+
+const entityChangeTypeNameMap: { [key: number]: string } = {
+  [ChangeType.Created]: '新增',
+  [ChangeType.Updated]: '修改',
+  [ChangeType.Deleted]: '删除'
+}
+const entityChangeTypeTimelineMap: { [key: number]: string } = {
+  [ChangeType.Created]: 'success',
+  [ChangeType.Updated]: 'warning',
+  [ChangeType.Deleted]: 'danger'
+}
 
 @Component({
   name: 'AuditLogProfile',
@@ -214,7 +319,7 @@ import JsonEditor from '@/components/JsonEditor/index.vue'
     JsonEditor
   },
   filters: {
-    httpStatusCodeFilter(httpStatusCode: number) {
+    httpStatusCodeTimelineFilter(httpStatusCode: number) {
       if (httpStatusCode >= 200 && httpStatusCode < 300) {
         return 'success'
       }
@@ -225,6 +330,12 @@ import JsonEditor from '@/components/JsonEditor/index.vue'
         return 'danger'
       }
       return 'primary'
+    },
+    entityChangeTypeNameFilter(type: ChangeType) {
+      return entityChangeTypeNameMap[type]
+    },
+    entityChangeTypeTimelineFilter(type: ChangeType) {
+      return entityChangeTypeTimelineMap[type]
     }
   },
   computed: {
@@ -276,9 +387,27 @@ export default class extends Vue {
 
   get getActions() {
     if (this.auditLog.actions && this.auditLog.actions.length > 0) {
-      return this.auditLog.actions.reverse()
+      return this.sortByDateTime(this.auditLog.actions, 'executionTime')
     }
     return new Array<Action>()
+  }
+
+  get getEntitiesChanges() {
+    if (this.auditLog.entityChanges && this.auditLog.entityChanges.length > 0) {
+      return this.sortByDateTime(this.auditLog.entityChanges, 'changeTime')
+    }
+    return new Array<EntityChange>()
+  }
+
+  private sortByDateTime(array: Array<any>, sortField: string) {
+    return array.sort((obj1, obj2) => {
+      if (obj1[sortField] && obj2[sortField]) {
+        const time1 = new Date(obj1[sortField])
+        const time2 = new Date(obj2[sortField])
+        return time1.getTime() - time2.getTime()
+      }
+      return 0
+    })
   }
 }
 </script>

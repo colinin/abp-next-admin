@@ -158,6 +158,21 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="响应时间"
+        prop="executionDuration"
+        sortable
+        width="130px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <el-tag
+            :type="row.executionDuration | executionDurationFilter"
+          >
+            {{ row.executionDuration }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="状态码"
         prop="httpStatusCode"
         sortable
@@ -312,6 +327,20 @@ const statusMap: { [key: string]: string } = {
         return 'danger'
       }
       return ''
+    },
+    executionDurationFilter(executionDuration: number) {
+      if (executionDuration < 100) {
+        return 'success'
+      }
+      if (executionDuration < 500) {
+        return 'primary'
+      }
+      if (executionDuration < 1000) {
+        return 'warning'
+      }
+      if (executionDuration > 1000) {
+        return 'danger'
+      }
     }
   },
   methods: {
@@ -361,7 +390,7 @@ export default class extends mixins(DataListMiXin) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .data-filter-collapse-title {
   font-size: 15px;
 }

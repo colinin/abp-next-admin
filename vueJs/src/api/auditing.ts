@@ -82,6 +82,12 @@ export class SecurityLog {
   extraProperties?: {[key: string]: any}
 }
 
+export enum ChangeType {
+  Created = 0,
+  Updated = 1,
+  Deleted = 2
+}
+
 export class PropertyChange {
   id!: string
   newValue?: string
@@ -93,7 +99,7 @@ export class PropertyChange {
 export class EntityChange {
   id!: string
   changeTime?: Date
-  changeType?: number
+  changeType?: ChangeType
   entityTenantId?: string
   entityId?: string
   entityTypeFullName?: string
@@ -106,7 +112,7 @@ export class Action {
   serviceName?: string
   methodName?: string
   parameters?: string
-  executionTime?: Date
+  executionTime!: Date
   executionDuration?: number
   extraProperties?: {[key: string]: any}
 }

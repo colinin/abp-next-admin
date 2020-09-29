@@ -24,6 +24,7 @@ using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
@@ -150,6 +151,18 @@ namespace LINGYUN.Abp.IdentityServer4
                 options.DefaultReceiveEmail = "colin.in@foxmail.com";
             });
 
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = "Identity-Server-Admin";
+                // 是否启用实体变更记录
+                var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
+                if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
+                {
+                    options
+                    .EntityHistorySelectors
+                    .AddAllEntities();
+                }
+            });
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
