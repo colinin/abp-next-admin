@@ -6,13 +6,13 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.RulesEngine
 {
     [DependsOn(
-        typeof(AbpRulesEngineModule),
+        typeof(AbpRulesModule),
         typeof(AbpAutoMapperModule))]
-    public class AbpMsRulesEngineModule : AbpModule
+    public class AbpRulesEngineModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<AbpMsRulesEngineModule>();
+            context.Services.AddAutoMapperObjectMapper<AbpRulesEngineModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<MsRulesEngineMapperProfile>(validate: true);
