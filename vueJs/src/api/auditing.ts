@@ -9,7 +9,7 @@ export default class AuditingService {
     const _url = '/api/auditing/audit-log/' + id
     return ApiService.Get<AuditLog>(_url, serviceUrl)
   }
-  
+
   public static getAuditLogs(payload: AuditLogGetPaged) {
     let _url = '/api/auditing/audit-log?'
     payload.skipCount = abpPagerFormat(payload.skipCount, payload.maxResultCount)

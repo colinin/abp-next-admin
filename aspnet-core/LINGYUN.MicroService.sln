@@ -233,11 +233,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.Application.Contracts", "modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj", "{F40F88F1-CA90-4A79-B772-80E287E25982}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Auditing.Application.Contracts", "modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj", "{F40F88F1-CA90-4A79-B772-80E287E25982}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.Application", "modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj", "{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Auditing.Application", "modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj", "{AC3C8985-73C2-472A-8E76-A0B8786FEC3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.HttpApi", "modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj", "{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Auditing.HttpApi", "modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj", "{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules", "modules\common\LINGYUN.Abp.Rules\LINGYUN.Abp.Rules.csproj", "{8ACB30CF-2311-4C0A-AE79-92C1A7667353}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngine", "modules\common\LINGYUN.Abp.RulesEngine\LINGYUN.Abp.RulesEngine.csproj", "{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -633,6 +637,14 @@ Global
 		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ACB30CF-2311-4C0A-AE79-92C1A7667353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ACB30CF-2311-4C0A-AE79-92C1A7667353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ACB30CF-2311-4C0A-AE79-92C1A7667353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ACB30CF-2311-4C0A-AE79-92C1A7667353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -753,6 +765,8 @@ Global
 		{F40F88F1-CA90-4A79-B772-80E287E25982} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
 		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
 		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
+		{8ACB30CF-2311-4C0A-AE79-92C1A7667353} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{FD007B55-A0F1-4EF8-9CFD-6D8AD1B61B65} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

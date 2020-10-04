@@ -67,10 +67,7 @@ services:
 
   abp-vue-admin-client:
     build:
-      context: ./vueJs
-    volumes: 
-      - /var/opt/abp/data/client/nginx:/etc/nginx/nginx.conf
-      - /var/opt/abp/data/client/nginx/conf.d:/etc/nginx/conf.d/default.conf
+      context: ./aspnet-core/services/Publish/client
     restart: always
     
 volumes:

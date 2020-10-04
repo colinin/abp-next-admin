@@ -97,7 +97,7 @@
 
     <el-table
       v-loading="dataLoading"
-      row-key="itemId"
+      row-key="id"
       :data="dataList"
       border
       fit
