@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Rules
 {
     [DependsOn(
         typeof(AbpDddDomainModule))]
-    public class AbpRulesEngineModule : AbpModule
+    public class AbpRulesModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
