@@ -95,7 +95,8 @@ export default class extends Vue {
   }
 
   get name() {
-    return UserModule.name
+    console.log(navigator)
+    return UserModule.name ?? UserModule.userName
   }
 
   private toggleSideBar() {

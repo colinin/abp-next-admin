@@ -1,6 +1,6 @@
 import store from '@/store'
 import i18n from '@/lang/index'
-import { getItemJson, setItem } from '@/utils/localStorage'
+import { getOrDefault, setItem } from '@/utils/localStorage'
 import AbpConfigurationService, { IAbpConfiguration, AbpConfiguration as AbpConfig } from '@/api/abpconfiguration'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 
@@ -12,7 +12,7 @@ const abpConfigurationKey = 'vue_admin_abp_configuration'
 
 @Module({ dynamic: true, store, name: 'abp' })
 class AbpConfiguration extends VuexModule implements IAbpState {
-  configuration = getItemJson(abpConfigurationKey) || new AbpConfig()
+  configuration = getOrDefault(abpConfigurationKey, new AbpConfig())
 
   @Mutation
   private SET_ABPCONFIGURATION(configuration: IAbpConfiguration) {
@@ -22,8 +22,9 @@ class AbpConfiguration extends VuexModule implements IAbpState {
 
   @Mutation
   private SET_ABPLOCALIZER(configuration: IAbpConfiguration) {
-    const { twoLetterIsoLanguageName } = configuration.localization.currentCulture
-    const resources: { [key: string]: any} = {}
+    const { cultureName } = configuration.localization.currentCulture
+    const localeMessage = i18n.getLocaleMessage(cultureName)
+    // const resources: { [key: string]: any} = {}
     Object.keys(configuration.localization.values).forEach(key => {
       const resource = configuration.localization.values[key]
       if (typeof resource !== 'object') return
@@ -32,16 +33,24 @@ class AbpConfiguration extends VuexModule implements IAbpState {
           resource[key2] = resource[key2].replace(/'{|{/g, '{').replace(/}'|}/g, '}')
         }
       })
-      resources[key] = resource
+      localeMessage[key] = resource
+      // resources[key] = resource
     })
-    i18n.mergeLocaleMessage(twoLetterIsoLanguageName, resources)
+    i18n.setLocaleMessage(cultureName, localeMessage)
+    // i18n.mergeLocaleMessage(cultureName, resources)
   }
 
   @Action({ rawError: true })
-  public async LoadAbpConfiguration() {
-    const config = await AbpConfigurationService.getAbpConfiguration()
-    this.SET_ABPCONFIGURATION(config)
-    this.SET_ABPLOCALIZER(config)
+  public LoadAbpConfiguration() {
+    return new Promise<AbpConfig>((resolve, reject) => {
+      AbpConfigurationService.getAbpConfiguration().then(config => {
+        this.SET_ABPCONFIGURATION(config)
+        this.SET_ABPLOCALIZER(config)
+        return resolve(config)
+      }).catch(error => {
+        return reject(error)
+      })
+    })
   }
 }
 

@@ -34,9 +34,9 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
       // Check whether the user has obtained his permission roles
       if (PermissionModule.authorizedPermissions.length === 0) {
         try {
-          const { sub } = await UserModule.GetUserInfo()
-          // Generate accessible routes map based on role
-          await PermissionModule.GenerateRoutes(sub)
+          UserModule.RefreshCurrentUser()
+
+          await PermissionModule.GenerateRoutes()
           // Dynamically add accessible routes
           router.addRoutes(PermissionModule.dynamicRoutes)
           // Hack: ensure addRoutes is complete

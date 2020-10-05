@@ -31,14 +31,14 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
-    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="3.1.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>

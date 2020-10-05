@@ -35,7 +35,7 @@
                 type="text"
                 auto-complete="off"
                 tabindex="1"
-                :placeholder="$t('global.pleaseInputBy', {key: $t('login.username')})"
+                :placeholder="$t('global.pleaseInputBy', {key: $t('AbpAccount.UserNameOrEmailAddress')})"
               />
             </el-form-item>
             <el-form-item
@@ -47,7 +47,7 @@
                 v-model="loginForm.password"
                 prefix-icon="el-icon-lock"
                 :type="passwordType"
-                :placeholder="$t('global.pleaseInputBy', {key: $t('login.password')})"
+                :placeholder="$t('global.pleaseInputBy', {key: $t('AbpAccount.Password')})"
                 name="password"
                 tabindex="2"
                 @keyup.enter.native="handleUserLogin"
@@ -110,26 +110,26 @@
           <el-form-item
             v-show="selfRegistration"
             label-width="100px"
-            :label="$t('login.notAccount')"
+            :label="$t('AbpAccount.AreYouANewUser')"
           >
             <el-link
               type="success"
               @click="handleRedirectRegister"
             >
-              {{ $t('login.register') }}
+              {{ $t('AbpAccount.Register') }}
             </el-link>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item
             label-width="100px"
-            :label="$t('login.forgotPassword')"
+            :label="$t('AbpAccount.ForgotPassword')"
           >
             <el-link
               type="info"
               @click="handleRedirectResetPassword"
             >
-              {{ $t('login.resetpassword') }}
+              {{ $t('AbpAccount.ResetPassword') }}
             </el-link>
           </el-form-item>
         </el-col>
@@ -142,7 +142,7 @@
           :loading="logining"
           @click="handleUserLogin"
         >
-          {{ $t('login.logIn') }}
+          {{ $t('AbpAccount.Login') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -177,7 +177,7 @@ export default class extends Vue {
   private sendButtonName = this.l('login.sendVerifyCode')
   private logining = false
   private loginForm = {
-    tenantName: '',
+    tenantName: AbpModule.configuration?.currentTenant?.name,
     username: '',
     password: '',
     phoneNumber: '',
@@ -189,9 +189,9 @@ export default class extends Vue {
   }
 
   get selfRegistration() {
-    const selfRegister = AbpModule.configuration.setting.values['Abp.Account.IsSelfRegistrationEnabled']
-    if (selfRegister) {
-      return selfRegister === 'true'
+    const settingValues = AbpModule.configuration?.setting?.values
+    if (settingValues && settingValues['Abp.Account.IsSelfRegistrationEnabled'] === true) {
+      return true
     }
     return false
   }
@@ -208,12 +208,12 @@ export default class extends Vue {
   private loginFormRules = {
     username: [
       {
-        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.username') }), trigger: 'blur'
+        required: true, message: this.l('global.pleaseInputBy', { key: this.l('AbpAccount.UserNameOrEmailAddress') }), trigger: 'blur'
       }
     ],
     password: [
       {
-        required: true, message: this.l('global.pleaseInputBy', { key: this.l('login.password') }), trigger: 'blur'
+        required: true, message: this.l('global.pleaseInputBy', { key: this.l('AbpAccount.Password') }), trigger: 'blur'
       }
     ],
     phoneNumber: [
@@ -271,7 +271,6 @@ export default class extends Vue {
         try {
           if (this.loginType === 'password') {
             const userLogin = {
-              tenantName: this.loginForm.tenantName,
               username: this.loginForm.username,
               password: this.loginForm.password
             }
@@ -281,7 +280,6 @@ export default class extends Vue {
             })
           } else {
             const phoneLogin = {
-              tenantName: this.loginForm.tenantName,
               phoneNumber: this.loginForm.phoneNumber,
               verifyCode: this.loginForm.verifyCode
             }

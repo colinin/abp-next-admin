@@ -32,6 +32,19 @@ export interface ITransactionData {
   status: string
 }
 
+export interface INameValue<T> {
+  name: string
+  value: T
+}
+
+export interface IAvailable {
+  isAvailable: boolean
+}
+
+export class Available implements IAvailable {
+  isAvailable!: boolean
+}
+
 export interface IUserData {
   id: number
   username: string
