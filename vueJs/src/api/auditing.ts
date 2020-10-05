@@ -1,4 +1,4 @@
-import { urlStringify, abpPagerFormat } from '@/utils/index'
+import { urlStringify } from '@/utils/index'
 import ApiService from './serviceBase'
 import { PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
@@ -12,7 +12,6 @@ export default class AuditingService {
 
   public static getAuditLogs(payload: AuditLogGetPaged) {
     let _url = '/api/auditing/audit-log?'
-    payload.skipCount = abpPagerFormat(payload.skipCount, payload.maxResultCount)
     _url += urlStringify(payload)
     return ApiService.Get<PagedResultDto<AuditLog>>(_url, serviceUrl)
   }
@@ -29,7 +28,6 @@ export default class AuditingService {
 
   public static getSecurityLogs(payload: SecurityLogGetPaged) {
     let _url = '/api/auditing/security-log?'
-    payload.skipCount = abpPagerFormat(payload.skipCount, payload.maxResultCount)
     _url += urlStringify(payload)
     return ApiService.Get<PagedResultDto<SecurityLog>>(_url, serviceUrl)
   }

@@ -107,7 +107,6 @@ export default class extends Vue {
   }
 
   private remove(index: number) {
-    console.log(index)
     this.scopes.splice(index, 1)
     this.tagChange()
   }

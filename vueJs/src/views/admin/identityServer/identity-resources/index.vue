@@ -161,50 +161,29 @@
     <Pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditIdentityResourceDialog"
+    <identity-resource-create-or-edit-form
+      :show-dialog="showEditIdentityResourceDialog"
       :title="editIdentityResourceTitle"
-      custom-class="modal-form"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      :identity-resource-id="editIdentityResource.id"
       @closed="handleIdentityResourceEditFormClosed"
-    >
-      <IdentityResourceCreateOrEditForm
-        ref="formIdentityResource"
-        :identity-resource-id="editIdentityResource.id"
-        @closed="handleIdentityResourceEditFormClosed"
-      />
-    </el-dialog>
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditIdentityPropertyDialog"
-      :title="$t('identityServer.identityResourceProperties')"
-      custom-class="modal-form"
-      :show-close="false"
+    <identity-property-edit-form
+      :show-dialog="showEditIdentityPropertyDialog"
+      :identity-resource="editIdentityResource"
       @closed="handleIdentityPropertyEditFormClosed"
-    >
-      <IdentityPropertyEditForm
-        ref="formIdentityProperty"
-        :identity-resource="editIdentityResource"
-        @closed="handleIdentityPropertyEditFormClosed"
-      />
-    </el-dialog>
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { dateFormat } from '@/utils/index'
+import { dateFormat, abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
@@ -249,6 +228,10 @@ export default class extends mixins(DataListMiXin) {
     this.refreshPagedData()
   }
 
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
+  }
+
   protected getPagedList(filter: any) {
     return IdentityResourceService.getIdentityResources(filter)
   }
@@ -287,9 +270,9 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleCommand(command: {key: string, row: IdentityResource}) {
-    this.editIdentityResource = command.row
     switch (command.key) {
       case 'property' :
+        this.editIdentityResource = command.row
         this.showEditIdentityPropertyDialog = true
         break
       case 'delete' :

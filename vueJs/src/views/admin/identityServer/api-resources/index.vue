@@ -167,66 +167,39 @@
     <Pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditApiResourceDialog"
+    <api-resource-create-or-edit-form
+      :show-dialog="showEditApiResourceDialog"
       :title="editApiResourceTitle"
-      custom-class="modal-form"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <ApiResourceCreateOrEditForm
-        :api-resource-id="editApiResource.id"
-        @closed="handleApiResourceEditFormClosed"
-      />
-    </el-dialog>
+      :api-resource-id="editApiResource.id"
+      @closed="handleApiResourceEditFormClosed"
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditApiSecretDialog"
-      :title="$t('identityServer.apiResourceSecret')"
-      custom-class="modal-form"
-      :show-close="false"
+    <api-secret-edit-form
+      :show-dialog="showEditApiSecretDialog"
+      :api-resource-id="editApiResource.id"
+      :api-secrets="editApiResource.secrets"
+      @apiSecretChanged="refreshPagedData"
       @closed="handleApiSecretEditFormClosed"
-    >
-      <ApiSecretEditForm
-        ref="formApiSecret"
-        :api-resource-id="editApiResource.id"
-        :api-secrets="editApiResource.secrets"
-        @apiSecretChanged="refreshPagedData"
-      />
-    </el-dialog>
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditApiScopeDialog"
-      :title="$t('identityServer.apiResourceScope')"
-      custom-class="modal-form"
-      :show-close="false"
+    <api-scope-edit-form
+      :show-dialog="showEditApiScopeDialog"
+      :api-resource-id="editApiResource.id"
+      :api-scopes="editApiResource.scopes"
+      @apiSecretChanged="refreshPagedData"
       @closed="handleApiScopeEditFormClosed"
-    >
-      <ApiScopeEditForm
-        ref="formApiScope"
-        :api-resource-id="editApiResource.id"
-        :api-scopes="editApiResource.scopes"
-        @apiSecretChanged="refreshPagedData"
-      />
-    </el-dialog>
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { dateFormat } from '@/utils/index'
+import { dateFormat, abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
@@ -277,6 +250,10 @@ export default class extends mixins(DataListMiXin) {
     this.refreshPagedData()
   }
 
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
+  }
+
   protected getPagedList(filter: any) {
     return ApiResourceService.getApiResources(filter)
   }
@@ -294,7 +271,6 @@ export default class extends mixins(DataListMiXin) {
 
   private handleApiResourceEditFormClosed(changed: boolean) {
     this.editApiResourceTitle = ''
-    this.editApiResource = ApiResource.empty()
     this.showEditApiResourceDialog = false
     if (changed) {
       this.refreshPagedData()
@@ -303,14 +279,10 @@ export default class extends mixins(DataListMiXin) {
 
   private handleApiSecretEditFormClosed() {
     this.showEditApiSecretDialog = false
-    const frmApiSecret = this.$refs.formApiSecret as ApiSecretEditForm
-    frmApiSecret.resetFields()
   }
 
   private handleApiScopeEditFormClosed() {
     this.showEditApiScopeDialog = false
-    const frmApiScope = this.$refs.formApiScope as ApiScopeEditForm
-    frmApiScope.resetFields()
   }
 
   private handleDeleteApiResource(id: string, name: string) {

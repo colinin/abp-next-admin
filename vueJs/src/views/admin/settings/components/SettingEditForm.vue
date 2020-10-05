@@ -6,7 +6,7 @@
       label-width="180px"
       style="width: 96%"
     >
-      <el-tabs>
+      <el-tabs :tab-position="tabPosition">
         <el-tab-pane
           v-if="hasSettingExistsed('Abp.Localization.DefaultLanguage')"
           :label="$t('settings.systemSetting')"
@@ -716,6 +716,9 @@ const booleanStrings = ['True', 'true', 'False', 'false']
 export default class extends Vue {
   @Prop({ default: () => { return Array<Setting>() } })
   private settings!: Setting[]
+
+  @Prop({ default: 'top' })
+  private tabPosition!: 'left' | 'right' | 'top' | 'bottom'
 
   private setting: {[key: string]: Setting} = {}
 

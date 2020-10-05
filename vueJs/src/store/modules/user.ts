@@ -73,7 +73,6 @@ class User extends VuexModule implements IUserState {
     this.SET_TOKEN(token)
     this.SET_REFRESHTOKEN(loginResult.refresh_token)
     await this.PostLogin()
-    console.log(this.token)
   }
 
   @Action({ rawError: true })

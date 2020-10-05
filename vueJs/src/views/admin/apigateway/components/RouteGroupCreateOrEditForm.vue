@@ -117,7 +117,6 @@ export default class extends Vue {
   private handleAppIdChange(val: any) {
     if (val) {
       ApiGateWayService.getRouteGroupByAppId(val).then(router => {
-        console.log(router)
         this.apiGateWayRouteGroup = router
       })
     }

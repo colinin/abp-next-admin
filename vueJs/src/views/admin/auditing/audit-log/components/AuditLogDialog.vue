@@ -3,6 +3,7 @@
     :visible="showDialog"
     :title="$t('AbpAuditLogging.AuditLog')"
     width="800px"
+    custom-class="modal-form"
     :close-on-click-modal="true"
     @close="onFormClosed"
   >

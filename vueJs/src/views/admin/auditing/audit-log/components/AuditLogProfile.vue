@@ -131,7 +131,7 @@
           name="methodInvoke"
           style="height:300px;overflow-y:auto;overflow-x:hidden;"
         >
-          <el-timeline>
+          <el-timeline class="timeline-card">
             <el-timeline-item
               v-for="(action, index) in getActions"
               :key="index"
@@ -173,7 +173,7 @@
           name="entitiesChanged"
           style="height:300px;overflow-y:auto;overflow-x:hidden;"
         >
-          <el-timeline>
+          <el-timeline class="timeline-card">
             <el-timeline-item
               v-for="(entity, index) in getEntitiesChanges"
               :key="index"
@@ -415,4 +415,7 @@ export default class extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.timeline-card {
+  margin: 5px;
+}
 </style>

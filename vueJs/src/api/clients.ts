@@ -1,5 +1,4 @@
 import ApiService from './serviceBase'
-import { pagerFormat } from '@/utils/index'
 import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
 const serviceUrl = process.env.VUE_APP_BASE_API
@@ -15,8 +14,7 @@ export default class ClientService {
     let _url = '/api/IdentityServer/Clients'
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    // 因为abp设计的原因, 需要前端组合页面
-    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<Client>>(_url, serviceUrl)
   }

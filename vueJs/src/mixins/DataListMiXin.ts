@@ -10,12 +10,27 @@ export default class DataListMiXin extends Vue {
   public dataList = new Array<any>()
   /** 数据总数 */
   public dataTotal = 0
+  /** 当前页码 */
+  public currentPage = 1
   /** 是否正在加载数据 */
   public dataLoading = false
   /** 查询过滤器
    *如果继承自分页查询接口的其他过滤类型,需要重写初始化类型
    */
   public dataFilter = new PagedAndSortedResultRequestDto()
+  /** 页大小 */
+  get pageSize() {
+    return this.dataFilter.maxResultCount
+  }
+
+  set pageSize(value: number) {
+    this.dataFilter.maxResultCount = value
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = this.currentPage
+    this.dataFilter.maxResultCount = this.pageSize
+  }
 
   /**
    * 刷新数据
@@ -39,6 +54,7 @@ export default class DataListMiXin extends Vue {
     this.dataLoading = true
     // 这里还可以处理对于过滤器的变动
     // 例如 abp 框架的skipCount区别于常见的pageNumber
+    this.processDataFilter()
     this.getPagedList(this.dataFilter)
       .then(res => {
         this.dataList = res.items
@@ -64,6 +80,12 @@ export default class DataListMiXin extends Vue {
     })
   }
 
+  /** 重置列表数据 */
+  protected resetList() {
+    this.currentPage = 1
+    this.refreshData()
+  }
+
   /**
    * 重写以执行具体查询分页数据逻辑
    * @param filter 查询过滤器
@@ -78,6 +100,12 @@ export default class DataListMiXin extends Vue {
     return new Promise<PagedResultDto<any>>((resolve) => {
       return resolve(new PagedResultDto<any>())
     })
+  }
+
+  /** 重置分页数据 */
+  protected resetPagedList() {
+    this.currentPage = 1
+    this.refreshPagedData()
   }
 
   /**

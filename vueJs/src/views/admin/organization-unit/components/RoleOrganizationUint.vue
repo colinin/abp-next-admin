@@ -60,14 +60,15 @@
     <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
     />
   </div>
 </template>
 
 <script lang="ts">
+import { abpPagerFormat } from '@/utils'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import { Prop, Watch } from 'vue-property-decorator'
 import Component, { mixins } from 'vue-class-component'
@@ -93,6 +94,10 @@ export default class extends mixins(DataListMiXin) {
       this.dataFilter.id = this.organizationUnitId
       this.refreshPagedData()
     }
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   protected getPagedList(filter: any) {

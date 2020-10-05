@@ -144,43 +144,23 @@
     <Pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showCreateOrEditTenantDialog"
-      :title="$t('tenant.updateTenant')"
-      custom-class="modal-form"
-      :show-close="false"
+    <tenant-create-or-edit-form
+      :show-dialog="showCreateOrEditTenantDialog"
+      :tenant-id="editTenantId"
       @closed="handleCreateOrEditTenantFormClosed"
-    >
-      <TenantCreateOrEditForm
-        ref="formCreateOrEditTenant"
-        :tenant-id="editTenantId"
-        @closed="handleCreateOrEditTenantFormClosed"
-      />
-    </el-dialog>
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditTenantConnectionDialog"
-      :title="$t('tenant.connectionOptions')"
-      custom-class="modal-form"
-      :show-close="false"
+    <tenant-connection-edit-form
+      :show-dialog="showEditTenantConnectionDialog"
+      :tenant-id="editTenantId"
       @closed="handleTenantConnectionEditFormClosed"
-    >
-      <TenantEditConnectionForm
-        ref="formEditTenantConnection"
-        :tenant-id="editTenantId"
-        @closed="handleTenantConnectionEditFormClosed"
-      />
-    </el-dialog>
+    />
 
     <tenant-feature-editForm
       :show-dialog="showFeatureEditFormDialog"
@@ -194,12 +174,12 @@
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant-management'
-import { dateFormat } from '@/utils/index'
+import { dateFormat, abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
 import TenantFeatureEditForm from './components/TenantFeatureEditForm.vue'
 import TenantCreateOrEditForm from './components/TenantCreateOrEditForm.vue'
-import TenantEditConnectionForm from './components/TenantEditConnectionForm.vue'
+import TenantConnectionEditForm from './components/TenantConnectionEditForm.vue'
 
 @Component({
   name: 'RoleList',
@@ -207,7 +187,7 @@ import TenantEditConnectionForm from './components/TenantEditConnectionForm.vue'
     Pagination,
     TenantFeatureEditForm,
     TenantCreateOrEditForm,
-    TenantEditConnectionForm
+    TenantConnectionEditForm
   },
   methods: {
     checkPermission
@@ -229,6 +209,10 @@ export default class extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   protected getPagedList(filter: any) {

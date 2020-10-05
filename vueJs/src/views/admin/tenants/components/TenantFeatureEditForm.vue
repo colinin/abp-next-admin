@@ -3,13 +3,15 @@
     :visible="showDialog"
     :title="$t('AbpTenantManagement.Permission:ManageFeatures')"
     width="800px"
+    custom-class="modal-form"
     :show-close="false"
-    @closed="onFormClosed"
+    @close="onFormClosed"
   >
     <feature-management
       ref="featureManagement"
       provider-name="T"
       :provider-key="tenantId"
+      :load-feature="showDialog"
       @closed="onFormClosed"
     />
   </el-dialog>

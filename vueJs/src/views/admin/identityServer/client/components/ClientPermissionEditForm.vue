@@ -1,38 +1,48 @@
 <template>
-  <el-form
-    ref="formClient"
-    label-width="100px"
-    :model="clientPermission"
-    label-position="top"
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.clientPermission')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed"
   >
-    <el-form-item v-if="hasLoadPermission">
-      <PermissionTree
-        ref="PermissionTree"
-        :expanded="false"
-        :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
-        :permission="clientPermission"
-        @onPermissionChanged="onPermissionChanged"
-      />
-    </el-form-item>
-    <el-form-item>
-      <el-button
-        class="cancel"
-        style="width:100px"
-        @click="onCancel"
-      >
-        {{ $t('table.cancel') }}
-      </el-button>
-      <el-button
-        class="confirm"
-        type="primary"
-        style="width:100px"
-        :disabled="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
-        @click="onSaveClientPemissions"
-      >
-        {{ $t('table.confirm') }}
-      </el-button>
-    </el-form-item>
-  </el-form>
+    <el-form
+      ref="formClient"
+      label-width="100px"
+      :model="clientPermission"
+      label-position="top"
+    >
+      <el-form-item v-if="hasLoadPermission">
+        <permission-tree
+          ref="PermissionTree"
+          :expanded="false"
+          :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+          :permission="clientPermission"
+          @onPermissionChanged="onPermissionChanged"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          class="cancel"
+          style="width:100px"
+          @click="onCancel"
+        >
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button
+          class="confirm"
+          type="primary"
+          style="width:100px"
+          :disabled="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+          @click="onSaveClientPemissions"
+        >
+          {{ $t('table.confirm') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -52,6 +62,9 @@ import PermissionService, { PermissionDto, UpdatePermissionsDto } from '@/api/pe
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   /** 客户端标识 */
   @Prop({ default: '' })
   private clientId!: string
@@ -74,9 +87,17 @@ export default class extends Vue {
   }
 
   /** 监听客户端标识变更事件,刷新客户端权限数据 */
-  @Watch('clientId', { immediate: true })
+  @Watch('clientId')
   private onClientIdChanged() {
-    if (this.clientId) {
+    this.handledGetClientPermissions()
+  }
+
+  mounted() {
+    this.handledGetClientPermissions()
+  }
+
+  private handledGetClientPermissions() {
+    if (this.showDialog && this.clientId) {
       PermissionService.getPermissionsByKey('C', this.clientId).then(permission => {
         this.clientPermission = permission
         this.hasLoadPermission = true
@@ -98,16 +119,18 @@ export default class extends Vue {
       const setClientPermissions = new UpdatePermissionsDto()
       setClientPermissions.permissions = this.editClientPermissions
       PermissionService.setPermissionsByKey('C', this.clientId, setClientPermissions).then(() => {
-        this.onCancel()
+        this.onFormClosed()
       })
     }
   }
 
+  private onFormClosed() {
+    this.$emit('closed')
+  }
+
   /** 取消操作 */
   private onCancel() {
-    const permissionTree = this.$refs.PermissionTree as PermissionTree
-    permissionTree.resetPermissions()
-    this.$emit('closed')
+    this.onFormClosed()
   }
 }
 </script>

@@ -1,6 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.apiResourceScope')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed"
+  >
+    <div class="app-container">
       <el-form
         v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
         ref="formApiScope"
@@ -141,7 +149,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -170,6 +178,9 @@ import ElInputTagEx from '@/components/InputTagEx/index.vue'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   @Prop({ default: '' })
   private apiResourceId!: string
 
@@ -220,11 +231,16 @@ export default class extends Vue {
           this.apiScopes.push(scope)
           const successMessage = this.l('identityServer.createApiScopeSuccess', { name: this.apiScope.name })
           this.$message.success(successMessage)
-          frmApiScope.resetFields()
           this.$emit('apiScopeChanged')
+          this.onFormClosed()
         })
       }
     })
+  }
+
+  private onFormClosed() {
+    this.resetFields()
+    this.$emit('closed')
   }
 
   public resetFields() {

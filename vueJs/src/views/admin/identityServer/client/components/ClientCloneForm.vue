@@ -1,6 +1,16 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.cloneClint')"
+    custom-class="modal-form"
+    :show-close="false"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    @close="onFormClosed"
+  >
+    <div class="app-container">
       <el-form
         ref="formCloneClient"
         label-width="175px"
@@ -117,7 +127,7 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -128,6 +138,9 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
   name: 'ClientCloneForm'
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   @Prop({ default: '' })
   private clientId!: string
 
@@ -163,6 +176,10 @@ export default class extends Vue {
         })
       }
     })
+  }
+
+  private onFormClosed() {
+    this.onCancel()
   }
 
   private onCancel() {

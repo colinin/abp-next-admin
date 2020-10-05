@@ -84,7 +84,7 @@
                 class="filter-item"
                 style="display:block;margin:0 auto; width: 150px;"
                 type="primary"
-                @click="refreshPagedData"
+                @click="resetPagedList"
               >
                 <i class="el-icon-search" />
                 {{ $t('AbpAuditLogging.SecrchLog') }}
@@ -115,6 +115,16 @@
       >
         <template slot-scope="{row}">
           <span>{{ row.applicationName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('AbpAuditLogging.CreationTime')"
+        prop="creationTime"
+        sortable
+        width="200px"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.creationTime | dateTimeFormatFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -213,8 +223,8 @@
     <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
@@ -228,6 +238,7 @@
 </template>
 
 <script lang="ts">
+import { dateFormat, abpPagerFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
 import AuditingService, { SecurityLog, SecurityLogGetPaged } from '@/api/auditing'
 import DataListMiXin from '@/mixins/DataListMiXin'
@@ -241,6 +252,11 @@ import SecurityLogDialog from './components/SecurityLogDialog.vue'
     Pagination,
     SecurityLogDialog
   },
+  filters: {
+    dateTimeFormatFilter(dateTime: Date) {
+      return dateFormat(new Date(dateTime), 'YYYY-mm-dd HH:MM:SS:NS')
+    }
+  },
   methods: {
     checkPermission
   }
@@ -252,6 +268,10 @@ export default class extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   protected getPagedList(filter: any) {

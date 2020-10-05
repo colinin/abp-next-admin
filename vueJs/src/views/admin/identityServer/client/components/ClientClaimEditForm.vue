@@ -1,6 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.clientClaim')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed"
+  >
+    <div class="app-container">
       <el-form
         ref="formClientClaim"
         label-width="100px"
@@ -92,7 +100,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -107,6 +115,9 @@ import { checkPermission } from '@/utils/permission'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   @Prop({ default: '' })
   private clientId!: string
 
@@ -163,6 +174,11 @@ export default class extends Vue {
         })
       }
     })
+  }
+
+  private onFormClosed() {
+    this.resetFields()
+    this.$emit('closed')
   }
 
   public resetFields() {
