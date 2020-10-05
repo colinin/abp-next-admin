@@ -12,16 +12,12 @@
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item
-        :disabled="language==='zh'"
-        command="zh"
+        v-for="language in localization.languages"
+        :key="language.cultureName"
+        :disabled="localization.currentCulture.cultureName === language.cultureName"
+        :command="language.cultureName"
       >
-        中文
-      </el-dropdown-item>
-      <el-dropdown-item
-        :disabled="language==='en'"
-        command="en"
-      >
-        English
+        {{ language.displayName }}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -33,20 +29,22 @@ import { AppModule } from '@/store/modules/app'
 import { AbpModule } from '@/store/modules/abp'
 
 @Component({
-  name: 'Login'
+  name: 'LangSelect'
 })
 export default class extends Vue {
-  get language() {
-    return AppModule.language
+  get localization() {
+    return AbpModule.configuration.localization
   }
 
-  private async handleSetLanguage(lang: string) {
+  private handleSetLanguage(lang: string) {
     AppModule.SetLanguage(lang)
     this.$i18n.locale = lang
-    await AbpModule.LoadAbpConfiguration()
-    this.$message({
-      message: 'Switch Language Success',
-      type: 'success'
+    this.localization.currentCulture.cultureName = lang
+    AbpModule.LoadAbpConfiguration().then(() => {
+      this.$message({
+        message: 'Switch Language Success',
+        type: 'success'
+      })
     })
   }
 }

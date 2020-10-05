@@ -2,7 +2,7 @@ import axios from 'axios'
 import i18n from '@/lang/index'
 import { MessageBox, Notification } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
-import { getTenant } from '@/utils/sessions'
+import { AbpModule } from '@/store/modules/abp'
 import { getLanguage } from '@/utils/cookies'
 
 const service = axios.create({
@@ -14,9 +14,11 @@ const service = axios.create({
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
-    const tenantId = getTenant()
-    if (tenantId) {
-      config.headers.__tenant = tenantId
+    if (AbpModule.configuration) {
+      if (AbpModule.configuration.currentTenant.isAvailable) {
+        config.headers.__tenant = AbpModule.configuration.currentTenant.id
+      }
+      config.headers['Accept-Language'] = AbpModule.configuration.localization?.currentCulture?.cultureName
     }
     // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
     // 顺序调整到token之前

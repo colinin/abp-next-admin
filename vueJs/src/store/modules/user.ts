@@ -1,10 +1,9 @@
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
 import UserApiService, { UserLoginData, UserLoginPhoneData } from '@/api/users'
-import TenantService from '@/api/tenant-management'
+import { CurrentUser } from '@/api/abpconfiguration'
 import { getItem, setItem, removeItem } from '@/utils/localStorage'
 import { resetRouter } from '@/router'
 import { TagsViewModule } from './tags-view'
-import { removeTenant, setTenant } from '@/utils/sessions'
 import { PermissionModule } from '@/store/modules/permission'
 import { AbpModule } from '@/store/modules/abp'
 import store from '@/store'
@@ -12,10 +11,13 @@ import store from '@/store'
 export interface IUserState {
   token: string
   refreshToken: string
-  id: string
-  name: string
+  id: string | undefined
+  name: string | undefined
+  surName: string | undefined
+  userName: string | undefined
+  phoneNumber: string | undefined
   roles: string[]
-  email: string
+  email: string | undefined
 }
 
 const tokenKey = 'vue_typescript_admin_token'
@@ -25,10 +27,13 @@ const refreshTokenKey = 'vue_typescript_admin_refresh_token'
 class User extends VuexModule implements IUserState {
   public token = getItem(tokenKey)
   public refreshToken = getItem(refreshTokenKey)
-  public id = ''
-  public name = ''
-  public roles: string[] = []
-  public email = ''
+  public id: string | undefined = ''
+  public name: string | undefined = ''
+  public surName: string | undefined = ''
+  public userName: string | undefined = ''
+  public phoneNumber: string | undefined = ''
+  public email: string | undefined = ''
+  public roles = new Array<string>()
 
   @Mutation
   private SET_TOKEN(token: string) {
@@ -43,30 +48,23 @@ class User extends VuexModule implements IUserState {
   }
 
   @Mutation
-  private SET_ID(id: string) {
-    this.id = id
-  }
-
-  @Mutation
-  private SET_NAME(name: string) {
-    this.name = name
-  }
-
-  @Mutation
-  private SET_ROLES(roles: string[]) {
-    this.roles = roles
-  }
-
-  @Mutation
-  private SET_EMAIL(email: string) {
-    this.email = email
+  private SET_CURRENTUSERINFO(currentUser: CurrentUser) {
+    this.id = currentUser.id
+    this.name = currentUser.name
+    this.email = currentUser.email
+    this.surName = currentUser.surName
+    this.userName = currentUser.userName
+    this.phoneNumber = currentUser.phoneNumber
+    this.roles = currentUser.roles
   }
 
   @Action({ rawError: true })
-  public async Login(userInfo: { tenantName: string | undefined, username: string, password: string}) {
-    if (userInfo.tenantName) {
-      await this.PreLogin(userInfo.tenantName)
-    }
+  public RefreshCurrentUser() {
+    this.SET_CURRENTUSERINFO(AbpModule.configuration.currentUser)
+  }
+
+  @Action({ rawError: true })
+  public async Login(userInfo: { username: string, password: string}) {
     const userLoginData = new UserLoginData()
     userLoginData.userName = userInfo.username
     userLoginData.password = userInfo.password
@@ -75,13 +73,11 @@ class User extends VuexModule implements IUserState {
     this.SET_TOKEN(token)
     this.SET_REFRESHTOKEN(loginResult.refresh_token)
     await this.PostLogin()
+    console.log(this.token)
   }
 
   @Action({ rawError: true })
-  public async PhoneLogin(userInfo: { tenantName: string | undefined, phoneNumber: string, verifyCode: string}) {
-    if (userInfo.tenantName) {
-      await this.PreLogin(userInfo.tenantName)
-    }
+  public async PhoneLogin(userInfo: { phoneNumber: string, verifyCode: string}) {
     const userLoginData = new UserLoginPhoneData()
     userLoginData.phoneNumber = userInfo.phoneNumber
     userLoginData.verifyCode = userInfo.verifyCode
@@ -95,21 +91,7 @@ class User extends VuexModule implements IUserState {
   @Action
   public ResetToken() {
     removeItem(tokenKey)
-    removeTenant()
     this.SET_TOKEN('')
-    this.SET_ROLES([])
-  }
-
-  @Action
-  public async GetUserInfo() {
-    if (this.token === '') {
-      throw Error('GetUserInfo: token is undefined!')
-    }
-    const userInfo = await UserApiService.getUserInfo()
-    this.SET_ID(userInfo.sub)
-    this.SET_NAME(userInfo.name)
-    this.SET_EMAIL(userInfo.email)
-    return userInfo
   }
 
   @Action
@@ -123,10 +105,9 @@ class User extends VuexModule implements IUserState {
     }
     this.SET_TOKEN('')
     this.SET_REFRESHTOKEN('')
-    this.SET_ROLES([])
+    this.SET_CURRENTUSERINFO(new CurrentUser())
     removeItem(tokenKey)
     removeItem(refreshTokenKey)
-    removeTenant()
     resetRouter()
     // Reset visited views and cached views
     TagsViewModule.delAllViews()
@@ -155,14 +136,9 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  private async PreLogin(tenantName: string) {
-    const tenantResult = await TenantService.findTenantByName(tenantName)
-    setTenant(tenantResult.tenantId)
-  }
-
-  @Action
   private async PostLogin() {
-    await AbpModule.LoadAbpConfiguration()
+    const abpConfig = await AbpModule.LoadAbpConfiguration()
+    this.SET_CURRENTUSERINFO(abpConfig.currentUser)
   }
 }
 

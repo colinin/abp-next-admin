@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import TenantService from '@/api/tenant-management'
-import { setTenant, removeTenant } from '@/utils/sessions'
+import { AbpModule } from '@/store/modules/abp'
 
 @Component({
   name: 'TenantSelect'
@@ -35,18 +35,23 @@ export default class extends Vue {
       this.$t('AbpUiMultiTenancy.SwitchTenant').toString(), {
         showInput: true
       }).then((val: any) => {
-      removeTenant()
       if (val.value) {
         TenantService.findTenantByName(val.value).then(tenant => {
           if (tenant.success) {
-            setTenant(tenant.tenantId)
+            AbpModule.configuration.currentTenant.isAvailable = true
+            AbpModule.configuration.currentTenant.id = tenant.tenantId
+            AbpModule.configuration.currentTenant.name = tenant.name
             this.$emit('input', tenant.name)
           } else {
+            AbpModule.configuration.currentTenant.isAvailable = false
             this.$message.warning(this.$t('login.tenantIsNotAvailable', { name: val.value }).toString())
           }
         })
       } else {
-        this.$emit('input', '')
+        AbpModule.configuration.currentTenant.isAvailable = false
+        AbpModule.LoadAbpConfiguration().finally(() => {
+          this.$emit('input', '')
+        })
       }
     }).catch(() => {
       console.log()
