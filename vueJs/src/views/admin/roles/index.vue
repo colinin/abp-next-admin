@@ -136,8 +136,8 @@
     <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
     />
 
@@ -156,6 +156,7 @@
 </template>
 
 <script lang="ts">
+import { abpPagerFormat } from '@/utils'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
@@ -183,6 +184,10 @@ export default class extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   /** 获取角色权限列表 */

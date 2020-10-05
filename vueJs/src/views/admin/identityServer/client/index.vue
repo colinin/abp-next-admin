@@ -218,130 +218,63 @@
     <Pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showCreateClientDialog"
-      :title="$t('identityServer.createClient')"
-      custom-class="modal-form"
-      :show-close="false"
+    <client-create-form
+      :show-dialog="showCreateClientDialog"
       @closed="handleClientCreateFormClosed"
-    >
-      <ClientCreateForm
-        ref="formCreateClient"
-        @closed="handleClientCreateFormClosed"
-      />
-    </el-dialog>
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showCloneClientDialog"
-      :title="$t('identityServer.cloneClint')"
-      custom-class="modal-form"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <ClientCloneForm
-        ref="formCloneClient"
-        :client-id="editClient.id"
-        @closed="handleClientCloneFormClosed"
-      />
-    </el-dialog>
+    <client-clone-form
+      :show-dialog="showCloneClientDialog"
+      :client-id="editClient.id"
+      @closed="handleClientCloneFormClosed"
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditClientDialog"
-      :title="editClientTitle"
-      custom-class="modal-form"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <ClientEditForm
-        :client-id="editClient.id"
-        @closed="handleClientEditFormClosed"
-      />
-    </el-dialog>
+    <client-edit-form
+      :show-dialog="showEditClientDialog"
+      :client-id="editClient.id"
+      @closed="handleClientEditFormClosed"
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditClientSecretDialog"
-      :title="$t('identityServer.clientSecret')"
-      custom-class="modal-form"
-      :show-close="false"
+    <client-secret-edit-form
+      :show-dialog="showEditClientSecretDialog"
+      :client-id="editClient.id"
+      :client-secrets="editClient.clientSecrets"
       @closed="handleClientSecretEditFormClosed"
-    >
-      <ClientSecretEditForm
-        ref="formClientSecret"
-        :client-id="editClient.id"
-        :client-secrets="editClient.clientSecrets"
-        @clientSecretChanged="refreshPagedData"
-      />
-    </el-dialog>
+      @clientClaimChanged="refreshPagedData"
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditClientClaimDialog"
-      :title="$t('identityServer.clientClaim')"
-      custom-class="modal-form"
-      :show-close="false"
+    <client-claim-edit-form
+      :show-dialog="showEditClientClaimDialog"
+      :client-id="editClient.id"
+      :client-claims="editClient.claims"
       @closed="handleClientClaimEditFormClosed"
       @clientClaimChanged="refreshPagedData"
-    >
-      <ClientClaimEditForm
-        ref="formClientClaim"
-        :client-id="editClient.id"
-        :client-claims="editClient.claims"
-      />
-    </el-dialog>
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditClientPropertyDialog"
-      :title="$t('identityServer.clientProperty')"
-      custom-class="modal-form"
-      :show-close="false"
-      @closed="handleClientPropertyEditFormClosed"
+    <client-property-edit-form
+      :show-dialog="showEditClientPropertyDialog"
+      :client-id="editClient.id"
+      :client-properties="editClient.properties"
       @clientPropertyChanged="refreshPagedData"
-    >
-      <ClientPropertyEditForm
-        ref="formClientProperty"
-        :client-id="editClient.id"
-        :client-properties="editClient.properties"
-      />
-    </el-dialog>
+      @closed="handleClientPropertyEditFormClosed"
+    />
 
-    <el-dialog
-      v-el-draggable-dialog
-      width="800px"
-      :visible.sync="showEditClientPermissionDialog"
-      :title="$t('identityServer.clientPermission')"
-      custom-class="modal-form"
-      :show-close="false"
+    <client-permission-edit-form
+      :show-dialog="showEditClientPermissionDialog"
+      :client-id="editClient.clientId"
       @closed="handleClientPermissionEditFormClosed"
-    >
-      <ClientPermissionEditForm
-        ref="formClientPermission"
-        :client-id="editClient.clientId"
-        @closed="handleClientPermissionEditFormClosed"
-      />
-    </el-dialog>
+    />
   </div>
 </template>
 
 <script lang="ts">
+import { abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
@@ -400,6 +333,10 @@ export default class extends mixins(DataListMiXin) {
     this.refreshPagedData()
   }
 
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
+  }
+
   protected getPagedList(filter: any) {
     return ClientService.getClients(filter)
   }
@@ -417,30 +354,20 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleClientCreateFormClosed(changed: boolean) {
-    this.editClientTitle = ''
-    this.editClient = Client.empty()
     this.showCreateClientDialog = false
-    const frmClient = this.$refs.formCreateClient as ClientCreateForm
-    frmClient.resetFields()
     if (changed) {
       this.refreshPagedData()
     }
   }
 
   private handleClientCloneFormClosed(changed: boolean) {
-    this.editClientTitle = ''
-    this.editClient = Client.empty()
     this.showCloneClientDialog = false
-    const frmClient = this.$refs.formCloneClient as ClientCloneForm
-    frmClient.resetFields()
     if (changed) {
       this.refreshPagedData()
     }
   }
 
   private handleClientEditFormClosed(changed: boolean) {
-    this.editClientTitle = ''
-    this.editClient = Client.empty()
     this.showEditClientDialog = false
     if (changed) {
       this.refreshPagedData()
@@ -449,24 +376,17 @@ export default class extends mixins(DataListMiXin) {
 
   private handleClientSecretEditFormClosed() {
     this.showEditClientSecretDialog = false
-    const frmClientSecret = this.$refs.formClientSecret as ClientSecretEditForm
-    frmClientSecret.resetFields()
   }
 
   private handleClientClaimEditFormClosed() {
     this.showEditClientClaimDialog = false
-    const frmClientClaim = this.$refs.formClientClaim as ClientClaimEditForm
-    frmClientClaim.resetFields()
   }
 
   private handleClientPropertyEditFormClosed() {
     this.showEditClientPropertyDialog = false
-    const frmClientProperty = this.$refs.formClientProperty as ClientPropertyEditForm
-    frmClientProperty.resetFields()
   }
 
   private handleClientPermissionEditFormClosed() {
-    this.editClient = Client.empty()
     this.showEditClientPermissionDialog = false
   }
 

@@ -1,4 +1,3 @@
-import { pagerFormat } from '@/utils'
 import { ListResultDto, PagedResultDto, PagedAndSortedResultRequestDto, FullAuditedEntityDto } from './types'
 import ApiService from './serviceBase'
 
@@ -28,7 +27,7 @@ export default class TenantService {
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     // 因为abp设计的原因, 需要前端组合页面
-    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<TenantDto>>(_url, serviceUrl)
   }

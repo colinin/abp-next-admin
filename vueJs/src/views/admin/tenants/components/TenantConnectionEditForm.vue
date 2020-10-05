@@ -1,6 +1,16 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    :visible="showDialog"
+    :title="$t('tenant.connectionOptions')"
+    width="800px"
+    custom-class="modal-form"
+    close-on-click-modal
+    @close="onFormClosed"
+  >
+    <div
+      class="app-container"
+    >
       <el-form
         v-if="checkPermission(['AbpTenantManagement.Tenants.ManageConnectionStrings'])"
         ref="formTenantConnection"
@@ -90,7 +100,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -99,7 +109,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
-  name: 'TenantEditConnectionForm',
+  name: 'TenantConnectionEditForm',
   methods: {
     checkPermission
   }
@@ -107,6 +117,9 @@ import { checkPermission } from '@/utils/permission'
 export default class extends Vue {
   @Prop({ default: '' })
   private tenantId!: string
+
+  @Prop({ default: false })
+  private showDialog!: boolean
 
   private tenantConnection: TenantConnectionString
   private tenantConnections: TenantConnectionString[]
@@ -125,9 +138,17 @@ export default class extends Vue {
     this.tenantConnections = new Array<TenantConnectionString>()
   }
 
-  @Watch('tenantId', { immediate: true })
+  @Watch('tenantId')
   private onTenantIdChanged() {
-    if (this.tenantId) {
+    this.handleGetTenantConnections()
+  }
+
+  mounted() {
+    this.handleGetTenantConnections()
+  }
+
+  private handleGetTenantConnections() {
+    if (this.showDialog && this.tenantId) {
       TenantService.getTenantConnections(this.tenantId).then(connections => {
         this.tenantConnections = connections.items
       })
@@ -146,8 +167,7 @@ export default class extends Vue {
               const deleteTenantConnectionIndex = this.tenantConnections.findIndex(p => p.name === name)
               this.tenantConnections.splice(deleteTenantConnectionIndex, 1)
               this.$message.success(this.l('tenant.deleteTenantConnectionSuccess', { name: name }))
-              this.resetFields()
-              this.$emit('closed', true)
+              this.onFormClosed()
             })
           }
         }
@@ -170,6 +190,11 @@ export default class extends Vue {
         })
       }
     })
+  }
+
+  private onFormClosed() {
+    this.resetFields()
+    this.$emit('closed')
   }
 
   public resetFields() {

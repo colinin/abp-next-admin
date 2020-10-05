@@ -112,7 +112,7 @@
                 class="filter-item"
                 style="display:block;margin:0 auto; width: 150px;"
                 type="primary"
-                @click="refreshPagedData"
+                @click="resetPagedList"
               >
                 <i class="el-icon-search" />
                 {{ $t('AbpAuditLogging.SecrchLog') }}
@@ -158,10 +158,35 @@
         </template>
       </el-table-column>
       <el-table-column
+        :label="$t('AbpAuditLogging.HttpMethod')"
+        prop="httpMethod"
+        sortable
+        width="150px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <el-tag
+            :type="row.httpMethod | httpMethodFilter"
+          >
+            {{ row.httpMethod }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('AbpAuditLogging.ExecutionTime')"
+        prop="executionTime"
+        sortable
+        width="200px"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.executionTime | dateTimeFormatFilter }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         :label="$t('AbpAuditLogging.ExecutionDuration')"
         prop="executionDuration"
         sortable
-        width="130px"
+        width="160px"
         align="center"
       >
         <template slot-scope="{row}">
@@ -176,7 +201,7 @@
         :label="$t('AbpAuditLogging.HttpStatusCode')"
         prop="httpStatusCode"
         sortable
-        width="100px"
+        width="130px"
         align="center"
       >
         <template slot-scope="{row}">
@@ -232,21 +257,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('AbpAuditLogging.HttpMethod')"
-        prop="httpMethod"
-        sortable
-        width="150px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <el-tag
-            :type="row.httpMethod | httpMethodFilter"
-          >
-            {{ row.httpMethod }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
         :label="$t('operaActions')"
         align="center"
         width="250px"
@@ -276,8 +286,8 @@
     <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
@@ -291,6 +301,7 @@
 </template>
 
 <script lang="ts">
+import { dateFormat, abpPagerFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
 import AuditingService, { AuditLog, AuditLogGetPaged } from '@/api/auditing'
 import DataListMiXin from '@/mixins/DataListMiXin'
@@ -313,6 +324,9 @@ const statusMap: { [key: string]: string } = {
     AuditLogDialog
   },
   filters: {
+    dateTimeFormatFilter(dateTime: Date) {
+      return dateFormat(new Date(dateTime), 'YYYY-mm-dd HH:MM:SS:NS')
+    },
     httpMethodFilter(httpMethod: string) {
       return statusMap[httpMethod]
     },
@@ -355,6 +369,10 @@ export default class extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   protected getPagedList(filter: any) {

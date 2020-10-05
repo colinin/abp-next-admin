@@ -1,5 +1,4 @@
 import ApiService from './serviceBase'
-import { pagerFormat } from '@/utils/index'
 import { AuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from './types'
 import { RoleDto } from './roles'
 import { UserDataDto } from './users'
@@ -36,7 +35,7 @@ export default class OrganizationUnitService {
     let _url = '/api/identity/organization-units'
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    _url += '&skipCount=' + pagerFormat(payload.skipCount)
+    _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<OrganizationUnit>>(_url, serviceUrl)
   }
@@ -120,8 +119,7 @@ export default class OrganizationUnitService {
     _url += '?id=' + payload.id
     _url += '&filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    // abp设计原因,需要前端计算分页
-    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    _url += '&skipCount=' + payload.skipCount
     // _url += '&skipCount=' + pagerFormat(payload.skipCount)
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<RoleDto>>(_url, serviceUrl)

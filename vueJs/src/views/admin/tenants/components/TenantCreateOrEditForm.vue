@@ -1,6 +1,15 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    :visible="showDialog"
+    :title="$t('tenant.updateTenant')"
+    width="800px"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed"
+  >
+    <div
+      class="app-container"
+    >
       <el-form
         ref="formTenant"
         label-width="120px"
@@ -56,7 +65,7 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -69,6 +78,9 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 export default class extends Vue {
   @Prop({ default: '' })
   private tenantId!: string
+
+  @Prop({ default: false })
+  private showDialog!: boolean
 
   private tenant!: TenantCreateOrEdit
 
@@ -97,9 +109,17 @@ export default class extends Vue {
     this.tenant = TenantCreateOrEdit.empty()
   }
 
-  @Watch('tenantId', { immediate: true })
+  @Watch('tenantId')
   private onTenantIdChanged() {
-    if (this.tenantId) {
+    this.handleGetEditTenant()
+  }
+
+  mounted() {
+    this.handleGetEditTenant()
+  }
+
+  private handleGetEditTenant() {
+    if (this.showDialog && this.tenantId) {
       TenantService.getTenantById(this.tenantId).then(tenant => {
         this.tenant.name = tenant.name
       })
@@ -129,6 +149,10 @@ export default class extends Vue {
         }
       }
     })
+  }
+
+  private onFormClosed() {
+    this.$emit('closed', false)
   }
 
   private onCancel() {

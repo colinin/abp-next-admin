@@ -1,6 +1,16 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="title"
+    custom-class="modal-form"
+    :show-close="false"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    @close="onFormClosed(false)"
+  >
+    <div class="app-container">
       <el-form
         ref="formApiResource"
         label-width="100px"
@@ -70,7 +80,7 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -85,6 +95,12 @@ import ElInputTagEx from '@/components/InputTagEx/index.vue'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
+  @Prop({ default: '' })
+  private title!: string
+
   @Prop({ default: '' })
   private apiResourceId!: string
 
@@ -128,8 +144,7 @@ export default class extends Vue {
             this.apiResource = resource
             const successMessage = this.l('identityServer.updateApiResourceSuccess', { name: resource.name })
             this.$message.success(successMessage)
-            frmApiResource.resetFields()
-            this.$emit('closed', true)
+            this.onFormClosed(true)
           })
         } else {
           const createApiResource = ApiResourceCreate.create(this.apiResource)
@@ -137,17 +152,20 @@ export default class extends Vue {
             this.apiResource = resource
             const successMessage = this.l('identityServer.createApiResourceSuccess', { name: resource.name })
             this.$message.success(successMessage)
-            frmApiResource.resetFields()
-            this.$emit('closed', true)
+            this.onFormClosed(true)
           })
         }
       }
     })
   }
 
-  private onCancel() {
+  private onFormClosed(changed: boolean) {
     this.resetFields()
-    this.$emit('closed', false)
+    this.$emit('closed', changed)
+  }
+
+  private onCancel() {
+    this.onFormClosed(false)
   }
 
   public resetFields() {

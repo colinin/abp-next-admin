@@ -1,5 +1,5 @@
 import store from '@/store'
-import i18n from '@/lang/index'
+import { setLanguage } from '@/lang/index'
 import { getOrDefault, setItem } from '@/utils/localStorage'
 import AbpConfigurationService, { IAbpConfiguration, AbpConfiguration as AbpConfig } from '@/api/abpconfiguration'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
@@ -22,22 +22,8 @@ class AbpConfiguration extends VuexModule implements IAbpState {
 
   @Mutation
   private SET_ABPLOCALIZER(configuration: IAbpConfiguration) {
-    const { cultureName } = configuration.localization.currentCulture
-    const localeMessage = i18n.getLocaleMessage(cultureName)
-    // const resources: { [key: string]: any} = {}
-    Object.keys(configuration.localization.values).forEach(key => {
-      const resource = configuration.localization.values[key]
-      if (typeof resource !== 'object') return
-      Object.keys(resource).forEach(key2 => {
-        if (/'{|{/g.test(resource[key2])) {
-          resource[key2] = resource[key2].replace(/'{|{/g, '{').replace(/}'|}/g, '}')
-        }
-      })
-      localeMessage[key] = resource
-      // resources[key] = resource
-    })
-    i18n.setLocaleMessage(cultureName, localeMessage)
-    // i18n.mergeLocaleMessage(cultureName, resources)
+    const { currentCulture, values } = configuration.localization
+    setLanguage(currentCulture.cultureName, values)
   }
 
   @Action({ rawError: true })

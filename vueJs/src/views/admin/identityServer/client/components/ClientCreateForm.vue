@@ -1,6 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.createClient')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed(false)"
+  >
+    <div class="app-container">
       <el-form
         ref="formClient"
         label-width="100px"
@@ -59,12 +67,12 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 import ClientService, { ClientCreate } from '@/api/clients'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import ElInputTagEx from '@/components/InputTagEx/index.vue'
 
 @Component({
@@ -74,6 +82,9 @@ import ElInputTagEx from '@/components/InputTagEx/index.vue'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   private client: ClientCreate
   private clientRules = {
     clientId: [
@@ -96,12 +107,16 @@ export default class extends Vue {
         ClientService.createClient(this.client).then(client => {
           const successMessage = this.l('identityServer.createClientSuccess', { id: client.clientId })
           this.$message.success(successMessage)
-          frmClient.resetFields()
           this.$emit('clientChanged')
-          this.$emit('closed')
+          this.onFormClosed(true)
         })
       }
     })
+  }
+
+  private onFormClosed(changed: boolean) {
+    this.resetFields()
+    this.$emit('closed', changed)
   }
 
   public resetFields() {

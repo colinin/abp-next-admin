@@ -1,6 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.identityResourceProperties')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed(false)"
+  >
+    <div class="app-container">
       <el-form
         v-if="checkPermission(['IdentityServer.IdentityResources.Properties.Create'])"
         ref="formIdentityProperty"
@@ -76,7 +84,6 @@
         :label="$t('operaActions')"
         align="center"
         width="150px"
-        fixed="right"
       >
         <template slot-scope="{row}">
           <el-button
@@ -90,13 +97,14 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 import IdentityResourceService, { IdentityResource, IdentityPropertyCreate } from '@/api/identityresources'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
+import { ElForm } from 'element-ui/types/form'
 
 @Component({
   name: 'IdentityPropertyEditForm',
@@ -105,6 +113,9 @@ import { checkPermission } from '@/utils/permission'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   @Prop({ default: () => IdentityResource.empty() })
   private identityResource!: IdentityResource
 
@@ -132,7 +143,7 @@ export default class extends Vue {
               const deletePropertyIndex = this.identityResource.properties.findIndex(p => p.key === key && p.value === key)
               this.identityResource.properties.splice(deletePropertyIndex, 1)
               this.$message.success(this.l('identityServer.deleteIdentityPropertySuccess', { key: key }))
-              this.$emit('closed', true)
+              this.onFormClosed(true)
             })
           }
         }
@@ -149,15 +160,20 @@ export default class extends Vue {
           this.identityResource.properties.push(property)
           const successMessage = this.l('identityServer.createIdentityPropertySuccess', { key: this.identityProperty.key })
           this.$message.success(successMessage)
-          this.resetFields()
-          this.$emit('closed', true)
+          this.onFormClosed(true)
         })
       }
     })
   }
 
-  public resetFields() {
-    this.identityProperty = IdentityPropertyCreate.empty()
+  private onFormClosed(changed: boolean) {
+    this.resetFields()
+    this.$emit('closed', changed)
+  }
+
+  private resetFields() {
+    const frmIdentityProperty = this.$refs.formIdentityProperty as ElForm
+    frmIdentityProperty.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

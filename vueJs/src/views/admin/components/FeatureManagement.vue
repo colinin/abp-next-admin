@@ -2,66 +2,75 @@
   <div class="app-container">
     <el-form
       ref="frmFeature"
-      :model="features"
-      label-width="100px"
+      :model="featureGroups"
+      label-width="130px"
     >
       <el-tabs v-model="selectTab">
         <el-tab-pane
-          v-for="(feature, fi) in features.features"
-          :key="feature.name"
-          :label="feature.displayName"
-          :name="feature.name"
+          v-for="(group, gi) in featureGroups.groups"
+          :key="group.name"
+          :label="group.displayName"
+          :name="group.name"
         >
-          <el-form-item
-            v-for="(featureChildren, fci) in feature.children"
-            :key="featureChildren.name"
-            :label="featureChildren.displayName"
-            :prop="'features.' + fi + '.children.' + fci + '.value'"
-            :rules="featureChildren.valueType.validator | inputRuleFilter(localizer)"
+          <div
+            v-for="(feature, fi) in group.features"
+            :key="feature.name"
           >
-            <el-popover
-              :ref="'popover_' + fi + '_' + fci"
-              trigger="hover"
-              :title="featureChildren.displayName"
-              :content="featureChildren.description"
-            />
-            <span
-              slot="label"
-              v-popover="'popover_' + fi + '_' + fci"
-            >{{ featureChildren.displayName }}</span>
-            <div
-              v-if="featureChildren.valueType.name === 'ToggleStringValueType'"
+            <el-form-item
+              v-if="feature.valueType !== null"
+              :label="feature.displayName"
+              :prop="'groups.' + gi + '.features.' + fi + '.value'"
+              :rules="feature.valueType.validator | inputRuleFilter(localizer)"
             >
-              <el-switch
-                v-if="featureChildren.valueType.validator.name === 'BOOLEAN'"
-                v-model="featureChildren.value"
+              <el-popover
+                :ref="'popover_' + gi + '_' + fi"
+                trigger="hover"
+                :title="feature.displayName"
+                :content="feature.description"
               />
-              <el-input
-                v-else-if="featureChildren.valueType.validator.name === 'NUMERIC'"
-                v-model.number="featureChildren.value"
-                type="number"
-              />
-              <el-input
-                v-else-if="featureChildren.valueType.validator.name === 'STRING'"
-                v-model="featureChildren.value"
-                type="text"
-              />
-            </div>
-            <div
-              v-else-if="featureChildren.valueType.name === 'SELECTION'"
-            >
-              <el-select
-                v-model="featureChildren.value"
+              <span
+                slot="label"
+                v-popover="'popover_' + gi + '_' + fi"
+              >{{ feature.displayName }}</span>
+              <div
+                v-if="feature.valueType.name === 'ToggleStringValueType'"
               >
-                <el-option
-                  v-for="valueItem in featureChildren.valueType.itemSource.items"
-                  :key="valueItem.value"
-                  :label="valueItem.displayText"
-                  :value="valueItem.value"
+                <el-switch
+                  :value="getBooleanValue(feature.value)"
+                  @change="(value) => handleCheckBoxValueChanged(feature, value)"
                 />
-              </el-select>
-            </div>
-          </el-form-item>
+              </div>
+              <div
+                v-else-if="feature.valueType.name === 'FreeTextStringValueType'"
+              >
+                <el-input
+                  v-if="feature.valueType.validator.name === 'NUMERIC'"
+                  v-model.number="feature.value"
+                  type="number"
+                />
+                <el-input
+                  v-else
+                  v-model="feature.value"
+                  type="text"
+                />
+              </div>
+              <div
+                v-else-if="feature.valueType.name === 'SelectionStringValueType'"
+              >
+                <el-select
+                  v-model="feature.value"
+                  style="width: 100%;"
+                >
+                  <el-option
+                    v-for="valueItem in feature.valueType.itemSource.items"
+                    :key="valueItem.value"
+                    :label="localizer(valueItem.displayText.resourceName + ':' + valueItem.displayText.name)"
+                    :value="valueItem.value"
+                  />
+                </el-select>
+              </div>
+            </el-form-item>
+          </div>
         </el-tab-pane>
       </el-tabs>
       <el-button
@@ -83,80 +92,21 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import FeatureManagementService, { ValueType, Feature, Features } from '@/api/feature-management'
+import FeatureManagementService, { Feature, FeatureGroups, Features } from '@/api/feature-management'
 import { ElForm } from 'element-ui/types/form'
-
-/**
- * 适用于动态表单的功能节点列表
- */
-class FeatureItems {
-  features = new Array<FeatureItem>()
-}
-
-/**
- * 适用于动态表单的功能节点
- */
-class FeatureItem {
-  /** 功能名称 */
-  name!: string
-  /** 显示名称 */
-  displayName?: string
-  /** 当前值 */
-  value!: any
-  /** 说明 */
-  description?: string
-  /** 值类型 */
-  valueType?: ValueType
-  /** 深度 */
-  depth?: number
-  /** 子节点 */
-  children!: FeatureItem[]
-
-  /** 构造器 */
-  constructor(
-    name: string,
-    value: any,
-    displayName?: string,
-    description?: string,
-    valueType?: ValueType,
-    depth?: number
-  ) {
-    this.name = name
-    this.depth = depth
-    this.valueType = valueType
-    this.displayName = displayName
-    this.description = description
-    this.children = new Array<FeatureItem>()
-    if (value !== null) {
-      this.value = value.toLowerCase() === 'true' ? true // boolean类型
-        : !isNaN(Number(value)) ? Number(value) // number类型
-          : value
-    }
-  }
-
-  /**
-   * 创建子节点
-   * @feature 子节点
-   */
-  public appendChildren(feature: FeatureItem) {
-    this.children.push(feature)
-  }
-
-  /**
-   * 获取子节点
-   * @name 节点名称
-   */
-  public getChildren(name: string) {
-    const childrenIndex = this.children.findIndex(feature => feature.name === name)
-    if (childrenIndex >= 0) {
-      return this.children[childrenIndex]
-    }
-    return undefined
-  }
-}
 
 @Component({
   name: 'FeatureManagement',
+  computed: {
+    getBooleanValue() {
+      return (value: any) => {
+        if (value === 'true') {
+          return true
+        }
+        return false
+      }
+    }
+  },
   filters: {
     /**
      * 动态处理功能表单验证
@@ -214,6 +164,9 @@ export default class extends Vue {
   @Prop({ default: '' })
   private providerKey!: string
 
+  @Prop({ default: false })
+  private loadFeature!: boolean
+
   /**
    * 默认选择tab选项卡
    * 如果不定义的话,动态组合的表单需要手动点击一次才会显示?
@@ -222,13 +175,21 @@ export default class extends Vue {
   /**
    * 用于拼接动态表单的功能数据,需要把abp返回的数据做一次调整
    */
-  private features = new FeatureItems()
+  // private features = new FeatureItems()
 
-  @Watch('providerKey', { immediate: true })
+  private featureGroups = new FeatureGroups()
+
+  mounted() {
+    this.handleGetFeatures()
+  }
+
+  @Watch('providerKey')
   onProviderKeyChanged() {
-    if (this.providerKey) {
-      this.handleGetFeatures()
-    }
+    this.handleGetFeatures()
+  }
+
+  private handleCheckBoxValueChanged(feature: Feature, value: any) {
+    feature.value = value.toString()
   }
 
   /**
@@ -243,46 +204,31 @@ export default class extends Vue {
    * 获取功能列表
    */
   private handleGetFeatures() {
-    FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
-      this.features = new FeatureItems()
-      res.features.forEach(feature => {
-        const featureItem = new FeatureItem(
-          feature.name,
-          feature.value,
-          feature.displayName,
-          feature.description,
-          feature.valueType,
-          feature.depth
-        )
-        if (feature.parentName) {
-          const children = this.features.features.find(f => f.name === feature.parentName)
-          if (children) {
-            children.appendChildren(featureItem)
-          } else {
-            this.features.features.push(featureItem)
-          }
-        } else {
-          this.features.features.push(featureItem)
+    if (this.loadFeature && this.providerKey) {
+      FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
+        this.featureGroups = res
+        if (this.featureGroups.groups.length > 0) {
+          this.selectTab = this.featureGroups.groups[0].name
         }
       })
-      // 需要手动选择一下?
-      if (this.features.features.length > 0) {
-        this.selectTab = this.features.features[0].name
-      }
-    })
+    }
   }
 
   /**
    * 保存变更
    */
   private onSave() {
-    if (this.features.features.length > 0) {
+    if (this.featureGroups.groups.length > 0) {
       const frmFeature = this.$refs.frmFeature as any
       frmFeature.validate((valid: boolean) => {
         if (valid) {
           const updateFeatures = new Features()
-          this.features.features.forEach(feature => {
-            this.getChangedFeatures(feature, updateFeatures)
+          this.featureGroups.groups.forEach(group => {
+            group.features.forEach(feature => {
+              if (feature.valueType != null) {
+                updateFeatures.features.push(new Feature(feature.name, feature.value))
+              }
+            })
           })
           FeatureManagementService
             .updateFeatures(this.providerName, this.providerKey, updateFeatures)
@@ -296,22 +242,11 @@ export default class extends Vue {
   }
 
   /**
-   * 递归获取abp的功能接口格式数据
-   */
-  private getChangedFeatures(feature: FeatureItem, features: Features) {
-    const updateFeature = new Feature(feature.name, feature.value)
-    features.features.push(updateFeature)
-    feature.children.forEach(children => {
-      this.getChangedFeatures(children, features)
-    })
-  }
-
-  /**
    * 关闭模态窗口
    */
   private onClosed() {
-    this.$emit('closed')
     this.resetFeature()
+    this.$emit('closed')
   }
 }
 </script>

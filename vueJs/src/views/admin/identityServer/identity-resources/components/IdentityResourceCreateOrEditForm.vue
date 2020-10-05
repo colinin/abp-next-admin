@@ -1,6 +1,16 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="title"
+    custom-class="modal-form"
+    :show-close="false"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    @close="onFormClosed(false)"
+  >
+    <div class="app-container">
       <el-form
         ref="formIdentityResource"
         label-width="120px"
@@ -94,7 +104,7 @@
         </el-form-item>
       </el-form>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -109,6 +119,12 @@ import ElInputTagEx from '@/components/InputTagEx/index.vue'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
+  @Prop({ default: '' })
+  private title!: string
+
   @Prop({ default: '' })
   private identityResourceId!: string
 
@@ -152,8 +168,7 @@ export default class extends Vue {
             this.identityResource = resource
             const successMessage = this.l('identityServer.updateIdentityResourceSuccess', { name: resource.name })
             this.$message.success(successMessage)
-            frmIdentityResource.resetFields()
-            this.$emit('closed', true)
+            this.onFormClosed(true)
           })
         } else {
           const createIdentityResource = IdentityResourceCreate.create(this.identityResource)
@@ -161,20 +176,23 @@ export default class extends Vue {
             this.identityResource = resource
             const successMessage = this.l('identityServer.createIdentityResourceSuccess', { name: resource.name })
             this.$message.success(successMessage)
-            this.resetFields()
-            this.$emit('closed', true)
+            this.onFormClosed(true)
           })
         }
       }
     })
   }
 
-  private onCancel() {
+  private onFormClosed(changed: boolean) {
     this.resetFields()
-    this.$emit('closed', false)
+    this.$emit('closed', changed)
   }
 
-  public resetFields() {
+  private onCancel() {
+    this.onFormClosed(false)
+  }
+
+  private resetFields() {
     this.identityResource = IdentityResource.empty()
     const frmIdentityResource = this.$refs.formIdentityResource as any
     frmIdentityResource.resetFields()

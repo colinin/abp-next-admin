@@ -152,8 +152,8 @@
     <Pagination
       v-show="dataTotal>0"
       :total="dataTotal"
-      :page.sync="dataFilter.skipCount"
-      :limit.sync="dataFilter.maxResultCount"
+      :page.sync="currentPage"
+      :limit.sync="pageSize"
       @pagination="refreshPagedData"
     />
 
@@ -188,7 +188,7 @@
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
-import { dateFormat } from '@/utils'
+import { dateFormat, abpPagerFormat } from '@/utils'
 import UserApiService, { UserDataDto, UsersGetPagedDto } from '@/api/users'
 import UserCreateForm from './components/UserCreateForm.vue'
 import UserEditForm from './components/UserEditForm.vue'
@@ -222,6 +222,10 @@ export default class extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
+  }
+
+  protected processDataFilter() {
+    this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
   /** 查询用户列表 */

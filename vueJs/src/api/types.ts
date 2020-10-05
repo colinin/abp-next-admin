@@ -77,7 +77,7 @@ export class PagedAndSortedResultRequestDto implements IPagedResultRequest, ISor
   constructor() {
     this.sorting = ''
     this.skipCount = 1
-    this.maxResultCount = 30
+    this.maxResultCount = 10
   }
 }
 

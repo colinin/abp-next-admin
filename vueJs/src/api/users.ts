@@ -1,5 +1,4 @@
 import qs from 'querystring'
-import { pagerFormat } from '@/utils/index'
 import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto, ListResultDto } from '@/api/types'
 import { OrganizationUnit } from './organizationunit'
 import ApiService from './serviceBase'
@@ -11,7 +10,7 @@ export default class UserApiService {
   public static getUsers(input: UsersGetPagedDto) {
     let _url = '/api/identity/users'
     // 因为abp设计的原因, 需要前端组合页面
-    _url += '?skipCount=' + pagerFormat(input.skipCount) * input.maxResultCount
+    _url += '?skipCount=' + input.skipCount
     _url += '&maxResultCount=' + input.maxResultCount
     if (input.sorting) {
       _url += '&sorting=' + input.sorting

@@ -29,14 +29,13 @@ export const getLocale = () => {
   if (cookieLanguage) {
     return cookieLanguage
   }
-  // const language = navigator.language.toLowerCase()
-  // const locales = Object.keys(messages)
-  // for (const locale of locales) {
-  //   if (language.indexOf(locale) > -1) {
-  //     return locale
-  //   }
-  // }
-
+  const language = navigator.language.toLowerCase()
+  const locales = Object.keys(messages)
+  for (const locale of locales) {
+    if (language.indexOf(locale) > -1) {
+      return locale
+    }
+  }
   return 'zh-Hans'
 }
 
@@ -44,5 +43,10 @@ const i18n = new VueI18n({
   locale: getLocale(),
   messages
 })
+
+export function setLanguage(language: string, values: any) {
+  i18n.mergeLocaleMessage(language, values)
+  i18n.locale = language
+}
 
 export default i18n

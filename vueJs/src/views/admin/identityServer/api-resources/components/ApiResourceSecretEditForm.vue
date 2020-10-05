@@ -1,6 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <el-dialog
+    v-el-draggable-dialog
+    width="800px"
+    :visible="showDialog"
+    :title="$t('identityServer.apiResourceSecret')"
+    custom-class="modal-form"
+    :show-close="false"
+    @close="onFormClosed"
+  >
+    <div class="app-container">
       <el-form
         v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
         ref="formApiSecret"
@@ -185,7 +193,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -210,6 +218,9 @@ import { checkPermission } from '@/utils/permission'
   }
 })
 export default class extends Vue {
+  @Prop({ default: false })
+  private showDialog!: boolean
+
   @Prop({ default: '' })
   private apiResourceId!: string
 
@@ -263,14 +274,19 @@ export default class extends Vue {
           this.apiSecrets.push(secret)
           const successMessage = this.l('identityServer.createApiSecretSuccess', { type: this.apiSecret.type })
           this.$message.success(successMessage)
-          frmApiSecret.resetFields()
           this.$emit('apiSecretChanged')
+          this.onFormClosed()
         })
       }
     })
   }
 
-  public resetFields() {
+  private onFormClosed() {
+    this.resetFields()
+    this.$emit('closed')
+  }
+
+  private resetFields() {
     const frmApiSecret = this.$refs.formApiSecret as any
     frmApiSecret.resetFields()
   }

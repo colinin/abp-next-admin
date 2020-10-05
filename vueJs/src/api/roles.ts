@@ -1,4 +1,3 @@
-import { pagerFormat } from '@/utils/index'
 import ApiService from './serviceBase'
 import { OrganizationUnit } from './organizationunit'
 import { ListResultDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
@@ -13,7 +12,7 @@ export default class RoleService {
   public static getRoles(payload: RoleGetPagedDto) {
     let _url = '/api/identity/roles'
     // 因为abp设计的原因, 需要前端组合页面
-    _url += '?skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
+    _url += '?skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     _url += '&sorting=' + payload.sorting
     _url += '&filter=' + payload.filter

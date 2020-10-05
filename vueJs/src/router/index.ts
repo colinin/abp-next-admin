@@ -108,6 +108,22 @@ export const constantRoutes: RouteConfig[] = [
 
 export const asyncRoutes: RouteConfig[] = [
   {
+    path: '/icon',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import(/* webpackChunkName: "icons" */ '@/views/icons/index.vue'),
+        name: 'Icons',
+        meta: {
+          title: 'icons',
+          icon: 'icon',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
@@ -120,6 +136,24 @@ export const asyncRoutes: RouteConfig[] = [
         meta: {
           title: 'profile',
           icon: 'user',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/profile-setting',
+    component: Layout,
+    redirect: '/profile-setting/index',
+    meta: { hidden: true },
+    children: [
+      {
+        path: 'index',
+        component: () => import(/* webpackChunkName: "profile" */ '@/views/profile-setting/index.vue'),
+        name: '个人设置',
+        meta: {
+          title: '个人设置',
+          icon: 'setting',
           noCache: true
         }
       }

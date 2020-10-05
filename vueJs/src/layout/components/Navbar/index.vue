@@ -37,12 +37,14 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile/">
             <el-dropdown-item>
-              {{ $t('navbar.profile') }}
+              <svg-icon name="profile" />
+              {{ $t('AbpAccount.PersonalInfo') }}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/">
+          <router-link to="/profile-setting/">
             <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
+              <svg-icon name="setting" />
+              {{ $t('AbpAccount.PersonalSettings') }}
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item
@@ -50,7 +52,8 @@
             @click.native="logout"
           >
             <span style="display:block;">
-              {{ $t('navbar.logOut') }}
+              <svg-icon name="logout" />
+              {{ $t('AbpAccount.Logout') }}
             </span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -95,7 +98,6 @@ export default class extends Vue {
   }
 
   get name() {
-    console.log(navigator)
     return UserModule.name ?? UserModule.userName
   }
 

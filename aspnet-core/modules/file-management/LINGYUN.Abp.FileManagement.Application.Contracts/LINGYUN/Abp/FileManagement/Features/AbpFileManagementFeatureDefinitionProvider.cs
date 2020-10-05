@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.FileManagement.Features
                 defaultValue: 1.ToString(),
                 displayName: L("Features:DisplayName:MaxUploadFileCount"),
                 description: L("Features:Description:MaxUploadFileCount"),
-                valueType: new ToggleStringValueType(new NumericValueValidator(1, 10)));
+                valueType: new FreeTextStringValueType(new NumericValueValidator(1, 10)));
         }
 
         protected ILocalizableString L(string name)

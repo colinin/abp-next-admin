@@ -1,5 +1,4 @@
 import ApiService from './serviceBase'
-import { pagerFormat } from '@/utils/index'
 import { FullAuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto } from './types'
 
 /** 远程服务地址 */
@@ -27,9 +26,7 @@ export default class IdentityResourceService {
     let _url = '/api/IdentityServer/IdentityResources'
     _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
-    // abp设计原因,需要前端计算分页
-    _url += '&skipCount=' + pagerFormat(payload.skipCount) * payload.maxResultCount
-    // _url += '&skipCount=' + pagerFormat(payload.skipCount)
+    _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<IdentityResource>>(_url, serviceUrl)
   }
