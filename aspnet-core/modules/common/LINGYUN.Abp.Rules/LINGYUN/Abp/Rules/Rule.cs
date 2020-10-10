@@ -11,21 +11,21 @@ namespace LINGYUN.Abp.Rules
     public class Rule
     {
         [NotNull]
-        public string Name { get; }
-        public string Operator { get; }
-        public string ErrorMessage { get; }
-        public DateTime CreationTime { get; }
-        public ErrorType ErrorType { get; }
-        public ExpressionType? ExpressionType { get; }
-        public List<Rule> Rules { get; }
-        public List<string> InjectRules { get; }
-        public List<RuleParam> Params { get; }
-        public string Expression { get; }
-        public string SuccessEvent { get; }
-
+        public string Name { get; set; }
+        public string Operator { get; set; }
+        public string ErrorMessage { get; set; }
+        public DateTime CreationTime { get; set; }
+        public ErrorType ErrorType { get; set; }
+        public ExpressionType? ExpressionType { get; set; }
+        public List<Rule> Rules { get; set; }
+        public List<string> InjectRules { get; set; }
+        public List<RuleParam> Params { get; set; }
+        public string Expression { get; set; }
+        public string SuccessEvent { get; set; }
+        protected Rule() { }
         public Rule(
             [NotNull] string name,
-            string @operator,
+            string operation,
             DateTime creationTime,
             string expression = null,
             string successEvent = null,
@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.Rules
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
             Name = name;
-            Operator = @operator;
+            Operator = operation;
             CreationTime = creationTime;
             Expression = expression;
             SuccessEvent = successEvent;
