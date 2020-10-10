@@ -184,7 +184,7 @@ namespace LINGYUN.Abp.Location.Tencent
                 if (Options.VisableErrorToClient)
                 {
                     var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
-                    var localizerErrorMessage = tencentLocationResponse.GetErrorMessage().Localize(localizerFactory);
+                    var localizerErrorMessage = tencentLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
                     var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<TencentLocationResource>>();
                     localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage];
                     throw new UserFriendlyException(localizerErrorMessage);

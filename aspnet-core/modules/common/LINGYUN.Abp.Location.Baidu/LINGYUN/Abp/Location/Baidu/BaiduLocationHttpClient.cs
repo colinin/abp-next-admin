@@ -67,8 +67,8 @@ namespace LINGYUN.Abp.Location.Baidu
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
-                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage().Localize(localizerFactory);
-                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage().Localize(localizerFactory);
+                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
+                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
                 var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
                 localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
                 if (Options.VisableErrorToClient)
