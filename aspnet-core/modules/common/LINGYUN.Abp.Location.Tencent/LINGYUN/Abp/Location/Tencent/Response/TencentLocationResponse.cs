@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.Location.Tencent.Response
         /// </summary>
         public bool IsSuccessed => Status.Equals(0);
 
-        public ILocalizableString GetErrorMessage()
+        public ILocalizableString GetErrorMessage(bool throwToClient = false)
         {
             switch (Status)
             {
@@ -45,7 +45,12 @@ namespace LINGYUN.Abp.Location.Tencent.Response
                     return LocalizableString.Create<TencentLocationResource>("Message:RETURN_310");
                 case 311:
                     return LocalizableString.Create<TencentLocationResource>("Message:RETURN_311");
-                default: throw new AbpException(Message);
+                default:
+                    if (throwToClient)
+                    {
+                        throw new LocationResolveException(Message);
+                    }
+                    throw new AbpException(Message);
             }
         }
     }

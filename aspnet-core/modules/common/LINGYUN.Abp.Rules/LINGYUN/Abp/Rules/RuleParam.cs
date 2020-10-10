@@ -6,10 +6,12 @@ namespace LINGYUN.Abp.Rules
     public class RuleParam
     {
         [NotNull]
-        public string Name { get; }
+        public string Name { get; set; }
 
         [NotNull]
-        public string Expression { get; }
+        public string Expression { get; set; }
+
+        protected RuleParam() { }
         public RuleParam(
             [NotNull] string name,
             [NotNull] string expression)

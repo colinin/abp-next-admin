@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Location.Baidu.Response
             return Status == 0;
         }
 
-        public ILocalizableString GetErrorMessage()
+        public ILocalizableString GetErrorMessage(bool throwToClient = false)
         {
             switch (Status)
             {
@@ -63,11 +63,16 @@ namespace LINGYUN.Abp.Location.Baidu.Response
                     return LocalizableString.Create<BaiduLocationResource>("Message:RETURN_401");
                 case 402:
                     return LocalizableString.Create<BaiduLocationResource>("Message:RETURN_402");
-                default: throw new AbpException($"{Status} - no error code define!");
+                default:
+                    if (throwToClient)
+                    {
+                        throw new LocationResolveException($"{Status} - no error code define!");
+                    }
+                    throw new AbpException($"{Status} - no error code define!");
             }
         }
 
-        public ILocalizableString GetErrorDescription()
+        public ILocalizableString GetErrorDescription(bool throwToClient = false)
         {
             switch (Status)
             {
@@ -117,7 +122,12 @@ namespace LINGYUN.Abp.Location.Baidu.Response
                     return LocalizableString.Create<BaiduLocationResource>("Description:RETURN_401");
                 case 402:
                     return LocalizableString.Create<BaiduLocationResource>("Description:RETURN_402");
-                default: throw new AbpException($"{Status} - no error code define!");
+                default:
+                    if (throwToClient)
+                    {
+                        throw new LocationResolveException($"{Status} - no error code define!");
+                    }
+                    throw new AbpException($"{Status} - no error code define!");
             }
         }
     }
