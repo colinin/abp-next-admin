@@ -121,12 +121,6 @@ namespace AuthServer.Host
             Configure<RedisCacheOptions>(options =>
             {
                 var redisConfig = ConfigurationOptions.Parse(options.Configuration);
-                // 单独一个缓存数据库
-                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
-                if (databaseConfig.Exists())
-                {
-                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
-                }
                 options.ConfigurationOptions = redisConfig;
                 options.InstanceName = configuration["Redis:InstanceName"];
             });
