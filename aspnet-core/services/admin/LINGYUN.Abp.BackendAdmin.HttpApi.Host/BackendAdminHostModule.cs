@@ -7,6 +7,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FileManagement;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.ApiGateway;
@@ -48,7 +49,6 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
@@ -61,8 +61,6 @@ namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AppPlatformApplicationContractModule),
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpFileManagementApplicationContractsModule),
@@ -86,6 +84,8 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -184,12 +184,6 @@ namespace LINGYUN.Abp.BackendAdmin
             Configure<RedisCacheOptions>(options =>
             {
                 var redisConfig = ConfigurationOptions.Parse(options.Configuration);
-                // 单独一个缓存数据库
-                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
-                if (databaseConfig.Exists())
-                {
-                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
-                }
                 options.ConfigurationOptions = redisConfig;
                 options.InstanceName = configuration["Redis:InstanceName"];
             });

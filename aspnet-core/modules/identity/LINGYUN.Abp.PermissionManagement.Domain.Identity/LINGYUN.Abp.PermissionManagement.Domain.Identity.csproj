@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+  
+   <ItemGroup>
+    <PackageReference Include="Volo.Abp.Uow" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\permissions-management\LINGYUN.Abp.PermissionManagement.Domain\LINGYUN.Abp.PermissionManagement.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
