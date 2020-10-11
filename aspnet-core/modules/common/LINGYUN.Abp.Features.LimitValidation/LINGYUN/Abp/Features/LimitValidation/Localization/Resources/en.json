@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "FeaturesLimitException": "Service has exceeded the maximum number of calls {0}. Please apply for the appropriate permissions"
+  }
+}

@@ -217,13 +217,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "modules\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation", "modules\common\LINGYUN.Abp.Features.Validation\LINGYUN.Abp.Features.Validation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "modules\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation.Redis", "modules\common\LINGYUN.Abp.Features.Validation.Redis\LINGYUN.Abp.Features.Validation.Redis.csproj", "{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation.Redis.Tests", "tests\LINGYUN.Abp.Features.Validation.Redis.Tests\LINGYUN.Abp.Features.Validation.Redis.Tests.csproj", "{F12F4645-C0FE-4129-8C71-65B4039DC445}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis.Tests", "tests\LINGYUN.Abp.Features.LimitValidation.Redis.Tests\LINGYUN.Abp.Features.LimitValidation.Redis.Tests.csproj", "{F12F4645-C0FE-4129-8C71-65B4039DC445}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Validation.Tests", "tests\LINGYUN.Abp.Features.Validation.Tests\LINGYUN.Abp.Features.Validation.Tests.csproj", "{C457FA70-8732-44B8-A018-C96D14025D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Tests", "tests\LINGYUN.Abp.Features.LimitValidation.Tests\LINGYUN.Abp.Features.LimitValidation.Tests.csproj", "{C457FA70-8732-44B8-A018-C96D14025D4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "features", "features", "{08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}"
 EndProject
@@ -247,7 +247,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "permission-management", "pe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.Domain\LINGYUN.Abp.PermissionManagement.Domain.csproj", "{B46D6DAF-98C6-441F-9FA5-3CAD7CF27727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.PermissionManagement.Domain.Identity", "modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj", "{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain.Identity", "modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj", "{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
