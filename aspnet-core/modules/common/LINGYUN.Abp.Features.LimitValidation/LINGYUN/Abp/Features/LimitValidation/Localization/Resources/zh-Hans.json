@@ -1,0 +1,6 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "FeaturesLimitException": "服务已超过最大调用次数 {0}，请申请适当的权限"
+  }
+}

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\Abp\Features\LimitValidation\Localization\Resources\en.json" />
+    <None Remove="LINGYUN\Abp\Features\LimitValidation\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Features\LimitValidation\Localization\Resources\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\Features\LimitValidation\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Features" Version="3.2.0" />
+  </ItemGroup>
+
+</Project>
