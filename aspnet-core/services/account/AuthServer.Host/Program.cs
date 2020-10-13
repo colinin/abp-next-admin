@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using System.IO;
 
 namespace AuthServer.Host
 {
@@ -11,15 +9,6 @@ namespace AuthServer.Host
     {
         public static int Main(string[] args)
         {
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-            Log.Logger = new LoggerConfiguration()
-               .ReadFrom.Configuration(configuration)
-               .CreateLogger();
             try
             {
                 Log.Information("Starting web host.");
@@ -39,11 +28,14 @@ namespace AuthServer.Host
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .UseSerilog((ctx, cfg) =>
+                {
+                    cfg = cfg.ReadFrom.Configuration(ctx.Configuration);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseSerilog()
                 .UseAutofac();
     }
 }

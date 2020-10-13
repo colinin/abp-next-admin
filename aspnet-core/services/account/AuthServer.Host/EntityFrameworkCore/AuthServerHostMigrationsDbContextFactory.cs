@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 
 namespace AuthServer.EntityFrameworkCore
@@ -19,9 +20,16 @@ namespace AuthServer.EntityFrameworkCore
 
         private static IConfigurationRoot BuildConfiguration()
         {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            var envFile = Path.Combine(Directory.GetCurrentDirectory(), $"appsettings.{env}.json");
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Development.json", optional: false);
+                .AddJsonFile("appsettings.json", optional: false);
+            if (File.Exists(envFile))
+            {
+                builder.AddJsonFile($"appsettings.{env}.json", optional: false);
+            }
 
             return builder.Build();
         }
