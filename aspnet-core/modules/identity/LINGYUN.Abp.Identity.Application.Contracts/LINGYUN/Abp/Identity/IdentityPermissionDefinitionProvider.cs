@@ -14,12 +14,14 @@ namespace LINGYUN.Abp.Identity
                 var userPermission = identityGroup.GetPermissionOrNull(Volo.Abp.Identity.IdentityPermissions.Users.Default);
                 if (userPermission != null)
                 {
+                    userPermission.AddChild(IdentityPermissions.Users.ManageClaims, L("Permission:ManageClaims"));
                     userPermission.AddChild(IdentityPermissions.Users.ManageOrganizationUnits, L("Permission:ManageOrganizationUnits"));
                 }
 
                 var rolePermission = identityGroup.GetPermissionOrNull(Volo.Abp.Identity.IdentityPermissions.Roles.Default);
                 if (rolePermission != null)
                 {
+                    rolePermission.AddChild(IdentityPermissions.Roles.ManageClaims, L("Permission:ManageClaims"));
                     rolePermission.AddChild(IdentityPermissions.Roles.ManageOrganizationUnits, L("Permission:ManageOrganizationUnits"));
                 }
 
@@ -29,6 +31,11 @@ namespace LINGYUN.Abp.Identity
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.Delete, L("Permission:Delete"));
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageRoles, L("Permission:ChangeRoles"));
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageUsers, L("Permission:ChangeUsers"));
+
+                var identityClaimType = identityGroup.AddPermission(IdentityPermissions.IdentityClaimType.Default, L("Permission:IdentityClaimTypeManagement"));
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Create, L("Permission:Create"));
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Update, L("Permission:Edit"));
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Delete, L("Permission:Delete"));
             }
         }
 

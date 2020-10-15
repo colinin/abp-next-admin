@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Identity
 {
-    [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
+    [Authorize(Volo.Abp.Identity.IdentityPermissions.Roles.Default)]
     public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
     {
         protected IIdentityRoleRepository IdentityRoleRepository { get; }
@@ -22,6 +24,9 @@ namespace LINGYUN.Abp.Identity
             IdentityRoleRepository = roleRepository;
         }
 
+        #region OrganizationUnit
+
+        [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
         public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
             var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id);
@@ -30,6 +35,7 @@ namespace LINGYUN.Abp.Identity
                 ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
         }
 
+        [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
         public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input)
         {
             var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id, true);
@@ -49,5 +55,61 @@ namespace LINGYUN.Abp.Identity
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }
+
+        #endregion
+
+        #region ClaimType
+
+        public virtual async Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
+        {
+            var role = await IdentityRoleRepository.GetAsync(id);
+
+            return new ListResultDto<IdentityClaimDto>(ObjectMapper.Map<ICollection<IdentityRoleClaim>, List<IdentityClaimDto>>(role.Claims));
+        }
+
+        [Authorize(IdentityPermissions.Roles.ManageClaims)]
+        public virtual async Task AddClaimAsync(Guid id, IdentityRoleClaimCreateDto input)
+        {
+            var role = await IdentityRoleRepository.GetAsync(id);
+            var claim = new Claim(input.ClaimType, input.ClaimValue);
+            if (role.FindClaim(claim) != null)
+            {
+                throw new UserFriendlyException(L["RoleClaimAlreadyExists"]);
+            }
+
+            role.AddClaim(GuidGenerator, claim);
+            await IdentityRoleRepository.UpdateAsync(role);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        [Authorize(IdentityPermissions.Roles.ManageClaims)]
+        public virtual async Task UpdateClaimAsync(Guid id, IdentityRoleClaimUpdateDto input)
+        {
+            var role = await IdentityRoleRepository.GetAsync(id);
+            var oldClaim = role.FindClaim(new Claim(input.ClaimType, input.ClaimValue));
+            if (oldClaim != null)
+            {
+                role.RemoveClaim(oldClaim.ToClaim());
+                role.AddClaim(GuidGenerator, new Claim(input.ClaimType, input.NewClaimValue));
+
+                await IdentityRoleRepository.UpdateAsync(role);
+
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
+        }
+
+        [Authorize(IdentityPermissions.Roles.ManageClaims)]
+        public virtual async Task DeleteClaimAsync(Guid id, IdentityRoleClaimDeleteDto input)
+        {
+            var role = await IdentityRoleRepository.GetAsync(id);
+            role.RemoveClaim(new Claim(input.ClaimType, input.ClaimValue));
+
+            await IdentityRoleRepository.UpdateAsync(role);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        #endregion
     }
 }

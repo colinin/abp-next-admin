@@ -83,7 +83,8 @@ export default {
     filesystem: '文件系统',
     auditing: '内部审计',
     auditLog: '审计日志',
-    securityLog: '安全日志'
+    securityLog: '安全日志',
+    claimType: '声明类型'
   },
   navbar: {
     logOut: '退出登录',
@@ -603,7 +604,7 @@ export default {
     filterString: '过滤字符',
     searchList: '查询列表',
     creationTime: '创建时间',
-    successful: '提交成功',
+    successful: '操作成功',
     pleaseInputBy: '请输入{key}',
     pleaseSelectBy: '请选择{key}',
     none: '未定义',

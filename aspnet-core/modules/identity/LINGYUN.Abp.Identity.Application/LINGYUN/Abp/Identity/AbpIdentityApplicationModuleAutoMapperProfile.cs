@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Identity
@@ -10,6 +7,11 @@ namespace LINGYUN.Abp.Identity
     {
         public AbpIdentityApplicationModuleAutoMapperProfile()
         {
+            CreateMap<IdentityClaimType, IdentityClaimTypeDto>()
+                .MapExtraProperties();
+            CreateMap<IdentityUserClaim, IdentityClaimDto>();
+            CreateMap<IdentityRoleClaim, IdentityClaimDto>();
+
             CreateMap<IdentityUser, IdentityUserDto>()
                 .MapExtraProperties();
 
