@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Identity
 {
@@ -32,10 +33,10 @@ namespace LINGYUN.Abp.Identity
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageRoles, L("Permission:ChangeRoles"));
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageUsers, L("Permission:ChangeUsers"));
 
-                var identityClaimType = identityGroup.AddPermission(IdentityPermissions.IdentityClaimType.Default, L("Permission:IdentityClaimTypeManagement"));
-                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Create, L("Permission:Create"));
-                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Update, L("Permission:Edit"));
-                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Delete, L("Permission:Delete"));
+                var identityClaimType = identityGroup.AddPermission(IdentityPermissions.IdentityClaimType.Default, L("Permission:IdentityClaimTypeManagement"), MultiTenancySides.Host);
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Create, L("Permission:Create"), MultiTenancySides.Host);
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Update, L("Permission:Edit"), MultiTenancySides.Host);
+                identityClaimType.AddChild(IdentityPermissions.IdentityClaimType.Delete, L("Permission:Delete"), MultiTenancySides.Host);
             }
         }
 
