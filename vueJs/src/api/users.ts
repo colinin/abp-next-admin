@@ -9,7 +9,6 @@ const IdentityServerUrl = process.env.VUE_APP_BASE_IDENTITY_SERVER
 export default class UserApiService {
   public static getUsers(input: UsersGetPagedDto) {
     let _url = '/api/identity/users'
-    // 因为abp设计的原因, 需要前端组合页面
     _url += '?skipCount=' + input.skipCount
     _url += '&maxResultCount=' + input.maxResultCount
     if (input.sorting) {
@@ -55,6 +54,28 @@ export default class UserApiService {
     _url += '/' + userId
     _url += '/roles'
     return ApiService.Get<UserRoleDto>(_url, IdentityServiceUrl)
+  }
+
+  public static getUserClaims(userId: string) {
+    const _url = '/api/identity/users/claims/' + userId
+    return ApiService.Get<ListResultDto<UserClaim>>(_url, IdentityServiceUrl)
+  }
+
+  public static addUserClaim(userId: string, payload: UserClaimCreateOrUpdate) {
+    const _url = '/api/identity/users/claims/' + userId
+    return ApiService.Post<void>(_url, payload, IdentityServiceUrl)
+  }
+
+  public static updateUserClaim(userId: string, payload: UserClaimCreateOrUpdate) {
+    const _url = '/api/identity/users/claims/' + userId
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
+  }
+
+  public static deleteUserClaim(userId: string, payload: UserClaimDelete) {
+    let _url = '/api/identity/users/claims/' + userId
+    _url += '?claimType=' + payload.claimType
+    _url += '&claimValue=' + payload.claimValue
+    return ApiService.Delete(_url, IdentityServiceUrl)
   }
 
   public static getUserOrganizationUnits(userId: string) {
@@ -452,4 +473,18 @@ export interface IUserRole {
 
 export class ChangeUserOrganizationUnitDto {
   organizationUnitIds = new Array<string>()
+}
+
+export class UserClaimCreateOrUpdate {
+  claimType = ''
+  claimValue = ''
+}
+
+export class UserClaimDelete {
+  claimType = ''
+  claimValue = ''
+}
+
+export class UserClaim extends UserClaimCreateOrUpdate {
+  id!: string
 }

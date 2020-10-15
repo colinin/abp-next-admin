@@ -83,7 +83,8 @@ export default {
     filesystem: 'file system',
     auditing: 'auditing',
     auditLog: 'audit log',
-    securityLog: 'security log'
+    securityLog: 'security log',
+    claimType: 'claim type'
   },
   navbar: {
     logOut: 'Log Out',

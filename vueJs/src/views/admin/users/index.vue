@@ -131,6 +131,12 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
+                :command="{key: 'claim', row}"
+                :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
+              >
+                管理声明
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="{key: 'lock', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
               >
@@ -181,6 +187,13 @@
         @onUserProfileChanged="handleUserProfileChanged"
       />
     </el-dialog>
+
+    <user-claim-create-or-update-form
+      :show-dialog="showClaimDialog"
+      :user-id="editUser.id"
+      :title="$t('AbpIdentity.ClaimSubject', {0: editUser.name})"
+      @closed="onClaimDialogClosed"
+    />
   </div>
 </template>
 
@@ -192,6 +205,7 @@ import { dateFormat, abpPagerFormat } from '@/utils'
 import UserApiService, { UserDataDto, UsersGetPagedDto } from '@/api/users'
 import UserCreateForm from './components/UserCreateForm.vue'
 import UserEditForm from './components/UserEditForm.vue'
+import UserClaimCreateOrUpdateForm from './components/UserClaimCreateOrUpdateForm.vue'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
@@ -199,7 +213,8 @@ import { checkPermission } from '@/utils/permission'
   components: {
     Pagination,
     UserEditForm,
-    UserCreateForm
+    UserCreateForm,
+    UserClaimCreateOrUpdateForm
   },
   filters: {
     dateTimeFilter(datetime: string) {
@@ -219,6 +234,7 @@ export default class extends mixins(DataListMiXin) {
 
   private showCreateUserDialog = false
   private showEditUserDialog = false
+  private showClaimDialog = false
 
   mounted() {
     this.refreshPagedData()
@@ -260,9 +276,21 @@ export default class extends mixins(DataListMiXin) {
     this.showCreateUserDialog = true
   }
 
+  private handleShowCliamDialog(row: UserDataDto) {
+    this.editUser = row
+    this.showClaimDialog = true
+  }
+
+  private onClaimDialogClosed() {
+    this.showClaimDialog = false
+  }
+
   /** 响应更多操作命令 */
   private handleCommand(command: any) {
     switch (command.key) {
+      case 'claim' :
+        this.handleShowCliamDialog(command.row)
+        break
       case 'lock' :
         this.handleLockUser(command.row)
         break

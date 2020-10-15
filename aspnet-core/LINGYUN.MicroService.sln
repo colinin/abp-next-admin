@@ -249,6 +249,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain.Identity", "modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj", "{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Account.Web", "modules\account\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj", "{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -659,6 +661,10 @@ Global
 		{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -784,6 +790,7 @@ Global
 		{CC362C67-6FC1-42B3-A130-8120AA8D790C} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{B46D6DAF-98C6-441F-9FA5-3CAD7CF27727} = {CC362C67-6FC1-42B3-A130-8120AA8D790C}
 		{2D377D3A-70EC-4BB3-9F4C-6C933693DA98} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
+		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E} = {9E72FEB9-A626-4312-892B-CDD043879758}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

@@ -1,8 +1,8 @@
 ﻿using DotNetCore.CAP;
-using IdentityServer4;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.PermissionManagement.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -11,7 +11,6 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System;
 using System.Linq;
@@ -19,8 +18,11 @@ using System.Text;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -28,9 +30,11 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -44,23 +48,28 @@ using Volo.Abp.UI.Navigation.Urls;
 namespace AuthServer.Host
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpIdentityAspNetCoreModule),
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpIdentityServerSmsValidatorModule),
-        typeof(AbpIdentityServerWeChatValidatorModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAccountApplicationModule),
         typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAccountApplicationModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerSmsValidatorModule),
+        typeof(AbpIdentityServerWeChatValidatorModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule)
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpDbFinderMultiTenancyModule),
+        typeof(AbpCAPEventBusModule)
         )]
     public class AuthIdentityServerModule : AbpModule
     {
@@ -143,7 +152,13 @@ namespace AuthServer.Host
             });
 
             // context.Services.AddAuthentication();
-            context.Services.AddAuthentication().AddCookie("Cookie");
+            context.Services.AddAuthentication()
+                    .AddJwtBearer(options =>
+                    {
+                        options.Authority = configuration["AuthServer:Authority"];
+                        options.RequireHttpsMetadata = false;
+                        options.Audience = configuration["AuthServer:ApiName"];
+                    });
 
             Configure<AbpMultiTenancyOptions>(options =>
             {
@@ -181,15 +196,28 @@ namespace AuthServer.Host
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseErrorPage();
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
             app.UseCorrelationId();
             app.UseVirtualFiles();
-            app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
             app.UseAbpClaimsMap();
             app.UseMultiTenancy();
+            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

@@ -11,7 +11,7 @@
     "AuthServer.Host": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:44386;http://localhost:44385",
+      "applicationUrl": "http://localhost:44385",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

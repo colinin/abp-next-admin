@@ -60,6 +60,16 @@ const adminRouter: RouteConfig = {
         icon: 'organization-unit',
         roles: ['AbpIdentity.OrganizationUnits']
       }
+    },
+    {
+      path: 'claim-type',
+      component: () => import(/* webpackChunkName: "organization-unit" */ '@/views/admin/claim-type/index.vue'),
+      name: 'claim-type',
+      meta: {
+        title: 'claimType',
+        icon: 'claim-type',
+        roles: ['AbpIdentity.IdentityClaimTypes']
+      }
     }
   ]
 }

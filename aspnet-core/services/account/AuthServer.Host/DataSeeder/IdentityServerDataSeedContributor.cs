@@ -156,7 +156,8 @@ namespace AuthServer.DataSeeder
                     new[] { "hybrid" },
                     commonSecret,
                     redirectUri: $"{webClientRootUrl}signin-oidc",
-                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
+                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
+                    corsOrigins: configurationSection["CorsOrigins"]
                 );
             }
 
@@ -200,7 +201,8 @@ namespace AuthServer.DataSeeder
             string secret,
             string redirectUri = null,
             string postLogoutRedirectUri = null,
-            IEnumerable<string> permissions = null)
+            IEnumerable<string> permissions = null,
+            string corsOrigins = null)
         {
             var client = await _clientRepository.FindByCliendIdAsync(name);
             if (client == null)
@@ -260,6 +262,18 @@ namespace AuthServer.DataSeeder
                 if (client.FindPostLogoutRedirectUri(postLogoutRedirectUri) == null)
                 {
                     client.AddPostLogoutRedirectUri(postLogoutRedirectUri);
+                }
+            }
+
+            if (corsOrigins != null)
+            {
+                var corsOriginsSplit = corsOrigins.Split(";");
+                foreach (var corsOrigin in corsOriginsSplit)
+                {
+                    if (client.FindCorsOrigin(corsOrigin) == null)
+                    {
+                        client.AddCorsOrigin(corsOrigin);
+                    }
                 }
             }
 
