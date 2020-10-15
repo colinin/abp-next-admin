@@ -63,7 +63,7 @@ const adminRouter: RouteConfig = {
     },
     {
       path: 'claim-type',
-      component: () => import(/* webpackChunkName: "organization-unit" */ '@/views/admin/claim-type/index.vue'),
+      component: () => import(/* webpackChunkName: "claim-type" */ '@/views/admin/claim-type/index.vue'),
       name: 'claim-type',
       meta: {
         title: 'claimType',
