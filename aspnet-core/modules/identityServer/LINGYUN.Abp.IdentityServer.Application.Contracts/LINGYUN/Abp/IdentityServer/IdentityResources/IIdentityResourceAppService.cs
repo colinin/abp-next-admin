@@ -1,23 +1,16 @@
-﻿using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
+﻿using System;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
-    public interface IIdentityResourceAppService : IApplicationService
+    public interface IIdentityResourceAppService : 
+        ICrudAppService<
+            IdentityResourceDto,
+            Guid,
+            IdentityResourceGetByPagedDto,
+            IdentityResourceCreateOrUpdateDto,
+            IdentityResourceCreateOrUpdateDto
+            >
     {
-        Task<IdentityResourceDto> GetAsync(IdentityResourceGetByIdInputDto identityResourceGetById);
-
-        Task<PagedResultDto<IdentityResourceDto>> GetAsync(IdentityResourceGetByPagedInputDto identityResourceGetByPaged);
-
-        Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateDto identityResourceCreate);
-
-        Task<IdentityResourceDto> UpdateAsync(IdentityResourceUpdateDto identityResourceUpdate);
-
-        Task DeleteAsync(IdentityResourceGetByIdInputDto identityResourceGetById);
-
-        Task<IdentityResourcePropertyDto> AddPropertyAsync(IdentityResourcePropertyCreateDto identityResourcePropertyCreate);
-
-        Task DeletePropertyAsync(IdentityResourcePropertyGetByKeyDto identityResourcePropertyGetByKey);
     }
 }

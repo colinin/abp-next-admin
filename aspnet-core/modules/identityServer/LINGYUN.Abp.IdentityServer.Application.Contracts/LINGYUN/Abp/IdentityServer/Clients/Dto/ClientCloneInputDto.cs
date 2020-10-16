@@ -1,16 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.Clients;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
-    public class ClientCloneInputDto
+    public class ClientCloneDto
     {
-        /// <summary>
-        /// 来源客户端标识
-        /// </summary>
-        [Required]
-        public Guid SourceClientId { get; set; }
         /// <summary>
         /// 客户端标识
         /// </summary>
@@ -60,7 +54,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 复制客户端 IdP 限制
         /// </summary>
         public bool CopyIdentityProviderRestriction { get; set; }
-        public ClientCloneInputDto()
+        public ClientCloneDto()
         {
             CopyAllowedCorsOrigin = true;
             CopyAllowedGrantType = true;

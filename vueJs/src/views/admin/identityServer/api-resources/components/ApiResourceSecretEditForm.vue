@@ -1,29 +1,20 @@
 <template>
-  <el-dialog
-    v-el-draggable-dialog
-    width="800px"
-    :visible="showDialog"
-    :title="$t('identityServer.apiResourceSecret')"
-    custom-class="modal-form"
-    :show-close="false"
-    @close="onFormClosed"
+  <el-form
+    ref="apiResourceSecretEditForm"
+    :model="apiResourceSecret"
+    label-width="80px"
+    :rules="apiResourceSecretRules"
   >
-    <div class="app-container">
-      <el-form
-        v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
-        ref="formApiSecret"
-        label-width="100px"
-        :model="apiSecret"
-        :rules="apiSecretRules"
-      >
+    <el-row>
+      <el-col :span="12">
         <el-form-item
           prop="type"
-          :label="$t('identityServer.secretType')"
+          :label="$t('AbpIdentityServer.Secret:Type')"
         >
           <el-select
-            v-model="apiSecret.type"
+            v-model="apiResourceSecret.type"
             class="full-select"
-            :placeholder="$t('pleaseSelectBy', {key: $t('identityServer.secretType')})"
+            :placeholder="$t('pleaseSelectBy', {key: $t('AbpIdentityServer.Secret:Type')})"
           >
             <el-option
               key="JWK"
@@ -52,9 +43,11 @@
             />
           </el-select>
         </el-form-item>
+      </el-col>
+      <el-col :span="12">
         <el-form-item
           prop="hashType"
-          :label="$t('identityServer.secretHashType')"
+          :label="$t('AbpIdentityServer.Secret:HashType')"
         >
           <el-popover
             ref="popHashType"
@@ -63,11 +56,11 @@
             :content="$t('identityServer.hashOnlySharedSecret')"
           />
           <el-select
-            v-model="apiSecret.hashType"
+            v-model="apiResourceSecret.hashType"
             v-popover:popHashType
-            :disabled="apiSecret.type !== 'SharedSecret'"
+            :disabled="apiResourceSecret.type !== 'SharedSecret'"
             class="full-select"
-            :placeholder="$t('pleaseSelectBy', {key: $t('identityServer.secretHashType')})"
+            :placeholder="$t('pleaseSelectBy', {key: $t('AbpIdentityServer.Secret:HashType')})"
           >
             <el-option
               :key="0"
@@ -81,63 +74,61 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item
-          prop="value"
-          :label="$t('identityServer.secretValue')"
-        >
-          <el-input
-            v-model="apiSecret.value"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.secretValue')})"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="description"
-          :label="$t('identityServer.secretDescription')"
-        >
-          <el-input
-            v-model="apiSecret.description"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="expiration"
-          :label="$t('identityServer.expiration')"
-        >
-          <el-date-picker
-            v-model="apiSecret.expiration"
-            class="full-select"
-            type="datetime"
-          />
-        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-form-item
+      prop="value"
+      :label="$t('AbpIdentityServer.Secret:Value')"
+    >
+      <el-input
+        v-model="apiResourceSecret.value"
+        :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Secret:Value')})"
+      />
+    </el-form-item>
+    <el-form-item
+      prop="description"
+      :label="$t('AbpIdentityServer.Description')"
+    >
+      <el-input
+        v-model="apiResourceSecret.description"
+      />
+    </el-form-item>
+    <el-form-item
+      prop="expiration"
+      :label="$t('AbpIdentityServer.Expiration')"
+    >
+      <el-date-picker
+        v-model="apiResourceSecret.expiration"
+        class="full-select"
+        type="datetime"
+      />
+    </el-form-item>
 
-        <el-form-item
-          style="text-align: center;"
-          label-width="0px"
-        >
-          <el-button
-            type="primary"
-            style="width:180px"
-            @click="onSaveApiSecret"
-          >
-            {{ $t('identityServer.createApiSecret') }}
-          </el-button>
-        </el-form-item>
-        <el-divider />
-      </el-form>
-    </div>
-
+    <el-form-item
+      style="text-align: center;"
+      label-width="0px"
+    >
+      <el-button
+        type="primary"
+        style="width:180px"
+        @click="onSave"
+      >
+        {{ $t('AbpIdentityServer.Secret:New') }}
+      </el-button>
+    </el-form-item>
     <el-table
       row-key="value"
-      :data="apiSecrets"
+      :data="apiResourceSecrets"
       border
       fit
       highlight-current-row
       style="width: 100%;"
     >
       <el-table-column
-        :label="$t('identityServer.secretType')"
+        :label="$t('AbpIdentityServer.Secret:Type')"
         prop="type"
         sortable
-        width="150px"
+        width="170px"
         align="center"
       >
         <template slot-scope="{row}">
@@ -145,7 +136,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.secretValue')"
+        :label="$t('AbpIdentityServer.Secret:Value')"
         prop="value"
         sortable
         width="200px"
@@ -156,9 +147,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.secretDescription')"
+        :label="$t('AbpIdentityServer.Description')"
         prop="description"
-        width="170px"
+        width="120px"
         align="center"
       >
         <template slot-scope="{row}">
@@ -166,7 +157,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.expiration')"
+        :label="$t('AbpIdentityServer.Expiration')"
         prop="expiration"
         width="170px"
         align="center"
@@ -176,39 +167,38 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('operaActions')"
         align="center"
-        width="150px"
+        width="80px"
         fixed="right"
       >
         <template slot-scope="{row}">
           <el-button
             :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets.Delete'])"
+            type="danger"
+            icon="el-icon-delete"
             size="mini"
-            type="primary"
             @click="handleDeleteApiSecret(row.type, row.value)"
-          >
-            {{ $t('identityServer.deleteApiSecret') }}
-          </el-button>
+          />
         </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-form>
 </template>
 
 <script lang="ts">
-import ApiResourceService, { ApiSecret, ApiSecretCreate } from '@/api/apiresources'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { ApiSecretCreateOrUpdate, ApiSecret } from '@/api/api-resources'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
+import { Form } from 'element-ui'
 
 @Component({
-  name: 'ApiSecretEditForm',
+  name: 'ApiResourceSecretEditForm',
   filters: {
     dateTimeFilter(datetime: string) {
       if (datetime) {
         const date = new Date(datetime)
-        return dateFormat(date, 'YYYY-mm-dd HH:MM')
+        return dateFormat(date, 'YYYY-mm-dd HH:MM:SS')
       }
       return ''
     }
@@ -217,78 +207,34 @@ import { checkPermission } from '@/utils/permission'
     checkPermission
   }
 })
-export default class extends Vue {
-  @Prop({ default: false })
-  private showDialog!: boolean
+export default class ApiResourceSecretEditForm extends Vue {
+  @Prop({ default: () => { return new Array<ApiSecret>() } })
+  private apiResourceSecrets!: ApiSecret[]
 
-  @Prop({ default: '' })
-  private apiResourceId!: string
-
-  @Prop({ default: () => new Array<ApiSecret>() })
-  private apiSecrets!: ApiSecret[]
-
-  private apiSecretChanged: boolean
-  private apiSecret: ApiSecretCreate
-  private apiSecretRules = {
+  private apiResourceSecret = new ApiSecretCreateOrUpdate()
+  private apiResourceSecretRules = {
     type: [
-      { required: true, message: this.l('pleaseSelectBy', { key: this.l('identityServer.secretType') }), trigger: 'change' }
+      { required: true, message: this.l('pleaseSelectBy', { key: this.l('AbpIdentityServer.Secret:Type') }), trigger: 'blur' }
     ],
     value: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.secretValue') }), trigger: 'blur' }
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('AbpIdentityServer.Secret:Value') }), trigger: 'blur' }
     ]
   }
 
-  constructor() {
-    super()
-    this.apiSecretChanged = false
-    this.apiSecret = ApiSecretCreate.empty()
-  }
-
-  @Watch('apiResourceId', { immediate: true })
-  private onApiResourceIdChanged() {
-    this.apiSecret.apiResourceId = this.apiResourceId
-  }
-
-  private handleDeleteApiSecret(type: string, value: string) {
-    this.$confirm(this.l('identityServer.deleteApiSecretByType', { type: value }),
-      this.l('identityServer.deleteApiSecret'), {
-        callback: (action) => {
-          if (action === 'confirm') {
-            ApiResourceService.deleteApiSecret(this.apiResourceId, type, value).then(() => {
-              const deleteSecretIndex = this.apiSecrets.findIndex(secret => secret.type === type)
-              this.apiSecrets.splice(deleteSecretIndex, 1)
-              this.$message.success(this.l('identityServer.deleteApiSecretSuccess', { type: value }))
-              this.$emit('apiSecretChanged')
-            })
-          }
-        }
-      })
-  }
-
-  private onSaveApiSecret() {
-    const frmApiSecret = this.$refs.formApiSecret as any
-    frmApiSecret.validate((valid: boolean) => {
+  private onSave() {
+    const apiResourceSecretEditForm = this.$refs.apiResourceSecretEditForm as Form
+    apiResourceSecretEditForm.validate(valid => {
       if (valid) {
-        this.apiSecret.apiResourceId = this.apiResourceId
-        ApiResourceService.addApiSecret(this.apiSecret).then(secret => {
-          this.apiSecrets.push(secret)
-          const successMessage = this.l('identityServer.createApiSecretSuccess', { type: this.apiSecret.type })
-          this.$message.success(successMessage)
-          this.$emit('apiSecretChanged')
-          this.onFormClosed()
-        })
+        this.$emit('apiResourceSecretCreated',
+          this.apiResourceSecret.hashType, this.apiResourceSecret.type, this.apiResourceSecret.value,
+          this.apiResourceSecret.description, this.apiResourceSecret.expiration)
+        apiResourceSecretEditForm.resetFields()
       }
     })
   }
 
-  private onFormClosed() {
-    this.resetFields()
-    this.$emit('closed')
-  }
-
-  private resetFields() {
-    const frmApiSecret = this.$refs.formApiSecret as any
-    frmApiSecret.resetFields()
+  private handleDeleteApiSecret(type: string, value: string) {
+    this.$emit('apiResourceSecretDeleted', type, value)
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

@@ -1,166 +1,186 @@
 <template>
-  <el-dialog
-    v-el-draggable-dialog
-    width="800px"
-    :visible="showDialog"
-    :title="$t('identityServer.apiResourceScope')"
-    custom-class="modal-form"
-    :show-close="false"
-    @close="onFormClosed"
-  >
-    <div class="app-container">
-      <el-form
-        v-if="checkPermission(['IdentityServer.ApiResources.Secrets.Create'])"
-        ref="formApiScope"
-        label-width="120px"
-        :model="apiScope"
-        :rules="apiScopeRules"
-      >
-        <el-form-item
-          prop="name"
-          :label="$t('identityServer.apiScopeName')"
-        >
-          <el-input
-            v-model="apiScope.name"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.apiScopeName')})"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="displayName"
-          :label="$t('identityServer.apiScopeDisplayName')"
-        >
-          <el-input
-            v-model="apiScope.displayName"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="description"
-          :label="$t('identityServer.apiScopeDescription')"
-        >
-          <el-input
-            v-model="apiScope.description"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="required"
-          :label="$t('identityServer.apiScopeRequired')"
-        >
-          <el-switch
-            v-model="apiScope.required"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="emphasize"
-          :label="$t('identityServer.apiScopeEmphasize')"
-        >
-          <el-switch
-            v-model="apiScope.emphasize"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="showInDiscoveryDocument"
-          :label="$t('identityServer.apiScopeShowInDiscoveryDocument')"
-        >
-          <el-switch
-            v-model="apiScope.showInDiscoveryDocument"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="userClaims"
-          :label="$t('identityServer.resourceUserClaims')"
-        >
-          <el-input-tag-ex
-            v-model="apiScope.userClaims"
-            label="type"
-          />
-        </el-form-item>
-
-        <el-form-item
-          style="text-align: center;"
-          label-width="0px"
-        >
-          <el-button
-            type="primary"
-            style="width:180px"
-            @click="onSaveApiScope"
-          >
-            {{ $t('identityServer.createApiScope') }}
-          </el-button>
-        </el-form-item>
-        <el-divider />
-      </el-form>
-    </div>
-
-    <el-table
-      row-key="value"
-      :data="apiScopes"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
+  <div>
+    <el-form
+      ref="apiResourceScopeEditForm"
+      label-width="80px"
+      :model="apiResourceScope"
+      :rules="apiResourceScopeRules"
     >
-      <el-table-column
-        :label="$t('identityServer.apiScopeName')"
-        prop="name"
-        sortable
-        width="150px"
-        align="center"
+      <el-tabs
+        type="border-card"
+        style="width: 100%;"
       >
-        <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('identityServer.apiScopeDisplayName')"
-        prop="displayName"
-        sortable
-        width="200px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.displayName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('identityServer.apiScopeDescription')"
-        prop="description"
-        width="300px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.description }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('operaActions')"
-        align="center"
-        width="150px"
-        fixed="right"
-      >
-        <template slot-scope="{row}">
-          <el-button
-            :disabled="!checkPermission(['IdentityServer.ApiResources.Scope.Delete'])"
-            size="mini"
-            type="primary"
-            @click="handleDeleteApiScope(row.name)"
+        <el-tab-pane :label="$t('AbpIdentityServer.Information')">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item
+                prop="name"
+                :label="$t('AbpIdentityServer.Name')"
+              >
+                <el-input v-model="apiResourceScope.name" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item
+                prop="displayName"
+                :label="$t('AbpIdentityServer.DisplayName')"
+              >
+                <el-input v-model="apiResourceScope.displayName" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item
+            prop="description"
+            :label="$t('AbpIdentityServer.Description')"
           >
-            {{ $t('identityServer.deleteApiScope') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog>
+            <el-input v-model="apiResourceScope.description" />
+          </el-form-item>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item
+                prop="required"
+                :label="$t('AbpIdentityServer.Required')"
+              >
+                <el-switch v-model="apiResourceScope.required" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item
+                prop="emphasize"
+                :label="$t('AbpIdentityServer.Emphasize')"
+              >
+                <el-switch v-model="apiResourceScope.emphasize" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item
+                prop="showInDiscoveryDocument"
+                :label="$t('AbpIdentityServer.ShowInDiscoveryDocument')"
+                label-width="150px"
+              >
+                <el-switch v-model="apiResourceScope.showInDiscoveryDocument" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('AbpIdentityServer.UserClaim')">
+          <el-transfer
+            v-model="apiResourceScope.userClaims"
+            class="transfer-scope-new"
+            :data="userClaims"
+            :props="{
+              key: 'type',
+              label: 'value'
+            }"
+            :titles="[$t('AbpIdentityServer.NoClaim'), $t('AbpIdentityServer.ExistsClaim')]"
+          />
+        </el-tab-pane>
+      </el-tabs>
+      <el-form-item
+        style="text-align: center;"
+        label-width="0px"
+      >
+        <el-button
+          type="primary"
+          style="width:180px; margin-top: 20px;"
+          @click="onSave"
+        >
+          {{ $t('AbpIdentityServer.Scope:New') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <el-collapse accordion>
+      <el-collapse-item
+        v-for="(scope, index) in apiResourceScopes"
+        :key="index"
+      >
+        <h3 slot="title">
+          {{ scope.name }}
+        </h3>
+        <el-card>
+          <el-form
+            :model="scope"
+            label-width="80px"
+          >
+            <el-button
+              :disabled="!checkPermission(['IdentityServer.ApiResources.Scope.Delete'])"
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              style="margin-bottom: 10px;"
+              @click="handleDeleteApiScope(scope.name)"
+            >
+              {{ $t('AbpIdentityServer.Scope:Delete') }}
+            </el-button>
+            <el-tabs type="border-card">
+              <el-tab-pane :label="$t('AbpIdentityServer.Information')">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item :label="$t('AbpIdentityServer.Name')">
+                      <el-input v-model="scope.name" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item :label="$t('AbpIdentityServer.DisplayName')">
+                      <el-input v-model="scope.displayName" />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-form-item :label="$t('AbpIdentityServer.Description')">
+                  <el-input v-model="scope.description" />
+                </el-form-item>
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item :label="$t('AbpIdentityServer.Required')">
+                      <el-switch v-model="scope.required" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item :label="$t('AbpIdentityServer.Emphasize')">
+                      <el-switch v-model="scope.emphasize" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item
+                      :label="$t('AbpIdentityServer.ShowInDiscoveryDocument')"
+                      label-width="150px"
+                    >
+                      <el-switch v-model="scope.showInDiscoveryDocument" />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-tab-pane>
+              <el-tab-pane :label="$t('AbpIdentityServer.UserClaim')">
+                <el-transfer
+                  v-model="scope.userClaims"
+                  class="transfer-scope-edit"
+                  :data="userClaims"
+                  :props="{
+                    key: 'type',
+                    label: 'value'
+                  }"
+                  :titles="[$t('AbpIdentityServer.NoClaim'), $t('AbpIdentityServer.ExistsClaim')]"
+                />
+              </el-tab-pane>
+            </el-tabs>
+          </el-form>
+        </el-card>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
 </template>
 
 <script lang="ts">
-import ApiResourceService, { ApiScope, ApiScopeCreate } from '@/api/apiresources'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { ApiScope } from '@/api/api-resources'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import ElInputTagEx from '@/components/InputTagEx/index.vue'
+import { Claim } from '@/api/types'
+import { Form } from 'element-ui'
 
 @Component({
-  name: 'ApiScopeEditForm',
+  name: 'ApiResourceScopeEditForm',
   components: {
     ElInputTagEx
   },
@@ -177,75 +197,36 @@ import ElInputTagEx from '@/components/InputTagEx/index.vue'
     checkPermission
   }
 })
-export default class extends Vue {
-  @Prop({ default: false })
-  private showDialog!: boolean
+export default class ApiResourceScopeEditForm extends Vue {
+  @Prop({ default: () => { return new Array<Claim>() } })
+  private userClaims!: Claim[]
 
-  @Prop({ default: '' })
-  private apiResourceId!: string
+  @Prop({ default: () => { return new Array<ApiScope>() } })
+  private apiResourceScopes!: ApiScope[]
 
-  @Prop({ default: () => new Array<ApiScope>() })
-  private apiScopes!: ApiScope[]
-
-  private apiScopeChanged: boolean
-  private apiScope: ApiScopeCreate
-  private apiScopeRules = {
+  private apiResourceScope = new ApiScope()
+  private apiResourceScopeRules = {
     name: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.apiScopeName') }), trigger: 'blur' }
+      { required: true, message: this.l('pleaseInputBy', { key: this.l('AbpIdentityServer.Name') }), trigger: 'blur' }
     ]
   }
 
-  constructor() {
-    super()
-    this.apiScopeChanged = false
-    this.apiScope = ApiScopeCreate.empty()
-  }
-
-  @Watch('apiResourceId', { immediate: true })
-  private onApiResourceIdChanged() {
-    this.apiScope.apiResourceId = this.apiResourceId
-  }
-
   private handleDeleteApiScope(name: string) {
-    this.$confirm(this.l('identityServer.deleteApiScopeByName', { name: name }),
-      this.l('identityServer.deleteApiScope'), {
-        callback: (action) => {
-          if (action === 'confirm') {
-            ApiResourceService.deleteApiScope(this.apiResourceId, name).then(() => {
-              const deleteScopeIndex = this.apiScopes.findIndex(scope => scope.name === name)
-              this.apiScopes.splice(deleteScopeIndex, 1)
-              this.$message.success(this.l('identityServer.deleteApiScopeSuccess', { name: name }))
-              this.$emit('apiScopeChanged')
-            })
-          }
-        }
-      })
+    this.$emit('apiResourceScopeDeleted', name)
   }
 
-  private onSaveApiScope() {
-    const frmApiScope = this.$refs.formApiScope as any
-    frmApiScope.validate((valid: boolean) => {
+  private onSave() {
+    const apiResourceScopeEditForm = this.$refs.apiResourceScopeEditForm as Form
+    apiResourceScopeEditForm.validate(valid => {
       if (valid) {
-        this.apiScope.apiResourceId = this.apiResourceId
-        ApiResourceService.addApiScope(this.apiScope).then(scope => {
-          this.apiScopes.push(scope)
-          const successMessage = this.l('identityServer.createApiScopeSuccess', { name: this.apiScope.name })
-          this.$message.success(successMessage)
-          this.$emit('apiScopeChanged')
-          this.onFormClosed()
-        })
+        this.$emit('apiResourceScopeCreated',
+          this.apiResourceScope.name, this.apiResourceScope.required,
+          this.apiResourceScope.emphasize, this.apiResourceScope.showInDiscoveryDocument,
+          this.apiResourceScope.userClaims, this.apiResourceScope.displayName, this.apiResourceScope.description)
+        apiResourceScopeEditForm.resetFields()
+        this.apiResourceScope.userClaims.length = 0
       }
     })
-  }
-
-  private onFormClosed() {
-    this.resetFields()
-    this.$emit('closed')
-  }
-
-  public resetFields() {
-    const frmApiScope = this.$refs.formApiScope as any
-    frmApiScope.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
@@ -257,5 +238,11 @@ export default class extends Vue {
 <style lang="scss" scoped>
 .full-select {
   width: 100%;
+}
+.transfer-scope-new ::v-deep .el-transfer-panel{
+  width: 236px;
+}
+.transfer-scope-edit ::v-deep .el-transfer-panel{
+  width: 216px;
 }
 </style>

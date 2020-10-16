@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityResourceGetByPagedInputDto : PagedAndSortedResultRequestDto
+    public class IdentityResourceGetByPagedDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
     }

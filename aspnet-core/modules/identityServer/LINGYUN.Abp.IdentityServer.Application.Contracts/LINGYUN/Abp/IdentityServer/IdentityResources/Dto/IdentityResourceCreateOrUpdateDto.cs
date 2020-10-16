@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityResourceUpdateDto
+    public class IdentityResourceCreateOrUpdateDto
     {
         [Required]
-        public Guid Id { get; set; }
-
-        [Required]
-        [StringLength(2000)]
-        public string ConcurrencyStamp { get; set; }
-
         [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.NameMaxLength))]
         public string Name { get; set; }
 
@@ -32,14 +25,18 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
 
         public bool ShowInDiscoveryDocument { get; set; }
 
-        public List<IdentityClaimDto> UserClaims { get; set; }
+        public List<string> UserClaims { get; set; }
 
-        public IdentityResourceUpdateDto()
+        public Dictionary<string, string> Properties { get; set; }
+
+        public IdentityResourceCreateOrUpdateDto()
         {
+            UserClaims = new List<string>();
+            Properties = new Dictionary<string, string>();
+
             Enabled = true;
             Required = false;
             ShowInDiscoveryDocument = false;
-            UserClaims = new List<IdentityClaimDto>();
         }
     }
 }

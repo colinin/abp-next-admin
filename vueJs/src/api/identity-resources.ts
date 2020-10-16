@@ -1,6 +1,7 @@
 import ApiService from './serviceBase'
 import { FullAuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto } from './types'
 
+const sourceUrl = '/api/identity-server/identity-resources'
 /** 远程服务地址 */
 const serviceUrl = process.env.VUE_APP_BASE_API
 
@@ -12,8 +13,7 @@ export default class IdentityResourceService {
    * @returns 返回类型为 IdentityResource 的对象
    */
   public static getIdentityResourceById(id: string) {
-    let _url = '/api/IdentityServer/IdentityResources/'
-    _url += id
+    const _url = sourceUrl + '/' + id
     return ApiService.Get<IdentityResource>(_url, serviceUrl)
   }
 
@@ -23,8 +23,7 @@ export default class IdentityResourceService {
    * @returns 返回类型为 IdentityResource 的对象列表
    */
   public static getIdentityResources(payload: IdentityResourceGetByPaged) {
-    let _url = '/api/IdentityServer/IdentityResources'
-    _url += '?filter=' + payload.filter
+    let _url = sourceUrl + '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
@@ -37,8 +36,7 @@ export default class IdentityResourceService {
    * @returns 返回类型为 IdentityResource 的对象
    */
   public static createIdentityResource(payload: IdentityResourceCreate) {
-    const _url = '/api/IdentityServer/IdentityResources'
-    return ApiService.Post<IdentityResource>(_url, payload, serviceUrl)
+    return ApiService.Post<IdentityResource>(sourceUrl, payload, serviceUrl)
   }
 
   /**
@@ -46,8 +44,8 @@ export default class IdentityResourceService {
    * @param payload 类型为 IdentityResourceUpdate 的对象
    * @returns 返回类型为 IdentityResource 的对象
    */
-  public static updateIdentityResource(payload: IdentityResourceUpdate) {
-    const _url = '/api/IdentityServer/IdentityResources'
+  public static updateIdentityResource(id: string, payload: IdentityResourceUpdate) {
+    const _url = sourceUrl + '/' + id
     return ApiService.Put<IdentityResource>(_url, payload, serviceUrl)
   }
 
@@ -56,30 +54,7 @@ export default class IdentityResourceService {
    * @param id 身份资源标识
    */
   public static deleteIdentityResource(id: string) {
-    let _url = '/api/IdentityServer/IdentityResources'
-    _url += '?id=' + id
-    return ApiService.Delete(_url, serviceUrl)
-  }
-
-  /**
-   * 创建身份资源属性
-   * @param payload 类型为 IdentityPropertyCreate 的对象
-   * @returns 返回类型为 IdentityProperty 的对象
-   */
-  public static createProperty(payload: IdentityPropertyCreate) {
-    const _url = '/api/IdentityServer/IdentityResources/Properties'
-    return ApiService.Post<IdentityProperty>(_url, payload, serviceUrl)
-  }
-
-  /**
-   * 删除身份资源属性
-   * @param identityResourceId 身份资源标识
-   * @param key 身份资源属性键
-   */
-  public static deleteProperty(identityResourceId: string, key: string) {
-    let _url = '/api/IdentityServer/IdentityResources/Properties'
-    _url += '?identityResourceId=' + identityResourceId
-    _url += '&key=' + key
+    const _url = sourceUrl + '/' + id
     return ApiService.Delete(_url, serviceUrl)
   }
 }

@@ -18,13 +18,13 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         public List<ApiScopeDto> Scopes { get; set; }
 
-        public List<ApiResourceClaimDto> UserClaims { get; set; }
+        public List<string> UserClaims { get; set; }
 
         public ApiResourceDto()
         {
+            UserClaims = new List<string>();
             Scopes = new List<ApiScopeDto>();
             Secrets = new List<ApiSecretDto>();
-            UserClaims = new List<ApiResourceClaimDto>();
         }
     }
 }

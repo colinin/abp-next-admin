@@ -79,10 +79,19 @@
           prop="userClaims"
           :label="$t('identityServer.resourceUserClaims')"
         >
-          <el-input-tag-ex
+          <el-select
             v-model="identityResource.userClaims"
-            label="type"
-          />
+            multiple
+            style="width: 100%;"
+            value-key="type"
+          >
+            <el-option
+              v-for="claim in identityClaims"
+              :key="claim.type"
+              :label="claim.type"
+              :value="claim"
+            />
+          </el-select>
         </el-form-item>
 
         <el-form-item>
@@ -108,15 +117,13 @@
 </template>
 
 <script lang="ts">
-import IdentityResourceService, { IdentityResourceCreate, IdentityResourceUpdate, IdentityResource } from '@/api/identityresources'
+import IdentityResourceService, { IdentityResourceCreate, IdentityResourceUpdate, IdentityResource, IdentityClaim } from '@/api/identityresources'
+import ClaimTypeApiService from '@/api/cliam-type'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import ElInputTagEx from '@/components/InputTagEx/index.vue'
+import { Form } from 'element-ui'
 
 @Component({
-  name: 'IdentityResourceCreateOrEditForm',
-  components: {
-    ElInputTagEx
-  }
+  name: 'IdentityResourceCreateOrEditForm'
 })
 export default class extends Vue {
   @Prop({ default: false })
@@ -128,6 +135,7 @@ export default class extends Vue {
   @Prop({ default: '' })
   private identityResourceId!: string
 
+  private identityClaims = new Array<IdentityClaim>()
   private identityResource: IdentityResource
   private identityResourceRules = {
     name: [
@@ -156,6 +164,20 @@ export default class extends Vue {
     } else {
       this.identityResource = IdentityResource.empty()
     }
+  }
+
+  mounted() {
+    this.handleGetClaimTypes()
+  }
+
+  private handleGetClaimTypes() {
+    ClaimTypeApiService.getActivedClaimTypes().then(res => {
+      res.items.map(claim => {
+        const identityClaim = new IdentityClaim()
+        identityClaim.type = claim.name
+        this.identityClaims.push(identityClaim)
+      })
+    })
   }
 
   private onSaveIdentityResource() {
@@ -193,8 +215,7 @@ export default class extends Vue {
   }
 
   private resetFields() {
-    this.identityResource = IdentityResource.empty()
-    const frmIdentityResource = this.$refs.formIdentityResource as any
+    const frmIdentityResource = this.$refs.formIdentityResource as Form
     frmIdentityResource.resetFields()
   }
 

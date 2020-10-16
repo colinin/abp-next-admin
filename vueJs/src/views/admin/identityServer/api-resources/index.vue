@@ -23,9 +23,9 @@
         class="filter-item"
         type="primary"
         :disabled="!checkPermission(['IdentityServer.ApiResources.Create'])"
-        @click="handleShowEditApiResourceForm()"
+        @click="handleShowEditApiResourceForm('')"
       >
-        {{ $t('identityServer.createApiResource') }}
+        {{ $t('AbpIdentityServer.Resource:New') }}
       </el-button>
     </div>
 
@@ -40,7 +40,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column
-        :label="$t('identityServer.resourceName')"
+        :label="$t('AbpIdentityServer.Name')"
         prop="name"
         sortable
         width="150px"
@@ -51,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.resourceDisplayName')"
+        :label="$t('AbpIdentityServer.DisplayName')"
         prop="displayName"
         sortable
         width="200px"
@@ -62,20 +62,21 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.resourceStatus')"
+        :label="$t('AbpIdentityServer.Required')"
         prop="enabled"
         sortable
         width="140px"
         align="center"
       >
         <template slot-scope="{row}">
-          <el-tag :type="row.enabled | statusFilter">
-            {{ formatStatusText(row.enabled) }}
-          </el-tag>
+          <el-switch
+            v-model="row.enabled"
+            disabled
+          />
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.resourceDescription')"
+        :label="$t('AbpIdentityServer.Description')"
         prop="description"
         sortable
         width="200px"
@@ -123,43 +124,18 @@
             :disabled="!checkPermission(['IdentityServer.ApiResources.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowEditApiResourceForm(row)"
+            @click="handleShowEditApiResourceForm(row.id, row.name)"
           >
-            {{ $t('identityServer.updateApiResource') }}
+            {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
-          <el-dropdown
-            class="options"
-            @command="handleCommand"
+          <el-button
+            :disabled="!checkPermission(['IdentityServer.ApiResources.Delete'])"
+            size="mini"
+            type="danger"
+            @click="handleDeleteApiResource(row.id, row.name)"
           >
-            <el-button
-              v-permission="['IdentityServer.ApiResources']"
-              size="mini"
-              type="info"
-            >
-              {{ $t('identityServer.otherOpera') }}<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="{key: 'secret', row}"
-                :disabled="!checkPermission(['IdentityServer.ApiResources.Secrets'])"
-              >
-                {{ $t('identityServer.apiResourceSecret') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="{key: 'scope', row}"
-                :disabled="!checkPermission(['IdentityServer.ApiResources.Scope'])"
-              >
-                {{ $t('identityServer.apiResourceScope') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                divided
-                :command="{key: 'delete', row}"
-                :disabled="!checkPermission(['IdentityServer.ApiResources.Delete'])"
-              >
-                {{ $t('identityServer.deleteApiResource') }}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+            {{ $t('AbpIdentityServer.Resource:Delete') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -176,24 +152,8 @@
     <api-resource-create-or-edit-form
       :show-dialog="showEditApiResourceDialog"
       :title="editApiResourceTitle"
-      :api-resource-id="editApiResource.id"
+      :api-resource-id="editApiResourceId"
       @closed="handleApiResourceEditFormClosed"
-    />
-
-    <api-secret-edit-form
-      :show-dialog="showEditApiSecretDialog"
-      :api-resource-id="editApiResource.id"
-      :api-secrets="editApiResource.secrets"
-      @apiSecretChanged="refreshPagedData"
-      @closed="handleApiSecretEditFormClosed"
-    />
-
-    <api-scope-edit-form
-      :show-dialog="showEditApiScopeDialog"
-      :api-resource-id="editApiResource.id"
-      :api-scopes="editApiResource.scopes"
-      @apiSecretChanged="refreshPagedData"
-      @closed="handleApiScopeEditFormClosed"
     />
   </div>
 </template>
@@ -204,17 +164,13 @@ import { checkPermission } from '@/utils/permission'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
-import ApiScopeEditForm from './components/ApiResourceScopeEditForm.vue'
-import ApiSecretEditForm from './components/ApiResourceSecretEditForm.vue'
 import ApiResourceCreateOrEditForm from './components/ApiResourceCreateOrEditForm.vue'
-import ApiResourceService, { ApiResource, ApiResourceGetByPaged } from '@/api/apiresources'
+import ApiResourceService, { ApiResourceGetByPaged } from '@/api/api-resources'
 
 @Component({
   name: 'IdentityServerApiResource',
   components: {
     Pagination,
-    ApiScopeEditForm,
-    ApiSecretEditForm,
     ApiResourceCreateOrEditForm
   },
   methods: {
@@ -237,7 +193,7 @@ import ApiResourceService, { ApiResource, ApiResourceGetByPaged } from '@/api/ap
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editApiResource = new ApiResource()
+  private editApiResourceId =''
   private editApiResourceTitle = ''
 
   private showEditApiScopeDialog = false
@@ -258,15 +214,13 @@ export default class extends mixins(DataListMiXin) {
     return ApiResourceService.getApiResources(filter)
   }
 
-  private handleShowEditApiResourceForm(resource: ApiResource) {
-    if (resource) {
-      this.editApiResource = resource
-      this.editApiResourceTitle = this.l('identityServer.updateApiResourceByName', { name: this.editApiResource.name })
-    } else {
-      this.editApiResource = ApiResource.empty()
-      this.editApiResourceTitle = this.l('identityServer.createApiResource')
-    }
+  private handleShowEditApiResourceForm(id: string, name: string) {
+    this.editApiResourceId = id
+    this.editApiResourceTitle = this.l('AbpIdentityServer.Resource:New')
     this.showEditApiResourceDialog = true
+    if (name) {
+      this.editApiResourceTitle = this.l('AbpIdentityServer.Resource:Name', { 0: name })
+    }
   }
 
   private handleApiResourceEditFormClosed(changed: boolean) {
@@ -281,48 +235,25 @@ export default class extends mixins(DataListMiXin) {
     this.showEditApiSecretDialog = false
   }
 
-  private handleApiScopeEditFormClosed() {
+  private handleApiScopeEditFormClosed(changed: boolean) {
     this.showEditApiScopeDialog = false
+    if (changed) {
+      this.refreshPagedData()
+    }
   }
 
-  private handleDeleteApiResource(id: string, name: string) {
-    this.$confirm(this.l('identityServer.deleteApiResourceByName', { name: name }),
-      this.l('identityServer.deleteApiResource'), {
+  private handleDeleteApiResource(id: string) {
+    this.$confirm(this.l('AbpIdentityServer.Resource:Delete'),
+      this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             ApiResourceService.deleteApiResource(id).then(() => {
-              this.$message.success(this.l('identityServer.deleteApiResourceSuccess', { name: name }))
+              this.$message.success(this.l('global.successful'))
               this.refreshPagedData()
             })
           }
         }
       })
-  }
-
-  private handleCommand(command: {key: string, row: ApiResource}) {
-    this.editApiResource = command.row
-    switch (command.key) {
-      case 'secret' :
-        this.showEditApiSecretDialog = true
-        break
-      case 'scope' :
-        this.showEditApiScopeDialog = true
-        break
-      case 'delete' :
-        this.handleDeleteApiResource(command.row.id, command.row.name)
-        break
-      default: break
-    }
-  }
-
-  private formatStatusText(status: boolean) {
-    let statusText = ''
-    if (status) {
-      statusText = this.l('enabled')
-    } else {
-      statusText = this.l('disbled')
-    }
-    return statusText
   }
 }
 </script>

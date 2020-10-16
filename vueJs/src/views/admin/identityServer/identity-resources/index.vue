@@ -166,19 +166,6 @@
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
-
-    <identity-resource-create-or-edit-form
-      :show-dialog="showEditIdentityResourceDialog"
-      :title="editIdentityResourceTitle"
-      :identity-resource-id="editIdentityResource.id"
-      @closed="handleIdentityResourceEditFormClosed"
-    />
-
-    <identity-property-edit-form
-      :show-dialog="showEditIdentityPropertyDialog"
-      :identity-resource="editIdentityResource"
-      @closed="handleIdentityPropertyEditFormClosed"
-    />
   </div>
 </template>
 
@@ -188,16 +175,12 @@ import { checkPermission } from '@/utils/permission'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
-import IdentityPropertyEditForm from './components/IdentityResourcePropertyEditForm.vue'
-import IdentityResourceCreateOrEditForm from './components/IdentityResourceCreateOrEditForm.vue'
-import IdentityResourceService, { IdentityResource, IdentityResourceGetByPaged } from '@/api/identityresources'
+import IdentityResourceService, { IdentityResource, IdentityResourceGetByPaged } from '@/api/identity-resources'
 
 @Component({
   name: 'IdentityServerIdentityResource',
   components: {
-    Pagination,
-    IdentityPropertyEditForm,
-    IdentityResourceCreateOrEditForm
+    Pagination
   },
   methods: {
     checkPermission

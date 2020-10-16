@@ -4,20 +4,8 @@ using Volo.Abp.IdentityServer.Clients;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
-    public class ClientUpdateDto 
+    public class ClientUpdateDto : ClientCreateOrUpdateDto
     {
-        [Required]
-        [StringLength(1000)]
-        public string ConcurrencyStamp { get; set; }
-
-        [StringLength(ClientConsts.ClientIdMaxLength)]
-        public string ClientId { get; set; }
-
-        [StringLength(ClientConsts.ClientNameMaxLength)]
-        public string ClientName { get; set; }
-
-        [StringLength(ClientConsts.DescriptionMaxLength)]
-        public string Description { get; set; }
 
         [StringLength(ClientConsts.ClientUriMaxLength)]
         public string ClientUri { get; set; }
@@ -25,62 +13,62 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [StringLength(ClientConsts.LogoUriMaxLength)]
         public string LogoUri { get; set; }
 
-        public bool? Enabled { get; set; }
+        public bool Enabled { get; set; }
 
         [StringLength(ClientConsts.ProtocolTypeMaxLength)]
         public string ProtocolType { get; set; }
 
-        public bool? RequireClientSecret { get; set; }
+        public bool RequireClientSecret { get; set; }
 
-        public bool? RequireConsent { get; set; }
+        public bool RequireConsent { get; set; }
 
-        public bool? AllowRememberConsent { get; set; }
+        public bool AllowRememberConsent { get; set; }
 
-        public bool? AlwaysIncludeUserClaimsInIdToken { get; set; }
+        public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
-        public bool? RequirePkce { get; set; }
+        public bool RequirePkce { get; set; }
 
-        public bool? AllowPlainTextPkce { get; set; }
+        public bool AllowPlainTextPkce { get; set; }
 
-        public bool? AllowAccessTokensViaBrowser { get; set; }
+        public bool AllowAccessTokensViaBrowser { get; set; }
 
         [StringLength(ClientConsts.FrontChannelLogoutUriMaxLength)]
         public string FrontChannelLogoutUri { get; set; }
 
-        public bool? FrontChannelLogoutSessionRequired { get; set; }
+        public bool FrontChannelLogoutSessionRequired { get; set; }
 
         [StringLength(ClientConsts.BackChannelLogoutUriMaxLength)]
         public string BackChannelLogoutUri { get; set; }
 
-        public bool? BackChannelLogoutSessionRequired { get; set; }
+        public bool BackChannelLogoutSessionRequired { get; set; }
 
-        public bool? AllowOfflineAccess { get; set; }
+        public bool AllowOfflineAccess { get; set; }
 
-        public int? IdentityTokenLifetime { get; set; }
+        public int IdentityTokenLifetime { get; set; }
 
-        public int? AccessTokenLifetime { get; set; }
+        public int AccessTokenLifetime { get; set; }
 
-        public int? AuthorizationCodeLifetime { get; set; }
+        public int AuthorizationCodeLifetime { get; set; }
 
         public int? ConsentLifetime { get; set; }
 
-        public int? AbsoluteRefreshTokenLifetime { get; set; }
+        public int AbsoluteRefreshTokenLifetime { get; set; }
 
-        public int? SlidingRefreshTokenLifetime { get; set; }
+        public int SlidingRefreshTokenLifetime { get; set; }
 
-        public int? RefreshTokenUsage { get; set; }
+        public int RefreshTokenUsage { get; set; }
 
-        public bool? UpdateAccessTokenClaimsOnRefresh { get; set; }
+        public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
 
-        public int? RefreshTokenExpiration { get; set; }
+        public int RefreshTokenExpiration { get; set; }
 
-        public int? AccessTokenType { get; set; }
+        public int AccessTokenType { get; set; }
 
-        public bool? EnableLocalLogin { get; set; }
+        public bool EnableLocalLogin { get; set; }
 
-        public bool? IncludeJwtId { get; set; }
+        public bool IncludeJwtId { get; set; }
 
-        public bool? AlwaysSendClientClaims { get; set; }
+        public bool AlwaysSendClientClaims { get; set; }
 
         [StringLength(ClientConsts.ClientClaimsPrefixMaxLength)]
         public string ClientClaimsPrefix { get; set; }
@@ -93,29 +81,52 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [StringLength(ClientConsts.UserCodeTypeMaxLength)]
         public string UserCodeType { get; set; }
 
-        public int? DeviceCodeLifetime { get; set; }
+        public int DeviceCodeLifetime { get; set; }
+        /// <summary>
+        /// Api资源(AllowScopes)
+        /// </summary>
+        public List<string> ApiResources { get; set; }
+        /// <summary>
+        /// 身份资源(AllowScopes)
+        /// </summary>
+        public List<string> IdentityResources { get; set; }
+        /// <summary>
+        /// 允许同源
+        /// </summary>
+        public List<string> AllowedCorsOrigins { get; set; }
+        /// <summary>
+        /// 重定向uri
+        /// </summary>
+        public List<string> RedirectUris { get; set; }
+        /// <summary>
+        /// 登出重定向uri
+        /// </summary>
+        public List<string> PostLogoutRedirectUris { get; set; }
+        /// <summary>
+        /// 限制提供商
+        /// </summary>
+        public List<string> IdentityProviderRestrictions { get; set; }
+        /// <summary>
+        /// 属性
+        /// </summary>
+        public Dictionary<string, string> Properties { get; set; }
+        /// <summary>
+        /// 密钥
+        /// </summary>
+        public List<SecretCreateOrUpdateDto> Secrets { get; set; }
 
-        public List<ClientScopeDto> AllowedScopes { get; set; }
-
-        public List<ClientGrantTypeDto> AllowedGrantTypes { get; set; }
-
-        public List<ClientCorsOriginDto> AllowedCorsOrigins { get; set; }
-
-        public List<ClientRedirectUriDto> RedirectUris { get; set; }
-
-        public List<ClientPostLogoutRedirectUriDto> PostLogoutRedirectUris { get; set; }
-
-        public List<ClientIdPRestrictionDto> IdentityProviderRestrictions { get; set; }
         public ClientUpdateDto()
         {
             Enabled = true;
             DeviceCodeLifetime = 300;
-            AllowedScopes = new List<ClientScopeDto>();
-            RedirectUris = new List<ClientRedirectUriDto>();
-            AllowedGrantTypes = new List<ClientGrantTypeDto>();
-            AllowedCorsOrigins = new List<ClientCorsOriginDto>();
-            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUriDto>();
-            IdentityProviderRestrictions = new List<ClientIdPRestrictionDto>();
+            ApiResources = new List<string>();
+            IdentityResources = new List<string>();
+            RedirectUris = new List<string>();
+            AllowedCorsOrigins = new List<string>();
+            PostLogoutRedirectUris = new List<string>();
+            IdentityProviderRestrictions = new List<string>();
+            Properties = new Dictionary<string, string>();
+            Secrets = new List<SecretCreateOrUpdateDto>();
         }
     }
 }
