@@ -134,7 +134,7 @@
                 :command="{key: 'claim', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
               >
-                管理声明
+                {{ $t('AbpIdentity.ManageClaim') }}
               </el-dropdown-item>
               <el-dropdown-item
                 :command="{key: 'lock', row}"
@@ -191,7 +191,6 @@
     <user-claim-create-or-update-form
       :show-dialog="showClaimDialog"
       :user-id="editUser.id"
-      :title="$t('AbpIdentity.ClaimSubject', {0: editUser.name})"
       @closed="onClaimDialogClosed"
     />
   </div>

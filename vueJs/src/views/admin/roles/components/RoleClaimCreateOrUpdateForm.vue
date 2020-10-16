@@ -11,17 +11,17 @@
     @close="onFormClosed(false)"
   >
     <el-form
-      ref="userClaimForm"
-      :model="editUserClaim"
+      ref="roleClaimForm"
+      :model="editRoleClaim"
       label-width="120px"
-      :rules="userClaimRules"
+      :rules="roleClaimRules"
     >
       <el-form-item
         prop="claimType"
         :label="$t('AbpIdentity.DisplayName:ClaimType')"
       >
         <el-select
-          v-model="editUserClaim.claimType"
+          v-model="editRoleClaim.claimType"
           style="width: 100%"
           @change="onClaimTypeChanged"
         >
@@ -38,22 +38,22 @@
         :label="$t('AbpIdentity.DisplayName:ClaimValue')"
       >
         <el-input
-          v-if="hasStringValueType(editUserClaim.claimType)"
-          v-model="editUserClaim.claimValue"
+          v-if="hasStringValueType(editRoleClaim.claimType)"
+          v-model="editRoleClaim.claimValue"
           type="text"
         />
         <el-input
-          v-else-if="hasIntegerValueType(editUserClaim.claimType)"
-          v-model="editUserClaim.claimValue"
+          v-else-if="hasIntegerValueType(editRoleClaim.claimType)"
+          v-model="editRoleClaim.claimValue"
           type="number"
         />
         <el-switch
-          v-else-if="hasBooleanValueType(editUserClaim.claimType)"
-          v-model="editUserClaim.claimValue"
+          v-else-if="hasBooleanValueType(editRoleClaim.claimType)"
+          v-model="editRoleClaim.claimValue"
         />
         <el-date-picker
-          v-else-if="hasDateTimeValueType(editUserClaim.claimType)"
-          v-model="editUserClaim.claimValue"
+          v-else-if="hasDateTimeValueType(editRoleClaim.claimType)"
+          v-model="editRoleClaim.claimValue"
           type="datetime"
           style="width: 100%"
         />
@@ -73,7 +73,7 @@
     </el-form>
     <el-table
       row-key="id"
-      :data="userClaims"
+      :data="roleClaims"
       border
       fit
       highlight-current-row
@@ -108,7 +108,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
+            :disabled="!checkPermission(['AbpIdentity.Roles.ManageClaims'])"
             size="mini"
             type="danger"
             @click="handleDeleteUserClaim(row)"
@@ -125,28 +125,28 @@
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import UserService, { UserClaim, UserClaimCreateOrUpdate, UserClaimDelete } from '@/api/users'
+import RoleApiService, { RoleClaim, RoleClaimCreateOrUpdate, RoleClaimDelete } from '@/api/roles'
 import ClaimTypeApiService, { IdentityClaimType, IdentityClaimValueType } from '@/api/cliam-type'
 import { Form } from 'element-ui'
 
 @Component({
-  name: 'UserClaimCreateOrUpdateForm',
+  name: 'RoleClaimCreateOrUpdateForm',
   methods: {
     checkPermission
   }
 })
 export default class UserClaimCreateOrUpdateForm extends Vue {
   @Prop({ default: '' })
-  private userId!: string
+  private roleId!: string
 
   @Prop({ default: false })
   private showDialog!: boolean
 
-  private editUserClaim = new UserClaimCreateOrUpdate()
-  private userClaims = new Array<UserClaim>()
+  private editRoleClaim = new RoleClaimCreateOrUpdate()
+  private roleClaims = new Array<RoleClaim>()
   private claimTypes = new Array<IdentityClaimType>()
 
-  private userClaimRules = {}
+  private roleClaimRules = {}
 
   get cliamType() {
     return (claimName: string) => {
@@ -197,20 +197,20 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     }
   }
 
-  @Watch('userId')
+  @Watch('roleId')
   private onUserIdChanged() {
-    this.handleGetUserClaims()
+    this.handleGetRoleClaims()
   }
 
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
-    this.handleGetUserClaims()
+    this.handleGetRoleClaims()
   }
 
   mounted() {
     this.handleGetClaimTypes()
-    this.handleGetUserClaims()
-    this.userClaimRules = {
+    this.handleGetRoleClaims()
+    this.roleClaimRules = {
       claimType: [
         { required: true, message: this.l('pleaseSelectBy', { key: this.l('AbpIdentity.DisplayName:ClaimType') }), trigger: 'blur' }
       ],
@@ -226,26 +226,26 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     })
   }
 
-  private handleGetUserClaims() {
-    if (this.userId && this.showDialog) {
-      UserService.getUserClaims(this.userId).then(res => {
-        this.userClaims = res.items
+  private handleGetRoleClaims() {
+    if (this.showDialog && this.roleId) {
+      RoleApiService.getRoleClaims(this.roleId).then(res => {
+        this.roleClaims = res.items
       })
     }
   }
 
-  private handleDeleteUserClaim(claim: UserClaim) {
+  private handleDeleteUserClaim(claim: RoleClaim) {
     this.$confirm(this.l('AbpIdentity.DeleteClaim'),
       this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
-            const deleteClaim = new UserClaimDelete()
+            const deleteClaim = new RoleClaimDelete()
             deleteClaim.claimType = claim.claimType
             deleteClaim.claimValue = claim.claimValue
-            UserService.deleteUserClaim(this.userId, deleteClaim).then(() => {
+            RoleApiService.deleteRoleClaim(this.roleId, deleteClaim).then(() => {
               this.$message.success(this.l('global.successful'))
-              const claimIndex = this.userClaims.findIndex(uc => uc.id === claim.id)
-              this.userClaims.splice(claimIndex, 1)
+              const claimIndex = this.roleClaims.findIndex(uc => uc.id === claim.id)
+              this.roleClaims.splice(claimIndex, 1)
             })
           }
         }
@@ -254,39 +254,39 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
 
   // TODO: 可以简化为一个组件,通过组件来实现用户/客户端等的声明类型
   private onClaimTypeChanged() {
-    const valueType = this.cliamType(this.editUserClaim.claimType)
+    const valueType = this.cliamType(this.editRoleClaim.claimType)
     switch (valueType) {
       case IdentityClaimValueType.Int :
-        this.editUserClaim.claimValue = '0'
+        this.editRoleClaim.claimValue = '0'
         break
       case IdentityClaimValueType.String :
-        this.editUserClaim.claimValue = ''
+        this.editRoleClaim.claimValue = ''
         break
       case IdentityClaimValueType.Boolean :
-        this.editUserClaim.claimValue = 'false'
+        this.editRoleClaim.claimValue = 'false'
         break
       case IdentityClaimValueType.DateTime :
-        this.editUserClaim.claimValue = ''
+        this.editRoleClaim.claimValue = ''
         break
     }
   }
 
   private onSave() {
-    const userClaimForm = this.$refs.userClaimForm as Form
-    userClaimForm.validate(valid => {
+    const roleClaimForm = this.$refs.roleClaimForm as Form
+    roleClaimForm.validate(valid => {
       if (valid) {
-        UserService.addUserClaim(this.userId, this.editUserClaim).then(() => {
+        RoleApiService.addRoleClaim(this.roleId, this.editRoleClaim).then(() => {
           this.$message.success(this.$t('global.successful').toString())
-          userClaimForm.resetFields()
-          this.handleGetUserClaims()
+          roleClaimForm.resetFields()
+          this.handleGetRoleClaims()
         })
       }
     })
   }
 
   private onFormClosed(changed: boolean) {
-    const userClaimForm = this.$refs.userClaimForm as Form
-    userClaimForm.resetFields()
+    const roleClaimForm = this.$refs.roleClaimForm as Form
+    roleClaimForm.resetFields()
     this.$emit('closed', changed)
   }
 

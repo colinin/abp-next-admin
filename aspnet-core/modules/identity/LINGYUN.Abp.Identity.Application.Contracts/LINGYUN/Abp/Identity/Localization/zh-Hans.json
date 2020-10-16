@@ -2,8 +2,8 @@
   "culture": "zh-Hans",
   "texts": {
     "Permission:OrganizationUnitManagement": "组织机构管理",
-    "Permission:ChangeRoles": "更改角色",
-    "Permission:ChangeUsers": "更改用户",
+    "Permission:ManageRoles": "管理角色",
+    "Permission:ManageUsers": "管理用户",
     "Permission:ManageClaims": "管理声明",
     "Permission:ManageOrganizationUnits": "管理组织机构",
     "Permission:IdentityClaimTypeManagement": "管理声明类型",
@@ -13,6 +13,7 @@
     "DisplayName:ClaimType": "声明类型",
     "DisplayName:ClaimValue": "声明值",
     "ClaimSubject": "声明 - {0}",
+    "RoleSubject": "角色 - {0}",
     "AddClaim": "添加声明",
     "UpdateClaim": "变更声明",
     "DeleteClaim": "删除声明",

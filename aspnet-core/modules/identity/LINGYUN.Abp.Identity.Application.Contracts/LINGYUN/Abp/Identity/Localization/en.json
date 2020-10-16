@@ -2,8 +2,8 @@
   "culture": "en",
   "texts": {
     "Permission:OrganizationUnitManagement": "Organization unit management",
-    "Permission:ChangeRoles": "Change roles",
-    "Permission:ChangeUsers": "Change users",
+    "Permission:ManageRoles": "Management roles",
+    "Permission:ManageUsers": "Management users",
     "Permission:ManageClaims": "Management claims",
     "Permission:ManageOrganizationUnits": "Management organization units",
     "Permission:IdentityClaimTypeManagement": "Management claim types",
@@ -13,6 +13,7 @@
     "DisplayName:ClaimType": "Type",
     "DisplayName:ClaimValue": "Value",
     "ClaimSubject": "Claim - {0}",
+    "RoleSubject": "Role - {0}",
     "AddClaim": "Add claim",
     "UpdateClaim": "Update claim",
     "DeleteClaim": "Delete claim",
