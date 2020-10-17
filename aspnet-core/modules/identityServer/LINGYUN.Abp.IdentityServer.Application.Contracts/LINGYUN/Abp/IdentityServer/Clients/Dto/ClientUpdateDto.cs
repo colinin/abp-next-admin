@@ -114,6 +114,10 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 密钥
         /// </summary>
         public List<SecretCreateOrUpdateDto> Secrets { get; set; }
+        /// <summary>
+        /// 声明
+        /// </summary>
+        public List<ClientClaimDto> Claims { get; set; }
 
         public ClientUpdateDto()
         {
@@ -127,6 +131,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             IdentityProviderRestrictions = new List<string>();
             Properties = new Dictionary<string, string>();
             Secrets = new List<SecretCreateOrUpdateDto>();
+            Claims = new List<ClientClaimDto>();
         }
     }
 }

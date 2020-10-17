@@ -187,11 +187,6 @@ export default class extends Vue {
     return false
   }
 
-  @Watch('apiResourceId')
-  private onApiResourceIdChanged() {
-    this.handleGetApiResource()
-  }
-
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
     this.handleGetApiResource()

@@ -1,18 +1,17 @@
 import ApiService from './serviceBase'
-import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
+import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto, SecretBase, Claim } from './types'
 
+const sourceUrl = '/api/identity-server/clients'
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class ClientService {
   public static getClientById(id: string) {
-    let _url = '/api/IdentityServer/Clients/'
-    _url += id
+    const _url = sourceUrl + '/' + id
     return ApiService.Get<Client>(_url, serviceUrl)
   }
 
   public static getClients(payload: ClientGetByPaged) {
-    let _url = '/api/IdentityServer/Clients'
-    _url += '?filter=' + payload.filter
+    let _url = sourceUrl + '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
@@ -20,144 +19,39 @@ export default class ClientService {
   }
 
   public static createClient(payload: ClientCreate) {
-    const _url = '/api/IdentityServer/Clients'
+    return ApiService.Post<Client>(sourceUrl, payload, serviceUrl)
+  }
+
+  public static cloneClient(id: string, payload: ClientClone) {
+    const _url = sourceUrl + '/' + id + '/clone'
     return ApiService.Post<Client>(_url, payload, serviceUrl)
   }
 
-  public static cloneClient(payload: ClientClone) {
-    const _url = '/api/IdentityServer/Clients/Clone'
-    return ApiService.Post<Client>(_url, payload, serviceUrl)
-  }
-
-  public static updateClient(payload: ClientUpdate) {
-    const _url = '/api/IdentityServer/Clients'
+  public static updateClient(id: string, payload: ClientUpdate) {
+    const _url = sourceUrl + '/' + id
     return ApiService.Put<Client>(_url, payload, serviceUrl)
   }
 
   public static deleteClient(id: string) {
-    const _url = '/api/IdentityServer/Clients/' + id
+    const _url = sourceUrl + '/' + id
     return ApiService.Delete(_url, serviceUrl)
   }
+}
 
-  public static addClientSecret(payload: ClientSecretCreate) {
-    const _url = '/api/IdentityServer/Clients/Secrets'
-    return ApiService.Post<ClientSecret>(_url, payload, serviceUrl)
-  }
+export enum HashType {
+  Sha256 = 0,
+	Sha512 = 1
+}
 
-  public static deleteClientSecret(clientId: string, type: string, value: string) {
-    let _url = '/api/IdentityServer/Clients/Secrets'
-    _url += '?clientId=' + clientId
-    _url += '&type=' + type
-    _url += '&value=' + value
-    return ApiService.Delete(_url, serviceUrl)
-  }
-
-  public static addClientProperty(payload: ClientPropertyCreate) {
-    const _url = '/api/IdentityServer/Clients/Properties'
-    return ApiService.Post<ClientProperty>(_url, payload, serviceUrl)
-  }
-
-  public static deleteClientProperty(clientId: string, key: string, value: string) {
-    let _url = '/api/IdentityServer/Clients/Properties'
-    _url += '?clientId=' + clientId
-    _url += '&key=' + key
-    _url += '&value=' + value
-    return ApiService.Delete(_url, serviceUrl)
-  }
-
-  public static addClientClaim(payload: ClientClaimCreate) {
-    const _url = '/api/IdentityServer/Clients/Claims'
-    return ApiService.Post<ClientClaim>(_url, payload, serviceUrl)
-  }
-
-  public static deleteClientClaim(clientId: string, type: string, value: string) {
-    let _url = '/api/IdentityServer/Clients/Claims'
-    _url += '?clientId=' + clientId
-    _url += '&type=' + type
-    _url += '&value=' + value
-    return ApiService.Delete(_url, serviceUrl)
-  }
+export class SecretCreateOrUpdate extends SecretBase {
+  hashType = HashType.Sha256
 }
 
 export class ClientGetByPaged extends PagedAndSortedResultRequestDto {
   filter = ''
 }
 
-export enum HashType {
-  Sha256,
-  Sha512
-}
-
-export class ClientSecret {
-  type = ''
-  value = ''
-  hashType = HashType.Sha256
-  description? = ''
-  expiration? = undefined
-}
-
-export class ClientRedirectUri {
-  redirectUri = ''
-}
-
-export class ClientClaim {
-  type = ''
-  value = ''
-}
-
-export class ClientCorsOrigin {
-  origin = ''
-}
-
-export class ClientGrantType {
-  grantType = ''
-}
-
-export class ClientIdPRestriction {
-  provider = ''
-}
-
-export class ClientPostLogoutRedirectUri {
-  postLogoutRedirectUri = ''
-}
-
-export class ClientProperty {
-  key = ''
-  value = ''
-}
-
-export class ClientScope {
-  scope = ''
-}
-
-export class ClientSecretCreate extends ClientSecret {
-  clientId!: string
-
-  constructor() {
-    super()
-    this.type = 'SharedSecret'
-    this.hashType = HashType.Sha256
-  }
-}
-
-export class ClientClaimCreate extends ClientClaim {
-  clientId!: string
-}
-
-export class ClientPropertyCreate extends ClientProperty {
-  clientId!: string
-}
-
-export class ClientCreate {
-  clientId = ''
-  clientName = ''
-  description? = ''
-  allowedGrantTypes?: ClientGrantType[]
-
-  constructor() {
-    this.allowedGrantTypes = new Array<ClientGrantType>()
-  }
-}
+export class ClientClaim extends Claim {}
 
 export class ClientClone {
   sourceClientId = ''
@@ -218,39 +112,27 @@ export class Client extends FullAuditedEntityDto {
   userSsoLifetime!: number
   userCodeType?: string
   deviceCodeLifetime!: number
-  allowedScopes!: ClientScope[]
-  clientSecrets!: ClientSecret[]
-  allowedGrantTypes!: ClientGrantType[]
-  allowedCorsOrigins!: ClientCorsOrigin[]
-  redirectUris!: ClientRedirectUri[]
-  postLogoutRedirectUris!: ClientPostLogoutRedirectUri[]
-  identityProviderRestrictions!: ClientIdPRestriction[]
-  claims!: ClientClaim[]
-  properties!: ClientProperty[]
-
-  constructor() {
-    super()
-    this.allowedScopes = new Array<ClientScope>()
-    this.clientSecrets = new Array<ClientSecret>()
-    this.allowedGrantTypes = new Array<ClientGrantType>()
-    this.allowedCorsOrigins = new Array<ClientCorsOrigin>()
-    this.redirectUris = new Array<ClientRedirectUri>()
-    this.postLogoutRedirectUris = new Array<ClientPostLogoutRedirectUri>()
-    this.identityProviderRestrictions = new Array<ClientIdPRestriction>()
-    this.claims = new Array<ClientClaim>()
-    this.properties = new Array<ClientProperty>()
-  }
-
-  public static empty() {
-    return new Client()
-  }
+  allowedScopes = new Array<string>()
+  clientSecrets = new Array<string>()
+  allowedGrantTypes = new Array<string>()
+  allowedCorsOrigins = new Array<string>()
+  redirectUris = new Array<string>()
+  postLogoutRedirectUris = new Array<string>()
+  identityProviderRestrictions = new Array<string>()
+  claims = new Array<string>()
+  properties = new Array<string>()
 }
 
-export class ClientUpdateData {
-  concurrencyStamp!: string
+export class ClientCreateOrUpdate {
   clientId = ''
   clientName = ''
   description? = ''
+  allowedGrantTypes = new Array<string>()
+}
+
+export class ClientCreate extends ClientCreateOrUpdate {}
+
+export class ClientUpdate extends ClientCreateOrUpdate {
   clientUri? = ''
   logoUri? = ''
   enabled = true
@@ -266,7 +148,7 @@ export class ClientUpdateData {
   frontChannelLogoutSessionRequired = true
   backChannelLogoutUri? = ''
   backChannelLogoutSessionRequired = true
-  allowOfflineAccess = false
+  allowOfflineAccess = true
   identityTokenLifetime = 300
   accessTokenLifetime = 3600
   authorizationCodeLifetime = 300
@@ -285,75 +167,13 @@ export class ClientUpdateData {
   userSsoLifetime!: number
   userCodeType? = ''
   deviceCodeLifetime = 300
-  allowedScopes!: ClientScope[]
-  allowedGrantTypes!: ClientGrantType[]
-  allowedCorsOrigins!: ClientCorsOrigin[]
-  redirectUris!: ClientRedirectUri[]
-  postLogoutRedirectUris!: ClientPostLogoutRedirectUri[]
-  identityProviderRestrictions!: ClientIdPRestriction[]
-
-  constructor() {
-    this.allowedScopes = new Array<ClientScope>()
-    this.allowedGrantTypes = new Array<ClientGrantType>()
-    this.allowedCorsOrigins = new Array<ClientCorsOrigin>()
-    this.redirectUris = new Array<ClientRedirectUri>()
-    this.postLogoutRedirectUris = new Array<ClientPostLogoutRedirectUri>()
-    this.identityProviderRestrictions = new Array<ClientIdPRestriction>()
-  }
-
-  public setClient(client: Client) {
-    this.absoluteRefreshTokenLifetime = client.absoluteRefreshTokenLifetime
-    this.accessTokenLifetime = client.accessTokenLifetime
-    this.accessTokenType = client.accessTokenType
-    this.allowAccessTokensViaBrowser = client.allowAccessTokensViaBrowser
-    this.allowOfflineAccess = client.allowOfflineAccess
-    this.allowPlainTextPkce = client.allowPlainTextPkce
-    this.allowRememberConsent = client.allowRememberConsent
-    this.allowedCorsOrigins = client.allowedCorsOrigins
-    this.allowedGrantTypes = client.allowedGrantTypes
-    this.allowedScopes = client.allowedScopes
-    this.alwaysIncludeUserClaimsInIdToken = client.alwaysIncludeUserClaimsInIdToken
-    this.alwaysSendClientClaims = client.alwaysSendClientClaims
-    this.authorizationCodeLifetime = client.authorizationCodeLifetime
-    this.backChannelLogoutSessionRequired = client.backChannelLogoutSessionRequired
-    this.backChannelLogoutUri = client.backChannelLogoutUri
-    this.clientClaimsPrefix = client.clientClaimsPrefix
-    this.clientId = client.clientId
-    this.clientName = client.clientName
-    this.clientUri = client.clientUri
-    this.concurrencyStamp = client.concurrencyStamp
-    this.consentLifetime = client.consentLifetime
-    this.description = client.description
-    this.deviceCodeLifetime = client.deviceCodeLifetime
-    this.enableLocalLogin = client.enableLocalLogin
-    this.enabled = client.enabled
-    this.frontChannelLogoutSessionRequired = client.frontChannelLogoutSessionRequired
-    this.frontChannelLogoutUri = client.frontChannelLogoutUri
-    this.identityProviderRestrictions = client.identityProviderRestrictions
-    this.identityTokenLifetime = client.identityTokenLifetime
-    this.includeJwtId = client.includeJwtId
-    this.logoUri = client.logoUri
-    this.pairWiseSubjectSalt = client.pairWiseSubjectSalt
-    this.postLogoutRedirectUris = client.postLogoutRedirectUris
-    this.protocolType = client.protocolType
-    this.redirectUris = client.redirectUris
-    this.refreshTokenExpiration = client.refreshTokenExpiration
-    this.refreshTokenUsage = client.refreshTokenUsage
-    this.requireClientSecret = client.requireClientSecret
-    this.requireConsent = client.requireConsent
-    this.requirePkce = client.requirePkce
-    this.slidingRefreshTokenLifetime = client.slidingRefreshTokenLifetime
-    this.updateAccessTokenClaimsOnRefresh = client.updateAccessTokenClaimsOnRefresh
-    this.userCodeType = client.userCodeType
-    this.userSsoLifetime = client.userSsoLifetime
-  }
-}
-
-export class ClientUpdate {
-  id!: string
-  client!: ClientUpdateData
-
-  constructor() {
-    this.client = new ClientUpdateData()
-  }
+  apiResources = new Array<string>()
+  identityResources = new Array<string>()
+  allowedCorsOrigins = new Array<string>()
+  redirectUris = new Array<string>()
+  postLogoutRedirectUris = new Array<string>()
+  identityProviderRestrictions = new Array<string>()
+  properties: {[key: string]: string} = {}
+  secrets = new Array<SecretCreateOrUpdate>()
+  claims = new Array<ClientClaim>()
 }

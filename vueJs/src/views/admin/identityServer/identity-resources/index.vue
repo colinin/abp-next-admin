@@ -25,7 +25,7 @@
         :disabled="!checkPermission(['IdentityServer.IdentityResources.Create'])"
         @click="handleShowEditIdentityResourceForm"
       >
-        {{ $t('identityServer.createIdentityResource') }}
+        {{ $t('AbpIdentityServer.Resource:New') }}
       </el-button>
     </div>
 
@@ -40,7 +40,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column
-        :label="$t('global.name')"
+        :label="$t('AbpIdentityServer.Name')"
         prop="name"
         sortable
         width="150px"
@@ -51,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('global.displayName')"
+        :label="$t('AbpIdentityServer.DisplayName')"
         prop="displayName"
         sortable
         width="200px"
@@ -62,20 +62,21 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('global.status')"
+        :label="$t('AbpIdentityServer.Resource:Enabled')"
         prop="enabled"
         sortable
         width="140px"
         align="center"
       >
         <template slot-scope="{row}">
-          <el-tag :type="row.enabled | statusFilter">
-            {{ formatStatusText(row.enabled) }}
-          </el-tag>
+          <el-switch
+            v-model="row.enabled"
+            disabled
+          />
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('global.description')"
+        :label="$t('AbpIdentityServer.Description')"
         prop="description"
         sortable
         width="200px"
@@ -125,35 +126,16 @@
             type="primary"
             @click="handleShowEditIdentityResourceForm(row)"
           >
-            {{ $t('identityServer.updateIdentityResource') }}
+            {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
-          <el-dropdown
-            class="options"
-            @command="handleCommand"
+          <el-button
+            :disabled="!checkPermission(['IdentityServer.IdentityResources.Delete'])"
+            size="mini"
+            type="danger"
+            @click="handleDeleteIdentityResource(row)"
           >
-            <el-button
-              v-permission="['IdentityServer.IdentityResources']"
-              size="mini"
-              type="info"
-            >
-              {{ $t('global.otherOpera') }}<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="{key: 'property', row}"
-                :disabled="!checkPermission(['IdentityServer.IdentityResources.Properties'])"
-              >
-                {{ $t('identityServer.identityResourceProperties') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                divided
-                :command="{key: 'delete', row}"
-                :disabled="!checkPermission(['IdentityServer.IdentityResources.Delete'])"
-              >
-                {{ $t('identityServer.deleteIdentityResource') }}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+            {{ $t('AbpIdentityServer.Resource:Delete') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -166,6 +148,13 @@
       @pagination="refreshPagedData"
       @sort-change="handleSortChange"
     />
+
+    <identity-resource-create-or-edit-form
+      :identity-resource-id="editIdentityResourceId"
+      :title="editIdentityResourceTitle"
+      :show-dialog="showEditIdentityResourceDialog"
+      @closed="onIdentityResourceEditFormClosed"
+    />
   </div>
 </template>
 
@@ -177,10 +166,13 @@ import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import IdentityResourceService, { IdentityResource, IdentityResourceGetByPaged } from '@/api/identity-resources'
 
+import IdentityResourceCreateOrEditForm from './components/IdentityResourceCreateOrEditForm.vue'
+
 @Component({
   name: 'IdentityServerIdentityResource',
   components: {
-    Pagination
+    Pagination,
+    IdentityResourceCreateOrEditForm
   },
   methods: {
     checkPermission
@@ -199,10 +191,9 @@ import IdentityResourceService, { IdentityResource, IdentityResourceGetByPaged }
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editIdentityResource = IdentityResource.empty()
+  private editIdentityResourceId = ''
   private editIdentityResourceTitle = ''
 
-  private showEditIdentityPropertyDialog = false
   private showEditIdentityResourceDialog = false
 
   public dataFilter = new IdentityResourceGetByPaged()
@@ -220,31 +211,22 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleShowEditIdentityResourceForm(resource: IdentityResource) {
-    this.editIdentityResource = IdentityResource.empty()
     if (resource) {
-      this.editIdentityResource = resource
-      this.editIdentityResourceTitle = this.l('identityServer.updateIdentityResourceByName', { name: this.editIdentityResource.name })
+      this.editIdentityResourceId = resource.id
+      this.editIdentityResourceTitle = this.l('AbpIdentityServer.Resource:Name', { 0: resource.name })
     } else {
-      this.editIdentityResourceTitle = this.l('identityServer.createIdentityResource')
+      this.editIdentityResourceTitle = this.l('AbpIdentityServer.Resource:New')
     }
     this.showEditIdentityResourceDialog = true
   }
 
-  private handleIdentityResourceEditFormClosed(changed: boolean) {
-    this.reset(changed)
-  }
-
-  private handleIdentityPropertyEditFormClosed(changed: boolean) {
-    this.reset(changed)
-  }
-
-  private handleDeleteIdentityResource(id: string, name: string) {
-    this.$confirm(this.l('identityServer.deleteIdentityResourceByName', { name: name }),
-      this.l('identityServer.deleteIdentityResource'), {
+  private handleDeleteIdentityResource(resource: IdentityResource) {
+    this.$confirm(this.l('AbpIdentityServer.Resource:WillDelete', { 0: resource.name }),
+      this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
-            IdentityResourceService.deleteIdentityResource(id).then(() => {
-              this.$message.success(this.l('identityServer.deleteIdentityResourceSuccess', { name: name }))
+            IdentityResourceService.deleteIdentityResource(resource.id).then(() => {
+              this.$message.success(this.l('global.successful'))
               this.refreshPagedData()
             })
           }
@@ -252,34 +234,8 @@ export default class extends mixins(DataListMiXin) {
       })
   }
 
-  private handleCommand(command: {key: string, row: IdentityResource}) {
-    switch (command.key) {
-      case 'property' :
-        this.editIdentityResource = command.row
-        this.showEditIdentityPropertyDialog = true
-        break
-      case 'delete' :
-        this.handleDeleteIdentityResource(command.row.id, command.row.name)
-        break
-      default: break
-    }
-  }
-
-  private formatStatusText(status: boolean) {
-    let statusText = ''
-    if (status) {
-      statusText = this.l('enabled')
-    } else {
-      statusText = this.l('disbled')
-    }
-    return statusText
-  }
-
-  private reset(changed: boolean) {
-    this.editIdentityResourceTitle = ''
-    this.editIdentityResource = IdentityResource.empty()
+  private onIdentityResourceEditFormClosed(changed: boolean) {
     this.showEditIdentityResourceDialog = false
-    this.showEditIdentityPropertyDialog = false
     if (changed) {
       this.refreshPagedData()
     }

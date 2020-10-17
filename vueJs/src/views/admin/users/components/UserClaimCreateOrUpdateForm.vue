@@ -197,11 +197,6 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     }
   }
 
-  @Watch('userId')
-  private onUserIdChanged() {
-    this.handleGetUserClaims()
-  }
-
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
     this.handleGetUserClaims()

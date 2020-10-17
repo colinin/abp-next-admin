@@ -12,8 +12,6 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         
         public string Description { get; set; }
 
-        public string ConcurrencyStamp { get; set; }
-
         public bool Enabled { get; set; }
 
         public bool Required { get; set; }

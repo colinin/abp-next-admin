@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 client.AddGrantType(grantType);
             }
 
-            client = await ClientRepository.InsertAsync(client, true);
+            client = await ClientRepository.InsertAsync(client);
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -50,7 +50,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         [Authorize(AbpIdentityServerPermissions.Clients.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            await ClientRepository.DeleteAsync(id);
+            var client = await ClientRepository.GetAsync(id);
+            await ClientRepository.DeleteAsync(client);
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }
@@ -64,10 +65,9 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public virtual async Task<PagedResultDto<ClientDto>> GetListAsync(ClientGetByPagedDto input)
         {
-            // Abp官方IdentityServer项目不支持Filter过滤...
             var clients = await ClientRepository.GetListAsync(input.Sorting,
                 input.SkipCount, input.MaxResultCount,
-                input.Filter, true);
+                input.Filter);
 
             var clientCount = await ClientRepository.GetCountAsync();
 
@@ -245,6 +245,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region Secrets
 
+            // 移除已经不存在的客户端密钥
+            client.ClientSecrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Value == inputSecret.Value && secret.Type == inputSecret.Type));
             var currentSecrets = new List<ClientSecretDto>();
             foreach (var inputSecret in input.Secrets)
             {
@@ -271,23 +273,8 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 if (clientSecret == null)
                 {
                     client.AddSecret(inputSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
-                    currentSecrets.Add(new ClientSecretDto
-                    {
-                        Value = inputSecretValue,
-                        Type = inputSecret.Type
-                    });
-                }
-                else
-                {
-                    currentSecrets.Add(new ClientSecretDto
-                    {
-                        Value = clientSecret.Value,
-                        Type = clientSecret.Type
-                    });
                 }
             }
-            // 移除已经不存在的客户端密钥
-            client.ClientSecrets.RemoveAll(secret => !currentSecrets.Any(allowSecret => secret.Value == allowSecret.Value && secret.Type == allowSecret.Type));
 
             #endregion
 
@@ -303,6 +290,20 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 }
             }
 
+            #endregion
+
+            #region Claims
+
+            // 移除已经不存在的客户端声明
+            client.ClientSecrets.RemoveAll(secret => !input.Claims.Any(inputClaim => secret.Value == inputClaim.Value && secret.Type == inputClaim.Type));
+            foreach (var inputClaim in input.Claims)
+            {
+                if (client.FindClaim(inputClaim.Value, inputClaim.Type) == null)
+                {
+                    client.AddClaim(inputClaim.Value, inputClaim.Type);
+                }
+            }
+            
             #endregion
 
             client = await ClientRepository.UpdateAsync(client);

@@ -125,11 +125,6 @@ export default class extends Vue {
     ]
   }
 
-  @Watch('roleId')
-  private onRoleIdChanged() {
-    this.handleGetRole()
-  }
-
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
     this.handleGetRole()

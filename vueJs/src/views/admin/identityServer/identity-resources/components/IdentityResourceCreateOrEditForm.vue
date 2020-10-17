@@ -13,92 +13,99 @@
     <div class="app-container">
       <el-form
         ref="formIdentityResource"
-        label-width="120px"
+        label-width="130px"
         :model="identityResource"
         :rules="identityResourceRules"
       >
-        <el-form-item
-          prop="enabled"
-          :label="$t('identityServer.enabledResource')"
+        <el-tabs
+          v-model="activeTable"
+          type="border-card"
         >
-          <el-switch
-            v-model="identityResource.enabled"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="name"
-          :label="$t('identityServer.resourceName')"
-        >
-          <el-input
-            v-model="identityResource.name"
-            :disabled="isEdit"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.resourceName')})"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="displayName"
-          :label="$t('identityServer.resourceDisplayName')"
-        >
-          <el-input
-            v-model="identityResource.displayName"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="description"
-          :label="$t('identityServer.resourceDescription')"
-        >
-          <el-input
-            v-model="identityResource.description"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="required"
-          :label="$t('identityServer.identityResourceRequired')"
-        >
-          <el-switch
-            v-model="identityResource.required"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="emphasize"
-          :label="$t('identityServer.identityResourceEmphasize')"
-        >
-          <el-switch
-            v-model="identityResource.emphasize"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="showInDiscoveryDocument"
-          :label="$t('identityServer.identityResourceShowInDiscoveryDocument')"
-        >
-          <el-switch
-            v-model="identityResource.showInDiscoveryDocument"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="userClaims"
-          :label="$t('identityServer.resourceUserClaims')"
-        >
-          <el-select
-            v-model="identityResource.userClaims"
-            multiple
-            style="width: 100%;"
-            value-key="type"
+          <el-tab-pane
+            name="information"
+            :label="$t('AbpIdentityServer.Information')"
           >
-            <el-option
-              v-for="claim in identityClaims"
-              :key="claim.type"
-              :label="claim.type"
-              :value="claim"
+            <el-form-item
+              prop="enabled"
+              :label="$t('AbpIdentityServer.Resource:Enabled')"
+            >
+              <el-switch
+                v-model="identityResource.enabled"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="name"
+              :label="$t('AbpIdentityServer.Name')"
+            >
+              <el-input
+                v-model="identityResource.name"
+                :disabled="isEdit"
+                :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="displayName"
+              :label="$t('AbpIdentityServer.DisplayName')"
+            >
+              <el-input
+                v-model="identityResource.displayName"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="description"
+              :label="$t('AbpIdentityServer.Description')"
+            >
+              <el-input
+                v-model="identityResource.description"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="required"
+              :label="$t('AbpIdentityServer.Required')"
+            >
+              <el-switch
+                v-model="identityResource.required"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="emphasize"
+              :label="$t('AbpIdentityServer.Emphasize')"
+            >
+              <el-switch
+                v-model="identityResource.emphasize"
+              />
+            </el-form-item>
+            <el-form-item
+              prop="showInDiscoveryDocument"
+              :label="$t('AbpIdentityServer.ShowInDiscoveryDocument')"
+            >
+              <el-switch
+                v-model="identityResource.showInDiscoveryDocument"
+              />
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane
+            name="claims"
+            :label="$t('AbpIdentityServer.UserClaim')"
+          >
+            <el-transfer
+              v-model="identityResource.userClaims"
+              class="transfer-scope"
+              :data="identityClaims"
+              :props="{
+                key: 'type',
+                label: 'value'
+              }"
+              :titles="[$t('AbpIdentityServer.NoClaim'), $t('AbpIdentityServer.ExistsClaim')]"
             />
-          </el-select>
-        </el-form-item>
+          </el-tab-pane>
+        </el-tabs>
 
         <el-form-item>
           <el-button
             class="cancel"
             style="width:100px"
-            @click="onCancel"
+            @click="onFormClosed(false)"
           >
             {{ $t('global.cancel') }}
           </el-button>
@@ -106,7 +113,7 @@
             class="confirm"
             type="primary"
             style="width:100px"
-            @click="onSaveIdentityResource"
+            @click="onSave"
           >
             {{ $t('global.confirm') }}
           </el-button>
@@ -117,10 +124,12 @@
 </template>
 
 <script lang="ts">
-import IdentityResourceService, { IdentityResourceCreate, IdentityResourceUpdate, IdentityResource, IdentityClaim } from '@/api/identityresources'
-import ClaimTypeApiService from '@/api/cliam-type'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Form } from 'element-ui'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+
+import { Claim } from '@/api/types'
+import ClaimTypeApiService from '@/api/cliam-type'
+import IdentityResourceService, { IdentityResource, IdentityResourceCreateOrUpdate } from '@/api/identity-resources'
 
 @Component({
   name: 'IdentityResourceCreateOrEditForm'
@@ -135,8 +144,9 @@ export default class extends Vue {
   @Prop({ default: '' })
   private identityResourceId!: string
 
-  private identityClaims = new Array<IdentityClaim>()
-  private identityResource: IdentityResource
+  private activeTable = 'information'
+  private identityClaims = new Array<Claim>()
+  private identityResource = new IdentityResource()
   private identityResourceRules = {
     name: [
       { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.resourceName') }), trigger: 'blur' }
@@ -150,20 +160,9 @@ export default class extends Vue {
     return false
   }
 
-  constructor() {
-    super()
-    this.identityResource = IdentityResource.empty()
-  }
-
-  @Watch('identityResourceId', { immediate: true })
-  private onIdentityResourceIdChanged() {
-    if (this.identityResourceId) {
-      IdentityResourceService.getIdentityResourceById(this.identityResourceId).then(resource => {
-        this.identityResource = resource
-      })
-    } else {
-      this.identityResource = IdentityResource.empty()
-    }
+  @Watch('showDialog', { immediate: true })
+  private onShowDialogChanged() {
+    this.handleGetIdentityResource()
   }
 
   mounted() {
@@ -173,30 +172,40 @@ export default class extends Vue {
   private handleGetClaimTypes() {
     ClaimTypeApiService.getActivedClaimTypes().then(res => {
       res.items.map(claim => {
-        const identityClaim = new IdentityClaim()
-        identityClaim.type = claim.name
+        const identityClaim = new Claim(claim.name, claim.name)
         this.identityClaims.push(identityClaim)
       })
     })
   }
 
-  private onSaveIdentityResource() {
+  private handleGetIdentityResource() {
+    this.activeTable = 'information'
+    if (this.showDialog && this.identityResourceId) {
+      IdentityResourceService.getIdentityResourceById(this.identityResourceId).then(resource => {
+        this.identityResource = resource
+      })
+    } else {
+      this.identityResource = new IdentityResource()
+    }
+  }
+
+  private onSave() {
     const frmIdentityResource = this.$refs.formIdentityResource as any
     frmIdentityResource.validate((valid: boolean) => {
       if (valid) {
+        const editIdentityResource = new IdentityResourceCreateOrUpdate()
+        this.updateIdentityResourceByInput(editIdentityResource)
         if (this.isEdit) {
-          const updateIdentityResource = IdentityResourceUpdate.create(this.identityResource)
-          IdentityResourceService.updateIdentityResource(updateIdentityResource).then(resource => {
+          IdentityResourceService.updateIdentityResource(this.identityResourceId, editIdentityResource).then(resource => {
             this.identityResource = resource
-            const successMessage = this.l('identityServer.updateIdentityResourceSuccess', { name: resource.name })
+            const successMessage = this.l('global.successful')
             this.$message.success(successMessage)
             this.onFormClosed(true)
           })
         } else {
-          const createIdentityResource = IdentityResourceCreate.create(this.identityResource)
-          IdentityResourceService.createIdentityResource(createIdentityResource).then(resource => {
+          IdentityResourceService.createIdentityResource(editIdentityResource).then(resource => {
             this.identityResource = resource
-            const successMessage = this.l('identityServer.createIdentityResourceSuccess', { name: resource.name })
+            const successMessage = this.l('global.successful')
             this.$message.success(successMessage)
             this.onFormClosed(true)
           })
@@ -205,13 +214,21 @@ export default class extends Vue {
     })
   }
 
+  private updateIdentityResourceByInput(identityResource: IdentityResourceCreateOrUpdate) {
+    identityResource.name = this.identityResource.name
+    identityResource.displayName = this.identityResource.displayName
+    identityResource.description = this.identityResource.description
+    identityResource.enabled = this.identityResource.enabled
+    identityResource.required = this.identityResource.required
+    identityResource.emphasize = this.identityResource.emphasize
+    identityResource.showInDiscoveryDocument = this.identityResource.showInDiscoveryDocument
+    identityResource.userClaims = this.identityResource.userClaims
+    identityResource.properties = this.identityResource.properties
+  }
+
   private onFormClosed(changed: boolean) {
     this.resetFields()
     this.$emit('closed', changed)
-  }
-
-  private onCancel() {
-    this.onFormClosed(false)
   }
 
   private resetFields() {
@@ -229,9 +246,14 @@ export default class extends Vue {
 .confirm {
   position: absolute;
   right: 10px;
+  top: 20px;
 }
 .cancel {
   position: absolute;
   right: 120px;
+  top: 20px;
+}
+.transfer-scope ::v-deep .el-transfer-panel{
+  width: 250px;
 }
 </style>
