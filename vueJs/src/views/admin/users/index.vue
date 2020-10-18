@@ -139,12 +139,6 @@
                 {{ $t('AbpIdentity.Edit') }}
               </el-dropdown-item>
               <el-dropdown-item
-                :command="{key: 'claim', row}"
-                :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
-              >
-                {{ $t('AbpIdentity.ManageClaim') }}
-              </el-dropdown-item>
-              <el-dropdown-item
                 :command="{key: 'permission', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.ManagePermissions'])"
               >
@@ -155,6 +149,12 @@
                 :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
               >
                 {{ $t('AbpIdentity.Lock') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{key: 'claim', row}"
+                :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
+              >
+                {{ $t('AbpIdentity.ManageClaim') }}
               </el-dropdown-item>
               <el-dropdown-item
                 divided
