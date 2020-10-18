@@ -657,8 +657,7 @@ export default {
   },
   AbpValidation: {
     ThisFieldIsNotAValidEmailAddress: '字段不是有效的邮箱地址',
-    ThisFieldMustBeAStringWithAMinimumLengthOf: '字段必须是最小长度为{0}的字符串',
-    'ThisFieldMustBeAStringWithAMinimumLengthOf{0}AndAMaximumLengthOf{1}':'字段必须是最小长度为{0}并且最大长度{1}的字符串'
+    ThisFieldMustBeAStringWithAMinimumLengthOf: '字段必须是最小长度为{0}的字符串'
   },
   AbpIdentity: {
     Lock: '锁定',

@@ -30,18 +30,6 @@ export default class PermissionService {
   }
 }
 
-export class UpdatePermissionsDto {
-  permissions!: UpdatePermissionDto[]
-
-  constructor() {
-    this.permissions = new Array<UpdatePermissionDto>()
-  }
-
-  public addPermission(name: string, isGranted: boolean) {
-    this.permissions.push(new UpdatePermissionDto(name, isGranted))
-  }
-}
-
 export class UpdatePermissionDto implements IPermission {
   name!: string
   isGranted!: boolean
@@ -52,6 +40,18 @@ export class UpdatePermissionDto implements IPermission {
   ) {
     this.name = name
     this.isGranted = isGranted
+  }
+}
+
+export class UpdatePermissionsDto {
+  permissions!: UpdatePermissionDto[]
+
+  constructor() {
+    this.permissions = new Array<UpdatePermissionDto>()
+  }
+
+  public addPermission(name: string, isGranted: boolean) {
+    this.permissions.push(new UpdatePermissionDto(name, isGranted))
   }
 }
 
