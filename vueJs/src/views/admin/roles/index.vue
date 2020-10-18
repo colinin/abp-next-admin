@@ -121,6 +121,12 @@
                 {{ $t('AbpIdentity.ManageClaim') }}
               </el-dropdown-item>
               <el-dropdown-item
+                :command="{key: 'permission', row}"
+                :disabled="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
+              >
+                {{ $t('AbpIdentity.Permissions') }}
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="row.isDefault ? {key: 'unDefault', row} : {key: 'default', row}"
                 :disabled="row.isStatic || !checkPermission(['AbpIdentity.Roles.Update'])"
               >
@@ -163,6 +169,14 @@
       :role-id="editRoleId"
       @closed="onClaimDialogClosed"
     />
+
+    <permission-form
+      provider-name="R"
+      :provider-key="editRoleName"
+      :readonly="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
+      :show-dialog="showPermissionDialog"
+      @closed="onPermissionDialogClosed"
+    />
   </div>
 </template>
 
@@ -173,7 +187,7 @@ import Component, { mixins } from 'vue-class-component'
 import RoleService, { RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
-import PermissionTree from '@/components/PermissionTree/index.vue'
+import PermissionForm from '@/components/PermissionForm/index.vue'
 import RoleEditForm from './components/RoleEditForm.vue'
 import RoleCreateForm from './components/RoleCreateForm.vue'
 import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateForm.vue'
@@ -181,7 +195,7 @@ import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateFor
 @Component({
   name: 'RoleList',
   components: {
-    PermissionTree,
+    PermissionForm,
     Pagination,
     RoleEditForm,
     RoleCreateForm,
@@ -196,6 +210,8 @@ export default class extends mixins(DataListMiXin) {
   private editRoleId = ''
   private showClaimDialog = false
   private showCreateDialog = false
+  private editRoleName = ''
+  private showPermissionDialog = false
 
   public dataFilter = new RoleGetPagedDto()
 
@@ -217,6 +233,9 @@ export default class extends mixins(DataListMiXin) {
     switch (command.key) {
       case 'claim' :
         this.handleShowCliamDialog(command.row)
+        break
+      case 'permission' :
+        this.handleShowPermissionDialog(command.row)
         break
       case 'default' :
         this.handleSetDefaultRole(command.row, true)
@@ -244,6 +263,15 @@ export default class extends mixins(DataListMiXin) {
   private handleShowCliamDialog(row: RoleDto) {
     this.editRoleId = row.id
     this.showClaimDialog = true
+  }
+
+  private handleShowPermissionDialog(row: RoleDto) {
+    this.editRoleName = row.name
+    this.showPermissionDialog = true
+  }
+
+  private onPermissionDialogClosed() {
+    this.showPermissionDialog = false
   }
 
   private onClaimDialogClosed() {

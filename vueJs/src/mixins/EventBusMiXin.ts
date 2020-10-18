@@ -44,8 +44,8 @@ export default class EventBusMiXin extends Vue {
    * @param name 事件名称
    * @param callback 注销回调
    */
-  protected unSubscribe(name: string, callback: (eventData: any) => void | undefined) {
-    this.$events.off(name, callback)
+  protected unSubscribe(name: string) {
+    this.$events.off(name, undefined)
   }
 
   /**

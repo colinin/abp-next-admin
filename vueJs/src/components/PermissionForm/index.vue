@@ -21,6 +21,7 @@
       </el-checkbox>
       <el-divider />
       <el-tabs
+        v-model="activeTabPane"
         tab-position="left"
         type="card"
       >
@@ -236,6 +237,8 @@ export default class PermissionForm extends Vue {
   @Prop({ default: false })
   private readonly!: boolean
 
+  /** 激活tab页 */
+  private activeTabPane = ''
   /** 确认按钮忙碌状态 */
   private confirmButtonBusy = false
   /** 当前编辑权限实体名称 */
@@ -350,6 +353,7 @@ export default class PermissionForm extends Vue {
    * 获取权限集合
    */
   private handleGetPermissions() {
+    this.activeTabPane = ''
     this.permissionGroups.length = 0
     if (this.showDialog && this.providerName) {
       PermissionApiService.getPermissionsByKey(this.providerName, this.providerKey).then(res => {
@@ -366,6 +370,9 @@ export default class PermissionForm extends Vue {
           })
           this.permissionGroups.push(group)
         })
+        if (this.permissionGroups.length > 0) {
+          this.activeTabPane = this.permissionGroups[0].name
+        }
       })
     }
   }

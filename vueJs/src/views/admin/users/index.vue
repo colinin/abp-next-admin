@@ -17,15 +17,15 @@
         type="primary"
         @click="refreshPagedData"
       >
-        {{ $t('users.searchList') }}
+        {{ $t('AbpIdentity.Search') }}
       </el-button>
       <el-button
         class="filter-item"
         type="primary"
         :disabled="!checkPermission(['AbpIdentity.Users.Create'])"
-        @click="handleCreateUser"
+        @click="handleShowUserDialog('')"
       >
-        {{ $t('users.createUser') }}
+        {{ $t('AbpIdentity.NewUser') }}
       </el-button>
     </div>
 
@@ -40,7 +40,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column
-        :label="$t('users.userName')"
+        :label="$t('AbpIdentity.DisplayName:UserName')"
         prop="userName"
         sortable
         width="110px"
@@ -51,7 +51,17 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.name')"
+        :label="$t('AbpIdentity.DisplayName:Surname')"
+        prop="surname"
+        width="110px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.surname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('AbpIdentity.DisplayName:Name')"
         prop="name"
         width="110px"
         align="center"
@@ -61,7 +71,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.email')"
+        :label="$t('AbpIdentity.DisplayName:Email')"
         prop="email"
         sortable
         min-width="180"
@@ -72,7 +82,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.phoneNumber')"
+        :label="$t('AbpIdentity.DisplayName:PhoneNumber')"
         prop="phoneNumber"
         width="140px"
         align="center"
@@ -82,7 +92,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.lockoutEnd')"
+        :label="$t('AbpIdentity.LockoutEnd')"
         prop="lockoutEnd"
         sortable
         width="140px"
@@ -93,7 +103,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.creationTime')"
+        :label="$t('AbpIdentity.CreationTime')"
         prop="creationTime"
         sortable
         width="140px"
@@ -104,20 +114,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('users.operaActions')"
+        :label="$t('AbpIdentity.Actions')"
         align="center"
-        width="250px"
-        min-width="250px"
+        width="120px"
+        fixed="right"
       >
         <template slot-scope="{row}">
-          <el-button
-            :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
-            size="mini"
-            type="primary"
-            @click="handleShowEditUserForm(row)"
-          >
-            {{ $t('users.updateUser') }}
-          </el-button>
           <el-dropdown
             class="options"
             @command="handleCommand"
@@ -125,11 +127,17 @@
             <el-button
               v-permission="['AbpIdentity.Users']"
               size="mini"
-              type="info"
+              type="primary"
             >
-              {{ $t('users.otherOpera') }}<i class="el-icon-arrow-down el-icon--right" />
+              {{ $t('AbpIdentity.Actions') }}<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                :command="{key: 'edit', row}"
+                :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
+              >
+                {{ $t('AbpIdentity.Edit') }}
+              </el-dropdown-item>
               <el-dropdown-item
                 :command="{key: 'claim', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
@@ -137,17 +145,23 @@
                 {{ $t('AbpIdentity.ManageClaim') }}
               </el-dropdown-item>
               <el-dropdown-item
+                :command="{key: 'permission', row}"
+                :disabled="!checkPermission(['AbpIdentity.Users.ManagePermissions'])"
+              >
+                {{ $t('AbpIdentity.Permissions') }}
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="{key: 'lock', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
               >
-                {{ $t('users.lockUser') }}
+                {{ $t('AbpIdentity.Lock') }}
               </el-dropdown-item>
               <el-dropdown-item
                 divided
                 :command="{key: 'delete', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.Delete'])"
               >
-                {{ $t('users.deleteUser') }}
+                {{ $t('AbpIdentity.Delete') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -155,7 +169,7 @@
       </el-table-column>
     </el-table>
 
-    <Pagination
+    <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
       :page.sync="currentPage"
@@ -163,56 +177,47 @@
       @pagination="refreshPagedData"
     />
 
-    <el-dialog
-      :visible.sync="showEditUserDialog"
-      custom-class="profile"
-      :title="$t('users.updateUserBy', {name: editUser.name})"
-      :show-close="false"
-    >
-      <UserEditForm
-        :user-id="editUser.id"
-        @onClose="handleCloseUserProfile"
-        @onUserProfileChanged="handleUserProfileChanged"
-      />
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="showCreateUserDialog"
-      custom-class="profile"
-      :title="$t('users.createUser')"
-      :show-close="false"
-    >
-      <UserCreateForm
-        @onClose="handleCloseUserProfile"
-        @onUserProfileChanged="handleUserProfileChanged"
-      />
-    </el-dialog>
+    <user-create-or-update-form
+      :show-dialog="showUserDialog"
+      :edit-user-id="editUserId"
+      @closed="onUserDialogClosed"
+    />
 
     <user-claim-create-or-update-form
       :show-dialog="showClaimDialog"
-      :user-id="editUser.id"
+      :user-id="editUserId"
       @closed="onClaimDialogClosed"
+    />
+
+    <permission-form
+      provider-name="U"
+      :provider-key="editUserId"
+      :readonly="!allowedEditPermission"
+      :show-dialog="showPermissionDialog"
+      @closed="onPermissionDialogClosed"
     />
   </div>
 </template>
 
 <script lang="ts">
+import { UserModule } from '@/store/modules/user'
 import DataListMiXin from '@/mixins/DataListMiXin'
+import EventBusMiXin from '@/mixins/EventBusMiXin'
 import Component, { mixins } from 'vue-class-component'
+import UserApiService, { User, UsersGetPagedDto } from '@/api/users'
 import Pagination from '@/components/Pagination/index.vue'
-import { dateFormat, abpPagerFormat } from '@/utils'
-import UserApiService, { UserDataDto, UsersGetPagedDto } from '@/api/users'
-import UserCreateForm from './components/UserCreateForm.vue'
-import UserEditForm from './components/UserEditForm.vue'
+import PermissionForm from '@/components/PermissionForm/index.vue'
+import UserCreateOrUpdateForm from './components/UserCreateOrUpdateForm.vue'
 import UserClaimCreateOrUpdateForm from './components/UserClaimCreateOrUpdateForm.vue'
+import { dateFormat, abpPagerFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
   name: 'UserList',
   components: {
     Pagination,
-    UserEditForm,
-    UserCreateForm,
+    PermissionForm,
+    UserCreateOrUpdateForm,
     UserClaimCreateOrUpdateForm
   },
   filters: {
@@ -225,18 +230,26 @@ import { checkPermission } from '@/utils/permission'
     checkPermission
   }
 })
-export default class extends mixins(DataListMiXin) {
-  /** 当前编辑用户 */
-  private editUser = new UserDataDto()
+export default class extends mixins(DataListMiXin, EventBusMiXin) {
+  private editUserId = ''
 
   public dataFilter = new UsersGetPagedDto()
 
-  private showCreateUserDialog = false
-  private showEditUserDialog = false
+  private showUserDialog = false
   private showClaimDialog = false
+  private showPermissionDialog = false
+
+  get allowedEditPermission() {
+    return this.editUserId !== UserModule.id && checkPermission(['AbpIdentity.Users.ManagePermissions'])
+  }
 
   mounted() {
     this.refreshPagedData()
+    this.subscribe('userChanged', () => this.refreshPagedData())
+  }
+
+  destroyed() {
+    this.unSubscribe('userChanged')
   }
 
   protected processDataFilter() {
@@ -255,28 +268,12 @@ export default class extends mixins(DataListMiXin) {
     console.log('handleLockUser' + row.id)
   }
 
-  private handleShowEditUserForm(row: UserDataDto) {
-    this.editUser = row
-    this.showEditUserDialog = true
-  }
-
-  private handleCloseUserProfile() {
-    this.editUser = new UserDataDto()
-    this.showCreateUserDialog = false
-    this.showEditUserDialog = false
-  }
-
   private handleUserProfileChanged() {
     this.refreshPagedData()
   }
 
-  private handleCreateUser() {
-    this.editUser = new UserDataDto()
-    this.showCreateUserDialog = true
-  }
-
-  private handleShowCliamDialog(row: UserDataDto) {
-    this.editUser = row
+  private handleShowCliamDialog(row: User) {
+    this.editUserId = row.id
     this.showClaimDialog = true
   }
 
@@ -284,11 +281,35 @@ export default class extends mixins(DataListMiXin) {
     this.showClaimDialog = false
   }
 
+  private handleShowPermissionDialog(id: string) {
+    this.editUserId = id
+    this.showPermissionDialog = true
+  }
+
+  private onPermissionDialogClosed() {
+    this.showPermissionDialog = false
+  }
+
+  private handleShowUserDialog(id: string) {
+    this.editUserId = id
+    this.showUserDialog = true
+  }
+
+  private onUserDialogClosed() {
+    this.showUserDialog = false
+  }
+
   /** 响应更多操作命令 */
   private handleCommand(command: any) {
     switch (command.key) {
+      case 'edit' :
+        this.handleShowUserDialog(command.row.id)
+        break
       case 'claim' :
         this.handleShowCliamDialog(command.row)
+        break
+      case 'permission' :
+        this.handleShowPermissionDialog(command.row.id)
         break
       case 'lock' :
         this.handleLockUser(command.row)
@@ -302,12 +323,12 @@ export default class extends mixins(DataListMiXin) {
 
   /** 响应删除用户事件 */
   private handleDeleteUser(row: any) {
-    this.$confirm(this.$t('users.delNotRecoverData').toString(),
-      this.$t('users.whetherDeleteUser', { name: row.userName }).toString(), {
+    this.$confirm(this.$t('AbpIdentity.UserDeletionConfirmationMessage', { 0: row.userName }).toString(),
+      this.$t('AbpIdentity.AreYouSure').toString(), {
         callback: (action) => {
           if (action === 'confirm') {
             UserApiService.deleteUser(row.id).then(() => {
-              this.$message.success(this.$t('users.userHasBeenDeleted', { name: row.userName }).toString())
+              this.$message.success(this.$t('global.successful').toString())
               this.refreshPagedData()
             })
           }

@@ -654,5 +654,17 @@ export default {
     uploadSuccess: '上传成功',
     folderNameIsRequired: '目录名称不能为空',
     folderCreateSuccess: '目录 {name} 已创建!'
+  },
+  AbpValidation: {
+    ThisFieldIsNotAValidEmailAddress: '字段不是有效的邮箱地址',
+    ThisFieldMustBeAStringWithAMinimumLengthOf: '字段必须是最小长度为{0}的字符串',
+    'ThisFieldMustBeAStringWithAMinimumLengthOf{0}AndAMaximumLengthOf{1}':'字段必须是最小长度为{0}并且最大长度{1}的字符串'
+  },
+  AbpIdentity: {
+    Lock: '锁定',
+    LockoutEnd: '锁定日期',
+    LockoutEnabled: '登录尝试失败后锁定帐户',
+    RoleList: '角色列表',
+    HasRoles: '已有角色'
   }
 }

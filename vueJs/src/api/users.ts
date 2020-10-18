@@ -1,5 +1,5 @@
 import qs from 'querystring'
-import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto, ListResultDto } from '@/api/types'
+import { PagedAndSortedResultRequestDto, FullAuditedEntityDto, PagedResultDto, ListResultDto, ExtensibleObject } from '@/api/types'
 import { OrganizationUnit } from './organizationunit'
 import ApiService from './serviceBase'
 
@@ -17,25 +17,25 @@ export default class UserApiService {
     if (input.filter) {
       _url += '&filter=' + input.filter
     }
-    return ApiService.Get<PagedResultDto<UserDataDto>>(_url, IdentityServiceUrl)
+    return ApiService.Get<PagedResultDto<User>>(_url, IdentityServiceUrl)
   }
 
   public static getUserById(userId: string) {
     let _url = '/api/identity/users/'
     _url += userId
-    return ApiService.Get<UserDataDto>(_url, IdentityServiceUrl)
+    return ApiService.Get<User>(_url, IdentityServiceUrl)
   }
 
   public static getUserByName(userName: string) {
     let _url = '/api/identity/users/by-username/'
     _url += userName
-    return ApiService.Get<UserDataDto>(_url, IdentityServiceUrl)
+    return ApiService.Get<User>(_url, IdentityServiceUrl)
   }
 
-  public static updateUser(userId: string | undefined, userData: UserUpdateDto) {
+  public static updateUser(userId: string, userData: UserUpdate) {
     let _url = '/api/identity/users/'
     _url += userId
-    return ApiService.Put<UserDataDto>(_url, userData, IdentityServiceUrl)
+    return ApiService.Put<User>(_url, userData, IdentityServiceUrl)
   }
 
   public static deleteUser(userId: string | undefined) {
@@ -44,9 +44,9 @@ export default class UserApiService {
     return ApiService.Delete(_url, IdentityServiceUrl)
   }
 
-  public static createUser(userData: UserCreateDto) {
+  public static createUser(userData: UserCreate) {
     const _url = '/api/identity/users'
-    return ApiService.Post<UserDataDto>(_url, userData, IdentityServiceUrl)
+    return ApiService.Post<User>(_url, userData, IdentityServiceUrl)
   }
 
   public static getUserRoles(userId: string) {
@@ -122,7 +122,7 @@ export default class UserApiService {
 
   public static userRegister(registerData: UserRegisterData) {
     const _url = '/api/account/phone/register'
-    return ApiService.HttpRequest<UserDataDto>({
+    return ApiService.HttpRequest<User>({
       baseURL: IdentityServiceUrl,
       url: _url,
       method: 'POST',
@@ -317,34 +317,6 @@ export class UserLoginResult {
   refresh_token!: string
 }
 
-/** 创建用户对象 */
-export class UserCreateDto {
-  /** 用户名 */
-  name!: string
-  /** 用户账户 */
-  userName!: string
-  /** 用户密码 */
-  password!: string
-  /** 用户简称 */
-  surname?: string
-  /** 邮件地址 */
-  email!: string
-  /** 联系方式 */
-  phoneNumber: number | undefined
-  /** 双因素验证 */
-  twoFactorEnabled!: boolean
-  /** 登录失败锁定 */
-  lockoutEnabled!: boolean
-  /** 用户列表 */
-  roleNames?: string[]
-
-  constructor() {
-    this.twoFactorEnabled = false
-    this.lockoutEnabled = true
-    this.roleNames = new Array<string>()
-  }
-}
-
 /** 用户密码变更对象 */
 export class UserChangePasswordDto {
   /** 当前密码 */
@@ -375,68 +347,68 @@ export class UserRole implements IUserRole {
   isStatic!: boolean
   /** 是否公共角色 */
   isPublic!: boolean
-  /** 并发令牌 */
-  concurrencyStamp: string | undefined
+}
+
+export class UserCreateOrUpdate extends ExtensibleObject {
+  /** 用户名 */
+  name = ''
+  /** 用户账户 */
+  userName = ''
+  /** 用户简称 */
+  surname = ''
+  /** 邮件地址 */
+  email = ''
+  /** 联系方式 */
+  phoneNumber = ''
+  /** 登录锁定 */
+  lockoutEnabled = false
+  /** 角色列表 */
+  roleNames: string[] | null = null
+  /** 密码 */
+  password: string | null = null
 }
 
 /** 变更用户对象 */
-export class UserUpdateDto implements IUserData {
-  /** 用户名 */
-  name!: string;
-  /** 用户账户 */
-  userName!: string;
-  /** 用户简称 */
-  surname?: string;
-  /** 邮件地址 */
-  email!: string;
-  /** 联系方式 */
-  phoneNumber?: number;
-  /** 双因素验证 */
-  twoFactorEnabled!: boolean;
-  /** 登录锁定 */
-  lockoutEnabled!: boolean;
+export class UserUpdate extends UserCreateOrUpdate {
   /** 并发令牌 */
-  concurrencyStamp!: string;
-  /** 用户角色列表 */
-  roles: string[]
+  concurrencyStamp = ''
+}
 
-  constructor() {
-    this.roles = new Array<string>()
-  }
+export class UserCreate extends UserCreateOrUpdate {
 }
 
 /** 用户对象 */
-export class UserDataDto extends FullAuditedEntityDto implements IUserData {
+export class User extends FullAuditedEntityDto implements IUser {
   /** 用户名 */
-  name!: string
+  name = ''
   /** 用户账户 */
-  userName!: string
+  userName = ''
   /** 用户简称 */
-  surname!: string
+  surname = ''
   /** 邮件地址 */
-  email!: string
+  email = ''
   /** 联系方式 */
-  phoneNumber?: number
+  phoneNumber = ''
   /** 双因素验证 */
-  twoFactorEnabled!: boolean
+  twoFactorEnabled = false
   /** 登录锁定 */
-  lockoutEnabled!: boolean
-  /** 并发令牌 */
-  concurrencyStamp!: string
+  lockoutEnabled = false
   /** 用户标识 */
-  id!: string
+  id = ''
   /** 租户标识 */
-  tenentId: string | undefined
+  tenentId? = ''
   /** 邮箱已验证 */
-  emailConfirmed!: boolean
+  emailConfirmed = false
   /** 联系方式已验证 */
-  phoneNumberConfirmed!: boolean
+  phoneNumberConfirmed = false
   /** 锁定截止时间 */
-  lockoutEnd: Date | undefined
+  lockoutEnd?: Date = undefined
+  /** 并发令牌 */
+  concurrencyStamp = ''
 }
 
 /** 用户对象接口 */
-export interface IUserData {
+export interface IUser {
   /** 用户名 */
   name: string
   /** 用户账户 */
@@ -446,13 +418,11 @@ export interface IUserData {
   /** 邮件地址 */
   email: string
   /** 联系方式 */
-  phoneNumber?: number
+  phoneNumber?: string
   /** 双因素验证 */
   twoFactorEnabled: boolean
   /** 登录锁定 */
   lockoutEnabled: boolean
-  /** 锁定截止时间 */
-  concurrencyStamp: string | undefined
 }
 
 /** 用户角色接口 */
@@ -467,8 +437,6 @@ export interface IUserRole {
   isStatic: boolean
   /** 公共角色 */
   isPublic: boolean
-  /** 并发令牌 */
-  concurrencyStamp: string | undefined
 }
 
 export class ChangeUserOrganizationUnitDto {
