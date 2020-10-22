@@ -1,5 +1,5 @@
 import ApiService from './serviceBase'
-import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, ListResultDto, PagedResultDto, SecretBase, Claim } from './types'
+import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, ListResultDto, PagedResultDto, SecretBase, Claim, HashType } from './types'
 
 const sourceUrl = '/api/identity-server/clients'
 const serviceUrl = process.env.VUE_APP_BASE_API
@@ -51,11 +51,6 @@ export default class ClientService {
     const _url = sourceUrl + '/distinct-cors-origins'
     return ApiService.Get<ListResultDto<string>>(_url, serviceUrl)
   }
-}
-
-export enum HashType {
-  Sha256 = 0,
-	Sha512 = 1
 }
 
 export class SecretCreateOrUpdate extends SecretBase {
@@ -138,13 +133,13 @@ export class Client extends FullAuditedEntityDto {
   postLogoutRedirectUris = new Array<string>()
   identityProviderRestrictions = new Array<string>()
   claims = new Array<ClientClaim>()
-  properties:{[key: string]: string} = {}
+  properties: {[key: string]: string} = {}
 }
 
 export class ClientCreateOrUpdate {
   clientId = ''
   clientName = ''
-  description? = ''
+  description?: string = ''
   allowedGrantTypes = new Array<string>()
 }
 

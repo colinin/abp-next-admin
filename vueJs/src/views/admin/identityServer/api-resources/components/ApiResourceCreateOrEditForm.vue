@@ -107,8 +107,8 @@
               :user-claims="apiResourceClaims"
               :api-resource-scopes="apiResource.scopes"
               :secrets="apiResource.secrets"
-              :allowed-create="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
-              :allowed-delete="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :allowed-create-prop="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :allowed-delete-prop="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
               :allowed-create-secret="checkPermission(['AbpIdentityServer.ApiResources.ManageSecrets'])"
               :allowed-delete-secret="checkPermission(['AbpIdentityServer.ApiResources.ManageSecrets'])"
               :properties="apiResource.properties"
@@ -120,45 +120,6 @@
               @onDeleted="onPropertyDeleted"
             />
           </el-tab-pane>
-          <!-- <el-tab-pane
-            v-if="isEdit"
-            name="scopes"
-            :label="$t('AbpIdentityServer.Scope')"
-          >
-            <api-resource-scope-edit-form
-              :user-claims="apiResourceClaims"
-              :api-resource-scopes="apiResource.scopes"
-              @onScopeCreated="apiResourceScopeCreated"
-              @onScopeDeleted="apiResourceScopeDeleted"
-            />
-          </el-tab-pane>
-          <el-tab-pane
-            v-if="isEdit"
-            name="secrets"
-            :label="$t('AbpIdentityServer.Secret')"
-          >
-            <el-card>
-              <secret-edit-form
-                :secrets="apiResource.secrets"
-                @onSecretCreated="apiResourceSecretCreated"
-                @onSecretDeleted="apiResourceSecretDeleted"
-              />
-            </el-card>
-          </el-tab-pane>
-
-          <el-tab-pane
-            v-if="isEdit"
-            name="properties"
-            :label="$t('AbpIdentityServer.Propertites')"
-          >
-            <properties-edit-form
-              :allowed-create="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
-              :allowed-delete="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
-              :properties="apiResource.properties"
-              @onCreated="onPropertyCreated"
-              @onDeleted="onPropertyDeleted"
-            />
-          </el-tab-pane> -->
         </el-tabs>
 
         <el-form-item>
