@@ -238,7 +238,7 @@
       provider-name="C"
       :provider-key="editClient.clientId"
       :show-dialog="showEditClientPermissionDialog"
-      :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+      :readonly="!checkPermission(['AbpIdentityServer.Clients.ManagePermissions'])"
       @closed="onPermissionDialogClosed"
     />
 
