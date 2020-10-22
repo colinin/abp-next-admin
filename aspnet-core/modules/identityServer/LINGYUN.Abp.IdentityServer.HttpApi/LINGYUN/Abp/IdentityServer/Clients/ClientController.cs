@@ -57,5 +57,26 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         {
             return await ClientAppService.CloneAsync(id, input);
         }
+
+        [HttpGet]
+        [Route("assignable-api-resources")]
+        public virtual async Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
+        {
+            return await ClientAppService.GetAssignableApiResourcesAsync();
+        }
+
+        [HttpGet]
+        [Route("assignable-identity-resources")]
+        public virtual async Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
+        {
+            return await ClientAppService.GetAssignableIdentityResourcesAsync();
+        }
+
+        [HttpGet]
+        [Route("distinct-cors-origins")]
+        public virtual async Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
+        {
+            return await ClientAppService.GetAllDistinctAllowedCorsOriginsAsync();
+        }
     }
 }

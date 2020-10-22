@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.IdentityServer.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.IdentityServer
@@ -15,6 +18,16 @@ namespace LINGYUN.Abp.IdentityServer
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpIdentityServerHttpApiModule).Assembly);
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpIdentityServerResource>()
+                    .AddBaseTypes(typeof(AbpUiResource));
             });
         }
     }

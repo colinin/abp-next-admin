@@ -1,4 +1,6 @@
-﻿using IdentityServer4;
+﻿using LINGYUN.Abp.IdentityServer.ApiResources;
+using LINGYUN.Abp.IdentityServer.IdentityResources;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -16,10 +18,17 @@ namespace LINGYUN.Abp.IdentityServer.Clients
     public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppService
     {
         protected IClientRepository ClientRepository { get; }
+        protected IApiResourceRepository ApiResourceRepository { get; }
+        protected IIdentityResourceRepository IdentityResourceRepository { get; }
 
-        public ClientAppService(IClientRepository clientRepository)
+        public ClientAppService(
+            IClientRepository clientRepository,
+            IApiResourceRepository apiResourceRepository,
+            IIdentityResourceRepository identityResourceRepository)
         {
             ClientRepository = clientRepository;
+            ApiResourceRepository = apiResourceRepository;
+            IdentityResourceRepository = identityResourceRepository;
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Create)]
@@ -155,22 +164,12 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region AllowScope
             // 删除未在身份资源和Api资源中的作用域
-            client.AllowedScopes.RemoveAll(scope => 
-                !input.IdentityResources.Contains(scope.Scope) &&
-                !input.ApiResources.Contains(scope.Scope));
-
-            foreach (var apiResource in input.ApiResources)
+            client.AllowedScopes.RemoveAll(scope => !input.AllowedScopes.Contains(scope.Scope));
+            foreach (var scope in input.AllowedScopes)
             {
-                if (client.FindScope(apiResource) == null)
+                if (client.FindScope(scope) == null)
                 {
-                    client.AddScope(apiResource);
-                }
-            }
-            foreach (var identityResource in input.IdentityResources)
-            {
-                if (client.FindScope(identityResource) == null)
-                {
-                    client.AddScope(identityResource);
+                    client.AddScope(scope);
                 }
             }
 
@@ -245,34 +244,41 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region Secrets
 
-            // 移除已经不存在的客户端密钥
-            client.ClientSecrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Value == inputSecret.Value && secret.Type == inputSecret.Type));
-            var currentSecrets = new List<ClientSecretDto>();
-            foreach (var inputSecret in input.Secrets)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageSecrets))
             {
-                var inputSecretValue = inputSecret.Value;
-                // 如果是 SharedSecret 类型的密钥
-                // 采用 IdentityServer4 服务器扩展方法加密
-                if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(inputSecret.Type))
+                // 移除已经不存在的客户端密钥
+                client.ClientSecrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Value == inputSecret.Value && secret.Type == inputSecret.Type));
+                foreach (var inputSecret in input.Secrets)
                 {
-                    if (inputSecret.HashType == HashType.Sha256)
+                    // 先对加密过的进行过滤
+                    if (client.FindSecret(inputSecret.Value, inputSecret.Type) != null)
                     {
-                        inputSecretValue = inputSecret.Value.Sha256();
+                        continue;
                     }
-                    else if (inputSecret.HashType == HashType.Sha512)
+                    var inputSecretValue = inputSecret.Value;
+                    // 如果是 SharedSecret 类型的密钥
+                    // 采用 IdentityServer4 服务器扩展方法加密
+                    if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(inputSecret.Type))
                     {
-                        inputSecretValue = inputSecret.Value.Sha512();
+                        if (inputSecret.HashType == HashType.Sha256)
+                        {
+                            inputSecretValue = inputSecret.Value.Sha256();
+                        }
+                        else if (inputSecret.HashType == HashType.Sha512)
+                        {
+                            inputSecretValue = inputSecret.Value.Sha512();
+                        }
                     }
-                }
-                else
-                {
-                    throw new UserFriendlyException(L["EncryptionNotImplemented", inputSecret.Type]);
-                }
+                    else
+                    {
+                        throw new UserFriendlyException(L["EncryptionNotImplemented", inputSecret.Type]);
+                    }
 
-                var clientSecret = client.FindSecret(inputSecretValue, inputSecret.Type);
-                if (clientSecret == null)
-                {
-                    client.AddSecret(inputSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
+                    var clientSecret = client.FindSecret(inputSecretValue, inputSecret.Type);
+                    if (clientSecret == null)
+                    {
+                        client.AddSecret(inputSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
+                    }
                 }
             }
 
@@ -280,27 +286,34 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             #region Properties
 
-            // 移除不存在的属性
-            client.Properties.RemoveAll(prop => input.Properties.Any(inputProp => inputProp.Key == prop.Key && inputProp.Value == prop.Value));
-            foreach (var inputProp in input.Properties)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageProperties))
             {
-                if (client.FindProperty(inputProp.Key, inputProp.Value) == null)
+                // 移除不存在的属性
+                client.Properties.RemoveAll(prop => !input.Properties.ContainsKey(prop.Key));
+                foreach (var inputProp in input.Properties)
                 {
-                    client.AddProperty(inputProp.Key, inputProp.Value);
+                    if (client.FindProperty(inputProp.Key, inputProp.Value) == null)
+                    {
+                        client.AddProperty(inputProp.Key, inputProp.Value);
+                    }
                 }
             }
+
 
             #endregion
 
             #region Claims
 
-            // 移除已经不存在的客户端声明
-            client.ClientSecrets.RemoveAll(secret => !input.Claims.Any(inputClaim => secret.Value == inputClaim.Value && secret.Type == inputClaim.Type));
-            foreach (var inputClaim in input.Claims)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageClaims))
             {
-                if (client.FindClaim(inputClaim.Value, inputClaim.Type) == null)
+                // 移除已经不存在的客户端声明
+                client.Claims.RemoveAll(secret => !input.Claims.Any(inputClaim => secret.Value == inputClaim.Value && secret.Type == inputClaim.Type));
+                foreach (var inputClaim in input.Claims)
                 {
-                    client.AddClaim(inputClaim.Value, inputClaim.Type);
+                    if (client.FindClaim(inputClaim.Value, inputClaim.Type) == null)
+                    {
+                        client.AddClaim(inputClaim.Value, inputClaim.Type);
+                    }
                 }
             }
             
@@ -404,6 +417,13 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                     client.AddClaim(claim.Value, claim.Type);
                 }
             }
+            if (input.CopySecret)
+            {
+                foreach (var secret in srcClient.ClientSecrets)
+                {
+                    client.AddSecret(secret.Value, secret.Expiration, secret.Type, secret.Description);
+                }
+            }
             if (input.CopyIdentityProviderRestriction)
             {
                 foreach (var provider in srcClient.IdentityProviderRestrictions)
@@ -437,6 +457,36 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
+        }
+        /// <summary>
+        /// 查询可用的Api资源
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
+        {
+            var resourceNames = await ApiResourceRepository.GetNamesAsync();
+
+            return new ListResultDto<string>(resourceNames);
+        }
+        /// <summary>
+        /// 查询可用的身份资源
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
+        {
+            var resourceNames = await IdentityResourceRepository.GetNamesAsync();
+
+            return new ListResultDto<string>(resourceNames);
+        }
+        /// <summary>
+        /// 查询所有不重复的跨域地址
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
+        {
+            var corsOrigins = await ClientRepository.GetAllDistinctAllowedCorsOriginsAsync();
+
+            return new ListResultDto<string>(corsOrigins);
         }
     }
 }

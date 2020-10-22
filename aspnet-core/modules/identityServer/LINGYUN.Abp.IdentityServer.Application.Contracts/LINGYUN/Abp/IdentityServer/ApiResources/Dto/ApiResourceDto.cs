@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IdentityServer.ApiResources
 {
-    public class ApiResourceDto : FullAuditedEntityDto<Guid>
+    public class ApiResourceDto : ExtensibleFullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
 
@@ -20,11 +20,14 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         public List<string> UserClaims { get; set; }
 
+        public Dictionary<string, string> Properties { get; set; }
+
         public ApiResourceDto()
         {
             UserClaims = new List<string>();
             Scopes = new List<ApiScopeDto>();
             Secrets = new List<ApiSecretDto>();
+            Properties = new Dictionary<string, string>();
         }
     }
 }

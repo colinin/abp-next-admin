@@ -15,15 +15,14 @@
         ref="formIdentityResource"
         label-width="130px"
         :model="identityResource"
-        :rules="identityResourceRules"
       >
         <el-tabs
           v-model="activeTable"
           type="border-card"
         >
           <el-tab-pane
-            name="information"
-            :label="$t('AbpIdentityServer.Information')"
+            name="basics"
+            :label="$t('AbpIdentityServer.Basics')"
           >
             <el-form-item
               prop="enabled"
@@ -36,6 +35,11 @@
             <el-form-item
               prop="name"
               :label="$t('AbpIdentityServer.Name')"
+              :rules="{
+                required: true,
+                message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+                trigger: 'blur'
+              }"
             >
               <el-input
                 v-model="identityResource.name"
@@ -99,23 +103,36 @@
               :titles="[$t('AbpIdentityServer.NoClaim'), $t('AbpIdentityServer.ExistsClaim')]"
             />
           </el-tab-pane>
+          <el-tab-pane
+            v-if="isEdit"
+            name="properties"
+            :label="$t('AbpIdentityServer.Propertites')"
+          >
+            <properties-edit-form
+              :properties="identityResource.properties"
+              :allowed-create="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
+              :allowed-delete="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
+              @onCreated="onPropertyCreated"
+              @onDeleted="onPropertyDeleted"
+            />
+          </el-tab-pane>
         </el-tabs>
 
         <el-form-item>
           <el-button
             class="cancel"
-            style="width:100px"
+            type="info"
             @click="onFormClosed(false)"
           >
-            {{ $t('global.cancel') }}
+            {{ $t('AbpIdentityServer.Cancel') }}
           </el-button>
           <el-button
             class="confirm"
             type="primary"
-            style="width:100px"
+            icon="el-icon-check"
             @click="onSave"
           >
-            {{ $t('global.confirm') }}
+            {{ $t('AbpIdentityServer.Save') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -124,15 +141,25 @@
 </template>
 
 <script lang="ts">
+import { checkPermission } from '@/utils/permission'
+
 import { Form } from 'element-ui'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 import { Claim } from '@/api/types'
 import ClaimTypeApiService from '@/api/cliam-type'
+
+import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
 import IdentityResourceService, { IdentityResource, IdentityResourceCreateOrUpdate } from '@/api/identity-resources'
 
 @Component({
-  name: 'IdentityResourceCreateOrEditForm'
+  name: 'IdentityResourceCreateOrEditForm',
+  components: {
+    PropertiesEditForm
+  },
+  methods: {
+    checkPermission
+  }
 })
 export default class extends Vue {
   @Prop({ default: false })
@@ -144,14 +171,9 @@ export default class extends Vue {
   @Prop({ default: '' })
   private identityResourceId!: string
 
-  private activeTable = 'information'
+  private activeTable = 'basics'
   private identityClaims = new Array<Claim>()
   private identityResource = new IdentityResource()
-  private identityResourceRules = {
-    name: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.resourceName') }), trigger: 'blur' }
-    ]
-  }
 
   get isEdit() {
     if (this.identityResource.id) {
@@ -179,7 +201,7 @@ export default class extends Vue {
   }
 
   private handleGetIdentityResource() {
-    this.activeTable = 'information'
+    this.activeTable = 'basics'
     if (this.showDialog && this.identityResourceId) {
       IdentityResourceService.getIdentityResourceById(this.identityResourceId).then(resource => {
         this.identityResource = resource
@@ -187,6 +209,14 @@ export default class extends Vue {
     } else {
       this.identityResource = new IdentityResource()
     }
+  }
+
+  private onPropertyCreated(key: string, value: string) {
+    this.$set(this.identityResource.properties, key, value)
+  }
+
+  private onPropertyDeleted(key: string) {
+    this.$delete(this.identityResource.properties, key)
   }
 
   private onSave() {
@@ -247,11 +277,13 @@ export default class extends Vue {
   position: absolute;
   right: 10px;
   top: 20px;
+  width:100px;
 }
 .cancel {
   position: absolute;
   right: 120px;
   top: 20px;
+  width:100px;
 }
 .transfer-scope ::v-deep .el-transfer-panel{
   width: 250px;

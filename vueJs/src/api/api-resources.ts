@@ -81,6 +81,7 @@ export class ApiResourceCreateOrUpdate {
   userClaims = new Array<string>()
   scopes = new Array<ApiScope>()
   secrets = new Array<ApiSecretCreateOrUpdate>()
+  properties: {[key: string]: string} = {}
 }
 
 export class ApiResourceCreate extends ApiResourceCreateOrUpdate {
@@ -98,6 +99,7 @@ export class ApiResource extends FullAuditedEntityDto {
   userClaims = new Array<string>()
   scopes = new Array<ApiScope>()
   secrets = new Array<ApiSecretCreateOrUpdate>()
+  properties: {[key: string]: string} = {}
 }
 
 export class ApiResourceGetByPaged extends PagedAndSortedResultRequestDto {

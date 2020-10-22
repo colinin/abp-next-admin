@@ -7,7 +7,7 @@ const identityServerRouter: RouteConfig = {
   meta: {
     title: 'identityServer',
     icon: 'identity-server',
-    roles: ['IdentityServer.Clients', 'IdentityServer.ApiResources', 'IdentityServer.IdentityResources'],
+    roles: ['AbpIdentityServer.Clients', 'AbpIdentityServer.ApiResources', 'AbpIdentityServer.IdentityResources'],
     alwaysShow: true
   },
   children: [
@@ -18,7 +18,7 @@ const identityServerRouter: RouteConfig = {
       meta: {
         title: 'clients',
         icon: 'client',
-        roles: ['IdentityServer.Clients']
+        roles: ['AbpIdentityServer.Clients']
       }
     },
     {
@@ -28,7 +28,7 @@ const identityServerRouter: RouteConfig = {
       meta: {
         title: 'apiresources',
         icon: 'api',
-        roles: ['IdentityServer.ApiResources']
+        roles: ['AbpIdentityServer.ApiResources']
       }
     },
     {
@@ -38,7 +38,7 @@ const identityServerRouter: RouteConfig = {
       meta: {
         title: 'identityresources',
         icon: 'identity',
-        roles: ['IdentityServer.IdentityResources']
+        roles: ['AbpIdentityServer.IdentityResources']
       }
     }
   ]

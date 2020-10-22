@@ -17,13 +17,13 @@
         type="primary"
         @click="refreshPagedData"
       >
-        {{ $t('global.searchList') }}
+        {{ $t('AbpIdentityServer.Search') }}
       </el-button>
       <el-button
         class="filter-item"
         type="primary"
-        :disabled="!checkPermission(['IdentityServer.IdentityResources.Create'])"
-        @click="handleShowEditIdentityResourceForm"
+        :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Create'])"
+        @click="handleShowEditIdentityResourceForm()"
       >
         {{ $t('AbpIdentityServer.Resource:New') }}
       </el-button>
@@ -115,13 +115,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('global.operaActions')"
+        :label="$t('AbpIdentityServer.Actions')"
         align="center"
         width="250px"
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.IdentityResources.Update'])"
+            :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Update'])"
             size="mini"
             type="primary"
             @click="handleShowEditIdentityResourceForm(row)"
@@ -129,7 +129,7 @@
             {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
           <el-button
-            :disabled="!checkPermission(['IdentityServer.IdentityResources.Delete'])"
+            :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Delete'])"
             size="mini"
             type="danger"
             @click="handleDeleteIdentityResource(row)"

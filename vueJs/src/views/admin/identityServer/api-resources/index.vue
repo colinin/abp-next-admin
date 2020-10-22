@@ -17,12 +17,12 @@
         type="primary"
         @click="refreshPagedData"
       >
-        {{ $t('searchList') }}
+        {{ $t('AbpIdentityServer.Search') }}
       </el-button>
       <el-button
         class="filter-item"
         type="primary"
-        :disabled="!checkPermission(['IdentityServer.ApiResources.Create'])"
+        :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Create'])"
         @click="handleShowEditApiResourceForm('')"
       >
         {{ $t('AbpIdentityServer.Resource:New') }}
@@ -121,7 +121,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.ApiResources.Update'])"
+            :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Update'])"
             size="mini"
             type="primary"
             @click="handleShowEditApiResourceForm(row.id, row.name)"
@@ -129,7 +129,7 @@
             {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
           <el-button
-            :disabled="!checkPermission(['IdentityServer.ApiResources.Delete'])"
+            :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Delete'])"
             size="mini"
             type="danger"
             @click="handleDeleteApiResource(row.id, row.name)"

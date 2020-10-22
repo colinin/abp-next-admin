@@ -2,7 +2,7 @@
 {
     public class AbpIdentityServerPermissions
     {
-        public const string GroupName = "IdentityServer";
+        public const string GroupName = "AbpIdentityServer";
 
         public static class Clients
         {
@@ -11,33 +11,10 @@
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
             public const string Clone = Default + ".Clone";
-            public const string Enabled = Default + ".Enabled";
-            public const string Disabled = Default + ".Disabled";
             public const string ManagePermissions = Default + ".ManagePermissions";
-
-            public static class Claims
-            {
-                public const string Default = Clients.Default + ".Claims";
-                public const string Create = Default + ".Create";
-                public const string Update = Default + ".Update";
-                public const string Delete = Default + ".Delete";
-            }
-
-            public static class Secrets
-            {
-                public const string Default = Clients.Default + ".Secrets";
-                public const string Create = Default + ".Create";
-                public const string Update = Default + ".Update";
-                public const string Delete = Default + ".Delete";
-            }
-
-            public static class Properties
-            {
-                public const string Default = Clients.Default + ".Properties";
-                public const string Create = Default + ".Create";
-                public const string Update = Default + ".Update";
-                public const string Delete = Default + ".Delete";
-            }
+            public const string ManageClaims = Default + ".ManageClaims";
+            public const string ManageSecrets = Default + ".ManageSecrets";
+            public const string ManageProperties = Default + ".ManageProperties";
         }
 
         public static class ApiResources
@@ -46,21 +23,10 @@
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
-            public static class Scope
-            {
-                public const string Default = ApiResources.Default + ".Scope";
-                public const string Create = Default + ".Create";
-                public const string Update = Default + ".Update";
-                public const string Delete = Default + ".Delete";
-            }
-
-            public static class Secrets
-            {
-                public const string Default = ApiResources.Default + ".Secrets";
-                public const string Create = Default + ".Create";
-                public const string Update = Default + ".Update";
-                public const string Delete = Default + ".Delete";
-            }
+            public const string ManageScopes = Default + ".ManageScopes";
+            public const string ManageClaims = Default + ".ManageClaims";
+            public const string ManageSecrets = Default + ".ManageSecrets";
+            public const string ManageProperties = Default + ".ManageProperties";
         }
 
         public static class IdentityResources
@@ -69,13 +35,8 @@
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
-
-            public static class Properties
-            {
-                public const string Default = IdentityResources.Default + ".Properties";
-                public const string Create = Default + ".Create";
-                public const string Delete = Default + ".Delete";
-            }
+            public const string ManageClaims = Default + ".ManageClaims";
+            public const string ManageProperties = Default + ".ManageProperties";
         }
     }
 }

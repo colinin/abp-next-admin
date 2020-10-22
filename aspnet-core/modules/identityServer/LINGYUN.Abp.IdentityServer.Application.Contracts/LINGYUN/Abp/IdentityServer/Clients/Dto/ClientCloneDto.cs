@@ -39,6 +39,10 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// </summary>
         public bool CopyClaim { get; set; }
         /// <summary>
+        /// 复制客户端密钥
+        /// </summary>
+        public bool CopySecret { get; set; }
+        /// <summary>
         /// 复制客户端跨域来源
         /// </summary>
         public bool CopyAllowedCorsOrigin { get; set; }
@@ -64,6 +68,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             CopyPostLogoutRedirectUri = true;
             CopyPropertie = true;
             CopyRedirectUri = true;
+            CopySecret = true;
         }
     }
 }

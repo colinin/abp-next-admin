@@ -2,20 +2,25 @@
   <div>
     <el-form
       ref="apiResourceScopeEditForm"
+      v-permission="['AbpIdentityServer.ApiResources.ManageScopes']"
       label-width="80px"
       :model="apiResourceScope"
-      :rules="apiResourceScopeRules"
     >
       <el-tabs
         type="border-card"
         style="width: 100%;"
       >
-        <el-tab-pane :label="$t('AbpIdentityServer.Information')">
+        <el-tab-pane :label="$t('AbpIdentityServer.Basics')">
           <el-row>
             <el-col :span="12">
               <el-form-item
                 prop="name"
                 :label="$t('AbpIdentityServer.Name')"
+                :rules="{
+                  required: true,
+                  message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+                  trigger: 'blur'
+                }"
               >
                 <el-input v-model="apiResourceScope.name" />
               </el-form-item>
@@ -103,7 +108,7 @@
             label-width="80px"
           >
             <el-button
-              :disabled="!checkPermission(['IdentityServer.ApiResources.Scope.Delete'])"
+              v-permission="['AbpIdentityServer.ApiResources.ManageScopes']"
               type="danger"
               icon="el-icon-delete"
               size="mini"
@@ -113,31 +118,46 @@
               {{ $t('AbpIdentityServer.Scope:Delete') }}
             </el-button>
             <el-tabs type="border-card">
-              <el-tab-pane :label="$t('AbpIdentityServer.Information')">
+              <el-tab-pane :label="$t('AbpIdentityServer.Basics')">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item :label="$t('AbpIdentityServer.Name')">
-                      <el-input v-model="scope.name" />
+                      <el-input
+                        v-model="scope.name"
+                        :readonly="readonly"
+                      />
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item :label="$t('AbpIdentityServer.DisplayName')">
-                      <el-input v-model="scope.displayName" />
+                      <el-input
+                        v-model="scope.displayName"
+                        :readonly="readonly"
+                      />
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-form-item :label="$t('AbpIdentityServer.Description')">
-                  <el-input v-model="scope.description" />
+                  <el-input
+                    v-model="scope.description"
+                    :readonly="readonly"
+                  />
                 </el-form-item>
                 <el-row>
                   <el-col :span="6">
                     <el-form-item :label="$t('AbpIdentityServer.Required')">
-                      <el-switch v-model="scope.required" />
+                      <el-switch
+                        v-model="scope.required"
+                        :readonly="readonly"
+                      />
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item :label="$t('AbpIdentityServer.Emphasize')">
-                      <el-switch v-model="scope.emphasize" />
+                      <el-switch
+                        v-model="scope.emphasize"
+                        :readonly="readonly"
+                      />
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
@@ -145,7 +165,10 @@
                       :label="$t('AbpIdentityServer.ShowInDiscoveryDocument')"
                       label-width="150px"
                     >
-                      <el-switch v-model="scope.showInDiscoveryDocument" />
+                      <el-switch
+                        v-model="scope.showInDiscoveryDocument"
+                        :readonly="readonly"
+                      />
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -204,22 +227,21 @@ export default class ApiResourceScopeEditForm extends Vue {
   @Prop({ default: () => { return new Array<ApiScope>() } })
   private apiResourceScopes!: ApiScope[]
 
-  private apiResourceScope = new ApiScope()
-  private apiResourceScopeRules = {
-    name: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('AbpIdentityServer.Name') }), trigger: 'blur' }
-    ]
+  get readonly() {
+    return !checkPermission(['AbpIdentityServer.ApiResources.ManageScopes'])
   }
 
+  private apiResourceScope = new ApiScope()
+
   private handleDeleteApiScope(name: string) {
-    this.$emit('apiResourceScopeDeleted', name)
+    this.$emit('onScopeDeleted', name)
   }
 
   private onSave() {
     const apiResourceScopeEditForm = this.$refs.apiResourceScopeEditForm as Form
     apiResourceScopeEditForm.validate(valid => {
       if (valid) {
-        this.$emit('apiResourceScopeCreated',
+        this.$emit('onScopeCreated',
           this.apiResourceScope.name, this.apiResourceScope.required,
           this.apiResourceScope.emphasize, this.apiResourceScope.showInDiscoveryDocument,
           this.apiResourceScope.userClaims, this.apiResourceScope.displayName, this.apiResourceScope.description)

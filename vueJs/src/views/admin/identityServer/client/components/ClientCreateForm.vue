@@ -3,129 +3,157 @@
     v-el-draggable-dialog
     width="800px"
     :visible="showDialog"
-    :title="$t('identityServer.createClient')"
+    :title="$t('AbpIdentityServer.Client:New')"
     custom-class="modal-form"
     :show-close="false"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
     @close="onFormClosed(false)"
   >
-    <div class="app-container">
-      <el-form
-        ref="formClient"
-        label-width="100px"
-        :model="client"
-        :rules="clientRules"
+    <el-form
+      ref="formClient"
+      label-width="100px"
+      :model="client"
+    >
+      <el-form-item
+        prop="clientId"
+        :label="$t('AbpIdentityServer.Client:Id')"
+        :rules="{
+          required: true,
+          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
+          trigger: 'blur'
+        }"
       >
-        <el-form-item
-          prop="clientId"
-          :label="$t('identityServer.clientId')"
+        <el-input
+          v-model="client.clientId"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')})"
+        />
+      </el-form-item>
+      <el-form-item
+        prop="clientName"
+        :label="$t('AbpIdentityServer.Name')"
+        :rules="{
+          required: true,
+          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+          trigger: 'blur'
+        }"
+      >
+        <el-input
+          v-model="client.clientName"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
+        />
+      </el-form-item>
+      <el-form-item
+        prop="description"
+        :label="$t('AbpIdentityServer.Description')"
+      >
+        <el-input
+          v-model="client.description"
+        />
+      </el-form-item>
+      <el-form-item
+        prop="allowedGrantTypes"
+        :label="$t('AbpIdentityServer.Client:AllowedGrantTypes')"
+        label-width="120px"
+      >
+        <el-select
+          v-model="client.allowedGrantTypes"
+          multiple
+          filterable
+          allow-create
+          clearable
+          class="full-select"
         >
-          <el-input
-            v-model="client.clientId"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.clientId')})"
+          <el-option
+            v-for="(grantType, index) in supportedGrantypes"
+            :key="index"
+            :label="grantType"
+            :value="grantType"
           />
-        </el-form-item>
-        <el-form-item
-          prop="clientName"
-          :label="$t('identityServer.clientName')"
-        >
-          <el-input
-            v-model="client.clientName"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.clientName')})"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="description"
-          :label="$t('identityServer.description')"
-        >
-          <el-input
-            v-model="client.description"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="allowedGrantTypes"
-          :label="$t('identityServer.allowedGrantTypes')"
-          label-width="120px"
-        >
-          <el-input-tag-ex
-            v-model="client.allowedGrantTypes"
-            :data="client.allowedGrantTypes"
-            label="grantType"
-          />
-        </el-form-item>
+        </el-select>
+      </el-form-item>
 
-        <el-form-item
-          style="text-align: center;"
-          label-width="0px"
+      <el-form-item>
+        <el-button
+          class="cancel"
+          type="info"
+          @click="onFormClosed(false)"
         >
-          <el-button
-            type="primary"
-            style="width:180px"
-            @click="onSaveClient"
-          >
-            {{ $t('identityServer.createClient') }}
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+          {{ $t('AbpIdentityServer.Cancel') }}
+        </el-button>
+        <el-button
+          class="confirm"
+          type="primary"
+          icon="el-icon-check"
+          @click="onSave"
+        >
+          {{ $t('AbpIdentityServer.Save') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import ClientService, { ClientCreate } from '@/api/clients'
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import ElInputTagEx from '@/components/InputTagEx/index.vue'
+
+import { Form } from 'element-ui'
+import ClientClaimEditForm from './ClientClaimEditForm.vue'
+import SecretEditForm from '../../components/SecretEditForm.vue'
+import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
+
+import ClientApiService, { ClientCreate } from '@/api/clients'
 
 @Component({
   name: 'ClientCreateForm',
   components: {
-    ElInputTagEx
+    SecretEditForm,
+    PropertiesEditForm,
+    ClientClaimEditForm
   }
 })
-export default class extends Vue {
+export default class ClientCreateForm extends Vue {
   @Prop({ default: false })
   private showDialog!: boolean
 
-  private client: ClientCreate
-  private clientRules = {
-    clientId: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.clientId') }), trigger: 'change' }
-    ],
-    clientName: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.clientName') }), trigger: 'blur' }
-    ]
-  }
+  @Prop({ default: () => { return new Array<string>() } })
+  private supportedGrantypes!: string[]
 
-  constructor() {
-    super()
-    this.client = new ClientCreate()
-  }
+  private client = new ClientCreate()
 
-  private onSaveClient() {
-    const frmClient = this.$refs.formClient as any
-    frmClient.validate((valid: boolean) => {
+  private onSave() {
+    const clientEditForm = this.$refs.formClient as Form
+    clientEditForm.validate(valid => {
       if (valid) {
-        ClientService.createClient(this.client).then(client => {
-          const successMessage = this.l('identityServer.createClientSuccess', { id: client.clientId })
-          this.$message.success(successMessage)
-          this.$emit('clientChanged')
-          this.onFormClosed(true)
-        })
+        ClientApiService.createClient(this.client)
+          .then(() => {
+            this.$message.success(this.$t('global.successful').toString())
+            this.onFormClosed(true)
+          })
       }
     })
   }
 
   private onFormClosed(changed: boolean) {
-    this.resetFields()
+    const clientEditForm = this.$refs.formClient as Form
+    clientEditForm.resetFields()
     this.$emit('closed', changed)
-  }
-
-  public resetFields() {
-    const frmClient = this.$refs.formClient as any
-    frmClient.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.full-select {
+  width: 100%;
+}
+.confirm {
+  position: absolute;
+  right: 10px;
+  width:100px;
+}
+.cancel {
+  position: absolute;
+  right: 120px;
+  width:100px;
+}
+</style>

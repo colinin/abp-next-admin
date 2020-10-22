@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityResourceDto : FullAuditedEntityDto<Guid>
+    public class IdentityResourceDto : ExtensibleFullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
         

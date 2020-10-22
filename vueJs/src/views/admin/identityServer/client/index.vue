@@ -17,13 +17,13 @@
         type="primary"
         @click="refreshPagedData"
       >
-        {{ $t('searchList') }}
+        {{ $t('AbpIdentityServer.Search') }}
       </el-button>
       <el-button
         class="filter-item"
         type="primary"
-        :disabled="!checkPermission(['IdentityServer.Clients.Create'])"
-        @click="handleShowCreateClientForm()"
+        :disabled="!checkPermission(['AbpIdentityServer.Clients.Create'])"
+        @click="handleShowCreateClientDialog()"
       >
         {{ $t('AbpIdentityServer.Client:New') }}
       </el-button>
@@ -175,10 +175,10 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.Clients.Update'])"
+            :disabled="!checkPermission(['AbpIdentityServer.Clients.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowEditClientForm(row)"
+            @click="handleShowEditClientDialog(row)"
           >
             {{ $t('AbpIdentityServer.Client:Edit') }}
           </el-button>
@@ -187,7 +187,7 @@
             @command="handleCommand"
           >
             <el-button
-              v-permission="['IdentityServer.Clients']"
+              v-permission="['AbpIdentityServer.Clients']"
               size="mini"
               type="info"
             >
@@ -196,20 +196,20 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 :command="{key: 'permissions', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.ManagePermissions'])"
               >
                 {{ $t('AbpIdentityServer.Permissions') }}
               </el-dropdown-item>
               <el-dropdown-item
                 :command="{key: 'clone', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Clone'])"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.Clone'])"
               >
                 {{ $t('AbpIdentityServer.Client:Clone') }}
               </el-dropdown-item>
               <el-dropdown-item
                 divided
                 :command="{key: 'delete', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Delete'])"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.Delete'])"
               >
                 {{ $t('AbpIdentityServer.Client:Delete') }}
               </el-dropdown-item>
@@ -228,12 +228,32 @@
       @sort-change="handleSortChange"
     />
 
+    <client-clone-form
+      :client-id="editClient.id"
+      :show-dialog="showCloneClientDialog"
+      @closed="onCloneClientDialogClosed"
+    />
+
     <permission-form
       provider-name="C"
-      :provider-key="editClientId"
+      :provider-key="editClient.clientId"
       :show-dialog="showEditClientPermissionDialog"
       :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
-      @closed="handleClientPermissionEditFormClosed"
+      @closed="onPermissionDialogClosed"
+    />
+
+    <client-create-form
+      :supported-grantypes="supportedGrantypes"
+      :show-dialog="showCreateClientDialog"
+      @closed="onCreateClientDialogClosed"
+    />
+
+    <client-edit-form
+      :supported-grantypes="supportedGrantypes"
+      :client-id="editClient.id"
+      :title="editClientTitle"
+      :show-dialog="showEditClientDialog"
+      @closed="onEditClientDialogClosed"
     />
   </div>
 </template>
@@ -241,18 +261,26 @@
 <script lang="ts">
 import { abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
+
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
-import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
-
+import ClientCloneForm from './components/ClientCloneForm.vue'
 import PermissionForm from '@/components/PermissionForm/index.vue'
+import ClientCreateForm from './components/ClientCreateForm.vue'
+import ClientEditForm from './components/ClientEditForm.vue'
+
+import IdentityServer4Service from '@/api/identity-server4'
+import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
 
 @Component({
   name: 'IdentityServerClient',
   components: {
     Pagination,
-    PermissionForm
+    PermissionForm,
+    ClientEditForm,
+    ClientCloneForm,
+    ClientCreateForm
   },
   methods: {
     checkPermission,
@@ -270,18 +298,20 @@ import PermissionForm from '@/components/PermissionForm/index.vue'
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editClientId = ''
+  private editClient = new Client()
   private editClientTitle = ''
 
   private showEditClientDialog = false
-  private showCloneClientDialog = false
   private showCreateClientDialog = false
+  private showCloneClientDialog = false
   private showEditClientPermissionDialog = false
 
   public dataFilter = new ClientGetByPaged()
+  private supportedGrantypes = new Array<string>()
 
   mounted() {
     this.refreshPagedData()
+    this.handleGetOpenIdConfiguration()
   }
 
   protected processDataFilter() {
@@ -292,38 +322,42 @@ export default class extends mixins(DataListMiXin) {
     return ClientService.getClients(filter)
   }
 
-  private handleShowCreateClientForm() {
-    this.editClientTitle = this.l('AbpIdentityServer.Client:New')
+  private handleGetOpenIdConfiguration() {
+    IdentityServer4Service.getOpenIdConfiguration()
+      .then(res => {
+        this.supportedGrantypes = res.grant_types_supported
+      })
+  }
+
+  private handleShowCreateClientDialog() {
     this.showCreateClientDialog = true
   }
 
-  private handleShowEditClientForm(client: Client) {
-    this.editClientId = client.clientId
+  private handleShowEditClientDialog(client: Client) {
+    this.editClient = client
+    this.editClientTitle = this.l('AbpIdentityServer.Client:Name', { 0: this.editClient.clientName })
     this.showEditClientDialog = true
   }
 
-  private handleClientCreateFormClosed(changed: boolean) {
-    this.showCreateClientDialog = false
-    if (changed) {
-      this.refreshPagedData()
-    }
+  private onEditClientDialogClosed() {
+    this.showEditClientDialog = false
   }
 
-  private handleClientCloneFormClosed(changed: boolean) {
+  private onCloneClientDialogClosed(changed: boolean) {
     this.showCloneClientDialog = false
     if (changed) {
       this.refreshPagedData()
     }
   }
 
-  private handleClientEditFormClosed(changed: boolean) {
-    this.showEditClientDialog = false
+  private onCreateClientDialogClosed(changed: boolean) {
+    this.showCreateClientDialog = false
     if (changed) {
       this.refreshPagedData()
     }
   }
 
-  private handleClientPermissionEditFormClosed() {
+  private onPermissionDialogClosed() {
     this.showEditClientPermissionDialog = false
   }
 
@@ -342,7 +376,7 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleCommand(command: {key: string, row: Client}) {
-    this.editClientId = command.row.clientId
+    this.editClient = command.row
     switch (command.key) {
       case 'clone' :
         this.showCloneClientDialog = true

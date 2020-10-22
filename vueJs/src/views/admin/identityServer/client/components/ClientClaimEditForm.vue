@@ -1,85 +1,83 @@
 <template>
-  <el-dialog
-    v-el-draggable-dialog
-    width="800px"
-    :visible="showDialog"
-    :title="$t('identityServer.clientClaim')"
-    custom-class="modal-form"
-    :show-close="false"
-    @close="onFormClosed"
-  >
-    <div class="app-container">
-      <el-form
-        ref="formClientClaim"
-        label-width="100px"
-        :model="clientClaim"
-        :rules="clientClaimRules"
+  <div>
+    <el-form
+      ref="clientClaimForm"
+      v-permission="['AbpIdentityServer.Clients.ManageClaims']"
+      label-width="100px"
+      :model="clientClaim"
+    >
+      <el-form-item
+        prop="type"
+        :label="$t('AbpIdentityServer.Claims:Type')"
+        :rules="{
+          required: true,
+          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Type')}),
+          trigger: 'blur'
+        }"
       >
-        <el-form-item
-          prop="type"
-          :label="$t('identityServer.claimType')"
+        <el-select
+          v-model="clientClaim.type"
+          style="width: 100%"
+          :placeholder="$t('pleaseSelectBy', {key: $t('AbpIdentityServer.Claims:Type')})"
+          @change="onClaimTypeChanged"
         >
-          <el-select
-            v-model="clientClaim.type"
-            style="width: 100%"
-            :placeholder="$t('pleaseSelectBy', {key: $t('identityServer.claimType')})"
-            @change="onClaimTypeChanged"
-          >
-            <el-option
-              v-for="claim in claimTypes"
-              :key="claim.id"
-              :label="claim.name"
-              :value="claim.name"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          prop="value"
-          :label="$t('identityServer.claimValue')"
-        >
-          <el-input
-            v-if="hasStringValueType(clientClaim.type)"
-            v-model="clientClaim.value"
-            type="text"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.claimValue')})"
+          <el-option
+            v-for="claim in claimTypes"
+            :key="claim.id"
+            :label="claim.name"
+            :value="claim.name"
           />
-          <el-input
-            v-else-if="hasIntegerValueType(clientClaim.type)"
-            v-model="clientClaim.value"
-            type="number"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.claimValue')})"
-          />
-          <el-switch
-            v-else-if="hasBooleanValueType(clientClaim.type)"
-            v-model="clientClaim.value"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.claimValue')})"
-          />
-          <el-date-picker
-            v-else-if="hasDateTimeValueType(clientClaim.type)"
-            v-model="clientClaim.value"
-            type="datetime"
-            style="width: 100%"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.claimValue')})"
-          />
-        </el-form-item>
+        </el-select>
+      </el-form-item>
+      <el-form-item
+        prop="value"
+        :label="$t('AbpIdentityServer.Claims:Value')"
+        :rules="{
+          required: true,
+          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Value')}),
+          trigger: 'blur'
+        }"
+      >
+        <el-input
+          v-if="hasStringValueType(clientClaim.type)"
+          v-model="clientClaim.value"
+          type="text"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Value')})"
+        />
+        <el-input
+          v-else-if="hasIntegerValueType(clientClaim.type)"
+          v-model="clientClaim.value"
+          type="number"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Value')})"
+        />
+        <el-switch
+          v-else-if="hasBooleanValueType(clientClaim.type)"
+          v-model="clientClaim.value"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Value')})"
+        />
+        <el-date-picker
+          v-else-if="hasDateTimeValueType(clientClaim.type)"
+          v-model="clientClaim.value"
+          type="datetime"
+          style="width: 100%"
+          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Claims:Value')})"
+        />
+      </el-form-item>
 
-        <el-form-item
-          style="text-align: center;"
-          label-width="0px"
+      <el-form-item
+        style="text-align: center;"
+        label-width="0px"
+      >
+        <el-button
+          type="primary"
+          style="width:180px"
+          :disabled="!checkPermission(['AbpIdentityServer.Clients.Claims.Create'])"
+          @click="onSave"
         >
-          <el-button
-            type="primary"
-            style="width:180px"
-            :disabled="!checkPermission(['IdentityServer.Clients.Claims.Create'])"
-            @click="onSaveClientClaim"
-          >
-            {{ $t('identityServer.createClaim') }}
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
-    <el-divider />
+          {{ $t('AbpIdentityServer.Claims:New') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
 
     <el-table
       row-key="clientId"
@@ -90,7 +88,7 @@
       style="width: 100%;"
     >
       <el-table-column
-        :label="$t('identityServer.claimType')"
+        :label="$t('AbpIdentityServer.Claims:Type')"
         prop="type"
         sortable
         width="150px"
@@ -101,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.claimValue')"
+        :label="$t('AbpIdentityServer.Claims:Value')"
         prop="value"
         sortable
         min-width="100%"
@@ -112,30 +110,30 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('operaActions')"
+        :label="$t('AbpIdentityServer.Actions')"
         align="center"
         width="150px"
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.Clients.Claims.Delete'])"
+            :disabled="!checkPermission(['AbpIdentityServer.Clients.Claims.Delete'])"
             size="mini"
             type="danger"
             @click="handleDeleteClientClaim(row.type, row.value)"
           >
-            {{ $t('identityServer.deleteClaim') }}
+            {{ $t('AbpIdentityServer.Claims:Delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </div>
 </template>
 
 <script lang="ts">
 import { dateFormat } from '@/utils/index'
 import ClaimTypeApiService, { IdentityClaimType, IdentityClaimValueType } from '@/api/cliam-type'
-import ClientService, { ClientClaim, ClientClaimCreate } from '@/api/clients'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { ClientClaim } from '@/api/clients'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
@@ -145,25 +143,11 @@ import { checkPermission } from '@/utils/permission'
   }
 })
 export default class extends Vue {
-  @Prop({ default: false })
-  private showDialog!: boolean
-
-  @Prop({ default: '' })
-  private clientId!: string
-
   @Prop({ default: () => new Array<ClientClaim>() })
   private clientClaims!: ClientClaim[]
 
-  private clientClaim: ClientClaimCreate
+  private clientClaim = new ClientClaim('', '')
   private claimTypes = new Array<IdentityClaimType>()
-  private clientClaimRules = {
-    type: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.claimType') }), trigger: 'change' }
-    ],
-    value: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.claimValue') }), trigger: 'blur' }
-    ]
-  }
 
   get cliamType() {
     return (claimName: string) => {
@@ -183,7 +167,7 @@ export default class extends Vue {
         case IdentityClaimValueType.String :
           return value
         case IdentityClaimValueType.Boolean :
-          return value.toLowerCase() === 'true'
+          return value
         case IdentityClaimValueType.DateTime :
           return dateFormat(new Date(value), 'YYYY-mm-dd HH:MM:SS')
       }
@@ -214,16 +198,6 @@ export default class extends Vue {
     }
   }
 
-  constructor() {
-    super()
-    this.clientClaim = new ClientClaimCreate()
-  }
-
-  @Watch('clientId', { immediate: true })
-  private onClientIdChanged() {
-    this.clientClaim.clientId = this.clientId
-  }
-
   mounted() {
     this.handleGetClaimTypes()
   }
@@ -235,19 +209,7 @@ export default class extends Vue {
   }
 
   private handleDeleteClientClaim(type: string, value: string) {
-    this.$confirm(this.l('identityServer.deleteClaimByType', { type: value }),
-      this.l('identityServer.deleteClaim'), {
-        callback: (action) => {
-          if (action === 'confirm') {
-            ClientService.deleteClientClaim(this.clientId, type, value).then(() => {
-              const deleteClaimIndex = this.clientClaims.findIndex(claim => claim.type === type && claim.value === value)
-              this.clientClaims.splice(deleteClaimIndex, 1)
-              this.$message.success(this.l('identityServer.deleteClaimSuccess', { type: value }))
-              this.$emit('clientClaimChanged')
-            })
-          }
-        }
-      })
+    this.$emit('onClientClaimDeleted', type, value)
   }
 
   private onClaimTypeChanged() {
@@ -268,30 +230,14 @@ export default class extends Vue {
     }
   }
 
-  private onSaveClientClaim() {
-    const frmClientClaim = this.$refs.formClientClaim as any
-    frmClientClaim.validate((valid: boolean) => {
+  private onSave() {
+    const clientClaimForm = this.$refs.clientClaimForm as any
+    clientClaimForm.validate((valid: boolean) => {
       if (valid) {
-        this.clientClaim.clientId = this.clientId
-        ClientService.addClientClaim(this.clientClaim).then(claim => {
-          this.clientClaims.push(claim)
-          const successMessage = this.l('identityServer.createClaimSuccess', { type: this.clientClaim.type })
-          this.$message.success(successMessage)
-          frmClientClaim.resetFields()
-          this.$emit('clientClaimChanged')
-        })
+        this.$emit('onClientClaimCreated', this.clientClaim.type, this.clientClaim.value)
+        clientClaimForm.resetFields()
       }
     })
-  }
-
-  private onFormClosed() {
-    this.resetFields()
-    this.$emit('closed')
-  }
-
-  public resetFields() {
-    const frmClientClaim = this.$refs.formClientClaim as any
-    frmClientClaim.resetFields()
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

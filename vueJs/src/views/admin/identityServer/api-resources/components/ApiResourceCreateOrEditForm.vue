@@ -15,15 +15,14 @@
         ref="formApiResource"
         label-width="100px"
         :model="apiResource"
-        :rules="apiResourceRules"
       >
         <el-tabs
-          v-model="activeTable"
+          v-model="activeTabPane"
           type="border-card"
         >
           <el-tab-pane
-            name="infomation"
-            :label="$t('AbpIdentityServer.Information')"
+            name="basics"
+            :label="$t('AbpIdentityServer.Basics')"
           >
             <el-form-item
               prop="enabled"
@@ -36,6 +35,11 @@
             <el-form-item
               prop="name"
               :label="$t('AbpIdentityServer.Name')"
+              :rules="{
+                required: true,
+                message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+                trigger: 'blur'
+              }"
             >
               <el-input
                 v-model="apiResource.name"
@@ -77,14 +81,55 @@
           </el-tab-pane>
           <el-tab-pane
             v-if="isEdit"
+            name="avanced"
+          >
+            <el-dropdown
+              slot="label"
+              @command="onDropdownMenuItemChanged"
+            >
+              <span class="el-dropdown-link">
+                {{ $t('AbpIdentityServer.Advanced') }}<i class="el-icon-arrow-down el-icon--right" />
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="api-resource-scope-edit-form">
+                  {{ $t('AbpIdentityServer.Scope') }}
+                </el-dropdown-item>
+                <el-dropdown-item command="secret-edit-form">
+                  {{ $t('AbpIdentityServer.Secret') }}
+                </el-dropdown-item>
+                <el-dropdown-item command="properties-edit-form">
+                  {{ $t('AbpIdentityServer.Propertites') }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <component
+              :is="advancedComponent"
+              :user-claims="apiResourceClaims"
+              :api-resource-scopes="apiResource.scopes"
+              :secrets="apiResource.secrets"
+              :allowed-create="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :allowed-delete="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :allowed-create-secret="checkPermission(['AbpIdentityServer.ApiResources.ManageSecrets'])"
+              :allowed-delete-secret="checkPermission(['AbpIdentityServer.ApiResources.ManageSecrets'])"
+              :properties="apiResource.properties"
+              @onScopeCreated="apiResourceScopeCreated"
+              @onScopeDeleted="apiResourceScopeDeleted"
+              @onSecretCreated="apiResourceSecretCreated"
+              @onSecretDeleted="apiResourceSecretDeleted"
+              @onCreated="onPropertyCreated"
+              @onDeleted="onPropertyDeleted"
+            />
+          </el-tab-pane>
+          <!-- <el-tab-pane
+            v-if="isEdit"
             name="scopes"
             :label="$t('AbpIdentityServer.Scope')"
           >
             <api-resource-scope-edit-form
               :user-claims="apiResourceClaims"
               :api-resource-scopes="apiResource.scopes"
-              @apiResourceScopeCreated="apiResourceScopeCreated"
-              @apiResourceScopeDeleted="apiResourceScopeDeleted"
+              @onScopeCreated="apiResourceScopeCreated"
+              @onScopeDeleted="apiResourceScopeDeleted"
             />
           </el-tab-pane>
           <el-tab-pane
@@ -93,30 +138,44 @@
             :label="$t('AbpIdentityServer.Secret')"
           >
             <el-card>
-              <api-resource-secret-edit-form
-                :api-resource-secrets="apiResource.secrets"
-                @apiResourceSecretCreated="apiResourceSecretCreated"
-                @apiResourceSecretDeleted="apiResourceSecretDeleted"
+              <secret-edit-form
+                :secrets="apiResource.secrets"
+                @onSecretCreated="apiResourceSecretCreated"
+                @onSecretDeleted="apiResourceSecretDeleted"
               />
             </el-card>
           </el-tab-pane>
+
+          <el-tab-pane
+            v-if="isEdit"
+            name="properties"
+            :label="$t('AbpIdentityServer.Propertites')"
+          >
+            <properties-edit-form
+              :allowed-create="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :allowed-delete="checkPermission(['AbpIdentityServer.ApiResources.ManageProperties'])"
+              :properties="apiResource.properties"
+              @onCreated="onPropertyCreated"
+              @onDeleted="onPropertyDeleted"
+            />
+          </el-tab-pane> -->
         </el-tabs>
 
         <el-form-item>
           <el-button
             class="cancel"
-            style="width:100px"
+            type="info"
             @click="onCancel"
           >
-            {{ $t('table.cancel') }}
+            {{ $t('AbpIdentityServer.Cancel') }}
           </el-button>
           <el-button
             class="confirm"
             type="primary"
-            style="width:100px"
-            @click="onSaveApiResource"
+            icon="el-icon-check"
+            @click="onSave"
           >
-            {{ $t('table.confirm') }}
+            {{ $t('AbpIdentityServer.Save') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -131,21 +190,23 @@ import ApiResourceService, {
   ApiResourceCreate,
   ApiResourceUpdate,
   ApiSecretCreateOrUpdate,
-  ApiResourceCreateOrUpdate, HashType
+  ApiResourceCreateOrUpdate
 } from '@/api/api-resources'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import ClaimTypeApiService from '@/api/cliam-type'
 import { checkPermission } from '@/utils/permission'
 import { dateFormat } from '@/utils/index'
 import { Claim } from '@/api/types'
-import ApiResourceSecretEditForm from './ApiResourceSecretEditForm.vue'
 import ApiResourceScopeEditForm from './ApiResourceScopeEditForm.vue'
+import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
+import SecretEditForm from '../../components/SecretEditForm.vue'
 
 @Component({
   name: 'ApiResourceCreateOrEditForm',
   components: {
-    ApiResourceScopeEditForm,
-    ApiResourceSecretEditForm
+    SecretEditForm,
+    PropertiesEditForm,
+    ApiResourceScopeEditForm
   },
   filters: {
     dateTimeFilter(datetime: string) {
@@ -170,15 +231,11 @@ export default class extends Vue {
   @Prop({ default: '' })
   private apiResourceId!: string
 
-  private activeTable = 'infomation'
+  private activeTabPane = 'basics'
+  private advancedComponent = 'api-resource-scope-edit-form'
   private apiResource = new ApiResource()
   private apiResourceClaims = new Array<Claim>()
   private newApiSecret = new ApiSecretCreateOrUpdate()
-  private apiResourceRules = {
-    name: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('AbpIdentityServer.Name') }), trigger: 'blur' }
-    ]
-  }
 
   get isEdit() {
     if (this.apiResourceId) {
@@ -205,7 +262,7 @@ export default class extends Vue {
   }
 
   private handleGetApiResource() {
-    this.activeTable = 'infomation'
+    this.activeTabPane = 'basics'
     if (this.apiResourceId && this.showDialog) {
       ApiResourceService.getApiResourceById(this.apiResourceId).then(res => {
         this.apiResource = res
@@ -215,13 +272,13 @@ export default class extends Vue {
     }
   }
 
-  private apiResourceSecretCreated(hashType: HashType, type: string, value: string, description: string, expiration: Date | undefined) {
+  private apiResourceSecretCreated(secret: any) {
     const apiSecret = new ApiSecretCreateOrUpdate()
-    apiSecret.hashType = hashType
-    apiSecret.type = type
-    apiSecret.value = value
-    apiSecret.description = description
-    apiSecret.expiration = expiration
+    apiSecret.hashType = secret.hashType
+    apiSecret.type = secret.type
+    apiSecret.value = secret.value
+    apiSecret.description = secret.description
+    apiSecret.expiration = secret.expiration
     this.apiResource.secrets.push(apiSecret)
   }
 
@@ -239,7 +296,7 @@ export default class extends Vue {
     apiScope.required = required
     apiScope.emphasize = emphasize
     apiScope.showInDiscoveryDocument = showInDiscoveryDocument
-    apiScope.userClaims = userClaims
+    apiScope.userClaims.push(...userClaims)
     this.apiResource.scopes.push(apiScope)
   }
 
@@ -248,7 +305,12 @@ export default class extends Vue {
     this.apiResource.scopes.splice(scopeIndex, 1)
   }
 
-  private onSaveApiResource() {
+  private onDropdownMenuItemChanged(component: any) {
+    this.activeTabPane = 'avanced'
+    this.advancedComponent = component
+  }
+
+  private onSave() {
     const frmApiResource = this.$refs.formApiResource as any
     frmApiResource.validate((valid: boolean) => {
       if (valid) {
@@ -283,6 +345,7 @@ export default class extends Vue {
     apiResource.userClaims = this.apiResource.userClaims
     apiResource.scopes = this.apiResource.scopes
     apiResource.secrets = this.apiResource.secrets
+    apiResource.properties = this.apiResource.properties
   }
 
   private onFormClosed(changed: boolean) {
@@ -292,6 +355,14 @@ export default class extends Vue {
 
   private onCancel() {
     this.onFormClosed(false)
+  }
+
+  private onPropertyCreated(key: string, value: string) {
+    this.$set(this.apiResource.properties, key, value)
+  }
+
+  private onPropertyDeleted(key: string) {
+    this.$delete(this.apiResource.properties, key)
   }
 
   public resetFields() {
@@ -310,11 +381,13 @@ export default class extends Vue {
   position: absolute;
   right: 10px;
   top: 20px;
+  width:100px;
 }
 .cancel {
   position: absolute;
   right: 120px;
   top: 20px;
+  width:100px;
 }
 .full-select {
   width: 100%;

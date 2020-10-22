@@ -37,10 +37,12 @@ namespace LINGYUN.Abp.IdentityServer
             CreateMap<ApiSecret, ApiSecretDto>();
             CreateMap<ApiScope, ApiScopeDto>();
             CreateMap<ApiResource, ApiResourceDto>()
-                .ForMember(dto => dto.UserClaims, map => map.MapFrom(src => src.UserClaims.Select(claim => claim.Type).ToList()));
+                .ForMember(dto => dto.UserClaims, map => map.MapFrom(src => src.UserClaims.Select(claim => claim.Type).ToList()))
+                .MapExtraProperties();
 
             CreateMap<IdentityResource, IdentityResourceDto>()
-                .ForMember(dto => dto.UserClaims, map => map.MapFrom(src => src.UserClaims.Select(claim => claim.Type).ToList()));
+                .ForMember(dto => dto.UserClaims, map => map.MapFrom(src => src.UserClaims.Select(claim => claim.Type).ToList()))
+                .MapExtraProperties();
         }
     }
 }

@@ -20,11 +20,14 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         public List<ApiSecretCreateOrUpdateDto> Secrets { get; set; }
 
+        public Dictionary<string, string> Properties { get; set; }
+
         protected ApiResourceCreateOrUpdateDto()
         {
             UserClaims = new List<string>();
             Scopes = new List<ApiScopeDto>();
             Secrets = new List<ApiSecretCreateOrUpdateDto>();
+            Properties = new Dictionary<string, string>();
         }
     }
 }

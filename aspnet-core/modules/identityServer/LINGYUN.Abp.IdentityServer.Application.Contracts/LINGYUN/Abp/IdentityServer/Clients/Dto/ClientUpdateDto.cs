@@ -83,13 +83,9 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public int DeviceCodeLifetime { get; set; }
         /// <summary>
-        /// Api资源(AllowScopes)
+        /// 允许的作用域
         /// </summary>
-        public List<string> ApiResources { get; set; }
-        /// <summary>
-        /// 身份资源(AllowScopes)
-        /// </summary>
-        public List<string> IdentityResources { get; set; }
+        public List<string> AllowedScopes { get; set; }
         /// <summary>
         /// 允许同源
         /// </summary>
@@ -123,8 +119,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         {
             Enabled = true;
             DeviceCodeLifetime = 300;
-            ApiResources = new List<string>();
-            IdentityResources = new List<string>();
+            AllowedScopes = new List<string>();
             RedirectUris = new List<string>();
             AllowedCorsOrigins = new List<string>();
             PostLogoutRedirectUris = new List<string>();

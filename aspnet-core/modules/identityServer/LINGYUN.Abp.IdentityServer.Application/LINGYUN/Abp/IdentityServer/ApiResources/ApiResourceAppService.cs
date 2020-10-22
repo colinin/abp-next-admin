@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.IdentityServer.ApiResources;
 using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
 
 namespace LINGYUN.Abp.IdentityServer.ApiResources
@@ -55,7 +54,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             {
                 Enabled = input.Enabled
             };
-            UpdateApiResourceByInput(apiResource, input);
+            await UpdateApiResourceByInputAsync(apiResource, input);
 
             apiResource = await ApiResourceRepository.InsertAsync(apiResource);
 
@@ -72,7 +71,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             apiResource.Description = input.Description ?? apiResource.Description;
             apiResource.Enabled = input.Enabled;
 
-            UpdateApiResourceByInput(apiResource, input);
+            await UpdateApiResourceByInputAsync(apiResource, input);
 
             apiResource = await ApiResourceRepository.UpdateAsync(apiResource);
 
@@ -90,76 +89,95 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        protected virtual void UpdateApiResourceByInput(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
+        protected virtual async Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
         {
-            // 删除不存在的UserClaim
-            apiResource.UserClaims.RemoveAll(claim => !input.UserClaims.Contains(claim.Type));
-            foreach (var inputClaim in input.UserClaims)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageClaims))
             {
-                var userClaim = apiResource.FindClaim(inputClaim);
-                if (userClaim == null)
+                // 删除不存在的UserClaim
+                apiResource.UserClaims.RemoveAll(claim => !input.UserClaims.Contains(claim.Type));
+                foreach (var inputClaim in input.UserClaims)
                 {
-                    apiResource.AddUserClaim(inputClaim);
-                }
-            }
-
-            // 删除不存在的Scope
-            apiResource.Scopes.RemoveAll(scope => !input.Scopes.Any(inputScope => scope.Name == inputScope.Name));
-            foreach (var inputScope in input.Scopes)
-            {
-                var scope = apiResource.FindScope(inputScope.Name);
-                if (scope == null)
-                {
-                    scope = apiResource.AddScope(
-                        inputScope.Name, inputScope.DisplayName, inputScope.Description,
-                        inputScope.Required, inputScope.Emphasize, inputScope.ShowInDiscoveryDocument);
-                }
-                else
-                {
-                    scope.Required = inputScope.Required;
-                    scope.Emphasize = inputScope.Emphasize;
-                    scope.Description = inputScope.Description;
-                    scope.DisplayName = inputScope.DisplayName;
-                    scope.ShowInDiscoveryDocument = inputScope.ShowInDiscoveryDocument;
-                    // 删除不存在的ScopeUserClaim
-                    scope.UserClaims.RemoveAll(claim => !inputScope.UserClaims.Contains(claim.Type));
-                }
-
-                foreach (var inputScopeClaim in inputScope.UserClaims)
-                {
-                    var scopeUserClaim = scope.FindClaim(inputScopeClaim);
-                    if (scopeUserClaim == null)
+                    var userClaim = apiResource.FindClaim(inputClaim);
+                    if (userClaim == null)
                     {
-                        scope.AddUserClaim(inputScopeClaim);
+                        apiResource.AddUserClaim(inputClaim);
                     }
                 }
             }
 
-            // 删除不存在的Secret
-            apiResource.Secrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Type == inputSecret.Type && secret.Value == inputSecret.Value));
-            foreach (var inputSecret in input.Secrets)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageScopes))
             {
-                // 第一次重复校验已经加密过的字符串
-                if (apiResource.FindSecret(inputSecret.Value, inputSecret.Type) == null)
+                // 删除不存在的Scope
+                apiResource.Scopes.RemoveAll(scope => !input.Scopes.Any(inputScope => scope.Name == inputScope.Name));
+                foreach (var inputScope in input.Scopes)
                 {
-                    var apiSecretValue = inputSecret.Value;
-                    if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(inputSecret.Type))
+                    var scope = apiResource.FindScope(inputScope.Name);
+                    if (scope == null)
                     {
-                        if (inputSecret.HashType == HashType.Sha256)
+                        scope = apiResource.AddScope(
+                            inputScope.Name, inputScope.DisplayName, inputScope.Description,
+                            inputScope.Required, inputScope.Emphasize, inputScope.ShowInDiscoveryDocument);
+                    }
+                    else
+                    {
+                        scope.Required = inputScope.Required;
+                        scope.Emphasize = inputScope.Emphasize;
+                        scope.Description = inputScope.Description;
+                        scope.DisplayName = inputScope.DisplayName;
+                        scope.ShowInDiscoveryDocument = inputScope.ShowInDiscoveryDocument;
+                        // 删除不存在的ScopeUserClaim
+                        scope.UserClaims.RemoveAll(claim => !inputScope.UserClaims.Contains(claim.Type));
+                    }
+
+                    foreach (var inputScopeClaim in inputScope.UserClaims)
+                    {
+                        var scopeUserClaim = scope.FindClaim(inputScopeClaim);
+                        if (scopeUserClaim == null)
                         {
-                            apiSecretValue = inputSecret.Value.Sha256();
-                        }
-                        else if (inputSecret.HashType == HashType.Sha512)
-                        {
-                            apiSecretValue = inputSecret.Value.Sha512();
+                            scope.AddUserClaim(inputScopeClaim);
                         }
                     }
-                    // 加密之后还需要做一次校验 避免出现重复值
-                    var secret = apiResource.FindSecret(apiSecretValue, inputSecret.Type);
-                    if (secret == null)
+                }
+            }
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageSecrets))
+            {
+                // 删除不存在的Secret
+                apiResource.Secrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Type == inputSecret.Type && secret.Value == inputSecret.Value));
+                foreach (var inputSecret in input.Secrets)
+                {
+                    // 第一次重复校验已经加密过的字符串
+                    if (apiResource.FindSecret(inputSecret.Value, inputSecret.Type) == null)
                     {
-                        apiResource.AddSecret(apiSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
+                        var apiSecretValue = inputSecret.Value;
+                        if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(inputSecret.Type))
+                        {
+                            if (inputSecret.HashType == HashType.Sha256)
+                            {
+                                apiSecretValue = inputSecret.Value.Sha256();
+                            }
+                            else if (inputSecret.HashType == HashType.Sha512)
+                            {
+                                apiSecretValue = inputSecret.Value.Sha512();
+                            }
+                        }
+                        // 加密之后还需要做一次校验 避免出现重复值
+                        var secret = apiResource.FindSecret(apiSecretValue, inputSecret.Type);
+                        if (secret == null)
+                        {
+                            apiResource.AddSecret(apiSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
+                        }
                     }
+                }
+            }
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageProperties))
+            {
+                // 删除不存在的属性
+                apiResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
+                foreach (var property in input.Properties)
+                {
+                    apiResource.Properties[property.Key] = property.Value;
                 }
             }
         }

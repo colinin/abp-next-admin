@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             var identityResource = new IdentityResource(GuidGenerator.Create(), input.Name, input.DisplayName,
                 input.Description, input.Enabled, input.Required, input.Emphasize,
                 input.ShowInDiscoveryDocument);
-            UpdateApiResourceByInput(identityResource, input);
+            await UpdateApiResourceByInputAsync(identityResource, input);
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         public virtual async Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
         {
             var identityResource = await IdentityResourceRepository.GetAsync(id);
-            UpdateApiResourceByInput(identityResource, input);
+            await UpdateApiResourceByInputAsync(identityResource, input);
             identityResource = await IdentityResourceRepository.UpdateAsync(identityResource);
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -75,7 +75,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             await IdentityResourceRepository.DeleteAsync(id);
         }
 
-        protected virtual void UpdateApiResourceByInput(IdentityResource identityResource, IdentityResourceCreateOrUpdateDto input)
+        protected virtual async Task UpdateApiResourceByInputAsync(IdentityResource identityResource, IdentityResourceCreateOrUpdateDto input)
         {
             if (!string.Equals(identityResource.Name, input.Name, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -94,22 +94,28 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             identityResource.Required = input.Required;
             identityResource.ShowInDiscoveryDocument = input.ShowInDiscoveryDocument;
 
-            // 删除不存在的UserClaim
-            identityResource.UserClaims.RemoveAll(claim => input.UserClaims.Contains(claim.Type));
-            foreach (var inputClaim in input.UserClaims)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageClaims))
             {
-                var userClaim = identityResource.FindUserClaim(inputClaim);
-                if (userClaim == null)
+                // 删除不存在的UserClaim
+                identityResource.UserClaims.RemoveAll(claim => input.UserClaims.Contains(claim.Type));
+                foreach (var inputClaim in input.UserClaims)
                 {
-                    identityResource.AddUserClaim(inputClaim);
+                    var userClaim = identityResource.FindUserClaim(inputClaim);
+                    if (userClaim == null)
+                    {
+                        identityResource.AddUserClaim(inputClaim);
+                    }
                 }
             }
 
-            // 删除不存在的Property
-            identityResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
-            foreach (var inputProp in input.Properties)
+            if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageProperties))
             {
-                identityResource.Properties[inputProp.Key] = inputProp.Value;
+                // 删除不存在的Property
+                identityResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
+                foreach (var inputProp in input.Properties)
+                {
+                    identityResource.Properties[inputProp.Key] = inputProp.Value;
+                }
             }
         }
     }

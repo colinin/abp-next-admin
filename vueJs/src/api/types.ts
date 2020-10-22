@@ -259,9 +259,14 @@ export class SecretBase implements ISecret {
   expiration: Date | undefined
 }
 
+export enum HashType {
+  Sha256,
+  Sha512
+}
+
 export class Claim implements IClaim {
-  type!: string
-  value!: string
+  type = ''
+  value = ''
 
   constructor(
     type: string,

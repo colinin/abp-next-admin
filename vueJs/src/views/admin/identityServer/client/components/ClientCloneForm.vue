@@ -3,41 +3,50 @@
     v-el-draggable-dialog
     width="800px"
     :visible="showDialog"
-    :title="$t('identityServer.cloneClint')"
+    :title="$t('AbpIdentityServer.Client:Clone')"
     custom-class="modal-form"
     :show-close="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    @close="onFormClosed"
+    @close="onFormClosed(false)"
   >
     <div class="app-container">
       <el-form
         ref="formCloneClient"
-        label-width="175px"
+        label-width="180px"
         :model="client"
-        :rules="clientRules"
       >
         <el-form-item
           prop="clientId"
-          :label="$t('identityServer.clientId')"
+          :label="$t('AbpIdentityServer.Client:Id')"
+          :rules="{
+            required: true,
+            message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
+            trigger: 'blur'
+          }"
         >
           <el-input
             v-model="client.clientId"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.clientId')})"
+            :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')})"
           />
         </el-form-item>
         <el-form-item
           prop="clientName"
-          :label="$t('identityServer.clientName')"
+          :label="$t('AbpIdentityServer.Name')"
+          :rules="{
+            required: true,
+            message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+            trigger: 'blur'
+          }"
         >
           <el-input
             v-model="client.clientName"
-            :placeholder="$t('pleaseInputBy', {key: $t('identityServer.clientName')})"
+            :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
           />
         </el-form-item>
         <el-form-item
           prop="description"
-          :label="$t('identityServer.description')"
+          :label="$t('AbpIdentityServer.Description')"
         >
           <el-input
             v-model="client.description"
@@ -45,7 +54,7 @@
         </el-form-item>
         <el-form-item
           prop="copyAllowedGrantType"
-          :label="$t('identityServer.copyAllowedGrantType')"
+          :label="$t('AbpIdentityServer.Clone:CopyAllowedGrantType')"
         >
           <el-switch
             v-model="client.copyAllowedGrantType"
@@ -53,7 +62,7 @@
         </el-form-item>
         <el-form-item
           prop="copyRedirectUri"
-          :label="$t('identityServer.copyRedirectUri')"
+          :label="$t('AbpIdentityServer.Clone:CopyRedirectUri')"
         >
           <el-switch
             v-model="client.copyRedirectUri"
@@ -61,7 +70,7 @@
         </el-form-item>
         <el-form-item
           prop="copyAllowedScope"
-          :label="$t('identityServer.copyAllowedScope')"
+          :label="$t('AbpIdentityServer.Clone:CopyAllowedScope')"
         >
           <el-switch
             v-model="client.copyAllowedScope"
@@ -69,15 +78,23 @@
         </el-form-item>
         <el-form-item
           prop="copyClaim"
-          :label="$t('identityServer.copyClaim')"
+          :label="$t('AbpIdentityServer.Clone:CopyClaim')"
         >
           <el-switch
             v-model="client.copyClaim"
           />
         </el-form-item>
         <el-form-item
+          prop="copySecret"
+          :label="$t('AbpIdentityServer.Clone:CopySecret')"
+        >
+          <el-switch
+            v-model="client.copySecret"
+          />
+        </el-form-item>
+        <el-form-item
           prop="copyAllowedCorsOrigin"
-          :label="$t('identityServer.copyAllowedCorsOrigin')"
+          :label="$t('AbpIdentityServer.Clone:CopyAllowedCorsOrigin')"
         >
           <el-switch
             v-model="client.copyAllowedCorsOrigin"
@@ -85,7 +102,7 @@
         </el-form-item>
         <el-form-item
           prop="copyPostLogoutRedirectUri"
-          :label="$t('identityServer.copyPostLogoutRedirectUri')"
+          :label="$t('AbpIdentityServer.Clone:CopyPostLogoutRedirectUri')"
         >
           <el-switch
             v-model="client.copyPostLogoutRedirectUri"
@@ -93,7 +110,7 @@
         </el-form-item>
         <el-form-item
           prop="copyPropertie"
-          :label="$t('identityServer.copyPropertie')"
+          :label="$t('AbpIdentityServer.Clone:CopyProperties')"
         >
           <el-switch
             v-model="client.copyPropertie"
@@ -101,7 +118,7 @@
         </el-form-item>
         <el-form-item
           prop="copyIdentityProviderRestriction"
-          :label="$t('identityServer.copyIdentityProviderRestriction')"
+          :label="$t('AbpIdentityServer.Clone:CopyIdentityProviderRestriction')"
         >
           <el-switch
             v-model="client.copyIdentityProviderRestriction"
@@ -112,17 +129,19 @@
           <el-button
             class="cancel"
             style="width:100px"
-            @click="onCancel"
+            type="info"
+            @click="onFormClosed(false)"
           >
-            {{ $t('table.cancel') }}
+            {{ $t('AbpIdentityServer.Cancel') }}
           </el-button>
           <el-button
             class="confirm"
             type="primary"
             style="width:100px"
-            @click="onCloneClient"
+            icon="el-icon-check"
+            @click="onSave"
           >
-            {{ $t('table.confirm') }}
+            {{ $t('AbpIdentityServer.Save') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -145,14 +164,6 @@ export default class extends Vue {
   private clientId!: string
 
   private client: ClientClone
-  private clientRules = {
-    clientId: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.clientId') }), trigger: 'blur' }
-    ],
-    clientName: [
-      { required: true, message: this.l('pleaseInputBy', { key: this.l('identityServer.clientName') }), trigger: 'blur' }
-    ]
-  }
 
   constructor() {
     super()
@@ -164,27 +175,22 @@ export default class extends Vue {
     this.client.sourceClientId = this.clientId
   }
 
-  private onCloneClient() {
+  private onSave() {
     const frmClient = this.$refs.formCloneClient as any
     frmClient.validate((valid: boolean) => {
       if (valid) {
-        ClientService.cloneClient(this.client).then(client => {
-          const successMessage = this.l('identityServer.createClientSuccess', { id: client.clientId })
+        ClientService.cloneClient(this.clientId, this.client).then(() => {
+          const successMessage = this.l('global.successful')
           this.$message.success(successMessage)
-          frmClient.resetFields()
-          this.$emit('closed', true)
+          this.onFormClosed(true)
         })
       }
     })
   }
 
-  private onFormClosed() {
-    this.onCancel()
-  }
-
-  private onCancel() {
+  private onFormClosed(changed: boolean) {
     this.resetFields()
-    this.$emit('closed')
+    this.$emit('closed', changed)
   }
 
   public resetFields() {
