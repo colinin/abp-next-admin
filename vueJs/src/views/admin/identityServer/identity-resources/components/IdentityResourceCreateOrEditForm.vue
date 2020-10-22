@@ -110,8 +110,8 @@
           >
             <properties-edit-form
               :properties="identityResource.properties"
-              :allowed-create="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
-              :allowed-delete="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
+              :allowed-create-prop="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
+              :allowed-delete-prop="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
               @onCreated="onPropertyCreated"
               @onDeleted="onPropertyDeleted"
             />

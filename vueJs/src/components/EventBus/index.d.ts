@@ -1,4 +1,4 @@
-import './vue';
+import './vue'
 import * as E from './events'
 
 declare namespace VueEvents {

@@ -13,9 +13,9 @@ export declare class VueEvents {
 
   once(event: string, callback: (eventData: any) => void): void
 
-  off(event:string, callback?: (eventData: any) => void): void
+  off(event: string, callback?: (eventData: any) => void): void
 
-  unlisten (event:string, callback?: (eventData: any) => void): void
+  unlisten (event: string, callback?: (eventData: any) => void): void
 
   removeAll(): void
 }

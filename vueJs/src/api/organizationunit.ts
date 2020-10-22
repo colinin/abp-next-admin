@@ -1,7 +1,7 @@
 import ApiService from './serviceBase'
 import { AuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from './types'
 import { RoleDto } from './roles'
-import { UserDataDto } from './users'
+import { User } from './users'
 
 /** 远程服务地址 */
 const serviceUrl = process.env.VUE_APP_BASE_API
@@ -154,7 +154,7 @@ export default class OrganizationUnitService {
   public static organizationUnitGetUsers(id: string) {
     let _url = '/api/identity/organization-units/management-users'
     _url += '?id=' + id
-    return ApiService.Get<ListResultDto<UserDataDto>>(_url, serviceUrl)
+    return ApiService.Get<ListResultDto<User>>(_url, serviceUrl)
   }
 
   /**

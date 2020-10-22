@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form
-      v-if="allowedCreate"
+      v-if="allowedCreateProp"
       ref="propertyEditForm"
       label-width="100px"
       :model="property"
@@ -88,7 +88,7 @@
           <el-button
             size="mini"
             type="danger"
-            :disabled="!allowedDelete"
+            :disabled="!allowedDeleteProp"
             icon="el-icon-delete"
             @click="onDelete(row.key)"
           />
@@ -123,10 +123,10 @@ export default class PropertiesEditForm extends Vue {
   private properties!: {[key: string]: string}
 
   @Prop({ default: false })
-  private allowedCreate!: boolean
+  private allowedCreateProp!: boolean
 
   @Prop({ default: false })
-  private allowedDelete!: boolean
+  private allowedDeleteProp!: boolean
 
   private editProperties = new Array<Property>()
   private property = new Property('', '')
