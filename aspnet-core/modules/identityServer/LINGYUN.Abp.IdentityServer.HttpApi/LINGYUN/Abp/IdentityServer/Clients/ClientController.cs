@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -7,8 +8,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
-    [Area("IdentityServer")]
-    [Route("api/IdentityServer/Clients")]
+    [Area("identity-server")]
+    [Route("api/identity-server/clients")]
     public class ClientController : AbpController, IClientAppService
     {
         protected IClientAppService ClientAppService { get; }
@@ -18,105 +19,64 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [HttpPost]
-        public virtual async Task<ClientDto> CreateAsync(ClientCreateDto clientCreate)
+        public virtual async Task<ClientDto> CreateAsync(ClientCreateDto input)
         {
-            return await ClientAppService.CreateAsync(clientCreate);
+            return await ClientAppService.CreateAsync(input);
         }
 
         [HttpDelete]
-        [Route("{Id}")]
-        public virtual async Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput)
+        [Route("{id}")]
+        public virtual async Task DeleteAsync(Guid id)
         {
-            await ClientAppService.DeleteAsync(clientGetByIdInput);
+            await ClientAppService.DeleteAsync(id);
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public virtual async Task<ClientDto> GetAsync(ClientGetByIdInputDto clientGetById)
+        [Route("{id}")]
+        public virtual async Task<ClientDto> GetAsync(Guid id)
         {
-            return await ClientAppService.GetAsync(clientGetById);
+            return await ClientAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<ClientDto>> GetAsync(ClientGetByPagedInputDto clientGetByPaged)
+        public virtual async Task<PagedResultDto<ClientDto>> GetListAsync(ClientGetByPagedDto input)
         {
-            return await ClientAppService.GetAsync(clientGetByPaged);
+            return await ClientAppService.GetListAsync(input);
         }
 
         [HttpPut]
-        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput)
+        [Route("{id}")]
+        public virtual async Task<ClientDto> UpdateAsync(Guid id, ClientUpdateDto input)
         {
-            return await ClientAppService.UpdateAsync(clientUpdateInput);
+            return await ClientAppService.UpdateAsync(id, input);
         }
 
         [HttpPost]
-        [Route("Clone")]
-        public virtual async Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput)
+        [Route("{id}/clone")]
+        public virtual async Task<ClientDto> CloneAsync(Guid id, ClientCloneDto input)
         {
-            return await ClientAppService.CloneAsync(clientCloneInput);
+            return await ClientAppService.CloneAsync(id, input);
         }
 
-        [HttpPost]
-        [Route("Claims")]
-        public virtual async Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate)
+        [HttpGet]
+        [Route("assignable-api-resources")]
+        public virtual async Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
         {
-            return await ClientAppService.AddClaimAsync(clientClaimCreate);
+            return await ClientAppService.GetAssignableApiResourcesAsync();
         }
 
-        [HttpPut]
-        [Route("Claims")]
-        public virtual async Task<ClientClaimDto> UpdateClaimAsync(ClientClaimUpdateDto clientClaimUpdate)
+        [HttpGet]
+        [Route("assignable-identity-resources")]
+        public virtual async Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
         {
-            return await ClientAppService.UpdateClaimAsync(clientClaimUpdate);
+            return await ClientAppService.GetAssignableIdentityResourcesAsync();
         }
 
-        [HttpDelete]
-        [Route("Claims")]
-        public virtual async Task DeleteClaimAsync(ClientClaimGetByKeyInputDto clientClaimGetByKey)
+        [HttpGet]
+        [Route("distinct-cors-origins")]
+        public virtual async Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
         {
-            await ClientAppService.DeleteClaimAsync(clientClaimGetByKey);
-        }
-
-        [HttpPost]
-        [Route("Properties")]
-        public virtual async Task<ClientPropertyDto> AddPropertyAsync(ClientPropertyCreateDto clientPropertyCreate)
-        {
-            return await ClientAppService.AddPropertyAsync(clientPropertyCreate);
-        }
-
-        [HttpPut]
-        [Route("Properties")]
-        public virtual async Task<ClientPropertyDto> UpdatePropertyAsync(ClientPropertyUpdateDto clientPropertyUpdate)
-        {
-            return await ClientAppService.UpdatePropertyAsync(clientPropertyUpdate);
-        }
-
-        [HttpDelete]
-        [Route("Properties")]
-        public virtual async Task DeletePropertyAsync(ClientPropertyGetByKeyDto clientPropertyGetByKey)
-        {
-            await ClientAppService.DeletePropertyAsync(clientPropertyGetByKey);
-        }
-
-        [HttpPost]
-        [Route("Secrets")]
-        public virtual async Task<ClientSecretDto> AddSecretAsync(ClientSecretCreateDto clientSecretCreate)
-        {
-            return await ClientAppService.AddSecretAsync(clientSecretCreate);
-        }
-
-        [HttpDelete]
-        [Route("Secrets")]
-        public virtual async Task DeleteSecretAsync(ClientSecretGetByTypeDto clientSecretGetByType)
-        {
-            await ClientAppService.DeleteSecretAsync(clientSecretGetByType);
-        }
-
-        [HttpPut]
-        [Route("Secrets")]
-        public virtual async Task<ClientSecretDto> UpdateSecretAsync(ClientSecretUpdateDto clientSecretUpdate)
-        {
-            return await ClientAppService.UpdateSecretAsync(clientSecretUpdate);
+            return await ClientAppService.GetAllDistinctAllowedCorsOriginsAsync();
         }
     }
 }

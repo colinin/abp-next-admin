@@ -1,39 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
-    public interface IClientAppService : IApplicationService
+    public interface IClientAppService : 
+        ICrudAppService<
+            ClientDto,
+            Guid,
+            ClientGetByPagedDto,
+            ClientCreateDto,
+            ClientUpdateDto>
     {
-        Task<ClientDto> GetAsync(ClientGetByIdInputDto clientGetById);
+        Task<ClientDto> CloneAsync(Guid id, ClientCloneDto input);
 
-        Task<PagedResultDto<ClientDto>> GetAsync(ClientGetByPagedInputDto clientGetByPaged);
+        Task<ListResultDto<string>> GetAssignableApiResourcesAsync();
 
-        Task<ClientDto> CreateAsync(ClientCreateDto clientCreate);
+        Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync();
 
-        Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput);
-
-        Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput);
-
-        Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput);
-
-        Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate);
-
-        Task<ClientClaimDto> UpdateClaimAsync(ClientClaimUpdateDto clientClaimUpdate);
-
-        Task DeleteClaimAsync(ClientClaimGetByKeyInputDto clientClaimGetByKey);
-
-        Task<ClientPropertyDto> AddPropertyAsync(ClientPropertyCreateDto clientPropertyCreate);
-
-        Task<ClientPropertyDto> UpdatePropertyAsync(ClientPropertyUpdateDto clientPropertyUpdate);
-
-        Task DeletePropertyAsync(ClientPropertyGetByKeyDto clientPropertyGetByKey);
-
-        Task<ClientSecretDto> AddSecretAsync(ClientSecretCreateDto clientSecretCreate);
-
-        Task<ClientSecretDto> UpdateSecretAsync(ClientSecretUpdateDto clientSecretUpdate);
-
-        Task DeleteSecretAsync(ClientSecretGetByTypeDto clientSecretGetByType);
+        Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -7,8 +8,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.IdentityServer.ApiResources
 {
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
-    [Area("IdentityServer")]
-    [Route("api/IdentityServer/ApiResources")]
+    [Area("identity-server")]
+    [Route("api/identity-server/api-resources")]
     public class ApiResourceController : AbpController, IApiResourceAppService
     {
         protected IApiResourceAppService ApiResourceAppService { get; }
@@ -19,63 +20,36 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public virtual async Task<ApiResourceDto> GetAsync(ApiResourceGetByIdInputDto apiResourceGetById)
+        [Route("{id}")]
+        public virtual async Task<ApiResourceDto> GetAsync(Guid id)
         {
-            return await ApiResourceAppService.GetAsync(apiResourceGetById);
+            return await ApiResourceAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<ApiResourceDto>> GetAsync(ApiResourceGetByPagedInputDto apiResourceGetByPaged)
+        public virtual async Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetByPagedInputDto input)
         {
-            return await ApiResourceAppService.GetAsync(apiResourceGetByPaged);
+            return await ApiResourceAppService.GetListAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto apiResourceCreate)
+        public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto input)
         {
-            return await ApiResourceAppService.CreateAsync(apiResourceCreate);
+            return await ApiResourceAppService.CreateAsync(input);
         }
 
         [HttpPut]
-        public virtual async Task<ApiResourceDto> UpdateAsync(ApiResourceUpdateDto apiResourceUpdate)
+        [Route("{id}")]
+        public virtual async Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
         {
-            return await ApiResourceAppService.UpdateAsync(apiResourceUpdate);
+            return await ApiResourceAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
-        [Route("{Id}")]
-        public virtual async Task DeleteAsync(ApiResourceGetByIdInputDto apiResourceGetById)
+        [Route("{id}")]
+        public virtual async Task DeleteAsync(Guid id)
         {
-            await ApiResourceAppService.DeleteAsync(apiResourceGetById);
-        }
-
-        [HttpPost]
-        [Route("Secrets")]
-        public virtual async Task<ApiSecretDto> AddSecretAsync(ApiSecretCreateDto apiSecretCreate)
-        {
-            return await ApiResourceAppService.AddSecretAsync(apiSecretCreate);
-        }
-
-        [HttpDelete]
-        [Route("Secrets")]
-        public virtual async Task DeleteSecretAsync(ApiSecretGetByTypeInputDto apiSecretGetByType)
-        {
-            await ApiResourceAppService.DeleteSecretAsync(apiSecretGetByType);
-        }
-
-        [HttpPost]
-        [Route("Scopes")]
-        public virtual async Task<ApiScopeDto> AddScopeAsync(ApiScopeCreateDto apiScopeCreate)
-        {
-            return await ApiResourceAppService.AddScopeAsync(apiScopeCreate);
-        }
-
-        [HttpDelete]
-        [Route("Scopes")]
-        public virtual async Task DeleteScopeAsync(ApiScopeGetByNameInputDto apiScopeGetByName)
-        {
-            await ApiResourceAppService.DeleteScopeAsync(apiScopeGetByName);
+            await ApiResourceAppService.DeleteAsync(id);
         }
     }
 }

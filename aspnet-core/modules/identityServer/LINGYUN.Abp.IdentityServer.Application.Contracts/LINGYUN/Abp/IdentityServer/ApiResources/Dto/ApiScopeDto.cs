@@ -16,11 +16,11 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         public bool ShowInDiscoveryDocument { get; set; }
 
-        public List<ApiScopeClaimDto> UserClaims { get; set; }
+        public List<string> UserClaims { get; set; }
 
         public ApiScopeDto()
         {
-            UserClaims = new List<ApiScopeClaimDto>();
+            UserClaims = new List<string>();
         }
     }
 }

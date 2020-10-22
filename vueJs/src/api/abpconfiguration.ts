@@ -18,19 +18,19 @@ export default class AbpConfigurationService {
 /** 授权 */
 export class Auth {
   /** 权限集合 */
-  policies?: { [key: string]: boolean}
+  policies?: { [key: string]: boolean} = {}
   /** 已授权集合 */
-  grantedPolicies?: { [key: string]: boolean}
+  grantedPolicies?: { [key: string]: boolean} = {}
 }
 
 /** 当前租户 */
 export class CurrentTenant {
   /** 标识 */
-  id?: string
+  id? = ''
   /** 名称 */
-  name?: string
+  name? = ''
   /** 是否可用 */
-  isAvailable!: boolean
+  isAvailable = false
 
   public clear() {
     this.id = ''
@@ -42,101 +42,101 @@ export class CurrentTenant {
 /** 当前用户 */
 export class CurrentUser {
   /** 标识 */
-  id?: string
+  id? = ''
   /** 邮件地址 */
-  email?: string
+  email? = ''
   /** 邮件已验证 */
-  emailVerified!: boolean
+  emailVerified = false
   /** 手机号 */
-  phoneNumber?: string
+  phoneNumber? = ''
   /** 手机号已验证 */
-  phoneNumberVerified!: boolean
+  phoneNumberVerified = false
   /** 名称 */
-  name?: string
+  name? = ''
   /** 简称 */
-  surName?: string
+  surName? = ''
   /** 用户名 */
-  userName?: string
+  userName? = ''
   /** 所属租户 */
-  tenantId?: string
+  tenantId? = ''
   /** 是否已认证 */
-  isAuthenticated!: boolean
+  isAuthenticated = false
   /** 所属角色列表 */
-  roles!: string[]
+  roles = new Array<string>()
 }
 
 /** 功能 */
 export class Feature {
   /** 功能集合 */
-  values?: { [key: string]: string}
+  values?: { [key: string]: string} = {}
 }
 
 /** 时区转换 */
 export class DateTimeFormat {
   /** 日历算法 */
-  calendarAlgorithmType!: string
+  calendarAlgorithmType = ''
   /** 日期分隔符 */
-  dateSeparator!: string
+  dateSeparator = ''
   /** 日期时间格式 */
-  dateTimeFormatLong!: string
+  dateTimeFormatLong = ''
   /** 完整日期时间格式 */
-  fullDateTimePattern!: string
+  fullDateTimePattern = ''
   /** 长时间格式 */
-  longTimePattern!: string
+  longTimePattern = ''
   /** 短日期格式 */
-  shortDatePattern!: string
+  shortDatePattern = ''
   /** 短时间格式 */
-  shortTimePattern!: string
+  shortTimePattern = ''
 }
 
 /** 当前区域信息 */
 export class CurrentCulture {
   /** 本地化名称 */
-  cultureName!: string
+  cultureName = ''
   /** 显示名称 */
-  displayName!: string
+  displayName = ''
   /** 英文名称 */
-  englishName!: string
+  englishName = ''
   /** 是否从右到左 */
-  isRightToLeft!: boolean
+  isRightToLeft = false
   /** 名称 */
-  name!: string
+  name = ''
   /** 本地名称 */
-  nativeName!: string
+  nativeName = ''
   /** 三个字母的ISO名称 */
-  threeLetterIsoLanguageName!: string
+  threeLetterIsoLanguageName = ''
   /** 两个字母的ISO名称 */
-  twoLetterIsoLanguageName!: string
+  twoLetterIsoLanguageName = ''
   /** 日期时间格式 */
-  dateTimeFormat!: DateTimeFormat
+  dateTimeFormat = new DateTimeFormat()
 }
 
 /** 语言 */
 export class Language {
   /** 本地化名称 */
-  cultureName!: string
+  cultureName = ''
   /** 显示名称 */
-  displayName!: string
+  displayName = ''
   /** 图标 */
-  flagIcon?: string
+  flagIcon = ''
   /** 用户界面本地化名称 */
-  uiCultureName!: string
+  uiCultureName = ''
 }
 
 /** 本地化 */
 export class Localization {
   /** 当前区域 */
-  currentCulture!: CurrentCulture
+  currentCulture = new CurrentCulture()
   /** 默认本地化资源名称 */
-  defaultResourceName?: string
+  defaultResourceName = ''
   /** 支持的语言列表 */
-  languages!: Language[]
+  languages = new Array<Language>()
   /** 本地化资源集合 */
-  values!: {[key: string]: {[key: string]: string}}
+  values: {[key: string]: {[key: string]: string}} = {}
   /** 语言映射集合 */
-  languagesMap?: {[key: string]: INameValue<string>[]}
+  languagesMap: {[key: string]: INameValue<string>[]} = {}
   /** 语言文档映射集合 */
-  languageFilesMap?: {[key: string]: INameValue<string>[]}
+  languageFilesMap: {[key: string]: INameValue<string>[]} = {}
 }
 
 /** 多租户配置 */
@@ -148,7 +148,7 @@ export class MultiTenancy {
 /** 全局设置 */
 export class Setting {
   /** 设置集合 */
-  values?: {[key: string]: any}
+  values: {[key: string]: any} = {}
 }
 
 /** 实体查询属性扩展 */
@@ -166,11 +166,11 @@ export class ExtensionPropertyApiUpdate extends Available {
 /** 实体属性api定义 */
 export class ExtensionPropertyApi {
   /** 查询时 */
-  onGet!: ExtensionPropertyApiGet
+  onGet = new ExtensionPropertyApiGet()
   /** 创建时 */
-  onCreate!: ExtensionPropertyApiCreate
+  onCreate = new ExtensionPropertyApiCreate()
   /** 更新时 */
-  onUpdate!: ExtensionPropertyApiUpdate
+  onUpdate = new ExtensionPropertyApiUpdate()
 }
 
 export class ExtensionPropertyUiTable extends Available {
@@ -180,55 +180,55 @@ export class ExtensionPropertyUiForm extends Available {
 }
 
 export class ExtensionPropertyUi {
-  onTable!: ExtensionPropertyUiTable
-  onCreateForm!: ExtensionPropertyUiForm
-  onEditForm!: ExtensionPropertyUiForm
+  onTable = new ExtensionPropertyUiTable()
+  onCreateForm = new ExtensionPropertyUiForm()
+  onEditForm = new ExtensionPropertyUiForm()
 }
 
 export class LocalizableString {
-  name!: string
-  resource?: string
+  name = ''
+  resource = ''
 }
 
 export class ExtensionPropertyAttribute {
-  typeSimple?: string
-  config?: {[key: string]: any}
+  typeSimple = ''
+  config: {[key: string]: any} = {}
 }
 
 export class ExtensionProperty {
-  type!: string
-  typeSimple!: string
-  displayName?: LocalizableString
-  api!: ExtensionPropertyApi
-  ui!: ExtensionPropertyUi
-  attributes!: ExtensionPropertyAttribute[]
-  configuration!: {[key: string]: any}
-  defaultValue!: any
+  type = ''
+  typeSimple = ''
+  displayName = new LocalizableString()
+  api = new ExtensionPropertyApi()
+  ui = new ExtensionPropertyUi()
+  attributes = new Array<ExtensionPropertyAttribute>()
+  configuration: {[key: string]: any} = {}
+  defaultValue: any = ''
 }
 
 export class EntityExtension {
-  properties!: {[key: string]: ExtensionProperty}
-  configuration!: {[key: string]: any}
+  properties: {[key: string]: ExtensionProperty} = {}
+  configuration: {[key: string]: any} = {}
 }
 
 export class ModuleExtension {
-  entities!: {[key: string]: EntityExtension}
-  configuration!: {[key: string]: any}
+  entities: {[key: string]: EntityExtension} = {}
+  configuration: {[key: string]: any} = {}
 }
 
 export class ExtensionEnumField {
-  name!: string
-  value!: any
+  name = ''
+  value: any = ''
 }
 
 export class ExtensionEnum {
-  fields!: ExtensionEnumField[]
-  localizationResource!: string
+  fields = new Array<ExtensionEnumField>()
+  localizationResource = ''
 }
 
 export class ObjectExtension {
-  modules!: {[key: string]: ModuleExtension}
-  enums!: {[key: string]: ExtensionEnum}
+  modules: {[key: string]: ModuleExtension} = {}
+  enums: {[key: string]: ExtensionEnum} = {}
 }
 
 /** abp框架信息 */
@@ -254,25 +254,14 @@ export interface IAbpConfiguration {
 }
 
 export class AbpConfiguration implements IAbpConfiguration {
-  auth!: Auth
-  currentTenant!: CurrentTenant
-  currentUser!: CurrentUser
-  features!: Feature
-  localization!: Localization
-  multiTenancy!: MultiTenancy
-  objectExtensions!: ObjectExtension
-  setting!: Setting
-
-  constructor() {
-    this.auth = new Auth()
-    this.setting = new Setting()
-    this.features = new Feature()
-    this.currentUser = new CurrentUser()
-    this.localization = new Localization()
-    this.multiTenancy = new MultiTenancy()
-    this.currentTenant = new CurrentTenant()
-    this.objectExtensions = new ObjectExtension()
-  }
+  auth = new Auth()
+  currentTenant = new CurrentTenant()
+  currentUser = new CurrentUser()
+  features = new Feature()
+  localization = new Localization()
+  multiTenancy = new MultiTenancy()
+  objectExtensions = new ObjectExtension()
+  setting = new Setting()
 
   public getSetting(key: string) {
     if (this.setting.values && this.setting.values[key]) {

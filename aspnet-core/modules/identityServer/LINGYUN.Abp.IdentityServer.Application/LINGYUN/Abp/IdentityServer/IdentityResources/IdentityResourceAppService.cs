@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -18,18 +19,18 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             IdentityResourceRepository = identityResourceRepository;
         }
 
-        public virtual async Task<IdentityResourceDto> GetAsync(IdentityResourceGetByIdInputDto identityResourceGetById)
+        public virtual async Task<IdentityResourceDto> GetAsync(Guid id)
         {
-            var identityResource = await IdentityResourceRepository.GetAsync(identityResourceGetById.Id);
+            var identityResource = await IdentityResourceRepository.GetAsync(id);
 
             return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
         }
 
-        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetAsync(IdentityResourceGetByPagedInputDto identityResourceGetByPaged)
+        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
         {
-            var identityResources = await IdentityResourceRepository.GetListAsync(identityResourceGetByPaged.Sorting,
-                identityResourceGetByPaged.SkipCount, identityResourceGetByPaged.MaxResultCount,
-                identityResourceGetByPaged.Filter, true);
+            var identityResources = await IdentityResourceRepository.GetListAsync(input.Sorting,
+                input.SkipCount, input.MaxResultCount,
+                input.Filter);
             var identityResourceCount = await IdentityResourceRepository.GetCountAsync();
 
             return new PagedResultDto<IdentityResourceDto>(identityResourceCount,
@@ -37,86 +38,85 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Create)]
-        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateDto identityResourceCreate)
+        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
         {
-            var identityResourceExists = await IdentityResourceRepository.CheckNameExistAsync(identityResourceCreate.Name);
+            var identityResourceExists = await IdentityResourceRepository.CheckNameExistAsync(input.Name);
             if (identityResourceExists)
             {
-                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.IdentityResourceNameExisted, identityResourceCreate.Name]);
+                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.IdentityResourceNameExisted, input.Name]);
             }
-            var identityResource = new IdentityResource(GuidGenerator.Create(), identityResourceCreate.Name, identityResourceCreate.DisplayName,
-                identityResourceCreate.Description, identityResourceCreate.Enabled, identityResourceCreate.Required, identityResourceCreate.Emphasize,
-                identityResourceCreate.ShowInDiscoveryDocument);
-            foreach(var claim in identityResourceCreate.UserClaims)
-            {
-                identityResource.AddUserClaim(claim.Type);
-            }
+            var identityResource = new IdentityResource(GuidGenerator.Create(), input.Name, input.DisplayName,
+                input.Description, input.Enabled, input.Required, input.Emphasize,
+                input.ShowInDiscoveryDocument);
+            await UpdateApiResourceByInputAsync(identityResource, input);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             identityResource = await IdentityResourceRepository.InsertAsync(identityResource);
 
             return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Update)]
-        public virtual async Task<IdentityResourceDto> UpdateAsync(IdentityResourceUpdateDto identityResourceUpdate)
+        public virtual async Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
         {
-            var identityResource = await IdentityResourceRepository.GetAsync(identityResourceUpdate.Id);
-            identityResource.ConcurrencyStamp = identityResourceUpdate.ConcurrencyStamp;
-            identityResource.Name = identityResourceUpdate.Name ?? identityResource.Name;
-            identityResource.DisplayName = identityResourceUpdate.DisplayName ?? identityResource.DisplayName;
-            identityResource.Description = identityResourceUpdate.Description ?? identityResource.Description;
-            identityResource.Enabled = identityResourceUpdate.Enabled;
-            identityResource.Emphasize = identityResourceUpdate.Emphasize;
-            identityResource.ShowInDiscoveryDocument = identityResourceUpdate.ShowInDiscoveryDocument;
-            if (identityResourceUpdate.UserClaims.Count > 0)
-            {
-                identityResource.RemoveAllUserClaims();
-                foreach (var claim in identityResourceUpdate.UserClaims)
-                {
-                    identityResource.AddUserClaim(claim.Type);
-                }
-            }
+            var identityResource = await IdentityResourceRepository.GetAsync(id);
+            await UpdateApiResourceByInputAsync(identityResource, input);
             identityResource = await IdentityResourceRepository.UpdateAsync(identityResource);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Delete)]
-        public virtual async Task DeleteAsync(IdentityResourceGetByIdInputDto identityResourceGetById)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            await IdentityResourceRepository.DeleteAsync(identityResourceGetById.Id);
+            await IdentityResourceRepository.DeleteAsync(id);
         }
 
-        [Authorize(AbpIdentityServerPermissions.IdentityResources.Properties.Create)]
-        public virtual async Task<IdentityResourcePropertyDto> AddPropertyAsync(IdentityResourcePropertyCreateDto identityResourcePropertyCreate)
+        protected virtual async Task UpdateApiResourceByInputAsync(IdentityResource identityResource, IdentityResourceCreateOrUpdateDto input)
         {
-            var identityResource = await IdentityResourceRepository.GetAsync(identityResourcePropertyCreate.IdentityResourceId);
-
-            if (identityResource.Properties.ContainsKey(identityResourcePropertyCreate.Key))
+            if (!string.Equals(identityResource.Name, input.Name, StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.IdentityResourcePropertyExisted, identityResourcePropertyCreate.Key]);
+                identityResource.Name = input.Name;
             }
-            identityResource.ConcurrencyStamp = identityResourcePropertyCreate.ConcurrencyStamp;
-            identityResource.Properties.Add(identityResourcePropertyCreate.Key, identityResourcePropertyCreate.Value);
-
-            await IdentityResourceRepository.UpdateAsync(identityResource);
-            return new IdentityResourcePropertyDto
+            if (!string.Equals(identityResource.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
             {
-                Key = identityResourcePropertyCreate.Key,
-                Value = identityResourcePropertyCreate.Value
-            };
-        }
-
-        [Authorize(AbpIdentityServerPermissions.IdentityResources.Properties.Delete)]
-        public virtual async Task DeletePropertyAsync(IdentityResourcePropertyGetByKeyDto identityResourcePropertyGetByKey)
-        {
-            var identityResource = await IdentityResourceRepository.GetAsync(identityResourcePropertyGetByKey.IdentityResourceId);
-
-            if (!identityResource.Properties.ContainsKey(identityResourcePropertyGetByKey.Key))
-            {
-                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.IdentityResourcePropertyNotFound, identityResourcePropertyGetByKey.Key]);
+                identityResource.Description = input.Description;
             }
-            identityResource.Properties.Remove(identityResourcePropertyGetByKey.Key);
-            await IdentityResourceRepository.UpdateAsync(identityResource);
+            if (!string.Equals(identityResource.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                identityResource.DisplayName = input.DisplayName;
+            }
+            identityResource.Emphasize = input.Emphasize;
+            identityResource.Enabled = input.Enabled;
+            identityResource.Required = input.Required;
+            identityResource.ShowInDiscoveryDocument = input.ShowInDiscoveryDocument;
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageClaims))
+            {
+                // 删除不存在的UserClaim
+                identityResource.UserClaims.RemoveAll(claim => input.UserClaims.Contains(claim.Type));
+                foreach (var inputClaim in input.UserClaims)
+                {
+                    var userClaim = identityResource.FindUserClaim(inputClaim);
+                    if (userClaim == null)
+                    {
+                        identityResource.AddUserClaim(inputClaim);
+                    }
+                }
+            }
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageProperties))
+            {
+                // 删除不存在的Property
+                identityResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
+                foreach (var inputProp in input.Properties)
+                {
+                    identityResource.Properties[inputProp.Key] = inputProp.Value;
+                }
+            }
         }
     }
 }

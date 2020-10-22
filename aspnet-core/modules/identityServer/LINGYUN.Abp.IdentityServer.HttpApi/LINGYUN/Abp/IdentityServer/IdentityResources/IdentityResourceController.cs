@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -7,8 +8,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
-    [Area("IdentityServer")]
-    [Route("api/IdentityServer/IdentityResources")]
+    [Area("identity-server")]
+    [Route("api/identity-server/identity-resources")]
     public class IdentityResourceController : AbpController, IIdentityResourceAppService
     {
         protected IIdentityResourceAppService IdentityResourceAppService { get; }
@@ -19,48 +20,36 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public virtual async Task<IdentityResourceDto> GetAsync(IdentityResourceGetByIdInputDto identityResourceGetById)
+        [Route("{id}")]
+        public virtual async Task<IdentityResourceDto> GetAsync(Guid id)
         {
-            return await IdentityResourceAppService.GetAsync(identityResourceGetById);
+            return await IdentityResourceAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetAsync(IdentityResourceGetByPagedInputDto identityResourceGetByPaged)
+        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
         {
-            return await IdentityResourceAppService.GetAsync(identityResourceGetByPaged);
+            return await IdentityResourceAppService.GetListAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateDto identityResourceCreate)
+        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
         {
-            return await IdentityResourceAppService.CreateAsync(identityResourceCreate);
+            return await IdentityResourceAppService.CreateAsync(input);
         }
 
         [HttpPut]
-        public virtual async Task<IdentityResourceDto> UpdateAsync(IdentityResourceUpdateDto identityResourceUpdate)
+        [Route("{id}")]
+        public virtual async Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
         {
-            return await IdentityResourceAppService.UpdateAsync(identityResourceUpdate);
+            return await IdentityResourceAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(IdentityResourceGetByIdInputDto identityResourceGetById)
+        [Route("{id}")]
+        public virtual async Task DeleteAsync(Guid id)
         {
-            await IdentityResourceAppService.DeleteAsync(identityResourceGetById);
-        }
-
-        [HttpPost]
-        [Route("Properties")]
-        public virtual async Task<IdentityResourcePropertyDto> AddPropertyAsync(IdentityResourcePropertyCreateDto identityResourcePropertyCreate)
-        {
-            return await IdentityResourceAppService.AddPropertyAsync(identityResourcePropertyCreate);
-        }
-
-        [HttpDelete]
-        [Route("Properties")]
-        public virtual async Task DeletePropertyAsync(IdentityResourcePropertyGetByKeyDto identityResourcePropertyGetByKey)
-        {
-            await IdentityResourceAppService.DeletePropertyAsync(identityResourcePropertyGetByKey);
+            await IdentityResourceAppService.DeleteAsync(id);
         }
     }
 }

@@ -153,11 +153,6 @@ export default class CreateOrUpdateCliamTypeForm extends Vue {
     return false
   }
 
-  @Watch('claimTypeId')
-  private onClaimTypeIdChanged() {
-    this.handleGetClaimType()
-  }
-
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
     this.handleGetClaimType()

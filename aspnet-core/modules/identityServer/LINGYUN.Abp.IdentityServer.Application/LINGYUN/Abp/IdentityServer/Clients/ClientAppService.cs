@@ -1,6 +1,9 @@
-﻿using IdentityServer4;
+﻿using LINGYUN.Abp.IdentityServer.ApiResources;
+using LINGYUN.Abp.IdentityServer.IdentityResources;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,65 +18,17 @@ namespace LINGYUN.Abp.IdentityServer.Clients
     public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppService
     {
         protected IClientRepository ClientRepository { get; }
+        protected IApiResourceRepository ApiResourceRepository { get; }
+        protected IIdentityResourceRepository IdentityResourceRepository { get; }
 
-        public ClientAppService(IClientRepository clientRepository)
+        public ClientAppService(
+            IClientRepository clientRepository,
+            IApiResourceRepository apiResourceRepository,
+            IIdentityResourceRepository identityResourceRepository)
         {
             ClientRepository = clientRepository;
-        }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Create)]
-        public virtual async Task<ClientClaimDto> AddClaimAsync(ClientClaimCreateDto clientClaimCreate)
-        {
-            var client = await ClientRepository.GetAsync(clientClaimCreate.ClientId);
-
-            client.AddClaim(clientClaimCreate.Value, clientClaimCreate.Type);
-            var clientClaim = client.FindClaim(clientClaimCreate.Value, clientClaimCreate.Type);
-
-            return ObjectMapper.Map<ClientClaim, ClientClaimDto>(clientClaim);
-        }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Create)]
-        public virtual async Task<ClientPropertyDto> AddPropertyAsync(ClientPropertyCreateDto clientPropertyCreate)
-        {
-            var client = await ClientRepository.GetAsync(clientPropertyCreate.ClientId);
-
-            client.AddProperty(clientPropertyCreate.Key, clientPropertyCreate.Value);
-            var clientProperty = client.FindProperty(clientPropertyCreate.Key, clientPropertyCreate.Value);
-
-            return ObjectMapper.Map<ClientProperty, ClientPropertyDto>(clientProperty);
-        }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Create)]
-        public virtual async Task<ClientSecretDto> AddSecretAsync(ClientSecretCreateDto clientSecretCreate)
-        {
-            var client = await ClientRepository.GetAsync(clientSecretCreate.ClientId);
-
-            var clientSecretValue = clientSecretCreate.Value;
-
-            // 如果是 SharedSecret 类型的密钥
-            // 采用 IdentityServer4 服务器扩展方法加密
-            if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(clientSecretCreate.Type))
-            {
-                if(clientSecretCreate.HashType == HashType.Sha256)
-                {
-                    clientSecretValue = clientSecretCreate.Value.Sha256();
-                }
-                else if (clientSecretCreate.HashType == HashType.Sha512)
-                {
-                    clientSecretValue = clientSecretCreate.Value.Sha512();
-                }
-            }
-            else
-            {
-                // 其他类型的服务器加密方式暂时不提供
-                throw new UserFriendlyException(L["EncryptionNotImplemented", clientSecretCreate.Type]);
-            }
-            client.AddSecret(clientSecretValue, clientSecretCreate.Expiration, 
-                clientSecretCreate.Type, clientSecretCreate.Description);
-            
-            var clientSecret = client.FindSecret(clientSecretValue, clientSecretCreate.Type);
-
-            return ObjectMapper.Map<ClientSecret, ClientSecretDto>(clientSecret);
+            ApiResourceRepository = apiResourceRepository;
+            IdentityResourceRepository = identityResourceRepository;
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Create)]
@@ -91,58 +46,37 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             };
             foreach (var grantType in clientCreate.AllowedGrantTypes)
             {
-                client.AddGrantType(grantType.GrantType);
+                client.AddGrantType(grantType);
             }
 
-            client = await ClientRepository.InsertAsync(client, true);
+            client = await ClientRepository.InsertAsync(client);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Delete)]
-        public virtual async Task DeleteAsync(ClientGetByIdInputDto clientGetByIdInput)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            await ClientRepository.DeleteAsync(clientGetByIdInput.Id);
+            var client = await ClientRepository.GetAsync(id);
+            await ClientRepository.DeleteAsync(client);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Delete)]
-        public virtual async Task DeleteClaimAsync(ClientClaimGetByKeyInputDto clientClaimGetByKey)
+        public virtual async Task<ClientDto> GetAsync(Guid id)
         {
-            var client = await ClientRepository.GetAsync(clientClaimGetByKey.ClientId);
-            client.RemoveClaim(clientClaimGetByKey.Value, clientClaimGetByKey.Type);
-            await ClientRepository.UpdateAsync(client);
-        }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Delete)]
-        public virtual async Task DeletePropertyAsync(ClientPropertyGetByKeyDto clientPropertyGetByKey)
-        {
-            var client = await ClientRepository.GetAsync(clientPropertyGetByKey.ClientId);
-            client.RemoveProperty(clientPropertyGetByKey.Key, clientPropertyGetByKey.Value);
-            await ClientRepository.UpdateAsync(client);
-        }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Delete)]
-        public virtual async Task DeleteSecretAsync(ClientSecretGetByTypeDto clientSecretGetByType)
-        {
-            var client = await ClientRepository.GetAsync(clientSecretGetByType.ClientId);
-            client.RemoveSecret(clientSecretGetByType.Value, clientSecretGetByType.Type);
-            await ClientRepository.UpdateAsync(client);
-        }
-
-
-        public virtual async Task<ClientDto> GetAsync(ClientGetByIdInputDto clientGetById)
-        {
-            var client = await ClientRepository.GetAsync(clientGetById.Id);
+            var client = await ClientRepository.GetAsync(id);
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
-        public virtual async Task<PagedResultDto<ClientDto>> GetAsync(ClientGetByPagedInputDto clientGetByPaged)
+        public virtual async Task<PagedResultDto<ClientDto>> GetListAsync(ClientGetByPagedDto input)
         {
-            // Abp官方IdentityServer项目不支持Filter过滤...
-            var clients = await ClientRepository.GetListAsync(clientGetByPaged.Sorting,
-                clientGetByPaged.SkipCount, clientGetByPaged.MaxResultCount,
-                clientGetByPaged.Filter, true);
+            var clients = await ClientRepository.GetListAsync(input.Sorting,
+                input.SkipCount, input.MaxResultCount,
+                input.Filter);
 
             var clientCount = await ClientRepository.GetCountAsync();
 
@@ -151,127 +85,243 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Update)]
-        public virtual async Task<ClientDto> UpdateAsync(ClientUpdateInputDto clientUpdateInput)
+        public virtual async Task<ClientDto> UpdateAsync(Guid id, ClientUpdateDto input)
         {
-            var client = await ClientRepository.GetAsync(clientUpdateInput.Id);
+            var client = await ClientRepository.GetAsync(id);
 
-            #region Basic Property
-            client.ConcurrencyStamp = clientUpdateInput.Client.ConcurrencyStamp;
-            client.ClientId = clientUpdateInput.Client.ClientId ?? client.ClientId;
-            client.ClientUri = clientUpdateInput.Client.ClientUri ?? client.ClientUri;
-            client.ClientName = clientUpdateInput.Client.ClientName ?? client.ClientName;
-            client.AbsoluteRefreshTokenLifetime = clientUpdateInput.Client.AbsoluteRefreshTokenLifetime
-                ?? client.AbsoluteRefreshTokenLifetime;
-            client.AccessTokenLifetime = clientUpdateInput.Client.AccessTokenLifetime
-                ?? client.AccessTokenLifetime;
-            client.AccessTokenType = clientUpdateInput.Client.AccessTokenType ?? client.AccessTokenType;
-            client.AllowAccessTokensViaBrowser = clientUpdateInput.Client.AllowAccessTokensViaBrowser
-                ?? client.AllowAccessTokensViaBrowser;
-            client.AllowOfflineAccess = clientUpdateInput.Client.AllowOfflineAccess
-                ?? client.AllowOfflineAccess;
-            client.AllowPlainTextPkce = clientUpdateInput.Client.AllowPlainTextPkce ?? client.AllowPlainTextPkce;
-            client.AllowRememberConsent = clientUpdateInput.Client.AllowRememberConsent ?? client.AllowRememberConsent;
-            client.AlwaysIncludeUserClaimsInIdToken = clientUpdateInput.Client.AlwaysIncludeUserClaimsInIdToken
-                ?? client.AlwaysIncludeUserClaimsInIdToken;
-            client.AlwaysSendClientClaims = clientUpdateInput.Client.AlwaysSendClientClaims ?? client.AlwaysSendClientClaims;
-            client.AuthorizationCodeLifetime = clientUpdateInput.Client.AuthorizationCodeLifetime
-                ?? client.AuthorizationCodeLifetime;
-            client.BackChannelLogoutSessionRequired = clientUpdateInput.Client.BackChannelLogoutSessionRequired
-                ?? client.BackChannelLogoutSessionRequired;
-
-            client.BackChannelLogoutUri = clientUpdateInput.Client.BackChannelLogoutUri
-                ?? client.BackChannelLogoutUri;
-            client.ClientClaimsPrefix = clientUpdateInput.Client.ClientClaimsPrefix ?? client.ClientClaimsPrefix;
-            client.ConsentLifetime = clientUpdateInput.Client.ConsentLifetime ?? client.ConsentLifetime;
-            client.Description = clientUpdateInput.Client.Description ?? client.Description;
-            client.DeviceCodeLifetime = clientUpdateInput.Client.DeviceCodeLifetime ?? client.DeviceCodeLifetime;
-            client.Enabled = clientUpdateInput.Client.Enabled ?? client.Enabled;
-            client.EnableLocalLogin = clientUpdateInput.Client.EnableLocalLogin ?? client.EnableLocalLogin;
-            client.FrontChannelLogoutSessionRequired = clientUpdateInput.Client.FrontChannelLogoutSessionRequired
-                ?? client.FrontChannelLogoutSessionRequired;
-            client.FrontChannelLogoutUri = clientUpdateInput.Client.FrontChannelLogoutUri ?? client.FrontChannelLogoutUri;
-
-            client.IdentityTokenLifetime = clientUpdateInput.Client.IdentityTokenLifetime ?? client.IdentityTokenLifetime;
-            client.IncludeJwtId = clientUpdateInput.Client.IncludeJwtId ?? client.IncludeJwtId;
-            client.LogoUri = clientUpdateInput.Client.LogoUri ?? client.LogoUri;
-            client.PairWiseSubjectSalt = clientUpdateInput.Client.PairWiseSubjectSalt ?? client.PairWiseSubjectSalt;
-            client.ProtocolType = clientUpdateInput.Client.ProtocolType ?? client.ProtocolType;
-            client.RefreshTokenExpiration = clientUpdateInput.Client.RefreshTokenExpiration ?? client.RefreshTokenExpiration;
-            client.RefreshTokenUsage = clientUpdateInput.Client.RefreshTokenUsage ?? client.RefreshTokenUsage;
-            client.RequireClientSecret = clientUpdateInput.Client.RequireClientSecret ?? client.RequireClientSecret;
-            client.RequireConsent = clientUpdateInput.Client.RequireConsent ?? client.RequireConsent;
-
-            client.RequirePkce = clientUpdateInput.Client.RequirePkce ?? client.RequirePkce;
-            client.SlidingRefreshTokenLifetime = clientUpdateInput.Client.SlidingRefreshTokenLifetime
-                ?? client.SlidingRefreshTokenLifetime;
-            client.UpdateAccessTokenClaimsOnRefresh = clientUpdateInput.Client.UpdateAccessTokenClaimsOnRefresh
-                ?? client.UpdateAccessTokenClaimsOnRefresh;
-
-            client.UserCodeType = clientUpdateInput.Client.UserCodeType ?? client.UserCodeType;
-            client.UserSsoLifetime = clientUpdateInput.Client.UserSsoLifetime ?? client.UserSsoLifetime;
+            #region Basic
+            if (!string.Equals(client.ClientId, input.ClientId, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.ClientId = input.ClientId;
+            }
+            if (!string.Equals(client.ClientUri, input.ClientUri, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.ClientUri = input.ClientUri;
+            }
+            if (!string.Equals(client.ClientName, input.ClientName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.ClientName = input.ClientName;
+            }
+            if (!string.Equals(client.BackChannelLogoutUri, input.BackChannelLogoutUri, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.BackChannelLogoutUri = input.BackChannelLogoutUri;
+            }
+            if (!string.Equals(client.FrontChannelLogoutUri, input.FrontChannelLogoutUri, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.FrontChannelLogoutUri = input.FrontChannelLogoutUri;
+            }
+            if (!string.Equals(client.ClientClaimsPrefix, input.ClientClaimsPrefix, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.ClientClaimsPrefix = input.ClientClaimsPrefix;
+            }
+            if (!string.Equals(client.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.Description = input.Description;
+            }
+            if (!string.Equals(client.LogoUri, input.LogoUri, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.LogoUri = input.LogoUri;
+            }
+            if (!string.Equals(client.UserCodeType, input.UserCodeType, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.UserCodeType = input.UserCodeType;
+            }
+            if (!string.Equals(client.PairWiseSubjectSalt, input.PairWiseSubjectSalt, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.PairWiseSubjectSalt = input.PairWiseSubjectSalt;
+            }
+            if (!string.Equals(client.ProtocolType, input.ProtocolType, StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.ProtocolType = input.ProtocolType;
+            }
+            client.AbsoluteRefreshTokenLifetime = input.AbsoluteRefreshTokenLifetime;
+            client.AccessTokenLifetime = input.AccessTokenLifetime;
+            client.AccessTokenType = input.AccessTokenType;
+            client.AllowAccessTokensViaBrowser = input.AllowAccessTokensViaBrowser;
+            client.AllowOfflineAccess = input.AllowOfflineAccess;
+            client.AllowPlainTextPkce = input.AllowPlainTextPkce;
+            client.AllowRememberConsent = input.AllowRememberConsent;
+            client.AlwaysIncludeUserClaimsInIdToken = input.AlwaysIncludeUserClaimsInIdToken;
+            client.AlwaysSendClientClaims = input.AlwaysSendClientClaims;
+            client.AuthorizationCodeLifetime = input.AuthorizationCodeLifetime;
+            client.BackChannelLogoutSessionRequired = input.BackChannelLogoutSessionRequired;
+            client.DeviceCodeLifetime = input.DeviceCodeLifetime;
+            client.ConsentLifetime = input.ConsentLifetime ?? client.ConsentLifetime;
+            client.Enabled = input.Enabled;
+            client.EnableLocalLogin = input.EnableLocalLogin;
+            client.FrontChannelLogoutSessionRequired = input.FrontChannelLogoutSessionRequired;
+            client.IdentityTokenLifetime = input.IdentityTokenLifetime;
+            client.IncludeJwtId = input.IncludeJwtId;
+            client.RefreshTokenExpiration = input.RefreshTokenExpiration;
+            client.RefreshTokenUsage = input.RefreshTokenUsage;
+            client.RequireClientSecret = input.RequireClientSecret;
+            client.RequireConsent = input.RequireConsent;
+            client.RequirePkce = input.RequirePkce;
+            client.SlidingRefreshTokenLifetime = input.SlidingRefreshTokenLifetime;
+            client.UpdateAccessTokenClaimsOnRefresh = input.UpdateAccessTokenClaimsOnRefresh;
+            client.UserSsoLifetime = input.UserSsoLifetime ?? client.UserSsoLifetime;
             #endregion
 
             #region AllowScope
-
-            client.RemoveAllScopes();
-            foreach (var scope in clientUpdateInput.Client.AllowedScopes)
+            // 删除未在身份资源和Api资源中的作用域
+            client.AllowedScopes.RemoveAll(scope => !input.AllowedScopes.Contains(scope.Scope));
+            foreach (var scope in input.AllowedScopes)
             {
-                client.AddScope(scope.Scope);
+                if (client.FindScope(scope) == null)
+                {
+                    client.AddScope(scope);
+                }
             }
 
             #endregion
 
             #region RedirectUris
-
-            client.RemoveAllRedirectUris();
-            foreach (var redirect in clientUpdateInput.Client.RedirectUris)
+            // 删除不存在的uri
+            client.RedirectUris.RemoveAll(uri => !input.RedirectUris.Contains(uri.RedirectUri));
+            foreach (var redirect in input.RedirectUris)
             {
-                client.AddRedirectUri(redirect.RedirectUri);
+                if (client.FindRedirectUri(redirect) != null)
+                {
+                    client.AddRedirectUri(redirect);
+                }
             }
 
             #endregion
 
             #region AllowedGrantTypes
-
-            client.RemoveAllAllowedGrantTypes();
-            foreach (var grantType in clientUpdateInput.Client.AllowedGrantTypes)
+            // 删除不存在的验证类型
+            client.AllowedGrantTypes.RemoveAll(grantType => !input.AllowedGrantTypes.Contains(grantType.GrantType));
+            foreach (var grantType in input.AllowedGrantTypes)
             {
-                client.AddGrantType(grantType.GrantType);
+                if (client.FindGrantType(grantType) == null)
+                {
+                    client.AddGrantType(grantType);
+                }
             }
 
             #endregion
 
             #region AllowedCorsOrigins
-
-            client.RemoveAllCorsOrigins();
-            foreach (var corgOrigin in clientUpdateInput.Client.AllowedCorsOrigins)
+            // 删除不存在的同源域名
+            client.AllowedCorsOrigins.RemoveAll(corgOrigin => !input.AllowedCorsOrigins.Contains(corgOrigin.Origin));
+            foreach (var corgOrigin in input.AllowedCorsOrigins)
             {
-                client.AddCorsOrigin(corgOrigin.Origin);
+                if (client.FindCorsOrigin(corgOrigin) == null)
+                {
+                    client.AddCorsOrigin(corgOrigin);
+                }
             }
 
             #endregion
 
             #region PostLogoutRedirectUris
 
-            client.RemoveAllPostLogoutRedirectUris();
-            foreach (var logoutRedirect in clientUpdateInput.Client.PostLogoutRedirectUris)
+            // 删除不存在的登录重定向域名
+            client.PostLogoutRedirectUris.RemoveAll(uri => !input.PostLogoutRedirectUris.Contains(uri.PostLogoutRedirectUri));
+            foreach (var logoutRedirectUri in input.PostLogoutRedirectUris)
             {
-                client.AddPostLogoutRedirectUri(logoutRedirect.PostLogoutRedirectUri);
+                if (client.FindPostLogoutRedirectUri(logoutRedirectUri) == null)
+                {
+                    client.AddPostLogoutRedirectUri(logoutRedirectUri);
+                }
             }
 
             #endregion
 
             #region IdentityProviderRestrictions
 
-            client.RemoveAllIdentityProviderRestrictions();
-            foreach (var provider in clientUpdateInput.Client.IdentityProviderRestrictions)
+            // 删除身份认证限制提供商
+            client.IdentityProviderRestrictions.RemoveAll(provider => !input.IdentityProviderRestrictions.Contains(provider.Provider));
+            foreach (var provider in input.IdentityProviderRestrictions)
             {
-                client.AddIdentityProviderRestriction(provider.Provider);
+                if (client.FindIdentityProviderRestriction(provider) == null)
+                {
+                    client.AddIdentityProviderRestriction(provider);
+                }
             }
 
             #endregion
 
-            client = await ClientRepository.UpdateAsync(client, true);
+            #region Secrets
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageSecrets))
+            {
+                // 移除已经不存在的客户端密钥
+                client.ClientSecrets.RemoveAll(secret => !input.Secrets.Any(inputSecret => secret.Value == inputSecret.Value && secret.Type == inputSecret.Type));
+                foreach (var inputSecret in input.Secrets)
+                {
+                    // 先对加密过的进行过滤
+                    if (client.FindSecret(inputSecret.Value, inputSecret.Type) != null)
+                    {
+                        continue;
+                    }
+                    var inputSecretValue = inputSecret.Value;
+                    // 如果是 SharedSecret 类型的密钥
+                    // 采用 IdentityServer4 服务器扩展方法加密
+                    if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(inputSecret.Type))
+                    {
+                        if (inputSecret.HashType == HashType.Sha256)
+                        {
+                            inputSecretValue = inputSecret.Value.Sha256();
+                        }
+                        else if (inputSecret.HashType == HashType.Sha512)
+                        {
+                            inputSecretValue = inputSecret.Value.Sha512();
+                        }
+                    }
+                    else
+                    {
+                        throw new UserFriendlyException(L["EncryptionNotImplemented", inputSecret.Type]);
+                    }
+
+                    var clientSecret = client.FindSecret(inputSecretValue, inputSecret.Type);
+                    if (clientSecret == null)
+                    {
+                        client.AddSecret(inputSecretValue, inputSecret.Expiration, inputSecret.Type, inputSecret.Description);
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Properties
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageProperties))
+            {
+                // 移除不存在的属性
+                client.Properties.RemoveAll(prop => !input.Properties.ContainsKey(prop.Key));
+                foreach (var inputProp in input.Properties)
+                {
+                    if (client.FindProperty(inputProp.Key, inputProp.Value) == null)
+                    {
+                        client.AddProperty(inputProp.Key, inputProp.Value);
+                    }
+                }
+            }
+
+
+            #endregion
+
+            #region Claims
+
+            if (await IsGrantAsync(AbpIdentityServerPermissions.Clients.ManageClaims))
+            {
+                // 移除已经不存在的客户端声明
+                client.Claims.RemoveAll(secret => !input.Claims.Any(inputClaim => secret.Value == inputClaim.Value && secret.Type == inputClaim.Type));
+                foreach (var inputClaim in input.Claims)
+                {
+                    if (client.FindClaim(inputClaim.Value, inputClaim.Type) == null)
+                    {
+                        client.AddClaim(inputClaim.Value, inputClaim.Type);
+                    }
+                }
+            }
+            
+            #endregion
+
+            client = await ClientRepository.UpdateAsync(client);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
@@ -283,22 +333,23 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 实现参考 Skoruba.IdentityServer4.Admin 项目
         /// https://github.com/skoruba/IdentityServer4.Admin.git
         /// </remarks>
-        /// <param name="clientCloneInput"></param>
+        /// <param name="id"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
         [Authorize(AbpIdentityServerPermissions.Clients.Clone)]
-        public virtual async Task<ClientDto> CloneAsync(ClientCloneInputDto clientCloneInput)
+        public virtual async Task<ClientDto> CloneAsync(Guid id, ClientCloneDto input)
         {
-            var clientIdExists = await ClientRepository.CheckClientIdExistAsync(clientCloneInput.ClientId);
+            var clientIdExists = await ClientRepository.CheckClientIdExistAsync(input.ClientId);
             if (clientIdExists)
             {
-                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ClientIdExisted, clientCloneInput.ClientId]);
+                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ClientIdExisted, input.ClientId]);
             }
-            var srcClient = await ClientRepository.GetAsync(clientCloneInput.SourceClientId);
+            var srcClient = await ClientRepository.GetAsync(id);
 
-            var client = new Client(GuidGenerator.Create(), clientCloneInput.ClientId)
+            var client = new Client(GuidGenerator.Create(), input.ClientId)
             {
-                ClientName = clientCloneInput.ClientName,
-                Description = clientCloneInput.Description,
+                ClientName = input.ClientName,
+                Description = input.Description,
                 AbsoluteRefreshTokenLifetime = srcClient.AbsoluteRefreshTokenLifetime,
                 AccessTokenLifetime = srcClient.AccessTokenLifetime,
                 AccessTokenType = srcClient.AccessTokenType,
@@ -338,56 +389,63 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 UserSsoLifetime = srcClient.UserSsoLifetime
             };
 
-            if (clientCloneInput.CopyAllowedCorsOrigin)
+            if (input.CopyAllowedCorsOrigin)
             {
                 foreach(var corsOrigin in srcClient.AllowedCorsOrigins)
                 {
                     client.AddCorsOrigin(corsOrigin.Origin);
                 }
             }
-            if (clientCloneInput.CopyAllowedGrantType)
+            if (input.CopyAllowedGrantType)
             {
                 foreach (var grantType in srcClient.AllowedGrantTypes)
                 {
                     client.AddGrantType(grantType.GrantType);
                 }
             }
-            if (clientCloneInput.CopyAllowedScope)
+            if (input.CopyAllowedScope)
             {
                 foreach (var scope in srcClient.AllowedScopes)
                 {
                     client.AddScope(scope.Scope);
                 }
             }
-            if (clientCloneInput.CopyClaim)
+            if (input.CopyClaim)
             {
                 foreach (var claim in srcClient.Claims)
                 {
                     client.AddClaim(claim.Value, claim.Type);
                 }
             }
-            if (clientCloneInput.CopyIdentityProviderRestriction)
+            if (input.CopySecret)
+            {
+                foreach (var secret in srcClient.ClientSecrets)
+                {
+                    client.AddSecret(secret.Value, secret.Expiration, secret.Type, secret.Description);
+                }
+            }
+            if (input.CopyIdentityProviderRestriction)
             {
                 foreach (var provider in srcClient.IdentityProviderRestrictions)
                 {
                     client.AddIdentityProviderRestriction(provider.Provider);
                 }
             }
-            if (clientCloneInput.CopyPostLogoutRedirectUri)
+            if (input.CopyPostLogoutRedirectUri)
             {
                 foreach (var uri in srcClient.PostLogoutRedirectUris)
                 {
                     client.AddPostLogoutRedirectUri(uri.PostLogoutRedirectUri);
                 }
             }
-            if (clientCloneInput.CopyPropertie)
+            if (input.CopyPropertie)
             {
                 foreach (var property in srcClient.Properties)
                 {
                     client.AddProperty(property.Key, property.Value);
                 }
             }
-            if (clientCloneInput.CopyRedirectUri)
+            if (input.CopyRedirectUri)
             {
                 foreach (var uri in srcClient.RedirectUris)
                 {
@@ -395,75 +453,40 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 }
             }
             client = await ClientRepository.InsertAsync(client);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Claims.Update)]
-        public virtual async Task<ClientClaimDto> UpdateClaimAsync(ClientClaimUpdateDto clientClaimUpdate)
+        /// <summary>
+        /// 查询可用的Api资源
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
         {
-            var client = await ClientRepository.GetAsync(clientClaimUpdate.ClientId);
+            var resourceNames = await ApiResourceRepository.GetNamesAsync();
 
-            var clientClaim = client.Claims.FirstOrDefault(claim => claim.Type.Equals(clientClaimUpdate.Type));
-            if(clientClaim == null)
-            {
-                throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ClientClaimNotFound, clientClaimUpdate.Type]);
-            }
-            clientClaim.Value = clientClaimUpdate.Value;
-
-            return ObjectMapper.Map<ClientClaim, ClientClaimDto>(clientClaim);
+            return new ListResultDto<string>(resourceNames);
         }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Properties.Update)]
-        public virtual async Task<ClientPropertyDto> UpdatePropertyAsync(ClientPropertyUpdateDto clientPropertyUpdate)
+        /// <summary>
+        /// 查询可用的身份资源
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
         {
-            var client = await ClientRepository.GetAsync(clientPropertyUpdate.ClientId);
+            var resourceNames = await IdentityResourceRepository.GetNamesAsync();
 
-            var clientProperty = client.Properties
-                .FirstOrDefault(property => property.Key.Equals(clientPropertyUpdate.Key));
-            if (clientProperty == null)
-            {
-                throw new UserFriendlyException(
-                    L[AbpIdentityServerErrorConsts.ClientPropertyNotFound, clientPropertyUpdate.Key]);
-            }
-            clientProperty.Value = clientPropertyUpdate.Value;
-
-            return ObjectMapper.Map<ClientProperty, ClientPropertyDto>(clientProperty);
+            return new ListResultDto<string>(resourceNames);
         }
-
-        [Authorize(AbpIdentityServerPermissions.Clients.Secrets.Update)]
-        public virtual async Task<ClientSecretDto> UpdateSecretAsync(ClientSecretUpdateDto clientSecretUpdate)
+        /// <summary>
+        /// 查询所有不重复的跨域地址
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
         {
-            var client = await ClientRepository.GetAsync(clientSecretUpdate.ClientId);
+            var corsOrigins = await ClientRepository.GetAllDistinctAllowedCorsOriginsAsync();
 
-            var clientSecret = client.ClientSecrets
-                .FirstOrDefault(secret => secret.Type.Equals(clientSecretUpdate.Type));
-            if (clientSecret == null)
-            {
-                throw new UserFriendlyException(
-                    L[AbpIdentityServerErrorConsts.ClientSecretNotFound, clientSecretUpdate.Type]);
-            }
-            var clientSecretValue = clientSecret.Value;
-
-            // 如果是 SharedSecret 类型的密钥
-            // 采用 IdentityServer4 服务器扩展方法加密
-            if (IdentityServerConstants.SecretTypes.SharedSecret.Equals(clientSecretUpdate.Type))
-            {
-                if (clientSecretUpdate.HashType == HashType.Sha256)
-                {
-                    clientSecretValue = clientSecretUpdate.Value.Sha256();
-                }
-                else if (clientSecretUpdate.HashType == HashType.Sha512)
-                {
-                    clientSecretValue = clientSecretUpdate.Value.Sha512();
-                }
-            }
-            else
-            {
-                throw new UserFriendlyException(L["EncryptionNotImplemented", clientSecretUpdate.Type]);
-            }
-            clientSecret.Value = clientSecretValue;
-
-            return ObjectMapper.Map<ClientSecret, ClientSecretDto>(clientSecret);
+            return new ListResultDto<string>(corsOrigins);
         }
     }
 }

@@ -3,7 +3,7 @@
     v-el-draggable-dialog
     width="800px"
     :visible="showDialog"
-    :title="title"
+    :title="$t('AbpIdentity.ManageClaim')"
     custom-class="modal-form"
     :show-close="false"
     :close-on-click-modal="true"
@@ -139,9 +139,6 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
   @Prop({ default: '' })
   private userId!: string
 
-  @Prop({ default: '' })
-  private title!: string
-
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -200,11 +197,9 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     }
   }
 
-  @Watch('userId')
-  private onUserIdChanged() {
-    if (this.userId && this.showDialog) {
-      this.handleGetUserClaims()
-    }
+  @Watch('showDialog', { immediate: true })
+  private onShowDialogChanged() {
+    this.handleGetUserClaims()
   }
 
   mounted() {
@@ -227,7 +222,7 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
   }
 
   private handleGetUserClaims() {
-    if (this.userId) {
+    if (this.userId && this.showDialog) {
       UserService.getUserClaims(this.userId).then(res => {
         this.userClaims = res.items
       })

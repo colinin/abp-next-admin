@@ -1,9 +1,8 @@
 ﻿using System;
-using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IdentityServer
 {
-    public abstract class SecretBaseDto : EntityDto
+    public class SecretBaseDto
     {
         public string Type { get; set; }
 

@@ -251,3 +251,28 @@ export interface IClaim {
   /** 数值 */
   value: string
 }
+
+export class SecretBase implements ISecret {
+  type = ''
+  value = ''
+  description = ''
+  expiration: Date | undefined
+}
+
+export enum HashType {
+  Sha256,
+  Sha512
+}
+
+export class Claim implements IClaim {
+  type = ''
+  value = ''
+
+  constructor(
+    type: string,
+    value: string
+  ) {
+    this.type = type
+    this.value = value
+  }
+}

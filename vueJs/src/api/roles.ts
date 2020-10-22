@@ -50,6 +50,28 @@ export default class RoleService {
     _url += id
     return ApiService.Delete(_url, IdentityServiceUrl)
   }
+
+  public static getRoleClaims(roleId: string) {
+    const _url = '/api/identity/roles/claims/' + roleId
+    return ApiService.Get<ListResultDto<RoleClaim>>(_url, IdentityServiceUrl)
+  }
+
+  public static addRoleClaim(roleId: string, payload: RoleClaimCreateOrUpdate) {
+    const _url = '/api/identity/roles/claims/' + roleId
+    return ApiService.Post<void>(_url, payload, IdentityServiceUrl)
+  }
+
+  public static updateRoleClaim(roleId: string, payload: RoleClaimCreateOrUpdate) {
+    const _url = '/api/identity/roles/claims/' + roleId
+    return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
+  }
+
+  public static deleteRoleClaim(roleId: string, payload: RoleClaimDelete) {
+    let _url = '/api/identity/roles/claims/' + roleId
+    _url += '?claimType=' + payload.claimType
+    _url += '&claimValue=' + payload.claimValue
+    return ApiService.Delete(_url, IdentityServiceUrl)
+  }
 }
 
 export class RoleBaseDto {
@@ -73,6 +95,7 @@ export class CreateRoleDto extends RoleBaseDto {
     super()
     this.isDefault = false
     this.isPublic = true
+    this.name = ''
   }
 }
 
@@ -88,4 +111,18 @@ export class UpdateRoleDto extends RoleBaseDto {
 
 export class ChangeRoleOrganizationUnitDto {
   organizationUnitIds = new Array<string>()
+}
+
+export class RoleClaimCreateOrUpdate {
+  claimType = ''
+  claimValue = ''
+}
+
+export class RoleClaimDelete {
+  claimType = ''
+  claimValue = ''
+}
+
+export class RoleClaim extends RoleClaimCreateOrUpdate {
+  id!: string
 }

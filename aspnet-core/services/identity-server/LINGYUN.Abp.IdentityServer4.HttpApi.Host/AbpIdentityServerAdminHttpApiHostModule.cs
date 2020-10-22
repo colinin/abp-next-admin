@@ -55,11 +55,11 @@ namespace LINGYUN.Abp.IdentityServer4
         typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
+        typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -177,12 +177,6 @@ namespace LINGYUN.Abp.IdentityServer4
             Configure<RedisCacheOptions>(options =>
             {
                 var redisConfig = ConfigurationOptions.Parse(options.Configuration);
-                // 单独一个缓存数据库
-                var databaseConfig = configuration.GetSection("Redis:DefaultDatabase");
-                if (databaseConfig.Exists())
-                {
-                    redisConfig.DefaultDatabase = databaseConfig.Get<int>();
-                }
                 options.ConfigurationOptions = redisConfig;
                 options.InstanceName = configuration["Redis:InstanceName"];
             });

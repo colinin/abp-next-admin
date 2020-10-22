@@ -17,15 +17,15 @@
         type="primary"
         @click="refreshPagedData"
       >
-        {{ $t('searchList') }}
+        {{ $t('AbpIdentityServer.Search') }}
       </el-button>
       <el-button
         class="filter-item"
         type="primary"
-        :disabled="!checkPermission(['IdentityServer.Clients.Create'])"
-        @click="handleShowCreateClientForm()"
+        :disabled="!checkPermission(['AbpIdentityServer.Clients.Create'])"
+        @click="handleShowCreateClientDialog()"
       >
-        {{ $t('identityServer.createClient') }}
+        {{ $t('AbpIdentityServer.Client:New') }}
       </el-button>
     </div>
 
@@ -40,7 +40,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column
-        :label="$t('identityServer.clientId')"
+        :label="$t('AbpIdentityServer.Client:Id')"
         prop="clientId"
         sortable
         width="150px"
@@ -51,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.clientName')"
+        :label="$t('AbpIdentityServer.Name')"
         prop="clientName"
         sortable
         width="200px"
@@ -62,20 +62,43 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.clientStatus')"
+        :label="$t('AbpIdentityServer.Description')"
+        prop="description"
+        sortable
+        width="200px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.description }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('AbpIdentityServer.Client:Enabled')"
         prop="enabled"
         sortable
         width="140px"
         align="center"
       >
         <template slot-scope="{row}">
-          <el-tag :type="row.enabled | statusFilter">
-            {{ formatStatusText(row.enabled) }}
-          </el-tag>
+          <el-switch
+            v-model="row.enabled"
+            disabled
+          />
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.identityTokenLifetime')"
+        :label="$t('AbpIdentityServer.Client:ProtocolType')"
+        prop="protocolType"
+        sortable
+        width="120px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.protocolType }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('AbpIdentityServer.Client:IdentityTokenLifetime')"
         prop="identityTokenLifetime"
         width="170px"
         align="center"
@@ -85,7 +108,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.accessTokenLifetime')"
+        :label="$t('AbpIdentityServer.Client:AccessTokenLifetime')"
         prop="accessTokenLifetime"
         width="170px"
         align="center"
@@ -95,7 +118,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.authorizationCodeLifetime')"
+        :label="$t('AbpIdentityServer.Client:AuthorizationCodeLifetime')"
         prop="authorizationCodeLifetime"
         width="170px"
         align="center"
@@ -105,7 +128,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.deviceCodeLifetime')"
+        :label="$t('AbpIdentityServer.Client:DeviceCodeLifetime')"
         prop="deviceCodeLifetime"
         width="170px"
         align="center"
@@ -115,7 +138,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.absoluteRefreshTokenLifetime')"
+        :label="$t('AbpIdentityServer.Client:AbsoluteRefreshTokenLifetime')"
         prop="absoluteRefreshTokenLifetime"
         width="180px"
         align="center"
@@ -125,7 +148,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.slidingRefreshTokenLifetime')"
+        :label="$t('AbpIdentityServer.Client:SlidingRefreshTokenLifetime')"
         prop="slidingRefreshTokenLifetime"
         width="180px"
         align="center"
@@ -135,7 +158,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('identityServer.clientClaimsPrefix')"
+        :label="$t('AbpIdentityServer.Client:ClientClaimsPrefix')"
         prop="clientClaimsPrefix"
         width="120px"
         align="center"
@@ -152,62 +175,43 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['IdentityServer.Clients.Update'])"
+            :disabled="!checkPermission(['AbpIdentityServer.Clients.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowEditClientForm(row)"
+            @click="handleShowEditClientDialog(row)"
           >
-            {{ $t('identityServer.updateClient') }}
+            {{ $t('AbpIdentityServer.Client:Edit') }}
           </el-button>
           <el-dropdown
             class="options"
             @command="handleCommand"
           >
             <el-button
-              v-permission="['IdentityServer.Clients']"
+              v-permission="['AbpIdentityServer.Clients']"
               size="mini"
               type="info"
             >
-              {{ $t('identityServer.otherOpera') }}<i class="el-icon-arrow-down el-icon--right" />
+              {{ $t('global.operaActions') }}<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                :command="{key: 'clone', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Clone'])"
-              >
-                {{ $t('identityServer.cloneClint') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                divided
-                :command="{key: 'claim', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Claims'])"
-              >
-                {{ $t('identityServer.clientClaim') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="{key: 'property', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Properties'])"
-              >
-                {{ $t('identityServer.clientProperty') }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                :command="{key: 'secret', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Secrets'])"
-              >
-                {{ $t('identityServer.clientSecret') }}
-              </el-dropdown-item>
-              <el-dropdown-item
                 :command="{key: 'permissions', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.ManagePermissions'])"
               >
-                {{ $t('identityServer.clientPermission') }}
+                {{ $t('AbpIdentityServer.Permissions') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{key: 'clone', row}"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.Clone'])"
+              >
+                {{ $t('AbpIdentityServer.Client:Clone') }}
               </el-dropdown-item>
               <el-dropdown-item
                 divided
                 :command="{key: 'delete', row}"
-                :disabled="!checkPermission(['IdentityServer.Clients.Delete'])"
+                :disabled="!checkPermission(['AbpIdentityServer.Clients.Delete'])"
               >
-                {{ $t('identityServer.deleteClient') }}
+                {{ $t('AbpIdentityServer.Client:Delete') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -215,7 +219,7 @@
       </el-table-column>
     </el-table>
 
-    <Pagination
+    <pagination
       v-show="dataTotal>0"
       :total="dataTotal"
       :page.sync="currentPage"
@@ -224,51 +228,32 @@
       @sort-change="handleSortChange"
     />
 
-    <client-create-form
-      :show-dialog="showCreateClientDialog"
-      @closed="handleClientCreateFormClosed"
+    <client-clone-form
+      :client-id="editClient.id"
+      :show-dialog="showCloneClientDialog"
+      @closed="onCloneClientDialogClosed"
     />
 
-    <client-clone-form
-      :show-dialog="showCloneClientDialog"
-      :client-id="editClient.id"
-      @closed="handleClientCloneFormClosed"
+    <permission-form
+      provider-name="C"
+      :provider-key="editClient.clientId"
+      :show-dialog="showEditClientPermissionDialog"
+      :readonly="!checkPermission(['IdentityServer.Clients.ManagePermissions'])"
+      @closed="onPermissionDialogClosed"
+    />
+
+    <client-create-form
+      :supported-grantypes="supportedGrantypes"
+      :show-dialog="showCreateClientDialog"
+      @closed="onCreateClientDialogClosed"
     />
 
     <client-edit-form
+      :supported-grantypes="supportedGrantypes"
+      :client-id="editClient.id"
+      :title="editClientTitle"
       :show-dialog="showEditClientDialog"
-      :client-id="editClient.id"
-      @closed="handleClientEditFormClosed"
-    />
-
-    <client-secret-edit-form
-      :show-dialog="showEditClientSecretDialog"
-      :client-id="editClient.id"
-      :client-secrets="editClient.clientSecrets"
-      @closed="handleClientSecretEditFormClosed"
-      @clientClaimChanged="refreshPagedData"
-    />
-
-    <client-claim-edit-form
-      :show-dialog="showEditClientClaimDialog"
-      :client-id="editClient.id"
-      :client-claims="editClient.claims"
-      @closed="handleClientClaimEditFormClosed"
-      @clientClaimChanged="refreshPagedData"
-    />
-
-    <client-property-edit-form
-      :show-dialog="showEditClientPropertyDialog"
-      :client-id="editClient.id"
-      :client-properties="editClient.properties"
-      @clientPropertyChanged="refreshPagedData"
-      @closed="handleClientPropertyEditFormClosed"
-    />
-
-    <client-permission-edit-form
-      :show-dialog="showEditClientPermissionDialog"
-      :client-id="editClient.clientId"
-      @closed="handleClientPermissionEditFormClosed"
+      @closed="onEditClientDialogClosed"
     />
   </div>
 </template>
@@ -276,29 +261,26 @@
 <script lang="ts">
 import { abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
+
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
-import ClientEditForm from './components/ClientEditForm.vue'
 import ClientCloneForm from './components/ClientCloneForm.vue'
+import PermissionForm from '@/components/PermissionForm/index.vue'
 import ClientCreateForm from './components/ClientCreateForm.vue'
-import ClientSecretEditForm from './components/ClientSecretEditForm.vue'
-import ClientClaimEditForm from './components/ClientClaimEditForm.vue'
-import ClientPropertyEditForm from './components/ClientPropertyEditForm.vue'
-import ClientPermissionEditForm from './components/ClientPermissionEditForm.vue'
+import ClientEditForm from './components/ClientEditForm.vue'
+
+import IdentityServer4Service from '@/api/identity-server4'
 import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
 
 @Component({
   name: 'IdentityServerClient',
   components: {
     Pagination,
+    PermissionForm,
     ClientEditForm,
     ClientCloneForm,
-    ClientCreateForm,
-    ClientClaimEditForm,
-    ClientSecretEditForm,
-    ClientPropertyEditForm,
-    ClientPermissionEditForm
+    ClientCreateForm
   },
   methods: {
     checkPermission,
@@ -316,21 +298,20 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editClient = Client.empty()
+  private editClient = new Client()
   private editClientTitle = ''
 
   private showEditClientDialog = false
-  private showCloneClientDialog = false
   private showCreateClientDialog = false
-  private showEditClientSecretDialog = false
-  private showEditClientClaimDialog = false
-  private showEditClientPropertyDialog = false
+  private showCloneClientDialog = false
   private showEditClientPermissionDialog = false
 
   public dataFilter = new ClientGetByPaged()
+  private supportedGrantypes = new Array<string>()
 
   mounted() {
     this.refreshPagedData()
+    this.handleGetOpenIdConfiguration()
   }
 
   protected processDataFilter() {
@@ -341,62 +322,52 @@ export default class extends mixins(DataListMiXin) {
     return ClientService.getClients(filter)
   }
 
-  private handleShowCreateClientForm() {
-    this.editClient = Client.empty()
-    this.editClientTitle = this.l('identityServer.createClient')
+  private handleGetOpenIdConfiguration() {
+    IdentityServer4Service.getOpenIdConfiguration()
+      .then(res => {
+        this.supportedGrantypes = res.grant_types_supported
+      })
+  }
+
+  private handleShowCreateClientDialog() {
     this.showCreateClientDialog = true
   }
 
-  private handleShowEditClientForm(client: Client) {
+  private handleShowEditClientDialog(client: Client) {
     this.editClient = client
-    this.editClientTitle = this.l('identityServer.updateClientByName', { name: this.editClient.clientName })
+    this.editClientTitle = this.l('AbpIdentityServer.Client:Name', { 0: this.editClient.clientName })
     this.showEditClientDialog = true
   }
 
-  private handleClientCreateFormClosed(changed: boolean) {
-    this.showCreateClientDialog = false
-    if (changed) {
-      this.refreshPagedData()
-    }
+  private onEditClientDialogClosed() {
+    this.showEditClientDialog = false
   }
 
-  private handleClientCloneFormClosed(changed: boolean) {
+  private onCloneClientDialogClosed(changed: boolean) {
     this.showCloneClientDialog = false
     if (changed) {
       this.refreshPagedData()
     }
   }
 
-  private handleClientEditFormClosed(changed: boolean) {
-    this.showEditClientDialog = false
+  private onCreateClientDialogClosed(changed: boolean) {
+    this.showCreateClientDialog = false
     if (changed) {
       this.refreshPagedData()
     }
   }
 
-  private handleClientSecretEditFormClosed() {
-    this.showEditClientSecretDialog = false
-  }
-
-  private handleClientClaimEditFormClosed() {
-    this.showEditClientClaimDialog = false
-  }
-
-  private handleClientPropertyEditFormClosed() {
-    this.showEditClientPropertyDialog = false
-  }
-
-  private handleClientPermissionEditFormClosed() {
+  private onPermissionDialogClosed() {
     this.showEditClientPermissionDialog = false
   }
 
   private handleDeleteClient(id: string, clientId: string) {
-    this.$confirm(this.l('identityServer.deleteClientById', { id: clientId }),
-      this.l('identityServer.deleteClient'), {
+    this.$confirm(this.l('AbpIdentityServer.Client:WillDelete', { 0: clientId }),
+      this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             ClientService.deleteClient(id).then(() => {
-              this.$message.success(this.l('identityServer.deleteClientSuccess', { id: clientId }))
+              this.$message.success(this.l('global.successful'))
               this.refreshPagedData()
             })
           }
@@ -410,15 +381,6 @@ export default class extends mixins(DataListMiXin) {
       case 'clone' :
         this.showCloneClientDialog = true
         break
-      case 'secret' :
-        this.showEditClientSecretDialog = true
-        break
-      case 'claim' :
-        this.showEditClientClaimDialog = true
-        break
-      case 'property':
-        this.showEditClientPropertyDialog = true
-        break
       case 'permissions':
         this.showEditClientPermissionDialog = true
         break
@@ -427,16 +389,6 @@ export default class extends mixins(DataListMiXin) {
         break
       default: break
     }
-  }
-
-  private formatStatusText(status: boolean) {
-    let statusText = ''
-    if (status) {
-      statusText = this.l('enabled')
-    } else {
-      statusText = this.l('disbled')
-    }
-    return statusText
   }
 }
 </script>

@@ -115,8 +115,20 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
+                :command="{key: 'claim', row}"
+                :disabled="!checkPermission(['AbpIdentity.Roles.ManageClaims'])"
+              >
+                {{ $t('AbpIdentity.ManageClaim') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{key: 'permission', row}"
+                :disabled="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
+              >
+                {{ $t('AbpIdentity.Permissions') }}
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="row.isDefault ? {key: 'unDefault', row} : {key: 'default', row}"
-                :disabled="!checkPermission(['AbpIdentity.Roles.Update'])"
+                :disabled="row.isStatic || !checkPermission(['AbpIdentity.Roles.Update'])"
               >
                 {{ row.isDefault ? $t('roles.unSetDefault') : $t('roles.setDefault') }}
               </el-dropdown-item>
@@ -141,17 +153,30 @@
       @pagination="refreshPagedData"
     />
 
-    <el-dialog
-      :visible="showEditDialog"
-      custom-class="profile"
-      title="编辑角色"
-      :show-close="false"
-    >
-      <role-edit-form
-        :role-id="editRoleId"
-        @onClosed="onEditRoleFormClosed"
-      />
-    </el-dialog>
+    <role-edit-form
+      :show-dialog="showEditDialog"
+      :role-id="editRoleId"
+      @closed="onEditRoleFormClosed"
+    />
+
+    <role-create-form
+      :show-dialog="showCreateDialog"
+      @closed="onCreateDialogClosed"
+    />
+
+    <role-claim-create-or-update-form
+      :show-dialog="showClaimDialog"
+      :role-id="editRoleId"
+      @closed="onClaimDialogClosed"
+    />
+
+    <permission-form
+      provider-name="R"
+      :provider-key="editRoleName"
+      :readonly="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
+      :show-dialog="showPermissionDialog"
+      @closed="onPermissionDialogClosed"
+    />
   </div>
 </template>
 
@@ -159,18 +184,22 @@
 import { abpPagerFormat } from '@/utils'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
-import RoleService, { CreateRoleDto, RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
+import RoleService, { RoleDto, UpdateRoleDto, RoleGetPagedDto } from '@/api/roles'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
-import PermissionTree from '@/components/PermissionTree/index.vue'
+import PermissionForm from '@/components/PermissionForm/index.vue'
 import RoleEditForm from './components/RoleEditForm.vue'
+import RoleCreateForm from './components/RoleCreateForm.vue'
+import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateForm.vue'
 
 @Component({
   name: 'RoleList',
   components: {
-    PermissionTree,
+    PermissionForm,
     Pagination,
-    RoleEditForm
+    RoleEditForm,
+    RoleCreateForm,
+    RoleClaimCreateOrUpdateForm
   },
   methods: {
     checkPermission
@@ -179,6 +208,10 @@ import RoleEditForm from './components/RoleEditForm.vue'
 export default class extends mixins(DataListMiXin) {
   private showEditDialog = false
   private editRoleId = ''
+  private showClaimDialog = false
+  private showCreateDialog = false
+  private editRoleName = ''
+  private showPermissionDialog = false
 
   public dataFilter = new RoleGetPagedDto()
 
@@ -198,13 +231,18 @@ export default class extends mixins(DataListMiXin) {
   /** 响应角色行操作事件 */
   private handleCommand(command: {key: string, row: RoleDto}) {
     switch (command.key) {
+      case 'claim' :
+        this.handleShowCliamDialog(command.row)
+        break
+      case 'permission' :
+        this.handleShowPermissionDialog(command.row)
+        break
       case 'default' :
         this.handleSetDefaultRole(command.row, true)
         break
       case 'unDefault' :
         this.handleSetDefaultRole(command.row, false)
         break
-
       case 'delete' :
         this.handleDeleteRole(command.row)
         break
@@ -214,30 +252,37 @@ export default class extends mixins(DataListMiXin) {
 
   /** 新建角色 */
   private handleCreateRole() {
-    this.$prompt(this.$t('roles.pleaseInputRoleName').toString(),
-      this.$t('roles.createRole').toString(), {
-        showInput: true,
-        inputValidator: (val) => {
-          return !(!val || val.length === 0)
-        },
-        inputErrorMessage: this.$t('roles.roleNameIsRequired').toString(),
-        inputPlaceholder: this.$t('roles.pleaseInputRoleName').toString()
-      }).then((val: any) => {
-      const createRoleDto = new CreateRoleDto()
-      createRoleDto.name = val.value
-      createRoleDto.isDefault = false
-      createRoleDto.isPublic = true
-      RoleService.createRole(createRoleDto).then(role => {
-        const message = this.$t('roles.createRoleSuccess', { name: role.name }).toString()
-        this.$message.success(message)
-        this.refreshPagedData()
-      })
-    })
+    this.showCreateDialog = true
   }
 
   private handleEditRole(role: RoleDto) {
     this.editRoleId = role.id
     this.showEditDialog = true
+  }
+
+  private handleShowCliamDialog(row: RoleDto) {
+    this.editRoleId = row.id
+    this.showClaimDialog = true
+  }
+
+  private handleShowPermissionDialog(row: RoleDto) {
+    this.editRoleName = row.name
+    this.showPermissionDialog = true
+  }
+
+  private onPermissionDialogClosed() {
+    this.showPermissionDialog = false
+  }
+
+  private onClaimDialogClosed() {
+    this.showClaimDialog = false
+  }
+
+  private onCreateDialogClosed(changed: boolean) {
+    this.showCreateDialog = false
+    if (changed) {
+      this.refreshPagedData()
+    }
   }
 
   /** 设置默认角色 */
@@ -268,9 +313,11 @@ export default class extends mixins(DataListMiXin) {
       })
   }
 
-  private onEditRoleFormClosed() {
-    this.editRoleId = ''
+  private onEditRoleFormClosed(changed: boolean) {
     this.showEditDialog = false
+    if (changed) {
+      this.refreshPagedData()
+    }
   }
 }
 </script>
