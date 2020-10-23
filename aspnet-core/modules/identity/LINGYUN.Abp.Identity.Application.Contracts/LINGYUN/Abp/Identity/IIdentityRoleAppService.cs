@@ -10,7 +10,10 @@ namespace LINGYUN.Abp.Identity
         #region OrganizationUnit
 
         Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id);
+
         Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input);
+
+        Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId);
 
         #endregion
 

@@ -64,30 +64,65 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpGet]
+        [Route("all")]
+        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync()
+        {
+            return await OrganizationUnitAppService.GetAllListAsync();
+        }
+
+        [HttpGet]
         public virtual async Task<PagedResultDto<OrganizationUnitDto>> GetListAsync(OrganizationUnitGetByPagedDto input)
         {
             return await OrganizationUnitAppService.GetListAsync(input);
         }
 
         [HttpGet]
-        [Route("management-roles/{id}")]
+        [Route("{id}/role-names")]
         public virtual async Task<ListResultDto<string>> GetRoleNamesAsync(Guid id)
         {
             return await OrganizationUnitAppService.GetRoleNamesAsync(id);
         }
 
         [HttpGet]
-        [Route("management-roles")]
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input)
+        [Route("{id}/unadded-roles")]
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetUnaddedRolesAsync(Guid id, OrganizationUnitGetUnaddedRoleByPagedDto input)
         {
-            return await OrganizationUnitAppService.GetRolesAsync(input);
+            return await OrganizationUnitAppService.GetUnaddedRolesAsync(id, input);
         }
 
         [HttpGet]
-        [Route("management-users")]
-        public virtual async Task<ListResultDto<IdentityUserDto>> GetUsersAsync(OrganizationUnitGetUserDto input)
+        [Route("{id}/roles")]
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(Guid id, PagedAndSortedResultRequestDto input)
         {
-            return await OrganizationUnitAppService.GetUsersAsync(input);
+            return await OrganizationUnitAppService.GetRolesAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("{id}/unadded-users")]
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUnaddedUsersAsync(Guid id, OrganizationUnitGetUnaddedUserByPagedDto input)
+        {
+            return await OrganizationUnitAppService.GetUnaddedUsersAsync(id, input);
+        }
+
+        [HttpGet]
+        [Route("{id}/users")]
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUsersAsync(Guid id, GetIdentityUsersInput input)
+        {
+            return await OrganizationUnitAppService.GetUsersAsync(id, input);
+        }
+
+        [HttpPost]
+        [Route("{id}/users")]
+        public virtual async Task AddUsersAsync(Guid id, OrganizationUnitAddUserDto input)
+        {
+            await OrganizationUnitAppService.AddUsersAsync(id, input);
+        }
+
+        [HttpPost]
+        [Route("{id}/roles")]
+        public virtual async Task AddRolesAsync(Guid id, OrganizationUnitAddRoleDto input)
+        {
+            await OrganizationUnitAppService.AddRolesAsync(id, input);
         }
 
         [HttpPut]

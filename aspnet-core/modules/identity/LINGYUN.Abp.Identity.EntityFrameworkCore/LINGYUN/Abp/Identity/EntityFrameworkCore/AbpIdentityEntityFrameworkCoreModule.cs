@@ -14,6 +14,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             context.Services.AddAbpDbContext<IdentityDbContext>(options =>
             {
                 options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
+                options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
             });
         }
     }

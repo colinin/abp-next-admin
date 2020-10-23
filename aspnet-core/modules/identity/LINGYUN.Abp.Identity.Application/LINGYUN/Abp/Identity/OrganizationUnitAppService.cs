@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
@@ -15,15 +16,18 @@ namespace LINGYUN.Abp.Identity
         protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
 
         protected IdentityUserManager UserManager { get; }
+        protected IIdentityRoleRepository RoleRepository { get; }
         protected IIdentityUserRepository UserRepository { get; }
 
         public OrganizationUnitAppService(
             IdentityUserManager userManager,
+            IIdentityRoleRepository roleRepository,
             IIdentityUserRepository userRepository,
             OrganizationUnitManager organizationUnitManager,
             IOrganizationUnitRepository organizationUnitRepository)
         {
             UserManager = userManager;
+            RoleRepository = roleRepository;
             UserRepository = userRepository;
             OrganizationUnitManager = organizationUnitManager;
             OrganizationUnitRepository = organizationUnitRepository;
@@ -88,6 +92,14 @@ namespace LINGYUN.Abp.Identity
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnitLastChildren);
         }
 
+        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync()
+        {
+            var origanizationUnits = await OrganizationUnitRepository.GetListAsync(false);
+
+            return new ListResultDto<OrganizationUnitDto>(
+                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
+        }
+
         public virtual async Task<PagedResultDto<OrganizationUnitDto>> GetListAsync(OrganizationUnitGetByPagedDto input)
         {
             var origanizationUnitCount = await OrganizationUnitRepository.GetCountAsync();
@@ -106,25 +118,69 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input)
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetUnaddedRolesAsync(Guid id, OrganizationUnitGetUnaddedRoleByPagedDto input)
         {
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            var origanizationUnitRoleCount = await OrganizationUnitRepository.GetRolesCountAsync(origanizationUnit);
-            var origanizationUnitRoles = await OrganizationUnitRepository.GetRolesAsync(origanizationUnit, 
-                input.Sorting, input.MaxResultCount, input.SkipCount, false);
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            var origanizationUnitRoleCount = await OrganizationUnitRepository
+                .GetUnaddedRolesCountAsync(origanizationUnit, input.Filter);
+
+            var origanizationUnitRoles = await OrganizationUnitRepository
+                .GetUnaddedRolesAsync(origanizationUnit, 
+                input.Sorting, input.MaxResultCount, 
+                input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityRoleDto>(origanizationUnitRoleCount,
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(origanizationUnitRoles));
         }
 
-        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task<ListResultDto<IdentityUserDto>> GetUsersAsync(OrganizationUnitGetUserDto input)
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(Guid id, PagedAndSortedResultRequestDto input)
         {
-            var origanizationUnit = await OrganizationUnitRepository.GetAsync(input.Id);
-            // TODO: 官方库没有定义分页查询API，有可能是企业付费版本，需要自行实现
-            var origanizationUnitUsers = await UserRepository.GetUsersInOrganizationUnitAsync(origanizationUnit.Id);
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
-            return new ListResultDto<IdentityUserDto>(
+            var origanizationUnitRoleCount = await OrganizationUnitRepository
+                .GetRolesCountAsync(origanizationUnit);
+
+            var origanizationUnitRoles = await OrganizationUnitRepository
+                .GetRolesAsync(origanizationUnit,
+                input.Sorting, input.MaxResultCount,
+                input.SkipCount);
+
+            return new PagedResultDto<IdentityRoleDto>(origanizationUnitRoleCount,
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(origanizationUnitRoles));
+        }
+
+
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUnaddedUsersAsync(Guid id, OrganizationUnitGetUnaddedUserByPagedDto input)
+        {
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            var origanizationUnitUserCount = await OrganizationUnitRepository
+                .GetUnaddedUsersCountAsync(origanizationUnit, input.Filter);
+            var origanizationUnitUsers = await OrganizationUnitRepository
+                .GetUnaddedUsersAsync(origanizationUnit,
+                input.Sorting, input.MaxResultCount, 
+                input.SkipCount, input.Filter);
+
+            return new PagedResultDto<IdentityUserDto>(origanizationUnitUserCount,
+                ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(origanizationUnitUsers));
+        }
+
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUsersAsync(Guid id, GetIdentityUsersInput input)
+        {
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            var origanizationUnitUserCount = await OrganizationUnitRepository
+                .GetMembersCountAsync(origanizationUnit, input.Filter);
+            var origanizationUnitUsers = await OrganizationUnitRepository
+                .GetMembersAsync(origanizationUnit,
+                input.Sorting, input.MaxResultCount,
+                input.SkipCount, input.Filter);
+
+            return new PagedResultDto<IdentityUserDto>(origanizationUnitUserCount,
                 ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(origanizationUnitUsers));
         }
 
@@ -145,6 +201,36 @@ namespace LINGYUN.Abp.Identity
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
+        }
+
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
+        public virtual async Task AddUsersAsync(Guid id, OrganizationUnitAddUserDto input)
+        {
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
+            var users = await UserRepository.GetListByIdListAsync(input.UserIds, includeDetails: true);
+
+            // 调用内部方法设置用户组织机构
+            foreach (var user in users)
+            {
+                await UserManager.AddToOrganizationUnitAsync(user, origanizationUnit);
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
+        public virtual async Task AddRolesAsync(Guid id, OrganizationUnitAddRoleDto input)
+        {
+            var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            var roles = await RoleRepository.GetListByIdListAsync(input.RoleIds, includeDetails: true);
+
+            foreach (var role in roles)
+            {
+                await OrganizationUnitManager.AddRoleToOrganizationUnitAsync(role, origanizationUnit);
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }

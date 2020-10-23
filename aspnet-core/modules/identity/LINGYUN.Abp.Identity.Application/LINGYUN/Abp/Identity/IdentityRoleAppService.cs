@@ -56,6 +56,14 @@ namespace LINGYUN.Abp.Identity
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
+        [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
+        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        {
+            await OrganizationUnitManager.RemoveRoleFromOrganizationUnitAsync(id, ouId);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
         #endregion
 
         #region ClaimType

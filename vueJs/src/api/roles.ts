@@ -26,8 +26,13 @@ export default class RoleService {
   }
 
   public static getRoleOrganizationUnits(roleId: string) {
-    const _url = '/api/identity/roles/organization-units/' + roleId
+    const _url = '/api/identity/roles/' + roleId + '/organization-units'
     return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl)
+  }
+
+  public static removeOrganizationUnits(roleId: string, ouId: string) {
+    const _url = '/api/identity/roles/' + roleId + '/organization-units/' + ouId
+    return ApiService.Delete(_url, IdentityServiceUrl)
   }
 
   public static changeRoleOrganizationUnits(roleId: string, payload: ChangeRoleOrganizationUnitDto) {
@@ -52,22 +57,22 @@ export default class RoleService {
   }
 
   public static getRoleClaims(roleId: string) {
-    const _url = '/api/identity/roles/claims/' + roleId
+    const _url = '/api/identity/roles/' + roleId + '/claims'
     return ApiService.Get<ListResultDto<RoleClaim>>(_url, IdentityServiceUrl)
   }
 
   public static addRoleClaim(roleId: string, payload: RoleClaimCreateOrUpdate) {
-    const _url = '/api/identity/roles/claims/' + roleId
+    const _url = '/api/identity/roles/' + roleId + '/claims'
     return ApiService.Post<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static updateRoleClaim(roleId: string, payload: RoleClaimCreateOrUpdate) {
-    const _url = '/api/identity/roles/claims/' + roleId
+    const _url = '/api/identity/roles/' + roleId + '/claims'
     return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static deleteRoleClaim(roleId: string, payload: RoleClaimDelete) {
-    let _url = '/api/identity/roles/claims/' + roleId
+    let _url = '/api/identity/roles/' + roleId + '/claims'
     _url += '?claimType=' + payload.claimType
     _url += '&claimValue=' + payload.claimValue
     return ApiService.Delete(_url, IdentityServiceUrl)

@@ -20,6 +20,17 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
         {
         }
 
+        public virtual async Task<List<IdentityRole>> GetListByIdListAsync(
+            List<Guid> roleIds,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return await DbSet.IncludeDetails(includeDetails)
+                .Where(role => roleIds.Contains(role.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             Guid id, 
             bool includeDetails = false,

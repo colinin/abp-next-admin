@@ -20,9 +20,9 @@
         {{ $t('global.searchList') }}
       </el-button>
       <el-button
+        v-permission="['AbpIdentity.IdentityClaimTypes.Create']"
         class="filter-item"
         type="primary"
-        :disabled="!checkPermission(['AbpIdentity.IdentityClaimTypes.Create'])"
         @click="handleCreateClaimType"
       >
         {{ $t('AbpIdentity.AddClaim') }}
@@ -112,6 +112,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="checkPermission(['AbpIdentity.IdentityClaimTypes.Update', 'AbpIdentity.IdentityClaimTypes.Delete'])"
         :label="$t('operaActions')"
         align="center"
         width="260px"
@@ -119,7 +120,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!allowedEditClaim(row)"
+            :disabled="!row.isStatic"
             size="mini"
             type="primary"
             @click="handleUpdateClaimType(row)"
@@ -127,7 +128,7 @@
             {{ $t('AbpIdentity.UpdateClaim') }}
           </el-button>
           <el-button
-            :disabled="!allowedDeleteClaim(row)"
+            :disabled="!row.isStatic"
             size="mini"
             type="danger"
             @click="handleDeleteClaimType(row)"
@@ -194,18 +195,6 @@ export default class ClaimType extends mixins(DataListMiXin) {
 
   mounted() {
     this.refreshPagedData()
-  }
-
-  get allowedEditClaim() {
-    return (claimType: IdentityClaimType) => {
-      return !claimType.isStatic && checkPermission(['AbpIdentity.IdentityClaimTypes.Update'])
-    }
-  }
-
-  get allowedDeleteClaim() {
-    return (claimType: IdentityClaimType) => {
-      return !claimType.isStatic && checkPermission(['AbpIdentity.IdentityClaimTypes.Delete'])
-    }
   }
 
   protected processDataFilter() {

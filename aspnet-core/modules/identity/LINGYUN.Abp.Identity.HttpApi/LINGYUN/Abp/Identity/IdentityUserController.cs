@@ -24,17 +24,24 @@ namespace LINGYUN.Abp.Identity
         #region OrganizationUnit
 
         [HttpGet]
-        [Route("organization-units/{id}")]
+        [Route("{id}/organization-units")]
         public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
             return await UserAppService.GetOrganizationUnitsAsync(id);
         }
 
         [HttpPut]
-        [Route("organization-units/{id}")]
-        public virtual async Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
+        [Route("{id}/organization-units")]
+        public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
         {
-            await UserAppService.UpdateOrganizationUnitsAsync(id, input);
+            await UserAppService.SetOrganizationUnitsAsync(id, input);
+        }
+
+        [HttpDelete]
+        [Route("{id}/organization-units/{ouId}")]
+        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        {
+            await UserAppService.RemoveOrganizationUnitsAsync(id, ouId);
         }
 
         #endregion
@@ -42,28 +49,28 @@ namespace LINGYUN.Abp.Identity
         #region Claim
 
         [HttpGet]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
         {
             return await UserAppService.GetClaimsAsync(id);
         }
 
         [HttpPost]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task AddClaimAsync(Guid id, IdentityUserClaimCreateDto input)
         {
             await UserAppService.AddClaimAsync(id, input);
         }
 
         [HttpPut]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task UpdateClaimAsync(Guid id, IdentityUserClaimUpdateDto input)
         {
             await UserAppService.UpdateClaimAsync(id, input);
         }
 
         [HttpDelete]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task DeleteClaimAsync(Guid id, IdentityUserClaimDeleteDto input)
         {
             await UserAppService.DeleteClaimAsync(id, input);
