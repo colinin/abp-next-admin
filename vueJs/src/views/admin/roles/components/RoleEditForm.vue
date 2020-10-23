@@ -14,49 +14,39 @@
       ref="roleEditForm"
       label-width="110px"
       :model="role"
-      :rules="roleRules"
     >
-      <el-tabs v-model="roleTabItem">
-        <el-tab-pane
-          :label="$t('roles.basic')"
-          name="basic"
-        >
-          <el-form-item
-            prop="name"
-            :label="$t('roles.name')"
-          >
-            <el-input
-              v-model="role.name"
-              :disabled="role.isStatic"
-              :placeholder="$t('global.pleaseInputBy', {key: $t('roles.name')})"
-            />
-          </el-form-item>
-        </el-tab-pane>
-        <el-tab-pane
-          :label="$t('roles.organizationUnits')"
-          name="organizationUnits"
-        >
-          <organization-unit-tree
-            :checked-organization-units="roleOrganizationUnits"
-            @onOrganizationUnitsChanged="onOrganizationUnitsChanged"
-          />
-        </el-tab-pane>
-      </el-tabs>
+      <el-form-item
+        prop="name"
+        :label="$t('AbpIdentity.DisplayName:RoleName')"
+        :rules="{
+          required: true,
+          message: $t('global.pleaseInputBy', {key: $t('AbpIdentity.DisplayName:RoleName')}),
+          trigger: 'blur'
+        }"
+      >
+        <el-input
+          v-model="role.name"
+          :disabled="role.isStatic"
+          :placeholder="$t('global.pleaseInputBy', {key: $t('AbpIdentity.DisplayName:RoleName')})"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           class="cancel"
           style="width:100px"
+          type="info"
           @click="onFormClosed(false)"
         >
-          {{ $t('global.cancel') }}
+          {{ $t('AbpIdentity.Cancel') }}
         </el-button>
         <el-button
           class="confirm"
           type="primary"
           style="width:100px"
+          icon="el-icon-check"
           @click="onSave"
         >
-          {{ $t('global.confirm') }}
+          {{ $t('AbpIdentity.Save') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -67,15 +57,10 @@
 import { checkPermission } from '@/utils/permission'
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 import RoleService, { RoleDto, UpdateRoleDto } from '@/api/roles'
-import OrganizationUnitTree from '@/components/OrganizationUnitTree/index.vue'
-import { ChangeUserOrganizationUnitDto } from '@/api/users'
 import { Form } from 'element-ui'
 
 @Component({
   name: 'RoleEditForm',
-  components: {
-    OrganizationUnitTree
-  },
   methods: {
     checkPermission
   }
@@ -87,19 +72,7 @@ export default class extends Vue {
   @Prop({ default: false })
   private showDialog!: boolean
 
-  private roleTabItem = 'basic'
   private role = new RoleDto()
-  /** 是否加载用户权限 */
-  private rolePermissionLoaded = false
-  private roleOrganizationUnitChanged = false
-  private roleOrganizationUnits = new Array<string>()
-
-  private roleRules = {
-    name: [
-      { required: true, message: this.l('global.pleaseInputBy', { key: this.l('roles.name') }), trigger: 'blur' },
-      { min: 3, max: 20, message: this.l('global.charLengthRange', { min: 3, max: 20 }), trigger: 'blur' }
-    ]
-  }
 
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
@@ -110,22 +83,8 @@ export default class extends Vue {
     if (this.showDialog && this.roleId) {
       RoleService.getRoleById(this.roleId).then(role => {
         this.role = role
-        this.handledGetRoleOrganizationUnits(role.id)
       })
-      this.roleOrganizationUnitChanged = false
-      this.roleOrganizationUnits = new Array<string>()
     }
-  }
-
-  private handledGetRoleOrganizationUnits(roleId: string) {
-    RoleService.getRoleOrganizationUnits(roleId).then(res => {
-      this.roleOrganizationUnits = res.items.map(ou => ou.id)
-    })
-  }
-
-  private onOrganizationUnitsChanged(checkedKeys: string[]) {
-    this.roleOrganizationUnitChanged = true
-    this.roleOrganizationUnits = checkedKeys
   }
 
   private onSave() {
@@ -137,13 +96,8 @@ export default class extends Vue {
         roleUpdateDto.isPublic = this.role.isPublic
         roleUpdateDto.isDefault = this.role.isDefault
         roleUpdateDto.concurrencyStamp = this.role.concurrencyStamp
-        if (this.roleOrganizationUnitChanged) {
-          const roleOrganizationUnitDto = new ChangeUserOrganizationUnitDto()
-          roleOrganizationUnitDto.organizationUnitIds = this.roleOrganizationUnits
-          await RoleService.changeRoleOrganizationUnits(this.roleId, roleOrganizationUnitDto)
-        }
-        RoleService.updateRole(this.roleId, roleUpdateDto).then(role => {
-          this.$message.success(this.l('roles.updateRoleSuccess', { name: role.name }))
+        RoleService.updateRole(this.roleId, roleUpdateDto).then(() => {
+          this.$message.success(this.l('global.successful'))
           this.onFormClosed(true)
         })
       }
@@ -151,8 +105,6 @@ export default class extends Vue {
   }
 
   private onFormClosed(changed: boolean) {
-    this.roleTabItem = 'basic'
-    this.rolePermissionLoaded = false
     const roleEditForm = this.$refs.roleEditForm as Form
     roleEditForm.resetFields()
     this.$emit('closed', changed)

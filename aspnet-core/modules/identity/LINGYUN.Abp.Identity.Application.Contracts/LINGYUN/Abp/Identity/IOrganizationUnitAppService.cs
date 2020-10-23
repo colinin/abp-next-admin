@@ -13,6 +13,8 @@ namespace LINGYUN.Abp.Identity
                         OrganizationUnitCreateDto,
                         OrganizationUnitUpdateDto>
     {
+        Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync();
+
         Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId);
 
         Task MoveAsync(Guid id, OrganizationUnitMoveDto input);
@@ -23,8 +25,16 @@ namespace LINGYUN.Abp.Identity
 
         Task<ListResultDto<string>> GetRoleNamesAsync(Guid id);
 
-        Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(OrganizationUnitGetRoleByPagedDto input);
+        Task<PagedResultDto<IdentityRoleDto>> GetUnaddedRolesAsync(Guid id, OrganizationUnitGetUnaddedRoleByPagedDto input);
 
-        Task<ListResultDto<IdentityUserDto>> GetUsersAsync(OrganizationUnitGetUserDto input);
+        Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(Guid id, PagedAndSortedResultRequestDto input);
+
+        Task AddRolesAsync(Guid id, OrganizationUnitAddRoleDto input);
+
+        Task<PagedResultDto<IdentityUserDto>> GetUnaddedUsersAsync(Guid id, OrganizationUnitGetUnaddedUserByPagedDto input);
+
+        Task<PagedResultDto<IdentityUserDto>> GetUsersAsync(Guid id, GetIdentityUsersInput input);
+
+        Task AddUsersAsync(Guid id, OrganizationUnitAddUserDto input);
     }
 }

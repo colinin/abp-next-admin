@@ -57,34 +57,44 @@ export default class UserApiService {
   }
 
   public static getUserClaims(userId: string) {
-    const _url = '/api/identity/users/claims/' + userId
+    const _url = '/api/identity/users/' + userId + '/claims'
     return ApiService.Get<ListResultDto<UserClaim>>(_url, IdentityServiceUrl)
   }
 
   public static addUserClaim(userId: string, payload: UserClaimCreateOrUpdate) {
-    const _url = '/api/identity/users/claims/' + userId
+    const _url = '/api/identity/users/' + userId + '/claims'
     return ApiService.Post<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static updateUserClaim(userId: string, payload: UserClaimCreateOrUpdate) {
-    const _url = '/api/identity/users/claims/' + userId
+    const _url = '/api/identity/users/' + userId + '/claims'
     return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
   }
 
   public static deleteUserClaim(userId: string, payload: UserClaimDelete) {
-    let _url = '/api/identity/users/claims/' + userId
+    let _url = '/api/identity/users/' + userId + '/claims'
     _url += '?claimType=' + payload.claimType
     _url += '&claimValue=' + payload.claimValue
     return ApiService.Delete(_url, IdentityServiceUrl)
   }
 
-  public static getUserOrganizationUnits(userId: string) {
-    const _url = '/api/identity/users/organization-units/' + userId
-    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, IdentityServiceUrl)
+  public static getOrganizationUnits(userId: string, payload: UsersGetPagedDto) {
+    let _url = '/api/identity/users/' + userId
+    _url += '/organization-units'
+    _url += '?filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
+    _url += '&skipCount=' + payload.skipCount
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<PagedResultDto<OrganizationUnit>>(_url, IdentityServiceUrl)
   }
 
-  public static changeUserOrganizationUnits(roleId: string, payload: ChangeUserOrganizationUnitDto) {
-    const _url = '/api/identity/users/organization-units/' + roleId
+  public static removeOrganizationUnit(userId: string, ouId: string) {
+    const _url = '/api/identity/users/' + userId + '/organization-units/' + ouId
+    return ApiService.Delete(_url, IdentityServiceUrl)
+  }
+
+  public static changeUserOrganizationUnits(userId: string, payload: ChangeUserOrganizationUnitDto) {
+    const _url = '/api/identity/users/organization-units/' + userId
     return ApiService.Put<void>(_url, payload, IdentityServiceUrl)
   }
 
@@ -233,7 +243,7 @@ export default class UserApiService {
 /** 用户列表查询对象 */
 export class UsersGetPagedDto extends PagedAndSortedResultRequestDto {
   /** 查询过滤字段 */
-  filter: string | undefined
+  filter = ''
 
   constructor() {
     super()
@@ -441,6 +451,15 @@ export interface IUserRole {
 
 export class ChangeUserOrganizationUnitDto {
   organizationUnitIds = new Array<string>()
+
+  public addOrganizationUnit(id: string) {
+    this.organizationUnitIds.push(id)
+  }
+
+  public removeOrganizationUnit(id: string) {
+    const index = this.organizationUnitIds.findIndex(ouId => ouId === id)
+    this.organizationUnitIds.splice(index, 1)
+  }
 }
 
 export class UserClaimCreateOrUpdate {

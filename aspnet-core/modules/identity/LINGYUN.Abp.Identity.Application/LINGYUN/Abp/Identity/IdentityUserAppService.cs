@@ -23,6 +23,7 @@ namespace LINGYUN.Abp.Identity
 
         #region OrganizationUnit
 
+
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
         public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
@@ -35,11 +36,19 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
-        public virtual async Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
+        public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
         {
             var user = await UserManager.GetByIdAsync(id);
 
             await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
+        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        {
+            await UserManager.RemoveFromOrganizationUnitAsync(id, ouId);
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }

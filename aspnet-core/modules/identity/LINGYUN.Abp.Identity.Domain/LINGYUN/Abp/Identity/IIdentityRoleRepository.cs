@@ -8,6 +8,12 @@ namespace LINGYUN.Abp.Identity
 {
     public interface IIdentityRoleRepository : Volo.Abp.Identity.IIdentityRoleRepository
     {
+        Task<List<IdentityRole>> GetListByIdListAsync(
+            List<Guid> roleIds,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+            );
+
         Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             Guid id,
             bool includeDetails = false,

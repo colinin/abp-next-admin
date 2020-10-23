@@ -1,7 +1,7 @@
 import ApiService from './serviceBase'
 import { AuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from './types'
-import { RoleDto } from './roles'
-import { User } from './users'
+import { RoleDto, RoleGetPagedDto } from './roles'
+import { User, UsersGetPagedDto } from './users'
 
 /** 远程服务地址 */
 const serviceUrl = process.env.VUE_APP_BASE_API
@@ -27,6 +27,15 @@ export default class OrganizationUnitService {
   }
 
   /**
+   * 查询所有组织结构
+   * @returns 返回类型为 OrganizationUnit 的对象列表
+   */
+  public static getAllOrganizationUnits() {
+    const _url = '/api/identity/organization-units/all'
+    return ApiService.Get<ListResultDto<OrganizationUnit>>(_url, serviceUrl)
+  }
+
+  /**
    * 查询组织机构列表
    * @param payload 分页查询对象
    * @returns 返回类型为 OrganizationUnit 的对象列表
@@ -46,8 +55,7 @@ export default class OrganizationUnitService {
    * @returns 返回类型为 OrganizationUnit 的对象
    */
   public static getOrganizationUnit(id: string) {
-    let _url = '/api/identity/organization-units/'
-    _url += '?id=' + id
+    const _url = '/api/identity/organization-units/' + id
     return ApiService.Get<OrganizationUnit>(_url, serviceUrl)
   }
 
@@ -56,8 +64,8 @@ export default class OrganizationUnitService {
    * @param payload 类型为 OrganizationUnitUpdate 的对象
    * @returns 返回类型为 OrganizationUnit 的对象
    */
-  public static updateOrganizationUnit(payload: OrganizationUnitUpdate) {
-    const _url = '/api/identity/organization-units'
+  public static updateOrganizationUnit(id: string, payload: OrganizationUnitUpdate) {
+    const _url = '/api/identity/organization-units/' + id
     return ApiService.Put<OrganizationUnit>(_url, payload, serviceUrl)
   }
 
@@ -110,72 +118,89 @@ export default class OrganizationUnitService {
   }
 
   /**
-   * 获取组织机构角色列表
-   * @param payload 类型为 OrganizationUnitGetRoleByPaged 的对象
-   * @returns 返回类型为 RoleDto 的对象列表
+   * 获取未加入组织机构的用户列表
+   * @param id 主键
+   * @param payload 类型为 UsersGetPagedDto 的对象
+   * @returns 返回类型为 User 的对象列表
    */
-  public static organizationUnitGetRoles(payload: OrganizationUnitGetRoleByPaged) {
-    let _url = '/api/identity/organization-units/management-roles'
-    _url += '?id=' + payload.id
-    _url += '&filter=' + payload.filter
+  public static getUnaddedUsers(id: string, payload: UsersGetPagedDto) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/unadded-users'
+    _url += '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + payload.skipCount
-    // _url += '&skipCount=' + pagerFormat(payload.skipCount)
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<PagedResultDto<User>>(_url, serviceUrl)
+  }
+
+  /**
+   * 获取组织机构的用户列表
+   * @param id 主键
+   * @param payload 类型为 UsersGetPagedDto 的对象
+   * @returns 返回类型为 User 的对象列表
+   */
+  public static getUsers(id: string, payload: UsersGetPagedDto) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/users'
+    _url += '?filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
+    _url += '&skipCount=' + payload.skipCount
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<PagedResultDto<User>>(_url, serviceUrl)
+  }
+
+  /**
+   * 组织机构添加用户
+   * @param id 主键
+   * @param payload 用户主键列表
+   */
+  public static addUsers(id: string, payload: OrganizationUnitAddUser) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/users'
+    return ApiService.Post<void>(_url, payload, serviceUrl)
+  }
+
+  /**
+   * 获取未加入组织机构的角色列表
+   * @param id 主键
+   * @param payload 类型为 UsersGetPagedDto 的对象
+   * @returns 返回类型为 User 的对象列表
+   */
+  public static getUnaddedRoles(id: string, payload: RoleGetPagedDto) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/unadded-roles'
+    _url += '?filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
+    _url += '&skipCount=' + payload.skipCount
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<PagedResultDto<RoleDto>>(_url, serviceUrl)
+  }
+
+  /**
+   * 获取组织机构的角色列表
+   * @param id 主键
+   * @param payload 类型为 UsersGetPagedDto 的对象
+   * @returns 返回类型为 User 的对象列表
+   */
+  public static getRoles(id: string, payload: RoleGetPagedDto) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/roles'
+    _url += '?filter=' + payload.filter
+    _url += '&sorting=' + payload.sorting
+    _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<RoleDto>>(_url, serviceUrl)
   }
 
   /**
    * 增加角色
-   * @param payload 类型为 OrganizationUnitAddRole 的对象
+   * @param id 主键
+   * @param payload 角色主键列表
    */
-  public static organizationUnitAddRole(payload: OrganizationUnitAddRole) {
-    const _url = '/api/identity/organization-units/management-roles'
+  public static addRoles(id: string, payload: OrganizationUnitAddRole) {
+    let _url = '/api/identity/organization-units/' + id
+    _url += '/roles'
     return ApiService.Post<void>(_url, payload, serviceUrl)
-  }
-
-  /**
-   * 删除角色
-   * @param id 主键标识
-   * @param roleId 角色标识
-   */
-  public static organizationUnitRemoveRole(id: string, roleId: string) {
-    let _url = '/api/identity/organization-units/management-roles'
-    _url += '?id=' + id
-    _url += '&roleId=' + roleId
-    return ApiService.Delete(_url, serviceUrl)
-  }
-
-  /**
-   * 获取组织机构用户列表
-   * @param payload 类型为 OrganizationUnitGetRoleByPaged 的对象
-   * @returns 返回类型为 RoleDto 的对象列表
-   */
-  public static organizationUnitGetUsers(id: string) {
-    let _url = '/api/identity/organization-units/management-users'
-    _url += '?id=' + id
-    return ApiService.Get<ListResultDto<User>>(_url, serviceUrl)
-  }
-
-  /**
-   * 增加用户
-   * @param payload 类型为 OrganizationUnitAddUser 的对象
-   */
-  public static organizationUnitAddUser(payload: OrganizationUnitAddUser) {
-    const _url = '/api/identity/organization-units/management-users'
-    return ApiService.Post<void>(_url, payload, serviceUrl)
-  }
-
-  /**
-   * 删除角色
-   * @param id 主键标识
-   * @param roleId 角色标识
-   */
-  public static organizationUnitRemoveUser(id: string, userId: string) {
-    let _url = '/api/identity/organization-units/management-users'
-    _url += '?id=' + id
-    _url += '&userId=' + userId
-    return ApiService.Delete(_url, serviceUrl)
   }
 }
 
@@ -197,14 +222,6 @@ export class OrganizationUnitGetByPaged extends PagedAndSortedResultRequestDto {
   filter!: string
 }
 
-/** 组织机构角色分页查询对象 */
-export class OrganizationUnitGetRoleByPaged extends PagedAndSortedResultRequestDto {
-  /** 主键标识 */
-  id!: string
-  /** 过滤字符 */
-  filter = ''
-}
-
 /** 组织机构创建对象 */
 export class OrganizationUnitCreate {
   /** 显示名称 */
@@ -215,24 +232,44 @@ export class OrganizationUnitCreate {
 
 /** 组织机构变更对象 */
 export class OrganizationUnitUpdate {
-  /** 标识 */
-  id!: string
   /** 显示名称 */
   displayName!: string
 }
 
 /** 组织机构增加部门对象 */
 export class OrganizationUnitAddRole {
-  /** 标识 */
-  id!: string
-  /** 部门标识 */
-  roleId!: string
+  /** 部门标识列表 */
+  roleIds = new Array<string>()
+
+  public isInOrganizationUnit(roleId: string) {
+    return this.roleIds.some(id => id === roleId)
+  }
+
+  public addRole(roleId: string) {
+    this.roleIds.push(roleId)
+  }
+
+  public removeRole(roleId: string) {
+    const index = this.roleIds.findIndex(id => id === roleId)
+    this.roleIds.splice(index, 1)
+  }
 }
 
 /** 组织机构增加用户对象 */
 export class OrganizationUnitAddUser {
-  /** 标识 */
-  id!: string
-  /** 用户标识 */
-  userId!: string
+  /** 用户标识列表 */
+  userIds = new Array<string>()
+
+  public isInOrganizationUnit(userId: string) {
+    return this.userIds.some(id => id === userId)
+  }
+
+  public addUser(userId: string) {
+    this.userIds.push(userId)
+  }
+
+  public removeUser(userId: string) {
+    const index = this.userIds.findIndex(id => id === userId)
+    this.userIds.splice(index, 1)
+  }
 }

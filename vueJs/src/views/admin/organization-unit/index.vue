@@ -4,7 +4,7 @@
       <el-col
         :span="8"
       >
-        <edit-organization-uint
+        <organization-unit-tree
           @onOrganizationUnitChecked="handleOrganizationUnitChecked"
         />
       </el-col>
@@ -13,14 +13,14 @@
           <div
             slot="header"
           >
-            <span>机构成员</span>
+            <span>{{ $t('AbpIdentity.OrganizationUnit:Members') }}</span>
           </div>
           <div>
             <el-tabs>
-              <el-tab-pane label="角色列表">
+              <el-tab-pane :label="$t('AbpIdentity.Roles')">
                 <role-organization-uint :organization-unit-id="checkedOrganizationUintId" />
               </el-tab-pane>
-              <el-tab-pane label="用户列表">
+              <el-tab-pane :label="$t('AbpIdentity.Users')">
                 <user-organization-uint :organization-unit-id="checkedOrganizationUintId" />
               </el-tab-pane>
             </el-tabs>
@@ -33,20 +33,20 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import EditOrganizationUint from './components/EditOrganizationUint.vue'
+import OrganizationUnitTree from './components/OrganizationUnitTree.vue'
 import UserOrganizationUint from './components/UserOrganizationUint.vue'
 import RoleOrganizationUint from './components/RoleOrganizationUint.vue'
 
 @Component({
   name: 'OrganizationUint',
   components: {
-    EditOrganizationUint,
+    OrganizationUnitTree,
     UserOrganizationUint,
     RoleOrganizationUint
   }
 })
 export default class extends Vue {
-  private checkedOrganizationUintId?: string = ''
+  private checkedOrganizationUintId = ''
 
   private handleOrganizationUnitChecked(id: string) {
     this.checkedOrganizationUintId = id

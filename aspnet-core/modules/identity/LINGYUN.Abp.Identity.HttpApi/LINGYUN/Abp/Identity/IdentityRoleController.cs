@@ -24,17 +24,24 @@ namespace LINGYUN.Abp.Identity
         #region OrganizationUnit
 
         [HttpGet]
-        [Route("organization-units/{id}")]
+        [Route("{id}/organization-units")]
         public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
             return await RoleAppService.GetOrganizationUnitsAsync(id);
         }
 
         [HttpPut]
-        [Route("organization-units/{id}")]
+        [Route("{id}/organization-units")]
         public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input)
         {
             await RoleAppService.SetOrganizationUnitsAsync(id, input);
+        }
+
+        [HttpDelete]
+        [Route("{id}/organization-units/{ouId}")]
+        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        {
+            await RoleAppService.RemoveOrganizationUnitsAsync(id, ouId);
         }
 
         #endregion
@@ -42,28 +49,28 @@ namespace LINGYUN.Abp.Identity
         #region Claim
 
         [HttpGet]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
         {
             return await RoleAppService.GetClaimsAsync(id);
         }
 
         [HttpPost]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task AddClaimAsync(Guid id, IdentityRoleClaimCreateDto input)
         {
             await RoleAppService.AddClaimAsync(id, input);
         }
 
         [HttpPut]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task UpdateClaimAsync(Guid id, IdentityRoleClaimUpdateDto input)
         {
             await RoleAppService.UpdateClaimAsync(id, input);
         }
 
         [HttpDelete]
-        [Route("claims/{id}")]
+        [Route("{id}/claims")]
         public virtual async Task DeleteClaimAsync(Guid id, IdentityRoleClaimDeleteDto input)
         {
             await RoleAppService.DeleteClaimAsync(id, input);

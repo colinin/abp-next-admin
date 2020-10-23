@@ -122,6 +122,7 @@ export class PermissionItem {
 
   public setGrant(grant: boolean) {
     this.isGrant = grant
+    // TODO: bug 会无限的追踪到跟节点,来进行全部取消授权
     if (this.parent) {
       this.parent.setGrant(grant)
     }
