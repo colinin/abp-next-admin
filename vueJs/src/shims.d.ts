@@ -31,3 +31,6 @@ declare module 'vue-simple-uploader'
 
 // TODO vue-contextmenujs
 declare module 'vue-contextmenujs'
+
+// TODO lemon-imui
+declare module 'lemon-imui'

@@ -9,7 +9,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.MessageService.Chat
 {
     [RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
-    [Route("api/chat")]
+    [Route("api/im/chat")]
     public class ChatController : AbpController, IChatAppService
     {
         private readonly IChatAppService _chatAppService;
@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         [HttpGet]
         [Route("groups/users")]
-        public virtual async Task<PagedResultDto<UserGroup>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
+        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
         {
             return await _chatAppService.GetGroupUsersAsync(groupUserGetByPaged);
         }

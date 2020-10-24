@@ -14,6 +14,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// </summary>
         public virtual Guid? TenantId { get; protected set; }
         /// <summary>
+        /// 群主
+        /// </summary>
+        public virtual Guid AdminUserId { get; protected set; }
+        /// <summary>
         /// 群组标识
         /// </summary>
         public virtual long GroupId { get; protected set; }
@@ -28,11 +32,11 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 群组地址
         /// </summary>
-        public virtual string Address { get; protected set; }
+        public virtual string Address { get; set; }
         /// <summary>
         /// 群组公告
         /// </summary>
-        public virtual string Notice { get; protected set; }
+        public virtual string Notice { get; set; }
         /// <summary>
         /// 最大用户数量
         /// </summary>
@@ -52,23 +56,20 @@ namespace LINGYUN.Abp.MessageService.Chat
         protected ChatGroup() 
         {
         }
-        public ChatGroup(long id, string name, string tag = "", string address = "", int maxUserCount = 200)
+        public ChatGroup(
+            long id, 
+            Guid adminUserId,
+            string name,
+            string tag = "", 
+            string address = "", 
+            int maxUserCount = 200)
         {
             GroupId = id;
+            AdminUserId = adminUserId;
             Name = name;
             Tag = tag;
             Address = address;
             MaxUserCount = maxUserCount;
-        }
-
-        public void ChangeAddress(string address) 
-        {
-            Address = address;
-        }
-
-        public void SetNotice(string notice)
-        {
-            Notice = notice;
         }
     }
 }

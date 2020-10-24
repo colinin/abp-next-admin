@@ -54,31 +54,72 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public async Task<List<ChatMessage>> GetGroupMessageAsync(Guid? tenantId, long groupId, string filter = "",
-            string sorting = nameof(ChatMessage.MessageId), MessageType? type = null, int skipCount = 1, int maxResultCount = 10)
+        public async Task<List<ChatMessage>> GetGroupMessageAsync(
+            Guid? tenantId, 
+            long groupId,
+            string filter = "",
+            string sorting = nameof(ChatMessage.MessageId),
+            bool reverse = true, 
+            MessageType? type = null, 
+            int skipCount = 0, 
+            int maxResultCount = 10)
         {
             using (CurrentTenant.Change(tenantId))
             {
                 var groupMessages = await MessageRepository
-                    .GetGroupMessagesAsync(groupId, filter, sorting, type, skipCount, maxResultCount);
+                    .GetGroupMessagesAsync(groupId, filter, sorting, reverse, type, skipCount, maxResultCount);
                 var chatMessages = ObjectMapper.Map<List<GroupMessage>, List<ChatMessage>>(groupMessages);
 
                 return chatMessages;
             }
         }
 
-        public async Task<List<ChatMessage>> GetChatMessageAsync(Guid? tenantId, Guid sendUserId, Guid receiveUserId, string filter = "",
-            string sorting = nameof(ChatMessage.MessageId), MessageType? type = null, int skipCount = 1, int maxResultCount = 10)
+        public async Task<List<ChatMessage>> GetChatMessageAsync(
+            Guid? tenantId, 
+            Guid sendUserId, 
+            Guid receiveUserId, 
+            string filter = "",
+            string sorting = nameof(ChatMessage.MessageId),
+            bool reverse = true, 
+            MessageType? type = null, 
+            int skipCount = 0, 
+            int maxResultCount = 10)
         {
             using (CurrentTenant.Change(tenantId))
             {
-                var userMessages = await MessageRepository.GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, type, skipCount, maxResultCount);
+                var userMessages = await MessageRepository
+                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, reverse, type, skipCount, maxResultCount);
                 var chatMessages = ObjectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
 
                 return chatMessages;
             }
         }
-    
+
+        public virtual async Task<long> GetGroupMessageCountAsync(
+            Guid? tenantId, 
+            long groupId, 
+            string filter = "",
+            MessageType? type = null)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                return await MessageRepository.GetCountAsync(groupId, filter, type);
+            }
+        }
+
+        public virtual async Task<long> GetChatMessageCountAsync(
+            Guid? tenantId,
+            Guid sendUserId, 
+            Guid receiveUserId, 
+            string filter = "", 
+            MessageType? type = null)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                return await MessageRepository.GetCountAsync(sendUserId, receiveUserId, filter, type);
+            }
+        }
+
         protected virtual async Task StoreUserMessageAsync(ChatMessage chatMessage)
         {
             var userHasBlacked = await UserChatSettingRepository
@@ -134,16 +175,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             await MessageRepository.InsertGroupMessageAsync(message);
 
             chatMessage.MessageId = messageId.ToString();
-        }
-
-        public Task<long> GetGroupMessageCountAsync(Guid? tenantId, long groupId, string filter = "", MessageType? type = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<long> GetChatMessageCountAsync(Guid? tenantId, Guid sendUserId, Guid receiveUserId, string filter = "", MessageType? type = null)
-        {
-            throw new NotImplementedException();
         }
     }
 }

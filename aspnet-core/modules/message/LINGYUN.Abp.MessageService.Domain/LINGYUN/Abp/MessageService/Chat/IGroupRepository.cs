@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -13,10 +14,18 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <param name="id"></param>
         /// <param name="formUserId"></param>
         /// <returns></returns>
-        Task<bool> UserHasBlackedAsync(long id, Guid formUserId);
+        Task<bool> UserHasBlackedAsync(
+            long id, 
+            Guid formUserId,
+            CancellationToken cancellationToken = default);
 
-        Task<ChatGroup> GetByIdAsync(long id);
+        Task<ChatGroup> GetByIdAsync(
+            long id,
+            CancellationToken cancellationToken = default);
 
-        Task<List<ChatGroupAdmin>> GetGroupAdminAsync(long id);
+        Task<List<UserGroupCard>> GetGroupAdminAsync(
+            long id,
+            CancellationToken cancellationToken = default);
+
     }
 }

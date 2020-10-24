@@ -1,23 +1,82 @@
-﻿using LINGYUN.Abp.IM.Messages;
+﻿using LINGYUN.Abp.IM.Contract;
+using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
     [Authorize]
-    public class MessageHub : OnlineClientHubBase
+    public class MessagesHub : OnlineClientHubBase
     {
-        private readonly IMessageStore _messageStore;
+        protected IFriendStore FriendStore { get; }
+        protected IMessageStore MessageStore { get; }
 
-        public MessageHub(
+        public MessagesHub(
+            IFriendStore friendStore,
             IMessageStore messageStore)
         {
-            _messageStore = messageStore;
+            FriendStore = friendStore;
+            MessageStore = messageStore;
         }
+
+        [HubMethodName("LastContactFriends")]
+        public virtual async Task<PagedResultDto<UserFriend>> GetLastContactFriendsAsync(
+            Guid? tenantId,
+            Guid userId,
+            int skipCount = 0,
+            int maxResultCount = 10)
+        {
+            var myFrientCount = await FriendStore.GetCountAsync(tenantId, userId);
+
+            var lastContractFriends = await FriendStore
+                .GetLastContactListAsync(tenantId, userId, skipCount, maxResultCount);
+
+            return new PagedResultDto<UserFriend>(myFrientCount, lastContractFriends);
+        }
+
+        [HubMethodName("MyFriends")]
+        public virtual async Task<PagedResultDto<UserFriend>> GetMyFriendsAsync(
+            Guid? tenantId,
+            Guid userId,
+            string filter = "",
+            string sorting = nameof(UserFriend.UserId),
+            bool reverse = false,
+            int skipCount = 0,
+            int maxResultCount = 10)
+        {
+            var myFrientCount = await FriendStore.GetCountAsync(tenantId, userId);
+
+            var myFriends = await FriendStore
+                .GetListAsync(tenantId, userId, filter, sorting, reverse, skipCount, maxResultCount);
+
+            return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
+        }
+
+        [HubMethodName("AddFriend")]
+        public virtual async Task AddFriendAsync(
+            Guid? tenantId,
+            Guid userId,
+            Guid friendId,
+            string remarkName = "")
+        {
+            await FriendStore.AddMemberAsync(tenantId, userId, friendId, remarkName);
+        }
+
+        [HubMethodName("RemoveFriend")]
+        public virtual async Task RemoveFriendAsync(
+            Guid? tenantId,
+            Guid userId,
+            Guid friendId,
+            string remarkName = "")
+        {
+            await FriendStore.RemoveMemberAsync(tenantId, userId, friendId);
+        }
+
         /// <summary>
         /// 客户端调用发送消息方法
         /// </summary>
@@ -27,7 +86,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         public virtual async Task SendMessageAsync(ChatMessage chatMessage)
         {
             // 持久化
-            await _messageStore.StoreMessageAsync(chatMessage);
+            await MessageStore.StoreMessageAsync(chatMessage);
 
             try
             {

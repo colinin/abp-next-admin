@@ -30,6 +30,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.Localization;
@@ -172,6 +173,12 @@ namespace LINGYUN.Abp.IdentityServer4
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.AddNamespace("Volo.Abp.Identity");
+                options.AutoEventSelectors.AddNamespace("Volo.Abp.IdentityServer");
             });
 
             Configure<RedisCacheOptions>(options =>

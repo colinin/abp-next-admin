@@ -11,11 +11,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MessageService.Subscriptions
 {
-    public class EfCoreUserSubscribeRepository : EfCoreRepository<MessageServiceDbContext, UserSubscribe, long>,
+    public class EfCoreUserSubscribeRepository : EfCoreRepository<IMessageServiceDbContext, UserSubscribe, long>,
         IUserSubscribeRepository, ITransientDependency
     {
         public EfCoreUserSubscribeRepository(
-            IDbContextProvider<MessageServiceDbContext> dbContextProvider) 
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
         }

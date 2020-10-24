@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
   </ItemGroup>

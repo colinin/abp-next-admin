@@ -12,11 +12,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
-    public class EfCoreUserNotificationRepository : EfCoreRepository<MessageServiceDbContext, UserNotification, long>,
+    public class EfCoreUserNotificationRepository : EfCoreRepository<IMessageServiceDbContext, UserNotification, long>,
         IUserNotificationRepository, ITransientDependency
     {
         public EfCoreUserNotificationRepository(
-            IDbContextProvider<MessageServiceDbContext> dbContextProvider) 
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
         }

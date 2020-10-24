@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="3.2.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
   </ItemGroup>

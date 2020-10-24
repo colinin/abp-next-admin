@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.IM.Group;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -9,23 +10,71 @@ namespace LINGYUN.Abp.MessageService.Chat
     public interface IUserChatGroupRepository : IBasicRepository<UserChatGroup, long>
     {
         /// <summary>
-        /// 用户是否在组里
+        /// 成员是否在群组里
         /// </summary>
         /// <param name="id"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<bool> UserHasInGroupAsync(long groupId, Guid userId);
-
-        Task<UserChatGroup> GetUserGroupAsync(long groupId, Guid userId);
-
-        Task<GroupUserCard> GetGroupUserCardAsync(long groupId, Guid userId);
-
-        Task<List<UserGroup>> GetGroupUsersAsync(long groupId);
-
-        Task<int> GetGroupUsersCountAsync(long groupId, string filter = "");
-
-        Task<List<UserGroup>> GetGroupUsersAsync(long groupId, string filter = "", string sorting = nameof(UserGroup.UserId), int skipCount = 1, int maxResultCount = 10);
-
-        Task<List<Group>> GetUserGroupsAsync(Guid userId);
+        Task<bool> MemberHasInGroupAsync(
+            long groupId, 
+            Guid userId,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 获取群组成员
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<GroupUserCard> GetMemberAsync(
+            long groupId, 
+            Guid userId,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 获取群组成员数
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<int> GetMembersCountAsync(
+            long groupId,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 获取群组成员列表
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="sorting"></param>
+        /// <param name="reverse"></param>
+        /// <param name="skipCount"></param>
+        /// <param name="maxResultCount"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<GroupUserCard>> GetMembersAsync(
+            long groupId, 
+            string sorting = nameof(UserChatCard.UserId),
+            bool reverse = false,
+            int skipCount = 0, 
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 获取成员所在群组列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<Group>> GetMemberGroupsAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 从群组中移除成员
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task RemoveMemberFormGroupAsync(
+            long groupId,
+            Guid userId,
+            CancellationToken cancellationToken = default);
     }
 }

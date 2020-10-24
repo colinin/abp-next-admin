@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -10,35 +11,46 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public class EfCoreGroupRepository : EfCoreRepository<MessageServiceDbContext, ChatGroup, long>,
+    public class EfCoreGroupRepository : EfCoreRepository<IMessageServiceDbContext, ChatGroup, long>,
         IGroupRepository, ITransientDependency
     {
         public EfCoreGroupRepository(
-            IDbContextProvider<MessageServiceDbContext> dbContextProvider) 
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
         }
 
-        public async Task<ChatGroup> GetByIdAsync(long id)
+        public virtual async Task<ChatGroup> GetByIdAsync(
+            long id,
+            CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.GroupId.Equals(id)).FirstOrDefaultAsync();
+            return await DbSet
+                .Where(x => x.GroupId.Equals(id))
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<ChatGroupAdmin>> GetGroupAdminAsync(long id)
+        public virtual async Task<List<UserGroupCard>> GetGroupAdminAsync(
+            long id,
+            CancellationToken cancellationToken = default)
         {
             var groupAdmins = await (from gp in DbContext.Set<ChatGroup>()
-                                     join gpa in DbContext.Set<ChatGroupAdmin>()
-                                       on gp.GroupId equals gpa.GroupId
-                                     select gpa)
-                                     .Distinct()
-                                     .ToListAsync();
+                                     join ucg in DbContext.Set<UserChatGroup>()
+                                       on gp.GroupId equals ucg.GroupId
+                                     join ugc in DbContext.Set<UserGroupCard>()
+                                       on ucg.UserId equals ugc.UserId
+                                     where ugc.IsAdmin
+                                     select ugc)
+                                     .ToListAsync(GetCancellationToken(cancellationToken));
             return groupAdmins;
         }
 
-        public async Task<bool> UserHasBlackedAsync(long id, Guid formUserId)
+        public virtual async Task<bool> UserHasBlackedAsync(
+            long id, 
+            Guid formUserId,
+            CancellationToken cancellationToken = default)
         {
             var userHasBlack = await DbContext.Set<GroupChatBlack>()
-                .AnyAsync(x => x.GroupId.Equals(id) && x.ShieldUserId.Equals(formUserId));
+                .AnyAsync(x => x.GroupId.Equals(id) && x.ShieldUserId.Equals(formUserId), GetCancellationToken(cancellationToken));
             return userHasBlack;
         }
     }

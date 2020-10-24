@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public class EfCoreUserChatSettingRepository : EfCoreRepository<MessageServiceDbContext, UserChatSetting, long>,
+    public class EfCoreUserChatSettingRepository : EfCoreRepository<IMessageServiceDbContext, UserChatSetting, long>,
         IUserChatSettingRepository, ITransientDependency
     {
         public EfCoreUserChatSettingRepository(
-            IDbContextProvider<MessageServiceDbContext> dbContextProvider)
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }

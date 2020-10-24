@@ -16,13 +16,13 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
 
         private readonly IOnlineClientManager _onlineClientManager;
 
-        private readonly IHubContext<MessageHub> _hubContext;
+        private readonly IHubContext<MessagesHub> _hubContext;
 
         private readonly IMessageStore _messageStore;
 
         public SignalRMessageSender(
            IOnlineClientManager onlineClientManager,
-           IHubContext<MessageHub> hubContext,
+           IHubContext<MessagesHub> hubContext,
            IMessageStore messageStore)
         {
             _hubContext = hubContext;

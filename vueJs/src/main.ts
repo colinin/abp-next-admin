@@ -8,10 +8,12 @@ import SvgIcon from 'vue-svgicon'
 import uploader from 'vue-simple-uploader'
 import contextMenu from 'vue-contextmenujs'
 import VueEvents from '@/components/EventBus'
+import LemonIMUI from 'lemon-imui'
 
 import '@/styles/element-variables.scss'
 import 'view-design/dist/styles/iview.css'
 import '@/styles/index.scss'
+import 'lemon-imui/dist/index.css'
 
 import App from '@/App.vue'
 import store from '@/store'
@@ -44,6 +46,7 @@ Vue.use(SvgIcon, {
 Vue.use(uploader)
 Vue.use(contextMenu)
 Vue.use(VueEvents)
+Vue.use(LemonIMUI)
 
 // Register global directives
 Object.keys(directives).forEach(key => {

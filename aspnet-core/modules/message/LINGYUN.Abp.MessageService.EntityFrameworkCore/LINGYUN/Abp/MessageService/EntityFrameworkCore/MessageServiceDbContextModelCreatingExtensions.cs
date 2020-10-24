@@ -89,6 +89,45 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.HasIndex(p => new { p.TenantId, p.GroupId });
             });
 
+            builder.Entity<UserChatFriend>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserChatFriends", options.Schema);
+
+                b.Property(p => p.RemarkName).HasMaxLength(UserChatCardConsts.MaxUserNameLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId, p.FrientId });
+            });
+
+            builder.Entity<UserChatCard>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserChatCards", options.Schema);
+
+                b.Property(p => p.UserName).HasMaxLength(UserChatCardConsts.MaxUserNameLength).IsRequired();
+
+                b.Property(p => p.AvatarUrl).HasMaxLength(UserChatCardConsts.MaxAvatarUrlLength);
+                b.Property(p => p.Description).HasMaxLength(UserChatCardConsts.MaxDescriptionLength);
+                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
+                b.Property(p => p.Sign).HasMaxLength(UserChatCardConsts.MaxSignLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId });
+            });
+
+            builder.Entity<UserGroupCard>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserGroupCards", options.Schema);
+
+                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId });
+            });
+            
+
             builder.Entity<UserChatSetting>(b =>
             {
                 b.ToTable(options.TablePrefix + "UserChatSettings", options.Schema);
@@ -119,15 +158,6 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
             builder.Entity<GroupChatBlack>(b =>
             {
                 b.ToTable(options.TablePrefix + "GroupChatBlacks", options.Schema);
-
-                b.ConfigureMultiTenant();
-
-                b.HasIndex(p => new { p.TenantId, p.GroupId });
-            });
-
-            builder.Entity<ChatGroupAdmin>(b =>
-            {
-                b.ToTable(options.TablePrefix + "ChatGroupAdmins", options.Schema);
 
                 b.ConfigureMultiTenant();
 

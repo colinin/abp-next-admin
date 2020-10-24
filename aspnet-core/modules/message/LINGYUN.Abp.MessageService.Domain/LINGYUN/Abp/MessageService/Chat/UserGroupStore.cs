@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             {
                 using (CurrentTenant.Change(tenantId))
                 {
-                    var userHasInGroup = await UserChatGroupRepository.UserHasInGroupAsync(groupId, userId);
+                    var userHasInGroup = await UserChatGroupRepository.MemberHasInGroupAsync(groupId, userId);
                     if (!userHasInGroup)
                     {
                         var userGroup = new UserChatGroup(groupId, userId, acceptUserId, tenantId);
@@ -48,19 +48,17 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (CurrentTenant.Change(tenantId))
             {
-                var groupUserCard = await UserChatGroupRepository.GetGroupUserCardAsync(groupId, userId);
+                var groupUserCard = await UserChatGroupRepository.GetMemberAsync(groupId, userId);
 
                 return groupUserCard;
             }
         }
 
-        public async Task<IEnumerable<UserGroup>> GetGroupUsersAsync(Guid? tenantId, long groupId)
+        public async Task<IEnumerable<GroupUserCard>> GetMembersAsync(Guid? tenantId, long groupId)
         {
             using (CurrentTenant.Change(tenantId))
             {
-                var userGroups = await UserChatGroupRepository.GetGroupUsersAsync(groupId);
-
-                return userGroups;
+                return await UserChatGroupRepository.GetMembersAsync(groupId);
             }
         }
 
@@ -68,9 +66,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (CurrentTenant.Change(tenantId))
             {
-                var groups = await UserChatGroupRepository.GetUserGroupsAsync(userId);
-
-                return groups;
+                return await UserChatGroupRepository.GetMemberGroupsAsync(userId);
             }
         }
 
@@ -81,31 +77,32 @@ namespace LINGYUN.Abp.MessageService.Chat
             {
                 using (CurrentTenant.Change(tenantId))
                 {
-                    var userGroup = await UserChatGroupRepository.GetUserGroupAsync(groupId, userId);
+                    await UserChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId);
 
-                    if(userGroup != null)
-                    {
-                        await UserChatGroupRepository.DeleteAsync(userGroup);
-
-                        await unitOfWork.SaveChangesAsync();
-                    }
+                    await unitOfWork.SaveChangesAsync();
                 }
             }
         }
 
-        public async Task<int> GetGroupUsersCountAsync(Guid? tenantId, long groupId, string filter = "")
+        public async Task<int> GetMembersCountAsync(Guid? tenantId, long groupId)
         {
             using (CurrentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetGroupUsersCountAsync(groupId, filter);
+                return await UserChatGroupRepository.GetMembersCountAsync(groupId);
             }
         }
 
-        public async Task<List<UserGroup>> GetGroupUsersAsync(Guid? tenantId, long groupId, string filter = "", string sorting = "UserId", int skipCount = 1, int maxResultCount = 10)
+        public async Task<List<GroupUserCard>> GetMembersAsync(
+            Guid? tenantId, 
+            long groupId,
+            string sorting = nameof(GroupUserCard.UserId), 
+            bool reverse = false, 
+            int skipCount = 0, 
+            int maxResultCount = 10)
         {
             using (CurrentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetGroupUsersAsync(groupId, filter, sorting, skipCount, maxResultCount);
+                return await UserChatGroupRepository.GetMembersAsync(groupId, sorting, reverse, skipCount, maxResultCount);
             }
         }
     }

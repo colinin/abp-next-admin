@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// </summary>
         /// <param name="groupUserGetByPaged"></param>
         /// <returns></returns>
-        Task<PagedResultDto<UserGroup>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged);
+        Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged);
         /// <summary>
         /// 处理用户群组申请
         /// </summary>

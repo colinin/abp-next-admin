@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Group;
 using LINGYUN.Abp.IM.Messages;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -25,6 +26,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userGroupStore = userGroupStore;
         }
 
+        [Authorize]
         public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto userMessageGetByPaged)
         {
             var chatMessageCount = await _messageStore
@@ -33,38 +35,41 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var chatMessages = await _messageStore
                 .GetChatMessageAsync(CurrentTenant.Id, CurrentUser.GetId(), userMessageGetByPaged.ReceiveUserId, 
-                    userMessageGetByPaged.Filter, userMessageGetByPaged.Sorting, userMessageGetByPaged.MessageType,
-                    userMessageGetByPaged.SkipCount, userMessageGetByPaged.MaxResultCount);
+                    userMessageGetByPaged.Filter, userMessageGetByPaged.Sorting, userMessageGetByPaged.Reverse,
+                    userMessageGetByPaged.MessageType, userMessageGetByPaged.SkipCount, userMessageGetByPaged.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(chatMessageCount, chatMessages);
         }
 
         public virtual async Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto groupMessageGetByPaged)
         {
+            // TODO: 增加验证,用户不在群组却来查询这个群组消息,是非法客户端操作
+
             var groupMessageCount = await _messageStore
                 .GetGroupMessageCountAsync(CurrentTenant.Id, groupMessageGetByPaged.GroupId,
                     groupMessageGetByPaged.Filter, groupMessageGetByPaged.MessageType);
 
             var groupMessages = await _messageStore
                 .GetGroupMessageAsync(CurrentTenant.Id, groupMessageGetByPaged.GroupId,
-                    groupMessageGetByPaged.Filter, groupMessageGetByPaged.Sorting, groupMessageGetByPaged.MessageType,
-                    groupMessageGetByPaged.SkipCount, groupMessageGetByPaged.MaxResultCount);
+                    groupMessageGetByPaged.Filter, groupMessageGetByPaged.Sorting, groupMessageGetByPaged.Reverse,
+                    groupMessageGetByPaged.MessageType, groupMessageGetByPaged.SkipCount, groupMessageGetByPaged.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(groupMessageCount, groupMessages);
         }
 
-        public virtual async Task<PagedResultDto<UserGroup>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
+        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
         {
-            var groupUserCount = await _userGroupStore.GetGroupUsersCountAsync(CurrentTenant.Id, 
-                groupUserGetByPaged.GroupId, groupUserGetByPaged.Filter);
+            var groupUserCardCount = await _userGroupStore
+                .GetMembersCountAsync(CurrentTenant.Id, groupUserGetByPaged.GroupId);
 
-            var groupUsers = await _userGroupStore.GetGroupUsersAsync(CurrentTenant.Id,
-                groupUserGetByPaged.GroupId, groupUserGetByPaged.Filter, groupUserGetByPaged.Sorting,
+            var groupUserCards = await _userGroupStore.GetMembersAsync(CurrentTenant.Id,
+                groupUserGetByPaged.GroupId, groupUserGetByPaged.Sorting, groupUserGetByPaged.Reverse,
                 groupUserGetByPaged.SkipCount, groupUserGetByPaged.MaxResultCount);
 
-            return new PagedResultDto<UserGroup>(groupUserCount, groupUsers);
+            return new PagedResultDto<GroupUserCard>(groupUserCardCount, groupUserCards);
         }
 
+        [Authorize]
         public virtual async Task<ListResultDto<Group>> GetMyGroupsAsync()
         {
             var myGroups = await _userGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
@@ -81,7 +86,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 // 当前登录用户不再用户组
                 throw new UserFriendlyException("");
             }
-            if (!myGroupCard.IsGrant(nameof(ChatGroupAdmin.AllowAddPeople)))
+            if (!myGroupCard.IsAdmin)
             {
                 // 当前登录用户没有加人权限
                 throw new UserFriendlyException("");
@@ -99,7 +104,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 // 当前登录用户不再用户组
                 throw new UserFriendlyException("");
             }
-            if (!myGroupCard.IsGrant(nameof(ChatGroupAdmin.AllowKickPeople)))
+            if (!myGroupCard.IsAdmin)
             {
                 // 当前登录用户没有踢人权限
                 throw new UserFriendlyException("");
