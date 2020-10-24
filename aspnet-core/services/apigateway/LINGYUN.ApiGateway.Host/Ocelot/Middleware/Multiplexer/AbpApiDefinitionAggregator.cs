@@ -20,9 +20,11 @@ namespace Ocelot.Middleware.Multiplexer
         protected virtual async Task<DownstreamResponse> MapAbpApiDefinitionAggregateContentAsync(List<HttpContext> responses)
         {
             JObject responseObject = null;
-            JsonMergeSettings mergeSetting = new JsonMergeSettings();
-            mergeSetting.MergeArrayHandling = MergeArrayHandling.Union;
-            mergeSetting.PropertyNameComparison = System.StringComparison.CurrentCultureIgnoreCase;
+            JsonMergeSettings mergeSetting = new JsonMergeSettings
+            {
+                MergeArrayHandling = MergeArrayHandling.Union,
+                PropertyNameComparison = System.StringComparison.CurrentCultureIgnoreCase
+            };
             foreach (var httpResponse in responses)
             {
                 var content = await httpResponse.Items.DownstreamResponse().Content.ReadAsStringAsync();
@@ -40,7 +42,7 @@ namespace Ocelot.Middleware.Multiplexer
             {
                 Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
             };
-            stringContent.Headers.Add("_abperrorformat", "true");
+            stringContent.Headers.Add("_AbpErrorFormat", "true");
             return new DownstreamResponse(stringContent, HttpStatusCode.OK,
                 new List<KeyValuePair<string, IEnumerable<string>>>(), "OK");
         }

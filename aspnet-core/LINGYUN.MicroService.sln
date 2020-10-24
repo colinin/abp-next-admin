@@ -249,7 +249,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain.Identity", "modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj", "{2D377D3A-70EC-4BB3-9F4C-6C933693DA98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Account.Web", "modules\account\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj", "{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.Web", "modules\account\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj", "{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
