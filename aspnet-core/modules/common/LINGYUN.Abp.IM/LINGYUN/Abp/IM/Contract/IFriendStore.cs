@@ -7,6 +7,20 @@ namespace LINGYUN.Abp.IM.Contract
     public interface IFriendStore
     {
         /// <summary>
+        /// 查询好友列表
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="sorting"></param>
+        /// <param name="reverse"></param>
+        /// <returns></returns>
+        Task<List<UserFriend>> GetListAsync(
+            Guid? tenantId,
+            Guid userId,
+            string sorting = nameof(UserFriend.UserId),
+            bool reverse = false
+            );
+        /// <summary>
         /// 获取好友数量
         /// </summary>
         /// <param name="tenantId"></param>

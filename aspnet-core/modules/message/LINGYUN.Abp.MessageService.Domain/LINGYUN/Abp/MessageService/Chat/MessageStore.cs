@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public async Task StoreMessageAsync(ChatMessage chatMessage)
+        public virtual async Task StoreMessageAsync(ChatMessage chatMessage)
         {
             using (var unitOfWork = UnitOfWorkManager.Begin())
             {
@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public async Task<List<ChatMessage>> GetGroupMessageAsync(
+        public virtual async Task<List<ChatMessage>> GetGroupMessageAsync(
             Guid? tenantId, 
             long groupId,
             string filter = "",
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public async Task<List<ChatMessage>> GetChatMessageAsync(
+        public virtual async Task<List<ChatMessage>> GetChatMessageAsync(
             Guid? tenantId, 
             Guid sendUserId, 
             Guid receiveUserId, 
@@ -92,6 +92,21 @@ namespace LINGYUN.Abp.MessageService.Chat
                 var chatMessages = ObjectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
 
                 return chatMessages;
+            }
+        }
+
+        public virtual async Task<List<LastChatMessage>> GetLastChatMessagesAsync(
+            Guid? tenantId,
+            Guid userId,
+            string sorting = nameof(LastChatMessage.SendTime),
+            bool reverse = true,
+            int maxResultCount = 10
+            )
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                return await MessageRepository
+                    .GetLastMessagesByOneFriendAsync(userId, sorting, reverse, maxResultCount);
             }
         }
 
@@ -130,15 +145,18 @@ namespace LINGYUN.Abp.MessageService.Chat
                 throw new BusinessException(MessageServiceErrorCodes.UserHasBlack);
             }
             var userChatSetting = await UserChatSettingRepository.GetByUserIdAsync(chatMessage.ToUserId.Value);
-            if (!userChatSetting.AllowReceiveMessage)
+            if (userChatSetting != null)
             {
-                // 当前发送的用户不接收消息
-                throw new BusinessException(MessageServiceErrorCodes.UserHasRejectAllMessage);
-            }
-            if (chatMessage.IsAnonymous && !userChatSetting.AllowAnonymous)
-            {
-                // 当前用户不允许匿名发言
-                throw new BusinessException(MessageServiceErrorCodes.UserNotAllowedToSpeakAnonymously);
+                if (!userChatSetting.AllowReceiveMessage)
+                {
+                    // 当前发送的用户不接收消息
+                    throw new BusinessException(MessageServiceErrorCodes.UserHasRejectAllMessage);
+                }
+                if (chatMessage.IsAnonymous && !userChatSetting.AllowAnonymous)
+                {
+                    // 当前用户不允许匿名发言
+                    throw new BusinessException(MessageServiceErrorCodes.UserNotAllowedToSpeakAnonymously);
+                }
             }
             var messageId = SnowflakeIdGenerator.Create();
             var message = new UserMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);

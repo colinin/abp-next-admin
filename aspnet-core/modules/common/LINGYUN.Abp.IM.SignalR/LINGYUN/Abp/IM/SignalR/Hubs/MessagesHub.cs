@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
@@ -39,22 +40,49 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             return new PagedResultDto<UserFriend>(myFrientCount, lastContractFriends);
         }
 
-        [HubMethodName("MyFriends")]
-        public virtual async Task<PagedResultDto<UserFriend>> GetMyFriendsAsync(
-            Guid? tenantId,
-            Guid userId,
-            string filter = "",
-            string sorting = nameof(UserFriend.UserId),
-            bool reverse = false,
-            int skipCount = 0,
+        [HubMethodName("MyLastChatMessages")]
+        public virtual async Task<ListResultDto<LastChatMessage>> GetMyLastChatMessagesAsync(
+            string sorting = nameof(LastChatMessage.SendTime),
+            bool reverse = true,
             int maxResultCount = 10)
         {
-            var myFrientCount = await FriendStore.GetCountAsync(tenantId, userId);
+            return await GetLastChatMessagesAsync(CurrentUser.GetId(), sorting, reverse, maxResultCount);
+        }
 
-            var myFriends = await FriendStore
-                .GetListAsync(tenantId, userId, filter, sorting, reverse, skipCount, maxResultCount);
 
-            return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
+        [HubMethodName("LastChatMessages")]
+        public virtual async Task<ListResultDto<LastChatMessage>> GetLastChatMessagesAsync(
+            Guid userId,
+            string sorting = nameof(LastChatMessage.SendTime),
+            bool reverse = true,
+            int maxResultCount = 10)
+        {
+            var messages = await MessageStore
+                .GetLastChatMessagesAsync(
+                    CurrentTenant.Id, userId, sorting, reverse, maxResultCount);
+
+            return new ListResultDto<LastChatMessage>(messages);
+        }
+
+        [HubMethodName("MyFriends")]
+        public virtual async Task<ListResultDto<UserFriend>> GetMyFriendsAsync(
+            string sorting = nameof(UserFriend.RemarkName),
+            bool reverse = false)
+        {
+            return await GetAllFriendsAsync(CurrentUser.GetId(), sorting, reverse);
+        }
+
+
+        [HubMethodName("AllFriends")]
+        public virtual async Task<ListResultDto<UserFriend>> GetAllFriendsAsync(
+            Guid userId,
+            string sorting = nameof(UserFriend.RemarkName),
+            bool reverse = false)
+        {
+            var userFriends = await FriendStore
+                .GetListAsync(CurrentTenant.Id, userId, sorting, reverse);
+
+            return new ListResultDto<UserFriend>(userFriends);
         }
 
         [HubMethodName("AddFriend")]

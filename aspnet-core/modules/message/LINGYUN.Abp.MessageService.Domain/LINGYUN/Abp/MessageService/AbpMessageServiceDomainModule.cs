@@ -34,8 +34,9 @@ namespace LINGYUN.Abp.MessageService
 
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Messages:Group", typeof(MessageServiceResource));
-                options.MapCodeNamespace("Messages:User", typeof(MessageServiceResource));
+                options.MapCodeNamespace("Messages.Group", typeof(MessageServiceResource));
+                options.MapCodeNamespace("Messages.User", typeof(MessageServiceResource));
+                options.MapCodeNamespace("Messages.UserFriend", typeof(MessageServiceResource));
             });
         }
     }

@@ -44,6 +44,13 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default);
 
+        Task<List<LastChatMessage>> GetLastMessagesByOneFriendAsync(
+            Guid userId,
+            string sorting = nameof(LastChatMessage.SendTime),
+            bool reverse = true,
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
+
         Task<List<UserMessage>> GetUserMessagesAsync(
             Guid sendUserId,
             Guid receiveUserId,

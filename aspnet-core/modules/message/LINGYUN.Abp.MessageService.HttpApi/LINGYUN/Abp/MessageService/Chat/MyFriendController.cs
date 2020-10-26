@@ -31,16 +31,16 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [HttpGet]
-        [Route("last-contacts")]
-        public virtual async Task<PagedResultDto<UserFriend>> GetLastContactFriendsAsync(PagedResultRequestDto input)
+        [Route("all")]
+        public virtual async Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
         {
-            return await MyFriendAppService.GetLastContactFriendsAsync(input);
+            return await MyFriendAppService.GetAllListAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<UserFriend>> GetMyFriendsAsync(MyFriendGetByPagedDto input)
+        public virtual async Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
         {
-            return await MyFriendAppService.GetMyFriendsAsync(input);
+            return await MyFriendAppService.GetListAsync(input);
         }
     }
 }

@@ -19,6 +19,12 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid friendId,
             CancellationToken cancellationToken = default);
 
+        Task<List<UserFriend>> GetAllMembersAsync(
+            Guid userId,
+            string sorting = nameof(UserChatFriend.RemarkName),
+            bool reverse = false,
+             CancellationToken cancellationToken = default);
+
         Task<int> GetMembersCountAsync(
             Guid userId,
             string filter = "",

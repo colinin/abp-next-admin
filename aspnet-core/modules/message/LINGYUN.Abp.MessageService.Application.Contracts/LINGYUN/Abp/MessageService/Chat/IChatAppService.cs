@@ -11,15 +11,15 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 发送消息
         /// </summary>
-        /// <param name="chatMessage"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage chatMessage);
+        Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input);
         /// <summary>
         /// 申请加入群组
         /// </summary>
-        /// <param name="userJoinGroup"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task ApplyJoinGroupAsync(UserJoinGroupDto userJoinGroup);
+        Task ApplyJoinGroupAsync(UserJoinGroupDto input);
         /// <summary>
         /// 获取我的群组
         /// </summary>
@@ -28,34 +28,39 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 获取群组用户
         /// </summary>
-        /// <param name="groupUserGetByPaged"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged);
+        Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input);
         /// <summary>
         /// 处理用户群组申请
         /// </summary>
-        /// <param name="groupAcceptUser"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task GroupAcceptUserAsync(GroupAcceptUserDto groupAcceptUser);
+        Task GroupAcceptUserAsync(GroupAcceptUserDto input);
         /// <summary>
         /// 群组移除用户
         /// </summary>
-        /// <param name="groupRemoveUser"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task GroupRemoveUserAsync(GroupRemoveUserDto groupRemoveUser);
+        Task GroupRemoveUserAsync(GroupRemoveUserDto input);
         /// <summary>
         /// 获取群组消息
         /// </summary>
-        /// <param name="groupMessageGetByPaged"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto groupMessageGetByPaged);
+        Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto input);
         /// <summary>
         /// 获取我的消息
         /// </summary>
-        /// <param name="userMessageGetByPaged"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto userMessageGetByPaged);
-
+        Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input);
+        /// <summary>
+        /// 获取我最近的消息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input);
         //TOTO: 还应该有获取我的未读消息 获取我的未读群组消息
     }
 }

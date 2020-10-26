@@ -21,30 +21,37 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         [HttpPost]
         [Route("groups/join")]
-        public virtual async Task ApplyJoinGroupAsync(UserJoinGroupDto userJoinGroup)
+        public virtual async Task ApplyJoinGroupAsync(UserJoinGroupDto input)
         {
-            await _chatAppService.ApplyJoinGroupAsync(userJoinGroup);
+            await _chatAppService.ApplyJoinGroupAsync(input);
         }
 
         [HttpGet]
-        [Route("messages/group")]
-        public virtual async Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto groupMessageGetByPaged)
+        [Route("group/messages")]
+        public virtual async Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto input)
         {
-            return await _chatAppService.GetGroupMessageAsync(groupMessageGetByPaged);
+            return await _chatAppService.GetGroupMessageAsync(input);
         }
 
         [HttpGet]
         [Route("groups/users")]
-        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
+        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
         {
-            return await _chatAppService.GetGroupUsersAsync(groupUserGetByPaged);
+            return await _chatAppService.GetGroupUsersAsync(input);
         }
 
         [HttpGet]
-        [Route("messages/me")]
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto userMessageGetByPaged)
+        [Route("my-messages")]
+        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
         {
-            return await _chatAppService.GetMyChatMessageAsync(userMessageGetByPaged);
+            return await _chatAppService.GetMyChatMessageAsync(input);
+        }
+
+        [HttpGet]
+        [Route("my-last-messages")]
+        public virtual async Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
+        {
+            return await _chatAppService.GetMyLastChatMessageAsync(input);
         }
 
         [HttpGet]
@@ -56,23 +63,23 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         [HttpPost]
         [Route("groups/users/accept")]
-        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto groupAcceptUser)
+        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto input)
         {
-            await _chatAppService.GroupAcceptUserAsync(groupAcceptUser);
+            await _chatAppService.GroupAcceptUserAsync(input);
         }
 
         [HttpDelete]
         [Route("groups/users/remove")]
-        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto groupRemoveUser)
+        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto input)
         {
-            await _chatAppService.GroupRemoveUserAsync(groupRemoveUser);
+            await _chatAppService.GroupRemoveUserAsync(input);
         }
 
         [HttpGet]
-        [Route("messages/send")]
-        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage chatMessage)
+        [Route("send-message")]
+        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {
-            return await _chatAppService.SendMessageAsync(chatMessage);
+            return await _chatAppService.SendMessageAsync(input);
         }
     }
 }

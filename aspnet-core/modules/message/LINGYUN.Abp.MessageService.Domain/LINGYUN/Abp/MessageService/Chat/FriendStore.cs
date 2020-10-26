@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Uow;
 
@@ -22,16 +23,18 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (CurrentTenant.Change(tenantId))
             {
-                if (!await UserChatFriendRepository.IsAddedAsync(userId, friendId))
+                if (await UserChatFriendRepository.IsAddedAsync(userId, friendId))
                 {
-                    var userChatFriend = new UserChatFriend(userId, friendId, remarkName, tenantId)
-                    {
-                        CreationTime = Clock.Now,
-                        CreatorId = userId
-                    };
-
-                    await UserChatFriendRepository.InsertAsync(userChatFriend);
+                    throw new BusinessException(MessageServiceErrorCodes.YouHaveAddedTheUserToFriend);
+                    
                 }
+                var userChatFriend = new UserChatFriend(userId, friendId, remarkName, tenantId)
+                {
+                    CreationTime = Clock.Now,
+                    CreatorId = userId
+                };
+
+                await UserChatFriendRepository.InsertAsync(userChatFriend);
             }
         }
 
@@ -39,6 +42,20 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task AddShieldMemberAsync(Guid? tenantId, Guid userId, Guid friendId)
         {
             await ChangeFriendShieldAsync(tenantId, userId, friendId, true);
+        }
+
+        public virtual async Task<List<UserFriend>> GetListAsync(
+            Guid? tenantId,
+            Guid userId,
+            string sorting = nameof(UserFriend.UserId),
+            bool reverse = false
+            )
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                return await UserChatFriendRepository
+                    .GetAllMembersAsync(userId, sorting, reverse);
+            }
         }
 
         public virtual async Task<int> GetCountAsync(Guid? tenantId, Guid userId, string filter = "")

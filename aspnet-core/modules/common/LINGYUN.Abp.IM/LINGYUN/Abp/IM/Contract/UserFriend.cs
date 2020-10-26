@@ -24,5 +24,23 @@ namespace LINGYUN.Abp.IM.Contract
         /// 备注名称
         /// </summary>
         public string RemarkName { get; set; }
+
+        public override int GetHashCode()
+        {
+            return FriendId.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (obj is UserFriend friend)
+            {
+                return friend.FriendId.Equals(FriendId);
+            }
+            return false;
+        }
     }
 }

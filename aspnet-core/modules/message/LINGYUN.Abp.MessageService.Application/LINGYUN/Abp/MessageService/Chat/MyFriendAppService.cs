@@ -27,18 +27,16 @@ namespace LINGYUN.Abp.MessageService.Chat
             await FriendStore.RemoveMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId);
         }
 
-        public virtual async Task<PagedResultDto<UserFriend>> GetLastContactFriendsAsync(PagedResultRequestDto input)
+        public virtual async Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
         {
-            var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
-
             var myFriends = await FriendStore
-                .GetLastContactListAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.SkipCount, input.MaxResultCount);
+                .GetListAsync(CurrentTenant.Id, CurrentUser.GetId(),
+                    input.Sorting, input.Reverse);
 
-            return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
+            return new ListResultDto<UserFriend>(myFriends);
         }
 
-        public virtual async Task<PagedResultDto<UserFriend>> GetMyFriendsAsync(MyFriendGetByPagedDto input)
+        public virtual async Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
         {
             var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
 

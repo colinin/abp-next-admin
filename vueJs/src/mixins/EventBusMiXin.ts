@@ -61,6 +61,6 @@ export default class EventBusMiXin extends Vue {
    * @param args 事件参数列表
    */
   protected trigger(name: string, ...args: any[]) {
-    this.$events.emit(name, args)
+    this.$events.emit(name, ...args)
   }
 }

@@ -1,48 +1,40 @@
 <template>
-  <div class="imui-center">
-    <lemon-imui
-      v-show="showDialog"
-      ref="IMUI"
-      :user="currentUser"
-      @send="handleSendMessage"
-      @pull-messages="onPullMessages"
-      @change-menu="onChangeMenu"
-      @change-contact="onChangeContract"
-      @message-click="handleMessageClick"
-      @menu-avatar-click="handleMenuAvatarClick"
-    >
-      <template #cover>
-        <div class="cover">
-          <i class="lemon-icon-message" />
-          <p><b>Lemon</b> IMUI</p>
-        </div>
-      </template>
-      <template #contact-title="contact">
-        <span>{{ contact.displayName }}</span>
-        <small
-          class="more"
-        >&#8230;</small>
-      </template>
-    </lemon-imui>
+  <div id="InstantMessage">
+    <div class="imui-center">
+      <lemon-imui
+        v-show="showDialog"
+        ref="IMUI"
+        :user="currentUser"
+        @send="handleSendMessage"
+        @pull-messages="onPullMessages"
+        @change-menu="onChangeMenu"
+        @change-contact="onChangeContract"
+        @message-click="handleMessageClick"
+        @menu-avatar-click="handleMenuAvatarClick"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import EventBusMiXin from '@/mixins/EventBusMiXin'
 import Component, { mixins } from 'vue-class-component'
+import AddFriend from './components/AddFriend.vue'
 
 import { abpPagerFormat } from '@/utils'
 
 import { UserModule } from '@/store/modules/user'
 
 import ImApiService, {
-  MyFriendGetByPaged,
+  MyFrientGetAll,
   UserMessageGetByPaged,
+  GetUserLastMessage,
   UserFriend,
   ChatMessage
 } from '@/api/instant-message'
 
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr'
+import { User } from '@/api/users'
 
 class MyContract {
   id = ''
@@ -60,6 +52,7 @@ class ChatMenu {
   name = ''
   title = ''
   unread = 0
+  click?: Function
   render?: Function
   renderContainer?: Function
   isBottom = false
@@ -106,18 +99,23 @@ class Message {
 }
 
 @Component({
-  name: 'InstantMessage'
+  name: 'InstantMessage',
+  components: {
+    AddFriend
+  }
 })
 export default class InstantMessage extends mixins(EventBusMiXin) {
   private showDialog = false
-  private dataFilter = new MyFriendGetByPaged()
   private myFriendCount = 0
   private myFriends = new Array<UserFriend>()
 
   private connection!: HubConnection
   private chatMenus = new Array<ChatMenu>()
 
+  private getMyFriendFilter = new MyFrientGetAll()
   private getChatMessageFilter = new UserMessageGetByPaged()
+
+  private showAddFriendDialog = false
 
   get currentUser() {
     return {
@@ -130,6 +128,7 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
   mounted() {
     this.unSubscribeAll()
     this.subscribe('onShowImDialog', this.onShowImDialog)
+    this.subscribe('onUserFriendAdded', this.onUserFriendAdded)
     this.handleInitDefaultMenus()
     this.handleStartConnection()
   }
@@ -141,11 +140,15 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
   private handleInitIMUI() {
     const imui = this.$refs.IMUI as any
     ImApiService
-      .getMyFriends(this.dataFilter)
+      .getMyAllFriends(this.getMyFriendFilter)
       .then(res => {
         this.myFriends = res.items
-        this.myFriendCount = res.totalCount
+        this.myFriendCount = res.items.length
         this.handleInitContracts(imui)
+      })
+      .finally(() => {
+        imui.initMenus(this.chatMenus)
+        this.handleInitLastContractMessages(imui)
       })
   }
 
@@ -157,19 +160,52 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
         myContract.id = friend.friendId
         myContract.displayName = friend.remarkName ?? friend.userName
         myContract.unread = 0
-        myContract.lastSendTime = new Date().getTime()
-        myContract.lastContent = '1524545'
         myContract.type = 'many'
         myContracts.push(myContract)
       })
     imui.initContacts(myContracts)
-    imui.initMenus(this.chatMenus)
+  }
+
+  private handleInitLastContractMessages(imui: any) {
+    const filter = new GetUserLastMessage()
+    ImApiService
+      .getMyLastMessages(filter)
+      .then(res => {
+        res.items
+          .sort((now, next) => { // 如果一条消息是与同一个用户的发送与接收,会被分为两条消息返回,所以需要按照发送时间升序排序,历史消息才会准确
+            return next.sendTime < now.sendTime ? 1 : -1
+          })
+          .forEach(msg => {
+            const imuiMsg = new Message()
+            imuiMsg.fromChatMessage(msg)
+            let contractId = msg.formUserId
+            if (msg.formUserId === this.currentUser.id) {
+              contractId = msg.toUserId
+            }
+            imui.updateContact(contractId, {
+              lastSendTime: imuiMsg.sendTime,
+              lastContent: imui.lastContentRender(imuiMsg)
+            })
+          })
+      })
   }
 
   private handleInitDefaultMenus() {
     const lastMsgMenu = new ChatMenu('lastMessages', '历史消息')
     const contractsMenu = new ChatMenu('contacts', '联系人')
-    this.chatMenus.push(lastMsgMenu, contractsMenu)
+    const addFriendMenu = new ChatMenu('addFriends', '添加朋友')
+    addFriendMenu.isBottom = true
+    addFriendMenu.render = () => {
+      return this.$createElement('i', { class: 'lemon-icon-attah' })
+    }
+    addFriendMenu.renderContainer = () => {
+      return this.$createElement(AddFriend, {
+        on: {
+          onUserFriendAdded: this.onUserFriendAdded
+        }
+      })
+    }
+    this.chatMenus.push(lastMsgMenu, contractsMenu, addFriendMenu)
   }
 
   private handleStartConnection() {
@@ -253,7 +289,7 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
     const message = new Message()
     message.fromChatMessage(chatMessage)
     const imui = this.$refs.IMUI as any
-    imui.appendMessage(message)
+    imui.appendMessage(message, chatMessage.formUserId)
     const currentContact = imui.currentContact
     if (currentContact && currentContact.id === chatMessage.formUserId) {
       currentContact.lastContent = chatMessage.content
@@ -296,6 +332,18 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
       unread: 0
     })
     imui.closeDrawer()
+  }
+
+  private onUserFriendAdded(user: User) {
+    if (UserModule.id && UserModule.userName) {
+      const chatMessage = new ChatMessage()
+      chatMessage.formUserId = UserModule.id
+      chatMessage.formUserName = UserModule.userName
+      chatMessage.toUserId = user.id
+      chatMessage.content = '我已经添加你为好友,让我们一起聊天吧!'
+      console.log(chatMessage)
+      this.connection.invoke('SendMessage', chatMessage)
+    }
   }
 }
 </script>

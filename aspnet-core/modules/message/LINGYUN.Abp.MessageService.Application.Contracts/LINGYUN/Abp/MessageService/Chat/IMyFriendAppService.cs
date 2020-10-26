@@ -7,9 +7,9 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     public interface IMyFriendAppService : IApplicationService
     {
-        Task<PagedResultDto<UserFriend>> GetMyFriendsAsync(MyFriendGetByPagedDto input);
+        Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input);
 
-        Task<PagedResultDto<UserFriend>> GetLastContactFriendsAsync(PagedResultRequestDto input);
+        Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input);
 
         Task CreateAsync(MyFriendCreateDto input);
 

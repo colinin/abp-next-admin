@@ -1,9 +1,14 @@
 import ApiService from './serviceBase'
-import { PagedResultDto, PagedAndSortedResultRequestDto, PagedResultRequestDto } from './types'
+import { PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from './types'
 
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class ImApiService {
+  public static addFriend(payload: AddUserFriend) { 
+    const _url = '/api/im/my-friends'
+    return ApiService.Post<void>(_url, payload, serviceUrl)
+  }
+
   public static getMyFriends(payload: MyFriendGetByPaged) {
     let _url = '/api/im/my-friends'
     _url += '?filter=' + payload.filter
@@ -14,8 +19,23 @@ export default class ImApiService {
     return ApiService.Get<PagedResultDto<UserFriend>>(_url, serviceUrl)
   }
 
+  public static getMyAllFriends(payload: MyFrientGetAll) {
+    let _url = '/api/im/my-friends/all'
+    _url += '?sorting=' + payload.sorting
+    _url += '&reverse=' + payload.reverse
+    return ApiService.Get<ListResultDto<UserFriend>>(_url, serviceUrl)
+  }
+
+  public static getMyLastMessages(payload: GetUserLastMessage) {
+    let _url = '/api/im/chat/my-last-messages'
+    _url += '?sorting=' + payload.sorting
+    _url += '&reverse=' + payload.reverse
+    _url += '&maxResultCount=' + payload.maxResultCount
+    return ApiService.Get<ListResultDto<ChatMessage>>(_url, serviceUrl)
+  }
+
   public static getMyChatMessages(payload: UserMessageGetByPaged) {
-    let _url = '/api/im/chat/messages/me'
+    let _url = '/api/im/chat/my-messages'
     _url += '?receiveUserId=' + payload.receiveUserId
     _url += '&messageType=' + payload.messageType
     _url += '&filter=' + payload.filter
@@ -24,6 +44,19 @@ export default class ImApiService {
     _url += '&skipCount=' + payload.skipCount
     _url += '&maxResultCount=' + payload.maxResultCount
     return ApiService.Get<PagedResultDto<ChatMessage>>(_url, serviceUrl)
+  }
+}
+
+export class AddUserFriend {
+  friendId!: string
+  remarkName!: string
+
+  constructor(
+    friendId: string,
+    remarkName: string
+  ) {
+    this.friendId = friendId
+    this.remarkName = remarkName
   }
 }
 
@@ -60,6 +93,17 @@ export class MyFriendGetByPaged extends PagedAndSortedResultRequestDto {
   sorting = 'UserName'
   skipCount = 0
   reverse = false
+}
+
+export class MyFrientGetAll {
+  sorting = 'UserName'
+  reverse = false
+}
+
+export class GetUserLastMessage {
+  sorting = 'SendTime'
+  reverse = false
+  maxResultCount = 10
 }
 
 export class UserMessageGetByPaged extends PagedAndSortedResultRequestDto {

@@ -49,6 +49,22 @@ namespace LINGYUN.Abp.IM.Messages
             int skipCount = 0, 
             int maxResultCount = 10);
         /// <summary>
+        /// 获取上一次通讯消息记录
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="sorting"></param>
+        /// <param name="reverse"></param>
+        /// <param name="maxResultCount"></param>
+        /// <returns></returns>
+        Task<List<LastChatMessage>> GetLastChatMessagesAsync(
+            Guid? tenantId,
+            Guid userId,
+            string sorting = nameof(LastChatMessage.SendTime),
+            bool reverse = true,
+            int maxResultCount = 10
+            );
+        /// <summary>
         /// 获取与某个用户的聊天记录总数
         /// </summary>
         /// <param name="tenantId"></param>

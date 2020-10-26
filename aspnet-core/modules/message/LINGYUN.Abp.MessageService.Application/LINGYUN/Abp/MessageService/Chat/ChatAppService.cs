@@ -27,44 +27,53 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [Authorize]
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto userMessageGetByPaged)
+        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
         {
             var chatMessageCount = await _messageStore
-                .GetChatMessageCountAsync(CurrentTenant.Id, CurrentUser.GetId(), userMessageGetByPaged.ReceiveUserId,
-                    userMessageGetByPaged.Filter, userMessageGetByPaged.MessageType);
+                .GetChatMessageCountAsync(CurrentTenant.Id, CurrentUser.GetId(), input.ReceiveUserId,
+                    input.Filter, input.MessageType);
 
             var chatMessages = await _messageStore
-                .GetChatMessageAsync(CurrentTenant.Id, CurrentUser.GetId(), userMessageGetByPaged.ReceiveUserId, 
-                    userMessageGetByPaged.Filter, userMessageGetByPaged.Sorting, userMessageGetByPaged.Reverse,
-                    userMessageGetByPaged.MessageType, userMessageGetByPaged.SkipCount, userMessageGetByPaged.MaxResultCount);
+                .GetChatMessageAsync(CurrentTenant.Id, CurrentUser.GetId(), input.ReceiveUserId, 
+                    input.Filter, input.Sorting, input.Reverse,
+                    input.MessageType, input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(chatMessageCount, chatMessages);
         }
 
-        public virtual async Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto groupMessageGetByPaged)
+        public virtual async Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
+        {
+            var chatMessages = await _messageStore
+                .GetLastChatMessagesAsync(CurrentTenant.Id, CurrentUser.GetId(),
+                    input.Sorting, input.Reverse, input.MaxResultCount);
+
+            return new ListResultDto<LastChatMessage>(chatMessages);
+        }
+
+        public virtual async Task<PagedResultDto<ChatMessage>> GetGroupMessageAsync(GroupMessageGetByPagedDto input)
         {
             // TODO: 增加验证,用户不在群组却来查询这个群组消息,是非法客户端操作
 
             var groupMessageCount = await _messageStore
-                .GetGroupMessageCountAsync(CurrentTenant.Id, groupMessageGetByPaged.GroupId,
-                    groupMessageGetByPaged.Filter, groupMessageGetByPaged.MessageType);
+                .GetGroupMessageCountAsync(CurrentTenant.Id, input.GroupId,
+                    input.Filter, input.MessageType);
 
             var groupMessages = await _messageStore
-                .GetGroupMessageAsync(CurrentTenant.Id, groupMessageGetByPaged.GroupId,
-                    groupMessageGetByPaged.Filter, groupMessageGetByPaged.Sorting, groupMessageGetByPaged.Reverse,
-                    groupMessageGetByPaged.MessageType, groupMessageGetByPaged.SkipCount, groupMessageGetByPaged.MaxResultCount);
+                .GetGroupMessageAsync(CurrentTenant.Id, input.GroupId,
+                    input.Filter, input.Sorting, input.Reverse,
+                    input.MessageType, input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(groupMessageCount, groupMessages);
         }
 
-        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto groupUserGetByPaged)
+        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
         {
             var groupUserCardCount = await _userGroupStore
-                .GetMembersCountAsync(CurrentTenant.Id, groupUserGetByPaged.GroupId);
+                .GetMembersCountAsync(CurrentTenant.Id, input.GroupId);
 
             var groupUserCards = await _userGroupStore.GetMembersAsync(CurrentTenant.Id,
-                groupUserGetByPaged.GroupId, groupUserGetByPaged.Sorting, groupUserGetByPaged.Reverse,
-                groupUserGetByPaged.SkipCount, groupUserGetByPaged.MaxResultCount);
+                input.GroupId, input.Sorting, input.Reverse,
+                input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<GroupUserCard>(groupUserCardCount, groupUserCards);
         }
@@ -77,10 +86,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             return new ListResultDto<Group>(myGroups.ToImmutableList());
         }
 
-        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto groupAcceptUser)
+        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto input)
         {
             var myGroupCard = await _userGroupStore
-                .GetUserGroupCardAsync(CurrentTenant.Id, groupAcceptUser.GroupId, CurrentUser.GetId());
+                .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
             if (myGroupCard == null)
             {
                 // 当前登录用户不再用户组
@@ -92,13 +101,13 @@ namespace LINGYUN.Abp.MessageService.Chat
                 throw new UserFriendlyException("");
             }
             await _userGroupStore
-                .AddUserToGroupAsync(CurrentTenant.Id, groupAcceptUser.UserId, groupAcceptUser.GroupId, CurrentUser.GetId());
+                .AddUserToGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId, CurrentUser.GetId());
         }
 
-        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto groupRemoveUser)
+        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto input)
         {
             var myGroupCard = await _userGroupStore
-                .GetUserGroupCardAsync(CurrentTenant.Id, groupRemoveUser.GroupId, CurrentUser.GetId());
+                .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
             if (myGroupCard == null)
             {
                 // 当前登录用户不再用户组
@@ -110,20 +119,20 @@ namespace LINGYUN.Abp.MessageService.Chat
                 throw new UserFriendlyException("");
             }
             await _userGroupStore
-                .RemoveUserFormGroupAsync(CurrentTenant.Id, groupRemoveUser.UserId, groupRemoveUser.GroupId);
+                .RemoveUserFormGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId);
         }
 
-        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage chatMessage)
+        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {
             // TODO：向其他租户发送消息?
-            chatMessage.TenantId = chatMessage.TenantId ?? CurrentTenant.Id;
+            input.TenantId = input.TenantId ?? CurrentTenant.Id;
 
-            await MessageSender.SendMessageAsync(chatMessage);
+            await MessageSender.SendMessageAsync(input);
 
-            return new ChatMessageSendResultDto(chatMessage.MessageId);
+            return new ChatMessageSendResultDto(input.MessageId);
         }
 
-        public virtual Task ApplyJoinGroupAsync(UserJoinGroupDto userJoinGroup)
+        public virtual Task ApplyJoinGroupAsync(UserJoinGroupDto input)
         {
             // TOTO 发送通知? 
             return Task.CompletedTask;
