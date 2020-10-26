@@ -104,6 +104,14 @@ namespace LINGYUN.Abp.IdentityServer4
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+                //if (hostingEnvironment.IsDevelopment())
+                //{
+                //    options.PreConfigure(ctx =>
+                //    {
+                //        ctx.DbContextOptions.EnableDetailedErrors();
+                //        ctx.DbContextOptions.EnableSensitiveDataLogging();
+                //    });
+                //}
             });
 
             // 加解密

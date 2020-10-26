@@ -1,29 +1,15 @@
 <template>
-  <div class="dashboard-editor-container">
-    IM测试页
-    <el-button @click="onShowImDialogClick">
-      打开IM
-    </el-button>
-    <instant-message />
-  </div>
+  <div class="dashboard-editor-container" />
 </template>
 
 <script lang="ts">
 import EventBusMiXin from '@/mixins/EventBusMiXin'
 import Component, { mixins } from 'vue-class-component'
 
-import InstantMessage from '@/components/InstantMessage/index.vue'
-
 @Component({
-  name: 'DashboardAdmin',
-  components: {
-    InstantMessage
-  }
+  name: 'DashboardAdmin'
 })
 export default class extends mixins(EventBusMiXin) {
-  private onShowImDialogClick() {
-    this.trigger('onShowImDialog')
-  }
 }
 </script>
 

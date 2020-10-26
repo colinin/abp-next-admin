@@ -41,6 +41,7 @@ export default class DataListMiXin extends Vue {
       .then(res => {
         this.dataList = res.items
         this.dataTotal = res.items.length
+        this.onDataLoadCompleted()
       })
       .finally(() => {
         this.dataLoading = false
@@ -110,7 +111,9 @@ export default class DataListMiXin extends Vue {
   }
 
   /** 数据加载完毕事件 */
-  protected onDataLoadCompleted() {}
+  protected onDataLoadCompleted() {
+    this.dataLoading = false
+  }
 
   /**
    * 排序变更事件

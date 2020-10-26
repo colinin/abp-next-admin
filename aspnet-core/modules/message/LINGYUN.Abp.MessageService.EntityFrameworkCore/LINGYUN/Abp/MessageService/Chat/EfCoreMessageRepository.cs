@@ -161,12 +161,12 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             sorting = reverse ? sorting + " desc" : sorting;
             var userMessages = await DbContext.Set<UserMessage>()
-                .Distinct()
-                .Where(x => x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId))
+                .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) |
+                             x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
                 .OrderBy(sorting ?? nameof(GroupMessage.MessageId))
-                .Page(skipCount, maxResultCount)
+                .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -181,8 +181,8 @@ namespace LINGYUN.Abp.MessageService.Chat
             CancellationToken cancellationToken = default)
         {
             var userMessagesCount = await DbContext.Set<UserMessage>()
-                .Distinct()
-                .Where(x => x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId))
+                .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) |
+                             x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));

@@ -49,6 +49,13 @@ export default class EventBusMiXin extends Vue {
   }
 
   /**
+   * 注销所有事件
+   */
+  protected unSubscribeAll() {
+    this.$events.removeAll()
+  }
+
+  /**
    * 触发事件
    * @param name 事件名称
    * @param args 事件参数列表
