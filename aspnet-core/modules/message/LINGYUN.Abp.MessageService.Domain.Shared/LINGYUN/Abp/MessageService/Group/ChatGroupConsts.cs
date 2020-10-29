@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.MessageService.Chat
+﻿namespace LINGYUN.Abp.MessageService.Group
 {
     public class ChatGroupConsts
     {

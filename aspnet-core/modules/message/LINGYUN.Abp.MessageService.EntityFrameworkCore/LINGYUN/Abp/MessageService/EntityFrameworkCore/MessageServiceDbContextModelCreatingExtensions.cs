@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.Group;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.EntityFrameworkCore;
@@ -137,23 +138,23 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.HasIndex(p => new { p.TenantId, p.UserId });
             });
 
-            builder.Entity<UserSpecialFocus>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
+            //builder.Entity<UserSpecialFocus>(b =>
+            //{
+            //    b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
 
-                b.ConfigureMultiTenant();
+            //    b.ConfigureMultiTenant();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            //    b.HasIndex(p => new { p.TenantId, p.UserId });
+            //});
 
-            builder.Entity<UserChatBlack>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
+            //builder.Entity<UserChatBlack>(b =>
+            //{
+            //    b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
 
-                b.ConfigureMultiTenant();
+            //    b.ConfigureMultiTenant();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            //    b.HasIndex(p => new { p.TenantId, p.UserId });
+            //});
 
             builder.Entity<GroupChatBlack>(b =>
             {

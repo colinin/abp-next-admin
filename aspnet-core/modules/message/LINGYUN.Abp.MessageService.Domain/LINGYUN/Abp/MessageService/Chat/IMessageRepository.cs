@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.MessageService.Group;
 using System;
 using System.Collections.Generic;
 using System.Threading;

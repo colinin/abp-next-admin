@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.IM.Messages;
+﻿using LINGYUN.Abp.IM.Contract;
+using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.MessageService.Group;
 using LINGYUN.Abp.MessageService.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,9 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     public class MessageStore : DomainService, IMessageStore
     {
+        private IFriendStore _friendStore;
+        protected IFriendStore FriendStore => LazyGetRequiredService(ref _friendStore);
+
         private IObjectMapper _objectMapper;
         protected IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
 
@@ -137,14 +142,15 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         protected virtual async Task StoreUserMessageAsync(ChatMessage chatMessage)
         {
-            var userHasBlacked = await UserChatSettingRepository
-                            .UserHasBlackedAsync(chatMessage.ToUserId.Value, chatMessage.FormUserId);
-            if (userHasBlacked)
+            // 检查接收用户
+            if (!chatMessage.ToUserId.HasValue)
             {
-                // 当前发送的用户已被拉黑
-                throw new BusinessException(MessageServiceErrorCodes.UserHasBlack);
+                throw new BusinessException(MessageServiceErrorCodes.UseNotFount);
             }
-            var userChatSetting = await UserChatSettingRepository.GetByUserIdAsync(chatMessage.ToUserId.Value);
+
+            var myFriend = await FriendStore.GetMemberAsync(chatMessage.TenantId, chatMessage.ToUserId.Value, chatMessage.FormUserId);
+
+            var userChatSetting = await UserChatSettingRepository.FindByUserIdAsync(chatMessage.ToUserId.Value);
             if (userChatSetting != null)
             {
                 if (!userChatSetting.AllowReceiveMessage)
@@ -152,11 +158,28 @@ namespace LINGYUN.Abp.MessageService.Chat
                     // 当前发送的用户不接收消息
                     throw new BusinessException(MessageServiceErrorCodes.UserHasRejectAllMessage);
                 }
+
+                if (myFriend == null && !chatMessage.IsAnonymous)
+                {
+                    throw new BusinessException(MessageServiceErrorCodes.UserHasRejectNotFriendMessage);
+                }
+
                 if (chatMessage.IsAnonymous && !userChatSetting.AllowAnonymous)
                 {
                     // 当前用户不允许匿名发言
                     throw new BusinessException(MessageServiceErrorCodes.UserNotAllowedToSpeakAnonymously);
                 }
+            }
+            else
+            {
+                if (myFriend == null)
+                {
+                    throw new BusinessException(MessageServiceErrorCodes.UserHasRejectNotFriendMessage);
+                }
+            }
+            if (myFriend?.Black == true)
+            {
+                throw new BusinessException(MessageServiceErrorCodes.UserHasBlack);
             }
             var messageId = SnowflakeIdGenerator.Create();
             var message = new UserMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
@@ -188,7 +211,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
             var messageId = SnowflakeIdGenerator.Create();
             var message = new GroupMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
-            // TODO: 需要压测 高并发场景下的装箱性能影响
+
             message.SendToGroup(groupId);
             await MessageRepository.InsertGroupMessageAsync(message);
 

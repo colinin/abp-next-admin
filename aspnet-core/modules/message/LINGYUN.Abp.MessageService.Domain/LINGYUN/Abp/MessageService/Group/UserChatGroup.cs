@@ -2,7 +2,7 @@
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     /// <summary>
     /// 用户群组

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,26 +54,44 @@ namespace LINGYUN.Abp.Notifications.SignalR
                     Logger.LogDebug($"Find online client with user {identifier.UserId} - {identifier.UserName}");
                     var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
                     var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);
-                    foreach (var onlineClient in onlineClients)
+                    var onlineClientConnectionIds = onlineClients.Select(client => client.ConnectionId).ToImmutableArray();
+                    try
                     {
-                        try
+                        var signalRClients = _hubContext.Clients.Clients(onlineClientConnectionIds);
+                        if (signalRClients == null)
                         {
-                            Logger.LogDebug($"Find online client {onlineClient.UserId} - {onlineClient.ConnectionId}");
-                            var signalRClient = _hubContext.Clients.Client(onlineClient.ConnectionId);
-                            if (signalRClient == null)
-                            {
-                                Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
-                                continue;
-                            }
-                            Logger.LogDebug($"Found a singalr client, begin senging notifications");
-                            await signalRClient.SendAsync("getNotification", notification);
+                            Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " connection from SignalR hub!");
+                            return;
                         }
-                        catch (Exception ex)
-                        {
-                            Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
-                            Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
-                        }
+                        Logger.LogDebug($"Found a singalr client, begin senging notifications");
+                        await signalRClients.SendAsync("getNotification", notification);
                     }
+                    catch (Exception ex)
+                    {
+                        Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
+                        Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+                    }
+
+                    //foreach (var onlineClient in onlineClients)
+                    //{
+                    //    try
+                    //    {
+                    //        Logger.LogDebug($"Find online client {onlineClient.UserId} - {onlineClient.ConnectionId}");
+                    //        var signalRClient = _hubContext.Clients.Client(onlineClient.ConnectionId);
+                    //        if (signalRClient == null)
+                    //        {
+                    //            Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
+                    //            continue;
+                    //        }
+                    //        Logger.LogDebug($"Found a singalr client, begin senging notifications");
+                    //        await signalRClient.SendAsync("getNotification", notification);
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
+                    //        Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+                    //    }
+                    //}
                 }
             }
         }

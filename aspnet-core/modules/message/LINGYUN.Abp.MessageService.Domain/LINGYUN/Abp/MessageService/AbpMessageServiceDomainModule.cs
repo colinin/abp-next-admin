@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Mapper;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -10,6 +11,7 @@ namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
+        typeof(AbpCachingModule),
         typeof(AbpMessageServiceDomainSharedModule))]
     public class AbpMessageServiceDomainModule : AbpModule
     {

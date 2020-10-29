@@ -251,7 +251,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.Web", "modules\account\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj", "{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AspNetCore.SignalR.JwtToken", "modules\common\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj", "{A66D48C9-F141-4111-9169-CEB64AFFF61D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.SignalR.JwtToken", "modules\common\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj", "{A66D48C9-F141-4111-9169-CEB64AFFF61D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RealTime.SignalR", "modules\common\LINGYUN.Abp.RealTime.SignalR\LINGYUN.Abp.RealTime.SignalR.csproj", "{524276E1-053D-4191-ABF7-4CDA01BFFBC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -671,6 +673,10 @@ Global
 		{A66D48C9-F141-4111-9169-CEB64AFFF61D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A66D48C9-F141-4111-9169-CEB64AFFF61D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A66D48C9-F141-4111-9169-CEB64AFFF61D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524276E1-053D-4191-ABF7-4CDA01BFFBC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524276E1-053D-4191-ABF7-4CDA01BFFBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524276E1-053D-4191-ABF7-4CDA01BFFBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524276E1-053D-4191-ABF7-4CDA01BFFBC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -798,6 +804,7 @@ Global
 		{2D377D3A-70EC-4BB3-9F4C-6C933693DA98} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{5F43141B-6C63-4547-B9D6-D69EC3D7CA7E} = {9E72FEB9-A626-4312-892B-CDD043879758}
 		{A66D48C9-F141-4111-9169-CEB64AFFF61D} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{524276E1-053D-4191-ABF7-4CDA01BFFBC3} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

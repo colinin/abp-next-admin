@@ -7,6 +7,18 @@ namespace LINGYUN.Abp.IM.Contract
     public interface IFriendStore
     {
         /// <summary>
+        /// 是否是好友关系
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="friendId"></param>
+        /// <returns></returns>
+        Task<bool> IsFriendAsync(
+            Guid? tenantId,
+            Guid userId,
+            Guid friendId
+            );
+        /// <summary>
         /// 查询好友列表
         /// </summary>
         /// <param name="tenantId"></param>
@@ -42,7 +54,7 @@ namespace LINGYUN.Abp.IM.Contract
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
-        Task<List<UserFriend>> GetListAsync(
+        Task<List<UserFriend>> GetPagedListAsync(
             Guid? tenantId,
             Guid userId,
             string filter = "",
@@ -82,7 +94,7 @@ namespace LINGYUN.Abp.IM.Contract
         /// <param name="friendId"></param>
         /// <param name="remarkName"></param>
         /// <returns></returns>
-        Task AddMemberAsync(
+        Task<UserAddFriendResult> AddMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,

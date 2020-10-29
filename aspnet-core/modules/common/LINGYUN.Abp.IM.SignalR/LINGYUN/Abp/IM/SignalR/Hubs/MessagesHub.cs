@@ -1,11 +1,16 @@
 ﻿using LINGYUN.Abp.IM.Contract;
+using LINGYUN.Abp.IM.Group;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime.Client;
+using LINGYUN.Abp.RealTime.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
@@ -16,13 +21,72 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
     {
         protected IFriendStore FriendStore { get; }
         protected IMessageStore MessageStore { get; }
+        protected IUserGroupStore UserGroupStore { get; }
 
         public MessagesHub(
             IFriendStore friendStore,
-            IMessageStore messageStore)
+            IMessageStore messageStore,
+            IUserGroupStore userGroupStore)
         {
             FriendStore = friendStore;
             MessageStore = messageStore;
+            UserGroupStore = userGroupStore;
+        }
+
+        protected override async Task OnClientConnectedAsync(IOnlineClient client)
+        {
+            // 加入通讯组
+            var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
+            foreach (var group in userGroups)
+            {
+                await Groups.AddToGroupAsync(client.ConnectionId, group.Name);
+                var groupClient = Clients.Group(group.Name);
+                if (groupClient != null)
+                {
+                    // 发送用户上线通知
+                    await groupClient.SendAsync("onUserOnlined", client.TenantId, client.UserId.Value);
+                }
+            }
+
+            // 发送好友上线通知
+            var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value);
+            if (userFriends.Count > 0)
+            {
+                var friendClientIds = userFriends.Select(friend => friend.FriendId.ToString()).ToImmutableArray();
+                var userClients = Clients.Users(friendClientIds);
+                if (userClients != null)
+                {
+                    await userClients.SendAsync("onUserOnlined", client.TenantId, client.UserId.Value);
+                }
+            }
+        }
+
+        protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
+        {
+            // 从通讯组断开会话
+            var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
+            foreach (var group in userGroups)
+            {
+                await Groups.RemoveFromGroupAsync(client.ConnectionId, group.Name);
+                var groupClient = Clients.Group(group.Name);
+                if (groupClient != null)
+                {
+                    // 发送用户下线指令
+                    await groupClient.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value);
+                }
+            }
+
+            // 发送好友下线通知
+            var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value);
+            if (userFriends.Count > 0)
+            {
+                var friendClientIds = userFriends.Select(friend => friend.FriendId.ToString()).ToImmutableArray();
+                var userClients = Clients.Users(friendClientIds);
+                if (userClients != null)
+                {
+                    await userClients.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value);
+                }
+            }
         }
 
         [HubMethodName("LastContactFriends")]
@@ -116,23 +180,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             // 持久化
             await MessageStore.StoreMessageAsync(chatMessage);
 
-            try
+            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
             {
-                if (!chatMessage.GroupId.IsNullOrWhiteSpace())
-                {
-                    await SendMessageToGroupAsync(chatMessage);
-                }
-                else
-                {
-                    await SendMessageToUserAsync(chatMessage);
-                }
+                await SendMessageToGroupAsync(chatMessage);
             }
-            catch (Exception ex)
+            else
             {
-                Logger.LogWarning("Could not send message, group: {0}, formUser: {1}, toUser: {2}",
-                    chatMessage.GroupId, chatMessage.FormUserName,
-                    chatMessage.ToUserId.HasValue ? chatMessage.ToUserId.ToString() : "None");
-                Logger.LogWarning("Send group message error: {0}", ex.Message);
+                await SendMessageToUserAsync(chatMessage);
             }
         }
 
@@ -153,11 +207,6 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
             var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
 
-            // 需要捕捉每一个发送任务的异常吗?
-            // var onlineClientConnections = onlineClients.Select(c => c.ConnectionId).ToImmutableList();
-            // var signalRClient = Clients.Clients(onlineClientConnections);
-            // await signalRClient.SendAsync("getChatMessage", chatMessage);
-
             foreach (var onlineClient in onlineClients)
             {
                 try
@@ -172,6 +221,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 }
                 catch (Exception ex)
                 {
+                    // 发送异常记录就行了,因为消息已经持久化
                     Logger.LogWarning("Could not send message to user: {0}", chatMessage.ToUserId);
                     Logger.LogWarning("Send to user message error: {0}", ex.Message);
                 }

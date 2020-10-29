@@ -7,6 +7,14 @@ namespace LINGYUN.Abp.IM.Group
     public interface IUserGroupStore
     {
         /// <summary>
+        /// 成员是否在群组
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<bool> MemberHasInGroupAsync(Guid? tenantId, long groupId, Guid userId);
+        /// <summary>
         /// 获取群组用户身份
         /// </summary>
         /// <param name="tenantId"></param>

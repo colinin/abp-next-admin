@@ -53,6 +53,9 @@ export default class extends mixins(EventBusMiXin) {
     this.subscribe('onNotificationReadChanged', () => {
       this.notificationCount -= 1
     })
+    this.subscribe('onReceivedChatMessage', () => {
+      this.notificationCount += 1
+    })
   }
 }
 </script>

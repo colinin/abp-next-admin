@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.MessageService.Group;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -161,10 +162,11 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var groupMsgQuery = DbContext.Set<UserMessage>()
                 .Where(msg => msg.ReceiveUserId == userId || msg.CreatorId == userId)
-                .GroupBy(msg => msg.CreatorId)
+                .GroupBy(msg => new { msg.CreatorId, msg.ReceiveUserId })
                 .Select(msg => new
                 {
-                    msg.Key,
+                    msg.Key.CreatorId,
+                    msg.Key.ReceiveUserId,
                     MessageId = msg.Max(x => x.MessageId)
                 });
 

@@ -9,7 +9,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     public class EfCoreGroupRepository : EfCoreRepository<IMessageServiceDbContext, ChatGroup, long>,
         IGroupRepository, ITransientDependency
@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public virtual async Task<ChatGroup> GetByIdAsync(
+        public virtual async Task<ChatGroup> FindByIdAsync(
             long id,
             CancellationToken cancellationToken = default)
         {

@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace LINGYUN.Abp.Notifications
 {
+    /// <summary>
+    /// 通知数据
+    /// </summary>
+    /// <remarks>
+    /// TODO: 2020-10-29 针对不同语言的用户,如果在发布时期就本地化语言是错误的设计
+    /// 把通知的标题和内容设计为 <see cref="Volo.Abp.Validation.StringValues.LocalizableStringInfo"/> 让客户端自行本地化
+    /// </remarks>
     public class NotificationData
     {
         public const string NotificationKey = "N:G";
@@ -153,14 +160,14 @@ namespace LINGYUN.Abp.Notifications
 
         public bool HasUserNotification(out Guid userId, out string userName)
         {
+            userName = "";
             if (Properties.TryGetValue(UserIdNotificationKey, out object userKey))
             {
                 userId = (Guid)userKey;
                 var name = TryGetData(UserNameNotificationKey);
-                userName = name != null ? name.ToString() : "";
+                userName = name?.ToString() ?? userName;
                 return true;
             }
-            userName = "";
             return false;
         }
 

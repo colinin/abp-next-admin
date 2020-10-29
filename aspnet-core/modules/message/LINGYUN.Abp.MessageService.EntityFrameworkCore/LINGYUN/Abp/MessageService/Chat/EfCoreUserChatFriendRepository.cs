@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
+                .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId && ucf.Status == UserFriendStatus.Added)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -34,10 +34,12 @@ namespace LINGYUN.Abp.MessageService.Chat
              CancellationToken cancellationToken = default)
         {
             sorting = reverse ? sorting + " DESC" : sorting;
+            
             var userFriendQuery = from ucf in DbContext.Set<UserChatFriend>()
                                   join ucc in DbContext.Set<UserChatCard>()
-                                        on ucf.FrientId equals ucc.UserId
-                                  where ucf.UserId == userId
+                                  //      on ucf.FrientId equals ucc.UserId // 查询双向好友的
+                                        on ucf.UserId equals ucc.UserId
+                                  where ucf.UserId == userId && ucf.Status == UserFriendStatus.Added
                                   select new UserFriend
                                   {
                                       Age = ucc.Age,
@@ -67,7 +69,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             var userFriendQuery = from ucf in DbContext.Set<UserChatFriend>()
                                   join ucc in DbContext.Set<UserChatCard>()
                                         on ucf.FrientId equals ucc.UserId
-                                  where ucf.UserId == userId && ucf.FrientId == friendId
+                                  where ucf.UserId == userId && ucf.FrientId == friendId && ucf.Status == UserFriendStatus.Added
                                   select new UserFriend
                                   {
                                       Age = ucc.Age,
@@ -100,6 +102,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             // 过滤好友资料
             var userChatFriendQuery = DbContext.Set<UserChatFriend>()
+                .Where(ucf => ucf.Status == UserFriendStatus.Added)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
 
             // 组合查询
@@ -146,7 +149,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                         on ucf.FrientId equals ucc.UserId
                                   join um in userReceiveMsgQuery
                                         on ucc.UserId equals um.CreatorId
-                                  where ucf.UserId == userId
+                                  where ucf.UserId == userId && ucf.Status == UserFriendStatus.Added
                                   orderby um.CreationTime descending // 消息创建时间倒序
                                   select new UserFriend
                                   {
@@ -178,6 +181,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                  .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter) || ucc.NickName.Contains(filter));
 
             var userChatFriendQuery = DbContext.Set<UserChatFriend>()
+                .Where(ucf => ucf.Status == UserFriendStatus.Added)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
 
             var userFriendQuery = from ucf in userChatFriendQuery

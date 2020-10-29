@@ -1,7 +1,8 @@
 ﻿using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.MessageService.Chat;
 using System;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     public class GroupMessage : Message
     {

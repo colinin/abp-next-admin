@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
 
             var myFriends = await FriendStore
-                .GetListAsync(CurrentTenant.Id, CurrentUser.GetId(),
+                .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
                     input.Filter, input.Sorting, input.Reverse, 
                     input.SkipCount, input.MaxResultCount);
 

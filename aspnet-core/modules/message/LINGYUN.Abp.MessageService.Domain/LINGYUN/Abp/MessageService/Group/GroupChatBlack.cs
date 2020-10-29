@@ -2,29 +2,29 @@
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     /// <summary>
     /// 用户黑名单
     /// </summary>
-    public class UserChatBlack : CreationAuditedEntity<long>, IMultiTenant
+    public class GroupChatBlack : CreationAuditedEntity<long>, IMultiTenant
     {
         /// <summary>
         /// 租户
         /// </summary>
         public virtual Guid? TenantId { get; protected set; }
         /// <summary>
-        /// 用户标识
+        /// 群组标识
         /// </summary>
-        public virtual Guid UserId { get; protected set; }
+        public virtual long GroupId { get; protected set; }
         /// <summary>
         /// 拉黑的用户
         /// </summary>
         public virtual Guid ShieldUserId { get; protected set; }
-        protected UserChatBlack() { }
-        public UserChatBlack(Guid userId, Guid shieldUserId, Guid? tenantId)
+        protected GroupChatBlack() { }
+        public GroupChatBlack(long groupId, Guid shieldUserId, Guid? tenantId)
         {
-            UserId = userId;
+            GroupId = groupId;
             ShieldUserId = shieldUserId;
             TenantId = tenantId;
         }

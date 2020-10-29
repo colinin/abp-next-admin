@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.RealTime.Client;
+using LINGYUN.Abp.RealTime.SignalR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -11,6 +13,24 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
     {
         private INotificationStore _notificationStore;
         protected INotificationStore NotificationStore => LazyGetRequiredService(ref _notificationStore);
+
+        protected override async Task OnClientConnectedAsync(IOnlineClient client)
+        {
+            if (client.TenantId.HasValue)
+            {
+                // 以租户为分组，将用户加入租户通讯组
+                await Groups.AddToGroupAsync(client.ConnectionId, client.TenantId.Value.ToString());
+            }
+        }
+
+        protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
+        {
+            if (client.TenantId.HasValue)
+            {
+                // 以租户为分组，将移除租户通讯组
+                await Groups.RemoveFromGroupAsync(client.ConnectionId, client.TenantId.Value.ToString());
+            }
+        }
 
         [HubMethodName("GetNotification")]
         public virtual async Task<ListResultDto<NotificationInfo>> GetNotificationAsync(
@@ -26,7 +46,5 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
         {
             await NotificationStore.ChangeUserNotificationReadStateAsync(CurrentTenant.Id, CurrentUser.GetId(), long.Parse(id), readState);
         }
-
-
     }
 }

@@ -18,17 +18,11 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public async Task<UserChatSetting> GetByUserIdAsync(Guid userId)
+        public async Task<UserChatSetting> FindByUserIdAsync(Guid userId)
         {
             return await DbSet.Where(x => x.UserId.Equals(userId))
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-        }
-
-        public async Task<bool> UserHasBlackedAsync(Guid formUserId, Guid toUserId)
-        {
-            return await DbContext.Set<UserChatBlack>()
-                .AnyAsync(x => x.UserId.Equals(toUserId) && x.ShieldUserId.Equals(formUserId));
         }
 
         public async Task<bool> UserHasOpendImAsync(Guid userId)

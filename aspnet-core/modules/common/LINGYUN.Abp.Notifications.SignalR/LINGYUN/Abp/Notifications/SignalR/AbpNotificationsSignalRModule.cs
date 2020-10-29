@@ -1,12 +1,12 @@
 ﻿using LINGYUN.Abp.AspNetCore.SignalR.JwtToken;
-using LINGYUN.Abp.RealTime;
+using LINGYUN.Abp.RealTime.SignalR;
 using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Notifications.SignalR
 {
     [DependsOn(
-        typeof(AbpRealTimeModule),
+        typeof(AbpRealTimeSignalRModule),
         typeof(AbpNotificationModule),
         typeof(AbpAspNetCoreSignalRModule),
         typeof(AbpAspNetCoreSignalRJwtTokenModule))]

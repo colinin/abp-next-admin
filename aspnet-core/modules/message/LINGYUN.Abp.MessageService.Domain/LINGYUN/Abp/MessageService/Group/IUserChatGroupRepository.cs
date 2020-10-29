@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     public interface IUserChatGroupRepository : IBasicRepository<UserChatGroup, long>
     {
@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <returns></returns>
         Task<List<GroupUserCard>> GetMembersAsync(
             long groupId, 
-            string sorting = nameof(UserChatCard.UserId),
+            string sorting = nameof(GroupUserCard.UserId),
             bool reverse = false,
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <param name="userId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<List<Group>> GetMemberGroupsAsync(
+        Task<List<LINGYUN.Abp.IM.Group.Group>> GetMemberGroupsAsync(
             Guid userId,
             CancellationToken cancellationToken = default);
         /// <summary>

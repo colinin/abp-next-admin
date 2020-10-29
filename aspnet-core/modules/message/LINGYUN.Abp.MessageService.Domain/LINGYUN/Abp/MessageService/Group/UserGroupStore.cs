@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Services;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     public class UserGroupStore : DomainService, IUserGroupStore
     {
@@ -24,8 +24,16 @@ namespace LINGYUN.Abp.MessageService.Chat
             UserChatGroupRepository = userChatGroupRepository;
         }
 
+        public virtual async Task<bool> MemberHasInGroupAsync(Guid? tenantId, long groupId, Guid userId)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                return await UserChatGroupRepository.MemberHasInGroupAsync(groupId, userId);
+            }
+        }
+
         [UnitOfWork]
-        public async Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId, Guid acceptUserId)
+        public virtual async Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId, Guid acceptUserId)
         {
             using (var unitOfWork = UnitOfWorkManager.Begin())
             {
@@ -62,7 +70,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public async Task<IEnumerable<Group>> GetUserGroupsAsync(Guid? tenantId, Guid userId)
+        public async Task<IEnumerable<LINGYUN.Abp.IM.Group.Group>> GetUserGroupsAsync(Guid? tenantId, Guid userId)
         {
             using (CurrentTenant.Change(tenantId))
             {

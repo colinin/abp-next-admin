@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Group
 {
     public interface IGroupRepository : IBasicRepository<ChatGroup, long>
     {
@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid formUserId,
             CancellationToken cancellationToken = default);
 
-        Task<ChatGroup> GetByIdAsync(
+        Task<ChatGroup> FindByIdAsync(
             long id,
             CancellationToken cancellationToken = default);
 

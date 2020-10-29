@@ -39,7 +39,7 @@ import { User } from '@/api/users'
 class MyContract {
   id = ''
   displayName = ''
-  avatar = ''
+  avatar = 'http://upload.qqbodys.com/allimg/1710/1035512943-0.jpg'
   type = ''
   index = 'A'
   unread = 0
@@ -92,9 +92,19 @@ class Message {
     this.content = chatMessage.content
     this.fromUser.id = chatMessage.formUserId
     this.fromUser.displayName = chatMessage.formUserName
+    this.fromUser.avatar = 'http://upload.qqbodys.com/allimg/1710/1035512943-0.jpg'
     this.toContactId = chatMessage.toUserId
     this.type = ChatMessage.getType(chatMessage.messageType)
     this.sendTime = new Date(chatMessage.sendTime).getTime()
+  }
+
+  public toChatMessage() {
+    const chatMessage = new ChatMessage()
+    chatMessage.formUserId = this.fromUser.id
+    chatMessage.formUserName = this.fromUser.displayName
+    chatMessage.toUserId = this.toContactId
+    chatMessage.content = this.content
+    return chatMessage
   }
 }
 
@@ -129,6 +139,7 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
     this.unSubscribeAll()
     this.subscribe('onShowImDialog', this.onShowImDialog)
     this.subscribe('onUserFriendAdded', this.onUserFriendAdded)
+    this.subscribe('onReceivedChatMessage', this.onReceivedChatMessage)
     this.handleInitDefaultMenus()
     this.handleStartConnection()
   }
@@ -270,8 +281,7 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
         next(messages, isEnd)
       })
       .catch(() => {
-        next(new Array<Message>(), true)
-        imui.messageViewToBottom()
+        next([], true)
       })
   }
 
@@ -279,13 +289,57 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
     console.log('Event:menu-avatar-click')
   }
 
-  private handleMessageClick(e: any, key: any, message: any) {
+  private handleMessageClick(e: any, key: any, message: Message) {
     console.log(e)
     console.log(key)
     console.log(message)
+    const imui = this.$refs.IMUI as any
+    if (key === 'status') {
+      imui.updateMessage(message.id, message.toContactId, {
+        status: 'going'
+      })
+      const chatMessage = message.toChatMessage()
+      this.connection
+        .invoke('SendMessage', chatMessage)
+        .then(() => {
+          imui
+            .updateMessage(message.id, message.toContactId, {
+              status: 'succeed'
+            })
+        })
+        .catch(() => {
+          imui
+            .updateMessage(message.id, message.toContactId, {
+              status: 'failed'
+            })
+        })
+    }
   }
 
   private handleReceiveMessage(chatMessage: ChatMessage) {
+    this.trigger('onReceivedChatMessage', chatMessage)
+  }
+
+  private handleSendMessage(message: Message, next: any, file: any) {
+    console.log(message, next, file)
+    const imui = this.$refs.IMUI as any
+    const chatMessage = message.toChatMessage()
+    this.connection
+      .invoke('SendMessage', chatMessage)
+      .then(() => {
+        setTimeout(() => {
+          next()
+        }, 1000)
+      })
+      .catch(() => {
+        imui
+          .updateMessage(message.id, message.toContactId, {
+            status: 'failed'
+          })
+      })
+  }
+
+  private onReceivedChatMessage(chatMessage: ChatMessage) {
     const message = new Message()
     message.fromChatMessage(chatMessage)
     const imui = this.$refs.IMUI as any
@@ -303,35 +357,14 @@ export default class InstantMessage extends mixins(EventBusMiXin) {
     }
   }
 
-  private handleSendMessage(message: Message, next: any, file: any) {
-    console.log(message, next, file)
-    const imui = this.$refs.IMUI as any
-    const chatMessage = new ChatMessage()
-    chatMessage.formUserId = message.fromUser.id
-    chatMessage.formUserName = message.fromUser.displayName
-    chatMessage.toUserId = message.toContactId
-    chatMessage.content = message.content
-    this.connection
-      .invoke('SendMessage', chatMessage)
-      .then(() => {
-        setTimeout(() => {
-          next()
-        }, 1000)
-      })
-      .catch(() => {
-        imui
-          .updateMessage(message.id, message.toContactId, {
-            status: 'failed'
-          })
-      })
-  }
-
   private onChangeContract(contract: any) {
     const imui = this.$refs.IMUI as any
     imui.updateContact(contract.id, {
       unread: 0
     })
     imui.closeDrawer()
+    imui.forceUpdateMessage()
+    console.log(imui.contacts)
   }
 
   private onUserFriendAdded(user: User) {
