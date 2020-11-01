@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
@@ -212,7 +212,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             var message = new UserMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
 
             message.SendToUser(chatMessage.ToUserId.Value);
-            chatMessage.MapExtraPropertiesTo(message);
+            message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
 
             await _messageRepository.InsertUserMessageAsync(message, cancellationToken);
 
@@ -246,7 +246,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             var message = new GroupMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
 
             message.SendToGroup(groupId);
-            chatMessage.MapExtraPropertiesTo(message);
+            message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
 
             await _messageRepository.InsertGroupMessageAsync(message, cancellationToken);
 
