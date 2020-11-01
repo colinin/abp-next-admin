@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.IM.Messages
         /// </summary>
         public DateTime SendTime { get; set; }
         /// <summary>
-        /// 是否匿名发送
+        /// 是否匿名发送(存储在扩展字段)
         /// </summary>
         public bool IsAnonymous { get; set; }
         /// <summary>

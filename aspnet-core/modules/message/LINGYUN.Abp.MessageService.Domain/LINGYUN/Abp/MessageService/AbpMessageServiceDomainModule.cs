@@ -1,10 +1,13 @@
-﻿using LINGYUN.Abp.MessageService.Localization;
+﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Mapper;
+using LINGYUN.Abp.MessageService.ObjectExtending;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.MessageService
@@ -36,10 +39,17 @@ namespace LINGYUN.Abp.MessageService
 
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Messages.Group", typeof(MessageServiceResource));
-                options.MapCodeNamespace("Messages.User", typeof(MessageServiceResource));
-                options.MapCodeNamespace("Messages.UserFriend", typeof(MessageServiceResource));
+                options.MapCodeNamespace(MessageServiceErrorCodes.Namespace, typeof(MessageServiceResource));
             });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                MessageServiceModuleExtensionConsts.ModuleName,
+                MessageServiceModuleExtensionConsts.EntityNames.Message,
+                typeof(Message)
+            );
         }
     }
 }

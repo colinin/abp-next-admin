@@ -19,8 +19,10 @@ namespace LINGYUN.Abp.RealTime.Client
 
         DateTime ConnectTime { get; }
 
-        object this[string key] { get; set; }
+        string[] Roles { get; }
 
-        Dictionary<string, object> Properties { get; }
+        object this[object key] { get; set; }
+
+        IDictionary<object, object> Properties { get; }
     }
 }

@@ -7,6 +7,6 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
     {
         [Required]
         [StringLength(NotificationConsts.MaxNameLength)]
-        public string NotificationName { get; set; }
+        public string Name { get; set; }
     }
 }

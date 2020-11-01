@@ -6,13 +6,13 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDataMappingDictionary : Dictionary<string, List<NotificationDataMappingDictionaryItem>>
     {
-        public void Mapping(string cateGory, string provider, Func<NotificationData, NotificationData> func)
+        public void Mapping(string name, string provider, Func<NotificationData, NotificationData> func)
         {
-            if (ContainsKey(cateGory))
+            if (ContainsKey(name))
             {
-                this[cateGory] = new List<NotificationDataMappingDictionaryItem>();
+                this[name] = new List<NotificationDataMappingDictionaryItem>();
             }
-            this[cateGory].Add(new NotificationDataMappingDictionaryItem(provider, func));
+            this[name].Add(new NotificationDataMappingDictionaryItem(provider, func));
         }
 
         public void MappingAll(string provider, Func<NotificationData, NotificationData> func)
@@ -23,11 +23,11 @@ namespace LINGYUN.Abp.Notifications
             }
         }
 
-        public NotificationDataMappingDictionaryItem GetMapItemOrNull(string cateGory, string provider)
+        public NotificationDataMappingDictionaryItem GetMapItemOrNull(string name, string provider)
         {
-            if (ContainsKey(cateGory))
+            if (ContainsKey(name))
             {
-                return this[cateGory].FirstOrDefault(map => map.Provider.Equals(provider));
+                return this[name].FirstOrDefault(map => map.Provider.Equals(provider));
             }
             return null;
         }

@@ -10,7 +10,6 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
@@ -35,6 +34,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
 
         protected override async Task OnClientConnectedAsync(IOnlineClient client)
         {
+            await base.OnClientConnectedAsync(client);
             // 加入通讯组
             var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
             foreach (var group in userGroups)
@@ -61,33 +61,35 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             }
         }
 
-        protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
-        {
-            // 从通讯组断开会话
-            var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
-            foreach (var group in userGroups)
-            {
-                await Groups.RemoveFromGroupAsync(client.ConnectionId, group.Name);
-                var groupClient = Clients.Group(group.Name);
-                if (groupClient != null)
-                {
-                    // 发送用户下线指令
-                    await groupClient.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value);
-                }
-            }
+        //protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
+        //{
+        //    // 从通讯组断开会话
+        //    var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value, Context.ConnectionAborted);
+        //    foreach (var group in userGroups)
+        //    {
+        //        await Groups.RemoveFromGroupAsync(client.ConnectionId, group.Name, Context.ConnectionAborted);
+        //        var groupClient = Clients.Group(group.Name);
+        //        if (groupClient != null)
+        //        {
+        //            // 发送用户下线指令
+        //            await groupClient.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value, Context.ConnectionAborted);
+        //        }
+        //    }
 
-            // 发送好友下线通知
-            var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value);
-            if (userFriends.Count > 0)
-            {
-                var friendClientIds = userFriends.Select(friend => friend.FriendId.ToString()).ToImmutableArray();
-                var userClients = Clients.Users(friendClientIds);
-                if (userClients != null)
-                {
-                    await userClients.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value);
-                }
-            }
-        }
+        //    // 发送好友下线通知
+        //    var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value, cancellationToken: Context.ConnectionAborted);
+        //    if (userFriends.Count > 0)
+        //    {
+        //        var friendClientIds = userFriends.Select(friend => friend.FriendId.ToString()).ToImmutableArray();
+        //        var userClients = Clients.Users(friendClientIds);
+        //        if (userClients != null)
+        //        {
+        //            await userClients.SendAsync("onUserOfflined", client.TenantId, client.UserId.Value, Context.ConnectionAborted);
+        //        }
+        //    }
+
+        //    await base.OnClientDisconnectedAsync(client);
+        //}
 
         [HubMethodName("LastContactFriends")]
         public virtual async Task<PagedResultDto<UserFriend>> GetLastContactFriendsAsync(
@@ -99,7 +101,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             var myFrientCount = await FriendStore.GetCountAsync(tenantId, userId);
 
             var lastContractFriends = await FriendStore
-                .GetLastContactListAsync(tenantId, userId, skipCount, maxResultCount);
+                .GetLastContactListAsync(tenantId, userId, skipCount, maxResultCount, cancellationToken: Context.ConnectionAborted);
 
             return new PagedResultDto<UserFriend>(myFrientCount, lastContractFriends);
         }
@@ -123,7 +125,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         {
             var messages = await MessageStore
                 .GetLastChatMessagesAsync(
-                    CurrentTenant.Id, userId, sorting, reverse, maxResultCount);
+                    CurrentTenant.Id, userId, sorting, reverse, maxResultCount, cancellationToken: Context.ConnectionAborted);
 
             return new ListResultDto<LastChatMessage>(messages);
         }
@@ -144,7 +146,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             bool reverse = false)
         {
             var userFriends = await FriendStore
-                .GetListAsync(CurrentTenant.Id, userId, sorting, reverse);
+                .GetListAsync(CurrentTenant.Id, userId, sorting, reverse, cancellationToken: Context.ConnectionAborted);
 
             return new ListResultDto<UserFriend>(userFriends);
         }
@@ -156,7 +158,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             Guid friendId,
             string remarkName = "")
         {
-            await FriendStore.AddMemberAsync(tenantId, userId, friendId, remarkName);
+            await FriendStore.AddRequestAsync(tenantId, userId, friendId, remarkName);
         }
 
         [HubMethodName("RemoveFriend")]
@@ -166,7 +168,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             Guid friendId,
             string remarkName = "")
         {
-            await FriendStore.RemoveMemberAsync(tenantId, userId, friendId);
+            await FriendStore.RemoveMemberAsync(tenantId, userId, friendId, cancellationToken: Context.ConnectionAborted);
         }
 
         /// <summary>
@@ -178,7 +180,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         public virtual async Task SendMessageAsync(ChatMessage chatMessage)
         {
             // 持久化
-            await MessageStore.StoreMessageAsync(chatMessage);
+            await MessageStore.StoreMessageAsync(chatMessage, cancellationToken: Context.ConnectionAborted);
 
             if (!chatMessage.GroupId.IsNullOrWhiteSpace())
             {
@@ -199,7 +201,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 return;
             }
 
-            await signalRClient.SendAsync("getChatMessage", chatMessage);
+            await signalRClient.SendAsync("getChatMessage", chatMessage, cancellationToken: Context.ConnectionAborted);
         }
 
         protected virtual async Task SendMessageToUserAsync(ChatMessage chatMessage)
@@ -217,7 +219,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                         Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
                         continue;
                     }
-                    await signalRClient.SendAsync("getChatMessage", chatMessage);
+                    await signalRClient.SendAsync("getChatMessage", chatMessage, cancellationToken: Context.ConnectionAborted);
                 }
                 catch (Exception ex)
                 {

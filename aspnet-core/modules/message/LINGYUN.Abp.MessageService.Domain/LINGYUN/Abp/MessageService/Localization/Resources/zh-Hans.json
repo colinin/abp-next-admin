@@ -18,8 +18,20 @@
     "LINGYUN.Abp.Message:03404": "发送消息失败: 用户不存在或已注销账号!",
     "LINGYUN.Abp.Message:03410": "用户拒绝添加好友",
     "LINGYUN.Abp.Message:03411": "对方已是您的好友或已发送验证请求,不能重复操作!",
-    "WelcomeToApplicationNotification": "用户欢迎通知",
-    "NewTenantRegisterdNotification": "租户创建通知",
-    "WelcomeToApplicationFormUser": "用户:{0} 欢迎您的加入!"
+    "Notifications:MultiTenancy": "租户通知",
+    "Notifications:Users": "用户通知",
+    "Notifications:NewTenantRegisterd": "租户创建通知",
+    "Notifications:WelcomeToApplication": "用户欢迎通知",
+    "Notifications:IM": "即时通讯",
+    "Notifications:FriendValidation": "好友验证通知",
+    "Notifications:NewFriend": "新好友通知",
+    "Notifications:RequestAddNewFriend": "用户 {name} 请求添加您为好友",
+    "Notifications:RequestAddNewFriendDetail": "附加说明: {description}",
+    "Notifications:JoinGroup": "加入群组通知",
+    "Notifications:ExitGroup": "退出群组通知",
+    "Notifications:DissolveGroup": "群组解散通知",
+    "AddNewFriendBySearchId": "通过账号搜索添加",
+    "WelcomeToApplicationFormUser": "用户:{0} 欢迎您的加入!",
+    "Messages:NewFriend": "我已经添加您为好友,让我们一起聊天吧!"
   }
 }

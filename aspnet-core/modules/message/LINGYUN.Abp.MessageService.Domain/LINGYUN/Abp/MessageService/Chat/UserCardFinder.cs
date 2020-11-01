@@ -2,34 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Services;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public class UserCardFinder : DomainService, IUserCardFinder
+    public class UserCardFinder : IUserCardFinder, ITransientDependency
     {
-        protected IUserChatCardRepository UserChatCardRepository { get; }
+        private readonly ICurrentTenant _currentTenant;
+        private readonly IUserChatCardRepository _userChatCardRepository;
 
         public UserCardFinder(
+            ICurrentTenant currentTenant,
             IUserChatCardRepository userChatCardRepository)
         {
-            UserChatCardRepository = userChatCardRepository;
+            _currentTenant = currentTenant;
+            _userChatCardRepository = userChatCardRepository;
         }
 
         public virtual async Task<int> GetCountAsync(Guid? tenantId, string findUserName = "", int? startAge = null, int? endAge = null, Sex? sex = null)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatCardRepository
+                return await _userChatCardRepository
                     .GetMemberCountAsync(findUserName, startAge, endAge, sex);
             }
         }
 
         public virtual async Task<List<UserCard>> GetListAsync(Guid? tenantId, string findUserName = "", int? startAge = null, int? endAge = null, Sex? sex = null, string sorting = nameof(UserCard.UserId), bool reverse = false, int skipCount = 0, int maxResultCount = 10)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatCardRepository
+                return await _userChatCardRepository
                     .GetMembersAsync(findUserName, startAge, endAge, sex,
                         sorting, reverse, skipCount, maxResultCount);
             }
@@ -37,9 +41,9 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatCardRepository
+                return await _userChatCardRepository
                     .GetMemberAsync(findUserId);
             }
         }

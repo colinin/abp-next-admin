@@ -4,57 +4,72 @@ using LINGYUN.Abp.MessageService.Group;
 using LINGYUN.Abp.MessageService.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Domain.Services;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public class MessageStore : DomainService, IMessageStore
+    public class MessageStore : IMessageStore, ITransientDependency
     {
-        private IFriendStore _friendStore;
-        protected IFriendStore FriendStore => LazyGetRequiredService(ref _friendStore);
+        private readonly IFriendStore _friendStore;
 
-        private IObjectMapper _objectMapper;
-        protected IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        private readonly IObjectMapper _objectMapper;
 
-        private IUnitOfWorkManager _unitOfWorkManager;
-        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
-        protected IUserChatSettingRepository UserChatSettingRepository { get; }
-        protected IMessageRepository MessageRepository { get; }
-        protected IGroupRepository GroupRepository { get; }
-        protected ISnowflakeIdGenerator SnowflakeIdGenerator { get; }
+        private readonly ICurrentTenant _currentTenant;
+
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        private readonly IGroupRepository _groupRepository;
+
+        private readonly IMessageRepository _messageRepository;
+
+        private readonly ISnowflakeIdGenerator _snowflakeIdGenerator;
+
+        private readonly IUserChatSettingRepository _userChatSettingRepository;
         public MessageStore(
+            IFriendStore friendStore,
+            IObjectMapper objectMapper,
+            ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IGroupRepository groupRepository,
             IMessageRepository messageRepository,
             ISnowflakeIdGenerator snowflakeIdGenerator,
             IUserChatSettingRepository userChatSettingRepository)
         {
-            GroupRepository = groupRepository;
-            MessageRepository = messageRepository;
-            SnowflakeIdGenerator = snowflakeIdGenerator;
-            UserChatSettingRepository = userChatSettingRepository;
+            _friendStore = friendStore;
+            _objectMapper = objectMapper;
+            _currentTenant = currentTenant;
+            _unitOfWorkManager = unitOfWorkManager;
+            _groupRepository = groupRepository;
+            _messageRepository = messageRepository;
+            _snowflakeIdGenerator = snowflakeIdGenerator;
+            _userChatSettingRepository = userChatSettingRepository;
         }
 
-        [UnitOfWork]
-        public virtual async Task StoreMessageAsync(ChatMessage chatMessage)
+        public virtual async Task StoreMessageAsync(
+            ChatMessage chatMessage,
+            CancellationToken cancellationToken = default)
         {
-            using (var unitOfWork = UnitOfWorkManager.Begin())
+            using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                using (CurrentTenant.Change(chatMessage.TenantId))
+                using (_currentTenant.Change(chatMessage.TenantId))
                 {
                     if (!chatMessage.GroupId.IsNullOrWhiteSpace())
                     {
                         long groupId = long.Parse(chatMessage.GroupId);
-                        await StoreGroupMessageAsync(chatMessage, groupId);
+                        await StoreGroupMessageAsync(chatMessage, groupId, cancellationToken);
                     }
                     else
                     {
-                        await StoreUserMessageAsync(chatMessage);
+                        await StoreUserMessageAsync(chatMessage, cancellationToken);
                     }
-                    await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(cancellationToken);
                 }
             }
         }
@@ -67,13 +82,15 @@ namespace LINGYUN.Abp.MessageService.Chat
             bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
-            int maxResultCount = 10)
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var groupMessages = await MessageRepository
-                    .GetGroupMessagesAsync(groupId, filter, sorting, reverse, type, skipCount, maxResultCount);
-                var chatMessages = ObjectMapper.Map<List<GroupMessage>, List<ChatMessage>>(groupMessages);
+                var groupMessages = await _messageRepository
+                    .GetGroupMessagesAsync(groupId, filter, sorting, reverse, type, skipCount, maxResultCount, cancellationToken);
+
+                var chatMessages = _objectMapper.Map<List<GroupMessage>, List<ChatMessage>>(groupMessages);
 
                 return chatMessages;
             }
@@ -88,13 +105,15 @@ namespace LINGYUN.Abp.MessageService.Chat
             bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
-            int maxResultCount = 10)
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var userMessages = await MessageRepository
-                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, reverse, type, skipCount, maxResultCount);
-                var chatMessages = ObjectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
+                var userMessages = await _messageRepository
+                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, reverse, type, skipCount, maxResultCount, cancellationToken);
+
+                var chatMessages = _objectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
 
                 return chatMessages;
             }
@@ -105,13 +124,14 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
             bool reverse = true,
-            int maxResultCount = 10
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default
             )
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await MessageRepository
-                    .GetLastMessagesByOneFriendAsync(userId, sorting, reverse, maxResultCount);
+                return await _messageRepository
+                    .GetLastMessagesByOneFriendAsync(userId, sorting, reverse, maxResultCount, cancellationToken);
             }
         }
 
@@ -119,11 +139,12 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid? tenantId, 
             long groupId, 
             string filter = "",
-            MessageType? type = null)
+            MessageType? type = null,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await MessageRepository.GetCountAsync(groupId, filter, type);
+                return await _messageRepository.GetCountAsync(groupId, filter, type, cancellationToken);
             }
         }
 
@@ -132,15 +153,18 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid sendUserId, 
             Guid receiveUserId, 
             string filter = "", 
-            MessageType? type = null)
+            MessageType? type = null,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await MessageRepository.GetCountAsync(sendUserId, receiveUserId, filter, type);
+                return await _messageRepository.GetCountAsync(sendUserId, receiveUserId, filter, type, cancellationToken);
             }
         }
 
-        protected virtual async Task StoreUserMessageAsync(ChatMessage chatMessage)
+        protected virtual async Task StoreUserMessageAsync(
+            ChatMessage chatMessage,
+            CancellationToken cancellationToken = default)
         {
             // 检查接收用户
             if (!chatMessage.ToUserId.HasValue)
@@ -148,9 +172,12 @@ namespace LINGYUN.Abp.MessageService.Chat
                 throw new BusinessException(MessageServiceErrorCodes.UseNotFount);
             }
 
-            var myFriend = await FriendStore.GetMemberAsync(chatMessage.TenantId, chatMessage.ToUserId.Value, chatMessage.FormUserId);
+            var myFriend = await _friendStore
+                .GetMemberAsync(chatMessage.TenantId, chatMessage.ToUserId.Value, chatMessage.FormUserId, cancellationToken);
 
-            var userChatSetting = await UserChatSettingRepository.FindByUserIdAsync(chatMessage.ToUserId.Value);
+            var userChatSetting = await _userChatSettingRepository
+                .FindByUserIdAsync(chatMessage.ToUserId.Value, cancellationToken);
+
             if (userChatSetting != null)
             {
                 if (!userChatSetting.AllowReceiveMessage)
@@ -181,24 +208,30 @@ namespace LINGYUN.Abp.MessageService.Chat
             {
                 throw new BusinessException(MessageServiceErrorCodes.UserHasBlack);
             }
-            var messageId = SnowflakeIdGenerator.Create();
+            var messageId = _snowflakeIdGenerator.Create();
             var message = new UserMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
+
             message.SendToUser(chatMessage.ToUserId.Value);
-            await MessageRepository.InsertUserMessageAsync(message);
+            chatMessage.MapExtraPropertiesTo(message);
+
+            await _messageRepository.InsertUserMessageAsync(message, cancellationToken);
 
             chatMessage.MessageId = messageId.ToString();
         }
 
-        protected virtual async Task StoreGroupMessageAsync(ChatMessage chatMessage, long groupId)
+        protected virtual async Task StoreGroupMessageAsync(
+            ChatMessage chatMessage, 
+            long groupId,
+            CancellationToken cancellationToken = default)
         {
-            var userHasBlacked = await GroupRepository
-                   .UserHasBlackedAsync(groupId, chatMessage.FormUserId);
+            var userHasBlacked = await _groupRepository
+                   .UserHasBlackedAsync(groupId, chatMessage.FormUserId, cancellationToken);
             if (userHasBlacked)
             {
                 // 当前发送的用户已被拉黑
                 throw new BusinessException(MessageServiceErrorCodes.GroupUserHasBlack);
             }
-            var group = await GroupRepository.GetByIdAsync(groupId);
+            var group = await _groupRepository.GetByIdAsync(groupId, cancellationToken);
             if (!group.AllowSendMessage)
             {
                 // 当前群组不允许发言
@@ -209,11 +242,13 @@ namespace LINGYUN.Abp.MessageService.Chat
                 // 当前群组不允许匿名发言
                 throw new BusinessException(MessageServiceErrorCodes.GroupNotAllowedToSpeakAnonymously);
             }
-            var messageId = SnowflakeIdGenerator.Create();
+            var messageId = _snowflakeIdGenerator.Create();
             var message = new GroupMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
 
             message.SendToGroup(groupId);
-            await MessageRepository.InsertGroupMessageAsync(message);
+            chatMessage.MapExtraPropertiesTo(message);
+
+            await _messageRepository.InsertGroupMessageAsync(message, cancellationToken);
 
             chatMessage.MessageId = messageId.ToString();
         }

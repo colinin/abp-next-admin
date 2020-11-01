@@ -18,11 +18,9 @@ namespace LINGYUN.Abp.WeChat.Authorization
             WeChatOpenId = weChatOpenId;
         }
 
-        public static string CalculateCacheKey(string code, Guid? tenantId = null)
+        public static string CalculateCacheKey(string code)
         {
-            string tenant = tenantId != null ? tenantId.Value.ToString("D") : "host";
-
-            return "t:" + tenant + ",c:" + code;
+            return "c:" + code;
         }
     }
 }

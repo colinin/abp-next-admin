@@ -24,6 +24,13 @@ namespace LINGYUN.Abp.MessageService.Chat
             await MyFriendAppService.CreateAsync(input);
         }
 
+        [HttpPost]
+        [Route("add-request")]
+        public virtual async Task AddRequestAsync(MyFriendAddRequestDto input)
+        {
+            await MyFriendAppService.AddRequestAsync(input);
+        }
+
         [HttpDelete]
         public virtual async Task DeleteAsync(MyFriendOperationDto input)
         {

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.Group;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;

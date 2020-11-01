@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -18,16 +19,16 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public async Task<UserChatSetting> FindByUserIdAsync(Guid userId)
+        public async Task<UserChatSetting> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             return await DbSet.Where(x => x.UserId.Equals(userId))
                 .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> UserHasOpendImAsync(Guid userId)
+        public async Task<bool> UserHasOpendImAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(x => x.UserId.Equals(userId));
+            return await DbSet.AnyAsync(x => x.UserId.Equals(userId), GetCancellationToken(cancellationToken));
         }
     }
 }

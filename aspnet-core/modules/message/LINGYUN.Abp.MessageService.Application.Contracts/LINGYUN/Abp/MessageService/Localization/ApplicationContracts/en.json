@@ -3,6 +3,8 @@
   "texts": {
     "Permission:MessageService": "Message service",
     "Permission:Notification": "Notification",
-    "Permission:Delete": "Delete"
+    "Permission:Delete": "Delete",
+    "Permission:Hangfire": "Hangfire dashboard",
+    "Permission:ManageQueue": "Manage queue"
   }
 }

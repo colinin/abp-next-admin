@@ -16,7 +16,6 @@ namespace LINGYUN.Abp.Identity
 
         Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId);
 
-
         #endregion
 
         #region ClaimType

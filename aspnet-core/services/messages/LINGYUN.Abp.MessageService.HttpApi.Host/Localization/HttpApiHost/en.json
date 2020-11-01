@@ -2,8 +2,6 @@
   "culture": "en",
   "texts": {
     "NewTenantRegisteredNotificationTitle": "Tenants create notification",
-    "NewTenantRegisteredNotificationMessage": "New tenants to create success, the tenant name: {0}!",
-    "Permission:Hangfire": "Hangfire dashboard",
-    "Permission:ManageQueue": "Manage queue"
+    "NewTenantRegisteredNotificationMessage": "New tenants to create success, the tenant name: {0}!"
   }
 }

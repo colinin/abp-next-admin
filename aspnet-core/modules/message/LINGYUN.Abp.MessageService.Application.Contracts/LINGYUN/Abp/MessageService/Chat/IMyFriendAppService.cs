@@ -14,5 +14,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         Task CreateAsync(MyFriendCreateDto input);
 
         Task DeleteAsync(MyFriendOperationDto input);
+
+        Task AddRequestAsync(MyFriendAddRequestDto input);
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -33,18 +34,18 @@ namespace LINGYUN.Abp.WeChat.Authorization
             Logger = NullLogger<WeChatTokenProvider>.Instance;
         }
 
-        public virtual async Task<WeChatToken> GetTokenAsync()
+        public virtual async Task<WeChatToken> GetTokenAsync(CancellationToken cancellationToken = default)
         {
-            return (await GetCacheItemAsync("WeChatToken", Options.AppId)).WeChatToken;
+            return (await GetCacheItemAsync("WeChatToken", Options.AppId, cancellationToken)).WeChatToken;
         }
 
-        protected virtual async Task<WeChatTokenCacheItem> GetCacheItemAsync(string provider, string appId)
+        protected virtual async Task<WeChatTokenCacheItem> GetCacheItemAsync(string provider, string appId, CancellationToken cancellationToken = default)
         {
             var cacheKey = WeChatTokenCacheItem.CalculateCacheKey(provider, appId);
 
             Logger.LogDebug($"WeChatTokenProvider.GetCacheItemAsync: {cacheKey}");
 
-            var cacheItem = await Cache.GetAsync(cacheKey);
+            var cacheItem = await Cache.GetAsync(cacheKey, token: cancellationToken);
 
             if (cacheItem != null)
             {
@@ -64,7 +65,7 @@ namespace LINGYUN.Abp.WeChat.Authorization
                 GrantType = "client_credential"
             };
 
-            var response = await client.RequestWeChatCodeTokenAsync(request);
+            var response = await client.RequestWeChatCodeTokenAsync(request, cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
             var weChatTokenResponse = JsonSerializer.Deserialize<WeChatTokenResponse>(responseContent);
             var weChatToken = weChatTokenResponse.ToWeChatToken();
@@ -78,7 +79,7 @@ namespace LINGYUN.Abp.WeChat.Authorization
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(weChatToken.ExpiresIn - 120)
             };
 
-            await Cache.SetAsync(cacheKey, cacheItem, cacheOptions);
+            await Cache.SetAsync(cacheKey, cacheItem, cacheOptions, token: cancellationToken);
 
             Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 

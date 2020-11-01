@@ -7,7 +7,10 @@ using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.WeChat.Authorization
 {
-    [DependsOn(typeof(AbpJsonModule), typeof(AbpCachingModule))]
+    [DependsOn(
+        typeof(AbpWeChatModule),
+        typeof(AbpJsonModule), 
+        typeof(AbpCachingModule))]
     public class AbpWeChatAuthorizationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

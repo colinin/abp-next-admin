@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.Group;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;

@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -39,11 +41,19 @@ namespace LINGYUN.Abp.Notifications
             return reference;
         }
 
+        public ICancellationTokenProvider CancellationTokenProvider { get; set; }
+
         protected NotificationPublishProvider(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public abstract Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers);
+        public async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
+        {
+            await PublishAsync(notification, identifiers, CancellationTokenProvider.Token);
+        }
+
+        protected abstract Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default);
     }
 }

@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId && ucf.Status == UserFriendStatus.Added)
+                .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -192,6 +192,16 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             return await userFriendQuery
                 .CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<bool> IsFriendAsync(
+            Guid userId,
+            Guid frientId,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId && ucf.Status == UserFriendStatus.Added,
+                    GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> IsAddedAsync(Guid userId, Guid frientId, CancellationToken cancellationToken = default)

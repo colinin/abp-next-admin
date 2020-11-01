@@ -42,7 +42,6 @@
     "script-loader": "^0.7.2",
     "simple-progress-webpack-plugin": "^1.1.2",
     "sortablejs": "^1.10.2",
-    "stylus-loader": "^4.1.1",
     "tinymce": "^5.2.1",
     "tui-editor": "^1.4.10",
     "view-design": "^4.2.0",

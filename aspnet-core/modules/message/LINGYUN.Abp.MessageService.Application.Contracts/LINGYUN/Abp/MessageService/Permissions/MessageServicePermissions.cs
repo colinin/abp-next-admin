@@ -10,5 +10,12 @@
 
             public const string Delete = Default + ".Delete";
         }
+
+        public class Hangfire
+        {
+            public const string Default = GroupName + ".Hangfire";
+
+            public const string ManageQueue = Default + ".ManageQueue";
+        }
     }
 }

@@ -12,6 +12,9 @@ namespace LINGYUN.Abp.MessageService.Permissions
 
             var noticeGroup = group.AddPermission(MessageServicePermissions.Notification.Default, L("Permission:Notification"));
             noticeGroup.AddChild(MessageServicePermissions.Notification.Delete, L("Permission:Delete"));
+
+            var hangfirePermission = group.AddPermission(MessageServicePermissions.Hangfire.Default, L("Permission:Hangfire"));
+            hangfirePermission.AddChild(MessageServicePermissions.Hangfire.ManageQueue, L("Permission:ManageQueue"));
         }
 
         private static LocalizableString L(string name)

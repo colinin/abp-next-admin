@@ -1,7 +1,12 @@
 <template>
-  <div class="notification">
+  <div
+    v-infinite-scroll="onNotifiersScrollChanged"
+    class="notification"
+    style="max-height: 200px;overflow-y: auto;"
+  >
     <List
       size="small"
+      item-layout="vertical"
     >
       <ListItem
         v-for="(notify) in notifications"
@@ -26,24 +31,20 @@
 </template>
 
 <script lang="ts">
+import EventBusMiXin from '@/mixins/EventBusMiXin'
+import Component, { mixins } from 'vue-class-component'
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr'
-import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
-import { dateFormat } from '@/utils/index'
+import { dateFormat, abpPagerFormat } from '@/utils/index'
+
 import { MessageType } from 'element-ui/types/message'
 
-enum Severity {
-  success = 0,
-  info = 10,
-  warn = 20,
-  error = 30,
-  fatal = 40
-}
-
-enum ReadState {
-  Read = 0,
-  UnRead = 1
-}
+import NotificationApiService, {
+  NotificationInfo,
+  NotificationSeverity as Severity,
+  NotificationReadState as ReadState,
+  UserNotificationGetByPaged
+} from '@/api/notification'
 
 class Notification {
   id!: string
@@ -56,9 +57,11 @@ class Notification {
 @Component({
   name: 'UserNofitications'
 })
-export default class extends Vue {
+export default class extends mixins(EventBusMiXin) {
   private connection!: HubConnection
   private notifications = new Array<Notification>()
+  private allowRefreshNotifier = false
+  private getMyNotifierFilter = new UserNotificationGetByPaged()
 
   mounted() {
     this.handleStartConnection()
@@ -69,14 +72,14 @@ export default class extends Vue {
   }
 
   private renderIconType(item: any) {
-    if (item.severity !== Severity.success) {
+    if (item.severity !== Severity.Success) {
       return ' el-icon-circle-close'
     }
     return ' el-icon-circle-check'
   }
 
   private renderIconStyle(item: any) {
-    if (item.severity !== Severity.success) {
+    if (item.severity !== Severity.Success) {
       return 'backgroundColor: #f56a00'
     }
     return 'backgroundColor: #87d068'
@@ -103,20 +106,24 @@ export default class extends Vue {
       })
     }
     if (this.connection.state !== HubConnectionState.Connected) {
-      this.connection.start().then(() => {
-        this.connection.invoke('GetNotification', ReadState.UnRead, 10).then(result => {
-          result.items.forEach((notify: any) => {
-            const notification = new Notification()
-            notification.id = notify.id
-            notification.title = notify.data.properties.title
-            notification.message = notify.data.properties.message
-            notification.datetime = notify.creationTime
-            notification.severity = notify.notificationSeverity
-            this.notifications.push(notification)
-            this.$events.emit('onNotificationReceived', notify)
-          })
+      this.connection.start()
+        .then(() => {
+          NotificationApiService
+            .getNotifications(this.getMyNotifierFilter)
+            .then(res => {
+              res.items.forEach((notify: NotificationInfo) => {
+                const notifier = NotificationInfo.tryParseNotifier(notify, this.$i18n)
+                const notification = new Notification()
+                notification.id = notifier.id
+                notification.title = notifier.data.properties.title
+                notification.message = notifier.data.properties.message
+                notification.datetime = notifier.creationTime
+                notification.severity = notifier.severity
+                this.notifications.push(notification)
+                this.trigger('onNotificationReceived', notify)
+              })
+            })
         })
-      })
     }
   }
 
@@ -127,16 +134,44 @@ export default class extends Vue {
     }
   }
 
-  private onNotificationReceived(notify: any) {
-    console.log('received signalr message...')
+  private onNotifiersScrollChanged() {
+    console.log('onNotifiersScrollChanged')
+    if (this.allowRefreshNotifier) {
+      this.allowRefreshNotifier = false
+      this.getMyNotifierFilter.skipCount = abpPagerFormat(this.getMyNotifierFilter.skipCount, this.getMyNotifierFilter.maxResultCount)
+      NotificationApiService
+        .getNotifications(this.getMyNotifierFilter)
+        .then(res => {
+          res.items.forEach((notify: NotificationInfo) => {
+            const notifier = NotificationInfo.tryParseNotifier(notify, this.$i18n)
+            const notification = new Notification()
+            notification.id = notifier.id
+            notification.title = notifier.data.properties.title
+            notification.message = notifier.data.properties.message
+            notification.datetime = notifier.creationTime
+            notification.severity = notifier.severity
+            this.notifications.push(notification)
+            this.trigger('onNotificationReceived', notify)
+          })
+          this.getMyNotifierFilter.skipCount += 1
+          if (res.items.length === 0) {
+            this.allowRefreshNotifier = true
+          }
+        })
+    }
+  }
+
+  private onNotificationReceived(notify: NotificationInfo) {
+    const notifier = NotificationInfo.tryParseNotifier(notify, this.$i18n)
     const notification = new Notification()
-    notification.id = notify.id
-    notification.title = notify.data.properties.title
-    notification.message = notify.data.properties.message
-    notification.datetime = notify.creationTime
-    notification.severity = notify.notificationSeverity
+    notification.id = notifier.id
+    notification.title = notifier.data.properties.title
+    notification.message = notifier.data.properties.message
+    notification.datetime = notifier.creationTime
+    notification.severity = notifier.severity
     this.pushUserNotification(notification)
-    this.$events.emit('onNotificationReceived', notify)
+    this.trigger(notifier.name, notify)
+    this.trigger('onNotificationReceived', notify)
     this.$notify({
       title: notification.title,
       message: notification.message,
@@ -148,7 +183,7 @@ export default class extends Vue {
     this.connection.invoke('ChangeState', notificationId, ReadState.Read).then(() => {
       const removeNotifyIndex = this.notifications.findIndex(n => n.id === notificationId)
       this.notifications.splice(removeNotifyIndex, 1)
-      this.$events.emit('onNotificationReadChanged')
+      this.trigger('onNotificationReadChanged')
     })
   }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Linq.Expressions;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
@@ -89,10 +90,12 @@ namespace LINGYUN.Abp.RealTime.Client
 
         public virtual IReadOnlyList<IOnlineClient> GetAllClients()
         {
-            lock (SyncObj)
-            {
-                return Store.GetAll();
-            }
+            return Store.GetAll();
+        }
+
+        public virtual IReadOnlyList<IOnlineClient> GetAllClients(Expression<Func<IOnlineClient, bool>> predicate)
+        {
+            return Store.GetAll(predicate);
         }
 
         [NotNull]

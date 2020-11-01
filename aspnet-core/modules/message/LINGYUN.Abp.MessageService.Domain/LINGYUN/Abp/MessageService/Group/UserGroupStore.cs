@@ -1,102 +1,131 @@
 ﻿using LINGYUN.Abp.IM.Group;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Services;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.Group
 {
-    public class UserGroupStore : DomainService, IUserGroupStore
+    public class UserGroupStore : IUserGroupStore, ITransientDependency
     {
-        private IObjectMapper _objectMapper;
-        protected IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
-
-        private IUnitOfWorkManager _unitOfWorkManager;
-        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
-
-        protected IUserChatGroupRepository  UserChatGroupRepository { get; }
+        private readonly IObjectMapper _objectMapper;
+        private readonly ICurrentTenant _currentTenant;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IUserChatGroupRepository _userChatGroupRepository;
 
         public UserGroupStore(
+            IObjectMapper objectMapper,
+            ICurrentTenant currentTenant,
+            IUnitOfWorkManager unitOfWorkManager,
             IUserChatGroupRepository userChatGroupRepository)
         {
-            UserChatGroupRepository = userChatGroupRepository;
+            _objectMapper = objectMapper;
+            _currentTenant = currentTenant;
+            _unitOfWorkManager = unitOfWorkManager;
+            _userChatGroupRepository = userChatGroupRepository;
         }
 
-        public virtual async Task<bool> MemberHasInGroupAsync(Guid? tenantId, long groupId, Guid userId)
+        public virtual async Task<bool> MemberHasInGroupAsync(
+            Guid? tenantId,
+            long groupId,
+            Guid userId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.MemberHasInGroupAsync(groupId, userId);
+                return await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public virtual async Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId, Guid acceptUserId)
+        public virtual async Task AddUserToGroupAsync(
+            Guid? tenantId, 
+            Guid userId, 
+            long groupId, 
+            Guid acceptUserId,
+            CancellationToken cancellationToken = default)
         {
-            using (var unitOfWork = UnitOfWorkManager.Begin())
+            using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                using (CurrentTenant.Change(tenantId))
+                using (_currentTenant.Change(tenantId))
                 {
-                    var userHasInGroup = await UserChatGroupRepository.MemberHasInGroupAsync(groupId, userId);
+                    var userHasInGroup = await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
                     if (!userHasInGroup)
                     {
                         var userGroup = new UserChatGroup(groupId, userId, acceptUserId, tenantId);
 
-                        await UserChatGroupRepository.InsertAsync(userGroup);
+                        await _userChatGroupRepository.InsertAsync(userGroup, cancellationToken: cancellationToken);
 
-                        await unitOfWork.SaveChangesAsync();
+                        await unitOfWork.SaveChangesAsync(cancellationToken);
                     }
                 }
             }
         }
 
-        public async Task<GroupUserCard> GetUserGroupCardAsync(Guid? tenantId, long groupId, Guid userId)
+        public async Task<GroupUserCard> GetUserGroupCardAsync(
+            Guid? tenantId, 
+            long groupId, 
+            Guid userId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var groupUserCard = await UserChatGroupRepository.GetMemberAsync(groupId, userId);
+                var groupUserCard = await _userChatGroupRepository.GetMemberAsync(groupId, userId, cancellationToken);
 
                 return groupUserCard;
             }
         }
 
-        public async Task<IEnumerable<GroupUserCard>> GetMembersAsync(Guid? tenantId, long groupId)
+        public async Task<IEnumerable<GroupUserCard>> GetMembersAsync(
+            Guid? tenantId, 
+            long groupId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetMembersAsync(groupId);
+                return await _userChatGroupRepository.GetMembersAsync(groupId, cancellationToken: cancellationToken);
             }
         }
 
-        public async Task<IEnumerable<LINGYUN.Abp.IM.Group.Group>> GetUserGroupsAsync(Guid? tenantId, Guid userId)
+        public async Task<IEnumerable<LINGYUN.Abp.IM.Group.Group>> GetUserGroupsAsync(
+            Guid? tenantId, 
+            Guid userId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetMemberGroupsAsync(userId);
+                return await _userChatGroupRepository.GetMemberGroupsAsync(userId, cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task RemoveUserFormGroupAsync(Guid? tenantId, Guid userId, long groupId)
+        public async Task RemoveUserFormGroupAsync(
+            Guid? tenantId, 
+            Guid userId, 
+            long groupId,
+            CancellationToken cancellationToken = default)
         {
-            using (var unitOfWork = UnitOfWorkManager.Begin())
+            using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                using (CurrentTenant.Change(tenantId))
+                using (_currentTenant.Change(tenantId))
                 {
-                    await UserChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId);
+                    await _userChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId, cancellationToken);
 
-                    await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(cancellationToken);
                 }
             }
         }
 
-        public async Task<int> GetMembersCountAsync(Guid? tenantId, long groupId)
+        public async Task<int> GetMembersCountAsync(
+            Guid? tenantId,
+            long groupId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetMembersCountAsync(groupId);
+                return await _userChatGroupRepository.GetMembersCountAsync(groupId, cancellationToken);
             }
         }
 
@@ -106,11 +135,12 @@ namespace LINGYUN.Abp.MessageService.Group
             string sorting = nameof(GroupUserCard.UserId), 
             bool reverse = false, 
             int skipCount = 0, 
-            int maxResultCount = 10)
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                return await UserChatGroupRepository.GetMembersAsync(groupId, sorting, reverse, skipCount, maxResultCount);
+                return await _userChatGroupRepository.GetMembersAsync(groupId, sorting, reverse, skipCount, maxResultCount, cancellationToken);
             }
         }
     }

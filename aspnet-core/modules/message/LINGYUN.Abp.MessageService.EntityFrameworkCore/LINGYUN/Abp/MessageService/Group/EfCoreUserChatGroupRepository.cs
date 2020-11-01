@@ -160,7 +160,7 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            await DeleteAsync(ucg => ucg.GroupId == groupId && ucg.UserId == userId);
+            await DeleteAsync(ucg => ucg.GroupId == groupId && ucg.UserId == userId, cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

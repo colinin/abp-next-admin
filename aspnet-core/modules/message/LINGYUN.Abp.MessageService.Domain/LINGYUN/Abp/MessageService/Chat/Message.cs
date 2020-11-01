@@ -1,11 +1,12 @@
 ﻿using LINGYUN.Abp.IM.Messages;
 using System;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public abstract class Message : CreationAuditedEntity<long>, IMultiTenant
+    public abstract class Message : CreationAuditedAggregateRoot<long>, IMultiTenant
     {
         /// <summary>
         /// 租户

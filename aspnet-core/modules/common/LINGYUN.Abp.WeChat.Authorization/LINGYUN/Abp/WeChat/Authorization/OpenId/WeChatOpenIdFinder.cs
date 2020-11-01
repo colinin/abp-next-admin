@@ -22,16 +22,19 @@ namespace LINGYUN.Abp.WeChat.Authorization
         protected ICurrentTenant CurrentTenant { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IJsonSerializer JsonSerializer { get; }
+        protected IUserWeChatCodeFinder UserWeChatCodeFinder { get; }
         protected IDistributedCache<WeChatOpenIdCacheItem> Cache { get; }
         public WeChatOpenIdFinder(
             ICurrentTenant currentTenant,
             IJsonSerializer jsonSerializer,
+            IUserWeChatCodeFinder userWeChatCodeFinder,
             IHttpClientFactory httpClientFactory,
             IOptions<AbpWeChatOptions> options,
             IDistributedCache<WeChatOpenIdCacheItem> cache)
         {
             CurrentTenant = currentTenant;
             JsonSerializer = jsonSerializer;
+            UserWeChatCodeFinder = userWeChatCodeFinder;
             HttpClientFactory = httpClientFactory;
 
             Cache = cache;
@@ -43,12 +46,30 @@ namespace LINGYUN.Abp.WeChat.Authorization
         {
             // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
             // 或者前端保存code,通过传递code来获取
-            return (await GetCacheItemAsync(code, CurrentTenant.Id)).WeChatOpenId;
+            return (await GetCacheItemAsync(code)).WeChatOpenId;
         }
 
-        protected virtual async Task<WeChatOpenIdCacheItem> GetCacheItemAsync(string code, Guid? tenantId = null)
+        public virtual async Task<WeChatOpenId> FindByUserIdAsync(Guid userId)
         {
-            var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(code, tenantId);
+            var code = await UserWeChatCodeFinder.FindByUserIdAsync(userId);
+            // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
+            // 或者前端保存code,通过传递code来获取
+            return (await GetCacheItemAsync(code)).WeChatOpenId;
+        }
+
+        public virtual async Task<WeChatOpenId> FindByUserNameAsync(string userName)
+        {
+            var code = await UserWeChatCodeFinder.FindByUserNameAsync(userName);
+            // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
+            // 或者前端保存code,通过传递code来获取
+            return (await GetCacheItemAsync(code)).WeChatOpenId;
+        }
+
+
+
+        protected virtual async Task<WeChatOpenIdCacheItem> GetCacheItemAsync(string code)
+        {
+            var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(code);
 
             Logger.LogDebug($"WeChatOpenIdFinder.GetCacheItemAsync: {cacheKey}");
 

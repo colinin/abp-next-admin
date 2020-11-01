@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notifications:Exception": "异常通知",
+    "Notifications:ExceptionNotifier": "异常推送"
+  }
+}

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IM.Contract;
+using LINGYUN.Abp.MessageService.Localization;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -12,14 +13,28 @@ namespace LINGYUN.Abp.MessageService.Chat
     {
         protected IFriendStore FriendStore { get; }
 
-        public MyFriendAppService(IFriendStore friendStore)
+        protected IUserChatCardRepository UserChatCardRepository { get; }
+
+        public MyFriendAppService(
+            IFriendStore friendStore,
+            IUserChatCardRepository userChatCardRepository)
         {
             FriendStore = friendStore;
+            UserChatCardRepository = userChatCardRepository;
+
+            LocalizationResource = typeof(MessageServiceResource);
         }
 
         public virtual async Task CreateAsync(MyFriendCreateDto input)
         {
-            await FriendStore.AddMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, input.RemarkName);
+            var friendCard = await UserChatCardRepository.GetMemberAsync(input.FriendId);
+
+            await FriendStore.AddMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
+        }
+
+        public virtual async Task AddRequestAsync(MyFriendAddRequestDto input)
+        {
+            await FriendStore.AddRequestAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, input.RemarkName, L["AddNewFriendBySearchId"]);
         }
 
         public virtual async Task DeleteAsync(MyFriendOperationDto input)

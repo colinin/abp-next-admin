@@ -9,9 +9,14 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     public interface IUserChatFriendRepository : IBasicRepository<UserChatFriend, long>
     {
-        Task<bool> IsAddedAsync(
+        Task<bool> IsFriendAsync(
             Guid userId,
             Guid frientId, 
+            CancellationToken cancellationToken = default);
+
+        Task<bool> IsAddedAsync(
+            Guid userId,
+            Guid frientId,
             CancellationToken cancellationToken = default);
 
         Task<UserChatFriend> FindByUserFriendIdAsync(

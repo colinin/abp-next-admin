@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.IM.Contract
@@ -16,7 +17,8 @@ namespace LINGYUN.Abp.IM.Contract
         Task<bool> IsFriendAsync(
             Guid? tenantId,
             Guid userId,
-            Guid friendId
+            Guid friendId,
+            CancellationToken cancellationToken = default
             );
         /// <summary>
         /// 查询好友列表
@@ -30,7 +32,8 @@ namespace LINGYUN.Abp.IM.Contract
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
-            bool reverse = false
+            bool reverse = false,
+            CancellationToken cancellationToken = default
             );
         /// <summary>
         /// 获取好友数量
@@ -42,7 +45,8 @@ namespace LINGYUN.Abp.IM.Contract
         Task<int> GetCountAsync(
             Guid? tenantId,
             Guid userId,
-            string filter = "");
+            string filter = "",
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取好友列表
         /// </summary>
@@ -61,7 +65,8 @@ namespace LINGYUN.Abp.IM.Contract
             string sorting = nameof(UserFriend.UserId),
             bool reverse = false,
             int skipCount = 0,
-            int maxResultCount = 10);
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取最近联系好友列表
         /// </summary>
@@ -74,7 +79,8 @@ namespace LINGYUN.Abp.IM.Contract
             Guid? tenantId,
             Guid userId,
             int skipCount = 0,
-            int maxResultCount = 10);
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取好友信息
         /// </summary>
@@ -85,20 +91,36 @@ namespace LINGYUN.Abp.IM.Contract
         Task<UserFriend> GetMemberAsync(
             Guid? tenantId,
             Guid userId,
-            Guid friendId);
+            Guid friendId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 添加好友
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="friendId"></param>
-        /// <param name="remarkName"></param>
         /// <returns></returns>
-        Task<UserAddFriendResult> AddMemberAsync(
+        Task AddMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
-            string remarkName = "");
+            string remarkName = "",
+            CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 添加好友请求
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <param name="friendId"></param>
+        /// <param name="remarkName"></param>
+        /// <returns></returns>
+        Task<UserAddFriendResult> AddRequestAsync(
+            Guid? tenantId,
+            Guid userId,
+            Guid friendId,
+            string remarkName = "", 
+            string description = "",
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 移除好友
         /// </summary>
@@ -109,7 +131,8 @@ namespace LINGYUN.Abp.IM.Contract
         Task RemoveMemberAsync(
             Guid? tenantId,
             Guid userId,
-            Guid friendId);
+            Guid friendId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 添加黑名单
         /// </summary>
@@ -120,7 +143,8 @@ namespace LINGYUN.Abp.IM.Contract
         Task AddShieldMemberAsync(
             Guid? tenantId,
             Guid userId,
-            Guid friendId);
+            Guid friendId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 移除黑名单
         /// </summary>
@@ -131,6 +155,7 @@ namespace LINGYUN.Abp.IM.Contract
         Task RemoveShieldMemberAsync(
             Guid? tenantId,
             Guid userId,
-            Guid friendId);
+            Guid friendId,
+            CancellationToken cancellationToken = default);
     }
 }

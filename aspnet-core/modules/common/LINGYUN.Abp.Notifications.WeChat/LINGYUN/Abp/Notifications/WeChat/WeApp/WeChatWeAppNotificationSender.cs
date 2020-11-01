@@ -1,13 +1,17 @@
-﻿using LINGYUN.Abp.WeChat.Authorization;
+﻿using LINGYUN.Abp.Features.LimitValidation;
+using LINGYUN.Abp.Notifications.WeChat.WeApp.Features;
+using LINGYUN.Abp.WeChat.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Notifications.WeChat.WeApp
@@ -31,7 +35,14 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             Logger = NullLogger<WeChatWeAppNotificationSender>.Instance;
         }
 
-        public virtual async Task SendAsync(WeChatWeAppSendNotificationData notificationData)
+        [RequiresLimitFeature( // 检查消息发布功能限制
+            WeChatWeAppFeatures.Notifications.PublishLimit, 
+            WeChatWeAppFeatures.Notifications.PublishLimitInterval,
+            LimitPolicy.Month,
+            WeChatWeAppFeatures.Notifications.DefaultPublishLimit,
+            WeChatWeAppFeatures.Notifications.DefaultPublishLimitInterval
+            )]
+        public virtual async Task SendAsync(WeChatWeAppSendNotificationData notificationData, CancellationToken cancellationToken = default)
         {
             var weChatToken = await WeChatTokenProvider.GetTokenAsync();
             var requestParamters = new Dictionary<string, string>
@@ -41,7 +52,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weChatSendNotificationUrl = "https://api.weixin.qq.com";
             var weChatSendNotificationPath = "/cgi-bin/message/subscribe/send";
             var requestUrl = BuildRequestUrl(weChatSendNotificationUrl, weChatSendNotificationPath, requestParamters);
-            var responseContent = await MakeRequestAndGetResultAsync(requestUrl, notificationData);
+            var responseContent = await MakeRequestAndGetResultAsync(requestUrl, notificationData, cancellationToken);
             var weChatSenNotificationResponse = JsonSerializer.Deserialize<WeChatSendNotificationResponse>(responseContent);
             
             if (!weChatSenNotificationResponse.IsSuccessed)
@@ -52,7 +63,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             // 失败是否抛出异常
             // weChatSenNotificationResponse.ThrowIfNotSuccess();
         }
-        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url, WeChatWeAppSendNotificationData notificationData)
+        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url, WeChatWeAppSendNotificationData notificationData, CancellationToken cancellationToken = default)
         {
             var client = HttpClientFactory.CreateClient(SendNotificationClientName);
             var sendDataContent = JsonSerializer.Serialize(notificationData);
@@ -62,7 +73,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
                 Content = requestContent
             };
 
-            var response = await client.SendAsync(requestMessage);
+            var response = await client.SendAsync(requestMessage, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 throw new AbpException($"WeChat send subscribe message http request service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");

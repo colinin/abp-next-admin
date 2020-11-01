@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LINGYUN.Abp.RealTime.Client
 {
@@ -15,5 +17,7 @@ namespace LINGYUN.Abp.RealTime.Client
         bool Contains(string connectionId);
 
         IReadOnlyList<IOnlineClient> GetAll();
+
+        IReadOnlyList<IOnlineClient> GetAll(Expression<Func<IOnlineClient, bool>> predicate);
     }
 }

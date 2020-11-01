@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LINGYUN.Abp.Notifications.WeChat.WeApp.Features;
+using LINGYUN.Abp.WeChat.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 {
@@ -13,8 +16,13 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
     public class WeChatWeAppNotificationPublishProvider : NotificationPublishProvider
     {
         public override string Name => "WeChat.WeApp";
-        private INotificationSubscriptionManager _notificationSubscriptionManager;
-        protected INotificationSubscriptionManager NotificationSubscriptionManager => LazyGetRequiredService(ref _notificationSubscriptionManager);
+
+        private IFeatureChecker _featureChecker;
+        protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
+
+        private IWeChatOpenIdFinder _weChatOpenIdFinder;
+        protected IWeChatOpenIdFinder WeChatOpenIdFinder => LazyGetRequiredService(ref _weChatOpenIdFinder);
+
         protected IWeChatWeAppNotificationSender NotificationSender { get; }
         protected AbpWeChatWeAppNotificationOptions Options { get; }
         public WeChatWeAppNotificationPublishProvider(
@@ -27,32 +35,39 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             NotificationSender = notificationSender;
         }
 
-        public override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
+        protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
         {
+
+            // 先检测微信小程序的功能限制
+            var publishEnabled = await FeatureChecker.GetAsync(WeChatWeAppFeatures.Notifications.Default, false);
+
+            if (!publishEnabled)
+            {
+                return;
+            }
+
             // step1 默认微信openid绑定的就是username,
             // 如果不是,需要自行处理openid获取逻辑
 
             // step2 调用微信消息推送接口
 
-            // 微信不支持推送到所有用户,需要获取订阅列表再发送
+            // 微信不支持推送到所有用户
             // 在小程序里用户订阅消息后通过 api/subscribes/subscribe 接口订阅对应模板消息
-            if (identifiers == null)
-            {
-                var userSubscriptions = await NotificationSubscriptionManager
-                    .GetSubscriptionsAsync(notification.TenantId, notification.Name);
-                identifiers = userSubscriptions
-                    .Select(us => new UserIdentifier(us.UserId, us.UserName));
-
-            }
             foreach (var identifier in identifiers)
             {
-                await SendWeChatTemplateMessagAsync(notification, identifier);
+                await SendWeChatTemplateMessagAsync(notification, identifier, cancellationToken);
             }
         }
 
-        protected virtual async Task SendWeChatTemplateMessagAsync(NotificationInfo notification, UserIdentifier identifier)
+        protected virtual async Task SendWeChatTemplateMessagAsync(NotificationInfo notification, UserIdentifier identifier, CancellationToken cancellationToken = default)
         {
             var templateId = GetOrDefaultTemplateId(notification.Data);
+            if (templateId.IsNullOrWhiteSpace())
+            {
+                Logger.LogWarning("Wechat weapp template id be empty, can not send notification!");
+                return;
+            }
+
             Logger.LogDebug($"Get wechat weapp template id: {templateId}");
 
             var redirect = GetOrDefault(notification.Data, "RedirectPage", null);
@@ -64,13 +79,22 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.DefaultWeAppLanguage);
             Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
-            var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(identifier.UserName,
+            // TODO: 如果微信端发布通知,请组装好 wx-code 字段在通知数据内容里面
+            string weChatCode = GetOrDefault(notification.Data, "wx-code", "");
+
+            WeChatOpenId openId = weChatCode.IsNullOrWhiteSpace()
+                ? await WeChatOpenIdFinder.FindByUserNameAsync(identifier.UserName) // 按照实际情况,需要自行实现 IUserWeChatCodeFinder 接口以获取微信Code,然后通过Code来获取OpenId
+                : await WeChatOpenIdFinder.FindAsync(weChatCode);
+            
+
+            var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(openId.OpenId,
                 templateId, redirect, weAppState, weAppLang);
 
             // 写入模板数据
             weChatWeAppNotificationData.WriteStandardData(NotificationData.ToStandardData(Options.DefaultMsgPrefix, notification.Data));
 
             Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
+
             // 发送小程序订阅消息
             await NotificationSender.SendAsync(weChatWeAppNotificationData);
         }

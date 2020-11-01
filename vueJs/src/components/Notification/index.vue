@@ -23,7 +23,9 @@
           >
             <user-nofitications />
           </el-tab-pane>
-          <el-tab-pane label="消息">
+          <el-tab-pane
+            label="消息"
+          >
             {{ $t('messages.noMessages') }}
           </el-tab-pane>
         </el-tabs>

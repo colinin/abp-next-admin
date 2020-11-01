@@ -21,26 +21,23 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
 
         protected override async Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
         {
-            var notificationDispatcher = context.ServiceProvider.GetRequiredService<INotificationDispatcher>();
-            var notificationName = NotificationNameNormalizer
-                .NormalizerName(AbpExceptionHandlingNotificationNames.NotificationName);
-            NotificationData notificationData;
-            if (CurrentTenant.IsAvailable)
-            {
-                notificationData = NotificationData.CreateTenantNotificationData(CurrentTenant.Id.Value);
-            }
-            else
-            {
-                notificationData = NotificationData.CreateNotificationData();
-            }
+            var notificationSender = context.ServiceProvider.GetRequiredService<INotificationSender>();
+
+            NotificationData notificationData = new NotificationData();
             // 写入通知数据
             //TODO：集成TextTemplate完成格式化的推送
             notificationData.WriteStandardData(
-                context.Exception.GetType().FullName, context.Exception.Message,
-                DateTime.Now, "System");
+                context.Exception.GetType().FullName, 
+                context.Exception.Message,
+                DateTime.Now, 
+                "System");
             
-            await notificationDispatcher.DispatchAsync(notificationName, notificationData, 
-                CurrentTenant.Id, NotificationSeverity.Error);
+            await notificationSender.SendNofiterAsync(
+                AbpExceptionHandlingNotificationNames.NotificationName, 
+                notificationData, 
+                null,
+                CurrentTenant.Id, 
+                NotificationSeverity.Error);
         }
     }
 }

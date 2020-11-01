@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.RealTime.Client
     [Serializable]
     public class OnlineClient : IOnlineClient
     {
-        public object this[string key]
+        public object this[object key]
         {
             get { return Properties[key]; }
             set { Properties[key] = value; }
@@ -23,10 +23,12 @@ namespace LINGYUN.Abp.RealTime.Client
 
         public string UserName { get; set; }
 
+        public string[] Roles { get; set; }
+
         public DateTime ConnectTime { get; set; }
 
-        private Dictionary<string, object> _properties;
-        public Dictionary<string, object> Properties
+        private IDictionary<object, object> _properties;
+        public IDictionary<object, object> Properties
         {
             get { return _properties; }
             set
@@ -53,7 +55,8 @@ namespace LINGYUN.Abp.RealTime.Client
             TenantId = tenantId;
             UserId = userId;
 
-            Properties = new Dictionary<string, object>();
+            Roles = new string[0];
+            Properties = new Dictionary<object, object>();
         }
 
         public override string ToString()

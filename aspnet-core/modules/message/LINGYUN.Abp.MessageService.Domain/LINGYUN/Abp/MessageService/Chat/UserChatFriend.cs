@@ -35,6 +35,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// 备注名称
         /// </summary>
         public virtual string RemarkName { get; set; }
+        /// <summary>
+        /// 附加说明
+        /// </summary>
+        public virtual string Description { get; set; }
 
         public virtual UserFriendStatus Status { get; protected set; }
 
@@ -46,19 +50,20 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid userId,
             Guid friendId,
             string remarkName = "",
-            UserFriendStatus status = UserFriendStatus.NeedValidation,
+            string description = "",
             Guid? tenantId = null)
         {
             UserId = userId;
             FrientId = friendId;
             RemarkName = remarkName;
-            Status = status;
             TenantId = tenantId;
+            Description = description;
+            Status = UserFriendStatus.NeedValidation;
         }
 
         public void SetStatus(UserFriendStatus status = UserFriendStatus.NeedValidation)
         {
-            if (Status == UserFriendStatus.NeedValidation && status == UserFriendStatus.NeedValidation)
+            if (Status == UserFriendStatus.NeedValidation && status == UserFriendStatus.Added)
             {
                 // 如果是后续验证通过的需要单独的事件
                 AddLocalEvent(new UserChatFriendEto

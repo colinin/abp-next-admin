@@ -9,6 +9,11 @@ export default class ImApiService {
     return ApiService.Post<void>(_url, payload, serviceUrl)
   }
 
+  public static addRequest(payload: RequestUserFriend) {
+    const _url = '/api/im/my-friends/add-request'
+    return ApiService.Post<void>(_url, payload, serviceUrl)
+  }
+
   public static getMyFriends(payload: MyFriendGetByPaged) {
     let _url = '/api/im/my-friends'
     _url += '?filter=' + payload.filter
@@ -48,6 +53,16 @@ export default class ImApiService {
 }
 
 export class AddUserFriend {
+  friendId!: string
+
+  constructor(
+    friendId: string
+  ) {
+    this.friendId = friendId
+  }
+}
+
+export class RequestUserFriend {
   friendId!: string
   remarkName!: string
 

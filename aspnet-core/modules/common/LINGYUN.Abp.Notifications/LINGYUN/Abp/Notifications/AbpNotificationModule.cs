@@ -22,11 +22,6 @@ namespace LINGYUN.Abp.Notifications
             AutoAddDefinitionProviders(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddTransient<INotificationDispatcher, DefaultNotificationDispatcher>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpNotificationCleanupOptions>>().Value;

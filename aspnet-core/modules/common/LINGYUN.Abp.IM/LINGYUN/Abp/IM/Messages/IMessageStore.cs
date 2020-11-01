@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.IM.Messages
@@ -13,7 +14,9 @@ namespace LINGYUN.Abp.IM.Messages
         /// <param name="formUserId"></param>
         /// <param name="toUserId"></param>
         /// <returns></returns>
-        Task StoreMessageAsync(ChatMessage chatMessage);
+        Task StoreMessageAsync(
+            ChatMessage chatMessage,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取群组聊天记录总数
         /// </summary>
@@ -26,7 +29,8 @@ namespace LINGYUN.Abp.IM.Messages
             Guid? tenantId, 
             long groupId, 
             string filter = "", 
-            MessageType? type = null);
+            MessageType? type = null,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取群组聊天记录
         /// </summary>
@@ -47,7 +51,8 @@ namespace LINGYUN.Abp.IM.Messages
             bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
-            int maxResultCount = 10);
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取上一次通讯消息记录
         /// </summary>
@@ -62,7 +67,8 @@ namespace LINGYUN.Abp.IM.Messages
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
             bool reverse = true,
-            int maxResultCount = 10
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default
             );
         /// <summary>
         /// 获取与某个用户的聊天记录总数
@@ -78,7 +84,8 @@ namespace LINGYUN.Abp.IM.Messages
             Guid sendUserId, 
             Guid receiveUserId, 
             string filter = "", 
-            MessageType? type = null);
+            MessageType? type = null,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取与某个用户的聊天记录
         /// </summary>
@@ -95,6 +102,7 @@ namespace LINGYUN.Abp.IM.Messages
             bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
-            int maxResultCount = 10);
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
     }
 }
