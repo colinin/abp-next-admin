@@ -120,7 +120,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!row.isStatic"
+            :disabled="row.isStatic"
             size="mini"
             type="primary"
             @click="handleUpdateClaimType(row)"
@@ -128,7 +128,7 @@
             {{ $t('AbpIdentity.UpdateClaim') }}
           </el-button>
           <el-button
-            :disabled="!row.isStatic"
+            :disabled="row.isStatic"
             size="mini"
             type="danger"
             @click="handleDeleteClaimType(row)"

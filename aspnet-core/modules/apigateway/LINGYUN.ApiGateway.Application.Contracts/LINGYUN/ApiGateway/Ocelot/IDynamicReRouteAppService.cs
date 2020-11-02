@@ -6,6 +6,6 @@ namespace LINGYUN.ApiGateway.Ocelot
 {
     public interface IDynamicReRouteAppService : IApplicationService
     {
-        Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto dynamicRouteGetByAppId);
+        Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto input);
     }
 }

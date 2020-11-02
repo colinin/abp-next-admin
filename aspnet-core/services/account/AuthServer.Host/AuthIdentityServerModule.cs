@@ -208,7 +208,7 @@ namespace AuthServer.Host
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); //TODO: 不启用则不能用MVC方式登录?
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();

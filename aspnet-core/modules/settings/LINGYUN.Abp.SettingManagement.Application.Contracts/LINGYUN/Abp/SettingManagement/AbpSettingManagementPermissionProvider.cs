@@ -14,7 +14,6 @@ namespace LINGYUN.Abp.SettingManagement
             var settingPermissionGroup = context.AddGroup(AbpSettingManagementPermissions.GroupName, L("Permission:SettingManagement"));
             
             var settingPermissions = settingPermissionGroup.AddPermission(AbpSettingManagementPermissions.Settings.Default, L("Permission:Settings"));
-            settingPermissions.AddChild(AbpSettingManagementPermissions.Settings.Update, L("Permission:Update"));
             settingPermissions.AddChild(AbpSettingManagementPermissions.Settings.Manager, L("Permission:Manager"));
         }
 

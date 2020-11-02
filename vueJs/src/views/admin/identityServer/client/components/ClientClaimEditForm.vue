@@ -71,7 +71,7 @@
         <el-button
           type="primary"
           style="width:180px"
-          :disabled="!checkPermission(['AbpIdentityServer.Clients.Claims.Create'])"
+          :disabled="!checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
           @click="onSave"
         >
           {{ $t('AbpIdentityServer.Claims:New') }}
@@ -116,7 +116,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            :disabled="!checkPermission(['AbpIdentityServer.Clients.Claims.Delete'])"
+            :disabled="!checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
             size="mini"
             type="danger"
             @click="handleDeleteClientClaim(row.type, row.value)"

@@ -29,11 +29,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Global.Export)]
-        public virtual async Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto globalGetByAppId)
+        public virtual async Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto input)
         {
-            await _routeGroupChecker.CheckActiveAsync(globalGetByAppId.AppId);
+            await _routeGroupChecker.CheckActiveAsync(input.AppId);
 
-            var globalConfig =  await _globalConfigRepository.GetByAppIdAsync(globalGetByAppId.AppId);
+            var globalConfig =  await _globalConfigRepository.GetByAppIdAsync(input.AppId);
 
             var globalConfigDto = ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfig);
 
@@ -41,17 +41,17 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Global.Create)]
-        public virtual async Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto globalCreateDto)
+        public virtual async Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto input)
         {
-            await _routeGroupChecker.CheckActiveAsync(globalCreateDto.AppId);
+            await _routeGroupChecker.CheckActiveAsync(input.AppId);
 
             var globalConfiguration = new GlobalConfiguration(_snowflakeIdGenerator.NextId(), 
-                globalCreateDto.BaseUrl, globalCreateDto.AppId);
-            globalConfiguration.RequestIdKey = globalCreateDto.RequestIdKey;
-            globalConfiguration.DownstreamScheme = globalCreateDto.DownstreamScheme;
-            globalConfiguration.DownstreamHttpVersion = globalCreateDto.DownstreamHttpVersion;
+                input.BaseUrl, input.AppId);
+            globalConfiguration.RequestIdKey = input.RequestIdKey;
+            globalConfiguration.DownstreamScheme = input.DownstreamScheme;
+            globalConfiguration.DownstreamHttpVersion = input.DownstreamHttpVersion;
 
-            ApplyGlobalConfigurationOptions(globalConfiguration, globalCreateDto);
+            ApplyGlobalConfigurationOptions(globalConfiguration, input);
 
             globalConfiguration = await _globalConfigRepository.InsertAsync(globalConfiguration, true);
 
@@ -61,16 +61,16 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Global.Update)]
-        public async Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto globalUpdateDto)
+        public async Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto input)
         {
-            var globalConfiguration = await _globalConfigRepository.GetByItemIdAsync(globalUpdateDto.ItemId);
+            var globalConfiguration = await _globalConfigRepository.GetByItemIdAsync(input.ItemId);
 
-            globalConfiguration.BaseUrl = globalUpdateDto.BaseUrl;
-            globalConfiguration.RequestIdKey = globalUpdateDto.RequestIdKey;
-            globalConfiguration.DownstreamScheme = globalUpdateDto.DownstreamScheme;
-            globalConfiguration.DownstreamHttpVersion = globalUpdateDto.DownstreamHttpVersion;
+            globalConfiguration.BaseUrl = input.BaseUrl;
+            globalConfiguration.RequestIdKey = input.RequestIdKey;
+            globalConfiguration.DownstreamScheme = input.DownstreamScheme;
+            globalConfiguration.DownstreamHttpVersion = input.DownstreamHttpVersion;
 
-            ApplyGlobalConfigurationOptions(globalConfiguration, globalUpdateDto);
+            ApplyGlobalConfigurationOptions(globalConfiguration, input);
 
             globalConfiguration = await _globalConfigRepository.UpdateAsync(globalConfiguration, true);
 
@@ -79,19 +79,19 @@ namespace LINGYUN.ApiGateway.Ocelot
             return ObjectMapper.Map<GlobalConfiguration, GlobalConfigurationDto>(globalConfiguration);
         }
 
-        public virtual async Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto globalGetPaged)
+        public virtual async Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto input)
         {
-            var globalsTupe = await _globalConfigRepository.GetPagedListAsync(globalGetPaged.Filter, globalGetPaged.Sorting,
-                globalGetPaged.SkipCount, globalGetPaged.MaxResultCount);
+            var globalsTupe = await _globalConfigRepository.GetPagedListAsync(input.Filter, input.Sorting,
+                input.SkipCount, input.MaxResultCount);
             var globals = ObjectMapper.Map<List<GlobalConfiguration>, List<GlobalConfigurationDto>>(globalsTupe.Globals);
 
             return new PagedResultDto<GlobalConfigurationDto>(globalsTupe.TotalCount, globals);
         }
 
         [Authorize(ApiGatewayPermissions.Global.Delete)]
-        public virtual async Task DeleteAsync(GlobalGetByAppIdInputDto globalGetByAppId)
+        public virtual async Task DeleteAsync(GlobalGetByAppIdInputDto input)
         {
-            var globalConfiguration = await _globalConfigRepository.GetByAppIdAsync(globalGetByAppId.AppId);
+            var globalConfiguration = await _globalConfigRepository.GetByAppIdAsync(input.AppId);
             await _globalConfigRepository.DeleteAsync(globalConfiguration);
         }
 

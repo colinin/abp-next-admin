@@ -26,11 +26,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Route.Create)]
-        public async Task<ReRouteDto> CreateAsync(ReRouteCreateDto routeCreateDto)
+        public async Task<ReRouteDto> CreateAsync(ReRouteCreateDto input)
         {
-            var reRoute = ObjectMapper.Map<ReRouteCreateDto, ReRoute>(routeCreateDto);
+            var reRoute = ObjectMapper.Map<ReRouteCreateDto, ReRoute>(input);
 
-            ApplyReRouteOptions(reRoute, routeCreateDto);
+            ApplyReRouteOptions(reRoute, input);
 
             reRoute = await _reRouteRepository.InsertAsync(reRoute, true);
 
@@ -42,32 +42,32 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Route.Update)]
-        public async Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto routeUpdateDto)
+        public async Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto input)
         {
-            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(long.Parse(routeUpdateDto.ReRouteId));
-            reRoute.SetRouteName(routeUpdateDto.ReRouteName);
-            reRoute.DangerousAcceptAnyServerCertificateValidator = routeUpdateDto.DangerousAcceptAnyServerCertificateValidator;
-            reRoute.DownstreamScheme = routeUpdateDto.DownstreamScheme;
-            reRoute.Key = routeUpdateDto.Key;
-            reRoute.Priority = routeUpdateDto.Priority;
-            reRoute.RequestIdKey = routeUpdateDto.RequestIdKey;
-            reRoute.ReRouteIsCaseSensitive = routeUpdateDto.ReRouteIsCaseSensitive;
-            reRoute.ServiceName = routeUpdateDto.ServiceName;
-            reRoute.ServiceNamespace = routeUpdateDto.ServiceNamespace;
-            reRoute.Timeout = routeUpdateDto.Timeout;
-            reRoute.UpstreamHost = routeUpdateDto.UpstreamHost;
-            reRoute.DownstreamHttpVersion = routeUpdateDto.DownstreamHttpVersion;
+            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(long.Parse(input.ReRouteId));
+            reRoute.SetRouteName(input.ReRouteName);
+            reRoute.DangerousAcceptAnyServerCertificateValidator = input.DangerousAcceptAnyServerCertificateValidator;
+            reRoute.DownstreamScheme = input.DownstreamScheme;
+            reRoute.Key = input.Key;
+            reRoute.Priority = input.Priority;
+            reRoute.RequestIdKey = input.RequestIdKey;
+            reRoute.ReRouteIsCaseSensitive = input.ReRouteIsCaseSensitive;
+            reRoute.ServiceName = input.ServiceName;
+            reRoute.ServiceNamespace = input.ServiceNamespace;
+            reRoute.Timeout = input.Timeout;
+            reRoute.UpstreamHost = input.UpstreamHost;
+            reRoute.DownstreamHttpVersion = input.DownstreamHttpVersion;
 
-            reRoute.SetDownstreamHeader(routeUpdateDto.DownstreamHeaderTransform);
-            reRoute.SetQueriesParamter(routeUpdateDto.AddQueriesToRequest);
-            reRoute.SetRequestClaims(routeUpdateDto.AddClaimsToRequest);
-            reRoute.SetRequestHeader(routeUpdateDto.AddHeadersToRequest);
-            reRoute.SetRouteClaims(routeUpdateDto.RouteClaimsRequirement);
-            reRoute.SetUpstreamHeader(routeUpdateDto.UpstreamHeaderTransform);
-            reRoute.SetChangeDownstreamPath(routeUpdateDto.ChangeDownstreamPathTemplate);
-            reRoute.SetDelegatingHandler(routeUpdateDto.DelegatingHandlers);
+            reRoute.SetDownstreamHeader(input.DownstreamHeaderTransform);
+            reRoute.SetQueriesParamter(input.AddQueriesToRequest);
+            reRoute.SetRequestClaims(input.AddClaimsToRequest);
+            reRoute.SetRequestHeader(input.AddHeadersToRequest);
+            reRoute.SetRouteClaims(input.RouteClaimsRequirement);
+            reRoute.SetUpstreamHeader(input.UpstreamHeaderTransform);
+            reRoute.SetChangeDownstreamPath(input.ChangeDownstreamPathTemplate);
+            reRoute.SetDelegatingHandler(input.DelegatingHandlers);
 
-            ApplyReRouteOptions(reRoute, routeUpdateDto);
+            ApplyReRouteOptions(reRoute, input);
 
             reRoute = await _reRouteRepository.UpdateAsync(reRoute, true);
 
@@ -78,44 +78,44 @@ namespace LINGYUN.ApiGateway.Ocelot
             return reRouteDto;
         }
 
-        public async Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto routeGetById)
+        public async Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto input)
         {
-            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(routeGetById.RouteId);
+            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(input.RouteId);
 
             return ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
         }
 
-        public async Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto routeGetByName)
+        public async Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto input)
         {
-            var reRoute = await _reRouteRepository.GetByNameAsync(routeGetByName.RouteName);
+            var reRoute = await _reRouteRepository.GetByNameAsync(input.RouteName);
 
             return ObjectMapper.Map<ReRoute, ReRouteDto>(reRoute);
         }
 
         [Authorize(ApiGatewayPermissions.Route.Export)]
-        public async Task<ListResultDto<ReRouteDto>> GetAsync(ReRouteGetByAppIdInputDto routeGetByAppId)
+        public async Task<ListResultDto<ReRouteDto>> GetListByAppIdAsync(ReRouteGetByAppIdInputDto input)
         {
-            await _routeGroupChecker.CheckActiveAsync(routeGetByAppId.AppId);
+            await _routeGroupChecker.CheckActiveAsync(input.AppId);
 
-            var routes = await _reRouteRepository.GetByAppIdAsync(routeGetByAppId.AppId);
+            var routes = await _reRouteRepository.GetByAppIdAsync(input.AppId);
 
             return new ListResultDto<ReRouteDto>(ObjectMapper.Map<List<ReRoute>, List<ReRouteDto>>(routes));
         }
 
-        public async Task<PagedResultDto<ReRouteDto>> GetPagedListAsync(ReRouteGetByPagedInputDto routeGetByPaged)
+        public async Task<PagedResultDto<ReRouteDto>> GetListAsync(ReRouteGetByPagedInputDto input)
         {
-            await _routeGroupChecker.CheckActiveAsync(routeGetByPaged.AppId);
+            await _routeGroupChecker.CheckActiveAsync(input.AppId);
             var reroutesTuple = await _reRouteRepository
-                .GetPagedListAsync(routeGetByPaged.AppId, routeGetByPaged.Filter, routeGetByPaged.Sorting, 
-                    routeGetByPaged.SkipCount, routeGetByPaged.MaxResultCount);
+                .GetPagedListAsync(input.AppId, input.Filter, input.Sorting, 
+                    input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<ReRouteDto>(reroutesTuple.total, ObjectMapper.Map<List<ReRoute>, List<ReRouteDto>>(reroutesTuple.routes));
         }
 
         [Authorize(ApiGatewayPermissions.Route.Delete)]
-        public async Task DeleteAsync(ReRouteGetByIdInputDto routeGetById)
+        public async Task DeleteAsync(ReRouteGetByIdInputDto input)
         {
-            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(routeGetById.RouteId);
+            var reRoute = await _reRouteRepository.GetByReRouteIdAsync(input.RouteId);
 
             await _reRouteRepository.DeleteAsync(reRoute);
 
@@ -123,13 +123,13 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.Route.Delete)]
-        public async Task RemoveAsync(ReRouteGetByAppIdInputDto routeGetByAppId)
+        public async Task RemoveAsync(ReRouteGetByAppIdInputDto input)
         {
-            await _routeGroupChecker.CheckActiveAsync(routeGetByAppId.AppId);
+            await _routeGroupChecker.CheckActiveAsync(input.AppId);
 
-            await _reRouteRepository.DeleteAsync(x => x.AppId.Equals(routeGetByAppId.AppId));
+            await _reRouteRepository.DeleteAsync(x => x.AppId.Equals(input.AppId));
 
-            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(routeGetByAppId.AppId, "ReRoute", "Clean"));
+            await DistributedEventBus.PublishAsync(new ApigatewayConfigChangeEventData(input.AppId, "ReRoute", "Clean"));
         }
 
         protected virtual void ApplyReRouteOptions(ReRoute reRoute, ReRouteDtoBase routeDto)

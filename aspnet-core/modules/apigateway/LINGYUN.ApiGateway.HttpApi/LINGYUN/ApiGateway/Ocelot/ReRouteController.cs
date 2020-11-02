@@ -18,55 +18,55 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [HttpPost]
-        public async Task<ReRouteDto> CreateAsync(ReRouteCreateDto routeCreateDto)
+        public async Task<ReRouteDto> CreateAsync(ReRouteCreateDto input)
         {
-            return await ReRouteAppService.CreateAsync(routeCreateDto);
+            return await ReRouteAppService.CreateAsync(input);
         }
 
         [HttpPut]
-        public async Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto routeUpdateDto)
+        public async Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto input)
         {
-            return await ReRouteAppService.UpdateAsync(routeUpdateDto);
+            return await ReRouteAppService.UpdateAsync(input);
         }
 
         [HttpGet]
         [Route("By-RouteId/{RouteId}")]
-        public async Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto routeGetById)
+        public async Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto input)
         {
-            return await ReRouteAppService.GetAsync(routeGetById);
+            return await ReRouteAppService.GetAsync(input);
         }
 
         [HttpGet]
         [Route("By-RouteName/{RouteName}")]
-        public async Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto routeGetByName)
+        public async Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto input)
         {
-            return await ReRouteAppService.GetByRouteNameAsync(routeGetByName);
+            return await ReRouteAppService.GetByRouteNameAsync(input);
         }
 
         [HttpGet]
         [Route("By-AppId/{AppId}")]
-        public async Task<ListResultDto<ReRouteDto>> GetAsync(ReRouteGetByAppIdInputDto routeGetByAppId)
+        public async Task<ListResultDto<ReRouteDto>> GetListByAppIdAsync(ReRouteGetByAppIdInputDto input)
         {
-            return await ReRouteAppService.GetAsync(routeGetByAppId);
+            return await ReRouteAppService.GetListByAppIdAsync(input);
         }
 
         [HttpGet]
-        public async Task<PagedResultDto<ReRouteDto>> GetPagedListAsync(ReRouteGetByPagedInputDto routeGetByPaged)
+        public async Task<PagedResultDto<ReRouteDto>> GetListAsync(ReRouteGetByPagedInputDto input)
         {
-            return await ReRouteAppService.GetPagedListAsync(routeGetByPaged);
+            return await ReRouteAppService.GetListAsync(input);
         }
 
         [HttpDelete]
         [Route("Clear")]
-        public async Task RemoveAsync(ReRouteGetByAppIdInputDto routeGetByAppId)
+        public async Task RemoveAsync(ReRouteGetByAppIdInputDto input)
         {
-            await ReRouteAppService.RemoveAsync(routeGetByAppId);
+            await ReRouteAppService.RemoveAsync(input);
         }
 
         [HttpDelete]
-        public async Task DeleteAsync(ReRouteGetByIdInputDto routeGetById)
+        public async Task DeleteAsync(ReRouteGetByIdInputDto input)
         {
-            await ReRouteAppService.DeleteAsync(routeGetById);
+            await ReRouteAppService.DeleteAsync(input);
         }
     }
 }

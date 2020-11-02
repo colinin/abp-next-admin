@@ -6,14 +6,14 @@ namespace LINGYUN.ApiGateway.Ocelot
 {
     public interface IGlobalConfigurationAppService : IApplicationService
     {
-        Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto globalGetByAppId);
+        Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto input);
 
-        Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto globalCreateDto);
+        Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto input);
 
-        Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto globalUpdateDto);
+        Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto input);
 
-        Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto globalGetPaged);
+        Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto input);
 
-        Task DeleteAsync(GlobalGetByAppIdInputDto globalGetByAppId);
+        Task DeleteAsync(GlobalGetByAppIdInputDto input);
     }
 }

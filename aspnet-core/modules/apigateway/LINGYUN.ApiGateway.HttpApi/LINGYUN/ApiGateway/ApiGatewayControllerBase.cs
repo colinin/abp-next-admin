@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.ApiGateway
 {
-    public class ApiGatewayControllerBase : AbpController
+    public abstract class ApiGatewayControllerBase : AbpController
     {
         protected ApiGatewayControllerBase()
         {

@@ -6,7 +6,9 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.ApiGateway
 {
-    [DependsOn(typeof(ApiGatewayDomainSharedModule), typeof(AbpDddApplicationModule))]
+    [DependsOn(
+        typeof(ApiGatewayDomainSharedModule), 
+        typeof(AbpDddApplicationContractsModule))]
     public class ApiGatewayApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
