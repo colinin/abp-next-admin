@@ -33,115 +33,116 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
         }
         public virtual TenantConfiguration Find(string name)
         {
-            using (_currentTenant.Change(null))
-            {
-                var tenantCacheItem = AsyncHelper.RunSync(async () => await
-                GetCacheItemByNameAsync(name));
+            var tenantCacheItem = AsyncHelper.RunSync(async () => await
+                  GetCacheItemByNameAsync(name));
 
-                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
-                {
-                    ConnectionStrings = tenantCacheItem.ConnectionStrings
-                };
-            }
+            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+            {
+                ConnectionStrings = tenantCacheItem.ConnectionStrings
+            };
         }
 
         public virtual TenantConfiguration Find(Guid id)
         {
-            using (_currentTenant.Change(null))
-            {
-                var tenantCacheItem = AsyncHelper.RunSync(async () => await
-                    GetCacheItemByIdAsync(id));
+            var tenantCacheItem = AsyncHelper.RunSync(async () => await
+                   GetCacheItemByIdAsync(id));
 
-                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
-                {
-                    ConnectionStrings = tenantCacheItem.ConnectionStrings
-                };
-            }
+            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
+            {
+                ConnectionStrings = tenantCacheItem.ConnectionStrings
+            };
         }
 
         public virtual async Task<TenantConfiguration> FindAsync(string name)
         {
-            using (_currentTenant.Change(null))
+            var tenantCacheItem = await GetCacheItemByNameAsync(name);
+            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
-                var tenantCacheItem = await GetCacheItemByNameAsync(name);
-                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
-                {
-                    ConnectionStrings = tenantCacheItem.ConnectionStrings
-                };
-            }
+                ConnectionStrings = tenantCacheItem.ConnectionStrings
+            };
         }
 
         public virtual async Task<TenantConfiguration> FindAsync(Guid id)
         {
-            using (_currentTenant.Change(null))
+            var tenantCacheItem = await GetCacheItemByIdAsync(id);
+            return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
             {
-                var tenantCacheItem = await GetCacheItemByIdAsync(id);
-                return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
-                {
-                    ConnectionStrings = tenantCacheItem.ConnectionStrings
-                };
-            }
+                ConnectionStrings = tenantCacheItem.ConnectionStrings
+            };
         }
 
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
         {
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(id.ToString());
-
-            Logger.LogDebug($"TenantStore.GetCacheItemByIdAsync: {cacheKey}");
-
-            var cacheItem = await _cache.GetAsync(cacheKey);
-
-            if (cacheItem != null)
+            using (_currentTenant.Change(null))
             {
-                Logger.LogDebug($"Found in the cache: {cacheKey}");
+                var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(id.ToString());
+
+                Logger.LogDebug($"TenantStore.GetCacheItemByIdAsync: {cacheKey}");
+
+                var cacheItem = await _cache.GetAsync(cacheKey);
+
+                if (cacheItem != null)
+                {
+                    Logger.LogDebug($"Found in the cache: {cacheKey}");
+                    return cacheItem;
+                }
+                Logger.LogDebug($"Not found in the cache, getting from the remote service: {cacheKey}");
+
+                var tenantDto = await _tenantAppService.GetAsync(id);
+                var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(id);
+                var connectionStrings = new ConnectionStrings();
+                foreach (var tenantConnectionString in tenantConnectionStringsDto.Items)
+                {
+                    connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
+                }
+                cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
+
+                Logger.LogDebug($"Setting the cache item: {cacheKey}");
+                await _cache.SetAsync(cacheKey, cacheItem);
+
+                // 通过租户名称再次缓存,以便通过租户名称查询的api能命中缓存
+                await _cache.SetAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantDto.Name), cacheItem);
+                Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
+
                 return cacheItem;
             }
-            Logger.LogDebug($"Not found in the cache, getting from the remote service: {cacheKey}");
-
-            var tenantDto = await _tenantAppService.GetAsync(id);
-            var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(id);
-            var connectionStrings = new ConnectionStrings();
-            foreach (var tenantConnectionString in tenantConnectionStringsDto.Items)
-            {
-                connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
-            }
-            cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
-            
-            Logger.LogDebug($"Setting the cache item: {cacheKey}");
-            await _cache.SetAsync(cacheKey, cacheItem);
-            Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
-
-            return cacheItem;
         }
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
         {
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
-
-            Logger.LogDebug($"TenantStore.GetCacheItemByNameAsync: {cacheKey}");
-
-            var cacheItem = await _cache.GetAsync(cacheKey);
-
-            if (cacheItem != null)
+            using (_currentTenant.Change(null))
             {
-                Logger.LogDebug($"Found in the cache: {cacheKey}");
+                var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
+
+                Logger.LogDebug($"TenantStore.GetCacheItemByNameAsync: {cacheKey}");
+
+                var cacheItem = await _cache.GetAsync(cacheKey);
+
+                if (cacheItem != null)
+                {
+                    Logger.LogDebug($"Found in the cache: {cacheKey}");
+                    return cacheItem;
+                }
+                Logger.LogDebug($"Not found in the cache, getting from the remote service: {cacheKey}");
+
+                var tenantDto = await _tenantAppService.GetAsync(new TenantGetByNameInputDto(name));
+                var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(tenantDto.Id);
+                var connectionStrings = new ConnectionStrings();
+                foreach (var tenantConnectionString in tenantConnectionStringsDto.Items)
+                {
+                    connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
+                }
+                cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
+
+                Logger.LogDebug($"Setting the cache item: {cacheKey}");
+                await _cache.SetAsync(cacheKey, cacheItem);
+
+                // 通过租户标识再次缓存,以便通过租户名称查询的api能命中缓存
+                await _cache.SetAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantDto.Id.ToString()), cacheItem);
+
+                Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
+
                 return cacheItem;
             }
-            Logger.LogDebug($"Not found in the cache, getting from the remote service: {cacheKey}");
-
-            var tenantDto = await _tenantAppService.GetAsync(new TenantGetByNameInputDto(name));
-            var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(tenantDto.Id);
-            var connectionStrings = new ConnectionStrings();
-            foreach(var tenantConnectionString in tenantConnectionStringsDto.Items)
-            {
-                connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
-            }
-            cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
-
-            Logger.LogDebug($"Setting the cache item: {cacheKey}");
-            await _cache.SetAsync(cacheKey, cacheItem);
-            Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
-
-            return cacheItem;
         }
     }
 }

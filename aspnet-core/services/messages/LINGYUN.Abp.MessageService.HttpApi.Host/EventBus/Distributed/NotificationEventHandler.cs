@@ -154,21 +154,22 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                         notificationInfo,
                         users.Select(u => u.UserId));
 
+                // 2020-11-02 fix bug, 多个发送提供者处于同一个工作单元之下,不能把删除用户订阅写入到单个通知提供者完成事件中
+                // 而且为了确保一致性,删除订阅移动到发布通知之前
+                if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
+                {
+                    // 一次性通知在发送完成后就取消用户订阅
+                    await NotificationStore
+                        .DeleteUserSubscriptionAsync(
+                            notificationInfo.TenantId,
+                            users,
+                            notificationInfo.Name);
+                }
+
                 // 发布通知
                 foreach (var provider in providers)
                 {
-                    await PublishAsync(provider, notificationInfo, users, async () =>
-                    {
-                        if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
-                        {
-                            // 一次性通知在发送完成后就取消用户订阅
-                            await NotificationStore
-                                .DeleteUserSubscriptionAsync(
-                                    notificationInfo.TenantId,
-                                    users,
-                                    notificationInfo.Name);
-                        }
-                    });
+                    await PublishAsync(provider, notificationInfo, users);
                 }
             }
         }
@@ -182,8 +183,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         protected async Task PublishAsync(
             INotificationPublishProvider provider, 
             NotificationInfo notificationInfo,
-            IEnumerable<UserIdentifier> subscriptionUserIdentifiers,
-            Action callback = null)
+            IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
         {
             try
             {
@@ -213,10 +213,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                     provider.GetType().AssemblyQualifiedName,
                     subscriptionUserIdentifiers.ToList(),
                     notificationInfo.TenantId));
-            }
-            finally
-            {
-                callback?.Invoke();
             }
         }
     }

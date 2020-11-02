@@ -3,13 +3,17 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Threading;
+
+/*
+ * fix bug: 不能在当前租户范围下来查询租户的连接配置信息,否则只会永远执行数据库查询
+ * 
+ */
 
 namespace LINGYUN.Abp.MultiTenancy.DbFinder
 {
@@ -98,21 +102,21 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
 
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
         {
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(id.ToString());
-
-            Logger.LogDebug($"TenantStore.GetCacheItemByIdAsync: {cacheKey}");
-
-            var cacheItem = await _cache.GetAsync(cacheKey);
-
-            if (cacheItem != null)
-            {
-                Logger.LogDebug($"Found in the cache: {cacheKey}");
-                return cacheItem;
-            }
-            Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
-
             using (_currentTenant.Change(null))
             {
+                var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(id.ToString());
+
+                Logger.LogDebug($"TenantStore.GetCacheItemByIdAsync: {cacheKey}");
+
+                var cacheItem = await _cache.GetAsync(cacheKey);
+
+                if (cacheItem != null)
+                {
+                    Logger.LogDebug($"Found in the cache: {cacheKey}");
+                    return cacheItem;
+                }
+                Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
+
                 var tenant = await _tenantRepository.FindAsync(id, true);
                 if (tenant == null)
                 {
@@ -129,6 +133,10 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
 
                 Logger.LogDebug($"Setting the cache item: {cacheKey}");
                 await _cache.SetAsync(cacheKey, cacheItem);
+
+                // 用租户名称再次缓存,以便通过标识查询也能命中缓存
+                await _cache.SetAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenant.Name), cacheItem);
+
                 Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 
                 return cacheItem;
@@ -136,21 +144,22 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
         }
         protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
         {
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
-
-            Logger.LogDebug($"TenantStore.GetCacheItemByNameAsync: {cacheKey}");
-
-            var cacheItem = await _cache.GetAsync(cacheKey);
-
-            if (cacheItem != null)
-            {
-                Logger.LogDebug($"Found in the cache: {cacheKey}");
-                return cacheItem;
-            }
-            Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
-
+            // 需要切换到最外层以解决查询无效的bug
             using (_currentTenant.Change(null))
             {
+                var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(name);
+
+                Logger.LogDebug($"TenantStore.GetCacheItemByNameAsync: {cacheKey}");
+
+                var cacheItem = await _cache.GetAsync(cacheKey);
+
+                if (cacheItem != null)
+                {
+                    Logger.LogDebug($"Found in the cache: {cacheKey}");
+                    return cacheItem;
+                }
+                Logger.LogDebug($"Not found in the cache, getting from the repository: {cacheKey}");
+
                 var tenant = await _tenantRepository.FindByNameAsync(name);
                 if (tenant == null)
                 {
@@ -166,7 +175,12 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
                 cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
 
                 Logger.LogDebug($"Setting the cache item: {cacheKey}");
+
                 await _cache.SetAsync(cacheKey, cacheItem);
+
+                // 用租户标识再次缓存,以便通过标识查询也能命中缓存
+                await _cache.SetAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id.ToString()), cacheItem);
+
                 Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 
                 return cacheItem;
