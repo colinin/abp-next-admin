@@ -115,9 +115,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChatValidator", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj", "{02043AD5-5E06-4EDD-8162-983E766C38EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.WeApp", "modules\common\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj", "{85EF4251-EFC4-4CC9-912B-EA5DB1E2E359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.WeApp", "modules\wechat\LINGYUN.Abp.Notifications.WeChat\LINGYUN.Abp.Notifications.WeChat.WeApp.csproj", "{85EF4251-EFC4-4CC9-912B-EA5DB1E2E359}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Authorization", "modules\common\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj", "{263A8A1C-69D0-4C3F-B33E-8F0831C146EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Authorization", "modules\wechat\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj", "{263A8A1C-69D0-4C3F-B33E-8F0831C146EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{47CC8F7A-681D-42B9-AE04-78453782C1B6}"
 EndProject
