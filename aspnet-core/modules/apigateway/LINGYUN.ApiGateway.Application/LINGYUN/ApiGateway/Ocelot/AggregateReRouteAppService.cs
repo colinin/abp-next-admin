@@ -26,49 +26,49 @@ namespace LINGYUN.ApiGateway.Ocelot
             _aggregateReRouteRepository = aggregateReRouteRepository;
         }
 
-        public virtual async Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        public virtual async Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto input)
         {
-            var routeId = long.Parse(aggregateRouteGetByRouteId.RouteId);
+            var routeId = long.Parse(input.RouteId);
             var reroute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
 
             return ObjectMapper.Map<AggregateReRoute, AggregateReRouteDto>(reroute);
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.Export)]
-        public async Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto aggregateRouteGetByAppId)
+        public async Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto input)
         {
-            var reroutes = await _aggregateReRouteRepository.GetByAppIdAsync(aggregateRouteGetByAppId.AppId);
+            var reroutes = await _aggregateReRouteRepository.GetByAppIdAsync(input.AppId);
 
             return new ListResultDto<AggregateReRouteDto>(ObjectMapper.Map<List<AggregateReRoute>, List<AggregateReRouteDto>>(reroutes));
         }
 
-        public async Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto aggregateRouteGetByPaged)
+        public async Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto input)
         {
             var reroutesTuple = await _aggregateReRouteRepository
-                .GetPagedListAsync(aggregateRouteGetByPaged.AppId, aggregateRouteGetByPaged.Filter, 
-                                   aggregateRouteGetByPaged.Sorting, aggregateRouteGetByPaged.SkipCount, 
-                                   aggregateRouteGetByPaged.MaxResultCount);
+                .GetPagedListAsync(input.AppId, input.Filter, 
+                                   input.Sorting, input.SkipCount, 
+                                   input.MaxResultCount);
 
             return new PagedResultDto<AggregateReRouteDto>(reroutesTuple.total,
                 ObjectMapper.Map<List<AggregateReRoute>, List<AggregateReRouteDto>>(reroutesTuple.routes));
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.Create)]
-        public virtual async Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto aggregateReRouteCreate)
+        public virtual async Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto input)
         {
             var aggregateNameExists = await _aggregateReRouteRepository
-                .AggregateReRouteNameExistsAsync(aggregateReRouteCreate.Name);
+                .AggregateReRouteNameExistsAsync(input.Name);
             if (aggregateNameExists)
             {
-                throw new UserFriendlyException(L["AggregateReRouteExists", aggregateReRouteCreate.Name]);
+                throw new UserFriendlyException(L["AggregateReRouteExists", input.Name]);
             }
-            var aggregateRoute = ObjectMapper.Map<AggregateReRouteCreateDto, AggregateReRoute>(aggregateReRouteCreate);
-            aggregateRoute.SetUpstream(aggregateReRouteCreate.UpstreamHost, aggregateReRouteCreate.UpstreamPathTemplate);
-            foreach (var httpMethod in aggregateReRouteCreate.UpstreamHttpMethod)
+            var aggregateRoute = ObjectMapper.Map<AggregateReRouteCreateDto, AggregateReRoute>(input);
+            aggregateRoute.SetUpstream(input.UpstreamHost, input.UpstreamPathTemplate);
+            foreach (var httpMethod in input.UpstreamHttpMethod)
             {
                 aggregateRoute.AddUpstreamHttpMethod(httpMethod);
             }
-            foreach (var routeKey in aggregateReRouteCreate.ReRouteKeys)
+            foreach (var routeKey in input.ReRouteKeys)
             {
                 aggregateRoute.AddRouteKey(routeKey);
             }
@@ -80,24 +80,24 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.Update)]
-        public virtual async Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto aggregateReRouteUpdate)
+        public virtual async Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto input)
         {
-            var routeId = long.Parse(aggregateReRouteUpdate.RouteId);
+            var routeId = long.Parse(input.RouteId);
             var aggregateRoute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
-            aggregateRoute.Priority = aggregateReRouteUpdate.Priority;
-            aggregateRoute.ConcurrencyStamp = aggregateReRouteUpdate.ConcurrencyStamp;
-            aggregateRoute.ReRouteIsCaseSensitive = aggregateReRouteUpdate.ReRouteIsCaseSensitive;
-            aggregateRoute.Aggregator = aggregateReRouteUpdate.Aggregator;
-            aggregateRoute.SetUpstream(aggregateReRouteUpdate.UpstreamHost, aggregateReRouteUpdate.UpstreamPathTemplate);
+            aggregateRoute.Priority = input.Priority;
+            aggregateRoute.ConcurrencyStamp = input.ConcurrencyStamp;
+            aggregateRoute.ReRouteIsCaseSensitive = input.ReRouteIsCaseSensitive;
+            aggregateRoute.Aggregator = input.Aggregator;
+            aggregateRoute.SetUpstream(input.UpstreamHost, input.UpstreamPathTemplate);
 
             aggregateRoute.RemoveAllUpstreamHttpMethod();
-            foreach (var httpMethod in aggregateReRouteUpdate.UpstreamHttpMethod)
+            foreach (var httpMethod in input.UpstreamHttpMethod)
             {
                 aggregateRoute.AddUpstreamHttpMethod(httpMethod);
             }
 
             aggregateRoute.RemoveAllRouteKey();
-            foreach (var routeKey in aggregateReRouteUpdate.ReRouteKeys)
+            foreach (var routeKey in input.ReRouteKeys)
             {
                 aggregateRoute.AddRouteKey(routeKey);
             }
@@ -110,9 +110,9 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.Delete)]
-        public virtual async Task DeleteAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        public virtual async Task DeleteAsync(AggregateRouteGetByRouteIdInputDto input)
         {
-            var routeId = long.Parse(aggregateRouteGetByRouteId.RouteId);
+            var routeId = long.Parse(input.RouteId);
             var aggregateRoute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
             await _aggregateReRouteRepository.DeleteAsync(aggregateRoute);
 
@@ -120,14 +120,14 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.ManageRouteConfig)]
-        public virtual async Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto aggregateReRouteConfigCreate)
+        public virtual async Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto input)
         {
-            var routeId = long.Parse(aggregateReRouteConfigCreate.RouteId);
+            var routeId = long.Parse(input.RouteId);
             var aggregateRoute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
-            aggregateRoute.RemoveReRouteConfig(aggregateReRouteConfigCreate.ReRouteKey)
-                .AddReRouteConfig(aggregateReRouteConfigCreate.ReRouteKey, aggregateReRouteConfigCreate.Parameter,
-                    aggregateReRouteConfigCreate.JsonPath);
-            var aggregateRouteConfig = aggregateRoute.FindReRouteConfig(aggregateReRouteConfigCreate.ReRouteKey);
+            aggregateRoute.RemoveReRouteConfig(input.ReRouteKey)
+                .AddReRouteConfig(input.ReRouteKey, input.Parameter,
+                    input.JsonPath);
+            var aggregateRouteConfig = aggregateRoute.FindReRouteConfig(input.ReRouteKey);
 
             await _aggregateReRouteRepository.UpdateAsync(aggregateRoute);
 
@@ -137,11 +137,11 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.AggregateRoute.ManageRouteConfig)]
-        public virtual async Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto aggregateReRouteConfigGetByKey)
+        public virtual async Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto input)
         {
-            var routeId = long.Parse(aggregateReRouteConfigGetByKey.RouteId);
+            var routeId = long.Parse(input.RouteId);
             var aggregateRoute = await _aggregateReRouteRepository.GetByRouteIdAsync(routeId);
-            aggregateRoute.RemoveReRouteConfig(aggregateReRouteConfigGetByKey.ReRouteKey);
+            aggregateRoute.RemoveReRouteConfig(input.ReRouteKey);
 
             await _aggregateReRouteRepository.UpdateAsync(aggregateRoute);
 

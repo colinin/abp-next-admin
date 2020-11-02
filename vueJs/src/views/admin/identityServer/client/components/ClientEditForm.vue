@@ -662,6 +662,8 @@
             :properties="client.properties"
             :allowed-create-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
             :allowed-delete-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
+            :allowed-create-secret="checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
+            :allowed-delete-secret="checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
             @onSecretCreated="onClientSecretCreated"
             @onSecretDeleted="onClientSecretDeleted"
             @onClientClaimCreated="onClientClaimCreated"

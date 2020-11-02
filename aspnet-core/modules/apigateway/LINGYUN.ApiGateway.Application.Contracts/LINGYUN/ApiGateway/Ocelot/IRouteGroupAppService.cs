@@ -7,14 +7,14 @@ namespace LINGYUN.ApiGateway.Ocelot
     {
         Task<ListResultDto<RouteGroupAppIdsDto>> GetActivedAsync();
 
-        Task<RouteGroupDto> GetAsync(RouteGroupGetByAppIdInputDto routerGetByAppId);
+        Task<RouteGroupDto> GetAsync(RouteGroupGetByAppIdInputDto input);
 
-        Task<PagedResultDto<RouteGroupDto>> GetAsync(RouteGroupGetByPagedInputDto routerGetByPagedInput);
+        Task<PagedResultDto<RouteGroupDto>> GetAsync(RouteGroupGetByPagedInputDto input);
 
-        Task<RouteGroupDto> CreateAsync(RouteGroupCreateDto routerCreateDto);
+        Task<RouteGroupDto> CreateAsync(RouteGroupCreateDto input);
 
-        Task<RouteGroupDto> UpdateAsync(RouteGroupUpdateDto routerUpdateDto);
+        Task<RouteGroupDto> UpdateAsync(RouteGroupUpdateDto input);
 
-        Task DeleteAsync(RouteGroupGetByAppIdInputDto routerGetByAppId);
+        Task DeleteAsync(RouteGroupGetByAppIdInputDto input);
     }
 }

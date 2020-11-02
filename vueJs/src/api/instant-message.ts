@@ -4,7 +4,7 @@ import { PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from '.
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class ImApiService {
-  public static addFriend(payload: AddUserFriend) { 
+  public static addFriend(payload: AddUserFriend) {
     const _url = '/api/im/my-friends'
     return ApiService.Post<void>(_url, payload, serviceUrl)
   }
@@ -121,14 +121,6 @@ export class GetUserLastMessage {
   maxResultCount = 10
 }
 
-export class UserMessageGetByPaged extends PagedAndSortedResultRequestDto {
-  filter = ''
-  messageType = MessageType.Text
-  sorting = 'CreationTime'
-  reverse = true
-  receiveUserId = ''
-}
-
 export enum MessageType {
   Text = 0,
   Image = 10,
@@ -136,6 +128,14 @@ export enum MessageType {
   Video = 30,
   Voice = 40,
   File = 50
+}
+
+export class UserMessageGetByPaged extends PagedAndSortedResultRequestDto {
+  filter = ''
+  messageType = MessageType.Text
+  sorting = 'CreationTime'
+  reverse = true
+  receiveUserId = ''
 }
 
 export class ChatMessage {
@@ -151,7 +151,7 @@ export class ChatMessage {
   messageType = MessageType.Text
 
   public static getType(messageType: MessageType) {
-    switch(messageType) {
+    switch (messageType) {
       case MessageType.Text :
       case MessageType.Link :
         return 'text'
@@ -164,7 +164,7 @@ export class ChatMessage {
       case MessageType.File :
         return 'file'
       default :
-      return 'text'
+        return 'text'
     }
   }
 }

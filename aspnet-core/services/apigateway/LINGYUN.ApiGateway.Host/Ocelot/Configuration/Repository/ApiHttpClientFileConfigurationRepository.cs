@@ -42,7 +42,7 @@ namespace Ocelot.Configuration.Repository
 
             fileConfiguration.GlobalConfiguration = _objectMapper.Map<GlobalConfigurationDto, FileGlobalConfiguration>(globalConfiguration);
 
-            var reRouteConfiguration = await _reRouteAppService.GetAsync(new ReRouteGetByAppIdInputDto { AppId = ApiGatewayOptions.AppId });
+            var reRouteConfiguration = await _reRouteAppService.GetListByAppIdAsync(new ReRouteGetByAppIdInputDto { AppId = ApiGatewayOptions.AppId });
 
             if (reRouteConfiguration != null && reRouteConfiguration.Items.Count > 0)
             {

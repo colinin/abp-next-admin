@@ -17,16 +17,16 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [HttpPost]
-        public virtual async Task<RouteGroupDto> CreateAsync(RouteGroupCreateDto routerCreateDto)
+        public virtual async Task<RouteGroupDto> CreateAsync(RouteGroupCreateDto input)
         {
-            return await RouterAppService.CreateAsync(routerCreateDto);
+            return await RouterAppService.CreateAsync(input);
         }
 
         [HttpGet]
         [Route("By-AppId/{AppId}")]
-        public virtual async Task<RouteGroupDto> GetAsync(RouteGroupGetByAppIdInputDto routerGetByAppId)
+        public virtual async Task<RouteGroupDto> GetAsync(RouteGroupGetByAppIdInputDto input)
         {
-            return await RouterAppService.GetAsync(routerGetByAppId);
+            return await RouterAppService.GetAsync(input);
         }
 
         [HttpGet]
@@ -37,21 +37,21 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<RouteGroupDto>> GetAsync(RouteGroupGetByPagedInputDto routerGetByPagedInput)
+        public virtual async Task<PagedResultDto<RouteGroupDto>> GetAsync(RouteGroupGetByPagedInputDto input)
         {
-            return await RouterAppService.GetAsync(routerGetByPagedInput);
+            return await RouterAppService.GetAsync(input);
         }
 
         [HttpPut]
-        public virtual async Task<RouteGroupDto> UpdateAsync(RouteGroupUpdateDto routerUpdateDto)
+        public virtual async Task<RouteGroupDto> UpdateAsync(RouteGroupUpdateDto input)
         {
-            return await RouterAppService.UpdateAsync(routerUpdateDto);
+            return await RouterAppService.UpdateAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(RouteGroupGetByAppIdInputDto routerGetByAppId)
+        public virtual async Task DeleteAsync(RouteGroupGetByAppIdInputDto input)
         {
-            await RouterAppService.DeleteAsync(routerGetByAppId);
+            await RouterAppService.DeleteAsync(input);
         }
     }
 }

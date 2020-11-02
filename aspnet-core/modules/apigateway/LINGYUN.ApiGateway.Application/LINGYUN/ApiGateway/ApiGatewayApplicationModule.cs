@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
@@ -7,6 +8,7 @@ namespace LINGYUN.ApiGateway
     [DependsOn(
         typeof(ApiGatewayDomainModule),
         typeof(ApiGatewayApplicationContractsModule),
+        typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule)
         )]
     public class ApiGatewayApplicationModule : AbpModule

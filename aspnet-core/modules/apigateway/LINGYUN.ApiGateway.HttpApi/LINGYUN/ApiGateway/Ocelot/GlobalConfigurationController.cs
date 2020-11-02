@@ -24,34 +24,34 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         [HttpGet]
         [Route("By-AppId/{AppId}")]
-        public async Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto globalGetByAppId)
+        public async Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto input)
         {
-            return await GlobalConfigurationAppService.GetAsync(globalGetByAppId);
+            return await GlobalConfigurationAppService.GetAsync(input);
         }
 
         [HttpPost]
-        public async Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto globalCreateDto)
+        public async Task<GlobalConfigurationDto> CreateAsync(GlobalCreateDto input)
         {
-            return await GlobalConfigurationAppService.CreateAsync(globalCreateDto);
+            return await GlobalConfigurationAppService.CreateAsync(input);
         }
 
         [HttpPut]
-        public async Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto globalUpdateDto)
+        public async Task<GlobalConfigurationDto> UpdateAsync(GlobalUpdateDto input)
         {
-            return await GlobalConfigurationAppService.UpdateAsync(globalUpdateDto);
+            return await GlobalConfigurationAppService.UpdateAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(GlobalGetByAppIdInputDto globalGetByAppId)
+        public virtual async Task DeleteAsync(GlobalGetByAppIdInputDto input)
         {
-            await GlobalConfigurationAppService.DeleteAsync(globalGetByAppId);
+            await GlobalConfigurationAppService.DeleteAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto globalGetPaged)
+        public virtual async Task<PagedResultDto<GlobalConfigurationDto>> GetAsync(GlobalGetByPagedInputDto input)
         {
             var user = CurrentUser;
-            return await GlobalConfigurationAppService.GetAsync(globalGetPaged);
+            return await GlobalConfigurationAppService.GetAsync(input);
         }
     }
 }

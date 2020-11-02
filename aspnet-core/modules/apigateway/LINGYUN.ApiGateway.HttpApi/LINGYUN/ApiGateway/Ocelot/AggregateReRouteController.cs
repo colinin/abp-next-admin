@@ -19,54 +19,54 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         [HttpGet]
         [Route("by-AppId/{AppId}")]
-        public async Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto aggregateRouteGetByAppId)
+        public async Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto input)
         {
-            return await AggregateReRouteAppService.GetAsync(aggregateRouteGetByAppId);
+            return await AggregateReRouteAppService.GetAsync(input);
         }
 
         [HttpGet]
-        public async Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto aggregateRouteGetByPaged)
+        public async Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto input)
         {
-            return await AggregateReRouteAppService.GetPagedListAsync(aggregateRouteGetByPaged);
+            return await AggregateReRouteAppService.GetPagedListAsync(input);
         }
 
         [HttpGet]
         [Route("{RouteId}")]
-        public async Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        public async Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto input)
         {
-            return await AggregateReRouteAppService.GetAsync(aggregateRouteGetByRouteId);
+            return await AggregateReRouteAppService.GetAsync(input);
         }
 
         [HttpPost]
-        public async Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto aggregateReRouteCreate)
+        public async Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto input)
         {
-            return await AggregateReRouteAppService.CreateAsync(aggregateReRouteCreate);
+            return await AggregateReRouteAppService.CreateAsync(input);
         }
 
         [HttpPut]
-        public async Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto aggregateReRouteUpdate)
+        public async Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto input)
         {
-            return await AggregateReRouteAppService.UpdateAsync(aggregateReRouteUpdate);
+            return await AggregateReRouteAppService.UpdateAsync(input);
         }
 
         [HttpDelete]
-        public async Task DeleteAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId)
+        public async Task DeleteAsync(AggregateRouteGetByRouteIdInputDto input)
         {
-            await AggregateReRouteAppService.DeleteAsync(aggregateRouteGetByRouteId);
+            await AggregateReRouteAppService.DeleteAsync(input);
         }
 
         [HttpPost]
         [Route("RouteConfig")]
-        public async Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto aggregateReRouteConfigCreate)
+        public async Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto input)
         {
-            return await AggregateReRouteAppService.AddRouteConfigAsync(aggregateReRouteConfigCreate);
+            return await AggregateReRouteAppService.AddRouteConfigAsync(input);
         }
 
         [HttpDelete]
         [Route("RouteConfig")]
-        public async Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto aggregateReRouteConfigGetByKey)
+        public async Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto input)
         {
-            await AggregateReRouteAppService.DeleteRouteConfigAsync(aggregateReRouteConfigGetByKey);
+            await AggregateReRouteAppService.DeleteRouteConfigAsync(input);
         }
     }
 }

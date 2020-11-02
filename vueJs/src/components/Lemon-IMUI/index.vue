@@ -459,21 +459,6 @@ export default class extends mixins(EventBusMiXin) {
             src: 'https://twemoji.maxcdn.com/2/72x72/1f621.png'
           }
         ]
-      },
-      {
-        label: '收藏',
-        children: [
-          {
-            name: '1f62c',
-            title: '微笑',
-            src: 'https://twemoji.maxcdn.com/2/72x72/1f62c.png'
-          },
-          {
-            name: '1f621',
-            title: '微笑',
-            src: 'https://twemoji.maxcdn.com/2/72x72/1f621.png'
-          }
-        ]
       }
     ])
   }
@@ -584,10 +569,14 @@ export default class extends mixins(EventBusMiXin) {
             return message
           })
         const isEnd = res.items.length === 0
-        next(messages, isEnd)
+        setTimeout(() => {
+          next(messages, isEnd)
+        }, 1000)
       })
       .catch(() => {
-        next([], true)
+        setTimeout(() => {
+          next([], true)
+        }, 1000)
       })
   }
 

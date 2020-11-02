@@ -15,9 +15,9 @@ namespace LINGYUN.ApiGateway.Ocelot
         }
 
         [Authorize(ApiGatewayPermissions.DynamicRoute.Export)]
-        public async Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto dynamicRouteGetByAppId)
+        public async Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto input)
         {
-            var dynamicReRoutes = await _dynamicReRouteRepository.GetByAppIdAsync(dynamicRouteGetByAppId.AppId);
+            var dynamicReRoutes = await _dynamicReRouteRepository.GetByAppIdAsync(input.AppId);
 
             return new ListResultDto<DynamicReRouteDto>(ObjectMapper.Map<List<DynamicReRoute>, List<DynamicReRouteDto>>(dynamicReRoutes));
         }

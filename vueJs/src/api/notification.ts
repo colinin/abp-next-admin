@@ -23,10 +23,8 @@ export default class NotificationApiService {
     return ApiService.Get<ListResultDto<UserSubscreNotification>>(_url, serviceUrl)
   }
 
-  public static subscribeNotifier(name: string) {
+  public static subscribeNotifier(payload: UserSubscreNotification) {
     const _url = '/api/my-subscribes'
-    const payload = new UserSubscreNotification()
-    payload.name = name
     return ApiService.Post<void>(_url, payload, serviceUrl)
   }
 

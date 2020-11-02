@@ -13,7 +13,7 @@
         <el-form class="fs-form">
           <el-input
             v-model="filterName"
-            placeholder="请输入内容"
+            placeholder="输入用户名称搜索"
             class="fs-form-input"
           >
             <el-button

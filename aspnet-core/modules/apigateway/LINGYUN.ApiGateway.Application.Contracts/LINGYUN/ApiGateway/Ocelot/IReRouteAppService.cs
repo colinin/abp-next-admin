@@ -6,20 +6,20 @@ namespace LINGYUN.ApiGateway.Ocelot
 {
     public interface IReRouteAppService : IApplicationService
     {
-        Task<ListResultDto<ReRouteDto>> GetAsync(ReRouteGetByAppIdInputDto routeGetByAppId);
+        Task<ListResultDto<ReRouteDto>> GetListByAppIdAsync(ReRouteGetByAppIdInputDto input);
 
-        Task<PagedResultDto<ReRouteDto>> GetPagedListAsync(ReRouteGetByPagedInputDto routeGetByPaged);
+        Task<PagedResultDto<ReRouteDto>> GetListAsync(ReRouteGetByPagedInputDto input);
 
-        Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto routeGetByName);
+        Task<ReRouteDto> GetByRouteNameAsync(ReRouteGetByNameInputDto input);
 
-        Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto routeGetById);
+        Task<ReRouteDto> GetAsync(ReRouteGetByIdInputDto input);
 
-        Task<ReRouteDto> CreateAsync(ReRouteCreateDto routeCreateDto);
+        Task<ReRouteDto> CreateAsync(ReRouteCreateDto input);
 
-        Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto routeUpdateDto);
+        Task<ReRouteDto> UpdateAsync(ReRouteUpdateDto input);
 
-        Task DeleteAsync(ReRouteGetByIdInputDto routeGetById);
+        Task DeleteAsync(ReRouteGetByIdInputDto input);
 
-        Task RemoveAsync(ReRouteGetByAppIdInputDto routeGetByAppId);
+        Task RemoveAsync(ReRouteGetByAppIdInputDto input);
     }
 }

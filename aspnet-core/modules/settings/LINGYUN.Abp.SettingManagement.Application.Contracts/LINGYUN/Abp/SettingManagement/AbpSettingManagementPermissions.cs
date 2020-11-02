@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.SettingManagement
         {
             public const string Default = GroupName + ".Settings";
 
-            [Obsolete("The best way to do this is to enable the configuration administrator privileges")]
+            [Obsolete("The best way to do this is to enable the configuration administrator privileges", true)]
             public const string Update = GroupName + ".Update";
 
             public const string Manager = GroupName + ".Manager";

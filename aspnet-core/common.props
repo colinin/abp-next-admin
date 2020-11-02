@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup> 
     <LangVersion>latest</LangVersion> 
-    <Version>3.2.0</Version>
+    <Version>3.3.0</Version>
     <Authors>LINGYUN</Authors>
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
     <PackageProjectUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</PackageProjectUrl>

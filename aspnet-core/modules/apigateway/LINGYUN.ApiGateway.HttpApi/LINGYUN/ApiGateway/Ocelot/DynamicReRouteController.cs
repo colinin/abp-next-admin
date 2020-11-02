@@ -19,9 +19,9 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         [HttpGet]
         [Route("By-AppId/{AppId}")]
-        public virtual async Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto dynamicRouteGetByAppId)
+        public virtual async Task<ListResultDto<DynamicReRouteDto>> GetAsync(DynamicRouteGetByAppIdInputDto input)
         {
-            return await DynamicReRouteAppService.GetAsync(dynamicRouteGetByAppId);
+            return await DynamicReRouteAppService.GetAsync(input);
         }
     }
 }

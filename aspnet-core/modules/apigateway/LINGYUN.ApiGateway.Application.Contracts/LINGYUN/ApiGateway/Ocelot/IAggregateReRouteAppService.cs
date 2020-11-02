@@ -6,20 +6,20 @@ namespace LINGYUN.ApiGateway.Ocelot
 {
     public interface IAggregateReRouteAppService : IApplicationService
     {
-        Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId);
+        Task<AggregateReRouteDto> GetAsync(AggregateRouteGetByRouteIdInputDto input);
 
-        Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto aggregateRouteGetByAppId);
+        Task<ListResultDto<AggregateReRouteDto>> GetAsync(AggregateRouteGetByAppIdInputDto input);
 
-        Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto aggregateRouteGetByPaged);
+        Task<PagedResultDto<AggregateReRouteDto>> GetPagedListAsync(AggregateRouteGetByPagedInputDto input);
 
-        Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto aggregateReRouteCreate);
+        Task<AggregateReRouteDto> CreateAsync(AggregateReRouteCreateDto input);
 
-        Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto aggregateReRouteUpdate);
+        Task<AggregateReRouteDto> UpdateAsync(AggregateReRouteUpdateDto input);
 
-        Task DeleteAsync(AggregateRouteGetByRouteIdInputDto aggregateRouteGetByRouteId);
+        Task DeleteAsync(AggregateRouteGetByRouteIdInputDto input);
 
-        Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto aggregateReRouteConfigCreate);
+        Task<AggregateReRouteConfigDto> AddRouteConfigAsync(AggregateReRouteConfigCreateDto input);
 
-        Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto aggregateReRouteConfigGetByKey);
+        Task DeleteRouteConfigAsync(AggregateReRouteConfigGetByKeyInputDto input);
     }
 }

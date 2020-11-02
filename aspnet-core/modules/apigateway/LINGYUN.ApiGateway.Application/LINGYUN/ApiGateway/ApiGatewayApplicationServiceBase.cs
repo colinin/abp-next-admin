@@ -3,7 +3,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.ApiGateway
 {
-    public class ApiGatewayApplicationServiceBase : ApplicationService
+    public abstract class ApiGatewayApplicationServiceBase : ApplicationService
     {
         protected ApiGatewayApplicationServiceBase()
         {
