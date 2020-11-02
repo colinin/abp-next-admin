@@ -1,9 +1,18 @@
-﻿namespace LINGYUN.Abp.Notifications
+﻿using JetBrains.Annotations;
+using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
+
+namespace LINGYUN.Abp.Notifications
 {
     public interface INotificationDefinitionContext
     {
-        NotificationDefinition GetOrNull(string category);
+        NotificationGroupDefinition AddGroup(
+            [NotNull] string name, 
+            ILocalizableString displayName = null,
+            bool allowSubscriptionToClients = true);
 
-        void Add(params NotificationDefinition[] definitions);
+        NotificationGroupDefinition GetGroupOrNull(string name);
+
+        void RemoveGroup(string name);
     }
 }

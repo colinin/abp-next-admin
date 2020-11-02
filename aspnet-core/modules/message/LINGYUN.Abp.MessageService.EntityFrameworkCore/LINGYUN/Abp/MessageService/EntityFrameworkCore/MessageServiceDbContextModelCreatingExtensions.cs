@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.Group;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,10 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.ToTable(options.TablePrefix + "Notifications", options.Schema);
 
                 b.Property(p => p.NotificationName).HasMaxLength(NotificationConsts.MaxNameLength).IsRequired();
-                b.Property(p => p.NotificationCateGory).HasMaxLength(NotificationConsts.MaxCateGoryLength).IsRequired();
                 b.Property(p => p.NotificationTypeName).HasMaxLength(NotificationConsts.MaxTypeNameLength).IsRequired();
                 b.Property(p => p.NotificationData).HasMaxLength(NotificationConsts.MaxDataLength).IsRequired();
 
-                b.ConfigureMultiTenant();
-                b.ConfigureCreationTime();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.NotificationName });
             });
@@ -39,7 +38,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserNotifications", options.Schema);
 
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.UserId, p.NotificationId })
                 .HasName("IX_Tenant_User_Notification_Id");
@@ -55,8 +54,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                     .HasDefaultValue("/")// 不是必须的
                     .IsRequired();
 
-                b.ConfigureCreationTime();
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.UserId, p.NotificationName })
                 .HasName("IX_Tenant_User_Notification_Name")
@@ -70,8 +68,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
                 b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
 
-                b.ConfigureCreationTime();
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.ReceiveUserId });
             });
@@ -83,53 +80,83 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
                 b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
 
-                b.ConfigureCreationTime();
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.GroupId });
             });
+
+            builder.Entity<UserChatFriend>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserChatFriends", options.Schema);
+
+                b.Property(p => p.RemarkName).HasMaxLength(UserChatFriendConsts.MaxRemarkNameLength);
+                b.Property(p => p.Description).HasMaxLength(UserChatFriendConsts.MaxDescriptionLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId, p.FrientId });
+            });
+
+            builder.Entity<UserChatCard>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserChatCards", options.Schema);
+
+                b.Property(p => p.UserName).HasMaxLength(UserChatCardConsts.MaxUserNameLength).IsRequired();
+
+                b.Property(p => p.AvatarUrl).HasMaxLength(UserChatCardConsts.MaxAvatarUrlLength);
+                b.Property(p => p.Description).HasMaxLength(UserChatCardConsts.MaxDescriptionLength);
+                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
+                b.Property(p => p.Sign).HasMaxLength(UserChatCardConsts.MaxSignLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId });
+            });
+
+            builder.Entity<UserGroupCard>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserGroupCards", options.Schema);
+
+                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.UserId });
+            });
+            
 
             builder.Entity<UserChatSetting>(b =>
             {
                 b.ToTable(options.TablePrefix + "UserChatSettings", options.Schema);
 
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.UserId });
             });
 
-            builder.Entity<UserSpecialFocus>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
+            //builder.Entity<UserSpecialFocus>(b =>
+            //{
+            //    b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
 
-                b.ConfigureMultiTenant();
+            //    b.ConfigureMultiTenant();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            //    b.HasIndex(p => new { p.TenantId, p.UserId });
+            //});
 
-            builder.Entity<UserChatBlack>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
+            //builder.Entity<UserChatBlack>(b =>
+            //{
+            //    b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
 
-                b.ConfigureMultiTenant();
+            //    b.ConfigureMultiTenant();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            //    b.HasIndex(p => new { p.TenantId, p.UserId });
+            //});
 
             builder.Entity<GroupChatBlack>(b =>
             {
                 b.ToTable(options.TablePrefix + "GroupChatBlacks", options.Schema);
 
-                b.ConfigureMultiTenant();
-
-                b.HasIndex(p => new { p.TenantId, p.GroupId });
-            });
-
-            builder.Entity<ChatGroupAdmin>(b =>
-            {
-                b.ToTable(options.TablePrefix + "ChatGroupAdmins", options.Schema);
-
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.GroupId });
             });
@@ -145,8 +172,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.Address).HasMaxLength(ChatGroupConsts.MaxAddressLength);
                 b.Property(p => p.Description).HasMaxLength(ChatGroupConsts.MaxDescriptionLength);
 
-                b.ConfigureAudited();
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.Name });
             });
@@ -155,8 +181,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserChatGroups", options.Schema);
 
-                b.ConfigureCreationAudited();
-                b.ConfigureMultiTenant();
+                b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.GroupId, p.UserId });
             });

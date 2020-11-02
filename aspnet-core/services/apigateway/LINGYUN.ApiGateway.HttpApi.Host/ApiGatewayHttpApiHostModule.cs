@@ -200,6 +200,7 @@ namespace LINGYUN.ApiGateway
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var configuration = context.GetConfiguration();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
@@ -225,7 +226,7 @@ namespace LINGYUN.ApiGateway
             // 路由
             app.UseConfiguredEndpoints();
 
-            if (context.GetEnvironment().IsDevelopment())
+            if (configuration.GetSection("ApiGateway:SeedInitScript").Get<bool>())
             {
                 SeedData(context);
             }

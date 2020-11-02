@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications.SignalR
@@ -28,51 +30,41 @@ namespace LINGYUN.Abp.Notifications.SignalR
             _onlineClientManager = onlineClientManager;
         }
 
-        public override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
+        protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
         {
-            if (notification.Data.HasTenantNotification(out Guid tenantId))
+            if (identifiers?.Count() == 0)
             {
-                // 返回标准数据给前端
-                notification.Data = NotificationData.ToStandardData(notification.Data);
-                var singalRGroup = _hubContext.Clients.Group(tenantId.ToString());
+                var groupName = notification.TenantId?.ToString() ?? "Global";
+
+                var singalRGroup = _hubContext.Clients.Group(groupName);
                 if (singalRGroup == null)
                 {
-                    Logger.LogDebug("Can not get group " + tenantId + " from SignalR hub!");
+                    Logger.LogDebug("Can not get group " + groupName + " from SignalR hub!");
                     return;
                 }
                 // 租户通知群发
                 Logger.LogDebug($"Found a singalr group, begin senging notifications");
-                await singalRGroup.SendAsync("getNotification", notification);
+                await singalRGroup.SendAsync("getNotification", notification, cancellationToken);
             }
             else
             {
-                // 返回标准数据给前端
-                notification.Data = NotificationData.ToStandardData(notification.Data);
-                foreach (var identifier in identifiers)
+                var onlineClients = _onlineClientManager.GetAllClients(client => identifiers.Any(ids => client.UserId == ids.UserId));
+                var onlineClientConnectionIds = onlineClients.Select(client => client.ConnectionId).ToImmutableArray();
+                try
                 {
-                    Logger.LogDebug($"Find online client with user {identifier.UserId} - {identifier.UserName}");
-                    var onlineClientContext = new OnlineClientContext(notification.TenantId, identifier.UserId);
-                    var onlineClients = _onlineClientManager.GetAllByContext(onlineClientContext);
-                    foreach (var onlineClient in onlineClients)
+                    var signalRClients = _hubContext.Clients.Clients(onlineClientConnectionIds);
+                    if (signalRClients == null)
                     {
-                        try
-                        {
-                            Logger.LogDebug($"Find online client {onlineClient.UserId} - {onlineClient.ConnectionId}");
-                            var signalRClient = _hubContext.Clients.Client(onlineClient.ConnectionId);
-                            if (signalRClient == null)
-                            {
-                                Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
-                                continue;
-                            }
-                            Logger.LogDebug($"Found a singalr client, begin senging notifications");
-                            await signalRClient.SendAsync("getNotification", notification);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogWarning("Could not send notifications to user: {0}", identifier.UserId);
-                            Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
-                        }
+                        Logger.LogDebug("Can not get users connection from SignalR hub!");
+                        return;
                     }
+                    Logger.LogDebug($"Found a singalr client, begin senging notifications");
+                    await signalRClients.SendAsync("getNotification", notification, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning("Could not send notifications to all users");
+                    Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
                 }
             }
         }

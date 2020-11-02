@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using Hangfire;
+using LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
@@ -60,6 +61,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpNotificationsSignalRModule),
         typeof(AbpNotificationsWeChatWeAppModule),
         typeof(AbpNotificationsExceptionHandlingModule),
+        typeof(AbpAspNetCoreSignalRProtocolJsonModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpBackgroundJobsHangfireModule),
         typeof(AbpHangfireMySqlStorageModule),

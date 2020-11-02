@@ -2,6 +2,7 @@
 {
     public class AbpExceptionHandlingNotificationNames
     {
-        public const string NotificationName = "Abp.ExceptionHandling.Notifier";
+        public const string GroupName = "LINGYUN.Abp.ExceptionHandling";
+        public const string NotificationName = GroupName + ".Notifier";
     }
 }

@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Notifications;
+﻿using LINGYUN.Abp.MessageService.Utils;
+using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Json;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
@@ -31,6 +33,14 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// </summary>
         protected AbpNotificationOptions Options { get; }
         /// <summary>
+        /// Reference to <see cref="IJsonSerializer"/>.
+        /// </summary>
+        protected IJsonSerializer JsonSerializer { get; }
+        /// <summary>
+        /// Reference to <see cref="ISnowflakeIdGenerator"/>.
+        /// </summary>
+        protected ISnowflakeIdGenerator SnowflakeIdGenerator { get; }
+        /// <summary>
         /// Reference to <see cref="IBackgroundJobManager"/>.
         /// </summary>
         protected IBackgroundJobManager BackgroundJobManager { get; }
@@ -38,6 +48,10 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// Reference to <see cref="INotificationStore"/>.
         /// </summary>
         protected INotificationStore NotificationStore { get; }
+        /// <summary>
+        /// Reference to <see cref="INotificationDefinitionManager"/>.
+        /// </summary>
+        protected INotificationDefinitionManager NotificationDefinitionManager { get; }
         /// <summary>
         /// Reference to <see cref="INotificationSubscriptionManager"/>.
         /// </summary>
@@ -51,15 +65,21 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// Initializes a new instance of the <see cref="NotificationEventHandler"/> class.
         /// </summary>
         public NotificationEventHandler(
+            IJsonSerializer jsonSerializer,
             IBackgroundJobManager backgroundJobManager,
             IOptions<AbpNotificationOptions> options,
             INotificationStore notificationStore,
+            ISnowflakeIdGenerator snowflakeIdGenerator,
+            INotificationDefinitionManager notificationDefinitionManager,
             INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
-            BackgroundJobManager = backgroundJobManager;
             Options = options.Value;
+            JsonSerializer = jsonSerializer;
+            BackgroundJobManager = backgroundJobManager;
             NotificationStore = notificationStore;
+            SnowflakeIdGenerator = snowflakeIdGenerator;
+            NotificationDefinitionManager = notificationDefinitionManager;
             NotificationSubscriptionManager = notificationSubscriptionManager;
             NotificationPublishProviderManager = notificationPublishProviderManager;
 
@@ -69,12 +89,31 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         [UnitOfWork]
         public virtual async Task HandleEventAsync(NotificationEventData eventData)
         {
-            var notificationInfo = eventData.ToNotificationInfo();
+            var notification = NotificationDefinitionManager.Get(eventData.Name);
+
+            var notificationInfo = new NotificationInfo
+            {
+                Name = notification.Name,
+                CreationTime = eventData.CreationTime,
+                Data = eventData.Data,
+                Severity = eventData.Severity,
+                Lifetime = notification.NotificationLifetime,
+                TenantId = eventData.TenantId,
+                Type = notification.NotificationType
+            };
+            notificationInfo.SetId(SnowflakeIdGenerator.Create());
+
+            notificationInfo.Data  = NotificationDataConverter.Convert(notificationInfo.Data);
+
+            Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
+
+            // 持久化通知
+            await NotificationStore.InsertNotificationAsync(notificationInfo);
 
             var providers = Enumerable
                  .Reverse(NotificationPublishProviderManager.Providers);
 
-            await PublishFromProvidersAsync(providers, notificationInfo);
+            await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
         }
 
         /// <summary>
@@ -83,43 +122,54 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// <param name="providers">提供者列表</param>
         /// <param name="notificationInfo">通知信息</param>
         /// <returns></returns>
-        protected async Task PublishFromProvidersAsync(IEnumerable<INotificationPublishProvider> providers,
+        protected async Task PublishFromProvidersAsync(
+            IEnumerable<INotificationPublishProvider> providers,
+            IEnumerable<UserIdentifier> users,
             NotificationInfo notificationInfo)
         {
-            Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
-
-            // 持久化通知
-            await NotificationStore.InsertNotificationAsync(notificationInfo);
-
-            // TODO: 某些情况下,不能直接在服务内订阅消息,目前只能通过将订阅内容放进消息内部,需要重构通知系统设计了
-            if (notificationInfo.Data.HasUserNotification(out Guid userId, out string userName))
-            {
-                await NotificationSubscriptionManager.SubscribeAsync(notificationInfo.TenantId,
-                    new UserIdentifier(userId, userName), notificationInfo.Name);
-            }
-
+            // 检查是够已订阅消息
             Logger.LogDebug($"Gets a list of user subscriptions {notificationInfo.Name}");
-            // 获取用户订阅列表
-            var userSubscriptions = await NotificationSubscriptionManager.GetSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
-
-            Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");
-            // 持久化用户通知
-            var subscriptionUserIdentifiers = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
-
-            await NotificationStore.InsertUserNotificationsAsync(notificationInfo,
-                subscriptionUserIdentifiers.Select(u => u.UserId));
-
-            // 发布通知
-            foreach (var provider in providers)
+            List<NotificationSubscriptionInfo> userSubscriptions;
+            if (users == null)
             {
-                await PublishAsync(provider, notificationInfo, subscriptionUserIdentifiers);
+                // 获取用户订阅列表
+                userSubscriptions = await NotificationSubscriptionManager
+                    .GetUserSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
+            }
+            else
+            {
+                // 过滤未订阅的用户
+                userSubscriptions = await NotificationSubscriptionManager
+                    .GetUsersSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name, users);
             }
 
-            if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
+            users = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
+
+            if (users.Count() > 0)
             {
-                // 一次性通知在发送完成后就取消用户订阅
-                await NotificationStore.DeleteAllUserSubscriptionAsync(notificationInfo.TenantId,
-                    notificationInfo.Name);
+                // 持久化用户通知
+                Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");
+                await NotificationStore
+                    .InsertUserNotificationsAsync(
+                        notificationInfo,
+                        users.Select(u => u.UserId));
+
+                // 发布通知
+                foreach (var provider in providers)
+                {
+                    await PublishAsync(provider, notificationInfo, users, async () =>
+                    {
+                        if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
+                        {
+                            // 一次性通知在发送完成后就取消用户订阅
+                            await NotificationStore
+                                .DeleteUserSubscriptionAsync(
+                                    notificationInfo.TenantId,
+                                    users,
+                                    notificationInfo.Name);
+                        }
+                    });
+                }
             }
         }
         /// <summary>
@@ -129,14 +179,17 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// <param name="notificationInfo">通知信息</param>
         /// <param name="subscriptionUserIdentifiers">订阅用户列表</param>
         /// <returns></returns>
-        protected async Task PublishAsync(INotificationPublishProvider provider, NotificationInfo notificationInfo,
-            IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
+        protected async Task PublishAsync(
+            INotificationPublishProvider provider, 
+            NotificationInfo notificationInfo,
+            IEnumerable<UserIdentifier> subscriptionUserIdentifiers,
+            Action callback = null)
         {
             try
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
                 var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrNull(provider.Name, notificationInfo.CateGory);
+                        .GetMapItemOrNull(notificationInfo.Name, provider.Name);
                 if (notifacationDataMapping != null)
                 {
                     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
@@ -160,6 +213,10 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                     provider.GetType().AssemblyQualifiedName,
                     subscriptionUserIdentifiers.ToList(),
                     notificationInfo.TenantId));
+            }
+            finally
+            {
+                callback?.Invoke();
             }
         }
     }

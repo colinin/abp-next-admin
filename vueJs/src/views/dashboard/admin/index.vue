@@ -3,19 +3,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import EventBusMiXin from '@/mixins/EventBusMiXin'
+import Component, { mixins } from 'vue-class-component'
 
 @Component({
   name: 'DashboardAdmin'
 })
-export default class extends Vue {
+export default class extends mixins(EventBusMiXin) {
 }
 </script>
 
 <style lang="scss" scoped>
 .dashboard-editor-container {
   padding: 32px;
-  background-color: rgb(240, 242, 245);
+  background-color: rgb(12, 73, 165);
   position: relative;
 
   .github-corner {

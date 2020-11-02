@@ -11,6 +11,10 @@ declare module '*.gif' {
   export const gif: any
 }
 
+declare module '*.png' {
+  export const png: any
+}
+
 // TODO: remove this part after vue-count-to has its typescript file
 declare module 'vue-count-to'
 
@@ -31,3 +35,6 @@ declare module 'vue-simple-uploader'
 
 // TODO vue-contextmenujs
 declare module 'vue-contextmenujs'
+
+// TODO lemon-imui
+declare module 'lemon-imui'

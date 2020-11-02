@@ -21,6 +21,20 @@
       <right-panel v-if="showSettings">
         <settings />
       </right-panel>
+      <div id="im">
+        <el-popover
+          placement="left-end"
+          width="500px"
+          trigger="click"
+        >
+          <LemonIMUI />
+          <label
+            slot="reference"
+            class="topBtn"
+            title="聊天"
+          />
+        </el-popover>
+      </div>
     </div>
   </div>
 </template>
@@ -31,8 +45,10 @@ import { mixins } from 'vue-class-component'
 import { DeviceType, AppModule } from '@/store/modules/app'
 import { SettingsModule } from '@/store/modules/settings'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+import LemonIMUI from '@/components/Lemon-IMUI/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
 import ResizeMixin from './mixin/resize'
+import EventBusMiXin from '@/mixins/EventBusMiXin'
 
 @Component({
   name: 'Layout',
@@ -42,10 +58,13 @@ import ResizeMixin from './mixin/resize'
     RightPanel,
     Settings,
     Sidebar,
-    TagsView
+    TagsView,
+    LemonIMUI
   }
 })
-export default class extends mixins(ResizeMixin) {
+export default class extends mixins(ResizeMixin, EventBusMiXin) {
+  private showImDialog = false
+
   get classObj() {
     return {
       hideSidebar: !this.sidebar.opened,
@@ -169,4 +188,31 @@ export default class extends mixins(ResizeMixin) {
     transition: none;
   }
 }
+</style>
+
+<style lang="scss">
+  #im {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 999;
+    width: 60px;
+    height: 60px;
+  }
+  #im .topBtn {
+    width: 60px;
+    height: 60px;
+    background-color: #f2f2f2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    background-image: url('../assets/im-images/top-buttom.png');
+    -webkit-animation: wobble 250ms  infinite;
+    animation: wobble 250ms  infinite;
+  }
 </style>

@@ -3,17 +3,11 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 /*
- * 通知系统的设计不应该定死通知名称
- * 而是规范通知的一些属性,因此不应该是自定义通知名称,而是定义通知的类目,类似于Catalog
- * 或者Prefix
- * 
- * TODO: 2020-08-26 如果需要用户或者租户特定的消息该如何来发送通知?
- *      是否追加字段：通知类别（宿主、租户、用户、通用）,主要可以在运行时判断发布消息的来源，
- *      如果是用户通知（NotificationData[FormUser]）则只会查询用户对于用户通知的订阅（用户互动：站内信、私信、好友请求、留言等），优先级最低
- *      租户通知（NotificationData[FormTenant]）则只会查询用户对于租户通知的订阅（系统发布、应用通知），优先级次于用户
- *      全局通知（NotificationData[FormGlobal]）则查询用户对于全局通知的订阅（一般用于系统发布、应用通知），优先级最高
+ * 2020-10-29 重构通知
+ * INotificationSender指定接收者,未指定才会查询所有订阅用户,已指定发布者,直接发布(检验是否订阅)
  */
 
 namespace LINGYUN.Abp.Notifications
@@ -21,10 +15,10 @@ namespace LINGYUN.Abp.Notifications
     public class NotificationDefinition
     {
         /// <summary>
-        /// 通知类目
+        /// 通知名称
         /// </summary>
         [NotNull]
-        public string CateGory { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 通知显示名称
         /// </summary>
@@ -58,15 +52,15 @@ namespace LINGYUN.Abp.Notifications
         public List<string> Providers { get; }
 
         public NotificationDefinition(
-           string category,
+           string name,
            ILocalizableString displayName = null,
            ILocalizableString description = null,
            NotificationType notificationType = NotificationType.Application,
            NotificationLifetime lifetime = NotificationLifetime.Persistent,
            bool allowSubscriptionToClients = false)
         {
-            CateGory = category;
-            DisplayName = displayName ?? new FixedLocalizableString(category);
+            Name = name;
+            DisplayName = displayName ?? new FixedLocalizableString(name);
             Description = description;
             NotificationLifetime = lifetime;
             NotificationType = notificationType;
@@ -83,6 +77,11 @@ namespace LINGYUN.Abp.Notifications
             }
 
             return this;
+        }
+
+        public override string ToString()
+        {
+            return $"[{nameof(NotificationDefinition)} {Name}]";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.IM.Group
@@ -7,35 +8,59 @@ namespace LINGYUN.Abp.IM.Group
     public interface IUserGroupStore
     {
         /// <summary>
+        /// 成员是否在群组
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<bool> MemberHasInGroupAsync(
+            Guid? tenantId, 
+            long groupId,
+            Guid userId,
+            CancellationToken cancellationToken = default);
+        /// <summary>
         /// 获取群组用户身份
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="groupId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<GroupUserCard> GetUserGroupCardAsync(Guid? tenantId, long groupId, Guid userId);
+        Task<GroupUserCard> GetUserGroupCardAsync(
+            Guid? tenantId, 
+            long groupId, 
+            Guid userId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取用户所在通讯组列表
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IEnumerable<Group>> GetUserGroupsAsync(Guid? tenantId, Guid userId);
+        Task<IEnumerable<Group>> GetUserGroupsAsync(
+            Guid? tenantId,
+            Guid userId,
+            CancellationToken cancellationToken = default);
         /// <summary>
-        /// 获取通讯组所有用户
+        /// 获取群组成员列表
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        Task<IEnumerable<UserGroup>> GetGroupUsersAsync(Guid? tenantId, long groupId);
+        Task<IEnumerable<GroupUserCard>> GetMembersAsync(
+            Guid? tenantId, 
+            long groupId,
+            CancellationToken cancellationToken = default);
         /// <summary>
-        /// 获取通讯组用户数
+        /// 获取群组成员数
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="groupId"></param>
-        /// <param name="filter"></param>
         /// <returns></returns>
-        Task<int> GetGroupUsersCountAsync(Guid? tenantId, long groupId, string filter = "");
+        Task<int> GetMembersCountAsync(
+            Guid? tenantId, 
+            long groupId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取通讯组用户
         /// </summary>
@@ -46,7 +71,14 @@ namespace LINGYUN.Abp.IM.Group
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
-        Task<List<UserGroup>> GetGroupUsersAsync(Guid? tenantId, long groupId, string filter = "", string sorting = nameof(UserGroup.UserId), int skipCount = 1, int maxResultCount = 10);
+        Task<List<GroupUserCard>> GetMembersAsync(
+            Guid? tenantId, 
+            long groupId,
+            string sorting = nameof(GroupUserCard.UserId), 
+            bool reverse = false, 
+            int skipCount = 0, 
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 用户加入通讯组
         /// </summary>
@@ -54,7 +86,12 @@ namespace LINGYUN.Abp.IM.Group
         /// <param name="userId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        Task AddUserToGroupAsync(Guid? tenantId, Guid userId, long groupId, Guid acceptUserId);
+        Task AddUserToGroupAsync(
+            Guid? tenantId, 
+            Guid userId, 
+            long groupId,
+            Guid acceptUserId,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 用户退出通讯组
         /// </summary>
@@ -62,6 +99,10 @@ namespace LINGYUN.Abp.IM.Group
         /// <param name="userId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        Task RemoveUserFormGroupAsync(Guid? tenantId, Guid userId, long groupId);
+        Task RemoveUserFormGroupAsync(
+            Guid? tenantId, 
+            Guid userId, 
+            long groupId,
+            CancellationToken cancellationToken = default);
     }
 }

@@ -36,6 +36,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement;
@@ -179,6 +180,11 @@ namespace LINGYUN.Abp.BackendAdmin
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
                 options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            });
+
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.AddNamespace("Volo.Abp.TenantManagement");
             });
 
             Configure<RedisCacheOptions>(options =>

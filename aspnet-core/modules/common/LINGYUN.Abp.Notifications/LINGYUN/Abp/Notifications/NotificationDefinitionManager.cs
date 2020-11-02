@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -12,51 +11,88 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDefinitionManager : INotificationDefinitionManager, ISingletonDependency
     {
-        protected Lazy<IDictionary<string, NotificationDefinition>> NotificationDefinitions { get; }
-
         protected AbpNotificationOptions Options { get; }
 
-        protected IServiceProvider ServiceProvider { get; }
+        protected IDictionary<string, NotificationGroupDefinition> NotificationGroupDefinitions => _lazyNotificationGroupDefinitions.Value;
+        private readonly Lazy<Dictionary<string, NotificationGroupDefinition>> _lazyNotificationGroupDefinitions;
+
+        protected IDictionary<string, NotificationDefinition> NotificationDefinitions => _lazyNotificationDefinitions.Value;
+        private readonly Lazy<Dictionary<string, NotificationDefinition>> _lazyNotificationDefinitions;
+
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public NotificationDefinitionManager(
             IOptions<AbpNotificationOptions> options,
-            IServiceProvider serviceProvider)
+            IServiceScopeFactory serviceScopeFactory)
         {
-            ServiceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
             Options = options.Value;
 
-            NotificationDefinitions = new Lazy<IDictionary<string, NotificationDefinition>>(CreateNotificationDefinitions, true);
+            _lazyNotificationDefinitions = new Lazy<Dictionary<string, NotificationDefinition>>(
+                    CreateNotificationDefinitions,
+                    isThreadSafe: true
+                );
+
+            _lazyNotificationGroupDefinitions = new Lazy<Dictionary<string, NotificationGroupDefinition>>(
+                CreateNotificationGroupDefinitions,
+                isThreadSafe: true
+            );
         }
 
-        public virtual NotificationDefinition Get([NotNull] string category)
+        public virtual NotificationDefinition Get(string name)
         {
-            Check.NotNull(category, nameof(category));
+            Check.NotNull(name, nameof(name));
 
-            var notification = GetOrNull(category);
+            var feature = GetOrNull(name);
 
-            if (notification == null)
+            if (feature == null)
             {
-                throw new AbpException("Undefined notification category: " + category);
+                throw new AbpException("Undefined notification: " + name);
             }
 
-            return notification;
+            return feature;
         }
 
         public virtual IReadOnlyList<NotificationDefinition> GetAll()
         {
-            return NotificationDefinitions.Value.Values.ToImmutableList();
+            return NotificationDefinitions.Values.ToImmutableList();
         }
 
-        public virtual NotificationDefinition GetOrNull(string category)
+        public virtual NotificationDefinition GetOrNull(string name)
         {
-            return NotificationDefinitions.Value.GetOrDefault(category);
+            return NotificationDefinitions.GetOrDefault(name);
         }
 
-        protected virtual IDictionary<string, NotificationDefinition> CreateNotificationDefinitions()
+        public IReadOnlyList<NotificationGroupDefinition> GetGroups()
+        {
+            return NotificationGroupDefinitions.Values.ToImmutableList();
+        }
+
+        protected virtual Dictionary<string, NotificationDefinition> CreateNotificationDefinitions()
         {
             var notifications = new Dictionary<string, NotificationDefinition>();
 
-            using (var scope = ServiceProvider.CreateScope())
+            foreach (var groupDefinition in NotificationGroupDefinitions.Values)
+            {
+                foreach (var notification in groupDefinition.Notifications)
+                {
+                    if (notifications.ContainsKey(notification.Name))
+                    {
+                        throw new AbpException("Duplicate notification name: " + notification.Name);
+                    }
+
+                    notifications[notification.Name] = notification;
+                }
+            }
+
+            return notifications;
+        }
+
+        protected virtual Dictionary<string, NotificationGroupDefinition> CreateNotificationGroupDefinitions()
+        {
+            var context = new NotificationDefinitionContext();
+
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var providers = Options
                     .DefinitionProviders
@@ -65,11 +101,11 @@ namespace LINGYUN.Abp.Notifications
 
                 foreach (var provider in providers)
                 {
-                    provider.Define(new NotificationDefinitionContext(notifications));
+                    provider.Define(context);
                 }
             }
 
-            return notifications;
+            return context.Groups;
         }
     }
 }

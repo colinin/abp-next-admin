@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LINGYUN.Abp.RealTime.Client
 {
@@ -21,6 +22,8 @@ namespace LINGYUN.Abp.RealTime.Client
         IOnlineClient GetByConnectionIdOrNull(string connectionId);
 
         IReadOnlyList<IOnlineClient> GetAllClients();
+
+        IReadOnlyList<IOnlineClient> GetAllClients(Expression<Func<IOnlineClient, bool>> predicate);
 
         IReadOnlyList<IOnlineClient> GetAllByContext([NotNull] OnlineClientContext context);
     }

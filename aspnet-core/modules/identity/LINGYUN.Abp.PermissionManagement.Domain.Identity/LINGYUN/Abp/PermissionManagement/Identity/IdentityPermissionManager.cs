@@ -8,7 +8,6 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.PermissionManagement.Identity
@@ -66,10 +65,11 @@ namespace LINGYUN.Abp.PermissionManagement.Identity
             {
                 var userRoleItemKey = $"FindRolesByUser:{userId}";
 
-                return CurrentUnitOfWork.GetOrAddItem(userRoleItemKey, (key) =>
+                return await CurrentUnitOfWork.GetOrAddItem(userRoleItemKey, (key) =>
                 {
-                    var roles = AsyncHelper.RunSync(async ()=> await UserRoleFinder.GetRolesAsync(userId));
-                    return roles;
+                    // 取消同步调用
+                    //var roles = AsyncHelper.RunSync(async ()=> await UserRoleFinder.GetRolesAsync(userId));
+                    return UserRoleFinder.GetRolesAsync(userId);
                 });
             }
             return await UserRoleFinder.GetRolesAsync(userId);

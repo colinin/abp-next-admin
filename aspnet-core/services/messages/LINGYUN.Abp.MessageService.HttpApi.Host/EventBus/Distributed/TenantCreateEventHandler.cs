@@ -20,14 +20,12 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         protected ICurrentTenant CurrentTenant { get; }
         protected ISettingProvider SettingProvider { get; }
         protected IStringLocalizer StringLocalizer { get; }
-        protected INotificationDispatcher NotificationDispatcher { get; }
-        protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }
+        protected INotificationSender NotificationSender { get; }
 
         public TenantCreateEventHandler(
             ICurrentTenant currentTenant,
             ISettingProvider settingProvider,
-            INotificationDispatcher notificationDispatcher,
-            INotificationSubscriptionManager notificationSubscriptionManager,
+            INotificationSender notificationSender,
             IStringLocalizer<MessageServiceResource> stringLocalizer,
             ILogger<TenantCreateEventHandler> logger)
         {
@@ -35,8 +33,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             CurrentTenant = currentTenant;
             SettingProvider = settingProvider;
             StringLocalizer = stringLocalizer;
-            NotificationDispatcher = notificationDispatcher;
-            NotificationSubscriptionManager = notificationSubscriptionManager;
+            NotificationSender = notificationSender;
         }
 
         public async Task HandleEventAsync(CreateEventData eventData)
@@ -49,21 +46,22 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             // 使用系统区域语言发布通知
             using (CultureHelper.Use(userDefaultCultureName, userDefaultCultureName))
             {
-                var noticeNormalizerName = NotificationNameNormalizer.NormalizerName(TenantNotificationNames.NewTenantRegistered);
                 var tenantAdminUserIdentifier = new UserIdentifier(eventData.AdminUserId, eventData.AdminEmailAddress);
 
-                // 管理用户订阅租户创建通知
-                await NotificationSubscriptionManager.SubscribeAsync(eventData.Id, tenantAdminUserIdentifier, noticeNormalizerName.Name);
-
-                var notificationData = NotificationData.CreateTenantNotificationData(eventData.Id);
+                var notificationData = new NotificationData();
                 notificationData.WriteStandardData(
                     L("NewTenantRegisteredNotificationTitle"),
                     L("NewTenantRegisteredNotificationMessage", eventData.Name),
                     DateTime.Now, eventData.AdminEmailAddress);
 
                 // 发布租户创建通知
-                await NotificationDispatcher.DispatchAsync(noticeNormalizerName, notificationData,
-                    eventData.Id, NotificationSeverity.Success);
+                await NotificationSender
+                    .SendNofiterAsync(
+                        TenantNotificationNames.NewTenantRegistered, 
+                        notificationData,
+                        tenantAdminUserIdentifier,
+                        eventData.Id, 
+                        NotificationSeverity.Success);
             }
         }
 

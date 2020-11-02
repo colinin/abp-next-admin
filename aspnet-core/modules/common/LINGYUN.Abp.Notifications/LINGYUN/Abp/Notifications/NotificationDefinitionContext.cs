@@ -1,33 +1,57 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 using System.Collections.Generic;
+using Volo.Abp;
+using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDefinitionContext : INotificationDefinitionContext
     {
-        protected Dictionary<string, NotificationDefinition> Notifications { get; }
+        internal Dictionary<string, NotificationGroupDefinition> Groups { get; }
 
-        public NotificationDefinitionContext(Dictionary<string, NotificationDefinition> notifications)
+        public NotificationDefinitionContext()
         {
-            Notifications = notifications;
+            Groups = new Dictionary<string, NotificationGroupDefinition>();
         }
 
-        public void Add(params NotificationDefinition[] definitions)
+        public NotificationGroupDefinition AddGroup(
+            [NotNull] string name, 
+            ILocalizableString displayName = null,
+            bool allowSubscriptionToClients = true)
         {
-            if (definitions.IsNullOrEmpty())
+            Check.NotNull(name, nameof(name));
+
+            if (Groups.ContainsKey(name))
             {
-                return;
+                throw new AbpException($"There is already an existing notification group with name: {name}");
             }
 
-            foreach (var definition in definitions)
-            {
-                Notifications[definition.CateGory] = definition;
-            }
+            return Groups[name] = new NotificationGroupDefinition(name, displayName, allowSubscriptionToClients);
         }
 
-        public NotificationDefinition GetOrNull(string category)
+        public NotificationGroupDefinition GetGroupOrNull(string name)
         {
-            return Notifications.GetOrDefault(category);
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                return null;
+            }
+
+            return Groups[name];
+        }
+
+        public void RemoveGroup(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
+            {
+                throw new AbpException($"Undefined notification group: '{name}'.");
+            }
+
+            Groups.Remove(name);
         }
     }
 }

@@ -23,7 +23,9 @@
           >
             <user-nofitications />
           </el-tab-pane>
-          <el-tab-pane label="消息">
+          <el-tab-pane
+            label="消息"
+          >
             {{ $t('messages.noMessages') }}
           </el-tab-pane>
         </el-tabs>
@@ -52,6 +54,9 @@ export default class extends mixins(EventBusMiXin) {
     })
     this.subscribe('onNotificationReadChanged', () => {
       this.notificationCount -= 1
+    })
+    this.subscribe('onReceivedChatMessage', () => {
+      this.notificationCount += 1
     })
   }
 }

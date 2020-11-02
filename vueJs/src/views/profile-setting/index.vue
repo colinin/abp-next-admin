@@ -13,19 +13,21 @@
       账号绑定
     </el-tab-pane>
     <el-tab-pane label="消息通知">
-      消息通知
+      <my-notifier />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang="ts">
 import MyProfile from './components/MyProfile.vue'
+import MyNotifier from './components/MyNotifier.vue'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   name: 'ProfileSettingEditForm',
   components: {
-    MyProfile
+    MyProfile,
+    MyNotifier
   }
 })
 export default class extends Vue {

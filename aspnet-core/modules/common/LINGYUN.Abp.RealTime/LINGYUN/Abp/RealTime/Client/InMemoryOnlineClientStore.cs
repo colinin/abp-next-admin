@@ -1,6 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Linq.Expressions;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.RealTime.Client
@@ -42,6 +45,13 @@ namespace LINGYUN.Abp.RealTime.Client
         public IReadOnlyList<IOnlineClient> GetAll()
         {
             return Clients.Values.ToImmutableList();
+        }
+
+        public IReadOnlyList<IOnlineClient> GetAll(Expression<Func<IOnlineClient, bool>> predicate)
+        {
+            return Clients.Values
+                .Where(predicate.Compile())
+                .ToImmutableList();
         }
     }
 }

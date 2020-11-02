@@ -180,7 +180,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             client.RedirectUris.RemoveAll(uri => !input.RedirectUris.Contains(uri.RedirectUri));
             foreach (var redirect in input.RedirectUris)
             {
-                if (client.FindRedirectUri(redirect) != null)
+                if (client.FindRedirectUri(redirect) == null)
                 {
                     client.AddRedirectUri(redirect);
                 }

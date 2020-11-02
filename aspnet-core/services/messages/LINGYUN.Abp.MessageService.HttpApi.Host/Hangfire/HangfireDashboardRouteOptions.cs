@@ -56,19 +56,19 @@ namespace Hangfire
 
         private void InitDefaultRoutes()
         {
-            WithPermission("/hangfire", AbpMessageServicePermissions.Hangfire.Default);
-            WithPermission("/stats", AbpMessageServicePermissions.Hangfire.Default);
-            WithPermission("/servers", AbpMessageServicePermissions.Hangfire.Default);
-            WithPermission("/retries", AbpMessageServicePermissions.Hangfire.Default);
-            WithPermission("/recurring", AbpMessageServicePermissions.Hangfire.Default);
-            WithPermission("/jobs/enqueued", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/processing", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/scheduled", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/failed", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/deleted", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/awaiting", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/actions", AbpMessageServicePermissions.Hangfire.ManageQueue);
-            WithPermission("/jobs/details", AbpMessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/hangfire", MessageServicePermissions.Hangfire.Default);
+            WithPermission("/stats", MessageServicePermissions.Hangfire.Default);
+            WithPermission("/servers", MessageServicePermissions.Hangfire.Default);
+            WithPermission("/retries", MessageServicePermissions.Hangfire.Default);
+            WithPermission("/recurring", MessageServicePermissions.Hangfire.Default);
+            WithPermission("/jobs/enqueued", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/processing", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/scheduled", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/failed", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/deleted", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/awaiting", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/actions", MessageServicePermissions.Hangfire.ManageQueue);
+            WithPermission("/jobs/details", MessageServicePermissions.Hangfire.ManageQueue);
         }
     }
 }

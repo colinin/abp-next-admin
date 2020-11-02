@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{7C727110-59CA-495B-8143-C5DDEDE41289}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{DDCA574F-911B-4547-BA21-12CCE1022D95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.Host", "services\account\AuthServer.Host\AuthServer.Host.csproj", "{BF8073FF-6403-4ED6-A3CD-74F240DC8044}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity-server", "identity-server", "{98887A8F-7040-4FA1-842F-A4C77A61ED09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.SmsValidator", "modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj", "{9EA06629-DBAC-4369-9850-B7415D0470B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChatValidator", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj", "{B9E9D754-0BC1-42EA-94B3-631D1EA82B48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{70B8D735-1E89-4163-8EDB-56A74E374CF4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain.Identity", "modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj", "{F87B2BA3-40BC-4CB8-B53E-793C860F285D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wechat", "wechat", "{AF8AECC8-0F42-4FC5-B3C0-00987BA8279F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Authorization", "modules\wechat\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj", "{F656C1B2-6122-44C1-97F4-421CB4C03ED8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF8073FF-6403-4ED6-A3CD-74F240DC8044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8073FF-6403-4ED6-A3CD-74F240DC8044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8073FF-6403-4ED6-A3CD-74F240DC8044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8073FF-6403-4ED6-A3CD-74F240DC8044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA06629-DBAC-4369-9850-B7415D0470B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA06629-DBAC-4369-9850-B7415D0470B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA06629-DBAC-4369-9850-B7415D0470B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA06629-DBAC-4369-9850-B7415D0470B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9E9D754-0BC1-42EA-94B3-631D1EA82B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9E9D754-0BC1-42EA-94B3-631D1EA82B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9E9D754-0BC1-42EA-94B3-631D1EA82B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9E9D754-0BC1-42EA-94B3-631D1EA82B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F87B2BA3-40BC-4CB8-B53E-793C860F285D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F87B2BA3-40BC-4CB8-B53E-793C860F285D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F87B2BA3-40BC-4CB8-B53E-793C860F285D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F87B2BA3-40BC-4CB8-B53E-793C860F285D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F656C1B2-6122-44C1-97F4-421CB4C03ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F656C1B2-6122-44C1-97F4-421CB4C03ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F656C1B2-6122-44C1-97F4-421CB4C03ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F656C1B2-6122-44C1-97F4-421CB4C03ED8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF8073FF-6403-4ED6-A3CD-74F240DC8044} = {DDCA574F-911B-4547-BA21-12CCE1022D95}
+		{98887A8F-7040-4FA1-842F-A4C77A61ED09} = {7C727110-59CA-495B-8143-C5DDEDE41289}
+		{9EA06629-DBAC-4369-9850-B7415D0470B0} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
+		{B9E9D754-0BC1-42EA-94B3-631D1EA82B48} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
+		{70B8D735-1E89-4163-8EDB-56A74E374CF4} = {7C727110-59CA-495B-8143-C5DDEDE41289}
+		{F87B2BA3-40BC-4CB8-B53E-793C860F285D} = {70B8D735-1E89-4163-8EDB-56A74E374CF4}
+		{AF8AECC8-0F42-4FC5-B3C0-00987BA8279F} = {7C727110-59CA-495B-8143-C5DDEDE41289}
+		{F656C1B2-6122-44C1-97F4-421CB4C03ED8} = {AF8AECC8-0F42-4FC5-B3C0-00987BA8279F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCB77471-9ECB-4666-A316-1D6A6285A468}
+	EndGlobalSection
+EndGlobal

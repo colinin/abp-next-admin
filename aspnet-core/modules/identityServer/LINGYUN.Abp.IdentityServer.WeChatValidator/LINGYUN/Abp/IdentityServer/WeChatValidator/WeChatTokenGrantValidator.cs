@@ -72,6 +72,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                     Localizer["InvalidGrant:GrantTypeInvalid"]);
                 return;
             }
+            // TODO: 统一命名规范, 微信认证传递的 code 改为 WeChatOpenIdConsts.WeCahtCodeKey
             var wechatCode = raw.Get(WeChatValidatorConsts.WeChatValidatorTokenName);
             if (wechatCode.IsNullOrWhiteSpace() || wechatCode.IsNullOrWhiteSpace())
             {
@@ -81,7 +82,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                 return;
             }
             var wechatOpenId = await WeChatOpenIdFinder.FindAsync(wechatCode);
-            var currentUser = await UserManager.FindByLoginAsync("WeChat", wechatOpenId.OpenId);
+            var currentUser = await UserManager.FindByLoginAsync(WeChatAuthorizationConsts.ProviderKey, wechatOpenId.OpenId);
             if(currentUser == null)
             {
                 Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatOpenId.OpenId);
@@ -90,6 +91,11 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                 return;
             }
             var sub = await UserManager.GetUserIdAsync(currentUser);
+
+            // 微信登录的用户写入token
+            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtCodeKey, wechatCode);
+            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtOpenIdKey, wechatOpenId.OpenId);
+            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtSessionKey, wechatOpenId.SessionKey);
 
             var additionalClaims = new List<Claim>();
             if (currentUser.TenantId.HasValue)

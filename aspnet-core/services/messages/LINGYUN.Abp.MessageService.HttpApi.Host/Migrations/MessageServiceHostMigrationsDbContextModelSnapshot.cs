@@ -16,269 +16,147 @@ namespace LINGYUN.Abp.MessageService.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.ChatGroup", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserChatCard", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AllowAnonymous")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasMaxLength(512);
 
-                    b.Property<bool>("AllowSendMessage")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<DateTime?>("Birthday")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastModifierId")
+                    b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("MaxUserCount")
+                    b.Property<string>("NickName")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<int>("Sex")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                    b.Property<string>("Sign")
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasMaxLength(30);
 
-                    b.Property<string>("Notice")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
-
-                    b.Property<string>("Tag")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
-                        .HasMaxLength(512);
-
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "Name");
-
-                    b.ToTable("AppChatGroups");
-                });
-
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.ChatGroupAdmin", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("AllowAddPeople")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("AllowDissolveGroup")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("AllowKickPeople")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("AllowSendNotice")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("AllowSilence")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsSuperAdmin")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifierId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "GroupId");
-
-                    b.ToTable("AppChatGroupAdmins");
-                });
-
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.GroupChatBlack", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ShieldUserId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "GroupId");
-
-                    b.ToTable("AppGroupChatBlacks");
-                });
-
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.GroupMessage", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
-                        .HasMaxLength(1048576);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("MessageId")
-                        .HasColumnType("bigint");
-
-                    b.Property<sbyte>("SendState")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("SendUserName")
-                        .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId", "GroupId");
-
-                    b.ToTable("AppGroupMessages");
-                });
-
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.UserChatBlack", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ShieldUserId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
                     b.HasIndex("TenantId", "UserId");
 
-                    b.ToTable("AppUserChatBlacks");
+                    b.ToTable("AppUserChatCards");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.UserChatGroup", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserChatFriend", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("Black")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("TenantId")
+                    b.Property<bool>("DontDisturb")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<Guid>("FrientId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("RemarkName")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("SpecialFocus")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "GroupId", "UserId");
+                    b.HasIndex("TenantId", "UserId", "FrientId");
 
-                    b.ToTable("AppUserChatGroups");
+                    b.ToTable("AppUserChatFriends");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.UserChatSetting", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserChatSetting", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -299,12 +177,11 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<bool>("RequireAddFriendValition")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -314,11 +191,17 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppUserChatSettings");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.UserMessage", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserMessage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -329,14 +212,18 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<long>("MessageId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("ReceiveUserId")
-                        .IsRequired()
+                    b.Property<Guid>("ReceiveUserId")
                         .HasColumnType("char(36)");
 
                     b.Property<sbyte>("SendState")
@@ -347,7 +234,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -361,35 +248,248 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppUserMessages");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Messages.UserSpecialFocus", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.ChatGroup", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("AdminUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("AllowAnonymous")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("AllowSendMessage")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasMaxLength(128);
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("MaxUserCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Notice")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasMaxLength(512);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name");
+
+                    b.ToTable("AppChatGroups");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.GroupChatBlack", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("FocusUserId")
-                        .IsRequired()
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("ShieldUserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "GroupId");
+
+                    b.ToTable("AppGroupChatBlacks");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.GroupMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasMaxLength(1048576);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MessageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<sbyte>("SendState")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("SendUserName")
+                        .IsRequired()
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "GroupId");
+
+                    b.ToTable("AppGroupMessages");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.UserChatGroup", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "GroupId", "UserId");
+
+                    b.ToTable("AppUserChatGroups");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.UserGroupCard", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("SilenceEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TenantId", "UserId");
 
-                    b.ToTable("AppUserSpecialFocuss");
+                    b.ToTable("AppUserGroupCards");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.MessageService.Notifications.Notification", b =>
@@ -404,11 +504,6 @@ namespace LINGYUN.Abp.MessageService.Migrations
 
                     b.Property<DateTime?>("ExpirationTime")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NotificationCateGory")
-                        .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
 
                     b.Property<string>("NotificationData")
                         .IsRequired()
@@ -431,7 +526,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<sbyte>("Severity")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -457,12 +552,11 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<int>("ReadStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -488,12 +582,11 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("UserName")

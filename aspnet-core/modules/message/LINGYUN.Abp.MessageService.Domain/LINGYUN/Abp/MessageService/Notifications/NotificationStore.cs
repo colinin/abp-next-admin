@@ -4,168 +4,271 @@ using LINGYUN.Abp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Services;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
-    public class NotificationStore : DomainService, INotificationStore
+    public class NotificationStore : INotificationStore, ITransientDependency
     {
+        private readonly IClock _clock;
+
         private readonly IObjectMapper _objectMapper;
+
+        private readonly ICurrentTenant _currentTenant;
+
+        private readonly IJsonSerializer _jsonSerializer;
+
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        private IJsonSerializer _jsonSerializer;
-        protected IJsonSerializer JsonSerializer => LazyGetRequiredService(ref _jsonSerializer);
+        private readonly ISnowflakeIdGenerator _snowflakeIdGenerator;
 
-        private ISnowflakeIdGenerator _snowflakeIdGenerator;
-        protected ISnowflakeIdGenerator SnowflakeIdGenerator => LazyGetRequiredService(ref _snowflakeIdGenerator);
+        private readonly INotificationRepository _notificationRepository;
 
-        private INotificationRepository _notificationRepository;
-        protected INotificationRepository NotificationRepository => LazyGetRequiredService(ref _notificationRepository);
+        private readonly IUserNotificationRepository _userNotificationRepository;
 
-        private IUserNotificationRepository _userNotificationRepository;
-        protected IUserNotificationRepository UserNotificationRepository => LazyGetRequiredService(ref _userNotificationRepository);
-
-        private IUserSubscribeRepository _userSubscribeRepository;
-        protected IUserSubscribeRepository UserSubscribeRepository => LazyGetRequiredService(ref _userSubscribeRepository);
+        private readonly IUserSubscribeRepository _userSubscribeRepository;
 
         public NotificationStore(
+            IClock clock,
             IObjectMapper objectMapper,
-            IUnitOfWorkManager unitOfWorkManager)
+            ICurrentTenant currentTenant,
+            IJsonSerializer jsonSerializer,
+            IUnitOfWorkManager unitOfWorkManager,
+            ISnowflakeIdGenerator snowflakeIdGenerator,
+            INotificationRepository notificationRepository,
+            IUserSubscribeRepository userSubscribeRepository,
+            IUserNotificationRepository userNotificationRepository
+            )
         {
+            _clock = clock;
             _objectMapper = objectMapper;
+            _currentTenant = currentTenant;
+            _jsonSerializer = jsonSerializer;
             _unitOfWorkManager = unitOfWorkManager;
+            _snowflakeIdGenerator = snowflakeIdGenerator;
+            _notificationRepository = notificationRepository;
+            _userSubscribeRepository = userSubscribeRepository;
+            _userNotificationRepository = userNotificationRepository;
         }
 
-        [UnitOfWork]
-        public async Task ChangeUserNotificationReadStateAsync(Guid? tenantId, Guid userId, long notificationId, NotificationReadState readState)
+        public virtual async Task ChangeUserNotificationReadStateAsync(
+            Guid? tenantId, 
+            Guid userId,
+            long notificationId, 
+            NotificationReadState readState,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                await UserNotificationRepository.ChangeUserNotificationReadStateAsync(userId, notificationId, readState);
+                await _userNotificationRepository
+                    .ChangeUserNotificationReadStateAsync(userId, notificationId, readState, cancellationToken);
 
                 await unitOfWork.SaveChangesAsync();
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteNotificationAsync(NotificationInfo notification)
+        public virtual async Task DeleteNotificationAsync(
+            NotificationInfo notification,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(notification.TenantId))
+            using (_currentTenant.Change(notification.TenantId))
             {
-                var notify = await NotificationRepository.GetByIdAsync(notification.GetId());
-                await NotificationRepository.DeleteAsync(notify.Id);
+                var notify = await _notificationRepository.GetByIdAsync(notification.GetId(), cancellationToken);
+                await _notificationRepository.DeleteAsync(notify.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteNotificationAsync(int batchCount)
+        public virtual async Task DeleteNotificationAsync(
+            int batchCount,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                await NotificationRepository.DeleteExpritionAsync(batchCount);
+                await _notificationRepository.DeleteExpritionAsync(batchCount, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteUserNotificationAsync(Guid? tenantId, Guid userId, long notificationId)
+        public virtual async Task DeleteUserNotificationAsync(
+            Guid? tenantId,
+            Guid userId,
+            long notificationId,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var notify = await UserNotificationRepository.GetByIdAsync(userId, notificationId);
-                await UserNotificationRepository.DeleteAsync(notify.Id);
+                var notify = await _userNotificationRepository
+                    .GetByIdAsync(userId, notificationId, cancellationToken);
+                await _userNotificationRepository
+                    .DeleteAsync(notify.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteAllUserSubscriptionAsync(Guid? tenantId, string notificationName)
+        public virtual async Task DeleteAllUserSubscriptionAsync(
+            Guid? tenantId,
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                await UserSubscribeRepository.DeleteUserSubscriptionAsync(notificationName);
+                await _userSubscribeRepository
+                    .DeleteUserSubscriptionAsync(notificationName, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteUserSubscriptionAsync(Guid? tenantId, Guid userId, string notificationName)
+        public virtual async Task DeleteUserSubscriptionAsync(
+            Guid? tenantId,
+            Guid userId, 
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var userSubscribe = await UserSubscribeRepository.GetUserSubscribeAsync(notificationName, userId);
-                await UserSubscribeRepository.DeleteAsync(userSubscribe.Id);
+                var userSubscribe = await _userSubscribeRepository
+                    .GetUserSubscribeAsync(notificationName, userId, cancellationToken);
+                await _userSubscribeRepository
+                    .DeleteAsync(userSubscribe.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task DeleteUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName)
+        public virtual async Task DeleteUserSubscriptionAsync(
+            Guid? tenantId, 
+            IEnumerable<UserIdentifier> identifiers,
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                // TODO:不追踪用户订阅实体?
-                var userSubscribes = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
+                await _userSubscribeRepository
+                    .DeleteUserSubscriptionAsync(notificationName, identifiers.Select(ids => ids.UserId), cancellationToken);
 
-                var removeUserSubscribes = userSubscribes.Where(us => identifiers.Any(id => id.UserId.Equals(us.UserId)));
-
-                await UserSubscribeRepository.DeleteUserSubscriptionAsync(removeUserSubscribes);
-
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task<NotificationInfo> GetNotificationOrNullAsync(Guid? tenantId, long notificationId)
+        public virtual async Task<NotificationInfo> GetNotificationOrNullAsync(
+            Guid? tenantId, 
+            long notificationId,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var notification = await NotificationRepository.GetByIdAsync(notificationId);
+                var notification = await _notificationRepository
+                    .GetByIdAsync(notificationId, cancellationToken);
 
                 return _objectMapper.Map<Notification, NotificationInfo>(notification);
             }
         }
 
-        public async Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(Guid? tenantId, string notificationName)
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
+            Guid? tenantId, 
+            string notificationName,
+            IEnumerable<UserIdentifier> identifiers = null,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var userSubscriptions = await UserSubscribeRepository.GetSubscribesAsync(notificationName);
+                var userSubscriptions = new List<UserSubscribe>();
+
+                if (identifiers == null)
+                {
+                    userSubscriptions = await _userSubscribeRepository
+                        .GetUserSubscribesAsync(notificationName, null, cancellationToken);
+                }
+                else
+                {
+                    userSubscriptions = await _userSubscribeRepository
+                        .GetUserSubscribesAsync(
+                            notificationName,
+                            identifiers.Select(ids => ids.UserId),
+                            cancellationToken);
+                }
 
                 return _objectMapper.Map<List<UserSubscribe>, List<NotificationSubscriptionInfo>>(userSubscriptions);
             }
         }
 
-        public async Task<List<NotificationInfo>> GetUserNotificationsAsync(Guid? tenantId, Guid userId, NotificationReadState readState = NotificationReadState.UnRead, int maxResultCount = 10)
+        public virtual async Task<List<NotificationInfo>> GetUserNotificationsAsync(
+            Guid? tenantId,
+            Guid userId, 
+            NotificationReadState readState = NotificationReadState.UnRead, 
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var notifications = await UserNotificationRepository.GetNotificationsAsync(userId, readState, maxResultCount);
+                var notifications = await _userNotificationRepository
+                    .GetNotificationsAsync(userId, readState, maxResultCount, cancellationToken);
 
                 return _objectMapper.Map<List<Notification>, List<NotificationInfo>>(notifications);
             }
         }
 
-        public async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, Guid userId)
+        public virtual async Task<int> GetUserNotificationsCountAsync(
+            Guid? tenantId,
+            Guid userId,
+            string filter = "",
+            NotificationReadState readState = NotificationReadState.UnRead,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var userSubscriptionNames = await UserSubscribeRepository.GetUserSubscribesAsync(userId);
+                return await _userNotificationRepository
+                    .GetCountAsync(userId, filter, readState, cancellationToken);
+            }
+        }
+
+        public virtual async Task<List<NotificationInfo>> GetUserNotificationsAsync(
+            Guid? tenantId,
+            Guid userId,
+            string filter = "",
+            string sorting = nameof(NotificationInfo.CreationTime),
+            bool reverse = true,
+            NotificationReadState readState = NotificationReadState.UnRead,
+            int skipCount = 1,
+            int maxResultCount = 10,
+            CancellationToken cancellationToken = default)
+        {
+            using (_currentTenant.Change(tenantId))
+            {
+                var notifications = await _userNotificationRepository
+                    .GetListAsync(userId, filter, sorting, reverse, readState, skipCount, maxResultCount, cancellationToken);
+
+                return _objectMapper.Map<List<Notification>, List<NotificationInfo>>(notifications);
+            }
+        }
+
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
+            Guid? tenantId, 
+            Guid userId,
+            CancellationToken cancellationToken = default)
+        {
+            using (_currentTenant.Change(tenantId))
+            {
+                var userSubscriptionNames = await _userSubscribeRepository
+                    .GetUserSubscribesAsync(userId, cancellationToken);
 
                 var userSubscriptions = new List<NotificationSubscriptionInfo>();
 
@@ -181,11 +284,15 @@ namespace LINGYUN.Abp.MessageService.Notifications
             }
         }
 
-        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(Guid? tenantId, string userName)
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
+            Guid? tenantId,
+            string userName,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
-                var userSubscriptions = await UserSubscribeRepository.GetUserSubscribesByNameAsync(userName);
+                var userSubscriptions = await _userSubscribeRepository
+                    .GetUserSubscribesByNameAsync(userName, cancellationToken);
 
                 var userSubscriptionInfos = new List<NotificationSubscriptionInfo>();
 
@@ -201,71 +308,83 @@ namespace LINGYUN.Abp.MessageService.Notifications
             }
         }
 
-        [UnitOfWork]
-        public async Task InsertNotificationAsync(NotificationInfo notification)
+        public virtual async Task InsertNotificationAsync(
+            NotificationInfo notification,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(notification.TenantId))
+            using (_currentTenant.Change(notification.TenantId))
             {
                 // var notifyId = notification.GetId();
-                var notifyId = SnowflakeIdGenerator.Create();
+                var notifyId = _snowflakeIdGenerator.Create();
                 // 保存主键，防止前端js long类型溢出
                 // notification.Data["id"] = notifyId.ToString();
 
-                var notify = new Notification(notifyId, notification.CateGory, notification.Name,
+                var notify = new Notification(notifyId, notification.Name,
                     notification.Data.GetType().AssemblyQualifiedName,
-                    JsonSerializer.Serialize(notification.Data), notification.NotificationSeverity)
+                    _jsonSerializer.Serialize(notification.Data), 
+                    notification.Severity, notification.TenantId)
                 {
-                    CreationTime = Clock.Now,
-                    Type = notification.NotificationType,
-                    ExpirationTime = Clock.Now.AddDays(60)
+                    CreationTime = _clock.Now,
+                    Type = notification.Type,
+                    // TODO: 通知过期时间应该可以配置
+                    ExpirationTime = _clock.Now.AddDays(60)
                 };
-                notify.SetTenantId(notification.TenantId);
 
-                await NotificationRepository.InsertAsync(notify);
+                await _notificationRepository.InsertAsync(notify, cancellationToken: cancellationToken);
 
                 notification.Id = notify.NotificationId.ToString();
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task InsertUserNotificationAsync(NotificationInfo notification, Guid userId)
+        public virtual async Task InsertUserNotificationAsync(
+            NotificationInfo notification, 
+            Guid userId,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(notification.TenantId))
+            using (_currentTenant.Change(notification.TenantId))
             {
                 var userNotification = new UserNotification(notification.GetId(), userId, notification.TenantId);
-                await UserNotificationRepository.InsertAsync(userNotification);
+                await _userNotificationRepository
+                    .InsertAsync(userNotification, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task InsertUserSubscriptionAsync(Guid? tenantId, UserIdentifier identifier, string notificationName)
+        public virtual async Task InsertUserSubscriptionAsync(
+            Guid? tenantId,
+            UserIdentifier identifier,
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
 
                 var userSubscription = new UserSubscribe(notificationName, identifier.UserId, identifier.UserName, tenantId)
                 {
-                    CreationTime = Clock.Now
+                    CreationTime = _clock.Now
                 };
 
-                await UserSubscribeRepository.InsertAsync(userSubscription);
+                await _userSubscribeRepository
+                    .InsertAsync(userSubscription, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        [UnitOfWork]
-        public async Task InsertUserSubscriptionAsync(Guid? tenantId, IEnumerable<UserIdentifier> identifiers, string notificationName)
+        public virtual async Task InsertUserSubscriptionAsync(
+            Guid? tenantId, 
+            IEnumerable<UserIdentifier> identifiers,
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(tenantId))
+            using (_currentTenant.Change(tenantId))
             {
                 var userSubscribes = new List<UserSubscribe>();
 
@@ -274,39 +393,47 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     userSubscribes.Add(new UserSubscribe(notificationName, identifier.UserId, identifier.UserName, tenantId));
                 }
 
-                await UserSubscribeRepository.InsertUserSubscriptionAsync(userSubscribes);
+                await _userSubscribeRepository
+                    .InsertUserSubscriptionAsync(userSubscribes, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task<bool> IsSubscribedAsync(Guid? tenantId, Guid userId, string notificationName)
+        public virtual async Task<bool> IsSubscribedAsync(
+            Guid? tenantId, 
+            Guid userId, 
+            string notificationName,
+            CancellationToken cancellationToken = default)
         {
-            using (CurrentTenant.Change(tenantId))
-            return await UserSubscribeRepository.UserSubscribeExistsAysnc(notificationName, userId);
+            using (_currentTenant.Change(tenantId))
+            return await _userSubscribeRepository
+                    .UserSubscribeExistsAysnc(notificationName, userId, cancellationToken);
         }
 
-        [UnitOfWork]
-        public async Task InsertUserNotificationsAsync(NotificationInfo notification, IEnumerable<Guid> userIds)
+        public virtual async Task InsertUserNotificationsAsync(
+            NotificationInfo notification, 
+            IEnumerable<Guid> userIds,
+            CancellationToken cancellationToken = default)
         {
-            // 添加工作单元
             using (var unitOfWork = _unitOfWorkManager.Begin())
-            using (CurrentTenant.Change(notification.TenantId))
+            using (_currentTenant.Change(notification.TenantId))
             {
                 var userNofitications = new List<UserNotification>();
                 foreach (var userId in userIds)
                 {
                     // 重复检查
                     // TODO:如果存在很多个订阅用户,这是个隐患
-                    if (!await UserNotificationRepository.AnyAsync(userId, notification.GetId()))
+                    if (!await _userNotificationRepository.AnyAsync(userId, notification.GetId(), cancellationToken))
                     {
                         var userNofitication = new UserNotification(notification.GetId(), userId, notification.TenantId);
                         userNofitications.Add(userNofitication);
                     }
                 }
-                await UserNotificationRepository.InsertUserNotificationsAsync(userNofitications);
+                await _userNotificationRepository
+                    .InsertUserNotificationsAsync(userNofitications, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
     }

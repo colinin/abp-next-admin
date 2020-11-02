@@ -30,8 +30,10 @@ namespace LINGYUN.Abp.Notifications
             if (ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)
             {
                 var notification = await Store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
+                notification.Data = NotificationDataConverter.Convert(notification.Data);
+
                 var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrNull(publishProvider.Name, notification.CateGory);
+                        .GetMapItemOrNull(notification.Name, publishProvider.Name);
                 if (notifacationDataMapping != null)
                 {
                     notification.Data = notifacationDataMapping.MappingFunc(notification.Data);
