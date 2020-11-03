@@ -151,6 +151,8 @@ namespace AuthServer.Host
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
 
+            context.Services.ConfigureNonBreakingSameSiteCookies();
+
             // context.Services.AddAuthentication();
             context.Services.AddAuthentication()
                     .AddJwtBearer(options =>
@@ -208,7 +210,8 @@ namespace AuthServer.Host
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection(); //TODO: 不启用则不能用MVC方式登录?
+            // app.UseHttpsRedirection();
+            app.UseCookiePolicy();
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
