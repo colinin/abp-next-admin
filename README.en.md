@@ -12,17 +12,29 @@ This is a [vue-typescript-admin-template](http://armour.github.io/vue-typescript
 
 ![Login](./vueJs/images/userLogin.png)
 
-![Tenants](./vueJs/images/tenant.png)
+![Tenant](./vueJs/images/tenant.png)
 
-![Roles](./vueJs/images/userRoles.png)
+![OrganizationUnit](./vueJs/images/organization-units.png)
 
-![Permissions](./vueJs/images/userPermissions.png)
+![AuditLog](./vueJs/images/auditing-logs.png)
 
-![IM](./vueJs/images/im-notifications.png)
+![SecurityLog](./vueJs/images/security-logs.png)
 
-![Clients](./vueJs/images/client.png)
+![Role](./vueJs/images/userRoles.png)
 
-![Aggregate route](./vueJs/images/aggregate.png)
+![Permission](./vueJs/images/userPermissions.png)
+
+![Notification](./vueJs/images/im-notifications.png)
+
+![IM](./vueJs/images/im-realtime-message.png)
+
+![ClaimType](./vueJs/images/claim-types.png)
+
+![Client](./vueJs/images/client.png)
+
+![ApiResource](./vueJs/images/api-resources.png)
+
+![AggregateRoute](./vueJs/images/aggregate.png)
 
 ## Related Projects
 

@@ -15,13 +15,25 @@
 
 ![租户管理](./vueJs/images/tenant.png)
 
+![组织机构](./vueJs/images/organization-units.png)
+
+![审计日志](./vueJs/images/auditing-logs.png)
+
+![安全日志](./vueJs/images/security-logs.png)
+
 ![角色页](./vueJs/images/userRoles.png)
 
 ![权限页](./vueJs/images/userPermissions.png)
 
-![即时通讯](./vueJs/images/im-notifications.png)
+![实时通知](./vueJs/images/im-notifications.png)
+
+![实时通讯](./vueJs/images/im-realtime-message.png)
+
+![声明类型](./vueJs/images/claim-types.png)
 
 ![客户端管理](./vueJs/images/client.png)
+
+![Api资源管理](./vueJs/images/api-resources.png)
 
 ![聚合路由](./vueJs/images/aggregate.png)
 
