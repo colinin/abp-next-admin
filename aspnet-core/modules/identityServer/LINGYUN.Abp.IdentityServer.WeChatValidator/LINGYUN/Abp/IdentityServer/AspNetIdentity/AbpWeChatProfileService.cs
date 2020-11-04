@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Models;
+using LINGYUN.Abp.WeChat.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Security.Principal;
@@ -32,8 +33,8 @@ namespace LINGYUN.Abp.IdentityServer.AspNetIdentity
                 await base.GetProfileDataAsync(context);
 
                 // TODO: 可以从令牌获取openid, 安全性呢?
-                TryAddWeChatClaim(context, WeChatClaimTypes.OpenId);
-                TryAddWeChatClaim(context, WeChatClaimTypes.UnionId);
+                TryAddWeChatClaim(context, AbpWeChatClaimTypes.OpenId);
+                TryAddWeChatClaim(context, AbpWeChatClaimTypes.UnionId);
             }
         }
 

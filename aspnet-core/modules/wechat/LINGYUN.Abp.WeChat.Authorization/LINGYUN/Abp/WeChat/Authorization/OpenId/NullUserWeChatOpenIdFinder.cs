@@ -4,16 +4,16 @@ using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.WeChat.Authorization
 {
-    public class NullUserWeChatCodeFinder : IUserWeChatCodeFinder, ISingletonDependency
+    public class NullUserWeChatOpenIdFinder : IUserWeChatOpenIdFinder, ISingletonDependency
     {
         public Task<string> FindByUserIdAsync(Guid userId)
         {
-            return Task.FromResult(userId.ToString());
+            return Task.FromResult("");
         }
 
         public Task<string> FindByUserNameAsync(string userName)
         {
-            return Task.FromResult(userName);
+            return Task.FromResult("");
         }
     }
 }

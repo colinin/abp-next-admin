@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Security.Claims;
+﻿using LINGYUN.Abp.WeChat.Authorization;
 
 namespace Volo.Abp.Users
 {
@@ -11,7 +11,7 @@ namespace Volo.Abp.Users
         /// <returns></returns>
         public static string FindWeChatOpenId(this ICurrentUser currentUser)
         {
-            var weChatClaim = currentUser.FindClaim(WeChatClaimTypes.OpenId);
+            var weChatClaim = currentUser.FindClaim(AbpWeChatClaimTypes.OpenId);
             if (weChatClaim == null)
             {
                 return null;
@@ -27,7 +27,7 @@ namespace Volo.Abp.Users
         /// <returns></returns>
         public static string FindWeChatUnionId(this ICurrentUser currentUser)
         {
-            var weChatClaim = currentUser.FindClaim(WeChatClaimTypes.UnionId);
+            var weChatClaim = currentUser.FindClaim(AbpWeChatClaimTypes.UnionId);
             if (weChatClaim == null)
             {
                 return null;

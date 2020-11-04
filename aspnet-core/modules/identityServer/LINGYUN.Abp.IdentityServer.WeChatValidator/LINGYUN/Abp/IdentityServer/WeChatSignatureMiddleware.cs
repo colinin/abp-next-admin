@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
@@ -63,9 +61,7 @@ namespace LINGYUN.Abp.IdentityServer
                 signatureStr += al[i];
             }
             // step3 SHA1加密
-            using var sha1 = new SHA1CryptoServiceProvider();
-            byte[] bytes_in = Encoding.ASCII.GetBytes(signatureStr);
-            byte[] bytes_out = sha1.ComputeHash(bytes_in);
+            byte[] bytes_out = signatureStr.Sha1();
             string result = BitConverter.ToString(bytes_out).Replace("-", "");
             // step4 比对
             if (result.Equals(signature, StringComparison.CurrentCultureIgnoreCase))
