@@ -20,8 +20,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
         private IFeatureChecker _featureChecker;
         protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
 
-        private IWeChatOpenIdFinder _weChatOpenIdFinder;
-        protected IWeChatOpenIdFinder WeChatOpenIdFinder => LazyGetRequiredService(ref _weChatOpenIdFinder);
+        private IUserWeChatOpenIdFinder _userWeChatOpenIdFinder;
+        protected IUserWeChatOpenIdFinder UserWeChatOpenIdFinder => LazyGetRequiredService(ref _userWeChatOpenIdFinder);
 
         protected IWeChatWeAppNotificationSender NotificationSender { get; }
         protected AbpWeChatWeAppNotificationOptions Options { get; }
@@ -79,15 +79,13 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.DefaultWeAppLanguage);
             Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
-            // TODO: 如果微信端发布通知,请组装好 wx-code 字段在通知数据内容里面
-            string weChatCode = GetOrDefault(notification.Data, "wx-code", "");
+            // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
+            string weChatCode = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
 
-            WeChatOpenId openId = weChatCode.IsNullOrWhiteSpace()
-                ? await WeChatOpenIdFinder.FindByUserNameAsync(identifier.UserName) // 按照实际情况,需要自行实现 IUserWeChatCodeFinder 接口以获取微信Code,然后通过Code来获取OpenId
-                : await WeChatOpenIdFinder.FindAsync(weChatCode);
-            
+            var openId = !weChatCode.IsNullOrWhiteSpace() ? weChatCode
+                : await UserWeChatOpenIdFinder.FindByUserIdAsync(identifier.UserId);
 
-            var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(openId.OpenId,
+            var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(openId,
                 templateId, redirect, weAppState, weAppLang);
 
             // 写入模板数据

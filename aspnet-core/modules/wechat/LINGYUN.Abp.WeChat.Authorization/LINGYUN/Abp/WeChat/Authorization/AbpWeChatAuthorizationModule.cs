@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.WeChat.Authorization
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            Configure<AbpWeChatOptions>(configuration.GetSection("WeChat:Auth"));
+            Configure<AbpWeChatAuthorizationOptions>(configuration.GetSection("WeChat:Auth"));
 
             context.Services.AddHttpClient("WeChatRequestClient", options =>
             {

@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
     public class WeChatTokenGrantValidator : IExtensionGrantValidator
     {
         protected ILogger<WeChatTokenGrantValidator> Logger { get; }
-        protected AbpWeChatOptions Options { get; }
+        protected AbpWeChatAuthorizationOptions Options { get; }
         protected IHttpClientFactory HttpClientFactory{ get; }
         protected IEventService EventService { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             SignInManager<IdentityUser> signInManager,
             IStringLocalizer<AbpIdentityServerResource> stringLocalizer,
             PhoneNumberTokenProvider<IdentityUser> phoneNumberTokenProvider,
-            IOptions<AbpWeChatOptions> options,
+            IOptions<AbpWeChatAuthorizationOptions> options,
             ILogger<WeChatTokenGrantValidator> logger)
         {
             Logger = logger;
@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
                 return;
             }
             var wechatOpenId = await WeChatOpenIdFinder.FindAsync(wechatCode);
-            var currentUser = await UserManager.FindByLoginAsync(WeChatAuthorizationConsts.ProviderKey, wechatOpenId.OpenId);
+            var currentUser = await UserManager.FindByLoginAsync(AbpWeChatAuthorizationConsts.ProviderKey, wechatOpenId.OpenId);
             if(currentUser == null)
             {
                 Logger.LogWarning("Invalid grant type: wechat openid: {0} not register", wechatOpenId.OpenId);
@@ -92,20 +92,15 @@ namespace LINGYUN.Abp.IdentityServer.WeChatValidator
             }
             var sub = await UserManager.GetUserIdAsync(currentUser);
 
-            // 微信登录的用户写入token
-            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtCodeKey, wechatCode);
-            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtOpenIdKey, wechatOpenId.OpenId);
-            currentUser.SetToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtSessionKey, wechatOpenId.SessionKey);
-
             var additionalClaims = new List<Claim>();
             if (currentUser.TenantId.HasValue)
             {
                 additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
             }
-            additionalClaims.Add(new Claim(WeChatClaimTypes.OpenId, wechatOpenId.OpenId));
+            additionalClaims.Add(new Claim(AbpWeChatClaimTypes.OpenId, wechatOpenId.OpenId));
             if (!wechatOpenId.UnionId.IsNullOrWhiteSpace())
             {
-                additionalClaims.Add(new Claim(WeChatClaimTypes.UnionId, wechatOpenId.UnionId));
+                additionalClaims.Add(new Claim(AbpWeChatClaimTypes.UnionId, wechatOpenId.UnionId));
             }
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenId.OpenId, null));

@@ -259,7 +259,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Sign
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wechat", "wechat", "{DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat", "modules\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{BAE74ABC-1096-495F-A624-BEBFBC1896F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat", "modules\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{BAE74ABC-1096-495F-A624-BEBFBC1896F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

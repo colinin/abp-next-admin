@@ -18,11 +18,11 @@ namespace LINGYUN.Abp.WeChat.Authorization
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IDistributedCache<WeChatTokenCacheItem> Cache { get; }
-        protected AbpWeChatOptions Options { get; }
+        protected AbpWeChatAuthorizationOptions Options { get; }
         public WeChatTokenProvider(
             IJsonSerializer jsonSerializer,
             IHttpClientFactory httpClientFactory,
-            IOptions<AbpWeChatOptions> options,
+            IOptions<AbpWeChatAuthorizationOptions> options,
             IDistributedCache<WeChatTokenCacheItem> cache)
         {
             JsonSerializer = jsonSerializer;

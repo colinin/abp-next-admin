@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Authorization
 {
-    public interface IUserWeChatCodeFinder
+    public interface IUserWeChatOpenIdFinder
     {
         Task<string> FindByUserIdAsync(Guid userId);
 

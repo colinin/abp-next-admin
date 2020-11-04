@@ -3,6 +3,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
+using Microsoft.AspNetCore.Authentication.WeChat;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -114,6 +115,11 @@ namespace AuthServer.Host
                     options.InitVectorBytes = encryptionConfiguration.GetSection("InitVector").Exists() 
                         ? Encoding.ASCII.GetBytes(encryptionConfiguration["InitVector"])
                         : options.InitVectorBytes;
+
+                    var keySizeConfig = encryptionConfiguration.GetSection("Keysize");
+                    options.Keysize = keySizeConfig.Exists()
+                        ? keySizeConfig.Get<int>()
+                        : options.Keysize;
                 }
             });
 
@@ -216,10 +222,11 @@ namespace AuthServer.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseWeChatSignature();
+            app.UseMultiTenancy();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
             app.UseAbpClaimsMap();
-            app.UseMultiTenancy();
             app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();

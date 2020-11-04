@@ -146,7 +146,13 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             try
             {
-                return Convert.ToInt32(userAgent.Split("Chrome/")[1].Split('.')[0]);
+                string version = "0";
+                var chromeAgents = userAgent.Split("Chrome/");
+                if (chromeAgents.Length > 1 && chromeAgents[1].Split('.').Length > 0)
+                {
+                    version = chromeAgents[1].Split('.')[0];
+                }
+                return Convert.ToInt32(version);
             }
             catch (Exception)
             {

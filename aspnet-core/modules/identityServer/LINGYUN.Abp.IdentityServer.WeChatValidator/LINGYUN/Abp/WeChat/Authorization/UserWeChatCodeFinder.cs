@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.WeChat.Authorization
 {
-    // TODO: 真正的项目需要扩展Abp框架实体来关联微信
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(typeof(IUserWeChatCodeFinder))]
-    public class UserWeChatCodeFinder : IUserWeChatCodeFinder
+    [ExposeServices(typeof(IUserWeChatOpenIdFinder))]
+    public class UserWeChatCodeFinder : IUserWeChatOpenIdFinder
     {
         protected IdentityUserManager UserManager { get; }
 
@@ -23,18 +23,24 @@ namespace LINGYUN.Abp.WeChat.Authorization
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
-            var weChatCodeToken = user?.FindToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtCodeKey);
-
-            return weChatCodeToken?.Value ?? userId.ToString();
+            return GetUserOpenIdOrNull(user);
         }
 
         public virtual async Task<string> FindByUserNameAsync(string userName)
         {
             var user = await UserManager.FindByNameAsync(userName);
 
-            var weChatCodeToken = user?.FindToken(WeChatAuthorizationConsts.ProviderKey, WeChatAuthorizationConsts.WeCahtCodeKey);
+            return GetUserOpenIdOrNull(user);
+        }
 
-            return weChatCodeToken?.Value ?? userName;
+        protected string GetUserOpenIdOrNull(IdentityUser user)
+        {
+            // 微信扩展登录后openid存储在Login中
+            var userLogin = user?.Logins
+                .Where(login => login.LoginProvider == AbpWeChatAuthorizationConsts.ProviderKey)
+                .FirstOrDefault();
+
+            return userLogin?.ProviderKey;
         }
     }
 }
