@@ -11,7 +11,7 @@
     "LINGYUN.ApiGateway.Host": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:30000",
+      "applicationUrl": "http://localhost:30000;https://localhost:30443",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
