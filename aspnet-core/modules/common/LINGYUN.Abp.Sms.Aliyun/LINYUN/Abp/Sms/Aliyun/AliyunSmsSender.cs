@@ -65,15 +65,11 @@ namespace LINYUN.Abp.Sms.Aliyun
                 var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsResponse>(responseContent);
                 if (!aliyunResponse.IsSuccess())
                 {
-                    var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
-                    var localizerError = aliyunResponse.GetErrorMessage().Localize(localizerFactory);
                     if (Options.VisableErrorToClient)
                     {
-                        var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<AliyunSmsResource>>();
-                        localizerError = localizer["SendMessageFailed", localizerError];
-                        throw new UserFriendlyException(localizerError);
+                        throw new AliyunSmsException(aliyunResponse.Code, aliyunResponse.Message);
                     }
-                    throw new AbpException($"Text message sending failed:{localizerError}!");
+                    throw new AbpException($"Text message sending failed, code:{aliyunResponse.Code}, message:{aliyunResponse.Message}!");
                 }
             }
             catch(ServerException se)
@@ -121,7 +117,9 @@ namespace LINYUN.Abp.Sms.Aliyun
             if (Environment.IsDevelopment())
             {
                 // check phone number length...
-                Check.NotNullOrWhiteSpace(Options.DeveloperPhoneNumber, nameof(Options.DeveloperPhoneNumber), 
+                Check.NotNullOrWhiteSpace(
+                    Options.DeveloperPhoneNumber,
+                    nameof(Options.DeveloperPhoneNumber), 
                     maxLength: 11, minLength: 11);
                 request.AddQueryParameters("PhoneNumbers", Options.DeveloperPhoneNumber);
             }

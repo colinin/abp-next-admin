@@ -16,11 +16,60 @@ namespace LINYUN.Abp.Sms.Aliyun
             return "ok".Equals(Code, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public ILocalizableString GetErrorMessage()
+        public static ILocalizableString GetErrorMessage(string code, string message)
         {
-            Check.NotNullOrWhiteSpace(Code, nameof(Code));
-            switch (Code)
+            // TODO: 把前缀写入本地化文档里面?
+            Check.NotNullOrWhiteSpace(code, nameof(code));
+            switch (code)
             {
+                case "isv.SMS_SIGNATURE_SCENE_ILLEGAL":
+                    return LocalizableString.Create<AliyunSmsResource>("SMS_SIGNATURE_SCENE_ILLEGAL");
+                case "isv.DENY_IP_RANGE":
+                    return LocalizableString.Create<AliyunSmsResource>("DENY_IP_RANGE");
+                case "isv.MOBILE_COUNT_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("MOBILE_COUNT_OVER_LIMIT");
+                case "isv.BUSINESS_LIMIT_CONTROL":
+                    return LocalizableString.Create<AliyunSmsResource>("BUSINESS_LIMIT_CONTROL");
+                case "SignatureDoesNotMatch":
+                    return LocalizableString.Create<AliyunSmsResource>("SignatureDoesNotMatch");
+                case "InvalidTimeStamp.Expired":
+                    return LocalizableString.Create<AliyunSmsResource>("InvalidTimeStampExpired");
+                case "SignatureNonceUsed":
+                    return LocalizableString.Create<AliyunSmsResource>("SignatureNonceUsed");
+                case "InvalidVersion":
+                    return LocalizableString.Create<AliyunSmsResource>("InvalidVersion");
+                case "InvalidAction.NotFound":
+                    return LocalizableString.Create<AliyunSmsResource>("InvalidActionNotFound");
+                case "isv.SIGN_COUNT_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("SIGN_COUNT_OVER_LIMIT");
+                case "isv.TEMPLATE_COUNT_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("TEMPLATE_COUNT_OVER_LIMIT");
+                case "isv.SIGN_NAME_ILLEGAL":
+                    return LocalizableString.Create<AliyunSmsResource>("SIGN_NAME_ILLEGAL");
+                case "isv.SIGN_FILE_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("SIGN_FILE_LIMIT");
+                case "isv.SIGN_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("SIGN_OVER_LIMIT");
+                case "isv.TEMPLATE_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("TEMPLATE_OVER_LIMIT");
+                case "SIGNATURE_BLACKLIST":
+                    return LocalizableString.Create<AliyunSmsResource>("SIGNATURE_BLACKLIST");
+                case "isv.SHORTURL_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("SHORTURL_OVER_LIMIT");
+                case "isv.NO_AVAILABLE_SHORT_URL":
+                    return LocalizableString.Create<AliyunSmsResource>("NO_AVAILABLE_SHORT_URL");
+                case "isv.SHORTURL_NAME_ILLEGAL":
+                    return LocalizableString.Create<AliyunSmsResource>("SHORTURL_NAME_ILLEGAL");
+                case "isv.SOURCEURL_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("SOURCEURL_OVER_LIMIT");
+                case "isv.SHORTURL_TIME_ILLEGAL":
+                    return LocalizableString.Create<AliyunSmsResource>("SHORTURL_TIME_ILLEGAL");
+                case "isv.PHONENUMBERS_OVER_LIMIT":
+                    return LocalizableString.Create<AliyunSmsResource>("PHONENUMBERS_OVER_LIMIT");
+                case "isv.SHORTURL_STILL_AVAILABLE":
+                    return LocalizableString.Create<AliyunSmsResource>("SHORTURL_STILL_AVAILABLE");
+                case "isv.SHORTURL_NOT_FOUND":
+                    return LocalizableString.Create<AliyunSmsResource>("SHORTURL_NOT_FOUND");
                 case "isv.SMS_TEMPLATE_ILLEGAL":
                     return LocalizableString.Create<AliyunSmsResource>("SMS_TEMPLATE_ILLEGAL");
                 case "isv.SMS_SIGNATURE_ILLEGAL":
@@ -68,7 +117,7 @@ namespace LINYUN.Abp.Sms.Aliyun
                 case "isv.TEMPLATE_PARAMS_ILLEGAL":
                     return LocalizableString.Create<AliyunSmsResource>("TEMPLATE_PARAMS_ILLEGAL");
                 default:
-                    throw new AbpException("no error code define!");
+                    throw new AbpException($"no error code: {code} define, message: {message}");
 
             }
         }
