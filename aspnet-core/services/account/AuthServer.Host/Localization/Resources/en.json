@@ -1,0 +1,18 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TwoFactor": "Two factor authentication",
+    "SelectedProvider": "Select validation mode",
+    "SendVerifyCode": "Send verification code",
+    "VerifyCode": "Verification code",
+    "VerifyAuthenticatorCode": "Authentication code",
+    "RememberBrowser": "Remember me in the browser",
+    "TwoFactorAuthenticationInvaidUser": "Authentication failed. Your session is invalid. Please re login try again!",
+    "InvaidGenerateTwoFactorToken": "Verification code generation failed. Please contact your administrator!",
+    "TextTemplate:Abp.Account.MailSecurityVerifyLink": "Mail security validation template",
+    "MailSecurityVerify": "Mail security verification",
+    "VerifyMyEmailAddress": "Hello {0}<br/><p>Your email security verification code is as follows. Please enter the verification code to proceed to the next step.</p><p>If not operated by you, please ignore this email.</p>",
+    "MailSecurityVerifyRemarks": "<p>(If it is not in the form of a link, copy the address to the browser address bar for further access)</p><p>Thank you for your visit and have a good time!</p>",
+    "ClickToValidation": "Click link verification"
+  }
+}

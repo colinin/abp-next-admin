@@ -1,9 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+	<RootNamespace>AuthServer</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Localization\Resources\en.json" />
+    <Content Remove="Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Emailing\Templates\MailSecurityVerify.tpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Emailing\Templates\MailSecurityVerify.tpl" />
+    <EmbeddedResource Include="Localization\Resources\en.json" />
+    <EmbeddedResource Include="Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.4" />
@@ -38,7 +54,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\account\LINGYUN.Abp.Account.Domain\LINGYUN.Abp.Account.Domain.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.WeChatValidator\LINGYUN.Abp.IdentityServer.WeChatValidator.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj" />
     <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj" />

@@ -1,0 +1,18 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TwoFactor": "双因素身份验证",
+    "SelectedProvider": "选择验证方式",
+    "SendVerifyCode": "发送验证码",
+    "VerifyCode": "验证码",
+    "VerifyAuthenticatorCode": "验证身份代码",
+    "RememberBrowser": "在浏览器中记住我",
+    "TwoFactorAuthenticationInvaidUser": "认证失败,您的会话已失效,请程序登录!",
+    "InvaidGenerateTwoFactorToken": "验证码生成失败,请联系管理员!",
+    "TextTemplate:Abp.Account.MailSecurityVerifyLink": "邮件安全验证模板",
+    "MailSecurityVerify": "邮件安全验证",
+    "VerifyMyEmailAddress": "亲爱的 {0}，您好<br/><p>您此次邮件安全验证码如下，请输入验证码进行下一步操作。</p><p>如非你本人操作，请忽略此邮件。</p>",
+    "MailSecurityVerifyRemarks": "此邮件为系统所发，请勿直接回复。",
+    "ClickToValidation": "点击进行验证"
+  }
+}
