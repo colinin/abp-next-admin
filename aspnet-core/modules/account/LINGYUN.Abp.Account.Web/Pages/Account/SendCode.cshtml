@@ -1,0 +1,22 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model LINGYUN.Abp.Account.Web.Pages.Account.SendCodeModel
+@inject IHtmlLocalizer<AccountResource> L
+
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["SendTwoFactor"]</h4>
+        <form method="post" class="mt-4">
+            <input asp-for="SendCodeInput.RememberMe" type="hidden" />
+            <input asp-for="SendCodeInput.ReturnUrl" type="hidden" />
+            <div class="form-group">
+                <label asp-for="@L["SelectProvider"]"></label>
+                <abp-select asp-for="SendCodeInput.SelectedProvider" asp-items="Model.SendCodeInput.Providers"></abp-select>
+            </div>
+            <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["SendTwoFactorCode"]</abp-button>
+        </form>
+
+    </div>
+</div>
+

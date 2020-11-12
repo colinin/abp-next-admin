@@ -1,0 +1,20 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model LINGYUN.Abp.Account.Web.Pages.Account.VerifyCodeModel
+@inject IHtmlLocalizer<AccountResource> L
+
+<form method="post" class="mt-4">
+    <input asp-for="Input.Provider" type="hidden" />
+    <input asp-for="Input.RememberMe" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Input.Code"></label>
+        <input asp-for="Input.Code" class="form-control" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.RememberBrowser"></label>
+        <abp-input asp-for="Input.RememberBrowser" />
+    </div>
+    <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["VerifyCode"]</abp-button>
+</form>
