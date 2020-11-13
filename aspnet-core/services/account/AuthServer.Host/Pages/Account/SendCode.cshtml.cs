@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     public class SendCodeModel : AccountPageModel
     {
         [BindProperty]
-        public SendCodeInputModel SendCodeInput { get; set; }
+        public SendCodeInputModel Input { get; set; }
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
-            SendCodeInput = new SendCodeInputModel();
+            Input = new SendCodeInputModel();
 
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            if (SendCodeInput.SelectedProvider == "Authenticator")
+            if (Input.SelectedProvider == "Authenticator")
             {
                 // 用户通过邮件/短信链接进入授权页面
                 return RedirectToPage("VerifyAuthenticatorCode", new
@@ -81,23 +81,23 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 });
             }
             // 生成验证码
-            var code = await UserManager.GenerateTwoFactorTokenAsync(user, SendCodeInput.SelectedProvider);
+            var code = await UserManager.GenerateTwoFactorTokenAsync(user, Input.SelectedProvider);
             if (string.IsNullOrWhiteSpace(code))
             {
                 Alerts.Warning(L["InvaidGenerateTwoFactorToken"]);
                 return Page();
             }
 
-            if (SendCodeInput.SelectedProvider == "Email")
+            if (Input.SelectedProvider == "Email")
             {
                 var appName = "MVC"; // TODO: 跟随Abp框架的意思变动
                 await AccountEmailVerifySender
                     .SendMailLoginVerifyLinkAsync(
                         user, code, appName,
-                        SendCodeInput.SelectedProvider, 
+                        Input.SelectedProvider, 
                         RememberMe, ReturnUrl, ReturnUrlHash);
             }
-            else if (SendCodeInput.SelectedProvider == "Phone")
+            else if (Input.SelectedProvider == "Phone")
             {
                 var phoneNumber = await UserManager.GetPhoneNumberAsync(user);
                 var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsSigninTemplateCode);
@@ -113,7 +113,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
             return RedirectToPage("VerifyCode", new
             {
-                provider = SendCodeInput.SelectedProvider,
+                provider = Input.SelectedProvider,
                 returnUrl = ReturnUrl,
                 returnUrlHash = ReturnUrlHash,
                 rememberMe = RememberMe
