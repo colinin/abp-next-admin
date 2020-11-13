@@ -40,6 +40,7 @@
     "IdentityClaim:Description": "Description",
     "IdentityClaim:ValueType": "Value type",
     "Volo.Abp.Identity:020005": "The static claim type cannot be changed!",
-    "Volo.Abp.Identity:020006": "Unable to delete static claim type!"
+    "Volo.Abp.Identity:020006": "Unable to delete static claim type!",
+    "Volo.Abp.Identity:020007": "The phone number is already tied to another user!"
   }
 }

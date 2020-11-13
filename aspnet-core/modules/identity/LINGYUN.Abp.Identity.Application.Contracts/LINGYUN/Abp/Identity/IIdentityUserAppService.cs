@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Identity
 {
@@ -30,5 +31,19 @@ namespace LINGYUN.Abp.Identity
 
         #endregion
 
+        /// <summary>
+        /// 变更用户双因素验证选项
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task ChangeTwoFactorEnabledAsync(Guid id, IdentityUserTwoFactorEnabledDto input);
+        /// <summary>
+        /// 变更用户密码
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task ChangePasswordAsync(Guid id, ChangePasswordInput input);
     }
 }
