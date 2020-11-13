@@ -24,5 +24,7 @@ namespace Volo.Abp.Settings
             }
             return value;
         }
+
+
     }
 }

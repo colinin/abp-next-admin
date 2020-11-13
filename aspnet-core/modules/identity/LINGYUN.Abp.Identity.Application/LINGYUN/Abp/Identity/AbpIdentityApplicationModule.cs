@@ -6,7 +6,8 @@ namespace LINGYUN.Abp.Identity
 {
     [DependsOn(
         typeof(Volo.Abp.Identity.AbpIdentityApplicationModule),
-        typeof(AbpIdentityApplicationContractsModule))]
+        typeof(AbpIdentityApplicationContractsModule),
+        typeof(AbpIdentityDomainModule))]
     public class AbpIdentityApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

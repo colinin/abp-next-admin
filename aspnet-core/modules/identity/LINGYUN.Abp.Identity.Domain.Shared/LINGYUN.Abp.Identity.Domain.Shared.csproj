@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Identity\Localization\en.json" />
+	  <None Remove="LINGYUN\Abp\Identity\Localization\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\Identity\Localization\en.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Identity\Localization\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="3.3.0" />
+	</ItemGroup>
+
+</Project>

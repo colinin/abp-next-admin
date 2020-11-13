@@ -48,14 +48,14 @@ namespace LINGYUN.Abp.Account
 
             var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code);
 
-            var user = await UserManager.FindByLoginAsync("WeChat", wehchatOpenId.OpenId);
+            var user = await UserManager.FindByLoginAsync(AbpWeChatAuthorizationConsts.ProviderKey, wehchatOpenId.OpenId);
             if (user != null)
             {
                 // 应该要抛出微信号已注册异常,而不是直接返回注册用户数据,否则造成用户信息泄露
                 throw new UserFriendlyException(L["DuplicateWeChat"]);
             }
-            var userName = input.UserName ?? wehchatOpenId.OpenId;
-            var userEmail = input.EmailAddress ?? $"{userName}@default.io";//如果邮件地址不验证,随意写入一个
+            var userName = input.UserName ?? "wx-" + wehchatOpenId.OpenId;
+            var userEmail = input.EmailAddress ?? $"{userName}@{CurrentTenant.Name ?? "default"}.io";//如果邮件地址不验证,随意写入一个
 
             user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.Account
 
             (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
-            var userLogin = new UserLoginInfo("WeChat", wehchatOpenId.OpenId, "微信认证登录");
+            var userLogin = new UserLoginInfo(AbpWeChatAuthorizationConsts.ProviderKey, wehchatOpenId.OpenId, AbpWeChatAuthorizationConsts.DisplayName);
             (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
@@ -101,7 +101,7 @@ namespace LINGYUN.Abp.Account
             //    }
             //}
 
-            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@default.io";//如果邮件地址不验证,随意写入一个
+            var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@{CurrentTenant.Name ?? "default"}.io";//如果邮件地址不验证,随意写入一个
             var userName = input.UserName ?? input.PhoneNumber;
             var user = new IdentityUser(GuidGenerator.Create(), userName, userEmail, CurrentTenant.Id)
             {
@@ -173,6 +173,8 @@ namespace LINGYUN.Abp.Account
         /// </remarks>
         public virtual async Task VerifyPhoneNumberAsync(VerifyDto input)
         {
+            // TODO: 借用TOTP算法生成6位动态验证码
+
             var verifyCodeExpiration = await SettingProvider.GetAsync<int>(AccountSettingNames.PhoneVerifyCodeExpiration);
             var phoneVerifyCacheKey = NormalizeCacheKey(input.PhoneNumber);
             var verifyCacheItem = await Cache.GetAsync(phoneVerifyCacheKey);

@@ -41,6 +41,7 @@
     "IdentityClaim:Description": "描述",
     "IdentityClaim:ValueType": "值类型",
     "Volo.Abp.Identity:020005": "无法变更静态声明类型!",
-    "Volo.Abp.Identity:020006": "无法删除静态声明类型!"
+    "Volo.Abp.Identity:020006": "无法删除静态声明类型!",
+    "Volo.Abp.Identity:020007": "手机号码已被其他用户绑定!"
   }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Identity.Domain" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj" />
   </ItemGroup>
 
 </Project>
