@@ -12,7 +12,7 @@
             <input asp-for="ReturnUrl" />
             <input asp-for="ReturnUrlHash" />
             <div class="form-group">
-                <abp-select asp-for="SendCodeInput.SelectedProvider" label="@L["SelectedProvider"].Value" asp-items="@Model.Providers"></abp-select>
+                <abp-select asp-for="Input.SelectedProvider" label="@L["SelectedProvider"].Value" asp-items="@Model.Providers"></abp-select>
             </div>
             <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["SendVerifyCode"]</abp-button>
         </form>
