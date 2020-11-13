@@ -18,7 +18,7 @@ namespace DotNetCore.CAP.Processor
         /// <summary>
         /// 过期消息清理配置
         /// </summary>
-        protected MessageCleanupOptions Options { get; }
+        protected AbpCAPEventBusOptions Options { get; }
         /// <summary>
         /// Initializer
         /// </summary>
@@ -39,7 +39,7 @@ namespace DotNetCore.CAP.Processor
             AbpTimer timer,
             IDataStorage storage,
             IStorageInitializer initializer,
-            IOptions<MessageCleanupOptions> options,
+            IOptions<AbpCAPEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory) 
             : base(timer, serviceScopeFactory)
         {
@@ -47,7 +47,7 @@ namespace DotNetCore.CAP.Processor
             Options = options.Value;
             Initializer = initializer;
 
-            timer.Period = Options.Interval;
+            timer.Period = Options.CleanUpExpiresMessageInterval;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace DotNetCore.CAP.Processor
             {
                 Logger.LogDebug($"Collecting expired data from table: {table}");
                 var time = DateTime.Now;
-                await Storage.DeleteExpiresAsync(table, time, Options.ItemBatch);
+                await Storage.DeleteExpiresAsync(table, time, Options.CleanUpExpiresMessageBatch);
             }
         }
     }

@@ -188,7 +188,7 @@ namespace LINGYUN.ApiGateway
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 context.Services
                     .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "ApiGateway-Protection-Keys");
+                    .PersistKeysToStackExchangeRedis(redis, "ApiGatewayAdmin-Protection-Keys");
             }
 
             Configure<AbpAutoMapperOptions>(options =>

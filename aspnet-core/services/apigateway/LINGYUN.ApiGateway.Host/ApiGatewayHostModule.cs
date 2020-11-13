@@ -3,10 +3,14 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.ApiGateway.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using Ocelot.Extenssions;
@@ -138,12 +142,6 @@ namespace LINGYUN.ApiGateway
                     .AddVirtualJson("/Localization/Host");
             });
 
-            Configure<IdentityModelHttpRequestMessageOptions>(options =>
-            {
-                // See https://github.com/abpframework/abp/pull/4564
-                options.ConfigureHttpRequestMessage = (requestMessage) => { };
-            });
-
             var mvcBuilder = context.Services.AddMvc();
             mvcBuilder.AddApplicationPart(typeof(ApiGatewayHostModule).Assembly);
 
@@ -155,6 +153,29 @@ namespace LINGYUN.ApiGateway
                     endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 });
             });
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                // Ssl证书
+                var sslOptions = configuration.GetSection("App:SslOptions");
+                if (sslOptions.Exists())
+                {
+                    var fileName = sslOptions["FileName"];
+                    var password = sslOptions["Password"];
+                    Configure<KestrelServerOptions>(options =>
+                    {
+                        options.ConfigureEndpointDefaults(cfg =>
+                        {
+                            cfg.UseHttps(fileName, password);
+                        });
+                    });
+                }
+
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                context.Services
+                    .AddDataProtection()
+                    .PersistKeysToStackExchangeRedis(redis, "ApiGatewayHost-Protection-Keys");
+            }
 
             context.Services
                 .AddOcelot()
