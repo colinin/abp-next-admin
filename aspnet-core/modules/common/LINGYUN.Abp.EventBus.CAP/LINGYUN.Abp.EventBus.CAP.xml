@@ -59,7 +59,7 @@
             Storage
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
             <summary>
             创建过期消息清理任务
             </summary>
@@ -120,6 +120,28 @@
             OnApplicationInitialization
             </summary>
             <param name="context"></param>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions">
+            <summary>
+            过期消息清理配置项
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.NotifyFailedCallback">
+            <summary>
+            发布消息处理失败通知
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.CleanUpExpiresMessageBatch">
+            <summary>
+            批量清理数量
+            default: 1000
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.CleanUpExpiresMessageInterval">
+            <summary>
+            执行间隔(ms)
+            default: 3600000 (1 hours)
+            </summary>
         </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException">
             <summary>
@@ -276,23 +298,6 @@
             </summary>
             <param name="eventType"></param>
             <param name="factory"></param>
-        </member>
-        <member name="T:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions">
-            <summary>
-            过期消息清理配置项
-            </summary>
-        </member>
-        <member name="P:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions.ItemBatch">
-            <summary>
-            批量清理数量
-            default: 1000
-            </summary>
-        </member>
-        <member name="P:LINGYUN.Abp.EventBus.CAP.MessageCleanupOptions.Interval">
-            <summary>
-            执行间隔(ms)
-            default: 3600000 (1 hours)
-            </summary>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions">
             <summary>
