@@ -4,14 +4,12 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Account
 {
-    public class VerifyDto
+    public class SendPhoneSigninCodeDto
     {
         [Required]
         [Phone]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
+        [Display(Name = "PhoneNumber")]
         public string PhoneNumber { get; set; }
-
-        [Required]
-        public PhoneNumberVerifyType VerifyType { get; set; }
     }
 }

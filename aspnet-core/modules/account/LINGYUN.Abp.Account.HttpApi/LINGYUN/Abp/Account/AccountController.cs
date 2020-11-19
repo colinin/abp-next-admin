@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Account
 {
@@ -21,30 +20,44 @@ namespace LINGYUN.Abp.Account
 
         [HttpPost]
         [Route("wechat/register")]
-        public virtual async Task<IdentityUserDto> RegisterAsync(WeChatRegisterDto input)
+        public virtual async Task RegisterAsync(WeChatRegisterDto input)
         {
-            return await AccountAppService.RegisterAsync(input);
+            await AccountAppService.RegisterAsync(input);
         }
 
         [HttpPost]
         [Route("phone/register")]
-        public virtual async Task<IdentityUserDto> RegisterAsync(PhoneNumberRegisterDto input)
+        public virtual async Task RegisterAsync(PhoneRegisterDto input)
         {
-            return await AccountAppService.RegisterAsync(input);
-        }
-
-        [HttpPost]
-        [Route("phone/verify")]
-        public virtual async Task VerifyPhoneNumberAsync(VerifyDto input)
-        {
-            await AccountAppService.VerifyPhoneNumberAsync(input);
+            await AccountAppService.RegisterAsync(input);
         }
 
         [HttpPut]
         [Route("phone/reset-password")]
-        public virtual async Task ResetPasswordAsync(PasswordResetDto passwordReset)
+        public virtual async Task ResetPasswordAsync(PhoneResetPasswordDto input)
         {
-            await AccountAppService.ResetPasswordAsync(passwordReset);
+            await AccountAppService.ResetPasswordAsync(input);
+        }
+
+        [HttpPost]
+        [Route("phone/send-signin-code")]
+        public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
+        {
+            await AccountAppService.SendPhoneSigninCodeAsync(input);
+        }
+
+        [HttpPost]
+        [Route("phone/send-register-code")]
+        public virtual async Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
+        {
+            await AccountAppService.SendPhoneRegisterCodeAsync(input);
+        }
+
+        [HttpPost]
+        [Route("phone/send-password-reset-code")]
+        public virtual async Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
+        {
+            await AccountAppService.SendPhoneResetPasswordCodeAsync(input);
         }
     }
 }

@@ -3,7 +3,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
-using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -25,8 +25,6 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
         protected UserManager<IdentityUser> UserManager { get; }
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
-        protected PhoneNumberTokenProvider<IdentityUser> PhoneNumberTokenProvider { get; }
-
 
         public SmsTokenGrantValidator(
             IEventService eventService,
@@ -34,7 +32,6 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             SignInManager<IdentityUser> signInManager,
             IIdentityUserRepository userRepository,
             IStringLocalizer<AbpIdentityServerResource> stringLocalizer,
-            PhoneNumberTokenProvider<IdentityUser> phoneNumberTokenProvider,
             ILogger<SmsTokenGrantValidator> logger)
         {
             Logger = logger;
@@ -43,7 +40,6 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             SignInManager = signInManager;
             Localizer = stringLocalizer;
             UserRepository = userRepository;
-            PhoneNumberTokenProvider = phoneNumberTokenProvider;
         }
 
         public string GrantType => SmsValidatorConsts.SmsValidatorGrantTypeName;
@@ -76,7 +72,8 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
                     Localizer["InvalidGrant:PhoneNumberNotRegister"]);
                 return;
             }
-            var validResult = await PhoneNumberTokenProvider.ValidateAsync(SmsValidatorConsts.SmsValidatorPurpose, phoneToken, UserManager, currentUser);
+            
+            var validResult = await UserManager.VerifyTwoFactorTokenAsync(currentUser, TokenOptions.DefaultPhoneProvider, phoneToken);
             if (!validResult)
             {
                 Logger.LogWarning("Authentication failed for token: {0}, reason: invalid token", phoneToken);
@@ -85,6 +82,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
                 await EventService.RaiseAsync(new UserLoginFailureEvent(currentUser.UserName, $"invalid phone verify code {phoneToken}", false));
                 return;
             }
+
             var sub = await UserManager.GetUserIdAsync(currentUser);
 
             var additionalClaims = new List<Claim>();
@@ -95,6 +93,9 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, phoneNumber, null));
             context.Result = new GrantValidationResult(sub, OidcConstants.AuthenticationMethods.ConfirmationBySms, additionalClaims.ToArray());
+
+            // 登录之后需要更新安全令牌
+            (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
         }
     }
 }

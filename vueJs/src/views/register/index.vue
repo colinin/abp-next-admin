@@ -124,7 +124,7 @@ import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import UserService, { PhoneVerify, VerifyType, UserRegisterData } from '@/api/users'
+import UserService, { UserRegisterData } from '@/api/users'
 import { AbpModule } from '@/store/modules/abp'
 
 @Component({
@@ -246,10 +246,7 @@ export default class extends Vue {
     frmLogin.validateField('phoneNumber', (errorMsg: string) => {
       if (!errorMsg) {
         this.sending = true
-        const phoneVerify = new PhoneVerify()
-        phoneVerify.phoneNumber = this.registerForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.Register
-        UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
+        UserService.sendSmsRegisterCode(this.registerForm.phoneNumber).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
           const sendedName = this.l('login.sendVerifyCode')

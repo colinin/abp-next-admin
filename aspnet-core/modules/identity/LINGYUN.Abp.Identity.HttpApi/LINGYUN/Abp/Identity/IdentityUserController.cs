@@ -87,7 +87,7 @@ namespace LINGYUN.Abp.Identity
 
         [HttpPut]
         [Route("change-two-factor")]
-        public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, IdentityUserTwoFactorEnabledDto input)
+        public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, ChangeTwoFactorEnabledDto input)
         {
             await UserAppService.ChangeTwoFactorEnabledAsync(id, input);
         }

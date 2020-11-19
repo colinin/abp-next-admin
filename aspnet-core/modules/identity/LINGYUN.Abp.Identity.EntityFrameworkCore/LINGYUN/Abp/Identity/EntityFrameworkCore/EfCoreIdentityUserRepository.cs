@@ -20,6 +20,44 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
         {
         }
 
+        public virtual async Task<bool> IsPhoneNumberUedAsync(
+            string phoneNumber,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(false)
+                .AnyAsync(user => user.PhoneNumber == phoneNumber,
+                    GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<bool> IsPhoneNumberConfirmedAsync(
+            string phoneNumber,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(false)
+                .AnyAsync(user => user.PhoneNumber == phoneNumber && user.PhoneNumberConfirmed,
+                    GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<bool> IsNormalizedEmailConfirmedAsync(
+           string normalizedEmail,
+           CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(false)
+                .AnyAsync(user => user.NormalizedEmail == normalizedEmail && user.EmailConfirmed,
+                    GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<IdentityUser> FindByPhoneNumberAsync(
+            string phoneNumber,
+            bool isConfirmed = true,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(includeDetails)
+               .Where(user => user.PhoneNumber == phoneNumber && user.PhoneNumberConfirmed == isConfirmed)
+               .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<IdentityUser>> GetListByIdListAsync(
             List<Guid> userIds,
             bool includeDetails = false,

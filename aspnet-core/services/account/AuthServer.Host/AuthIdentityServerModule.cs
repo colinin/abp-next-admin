@@ -1,7 +1,8 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Account;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
+using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINYUN.Abp.Sms.Aliyun;
@@ -35,8 +36,6 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.EntityFrameworkCore;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -52,7 +51,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace AuthServer.Host
 {
     [DependsOn(
-        typeof(AbpAccountDomainModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
@@ -170,7 +168,7 @@ namespace AuthServer.Host
             {
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
                 // 邮件登录地址
-                options.Applications["MVC"].Urls[LINGYUN.Abp.Account.AccountUrlNames.MailLoginVerify] = "Account/VerifyCode";
+                options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
             });
 
             context.Services.ConfigureNonBreakingSameSiteCookies();

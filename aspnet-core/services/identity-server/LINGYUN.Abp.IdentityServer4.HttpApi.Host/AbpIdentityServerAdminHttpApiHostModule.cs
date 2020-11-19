@@ -1,5 +1,4 @@
 using DotNetCore.CAP;
-using IdentityModel;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -14,13 +13,11 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Text;
 using Volo.Abp;
-using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Security.Claims;
@@ -34,7 +31,6 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -50,16 +46,14 @@ namespace LINGYUN.Abp.IdentityServer4
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
         typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
         typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
+        typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
         typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
         typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAccountHttpApiModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
@@ -180,7 +174,7 @@ namespace LINGYUN.Abp.IdentityServer4
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
-                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+                options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(60);
             });
 
             Configure<AbpDistributedEntityEventOptions>(options =>

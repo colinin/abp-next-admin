@@ -1,4 +1,5 @@
 using AuthServer.Host.Emailing;
+using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -100,8 +101,8 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             else if (Input.SelectedProvider == "Phone")
             {
                 var phoneNumber = await UserManager.GetPhoneNumberAsync(user);
-                var templateCode = await SettingProvider.GetOrNullAsync(AccountSettingNames.SmsSigninTemplateCode);
-                Check.NotNullOrWhiteSpace(templateCode, nameof(AccountSettingNames.SmsSigninTemplateCode));
+                var templateCode = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsUserSignin);
+                Check.NotNullOrWhiteSpace(templateCode, nameof(IdentitySettingNames.User.SmsUserSignin));
 
                 // TODO: 以后扩展短信模板发送
                 var smsMessage = new SmsMessage(phoneNumber, code);

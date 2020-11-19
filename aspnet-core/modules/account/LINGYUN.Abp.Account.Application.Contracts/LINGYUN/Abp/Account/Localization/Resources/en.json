@@ -1,0 +1,15 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "SendRepeatSmsVerifyCode": "Phone verification code cannot be sent repeatedly within {0} minutes!",
+    "DuplicatePhoneNumber": "The phone number already exists!",
+    "PhoneNumberNotRegisterd": "The registered mobile phone number is not registered!",
+    "InvalidSmsVerifyCode": "The phone verification code is invalid or expired!",
+    "RequiredEmailAddress": "Email address required",
+    "InvalidPhoneNumber": "Invalid phone number",
+    "DuplicateWeChat": "The wechat has been registered!",
+    "DisplayName:SmsVerifyCode": "SMS verification code",
+    "DisplayName:EmailVerifyCode": "Mail verification code",
+    "DisplayName:WeChatCode": "Wechat login code"
+  }
+}

@@ -42,6 +42,23 @@
     "IdentityClaim:ValueType": "值类型",
     "Volo.Abp.Identity:020005": "无法变更静态声明类型!",
     "Volo.Abp.Identity:020006": "无法删除静态声明类型!",
-    "Volo.Abp.Identity:020007": "手机号码已被其他用户绑定!"
+    "Volo.Abp.Identity:020007": "手机号码已被其他用户绑定!",
+    "Volo.Abp.Identity:020008": "你不能修改你的手机绑定信息!",
+    "Volo.Abp.Identity:020009": "你不能修改你的邮件绑定信息!",
+    "Volo.Abp.Identity:DuplicatePhoneNumber": "手机号 '{0}' 已存在.",
+    "DisplayName:Abp.Identity.User.SmsNewUserRegister": "新用户注册模板",
+    "Description:Abp.Identity.User.SmsNewUserRegister": "新用户通过手机注册账号验证码模板",
+    "DisplayName:Abp.Identity.User.SmsUserSignin": "用户登录模板",
+    "Description:Abp.Identity.User.SmsUserSignin": "用户通过手机登录验证码模板",
+    "DisplayName:Abp.Identity.User.SmsResetPassword": "密码找回模板",
+    "Description:Abp.Identity.User.SmsResetPassword": "用户通过手机找回密码验证码模板",
+    "DisplayName:Abp.Identity.User.SmsPhoneNumberConfirmed": "手机确认模板",
+    "Description:Abp.Identity.User.SmsPhoneNumberConfirmed": "用户确认手机号验证码模板",
+    "DisplayName:Abp.Identity.User.SmsRepetInterval": "重复发送间隔时间(min)",
+    "Description:Abp.Identity.User.SmsRepetInterval": "验证码重复发送的最小时间差,单位为分",
+    "DisplayName:SmsVerifyCode": "短信验证码",
+    "DisplayName:EmailVerifyCode": "邮件验证码",
+    "DisplayName:WeChatCode": "微信登录凭证",
+    "SendRepeatSmsVerifyCode": "手机验证码不能在 {0} 分钟内重复发送!"
   }
 }

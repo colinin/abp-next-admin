@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <Import Project="..\..\..\common.props" />
 
@@ -8,17 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LINGYUN\Abp\Account\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Volo.Abp.Localization" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj" />
   </ItemGroup>
 
 </Project>

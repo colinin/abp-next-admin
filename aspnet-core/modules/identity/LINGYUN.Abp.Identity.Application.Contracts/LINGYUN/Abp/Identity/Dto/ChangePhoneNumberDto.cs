@@ -5,7 +5,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Identity
 {
-    public class ChangePhoneNumberInput
+    public class ChangePhoneNumberDto
     {
         /// <summary>
         /// 新手机号
@@ -13,12 +13,15 @@ namespace LINGYUN.Abp.Identity
         [Required]
         [Phone]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
+        [Display(Name = "PhoneNumber")]
         public string NewPhoneNumber { get; set; }
         /// <summary>
         /// 安全验证码
         /// </summary>
+        [Required]
         [DisableAuditing]
-        [StringLength(6)]
+        [StringLength(6, MinimumLength = 6)]
+        [Display(Name = "SmsVerifyCode")]
         public string Code { get; set; }
     }
 }

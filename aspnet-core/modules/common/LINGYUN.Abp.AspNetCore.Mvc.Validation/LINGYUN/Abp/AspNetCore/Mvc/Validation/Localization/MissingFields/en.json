@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "ThisFieldMustBeANumber": "The field must be a number!",
+    "The field {0} must be a number.": "The supplied value {0} must be a number!"
+  }
+}

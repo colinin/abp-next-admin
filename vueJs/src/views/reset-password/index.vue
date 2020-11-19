@@ -112,7 +112,7 @@ import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import UserService, { PhoneVerify, VerifyType, UserResetPasswordData } from '@/api/users'
+import UserService, { UserResetPasswordData } from '@/api/users'
 import { AbpModule } from '@/store/modules/abp'
 
 @Component({
@@ -226,10 +226,7 @@ export default class extends Vue {
     frmResetPassword.validateField('phoneNumber', (errorMsg: string) => {
       if (!errorMsg) {
         this.sending = true
-        const phoneVerify = new PhoneVerify()
-        phoneVerify.phoneNumber = this.resetPasswordForm.phoneNumber
-        phoneVerify.verifyType = VerifyType.ResetPassword
-        UserService.sendPhoneVerifyCode(phoneVerify).then(() => {
+        UserService.sendSmsResetPasswordCode(this.resetPasswordForm.phoneNumber).then(() => {
           let interValTime = 60
           const sendingName = this.l('login.afterSendVerifyCode')
           const sendedName = this.l('login.sendVerifyCode')
