@@ -14,5 +14,13 @@
         /// 手机号码已被使用
         /// </summary>
         public const string DuplicatePhoneNumber = "Volo.Abp.Identity:020007";
+        /// <summary>
+        /// 你不能修改你的手机绑定信息
+        /// </summary>
+        public const string UsersCanNotChangePhoneNumber = "Volo.Abp.Identity:020008";
+        /// <summary>
+        /// 你不能修改你的邮件绑定信息
+        /// </summary>
+        public const string UsersCanNotChangeEmailAddress = "Volo.Abp.Identity:020009";
     }
 }

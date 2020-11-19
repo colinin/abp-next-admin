@@ -169,13 +169,40 @@ export default class UserApiService {
     })
   }
 
-  public static sendPhoneVerifyCode(phoneVerify: PhoneVerify) {
-    const _url = '/api/account/phone/verify'
-    return ApiService.HttpRequest<any>({
+  /** 发送短信登录验证码 */
+  public static sendSmsSigninCode(phoneNumber: string) {
+    const _url = '/api/account/phone/send-signin-code'
+    return ApiService.HttpRequest<void>({
       baseURL: IdentityServiceUrl,
       url: _url,
       method: 'POST',
-      data: phoneVerify
+      data: {
+        phoneNumber: phoneNumber
+      }
+    })
+  }
+
+  public static sendSmsResetPasswordCode(phoneNumber: string) {
+    const _url = '/api/account/phone/send-password-reset-code'
+    return ApiService.HttpRequest<void>({
+      baseURL: IdentityServiceUrl,
+      url: _url,
+      method: 'POST',
+      data: {
+        phoneNumber: phoneNumber
+      }
+    })
+  }
+
+  public static sendSmsRegisterCode(phoneNumber: string) {
+    const _url = '/api/account/phone/send-register-code'
+    return ApiService.HttpRequest<void>({
+      baseURL: IdentityServiceUrl,
+      url: _url,
+      method: 'POST',
+      data: {
+        phoneNumber: phoneNumber
+      }
     })
   }
 

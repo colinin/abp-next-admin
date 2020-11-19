@@ -8,22 +8,23 @@ namespace LINGYUN.Abp.Account
     public class WeChatRegisterDto
     {
         [Required]
+        [DisableAuditing]
+        [Display(Name = "DisplayName:WeChatCode")]
         public string Code { get; set; }
 
-        [DisableAuditing]
         [DataType(DataType.Password)]
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        [DisableAuditing]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
-        public string Name { get; set; }
-
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
+        [Display(Name = "UserName")]
         public string UserName { get; set; }
 
-        [EmailAddress]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+        [Display(Name = "EmailAddress")]
         public string EmailAddress { get; set; }
     }
 }

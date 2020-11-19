@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Account.Domain.Shared\LINGYUN.Abp.Account.Domain.Shared.csproj" />
+    <Folder Include="Microsoft\AspNetCore\Identity\" />
   </ItemGroup>
 
 </Project>

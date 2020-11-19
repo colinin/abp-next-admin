@@ -14,6 +14,7 @@
     "OrganizationUnit:AddChildren": "Add Children",
     "OrganizationUnit:AddMember": "Add Member",
     "OrganizationUnit:AddRole": "Add Role",
+    "OrganizationUnit:DisplayName": "Display Name",
     "OrganizationUnit:WillDelete": "Organization: {0} will be deleted",
     "OrganizationUnit:AreYouSureRemoveUser": "Are you sure you want to delete user {0} from your organization?",
     "OrganizationUnit:AreYouSureRemoveRole": "Are you sure you want to remove the role {0} from the organization?",
@@ -41,6 +42,23 @@
     "IdentityClaim:ValueType": "Value type",
     "Volo.Abp.Identity:020005": "The static claim type cannot be changed!",
     "Volo.Abp.Identity:020006": "Unable to delete static claim type!",
-    "Volo.Abp.Identity:020007": "The phone number is already tied to another user!"
+    "Volo.Abp.Identity:020007": "The phone number is already tied to another user!",
+    "Volo.Abp.Identity:020008": "You can't modify your phone's binding information!",
+    "Volo.Abp.Identity:020009": "You cannot modify your email binding information!",
+    "Volo.Abp.Identity:DuplicatePhoneNumber": "Phone number '{0}' is already taken.",
+    "DisplayName:Abp.Identity.User.SmsNewUserRegister": "Register sms template",
+    "Description:Abp.Identity.User.SmsNewUserRegister": "When the user registers, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
+    "DisplayName:Abp.Identity.User.SmsUserSignin": "Signin sms template",
+    "Description:Abp.Identity.User.SmsUserSignin": "When the user logs in, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
+    "DisplayName:Abp.Identity.User.SmsResetPassword": "Reset password sms template",
+    "Description:Abp.Identity.User.SmsResetPassword": "When the user resets the password, he/she sends the template number of SMS verification code and fills in the template number registered on the cloud platform",
+    "DisplayName:Abp.Identity.User.SmsPhoneNumberConfirmed": "Phone number confirmation template",
+    "Description:Abp.Identity.User.SmsPhoneNumberConfirmed": "The user confirms the mobile phone verification code template",
+    "DisplayName:Abp.Identity.User.SmsRepetInterval": "SMS verification code validity(min)",
+    "Description:Abp.Identity.User.SmsRepetInterval": "The valid time for the user to send SMS verification code, unit m, default 3min",
+    "DisplayName:SmsVerifyCode": "SMS verification code",
+    "DisplayName:EmailVerifyCode": "Mail verification code",
+    "DisplayName:WeChatCode": "Wechat login code",
+    "SendRepeatSmsVerifyCode": "Phone verification code cannot be sent repeatedly within {0} minutes!"
   }
 }

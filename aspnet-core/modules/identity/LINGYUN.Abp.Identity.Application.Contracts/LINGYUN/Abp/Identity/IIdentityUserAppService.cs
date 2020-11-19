@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Identity
         /// <param name="id"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task ChangeTwoFactorEnabledAsync(Guid id, IdentityUserTwoFactorEnabledDto input);
+        Task ChangeTwoFactorEnabledAsync(Guid id, ChangeTwoFactorEnabledDto input);
         /// <summary>
         /// 变更用户密码
         /// </summary>

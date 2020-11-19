@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\en.json" />
+	  <None Remove="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\en.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.3.0" />
+	</ItemGroup>
+
+</Project>

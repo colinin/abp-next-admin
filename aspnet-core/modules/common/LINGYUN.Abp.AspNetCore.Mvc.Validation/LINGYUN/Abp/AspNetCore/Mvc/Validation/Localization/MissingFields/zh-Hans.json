@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "ThisFieldMustBeANumber": "字段必须是数字!",
+    "The field {0} must be a number.": "提供的值 {0} 必须是数字!"
+  }
+}

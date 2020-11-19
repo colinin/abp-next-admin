@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\account\LINGYUN.Abp.Account.Domain\LINGYUN.Abp.Account.Domain.csproj" />
+    <ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>

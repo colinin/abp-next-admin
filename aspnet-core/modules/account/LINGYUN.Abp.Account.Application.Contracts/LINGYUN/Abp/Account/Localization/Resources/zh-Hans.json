@@ -1,0 +1,15 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "SendRepeatSmsVerifyCode": "手机验证码不能在 {0} 分钟内重复发送!",
+    "DuplicatePhoneNumber": "手机号已经存在!",
+    "PhoneNumberNotRegisterd": "手机号码未注册!",
+    "InvalidSmsVerifyCode": "手机验证码无效或已经过期!",
+    "RequiredEmailAddress": "邮件地址必须输入",
+    "InvalidPhoneNumber": "手机号无效",
+    "DuplicateWeChat": "微信号已经注册过!",
+    "DisplayName:SmsVerifyCode": "短信验证码",
+    "DisplayName:EmailVerifyCode": "邮件验证码",
+    "DisplayName:WeChatCode": "微信登录凭证"
+  }
+}
