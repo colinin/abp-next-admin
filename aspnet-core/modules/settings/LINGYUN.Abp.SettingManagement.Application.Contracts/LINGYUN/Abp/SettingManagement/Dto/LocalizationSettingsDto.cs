@@ -5,6 +5,6 @@
         /// <summary>
         /// 应用程序的默认语言
         /// </summary>
-        public string DefaultLanguage { get; set; }
+        public SettingDetailsDto DefaultLanguage { get; set; }
     }
 }

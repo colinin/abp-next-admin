@@ -66,7 +66,7 @@ namespace LINGYUN.Abp.Account
             var userName = input.UserName;
             if (userName.IsNullOrWhiteSpace())
             {
-                userName = "wxid-" + wehchatOpenId.OpenId.ToMd5();
+                userName = "wxid-" + wehchatOpenId.OpenId.ToMd5().ToLower();
             }
             
             var userEmail = input.EmailAddress;//如果邮件地址不验证,随意写入一个

@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Account.Localization;
+﻿using Volo.Abp.Account.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;

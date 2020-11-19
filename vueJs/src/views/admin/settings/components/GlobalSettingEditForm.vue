@@ -1,6 +1,6 @@
 <template>
   <SettingEditForm
-    :settings="settings"
+    :setting-groups="settingGroups"
     @onSettingSaving="onSettingSaving"
   />
 </template>
@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import SettingEditForm from './SettingEditForm.vue'
-import SettingService, { Setting, SettingsUpdate } from '@/api/settings'
+import SettingService, { SettingGroup, SettingsUpdate } from '@/api/settings'
 
 @Component({
   name: 'GlobalSettingEditForm',
@@ -17,12 +17,14 @@ import SettingService, { Setting, SettingsUpdate } from '@/api/settings'
   }
 })
 export default class extends Vue {
-  private settings = new Array<Setting>()
+  private settingGroups = new Array<SettingGroup>()
 
   mounted() {
-    SettingService.getGlobalSettings().then(res => {
-      this.settings = res.items
-    })
+    SettingService
+      .getGlobalSettings()
+      .then(res => {
+        this.settingGroups = res.items
+      })
   }
 
   private onSettingSaving(settings: SettingsUpdate) {

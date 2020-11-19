@@ -9,7 +9,7 @@ export default class SettingApiService {
    */
   public static getGlobalSettings() {
     const _url = '/api/setting-management/settings/by-global'
-    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+    return ApiService.Get<ListResultDto<SettingGroup>>(_url, IdentityService)
   }
 
   /**
@@ -25,7 +25,7 @@ export default class SettingApiService {
    */
   public static getCurrentTenantSettings() {
     const _url = '/api/setting-management/settings/by-current-tenant'
-    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
+    return ApiService.Get<ListResultDto<SettingGroup>>(_url, IdentityService)
   }
 
   /**
@@ -33,38 +33,6 @@ export default class SettingApiService {
    */
   public static setCurrentTenantSettings(payload: SettingsUpdate) {
     const _url = '/api/setting-management/settings/by-current-tenant'
-    return ApiService.Put<any>(_url, payload, IdentityService)
-  }
-
-  /**
-   * 获取当前用户配置
-   */
-  public static getCurrentUserSettings() {
-    const _url = '/api/setting-management/settings/by-current-user'
-    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
-  }
-
-  /**
-   * 设置当前用户配置
-   */
-  public static setCurrentUserSettings(payload: SettingsUpdate) {
-    const _url = '/api/setting-management/settings/by-current-user'
-    return ApiService.Put<any>(_url, payload, IdentityService)
-  }
-
-  /**
-   * 获取用户配置
-   */
-  public static getUserSettings(userId: string) {
-    const _url = '/api/setting-management/settings/by-user/' + userId
-    return ApiService.Get<ListResultDto<Setting>>(_url, IdentityService)
-  }
-
-  /**
-   * 设置当前用户配置
-   */
-  public static setUserSettings(userId: string, payload: SettingsUpdate) {
-    const _url = '/api/setting-management/settings/by-user/' + userId
     return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
@@ -90,22 +58,22 @@ export class SettingBase {
   value!: any
 }
 
-/** 设置对象 */
-export class Setting extends SettingBase {
-  /** 显示名称 */
-  displayName!: string
-  /** 说明 */
-  description!: string
-  /** 默认设置 */
-  defaultValue!: string
+// /** 设置对象 */
+// export class Setting extends SettingBase {
+//   /** 显示名称 */
+//   displayName!: string
+//   /** 说明 */
+//   description!: string
+//   /** 默认设置 */
+//   defaultValue!: string
 
-  public getValue() {
-    if (this.value) {
-      return this.value
-    }
-    return this.defaultValue
-  }
-}
+//   public getValue() {
+//     if (this.value) {
+//       return this.value
+//     }
+//     return this.defaultValue
+//   }
+// }
 
 /** 配置变更对象 */
 export class SettingUpdate extends SettingBase {}
@@ -118,4 +86,42 @@ export class SettingsUpdate {
   constructor() {
     this.settings = new Array<SettingUpdate>()
   }
+}
+
+export enum ValueType {
+  String = 0,
+  Number = 1,
+  Boolean = 2,
+  Date = 3,
+  Array = 4,
+  Option = 5,
+  Object = 10
+}
+
+export class Option {
+  name!: string
+  value!: string
+}
+
+export class SettingDetail {
+  name!: string
+  displayName!: string
+  description?: string
+  value?: string
+  defaultValue!: string
+  valueType!: ValueType
+  isEncrypted = false
+  options = new Array<Option>()
+}
+
+export class Setting {
+  displayName!: string
+  description?: string
+  details = new Array<SettingDetail>()
+}
+
+export class SettingGroup {
+  displayName!: string
+  description?: string
+  settings = new Array<Setting>()
 }
