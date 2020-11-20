@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\WeChat\MiniProgram\Localization\Resources\en.json" />
+	  <None Remove="LINGYUN\Abp\WeChat\MiniProgram\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\MiniProgram\Localization\Resources\en.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\MiniProgram\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
+	</ItemGroup>
+
+</Project>

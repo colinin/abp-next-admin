@@ -1,12 +1,20 @@
 ﻿using LINGYUN.Abp.WeChat.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using System;
+using Volo.Abp.Caching;
 using Volo.Abp.Features;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.WeChat
 {
-    [DependsOn(typeof(AbpFeaturesModule))]
+    [DependsOn(
+        typeof(AbpCachingModule),
+        typeof(AbpFeaturesModule),
+        typeof(AbpJsonModule))]
     public class AbpWeChatModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -22,6 +30,12 @@ namespace LINGYUN.Abp.WeChat
                     .Add<WeChatResource>("zh-Hans")
                     .AddVirtualJson("/LINGYUN/Abp/WeChat/Localization/Resources");
             });
+
+            context.Services.AddHttpClient("WeChatRequestClient", options =>
+            {
+                options.BaseAddress = new Uri("https://api.weixin.qq.com");
+            }).AddTransientHttpErrorPolicy(builder =>
+                builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
         }
     }
 }

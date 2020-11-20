@@ -10,6 +10,7 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TenantManagement;
+using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform;
 using LINYUN.Abp.Sms.Aliyun;
@@ -79,6 +80,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAuditingHttpApiModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpWeChatSettingManagementModule),// 微信配置管理模块
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
         typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包

@@ -1,6 +1,9 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "Features:WeChat": "WeChat"
+    "Features:WeChat": "WeChat",
+    "Permission:WeChat": "WeChat",
+    "DisplayName:WeChat": "WeChat",
+    "Description:WeChat": "WeChat"
   }
 }

@@ -817,6 +817,8 @@ export default class extends Vue {
         ClientApiService.updateClient(this.clientId, updateClient)
           .then(client => {
             this.client = client
+            const successMessage = this.l('global.successful')
+            this.$message.success(successMessage)
           })
       }
     })

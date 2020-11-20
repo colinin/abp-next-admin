@@ -16,7 +16,7 @@ export default class SettingApiService {
    * 设置公共配置
    */
   public static setGlobalSettings(payload: SettingsUpdate) {
-    const _url = '/api/setting-management/settings/by-global'
+    const _url = '/api/setting-management/settings/change-global'
     return ApiService.Put<any>(_url, payload, IdentityService)
   }
 
@@ -32,7 +32,7 @@ export default class SettingApiService {
    * 设置当前租户配置
    */
   public static setCurrentTenantSettings(payload: SettingsUpdate) {
-    const _url = '/api/setting-management/settings/by-current-tenant'
+    const _url = '/api/setting-management/settings/change-current-tenant'
     return ApiService.Put<any>(_url, payload, IdentityService)
   }
 

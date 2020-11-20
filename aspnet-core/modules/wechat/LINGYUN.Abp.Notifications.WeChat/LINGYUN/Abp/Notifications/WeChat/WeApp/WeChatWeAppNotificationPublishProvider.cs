@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications.WeChat.WeApp.Features;
-using LINGYUN.Abp.WeChat.Authorization;
+using LINGYUN.Abp.WeChat.MiniProgram.Messages;
+using LINGYUN.Abp.WeChat.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -19,20 +20,16 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
 
         private IFeatureChecker _featureChecker;
         protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
-
-        private IUserWeChatOpenIdFinder _userWeChatOpenIdFinder;
-        protected IUserWeChatOpenIdFinder UserWeChatOpenIdFinder => LazyGetRequiredService(ref _userWeChatOpenIdFinder);
-
-        protected IWeChatWeAppNotificationSender NotificationSender { get; }
+        protected ISubscribeMessager SubscribeMessager { get; }
         protected AbpWeChatWeAppNotificationOptions Options { get; }
         public WeChatWeAppNotificationPublishProvider(
             IServiceProvider serviceProvider,
-            IWeChatWeAppNotificationSender notificationSender,
+            ISubscribeMessager subscribeMessager,
             IOptions<AbpWeChatWeAppNotificationOptions> options) 
             : base(serviceProvider)
         {
             Options = options.Value;
-            NotificationSender = notificationSender;
+            SubscribeMessager = subscribeMessager;
         }
 
         protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
@@ -79,22 +76,30 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.DefaultWeAppLanguage);
             Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
+            var notificationData = NotificationData.ToStandardData(Options.DefaultMsgPrefix, notification.Data);
+
             // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
-            string weChatCode = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
+            string openId = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
 
-            var openId = !weChatCode.IsNullOrWhiteSpace() ? weChatCode
-                : await UserWeChatOpenIdFinder.FindByUserIdAsync(identifier.UserId);
+            if (openId.IsNullOrWhiteSpace())
+            {
+                // 发送小程序订阅消息
+                await SubscribeMessager
+                    .SendAsync(
+                        identifier.UserId, templateId, redirect, weAppLang, 
+                        weAppState, notificationData.Properties, cancellationToken);
+            }
+            else
+            {
+                var weChatWeAppNotificationData = new SubscribeMessage(templateId, redirect, weAppState, weAppLang);
+                // 写入模板数据
+                weChatWeAppNotificationData.WriteData(notificationData.Properties);
 
-            var weChatWeAppNotificationData = new WeChatWeAppSendNotificationData(openId,
-                templateId, redirect, weAppState, weAppLang);
+                Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
 
-            // 写入模板数据
-            weChatWeAppNotificationData.WriteStandardData(NotificationData.ToStandardData(Options.DefaultMsgPrefix, notification.Data));
-
-            Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
-
-            // 发送小程序订阅消息
-            await NotificationSender.SendAsync(weChatWeAppNotificationData);
+                // 发送小程序订阅消息
+                await SubscribeMessager.SendAsync(weChatWeAppNotificationData, cancellationToken);
+            }
         }
 
         protected string GetOrDefaultTemplateId(NotificationData data)
