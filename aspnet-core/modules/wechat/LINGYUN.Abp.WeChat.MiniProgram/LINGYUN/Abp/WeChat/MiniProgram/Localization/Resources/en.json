@@ -1,0 +1,15 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:WeChat.MiniProgram": "WeChat Mini Program",
+    "Description:WeChat.MiniProgram": "WeChat Mini Program",
+    "DisplayName:WeChat.MiniProgram.AppId": "AppId",
+    "Description:WeChat.MiniProgram.AppId": "AppId,See:https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "DisplayName:WeChat.MiniProgram.AppSecret": "App Secret",
+    "Description:WeChat.MiniProgram.AppSecret": "App Secret,See:https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "DisplayName:WeChat.MiniProgram.Token": "Token",
+    "Description:WeChat.MiniProgram.Token": "Token,See:https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "DisplayName:WeChat.MiniProgram.EncodingAESKey": "Encoding AES Key",
+    "Description:WeChat.MiniProgram.EncodingAESKey": "Encoding AES Key,See:https://developers.weixin.qq.com/miniprogram/dev/framework/"
+  }
+}

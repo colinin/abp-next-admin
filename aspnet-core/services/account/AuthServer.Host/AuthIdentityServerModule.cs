@@ -3,6 +3,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
+using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINYUN.Abp.Sms.Aliyun;
@@ -64,7 +65,7 @@ namespace AuthServer.Host
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpIdentityServerSmsValidatorModule),
-        typeof(AbpIdentityServerWeChatValidatorModule),
+        typeof(AbpIdentityServerWeChatModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),

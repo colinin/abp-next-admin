@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\wechat\LINGYUN.Abp.WeChat.Authorization\LINGYUN.Abp.WeChat.Authorization.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Microsoft\DependencyInjection\" />
   </ItemGroup>
 

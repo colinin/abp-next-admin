@@ -1,6 +1,9 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Features:WeChat": "微信开发"
+    "Features:WeChat": "微信开发",
+    "Permission:WeChat": "微信开发",
+    "DisplayName:WeChat": "微信开发平台",
+    "Description:WeChat": "微信开发平台"
   }
 }

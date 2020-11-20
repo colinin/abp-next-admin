@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Account
         /// <returns></returns>
         Task RegisterAsync(PhoneRegisterDto input);
         /// <summary>
-        /// 通过微信注册用户账户
+        /// 通过微信小程序注册用户账户
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

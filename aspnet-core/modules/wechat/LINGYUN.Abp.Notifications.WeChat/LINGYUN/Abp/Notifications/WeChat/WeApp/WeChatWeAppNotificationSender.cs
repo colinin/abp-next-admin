@@ -1,8 +1,10 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.Notifications.WeChat.WeApp.Features;
-using LINGYUN.Abp.WeChat.Authorization;
+using LINGYUN.Abp.WeChat.MiniProgram;
+using LINGYUN.Abp.WeChat.Token;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,7 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Features;
 using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Notifications.WeChat.WeApp
@@ -22,15 +23,18 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
         public ILogger<WeChatWeAppNotificationSender> Logger { get; set; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IJsonSerializer JsonSerializer { get; }
+        protected AbpWeChatMiniProgramOptions MiniProgramOptions { get; }
         protected IWeChatTokenProvider WeChatTokenProvider { get; }
         public WeChatWeAppNotificationSender(
             IJsonSerializer jsonSerializer,
             IHttpClientFactory httpClientFactory,
-            IWeChatTokenProvider weChatTokenProvider)
+            IWeChatTokenProvider weChatTokenProvider,
+            IOptions<AbpWeChatMiniProgramOptions> miniProgramOptions)
         {
             JsonSerializer = jsonSerializer;
             HttpClientFactory = httpClientFactory;
             WeChatTokenProvider = weChatTokenProvider;
+            MiniProgramOptions = miniProgramOptions.Value;
 
             Logger = NullLogger<WeChatWeAppNotificationSender>.Instance;
         }
@@ -44,7 +48,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.WeApp
             )]
         public virtual async Task SendAsync(WeChatWeAppSendNotificationData notificationData, CancellationToken cancellationToken = default)
         {
-            var weChatToken = await WeChatTokenProvider.GetTokenAsync();
+            var weChatToken = await WeChatTokenProvider.GetTokenAsync(MiniProgramOptions.AppId, MiniProgramOptions.AppSecret, cancellationToken);
             var requestParamters = new Dictionary<string, string>
             {
                 { "access_token", weChatToken.AccessToken }

@@ -1,0 +1,17 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:WeChat.Official": "微信公众号",
+    "Description:WeChat.Official": "微信公众号",
+    "DisplayName:WeChat.Official.AppId": "公众号AppId",
+    "Description:WeChat.Official.AppId": "微信公众号AppId,详情见:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
+    "DisplayName:WeChat.Official.AppSecret": "公众号AppSecret",
+    "Description:WeChat.Official.AppSecret": "微信公众号AppSecret,详情见:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
+    "DisplayName:WeChat.Official.Url": "公众号Url",
+    "Description:WeChat.Official.Url": "微信公众号Url,详情见:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
+    "DisplayName:WeChat.Official.Token": "公众号Token",
+    "Description:WeChat.Official.Token": "微信公众号Token,详情见:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
+    "DisplayName:WeChat.Official.EncodingAESKey": "公众号EncodingAESKey",
+    "Description:WeChat.Official.EncodingAESKey": "微信公众号EncodingAESKey,详情见:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html"
+  }
+}
