@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.WeChat.OpenId
 
             Logger.LogDebug($"Not found in the cache, getting from the httpClient: {cacheKey}");
 
-            var client = HttpClientFactory.CreateClient("WeChatRequestClient");
+            var client = HttpClientFactory.CreateClient(AbpWeChatGlobalConsts.HttpClient);
 
             var request = new WeChatOpenIdRequest
             {

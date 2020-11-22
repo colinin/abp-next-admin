@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using IdentityResource = Volo.Abp.Identity.Localization.IdentityResource;
 
 namespace LINGYUN.Abp.IdentityServer.SmsValidator
 {

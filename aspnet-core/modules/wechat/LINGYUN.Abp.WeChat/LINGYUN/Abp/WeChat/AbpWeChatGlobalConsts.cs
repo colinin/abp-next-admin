@@ -14,5 +14,7 @@
         /// 微信授权显示名称
         /// </summary>
         public static string DisplayName { get; set; } = "WeChat";
+
+        public static string HttpClient { get; set; } = "Abp.WeChat";
     }
 }

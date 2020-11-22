@@ -3,7 +3,7 @@
     public class AbpWeChatMiniProgramConsts
     {
         /// <summary>
-        /// 全局对应的Provider名称
+        /// 微信小程序对应的Provider名称
         /// </summary>
         public static string ProviderKey { get; set; } = "WeChat.MiniProgram";
 

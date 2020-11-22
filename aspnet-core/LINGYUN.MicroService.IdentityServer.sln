@@ -47,11 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Entity
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.EntityFrameworkCore", "modules\identityServer\LINGYUN.Abp.IdentityServer.EntityFrameworkCore\LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj", "{644FAB8F-ED83-4539-AF43-8F8FE61EF778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{648D7B5D-8B78-4F90-BDE0-4AC50C902CC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{648D7B5D-8B78-4F90-BDE0-4AC50C902CC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Official", "modules\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{F762D1BB-66FB-421A-A917-D80B7DCC0DC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official", "modules\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{F762D1BB-66FB-421A-A917-D80B7DCC0DC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.IdentityServer.WeChat", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat\LINGYUN.Abp.IdentityServer.WeChat.csproj", "{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChat", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat\LINGYUN.Abp.IdentityServer.WeChat.csproj", "{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.Domain", "modules\identityServer\LINGYUN.Abp.IdentityServer.Domain\LINGYUN.Abp.IdentityServer.Domain.csproj", "{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +161,7 @@ Global
 		{648D7B5D-8B78-4F90-BDE0-4AC50C902CC3} = {AF8AECC8-0F42-4FC5-B3C0-00987BA8279F}
 		{F762D1BB-66FB-421A-A917-D80B7DCC0DC0} = {AF8AECC8-0F42-4FC5-B3C0-00987BA8279F}
 		{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
+		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCB77471-9ECB-4666-A316-1D6A6285A468}

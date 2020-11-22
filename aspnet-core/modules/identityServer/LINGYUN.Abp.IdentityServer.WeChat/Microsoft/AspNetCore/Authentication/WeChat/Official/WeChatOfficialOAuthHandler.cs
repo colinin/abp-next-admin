@@ -88,7 +88,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             // TODO: 此处通过唯一的 CorrelationId, 将 properties生成的State缓存删除
             var state = Request.Query["state"];
 
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state, null);
+            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToString().ToMd5(), null);
             await Cache.RemoveAsync(stateCacheKey, token: Context.RequestAborted);
 
             return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
@@ -138,10 +138,12 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             await base.HandleChallengeAsync(properties);
 
             // TODO: 此处已经生成唯一的 CorrelationId, 可以借此将 properties生成State之后再进行缓存
+            // 注: 默认的State对于微信来说太长(微信只支持128位长度的State),因此巧妙的利用CorrelationId的MD5值来替代State
+            // MD5转换防止直接通过CorrelationId干些别的事情...
             var state = properties.Items[".xsrf"];
 
             var stateToken = Options.StateDataFormat.Protect(properties);
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state, null);
+            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToMd5(), null);
 
             await Cache
                 .SetAsync(
@@ -177,7 +179,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
                 ["response_type"] = "code"
             });
 
-            challengeUrl += $"&scope={scope}&state={state}";
+            challengeUrl += $"&scope={scope}&state={state.ToMd5()}";
 
             return challengeUrl;
         }
@@ -189,7 +191,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             // TODO: 此处借用唯一的 CorrelationId, 将 properties生成的State缓存取出,进行解密
             var state = query["state"];
 
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state, null);
+            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToString().ToMd5(), null);
             var stateCacheItem = await Cache.GetAsync(stateCacheKey, token: Context.RequestAborted);
 
             var properties = Options.StateDataFormat.Unprotect(stateCacheItem.State);
