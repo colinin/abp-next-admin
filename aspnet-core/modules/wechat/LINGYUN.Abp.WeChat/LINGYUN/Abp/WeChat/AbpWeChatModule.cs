@@ -31,11 +31,12 @@ namespace LINGYUN.Abp.WeChat
                     .AddVirtualJson("/LINGYUN/Abp/WeChat/Localization/Resources");
             });
 
-            context.Services.AddHttpClient("WeChatRequestClient", options =>
-            {
-                options.BaseAddress = new Uri("https://api.weixin.qq.com");
-            }).AddTransientHttpErrorPolicy(builder =>
-                builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
+            context.Services.AddHttpClient(AbpWeChatGlobalConsts.HttpClient,
+                options =>
+                {
+                    options.BaseAddress = new Uri("https://api.weixin.qq.com");
+                }).AddTransientHttpErrorPolicy(builder =>
+                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
         }
     }
 }

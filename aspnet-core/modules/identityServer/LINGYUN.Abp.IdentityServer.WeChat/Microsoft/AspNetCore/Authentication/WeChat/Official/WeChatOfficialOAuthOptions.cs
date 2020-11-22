@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
     {
         public WeChatOfficialOAuthOptions()
         {
-            // 用于防止初始化错误
+            // 用于防止初始化错误,会在OAuthHandler.InitializeHandlerAsync中进行重写
             ClientId = "WeChatOfficial";
             ClientSecret = "WeChatOfficial";
 

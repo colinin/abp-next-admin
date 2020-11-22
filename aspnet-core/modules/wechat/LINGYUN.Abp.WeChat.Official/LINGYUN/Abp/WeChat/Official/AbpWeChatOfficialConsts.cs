@@ -3,7 +3,7 @@
     public class AbpWeChatOfficialConsts
     {
         /// <summary>
-        /// 微信公众号全局对应的Provider名称
+        /// 微信公众号对应的Provider名称
         /// </summary>
         public static string ProviderKey { get; set; } = "WeChat.Official";
 
