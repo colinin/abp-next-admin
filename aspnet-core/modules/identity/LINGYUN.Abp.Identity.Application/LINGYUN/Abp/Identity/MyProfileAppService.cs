@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.Identity
             UserManager = userManager;
             UserRepository = userRepository;
             SecurityCodeSender = securityCodeSender;
-            SecurityTokenCache = SecurityTokenCache;
+            SecurityTokenCache = securityTokenCache;
         }
 
         public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)
