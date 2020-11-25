@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Notifications
                 notification.Data = NotificationDataConverter.Convert(notification.Data);
 
                 var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrNull(notification.Name, publishProvider.Name);
+                        .GetMapItemOrDefault(notification.Name, publishProvider.Name);
                 if (notifacationDataMapping != null)
                 {
                     notification.Data = notifacationDataMapping.MappingFunc(notification.Data);

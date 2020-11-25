@@ -6,18 +6,18 @@ using LINGYUN.Abp.RealTime.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
     [Authorize]
     public class MessagesHub : OnlineClientHubBase
     {
+        protected AbpIMSignalROptions Options { get; }
         protected IFriendStore FriendStore { get; }
         protected IMessageStore MessageStore { get; }
         protected IUserGroupStore UserGroupStore { get; }
@@ -25,11 +25,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         public MessagesHub(
             IFriendStore friendStore,
             IMessageStore messageStore,
-            IUserGroupStore userGroupStore)
+            IUserGroupStore userGroupStore,
+            IOptions<AbpIMSignalROptions> options)
         {
             FriendStore = friendStore;
             MessageStore = messageStore;
             UserGroupStore = userGroupStore;
+            Options = options.Value;
         }
 
         protected override async Task OnClientConnectedAsync(IOnlineClient client)
@@ -44,7 +46,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 if (groupClient != null)
                 {
                     // 发送用户上线通知
-                    await groupClient.SendAsync("onUserOnlined", client.TenantId, client.UserId.Value);
+                    await groupClient.SendAsync(Options.UserOnlineMethod, client.TenantId, client.UserId.Value);
                 }
             }
 
@@ -56,7 +58,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 var userClients = Clients.Users(friendClientIds);
                 if (userClients != null)
                 {
-                    await userClients.SendAsync("onUserOnlined", client.TenantId, client.UserId.Value);
+                    await userClients.SendAsync(Options.UserOnlineMethod, client.TenantId, client.UserId.Value);
                 }
             }
         }
@@ -90,7 +92,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 return;
             }
 
-            await signalRClient.SendAsync("getChatMessage", chatMessage, cancellationToken: Context.ConnectionAborted);
+            await signalRClient.SendAsync(Options.GetChatMessageMethod, chatMessage, cancellationToken: Context.ConnectionAborted);
         }
 
         protected virtual async Task SendMessageToUserAsync(ChatMessage chatMessage)
@@ -108,7 +110,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                         Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
                         continue;
                     }
-                    await signalRClient.SendAsync("getChatMessage", chatMessage, cancellationToken: Context.ConnectionAborted);
+                    await signalRClient.SendAsync(Options.GetChatMessageMethod, chatMessage, cancellationToken: Context.ConnectionAborted);
                 }
                 catch (Exception ex)
                 {

@@ -12,7 +12,11 @@ namespace LINGYUN.Abp.Notifications
     /// </remarks>
     public class NotificationData
     {
+        /// <summary>
+        /// 用来标识是否需要本地化的信息
+        /// </summary>
         public const string LocalizerKey = "localizer";
+
         public virtual string Type => GetType().FullName;
 
         public object this[string key]

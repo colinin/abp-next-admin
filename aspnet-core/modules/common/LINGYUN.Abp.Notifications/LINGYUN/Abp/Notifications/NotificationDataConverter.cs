@@ -10,10 +10,17 @@ namespace LINGYUN.Abp.Notifications
             {
                 if (notificationData.NeedLocalizer())
                 {
-                    var title = JsonConvert.DeserializeObject<LocalizableStringInfo>(notificationData.TryGetData("title").ToString());
-                    var message = JsonConvert.DeserializeObject<LocalizableStringInfo>(notificationData.TryGetData("message").ToString());
-                    notificationData.TrySetData("title", title);
-                    notificationData.TrySetData("message", message);
+                    // 潜在的空对象引用修复
+                    if (notificationData.Properties.TryGetValue("title", out object title) && title != null)
+                    {
+                        var titleObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(title.ToString());
+                        notificationData.TrySetData("title", titleObj);
+                    }
+                    if (notificationData.Properties.TryGetValue("message", out object message) && message != null)
+                    {
+                        var messageObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(message.ToString());
+                        notificationData.TrySetData("message", messageObj);
+                    }
 
                     if (notificationData.Properties.TryGetValue("description", out object description) && description != null)
                     {

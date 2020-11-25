@@ -11,6 +11,7 @@ using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Notifications
 {
+    // TODO: 需要重命名 AbpNotificationsModule
     [DependsOn(
         typeof(AbpBackgroundJobsModule),
         typeof(AbpJsonModule))]

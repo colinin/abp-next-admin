@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+		<Description>腾讯云SDK基础框架</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\en.json" />
+		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Localization" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Json" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Settings" Version="3.3.0" />
+	</ItemGroup>
+
+</Project>

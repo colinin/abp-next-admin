@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 /*
  * 2020-10-29 重构通知
