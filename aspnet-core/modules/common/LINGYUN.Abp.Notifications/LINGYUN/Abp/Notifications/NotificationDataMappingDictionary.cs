@@ -6,28 +6,53 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDataMappingDictionary : Dictionary<string, List<NotificationDataMappingDictionaryItem>>
     {
-        public void Mapping(string name, string provider, Func<NotificationData, NotificationData> func)
+        public static string DefaultKey { get; set; } = "Default";
+        /// <summary>
+        /// 处理某个通知的数据
+        /// 特定于一个提供程序
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="name"></param>
+        /// <param name="func"></param>
+        public void Mapping(string provider, string name, Func<NotificationData, NotificationData> func)
         {
-            if (ContainsKey(name))
+            if (!ContainsKey(provider))
             {
-                this[name] = new List<NotificationDataMappingDictionaryItem>();
+                this[provider] = new List<NotificationDataMappingDictionaryItem>();
             }
-            this[name].Add(new NotificationDataMappingDictionaryItem(provider, func));
-        }
 
-        public void MappingAll(string provider, Func<NotificationData, NotificationData> func)
-        {
-            foreach(var mapping in this)
+            var mapItem = this[provider].FirstOrDefault(item => item.Name.Equals(name));
+
+            if (mapItem == null)
             {
-                Mapping(mapping.Key, provider, func);
+                this[provider].Add(new NotificationDataMappingDictionaryItem(name, func));
+            }
+            else
+            {
+                mapItem.Replace(func);
             }
         }
-
-        public NotificationDataMappingDictionaryItem GetMapItemOrNull(string name, string provider)
+        /// <summary>
+        /// 处理所有通知的数据
+        /// 特定于一个提供程序
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="func"></param>
+        public void MappingDefault(string provider, Func<NotificationData, NotificationData> func)
         {
-            if (ContainsKey(name))
+            Mapping(provider, DefaultKey, func);
+        }
+        /// <summary>
+        /// 获取需要处理数据的方法
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public NotificationDataMappingDictionaryItem GetMapItemOrDefault(string provider, string name)
+        {
+            if (ContainsKey(provider))
             {
-                return this[name].FirstOrDefault(map => map.Provider.Equals(provider));
+                return this[provider].GetOrNullDefault(name);
             }
             return null;
         }

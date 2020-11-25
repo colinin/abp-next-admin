@@ -2,6 +2,7 @@
 using LINGYUN.Abp.RealTime.Client;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -20,12 +21,15 @@ namespace LINGYUN.Abp.Notifications.SignalR
 
         private readonly IHubContext<NotificationsHub> _hubContext;
 
+        private readonly AbpNotificationsSignalROptions _options;
         public SignalRNotificationPublishProvider(
            IOnlineClientManager onlineClientManager,
            IHubContext<NotificationsHub> hubContext,
+           IOptions<AbpNotificationsSignalROptions> options,
            IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
+            _options = options.Value;
             _hubContext = hubContext;
             _onlineClientManager = onlineClientManager;
         }
@@ -44,7 +48,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
                 }
                 // 租户通知群发
                 Logger.LogDebug($"Found a singalr group, begin senging notifications");
-                await singalRGroup.SendAsync("getNotification", notification, cancellationToken);
+                await singalRGroup.SendAsync(_options.MethodName, notification, cancellationToken);
             }
             else
             {

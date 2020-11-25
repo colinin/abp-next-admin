@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+		<Description>阿里云SDK基础框架</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINYUN\Abp\Aliyun\Localization\Resources\en.json" />
+		<None Remove="LINYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINYUN\Abp\Aliyun\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="aliyun-net-sdk-core" Version="1.5.8" />
+		<PackageReference Include="Volo.Abp.Localization" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Json" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Settings" Version="3.3.0" />
+	</ItemGroup>
+
+</Project>

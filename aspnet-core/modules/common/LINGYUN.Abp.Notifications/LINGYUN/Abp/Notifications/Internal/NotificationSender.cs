@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,10 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.Abp.Notifications
 {
+    /// <summary>
+    /// 默认实现通过分布式事件发送通知
+    /// 可替换实现来发送实时通知
+    /// </summary>
     public class NotificationSender : INotificationSender, ITransientDependency
     {
         /// <summary>
@@ -20,9 +25,12 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public IDistributedEventBus DistributedEventBus { get; }
 
+        protected AbpNotificationOptions Options { get; }
         public NotificationSender(
-           IDistributedEventBus distributedEventBus)
+           IDistributedEventBus distributedEventBus,
+           IOptions<AbpNotificationOptions> options)
         {
+            Options = options.Value;
             DistributedEventBus = distributedEventBus;
             Logger = NullLogger<NotificationSender>.Instance;
         }
@@ -66,6 +74,7 @@ namespace LINGYUN.Abp.Notifications
                 .PublishAsync(
                     new NotificationEventData
                     {
+                        Application = Options.Application,
                         TenantId = tenantId,
                         Users = users?.ToList(),
                         Name = name,

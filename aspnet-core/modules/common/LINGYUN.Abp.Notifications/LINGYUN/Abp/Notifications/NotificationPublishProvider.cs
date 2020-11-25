@@ -53,7 +53,13 @@ namespace LINGYUN.Abp.Notifications
         {
             await PublishAsync(notification, identifiers, CancellationTokenProvider.Token);
         }
-
+        /// <summary>
+        /// 重写实现通知发布
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <param name="identifiers"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected abstract Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default);
     }
 }

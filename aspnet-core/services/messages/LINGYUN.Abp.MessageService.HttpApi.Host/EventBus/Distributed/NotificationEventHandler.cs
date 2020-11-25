@@ -89,6 +89,16 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         [UnitOfWork]
         public virtual async Task HandleEventAsync(NotificationEventData eventData)
         {
+            // 这样做的话就要注意了
+            // 当只有一个消费者订阅时,事件总线会认为消息已经处理,从而发布Ack指令,从消息队列中移除此消息
+            // 可能造成通知数据丢失
+            var application = Options.Application ?? "Abp";
+            if (application.Equals(Options.Application))
+            {
+                // 不是当前监听应用的消息不做处理
+                return;
+            }
+            // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
             var notification = NotificationDefinitionManager.Get(eventData.Name);
 
             var notificationInfo = new NotificationInfo
@@ -103,6 +113,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             };
             notificationInfo.SetId(SnowflakeIdGenerator.Create());
 
+            // TODO: 可以做成一个接口来序列化消息
             notificationInfo.Data  = NotificationDataConverter.Convert(notificationInfo.Data);
 
             Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
@@ -189,7 +200,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
                 var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrNull(notificationInfo.Name, provider.Name);
+                        .GetMapItemOrDefault(notificationInfo.Name, provider.Name);
                 if (notifacationDataMapping != null)
                 {
                     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
@@ -209,10 +220,11 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                 Logger.LogDebug($"Send notification error, notification {notificationInfo.Name} entry queue");
                 // 发送失败的消息进入后台队列
                 await BackgroundJobManager.EnqueueAsync(
-                    new NotificationPublishJobArgs(notificationInfo.GetId(),
-                    provider.GetType().AssemblyQualifiedName,
-                    subscriptionUserIdentifiers.ToList(),
-                    notificationInfo.TenantId));
+                    new NotificationPublishJobArgs(
+                        notificationInfo.GetId(),
+                        provider.GetType().AssemblyQualifiedName,
+                        subscriptionUserIdentifiers.ToList(),
+                        notificationInfo.TenantId));
             }
         }
     }

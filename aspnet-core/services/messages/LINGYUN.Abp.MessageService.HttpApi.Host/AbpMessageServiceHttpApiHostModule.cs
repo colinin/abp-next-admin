@@ -13,7 +13,8 @@ using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
-using LINGYUN.Abp.Notifications.WeChat.WeApp;
+using LINGYUN.Abp.Notifications.Sms;
+using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -58,8 +59,9 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpIMSignalRModule),
+        typeof(AbpNotificationsSmsModule),
         typeof(AbpNotificationsSignalRModule),
-        typeof(AbpNotificationsWeChatWeAppModule),
+        typeof(AbpNotificationsWeChatMiniProgramModule),
         typeof(AbpNotificationsExceptionHandlingModule),
         typeof(AbpAspNetCoreSignalRProtocolJsonModule),
         typeof(AbpCAPEventBusModule),

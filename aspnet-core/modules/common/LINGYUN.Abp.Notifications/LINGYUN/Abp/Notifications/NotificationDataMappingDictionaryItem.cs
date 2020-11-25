@@ -4,12 +4,23 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDataMappingDictionaryItem
     {
-        public string Provider { get; }
+        /// <summary>
+        /// 通知名称
+        /// </summary>
+        public string Name { get; }
+        /// <summary>
+        /// 转换方法
+        /// </summary>
+        public Func<NotificationData, NotificationData> MappingFunc { get; private set; }
 
-        public Func<NotificationData, NotificationData> MappingFunc { get; }
-        public NotificationDataMappingDictionaryItem(string prodiver, Func<NotificationData, NotificationData> func)
+        public NotificationDataMappingDictionaryItem(string name, Func<NotificationData, NotificationData> func)
         {
-            Provider = prodiver;
+            Name = name;
+            MappingFunc = func;
+        }
+
+        public void Replace(Func<NotificationData, NotificationData> func)
+        {
             MappingFunc = func;
         }
     }
