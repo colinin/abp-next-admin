@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using Ocelot.Extenssions;
@@ -186,6 +187,8 @@ namespace LINGYUN.ApiGateway
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            // 网关不需要加代理中间件
 
             app.UseAuditing();
             app.UseVirtualFiles();

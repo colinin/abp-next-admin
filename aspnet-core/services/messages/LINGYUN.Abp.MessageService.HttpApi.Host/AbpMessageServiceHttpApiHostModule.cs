@@ -10,7 +10,6 @@ using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.MessageService.Authorization;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
-using LINGYUN.Abp.MessageService.MultiTenancy;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
@@ -95,6 +94,16 @@ namespace LINGYUN.Abp.MessageService
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = hostingEnvironment.BuildConfiguration();
+
+            // 请求代理配置
+            Configure<ForwardedHeadersOptions>(options =>
+            {
+                configuration.GetSection("App:Forwarded").Bind(options);
+                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             // 配置Ef
             Configure<AbpDbContextOptions>(options =>
             {
@@ -141,10 +150,18 @@ namespace LINGYUN.Abp.MessageService
                 options.IsEnabled = true;
             });
 
-            Configure<AbpTenantResolveOptions>(options =>
+            var tenantResolveCfg = configuration.GetSection("App:Domains");
+            if (tenantResolveCfg.Exists())
             {
-                options.TenantResolvers.Insert(0, new AuthorizationTenantResolveContributor());
-            });
+                Configure<AbpTenantResolveOptions>(options =>
+                {
+                    var domains = tenantResolveCfg.Get<string[]>();
+                    foreach (var domain in domains)
+                    {
+                        options.AddDomainTenantResolver(domain);
+                    }
+                });
+            }
 
             Configure<AbpDistributedCacheOptions>(options =>
             {
@@ -273,6 +290,8 @@ namespace LINGYUN.Abp.MessageService
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统

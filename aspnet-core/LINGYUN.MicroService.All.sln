@@ -265,9 +265,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cloud-aliyun", "cloud-aliyu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cloud-tencent", "cloud-tencent", "{3B96F4D8-4993-419B-BCEB-AFE4ED39449F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Aliyun", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{97B4A37E-B93E-48C9-95D5-689CB9495D8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{97B4A37E-B93E-48C9-95D5-689CB9495D8B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{8C3312E7-F51E-4780-A893-CE0E0B80B579}"
 EndProject

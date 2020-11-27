@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Localization" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\ApiGateWay\Admin\Localization\DomainShared\en.json" />
+    <None Remove="LINGYUN\ApiGateWay\Admin\Localization\DomainShared\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\ApiGateWay\Admin\Localization\DomainShared\en.json" />
+    <EmbeddedResource Include="LINGYUN\ApiGateWay\Admin\Localization\DomainShared\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LINGYUN\ApiGateWay\Admin\Routes\" />
+  </ItemGroup>
+
+</Project>
