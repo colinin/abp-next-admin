@@ -94,6 +94,16 @@ namespace LINGYUN.Abp.IdentityServer4
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = hostingEnvironment.BuildConfiguration();
+
+            // 请求代理配置
+            Configure<ForwardedHeadersOptions>(options =>
+            {
+                configuration.GetSection("App:Forwarded").Bind(options);
+                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             // 配置Ef
             Configure<AbpDbContextOptions>(options =>
             {
@@ -150,8 +160,6 @@ namespace LINGYUN.Abp.IdentityServer4
             {
                 // 是否发送堆栈信息
                 options.SendStackTrace = true;
-                // 未指定异常接收者的默认接收邮件
-                options.DefaultReceiveEmail = "colin.in@foxmail.com";
             });
 
             Configure<AbpAuditingOptions>(options =>
@@ -201,10 +209,18 @@ namespace LINGYUN.Abp.IdentityServer4
                 options.IsEnabled = true;
             });
 
-            Configure<AbpTenantResolveOptions>(options =>
+            var tenantResolveCfg = configuration.GetSection("App:Domains");
+            if (tenantResolveCfg.Exists())
             {
-                options.TenantResolvers.Insert(0, new AuthorizationTenantResolveContributor());
-            });
+                Configure<AbpTenantResolveOptions>(options =>
+                {
+                    var domains = tenantResolveCfg.Get<string[]>();
+                    foreach (var domain in domains)
+                    {
+                        options.AddDomainTenantResolver(domain);
+                    }
+                });
+            }
 
             // Swagger
             context.Services.AddSwaggerGen(
@@ -270,6 +286,8 @@ namespace LINGYUN.Abp.IdentityServer4
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统

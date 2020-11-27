@@ -7,7 +7,6 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
-using LINGYUN.Platform.MultiTenancy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -90,6 +89,16 @@ namespace LINGYUN.Platform
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = hostingEnvironment.BuildConfiguration();
+
+            // 请求代理配置
+            Configure<ForwardedHeadersOptions>(options =>
+            {
+                configuration.GetSection("App:Forwarded").Bind(options);
+                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             // 配置Ef
             Configure<AbpDbContextOptions>(options =>
             {
@@ -179,6 +188,19 @@ namespace LINGYUN.Platform
                 options.IsEnabled = true;
             });
 
+            var tenantResolveCfg = configuration.GetSection("App:Domains");
+            if (tenantResolveCfg.Exists())
+            {
+                Configure<AbpTenantResolveOptions>(options =>
+                {
+                    var domains = tenantResolveCfg.Get<string[]>();
+                    foreach (var domain in domains)
+                    {
+                        options.AddDomainTenantResolver(domain);
+                    }
+                });
+            }
+
             Configure<AbpAuditingOptions>(options =>
             {
                 options.ApplicationName = "Platform";
@@ -190,11 +212,6 @@ namespace LINGYUN.Platform
                     .EntityHistorySelectors
                     .AddAllEntities();
                 }
-            });
-
-            Configure<AbpTenantResolveOptions>(options =>
-            {
-                options.TenantResolvers.Insert(0, new AuthorizationTenantResolveContributor());
             });
 
             // Swagger
@@ -265,6 +282,8 @@ namespace LINGYUN.Platform
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统

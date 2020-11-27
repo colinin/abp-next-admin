@@ -70,7 +70,8 @@ namespace LINGYUN.Abp.SettingManagement
             }
         }
 
-        [Authorize]
+        //[Authorize]
+        [AllowAnonymous]
         public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());

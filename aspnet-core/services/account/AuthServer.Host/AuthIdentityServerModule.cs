@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -101,6 +102,15 @@ namespace AuthServer.Host
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            // 请求代理配置
+            Configure<ForwardedHeadersOptions>(options =>
+            {
+                configuration.GetSection("App:Forwarded").Bind(options);
+                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
@@ -183,10 +193,7 @@ namespace AuthServer.Host
                         options.Audience = configuration["AuthServer:ApiName"];
                     });
 
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = true;
-            });
+            
 
             if (!hostingEnvironment.IsDevelopment())
             {
@@ -194,6 +201,24 @@ namespace AuthServer.Host
                 context.Services
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "AuthServer-Protection-Keys");
+            }
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = true;
+            });
+
+            var tenantResolveCfg = configuration.GetSection("App:Domains");
+            if (tenantResolveCfg.Exists())
+            {
+                Configure<AbpTenantResolveOptions>(options =>
+                {
+                    var domains = tenantResolveCfg.Get<string[]>();
+                    foreach (var domain in domains)
+                    {
+                        options.AddDomainTenantResolver(domain);
+                    }
+                });
             }
 
             context.Services.AddCors(options =>
@@ -221,6 +246,8 @@ namespace AuthServer.Host
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            // 从请求头中解析真实的客户机连接信息
+            app.UseForwardedHeaders();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

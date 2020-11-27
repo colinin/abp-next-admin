@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Auditing;
-using LINGYUN.Abp.BackendAdmin.MultiTenancy;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -25,6 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -121,6 +122,16 @@ namespace LINGYUN.Abp.BackendAdmin
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = hostingEnvironment.BuildConfiguration();
+
+            // 请求代理配置
+            Configure<ForwardedHeadersOptions>(options =>
+            {
+                configuration.GetSection("App:Forwarded").Bind(options);
+                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             // 配置Ef
             Configure<AbpDbContextOptions>(options =>
             {
@@ -207,10 +218,18 @@ namespace LINGYUN.Abp.BackendAdmin
                 options.IsEnabled = true;
             });
 
-            Configure<AbpTenantResolveOptions>(options =>
+            var tenantResolveCfg = configuration.GetSection("App:Domains");
+            if (tenantResolveCfg.Exists())
             {
-                options.TenantResolvers.Insert(0, new AuthorizationTenantResolveContributor());
-            });
+                Configure<AbpTenantResolveOptions>(options =>
+                {
+                    var domains = tenantResolveCfg.Get<string[]>();
+                    foreach (var domain in domains)
+                    {
+                        options.AddDomainTenantResolver(domain);
+                    }
+                });
+            }
 
             Configure<AbpAuditingOptions>(options =>
             {
@@ -299,6 +318,8 @@ namespace LINGYUN.Abp.BackendAdmin
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            // 代理的中间件应放在其他中间件之前
+            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
@@ -330,6 +351,8 @@ namespace LINGYUN.Abp.BackendAdmin
 
             if (context.GetEnvironment().IsDevelopment())
             {
+                // 开发模式下调试代理连接信息用
+                app.UseProxyConnectTest();
                 SeedData(context);
             }
         }
