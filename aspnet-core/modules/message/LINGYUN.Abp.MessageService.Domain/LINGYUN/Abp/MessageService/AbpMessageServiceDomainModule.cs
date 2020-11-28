@@ -2,6 +2,9 @@
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Mapper;
 using LINGYUN.Abp.MessageService.ObjectExtending;
+using LINGYUN.Abp.MessageService.Utils;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Localization;
@@ -50,6 +53,14 @@ namespace LINGYUN.Abp.MessageService
                 MessageServiceModuleExtensionConsts.EntityNames.Message,
                 typeof(Message)
             );
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context
+                .ServiceProvider
+                .GetRequiredService<SnowflakeIdGenerator>()
+                .Initialize();
         }
     }
 }

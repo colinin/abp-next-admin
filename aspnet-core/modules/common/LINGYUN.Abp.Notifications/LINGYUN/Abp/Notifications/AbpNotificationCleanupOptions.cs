@@ -9,9 +9,9 @@
         public bool IsEnabled { get; set; } = true;
         /// <summary>
         /// 清理时间间隔
-        /// 默认：300000ms
+        /// 默认：30_0000ms
         /// </summary>
-        public int CleanupPeriod { get; set; } = 300000;
+        public int CleanupPeriod { get; set; } = 30_0000;
         /// <summary>
         /// 清理批次
         /// 默认： 200
