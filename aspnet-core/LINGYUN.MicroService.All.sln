@@ -271,10 +271,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{8C3312E7-F51E-4780-A893-CE0E0B80B579}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caching", "caching", "{59810DD0-BA7C-4581-8425-71E1EDEBB49A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Caching.Interceptor", "modules\caching\LINGYUN.Abp.Caching.Interceptor\LINGYUN.Abp.Caching.Interceptor.csproj", "{0214F1AC-B0D5-4B12-826C-064C31B79612}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -717,10 +713,6 @@ Global
 		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0214F1AC-B0D5-4B12-826C-064C31B79612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0214F1AC-B0D5-4B12-826C-064C31B79612}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0214F1AC-B0D5-4B12-826C-064C31B79612}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0214F1AC-B0D5-4B12-826C-064C31B79612}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -857,8 +849,6 @@ Global
 		{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC} = {14CDBAD1-10C8-464A-B445-1F727C988010}
 		{97B4A37E-B93E-48C9-95D5-689CB9495D8B} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
 		{8C3312E7-F51E-4780-A893-CE0E0B80B579} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{59810DD0-BA7C-4581-8425-71E1EDEBB49A} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
-		{0214F1AC-B0D5-4B12-826C-064C31B79612} = {59810DD0-BA7C-4581-8425-71E1EDEBB49A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
