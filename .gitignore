@@ -9,6 +9,7 @@ bin
 Logs
 appsettings.json
 appsettings.*.json
+.vs
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
