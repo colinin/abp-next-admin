@@ -24,8 +24,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
