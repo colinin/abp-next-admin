@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.MessageService.Subscriptions;
 using LINGYUN.Abp.MessageService.Utils;
 using LINGYUN.Abp.Notifications;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,9 @@ using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
-    public class NotificationStore : INotificationStore, ITransientDependency
+    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+    [ExposeServices(typeof(INotificationStore))]
+    public class NotificationStore : INotificationStore
     {
         private readonly IClock _clock;
 
@@ -68,10 +71,14 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (_currentTenant.Change(tenantId))
             {
-                await _userNotificationRepository
-                    .ChangeUserNotificationReadStateAsync(userId, notificationId, readState, cancellationToken);
+                var notification = await _userNotificationRepository.GetByIdAsync(userId, notificationId);
+                if (notification != null)
+                {
+                    notification.ChangeReadState(readState);
+                    await _userNotificationRepository.UpdateAsync(notification);
 
-                await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync();
+                }
             }
         }
 
@@ -212,8 +219,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         public virtual async Task<List<NotificationInfo>> GetUserNotificationsAsync(
             Guid? tenantId,
-            Guid userId, 
-            NotificationReadState readState = NotificationReadState.UnRead, 
+            Guid userId,
+            NotificationReadState? readState = null,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
@@ -230,7 +237,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             Guid? tenantId,
             Guid userId,
             string filter = "",
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
@@ -246,7 +253,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             string filter = "",
             string sorting = nameof(NotificationInfo.CreationTime),
             bool reverse = true,
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)

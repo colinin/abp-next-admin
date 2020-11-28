@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.Notifications
         Task<List<NotificationInfo>> GetUserNotificationsAsync(
             Guid? tenantId, 
             Guid userId, 
-            NotificationReadState readState = NotificationReadState.UnRead, 
+            NotificationReadState? readState = null, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
 
@@ -102,7 +102,7 @@ namespace LINGYUN.Abp.Notifications
             Guid? tenantId,
             Guid userId,
             string filter = "",
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             CancellationToken cancellationToken = default);
 
         Task<List<NotificationInfo>> GetUserNotificationsAsync(
@@ -111,7 +111,7 @@ namespace LINGYUN.Abp.Notifications
             string filter = "",
             string sorting = nameof(NotificationInfo.CreationTime),
             bool reverse = true,
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);

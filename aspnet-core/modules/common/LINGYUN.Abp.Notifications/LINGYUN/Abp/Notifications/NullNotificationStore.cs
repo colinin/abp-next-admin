@@ -6,9 +6,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Notifications
 {
-    [Dependency(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton, TryRegister = true)]
-    [ExposeServices(typeof(INotificationStore))]
-    public class NullNotificationStore : INotificationStore
+    [Dependency(TryRegister = true)]
+    public class NullNotificationStore : INotificationStore, ISingletonDependency
     {
         public Task ChangeUserNotificationReadStateAsync(
             Guid? tenantId, 
@@ -88,8 +87,8 @@ namespace LINGYUN.Abp.Notifications
 
         public Task<List<NotificationInfo>> GetUserNotificationsAsync(
             Guid? tenantId, 
-            Guid userId, 
-            NotificationReadState readState = NotificationReadState.UnRead, 
+            Guid userId,
+            NotificationReadState? readState = null,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
@@ -100,7 +99,7 @@ namespace LINGYUN.Abp.Notifications
             Guid? tenantId,
             Guid userId,
             string filter = "",
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             CancellationToken cancellationToken = default)
         {
             return Task.FromResult(0);
@@ -112,7 +111,7 @@ namespace LINGYUN.Abp.Notifications
             string filter = "",
             string sorting = nameof(NotificationInfo.CreationTime),
             bool reverse = true,
-            NotificationReadState readState = NotificationReadState.UnRead,
+            NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)

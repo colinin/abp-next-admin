@@ -9,6 +9,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         public bool Reverse { get; set; }
 
-        public NotificationReadState ReadState { get; set; } = NotificationReadState.Read;
+        public NotificationReadState? ReadState { get; set; }
     }
 }

@@ -349,10 +349,11 @@ namespace LINGYUN.Abp.BackendAdmin
             // 路由
             app.UseConfiguredEndpoints();
 
+            // 调试代理连接信息用,上线后注释掉
+            app.UseProxyConnectTest();
+
             if (context.GetEnvironment().IsDevelopment())
             {
-                // 开发模式下调试代理连接信息用
-                app.UseProxyConnectTest();
                 SeedData(context);
             }
         }

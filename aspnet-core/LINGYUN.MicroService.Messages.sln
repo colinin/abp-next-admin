@@ -53,17 +53,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{454059F7-D087-439A-A724-80BDFE94776F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{64E2622A-611D-4056-9497-0B52A91DC59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{64E2622A-611D-4056-9497-0B52A91DC59C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{42800C56-9473-4B96-BF29-1B0F25C867F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Sms.Tests", "tests\LINGYUN.Abp.Notifications.Sms.Tests\LINGYUN.Abp.Notifications.Sms.Tests.csproj", "{5714481A-BDF5-4860-9158-3B18D3018EC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms.Tests", "tests\LINGYUN.Abp.Notifications.Sms.Tests\LINGYUN.Abp.Notifications.Sms.Tests.csproj", "{5714481A-BDF5-4860-9158-3B18D3018EC5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "tests\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj", "{B5E23AED-3068-4CFE-84B0-3B7725665506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Tests", "tests\LINGYUN.Abp.Notifications.Tests\LINGYUN.Abp.Notifications.Tests.csproj", "{E5257008-A0AD-473F-91B0-864FC601B84B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Tests", "tests\LINGYUN.Abp.Notifications.Tests\LINGYUN.Abp.Notifications.Tests.csproj", "{E5257008-A0AD-473F-91B0-864FC601B84B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests", "tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj", "{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests", "tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj", "{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{25267137-08BE-44A6-9F7E-7783CC8C62E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests.csproj", "{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MessageService.Domain.Tests", "tests\LINGYUN.Abp.MessageService.Domain.Tests\LINGYUN.Abp.MessageService.Domain.Tests.csproj", "{097319B9-D062-4A54-8F8C-001C180E2CB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +177,18 @@ Global
 		{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25267137-08BE-44A6-9F7E-7783CC8C62E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25267137-08BE-44A6-9F7E-7783CC8C62E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25267137-08BE-44A6-9F7E-7783CC8C62E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25267137-08BE-44A6-9F7E-7783CC8C62E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +222,9 @@ Global
 		{B5E23AED-3068-4CFE-84B0-3B7725665506} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
 		{E5257008-A0AD-473F-91B0-864FC601B84B} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
 		{DB425943-CEE6-4FF6-A0EE-233B6ADA3BD7} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
+		{25267137-08BE-44A6-9F7E-7783CC8C62E8} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
+		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
+		{097319B9-D062-4A54-8F8C-001C180E2CB3} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6238659A-7267-49B9-A499-8746BDEED6B8}

@@ -8,6 +8,5 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpTestsBaseModule))]
     public class AbpNotificationsTestsModule : AbpModule
     {
-
     }
 }
