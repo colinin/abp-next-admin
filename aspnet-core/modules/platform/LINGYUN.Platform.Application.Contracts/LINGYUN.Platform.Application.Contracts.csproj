@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LINGYUN\Platform\Routes\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LINGYUN.Platform.Domain.Shared\LINGYUN.Platform.Domain.Shared.csproj" />
   </ItemGroup>
 

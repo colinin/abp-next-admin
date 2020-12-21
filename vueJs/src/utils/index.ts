@@ -1,3 +1,15 @@
+/** 
+ * 递归生成树结构
+ * @param array 参与计算的对象数组
+ * @param id 当前层级的父节点标识
+ * @param parentIdKey 父节点名称
+ */
+export function generateTree(array: any, id = null, parentIdKey = 'parentId') {
+  return array
+    .filter((item: any) => item[parentIdKey] === id)
+    .map((item: any) => ({...item, children: generateTree(array, item.id)}))
+}
+
 export function urlStringify(payload: any) {
   let urlParam = ''
   Object.keys(payload).forEach(key => {

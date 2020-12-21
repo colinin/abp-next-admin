@@ -70,6 +70,26 @@ const adminRouter: RouteConfig = {
         icon: 'claim-type',
         roles: ['AbpIdentity.IdentityClaimTypes']
       }
+    },
+    {
+      path: 'data-dictionary',
+      component: () => import(/* webpackChunkName: "claim-type" */ '@/views/admin/data-dictionary/index.vue'),
+      name: 'data-dictionary',
+      meta: {
+        title: '数据字典',
+        icon: 'data-dictionary',
+        roles: ['AbpIdentity.IdentityClaimTypes']
+      }
+    },
+    {
+      path: 'menus',
+      component: () => import(/* webpackChunkName: "claim-type" */ '@/views/admin/menus/index.vue'),
+      name: 'menus',
+      meta: {
+        title: '菜单',
+        icon: 'menus',
+        roles: ['AbpIdentity.IdentityClaimTypes']
+      }
     }
   ]
 }

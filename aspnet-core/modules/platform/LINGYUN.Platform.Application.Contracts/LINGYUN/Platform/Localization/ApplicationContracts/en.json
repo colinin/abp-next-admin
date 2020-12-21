@@ -17,6 +17,15 @@
     "Permission:DeleteFile": "Delete file",
     "Permission:CopyFile": "Copy file",
     "Permission:MoveFile": "Move file",
-    "Permission:DownloadFile": "Download file"
+    "Permission:DownloadFile": "Download file",
+    "Permission:DataDictionary": "Data Dictionary",
+    "Permission:Layout": "Layout",
+    "Permission:Menu": "Menu",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
+    "Permission:ManageItems": "Manage Items",
+    "Permission:ManageRoleMenus": "Manage Role Menus",
+    "Permission:ManageUserMenus": "Manage User Menus"
   }
 }

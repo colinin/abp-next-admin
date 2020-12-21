@@ -121,6 +121,12 @@
                 {{ $t('AbpIdentity.ManageClaim') }}
               </el-dropdown-item>
               <el-dropdown-item
+                :command="{key: 'menu', row}"
+                :disabled="!checkPermission(['Platform.Menu.ManageRoles'])"
+              >
+                {{ $t('AppPlatform.Menu:Manage') }}
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="{key: 'permission', row}"
                 :disabled="!checkPermission(['AbpIdentity.Roles.ManagePermissions'])"
               >
@@ -170,6 +176,12 @@
       @closed="onClaimDialogClosed"
     />
 
+    <manage-role-menu-dialog
+      :show-dialog="showManageRoleMenuDialog"
+      :role-name="editRoleName"
+      @closed="showManageRoleMenuDialog=false"
+    />
+
     <permission-form
       provider-name="R"
       :provider-key="editRoleName"
@@ -190,6 +202,7 @@ import Pagination from '@/components/Pagination/index.vue'
 import PermissionForm from '@/components/PermissionForm/index.vue'
 import RoleEditForm from './components/RoleEditForm.vue'
 import RoleCreateForm from './components/RoleCreateForm.vue'
+import ManageRoleMenuDialog from './components/ManageRoleMenuDialog.vue'
 import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateForm.vue'
 
 @Component({
@@ -199,6 +212,7 @@ import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateFor
     Pagination,
     RoleEditForm,
     RoleCreateForm,
+    ManageRoleMenuDialog,
     RoleClaimCreateOrUpdateForm
   },
   methods: {
@@ -207,6 +221,7 @@ import RoleClaimCreateOrUpdateForm from './components/RoleClaimCreateOrUpdateFor
 })
 export default class extends mixins(DataListMiXin) {
   private showEditDialog = false
+  private showManageRoleMenuDialog = false
   private editRoleId = ''
   private showClaimDialog = false
   private showCreateDialog = false
@@ -245,6 +260,10 @@ export default class extends mixins(DataListMiXin) {
         break
       case 'delete' :
         this.handleDeleteRole(command.row)
+        break
+      case 'menu' :
+        this.editRoleName = command.row.name
+        this.showManageRoleMenuDialog = true
         break
       default: break
     }

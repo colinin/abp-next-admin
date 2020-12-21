@@ -16,6 +16,7 @@ using Volo.Abp.Settings;
 
 namespace LINGYUN.Platform.Versions
 {
+    [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
     [Area("platform")]
     [Route("api/platform/version")]
     public class VersionController : PlatformControllerBase, IVersionAppService
