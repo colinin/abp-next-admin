@@ -11,11 +11,11 @@
         <span
           v-if="item.redirect === 'noredirect' || index === breadcrumbs.length-1"
           class="no-redirect"
-        >{{ $t('route.' + item.meta.title) }}</span>
+        >{{ routeDisplayName(item) }}</span>
         <a
           v-else
           @click.prevent="handleLink(item)"
-        >{{ $t('route.' + item.meta.title) }}</a>
+        >{{ routeDisplayName(item) }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -31,6 +31,15 @@ import { RouteRecord, Route } from 'vue-router'
 })
 export default class extends Vue {
   private breadcrumbs: RouteRecord[] = []
+
+  get routeDisplayName() {
+    return (route: any) => {
+      if (route.meta.displayName) {
+        return route.meta.displayName
+      }
+      return this.$t('route.' + route.meta.title)
+    }
+  }
 
   @Watch('$route')
   private onRouteChange(route: Route) {

@@ -17,7 +17,11 @@
             :name="theOnlyOneChild.meta.icon"
           />
           <span
-            v-if="theOnlyOneChild.meta.title"
+            v-if="theOnlyOneChild.meta.displayName"
+            slot="title"
+          >{{ theOnlyOneChild.meta.displayName }}</span>
+          <span
+            v-else-if="theOnlyOneChild.meta.title"
             slot="title"
           >{{ $t('route.' + theOnlyOneChild.meta.title) }}</span>
         </el-menu-item>
@@ -34,7 +38,11 @@
           :name="item.meta.icon"
         />
         <span
-          v-if="item.meta && item.meta.title"
+          v-if="item.meta && item.meta.displayName"
+          slot="title"
+        >{{ item.meta.displayName }}</span>
+        <span
+          v-else-if="item.meta && item.meta.title"
           slot="title"
         >{{ $t('route.' + item.meta.title) }}</span>
       </template>

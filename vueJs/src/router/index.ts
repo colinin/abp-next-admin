@@ -10,11 +10,15 @@ import Layout from '@/layout/index.vue'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 // import taskRouter from './modules/task'
+// 就算是动态菜单，依然要在这里定义一下路径，这是为了告诉webpack哪些文件需要打包，否则会找不到页面路径
+// 当然，更好的方法是指定webpack配置
+
 import adminRouter from './modules/admin'
 import auditingRouter from './modules/auditing'
 import apigatewayRouter from './modules/apigateway'
 import identityServerRouter from './modules/identityServer'
 import fileManagementRouter from './modules/file-management'
+import containerRouter from './modules/container'
 
 Vue.use(Router)
 /*
@@ -164,6 +168,7 @@ export const asyncRoutes: RouteConfig[] = [
   apigatewayRouter,
   identityServerRouter,
   fileManagementRouter,
+  containerRouter,
   {
     path: '*',
     component: () => import(/* webpackChunkName: "error-page-404" */ '@/views/error-page/404.vue'),

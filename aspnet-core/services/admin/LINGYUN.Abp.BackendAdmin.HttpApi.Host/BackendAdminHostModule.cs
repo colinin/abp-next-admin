@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AppPlatformApplicationContractModule),
+        typeof(PlatformApplicationContractModule),
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpFileManagementApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),

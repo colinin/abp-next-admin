@@ -1,4 +1,6 @@
-﻿using LINGYUN.Platform.Routes;
+﻿using LINGYUN.Platform.Datas;
+using LINGYUN.Platform.Layouts;
+using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Versions;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -6,10 +8,12 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.EntityFrameworkCore
 {
-    [ConnectionStringName(AppPlatformDbProperties.ConnectionStringName)]
+    [ConnectionStringName(PlatformDbProperties.ConnectionStringName)]
     public class PlatformDbContext : AbpDbContext<PlatformDbContext>, IPlatformDbContext
     {
-        public DbSet<Route> Routes { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Layout> Layouts { get; set; }
+        public DbSet<Data> Datas { get; set; }
 
         public DbSet<AppVersion> AppVersions { get; set; }
 

@@ -2,9 +2,48 @@
 
 namespace LINGYUN.Platform.Permissions
 {
-    public class PlatformPermissions
+    public static class PlatformPermissions
     {
         public const string GroupName = "Platform";
+
+        public class DataDictionary
+        {
+            public const string Default = GroupName + ".DataDictionary";
+
+            public const string Create = Default + ".Create";
+
+            public const string Update = Default + ".Update";
+
+            public const string Delete = Default + ".Delete";
+
+            public const string ManageItems = Default + ".ManageItems";
+        }
+
+        public class Layout
+        {
+            public const string Default = GroupName + ".Layout";
+
+            public const string Create = Default + ".Create";
+
+            public const string Update = Default + ".Update";
+
+            public const string Delete = Default + ".Delete";
+        }
+
+        public class Menu
+        {
+            public const string Default = GroupName + ".Menu";
+
+            public const string Create = Default + ".Create";
+
+            public const string Update = Default + ".Update";
+
+            public const string Delete = Default + ".Delete";
+
+            public const string ManageRoles = Default + ".ManageRoles";
+
+            public const string ManageUsers = Default + ".ManageUsers";
+        }
 
         // 如果abp后期提供对象存储的目录管理接口,则启用此权限
         /// <summary>

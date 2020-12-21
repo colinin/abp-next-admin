@@ -32,7 +32,13 @@
             set;
         } = 128;
 
-        public static int MaxLinkUrlLength
+        public static int MaxPathLength
+        {
+            get;
+            set;
+        } = 255;
+
+        public static int MaxRedirectLength
         {
             get;
             set;

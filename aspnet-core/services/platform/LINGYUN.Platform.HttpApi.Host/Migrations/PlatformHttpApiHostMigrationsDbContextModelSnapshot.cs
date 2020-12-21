@@ -16,71 +16,20 @@ namespace LINGYUN.Platform.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LINGYUN.Platform.Routes.RoleRoute", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("DeleterId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifierId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnName("RoleName")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("RouteId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleName", "RouteId");
-
-                    b.ToTable("AppPlatformRoleRoute");
-                });
-
-            modelBuilder.Entity("LINGYUN.Platform.Routes.Route", b =>
-                {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<bool>("AlwaysShow")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnName("Code")
-                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4")
-                        .HasMaxLength(95);
+                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasMaxLength(1024);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -92,11 +41,11 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("DeleterId")
+                    b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
                         .HasColumnType("char(36)");
 
@@ -106,8 +55,8 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnName("Description")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
-                        .HasMaxLength(255);
+                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasMaxLength(1024);
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -119,15 +68,95 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("ExtraProperties")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("FullName")
-                        .HasColumnName("FullName")
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasMaxLength(30);
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("AppPlatformDatas");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("AllowBeNull")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("DataId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("DefaultValue")
+                        .HasColumnName("DefaultValue")
                         .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
                         .HasMaxLength(128);
 
-                    b.Property<string>("Icon")
-                        .HasColumnName("Icon")
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnName("Description")
+                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasMaxLength(1024);
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnName("DisplayName")
                         .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
                         .HasMaxLength(128);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -135,109 +164,39 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsMenu")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsSideBar")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsStatic")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsToolBar")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastModifierId")
+                    b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("LinkUrl")
-                        .IsRequired()
-                        .HasColumnName("LinkUrl")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
-                        .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("Name")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasMaxLength(30);
 
-                    b.Property<string>("ParentId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("PlatformType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("AppPlatformRoute");
-                });
-
-            modelBuilder.Entity("LINGYUN.Platform.Routes.UserRoute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ValueType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("DeleterId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifierId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("RouteId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenantId")
-                        .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "RouteId");
+                    b.HasIndex("DataId");
 
-                    b.ToTable("AppPlatformUserRoute");
+                    b.HasIndex("Name");
+
+                    b.ToTable("AppPlatformDataItems");
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Versions.AppVersion", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Layouts.Layout", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -251,11 +210,282 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("DeleterId")
+                    b.Property<Guid>("DataId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnName("DisplayName")
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Path")
+                        .HasColumnName("Path")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("PlatformType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Redirect")
+                        .HasColumnName("Redirect")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppPlatformLayouts");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Menus.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnName("Code")
+                        .HasColumnType("varchar(23) CHARACTER SET utf8mb4")
+                        .HasMaxLength(23);
+
+                    b.Property<string>("Component")
+                        .IsRequired()
+                        .HasColumnName("Component")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnName("DisplayName")
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LayoutId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64);
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Path")
+                        .HasColumnName("Path")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("PlatformType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Redirect")
+                        .HasColumnName("Redirect")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppPlatformMenus");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Menus.RoleMenu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnName("RoleName")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleName", "MenuId");
+
+                    b.ToTable("AppPlatformRoleMenus");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Menus.UserMenu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "MenuId");
+
+                    b.ToTable("AppPlatformUserMenus");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Versions.AppVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
                         .HasColumnType("char(36)");
 
@@ -282,7 +512,7 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastModifierId")
+                    b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -292,7 +522,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<int>("PlatformType")
                         .HasColumnType("int");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -321,15 +551,14 @@ namespace LINGYUN.Platform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AppVersionId")
-                        .IsRequired()
+                    b.Property<Guid>("AppVersionId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
                         .HasColumnType("char(36)");
 
@@ -343,7 +572,7 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastModifierId")
+                    b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
                         .HasColumnType("char(36)");
 
@@ -367,7 +596,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("TenantId")
+                    b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
                         .HasColumnType("char(36)");
 
@@ -387,11 +616,13 @@ namespace LINGYUN.Platform.Migrations
                     b.ToTable("AppPlatformVersionFile");
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Routes.Route", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
                 {
-                    b.HasOne("LINGYUN.Platform.Routes.Route", null)
-                        .WithMany()
-                        .HasForeignKey("ParentId");
+                    b.HasOne("LINGYUN.Platform.Datas.Data", null)
+                        .WithMany("Items")
+                        .HasForeignKey("DataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LINGYUN.Platform.Versions.VersionFile", b =>

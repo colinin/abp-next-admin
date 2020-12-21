@@ -32,8 +32,10 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -42,16 +44,20 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Http.Client.IdentityModel;
 
 namespace LINGYUN.Platform
 {
     [DependsOn(
         typeof(AbpFileManagementApplicationModule),
         typeof(AbpFileManagementHttpApiModule),
-        typeof(AppPlatformApplicationModule),
-        typeof(AppPlatformHttpApiModule),
-        typeof(AppPlatformEntityFrameworkCoreModule),
+        typeof(PlatformApplicationModule),
+        typeof(PlatformHttpApiModule),
+        typeof(PlatformEntityFrameworkCoreModule),
+        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
@@ -282,6 +288,7 @@ namespace LINGYUN.Platform
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
             app.UseForwardedHeaders();
             // http调用链
@@ -312,6 +319,13 @@ namespace LINGYUN.Platform
             app.UseAuditing();
             // 路由
             app.UseConfiguredEndpoints();
+
+            if (env.IsDevelopment())
+            {
+                AsyncHelper.RunSync(async () => 
+                    await app.ApplicationServices.GetRequiredService<IDataSeeder>()
+                        .SeedAsync());
+            }
         }
     }
 }

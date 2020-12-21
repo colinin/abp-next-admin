@@ -53,8 +53,12 @@ namespace LINGYUN.Platform
         /// </summary>
         Mobile = Android | iOS,
         /// <summary>
+        /// 小程序
+        /// </summary>
+        MiniProgram = 256,
+        /// <summary>
         /// 所有平台通用
         /// </summary>
-        All = Desktop | Web | Mobile
+        All = Desktop | Web | Mobile | MiniProgram
     }
 }

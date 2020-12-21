@@ -189,6 +189,23 @@ namespace AuthServer.DataSeeder
                     permissions: apigatewayPermissions
                 );
             }
+
+            // InternalService 内部服务间通讯客户端,必要的话需要在前端指定它拥有所有权限,当前项目仅预置用户查询权限
+            var internalServiceClientId = configurationSection["InternalService:ClientId"];
+            if (!internalServiceClientId.IsNullOrWhiteSpace())
+            {
+                var internalServicePermissions = new string[2]
+                {
+                    "AbpIdentity.UserLookup","AbpIdentity.Users"
+                };
+                await CreateClientAsync(
+                    internalServiceClientId,
+                    commonScopes.Union(new[] { "auth-service" }),
+                    new[] { "client_credentials" },
+                    commonSecret,
+                    permissions: internalServicePermissions
+                );
+            }
         }
 
         private async Task<Client> CreateClientAsync(

@@ -1,193 +1,79 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Routes
 {
-    // TODO: 因为abp的菜单设计模式是按照权限分配的,是否可以去掉路由的后台配置? 
-    // 按钮、菜单权限可以在子权限中定义
-    // 数据权限需要DbContext拦截器或者创建一个数据过滤仓储的抽象类,需要过滤数据权限的继承自此仓储
-    public class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
+    /// <summary>
+    /// 不管是布局还是视图或者页面，都作为路由的实现，因此抽象一个路由实体<br/> 
+    /// 注意:这是基于 Vue Router 的路由规则设计的实体,详情:https://router.vuejs.org/zh/api/#routes
+    /// </summary>
+    public abstract class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        /// <summary>
-        /// 租户标识
-        /// </summary>
         public virtual Guid? TenantId { get; protected set; }
         /// <summary>
-        /// 编号
+        /// 路径
         /// </summary>
-        public virtual string Code { get; set; }
+        public virtual string Path { get; set; }
         /// <summary>
         /// 名称
         /// </summary>
-        public virtual string Name { get; protected set; }
-        /// <summary>
-        /// 全名
-        /// </summary>
-        public virtual string FullName { get; set; }
+        public virtual string Name { get; set; }
         /// <summary>
         /// 显示名称
         /// </summary>
-        public virtual string DisplayName { get; protected set; }
-        /// <summary>
-        /// 平台标识
-        /// </summary>
-        public virtual PlatformType PlatformType { get; set; }
+        public virtual string DisplayName { get; set; }
         /// <summary>
         /// 说明
         /// </summary>
         public virtual string Description { get; set; }
         /// <summary>
-        /// 图标
+        /// 重定向路径
         /// </summary>
-        public virtual string Icon { get; protected set; }
-        /// <summary>
-        /// 路由地址
-        /// </summary>
-        public virtual string LinkUrl { get; protected set; }
-        /// <summary>
-        /// 是否菜单
-        /// </summary>
-        public virtual bool IsMenu { get; set; }
-        /// <summary>
-        /// 是否工具栏
-        /// </summary>
-        public virtual bool IsToolBar { get; set; }
-        /// <summary>
-        /// 是否侧边栏
-        /// </summary>
-        public virtual bool IsSideBar { get; set; }
-        /// <summary>
-        /// 是否公共路由
-        /// </summary>
-        public virtual bool IsPublic { get; set; }
-        /// <summary>
-        /// 是否内置
-        /// </summary>
-        public virtual bool IsStatic { get; set; }
-        /// <summary>
-        /// 总是显示根菜单
-        /// </summary>
-        public virtual bool AlwaysShow { get; set; }
-        /// <summary>
-        /// 父级标识
-        /// </summary>
-        public virtual Guid? ParentId { get; set; }
-        protected Route()
-        {
+        public virtual string Redirect { get; set; }
 
-        }
+        protected Route() { }
 
-        public Route(Guid id, string name, string displayName, string url)
+        protected Route(
+            [NotNull] Guid id,
+            [NotNull] string path,
+            [NotNull] string name,
+            [NotNull] string displayName,
+            [CanBeNull] string redirect = "",
+            [CanBeNull] string description = "",
+            [CanBeNull] Guid? tenantId = null)
+            : base(id)
         {
-            Id = id;
-            LinkToUrl(url);
-            ChangeName(name, displayName);
-        }
+            Check.NotNullOrWhiteSpace(path, nameof(path));
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+            Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
 
-        public void LinkToUrl([NotNull] string linkUrl)
-        {
-            LinkUrl = Check.NotNullOrWhiteSpace(linkUrl, nameof(linkUrl));
-        }
-
-        public void ChangeIcon(string icon)
-        {
-            Icon = icon;
-        }
-
-        public void ChangeName([NotNull] string name, [CanBeNull] string displayName)
-        {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            Path = path;
+            Name = name;
             DisplayName = displayName;
+            Redirect = redirect;
+            Description = description;
+            TenantId = tenantId;
         }
 
-        public static string CreateCode(params int[] numbers)
+        public override int GetHashCode()
         {
-            if (numbers.IsNullOrEmpty())
-            {
-                return null;
-            }
-
-            return numbers.Select(number => number.ToString(new string('0', RouteConsts.CodeUnitLength))).JoinAsString(".");
+            return Name.GetHashCode();
         }
 
-        public static string AppendCode(string parentCode, string childCode)
+        public override bool Equals(object obj)
         {
-            if (childCode.IsNullOrEmpty())
+            if (obj == null)
             {
-                throw new ArgumentNullException(nameof(childCode), "childCode can not be null or empty.");
+                return false;
             }
-
-            if (parentCode.IsNullOrEmpty())
+            if (obj is Route route)
             {
-                return childCode;
+                return route.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase);
             }
-
-            return parentCode + "." + childCode;
-        }
-
-        public static string GetRelativeCode(string code, string parentCode)
-        {
-            if (code.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
-            }
-
-            if (parentCode.IsNullOrEmpty())
-            {
-                return code;
-            }
-
-            if (code.Length == parentCode.Length)
-            {
-                return null;
-            }
-
-            return code.Substring(parentCode.Length + 1);
-        }
-
-        public static string CalculateNextCode(string code)
-        {
-            if (code.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
-            }
-
-            var parentCode = GetParentCode(code);
-            var lastUnitCode = GetLastUnitCode(code);
-
-            return AppendCode(parentCode, CreateCode(Convert.ToInt32(lastUnitCode) + 1));
-        }
-
-        public static string GetLastUnitCode(string code)
-        {
-            if (code.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
-            }
-
-            var splittedCode = code.Split('.');
-            return splittedCode[splittedCode.Length - 1];
-        }
-
-        public static string GetParentCode(string code)
-        {
-            if (code.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
-            }
-
-            var splittedCode = code.Split('.');
-            if (splittedCode.Length == 1)
-            {
-                return null;
-            }
-
-            return splittedCode.Take(splittedCode.Length - 1).JoinAsString(".");
+            return base.Equals(obj);
         }
     }
 }
