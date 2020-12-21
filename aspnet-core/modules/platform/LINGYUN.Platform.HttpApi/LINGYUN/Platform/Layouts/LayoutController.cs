@@ -41,6 +41,13 @@ namespace LINGYUN.Platform.Layouts
         }
 
         [HttpGet]
+        [Route("all")]
+        public virtual async Task<ListResultDto<LayoutDto>> GetAllListAsync()
+        {
+            return await LayoutAppService.GetAllListAsync();
+        }
+
+        [HttpGet]
         public virtual async Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
         {
             return await LayoutAppService.GetListAsync(input);

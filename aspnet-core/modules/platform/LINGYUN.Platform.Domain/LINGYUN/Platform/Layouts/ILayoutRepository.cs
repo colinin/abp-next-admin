@@ -20,18 +20,15 @@ namespace LINGYUN.Platform.Layouts
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
-        Task<Layout> GetLastOrNullAsync(
-            CancellationToken cancellationToken = default);
-
         Task<int> GetCountAsync(
             PlatformType? platformType = null,
             string filter = "",
             CancellationToken cancellationToken = default);
 
-        Task<List<Layout>> GetListAsync(
+        Task<List<Layout>> GetPagedListAsync(
             PlatformType? platformType = null,
             string filter = "",
-            string sorting = nameof(Layout.Code),
+            string sorting = nameof(Layout.Name),
             bool reverse = false,
             bool includeDetails = false,
             int skipCount = 0,

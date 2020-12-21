@@ -60,7 +60,7 @@ namespace LINGYUN.Platform.Menus
         {
             var menus = await MenuRepository.GetAllAsync(
                 input.Filter, input.Sorting, input.Reverse,
-                input.PlatformType, input.ParentId);
+                input.PlatformType, input.ParentId, input.LayoutId);
 
             return new ListResultDto<MenuDto>(
                 ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
@@ -68,11 +68,11 @@ namespace LINGYUN.Platform.Menus
 
         public virtual async Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
         {
-            var count = await MenuRepository.GetCountAsync(input.Filter, input.PlatformType, input.ParentId);
+            var count = await MenuRepository.GetCountAsync(input.Filter, input.PlatformType, input.ParentId, input.LayoutId);
 
             var menus = await MenuRepository.GetListAsync(
                 input.Filter, input.Sorting, input.Reverse,
-                input.PlatformType, input.ParentId,
+                input.PlatformType, input.ParentId, input.LayoutId,
                 input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<MenuDto>(count,

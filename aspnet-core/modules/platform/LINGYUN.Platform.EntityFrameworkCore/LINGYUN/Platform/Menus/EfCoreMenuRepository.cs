@@ -148,6 +148,7 @@ namespace LINGYUN.Platform.Menus
             bool reverse = false,
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             CancellationToken cancellationToken = default)
         {
             sorting ??= nameof(Menu.Code);
@@ -155,6 +156,7 @@ namespace LINGYUN.Platform.Menus
 
             return await DbSet
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
@@ -168,10 +170,12 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu => 
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
@@ -186,6 +190,7 @@ namespace LINGYUN.Platform.Menus
             bool reverse = false,
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             int skipCount = 0, 
             int maxResultCount = 10, 
             CancellationToken cancellationToken = default)
@@ -195,6 +200,7 @@ namespace LINGYUN.Platform.Menus
 
             return await DbSet
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||

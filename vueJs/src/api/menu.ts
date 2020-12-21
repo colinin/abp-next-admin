@@ -80,6 +80,7 @@ export class GetAllMenu implements ISortedResultRequest {
   sorting = ''
   reverse = false
   parentId?: string
+  layoutId?: string
   platformType?: PlatformType
 }
 
@@ -91,6 +92,8 @@ export class GetRoleMenu {
 export class GetMenuByPaged extends PagedAndSortedResultRequestDto {
   filter = ''
   reverse = false
+  layoutId?: string
+  parentId?: string
   platformType?: PlatformType
 }
 

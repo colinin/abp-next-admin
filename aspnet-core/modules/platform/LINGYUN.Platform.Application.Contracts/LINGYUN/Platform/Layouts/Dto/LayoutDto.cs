@@ -6,10 +6,6 @@ namespace LINGYUN.Platform.Layouts
     public class LayoutDto : RouteDto
     {
         /// <summary>
-        /// 布局编号
-        /// </summary>
-        public string Code { get; set; }
-        /// <summary>
         /// 所属平台
         /// </summary>
         public PlatformType PlatformType { get; set; }

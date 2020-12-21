@@ -34,7 +34,6 @@ namespace LINGYUN.Platform.Routes
         public virtual async Task<Layout> SeedLayoutAsync(
             string name, 
             string path, 
-            string code, 
             string displayName,
             Guid dataId, 
             PlatformType platformType = PlatformType.None, 
@@ -50,7 +49,6 @@ namespace LINGYUN.Platform.Routes
                     GuidGenerator.Create(),
                     path,
                     name,
-                    code,
                     displayName,
                     dataId,
                     platformType,

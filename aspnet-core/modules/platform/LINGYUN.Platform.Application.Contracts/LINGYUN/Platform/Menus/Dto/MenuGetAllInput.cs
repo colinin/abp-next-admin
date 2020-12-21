@@ -14,5 +14,7 @@ namespace LINGYUN.Platform.Menus
         public Guid? ParentId { get; set; }
 
         public string Sorting { get; set; }
+
+        public Guid? LayoutId { get; set; }
     }
 }

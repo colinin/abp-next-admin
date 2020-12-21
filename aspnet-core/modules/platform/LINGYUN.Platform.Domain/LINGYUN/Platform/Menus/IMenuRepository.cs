@@ -77,6 +77,7 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             CancellationToken cancellationToken = default);
 
         Task<List<Menu>> GetListAsync(
@@ -85,6 +86,7 @@ namespace LINGYUN.Platform.Menus
             bool reverse = false,
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
@@ -95,6 +97,7 @@ namespace LINGYUN.Platform.Menus
             bool reverse = false,
             PlatformType? platformType = null,
             Guid? parentId = null,
+            Guid? layoutId = null,
             CancellationToken cancellationToken = default);
 
         Task RemoveAllRolesAsync(

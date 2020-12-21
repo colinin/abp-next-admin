@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Permissions;
+using LINGYUN.Platform.Routes;
 using LINGYUN.Platform.Utils;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -13,42 +14,27 @@ namespace LINGYUN.Platform.Layouts
     [Authorize(PlatformPermissions.Layout.Default)]
     public class LayoutAppService : PlatformApplicationServiceBase, ILayoutAppService
     {
-        protected IDataRepository DataRepository { get; }
         protected ILayoutRepository LayoutRepository { get; }
 
         public LayoutAppService(
-            IDataRepository dataRepository,
             ILayoutRepository layoutRepository)
         {
-            DataRepository = dataRepository;
             LayoutRepository = layoutRepository;
         }
 
         [Authorize(PlatformPermissions.Layout.Create)]
         public virtual async Task<LayoutDto> CreateAsync(LayoutCreateDto input)
         {
-            var data = DataRepository.FindAsync(input.DataId);
-            if (data == null)
-            {
-                throw new UserFriendlyException($"数据字典 {input.DataId} 的不存在或已删除!");
-            }
-
             var layout = await LayoutRepository.FindByNameAsync(input.Name);
             if (layout != null)
             {
                 throw new UserFriendlyException($"已经存在名为 {input.Name} 的布局!");
             }
 
-            var lastLayout = await LayoutRepository.GetLastOrNullAsync();
-            var code = lastLayout != null
-                ? CodeNumberGenerator.CalculateNextCode(lastLayout.Code)
-                : CodeNumberGenerator.CreateCode(1);
-
             layout = new Layout(
                 GuidGenerator.Create(),
                 input.Path,
                 input.Name,
-                code,
                 input.DisplayName,
                 input.DataId,
                 input.PlatformType,
@@ -83,11 +69,19 @@ namespace LINGYUN.Platform.Layouts
             return ObjectMapper.Map<Layout, LayoutDto>(layout);
         }
 
+        public virtual async Task<ListResultDto<LayoutDto>> GetAllListAsync()
+        {
+            var layouts = await LayoutRepository.GetListAsync();
+
+            return new ListResultDto<LayoutDto>(
+                ObjectMapper.Map<List<Layout>, List<LayoutDto>>(layouts));
+        }
+
         public virtual async Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
         {
             var count = await LayoutRepository.GetCountAsync(input.PlatformType, input.Filter);
 
-            var layouts = await LayoutRepository.GetListAsync(
+            var layouts = await LayoutRepository.GetPagedListAsync(
                 input.PlatformType, input.Filter,
                 input.Sorting, input.Reverse, false,
                 input.SkipCount, input.MaxResultCount);

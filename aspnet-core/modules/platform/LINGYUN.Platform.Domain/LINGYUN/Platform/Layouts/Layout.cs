@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Platform.Routes;
 using System;
-using Volo.Abp;
 
 namespace LINGYUN.Platform.Layouts
 {
@@ -10,10 +9,6 @@ namespace LINGYUN.Platform.Layouts
     /// </summary>
     public class Layout : Route
     {
-        /// <summary>
-        /// 布局编号
-        /// </summary>
-        public virtual string Code { get; set; }
         /// <summary>
         /// 所属平台
         /// </summary>
@@ -29,7 +24,6 @@ namespace LINGYUN.Platform.Layouts
             [NotNull] Guid id, 
             [NotNull] string path, 
             [NotNull] string name,
-            [NotNull] string code,
             [NotNull] string displayName,
             [NotNull] Guid dataId,
             [NotNull] PlatformType platformType = PlatformType.None,
@@ -38,9 +32,6 @@ namespace LINGYUN.Platform.Layouts
             [CanBeNull] Guid? tenantId = null) 
             : base(id, path, name, displayName, redirect, description, tenantId)
         {
-            Check.NotNullOrWhiteSpace(code, nameof(code));
-
-            Code = code;
             DataId = dataId;
             PlatformType = platformType;
         }

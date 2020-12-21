@@ -12,5 +12,7 @@ namespace LINGYUN.Platform.Menus
         public bool Reverse { get; set; }
 
         public Guid? ParentId { get; set; }
+
+        public Guid? LayoutId { get; set; }
     }
 }

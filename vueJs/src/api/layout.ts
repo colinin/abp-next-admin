@@ -1,6 +1,6 @@
 import ApiService from './serviceBase'
 import { urlStringify } from '@/utils/index'
-import { FullAuditedEntityDto, PagedResultDto, PagedAndSortedResultRequestDto } from './types'
+import { ListResultDto, PagedResultDto, PagedAndSortedResultRequestDto } from './types'
 
 const sourceUrl = '/api/platform/layouts'
 /** 远程服务地址 */
@@ -11,6 +11,11 @@ export default class LayoutService {
   public static get(id: string) {
     const _url = sourceUrl + '/' + id
     return ApiService.Get<Layout>(_url, serviceUrl)
+  }
+
+  public static getAllList() {
+    const _url = sourceUrl + '/all'
+    return ApiService.Get<ListResultDto<Layout >>(_url, serviceUrl)
   }
 
   public static getList(payload: GetLayoutByPaged) {
@@ -76,7 +81,6 @@ export class Route {
 }
 
 export class Layout extends Route {
-  code!: string
   platformType!: PlatformType
   dataId!: string
 }

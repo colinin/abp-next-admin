@@ -138,7 +138,6 @@ namespace LINGYUN.Platform
             var layout = await RouteDataSeeder.SeedLayoutAsync(
                 "Layout",
                 "layout/index.vue",
-                CodeNumberGenerator.CreateCode(1),
                 "Vue Admin Layout",
                 data.Id,
                 PlatformType.WebMvvm, // 针对当前的vue管理页
@@ -567,10 +566,10 @@ namespace LINGYUN.Platform
             await SeedMenuAsync(
                layout,
                data,
-               "layout",
-                "layout",
+               "layouts",
+                "layouts",
                 CodeNumberGenerator.AppendCode(containerRoot.Code, CodeNumberGenerator.CreateCode(1)),
-                "views/admin/layouts/index.vue",
+                "views/container/layouts/index.vue",
                 "Manage Layouts",
                 "",
                 "Manage Layouts",
@@ -578,7 +577,7 @@ namespace LINGYUN.Platform
                 containerRoot.TenantId,
                new Dictionary<string, object>()
                {
-                    { "title", "layout" },
+                    { "title", "layouts" },
                     { "icon", "layout" }
                },
                new string[] { "admin" });
@@ -589,7 +588,7 @@ namespace LINGYUN.Platform
                "menus",
                 "menus",
                 CodeNumberGenerator.AppendCode(containerRoot.Code, CodeNumberGenerator.CreateCode(2)),
-                "views/admin/menus/index.vue",
+                "views/container/menus/index.vue",
                 "Manage Menus",
                 "",
                 "Manage Menus",
@@ -718,6 +717,7 @@ namespace LINGYUN.Platform
             Guid? tenantId = null,
             Dictionary<string, object> meta = null,
             string[] roles = null,
+            Guid[] users = null,
             bool isPublic = false
             )
         {
@@ -751,6 +751,14 @@ namespace LINGYUN.Platform
                 foreach (var role in roles)
                 {
                     await RouteDataSeeder.SeedRoleMenuAsync(role, menu, tenantId);
+                }
+            }
+
+            if (users != null)
+            {
+                foreach (var user in users)
+                {
+                    await RouteDataSeeder.SeedUserMenuAsync(user, menu, tenantId);
                 }
             }
 

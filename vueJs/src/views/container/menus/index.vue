@@ -1,60 +1,69 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form>
-        <el-row>
-          <el-col :span="6">
-            <el-form-item
-              label-width="100px"
-              :label="$t('AppPlatform.DisplayName:Filter')"
-            >
-              <el-input
-                v-model="dataQueryFilter.filter"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item
-              label-width="100px"
-              :label="$t('AppPlatform.DisplayName:PlatformType')"
-            >
-              <el-select
-                v-model="dataQueryFilter.platformType"
-                style="width: 250px;margin-left: 10px;"
-                class="filter-item"
-                clearable
-                :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
-              >
-                <el-option
-                  v-for="item in platformTypes"
-                  :key="item.key"
-                  :label="item.key"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-button
-              class="filter-item"
-              style="width: 150px;"
-              type="primary"
-              @click="resetList"
-            >
-              <i class="el-icon-search" />
-              {{ $t('AppPlatform.DisplayName:SecrchMenu') }}
-            </el-button>
-            <el-button
-              class="filter-item"
-              style="width: 150px;"
-              type="success"
-              @click="handleAddMenu('')"
-            >
-              <i class="ivu-icon ivu-icon-md-add" />
-              {{ $t('AppPlatform.Menu:AddNew') }}
-            </el-button>
-          </el-col>
-        </el-row>
+      <el-form inline>
+        <el-form-item
+          label-width="100px"
+          :label="$t('AppPlatform.DisplayName:Filter')"
+        >
+          <el-input
+            v-model="dataQueryFilter.filter"
+          />
+        </el-form-item>
+        <el-form-item
+          label-width="100px"
+          :label="$t('AppPlatform.DisplayName:PlatformType')"
+        >
+          <el-select
+            v-model="dataQueryFilter.platformType"
+            class="filter-item"
+            clearable
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
+          >
+            <el-option
+              v-for="item in platformTypes"
+              :key="item.key"
+              :label="item.key"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label-width="100px"
+          :label="$t('AppPlatform.DisplayName:Layout')"
+        >
+          <el-select
+            v-model="dataQueryFilter.layoutId"
+            class="filter-item"
+            clearable
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:Layout')})"
+          >
+            <el-option
+              v-for="layout in layouts"
+              :key="layout.id"
+              :label="layout.displayName"
+              :value="layout.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-button
+          class="filter-item"
+          style="width: 150px; margin-left: 10px;"
+          type="primary"
+          @click="resetList"
+        >
+          <i class="el-icon-search" />
+          {{ $t('AppPlatform.DisplayName:SecrchMenu') }}
+        </el-button>
+        <el-button
+          class="filter-item"
+          style="width: 150px; margin-left: 10px;"
+          type="success"
+          @click="handleAddMenu('')"
+        >
+          <i class="ivu-icon ivu-icon-md-add" />
+          {{ $t('AppPlatform.Menu:AddNew') }}
+        </el-button>
       </el-form>
     </div>
 
@@ -177,7 +186,7 @@
 <script lang="ts">
 import { dateFormat, generateTree } from '@/utils'
 import { checkPermission } from '@/utils/permission'
-import { PlatformTypes } from '@/api/layout'
+import LayoutService, { PlatformTypes, Layout } from '@/api/layout'
 import MenuService, { Menu, GetAllMenu } from '@/api/menu'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
@@ -204,10 +213,12 @@ export default class extends mixins(DataListMiXin) {
   private showEditDialog = false
   private editMenuId = ''
   private parentMenuId = ''
+  private layouts = new Array<Layout>()
 
   private platformTypes = PlatformTypes
 
   mounted() {
+    this.handleGetLayouts()
     this.refreshData()
   }
 
@@ -224,9 +235,17 @@ export default class extends mixins(DataListMiXin) {
       })
   }
 
+  private handleGetLayouts() {
+    LayoutService
+      .getAllList()
+      .then(res => {
+        this.layouts = res.items
+      })
+  }
+
   private handleRemoveMenu(menu: Menu) {
     this.$confirm(this.l('questingDeleteByMessage', { message: menu.displayName }),
-      this.l('AppPlatform.RemoveMenu'), {
+      this.l('AppPlatform.Menu:Delete'), {
         callback: (action) => {
           if (action === 'confirm') {
             MenuService

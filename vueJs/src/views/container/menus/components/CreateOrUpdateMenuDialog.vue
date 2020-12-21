@@ -282,6 +282,10 @@ export default class CreateOrUpdateMenuDialog extends Vue {
   private onLayoutChanged() {
     const layout = this.layouts.find(x => x.id === this.layoutId)
     if (layout) {
+      if (!this.parentId) {
+        // 对于根菜单,自动设置组件路径为布局路径
+        this.menu.component = layout.path
+      }
       DataService
         .get(layout.dataId)
         .then(res => {

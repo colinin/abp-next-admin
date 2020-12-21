@@ -11,7 +11,6 @@ namespace LINGYUN.Platform.Routes
         Task<Layout> SeedLayoutAsync(
             string name,
             string path,
-            string code,
             string displayName,
             Guid dataId,
             PlatformType platformType = PlatformType.None,

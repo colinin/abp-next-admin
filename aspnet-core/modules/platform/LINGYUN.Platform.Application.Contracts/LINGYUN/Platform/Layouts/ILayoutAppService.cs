@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Platform.Layouts
@@ -11,6 +13,6 @@ namespace LINGYUN.Platform.Layouts
             LayoutCreateDto,
             LayoutUpdateDto>
     {
-
+        Task<ListResultDto<LayoutDto>> GetAllListAsync();
     }
 }

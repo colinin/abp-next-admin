@@ -42,25 +42,17 @@ namespace LINGYUN.Platform.Layouts
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<Layout> GetLastOrNullAsync(
-            CancellationToken cancellationToken = default)
-        {
-            return await DbSet
-                .OrderByDescending(x => x.Code)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public virtual async Task<List<Layout>> GetListAsync(
+        public virtual async Task<List<Layout>> GetPagedListAsync(
             PlatformType? platformType = null, 
             string filter = "",
-            string sorting = "Code",
+            string sorting = nameof(Layout.Name),
             bool reverse = false,
             bool includeDetails = false, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(Layout.Code);
+            sorting ??= nameof(Layout.Name);
             sorting = reverse ? sorting + " DESC" : sorting;
 
             return await DbSet
