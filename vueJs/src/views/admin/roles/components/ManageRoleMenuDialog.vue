@@ -150,6 +150,10 @@ export default class ManageRoleMenuDialog extends Vue {
   }
 
   private onFormClosed() {
+    this.$nextTick(() => {
+      const tree = this.$refs.roleMenuTree as Tree
+      tree.setCheckedKeys([])
+    })
     this.$emit('closed')
   }
 }
