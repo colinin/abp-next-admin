@@ -141,6 +141,8 @@ import CreateOrUpdateDataItemDialog from './CreateOrUpdateDataItemDialog.vue'
           return 'DateTime'
         case ValueType.Array:
           return 'Array'
+        case ValueType.Object:
+          return 'Object'
         default:
         case ValueType.String:
           return 'String'

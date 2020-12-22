@@ -10,7 +10,7 @@
           style="float: right;"
           type="primary"
           icon="ivu-icon ivu-icon-md-add"
-          @click="handleEditData"
+          @click="handleEditData('')"
         >
           {{ $t('AppPlatform.Data:AddNew') }}
         </el-button>
@@ -99,7 +99,7 @@ export default class DataDictionaryTree extends Vue {
           icon: 'el-icon-edit',
           disabled: !checkPermission(['Platform.DataDictionary.Update']),
           onClick: () => {
-            this.handleEditData(data)
+            this.handleEditData(data.id)
           }
         },
         {
@@ -107,7 +107,7 @@ export default class DataDictionaryTree extends Vue {
           icon: 'ivu-icon ivu-icon-md-add',
           disabled: !checkPermission(['Platform.DataDictionary.Create']),
           onClick: () => {
-            this.handleEditData()
+            this.handleEditData('')
           }
         },
         {
@@ -152,11 +152,11 @@ export default class DataDictionaryTree extends Vue {
     }
   }
 
-  private handleEditData(data?: Data) {
+  private handleEditData(dataId: string) {
     this.editDataTitle = this.l('AppPlatform.Data:AddNew')
     this.isEditData = false
-    if (data) {
-      this.editDataId = data.id
+    if (dataId) {
+      this.editDataId = dataId
       this.isEditData = true
       this.editDataTitle = this.l('AppPlatform.Data:Edit')
     } else {

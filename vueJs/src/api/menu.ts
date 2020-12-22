@@ -29,8 +29,13 @@ export default class MenuService {
     return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
   }
 
-  public static getRoleMenuList(payload: GetRoleMenu) {
-    const _url = sourceUrl + '/by-role?' + urlStringify(payload)
+  public static getRoleMenuList(role: string, platformType: PlatformType) {
+    const _url = sourceUrl + `/by-role/${role}/${platformType}`
+    return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
+  }
+
+  public static getUserMenuList(userId: string, platformType: PlatformType) {
+    const _url = sourceUrl + `/by-user/${userId}/${platformType}`
     return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
   }
 
@@ -50,6 +55,11 @@ export default class MenuService {
 
   public static setRoleMenu(payload: RoleMenu) {
     const _url = sourceUrl + '/by-role'
+    return ApiService.Put<void>(_url, payload,serviceUrl)
+  }
+
+  public static setUserMenu(payload: UserMenu) {
+    const _url = sourceUrl + '/by-user'
     return ApiService.Put<void>(_url, payload,serviceUrl)
   }
 }
@@ -84,11 +94,6 @@ export class GetAllMenu implements ISortedResultRequest {
   platformType?: PlatformType
 }
 
-export class GetRoleMenu {
-  role!: string
-  platformType!: PlatformType
-}
-
 export class GetMenuByPaged extends PagedAndSortedResultRequestDto {
   filter = ''
   reverse = false
@@ -109,5 +114,10 @@ export class Menu extends Route {
 
 export class RoleMenu {
   roleName!: string
+  menuIds = new Array<string>()
+}
+
+export class UserMenu {
+  userId!: string
   menuIds = new Array<string>()
 }

@@ -46,7 +46,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 
 namespace LINGYUN.Platform
 {
@@ -57,7 +57,7 @@ namespace LINGYUN.Platform
         typeof(PlatformHttpApiModule),
         typeof(PlatformEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),

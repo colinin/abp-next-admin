@@ -18,7 +18,7 @@
         @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
         @contextmenu.prevent.native="openMenu(tag, $event)"
       >
-        {{ $t('route.' + tag.meta.title) }}
+        {{ routeTitle(tag) }}
         <span
           v-if="!isAffix(tag)"
           class="el-icon-close"
@@ -78,6 +78,15 @@ export default class extends Vue {
 
   get routes() {
     return PermissionModule.routes
+  }
+
+  get routeTitle() {
+    return (route: any) => {
+      if (route.meta.displayName) {
+        return route.meta.displayName
+      }
+      return this.$t('route.' + route.meta.title)
+    }
   }
 
   @Watch('$route')

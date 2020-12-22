@@ -26,6 +26,7 @@
       >
         <el-input
           v-model="dataItem.name"
+          :disabled="isEdit"
         />
       </el-form-item>
       <el-form-item
@@ -84,6 +85,11 @@
             key="Array"
             label="Array"
             :value="5"
+          />
+          <el-option
+            key="Object"
+            label="Object"
+            :value="6"
           />
         </el-select>
       </el-form-item>

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using Volo.Abp;
@@ -89,6 +90,15 @@ namespace LINGYUN.Platform.Datas
                     return "";
                 }
                 return value.ToString();
+            });
+            SetMapping(ValueType.Object, value =>
+            {
+                if (value == null)
+                {
+                    return "{}";
+                }
+
+                return JsonConvert.SerializeObject(value);
             });
         }
 

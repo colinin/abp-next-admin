@@ -59,7 +59,8 @@ export enum ValueType {
   Boolean = 2,
   Date = 3,
   DateTime = 4,
-  Array = 5
+  Array = 5,
+  Object = 6
 }
 
 export class DataItem {

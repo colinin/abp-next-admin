@@ -126,7 +126,7 @@
           :label="$t(('AppPlatform.DisplayName:Meta'))"
         >
           <el-form-item
-            v-for="(dataItem) in bindData.items"
+            v-for="(dataItem) in dataItems"
             :key="dataItem.id"
             :label="dataItem.displayName"
             :prop="'meta.' + dataItem.name"
@@ -136,16 +136,16 @@
               trigger: 'blur'
             }"
           >
-            <el-popover
+            <!-- <el-popover
               :ref="dataItem.name"
               trigger="hover"
               :title="dataItem.displayName"
-              :content="dataItem.description"
+              :content="dataItem.description || dataItem.displayName"
             />
             <span
               slot="label"
               v-popover="dataItem.name"
-            >{{ dataItem.displayName }}</span>
+            >{{ dataItem.displayName }}</span> -->
             <menu-meta-input
               v-model="menu.meta[dataItem.name]"
               :prop-name="'meta.' + dataItem.name"
@@ -186,9 +186,8 @@ import MenuService, {
   MenuUpdate,
   MenuCreateOrUpdate
 } from '@/api/menu'
-import DataService, { Data } from '@/api/data-dictionary'
-import LayoutService, { Layout, GetLayoutByPaged } from '@/api/layout'
-import { abpPagerFormat } from '@/utils/index'
+import DataService, { Data, DataItem } from '@/api/data-dictionary'
+import LayoutService, { Layout } from '@/api/layout'
 
 import MenuMetaInput from './MenuMetaInput.vue'
 
@@ -222,15 +221,18 @@ export default class CreateOrUpdateMenuDialog extends Vue {
     return this.$t('AppPlatform.Menu:AddNew')
   }
 
+  get dataItems() {
+    const items = this.bindData.items.sort((pre: DataItem, next: DataItem) => {
+      return pre.valueType < next.valueType ? -1 : 0
+    })
+    return items
+  }
+
   private activedTab = 'basic'
   private menu = new Menu()
   private bindData = new Data()
   private layouts = new Array<Layout>()
   private layoutId = ''
-  private layoutPage = 1
-  private layoutTotal = 0
-  private layoutEnd = false
-  private layoutQuery = new GetLayoutByPaged()
 
   @Watch('showDialog')
   private onShowDialogChanged() {
@@ -242,19 +244,11 @@ export default class CreateOrUpdateMenuDialog extends Vue {
   }
 
   private handleGetLayouts() {
-    if (!this.isEdit && !this.layoutEnd) {
-      this.layoutQuery.skipCount = abpPagerFormat(this.layoutPage, this.layoutQuery.maxResultCount)
+    if (!this.isEdit) {
       LayoutService
-        .getList(this.layoutQuery)
+        .getAllList()
         .then(res => {
-          this.layouts.push(...res.items)
-          this.layoutTotal = res.totalCount
-          if (res.items.length === 0 ||
-              res.items.length < this.layoutQuery.maxResultCount) {
-            this.layoutEnd = true
-          } else {
-            this.layoutPage += 1
-          }
+          this.layouts = res.items
         })
     }
   }
@@ -282,6 +276,9 @@ export default class CreateOrUpdateMenuDialog extends Vue {
   private onLayoutChanged() {
     const layout = this.layouts.find(x => x.id === this.layoutId)
     if (layout) {
+      if (!this.isEdit) {
+        this.menu.meta = {}
+      }
       if (!this.parentId) {
         // 对于根菜单,自动设置组件路径为布局路径
         this.menu.component = layout.path
