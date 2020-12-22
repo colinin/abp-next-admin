@@ -281,9 +281,9 @@ namespace LINGYUN.Platform
                 "claim-type",
                 CodeNumberGenerator.AppendCode(adminMenu.Code, CodeNumberGenerator.CreateCode(4)),
                 "views/admin/claim-type/index.vue",
-                "Manage Organization Units",
+                "Manage Claim Types",
                 "",
-                "Manage Organization Units",
+                "Manage Claim Types",
                 adminMenu.Id,
                 layout.TenantId,
                 new Dictionary<string, object>()
