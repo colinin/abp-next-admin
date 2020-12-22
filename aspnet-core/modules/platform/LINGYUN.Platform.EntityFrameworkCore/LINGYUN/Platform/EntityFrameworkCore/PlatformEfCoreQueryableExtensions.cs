@@ -19,6 +19,16 @@ namespace LINGYUN.Platform.EntityFrameworkCore
             return queryable;
         }
 
+        public static IQueryable<Menu> IncludeDetails(this IQueryable<Menu> queryable, bool include = true)
+        {
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable;
+        }
+
         public static IQueryable<Data> IncludeDetails(this IQueryable<Data> queryable, bool include = true)
         {
             if (!include)

@@ -234,5 +234,10 @@ namespace LINGYUN.Platform.Menus
 
             DbContext.Set<UserMenu>().RemoveRange(membersQuery);
         }
+
+        public override IQueryable<Menu> WithDetails()
+        {
+            return GetQueryable().IncludeDetails();
+        }
     }
 }

@@ -126,7 +126,7 @@
           :label="$t(('AppPlatform.DisplayName:Meta'))"
         >
           <el-form-item
-            v-for="(dataItem) in bindData.items"
+            v-for="(dataItem) in dataItems"
             :key="dataItem.id"
             :label="dataItem.displayName"
             :prop="'meta.' + dataItem.name"
@@ -136,16 +136,16 @@
               trigger: 'blur'
             }"
           >
-            <el-popover
+            <!-- <el-popover
               :ref="dataItem.name"
               trigger="hover"
               :title="dataItem.displayName"
-              :content="dataItem.description"
+              :content="dataItem.description || dataItem.displayName"
             />
             <span
               slot="label"
               v-popover="dataItem.name"
-            >{{ dataItem.displayName }}</span>
+            >{{ dataItem.displayName }}</span> -->
             <menu-meta-input
               v-model="menu.meta[dataItem.name]"
               :prop-name="'meta.' + dataItem.name"
@@ -186,7 +186,7 @@ import MenuService, {
   MenuUpdate,
   MenuCreateOrUpdate
 } from '@/api/menu'
-import DataService, { Data } from '@/api/data-dictionary'
+import DataService, { Data, DataItem } from '@/api/data-dictionary'
 import LayoutService, { Layout, GetLayoutByPaged } from '@/api/layout'
 import { abpPagerFormat } from '@/utils/index'
 
@@ -220,6 +220,13 @@ export default class CreateOrUpdateMenuDialog extends Vue {
       return this.$t('AppPlatform.Menu:EditByName', { 0: this.menu.displayName })
     }
     return this.$t('AppPlatform.Menu:AddNew')
+  }
+
+  get dataItems() {
+    const items = this.bindData.items.sort((pre: DataItem, next: DataItem) => {
+      return pre.valueType < next.valueType ? -1 : 0
+    })
+    return items
   }
 
   private activedTab = 'basic'
@@ -282,6 +289,9 @@ export default class CreateOrUpdateMenuDialog extends Vue {
   private onLayoutChanged() {
     const layout = this.layouts.find(x => x.id === this.layoutId)
     if (layout) {
+      if (!this.isEdit) {
+        this.menu.meta = {}
+      }
       if (!this.parentId) {
         // 对于根菜单,自动设置组件路径为布局路径
         this.menu.component = layout.path

@@ -32,6 +32,11 @@
       :value="inputArrayValue(value)"
       @input="onInputMetaChanged"
     />
+    <input-object
+      v-else-if="dataItem.valueType===6"
+      :value="inputObjectValue"
+      @input="onInputMetaChanged"
+    />
   </div>
 </template>
 
@@ -40,12 +45,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { DataItem } from '@/api/data-dictionary'
 import { isBoolean } from 'lodash'
 import ElInputTag from '@/components/InputTag/index.vue'
+import InputObject from '@/components/InputObject/index.vue'
 import { isArray } from '@/utils/validate'
 
 @Component({
   name: 'MenuMetaInput',
   components: {
-    ElInputTag
+    ElInputTag,
+    InputObject
   }
 })
 export default class MenuMetaInput extends Vue {
@@ -85,6 +92,16 @@ export default class MenuMetaInput extends Vue {
       this.value = value
     }
     this.value = String(value).split(',')
+  }
+
+  get inputObjectValue() {
+    if (typeof this.value === 'object') {
+      return this.value
+    }
+    if (typeof this.value === 'string') {
+      return JSON.parse(this.value)
+    }
+    return JSON.parse(String(this.value))
   }
 
   onInputMetaChanged(value: any) {

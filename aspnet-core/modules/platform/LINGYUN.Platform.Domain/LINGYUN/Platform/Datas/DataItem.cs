@@ -78,6 +78,9 @@ namespace LINGYUN.Platform.Datas
                 case ValueType.Numeic:
                     DefaultValue = "0";
                     break;
+                case ValueType.Object:
+                    DefaultValue = "{}";
+                    break;
                 default:
                 case ValueType.String:
                     DefaultValue = "";
