@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 21/12/2020 18:32:50
+ Date: 22/12/2020 14:45:05
 */
 
 SET NAMES utf8mb4;
@@ -521,7 +521,7 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (131, 1310515735292985344, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (132, 1316628769783480320, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (133, 1316628940663619584, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (134, 1316629112428756992, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (135, 1316652047017246720, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (135, 1316652047017246720, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (136, 1316913899996737536, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (137, 1319200951383199744, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (138, 1319221929807024128, 0, '');
@@ -1313,7 +1313,7 @@ INSERT INTO `appapigatewayreroute` VALUES (138, '{}', 'c3ebc82d55f640fb9d70a911e
 INSERT INTO `appapigatewayreroute` VALUES (139, '{}', '0379fcb3a9cd4b13b562b3b5b5c3eb7d', 1316628769783480320, '【身份认证服务】- 声明类型', '/api/identity/claim-types', '', '', '/api/identity/claim-types', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (140, '{}', 'de25c9a80d994f728b37eb483b2f5127', 1316628940663619584, '【身份认证服务】- 管理声明类型', '/api/identity/claim-types/{id}', '', '', '/api/identity/claim-types/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (141, '{}', '25c19106baff4cf3a877ae8cd690a1b5', 1316629112428756992, '【身份认证服务】- 查询在用的声明类型列表', '/api/identity/claim-types/actived-list', '', '', '/api/identity/claim-types/actived-list', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (142, '{}', 'd42f8b779cf344eeaa24df0ae37fb7cf', 1316652047017246720, '【身份认证服务】- 管理用户声明', '/api/identity/users/claims/{id}', '', '', '/api/identity/users/claims/{id}', 'POST,PUT,DELETE,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (142, '{}', '7d3b941d8c4d4d3ebc05b6332308b992', 1316652047017246720, '【身份认证服务】- 管理用户声明', '/api/identity/users/{id}/claims', '', '', '/api/identity/users/{id}/claims', 'POST,PUT,DELETE,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (143, '{}', 'b86af44a34a14db4b482df8550f1bde1', 1316913899996737536, '【身份认证管理】- 管理角色声明', '/api/identity/roles/claims/{id}', '', '', '/api/identity/roles/claims/{id}', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (144, '{}', '51a14bc295044de985ae014fbcc5bddf', 1319200951383199744, '【IdentityServer4】- 发现端点', '/.well-known/openid-configuration', '', '', '/.well-known/openid-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (145, '{}', '9d859a444d774e93818237e53b6cc102', 1319221929807024128, '【身份认证服务】- 查询所有组织机构', '/api/identity/organization-units/all', '', '', '/api/identity/organization-units/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
@@ -1565,6 +1565,7 @@ CREATE TABLE `cap.published`  (
 -- Records of cap.published
 -- ----------------------------
 INSERT INTO `cap.published` VALUES (1340961909189136384, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-callback-name\":null,\"cap-msg-id\":\"1340961909189136384\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2020/12/21 18:06:47 +08:00\",\"cap-corr-id\":\"1340961909189136384\",\"cap-corr-seq\":\"0\"},\"Value\":{\"DateTime\":\"2020-12-21T18:06:47.6668667+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2020-12-21 18:06:48', '2020-12-22 18:06:48', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1341265150657449984, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-callback-name\":null,\"cap-msg-id\":\"1341265150657449984\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2020/12/22 14:11:46 +08:00\",\"cap-corr-id\":\"1341265150657449984\",\"cap-corr-seq\":\"0\"},\"Value\":{\"DateTime\":\"2020-12-22T14:11:46.0753073+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Modify\",\"Object\":\"ReRoute\"}}', 0, '2020-12-22 14:11:46', '2020-12-23 14:11:46', 'Succeeded');
 
 -- ----------------------------
 -- Table structure for cap.received
