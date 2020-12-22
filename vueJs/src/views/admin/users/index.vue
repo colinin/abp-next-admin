@@ -116,10 +116,19 @@
       <el-table-column
         :label="$t('AbpIdentity.Actions')"
         align="center"
-        width="120px"
-        fixed="right"
+        width="250px"
+        min-width="250px"
       >
         <template slot-scope="{row}">
+          <el-button
+            :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="handleShowUserDialog(row.id)"
+          >
+            {{ $t('AbpIdentity.Edit') }}
+          </el-button>
           <el-dropdown
             class="options"
             @command="handleCommand"
@@ -127,17 +136,11 @@
             <el-button
               v-permission="['AbpIdentity.Users']"
               size="mini"
-              type="primary"
+              type="info"
             >
               {{ $t('AbpIdentity.Actions') }}<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                :command="{key: 'edit', row}"
-                :disabled="!checkPermission(['AbpIdentity.Users.Update'])"
-              >
-                {{ $t('AbpIdentity.Edit') }}
-              </el-dropdown-item>
               <el-dropdown-item
                 :command="{key: 'permission', row}"
                 :disabled="!checkPermission(['AbpIdentity.Users.ManagePermissions'])"
@@ -155,6 +158,12 @@
                 :disabled="!checkPermission(['AbpIdentity.Users.ManageClaims'])"
               >
                 {{ $t('AbpIdentity.ManageClaim') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{key: 'menu', row}"
+                :disabled="!checkPermission(['Platform.Menu.ManageUsers'])"
+              >
+                {{ $t('AppPlatform.Menu:Manage') }}
               </el-dropdown-item>
               <el-dropdown-item
                 divided
@@ -189,6 +198,12 @@
       @closed="onClaimDialogClosed"
     />
 
+    <manage-user-menu-dialog
+      :show-dialog="showManageUserMenuDialog"
+      :user-id="editUserId"
+      @closed="showManageUserMenuDialog=false"
+    />
+
     <permission-form
       provider-name="U"
       :provider-key="editUserId"
@@ -207,6 +222,7 @@ import Component, { mixins } from 'vue-class-component'
 import UserApiService, { User, UsersGetPagedDto } from '@/api/users'
 import Pagination from '@/components/Pagination/index.vue'
 import PermissionForm from '@/components/PermissionForm/index.vue'
+import ManageUserMenuDialog from './components/ManageUserMenuDialog.vue'
 import UserCreateOrUpdateForm from './components/UserCreateOrUpdateForm.vue'
 import UserClaimCreateOrUpdateForm from './components/UserClaimCreateOrUpdateForm.vue'
 import { dateFormat, abpPagerFormat } from '@/utils'
@@ -217,6 +233,7 @@ import { checkPermission } from '@/utils/permission'
   components: {
     Pagination,
     PermissionForm,
+    ManageUserMenuDialog,
     UserCreateOrUpdateForm,
     UserClaimCreateOrUpdateForm
   },
@@ -238,6 +255,7 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
   private showUserDialog = false
   private showClaimDialog = false
   private showPermissionDialog = false
+  private showManageUserMenuDialog = false
 
   get allowedEditPermission() {
     return this.editUserId !== UserModule.id && checkPermission(['AbpIdentity.Users.ManagePermissions'])
@@ -302,11 +320,12 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
   /** 响应更多操作命令 */
   private handleCommand(command: any) {
     switch (command.key) {
-      case 'edit' :
-        this.handleShowUserDialog(command.row.id)
-        break
       case 'claim' :
         this.handleShowCliamDialog(command.row)
+        break
+      case 'menu' :
+        this.editUserId = command.row.id
+        this.showManageUserMenuDialog = true
         break
       case 'permission' :
         this.handleShowPermissionDialog(command.row.id)

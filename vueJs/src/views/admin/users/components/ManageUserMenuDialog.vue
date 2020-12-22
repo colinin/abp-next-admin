@@ -37,13 +37,13 @@
           :label="$t('AppPlatform.DisplayName:Menus')"
         >
           <el-tree
-            ref="roleMenuTree"
+            ref="userMenuTree"
             show-checkbox
             :check-strictly="true"
             node-key="id"
             :data="menus"
             :props="menuProps"
-            :default-checked-keys="roleMenuIds"
+            :default-checked-keys="userMenuIds"
           />
         </el-form-item>
       </el-card>
@@ -73,23 +73,23 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import MenuService, { Menu, GetAllMenu, RoleMenu } from '@/api/menu'
+import MenuService, { Menu, GetAllMenu, UserMenu } from '@/api/menu'
 import { generateTree } from '@/utils'
 import { PlatformType, PlatformTypes } from '@/api/layout'
 import { Tree } from 'element-ui'
 
 @Component({
-  name: 'ManageRoleMenuDialog'
+  name: 'ManageUserMenuDialog'
 })
-export default class ManageRoleMenuDialog extends Vue {
+export default class ManageUserMenuDialog extends Vue {
   @Prop({ default: false })
   private showDialog!: boolean
 
   @Prop({ default: '' })
-  private roleName!: string
+  private userId!: string
 
   private menus = new Array<Menu>()
-  private roleMenuIds = new Array<string>()
+  private userMenuIds = new Array<string>()
   private getMenuQuery = new GetAllMenu()
   private platformTypes = PlatformTypes
   private confirmButtonBusy = false
@@ -107,12 +107,12 @@ export default class ManageRoleMenuDialog extends Vue {
 
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
-    this.handleGetRoleMenus()
+    this.handleGetUserMenus()
   }
 
   private onPlatformTypeChanged() {
     this.handleGetMenus()
-    this.handleGetRoleMenus()
+    this.handleGetUserMenus()
   }
 
   private handleGetMenus() {
@@ -123,25 +123,25 @@ export default class ManageRoleMenuDialog extends Vue {
       })
   }
 
-  private handleGetRoleMenus() {
-    if (this.showDialog && this.roleName) {
+  private handleGetUserMenus() {
+    if (this.showDialog && this.userId) {
       MenuService
-        .getRoleMenuList(this.roleName, this.getMenuQuery.platformType || PlatformType.None)
+        .getUserMenuList(this.userId, this.getMenuQuery.platformType || PlatformType.None)
         .then(res => {
-          this.roleMenuIds = res.items.map(item => item.id)
+          this.userMenuIds = res.items.map(item => item.id)
         })
     } else {
-      this.roleMenuIds.length = 0
+      this.userMenuIds.length = 0
     }
   }
 
   private onSave() {
-    const roleMenuTree = this.$refs.roleMenuTree as Tree
-    const roleMenu = new RoleMenu()
-    roleMenu.roleName = this.roleName
-    roleMenu.menuIds = roleMenuTree.getCheckedKeys()
+    const userMenuTree = this.$refs.userMenuTree as Tree
+    const userMenu = new UserMenu()
+    userMenu.userId = this.userId
+    userMenu.menuIds = userMenuTree.getCheckedKeys()
     MenuService
-      .setRoleMenu(roleMenu)
+      .setUserMenu(userMenu)
       .then(() => {
         this.$message.success(this.$t('successful').toString())
         this.onFormClosed()
@@ -150,7 +150,7 @@ export default class ManageRoleMenuDialog extends Vue {
 
   private onFormClosed() {
     this.$nextTick(() => {
-      const tree = this.$refs.roleMenuTree as Tree
+      const tree = this.$refs.userMenuTree as Tree
       tree.setCheckedKeys([])
     })
     this.$emit('closed')
