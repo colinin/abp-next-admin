@@ -11,8 +11,10 @@ namespace LINGYUN.Abp.BackendAdmin.EntityFrameworkCore
         {
             var configuration = BuildConfiguration();
 
+            var connectionString = configuration.GetConnectionString("Default");
+
             var builder = new DbContextOptionsBuilder<BackendAdminHostMigrationsDbContext>()
-                .UseMySql(configuration.GetConnectionString("Default"));
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
             return new BackendAdminHostMigrationsDbContext(builder.Options);
         }

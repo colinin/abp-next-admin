@@ -15,64 +15,51 @@
       label-width="100px"
       :model="client"
     >
-      <el-form-item
-        prop="clientId"
-        :label="$t('AbpIdentityServer.Client:Id')"
-        :rules="{
-          required: true,
-          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
-          trigger: 'blur'
-        }"
-      >
-        <el-input
-          v-model="client.clientId"
-          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')})"
-        />
-      </el-form-item>
-      <el-form-item
-        prop="clientName"
-        :label="$t('AbpIdentityServer.Name')"
-        :rules="{
-          required: true,
-          message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
-          trigger: 'blur'
-        }"
-      >
-        <el-input
-          v-model="client.clientName"
-          :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
-        />
-      </el-form-item>
-      <el-form-item
-        prop="description"
-        :label="$t('AbpIdentityServer.Description')"
-      >
-        <el-input
-          v-model="client.description"
-        />
-      </el-form-item>
-      <el-form-item
-        prop="allowedGrantTypes"
-        :label="$t('AbpIdentityServer.Client:AllowedGrantTypes')"
-        label-width="120px"
-      >
-        <el-select
-          v-model="client.allowedGrantTypes"
-          multiple
-          filterable
-          allow-create
-          clearable
-          class="full-select"
-        >
-          <el-option
-            v-for="(grantType, index) in supportedGrantypes"
-            :key="index"
-            :label="grantType"
-            :value="grantType"
+      <el-tabs>
+        <el-tab-pane :label="$t('AbpIdentityServer.Basics')">
+          <el-form-item
+            prop="clientId"
+            :label="$t('AbpIdentityServer.Client:Id')"
+            :rules="{
+              required: true,
+              message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
+              trigger: 'blur'
+            }"
+          >
+            <el-input
+              v-model="client.clientId"
+              :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')})"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="clientName"
+            :label="$t('AbpIdentityServer.Name')"
+            :rules="{
+              required: true,
+              message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+              trigger: 'blur'
+            }"
+          >
+            <el-input
+              v-model="client.clientName"
+              :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="description"
+            :label="$t('AbpIdentityServer.Description')"
+          >
+            <el-input
+              v-model="client.description"
+            />
+          </el-form-item>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('AbpIdentityServer.Client:AllowedGrantTypes')">
+          <grant-type-edit-form
+            v-model="client.allowedGrantTypes"
           />
-        </el-select>
-      </el-form-item>
-
+        </el-tab-pane>
+      </el-tabs>
       <el-form-item>
         <el-button
           class="cancel"
@@ -98,18 +85,14 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
 import { Form } from 'element-ui'
-import ClientClaimEditForm from './ClientClaimEditForm.vue'
-import SecretEditForm from '../../components/SecretEditForm.vue'
-import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
+import GrantTypeEditForm from './GrantTypeEditForm.vue'
 
 import ClientApiService, { ClientCreate } from '@/api/clients'
 
 @Component({
   name: 'ClientCreateForm',
   components: {
-    SecretEditForm,
-    PropertiesEditForm,
-    ClientClaimEditForm
+    GrantTypeEditForm
   }
 })
 export default class ClientCreateForm extends Vue {
@@ -125,7 +108,8 @@ export default class ClientCreateForm extends Vue {
     const clientEditForm = this.$refs.formClient as Form
     clientEditForm.validate(valid => {
       if (valid) {
-        ClientApiService.createClient(this.client)
+        ClientApiService
+          .create(this.client)
           .then(() => {
             this.$message.success(this.$t('global.successful').toString())
             this.onFormClosed(true)

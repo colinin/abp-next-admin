@@ -48,35 +48,6 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        prop="hashType"
-        :label="$t('AbpIdentityServer.Secret:HashType')"
-      >
-        <el-popover
-          ref="popHashType"
-          placement="top-start"
-          trigger="hover"
-          :content="$t('AbpIdentityServer.Secret:HashTypeOnlySharedSecret')"
-        />
-        <el-select
-          v-model="secret.hashType"
-          v-popover:popHashType
-          :disabled="secret.type !== 'SharedSecret'"
-          class="full-select"
-          :placeholder="$t('pleaseSelectBy', {key: $t('AbpIdentityServer.Secret:HashType')})"
-        >
-          <el-option
-            :key="0"
-            label="Sha256"
-            :value="0"
-          />
-          <el-option
-            :key="1"
-            label="Sha512"
-            :value="1"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item
         prop="value"
         :label="$t('AbpIdentityServer.Secret:Value')"
         :rules="{
@@ -109,16 +80,14 @@
         />
       </el-form-item>
 
-      <el-form-item
-        style="text-align: center;"
-        label-width="0px"
-      >
+      <el-form-item>
         <el-button
-          type="primary"
-          style="width:180px"
+          type="success"
+          class="add-button"
           @click="onSave"
         >
-          {{ $t('AbpIdentityServer.Secret:New') }}
+          <i class="ivu-icon ivu-icon-md-add" />
+          {{ $t('AbpIdentityServer.AddNew') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -184,7 +153,7 @@
             type="danger"
             icon="el-icon-delete"
             size="mini"
-            @click="handleDeleteApiSecret(row.type, row.value)"
+            @click="onDeleted(row.type, row.value)"
           />
         </template>
       </el-table-column>
@@ -193,18 +162,10 @@
 </template>
 
 <script lang="ts">
-import { ISecret, HashType } from '@/api/types'
+import { Secret } from '@/api/identity-server4'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { dateFormat } from '@/utils/index'
 import { Form } from 'element-ui'
-
-class Secret implements ISecret {
-  type = ''
-  value = ''
-  hashType = HashType.Sha256
-  description = ''
-  expiration: Date | undefined = undefined
-}
 
 @Component({
   name: 'SecretEditForm',
@@ -216,11 +177,15 @@ class Secret implements ISecret {
       }
       return ''
     }
+  },
+  model: {
+    prop: 'secrets',
+    event: 'change'
   }
 })
 export default class SecretEditForm extends Vue {
-  @Prop({ default: () => { return new Array<ISecret>() } })
-  private secrets!: ISecret[]
+  @Prop({ default: () => { return new Array<Secret>() } })
+  private secrets!: Secret[]
 
   @Prop({ default: false })
   private allowedCreateSecret!: boolean
@@ -234,14 +199,20 @@ export default class SecretEditForm extends Vue {
     const secretEditForm = this.$refs.secretEditForm as Form
     secretEditForm.validate(valid => {
       if (valid) {
-        this.$emit('onSecretCreated', this.secret)
+        this.$emit('change', this.secrets.concat({
+          type: this.secret.type,
+          value: this.secret.value,
+          description: this.secret.description,
+          expiration: this.secret.expiration
+        }))
         secretEditForm.resetFields()
       }
     })
   }
 
-  private handleDeleteApiSecret(type: string, value: string) {
-    this.$emit('onSecretDeleted', type, value)
+  private onDeleted(type: string, value: string) {
+    console.log(type, value)
+    this.$emit('change', this.secrets.filter(secret => secret.value !== value || secret.type !== type))
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
@@ -253,5 +224,9 @@ export default class SecretEditForm extends Vue {
 <style lang="scss" scoped>
 .full-select {
   width: 100%;
+}
+.add-button {
+  width: 150px;
+  float: right;
 }
 </style>

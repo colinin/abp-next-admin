@@ -49,11 +49,12 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             {
                 throw new UserFriendlyException(L[AbpIdentityServerErrorConsts.ApiResourceNameExisted, input.Name]);
             }
-            var apiResource = new ApiResource(GuidGenerator.Create(), input.Name,
-                input.DisplayName, input.Description)
-            {
-                Enabled = input.Enabled
-            };
+            var apiResource = new ApiResource(
+                GuidGenerator.Create(), 
+                input.Name,
+                input.DisplayName, 
+                input.Description);
+
             await UpdateApiResourceByInputAsync(apiResource, input);
 
             apiResource = await ApiResourceRepository.InsertAsync(apiResource);
@@ -67,9 +68,6 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         public virtual async Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
         {
             var apiResource = await ApiResourceRepository.GetAsync(id);
-            apiResource.DisplayName = input.DisplayName ?? apiResource.DisplayName;
-            apiResource.Description = input.Description ?? apiResource.Description;
-            apiResource.Enabled = input.Enabled;
 
             await UpdateApiResourceByInputAsync(apiResource, input);
 
@@ -91,16 +89,33 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         protected virtual async Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
         {
+            apiResource.ShowInDiscoveryDocument = input.ShowInDiscoveryDocument;
+            apiResource.Enabled = input.Enabled;
+
+            if (!string.Equals(apiResource.AllowedAccessTokenSigningAlgorithms, input.AllowedAccessTokenSigningAlgorithms, StringComparison.InvariantCultureIgnoreCase))
+            {
+                apiResource.AllowedAccessTokenSigningAlgorithms = input.AllowedAccessTokenSigningAlgorithms;
+            }
+            if (!string.Equals(apiResource.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                apiResource.DisplayName = input.DisplayName;
+            }
+            if (apiResource.Description?.Equals(input.Description, StringComparison.InvariantCultureIgnoreCase)
+                == false)
+            {
+                apiResource.Description = input.Description;
+            }
+
             if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageClaims))
             {
                 // 删除不存在的UserClaim
-                apiResource.UserClaims.RemoveAll(claim => !input.UserClaims.Contains(claim.Type));
+                apiResource.UserClaims.RemoveAll(claim => !input.UserClaims.Any(inputClaim => claim.Type == inputClaim.Type));
                 foreach (var inputClaim in input.UserClaims)
                 {
-                    var userClaim = apiResource.FindClaim(inputClaim);
+                    var userClaim = apiResource.FindClaim(inputClaim.Type);
                     if (userClaim == null)
                     {
-                        apiResource.AddUserClaim(inputClaim);
+                        apiResource.AddUserClaim(inputClaim.Type);
                     }
                 }
             }
@@ -108,34 +123,13 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageScopes))
             {
                 // 删除不存在的Scope
-                apiResource.Scopes.RemoveAll(scope => !input.Scopes.Any(inputScope => scope.Name == inputScope.Name));
+                apiResource.Scopes.RemoveAll(scope => !input.Scopes.Any(inputScope => scope.Scope == inputScope.Scope));
                 foreach (var inputScope in input.Scopes)
                 {
-                    var scope = apiResource.FindScope(inputScope.Name);
+                    var scope = apiResource.FindScope(inputScope.Scope);
                     if (scope == null)
                     {
-                        scope = apiResource.AddScope(
-                            inputScope.Name, inputScope.DisplayName, inputScope.Description,
-                            inputScope.Required, inputScope.Emphasize, inputScope.ShowInDiscoveryDocument);
-                    }
-                    else
-                    {
-                        scope.Required = inputScope.Required;
-                        scope.Emphasize = inputScope.Emphasize;
-                        scope.Description = inputScope.Description;
-                        scope.DisplayName = inputScope.DisplayName;
-                        scope.ShowInDiscoveryDocument = inputScope.ShowInDiscoveryDocument;
-                        // 删除不存在的ScopeUserClaim
-                        scope.UserClaims.RemoveAll(claim => !inputScope.UserClaims.Contains(claim.Type));
-                    }
-
-                    foreach (var inputScopeClaim in inputScope.UserClaims)
-                    {
-                        var scopeUserClaim = scope.FindClaim(inputScopeClaim);
-                        if (scopeUserClaim == null)
-                        {
-                            scope.AddUserClaim(inputScopeClaim);
-                        }
+                        apiResource.AddScope(inputScope.Scope);
                     }
                 }
             }
@@ -174,10 +168,18 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             if (await IsGrantAsync(AbpIdentityServerPermissions.ApiResources.ManageProperties))
             {
                 // 删除不存在的属性
-                apiResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
-                foreach (var property in input.Properties)
+                apiResource.Properties.RemoveAll(prop => !input.Properties.Any(inputProp => prop.Key == inputProp.Key));
+                foreach (var inputProp in input.Properties)
                 {
-                    apiResource.Properties[property.Key] = property.Value;
+                    var apiResourceProperty = apiResource.FindProperty(inputProp.Key);
+                    if (apiResourceProperty == null)
+                    {
+                        apiResource.AddProperty(inputProp.Key, inputProp.Value);
+                    }
+                    else
+                    {
+                        apiResourceProperty.Value = inputProp.Value;
+                    }
                 }
             }
         }

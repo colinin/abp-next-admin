@@ -15,59 +15,71 @@
       label-width="100px"
       :model="client"
     >
-      <el-tabs v-model="activeTabPane">
+      <el-tabs
+        v-model="activeTabPane"
+        :before-leave="onTabBeforeLeave"
+      >
         <el-tab-pane
           name="basics"
           :label="$t('AbpIdentityServer.Basics')"
         >
           <el-form-item
             prop="enabled"
-            :label="$t('AbpIdentityServer.Client:Enabled')"
+            label-width="0"
           >
-            <el-switch
+            <el-checkbox
               v-model="client.enabled"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:Enabled') }}
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item
+            prop="requireRequestObject"
+            label-width="0"
+          >
+            <el-checkbox
+              v-model="client.requireRequestObject"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:RequireRequestObject') }}
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item
+            prop="clientId"
+            :label="$t('AbpIdentityServer.Client:Id')"
+            :rules="{
+              required: true,
+              message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
+              trigger: 'blur'
+            }"
+          >
+            <el-input
+              v-model="client.clientId"
+              disabled
             />
           </el-form-item>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item
-                prop="clientId"
-                :label="$t('AbpIdentityServer.Client:Id')"
-                :rules="{
-                  required: true,
-                  message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')}),
-                  trigger: 'blur'
-                }"
-              >
-                <el-input
-                  v-model="client.clientId"
-                  :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Client:Id')})"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                prop="clientName"
-                :label="$t('AbpIdentityServer.Name')"
-                :rules="{
-                  required: true,
-                  message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
-                  trigger: 'blur'
-                }"
-              >
-                <el-input
-                  v-model="client.clientName"
-                  :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-form-item
+            prop="clientName"
+            :label="$t('AbpIdentityServer.Name')"
+            :rules="{
+              required: true,
+              message: $t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')}),
+              trigger: 'blur'
+            }"
+          >
+            <el-input
+              v-model="client.clientName"
+              :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Name')})"
+            />
+          </el-form-item>
           <el-form-item
             prop="description"
             :label="$t('AbpIdentityServer.Description')"
           >
             <el-input
               v-model="client.description"
+              type="textarea"
             />
           </el-form-item>
           <el-form-item
@@ -91,226 +103,172 @@
               />
             </el-select>
           </el-form-item>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item
-                prop="requireClientSecret"
-                :label="$t('AbpIdentityServer.Client:RequiredClientSecret')"
-                label-width="120px"
-              >
-                <el-switch
-                  v-model="client.requireClientSecret"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item
-                prop="requirePkce"
-                :label="$t('AbpIdentityServer.Client:RequiredPkce')"
-              >
-                <el-switch
-                  v-model="client.requirePkce"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item
-                prop="allowPlainTextPkce"
-                :label="$t('AbpIdentityServer.Client:AllowedPlainTextPkce')"
-                label-width="180px"
-              >
-                <el-switch
-                  v-model="client.allowPlainTextPkce"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item
-                prop="allowOfflineAccess"
-                :label="$t('AbpIdentityServer.Client:AllowedOfflineAccess')"
-              >
-                <el-switch
-                  v-model="client.allowOfflineAccess"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item
-                prop="allowAccessTokensViaBrowser"
-                :label="$t('AbpIdentityServer.Client:AllowedAccessTokensViaBrowser')"
-                label-width="180px"
-              >
-                <el-switch
-                  v-model="client.allowAccessTokensViaBrowser"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
           <el-form-item
-            prop="allowedScopes"
-            :label="$t('AbpIdentityServer.Client:AllowedScopes')"
+            prop="allowedIdentityTokenSigningAlgorithms"
+            :label="$t('AbpIdentityServer.Client:AllowedIdentityTokenSigningAlgorithms')"
+            label-width="180px"
           >
-            <el-select
-              v-model="client.allowedScopes"
-              multiple
-              filterable
-              allow-create
-              clearable
-              style="width: 100%;"
-            >
-              <el-option-group :label="$t('AbpIdentityServer.Resource:Api')">
-                <el-option
-                  v-for="resource in apiResources"
-                  :key="resource"
-                  :label="resource"
-                  :value="resource"
-                />
-              </el-option-group>
-              <el-option-group :label="$t('AbpIdentityServer.Resource:Identity')">
-                <el-option
-                  v-for="resource in identityResources"
-                  :key="resource"
-                  :label="resource"
-                  :value="resource"
-                />
-              </el-option-group>
-            </el-select>
-          </el-form-item>
-          <el-form-item
-            prop="redirectUris"
-            :label="$t('AbpIdentityServer.Client:RedirectUris')"
-          >
-            <el-select
-              v-model="client.redirectUris"
-              multiple
-              filterable
-              allow-create
-              clearable
-              style="width: 100%;"
+            <el-input
+              v-model="client.allowedIdentityTokenSigningAlgorithms"
             />
           </el-form-item>
           <el-form-item
-            prop="allowedGrantTypes"
-            :label="$t('AbpIdentityServer.Client:AllowedGrantTypes')"
-            label-width="120px"
+            prop="requirePkce"
+            label-width="0"
           >
-            <el-select
-              v-model="client.allowedGrantTypes"
-              multiple
-              filterable
-              allow-create
-              clearable
-              class="full-select"
+            <el-checkbox
+              v-model="client.requirePkce"
+              class="label-title"
             >
-              <el-option
-                v-for="(grantType, index) in supportedGrantypes"
-                :key="index"
-                :label="grantType"
-                :value="grantType"
-              />
-            </el-select>
+              {{ $t('AbpIdentityServer.Client:RequiredPkce') }}
+            </el-checkbox>
           </el-form-item>
+          <el-form-item
+            prop="allowPlainTextPkce"
+            label-width="0"
+          >
+            <el-checkbox
+              v-model="client.allowPlainTextPkce"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:AllowedPlainTextPkce') }}
+            </el-checkbox>
+          </el-form-item>
+        </el-tab-pane>
+        <el-tab-pane
+          name="applicationUris"
+        >
+          <el-dropdown
+            slot="label"
+            @command="onUrlsDropdownItemChanged"
+          >
+            <span class="el-dropdown-link">
+              {{ $t('AbpIdentityServer.Client:ApplicationUrls') }}
+              <i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                :command="{
+                  component: 'redirect-edit-form',
+                  prop: 'redirectUris',
+                  key: 'redirectUri',
+                  title: $t('AbpIdentityServer.Client:CallbackUrl'),
+                  suggestes: []
+                }"
+              >
+                {{ $t('AbpIdentityServer.Client:CallbackUrl') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{
+                  component: 'signout-edit-form',
+                  prop: 'postLogoutRedirectUris',
+                  key: 'postLogoutRedirectUri',
+                  title: $t('AbpIdentityServer.Client:PostLogoutRedirectUri'),
+                  suggestes: []
+                }"
+              >
+                {{ $t('AbpIdentityServer.Client:PostLogoutRedirectUri') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{
+                  component: 'cors-origin-edit-form',
+                  prop: 'allowedCorsOrigins',
+                  key: 'origin',
+                  title: $t('AbpIdentityServer.Client:AllowedCorsOrigins'),
+                  suggestes: distinctAllowedCorsOrigins
+                }"
+              >
+                {{ $t('AbpIdentityServer.Client:AllowedCorsOrigins') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <UrlsEditForm
+            v-model="client[clientUrlProp]"
+            :url-key="clientUrlKey"
+            :title="clientUrlTitle"
+            :fetch-urls="clientUrlSuggestes"
+          />
+        </el-tab-pane>
+        <el-tab-pane
+          name="resources"
+        >
+          <el-dropdown
+            slot="label"
+            @command="onResourceDropdownItemChanged"
+          >
+            <span class="el-dropdown-link">
+              {{ $t('AbpIdentityServer.Client:Resources') }}
+              <i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                :command="{
+                  title: $t('AbpIdentityServer.Resource:Api'),
+                  scopes: apiResources
+                }"
+              >
+                {{ $t('AbpIdentityServer.Resource:Api') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{
+                  title: $t('AbpIdentityServer.Resource:Identity'),
+                  scopes: identityResources
+                }"
+              >
+                {{ $t('AbpIdentityServer.Resource:Identity') }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <client-scope-edit-form
+            v-model="client.allowedScopes"
+            :title="clientScopeTitle"
+            :scopes="clientResources"
+          />
         </el-tab-pane>
         <el-tab-pane
           name="authentication"
           :label="$t('AbpIdentityServer.Authentication')"
         >
           <el-form-item
-            prop="enableLocalLogin"
-            :label="$t('AbpIdentityServer.Client:EnableLocalLogin')"
+            prop="frontChannelLogoutSessionRequired"
+            label-width="0"
           >
-            <el-switch
-              v-model="client.enableLocalLogin"
-            />
-          </el-form-item>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item
-                prop="frontChannelLogoutSessionRequired"
-                :label="$t('AbpIdentityServer.Client:FrontChannelLogoutSessionRequired')"
-                label-width="160px"
-              >
-                <el-switch
-                  v-model="client.frontChannelLogoutSessionRequired"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
-              <el-form-item
-                prop="frontChannelLogoutUri"
-                :label="$t('AbpIdentityServer.Client:FrontChannelLogoutUri')"
-                label-width="140px"
-              >
-                <el-input
-                  v-model="client.frontChannelLogoutUri"
-                  :readonly="!client.frontChannelLogoutSessionRequired"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item
-                prop="backChannelLogoutSessionRequired"
-                :label="$t('AbpIdentityServer.Client:BackChannelLogoutSessionRequired')"
-                label-width="160px"
-              >
-                <el-switch
-                  v-model="client.backChannelLogoutSessionRequired"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
-              <el-form-item
-                prop="backChannelLogoutUri"
-                :label="$t('AbpIdentityServer.Client:BackChannelLogoutUri')"
-                label-width="140px"
-              >
-                <el-input
-                  v-model="client.backChannelLogoutUri"
-                  :readonly="!client.backChannelLogoutSessionRequired"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item
-            prop="postLogoutRedirectUris"
-            :label="$t('AbpIdentityServer.Client:PostLogoutRedirectUris')"
-            label-width="140px"
-          >
-            <el-select
-              v-model="client.postLogoutRedirectUris"
-              multiple
-              filterable
-              allow-create
-              clearable
-              style="width: 100%;"
-            />
+            <el-checkbox
+              v-model="client.frontChannelLogoutSessionRequired"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:FrontChannelLogoutSessionRequired') }}
+            </el-checkbox>
           </el-form-item>
           <el-form-item
-            prop="identityProviderRestrictions"
-            :label="$t('AbpIdentityServer.Client:IdentityProviderRestrictions')"
-            label-width="140px"
-          >
-            <el-select
-              v-model="client.identityProviderRestrictions"
-              multiple
-              filterable
-              allow-create
-              clearable
-              style="width: 100%;"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="userSsoLifetime"
-            :label="$t('AbpIdentityServer.Client:UserSsoLifetime')"
+            prop="frontChannelLogoutUri"
+            :label="$t('AbpIdentityServer.Client:FrontChannelLogoutUri')"
             label-width="140px"
           >
             <el-input
-              v-model="client.userSsoLifetime"
-              type="number"
+              v-model="client.frontChannelLogoutUri"
+              :readonly="!client.frontChannelLogoutSessionRequired"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="backChannelLogoutSessionRequired"
+            label-width="0"
+          >
+            <el-checkbox
+              v-model="client.backChannelLogoutSessionRequired"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:BackChannelLogoutSessionRequired') }}
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item
+            prop="backChannelLogoutUri"
+            :label="$t('AbpIdentityServer.Client:BackChannelLogoutUri')"
+            label-width="140px"
+          >
+            <el-input
+              v-model="client.backChannelLogoutUri"
+              :readonly="!client.backChannelLogoutSessionRequired"
             />
           </el-form-item>
         </el-tab-pane>
@@ -475,70 +433,68 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            prop="allowedCorsOrigins"
-            :label="$t('AbpIdentityServer.Client:AllowedCorsOrigins')"
-            label-width="165px"
+            prop="userSsoLifetime"
+            :label="$t('AbpIdentityServer.Client:UserSsoLifetime')"
+            label-width="140px"
           >
-            <el-select
-              v-model="client.allowedCorsOrigins"
-              multiple
-              filterable
-              allow-create
-              clearable
-              style="width: 100%;"
-            >
-              <el-option
-                v-for="(corsOrigin, index) in distinctAllowedCorsOrigins"
-                :key="index"
-                :label="corsOrigin"
-                :value="corsOrigin"
-              />
-            </el-select>
+            <el-input
+              v-model="client.userSsoLifetime"
+              type="number"
+            />
           </el-form-item>
           <el-row>
             <el-col :span="8">
               <el-form-item
-                prop="updateAccessTokenClaimsOnRefresh"
-                :label="$t('AbpIdentityServer.Client:UpdateAccessTokenClaimsOnRefresh')"
-                label-width="170px"
+                prop="allowOfflineAccess"
+                label-width="0"
               >
-                <el-switch
-                  v-model="client.updateAccessTokenClaimsOnRefresh"
-                />
+                <el-checkbox
+                  v-model="client.allowOfflineAccess"
+                  class="label-title"
+                >
+                  {{ $t('AbpIdentityServer.Client:AllowedOfflineAccess') }}
+                </el-checkbox>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
-                prop="includeJwtId"
-                :label="$t('AbpIdentityServer.Client:IncludeJwtId')"
+                prop="allowAccessTokensViaBrowser"
+                label-width="0"
               >
-                <el-switch
-                  v-model="client.includeJwtId"
-                />
+                <el-checkbox
+                  v-model="client.allowAccessTokensViaBrowser"
+                  class="label-title"
+                >
+                  {{ $t('AbpIdentityServer.Client:AllowedAccessTokensViaBrowser') }}
+                </el-checkbox>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item
-                prop="alwaysSendClientClaims"
-                :label="$t('AbpIdentityServer.Client:AlwaysSendClientClaims')"
-                label-width="170px"
+                prop="updateAccessTokenClaimsOnRefresh"
+                label-width="0"
               >
-                <el-switch
-                  v-model="client.alwaysSendClientClaims"
-                />
+                <el-checkbox
+                  v-model="client.updateAccessTokenClaimsOnRefresh"
+                  class="label-title"
+                >
+                  {{ $t('AbpIdentityServer.Client:UpdateAccessTokenClaimsOnRefresh') }}
+                </el-checkbox>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
-                prop="alwaysIncludeUserClaimsInIdToken"
-                :label="$t('AbpIdentityServer.Client:AlwaysIncludeUserClaimsInIdToken')"
-                label-width="210px"
+                prop="includeJwtId"
+                label-width="0"
               >
-                <el-switch
-                  v-model="client.alwaysIncludeUserClaimsInIdToken"
-                />
+                <el-checkbox
+                  v-model="client.includeJwtId"
+                  class="label-title"
+                >
+                  {{ $t('AbpIdentityServer.Client:IncludeJwtId') }}
+                </el-checkbox>
               </el-form-item>
             </el-col>
           </el-row>
@@ -565,28 +521,28 @@
           name="consent"
           :label="$t('AbpIdentityServer.Consent')"
         >
-          <el-row>
-            <el-col :span="6">
-              <el-form-item
-                prop="requireConsent"
-                :label="$t('AbpIdentityServer.Client:RequireConsent')"
-              >
-                <el-switch
-                  v-model="client.requireConsent"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item
-                prop="allowRememberConsent"
-                :label="$t('AbpIdentityServer.Client:AllowRememberConsent')"
-              >
-                <el-switch
-                  v-model="client.allowRememberConsent"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-form-item
+            prop="requireConsent"
+            label-width="0"
+          >
+            <el-checkbox
+              v-model="client.requireConsent"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:RequireConsent') }}
+            </el-checkbox>
+          </el-form-item>
+          <el-form-item
+            prop="allowRememberConsent"
+            label-width="0"
+          >
+            <el-checkbox
+              v-model="client.allowRememberConsent"
+              class="label-title"
+            >
+              {{ $t('AbpIdentityServer.Client:AllowRememberConsent') }}
+            </el-checkbox>
+          </el-form-item>
           <el-form-item
             prop="clientUri"
             :label="$t('AbpIdentityServer.Client:ClientUri')"
@@ -634,42 +590,76 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
-          name="avanced"
+          name="advanced"
         >
           <el-dropdown
             slot="label"
-            @command="onDropdownMenuItemChanged"
+            @command="onAdvancedDropdownItemChanged"
           >
             <span class="el-dropdown-link">
               {{ $t('AbpIdentityServer.Advanced') }}<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="secret-edit-form">
+              <el-dropdown-item
+                :command="{
+                  component: 'client-secret-edit-form',
+                  prop: 'clientSecrets',
+                  title: $t('AbpIdentityServer.Secret')
+                }"
+              >
                 {{ $t('AbpIdentityServer.Secret') }}
               </el-dropdown-item>
-              <el-dropdown-item command="client-claim-edit-form">
+              <el-dropdown-item
+                :command="{
+                  component: 'client-claim-edit-form',
+                  prop: 'claims',
+                  title: $t('AbpIdentityServer.Claims')
+                }"
+              >
                 {{ $t('AbpIdentityServer.Claims') }}
               </el-dropdown-item>
-              <el-dropdown-item command="properties-edit-form">
+              <el-dropdown-item
+                :command="{
+                  component: 'properties-edit-form',
+                  prop: 'properties',
+                  key: 'key',
+                  title: $t('AbpIdentityServer.Propertites')
+                }"
+              >
                 {{ $t('AbpIdentityServer.Propertites') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{
+                  component: 'grant-type-edit-form',
+                  prop: 'allowedGrantTypes',
+                  key: 'grantType',
+                  title: $t('AbpIdentityServer.Client:AllowedGrantTypes')
+                }"
+              >
+                {{ $t('AbpIdentityServer.Client:AllowedGrantTypes') }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="{
+                  component: 'client-idp-edit-form',
+                  prop: 'identityProviderRestrictions',
+                  key: 'provider',
+                  title: $t('AbpIdentityServer.Client:IdentityProviderRestrictions')
+                }"
+              >
+                {{ $t('AbpIdentityServer.Client:IdentityProviderRestrictions') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <component
             :is="advancedComponent"
-            :secrets="client.clientSecrets"
-            :client-claims="client.claims"
-            :properties="client.properties"
+            v-model="client[clientAdvancedPropName]"
+            :prop-name="clientAdvancedPropKey"
+            :supported-grantypes="supportedGrantypes"
+            :client="client"
             :allowed-create-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
             :allowed-delete-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
-            :allowed-create-secret="checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
-            :allowed-delete-secret="checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
-            @onSecretCreated="onClientSecretCreated"
-            @onSecretDeleted="onClientSecretDeleted"
-            @onClientClaimCreated="onClientClaimCreated"
-            @onClientClaimDeleted="onClientClaimDeleted"
-            @onCreated="onClientPropertyCreated"
-            @onDeleted="onClientPropertyDeleted"
+            :allowed-create-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
+            :allowed-delete-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
           />
         </el-tab-pane>
       </el-tabs>
@@ -699,18 +689,30 @@
 import { checkPermission } from '@/utils/permission'
 
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import ClientApiService, { Client, ClientUpdate, ClientCreateOrUpdate, ClientClaim, SecretCreateOrUpdate } from '@/api/clients'
+import ClientApiService, {
+  Client,
+  ClientUpdate,
+  ClientCreateOrUpdate
+} from '@/api/clients'
 
+import UrlsEditForm from '../../components/UrlsEditForm.vue'
 import ClientClaimEditForm from './ClientClaimEditForm.vue'
-import SecretEditForm from '../../components/SecretEditForm.vue'
+import GrantTypeEditForm from './GrantTypeEditForm.vue'
+import ClientIdpEditForm from './ClientIdpEditForm.vue'
+import ClientScopeEditForm from './ClientScopeEditForm.vue'
+import ClientSecretEditForm from './ClientSecretEditForm.vue'
 import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
 
 @Component({
   name: 'ClientEditForm',
   components: {
-    SecretEditForm,
+    UrlsEditForm,
+    ClientSecretEditForm,
+    ClientIdpEditForm,
+    GrantTypeEditForm,
     PropertiesEditForm,
-    ClientClaimEditForm
+    ClientClaimEditForm,
+    ClientScopeEditForm
   },
   methods: {
     checkPermission
@@ -721,21 +723,42 @@ export default class extends Vue {
   private showDialog!: boolean
 
   @Prop({ default: '' })
-  private title!: string
-
-  @Prop({ default: '' })
   private clientId!: string
 
   @Prop({ default: () => { return new Array<string>() } })
   private supportedGrantypes!: string[]
 
+  get title() {
+    return this.l('AbpIdentityServer.Client:Name', { 0: this.client.clientName })
+  }
+
   private activeTabPane = 'basics'
-  private advancedComponent = 'secret-edit-form'
+  private advancedComponent = 'client-secret-edit-form'
   private apiResources = new Array<string>()
   private identityResources = new Array<string>()
   private distinctAllowedCorsOrigins = new Array<string>()
 
   private client = new Client()
+  // 客户端高级选项属性名称
+  private clientAdvancedPropName = ''
+  // 高级选项属性键名称
+  private clientAdvancedPropKey = ''
+  // 高级选项标题
+  private clientAdvancedTitle = ''
+  // Url选项属性    传递给子元素的属性名称  v-model
+  private clientUrlProp = ''
+  // Url选项键名称  用于在组件中遍历子元素
+  private clientUrlKey = ''
+  // Url选项标题    用于在编辑框上显示当前选项卡的名称
+  private clientUrlTitle = ''
+  // 客户端用于搜索匹配的Url列表
+  private clientUrlSuggestes = []
+  // 客户端资源标题
+  private clientScopeTitle = ''
+  // 客户端可用的资源列表
+  private clientResources = []
+
+  private blockSwitchTabPane = ['applicationUris', 'advanced', 'resources']
 
   @Watch('showDialog', { immediate: true })
   private onShowDialogChanged() {
@@ -763,48 +786,50 @@ export default class extends Vue {
 
   private handleGetClient() {
     if (this.showDialog && this.clientId) {
-      ClientApiService.getClientById(this.clientId)
+      ClientApiService
+        .get(this.clientId)
         .then(client => {
           this.client = client
         })
     }
   }
 
+  private onTabBeforeLeave(activeName: string) {
+    return !this.blockSwitchTabPane.some(name => name === activeName)
+  }
+
+  private onResourceDropdownItemChanged(command: any) {
+    this.clientScopeTitle = command.title
+    this.clientResources = command.scopes
+    this.switchTabPane('resources')
+  }
+
+  private onAdvancedDropdownItemChanged(command: any) {
+    this.clientAdvancedPropName = command.prop
+    this.clientAdvancedPropKey = command.key
+    this.clientAdvancedTitle = command.title
+    this.advancedComponent = command.component
+    this.switchTabPane('advanced')
+  }
+
+  private onUrlsDropdownItemChanged(command: any) {
+    this.clientUrlProp = command.prop
+    this.clientUrlKey = command.key
+    this.clientUrlTitle = command.title
+    this.switchTabPane('applicationUris')
+  }
+
+  private switchTabPane(tabPaneName: string) {
+    const tabPaneIndex = this.blockSwitchTabPane.findIndex(name => name === tabPaneName)
+    if (tabPaneIndex >= 0) {
+      this.blockSwitchTabPane.splice(tabPaneIndex, 1)
+    }
+    this.activeTabPane = tabPaneName
+  }
+
   private onDropdownMenuItemChanged(component: any) {
     this.activeTabPane = 'avanced'
     this.advancedComponent = component
-  }
-
-  private onClientSecretCreated(secret: any) {
-    const clientSecret = new SecretCreateOrUpdate()
-    clientSecret.hashType = secret.hashType
-    clientSecret.type = secret.type
-    clientSecret.value = secret.value
-    clientSecret.description = secret.description
-    clientSecret.expiration = secret.expiration
-    this.client.clientSecrets.push(clientSecret)
-  }
-
-  private onClientSecretDeleted(type: string, value: string) {
-    const secretIndex = this.client.clientSecrets.findIndex(secret => secret.type === type && secret.value === value)
-    this.client.clientSecrets.splice(secretIndex, 1)
-  }
-
-  private onClientClaimCreated(type: string, value: string) {
-    this.client.claims.push(new ClientClaim(type, value))
-  }
-
-  private onClientClaimDeleted(type: string, value: string) {
-    const claimIndex = this.client.claims.findIndex(c => c.type === type && c.value === value)
-    this.client.claims.splice(claimIndex, 1)
-  }
-
-  private onClientPropertyCreated(key: string, value: string) {
-    this.$set(this.client.properties, key, value)
-  }
-
-  private onClientPropertyDeleted(key: string) {
-    this.$delete(this.client.properties, key)
   }
 
   private onSave() {
@@ -814,7 +839,8 @@ export default class extends Vue {
         const updateClient = new ClientUpdate()
         this.updateClientByInput(updateClient)
         updateClient.updateByClient(this.client)
-        ClientApiService.updateClient(this.clientId, updateClient)
+        ClientApiService
+          .update(this.clientId, updateClient)
           .then(client => {
             this.client = client
             const successMessage = this.l('global.successful')
@@ -862,5 +888,13 @@ export default class extends Vue {
   right: 120px;
   width:100px;
   top: 10px;
+}
+.label-title {
+  text-align: right;
+  font-size: 14px;
+  color: #1f2d3d;
+  padding: 0 12px 0 0;
+  box-sizing: border-box;
+  font-weight: 700;
 }
 </style>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System;
 using System.IO;
 using System.Threading.Tasks;

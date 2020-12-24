@@ -10,9 +10,10 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
         public MessageServiceHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
+            var connectionString = configuration.GetConnectionString("Default");
 
             var builder = new DbContextOptionsBuilder<MessageServiceHostMigrationsDbContext>()
-                .UseMySql(configuration.GetConnectionString("Default"));
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
             return new MessageServiceHostMigrationsDbContext(builder.Options);
         }

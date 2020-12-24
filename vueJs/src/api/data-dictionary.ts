@@ -24,12 +24,12 @@ export default class DataDictionaryService {
   }
 
   public static create(payload: DataCreate) {
-    return ApiService.Post<Data>(sourceUrl, payload,  serviceUrl)
+    return ApiService.Post<Data>(sourceUrl, payload, serviceUrl)
   }
 
   public static update(id: string, payload: DataUpdate) {
     const _url = sourceUrl + '/' + id
-    return ApiService.Put<Data>(_url, payload,  serviceUrl)
+    return ApiService.Put<Data>(_url, payload, serviceUrl)
   }
 
   public static delete(id: string) {
@@ -39,17 +39,17 @@ export default class DataDictionaryService {
 
   public static appendItem(id: string, payload: DataItemCreate) {
     const _url = sourceUrl + '/' + id + '/items'
-    return ApiService.Post<Data>(_url, payload,  serviceUrl)
+    return ApiService.Post<Data>(_url, payload, serviceUrl)
   }
 
   public static updateItem(id: string, name: string, payload: DataItemUpdate) {
     const _url = sourceUrl + '/' + id + '/items/' + name
-    return ApiService.Put<Data>(_url, payload,  serviceUrl)
+    return ApiService.Put<Data>(_url, payload, serviceUrl)
   }
 
   public static removeItem(id: string, name: string) {
     const _url = sourceUrl + '/' + id + '/items/' + name
-    return ApiService.Delete(_url,  serviceUrl)
+    return ApiService.Delete(_url, serviceUrl)
   }
 }
 

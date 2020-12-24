@@ -163,7 +163,8 @@ namespace LINGYUN.Platform
                 // 是否发送堆栈信息
                 options.SendStackTrace = true;
                 // 未指定异常接收者的默认接收邮件
-                options.DefaultReceiveEmail = "colin.in@foxmail.com";
+                // 指定自己的邮件地址
+                // options.DefaultReceiveEmail = "colin.in@foxmail.com";
             });
 
             Configure<AbpDistributedCacheOptions>(options =>

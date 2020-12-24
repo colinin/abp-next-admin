@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.DependencyInjection;
+using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace AuthServer.Host.Pages.Account
 {
@@ -20,10 +21,11 @@ namespace AuthServer.Host.Pages.Account
         public TwoFactorSupportedLoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions,
+            IOptions<IdentityOptions> identityOptions,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService identityServerEvents)
-            : base(schemeProvider, accountOptions, interaction, clientStore, identityServerEvents)
+            : base(schemeProvider, accountOptions, interaction, clientStore, identityServerEvents, identityOptions)
         {
 
         }

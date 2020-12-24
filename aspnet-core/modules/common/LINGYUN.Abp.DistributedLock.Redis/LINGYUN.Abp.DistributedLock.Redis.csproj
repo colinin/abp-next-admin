@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="Polly" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.Core" Version="3.3.0" />
+    <PackageReference Include="Volo.Abp.Core" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

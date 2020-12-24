@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Clients;
 
 namespace LINGYUN.ApiGateway.Ocelot
 {
@@ -26,6 +27,8 @@ namespace LINGYUN.ApiGateway.Ocelot
         [Route("By-AppId/{AppId}")]
         public async Task<GlobalConfigurationDto> GetAsync(GlobalGetByAppIdInputDto input)
         {
+            ICurrentClient client = null;
+            var currentClient = LazyGetRequiredService(ref client);
             return await GlobalConfigurationAppService.GetAsync(input);
         }
 

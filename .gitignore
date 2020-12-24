@@ -9,6 +9,7 @@ bin
 Logs
 appsettings.json
 appsettings.*.json
+tempkey.jwk
 .vs
 
 /tests/e2e/videos/

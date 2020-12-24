@@ -1,43 +1,48 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
     public class ClientUpdateDto : ClientCreateOrUpdateDto
     {
 
-        [StringLength(ClientConsts.ClientUriMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientUriMaxLength))]
         public string ClientUri { get; set; }
 
-        [StringLength(ClientConsts.LogoUriMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.LogoUriMaxLength))]
         public string LogoUri { get; set; }
 
         public bool Enabled { get; set; }
 
-        [StringLength(ClientConsts.ProtocolTypeMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ProtocolTypeMaxLength))]
         public string ProtocolType { get; set; }
 
         public bool RequireClientSecret { get; set; }
 
-        public bool RequireConsent { get; set; }
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.AllowedIdentityTokenSigningAlgorithms))]
+        public string AllowedIdentityTokenSigningAlgorithms { get; set; }
+
+        public bool RequireConsent { get; set; } = false;
+
+        public bool RequireRequestObject { get; set; }
 
         public bool AllowRememberConsent { get; set; }
 
         public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
-        public bool RequirePkce { get; set; }
+        public bool RequirePkce { get; set; } = true;
 
         public bool AllowPlainTextPkce { get; set; }
 
         public bool AllowAccessTokensViaBrowser { get; set; }
 
-        [StringLength(ClientConsts.FrontChannelLogoutUriMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.FrontChannelLogoutUriMaxLength))]
         public string FrontChannelLogoutUri { get; set; }
 
         public bool FrontChannelLogoutSessionRequired { get; set; }
 
-        [StringLength(ClientConsts.BackChannelLogoutUriMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.BackChannelLogoutUriMaxLength))]
         public string BackChannelLogoutUri { get; set; }
 
         public bool BackChannelLogoutSessionRequired { get; set; }
@@ -70,46 +75,32 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public bool AlwaysSendClientClaims { get; set; }
 
-        [StringLength(ClientConsts.ClientClaimsPrefixMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientClaimsPrefixMaxLength))]
         public string ClientClaimsPrefix { get; set; }
 
-        [StringLength(ClientConsts.PairWiseSubjectSaltMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.PairWiseSubjectSaltMaxLength))]
         public string PairWiseSubjectSalt { get; set; }
 
         public int? UserSsoLifetime { get; set; }
 
-        [StringLength(ClientConsts.UserCodeTypeMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.UserCodeTypeMaxLength))]
         public string UserCodeType { get; set; }
 
         public int DeviceCodeLifetime { get; set; }
-        /// <summary>
-        /// 允许的作用域
-        /// </summary>
-        public List<string> AllowedScopes { get; set; }
-        /// <summary>
-        /// 允许同源
-        /// </summary>
-        public List<string> AllowedCorsOrigins { get; set; }
-        /// <summary>
-        /// 重定向uri
-        /// </summary>
-        public List<string> RedirectUris { get; set; }
-        /// <summary>
-        /// 登出重定向uri
-        /// </summary>
-        public List<string> PostLogoutRedirectUris { get; set; }
-        /// <summary>
-        /// 限制提供商
-        /// </summary>
-        public List<string> IdentityProviderRestrictions { get; set; }
-        /// <summary>
-        /// 属性
-        /// </summary>
-        public Dictionary<string, string> Properties { get; set; }
-        /// <summary>
-        /// 密钥
-        /// </summary>
-        public List<SecretCreateOrUpdateDto> Secrets { get; set; }
+
+        public List<ClientScopeDto> AllowedScopes { get; set; }
+
+        public List<ClientSecretDto> ClientSecrets { get; set; }
+
+        public List<ClientCorsOriginDto> AllowedCorsOrigins { get; set; }
+
+        public List<ClientRedirectUriDto> RedirectUris { get; set; }
+
+        public List<ClientPostLogoutRedirectUriDto> PostLogoutRedirectUris { get; set; }
+
+        public List<ClientIdPRestrictionDto> IdentityProviderRestrictions { get; set; }
+
+        public List<ClientPropertyDto> Properties { get; set; }
         /// <summary>
         /// 声明
         /// </summary>
@@ -119,13 +110,13 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         {
             Enabled = true;
             DeviceCodeLifetime = 300;
-            AllowedScopes = new List<string>();
-            RedirectUris = new List<string>();
-            AllowedCorsOrigins = new List<string>();
-            PostLogoutRedirectUris = new List<string>();
-            IdentityProviderRestrictions = new List<string>();
-            Properties = new Dictionary<string, string>();
-            Secrets = new List<SecretCreateOrUpdateDto>();
+            AllowedScopes = new List<ClientScopeDto>();
+            RedirectUris = new List<ClientRedirectUriDto>();
+            AllowedCorsOrigins = new List<ClientCorsOriginDto>();
+            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUriDto>();
+            IdentityProviderRestrictions = new List<ClientIdPRestrictionDto>();
+            Properties = new List<ClientPropertyDto>();
+            ClientSecrets = new List<ClientSecretDto>();
             Claims = new List<ClientClaimDto>();
         }
     }

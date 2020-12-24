@@ -179,11 +179,13 @@ export default class extends Vue {
     const frmClient = this.$refs.formCloneClient as any
     frmClient.validate((valid: boolean) => {
       if (valid) {
-        ClientService.cloneClient(this.clientId, this.client).then(() => {
-          const successMessage = this.l('global.successful')
-          this.$message.success(successMessage)
-          this.onFormClosed(true)
-        })
+        ClientService
+          .clone(this.clientId, this.client)
+          .then(() => {
+            const successMessage = this.l('global.successful')
+            this.$message.success(successMessage)
+            this.onFormClosed(true)
+          })
       }
     })
   }

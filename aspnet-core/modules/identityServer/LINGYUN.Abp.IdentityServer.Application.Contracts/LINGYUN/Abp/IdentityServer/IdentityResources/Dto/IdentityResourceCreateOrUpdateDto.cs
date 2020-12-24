@@ -25,14 +25,14 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
 
         public bool ShowInDiscoveryDocument { get; set; }
 
-        public List<string> UserClaims { get; set; }
+        public List<IdentityResourceClaimDto> UserClaims { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public List<IdentityResourcePropertyDto> Properties { get; set; }
 
         public IdentityResourceCreateOrUpdateDto()
         {
-            UserClaims = new List<string>();
-            Properties = new Dictionary<string, string>();
+            UserClaims = new List<IdentityResourceClaimDto>();
+            Properties = new List<IdentityResourcePropertyDto>();
 
             Enabled = true;
             Required = false;

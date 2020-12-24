@@ -41,8 +41,16 @@ namespace LINGYUN.Abp.IdentityServer
             apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.Delete, L("Permissions:Delete"), MultiTenancySides.Host);
             apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.ManageClaims, L("Permissions:ManageClaims"), MultiTenancySides.Host);
             apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.ManageSecrets, L("Permissions:ManageSecrets"), MultiTenancySides.Host);
-            apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.ManageProperties, L("Permissions:ManageProperties"), MultiTenancySides.Host);
             apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.ManageScopes, L("Permissions:ManageScopes"), MultiTenancySides.Host);
+            apiResourcePermissions.AddChild(AbpIdentityServerPermissions.ApiResources.ManageProperties, L("Permissions:ManageProperties"), MultiTenancySides.Host);
+
+            // Api范围权限
+            var apiScopePermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.ApiScopes.Default, L("Permissions:ApiScopes"), MultiTenancySides.Host);
+            apiScopePermissions.AddChild(AbpIdentityServerPermissions.ApiScopes.Create, L("Permissions:Create"), MultiTenancySides.Host);
+            apiScopePermissions.AddChild(AbpIdentityServerPermissions.ApiScopes.Update, L("Permissions:Update"), MultiTenancySides.Host);
+            apiScopePermissions.AddChild(AbpIdentityServerPermissions.ApiScopes.Delete, L("Permissions:Delete"), MultiTenancySides.Host);
+            apiScopePermissions.AddChild(AbpIdentityServerPermissions.ApiScopes.ManageClaims, L("Permissions:ManageClaims"), MultiTenancySides.Host);
+            apiScopePermissions.AddChild(AbpIdentityServerPermissions.ApiScopes.ManageProperties, L("Permissions:ManageProperties"), MultiTenancySides.Host);
 
             // 身份资源权限
             var identityResourcePermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.IdentityResources.Default, L("Permissions:IdentityResources"), MultiTenancySides.Host);
@@ -51,6 +59,10 @@ namespace LINGYUN.Abp.IdentityServer
             identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.Delete, L("Permissions:Delete"), MultiTenancySides.Host);
             identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.ManageClaims, L("Permissions:ManageClaims"), MultiTenancySides.Host);
             identityResourcePermissions.AddChild(AbpIdentityServerPermissions.IdentityResources.ManageProperties, L("Permissions:ManageProperties"), MultiTenancySides.Host);
+
+            // 持久授权
+            var persistedGrantPermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.Grants.Default, L("Permissions:Grants"), MultiTenancySides.Host);
+            persistedGrantPermissions.AddChild(AbpIdentityServerPermissions.Grants.Delete, L("Permissions:Delete"), MultiTenancySides.Host);
         }
 
         protected virtual LocalizableString L(string name)

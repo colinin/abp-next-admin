@@ -13,6 +13,11 @@
         public const string ApiResourceNameExisted = "ApiResourceNameExisted";
 
         /// <summary>
+        /// Api范围已经存在
+        /// </summary>
+        public const string ApiScopeNameExisted = "ApiScopeNameExisted";
+
+        /// <summary>
         /// 身份资源已经存在
         /// </summary>
         public const string IdentityResourceNameExisted = "IdentityResourceNameExisted";

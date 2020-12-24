@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.10.0" />
-    <PackageReference Include="Volo.Abp.BlobStoring" Version="3.3.0" />
+    <PackageReference Include="Volo.Abp.BlobStoring" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

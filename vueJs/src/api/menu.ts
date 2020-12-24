@@ -40,12 +40,12 @@ export default class MenuService {
   }
 
   public static create(payload: MenuCreate) {
-    return ApiService.Post<Menu>(sourceUrl, payload,  serviceUrl)
+    return ApiService.Post<Menu>(sourceUrl, payload, serviceUrl)
   }
 
   public static update(id: string, payload: MenuUpdate) {
     const _url = sourceUrl + '/' + id
-    return ApiService.Put<Menu>(_url, payload,  serviceUrl)
+    return ApiService.Put<Menu>(_url, payload, serviceUrl)
   }
 
   public static delete(id: string) {
@@ -55,12 +55,12 @@ export default class MenuService {
 
   public static setRoleMenu(payload: RoleMenu) {
     const _url = sourceUrl + '/by-role'
-    return ApiService.Put<void>(_url, payload,serviceUrl)
+    return ApiService.Put<void>(_url, payload, serviceUrl)
   }
 
   public static setUserMenu(payload: UserMenu) {
     const _url = sourceUrl + '/by-user'
-    return ApiService.Put<void>(_url, payload,serviceUrl)
+    return ApiService.Put<void>(_url, payload, serviceUrl)
   }
 }
 
@@ -81,7 +81,7 @@ export class MenuCreate extends MenuCreateOrUpdate {
   parentId?: string
 }
 
-export class MenuUpdate  extends MenuCreateOrUpdate {
+export class MenuUpdate extends MenuCreateOrUpdate {
 
 }
 
