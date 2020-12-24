@@ -26,6 +26,10 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public bool AllowRememberConsent { get; set; }
 
+        public bool RequireRequestObject { get; set; }
+
+        public string AllowedIdentityTokenSigningAlgorithms { get; set; }
+
         public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
         public bool RequirePkce { get; set; }
@@ -82,34 +86,34 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
         public string ConcurrencyStamp { get; set; }
 
-        public List<string> AllowedScopes { get; set; }
+        public List<ClientScopeDto> AllowedScopes { get; set; }
 
         public List<ClientSecretDto> ClientSecrets { get; set; }
 
-        public List<string> AllowedGrantTypes { get; set; }
+        public List<ClientGrantTypeDto> AllowedGrantTypes { get; set; }
 
-        public List<string> AllowedCorsOrigins { get; set; }
+        public List<ClientCorsOriginDto> AllowedCorsOrigins { get; set; }
 
-        public List<string> RedirectUris { get; set; }
+        public List<ClientRedirectUriDto> RedirectUris { get; set; }
 
-        public List<string> PostLogoutRedirectUris { get; set; }
+        public List<ClientPostLogoutRedirectUriDto> PostLogoutRedirectUris { get; set; }
 
-        public List<string> IdentityProviderRestrictions { get; set; }
+        public List<ClientIdPRestrictionDto> IdentityProviderRestrictions { get; set; }
 
         public List<ClientClaimDto> Claims { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public List<ClientPropertyDto> Properties { get; set; }
         public ClientDto()
         {
             Claims = new List<ClientClaimDto>();
-            Properties = new Dictionary<string, string>();
-            AllowedScopes = new List<string>();
+            Properties = new List<ClientPropertyDto>();
+            AllowedScopes = new List<ClientScopeDto>();
             ClientSecrets = new List<ClientSecretDto>();
-            RedirectUris = new List<string>();
-            AllowedGrantTypes = new List<string>();
-            AllowedCorsOrigins = new List<string>();
-            PostLogoutRedirectUris = new List<string>();
-            IdentityProviderRestrictions = new List<string>();
+            RedirectUris = new List<ClientRedirectUriDto>();
+            AllowedGrantTypes = new List<ClientGrantTypeDto>();
+            AllowedCorsOrigins = new List<ClientCorsOriginDto>();
+            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUriDto>();
+            IdentityProviderRestrictions = new List<ClientIdPRestrictionDto>();
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Volo.Abp.Application;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.IdentityServer
 {
     [DependsOn(
-        typeof(AbpIdentityServerDomainModule),
         typeof(AbpIdentityServerApplicationContractsModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule)
         )]
     public class AbpIdentityServerApplicationModule : AbpModule

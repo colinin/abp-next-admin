@@ -1,12 +1,20 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 import { RouteConfig } from 'vue-router'
-//eslint-disable-next-line
+// eslint-disable-next-line
 import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'
 import { AbpModule } from '@/store/modules/abp'
 import MenuService, { Menu } from '@/api/menu'
 import { PlatformType } from '@/api/layout'
 import { generateTree } from '@/utils'
+
+const mapMetaBoolean = (key: string, meta: any) => {
+  return typeof meta[key] === 'boolean' ? meta[key] : meta[key] === 'true'
+}
+
+const mapMetaArray = (key: string, meta: any) => {
+  return Array.isArray(meta[key]) ? meta[key] : String(meta[key]).split(',')
+}
 
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
@@ -32,7 +40,7 @@ export const filterAsyncRoutes = (routes: RouteConfig[], roles: string[]) => {
 
 const filterDynamicRoutes = (menus: Menu[]) => {
   const res: RouteConfig[] = []
-  
+
   menus.forEach(menu => {
     const r: RouteConfig = {
       path: menu.path,
@@ -40,14 +48,14 @@ const filterDynamicRoutes = (menus: Menu[]) => {
       redirect: menu.redirect,
       // meta自行转换
       meta: {
-        activeMenu: menu.meta['activeMenu'],
+        activeMenu: menu.meta.activeMenu,
         affix: mapMetaBoolean('affix', menu.meta), // 需要转换为正确的bool类型
         noCache: mapMetaBoolean('noCache', menu.meta),
         breadcrumb: mapMetaBoolean('breadcrumb', menu.meta),
         alwaysShow: mapMetaBoolean('alwaysShow', menu.meta),
         hidden: mapMetaBoolean('hidden', menu.meta),
-        icon: menu.meta['icon'],
-        title: menu.meta['title'],
+        icon: menu.meta.icon,
+        title: menu.meta.title,
         displayName: menu.displayName,
         roles: mapMetaArray('roles', menu.meta) // 需要转换为正确的array类型
       }
@@ -59,14 +67,6 @@ const filterDynamicRoutes = (menus: Menu[]) => {
     res.push(r)
   })
   return res
-}
-
-const mapMetaBoolean = (key: string, meta: any) => {
-  return typeof meta[key] === 'boolean' ? meta[key] : meta[key] === 'true'
-}
-
-const mapMetaArray = (key: string, meta: any) => {
-  return Array.isArray(meta[key]) ? meta[key] : String(meta[key]).split(',')
 }
 
 export interface IPermissionState {

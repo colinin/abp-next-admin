@@ -92,15 +92,8 @@
             name="claims"
             :label="$t('AbpIdentityServer.UserClaim')"
           >
-            <el-transfer
+            <user-claim-edit-form
               v-model="identityResource.userClaims"
-              class="transfer-scope"
-              :data="identityClaims"
-              :props="{
-                key: 'type',
-                label: 'value'
-              }"
-              :titles="[$t('AbpIdentityServer.NoClaim'), $t('AbpIdentityServer.ExistsClaim')]"
             />
           </el-tab-pane>
           <el-tab-pane
@@ -109,11 +102,9 @@
             :label="$t('AbpIdentityServer.Propertites')"
           >
             <properties-edit-form
-              :properties="identityResource.properties"
+              v-model="identityResource.properties"
               :allowed-create-prop="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
               :allowed-delete-prop="checkPermission(['AbpIdentityServer.IdentityResources.ManageProperties'])"
-              @onCreated="onPropertyCreated"
-              @onDeleted="onPropertyDeleted"
             />
           </el-tab-pane>
         </el-tabs>
@@ -146,15 +137,17 @@ import { checkPermission } from '@/utils/permission'
 import { Form } from 'element-ui'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
-import { Claim } from '@/api/types'
-import ClaimTypeApiService from '@/api/cliam-type'
-
 import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
-import IdentityResourceService, { IdentityResource, IdentityResourceCreateOrUpdate } from '@/api/identity-resources'
+import UserClaimEditForm from '../../components/UserClaimEditForm.vue'
+import IdentityResourceService, {
+  IdentityResource,
+  IdentityResourceCreateOrUpdate
+} from '@/api/identity-resources'
 
 @Component({
   name: 'IdentityResourceCreateOrEditForm',
   components: {
+    UserClaimEditForm,
     PropertiesEditForm
   },
   methods: {
@@ -163,23 +156,26 @@ import IdentityResourceService, { IdentityResource, IdentityResourceCreateOrUpda
 })
 export default class extends Vue {
   @Prop({ default: false })
-  private showDialog!: boolean
+  private showDialog!: ConstrainBoolean
 
   @Prop({ default: '' })
-  private title!: string
-
-  @Prop({ default: '' })
-  private identityResourceId!: string
+  private id!: string
 
   private activeTable = 'basics'
-  private identityClaims = new Array<Claim>()
   private identityResource = new IdentityResource()
 
   get isEdit() {
-    if (this.identityResource.id) {
+    if (this.id) {
       return true
     }
     return false
+  }
+
+  get title() {
+    if (this.isEdit) {
+      return '编辑资源 - ' + this.identityResource.displayName || this.identityResource.name
+    }
+    return '新增资源'
   }
 
   @Watch('showDialog', { immediate: true })
@@ -187,73 +183,58 @@ export default class extends Vue {
     this.handleGetIdentityResource()
   }
 
-  mounted() {
-    this.handleGetClaimTypes()
-  }
-
-  private handleGetClaimTypes() {
-    ClaimTypeApiService.getActivedClaimTypes().then(res => {
-      res.items.map(claim => {
-        const identityClaim = new Claim(claim.name, claim.name)
-        this.identityClaims.push(identityClaim)
-      })
-    })
-  }
-
   private handleGetIdentityResource() {
     this.activeTable = 'basics'
-    if (this.showDialog && this.identityResourceId) {
-      IdentityResourceService.getIdentityResourceById(this.identityResourceId).then(resource => {
-        this.identityResource = resource
-      })
+    if (this.showDialog && this.id) {
+      IdentityResourceService
+        .get(this.id)
+        .then(resource => {
+          this.identityResource = resource
+        })
     } else {
       this.identityResource = new IdentityResource()
     }
-  }
-
-  private onPropertyCreated(key: string, value: string) {
-    this.$set(this.identityResource.properties, key, value)
-  }
-
-  private onPropertyDeleted(key: string) {
-    this.$delete(this.identityResource.properties, key)
   }
 
   private onSave() {
     const frmIdentityResource = this.$refs.formIdentityResource as any
     frmIdentityResource.validate((valid: boolean) => {
       if (valid) {
-        const editIdentityResource = new IdentityResourceCreateOrUpdate()
-        this.updateIdentityResourceByInput(editIdentityResource)
+        const input = new IdentityResourceCreateOrUpdate()
+        this.updateByInput(input)
         if (this.isEdit) {
-          IdentityResourceService.updateIdentityResource(this.identityResourceId, editIdentityResource).then(resource => {
-            this.identityResource = resource
-            const successMessage = this.l('global.successful')
-            this.$message.success(successMessage)
-            this.onFormClosed(true)
-          })
+          IdentityResourceService
+            .update(this.id, input)
+            .then(resource => {
+              this.identityResource = resource
+              const successMessage = this.l('global.successful')
+              this.$message.success(successMessage)
+              this.onFormClosed(true)
+            })
         } else {
-          IdentityResourceService.createIdentityResource(editIdentityResource).then(resource => {
-            this.identityResource = resource
-            const successMessage = this.l('global.successful')
-            this.$message.success(successMessage)
-            this.onFormClosed(true)
-          })
+          IdentityResourceService
+            .create(input)
+            .then(resource => {
+              this.identityResource = resource
+              const successMessage = this.l('global.successful')
+              this.$message.success(successMessage)
+              this.onFormClosed(true)
+            })
         }
       }
     })
   }
 
-  private updateIdentityResourceByInput(identityResource: IdentityResourceCreateOrUpdate) {
-    identityResource.name = this.identityResource.name
-    identityResource.displayName = this.identityResource.displayName
-    identityResource.description = this.identityResource.description
-    identityResource.enabled = this.identityResource.enabled
-    identityResource.required = this.identityResource.required
-    identityResource.emphasize = this.identityResource.emphasize
-    identityResource.showInDiscoveryDocument = this.identityResource.showInDiscoveryDocument
-    identityResource.userClaims = this.identityResource.userClaims
-    identityResource.properties = this.identityResource.properties
+  private updateByInput(input: IdentityResourceCreateOrUpdate) {
+    input.name = this.identityResource.name
+    input.displayName = this.identityResource.displayName
+    input.description = this.identityResource.description
+    input.enabled = this.identityResource.enabled
+    input.required = this.identityResource.required
+    input.emphasize = this.identityResource.emphasize
+    input.showInDiscoveryDocument = this.identityResource.showInDiscoveryDocument
+    input.userClaims = this.identityResource.userClaims
+    input.properties = this.identityResource.properties
   }
 
   private onFormClosed(changed: boolean) {

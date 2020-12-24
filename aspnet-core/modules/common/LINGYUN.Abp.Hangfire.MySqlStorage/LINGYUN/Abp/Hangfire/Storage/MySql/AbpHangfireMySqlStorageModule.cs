@@ -1,7 +1,8 @@
 ﻿using Hangfire;
-using Hangfire.MySql.Core;
+using Hangfire.MySql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
@@ -33,6 +34,11 @@ namespace LINGYUN.Abp.Hangfire.Storage.MySql
             {
                 config.UseStorage(_jobStorage);
             });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            _jobStorage?.Dispose();
         }
     }
 }

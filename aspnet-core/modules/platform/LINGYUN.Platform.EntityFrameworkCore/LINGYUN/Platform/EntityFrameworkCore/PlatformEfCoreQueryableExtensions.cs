@@ -37,7 +37,7 @@ namespace LINGYUN.Platform.EntityFrameworkCore
             }
 
             return queryable
-                //.AsSplitQuery()
+                .AsSplitQuery()
                 .Include(x => x.Items);
         }
     }

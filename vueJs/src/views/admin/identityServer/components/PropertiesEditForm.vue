@@ -4,7 +4,7 @@
       v-if="allowedCreateProp"
       ref="propertyEditForm"
       label-width="100px"
-      :model="property"
+      :model="newProp"
     >
       <el-form-item
         prop="key"
@@ -16,7 +16,7 @@
         }"
       >
         <el-input
-          v-model="property.key"
+          v-model="newProp.key"
           :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Propertites:Key')})"
         />
       </el-form-item>
@@ -30,28 +30,26 @@
         }"
       >
         <el-input
-          v-model="property.value"
+          v-model="newProp.value"
           :placeholder="$t('pleaseInputBy', {key: $t('AbpIdentityServer.Propertites:Value')})"
         />
       </el-form-item>
 
-      <el-form-item
-        style="text-align: center;"
-        label-width="0px"
-      >
+      <el-form-item>
         <el-button
-          type="primary"
-          style="width:180px"
+          type="success"
+          class="add-button"
           @click="onSave"
         >
-          {{ $t('AbpIdentityServer.Propertites:New') }}
+          <i class="ivu-icon ivu-icon-md-add" />
+          {{ $t('AbpIdentityServer.AddNew') }}
         </el-button>
       </el-form-item>
     </el-form>
 
     <el-table
       row-key="key"
-      :data="editProperties"
+      :data="properties"
       border
       fit
       highlight-current-row
@@ -82,7 +80,7 @@
       <el-table-column
         :label="$t('AbpIdentityServer.Actions')"
         align="center"
-        width="80px"
+        min-width="80px"
       >
         <template slot-scope="{row}">
           <el-button
@@ -99,28 +97,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Property } from '@/api/identity-server4'
 import { Form } from 'element-ui'
 
-class Property {
-  key = ''
-  value = ''
-
-  constructor(
-    key: string,
-    value: string
-  ) {
-    this.key = key
-    this.value = value
-  }
-}
-
 @Component({
-  name: 'PropertiesEditForm'
+  name: 'PropertiesEditForm',
+  model: {
+    prop: 'properties',
+    event: 'change'
+  }
 })
 export default class PropertiesEditForm extends Vue {
-  @Prop({ default: () => { return {} } })
-  private properties!: {[key: string]: string}
+  @Prop({ default: () => { return new Array<Property>() } })
+  private properties!: Property[]
 
   @Prop({ default: false })
   private allowedCreateProp!: boolean
@@ -128,20 +118,11 @@ export default class PropertiesEditForm extends Vue {
   @Prop({ default: false })
   private allowedDeleteProp!: boolean
 
-  private editProperties = new Array<Property>()
-  private property = new Property('', '')
-
-  @Watch('properties', { immediate: true, deep: true })
-  private onPropertiesChanged() {
-    this.editProperties = new Array<Property>()
-    Object.keys(this.properties)
-      .forEach(key => {
-        this.editProperties.push(new Property(key, this.properties[key]))
-      })
-  }
+  private newProp = new Property()
+  private showEditDialog = false
 
   private validateInput() {
-    return !this.editProperties.some(prop => prop.key === this.property.key)
+    return !this.properties.some(prop => prop.key === this.newProp.key)
   }
 
   private onSave() {
@@ -149,7 +130,11 @@ export default class PropertiesEditForm extends Vue {
     propertyEditForm.validate(valid => {
       if (valid) {
         if (this.validateInput()) {
-          this.$emit('onCreated', this.property.key, this.property.value)
+          const prop: Property = {
+            key: this.newProp.key,
+            value: this.newProp.value
+          }
+          this.$emit('change', this.properties.concat(prop))
           propertyEditForm.resetFields()
         } else {
           this.$message.warning(this.l('AbpIdentityServer.Propertites:DuplicateKey'))
@@ -159,7 +144,7 @@ export default class PropertiesEditForm extends Vue {
   }
 
   private onDelete(key: string) {
-    this.$emit('onDeleted', key)
+    this.$emit('change', this.properties.filter(prop => prop.key !== key))
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
@@ -167,3 +152,10 @@ export default class PropertiesEditForm extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.add-button {
+  width: 150px;
+  float: right;
+}
+</style>

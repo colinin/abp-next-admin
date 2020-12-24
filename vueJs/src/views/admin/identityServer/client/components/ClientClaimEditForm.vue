@@ -1,5 +1,27 @@
 <template>
   <div>
+    <el-form-item
+      prop="alwaysSendClientClaims"
+      label-width="0"
+    >
+      <el-checkbox
+        v-model="client.alwaysSendClientClaims"
+        class="label-title"
+      >
+        {{ $t('AbpIdentityServer.Client:AlwaysSendClientClaims') }}
+      </el-checkbox>
+    </el-form-item>
+    <el-form-item
+      prop="alwaysIncludeUserClaimsInIdToken"
+      label-width="0"
+    >
+      <el-checkbox
+        v-model="client.alwaysIncludeUserClaimsInIdToken"
+        class="label-title"
+      >
+        {{ $t('AbpIdentityServer.Client:AlwaysIncludeUserClaimsInIdToken') }}
+      </el-checkbox>
+    </el-form-item>
     <el-form
       ref="clientClaimForm"
       v-permission="['AbpIdentityServer.Clients.ManageClaims']"
@@ -64,17 +86,14 @@
         />
       </el-form-item>
 
-      <el-form-item
-        style="text-align: center;"
-        label-width="0px"
-      >
+      <el-form-item>
         <el-button
-          type="primary"
-          style="width:180px"
-          :disabled="!checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
+          type="success"
+          class="add-button"
           @click="onSave"
         >
-          {{ $t('AbpIdentityServer.Claims:New') }}
+          <i class="ivu-icon ivu-icon-md-add" />
+          {{ $t('AbpIdentityServer.AddNew') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -119,7 +138,7 @@
             :disabled="!checkPermission(['AbpIdentityServer.Clients.ManageClaims'])"
             size="mini"
             type="danger"
-            @click="handleDeleteClientClaim(row.type, row.value)"
+            @click="onDeleted(row.type, row.value)"
           >
             {{ $t('AbpIdentityServer.Claims:Delete') }}
           </el-button>
@@ -132,17 +151,25 @@
 <script lang="ts">
 import { dateFormat } from '@/utils/index'
 import ClaimTypeApiService, { IdentityClaimType, IdentityClaimValueType } from '@/api/cliam-type'
-import { ClientClaim } from '@/api/clients'
+import { Client, ClientClaim } from '@/api/clients'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
+import { Form } from 'element-ui'
 
 @Component({
   name: 'ClientClaimEditForm',
   methods: {
     checkPermission
+  },
+  model: {
+    prop: 'clientClaims',
+    event: 'change'
   }
 })
 export default class extends Vue {
+  @Prop({ default: () => { return new Client() } })
+  private client!: Client
+
   @Prop({ default: () => new Array<ClientClaim>() })
   private clientClaims!: ClientClaim[]
 
@@ -208,8 +235,8 @@ export default class extends Vue {
     })
   }
 
-  private handleDeleteClientClaim(type: string, value: string) {
-    this.$emit('onClientClaimDeleted', type, value)
+  private onDeleted(type: string, value: string) {
+    this.$emit('change', this.clientClaims.filter(claim => claim.value !== value || claim.type !== type))
   }
 
   private onClaimTypeChanged() {
@@ -231,10 +258,17 @@ export default class extends Vue {
   }
 
   private onSave() {
-    const clientClaimForm = this.$refs.clientClaimForm as any
+    const clientClaimForm = this.$refs.clientClaimForm as Form
     clientClaimForm.validate((valid: boolean) => {
       if (valid) {
-        this.$emit('onClientClaimCreated', this.clientClaim.type, this.clientClaim.value)
+        if (this.clientClaims.some(claim => claim.value === this.clientClaim.value || claim.type === this.clientClaim.type)) {
+          this.$message.warning(this.l('AbpIdentityServer.Claims:DuplicateValue'))
+          return
+        }
+        this.$emit('change', this.clientClaims.concat({
+          type: this.clientClaim.type,
+          value: this.clientClaim.value
+        }))
         clientClaimForm.resetFields()
       }
     })
@@ -249,5 +283,9 @@ export default class extends Vue {
 <style lang="scss" scoped>
 .full-select {
   width: 100%;
+}
+.add-button {
+  width: 150px;
+  float: right;
 }
 </style>

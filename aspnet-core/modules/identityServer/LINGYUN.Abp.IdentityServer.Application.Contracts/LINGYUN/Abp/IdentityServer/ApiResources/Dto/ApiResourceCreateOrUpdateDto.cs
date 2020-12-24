@@ -1,33 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.ApiResources
 {
     public class ApiResourceCreateOrUpdateDto
     {
-        [StringLength(ApiResourceConsts.DisplayNameMaxLength)]
+        [DynamicStringLength(typeof(ApiResourceConsts), nameof(ApiResourceConsts.DisplayNameMaxLength))]
         public string DisplayName { get; set; }
 
-        [StringLength(ApiResourceConsts.DescriptionMaxLength)]
+        [DynamicStringLength(typeof(ApiResourceConsts), nameof(ApiResourceConsts.DescriptionMaxLength))]
         public string Description { get; set; }
 
         public bool Enabled { get; set; }
 
-        public List<string> UserClaims { get; set; }
+        public string AllowedAccessTokenSigningAlgorithms { get; set; }
 
-        public List<ApiScopeDto> Scopes { get; set; }
+        public bool ShowInDiscoveryDocument { get; set; }
 
-        public List<ApiSecretCreateOrUpdateDto> Secrets { get; set; }
+        public List<ApiResourceSecretCreateOrUpdateDto> Secrets { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public List<ApiResourceScopeDto> Scopes { get; set; }
+
+        public List<ApiResourceClaimDto> UserClaims { get; set; }
+
+        public List<ApiResourcePropertyDto> Properties { get; set; }
 
         protected ApiResourceCreateOrUpdateDto()
         {
-            UserClaims = new List<string>();
-            Scopes = new List<ApiScopeDto>();
-            Secrets = new List<ApiSecretCreateOrUpdateDto>();
-            Properties = new Dictionary<string, string>();
+            UserClaims = new List<ApiResourceClaimDto>();
+            Scopes = new List<ApiResourceScopeDto>();
+            Secrets = new List<ApiResourceSecretCreateOrUpdateDto>();
+            Properties = new List<ApiResourcePropertyDto>();
         }
     }
 }

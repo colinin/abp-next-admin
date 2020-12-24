@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -97,13 +98,13 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageClaims))
             {
                 // 删除不存在的UserClaim
-                identityResource.UserClaims.RemoveAll(claim => input.UserClaims.Contains(claim.Type));
+                identityResource.UserClaims.RemoveAll(claim => input.UserClaims.Any(inputClaim => claim.Type == inputClaim.Type));
                 foreach (var inputClaim in input.UserClaims)
                 {
-                    var userClaim = identityResource.FindUserClaim(inputClaim);
+                    var userClaim = identityResource.FindUserClaim(inputClaim.Type);
                     if (userClaim == null)
                     {
-                        identityResource.AddUserClaim(inputClaim);
+                        identityResource.AddUserClaim(inputClaim.Type);
                     }
                 }
             }
@@ -111,10 +112,18 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             if (await IsGrantAsync(AbpIdentityServerPermissions.IdentityResources.ManageProperties))
             {
                 // 删除不存在的Property
-                identityResource.Properties.RemoveAll(scope => !input.Properties.ContainsKey(scope.Key));
+                identityResource.Properties.RemoveAll(prop => !input.Properties.Any(inputProp => prop.Key == inputProp.Key));
                 foreach (var inputProp in input.Properties)
                 {
-                    identityResource.Properties[inputProp.Key] = inputProp.Value;
+                    var identityResourceProperty = identityResource.FindProperty(inputProp.Key);
+                    if (identityResourceProperty == null)
+                    {
+                        identityResource.AddProperty(inputProp.Key, inputProp.Value);
+                    }
+                    else
+                    {
+                        identityResourceProperty.Value = inputProp.Value;
+                    }
                 }
             }
         }

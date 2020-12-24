@@ -34,9 +34,9 @@ namespace LINGYUN.Platform.Versions
                 .IncludeIf(includeDetails, x => x.Files)
                 .Where(x => (platformType | x.PlatformType) == x.PlatformType)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Version.Contains(filter) || x.Title.Contains(filter))
-                .OrderByDescending(x => x.CreationTime)
-                .ThenBy(soring ?? nameof(AppVersion.Version)) // TODO: 排序待优化
-                .Page(skipCount, maxResultCount)
+                .OrderBy($"{nameof(AppVersion.CreationTime)} DESC")
+                .ThenBy(soring ?? nameof(AppVersion.Version))
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -60,7 +60,8 @@ namespace LINGYUN.Platform.Versions
             return await DbSet
                 .Include(x => x.Files)
                 .Where(x => (platformType | x.PlatformType) == x.PlatformType)
-                .OrderByDescending(x => x.CreationTime)
+                .OrderBy($"{nameof(AppVersion.CreationTime)} DESC")
+                .ThenBy(nameof(AppVersion.Version))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
     }

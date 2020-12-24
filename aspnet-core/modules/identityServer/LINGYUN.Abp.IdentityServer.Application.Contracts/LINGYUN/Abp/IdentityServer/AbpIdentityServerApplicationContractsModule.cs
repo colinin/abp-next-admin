@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Application;
+using Volo.Abp.Authorization;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Localization;
@@ -7,8 +8,10 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.IdentityServer
 {
-    [DependsOn(new[] { typeof(AbpDddApplicationModule) })]
-    [DependsOn(new[] { typeof(AbpIdentityServerDomainSharedModule) })]
+    [DependsOn(
+        typeof(AbpAuthorizationModule),
+        typeof(AbpDddApplicationContractsModule),
+        typeof(AbpIdentityServerDomainSharedModule))]
     public class AbpIdentityServerApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

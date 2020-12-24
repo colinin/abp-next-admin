@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "zh-Hans",
   "texts": {
     "Permissions:IdentityServer": "IdentityServer管理",
@@ -13,9 +13,11 @@
     "Permissions:ManagePermissions": "更改权限",
     "Permissions:Clients": "客户端管理",
     "Permissions:ApiResources": "Api资源管理",
+    "Permissions:ApiScopes": "Api授权范围管理",
     "Permissions:IdentityResources": "身份资源管理",
     "ClientIdExisted": "客户端标识: {0} 已经存在!",
     "ApiResourceNameExisted": "Api资源: {0} 已经存在!",
+    "ApiScopeNameExisted": "Api授权范围: {0} 已经存在!",
     "IdentityResourceNameExisted": "身份资源: {0} 已经存在!",
     "IdentityResourcePropertyExisted": "身份资源属性: {0} 已经存在!",
     "ClientClaimNotFound": "客户端声明: {0} 不存在!",
@@ -23,6 +25,7 @@
     "ClientPropertyNotFound": "客户端属性: {0} 不存在!",
     "IdentityResourcePropertyNotFound": "身份资源属性: {0} 不存在!",
     "EncryptionNotImplemented": "加密类型: {0} 未实现!",
+    "AddNew": "添加一个新的",
     "Basics": "基本信息",
     "Authentication": "认证/注销",
     "Token": "令牌",
@@ -48,6 +51,9 @@
     "Required": "必要",
     "Emphasize": "强调",
     "ShowInDiscoveryDocument": "在发现文档中显示",
+    "AllowedAccessTokenSigningAlgorithms": "允许访问令牌签名算法",
+    "Assigned": "可分配的",
+    "Available": "已拥有的",
     "Expiration": "过期",
     "Scope:New": "添加新作用域",
     "Scope:Delete": "删除作用域",
@@ -73,6 +79,12 @@
     "Clone:CopyPostLogoutRedirectUri": "复制客户端注销重定向 Uri",
     "Clone:CopyProperties": "复制客户端属性",
     "Clone:CopyIdentityProviderRestriction": "复制身份提供程序限制",
+    "Client:PostLogoutRedirectUri": "注销重定向地址",
+    "Client:ApplicationUrls": "应用程序Urls",
+    "Client:CallbackUrl": "回调地址",
+    "Client:RequireRequestObject": "需要请求对象",
+    "Client:AllowedIdentityTokenSigningAlgorithms": "允许身份令牌签名算法",
+    "Client:Resources": "资源",
     "Client:ProtocolType": "协议类型",
     "Client:RequiredClientSecret": "需要客户端密钥",
     "Client:RequiredPkce": "需要 Pkce",
@@ -116,12 +128,15 @@
     "Claims:Delete": "删除声明",
     "Claims:Type": "声明类型",
     "Claims:Value": "值",
+    "Claims:DuplicateValue": "声明类型已存在,不能添加重复值!",
     "Propertites": "属性",
     "Propertites:New": "添加新属性",
     "Propertites:Key": "属性名称",
     "Propertites:Value": "值",
     "Propertites:Delete": "删除属性",
     "Propertites:DuplicateKey": "属性已经存在,不能添加重复项!",
-    "Permissions": "权限"
+    "Permissions": "权限",
+    "ApiScopes:Edit": "编辑范围",
+    "ApiScopes:Delete": "删除范围"
   }
 }

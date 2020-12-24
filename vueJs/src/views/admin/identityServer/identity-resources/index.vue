@@ -23,7 +23,7 @@
         class="filter-item"
         type="primary"
         :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Create'])"
-        @click="handleShowEditIdentityResourceForm()"
+        @click="onShowEditForm('')"
       >
         {{ $t('AbpIdentityServer.Resource:New') }}
       </el-button>
@@ -124,7 +124,7 @@
             :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowEditIdentityResourceForm(row)"
+            @click="onShowEditForm(row.id)"
           >
             {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
@@ -132,7 +132,7 @@
             :disabled="!checkPermission(['AbpIdentityServer.IdentityResources.Delete'])"
             size="mini"
             type="danger"
-            @click="handleDeleteIdentityResource(row)"
+            @click="onDeleted(row)"
           >
             {{ $t('AbpIdentityServer.Resource:Delete') }}
           </el-button>
@@ -150,10 +150,9 @@
     />
 
     <identity-resource-create-or-edit-form
-      :identity-resource-id="editIdentityResourceId"
-      :title="editIdentityResourceTitle"
-      :show-dialog="showEditIdentityResourceDialog"
-      @closed="onIdentityResourceEditFormClosed"
+      :id="selectId"
+      :show-dialog="showEditDialog"
+      @closed="onEditFormClosed"
     />
   </div>
 </template>
@@ -191,10 +190,8 @@ import IdentityResourceCreateOrEditForm from './components/IdentityResourceCreat
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editIdentityResourceId = ''
-  private editIdentityResourceTitle = ''
-
-  private showEditIdentityResourceDialog = false
+  private selectId = ''
+  private showEditDialog = false
 
   public dataFilter = new IdentityResourceGetByPaged()
 
@@ -207,35 +204,32 @@ export default class extends mixins(DataListMiXin) {
   }
 
   protected getPagedList(filter: any) {
-    return IdentityResourceService.getIdentityResources(filter)
+    return IdentityResourceService.getList(filter)
   }
 
-  private handleShowEditIdentityResourceForm(resource: IdentityResource) {
-    if (resource) {
-      this.editIdentityResourceId = resource.id
-      this.editIdentityResourceTitle = this.l('AbpIdentityServer.Resource:Name', { 0: resource.name })
-    } else {
-      this.editIdentityResourceTitle = this.l('AbpIdentityServer.Resource:New')
-    }
-    this.showEditIdentityResourceDialog = true
+  private onShowEditForm(id: string) {
+    this.selectId = id
+    this.showEditDialog = true
   }
 
-  private handleDeleteIdentityResource(resource: IdentityResource) {
+  private onDeleted(resource: IdentityResource) {
     this.$confirm(this.l('AbpIdentityServer.Resource:WillDelete', { 0: resource.name }),
       this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
-            IdentityResourceService.deleteIdentityResource(resource.id).then(() => {
-              this.$message.success(this.l('global.successful'))
-              this.refreshPagedData()
-            })
+            IdentityResourceService
+              .delete(resource.id)
+              .then(() => {
+                this.$message.success(this.l('global.successful'))
+                this.refreshPagedData()
+              })
           }
         }
       })
   }
 
-  private onIdentityResourceEditFormClosed(changed: boolean) {
-    this.showEditIdentityResourceDialog = false
+  private onEditFormClosed(changed: boolean) {
+    this.showEditDialog = false
     if (changed) {
       this.refreshPagedData()
     }

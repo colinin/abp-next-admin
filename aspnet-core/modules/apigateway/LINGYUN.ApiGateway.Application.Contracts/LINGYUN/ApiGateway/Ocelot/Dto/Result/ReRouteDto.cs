@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace LINGYUN.ApiGateway.Ocelot
 {
@@ -7,9 +6,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     public class ReRouteDto : ReRouteDtoBase
     {
         public int Id { get; set; }
-        
-        [JsonConverter(typeof(HexLongConverter))]
-        public long ReRouteId { get; set; }
+        public string ReRouteId { get; set; }
         public string ConcurrencyStamp { get; set; }
         public string ReRouteName { get; set; }
         public string AppId { get; set; }

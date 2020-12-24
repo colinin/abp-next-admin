@@ -1,5 +1,6 @@
 import ApiService from './serviceBase'
-import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto, SecretBase } from './types'
+import { Secret, Scope, UserClaim, Property } from './identity-server4'
+import { AuditedEntityDto, PagedAndSortedResultRequestDto, PagedResultDto } from './types'
 
 const sourceUrl = '/api/identity-server/api-resources'
 const serviceUrl = process.env.VUE_APP_BASE_API
@@ -9,7 +10,7 @@ export default class ApiResourceService {
    * 获取Api资源
    * @param id Api资源标识
    */
-  public static getApiResourceById(id: string) {
+  public static get(id: string) {
     const _url = sourceUrl + '/' + id
     return ApiService.Get<ApiResource>(_url, serviceUrl)
   }
@@ -18,7 +19,7 @@ export default class ApiResourceService {
    * 获取Api资源列表
    * @param payload 查询参数
    */
-  public static getApiResources(payload: ApiResourceGetByPaged) {
+  public static getList(payload: ApiResourceGetByPaged) {
     let _url = sourceUrl + '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + payload.skipCount
@@ -30,7 +31,7 @@ export default class ApiResourceService {
    * 创建Api资源
    * @param payload api资源参数
    */
-  public static createApiResource(payload: ApiResourceCreate) {
+  public static create(payload: ApiResourceCreate) {
     return ApiService.Post<ApiResource>(sourceUrl, payload, serviceUrl)
   }
 
@@ -38,7 +39,7 @@ export default class ApiResourceService {
    * 变更Api资源
    * @param payload api资源参数
    */
-  public static updateApiResource(id: string, payload: ApiResourceUpdate) {
+  public static update(id: string, payload: ApiResourceUpdate) {
     const _url = sourceUrl + '/' + id
     return ApiService.Put<ApiResource>(_url, payload, serviceUrl)
   }
@@ -47,7 +48,7 @@ export default class ApiResourceService {
    * 删除Api资源
    * @param id Api资源标识
    */
-  public static deleteApiResource(id: string) {
+  public static delete(id: string) {
     const _url = sourceUrl + '/' + id
     return ApiService.Delete(_url, serviceUrl)
   }
@@ -58,30 +59,44 @@ export enum HashType {
   Sha512
 }
 
-export class ApiScope {
-  name = ''
-  displayName?: string = ''
-  description?: string = ''
-  required = false
-  emphasize = false
-  showInDiscoveryDocument = true
-  userClaims = new Array<string>()
-}
+export class ApiResourceSecret extends Secret {}
 
-export class ApiSecret extends SecretBase {}
-
-export class ApiSecretCreateOrUpdate extends SecretBase {
+export class ApiResourceSecretCreateOrUpdate extends Secret {
   hashType = HashType.Sha256
 }
 
+export class ApiResourceScope extends Scope {}
+
+export class ApiResourceClaim extends UserClaim {}
+
+export class ApiResourceProperty extends Property {}
+
+export class ApiResource extends AuditedEntityDto {
+  id!: string
+  name!: string
+  displayName?: string
+  description?: string
+  enabled!: boolean
+  userClaims = new Array<ApiResourceClaim>()
+  scopes = new Array<ApiResourceScope>()
+  secrets = new Array<ApiResourceSecret>()
+  properties = new Array<ApiResourceProperty>()
+  /** 允许访问令牌签名算法 */
+  allowedAccessTokenSigningAlgorithms?: string
+  /** 在发现文档中显示 */
+  showInDiscoveryDocument!: boolean
+}
+
 export class ApiResourceCreateOrUpdate {
+  enabled = true
   displayName?: string = ''
   description?: string = ''
-  enabled = true
-  userClaims = new Array<string>()
-  scopes = new Array<ApiScope>()
-  secrets = new Array<ApiSecretCreateOrUpdate>()
-  properties: {[key: string]: string} = {}
+  showInDiscoveryDocument = false
+  allowedAccessTokenSigningAlgorithms?: string = ''
+  userClaims = new Array<ApiResourceClaim>()
+  scopes = new Array<ApiResourceScope>()
+  secrets = new Array<ApiResourceSecretCreate>()
+  properties = new Array<ApiResourceProperty>()
 }
 
 export class ApiResourceCreate extends ApiResourceCreateOrUpdate {
@@ -89,18 +104,6 @@ export class ApiResourceCreate extends ApiResourceCreateOrUpdate {
 }
 
 export class ApiResourceUpdate extends ApiResourceCreateOrUpdate {}
-
-export class ApiResource extends FullAuditedEntityDto {
-  id!: string
-  name!: string
-  displayName?: string
-  description?: string
-  enabled!: boolean
-  userClaims = new Array<string>()
-  scopes = new Array<ApiScope>()
-  secrets = new Array<ApiSecretCreateOrUpdate>()
-  properties: {[key: string]: string} = {}
-}
 
 export class ApiResourceGetByPaged extends PagedAndSortedResultRequestDto {
   filter = ''

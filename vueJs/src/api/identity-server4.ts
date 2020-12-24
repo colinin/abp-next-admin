@@ -34,3 +34,29 @@ export class OpenIdConfiguration {
   code_challenge_methods_supported = new Array<string>()
   request_parameter_supported!: boolean
 }
+
+export class Secret {
+  type!: string
+  value!: string
+  description?: string
+  expiration?: Date
+}
+
+export class Scope {
+  scope!: string
+}
+
+export class Property {
+  key!: string
+  value!: string
+}
+
+export class UserClaim {
+  type!: string
+
+  constructor(
+    type: string
+  ) {
+    this.type = type
+  }
+}

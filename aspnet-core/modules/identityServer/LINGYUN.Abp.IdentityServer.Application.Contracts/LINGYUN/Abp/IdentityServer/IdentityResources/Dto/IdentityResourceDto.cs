@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IdentityServer.IdentityResources
 {
-    public class IdentityResourceDto : ExtensibleFullAuditedEntityDto<Guid>
+    public class IdentityResourceDto : ExtensibleAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
         
@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
 
         public bool ShowInDiscoveryDocument { get; set; }
 
-        public List<string> UserClaims { get; set; }
+        public List<IdentityResourceClaimDto> UserClaims { get; set; }
 
-        public Dictionary<string, string> Properties { get; set; }
+        public List<IdentityResourcePropertyDto> Properties { get; set; }
 
         public IdentityResourceDto()
         {
-            UserClaims = new List<string>();
-            Properties = new Dictionary<string, string>();
+            UserClaims = new List<IdentityResourceClaimDto>();
+            Properties = new List<IdentityResourcePropertyDto>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
@@ -9,18 +10,18 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 客户端标识
         /// </summary>
         [Required]
-        [StringLength(ClientConsts.ClientIdMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientIdMaxLength))]
         public string ClientId { get; set; }
         /// <summary>
         /// 客户端名称
         /// </summary>
         [Required]
-        [StringLength(ClientConsts.ClientNameMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientNameMaxLength))]
         public string ClientName { get; set; }
         /// <summary>
         /// 说明
         /// </summary>
-        [StringLength(ClientConsts.DescriptionMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.DescriptionMaxLength))]
         public string Description { get; set; }
         /// <summary>
         /// 复制客户端授权类型

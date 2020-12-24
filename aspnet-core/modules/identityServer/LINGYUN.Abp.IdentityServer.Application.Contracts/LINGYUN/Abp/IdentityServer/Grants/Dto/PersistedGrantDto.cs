@@ -11,6 +11,12 @@ namespace LINGYUN.Abp.IdentityServer.Grants
 
         public string SubjectId { get; set; }
 
+        public string SessionId { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime? ConsumedTime { get; set; }
+
         public string ClientId { get; set; }
 
         public DateTime CreationTime { get; set; }

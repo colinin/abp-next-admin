@@ -1,16 +1,17 @@
 import ApiService from './serviceBase'
+import { Secret, Scope, Property } from './identity-server4'
 import { FullAuditedEntityDto, PagedAndSortedResultRequestDto, ListResultDto, PagedResultDto, SecretBase, Claim, HashType } from './types'
 
 const sourceUrl = '/api/identity-server/clients'
 const serviceUrl = process.env.VUE_APP_BASE_API
 
 export default class ClientService {
-  public static getClientById(id: string) {
+  public static get(id: string) {
     const _url = sourceUrl + '/' + id
     return ApiService.Get<Client>(_url, serviceUrl)
   }
 
-  public static getClients(payload: ClientGetByPaged) {
+  public static getList(payload: ClientGetByPaged) {
     let _url = sourceUrl + '?filter=' + payload.filter
     _url += '&sorting=' + payload.sorting
     _url += '&skipCount=' + payload.skipCount
@@ -18,21 +19,21 @@ export default class ClientService {
     return ApiService.Get<PagedResultDto<Client>>(_url, serviceUrl)
   }
 
-  public static createClient(payload: ClientCreate) {
+  public static create(payload: ClientCreate) {
     return ApiService.Post<Client>(sourceUrl, payload, serviceUrl)
   }
 
-  public static cloneClient(id: string, payload: ClientClone) {
+  public static clone(id: string, payload: ClientClone) {
     const _url = sourceUrl + '/' + id + '/clone'
     return ApiService.Post<Client>(_url, payload, serviceUrl)
   }
 
-  public static updateClient(id: string, payload: ClientUpdate) {
+  public static update(id: string, payload: ClientUpdate) {
     const _url = sourceUrl + '/' + id
     return ApiService.Put<Client>(_url, payload, serviceUrl)
   }
 
-  public static deleteClient(id: string) {
+  public static delete(id: string) {
     const _url = sourceUrl + '/' + id
     return ApiService.Delete(_url, serviceUrl)
   }
@@ -61,9 +62,33 @@ export class ClientGetByPaged extends PagedAndSortedResultRequestDto {
   filter = ''
 }
 
+export class ClientProperty extends Property {}
+
 export class ClientClaim extends Claim {}
 
-export class ClientSecret extends SecretCreateOrUpdate {}
+export class ClientIdPRestriction {
+  provider = ''
+}
+
+export class ClientPostLogoutRedirectUri {
+  postLogoutRedirectUri = ''
+}
+
+export class ClientRedirectUri {
+  redirectUri = ''
+}
+
+export class ClientCorsOrigin {
+  origin = ''
+}
+
+export class ClientGrantType {
+  grantType = ''
+}
+
+export class ClientSecret extends Secret {}
+
+export class ClientScope extends Scope {}
 
 export class ClientClone {
   sourceClientId = ''
@@ -95,11 +120,13 @@ export class Client extends FullAuditedEntityDto {
   logoUri?: string
   enabled!: boolean
   protocolType!: string
+  allowedIdentityTokenSigningAlgorithms?: string
   requireClientSecret!: boolean
   requireConsent!: boolean
   allowRememberConsent!: boolean
   alwaysIncludeUserClaimsInIdToken!: boolean
   requirePkce!: boolean
+  requireRequestObject!: boolean
   allowPlainTextPkce!: boolean
   allowAccessTokensViaBrowser!: boolean
   frontChannelLogoutUri?: string
@@ -125,22 +152,22 @@ export class Client extends FullAuditedEntityDto {
   userSsoLifetime!: number
   userCodeType?: string
   deviceCodeLifetime!: number
-  allowedScopes = new Array<string>()
+  allowedScopes = new Array<ClientScope>()
   clientSecrets = new Array<ClientSecret>()
-  allowedGrantTypes = new Array<string>()
-  allowedCorsOrigins = new Array<string>()
-  redirectUris = new Array<string>()
-  postLogoutRedirectUris = new Array<string>()
-  identityProviderRestrictions = new Array<string>()
+  allowedGrantTypes = new Array<ClientGrantType>()
+  allowedCorsOrigins = new Array<ClientCorsOrigin>()
+  redirectUris = new Array<ClientRedirectUri>()
+  postLogoutRedirectUris = new Array<ClientPostLogoutRedirectUri>()
+  identityProviderRestrictions = new Array<ClientIdPRestriction>()
   claims = new Array<ClientClaim>()
-  properties: {[key: string]: string} = {}
+  properties = new Array<ClientProperty>()
 }
 
 export class ClientCreateOrUpdate {
   clientId = ''
   clientName = ''
   description?: string = ''
-  allowedGrantTypes = new Array<string>()
+  allowedGrantTypes = new Array<ClientGrantType>()
 }
 
 export class ClientCreate extends ClientCreateOrUpdate {}
@@ -150,11 +177,13 @@ export class ClientUpdate extends ClientCreateOrUpdate {
   logoUri? = ''
   enabled = true
   protocolType = 'oidc'
+  requireRequestObject = false
+  allowedIdentityTokenSigningAlgorithms = ''
   requireClientSecret = true
-  requireConsent = true
+  requireConsent = false
   allowRememberConsent = true
   alwaysIncludeUserClaimsInIdToken = false
-  requirePkce = false
+  requirePkce = true
   allowPlainTextPkce = false
   allowAccessTokensViaBrowser = false
   frontChannelLogoutUri? = ''
@@ -180,14 +209,14 @@ export class ClientUpdate extends ClientCreateOrUpdate {
   userSsoLifetime!: number
   userCodeType? = ''
   deviceCodeLifetime = 300
-  allowedScopes = new Array<string>()
-  allowedCorsOrigins = new Array<string>()
-  redirectUris = new Array<string>()
-  postLogoutRedirectUris = new Array<string>()
-  identityProviderRestrictions = new Array<string>()
-  properties: {[key: string]: string} = {}
-  secrets = new Array<SecretCreateOrUpdate>()
+  allowedScopes = new Array<ClientScope>()
+  clientSecrets = new Array<ClientSecret>()
+  allowedCorsOrigins = new Array<ClientCorsOrigin>()
+  redirectUris = new Array<ClientRedirectUri>()
+  postLogoutRedirectUris = new Array<ClientPostLogoutRedirectUri>()
+  identityProviderRestrictions = new Array<ClientIdPRestriction>()
   claims = new Array<ClientClaim>()
+  properties = new Array<ClientProperty>()
 
   public updateByClient(client: Client) {
     this.clientUri = client.clientUri

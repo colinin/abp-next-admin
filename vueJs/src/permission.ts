@@ -73,7 +73,7 @@ router.afterEach((to: Route) => {
   NProgress.done()
 
   // set page title
-  //document.title = getPageTitle(to.meta.title)
+  // document.title = getPageTitle(to.meta.title)
   if (to.meta.displayName) {
     document.title = to.meta.displayName
   } else {

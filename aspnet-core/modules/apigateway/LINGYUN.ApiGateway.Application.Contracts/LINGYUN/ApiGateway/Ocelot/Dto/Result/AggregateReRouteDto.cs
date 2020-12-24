@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LINGYUN.ApiGateway.Ocelot
@@ -9,8 +8,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     {
         public string AppId { get; set; }
 
-        [JsonConverter(typeof(HexLongConverter))]
-        public long ReRouteId { get; set; }
+        public string ReRouteId { get; set; }
 
         public string Name { get; set; }
 

@@ -3,13 +3,13 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="3.3.0" />
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="3.3.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,9 +10,10 @@ namespace LINGYUN.ApiGateway.EntityFrameworkCore
         public HttpApiHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
+            var connectionString = configuration.GetConnectionString("Default");
 
             var builder = new DbContextOptionsBuilder<HttpApiHostMigrationsDbContext>()
-                .UseMySql(configuration.GetConnectionString("Default"));
+                .UseMySql(configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(connectionString));
 
             return new HttpApiHostMigrationsDbContext(builder.Options);
         }

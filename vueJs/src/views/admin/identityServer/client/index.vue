@@ -319,7 +319,7 @@ export default class extends mixins(DataListMiXin) {
   }
 
   protected getPagedList(filter: any) {
-    return ClientService.getClients(filter)
+    return ClientService.getList(filter)
   }
 
   private handleGetOpenIdConfiguration() {
@@ -366,10 +366,12 @@ export default class extends mixins(DataListMiXin) {
       this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
-            ClientService.deleteClient(id).then(() => {
-              this.$message.success(this.l('global.successful'))
-              this.refreshPagedData()
-            })
+            ClientService
+              .delete(id)
+              .then(() => {
+                this.$message.success(this.l('global.successful'))
+                this.refreshPagedData()
+              })
           }
         }
       })

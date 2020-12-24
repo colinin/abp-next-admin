@@ -185,7 +185,8 @@ namespace LINGYUN.ApiGateway
                 options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
             });
 
-            context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            context.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
@@ -226,6 +227,8 @@ namespace LINGYUN.ApiGateway
             // app.UseMultiTenancy();
             // 本地化
             app.UseAbpRequestLocalization();
+            // 认证
+            app.UseAuthorization();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面

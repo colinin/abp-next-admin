@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.Clients
 {
     public class ClientCreateOrUpdateDto
     {
         [Required]
-        [StringLength(ClientConsts.ClientIdMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientIdMaxLength))]
         public string ClientId { get; set; }
 
         [Required]
-        [StringLength(ClientConsts.ClientNameMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientNameMaxLength))]
         public string ClientName { get; set; }
 
-        [StringLength(ClientConsts.DescriptionMaxLength)]
+        [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.DescriptionMaxLength))]
         public string Description { get; set; }
 
-        public List<string> AllowedGrantTypes { get; set; }
+        public List<ClientGrantTypeDto> AllowedGrantTypes { get; set; }
 
         protected ClientCreateOrUpdateDto()
         {
-            AllowedGrantTypes = new List<string>();
+            AllowedGrantTypes = new List<ClientGrantTypeDto>();
         }
     }
 }

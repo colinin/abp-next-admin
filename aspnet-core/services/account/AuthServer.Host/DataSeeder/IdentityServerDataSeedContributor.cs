@@ -9,10 +9,11 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
@@ -21,27 +22,30 @@ namespace AuthServer.DataSeeder
     public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
+        private readonly IApiScopeRepository _apiScopeRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
-        private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
-        private readonly IPermissionDataSeeder _permissionDataSeeder;
         private readonly IWeChatResourceDataSeeder _weChatResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
+        private readonly IPermissionDataSeeder _permissionDataSeeder;
         private readonly IConfiguration _configuration;
+        private readonly ICurrentTenant _currentTenant;
 
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
+            IApiScopeRepository apiScopeRepository,
             IPermissionDataSeeder permissionDataSeeder,
             IApiResourceRepository apiResourceRepository,
             IWeChatResourceDataSeeder weChatResourceDataSeeder,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
-            IIdentityClaimTypeRepository identityClaimTypeRepository,
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
+            _currentTenant = currentTenant;
             _clientRepository = clientRepository;
             _permissionDataSeeder = permissionDataSeeder;
+            _apiScopeRepository = apiScopeRepository;
             _apiResourceRepository = apiResourceRepository;
-            _identityClaimTypeRepository = identityClaimTypeRepository;
             _weChatResourceDataSeeder = weChatResourceDataSeeder;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
@@ -57,15 +61,24 @@ namespace AuthServer.DataSeeder
         [UnitOfWork]
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            await _identityResourceDataSeeder.CreateStandardResourcesAsync();
-            await CreateApiResourcesAsync();
-            await CreateClientsAsync();
-            await CreateWeChatClaimTypeAsync();
+            using (_currentTenant.Change(context?.TenantId))
+            {
+                await _identityResourceDataSeeder.CreateStandardResourcesAsync();
+                await CreateWeChatClaimTypeAsync();
+                await CreateApiResourcesAsync();
+                await CreateApiScopesAsync();
+                await CreateClientsAsync();
+            }
         }
 
         private async Task CreateWeChatClaimTypeAsync()
         {
             await _weChatResourceDataSeeder.CreateStandardResourcesAsync();
+        }
+
+        private async Task CreateApiScopesAsync()
+        {
+            await CreateApiScopeAsync("lingyun-abp-application");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -80,13 +93,7 @@ namespace AuthServer.DataSeeder
                 "role"
             };
 
-            await CreateApiResourceAsync("auth-service", commonApiUserClaims);
-
-            var apigatewaySecret = new[]
-            {
-                "defj98734htgrb90365D23"
-            };
-            await CreateApiResourceAsync("apigateway-service", commonApiUserClaims.Union(new[] { "apigateway-service" }), apigatewaySecret);
+            await CreateApiResourceAsync("lingyun-abp-application", commonApiUserClaims);
         }
 
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims, IEnumerable<string> secrets = null)
@@ -125,9 +132,28 @@ namespace AuthServer.DataSeeder
             return await _apiResourceRepository.UpdateAsync(apiResource);
         }
 
+        private async Task<ApiScope> CreateApiScopeAsync(string name)
+        {
+            var apiScope = await _apiScopeRepository.GetByNameAsync(name);
+            if (apiScope == null)
+            {
+                apiScope = await _apiScopeRepository.InsertAsync(
+                    new ApiScope(
+                        _guidGenerator.Create(),
+                        name,
+                        name + " API"
+                    ),
+                    autoSave: true
+                );
+            }
+
+            return apiScope;
+        }
+
         private async Task CreateClientsAsync()
         {
-            const string commonSecret = "E5Xd4yMqjP5kjWFKrYgySBju6JVfCzMyFp7n2QmMrME=";
+            
+            string commonSecret = IdentityServer4.Models.HashExtensions.Sha256("1q2w3e*");
 
             var commonScopes = new[]
             {
@@ -137,7 +163,8 @@ namespace AuthServer.DataSeeder
                 "role",
                 "phone",
                 "address",
-                "offline_access" // 加上刷新
+                "offline_access" // 加上刷新,
+
             };
 
             var configurationSection = _configuration.GetSection("IdentityServer:Clients");
@@ -149,7 +176,7 @@ namespace AuthServer.DataSeeder
                 var webClientRootUrl = configurationSection["AuthManagement:RootUrl"].EnsureEndsWith('/');
                 await CreateClientAsync(
                     webClientId,
-                    commonScopes.Union(new[] { "auth-service" }),
+                    commonScopes.Union(new[] { "lingyun-abp-application" }),
                     new[] { "hybrid" },
                     commonSecret,
                     redirectUri: $"{webClientRootUrl}signin-oidc",
@@ -164,7 +191,7 @@ namespace AuthServer.DataSeeder
             {
                 await CreateClientAsync(
                     consoleClientId,
-                    commonScopes.Union(new[] { "auth-service", "apigateway-service" }),
+                    commonScopes.Union(new[] { "lingyun-abp-application" }),
                     new[] { "password", "client_credentials" },
                     commonSecret
                 );
@@ -183,7 +210,7 @@ namespace AuthServer.DataSeeder
                 };
                 await CreateClientAsync(
                     apigatewayClientId,
-                    commonScopes.Union(new[] { "apigateway-service" }),
+                    commonScopes.Union(new[] { "lingyun-abp-application" }),
                     new[] { "client_credentials" },
                     commonSecret,
                     permissions: apigatewayPermissions
@@ -200,7 +227,7 @@ namespace AuthServer.DataSeeder
                 };
                 await CreateClientAsync(
                     internalServiceClientId,
-                    commonScopes.Union(new[] { "auth-service" }),
+                    commonScopes.Union(new[] { "lingyun-abp-application" }),
                     new[] { "client_credentials" },
                     commonSecret,
                     permissions: internalServicePermissions
@@ -218,7 +245,7 @@ namespace AuthServer.DataSeeder
             IEnumerable<string> permissions = null,
             string corsOrigins = null)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(name);
+            var client = await _clientRepository.FindByClientIdAsync(name);
             if (client == null)
             {
                 client = await _clientRepository.InsertAsync(

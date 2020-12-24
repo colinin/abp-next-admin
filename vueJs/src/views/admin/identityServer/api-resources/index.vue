@@ -23,7 +23,7 @@
         class="filter-item"
         type="primary"
         :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Create'])"
-        @click="handleShowEditApiResourceForm('')"
+        @click="onShowEditForm('')"
       >
         {{ $t('AbpIdentityServer.Resource:New') }}
       </el-button>
@@ -76,6 +76,20 @@
         </template>
       </el-table-column>
       <el-table-column
+        :label="$t('AbpIdentityServer.ShowInDiscoveryDocument')"
+        prop="showInDiscoveryDocument"
+        sortable
+        width="140px"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <el-switch
+            v-model="row.showInDiscoveryDocument"
+            disabled
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
         :label="$t('AbpIdentityServer.Description')"
         prop="description"
         sortable
@@ -87,31 +101,14 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('global.creationTime')"
-        prop="creationTime"
-        width="170px"
+        :label="$t('AbpIdentityServer.AllowedAccessTokenSigningAlgorithms')"
+        prop="allowedAccessTokenSigningAlgorithms"
+        sortable
+        width="200px"
         align="center"
       >
         <template slot-scope="{row}">
-          <span>
-            <el-tag>
-              {{ row.creationTime | datetimeFilter }}
-            </el-tag>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('global.lastModificationTime')"
-        prop="lastModificationTime"
-        width="170px"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>
-            <el-tag type="warning">
-              {{ row.lastModificationTime | datetimeFilter }}
-            </el-tag>
-          </span>
+          <span>{{ row.allowedAccessTokenSigningAlgorithms }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -124,7 +121,7 @@
             :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Update'])"
             size="mini"
             type="primary"
-            @click="handleShowEditApiResourceForm(row.id, row.name)"
+            @click="onShowEditForm(row.id)"
           >
             {{ $t('AbpIdentityServer.Resource:Edit') }}
           </el-button>
@@ -132,7 +129,7 @@
             :disabled="!checkPermission(['AbpIdentityServer.ApiResources.Delete'])"
             size="mini"
             type="danger"
-            @click="handleDeleteApiResource(row.id, row.name)"
+            @click="onDelete(row.id, row.name)"
           >
             {{ $t('AbpIdentityServer.Resource:Delete') }}
           </el-button>
@@ -150,10 +147,9 @@
     />
 
     <api-resource-create-or-edit-form
-      :show-dialog="showEditApiResourceDialog"
-      :title="editApiResourceTitle"
-      :api-resource-id="editApiResourceId"
-      @closed="handleApiResourceEditFormClosed"
+      :show-dialog="showEditDialog"
+      :api-resource-id="selectId"
+      @closed="onEditFormClosed"
     />
   </div>
 </template>
@@ -193,12 +189,8 @@ import ApiResourceService, { ApiResourceGetByPaged } from '@/api/api-resources'
   }
 })
 export default class extends mixins(DataListMiXin) {
-  private editApiResourceId =''
-  private editApiResourceTitle = ''
-
-  private showEditApiScopeDialog = false
-  private showEditApiSecretDialog = false
-  private showEditApiResourceDialog = false
+  private selectId =''
+  private showEditDialog = false
 
   public dataFilter = new ApiResourceGetByPaged()
 
@@ -211,46 +203,31 @@ export default class extends mixins(DataListMiXin) {
   }
 
   protected getPagedList(filter: any) {
-    return ApiResourceService.getApiResources(filter)
+    return ApiResourceService.getList(filter)
   }
 
-  private handleShowEditApiResourceForm(id: string, name: string) {
-    this.editApiResourceId = id
-    this.editApiResourceTitle = this.l('AbpIdentityServer.Resource:New')
-    this.showEditApiResourceDialog = true
-    if (name) {
-      this.editApiResourceTitle = this.l('AbpIdentityServer.Resource:Name', { 0: name })
-    }
+  private onShowEditForm(id: string) {
+    this.selectId = id
+    this.showEditDialog = true
   }
 
-  private handleApiResourceEditFormClosed(changed: boolean) {
-    this.editApiResourceTitle = ''
-    this.showEditApiResourceDialog = false
+  private onEditFormClosed(changed: boolean) {
+    this.showEditDialog = false
     if (changed) {
       this.refreshPagedData()
     }
   }
 
-  private handleApiSecretEditFormClosed() {
-    this.showEditApiSecretDialog = false
-  }
-
-  private handleApiScopeEditFormClosed(changed: boolean) {
-    this.showEditApiScopeDialog = false
-    if (changed) {
-      this.refreshPagedData()
-    }
-  }
-
-  private handleDeleteApiResource(id: string) {
+  private onDelete(id: string) {
     this.$confirm(this.l('AbpIdentityServer.Resource:Delete'),
       this.l('AbpUi.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
-            ApiResourceService.deleteApiResource(id).then(() => {
-              this.$message.success(this.l('global.successful'))
-              this.refreshPagedData()
-            })
+            ApiResourceService
+              .delete(id).then(() => {
+                this.$message.success(this.l('global.successful'))
+                this.refreshPagedData()
+              })
           }
         }
       })

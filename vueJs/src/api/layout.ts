@@ -24,12 +24,12 @@ export default class LayoutService {
   }
 
   public static create(payload: LayoutCreate) {
-    return ApiService.Post<Layout>(sourceUrl, payload,  serviceUrl)
+    return ApiService.Post<Layout>(sourceUrl, payload, serviceUrl)
   }
 
   public static update(id: string, payload: LayoutUpdate) {
     const _url = sourceUrl + '/' + id
-    return ApiService.Put<Layout>(_url, payload,  serviceUrl)
+    return ApiService.Put<Layout>(_url, payload, serviceUrl)
   }
 
   public static delete(id: string) {
@@ -98,7 +98,7 @@ export class LayoutCreate extends LayoutCreateOrUpdate {
   dataId!: string
 }
 
-export class LayoutUpdate  extends LayoutCreateOrUpdate {
+export class LayoutUpdate extends LayoutCreateOrUpdate {
 
 }
 

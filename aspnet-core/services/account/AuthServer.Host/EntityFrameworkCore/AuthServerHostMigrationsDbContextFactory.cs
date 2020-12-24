@@ -11,9 +11,10 @@ namespace AuthServer.EntityFrameworkCore
         public AuthServerHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
+            var connectionString = configuration.GetConnectionString("Default");
 
             var builder = new DbContextOptionsBuilder<AuthServerHostMigrationsDbContext>()
-                .UseMySql(configuration.GetConnectionString("Default"));
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
             return new AuthServerHostMigrationsDbContext(builder.Options);
         }
@@ -25,7 +26,7 @@ namespace AuthServer.EntityFrameworkCore
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false);
+                .AddJsonFile("appsettings.json", optional: true);
             if (File.Exists(envFile))
             {
                 builder.AddJsonFile($"appsettings.{env}.json", optional: false);

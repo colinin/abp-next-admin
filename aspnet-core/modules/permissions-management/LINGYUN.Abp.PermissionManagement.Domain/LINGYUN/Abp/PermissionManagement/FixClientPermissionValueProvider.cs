@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.PermissionManagement
         protected ICurrentTenant CurrentTenant { get; }
         public FixClientPermissionValueProvider(
             IPermissionStore permissionStore,
-            ICurrentTenant currentTenant) : base(permissionStore)
+            ICurrentTenant currentTenant) : base(permissionStore, currentTenant)
         {
             CurrentTenant = currentTenant;
         }
