@@ -263,6 +263,7 @@ import { abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 
 import DataListMiXin from '@/mixins/DataListMiXin'
+import HttpProxyMiXin from '@/mixins/HttpProxyMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
 import ClientCloneForm from './components/ClientCloneForm.vue'
@@ -297,7 +298,7 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
     }
   }
 })
-export default class extends mixins(DataListMiXin) {
+export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
   private editClient = new Client()
   private editClientTitle = ''
 
@@ -319,7 +320,15 @@ export default class extends mixins(DataListMiXin) {
   }
 
   protected getPagedList(filter: any) {
-    return ClientService.getList(filter)
+    return this.pagedRequest<Client>({
+      service: 'IdentityServer',
+      controller: 'Client',
+      action: 'GetListAsync',
+      data: {
+        input: filter
+      }
+    })
+    // return ClientService.getList(filter)
   }
 
   private handleGetOpenIdConfiguration() {

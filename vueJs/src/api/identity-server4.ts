@@ -1,5 +1,4 @@
 import ApiService from './serviceBase'
-import { getOrDefault } from '@/utils/localStorage'
 
 const openIdConfigurationUrl = '/.well-known/openid-configuration'
 

@@ -8,6 +8,7 @@ import { IPermissionState } from './modules/permission'
 import { ISettingsState } from './modules/settings'
 import { IRoleState } from './modules/role'
 import { IAbpState } from './modules/abp'
+import { IHttpProxy } from './modules/http-proxy'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export interface IRootState {
   permission: IPermissionState
   settings: ISettingsState
   role: IRoleState
+  httpProxy: IHttpProxy
 }
 
 // Declare empty store first, dynamically register all modules later.
