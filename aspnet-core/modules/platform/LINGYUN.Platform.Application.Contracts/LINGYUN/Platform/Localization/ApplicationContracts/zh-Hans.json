@@ -22,8 +22,8 @@
     "Permission:Layout": "布局管理",
     "Permission:Menu": "菜单管理",
     "Permission:Create": "新增",
-    "Permission:Update": "新增",
-    "Permission:Delete": "新增",
+    "Permission:Update": "编辑",
+    "Permission:Delete": "删除",
     "Permission:ManageItems": "管理项目",
     "Permission:ManageRoleMenus": "管理角色菜单",
     "Permission:ManageUserMenus": "管理用户菜单"

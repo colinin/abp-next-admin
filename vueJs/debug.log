@@ -6,3 +6,4 @@
 [1221/155401.113:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)
 [1222/155401.133:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)
 [1223/145638.708:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\iVarKey\AppData\Local\Google\Chrome\User Data\Crashpad\reports\0106539b-a680-4c00-8e38-5a7a621345b9.dmp: 另一个程序正在使用此文件，进程无法访问。 (0x20)
+[1225/102752.308:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)

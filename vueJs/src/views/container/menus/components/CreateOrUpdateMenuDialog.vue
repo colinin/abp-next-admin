@@ -278,10 +278,10 @@ export default class CreateOrUpdateMenuDialog extends Vue {
     if (layout) {
       if (!this.isEdit) {
         this.menu.meta = {}
-      }
-      if (!this.parentId) {
-        // 对于根菜单,自动设置组件路径为布局路径
-        this.menu.component = layout.path
+        if (!this.parentId) {
+          // 对于根菜单,自动设置组件路径为布局路径
+          this.menu.component = layout.path
+        }
       }
       DataService
         .get(layout.dataId)
