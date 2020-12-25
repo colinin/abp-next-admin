@@ -258,7 +258,7 @@ export class ClientUpdate extends ClientCreateOrUpdate {
     this.postLogoutRedirectUris = client.postLogoutRedirectUris
     this.identityProviderRestrictions = client.identityProviderRestrictions
     this.allowedScopes = client.allowedScopes
-    this.secrets = client.clientSecrets
+    this.clientSecrets = client.clientSecrets
     this.claims = client.claims
     this.properties = client.properties
   }

@@ -95,7 +95,7 @@ export class ApiResourceCreateOrUpdate {
   allowedAccessTokenSigningAlgorithms?: string = ''
   userClaims = new Array<ApiResourceClaim>()
   scopes = new Array<ApiResourceScope>()
-  secrets = new Array<ApiResourceSecretCreate>()
+  secrets = new Array<ApiResourceSecret>()
   properties = new Array<ApiResourceProperty>()
 }
 

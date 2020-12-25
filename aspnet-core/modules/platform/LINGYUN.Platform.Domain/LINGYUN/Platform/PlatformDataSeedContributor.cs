@@ -434,7 +434,7 @@ namespace LINGYUN.Platform
                 new Dictionary<string, object>()
                 {
                     { "title", "clients" },
-                    { "icon", "clients" },
+                    { "icon", "client" },
                     { "roles", new string[]{ "AbpIdentityServer.Clients" } }
                 },
                 new string[] { "admin" });
