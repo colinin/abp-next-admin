@@ -415,7 +415,7 @@ namespace LINGYUN.Platform
                     { "title", "identity-server" },
                     { "icon", "identity-server" },
                     { "alwaysShow", true },
-                    { "roles", new string[]{ "AbpIdentityServer.Clients", "AbpIdentityServer.ApiResources", "AbpIdentityServer.IdentityResources" } }
+                    { "roles", new string[]{ "AbpIdentityServer.Clients", "AbpIdentityServer.ApiResources", "AbpIdentityServer.IdentityResources", "AbpIdentityServer.ApiScopes" } }
                 },
                 new string[] { "admin" });
 
@@ -462,7 +462,7 @@ namespace LINGYUN.Platform
                 data,
                 "identity-resources",
                 "identity-resources",
-                CodeNumberGenerator.AppendCode(identityServerMenu.Code, CodeNumberGenerator.CreateCode(2)),
+                CodeNumberGenerator.AppendCode(identityServerMenu.Code, CodeNumberGenerator.CreateCode(3)),
                 "views/admin/identityServer/identity-resources/index.vue",
                 "Manage Identity Resources",
                 "",
@@ -474,6 +474,25 @@ namespace LINGYUN.Platform
                     { "title", "identity-resources" },
                     { "icon", "identity" },
                     { "roles", new string[]{ "AbpIdentityServer.IdentityResources" } }
+                },
+                new string[] { "admin" });
+            await SeedMenuAsync(
+                layout,
+                data,
+                "api-scopes",
+                "api-scopes",
+                CodeNumberGenerator.AppendCode(identityServerMenu.Code, CodeNumberGenerator.CreateCode(4)),
+                "views/admin/identityServer/api-scopes/index.vue",
+                "Manage Api Scopes",
+                "",
+                "Manage Api Scopes",
+                identityServerMenu.Id,
+                layout.TenantId,
+                new Dictionary<string, object>()
+                {
+                    { "title", "api-scopes" },
+                    { "icon", "api-scopes" },
+                    { "roles", new string[]{ "AbpIdentityServer.ApiScopes" } }
                 },
                 new string[] { "admin" });
         }
