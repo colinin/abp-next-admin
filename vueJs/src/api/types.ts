@@ -286,3 +286,8 @@ export class Claim implements IClaim {
     this.value = value
   }
 }
+
+export class KeyValue<TKey, TValue> {
+  key!: TKey
+  value?: TValue
+}

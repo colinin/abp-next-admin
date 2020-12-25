@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { AbpModule } from '@/store/modules/abp'
+import { HttpProxyModule } from '@/store/modules/http-proxy'
 import { Component, Vue } from 'vue-property-decorator'
 import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.vue'
 
@@ -22,6 +23,7 @@ export default class extends Vue {
   }
 
   private async initializeAbpConfiguration() {
+    await HttpProxyModule.Initialize()
     await AbpModule.LoadAbpConfiguration()
   }
 }
