@@ -15,6 +15,7 @@
     "Permissions:ApiResources": "Api资源管理",
     "Permissions:ApiScopes": "Api授权范围管理",
     "Permissions:IdentityResources": "身份资源管理",
+    "Permissions:Grants": "持久授权",
     "ClientIdExisted": "客户端标识: {0} 已经存在!",
     "ApiResourceNameExisted": "Api资源: {0} 已经存在!",
     "ApiScopeNameExisted": "Api授权范围: {0} 已经存在!",

@@ -15,6 +15,7 @@
     "Permissions:ApiResources": "Api Resources",
     "Permissions:ApiScopes": "Api Scopes",
     "Permissions:IdentityResources": "Identity Resources",
+    "Permissions:Grants": "Persistent Grants",
     "ClientIdExisted": "Client id: {0} already exists!",
     "ApiResourceNameExisted": "Api resource name: {0} already exists!",
     "ApiScopeNameExisted": "Api scope: {0} already exists!",
