@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 LABEL maintainer="colin.in@foxmail.com"
 WORKDIR /app
 
