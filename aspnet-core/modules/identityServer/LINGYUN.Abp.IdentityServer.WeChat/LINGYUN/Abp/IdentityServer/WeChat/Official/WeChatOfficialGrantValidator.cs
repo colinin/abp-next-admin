@@ -3,7 +3,6 @@ using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.OpenId;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Localization;
@@ -22,7 +21,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
 
         public override string AuthenticationMethod => AbpWeChatOfficialConsts.AuthenticationMethod;
 
-        protected AbpWeChatOfficialOptions Options { get; }
+        protected AbpWeChatOfficialOptionsFactory WeChatOfficialOptionsFactory { get; }
 
         public WeChatOfficialGrantValidator(
             IEventService eventService, 
@@ -31,15 +30,17 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
             IIdentityUserRepository userRepository,
             IStringLocalizer<Volo.Abp.Identity.Localization.IdentityResource> identityLocalizer, 
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer,
-            IOptions<AbpWeChatOfficialOptions> options) 
+            AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory) 
             : base(eventService, weChatOpenIdFinder, userManager, userRepository, identityLocalizer, identityServerLocalizer)
         {
-            Options = options.Value;
+            WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
 
         protected override async Task<WeChatOpenId> FindOpenIdAsync(string code)
         {
-            return await WeChatOpenIdFinder.FindAsync(code, Options.AppId, Options.AppSecret);
+            var options = await WeChatOfficialOptionsFactory.CreateAsync();
+
+            return await WeChatOpenIdFinder.FindAsync(code, options.AppId, options.AppSecret);
         }
     }
 }

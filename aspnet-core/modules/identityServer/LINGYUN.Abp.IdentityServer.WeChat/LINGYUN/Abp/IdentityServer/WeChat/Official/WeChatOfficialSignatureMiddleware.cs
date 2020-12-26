@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Official;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
@@ -11,26 +10,29 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
 {
     public class WeChatOfficialSignatureMiddleware : IMiddleware, ITransientDependency
     {
-        protected AbpWeChatOfficialOptions Options { get; }
-        public WeChatOfficialSignatureMiddleware(IOptions<AbpWeChatOfficialOptions> options)
+        protected AbpWeChatOfficialOptionsFactory WeChatOfficialOptionsFactory { get; }
+        public WeChatOfficialSignatureMiddleware(
+            AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory)
         {
-            Options = options.Value;
+            WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (context.Request.Path.HasValue)
             {
+                var options = await WeChatOfficialOptionsFactory.CreateAsync();
+
                 var requestPath = context.Request.Path.Value;
                 // 访问地址是否与定义的地址匹配
-                if (requestPath.Equals(Options.Url))
+                if (requestPath.Equals(options.Url))
                 {
                     var timestamp = context.Request.Query["timestamp"];
                     var nonce = context.Request.Query["nonce"];
                     var signature = context.Request.Query["signature"];
                     var echostr = context.Request.Query["echostr"];
                     // 验证消息合法性
-                    var check = CheckWeChatSignature(Options.Token, timestamp, nonce, signature);
+                    var check = CheckWeChatSignature(options.Token, timestamp, nonce, signature);
                     if (check)
                     {
                         // 验证通过需要把微信服务器传递的字符原封不动传回

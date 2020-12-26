@@ -26,26 +26,29 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
     public class WeChatOfficialOAuthHandler : OAuthHandler<WeChatOfficialOAuthOptions>
     {
         protected IDistributedCache<WeChatOfficialStateCacheItem> Cache { get; }
-        protected AbpWeChatOfficialOptions WeChatOfficialOptions { get; }
+        protected AbpWeChatOfficialOptionsFactory WeChatOfficialOptionsFactory { get; }
         public WeChatOfficialOAuthHandler(
             IDistributedCache<WeChatOfficialStateCacheItem> cache,
-            IOptionsMonitor<WeChatOfficialOAuthOptions> options, 
-            IOptions<AbpWeChatOfficialOptions> weChatOfficialOptions,
+            IOptionsMonitor<WeChatOfficialOAuthOptions> options,
+            AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory,
             ILoggerFactory logger, 
             UrlEncoder encoder, 
             ISystemClock clock) 
             : base(options, logger, encoder, clock)
         {
             Cache = cache;
-            WeChatOfficialOptions = weChatOfficialOptions.Value;
+            WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
 
-        protected override Task InitializeHandlerAsync()
+        protected override async Task InitializeHandlerAsync()
         {
+            var weChatOfficialOptions = await WeChatOfficialOptionsFactory.CreateAsync();
+
             // 用配置项重写
-            Options.ClientId = WeChatOfficialOptions.AppId;
-            Options.ClientSecret = WeChatOfficialOptions.AppSecret;
-            return base.InitializeHandlerAsync();
+            Options.ClientId = weChatOfficialOptions.AppId;
+            Options.ClientSecret = weChatOfficialOptions.AppSecret;
+
+            await base.InitializeHandlerAsync();
         }
 
         protected override async Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity, AuthenticationProperties properties, OAuthTokenResponse tokens)

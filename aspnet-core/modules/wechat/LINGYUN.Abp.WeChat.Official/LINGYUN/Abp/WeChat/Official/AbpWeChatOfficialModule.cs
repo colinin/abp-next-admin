@@ -1,7 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -26,13 +24,7 @@ namespace LINGYUN.Abp.WeChat.Official
                     .AddVirtualJson("/LINGYUN/Abp/WeChat/Official/Localization/Resources");
             });
 
-            AddAbpWeChatOfficialOptionsFactory(context.Services);
-        }
-
-        private static void AddAbpWeChatOfficialOptionsFactory(IServiceCollection services)
-        {
-            services.Replace(ServiceDescriptor.Transient<IOptionsFactory<AbpWeChatOfficialOptions>, AbpWeChatOfficialOptionsFactory>());
-            services.Replace(ServiceDescriptor.Scoped<IOptions<AbpWeChatOfficialOptions>, OptionsManager<AbpWeChatOfficialOptions>>());
+            context.Services.AddAbpDynamicOptions<AbpWeChatOfficialOptions, AbpWeChatOfficialOptionsManager>();
         }
     }
 }

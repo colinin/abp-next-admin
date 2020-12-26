@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -152,6 +153,16 @@ namespace AuthServer.Host
                 var redisConfig = ConfigurationOptions.Parse(options.Configuration);
                 options.ConfigurationOptions = redisConfig;
                 options.InstanceName = configuration["Redis:InstanceName"];
+            });
+
+            // 增加配置文件定义,在新建租户时需要
+            Configure<IdentityOptions>(options =>
+            {
+                var identityConfiguration = configuration.GetSection("Identity");
+                if (identityConfiguration.Exists())
+                {
+                    identityConfiguration.Bind(options);
+                }
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>

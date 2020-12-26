@@ -1,7 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using System;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -34,13 +32,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram
                 options.BaseAddress = new Uri("https://api.weixin.qq.com");
             });
 
-            AddAbpWeChatMiniProgramOptionsFactory(context.Services);
-        }
-
-        private static void AddAbpWeChatMiniProgramOptionsFactory(IServiceCollection services)
-        {
-            services.Replace(ServiceDescriptor.Transient<IOptionsFactory<AbpWeChatMiniProgramOptions>, AbpWeChatMiniProgramOptionsFactory>());
-            services.Replace(ServiceDescriptor.Scoped<IOptions<AbpWeChatMiniProgramOptions>, OptionsManager<AbpWeChatMiniProgramOptions>>());
+            context.Services.AddAbpDynamicOptions<AbpWeChatMiniProgramOptions, AbpWeChatMiniProgramOptionsManager>();
         }
     }
 }

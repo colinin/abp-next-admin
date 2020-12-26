@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
         public ILogger<SubscribeMessager> Logger { get; set; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected IJsonSerializer JsonSerializer { get; }
-        protected AbpWeChatMiniProgramOptions MiniProgramOptions { get; }
+        protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
         protected IWeChatTokenProvider WeChatTokenProvider { get; }
         protected IUserWeChatOpenIdFinder UserWeChatOpenIdFinder { get; }
         public SubscribeMessager(
@@ -28,13 +28,13 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             IHttpClientFactory httpClientFactory,
             IWeChatTokenProvider weChatTokenProvider,
             IUserWeChatOpenIdFinder userWeChatOpenIdFinder,
-            IOptions<AbpWeChatMiniProgramOptions> miniProgramOptions)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
         {
             JsonSerializer = jsonSerializer;
             HttpClientFactory = httpClientFactory;
             WeChatTokenProvider = weChatTokenProvider;
             UserWeChatOpenIdFinder = userWeChatOpenIdFinder;
-            MiniProgramOptions = miniProgramOptions.Value;
+            MiniProgramOptionsFactory = miniProgramOptionsFactory;
 
             Logger = NullLogger<SubscribeMessager>.Instance;
         }
@@ -64,7 +64,9 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
 
         public virtual async Task SendAsync(SubscribeMessage message, CancellationToken cancellationToken = default)
         {
-            var weChatToken = await WeChatTokenProvider.GetTokenAsync(MiniProgramOptions.AppId, MiniProgramOptions.AppSecret, cancellationToken);
+            var options = await MiniProgramOptionsFactory.CreateAsync();
+
+            var weChatToken = await WeChatTokenProvider.GetTokenAsync(options.AppId, options.AppSecret, cancellationToken);
             var requestParamters = new Dictionary<string, string>
             {
                 { "access_token", weChatToken.AccessToken }

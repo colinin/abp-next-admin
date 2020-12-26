@@ -7,7 +7,8 @@
 
 #### 注意
 
-
+在动态配置中有一个已知的问题: https://github.com/abpframework/abp/issues/6318  
+因此必须要重建一个动态变更 AbpWeChatOfficialOptions 的方法，请使用AbpWeChatOfficialOptionsFactory.CreateAsync()
 
 ## 配置使用
 
