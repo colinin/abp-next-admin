@@ -8,6 +8,19 @@ import { Method } from 'axios'
 const sourceUrl = '/api/abp/api-definition'
 const serviceUrl = process.env.VUE_APP_BASE_API
 
+export enum ParameterBindingSources {
+  modelBinding = 'ModelBinding',
+  query = 'Query',
+  body = 'Body',
+  path = 'Path',
+  form = 'Form',
+  header = 'Header',
+  custom = 'Custom',
+  services = 'Services'
+}
+
+const bindSources = [ParameterBindingSources.modelBinding, ParameterBindingSources.query]
+
 export default class DynamicApiService {
   /** 获取api代理信息
    * @param includeTypes 包括类型信息
@@ -44,14 +57,14 @@ export class UrlBuilder {
           const value = HttpActionParameterHelper.findParameterValue(methodArguments, pathParameter)
           if (!value) {
             if (pathParameter.isOptional) {
-              urlBuilder = urlBuilder.replace(`{{${pathParameter.name}}}`, '')
+              urlBuilder = urlBuilder.replace(`{${pathParameter.name}}`, '')
             } else if (pathParameter.defaultValue) {
-              urlBuilder = urlBuilder.replace(`{{${pathParameter.name}}}`, String(pathParameter.defaultValue))
+              urlBuilder = urlBuilder.replace(`{${pathParameter.name}}`, String(pathParameter.defaultValue))
             } else {
               throw new Error(`Missing path parameter value for ${pathParameter.name} (${pathParameter.nameOnMethod})`)
             }
           } else {
-            urlBuilder = urlBuilder.replace(`{{${pathParameter.name}}}`, String(value))
+            urlBuilder = urlBuilder.replace(`{${pathParameter.name}}`, String(value))
           }
         })
       return urlBuilder
@@ -63,7 +76,6 @@ export class UrlBuilder {
     methodArguments: any,
     apiVersion: ApiVersionInfo
   ) {
-    const bindSources = [ParameterBindingSources.modelBinding, ParameterBindingSources.query]
     const queryStringParameters = actionParameters.filter(x => bindSources.some(b => b === x.bindingSourceId))
     let isFirstParam = true
     queryStringParameters
@@ -140,17 +152,6 @@ export class ApiVersionInfo {
   public shouldSendInQueryString() {
     return ['Path'].some(x => x === this.bindingSource)
   }
-}
-
-export enum ParameterBindingSources {
-  modelBinding = 'ModelBinding',
-  query = 'Query',
-  body = 'Body',
-  path = 'Path',
-  form = 'Form',
-  header = 'Header',
-  custom = 'Custom',
-  services = 'Services'
 }
 
 export class ControllerInterfaceApiDescriptionModel {
