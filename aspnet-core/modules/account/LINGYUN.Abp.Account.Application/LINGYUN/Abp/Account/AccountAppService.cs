@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Account
         protected IIdentityUserRepository UserRepository { get; }
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
-        protected AbpWeChatMiniProgramOptions MiniProgramOptions { get; }
+        protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
 
         protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
 
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.Account
             IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache,
-            IOptions<AbpWeChatMiniProgramOptions> miniProgramOptions)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
         {
             TotpService = totpService;
             UserStore = userStore;
@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.Account
             WeChatOpenIdFinder = weChatOpenIdFinder;
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
-            MiniProgramOptions = miniProgramOptions.Value;
+            MiniProgramOptionsFactory = miniProgramOptionsFactory;
 
             LocalizationResource = typeof(AccountResource);
         }
@@ -61,7 +61,9 @@ namespace LINGYUN.Abp.Account
             ThowIfInvalidEmailAddress(input.EmailAddress);
             await CheckSelfRegistrationAsync();
 
-            var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code, MiniProgramOptions.AppId, MiniProgramOptions.AppSecret);
+            var options = await MiniProgramOptionsFactory.CreateAsync();
+
+            var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code, options.AppId, options.AppSecret);
 
             var user = await UserManager.FindByLoginAsync(AbpWeChatMiniProgramConsts.ProviderKey, wehchatOpenId.OpenId);
             if (user != null)

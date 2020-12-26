@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.MiniProgram
 
         public override string AuthenticationMethod => AbpWeChatMiniProgramConsts.AuthenticationMethod;
 
-        protected AbpWeChatMiniProgramOptions Options { get; }
+        protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
 
         public WeChatMiniProgramGrantValidator(
             IEventService eventService,
@@ -31,15 +31,17 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.MiniProgram
             IIdentityUserRepository userRepository,
             IStringLocalizer<Volo.Abp.Identity.Localization.IdentityResource> identityLocalizer,
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer,
-            IOptions<AbpWeChatMiniProgramOptions> options)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
             : base(eventService, weChatOpenIdFinder, userManager, userRepository, identityLocalizer, identityServerLocalizer)
         {
-            Options = options.Value;
+            MiniProgramOptionsFactory = miniProgramOptionsFactory;
         }
 
         protected override async Task<WeChatOpenId> FindOpenIdAsync(string code)
         {
-            return await WeChatOpenIdFinder.FindAsync(code, Options.AppId, Options.AppSecret);
+            var options = await MiniProgramOptionsFactory.CreateAsync();
+
+            return await WeChatOpenIdFinder.FindAsync(code, options.AppId, options.AppSecret);
         }
     }
 }
