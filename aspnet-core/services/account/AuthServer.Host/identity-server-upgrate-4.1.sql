@@ -177,9 +177,9 @@ CALL PROC_DROP_COLUMN('IdentityServerApiResources', 'Properties');
 
 ALTER TABLE `IdentityServerApiClaims` RENAME `IdentityServerApiResourceClaims`;
 
-ALTER TABLE `IdentityServerApiScopes` RENAME COLUMN `ApiResourceId` TO `Id`;
+ALTER TABLE `IdentityServerApiScopes` CHANGE COLUMN `ApiResourceId` `Id` CHAR(36);
 
-ALTER TABLE `IdentityServerApiScopeClaims` RENAME COLUMN `ApiResourceId` TO `ApiScopeId`;
+ALTER TABLE `IdentityServerApiScopeClaims` CHANGE COLUMN `ApiResourceId` `ApiScopeId` CHAR(36);
 
 -- 将要删除此表的所有数据，请注意
 TRUNCATE TABLE `IdentityServerApiScopeClaims`;
