@@ -2,10 +2,12 @@
 using LINGYUN.Abp.IdentityServer.ApiResources;
 using LINGYUN.Abp.IdentityServer.ApiScopes;
 using LINGYUN.Abp.IdentityServer.Clients;
+using LINGYUN.Abp.IdentityServer.Grants;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace LINGYUN.Abp.IdentityServer
@@ -46,6 +48,9 @@ namespace LINGYUN.Abp.IdentityServer
             CreateMap<IdentityResourceClaim, IdentityResourceClaimDto>();
             CreateMap<IdentityResourceProperty, IdentityResourcePropertyDto>();
             CreateMap<IdentityResource, IdentityResourceDto>()
+                .MapExtraProperties();
+
+            CreateMap<PersistedGrant, PersistedGrantDto>()
                 .MapExtraProperties();
         }
     }

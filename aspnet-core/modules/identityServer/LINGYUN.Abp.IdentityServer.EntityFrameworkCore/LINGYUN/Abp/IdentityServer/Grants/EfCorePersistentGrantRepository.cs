@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))
                 .OrderBy(sorting ?? nameof(PersistedGrant.CreationTime))
-                .Page(skipCount, maxResultCount)
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellation));
         }
     }

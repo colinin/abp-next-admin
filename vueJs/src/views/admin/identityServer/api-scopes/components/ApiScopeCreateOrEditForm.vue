@@ -149,7 +149,7 @@ import UserClaimEditForm from '../../components/UserClaimEditForm.vue'
 })
 export default class extends Vue {
   @Prop({ default: false })
-  private showDialog!: BooleanConstructor
+  private showDialog!: boolean
 
   @Prop({ default: '' })
   private id!: string
