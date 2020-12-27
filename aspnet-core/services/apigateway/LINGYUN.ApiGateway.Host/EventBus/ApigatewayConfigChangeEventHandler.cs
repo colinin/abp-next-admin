@@ -5,12 +5,10 @@ using Ocelot.Configuration.Repository;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.ApiGateway.EventBus
 {
-    [EventName("LINGYUN.ApiGateway.ConfigChanged")]
     public class ApigatewayConfigChangeEventHandler : IDistributedEventHandler<ApigatewayConfigChangeEventData>, ITransientDependency
     {
         protected ApiGatewayOptions Options { get; }

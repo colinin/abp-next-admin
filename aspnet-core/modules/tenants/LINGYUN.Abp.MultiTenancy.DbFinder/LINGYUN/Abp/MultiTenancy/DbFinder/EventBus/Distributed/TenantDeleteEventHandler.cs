@@ -2,13 +2,11 @@
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.TenantManagement;
 
 namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
 {
-    [EventName("LINGYUN.Abp.MultiTenancy.DbFinder.Deletor")]
     public class TenantDeleteEventHandler : IDistributedEventHandler<EntityDeletedEto<TenantEto>>, ITransientDependency
     {
         private readonly IDistributedCache<TenantConfigurationCacheItem> _cache;

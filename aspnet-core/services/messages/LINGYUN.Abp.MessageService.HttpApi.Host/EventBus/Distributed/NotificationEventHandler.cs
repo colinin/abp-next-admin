@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json;
 using Volo.Abp.Uow;
@@ -23,7 +22,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
     /// 作用在于SignalR客户端只会与一台服务器建立连接,
     /// 只有启用了SignlR服务端的才能真正将消息发布到客户端
     /// </remarks>
-    [EventName("LINGYUN.Abp.MessageService.Notifications.Sender")]
     public class NotificationEventHandler : IDistributedEventHandler<NotificationEventData>, ITransientDependency
     {
         /// <summary>
