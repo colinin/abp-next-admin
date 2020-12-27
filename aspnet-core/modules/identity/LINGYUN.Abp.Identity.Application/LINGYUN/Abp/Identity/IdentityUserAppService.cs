@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,13 @@ namespace LINGYUN.Abp.Identity
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
         protected IdentityUserManager UserManager { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
         public IdentityUserAppService(
-            IdentityUserManager userManager) 
+            IdentityUserManager userManager,
+            IOptions<IdentityOptions> identityOptions) 
         {
             UserManager = userManager;
+            IdentityOptions = identityOptions;
         }
 
         #region OrganizationUnit
@@ -106,6 +110,7 @@ namespace LINGYUN.Abp.Identity
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangePasswordAsync(Guid id, ChangePasswordInput input)
         {
+            await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(id);
 
             if (user.IsExternal)
@@ -126,6 +131,7 @@ namespace LINGYUN.Abp.Identity
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, ChangeTwoFactorEnabledDto input)
         {
+            await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(id);
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
