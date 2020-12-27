@@ -93,7 +93,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             // 当只有一个消费者订阅时,事件总线会认为消息已经处理,从而发布Ack指令,从消息队列中移除此消息
             // 可能造成通知数据丢失
             var application = Options.Application ?? "Abp";
-            if (application.Equals(Options.Application))
+            if (!string.Equals(application, eventData.Application, StringComparison.InvariantCultureIgnoreCase))
             {
                 // 不是当前监听应用的消息不做处理
                 return;
