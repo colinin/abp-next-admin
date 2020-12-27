@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -14,6 +15,7 @@ using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
 {
+    [EventName("LINGYUN.Abp.Tenants.Admin.Permissions.Deletor")]
     public class TenantDeleteEventHandler : IDistributedEventHandler<EntityDeletedEto<TenantEto>>, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }

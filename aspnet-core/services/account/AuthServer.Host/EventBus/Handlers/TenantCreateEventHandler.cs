@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
@@ -14,6 +15,7 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace AuthServer.Host.EventBus.Handlers
 {
+    [EventName("LINGYUN.Abp.Tenants.Admin.UserRoles.Creator")]
     public class TenantCreateEventHandler : IDistributedEventHandler<CreateEventData>, ITransientDependency
     {
         protected ILogger<TenantCreateEventHandler> Logger { get; }
