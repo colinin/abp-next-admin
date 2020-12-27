@@ -1,33 +1,35 @@
-﻿using DotNetCore.CAP.Internal;
+﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Internal;
 using DotNetCore.CAP.Transport;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
-using System.Linq;
-using DotNetCore.CAP;
-using Microsoft.Extensions.Options;
 
 namespace LINGYUN.Abp.EventBus.CAP
 {
     internal class CustomDistributedEventSubscriber : ICustomDistributedEventSubscriber, ISingletonDependency
     {
+        protected AbpCAPEventBusOptions CAPEventBusOptions { get; }
         protected CapOptions CapOptions { get; }
         protected IConsumerClientFactory ConsumerClientFactory { get; }
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
         protected ConcurrentDictionary<string, CancellationTokenSource> EventStopingTokens { get; }
         public CustomDistributedEventSubscriber(
-            IOptions<CapOptions> options,
+            IOptions<CapOptions> capOptions,
+            IOptions<AbpCAPEventBusOptions> capEventBusOptions,
             IConsumerClientFactory consumerClientFactory)
         {
-            CapOptions = options.Value;
+            CapOptions = capOptions.Value;
+            CAPEventBusOptions = capEventBusOptions.Value;
             ConsumerClientFactory = consumerClientFactory;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -82,7 +84,9 @@ namespace LINGYUN.Abp.EventBus.CAP
                     nameof(IDistributedEventHandler<object>.HandleEventAsync),
                     new[] { eventType }
                 );
-            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+            var eventName = CAPEventBusOptions.NameInEventDataType
+                ? EventNameAttribute.GetNameOrDefault(eventType)
+                : EventNameAttribute.GetNameOrDefault(typeInfo);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();
 

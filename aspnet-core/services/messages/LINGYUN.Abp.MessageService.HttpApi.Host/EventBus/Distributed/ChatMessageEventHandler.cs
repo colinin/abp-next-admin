@@ -5,10 +5,12 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {
+    [EventName("LINGYUN.Abp.MessageService.ChatMessage.Sender")]
     public class ChatMessageEventHandler : IDistributedEventHandler<ChatMessage>, ITransientDependency
     {
         /// <summary>

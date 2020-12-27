@@ -60,6 +60,7 @@
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
+    <ProjectReference Include="..\..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
 </Project>

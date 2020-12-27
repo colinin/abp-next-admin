@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP.Internal;
+using LINGYUN.Abp.EventBus.CAP;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -20,6 +21,10 @@ namespace DotNetCore.CAP
     public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
     {
         /// <summary>
+        /// Abp Cap事件配置
+        /// </summary>
+        protected AbpCAPEventBusOptions AbpCAPEventBusOptions { get; }
+        /// <summary>
         /// Abp分布式事件配置
         /// </summary>
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
@@ -31,9 +36,13 @@ namespace DotNetCore.CAP
         /// <summary>
         /// Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
         /// </summary>
-        public ConsumerServiceSelector(IServiceProvider serviceProvider, IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions) : base(serviceProvider)
+        public ConsumerServiceSelector(
+            IServiceProvider serviceProvider,
+            IOptions<AbpCAPEventBusOptions> capEventBusOptions,
+            IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions) : base(serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            AbpCAPEventBusOptions = capEventBusOptions.Value;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         }
         /// <summary>
@@ -83,7 +92,10 @@ namespace DotNetCore.CAP
                     nameof(IDistributedEventHandler<object>.HandleEventAsync),
                     new[] { eventType }
                 );
-            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+            // TODO: 事件名称定义在事件参数类型,就无法创建多个订阅者类了,增加可选配置,让用户决定事件名称定义在哪里
+            var eventName = AbpCAPEventBusOptions.NameInEventDataType
+                ? EventNameAttribute.GetNameOrDefault(eventType)
+                : EventNameAttribute.GetNameOrDefault(typeInfo);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();
 

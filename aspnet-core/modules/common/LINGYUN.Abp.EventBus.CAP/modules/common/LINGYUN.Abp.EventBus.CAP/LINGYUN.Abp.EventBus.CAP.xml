@@ -9,6 +9,11 @@
             消费者查找器
             </summary>
         </member>
+        <member name="P:DotNetCore.CAP.ConsumerServiceSelector.AbpCAPEventBusOptions">
+            <summary>
+            Abp Cap事件配置
+            </summary>
+        </member>
         <member name="P:DotNetCore.CAP.ConsumerServiceSelector.AbpDistributedEventBusOptions">
             <summary>
             Abp分布式事件配置
@@ -19,7 +24,7 @@
             服务提供者
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
+        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions},Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
             <summary>
             Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
             </summary>
@@ -129,6 +134,13 @@
         <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.NotifyFailedCallback">
             <summary>
             发布消息处理失败通知
+            default: false
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.NameInEventDataType">
+            <summary>
+            事件名称定义在事件参数类型
+            default: true
             </summary>
         </member>
         <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.CleanUpExpiresMessageBatch">

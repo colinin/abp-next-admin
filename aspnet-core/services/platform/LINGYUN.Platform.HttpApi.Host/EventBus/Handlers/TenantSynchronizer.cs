@@ -9,12 +9,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.EventBus.Handlers
 {
+    [EventName("LINGYUN.Abp.Tenants.Platform.Creator")]
     public class TenantSynchronizer :
         IDistributedEventHandler<CreateEventData>,
         ITransientDependency

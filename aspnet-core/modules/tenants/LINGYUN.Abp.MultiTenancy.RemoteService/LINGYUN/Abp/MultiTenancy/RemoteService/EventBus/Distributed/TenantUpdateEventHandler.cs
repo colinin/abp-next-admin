@@ -4,11 +4,13 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.TenantManagement;
 
 namespace LINGYUN.Abp.MultiTenancy.RemoteService.EventBus.Distributed
 {
+    [EventName("LINGYUN.Abp.MultiTenancy.RemoteService.Updator")]
     public class TenantUpdateEventHandler : IDistributedEventHandler<EntityUpdatedEto<TenantEto>>, ITransientDependency
     {
         private readonly ITenantAppService _tenantAppService;
