@@ -30,8 +30,8 @@ namespace LINGYUN.Abp.Account
         protected IIdentityUserRepository UserRepository { get; }
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
         protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
-
         protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
 
         public AccountAppService(
@@ -42,7 +42,8 @@ namespace LINGYUN.Abp.Account
             IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache,
-            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
+            IOptions<IdentityOptions> identityOptions)
         {
             TotpService = totpService;
             UserStore = userStore;
@@ -52,6 +53,7 @@ namespace LINGYUN.Abp.Account
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
+            IdentityOptions = identityOptions;
 
             LocalizationResource = typeof(AccountResource);
         }
@@ -59,7 +61,9 @@ namespace LINGYUN.Abp.Account
         public virtual async Task RegisterAsync(WeChatRegisterDto input)
         {
             ThowIfInvalidEmailAddress(input.EmailAddress);
+
             await CheckSelfRegistrationAsync();
+            await IdentityOptions.SetAsync();
 
             var options = await MiniProgramOptionsFactory.CreateAsync();
 
@@ -130,6 +134,7 @@ namespace LINGYUN.Abp.Account
         public virtual async Task RegisterAsync(PhoneRegisterDto input)
         {
             await CheckSelfRegistrationAsync();
+            await IdentityOptions.SetAsync();
             await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
@@ -223,6 +228,7 @@ namespace LINGYUN.Abp.Account
             {
                 throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
             }
+            await IdentityOptions.SetAsync();
             // 传递 isConfirmed 用户必须是已确认过手机号的
             var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
             // 验证二次认证码

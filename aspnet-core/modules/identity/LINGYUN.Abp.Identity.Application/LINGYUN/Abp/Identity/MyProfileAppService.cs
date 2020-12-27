@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -19,15 +20,18 @@ namespace LINGYUN.Abp.Identity
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IdentityUserManager UserManager { get; }
         protected IIdentityUserRepository UserRepository { get; }
+        protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public MyProfileAppService(
             IdentityUserManager userManager,
             IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
+            IOptions<IdentityOptions> identityOptions,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache)
         {
             UserManager = userManager;
             UserRepository = userRepository;
+            IdentityOptions = identityOptions;
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
         }
@@ -38,7 +42,7 @@ namespace LINGYUN.Abp.Identity
             {
                 throw new BusinessException(Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor);
             }
-
+            await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
@@ -83,6 +87,7 @@ namespace LINGYUN.Abp.Identity
             {
                 throw new BusinessException(IdentityErrorCodes.DuplicatePhoneNumber);
             }
+            await IdentityOptions.SetAsync();
             //TODO: 可以查询缓存用 securityTokenCacheItem.SecurityToken 与 user.SecurityStamp 作对比
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
             // 更换手机号
