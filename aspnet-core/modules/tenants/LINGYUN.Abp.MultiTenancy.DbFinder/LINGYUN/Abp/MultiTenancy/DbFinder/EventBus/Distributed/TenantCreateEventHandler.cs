@@ -5,7 +5,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
@@ -13,7 +12,6 @@ using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
 {
-    [EventName("LINGYUN.Abp.MultiTenancy.DbFinder.Creator")]
     public class TenantCreateEventHandler : IDistributedEventHandler<EntityCreatedEto<TenantEto>>, ITransientDependency
     {
         private readonly ILogger<TenantCreateEventHandler> _logger;

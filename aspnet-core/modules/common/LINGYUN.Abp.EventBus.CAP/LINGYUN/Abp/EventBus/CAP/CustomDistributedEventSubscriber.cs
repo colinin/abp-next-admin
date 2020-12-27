@@ -17,7 +17,6 @@ namespace LINGYUN.Abp.EventBus.CAP
 {
     internal class CustomDistributedEventSubscriber : ICustomDistributedEventSubscriber, ISingletonDependency
     {
-        protected AbpCAPEventBusOptions CAPEventBusOptions { get; }
         protected CapOptions CapOptions { get; }
         protected IConsumerClientFactory ConsumerClientFactory { get; }
 
@@ -25,11 +24,9 @@ namespace LINGYUN.Abp.EventBus.CAP
         protected ConcurrentDictionary<string, CancellationTokenSource> EventStopingTokens { get; }
         public CustomDistributedEventSubscriber(
             IOptions<CapOptions> capOptions,
-            IOptions<AbpCAPEventBusOptions> capEventBusOptions,
             IConsumerClientFactory consumerClientFactory)
         {
             CapOptions = capOptions.Value;
-            CAPEventBusOptions = capEventBusOptions.Value;
             ConsumerClientFactory = consumerClientFactory;
 
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -84,9 +81,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                     nameof(IDistributedEventHandler<object>.HandleEventAsync),
                     new[] { eventType }
                 );
-            var eventName = CAPEventBusOptions.NameInEventDataType
-                ? EventNameAttribute.GetNameOrDefault(eventType)
-                : EventNameAttribute.GetNameOrDefault(typeInfo);
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();
 

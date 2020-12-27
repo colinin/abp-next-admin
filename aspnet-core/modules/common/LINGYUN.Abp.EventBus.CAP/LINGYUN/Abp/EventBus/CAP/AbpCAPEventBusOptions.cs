@@ -11,11 +11,6 @@
         /// </summary>
         public bool NotifyFailedCallback { get; set; } = false;
         /// <summary>
-        /// 事件名称定义在事件参数类型
-        /// default: true
-        /// </summary>
-        public bool NameInEventDataType { get; set; } = true;
-        /// <summary>
         /// 批量清理数量
         /// default: 1000
         /// </summary>

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -16,7 +15,6 @@ using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
 {
-    [EventName("LINGYUN.Abp.Tenants.Admin.Permissions.Creator")]
     public class TenantCreateEventHandler : IDistributedEventHandler<CreateEventData>, ITransientDependency
     {
         protected ICurrentTenant CurrentTenant { get; }

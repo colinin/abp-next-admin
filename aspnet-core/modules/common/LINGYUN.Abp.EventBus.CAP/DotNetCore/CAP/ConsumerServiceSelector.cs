@@ -21,10 +21,6 @@ namespace DotNetCore.CAP
     public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
     {
         /// <summary>
-        /// Abp Cap事件配置
-        /// </summary>
-        protected AbpCAPEventBusOptions AbpCAPEventBusOptions { get; }
-        /// <summary>
         /// Abp分布式事件配置
         /// </summary>
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
@@ -38,11 +34,9 @@ namespace DotNetCore.CAP
         /// </summary>
         public ConsumerServiceSelector(
             IServiceProvider serviceProvider,
-            IOptions<AbpCAPEventBusOptions> capEventBusOptions,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions) : base(serviceProvider)
         {
             ServiceProvider = serviceProvider;
-            AbpCAPEventBusOptions = capEventBusOptions.Value;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         }
         /// <summary>
@@ -69,8 +63,21 @@ namespace DotNetCore.CAP
                     var genericArgs = @interface.GetGenericArguments();
                     if (genericArgs.Length == 1)
                     {
-                        executorDescriptorList.AddRange(
-                            GetHandlerDescription(genericArgs[0], handler));
+                        var consumerExecutorDescriptors = GetHandlerDescription(genericArgs[0], handler);
+
+                        foreach (var consumerExecutorDescriptor in consumerExecutorDescriptors)
+                        {
+                            if (executorDescriptorList.Any(x => new ConsumerExecutorDescriptorComparer().Equals(x, consumerExecutorDescriptor)))
+                            {
+                                // 如果存在多个消费者,后续的消费者需要重新定义分组才能不被 CAP 框架过滤掉
+                                consumerExecutorDescriptor.Attribute.Group = handler.IsGenericType
+                                    ? handler.GetGenericTypeDefinition().FullName
+                                    : handler.FullName;
+                                SetSubscribeAttribute(consumerExecutorDescriptor.Attribute);
+
+                            }
+                            executorDescriptorList.Add(consumerExecutorDescriptor);
+                        }
                         //Subscribe(genericArgs[0], new IocEventHandlerFactory(ServiceScopeFactory, handler));
                     }
                 }
@@ -93,9 +100,7 @@ namespace DotNetCore.CAP
                     new[] { eventType }
                 );
             // TODO: 事件名称定义在事件参数类型,就无法创建多个订阅者类了,增加可选配置,让用户决定事件名称定义在哪里
-            var eventName = AbpCAPEventBusOptions.NameInEventDataType
-                ? EventNameAttribute.GetNameOrDefault(eventType)
-                : EventNameAttribute.GetNameOrDefault(typeInfo);
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();
 

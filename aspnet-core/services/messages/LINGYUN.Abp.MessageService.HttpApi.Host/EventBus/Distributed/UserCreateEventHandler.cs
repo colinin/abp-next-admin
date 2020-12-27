@@ -2,14 +2,12 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {
-    [EventName("LINGYUN.Abp.Users.MessageService.Creator")]
     public class UserCreateEventHandler : IDistributedEventHandler<EntityCreatedEto<UserEto>>, ITransientDependency
     {
         private readonly ILocalEventBus _localEventBus;

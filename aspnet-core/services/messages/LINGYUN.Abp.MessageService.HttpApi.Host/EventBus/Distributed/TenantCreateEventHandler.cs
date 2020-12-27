@@ -7,7 +7,6 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -15,7 +14,6 @@ using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {
-    [EventName("LINGYUN.Abp.Tenants.MessageService.Creator")]
     public class TenantCreateEventHandler : IDistributedEventHandler<CreateEventData>, ITransientDependency
     {
         protected ILogger<TenantCreateEventHandler> Logger { get; }
