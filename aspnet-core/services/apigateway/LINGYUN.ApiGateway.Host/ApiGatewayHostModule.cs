@@ -20,6 +20,8 @@ using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Security.Claims;
@@ -29,6 +31,8 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
@@ -82,9 +86,15 @@ namespace LINGYUN.ApiGateway
 
             Configure<ApiGatewayOptions>(configuration.GetSection("ApiGateway"));
 
-            Configure<AbpClaimsMapOptions>(options =>
+            // 解决某些不支持类型的序列化
+            Configure<AbpJsonOptions>(options =>
             {
-                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
+                options.UseHybridSerializer = true;
+            });
+            // 中文序列化的编码问题
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             });
 
             context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
