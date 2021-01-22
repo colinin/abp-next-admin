@@ -17,6 +17,8 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -31,6 +33,8 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -116,6 +120,17 @@ namespace LINGYUN.Abp.IdentityServer4
                 //        ctx.DbContextOptions.EnableSensitiveDataLogging();
                 //    });
                 //}
+            });
+
+            // 解决某些不支持类型的序列化
+            Configure<AbpJsonOptions>(options =>
+            {
+                options.UseHybridSerializer = true;
+            });
+            // 中文序列化的编码问题
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             });
 
             // 加解密

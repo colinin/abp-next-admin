@@ -34,6 +34,10 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace LINGYUN.ApiGateway
 {
@@ -86,6 +90,17 @@ namespace LINGYUN.ApiGateway
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
+            });
+
+            // 解决某些不支持类型的序列化
+            Configure<AbpJsonOptions>(options =>
+            {
+                options.UseHybridSerializer = true;
+            });
+            // 中文序列化的编码问题
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             });
 
             // 加解密
