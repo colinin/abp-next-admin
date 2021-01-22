@@ -21,11 +21,13 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         protected ISettingProvider SettingProvider { get; }
         protected IStringLocalizer StringLocalizer { get; }
         protected INotificationSender NotificationSender { get; }
+        protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }
 
         public TenantCreateEventHandler(
             ICurrentTenant currentTenant,
             ISettingProvider settingProvider,
             INotificationSender notificationSender,
+            INotificationSubscriptionManager notificationSubscriptionManager,
             IStringLocalizer<MessageServiceResource> stringLocalizer,
             ILogger<TenantCreateEventHandler> logger)
         {
@@ -34,10 +36,20 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             SettingProvider = settingProvider;
             StringLocalizer = stringLocalizer;
             NotificationSender = notificationSender;
+            NotificationSubscriptionManager = notificationSubscriptionManager;
         }
 
         public async Task HandleEventAsync(CreateEventData eventData)
         {
+            var tenantAdminUserIdentifier = new UserIdentifier(eventData.AdminUserId, eventData.AdminEmailAddress);
+
+            // 租户管理员订阅事件
+            await NotificationSubscriptionManager
+                .SubscribeAsync(
+                    eventData.Id,
+                    tenantAdminUserIdentifier,
+                    TenantNotificationNames.NewTenantRegistered);
+
             var userDefaultCultureName = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
             if (userDefaultCultureName.IsNullOrWhiteSpace())
             {
@@ -46,8 +58,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             // 使用系统区域语言发布通知
             using (CultureHelper.Use(userDefaultCultureName, userDefaultCultureName))
             {
-                var tenantAdminUserIdentifier = new UserIdentifier(eventData.AdminUserId, eventData.AdminEmailAddress);
-
                 var notificationData = new NotificationData();
                 notificationData.WriteStandardData(
                     L("NewTenantRegisteredNotificationTitle"),
