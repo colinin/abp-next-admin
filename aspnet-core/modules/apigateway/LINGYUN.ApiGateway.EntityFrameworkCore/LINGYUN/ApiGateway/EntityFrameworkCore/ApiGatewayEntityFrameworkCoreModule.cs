@@ -22,11 +22,11 @@ namespace LINGYUN.ApiGateway.EntityFrameworkCore
             context.Services.AddAbpDbContext<ApiGatewayDbContext>(options =>
             {
                 //Remove "includeAllEntities: true" to create default repositories only for aggregate roots
-                options.AddRepository<RouteGroup, IRouteGroupRepository>();
-                options.AddRepository<ReRoute, IReRouteRepository>();
-                options.AddRepository<GlobalConfiguration, IGlobalConfigRepository>();
-                options.AddRepository<DynamicReRoute, IDynamicReRouteRepository>();
-                options.AddRepository<AggregateReRoute, IAggregateReRouteRepository>();
+                options.AddRepository<RouteGroup, EfCoreRouteGroupRepository>();
+                options.AddRepository<ReRoute, EfCoreReRouteRepository>();
+                options.AddRepository<GlobalConfiguration, EfCoreGlobalConfigRepository>();
+                options.AddRepository<DynamicReRoute, EfCoreDynamicReRouteRepository>();
+                options.AddRepository<AggregateReRoute, EfCoreAggregateReRouteRepository>();
 
                 options.Entity<ReRoute>(opt =>
                     opt.DefaultWithDetailsFunc = (p) => 

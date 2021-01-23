@@ -17,16 +17,16 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<MessageServiceDbContext>(options =>
             {
-                options.AddRepository<Notification, INotificationRepository>();
-                options.AddRepository<UserNotification, IUserNotificationRepository>();
-                options.AddRepository<UserSubscribe, IUserSubscribeRepository>();
+                options.AddRepository<Notification, EfCoreNotificationRepository>();
+                options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
+                options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
 
-                options.AddRepository<ChatGroup, IGroupRepository>();
-                options.AddRepository<UserChatGroup, IUserChatGroupRepository>();
-                options.AddRepository<UserChatCard, IUserChatCardRepository>();
-                options.AddRepository<UserChatSetting, IUserChatSettingRepository>();
+                options.AddRepository<ChatGroup, EfCoreGroupRepository>();
+                options.AddRepository<UserChatGroup, EfCoreUserChatGroupRepository>();
+                options.AddRepository<UserChatCard, EfCoreUserChatCardRepository>();
+                options.AddRepository<UserChatSetting, EfCoreUserChatSettingRepository>();
 
-                options.AddRepository<UserChatFriend, IUserChatFriendRepository>();
+                options.AddRepository<UserChatFriend, EfCoreUserChatFriendRepository>();
 
                 options.AddDefaultRepositories(includeAllEntities: true);
             });
