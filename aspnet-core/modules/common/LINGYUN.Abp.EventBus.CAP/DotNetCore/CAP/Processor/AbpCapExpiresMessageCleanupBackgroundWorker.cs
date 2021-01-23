@@ -36,7 +36,7 @@ namespace DotNetCore.CAP.Processor
         /// <param name="options"></param>
         /// <param name="serviceScopeFactory"></param>
         public AbpCapExpiresMessageCleanupBackgroundWorker(
-            AbpTimer timer,
+            AbpAsyncTimer timer,
             IDataStorage storage,
             IStorageInitializer initializer,
             IOptions<AbpCAPEventBusOptions> options,

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="4.1.2" />
   </ItemGroup>
 
 </Project>

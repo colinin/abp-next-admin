@@ -11,15 +11,15 @@ namespace LINGYUN.Abp.Identity
     [Authorize(IdentityPermissions.IdentityClaimType.Default)]
     public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClaimTypeAppService
     {
-        protected IdenityClaimTypeManager IdenityClaimTypeManager { get; }
+        protected IdentityClaimTypeManager IdentityClaimTypeManager { get; }
 
         protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
 
         public IdentityClaimTypeAppService(
-            IdenityClaimTypeManager idenityClaimTypeManager,
+            IdentityClaimTypeManager identityClaimTypeManager,
             IIdentityClaimTypeRepository identityClaimTypeRepository)
         {
-            IdenityClaimTypeManager = idenityClaimTypeManager;
+            IdentityClaimTypeManager = identityClaimTypeManager;
             IdentityClaimTypeRepository = identityClaimTypeRepository;
         }
 
@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.Identity
                 input.Description,
                 input.ValueType
             );
-            identityClaimType = await IdenityClaimTypeManager.CreateAsync(identityClaimType);
+            identityClaimType = await IdentityClaimTypeManager.CreateAsync(identityClaimType);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
@@ -104,7 +104,7 @@ namespace LINGYUN.Abp.Identity
                 identityClaimType.Description = input.Description;
             }
 
-            identityClaimType = await IdenityClaimTypeManager.UpdateAsync(identityClaimType);
+            identityClaimType = await IdentityClaimTypeManager.UpdateAsync(identityClaimType);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);

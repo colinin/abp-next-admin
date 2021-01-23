@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Notifications.Internal
         protected AbpNotificationCleanupOptions Options { get; }
 
         public NotificationCleanupBackgroundWorker(
-            AbpTimer timer, 
+            AbpAsyncTimer timer, 
             IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpNotificationCleanupOptions> options) 
             : base(timer, serviceScopeFactory)

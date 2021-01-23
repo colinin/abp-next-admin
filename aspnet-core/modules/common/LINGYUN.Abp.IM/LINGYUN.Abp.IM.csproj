@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Auditing" Version="4.0.0" />
-    <PackageReference Include="Volo.Abp.EventBus" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.Auditing" Version="4.1.2" />
+    <PackageReference Include="Volo.Abp.EventBus" Version="4.1.2" />
   </ItemGroup>
 
 </Project>
