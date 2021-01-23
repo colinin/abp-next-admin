@@ -59,7 +59,7 @@
             Storage
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpAsyncTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
             <summary>
             创建过期消息清理任务
             </summary>

@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.EventBus" Version="4.0.0" />
-    <PackageReference Include="Volo.Abp.Json" Version="4.0.0" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.EventBus" Version="4.1.2" />
+    <PackageReference Include="Volo.Abp.Json" Version="4.1.2" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs" Version="4.1.2" />
   </ItemGroup>
 
 </Project>
