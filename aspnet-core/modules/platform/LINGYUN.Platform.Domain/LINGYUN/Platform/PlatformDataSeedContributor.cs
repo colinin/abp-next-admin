@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform
 {
     public class PlatformDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
+        protected ICurrentTenant CurrentTenant { get; }
         protected IGuidGenerator GuidGenerator { get; }
         protected IRouteDataSeeder RouteDataSeeder { get; }
         protected IDataDictionaryDataSeeder DataDictionaryDataSeeder { get; }
@@ -21,12 +23,14 @@ namespace LINGYUN.Platform
         protected ILayoutRepository LayoutRepository { get; }
 
         public PlatformDataSeedContributor(
+            ICurrentTenant currentTenant,
             IRouteDataSeeder routeDataSeeder,
             IMenuRepository menuRepository,
             ILayoutRepository layoutRepository,
             IGuidGenerator guidGenerator,
             IDataDictionaryDataSeeder dataDictionaryDataSeeder)
         {
+            CurrentTenant = currentTenant;
             GuidGenerator = guidGenerator;
             RouteDataSeeder = routeDataSeeder;
             MenuRepository = menuRepository;
@@ -36,23 +40,26 @@ namespace LINGYUN.Platform
 
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            var data = await SeedDefaultDataDictionaryAsync(context.TenantId);
-            // 预置
-            var layout = await SeedDefaultLayoutAsync(data);
-            // 首页
-            await SeedHomeMenuAsync(layout, data);
-            // 管理菜单预置菜单数据
-            await SeedAdminMenuAsync(layout, data);
-            // saas菜单数据
-            await SeedSaasMenuAsync(layout, data);
-            // 身份资源菜单数据
-            await SeedIdentityServerMenuAsync(layout, data);
-            // 审计日志菜单数据
-            await SeedAuditingMenuAsync(layout, data);
-            // 布局容器预置菜单数据
-            await SeedContainerMenuAsync(layout, data);
-            // 网关管理菜单数据
-            await SeedApiGatewayMenuAsync(layout, data);
+            using (CurrentTenant.Change(context.TenantId))
+            {
+                var data = await SeedDefaultDataDictionaryAsync(context.TenantId);
+                // 预置
+                var layout = await SeedDefaultLayoutAsync(data);
+                // 首页
+                await SeedHomeMenuAsync(layout, data);
+                // 管理菜单预置菜单数据
+                await SeedAdminMenuAsync(layout, data);
+                // saas菜单数据
+                await SeedSaasMenuAsync(layout, data);
+                // 身份资源菜单数据
+                await SeedIdentityServerMenuAsync(layout, data);
+                // 审计日志菜单数据
+                await SeedAuditingMenuAsync(layout, data);
+                // 布局容器预置菜单数据
+                await SeedContainerMenuAsync(layout, data);
+                // 网关管理菜单数据
+                await SeedApiGatewayMenuAsync(layout, data);
+            }
         }
 
         private async Task<Data> SeedDefaultDataDictionaryAsync(Guid? tenantId)

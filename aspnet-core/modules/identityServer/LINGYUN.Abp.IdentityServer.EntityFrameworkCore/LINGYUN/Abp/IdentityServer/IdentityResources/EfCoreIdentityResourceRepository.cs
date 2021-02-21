@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
 
         public virtual async Task<List<string>> GetNamesAsync(CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                    .Select(x => x.Name)
                    .Distinct()
                    .ToListAsync(GetCancellationToken(cancellationToken));

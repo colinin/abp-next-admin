@@ -23,22 +23,23 @@ namespace LINGYUN.Abp.MessageService.Notifications
             int batchCount,
             CancellationToken cancellationToken = default)
         {
-            var batchDeleteNoticeWithIds = await DbSet
+            var dbSet = await GetDbSetAsync();
+            var batchDeleteNoticeWithIds = await dbSet
                 .Where(x => x.ExpirationTime <= DateTime.Now)
                 .Take(batchCount)
                 .Select(x => new Notification(x.Id))
                 .AsNoTracking()
                 .ToArrayAsync(GetCancellationToken(cancellationToken));
 
-            DbSet.AttachRange(batchDeleteNoticeWithIds);
-            DbSet.RemoveRange(batchDeleteNoticeWithIds);
+            dbSet.AttachRange(batchDeleteNoticeWithIds);
+            dbSet.RemoveRange(batchDeleteNoticeWithIds);
         }
 
         public async Task<Notification> GetByIdAsync(
             long notificationId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.NotificationId.Equals(notificationId))
+            return await (await GetDbSetAsync()).Where(x => x.NotificationId.Equals(notificationId))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
     }

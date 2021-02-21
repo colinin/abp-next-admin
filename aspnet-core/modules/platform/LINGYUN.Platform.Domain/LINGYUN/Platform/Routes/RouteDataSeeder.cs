@@ -117,7 +117,7 @@ namespace LINGYUN.Platform.Routes
         {
             if (! await RoleMenuRepository.RoleHasInMenuAsync(roleName, menu.Name, cancellationToken))
             {
-                var roleMenu = new RoleMenu(menu.Id, roleName, tenantId);
+                var roleMenu = new RoleMenu(GuidGenerator.Create(), menu.Id, roleName, tenantId);
                 await RoleMenuRepository.InsertAsync(roleMenu);
 
                 var childrens = await MenuRepository.GetChildrenAsync(menu.Id);
@@ -136,7 +136,7 @@ namespace LINGYUN.Platform.Routes
         {
             if (!await UserMenuRepository.UserHasInMenuAsync(userId, menu.Name, cancellationToken))
             {
-                var userMenu = new UserMenu(menu.Id, userId, tenantId);
+                var userMenu = new UserMenu(GuidGenerator.Create(), menu.Id, userId, tenantId);
                 await UserMenuRepository.InsertAsync(userMenu);
 
                 var childrens = await MenuRepository.GetChildrenAsync(menu.Id);

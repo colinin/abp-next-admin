@@ -17,12 +17,17 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task<DynamicReRoute> GetByItemIdAsync(int itemId)
         {
-            return await GetQueryable().Where(x => x.DynamicReRouteId.Equals(itemId)).FirstOrDefaultAsync();
+            return await (await GetQueryableAsync()).Where(x => x.DynamicReRouteId.Equals(itemId)).FirstOrDefaultAsync();
         }
 
         public async Task<List<DynamicReRoute>> GetByAppIdAsync(string appId)
         {
-            return await WithDetails().Where(x => x.AppId.Equals(appId)).ToListAsync();
+            return await (await WithDetailsAsync()).Where(x => x.AppId.Equals(appId)).ToListAsync();
+        }
+
+        public override async Task<IQueryable<DynamicReRoute>> WithDetailsAsync()
+        {
+            return await WithDetailsAsync(x => x.RateLimitRule); ;
         }
 
         public override IQueryable<DynamicReRoute> WithDetails()

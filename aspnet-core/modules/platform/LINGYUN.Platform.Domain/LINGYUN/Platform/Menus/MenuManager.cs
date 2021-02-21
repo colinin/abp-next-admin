@@ -11,6 +11,8 @@ namespace LINGYUN.Platform.Menus
 {
     public class MenuManager : DomainService
     {
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+
         protected IMenuRepository MenuRepository { get; }
         protected IUserMenuRepository UserMenuRepository { get; }
         protected IRoleMenuRepository RoleMenuRepository { get; }
@@ -68,6 +70,7 @@ namespace LINGYUN.Platform.Menus
             return menu;
         }
 
+        [UnitOfWork]
         public virtual async Task UpdateAsync(Menu menu)
         {
             await ValidateMenuAsync(menu);
@@ -117,27 +120,61 @@ namespace LINGYUN.Platform.Menus
             }
         }
 
+        public virtual async Task<bool> UserHasInMenuAsync(Guid userId, string menuName)
+        {
+            var menu = await MenuRepository.FindByNameAsync(menuName);
+            return false;
+        }
+
         public virtual async Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds)
         {
-            await UserMenuRepository.SetMemberMenusAsync(userId, menuIds);
+            using (var unitOfWork = UnitOfWorkManager.Begin())
+            {
+                var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId);
+
+                // 移除不存在的菜单
+                // TODO: 升级框架版本解决未能删除不需要菜单的问题
+                // userMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                var dels = userMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                if (dels.Any())
+                {
+                    await UserMenuRepository.DeleteManyAsync(dels);
+                }
+
+                var adds = menuIds.Where(menuId => !userMenus.Any(x => x.MenuId == menuId));
+                if (adds.Any())
+                {
+                    var addInMenus = adds.Select(menuId => new UserMenu(GuidGenerator.Create(), menuId, userId, CurrentTenant.Id));
+                    await UserMenuRepository.InsertAsync(addInMenus);
+                }
+
+                await unitOfWork.SaveChangesAsync();
+            }
         }
 
-        [UnitOfWork]
         public virtual async Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds)
         {
-            await RoleMenuRepository.SetRoleMenusAsync(roleName, menuIds);
-        }
-
-        protected virtual async Task ValidateMenuAsync(Menu menu)
-        {
-            var siblings = (await FindChildrenAsync(menu.ParentId))
-                .Where(x => x.Id != menu.Id)
-                .ToList();
-
-            if (siblings.Any(ou => ou.Name == menu.Name))
+            using (var unitOfWork = UnitOfWorkManager.Begin())
             {
-                throw new BusinessException(PlatformErrorCodes.DuplicateMenu)
-                    .WithData("Name", menu.Name);
+                var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName);
+
+                // 移除不存在的菜单
+                // TODO: 升级框架版本解决未能删除不需要菜单的问题
+                // roleMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                var dels = roleMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                if (dels.Any())
+                {
+                    await UserMenuRepository.DeleteManyAsync(dels);
+                }
+
+                var adds = menuIds.Where(menuId => !roleMenus.Any(x => x.MenuId == menuId));
+                if (adds.Any())
+                {
+                    var addInMenus = adds.Select(menuId => new RoleMenu(GuidGenerator.Create(), menuId, roleName, CurrentTenant.Id));
+                    await RoleMenuRepository.InsertAsync(addInMenus);
+                }
+
+                await unitOfWork.SaveChangesAsync();
             }
         }
 
@@ -186,6 +223,19 @@ namespace LINGYUN.Platform.Menus
         {
             var menu = await MenuRepository.GetAsync(id);
             return menu?.Code;
+        }
+
+        protected virtual async Task ValidateMenuAsync(Menu menu)
+        {
+            var siblings = (await FindChildrenAsync(menu.ParentId))
+                .Where(x => x.Id != menu.Id)
+                .ToList();
+
+            if (siblings.Any(x => x.Name == menu.Name))
+            {
+                throw new BusinessException(PlatformErrorCodes.DuplicateMenu)
+                    .WithData("Name", menu.Name);
+            }
         }
     }
 }

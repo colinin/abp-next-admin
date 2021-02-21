@@ -15,8 +15,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     [Authorize(ApiGatewayPermissions.AggregateRoute.Default)]
     public class AggregateReRouteAppService : ApiGatewayApplicationServiceBase, IAggregateReRouteAppService
     {
-        private IDistributedEventBus _eventBus;
-        protected IDistributedEventBus DistributedEventBus => LazyGetRequiredService(ref _eventBus);
+        protected IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
 
         private readonly IAggregateReRouteRepository _aggregateReRouteRepository;
 

@@ -57,11 +57,11 @@ namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
                     // TODO: MySql 批量新增还是一条一条的语句?
                     // await PermissionGrantRepository.GetDbSet().AddRangeAsync(grantPermissions);
 
-                    var permissionEntityType = PermissionGrantRepository.GetDbContext()
-                        .Model.FindEntityType(typeof(PermissionGrant));
+                    var dbContext = await PermissionGrantRepository.GetDbContextAsync();
+                    var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
                     var permissionTableName = permissionEntityType.GetTableName();
                     var batchInsertPermissionSql = string.Empty;
-                    if (PermissionGrantRepository.GetDbContext().Database.IsMySql())
+                    if (dbContext.Database.IsMySql())
                     {
                         batchInsertPermissionSql = BuildMySqlBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
                     }
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
                     {
                         batchInsertPermissionSql = BuildSqlServerBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
                     }
-                    await PermissionGrantRepository.GetDbContext().Database.ExecuteSqlRawAsync(batchInsertPermissionSql);
+                    await dbContext.Database.ExecuteSqlRawAsync(batchInsertPermissionSql);
 
                     await unitOfWork.SaveChangesAsync();
                 }

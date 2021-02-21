@@ -10,8 +10,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     [Authorize(ApiGatewayPermissions.Route.Default)]
     public class ReRouteAppService : ApiGatewayApplicationServiceBase, IReRouteAppService
     {
-        private IDistributedEventBus _eventBus;
-        protected IDistributedEventBus DistributedEventBus => LazyGetRequiredService(ref _eventBus);
+        protected IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
 
         private readonly IRouteGroupChecker _routeGroupChecker;
         private readonly IReRouteRepository _reRouteRepository;

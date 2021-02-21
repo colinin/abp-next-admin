@@ -24,10 +24,10 @@ namespace LINGYUN.Platform.Menus
             string menuName,
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbSet.Where(x => x.Name == menuName);
+            var menuQuery = (await GetDbSetAsync()).Where(x => x.Name == menuName);
 
             return await (from menu in menuQuery
-                          join userMenu in DbContext.Set<UserMenu>()
+                          join userMenu in (await GetDbContextAsync()).Set<UserMenu>()
                                on menu.Id equals userMenu.MenuId
                           select userMenu)
                           .AnyAsync(x => x.UserId == userId, GetCancellationToken(cancellationToken));
@@ -38,10 +38,10 @@ namespace LINGYUN.Platform.Menus
             string menuName,
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbSet.Where(x => x.Name == menuName);
+            var menuQuery = (await GetDbSetAsync()).Where(x => x.Name == menuName);
 
             return await (from menu in menuQuery
-                          join roleMenu in DbContext.Set<RoleMenu>()
+                          join roleMenu in (await GetDbContextAsync()).Set<RoleMenu>()
                                on menu.Id equals roleMenu.MenuId
                           select roleMenu)
                           .AnyAsync(x => x.RoleName == roleName, GetCancellationToken(cancellationToken));
@@ -51,7 +51,7 @@ namespace LINGYUN.Platform.Menus
             string menuName,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.Name == menuName)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
@@ -60,7 +60,7 @@ namespace LINGYUN.Platform.Menus
             PlatformType platformType = PlatformType.None,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(menu => menu.PlatformType.HasFlag(platformType) && menu.Path == "/")
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
@@ -70,10 +70,10 @@ namespace LINGYUN.Platform.Menus
             PlatformType platformType = PlatformType.None, 
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbSet
+            var menuQuery = (await GetDbSetAsync())
                 .Where(menu => menu.PlatformType.HasFlag(platformType));
 
-            var roleMenuQuery = DbContext.Set<RoleMenu>()
+            var roleMenuQuery = (await GetDbContextAsync()).Set<RoleMenu>()
                     .Where(menu => roles.Contains(menu.RoleName));
 
             return await (from menu in menuQuery
@@ -91,10 +91,11 @@ namespace LINGYUN.Platform.Menus
             PlatformType platformType = PlatformType.None, 
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbSet
+            var menuQuery = (await GetDbSetAsync())
                 .Where(menu => menu.PlatformType.HasFlag(platformType));
 
-            var userMenuQuery = from userMenu in DbContext.Set<UserMenu>()
+            var dbContext = await GetDbContextAsync();
+            var userMenuQuery = from userMenu in dbContext.Set<UserMenu>()
                                 join menu in menuQuery
                                     on userMenu.MenuId equals menu.Id
                                 where userMenu.UserId == userId
@@ -102,7 +103,7 @@ namespace LINGYUN.Platform.Menus
 
             if (roles != null && roles.Length > 0)
             {
-                var roleMenuQuery = from roleMenu in DbContext.Set<RoleMenu>()
+                var roleMenuQuery = from roleMenu in dbContext.Set<RoleMenu>()
                                     join menu in menuQuery
                                         on roleMenu.MenuId equals menu.Id
                                     where roles.Contains(roleMenu.RoleName)
@@ -126,7 +127,7 @@ namespace LINGYUN.Platform.Menus
             CancellationToken cancellationToken = default
         )
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.ParentId == parentId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -137,7 +138,7 @@ namespace LINGYUN.Platform.Menus
             CancellationToken cancellationToken = default
         )
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                .Where(x => x.Code.StartsWith(code) && x.Id != parentId.Value)
                .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -154,7 +155,7 @@ namespace LINGYUN.Platform.Menus
             sorting ??= nameof(Menu.Code);
             sorting = reverse ? sorting + " DESC" : sorting;
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
@@ -173,7 +174,7 @@ namespace LINGYUN.Platform.Menus
             Guid? layoutId = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
@@ -198,7 +199,7 @@ namespace LINGYUN.Platform.Menus
             sorting ??= nameof(Menu.Code);
             sorting = reverse ? sorting + " DESC" : sorting;
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
                 .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
@@ -216,11 +217,12 @@ namespace LINGYUN.Platform.Menus
             CancellationToken cancellationToken = default
         )
         {
-            var rolesQuery = await DbContext.Set<RoleMenu>()
+            var dbContext = await GetDbContextAsync();
+            var rolesQuery = await dbContext.Set<RoleMenu>()
                 .Where(q => q.MenuId == menu.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
-            DbContext.Set<RoleMenu>().RemoveRange(rolesQuery);
+            dbContext.Set<RoleMenu>().RemoveRange(rolesQuery);
         }
 
         public virtual async Task RemoveAllMembersAsync(
@@ -228,11 +230,17 @@ namespace LINGYUN.Platform.Menus
             CancellationToken cancellationToken = default
         )
         {
-            var membersQuery = await DbContext.Set<UserMenu>()
+            var dbContext = await GetDbContextAsync();
+            var membersQuery = await dbContext.Set<UserMenu>()
                 .Where(q => q.MenuId == menu.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
-            DbContext.Set<UserMenu>().RemoveRange(membersQuery);
+            dbContext.Set<UserMenu>().RemoveRange(membersQuery);
+        }
+
+        public override async Task<IQueryable<Menu>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
 
         public override IQueryable<Menu> WithDetails()

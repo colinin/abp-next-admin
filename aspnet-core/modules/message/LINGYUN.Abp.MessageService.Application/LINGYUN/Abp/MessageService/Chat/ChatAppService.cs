@@ -11,8 +11,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     public class ChatAppService : ApplicationService, IChatAppService
     {
-        private IMessageSender _messageSender;
-        protected IMessageSender MessageSender => LazyGetRequiredService(ref _messageSender);
+        protected IMessageSender MessageSender => LazyServiceProvider.LazyGetRequiredService<IMessageSender>();
 
         private readonly IUserGroupStore _userGroupStore;
         private readonly IMessageStore _messageStore;
@@ -127,7 +126,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {
             // TODO：向其他租户发送消息?
-            input.TenantId = input.TenantId ?? CurrentTenant.Id;
+            input.TenantId ??= CurrentTenant.Id;
 
             await MessageSender.SendMessageAsync(input);
 

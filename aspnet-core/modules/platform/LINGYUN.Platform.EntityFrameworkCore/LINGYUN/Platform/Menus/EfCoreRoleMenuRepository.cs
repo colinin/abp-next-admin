@@ -18,43 +18,31 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
+        public virtual async Task<List<RoleMenu>> GetListByRoleNameAsync(string roleName, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync()).Where(x => x.RoleName.Equals(roleName))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task InsertAsync(IEnumerable<RoleMenu> roleMenus, CancellationToken cancellationToken = default)
+        {
+            await (await GetDbSetAsync()).AddRangeAsync(roleMenus, GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<bool> RoleHasInMenuAsync(
             string roleName, 
             string menuName, 
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbContext.Set<Menu>().Where(x => x.Name == menuName);
+            var menuQuery = (await GetDbContextAsync()).Set<Menu>().Where(x => x.Name == menuName);
 
             return await
-                (from roleMenu in DbSet
+                (from roleMenu in (await GetDbSetAsync())
                  join menu in menuQuery
                       on roleMenu.MenuId equals menu.Id
                  select roleMenu)
                  .AnyAsync(x => x.RoleName == roleName, 
                     GetCancellationToken(cancellationToken));
-        }
-
-        public virtual async Task SetRoleMenusAsync(
-            string roleName,
-            IEnumerable<Guid> menuIds,
-            CancellationToken cancellationToken = default)
-        {
-            var hasInMenus = await DbSet
-                .Where(x => x.RoleName == roleName)
-                .ToArrayAsync(GetCancellationToken(cancellationToken));
-
-            var removes = hasInMenus.Where(x => !menuIds.Contains(x.MenuId));
-            if (removes.Any())
-            {
-                DbContext.RemoveRange(removes);
-            }
-
-            var adds = menuIds.Where(menuId => !hasInMenus.Any(x => x.MenuId == menuId));
-            if (adds.Any())
-            {
-                var addInMenus = adds.Select(menuId => new RoleMenu(menuId, roleName, CurrentTenant.Id));
-                await DbContext.AddRangeAsync(addInMenus, GetCancellationToken(cancellationToken));
-            }
         }
     }
 }

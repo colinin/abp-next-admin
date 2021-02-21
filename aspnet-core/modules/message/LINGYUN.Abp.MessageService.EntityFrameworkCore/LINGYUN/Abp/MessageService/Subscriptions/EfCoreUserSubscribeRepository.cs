@@ -21,12 +21,12 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         {
         }
 
-        public async Task<List<UserSubscribe>> GetUserSubscribesAsync(
+        public virtual async Task<List<UserSubscribe>> GetUserSubscribesAsync(
             string notificationName, 
             IEnumerable<Guid> userIds = null,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribes = await DbSet
+            var userSubscribes = await (await GetDbSetAsync())
                 .Distinct()
                 .Where(x => x.NotificationName.Equals(notificationName))
                 .WhereIf(userIds != null, x => userIds.Contains(x.UserId))
@@ -36,12 +36,12 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribes;
         }
 
-        public async Task<UserSubscribe> GetUserSubscribeAsync(
+        public virtual async Task<UserSubscribe> GetUserSubscribeAsync(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribe = await DbSet
+            var userSubscribe = await (await GetDbSetAsync())
                 .Where(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -49,11 +49,11 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribe;
         }
 
-        public async Task<List<string>> GetUserSubscribesAsync(
+        public virtual async Task<List<string>> GetUserSubscribesAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribeNames = await DbSet
+            var userSubscribeNames = await (await GetDbSetAsync())
                 .Distinct()
                 .Where(x => x.UserId.Equals(userId))
                 .Select(x => x.NotificationName)
@@ -62,11 +62,11 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribeNames;
         }
 
-        public async Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(
+        public virtual async Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(
             string userName,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribeNames = await DbSet
+            var userSubscribeNames = await (await GetDbSetAsync())
                 .Distinct()
                 .Where(x => x.UserName.Equals(userName))
                 .AsNoTracking()
@@ -75,11 +75,11 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribeNames;
         }
 
-        public async Task<List<Guid>> GetUserSubscribesAsync(
+        public virtual async Task<List<Guid>> GetUserSubscribesAsync(
             string notificationName,
             CancellationToken cancellationToken = default)
         {
-            var subscribeUsers = await DbSet
+            var subscribeUsers = await (await GetDbSetAsync())
                 .Distinct()
                 .Where(x => x.NotificationName.Equals(notificationName))
                 .Select(x => x.UserId)
@@ -88,28 +88,27 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return subscribeUsers;
         }
 
-        public async Task InsertUserSubscriptionAsync(
+        public virtual async Task InsertUserSubscriptionAsync(
             IEnumerable<UserSubscribe> userSubscribes,
             CancellationToken cancellationToken = default)
         {
-            await DbSet.AddRangeAsync(userSubscribes, GetCancellationToken(cancellationToken));
+            await (await GetDbSetAsync()).AddRangeAsync(userSubscribes, GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteUserSubscriptionAsync(
+        public virtual async Task DeleteUserSubscriptionAsync(
             string notificationName,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribes = await DbSet.Where(x => x.NotificationName.Equals(notificationName))
+            var userSubscribes = await (await GetDbSetAsync()).Where(x => x.NotificationName.Equals(notificationName))
                 .ToListAsync(GetCancellationToken(cancellationToken));
-            DbSet.RemoveRange(userSubscribes);
+            (await GetDbSetAsync()).RemoveRange(userSubscribes);
         }
 
-        public Task DeleteUserSubscriptionAsync(
+        public virtual async Task DeleteUserSubscriptionAsync(
             IEnumerable<UserSubscribe> userSubscribes,
             CancellationToken cancellationToken = default)
         {
-            DbSet.RemoveRange(userSubscribes);
-            return Task.CompletedTask;
+            await DeleteManyAsync(userSubscribes);
         }
 
         public virtual async Task DeleteUserSubscriptionAsync(
@@ -122,12 +121,12 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> UserSubscribeExistsAysnc(
+        public virtual async Task<bool> UserSubscribeExistsAysnc(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .AnyAsync(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName),
                     GetCancellationToken(cancellationToken));
         }
@@ -139,7 +138,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribes = await DbSet
+            var userSubscribes = await (await GetDbSetAsync())
                  .Distinct()
                  .Where(x => x.UserId.Equals(userId))
                  .OrderBy(sorting ?? nameof(UserSubscribe.Id))
@@ -154,7 +153,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            var userSubscribedCount = await DbSet
+            var userSubscribedCount = await (await GetDbSetAsync())
                  .Distinct()
                  .Where(x => x.UserId.Equals(userId))
                  .LongCountAsync(GetCancellationToken(cancellationToken));

@@ -23,7 +23,7 @@ namespace LINGYUN.Platform.Layouts
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -34,7 +34,7 @@ namespace LINGYUN.Platform.Layouts
             string filter = "", 
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(platformType.HasValue, x => x.PlatformType == platformType.Value)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                         x.Name.Contains(filter) || x.DisplayName.Contains(filter) ||
@@ -55,7 +55,7 @@ namespace LINGYUN.Platform.Layouts
             sorting ??= nameof(Layout.Name);
             sorting = reverse ? sorting + " DESC" : sorting;
 
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(platformType.HasValue, x => x.PlatformType == platformType.Value)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
@@ -64,6 +64,11 @@ namespace LINGYUN.Platform.Layouts
                 .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public override async Task<IQueryable<Layout>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
 
         public override IQueryable<Layout> WithDetails()

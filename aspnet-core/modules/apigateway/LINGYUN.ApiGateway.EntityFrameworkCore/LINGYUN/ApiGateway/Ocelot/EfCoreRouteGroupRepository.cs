@@ -18,24 +18,25 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public virtual async Task<IEnumerable<RouteGroupAppKey>> GetActivedAppsAsync()
         {
-            return await DbSet.Select(g => new RouteGroupAppKey(g.AppId, g.AppName)).ToArrayAsync();
+            return await (await GetDbSetAsync()).Select(g => new RouteGroupAppKey(g.AppId, g.AppName)).ToArrayAsync();
         }
 
         public virtual async Task<RouteGroup> GetByAppIdAsync(string appId)
         {
-            var routeGroup = await DbSet.Where(g => g.AppId.Equals(appId)).FirstOrDefaultAsync();
+            var routeGroup = await (await GetDbSetAsync()).Where(g => g.AppId.Equals(appId)).FirstOrDefaultAsync();
             return routeGroup ?? throw new EntityNotFoundException(typeof(RouteGroup), appId);
         }
 
         public virtual async Task<(List<RouteGroup> Routers, long TotalCount)> GetPagedListAsync(string filter = "", string sorting = "", int skipCount = 1, int maxResultCount = 10)
         {
-            var groups = await DbSet
+            var dbSet = await GetDbSetAsync();
+            var groups = await dbSet
                 .WhereIf(!filter.IsNullOrWhiteSpace(), g => g.AppId.Contains(filter) ||
                     g.AppName.Contains(filter) || g.AppIpAddress.Contains(filter) || g.Description.Contains(filter))
                 .OrderBy(g => sorting ?? nameof(RouteGroup.AppId))
                 .EfPageBy(skipCount, maxResultCount)
                 .ToListAsync();
-            var toatl = await DbSet
+            var toatl = await dbSet
                 .WhereIf(!filter.IsNullOrWhiteSpace(), g => g.AppId.Contains(filter) ||
                     g.AppName.Contains(filter) || g.AppIpAddress.Contains(filter) || g.Description.Contains(filter))
                 .LongCountAsync();

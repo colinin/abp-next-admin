@@ -18,9 +18,11 @@ namespace LINGYUN.Platform.Menus
         protected UserMenu() { }
 
         public UserMenu(
+            Guid id,
             Guid menuId,
             Guid userId,
             Guid? tenantId = null)
+            : base(id)
         {
             MenuId = menuId;
             UserId = userId;

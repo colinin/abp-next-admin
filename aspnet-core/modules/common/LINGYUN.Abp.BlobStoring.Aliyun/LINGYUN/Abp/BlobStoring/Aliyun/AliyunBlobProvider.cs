@@ -1,6 +1,4 @@
 ﻿using Aliyun.OSS;
-using LINGYUN.Abp.Aliyun.Authorization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,25 +10,24 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
     public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
     {
-        protected AbpAliyunOptions Options { get; }
+        protected IOssClientFactory OssClientFactory { get; }
         protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
 
         public AliyunBlobProvider(
-            IOptions<AbpAliyunOptions> options,
+            IOssClientFactory ossClientFactory,
             IAliyunBlobNameCalculator aliyunBlobNameCalculator)
         {
-            Options = options.Value;
+            OssClientFactory = ossClientFactory;
             AliyunBlobNameCalculator = aliyunBlobNameCalculator;
         }
 
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
+            var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
 
-            if (await BlobExistsAsync(args, blobName))
+            if (await BlobExistsAsync(ossClient, args, blobName))
             {
-                var ossClient = GetOssClient(args);
-
                 return ossClient.DeleteObject(GetBucketName(args), blobName).DeleteMarker;
             }
 
@@ -39,21 +36,22 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
+            var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
 
-            return await BlobExistsAsync(args, blobName);
+            return await BlobExistsAsync(ossClient, args, blobName);
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
+            var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
 
-            if (!await BlobExistsAsync(args, blobName))
+            if (!await BlobExistsAsync(ossClient, args, blobName))
             {
                 return null;
             }
 
-            var ossClient = GetOssClient(args);
             var ossObject = ossClient.GetObject(GetBucketName(args), blobName);
             var memoryStream = new MemoryStream();
             await ossObject.Content.CopyToAsync(memoryStream);
@@ -62,20 +60,20 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
+            var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAliyunConfiguration();
 
             // 先检查Bucket
             if (configuration.CreateBucketIfNotExists)
             {
-                await CreateBucketIfNotExists(args, configuration.CreateBucketReferer);
+                await CreateBucketIfNotExists(ossClient, args, configuration.CreateBucketReferer);
             }
 
             var bucketName = GetBucketName(args);
-            var ossClient = GetOssClient(args);
 
             // 是否已存在
-            if (await BlobExistsAsync(args, blobName))
+            if (await BlobExistsAsync(ossClient, args, blobName))
             {
                 // 是否覆盖
                 if (!args.OverrideExisting)
@@ -92,18 +90,17 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             ossClient.PutObject(bucketName, blobName, args.BlobStream);
         }
 
-        protected virtual OssClient GetOssClient(BlobProviderArgs args)
+        protected virtual async Task<IOss> GetOssClientAsync(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAliyunConfiguration();
-            var ossClient = new OssClient(configuration.Endpoint, Options.AccessKeyId, Options.AccessKeySecret);
+            var ossClient = await OssClientFactory.CreateAsync(configuration);
             return ossClient;
         }
 
-        protected virtual async Task CreateBucketIfNotExists(BlobProviderArgs args, IList<string> refererList = null)
+        protected virtual async Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
         {
-            if (! await BucketExistsAsync(args))
+            if (! await BucketExistsAsync(ossClient, args))
             {
-                var ossClient = GetOssClient(args);
                 var bucketName = GetBucketName(args);
 
                 var request = new CreateBucketRequest(bucketName)
@@ -124,10 +121,9 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             }
         }
 
-        private async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
+        private async Task<bool> BlobExistsAsync(IOss ossClient, BlobProviderArgs args, string blobName)
         {
-            var ossClient = GetOssClient(args);
-            var bucketExists = await BucketExistsAsync(args);
+            var bucketExists = await BucketExistsAsync(ossClient, args);
             if (bucketExists)
             {
                 var objectExists = ossClient.DoesObjectExist(GetBucketName(args), blobName);
@@ -137,9 +133,8 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             return false;
         }
 
-        private Task<bool> BucketExistsAsync(BlobProviderArgs args)
+        private Task<bool> BucketExistsAsync(IOss ossClient,  BlobProviderArgs args)
         {
-            var ossClient = GetOssClient(args);
             var bucketExists = ossClient.DoesBucketExist(GetBucketName(args));
 
             return Task.FromResult(bucketExists);

@@ -10,11 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="2.10.0" />
-    <PackageReference Include="Volo.Abp.BlobStoring" Version="4.1.2" />
+    <PackageReference Include="Volo.Abp.BlobStoring" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Aliyun.Authorization\LINGYUN.Abp.Aliyun.Authorization.csproj" />
+    <ProjectReference Include="..\..\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
   </ItemGroup>
 
 </Project>

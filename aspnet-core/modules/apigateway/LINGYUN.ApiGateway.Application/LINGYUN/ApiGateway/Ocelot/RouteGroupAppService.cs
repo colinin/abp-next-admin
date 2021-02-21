@@ -10,8 +10,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     [Authorize(ApiGatewayPermissions.RouteGroup.Default)]
     public class RouteGroupAppService : ApiGatewayApplicationServiceBase, IRouteGroupAppService
     {
-        private IDataFilter _dataFilter;
-        protected IDataFilter DataFilter => LazyGetRequiredService(ref _dataFilter);
+        protected IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
         protected IRouteGroupRepository RouterRepository { get; }
 
         public RouteGroupAppService(

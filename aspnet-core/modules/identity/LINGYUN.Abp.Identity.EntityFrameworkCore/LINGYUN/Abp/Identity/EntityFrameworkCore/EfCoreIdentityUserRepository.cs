@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             string phoneNumber,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(false)
+            return await (await GetDbSetAsync()).IncludeDetails(false)
                 .AnyAsync(user => user.PhoneNumber == phoneNumber,
                     GetCancellationToken(cancellationToken));
         }
@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             string phoneNumber,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(false)
+            return await (await GetDbSetAsync()).IncludeDetails(false)
                 .AnyAsync(user => user.PhoneNumber == phoneNumber && user.PhoneNumberConfirmed,
                     GetCancellationToken(cancellationToken));
         }
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
            string normalizedEmail,
            CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(false)
+            return await (await GetDbSetAsync()).IncludeDetails(false)
                 .AnyAsync(user => user.NormalizedEmail == normalizedEmail && user.EmailConfirmed,
                     GetCancellationToken(cancellationToken));
         }
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.IncludeDetails(includeDetails)
+            return await (await GetDbSetAsync()).IncludeDetails(includeDetails)
                .Where(user => user.PhoneNumber == phoneNumber && user.PhoneNumberConfirmed == isConfirmed)
                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
             )
         {
-            return await DbSet.IncludeDetails(includeDetails)
+            return await (await GetDbSetAsync()).IncludeDetails(includeDetails)
                 .Where(user => userIds.Contains(user.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -78,8 +78,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOU in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOU.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOU in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOU.OrganizationUnitId equals ou.Id
                         where userOU.UserId == id
                         select ou;
 
@@ -95,8 +96,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
                         where userOu.OrganizationUnitId == organizationUnitId
                         select user;
             return await query
@@ -115,8 +117,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
                         where userOu.OrganizationUnitId == organizationUnitId
                         select user;
             return await query
@@ -134,8 +137,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
                         where organizationUnitIds.Contains(userOu.OrganizationUnitId)
                         select user;
             return await query
@@ -154,8 +158,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
                         where organizationUnitIds.Contains(userOu.OrganizationUnitId)
                         select user;
             return await query
@@ -173,9 +178,10 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
-                        join ou in DbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
+                        join ou in dbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(code)
                         select user;
             return await query
@@ -194,9 +200,10 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
         )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbSet on userOu.UserId equals user.Id
-                        join ou in DbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in (await GetDbSetAsync()) on userOu.UserId equals user.Id
+                        join ou in dbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(code)
                         select user;
             return await query

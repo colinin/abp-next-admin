@@ -23,6 +23,10 @@ namespace LINGYUN.Abp.EntityFrameworkCore.Tests
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
+                    abpDbContextConfigurationContext.DbContextOptions.EnableDetailedErrors();
+                    abpDbContextConfigurationContext.DbContextOptions.EnableSensitiveDataLogging();
+                    abpDbContextConfigurationContext.DbContextOptions.UseEFCoreLogger();
+
                     abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
                 });
             });

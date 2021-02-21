@@ -20,9 +20,12 @@ namespace LINGYUN.Platform.Menus
             string menuName,
             CancellationToken cancellationToken = default);
 
-        Task SetRoleMenusAsync(
+        Task<List<RoleMenu>> GetListByRoleNameAsync(
             string roleName,
-            IEnumerable<Guid> menuIds,
+            CancellationToken cancellationToken = default);
+
+        Task InsertAsync(
+            IEnumerable<RoleMenu> roleMenus,
             CancellationToken cancellationToken = default);
     }
 }

@@ -22,14 +22,14 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<bool> CheckUserIdExistsAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .AnyAsync(ucc => ucc.UserId == userId,
                     GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<UserCard> GetMemberAsync(Guid findUserId, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(ucc => ucc.UserId == findUserId)
                 .Select(ucc => ucc.ToUserCard())
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<int> GetMemberCountAsync(string findUserName = "", int? startAge = null, int? endAge = null, Sex? sex = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                   .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName))
                   .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge.Value)
                   .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge.Value)
@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             sorting ??= nameof(UserChatCard.UserId);
             sorting = reverse ? sorting + " desc" : sorting;
-            return await DbSet
+            return await (await GetDbSetAsync())
                   .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName))
                   .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge.Value)
                   .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge.Value)

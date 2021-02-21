@@ -7,8 +7,7 @@ namespace LINGYUN.Abp.IdentityServer
 {
     public abstract class AbpIdentityServerAppServiceBase : ApplicationService
     {
-        private IPermissionChecker _permissionChecker;
-        protected IPermissionChecker PermissionChecker => LazyGetRequiredService(ref _permissionChecker);
+        protected IPermissionChecker PermissionChecker => LazyServiceProvider.LazyGetRequiredService<IPermissionChecker>();
         protected AbpIdentityServerAppServiceBase()
         {
             LocalizationResource = typeof(AbpIdentityServerResource);

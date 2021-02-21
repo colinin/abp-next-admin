@@ -1,9 +1,7 @@
 ﻿using AuthServer.Host.Emailing.Templates;
-using LINGYUN.Abp.Account;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Diagnostics;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp.Account.Emailing;
@@ -73,7 +71,7 @@ namespace AuthServer.Host.Emailing
             );
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
+        protected override string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {

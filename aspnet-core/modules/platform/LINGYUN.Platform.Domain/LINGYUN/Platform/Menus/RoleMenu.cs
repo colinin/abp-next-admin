@@ -18,9 +18,11 @@ namespace LINGYUN.Platform.Menus
         protected RoleMenu() { }
 
         public RoleMenu(
+            Guid id,
             Guid menuId,
             string roleName,
             Guid? tenantId = null)
+            : base(id)
         {
             MenuId = menuId;
             RoleName = roleName;

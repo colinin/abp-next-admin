@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             long notificationId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .AnyAsync(x => x.NotificationId.Equals(notificationId) && x.UserId.Equals(userId),
                     GetCancellationToken(cancellationToken));
         }
@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             IEnumerable<UserNotification> userNotifications,
             CancellationToken cancellationToken = default)
         {
-            await DbSet.AddRangeAsync(userNotifications, GetCancellationToken(cancellationToken));
+            await (await GetDbSetAsync()).AddRangeAsync(userNotifications, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<UserNotification> GetByIdAsync(
@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             long notificationId,
             CancellationToken cancellationToken = default)
         {
-            var userNofitication = await DbSet
+            var userNofitication = await (await GetDbSetAsync())
                 .Where(x => x.NotificationId.Equals(notificationId) && x.UserId.Equals(userId))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
@@ -57,12 +57,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            var userNotifilerQuery = DbContext.Set<UserNotification>()
+            var dbContext = await GetDbContextAsync();
+            var userNotifilerQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
             var notifilerQuery = from un in userNotifilerQuery
-                                 join n in DbContext.Set<Notification>()
+                                 join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 
@@ -79,12 +80,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationReadState? readState = null,
             CancellationToken cancellationToken = default)
         {
-            var userNotifilerQuery = DbContext.Set<UserNotification>()
+            var dbContext = await GetDbContextAsync();
+            var userNotifilerQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
             var notifilerQuery = from un in userNotifilerQuery
-                                 join n in DbContext.Set<Notification>()
+                                 join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 
@@ -108,13 +110,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
             sorting ??= nameof(Notification.CreationTime);
             sorting = reverse ? sorting + " DESC" : sorting;
 
-
-            var userNotifilerQuery = DbContext.Set<UserNotification>()
+            var dbContext = await GetDbContextAsync();
+            var userNotifilerQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
             var notifilerQuery = from un in userNotifilerQuery
-                                 join n in DbContext.Set<Notification>()
+                                 join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 

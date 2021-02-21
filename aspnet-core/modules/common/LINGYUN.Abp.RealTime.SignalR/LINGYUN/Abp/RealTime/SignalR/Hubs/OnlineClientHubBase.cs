@@ -9,11 +9,8 @@ namespace LINGYUN.Abp.RealTime.SignalR
 {
     public abstract class OnlineClientHubBase : AbpHub, IClient
     {
-        private IWebClientInfoProvider _webClientInfoProvider;
-        protected IWebClientInfoProvider WebClientInfoProvider => LazyGetRequiredService(ref _webClientInfoProvider);
-
-        private IOnlineClientManager _onlineClientManager;
-        protected IOnlineClientManager OnlineClientManager => LazyGetRequiredService(ref _onlineClientManager);
+        protected IWebClientInfoProvider WebClientInfoProvider => LazyServiceProvider.LazyGetRequiredService<IWebClientInfoProvider>();
+        protected IOnlineClientManager OnlineClientManager => LazyServiceProvider.LazyGetRequiredService<IOnlineClientManager>();
 
         public override async Task OnConnectedAsync()
         {
