@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
@@ -12,7 +13,7 @@ using LINGYUN.Abp.TenantManagement;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform;
-using LINYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -84,6 +85,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpWeChatSettingManagementModule),// 微信配置管理模块
+        typeof(AbpAliyunSettingManagementModule),// 阿里云配置管理模块
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
         typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包

@@ -116,10 +116,10 @@ export default class extends Vue {
     if (isUndefined(setting)) {
       const setting = new SettingUpdate()
       setting.name = key
-      setting.value = value
+      setting.value = String(value) // 配置项必须为文本类型
       this.changeSetting.settings.push(setting)
     } else {
-      setting.value = value
+      setting.value = String(value) // 配置项必须为文本类型
     }
   }
 

@@ -1,0 +1,25 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:Aliyun.RAM": "访问控制",
+    "Description:Aliyun.RAM": "阿里云服务访问控制",
+    "DisplayName:Authorization": "阿里云身份认证凭据",
+    "Description:Authorization": "阿里云身份认证凭据",
+    "DisplayName:RegionId": "地域ID",
+    "Description:RegionId": "正在使用的地域ID",
+    "DisplayName:AccessKeyId": "AccessKey Id",
+    "Description:AccessKeyId": "访问密钥标识",
+    "DisplayName:AccessKeySecret": "AccessKey Secret",
+    "Description:AccessKeySecret": "访问密钥",
+    "DisplayName:UseSecurityTokenService": "使用STS Token访问",
+    "Description:UseSecurityTokenService": "使用STS Token访问",
+    "DisplayName:RamRoleArn": "角色全局资源描述符",
+    "Description:RamRoleArn": "格式：acs:ram::$accountID:role/$roleName/$RoleSessionName,详情见阿里云访问控制API",
+    "DisplayName:RoleSessionName": "角色的临时身份",
+    "Description:RoleSessionName": "此参数用来区分不同的令牌，可用于用户级别的访问审计",
+    "DisplayName:DurationSeconds": "过期时间,单位为秒。",
+    "Description:DurationSeconds": "过期时间最小值为900秒,默认3600秒",
+    "DisplayName:Policy": "权限策略",
+    "Description:Policy": "生成STS Token时可以指定一个额外的权限策略，以进一步限制STS Token的权限"
+  }
+}

@@ -1,4 +1,4 @@
-﻿using LINYUN.Abp.Sms.Aliyun;
+﻿using LINGYUN.Abp.Sms.Aliyun;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

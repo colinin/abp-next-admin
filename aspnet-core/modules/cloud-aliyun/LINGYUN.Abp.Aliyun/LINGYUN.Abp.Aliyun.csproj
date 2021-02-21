@@ -10,13 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINYUN\Abp\Aliyun\Localization\Resources\en.json" />
-		<None Remove="LINYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINGYUN\Abp\Aliyun\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINYUN\Abp\Aliyun\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Aliyun\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Aliyun\Localization\Resources\zh-Hans.json" />
 	</ItemGroup>
 
 	<ItemGroup>
