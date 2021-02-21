@@ -1,5 +1,5 @@
 ﻿using Aliyun.OSS;
-using LINYUN.Abp.Aliyun;
+using LINGYUN.Abp.Aliyun;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;

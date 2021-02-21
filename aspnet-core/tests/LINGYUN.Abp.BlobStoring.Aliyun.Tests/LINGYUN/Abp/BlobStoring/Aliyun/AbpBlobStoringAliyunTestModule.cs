@@ -1,6 +1,6 @@
 ﻿using Aliyun.OSS;
 using LINGYUN.Abp.Aliyun;
-using LINYUN.Abp.Aliyun.Settings;
+using LINGYUN.Abp.Aliyun.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;

@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:Aliyun": "阿里云服务",
+    "Permission:Aliyun.Settings": "配置阿里云",
+    "DisplayName:Aliyun": "阿里云服务",
+    "Description:Aliyun": "阿里云服务"
+  }
+}
