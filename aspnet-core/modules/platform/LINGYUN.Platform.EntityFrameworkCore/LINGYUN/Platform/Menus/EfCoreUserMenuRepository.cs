@@ -23,38 +23,28 @@ namespace LINGYUN.Platform.Menus
             string menuName, 
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbContext.Set<Menu>().Where(x => x.Name == menuName);
-
             return await
-                (from roleMenu in DbSet
-                 join menu in menuQuery
-                      on roleMenu.MenuId equals menu.Id
-                 select roleMenu)
-                 .AnyAsync(x => x.UserId == userId, 
+                (from userMenu in DbContext.Set<UserMenu>()
+                 join menu in DbContext.Set<Menu>()
+                      on userMenu.MenuId equals menu.Id
+                 where userMenu.UserId.Equals(userId)
+                 select menu)
+                 .AnyAsync(
+                    x => x.Name.Equals(menuName),
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task SetMemberMenusAsync(
+        public virtual async Task<List<UserMenu>> GetListByUserIdAsync(
             Guid userId,
-            IEnumerable<Guid> menuIds,
             CancellationToken cancellationToken = default)
         {
-            var hasInMenus = await DbSet
-                .Where(x => x.UserId == userId)
-                .ToArrayAsync(GetCancellationToken(cancellationToken));
+            return await DbSet.Where(x => x.UserId.Equals(userId))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
 
-            var removes = hasInMenus.Where(x => !menuIds.Contains(x.MenuId));
-            if (removes.Any())
-            {
-                DbContext.RemoveRange(removes);
-            }
-
-            var adds = menuIds.Where(menuId => !hasInMenus.Any(x => x.MenuId == menuId));
-            if (adds.Any())
-            {
-                var addInMenus = adds.Select(menuId => new UserMenu(menuId, userId, CurrentTenant.Id));
-                await DbContext.AddRangeAsync(addInMenus, GetCancellationToken(cancellationToken));
-            }
+        public virtual async Task InsertAsync(IEnumerable<UserMenu> userMenus, CancellationToken cancellationToken = default)
+        {
+            await DbSet.AddRangeAsync(userMenus, GetCancellationToken(cancellationToken));
         }
     }
 }

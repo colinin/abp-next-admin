@@ -25,9 +25,9 @@ namespace LINGYUN.Platform.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             builder.ConfigurePlatform();
+
+            base.OnModelCreating(builder);
         }
     }
 }

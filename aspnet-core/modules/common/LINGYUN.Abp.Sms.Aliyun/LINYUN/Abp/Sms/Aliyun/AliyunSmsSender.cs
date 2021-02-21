@@ -1,19 +1,17 @@
 ﻿using Aliyun.Acs.Core;
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
-using Aliyun.Acs.Core.Profile;
-using LINGYUN.Abp.Aliyun.Authorization;
-using LINYUN.Abp.Sms.Aliyun.Localization;
+using LINYUN.Abp.Aliyun;
+using LINYUN.Abp.Sms.Aliyun.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
+using Volo.Abp.Settings;
 using Volo.Abp.Sms;
 
 namespace LINYUN.Abp.Sms.Aliyun
@@ -22,69 +20,71 @@ namespace LINYUN.Abp.Sms.Aliyun
     [ExposeServices(typeof(ISmsSender), typeof(AliyunSmsSender))]
     public class AliyunSmsSender : ISmsSender
     {
-        protected AbpAliyunOptions AuthOptions { get; }
-        protected AliyunSmsOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
-        protected IHostEnvironment Environment { get; }
+        protected ISettingProvider SettingProvider { get; }
         protected IServiceProvider ServiceProvider { get; }
+        protected IAcsClientFactory AcsClientFactory { get; }
         public AliyunSmsSender(
-            IHostEnvironment environment,
             IJsonSerializer jsonSerializer,
+            ISettingProvider settingProvider,
             IServiceProvider serviceProvider,
-            IOptions<AliyunSmsOptions> options,
-            IOptions<AbpAliyunOptions> authOptions)
+            IAcsClientFactory acsClientFactory)
         {
-            Options = options.Value;
-            AuthOptions = authOptions.Value;
-
-            Environment = environment;
             JsonSerializer = jsonSerializer;
+            SettingProvider = settingProvider;
             ServiceProvider = serviceProvider;
+            AcsClientFactory = acsClientFactory;
         }
 
-        public Task SendAsync(SmsMessage smsMessage)
+        public virtual async Task SendAsync(SmsMessage smsMessage)
         {
+            var domain = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain);
+            var action = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName);
+            var version = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Version);
+
+            Check.NotNullOrWhiteSpace(domain, AliyunSmsSettingNames.Sms.Domain);
+            Check.NotNullOrWhiteSpace(action, AliyunSmsSettingNames.Sms.ActionName);
+            Check.NotNullOrWhiteSpace(version, AliyunSmsSettingNames.Sms.Version);
+
             CommonRequest request = new CommonRequest
             {
                 Method = MethodType.POST,
-                Domain = Options.Domain,
-                Action = Options.ActionName,
-                Version = Options.Version
+                Domain = domain,
+                Action = action,
+                Version = version
             };
-            TryAddTemplateCode(request, smsMessage);
-            TryAddSignName(request, smsMessage);
-            TryAddSendPhone(request, smsMessage);
+            await TryAddTemplateCodeAsync(request, smsMessage);
+            await TryAddSignNameAsync(request, smsMessage);
+            await TryAddSendPhoneAsync(request, smsMessage);
+
             TryAddTemplateParam(request, smsMessage);
 
             try
             {
-                IClientProfile profile = DefaultProfile.GetProfile(Options.RegionId, AuthOptions.AccessKeyId, AuthOptions.AccessKeySecret);
-                IAcsClient client = new DefaultAcsClient(profile);
+                var client = await AcsClientFactory.CreateAsync();
                 CommonResponse response = client.GetCommonResponse(request);
                 var responseContent = Encoding.Default.GetString(response.HttpResponse.Content);
                 var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsResponse>(responseContent);
                 if (!aliyunResponse.IsSuccess())
                 {
-                    if (Options.VisableErrorToClient)
+                    if (await SettingProvider.IsTrueAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient))
                     {
-                        throw new AliyunSmsException(aliyunResponse.Code, aliyunResponse.Message);
+                        throw new UserFriendlyException(aliyunResponse.Code, aliyunResponse.Message);
                     }
-                    throw new AbpException($"Text message sending failed, code:{aliyunResponse.Code}, message:{aliyunResponse.Message}!");
+                    throw new AliyunSmsException(aliyunResponse.Code, $"Text message sending failed, code:{aliyunResponse.Code}, message:{aliyunResponse.Message}!");
                 }
             }
             catch(ServerException se)
             {
-                throw new AbpException("Sending text messages to aliyun server is abnormal", se);
+                throw new AliyunSmsException(se.ErrorCode, $"Sending text messages to aliyun server is abnormal,type: {se.ErrorType}, error: {se.ErrorMessage}");
             }
             catch(ClientException ce)
             {
-                throw new AbpException("A client exception occurred in sending SMS messages", ce);
+                throw new AliyunSmsException(ce.ErrorCode, $"A client exception occurred in sending SMS messages,type: {ce.ErrorType}, error: {ce.ErrorMessage}");
             }
-
-            return Task.CompletedTask;
         }
 
-        private void TryAddTemplateCode(CommonRequest request, SmsMessage smsMessage)
+        private async Task TryAddTemplateCodeAsync(CommonRequest request, SmsMessage smsMessage)
         {
             if (smsMessage.Properties.TryGetValue("TemplateCode", out object template) && template != null)
             {
@@ -93,12 +93,13 @@ namespace LINYUN.Abp.Sms.Aliyun
             }
             else
             {
-                Check.NotNullOrWhiteSpace(Options.DefaultTemplateCode, nameof(Options.DefaultTemplateCode));
-                request.AddQueryParameters("TemplateCode", Options.DefaultTemplateCode);
+                var defaultTemplateCode = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultTemplateCode);
+                Check.NotNullOrWhiteSpace(defaultTemplateCode, "TemplateCode");
+                request.AddQueryParameters("TemplateCode", defaultTemplateCode);
             }
         }
 
-        private void TryAddSignName(CommonRequest request, SmsMessage smsMessage)
+        private async Task TryAddSignNameAsync(CommonRequest request, SmsMessage smsMessage)
         {
             if (smsMessage.Properties.TryGetValue("SignName", out object signName) && signName != null)
             {
@@ -107,21 +108,23 @@ namespace LINYUN.Abp.Sms.Aliyun
             }
             else
             {
-                Check.NotNullOrWhiteSpace(Options.DefaultSignName, nameof(Options.DefaultSignName));
-                request.AddQueryParameters("SignName", Options.DefaultSignName);
+                var defaultSignName = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultSignName);
+                Check.NotNullOrWhiteSpace(defaultSignName, "SignName");
+                request.AddQueryParameters("SignName", defaultSignName);
             }
         }
 
-        private void TryAddSendPhone(CommonRequest request, SmsMessage smsMessage)
+        private async Task TryAddSendPhoneAsync(CommonRequest request, SmsMessage smsMessage)
         {
-            if (Environment.IsDevelopment())
+            if (smsMessage.PhoneNumber.IsNullOrWhiteSpace())
             {
+                var defaultPhoneNumber = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultPhoneNumber);
                 // check phone number length...
                 Check.NotNullOrWhiteSpace(
-                    Options.DeveloperPhoneNumber,
-                    nameof(Options.DeveloperPhoneNumber), 
+                    defaultPhoneNumber,
+                    AliyunSmsSettingNames.Sms.DefaultPhoneNumber, 
                     maxLength: 11, minLength: 11);
-                request.AddQueryParameters("PhoneNumbers", Options.DeveloperPhoneNumber);
+                request.AddQueryParameters("PhoneNumbers", defaultPhoneNumber);
             }
             else
             {

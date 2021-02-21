@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Aliyun.Authorization;
+﻿using LINGYUN.Abp.Aliyun;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
     [DependsOn(
         typeof(AbpBlobStoringModule),
-        typeof(AbpAliyunAuthorizationModule))]
+        typeof(AbpAliyunModule))]
     public class AbpBlobStoringAliyunModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

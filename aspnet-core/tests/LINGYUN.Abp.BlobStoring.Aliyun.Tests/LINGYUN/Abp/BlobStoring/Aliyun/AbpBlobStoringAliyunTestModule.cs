@@ -1,19 +1,20 @@
 ﻿using Aliyun.OSS;
-using LINGYUN.Abp.Tests;
+using LINGYUN.Abp.Aliyun;
+using LINYUN.Abp.Aliyun.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Encryption;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
     [DependsOn(
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringAliyunModule),
-        typeof(AbpTestsBaseModule),
+        typeof(AbpAliyunTestModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpBlobStoringAliyunTestModule : AbpModule
@@ -23,25 +24,22 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
         private string _accessKeySecret;
         private string _endPoint;
 
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            var configurationOptions = new AbpConfigurationBuilderOptions
-            {
-                BasePath = @"D:\Projects\Development\Abp\BlobStoring\Aliyun",
-                EnvironmentName = "Development"
-            };
-
-            context.Services.ReplaceConfiguration(ConfigurationHelper.BuildConfiguration(configurationOptions));
-        }
+        private IConfiguration _configuration;
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = context.Services.GetConfiguration();
+            _configuration = context.Services.GetConfiguration();
+        }
 
-            _endPoint = configuration[AliyunBlobProviderConfigurationNames.Endpoint];
-            _bucketName = configuration[AliyunBlobProviderConfigurationNames.BucketName];
-            _accessKeyId = configuration["Aliyun:Auth:AccessKeyId"];
-            _accessKeySecret = configuration["Aliyun:Auth:AccessKeySecret"];
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            _endPoint = _configuration[AliyunBlobProviderConfigurationNames.Endpoint];
+            _bucketName = _configuration[AliyunBlobProviderConfigurationNames.BucketName];
+
+            var encryptionService = context.ServiceProvider.GetRequiredService<IStringEncryptionService>();
+
+            _accessKeyId = encryptionService.Decrypt(_configuration["Settings:" + AliyunSettingNames.Authorization.AccessKeyId]);
+            _accessKeySecret = encryptionService.Decrypt(_configuration["Settings:" + AliyunSettingNames.Authorization.AccessKeySecret]);
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

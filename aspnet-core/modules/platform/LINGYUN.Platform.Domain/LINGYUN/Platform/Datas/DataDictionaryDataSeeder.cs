@@ -3,18 +3,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Datas
 {
     public class DataDictionaryDataSeeder : IDataDictionaryDataSeeder, ITransientDependency
     {
+        protected ICurrentTenant CurrentTenant { get; }
         protected IGuidGenerator GuidGenerator { get; }
         protected IDataRepository DataRepository { get; }
 
         public DataDictionaryDataSeeder(
+            ICurrentTenant currentTenant,
             IGuidGenerator guidGenerator,
             IDataRepository dataRepository)
         {
+            CurrentTenant = currentTenant;
             GuidGenerator = guidGenerator;
             DataRepository = dataRepository;
         }
@@ -28,23 +32,26 @@ namespace LINGYUN.Platform.Datas
             Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            var data = await DataRepository.FindByNameAsync(name, cancellationToken: cancellationToken);
-
-            if (data == null)
+            using (CurrentTenant.Change(tenantId))
             {
-                data = new Data(
-                    GuidGenerator.Create(),
-                    name,
-                    code,
-                    displayName,
-                    description,
-                    parentId,
-                    tenantId);
+                var data = await DataRepository.FindByNameAsync(name, cancellationToken: cancellationToken);
 
-                data = await DataRepository.InsertAsync(data);
+                if (data == null)
+                {
+                    data = new Data(
+                        GuidGenerator.Create(),
+                        name,
+                        code,
+                        displayName,
+                        description,
+                        parentId,
+                        tenantId);
+
+                    data = await DataRepository.InsertAsync(data);
+                }
+
+                return data;
             }
-
-            return data;
         }
     }
 }

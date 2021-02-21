@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Aliyun.Authorization\LINGYUN.Abp.Aliyun.Authorization.csproj" />
+    <ProjectReference Include="..\..\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
   </ItemGroup>
 
 </Project>
