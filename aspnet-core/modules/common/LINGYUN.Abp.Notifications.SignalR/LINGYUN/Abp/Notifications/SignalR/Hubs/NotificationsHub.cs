@@ -12,8 +12,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
     [Authorize]
     public class NotificationsHub : OnlineClientHubBase
     {
-        private INotificationStore _notificationStore;
-        protected INotificationStore NotificationStore => LazyGetRequiredService(ref _notificationStore);
+        protected INotificationStore NotificationStore => LazyServiceProvider.LazyGetRequiredService<INotificationStore>();
 
         protected override async Task OnClientConnectedAsync(IOnlineClient client)
         {

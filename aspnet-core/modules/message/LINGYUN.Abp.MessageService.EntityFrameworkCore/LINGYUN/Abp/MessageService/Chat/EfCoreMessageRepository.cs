@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             long id,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Set<GroupMessage>()
+            return await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Where(x => x.MessageId.Equals(id))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             CancellationToken cancellationToken = default)
         {
             sorting = reverse ? sorting + " desc" : sorting;
-            var groupMessages = await DbContext.Set<GroupMessage>()
+            var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -63,7 +63,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default)
         {
-            var groupMessagesCount = await DbContext.Set<GroupMessage>()
+            var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -84,7 +84,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             CancellationToken cancellationToken = default)
         {
             sorting = reverse ? sorting + " desc" : sorting;
-            var groupMessages = await DbContext.Set<GroupMessage>()
+            var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -104,7 +104,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default)
         {
-            var groupMessagesCount = await DbContext.Set<GroupMessage>()
+            var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
                   .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
                   .WhereIf(type != null, x => x.Type.Equals(type))
                   .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
@@ -118,7 +118,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Set<GroupMessage>()
+            return await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Where(x => x.GroupId.Equals(groupId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
@@ -132,7 +132,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Set<UserMessage>()
+            return await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                              x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -144,7 +144,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             long id,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Set<UserMessage>()
+            return await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => x.MessageId.Equals(id))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -160,7 +160,8 @@ namespace LINGYUN.Abp.MessageService.Chat
             sorting ??= nameof(LastChatMessage.SendTime);
             sorting = reverse ? sorting + " DESC" : sorting;
 
-            var groupMsgQuery = DbContext.Set<UserMessage>()
+            var dbContext = await GetDbContextAsync();
+            var groupMsgQuery = dbContext.Set<UserMessage>()
                 .Where(msg => msg.ReceiveUserId == userId || msg.CreatorId == userId)
                 .GroupBy(msg => new { msg.CreatorId, msg.ReceiveUserId })
                 .Select(msg => new
@@ -170,7 +171,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                     MessageId = msg.Max(x => x.MessageId)
                 });
 
-            var userMessageQuery = from msg in DbContext.Set<UserMessage>()
+            var userMessageQuery = from msg in dbContext.Set<UserMessage>()
                                    join gMsg in groupMsgQuery
                                         on msg.MessageId equals gMsg.MessageId
                                    select new LastChatMessage
@@ -204,7 +205,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             sorting ??= nameof(UserMessage.MessageId);
             sorting = reverse ? sorting + " desc" : sorting;
-            var userMessages = await DbContext.Set<UserMessage>()
+            var userMessages = await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                              x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -224,7 +225,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             MessageType? type = null,
             CancellationToken cancellationToken = default)
         {
-            var userMessagesCount = await DbContext.Set<UserMessage>()
+            var userMessagesCount = await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                              x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
@@ -238,7 +239,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             GroupMessage groupMessage,
             CancellationToken cancellationToken = default)
         {
-            await DbContext.Set<GroupMessage>()
+            await (await GetDbContextAsync()).Set<GroupMessage>()
                 .AddAsync(groupMessage, GetCancellationToken(cancellationToken));
         }
 
@@ -246,7 +247,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             UserMessage userMessage,
             CancellationToken cancellationToken = default)
         {
-            await DbContext.Set<UserMessage>()
+            await (await GetDbContextAsync()).Set<UserMessage>()
                 .AddAsync(userMessage, GetCancellationToken(cancellationToken));
         }
     }

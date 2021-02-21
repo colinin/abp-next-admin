@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Features.Client;
+using System.Threading.Tasks;
 using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.FeatureManagement;
@@ -20,14 +21,15 @@ namespace LINGYUN.Abp.FeatureManagement.Client
             CurrentClient = currentClient;
         }
 
-        protected override string NormalizeProviderKey(string providerKey)
+
+        protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
         {
             if (providerKey != null)
             {
-                return providerKey;
+                base.NormalizeProviderKeyAsync(providerKey);
             }
 
-            return CurrentClient.Id;
+            return Task.FromResult(CurrentClient.Id);
         }
     }
 }

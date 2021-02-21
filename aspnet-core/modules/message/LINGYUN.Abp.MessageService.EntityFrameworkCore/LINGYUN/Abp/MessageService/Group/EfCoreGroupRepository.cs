@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.MessageService.Group
             long id,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(x => x.GroupId.Equals(id))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
@@ -33,10 +33,11 @@ namespace LINGYUN.Abp.MessageService.Group
             long id,
             CancellationToken cancellationToken = default)
         {
-            var groupAdmins = await (from gp in DbContext.Set<ChatGroup>()
-                                     join ucg in DbContext.Set<UserChatGroup>()
+            var dbContext = await GetDbContextAsync();
+            var groupAdmins = await (from gp in dbContext.Set<ChatGroup>()
+                                     join ucg in dbContext.Set<UserChatGroup>()
                                        on gp.GroupId equals ucg.GroupId
-                                     join ugc in DbContext.Set<UserGroupCard>()
+                                     join ugc in dbContext.Set<UserGroupCard>()
                                        on ucg.UserId equals ugc.UserId
                                      where ugc.IsAdmin
                                      select ugc)
@@ -49,7 +50,7 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid formUserId,
             CancellationToken cancellationToken = default)
         {
-            var userHasBlack = await DbContext.Set<GroupChatBlack>()
+            var userHasBlack = await (await GetDbContextAsync()).Set<GroupChatBlack>()
                 .AnyAsync(x => x.GroupId.Equals(id) && x.ShieldUserId.Equals(formUserId), GetCancellationToken(cancellationToken));
             return userHasBlack;
         }

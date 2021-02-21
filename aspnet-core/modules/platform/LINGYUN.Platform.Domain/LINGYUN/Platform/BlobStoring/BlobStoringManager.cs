@@ -11,11 +11,8 @@ namespace LINGYUN.Platform.BlobStoring
 {
     public class BlobStoringManager : DomainService
     {
-        private IBlobRepository _blobRepository;
-        protected IBlobRepository BlobRepository => LazyGetRequiredService(ref _blobRepository);
-
-        private IBlobContainerRepository _containerRepository;
-        protected IBlobContainerRepository ContainerRepository => LazyGetRequiredService(ref _containerRepository);
+        protected IBlobRepository BlobRepository => LazyServiceProvider.LazyGetRequiredService<IBlobRepository>();
+        protected IBlobContainerRepository ContainerRepository => LazyServiceProvider.LazyGetRequiredService<IBlobContainerRepository>();
 
         protected IBlobContainerFactory BlobContainerFactory { get; }
         protected IBlobContainerConfigurationProvider BlobContainerConfigurationProvider { get; }

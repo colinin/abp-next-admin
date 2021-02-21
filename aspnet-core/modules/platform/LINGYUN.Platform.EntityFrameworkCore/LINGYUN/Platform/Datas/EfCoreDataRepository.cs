@@ -23,7 +23,8 @@ namespace LINGYUN.Platform.Datas
             bool includeDetails = true, 
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -34,7 +35,8 @@ namespace LINGYUN.Platform.Datas
             bool includeDetails = false, 
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                   .IncludeDetails(includeDetails)
                   .Where(x => x.ParentId == parentId)
                   .ToListAsync(GetCancellationToken(cancellationToken));
@@ -44,7 +46,8 @@ namespace LINGYUN.Platform.Datas
             string filter = "", 
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Code.Contains(filter) || x.Description.Contains(filter) ||
                     x.DisplayName.Contains(filter) || x.Name.Contains(filter))
@@ -61,7 +64,8 @@ namespace LINGYUN.Platform.Datas
         {
             sotring ??= nameof(Data.Code);
 
-            return await DbSet
+            var dbSet = await GetDbSetAsync();
+            return await dbSet
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                       x.Code.Contains(filter) || x.Description.Contains(filter) ||
@@ -69,6 +73,11 @@ namespace LINGYUN.Platform.Datas
                 .OrderBy(sotring)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public override async Task<IQueryable<Data>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
 
         public override IQueryable<Data> WithDetails()

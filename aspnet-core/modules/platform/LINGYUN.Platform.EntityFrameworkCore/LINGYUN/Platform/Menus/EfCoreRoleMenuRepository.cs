@@ -20,13 +20,13 @@ namespace LINGYUN.Platform.Menus
 
         public virtual async Task<List<RoleMenu>> GetListByRoleNameAsync(string roleName, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.RoleName.Equals(roleName))
+            return await (await GetDbSetAsync()).Where(x => x.RoleName.Equals(roleName))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task InsertAsync(IEnumerable<RoleMenu> roleMenus, CancellationToken cancellationToken = default)
         {
-            await DbSet.AddRangeAsync(roleMenus, GetCancellationToken(cancellationToken));
+            await (await GetDbSetAsync()).AddRangeAsync(roleMenus, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> RoleHasInMenuAsync(
@@ -34,10 +34,10 @@ namespace LINGYUN.Platform.Menus
             string menuName, 
             CancellationToken cancellationToken = default)
         {
-            var menuQuery = DbContext.Set<Menu>().Where(x => x.Name == menuName);
+            var menuQuery = (await GetDbContextAsync()).Set<Menu>().Where(x => x.Name == menuName);
 
             return await
-                (from roleMenu in DbSet
+                (from roleMenu in (await GetDbSetAsync())
                  join menu in menuQuery
                       on roleMenu.MenuId equals menu.Id
                  select roleMenu)

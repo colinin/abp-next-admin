@@ -23,9 +23,10 @@ namespace LINGYUN.Platform.Menus
             string menuName, 
             CancellationToken cancellationToken = default)
         {
+            var dbContext = await GetDbContextAsync();
             return await
-                (from userMenu in DbContext.Set<UserMenu>()
-                 join menu in DbContext.Set<Menu>()
+                (from userMenu in dbContext.Set<UserMenu>()
+                 join menu in dbContext.Set<Menu>()
                       on userMenu.MenuId equals menu.Id
                  where userMenu.UserId.Equals(userId)
                  select menu)
@@ -38,13 +39,15 @@ namespace LINGYUN.Platform.Menus
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.UserId.Equals(userId))
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.Where(x => x.UserId.Equals(userId))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task InsertAsync(IEnumerable<UserMenu> userMenus, CancellationToken cancellationToken = default)
         {
-            await DbSet.AddRangeAsync(userMenus, GetCancellationToken(cancellationToken));
+            var dbSet = await GetDbSetAsync();
+            await dbSet.AddRangeAsync(userMenus, GetCancellationToken(cancellationToken));
         }
     }
 }

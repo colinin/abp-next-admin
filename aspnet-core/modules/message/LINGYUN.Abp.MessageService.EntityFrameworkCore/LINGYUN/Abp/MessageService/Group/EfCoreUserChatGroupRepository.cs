@@ -28,12 +28,13 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid userId, 
             CancellationToken cancellationToken = default)
         {
-            var cardQuery = from gp in DbContext.Set<ChatGroup>()
-                       join ucg in DbContext.Set<UserChatGroup>()
+            var dbContext = await GetDbContextAsync();
+            var cardQuery = from gp in dbContext.Set<ChatGroup>()
+                       join ucg in dbContext.Set<UserChatGroup>()
                             on gp.GroupId equals ucg.GroupId
-                       join ugc in DbContext.Set<UserGroupCard>()
+                       join ugc in dbContext.Set<UserGroupCard>()
                             on ucg.UserId equals ugc.UserId
-                       join uc in DbContext.Set<UserChatCard>()
+                       join uc in dbContext.Set<UserChatCard>()
                             on ugc.UserId equals uc.UserId
                        where gp.GroupId == groupId && ugc.UserId == userId
                        select new GroupUserCard
@@ -67,12 +68,14 @@ namespace LINGYUN.Abp.MessageService.Group
         {
             sorting ??= nameof(UserChatCard.UserId);
             sorting = reverse ? sorting + " desc" : sorting;
-            var cardQuery = from gp in DbContext.Set<ChatGroup>()
-                             join ucg in DbContext.Set<UserChatGroup>()
+
+            var dbContext = await GetDbContextAsync();
+            var cardQuery = from gp in dbContext.Set<ChatGroup>()
+                             join ucg in dbContext.Set<UserChatGroup>()
                                   on gp.GroupId equals ucg.GroupId
-                             join ugc in DbContext.Set<UserGroupCard>()
+                             join ugc in dbContext.Set<UserGroupCard>()
                                   on ucg.UserId equals ugc.UserId
-                             join uc in DbContext.Set<UserChatCard>()
+                             join uc in dbContext.Set<UserChatCard>()
                                   on ugc.UserId equals uc.UserId
                              where gp.GroupId == groupId
                              select new GroupUserCard
@@ -102,12 +105,13 @@ namespace LINGYUN.Abp.MessageService.Group
             long groupId, 
             CancellationToken cancellationToken = default)
         {
-            var cardQuery = from gp in DbContext.Set<ChatGroup>()
-                            join ucg in DbContext.Set<UserChatGroup>()
+            var dbContext = await GetDbContextAsync();
+            var cardQuery = from gp in dbContext.Set<ChatGroup>()
+                            join ucg in dbContext.Set<UserChatGroup>()
                                  on gp.GroupId equals ucg.GroupId
-                            join ugc in DbContext.Set<UserGroupCard>()
+                            join ugc in dbContext.Set<UserGroupCard>()
                                  on ucg.UserId equals ugc.UserId
-                            join uc in DbContext.Set<UserChatCard>()
+                            join uc in dbContext.Set<UserChatCard>()
                                  on ugc.UserId equals uc.UserId
                             where gp.GroupId == groupId
                             select ucg;
@@ -121,7 +125,7 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid userId, 
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Set<UserChatGroup>()
+            return await (await GetDbContextAsync()).Set<UserChatGroup>()
                 .AnyAsync(ucg => ucg.GroupId == groupId && ucg.UserId == userId,
                     GetCancellationToken(cancellationToken));
         }
@@ -130,8 +134,9 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid userId,
             CancellationToken cancellationToken = default)
         {
-            var groupQuery = from gp in DbContext.Set<ChatGroup>()
-                             join ucg in DbContext.Set<UserChatGroup>()
+            var dbContext = await GetDbContextAsync();
+            var groupQuery = from gp in dbContext.Set<ChatGroup>()
+                             join ucg in dbContext.Set<UserChatGroup>()
                                   on gp.GroupId equals ucg.GroupId
                              where ucg.UserId.Equals(userId)
                              group ucg by new

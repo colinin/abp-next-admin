@@ -44,10 +44,11 @@ namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
 
                 // EfCore MySql 批量删除还是一条一条的语句?
                 // PermissionGrantRepository.GetDbSet().RemoveRange(grantPermissions);
-                var permissionEntityType = PermissionGrantRepository.GetDbContext().Model.FindEntityType(typeof(PermissionGrant));
+                var dbContext = await PermissionGrantRepository.GetDbContextAsync();
+                var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
                 var permissionTableName = permissionEntityType.GetTableName();
                 var batchRmovePermissionSql = string.Empty;
-                if (PermissionGrantRepository.GetDbContext().Database.IsMySql())
+                if (dbContext.Database.IsMySql())
                 {
                     batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Entity.Id);
                 }
@@ -56,8 +57,7 @@ namespace LINGYUN.Abp.BackendAdmin.EventBus.Handlers
                     batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Entity.Id);
                 }
 
-                await PermissionGrantRepository.GetDbContext().Database
-                    .ExecuteSqlRawAsync(batchRmovePermissionSql);
+                await dbContext.Database.ExecuteSqlRawAsync(batchRmovePermissionSql);
 
                 await unitOfWork.SaveChangesAsync();
             }

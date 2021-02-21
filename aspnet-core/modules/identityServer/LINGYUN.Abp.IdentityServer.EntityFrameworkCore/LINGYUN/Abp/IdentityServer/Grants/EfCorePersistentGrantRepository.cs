@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
 
         public virtual async Task<long> GetCountAsync(string subjectId = null, string filter = null, CancellationToken cancellation = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))
@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
 
         public virtual async Task<List<PersistedGrant>> GetListAsync(string subjectId = null, string filter = null, string sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))

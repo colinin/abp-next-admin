@@ -17,23 +17,25 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task<bool> AggregateReRouteNameExistsAsync(string name)
         {
-            return await DbSet.AnyAsync(ar => ar.Name.Equals(name));
+            return await (await GetDbSetAsync()).AnyAsync(ar => ar.Name.Equals(name));
         }
 
         public async Task<AggregateReRoute> GetByRouteIdAsync(long routeId)
         {
-            return await WithDetails().Where(ar => ar.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
+            return await (await WithDetailsAsync())
+                .Where(ar => ar.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
         }
 
         public async Task<List<AggregateReRoute>> GetByAppIdAsync(string appId)
         {
-            return await WithDetails().Where(ar => ar.AppId.Equals(appId)).ToListAsync();
+            return await (await WithDetailsAsync())
+                .Where(ar => ar.AppId.Equals(appId)).ToListAsync();
         }
 
         public async Task<(List<AggregateReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
             string sorting = "", int skipCount = 1, int maxResultCount = 100)
         {
-            var resultReRoutes = await WithDetails()
+            var resultReRoutes = await (await WithDetailsAsync())
                 .Where(ar => ar.AppId.Equals(appId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ar => ar.ReRouteKeys.Contains(filter) ||
                     ar.UpstreamHost.Contains(filter) || ar.UpstreamPathTemplate.Contains(filter))
@@ -41,7 +43,7 @@ namespace LINGYUN.ApiGateway.Ocelot
                 .EfPageBy(skipCount, maxResultCount)
                 .ToListAsync();
 
-            var total = await GetQueryable()
+            var total = await (await GetQueryableAsync())
                 .Where(ar => ar.AppId.Equals(appId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ar => ar.ReRouteKeys.Contains(filter) ||
                     ar.UpstreamHost.Contains(filter) || ar.UpstreamPathTemplate.Contains(filter)).LongCountAsync();

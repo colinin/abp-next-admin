@@ -21,14 +21,15 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public async Task<UserChatSetting> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(x => x.UserId.Equals(userId))
+            return await (await GetDbSetAsync()).Where(x => x.UserId.Equals(userId))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<bool> UserHasOpendImAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(x => x.UserId.Equals(userId), GetCancellationToken(cancellationToken));
+            return await (await GetDbSetAsync())
+                .AnyAsync(x => x.UserId.Equals(userId), GetCancellationToken(cancellationToken));
         }
     }
 }

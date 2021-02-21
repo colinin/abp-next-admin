@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
@@ -34,9 +34,10 @@ namespace LINGYUN.Abp.MessageService.Chat
              CancellationToken cancellationToken = default)
         {
             sorting = reverse ? sorting + " DESC" : sorting;
-            
-            var userFriendQuery = from ucf in DbContext.Set<UserChatFriend>()
-                                  join ucc in DbContext.Set<UserChatCard>()
+
+            var dbContext = await GetDbContextAsync();
+            var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
+                                  join ucc in dbContext.Set<UserChatCard>()
                                   //      on ucf.FrientId equals ucc.UserId // 查询双向好友的
                                         on ucf.UserId equals ucc.UserId
                                   where ucf.UserId == userId && ucf.Status == UserFriendStatus.Added
@@ -66,8 +67,9 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<UserFriend> GetMemberAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
-            var userFriendQuery = from ucf in DbContext.Set<UserChatFriend>()
-                                  join ucc in DbContext.Set<UserChatCard>()
+            var dbContext = await GetDbContextAsync();
+            var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
+                                  join ucc in dbContext.Set<UserChatCard>()
                                         on ucf.FrientId equals ucc.UserId
                                   where ucf.UserId == userId && ucf.FrientId == friendId && ucf.Status == UserFriendStatus.Added
                                   select new UserFriend
@@ -96,12 +98,14 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<List<UserFriend>> GetMembersAsync(Guid userId, string filter = "", string sorting = nameof(UserChatFriend.UserId), bool reverse = false, int skipCount = 0, int maxResultCount = 10, CancellationToken cancellationToken = default)
         {
             sorting = reverse ? sorting + " desc" : sorting;
+
+            var dbContext = await GetDbContextAsync();
             // 过滤用户资料
-            var userChatCardQuery = DbContext.Set<UserChatCard>()
+            var userChatCardQuery = dbContext.Set<UserChatCard>()
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter) || ucc.NickName.Contains(filter));
 
             // 过滤好友资料
-            var userChatFriendQuery = DbContext.Set<UserChatFriend>()
+            var userChatFriendQuery = dbContext.Set<UserChatFriend>()
                 .Where(ucf => ucf.Status == UserFriendStatus.Added)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
 
@@ -141,11 +145,12 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
              CancellationToken cancellationToken = default)
         {
-            var userReceiveMsgQuery = DbContext.Set<UserMessage>()
+            var dbContext = await GetDbContextAsync();
+            var userReceiveMsgQuery = dbContext.Set<UserMessage>()
                 .Where(um => um.ReceiveUserId == userId);
 
-            var userFriendQuery = from ucf in DbContext.Set<UserChatFriend>()
-                                  join ucc in DbContext.Set<UserChatCard>()
+            var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
+                                  join ucc in dbContext.Set<UserChatCard>()
                                         on ucf.FrientId equals ucc.UserId
                                   join um in userReceiveMsgQuery
                                         on ucc.UserId equals um.CreatorId
@@ -177,10 +182,11 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<int> GetMembersCountAsync(Guid userId, string filter = "", CancellationToken cancellationToken = default)
         {
-            var userChatCardQuery = DbContext.Set<UserChatCard>()
+            var dbContext = await GetDbContextAsync();
+            var userChatCardQuery = dbContext.Set<UserChatCard>()
                  .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter) || ucc.NickName.Contains(filter));
 
-            var userChatFriendQuery = DbContext.Set<UserChatFriend>()
+            var userChatFriendQuery = dbContext.Set<UserChatFriend>()
                 .Where(ucf => ucf.Status == UserFriendStatus.Added)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
 
@@ -199,14 +205,14 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid frientId,
             CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId && ucf.Status == UserFriendStatus.Added,
                     GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> IsAddedAsync(Guid userId, Guid frientId, CancellationToken cancellationToken = default)
         {
-            return await DbSet
+            return await (await GetDbSetAsync())
                 .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId,
                     GetCancellationToken(cancellationToken));
         }

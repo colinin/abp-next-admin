@@ -11,8 +11,7 @@ namespace LINGYUN.Platform.Menus
 {
     public class MenuManager : DomainService
     {
-        private IUnitOfWorkManager _unitOfWorkManager;
-        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
         protected IMenuRepository MenuRepository { get; }
         protected IUserMenuRepository UserMenuRepository { get; }
@@ -135,7 +134,12 @@ namespace LINGYUN.Platform.Menus
 
                 // 移除不存在的菜单
                 // TODO: 升级框架版本解决未能删除不需要菜单的问题
-                userMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                // userMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                var dels = userMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                if (dels.Any())
+                {
+                    await UserMenuRepository.DeleteManyAsync(dels);
+                }
 
                 var adds = menuIds.Where(menuId => !userMenus.Any(x => x.MenuId == menuId));
                 if (adds.Any())
@@ -155,7 +159,13 @@ namespace LINGYUN.Platform.Menus
                 var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName);
 
                 // 移除不存在的菜单
-                roleMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                // TODO: 升级框架版本解决未能删除不需要菜单的问题
+                // roleMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
+                var dels = roleMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                if (dels.Any())
+                {
+                    await UserMenuRepository.DeleteManyAsync(dels);
+                }
 
                 var adds = menuIds.Where(menuId => !roleMenus.Any(x => x.MenuId == menuId));
                 if (adds.Any())

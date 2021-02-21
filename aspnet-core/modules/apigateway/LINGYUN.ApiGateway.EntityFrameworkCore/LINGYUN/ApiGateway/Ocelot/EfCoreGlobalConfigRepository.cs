@@ -19,7 +19,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task<GlobalConfiguration> GetByItemIdAsync(long itemId)
         {
-            var globalConfiguration = await WithDetails().Where(x => x.ItemId.Equals(itemId)).FirstOrDefaultAsync();
+            var globalConfiguration = await (await WithDetailsAsync()).Where(x => x.ItemId.Equals(itemId)).FirstOrDefaultAsync();
             if(globalConfiguration == null)
             {
                 throw new EntityNotFoundException(typeof(GlobalConfiguration));
@@ -29,7 +29,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task<GlobalConfiguration> GetByAppIdAsync(string appId)
         {
-            return await WithDetails()
+            return await (await WithDetailsAsync())
                 .Where(g => g.AppId.Equals(appId))
                 .FirstOrDefaultAsync();
         }
@@ -37,18 +37,28 @@ namespace LINGYUN.ApiGateway.Ocelot
         public virtual async Task<(List<GlobalConfiguration> Globals, long TotalCount)> GetPagedListAsync(string filter = "", string sorting = "",
             int skipCount = 1, int maxResultCount = 10)
         {
-            var globals = await WithDetails()
+            var globals = await (await WithDetailsAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), g => g.AppId.Contains(filter) ||
                           g.BaseUrl.Contains(filter) || g.DownstreamScheme.Contains(filter))
                 .OrderBy(g => sorting ?? g.BaseUrl)
                 .EfPageBy(skipCount, maxResultCount)
                 .ToListAsync();
-            var total = await GetQueryable()
+            var total = await (await GetQueryableAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), g => g.AppId.Contains(filter) ||
                           g.BaseUrl.Contains(filter) || g.DownstreamScheme.Contains(filter))
                 .LongCountAsync();
 
             return ValueTuple.Create(globals, total);
+        }
+
+        public override async Task<IQueryable<GlobalConfiguration>> WithDetailsAsync()
+        {
+            return await WithDetailsAsync(
+                x => x.HttpHandlerOptions,
+                x => x.LoadBalancerOptions,
+                x => x.QoSOptions,
+                x => x.RateLimitOptions,
+                x => x.ServiceDiscoveryProvider);
         }
 
         public override IQueryable<GlobalConfiguration> WithDetails()

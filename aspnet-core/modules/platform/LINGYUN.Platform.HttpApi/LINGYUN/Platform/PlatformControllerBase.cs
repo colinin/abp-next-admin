@@ -6,8 +6,7 @@ namespace LINGYUN.Platform
 {
     public abstract class PlatformControllerBase : AbpController
     {
-        private ISettingProvider _settingProvider;
-        protected ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
+        protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
 
         protected PlatformControllerBase()
         {

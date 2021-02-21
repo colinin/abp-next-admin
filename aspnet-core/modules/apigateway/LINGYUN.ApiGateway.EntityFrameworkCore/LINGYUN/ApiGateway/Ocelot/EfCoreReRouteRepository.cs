@@ -19,19 +19,19 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task<ReRoute> GetByNameAsync(string routeName)
         {
-            var reRoute = await WithDetails().Where(x => x.ReRouteName.Equals(routeName)).FirstOrDefaultAsync();
+            var reRoute = await (await WithDetailsAsync()).Where(x => x.ReRouteName.Equals(routeName)).FirstOrDefaultAsync();
             return reRoute ?? throw new EntityNotFoundException(typeof(ReRoute), routeName);
         }
 
         public async Task<ReRoute> GetByReRouteIdAsync(long routeId)
         {
-            var reRoute = await WithDetails().Where(x => x.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
+            var reRoute = await (await WithDetailsAsync()).Where(x => x.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
             return reRoute ?? throw new EntityNotFoundException(typeof(ReRoute), routeId);
         }
 
         public async Task<List<ReRoute>> GetByAppIdAsync(string appId)
         {
-            return await WithDetails()
+            return await (await WithDetailsAsync())
                 .Where(r => r.AppId.Equals(appId))
                 .ToListAsync();
         }
@@ -39,7 +39,7 @@ namespace LINGYUN.ApiGateway.Ocelot
         public async Task<(List<ReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
             string sorting = "", int skipCount = 1, int maxResultCount = 100)
         {
-            var resultReRoutes = await WithDetails()
+            var resultReRoutes = await (await WithDetailsAsync())
                 .Where(r => r.AppId.Equals(appId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.ReRouteName.Contains(filter) || 
                     r.DownstreamHostAndPorts.Contains(filter) || r.ServiceName.Contains(filter))
@@ -47,7 +47,7 @@ namespace LINGYUN.ApiGateway.Ocelot
                 .EfPageBy(skipCount, maxResultCount)
                 .ToListAsync();
 
-            var total = await GetQueryable()
+            var total = await (await GetQueryableAsync())
                 .Where(r => r.AppId.Equals(appId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.ReRouteName.Contains(filter) ||
                     r.DownstreamHostAndPorts.Contains(filter) || r.ServiceName.Contains(filter))
@@ -58,20 +58,21 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         public async Task RemoveAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var entityType = DbContext.Model.FindEntityType(typeof(ReRoute));
+            var dbContext = await GetDbContextAsync();
+            var entityType = dbContext.Model.FindEntityType(typeof(ReRoute));
             var tableName = entityType.GetTableName();//.Relational().TableName;
 
             var sqlText = $"DELETE FROM @tableName";
             var sqlParam = new List<object> { new { tableName } };
 
             // TODO: Test
-            await DbContext.Database.ExecuteSqlRawAsync(sqlText, sqlParam, cancellationToken);
+            await dbContext.Database.ExecuteSqlRawAsync(sqlText, sqlParam, cancellationToken);
             //await DbContext.Database.ExecuteSqlCommandAsync(sqlText, sqlParam, cancellationToken);
         }
 
-        public override IQueryable<ReRoute> WithDetails()
+        public override async Task<IQueryable<ReRoute>> WithDetailsAsync()
         {
-            return WithDetails(
+            return await WithDetailsAsync(
                 x => x.AuthenticationOptions,
                 x => x.CacheOptions,
                 x => x.HttpHandlerOptions,
@@ -79,6 +80,18 @@ namespace LINGYUN.ApiGateway.Ocelot
                 x => x.QoSOptions,
                 x => x.RateLimitOptions,
                 x => x.SecurityOptions);
+        }
+
+        public override IQueryable<ReRoute> WithDetails()
+        {
+            return WithDetails(
+                  x => x.AuthenticationOptions,
+                  x => x.CacheOptions,
+                  x => x.HttpHandlerOptions,
+                  x => x.LoadBalancerOptions,
+                  x => x.QoSOptions,
+                  x => x.RateLimitOptions,
+                  x => x.SecurityOptions);
         }
     }
 }

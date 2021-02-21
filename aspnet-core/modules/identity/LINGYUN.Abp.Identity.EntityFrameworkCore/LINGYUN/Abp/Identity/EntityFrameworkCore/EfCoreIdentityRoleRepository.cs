@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
             )
         {
-            return await DbSet.IncludeDetails(includeDetails)
+            return await (await GetDbSetAsync()).IncludeDetails(includeDetails)
                 .Where(role => roleIds.Contains(role.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -36,8 +35,9 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from roleOU in DbContext.Set<OrganizationUnitRole>()
-                        join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on roleOU.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from roleOU in dbContext.Set<OrganizationUnitRole>()
+                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on roleOU.OrganizationUnitId equals ou.Id
                         where roleOU.RoleId == id
                         select ou;
 
@@ -48,8 +48,8 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             List<Guid> organizationUnitIds, 
             CancellationToken cancellationToken = default)
         {
-            var query = from roleOu in DbContext.Set<OrganizationUnitRole>()
-                        join user in DbSet on roleOu.RoleId equals user.Id
+            var query = from roleOu in (await GetDbContextAsync()).Set<OrganizationUnitRole>()
+                        join user in (await GetDbSetAsync()) on roleOu.RoleId equals user.Id
                         where organizationUnitIds.Contains(roleOu.OrganizationUnitId)
                         select user;
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
@@ -59,8 +59,8 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             Guid organizationUnitId, 
             CancellationToken cancellationToken = default)
         {
-            var query = from roleOu in DbContext.Set<OrganizationUnitRole>()
-                        join user in DbSet on roleOu.RoleId equals user.Id
+            var query = from roleOu in (await GetDbContextAsync()).Set<OrganizationUnitRole>()
+                        join user in (await GetDbSetAsync()) on roleOu.RoleId equals user.Id
                         where roleOu.OrganizationUnitId == organizationUnitId
                         select user;
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
@@ -70,9 +70,10 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             string code, 
             CancellationToken cancellationToken = default)
         {
-            var query = from roleOU in DbContext.Set<OrganizationUnitRole>()
-                        join user in DbSet on roleOU.RoleId equals user.Id
-                        join ou in DbContext.Set<OrganizationUnit>() on roleOU.OrganizationUnitId equals ou.Id
+            var dbContext = await GetDbContextAsync();
+            var query = from roleOU in dbContext.Set<OrganizationUnitRole>()
+                        join user in (await GetDbSetAsync()) on roleOU.RoleId equals user.Id
+                        join ou in dbContext.Set<OrganizationUnit>() on roleOU.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(code)
                         select user;
             return await query.ToListAsync(GetCancellationToken(cancellationToken));

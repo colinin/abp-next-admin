@@ -50,19 +50,17 @@ namespace LINGYUN.Platform.Menus
 
             using (CurrentTenant.Change(PlatformTestsConsts.TenantId))
             {
+                // 在租户范围不能查询到宿主数据
                 (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User1Id, "admin")).ShouldBeFalse();
 
                 var tenantSaasMenu = await MenuRepository.FindByNameAsync("saas");
-
-                var ss = await Repository.GetListByUserIdAsync(PlatformTestsConsts.User2Id);
-
                 await MenuManager.SetUserMenusAsync(PlatformTestsConsts.User2Id, new Guid[] { tenantSaasMenu.Id });
-
-                var ss1 = await Repository.GetListByUserIdAsync(PlatformTestsConsts.User2Id);
 
                 (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User2Id, "admin")).ShouldBeFalse();
                 (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User2Id, "saas")).ShouldBeTrue();
             }
+            // 在租户范围内处理了菜单数据不应该影响到宿主
+            (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User2Id, "admin")).ShouldBeTrue();
         }
     }
 }

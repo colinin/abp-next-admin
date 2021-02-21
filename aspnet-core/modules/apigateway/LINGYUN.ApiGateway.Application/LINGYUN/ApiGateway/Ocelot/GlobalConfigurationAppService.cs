@@ -11,8 +11,7 @@ namespace LINGYUN.ApiGateway.Ocelot
     [Authorize(ApiGatewayPermissions.Global.Default)]
     public class GlobalConfigurationAppService : ApiGatewayApplicationServiceBase, IGlobalConfigurationAppService
     {
-        private IDistributedEventBus _eventBus;
-        protected IDistributedEventBus DistributedEventBus => LazyGetRequiredService(ref _eventBus);
+        protected IDistributedEventBus DistributedEventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
 
         private readonly IRouteGroupChecker _routeGroupChecker;
         private readonly IGlobalConfigRepository _globalConfigRepository;
