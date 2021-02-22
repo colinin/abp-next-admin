@@ -135,7 +135,7 @@ namespace LINGYUN.Platform.Menus
                 // 移除不存在的菜单
                 // TODO: 升级框架版本解决未能删除不需要菜单的问题
                 // userMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
-                var dels = userMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                var dels = userMenus.Where(x => !menuIds.Contains(x.MenuId));
                 if (dels.Any())
                 {
                     await UserMenuRepository.DeleteManyAsync(dels);
@@ -161,10 +161,10 @@ namespace LINGYUN.Platform.Menus
                 // 移除不存在的菜单
                 // TODO: 升级框架版本解决未能删除不需要菜单的问题
                 // roleMenus.RemoveAll(x => !menuIds.Contains(x.MenuId));
-                var dels = roleMenus.Where(x => !menuIds.Contains(x.MenuId)).Select(x => x.Id);
+                var dels = roleMenus.Where(x => !menuIds.Contains(x.MenuId));
                 if (dels.Any())
                 {
-                    await UserMenuRepository.DeleteManyAsync(dels);
+                    await RoleMenuRepository.DeleteManyAsync(dels);
                 }
 
                 var adds = menuIds.Where(menuId => !roleMenus.Any(x => x.MenuId == menuId));
