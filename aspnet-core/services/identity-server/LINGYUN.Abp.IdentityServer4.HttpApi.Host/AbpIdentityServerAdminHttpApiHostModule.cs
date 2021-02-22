@@ -3,7 +3,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
-using LINYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;

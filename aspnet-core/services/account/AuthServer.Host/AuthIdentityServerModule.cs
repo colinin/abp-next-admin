@@ -6,7 +6,7 @@ using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
-using LINYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
