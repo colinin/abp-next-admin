@@ -52,6 +52,7 @@ namespace LINGYUN.Platform.Menus
             {
                 // 在租户范围不能查询到宿主数据
                 (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User1Id, "admin")).ShouldBeFalse();
+                (await Repository.UserHasInMenuAsync(PlatformTestsConsts.User2Id, "saas")).ShouldBeFalse();
 
                 var tenantSaasMenu = await MenuRepository.FindByNameAsync("saas");
                 await MenuManager.SetUserMenusAsync(PlatformTestsConsts.User2Id, new Guid[] { tenantSaasMenu.Id });
