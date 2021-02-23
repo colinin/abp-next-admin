@@ -1,28 +1,19 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-page-header
-        @back="handleGoToLastFolder"
+      <el-breadcrumb
+        ref="fileSystemBreadCrumb"
+        separator-class="el-icon-arrow-right"
       >
-        <template
-          slot="content"
-          class="file-system-page"
+        <el-breadcrumb-item
+          v-for="(fileRoot, index) in fileSystemRoot"
+          :key="index"
+          class="file-system-breadcrumb"
+          @click.native="(event) => onBreadCrumbClick(event, index)"
         >
-          <el-breadcrumb
-            ref="fileSystemBreadCrumb"
-            separator-class="el-icon-arrow-right"
-          >
-            <el-breadcrumb-item
-              v-for="(fileRoot, index) in fileSystemRoot"
-              :key="index"
-              class="file-system-breadcrumb"
-              @click.native="(event) => onBreadCrumbClick(event, index)"
-            >
-              {{ fileRoot }}
-            </el-breadcrumb-item>
-          </el-breadcrumb>
-        </template>
-      </el-page-header>
+          {{ fileRoot }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
 
     <el-table
@@ -34,7 +25,6 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      :row-class-name="tableRowClassName"
       @row-click="onRowClick"
       @row-dblclick="onRowDoubleClick"
       @contextmenu.native="onContextMenu"
@@ -171,6 +161,13 @@
         @onFileUploaded="onFileUploaded"
       />
     </el-dialog>
+
+    <file-download-form
+      :show-dialog="showDownloadDialog"
+      :files="downloadFiles"
+      @closed="showDownloadDialog=false"
+      @onFileRemoved="onFileRemoved"
+    />
   </div>
 </template>
 
@@ -181,6 +178,7 @@ import { Vue } from 'vue-property-decorator'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import FileUploadForm from './components/FileUploadForm.vue'
+import FileDownloadForm, { FileInfo } from './components/FileDownloadForm.vue'
 import Pagination from '@/components/Pagination/index.vue'
 import FileSystemService, { FileSystemGetByPaged, FileSystemType } from '@/api/filemanagement'
 
@@ -193,7 +191,8 @@ const $contextmenu = Vue.prototype.$contextmenu
   name: 'FileManagement',
   components: {
     Pagination,
-    FileUploadForm
+    FileUploadForm,
+    FileDownloadForm
   },
   filters: {
     dateTimeFilter(datetime: string) {
@@ -255,6 +254,9 @@ export default class extends mixins(DataListMiXin) {
   private downloading = false
   private lastFilePath = ''
   private fileSystemRoot = new Array<string>()
+
+  private showDownloadDialog = false
+  private downloadFiles = new Array<FileInfo>()
 
   public dataFilter = new FileSystemGetByPaged()
 
@@ -332,42 +334,20 @@ export default class extends mixins(DataListMiXin) {
   }
 
   private handleDownloadFile(path: string, fileName: string, size: number) {
-    this.downloading = true
-    const blobs = new Array<BlobPart>()
-    this.downlodFile(path, fileName, size, 0, blobs,
-      (downloadSize: number) => {
-        if (downloadSize >= size) {
-          this.downloading = false
-          // 释放空间
-          blobs.length = 0
-        }
-      })
+    if (!this.downloadFiles.some(x => x.name === fileName && x.path === path)) {
+      const file = new FileInfo()
+      file.name = fileName
+      file.path = path
+      file.size = size
+      file.progress = 0
+      this.downloadFiles.push(file)
+    }
+    this.showDownloadDialog = true
   }
 
-  private downlodFile(path: string, fileName: string, size: number, currentByte: number, blobs: BlobPart[], callback: Function) {
-    FileSystemService.downlodFle(fileName, path, currentByte).then((res: any) => {
-      // 获取当前下载字节大小
-      const downloadByte = res.data.size
-      // 当前下载分块入栈
-      blobs.push(res.data)
-      currentByte += downloadByte
-      if (size > currentByte) {
-        this.downlodFile(path, fileName, size, currentByte, blobs, callback)
-      } else {
-        // 合并下载文件
-        const url = window.URL.createObjectURL(new Blob(blobs, { type: res.headers['content-type'] }))
-        const link = document.createElement('a')
-        link.style.display = 'none'
-        link.href = url
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
-        // 下载完成后的回调
-        callback(size)
-      }
-    }).catch(() => {
-      callback(size)
-    })
+  private onFileRemoved(fileInfo: FileInfo) {
+    const index = this.downloadFiles.findIndex(x => x.path === fileInfo.path && x.name === fileInfo.name)
+    this.downloadFiles.splice(index, 1)
   }
 
   private onRowClick(row: any) {
@@ -449,6 +429,37 @@ export default class extends mixins(DataListMiXin) {
             }
             this.lastFilePath = path
             this.showFileUploadDialog = true
+          },
+          divided: true
+        },
+        {
+          label: this.$t('fileSystem.bacthDownload'),
+          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Download']),
+          onClick: () => {
+            const table = this.$refs.fileSystemTable as any
+            // 过滤未添加到下载列表的文件
+            const selectFiles = table.selection.filter((x: any) => x.type === 1 && !this.downloadFiles.some(f => f.name === x.name && f.path === x.path))
+            // 格式化文件列表别添加到下载列表
+            this.downloadFiles.push(...selectFiles.map((f: any) => {
+              const file = new FileInfo()
+              file.name = f.name
+              file.path = f.parent
+              file.size = f.size
+              file.progress = 0
+              return file
+            }))
+            // 显示下载列表
+            this.showDownloadDialog = true
+          }
+        },
+        {
+          label: this.$t('fileSystem.bacthDelete'),
+          disabled: true, // !checkPermission(['AbpFileManagement.FileSystem.FileManager.Delete']),
+          onClick: () => {
+            // 未公布批量删除接口
+            // const table = this.$refs.fileSystemTable as any
+            // 过滤类型为文件的选中项
+            // const selectFiles = table.selection.filter((x: any) => x.type === 1)
           }
         }
       ],
