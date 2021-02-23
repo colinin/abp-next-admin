@@ -105,11 +105,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Ali
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "console", "console", "{8D2AD50B-DD4B-48A2-88EC-0E8E8236D883}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Encryption.Console", "modules\console\LINGYUN.Abp.Encryption.Console\LINGYUN.Abp.Encryption.Console.csproj", "{8FB74B18-CA5C-4DC3-8DFA-600133A05712}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Encryption.Console", "modules\console\LINGYUN.Abp.Encryption.Console\LINGYUN.Abp.Encryption.Console.csproj", "{8FB74B18-CA5C-4DC3-8DFA-600133A05712}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Aliyun.Tests", "tests\LINGYUN.Abp.Aliyun.Tests\LINGYUN.Abp.Aliyun.Tests.csproj", "{3DBF0975-B09D-49CA-9AF8-69175EDB9D52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.Tests", "tests\LINGYUN.Abp.Aliyun.Tests\LINGYUN.Abp.Aliyun.Tests.csproj", "{3DBF0975-B09D-49CA-9AF8-69175EDB9D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Sms.Aliyun.Tests", "tests\LINGYUN.Abp.Sms.Aliyun.Tests\LINGYUN.Abp.Sms.Aliyun.Tests.csproj", "{93DD5A05-B67A-4E11-BB56-F6B4E7F1489C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun.Tests", "tests\LINGYUN.Abp.Sms.Aliyun.Tests\LINGYUN.Abp.Sms.Aliyun.Tests.csproj", "{93DD5A05-B67A-4E11-BB56-F6B4E7F1489C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
