@@ -44,6 +44,7 @@
             size="mini"
             type="success"
             icon="el-icon-caret-right"
+            :disabled="row.downloading"
             @click="handleDownloadFile(row)"
           >
             {{ $t('fileSystem.begin') }}
@@ -74,6 +75,7 @@ export class FileInfo {
   pause!: boolean
   blobs = new Array<BlobPart>()
   type!: string
+  downloading!: boolean
 }
 
 @Component({
@@ -106,12 +108,14 @@ export default class FileDownloadForm extends Vue {
 
   private handleRemoveFile(fileInfo: FileInfo) {
     fileInfo.pause = true
+    fileInfo.downloading = false
     fileInfo.blobs.length = 0
     this.$emit('onFileRemoved', fileInfo)
   }
 
   private handleDownloadFile(fileInfo: FileInfo) {
     fileInfo.pause = false
+    fileInfo.downloading = true
     if (fileInfo.progress >= 100) {
       this.downloadBlob(fileInfo)
     } else {
