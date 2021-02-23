@@ -16,17 +16,18 @@ service.interceptors.request.use(
   (config) => {
     if (AbpModule.configuration) {
       if (AbpModule.configuration.currentTenant.isAvailable) {
-        config.headers.__tenant = AbpModule.configuration.currentTenant.id
+        config.headers['__tenant'] = AbpModule.configuration.currentTenant.id
       }
       config.headers['Accept-Language'] = AbpModule.configuration.localization?.currentCulture?.cultureName
-    }
-    // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
-    // 顺序调整到token之前
-    const language = getLanguage()
-    if (language?.indexOf('zh') !== -1) {
-      config.headers['Accept-Language'] = 'zh-Hans'
     } else {
-      config.headers['Accept-Language'] = language
+      // abp官方类库用的 zh-Hans 的简体中文包 这里直接粗暴一点
+      // 顺序调整到token之前
+      const language = getLanguage()
+      if (language?.indexOf('zh') !== -1) {
+        config.headers['Accept-Language'] = 'zh-Hans'
+      } else {
+        config.headers['Accept-Language'] = language
+      }
     }
     if (config.url === '/connect/token') {
       return config
@@ -46,11 +47,33 @@ function l(name: string) {
   return i18n.tc(name)
 }
 
-function showError(response: any) {
+function showError(error: any) {
   let message = ''
   let title = ''
+  let response = error.response
+  console.log(response)
+  // 特别处理返回数据为blob类型时的错误信息
+  if (error.config.responseType && error.config.responseType === 'blob') {
+    const fileReader = new FileReader()
+    fileReader.onload = (e) => {
+      if (e.target?.result) {
+        const jsonError = JSON.parse(e.target.result.toString())
+        Notification({
+          title: l('AbpUi.DefaultErrorMessage'),
+          message: jsonError.error.message,
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+    }
+    fileReader.readAsText(error.response.data, 'utf-8')
+    return
+  }
   if (response.data && response.data.error) {
-    if (response.data.error.details) {
+    if (response.data.error_description) {
+      title = response.data.error
+      message = response.data.error_description
+    } else if (response.data.error.details) {
       message = response.data.error.details
       title = response.data.error.message
     } else if (response.data.error.message) {
@@ -58,10 +81,6 @@ function showError(response: any) {
     }
   } else {
     switch (response.status) {
-      case 400:
-        title = response.data.error
-        message = response.data.error_description
-        break
       case 401:
         title = l('AbpUi.DefaultErrorMessage401')
         message = l('AbpUi.DefaultErrorMessage401Detail')
@@ -121,7 +140,7 @@ service.interceptors.response.use(
         })
       })
     } else {
-      showError(error.response)
+      showError(error)
     }
     return Promise.reject(error)
   }
