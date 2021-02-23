@@ -27,6 +27,15 @@
       >
         {{ $t('tenant.createTenant') }}
       </el-button>
+      <el-button
+        v-if="isHost"
+        class="filter-item"
+        type="primary"
+        :disabled="!checkPermission(['FeatureManagement.ManageHostFeatures'])"
+        @click="handleManageHostFeatures"
+      >
+        {{ $t('AbpTenantManagement.ManageHostFeatures') }}
+      </el-button>
     </div>
 
     <el-table
@@ -162,21 +171,45 @@
       @closed="handleTenantConnectionEditFormClosed"
     />
 
-    <tenant-feature-editForm
+    <!-- <tenant-feature-edit-form
       :show-dialog="showFeatureEditFormDialog"
       :tenant-id="editTenantId"
       @closed="onFeatureEditFormClosed"
     />
+
+    <host-feature-edit-form
+      v-if="isHost"
+      :show-dialog="showHostFeatureDialog"
+      @closed="showHostFeatureDialog=false"
+    /> -->
+
+    <el-dialog
+      :visible="showFeatureDialog"
+      :title="featureManagementTitle"
+      width="800px"
+      custom-class="modal-form"
+      :show-close="false"
+      @close="showFeatureDialog=false"
+    >
+      <feature-management
+        :provider-name="featureProviderName"
+        :provider-key="featureProviderKey"
+        :load-feature="showFeatureDialog"
+        @closed="showFeatureDialog=false"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
+import { AbpModule } from '@/store/modules/abp'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import TenantService, { TenantDto, TenantGetByPaged } from '@/api/tenant-management'
 import { dateFormat, abpPagerFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import Pagination from '@/components/Pagination/index.vue'
+import FeatureManagement from '../components/FeatureManagement.vue'
 import TenantFeatureEditForm from './components/TenantFeatureEditForm.vue'
 import TenantCreateOrEditForm from './components/TenantCreateOrEditForm.vue'
 import TenantConnectionEditForm from './components/TenantConnectionEditForm.vue'
@@ -185,6 +218,7 @@ import TenantConnectionEditForm from './components/TenantConnectionEditForm.vue'
   name: 'RoleList',
   components: {
     Pagination,
+    FeatureManagement,
     TenantFeatureEditForm,
     TenantCreateOrEditForm,
     TenantConnectionEditForm
@@ -205,7 +239,19 @@ export default class extends mixins(DataListMiXin) {
   private showCreateOrEditTenantDialog = false
   private showFeatureEditFormDialog = false
 
+  private showFeatureDialog = false
+  private featureManagementTitle = ''
+  private featureProviderName = ''
+  private featureProviderKey = ''
+
   public dataFilter = new TenantGetByPaged()
+
+  get isHost() {
+    if (!AbpModule.configuration) {
+      return true
+    }
+    return !AbpModule.configuration.currentTenant.isAvailable
+  }
 
   mounted() {
     this.refreshPagedData()
@@ -226,8 +272,10 @@ export default class extends mixins(DataListMiXin) {
         this.showEditTenantConnectionDialog = true
         break
       case 'feature' :
-        this.editTenantId = command.row.id
-        this.showFeatureEditFormDialog = true
+        this.featureProviderName = 'T'
+        this.featureProviderKey = command.row.id
+        this.featureManagementTitle = this.l('AbpTenantManagement.Permission:ManageFeatures')
+        this.showFeatureDialog = true
         break
       case 'delete' :
         this.handleDeleteTenant(command.row.id, command.row.name)
@@ -271,8 +319,15 @@ export default class extends mixins(DataListMiXin) {
     }
   }
 
+  private handleManageHostFeatures() {
+    this.featureProviderName = 'T'
+    this.featureProviderKey = ''
+    this.featureManagementTitle = this.l('AbpTenantManagement.ManageHostFeatures')
+    this.showFeatureDialog = true
+  }
+
   private onFeatureEditFormClosed() {
-    this.showFeatureEditFormDialog = false
+    this.showFeatureDialog = false
     this.editTenantId = ''
   }
 }

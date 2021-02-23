@@ -37,7 +37,7 @@
               >
                 <el-switch
                   :value="getBooleanValue(feature.value)"
-                  @change="(value) => handleCheckBoxValueChanged(feature, value)"
+                  @change="(value) => handleValueChanged(feature, value)"
                 />
               </div>
               <div
@@ -47,6 +47,7 @@
                   v-if="feature.valueType.validator.name === 'NUMERIC'"
                   v-model.number="feature.value"
                   type="number"
+                  @change="(value) => handleValueChanged(feature, value)"
                 />
                 <el-input
                   v-else
@@ -188,8 +189,8 @@ export default class extends Vue {
     this.handleGetFeatures()
   }
 
-  private handleCheckBoxValueChanged(feature: Feature, value: any) {
-    feature.value = value.toString()
+  private handleValueChanged(feature: Feature, value: any) {
+    feature.value = String(value)
   }
 
   /**
@@ -204,7 +205,7 @@ export default class extends Vue {
    * 获取功能列表
    */
   private handleGetFeatures() {
-    if (this.loadFeature && this.providerKey) {
+    if (this.loadFeature) {
       FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
         this.featureGroups = res
         if (this.featureGroups.groups.length > 0) {
