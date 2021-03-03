@@ -3,15 +3,17 @@ using System;
 using AuthServer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace AuthServer.Migrations
+namespace AuthServer.Host.Migrations
 {
     [DbContext(typeof(AuthServerHostMigrationsDbContext))]
-    partial class IdentityServerMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210302035805_Add-IdentityUser-AvatarUrl")]
+    partial class AddIdentityUserAvatarUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

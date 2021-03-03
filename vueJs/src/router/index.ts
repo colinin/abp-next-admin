@@ -142,21 +142,13 @@ export const asyncRoutes: RouteConfig[] = [
           icon: 'user',
           noCache: true
         }
-      }
-    ]
-  },
-  {
-    path: '/profile-setting',
-    component: Layout,
-    redirect: '/profile-setting/index',
-    meta: { hidden: true },
-    children: [
+      },
       {
-        path: 'index',
-        component: () => import(/* webpackChunkName: "profile" */ '@/views/profile-setting/index.vue'),
-        name: '个人设置',
+        path: 'setting',
+        component: () => import(/* webpackChunkName: "profile" */ '@/views/profile/setting.vue'),
+        name: 'setting',
         meta: {
-          title: '个人设置',
+          title: 'setting',
           icon: 'setting',
           noCache: true
         }

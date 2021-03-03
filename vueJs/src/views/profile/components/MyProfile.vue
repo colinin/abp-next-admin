@@ -39,10 +39,25 @@
                 />
               </el-row>
               <el-row>
-                <el-button>
+                <el-button
+                  @click="handleShowImageUpload"
+                >
                   <i class="el-icon-upload2" />
                   更换头像
                 </el-button>
+                <avatar-upload
+                  v-model="showImageUpload"
+                  field="avatar"
+                  :width="300"
+                  :height="300"
+                  :params="params"
+                  :headers="headers"
+                  :url="uploadUrl"
+                  @close="showImageUpload=false"
+                  @src-file-set="handleSrcFileSet"
+                  @crop-upload-fail="handleUploadFail"
+                  @crop-upload-success="onCropUploadSuccess"
+                />
               </el-row>
             </div>
           </div>
@@ -74,17 +89,26 @@
 
 <script lang="ts">
 import MyProfileService, { MyProfile, UpdateMyProfile } from '@/api/profile'
+import { FileUploadUrl } from '@/api/filemanagement'
 import { Component, Vue } from 'vue-property-decorator'
+import { UserModule } from '@/store/modules/user'
+import AvatarUpload from '@/components/AvatarUpload/index.vue'
 import PanThumb from '@/components/PanThumb/index.vue'
 
 @Component({
   name: 'MyProfile',
   components: {
-    PanThumb
+    PanThumb,
+    AvatarUpload
   }
 })
 export default class extends Vue {
   private myProfile = new MyProfile()
+
+  private showImageUpload = false
+  private headers: any = {}
+  private params: any = {}
+  private uploadUrl = FileUploadUrl
 
   get myAvatar() {
     if (this.myProfile.extraProperties) {
@@ -106,6 +130,31 @@ export default class extends Vue {
     MyProfileService.getMyProfile().then(profile => {
       this.myProfile = profile
     })
+  }
+
+  private handleShowImageUpload() {
+    this.showImageUpload = true
+    this.headers.Authorization = UserModule.token
+  }
+
+  private handleSrcFileSet(fileName: string, fileType: any, fileSize: any) {
+    this.params.FileName = fileName
+    this.params.ChunkSize = fileSize
+    this.params.CurrentChunkSize = fileSize
+    this.params.ChunkNumber = 1
+    this.params.TotalChunks = 1
+    this.params.TotalSize = fileSize
+  }
+
+  private handleUploadFail(status: any, field: any) {
+    console.log(status)
+    console.log(field)
+  }
+
+  private onCropUploadSuccess(jsonData: any, field: string) {
+    this.showImageUpload = false
+    console.log(jsonData)
+    console.log(field)
   }
 
   private handleUpdateMyProfile() {
