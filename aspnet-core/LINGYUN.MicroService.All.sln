@@ -269,9 +269,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{8C3312E7-F51E-4780-A893-CE0E0B80B579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Aliyun.SettingManagement", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun.SettingManagement\LINGYUN.Abp.Aliyun.SettingManagement.csproj", "{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.SettingManagement", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun.SettingManagement\LINGYUN.Abp.Aliyun.SettingManagement.csproj", "{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.Tests", "tests\LINGYUN.Abp.Aliyun.Tests\LINGYUN.Abp.Aliyun.Tests.csproj", "{B86EBB6F-A27F-4277-8265-937951A9DCB0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Aliyun", "modules\file-management\LINGYUN.Abp.FileManagement.Aliyun\LINGYUN.Abp.FileManagement.Aliyun.csproj", "{35B17218-9FB6-439E-AF73-9A1454BC923C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.FileSystem", "modules\file-management\LINGYUN.Abp.FileManagement.FileSystem\LINGYUN.Abp.FileManagement.FileSystem.csproj", "{D5036D3F-1C53-47EE-BA50-AD290AE062D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.FileSystem.ImageSharp", "modules\file-management\LINGYUN.Abp.FileManagement.FileSystem.ImageSharp\LINGYUN.Abp.FileManagement.FileSystem.ImageSharp.csproj", "{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -719,6 +725,18 @@ Global
 		{B86EBB6F-A27F-4277-8265-937951A9DCB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B86EBB6F-A27F-4277-8265-937951A9DCB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B86EBB6F-A27F-4277-8265-937951A9DCB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35B17218-9FB6-439E-AF73-9A1454BC923C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35B17218-9FB6-439E-AF73-9A1454BC923C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35B17218-9FB6-439E-AF73-9A1454BC923C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35B17218-9FB6-439E-AF73-9A1454BC923C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5036D3F-1C53-47EE-BA50-AD290AE062D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5036D3F-1C53-47EE-BA50-AD290AE062D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5036D3F-1C53-47EE-BA50-AD290AE062D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5036D3F-1C53-47EE-BA50-AD290AE062D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -856,6 +874,9 @@ Global
 		{8C3312E7-F51E-4780-A893-CE0E0B80B579} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C} = {14CDBAD1-10C8-464A-B445-1F727C988010}
 		{B86EBB6F-A27F-4277-8265-937951A9DCB0} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{35B17218-9FB6-439E-AF73-9A1454BC923C} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{D5036D3F-1C53-47EE-BA50-AD290AE062D7} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

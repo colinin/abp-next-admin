@@ -1,6 +1,12 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Abp.FileManagement:010001": "不能删除存在多个对象的容器!",
+    "Abp.FileManagement:010402": "容器名称已经存在!",
+    "Abp.FileManagement:010404": "未能找到查询的容器!",
+    "Abp.FileManagement:020001": "不能删除存在多个子级的对象!",
+    "Abp.FileManagement:020402": "对象名称已经存在!",
+    "Abp.FileManagement:020404": "未能找到查询的对象!",
     "Permission:FileManagement": "文件管理",
     "Permission:FileSystem": "文件系统",
     "Permission:FileManager": "文件",

@@ -16,10 +16,10 @@ namespace LINGYUN.Abp.FileManagement
     [Authorize(AbpFileManagementPermissions.FileSystem.Default)]
     public class FileSystemAppService : FileManagementApplicationServiceBase, IFileSystemAppService
     {
-        protected IBlobContainer<FileSystemContainer> BlobContainer { get; }
+        protected IBlobContainer<AbpFileManagementContainer> BlobContainer { get; }
         protected IBlobContainerConfigurationProvider BlobContainerConfigurationProvider { get; }
         public FileSystemAppService(
-            IBlobContainer<FileSystemContainer> blobContainer,
+            IBlobContainer<AbpFileManagementContainer> blobContainer,
             IBlobContainerConfigurationProvider blobContainerConfigurationProvider)
         {
             BlobContainer = blobContainer;
@@ -373,7 +373,7 @@ namespace LINGYUN.Abp.FileManagement
                 blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
             }
             // 去除完整路径中的容器根目录
-            var containerName = BlobContainerNameAttribute.GetContainerName<FileSystemContainer>();
+            var containerName = BlobContainerNameAttribute.GetContainerName<AbpFileManagementContainer>();
             if (path.Contains(containerName))
             {
                 blobPath = Path.Combine(blobPath, containerName);
@@ -421,7 +421,7 @@ namespace LINGYUN.Abp.FileManagement
             {
                 blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
             }
-            var containerName = BlobContainerNameAttribute.GetContainerName<FileSystemContainer>();
+            var containerName = BlobContainerNameAttribute.GetContainerName<AbpFileManagementContainer>();
 
             blobPath = Path.Combine(blobPath, containerName);
 
@@ -436,7 +436,7 @@ namespace LINGYUN.Abp.FileManagement
         protected virtual FileSystemBlobProviderConfiguration GetFileSystemBlobProviderConfiguration()
         {
             var blobConfiguration = BlobContainerConfigurationProvider
-                .Get<FileSystemContainer>();
+                .Get<AbpFileManagementContainer>();
             return blobConfiguration.GetFileSystemConfiguration();
         }
 

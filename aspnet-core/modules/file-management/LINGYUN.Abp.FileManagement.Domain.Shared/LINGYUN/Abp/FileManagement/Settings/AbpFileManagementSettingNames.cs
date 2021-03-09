@@ -4,6 +4,10 @@
     {
         public const string GroupName = "Abp.FileManagement";
         /// <summary>
+        /// 下载分包大小
+        /// </summary>
+        public const string DownloadPackageSize = GroupName + ".DownloadPackageSize";
+        /// <summary>
         /// 文件限制长度
         /// </summary>
         public const string FileLimitLength = GroupName + ".FileLimitLength";

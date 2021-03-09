@@ -1,6 +1,12 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Abp.FileManagement:010001": "Cannot delete a container that has more than one object!",
+    "Abp.FileManagement:010402": "The container name already exists!",
+    "Abp.FileManagement:010404": "The queried container could not be found!",
+    "Abp.FileManagement:020001": "An object that has more than one child cannot be deleted!",
+    "Abp.FileManagement:020402": "The object name already exists!",
+    "Abp.FileManagement:020404": "The queried object could not be found!",
     "Permission:FileManagement": "File management",
     "Permission:FileSystem": "File system",
     "Permission:FileManager": "Files",

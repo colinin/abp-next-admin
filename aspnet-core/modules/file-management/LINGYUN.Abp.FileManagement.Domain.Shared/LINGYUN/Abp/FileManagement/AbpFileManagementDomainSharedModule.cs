@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.FileManagement.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
@@ -24,6 +25,11 @@ namespace LINGYUN.Abp.FileManagement
                     .AddBaseTypes(
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("/LINGYUN/Abp/FileManagement/Localization/Resources");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace(FileManagementErrorCodes.Namespace, typeof(AbpFileManagementResource));
             });
         }
     }

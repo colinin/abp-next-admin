@@ -45,9 +45,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{B2C0271C-3FE6-4C45-B162-4DE00E542A55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Platform.EntityFrameworkCore.Tests", "tests\LINGYUN.Platform.EntityFrameworkCore.Tests\LINGYUN.Platform.EntityFrameworkCore.Tests.csproj", "{263C49A9-34B9-449B-ABBC-D328210C023D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.EntityFrameworkCore.Tests", "tests\LINGYUN.Platform.EntityFrameworkCore.Tests\LINGYUN.Platform.EntityFrameworkCore.Tests.csproj", "{263C49A9-34B9-449B-ABBC-D328210C023D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Platform.Domain.Tests", "tests\LINGYUN.Platform.Domain.Tests\LINGYUN.Platform.Domain.Tests.csproj", "{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Domain.Tests", "tests\LINGYUN.Platform.Domain.Tests\LINGYUN.Platform.Domain.Tests.csproj", "{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Aliyun", "modules\file-management\LINGYUN.Abp.FileManagement.Aliyun\LINGYUN.Abp.FileManagement.Aliyun.csproj", "{104EDC09-0CEA-4AB0-BFF5-B009D4679419}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{265D5E44-682B-49BC-984A-BDD8CA45E60E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "modules\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.FileSystem", "modules\file-management\LINGYUN.Abp.FileManagement.FileSystem\LINGYUN.Abp.FileManagement.FileSystem.csproj", "{B5569DCD-445E-445B-87E7-D8D4E03F0F76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +133,22 @@ Global
 		{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{104EDC09-0CEA-4AB0-BFF5-B009D4679419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{104EDC09-0CEA-4AB0-BFF5-B009D4679419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{104EDC09-0CEA-4AB0-BFF5-B009D4679419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{104EDC09-0CEA-4AB0-BFF5-B009D4679419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +174,11 @@ Global
 		{B2C0271C-3FE6-4C45-B162-4DE00E542A55} = {CCEFF583-4EEE-433F-8568-9E64166B41FE}
 		{263C49A9-34B9-449B-ABBC-D328210C023D} = {CCEFF583-4EEE-433F-8568-9E64166B41FE}
 		{C60A06F2-0F4C-483F-BE2B-B103F0D726CE} = {CCEFF583-4EEE-433F-8568-9E64166B41FE}
+		{104EDC09-0CEA-4AB0-BFF5-B009D4679419} = {C7D0EB39-3418-4A7C-AD94-FAB76F023E88}
+		{265D5E44-682B-49BC-984A-BDD8CA45E60E} = {15BDA03E-DE8E-46E4-96A8-CA3F2872E812}
+		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
+		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
+		{B5569DCD-445E-445B-87E7-D8D4E03F0F76} = {C7D0EB39-3418-4A7C-AD94-FAB76F023E88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03D3B66F-8926-4C00-B7AB-A21761EC859E}
