@@ -157,6 +157,15 @@
       :path="selectionOssObject.path"
       @closed="showOssObject=false"
     />
+
+    <OssObjectUploadDialog
+      ref="ossObjectUploadDialog"
+      :show-dialog="showUploadOss"
+      :bucket="bucket"
+      :path="uploadPath"
+      @closed="showUploadOss=false"
+      @onFileUploaded="onFileUploaded"
+    />
   </div>
 </template>
 
@@ -171,6 +180,7 @@ import OssManagerApi, {
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
 import OssObjectProfile from './components/OssObjectProfile.vue'
+import OssObjectUploadDialog from './components/OssObjectUploadDialog.vue'
 
 const kbUnit = 1 * 1024
 const mbUnit = kbUnit * 1024
@@ -180,7 +190,8 @@ const $contextmenu = Vue.prototype.$contextmenu
 @Component({
   name: 'OssManagement',
   components: {
-    OssObjectProfile
+    OssObjectProfile,
+    OssObjectUploadDialog
   },
   methods: {
     checkPermission
@@ -225,6 +236,9 @@ export default class OssManagement extends Vue {
   private buckets = new Array<OssContainer>()
   private objects = new Array<OssObject>()
   private fileSystemRoot = new Array<string>()
+
+  private showUploadOss = false
+  private uploadPath = ''
 
   private getObjectRequest = new GetOssObjectRequest()
   private getBucketRequest = new GetOssContainerRequest()
@@ -330,6 +344,7 @@ export default class OssManagement extends Vue {
               .deleteObject(this.bucket, oss.name, oss.path)
               .then(() => {
                 this.$notify.success(this.l('global.dataHasBeenDeleted', { name: oss.name }))
+                this.handleClearObjects()
                 this.handleGetObjects()
               })
           }
@@ -343,11 +358,14 @@ export default class OssManagement extends Vue {
   }
 
   private handleDownloadOssObject(oss: OssObject) {
-    console.log(oss)
-  }
-
-  private handleFileSystemCommand(command: any) {
-    console.log(command)
+    if (!oss.isFolder) {
+      const link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = OssManagerApi.generateOssUrl(this.bucket, oss.name, oss.path, '/api/')
+      link.setAttribute('download', oss.name)
+      document.body.appendChild(link)
+      link.click()
+    }
   }
 
   private handleClearObjects() {
@@ -364,11 +382,6 @@ export default class OssManagement extends Vue {
           label: this.$t('fileSystem.addFolder'),
           disabled: !checkPermission(['AbpFileManagement.FileSystem.Create']),
           onClick: () => {
-            let parent = ''
-            // 在根目录下
-            if (this.fileSystemRoot.length > 1) {
-              parent = this.fileSystemRoot.slice(1).join('')
-            }
             this.$prompt(this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString(),
               this.$t('fileSystem.addFolder').toString(), {
                 showInput: true,
@@ -380,7 +393,7 @@ export default class OssManagement extends Vue {
               }).then((val: any) => {
               const name = val.value + '/'
               OssManagerApi
-                .createFolder(this.bucket, name.replace('//', '/'), parent)
+                .createFolder(this.bucket, name.replace('//', '/'), this.getCurrentPath())
                 .then(res => {
                   this.$message.success(this.$t('fileSystem.folderCreateSuccess', { name: res.name }).toString())
                   this.handleClearObjects()
@@ -394,28 +407,25 @@ export default class OssManagement extends Vue {
           label: this.$t('fileSystem.upload'),
           disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Create']),
           onClick: () => {
-            let path = ''
-            if (this.fileSystemRoot.length > 1) {
-              path = this.fileSystemRoot.slice(1).join('/')
-            }
+            this.uploadPath = this.getCurrentPath()
+            this.showUploadOss = true
           },
           divided: true
         },
         {
-          label: this.$t('fileSystem.bacthDownload'),
-          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Download']),
-          onClick: () => {
-            const table = this.$refs.ossObjectTable as any
-          }
-        },
-        {
           label: this.$t('fileSystem.bacthDelete'),
-          disabled: true, // !checkPermission(['AbpFileManagement.FileSystem.FileManager.Delete']),
+          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Delete']),
           onClick: () => {
             // 未公布批量删除接口
-            // const table = this.$refs.ossObjectTable as any
-            // 过滤类型为文件的选中项
-            // const selectFiles = table.selection.filter((x: any) => x.type === 1)
+            const table = this.$refs.ossObjectTable as any
+            console.log(table)
+            OssManagerApi
+              .bulkDeleteObject(this.bucket, table.selection.map((x: any) => x.name), this.getCurrentPath())
+              .then(() => {
+                this.$message.success(this.l('successful'))
+                this.handleClearObjects()
+                this.handleGetObjects()
+              })
           }
         }
       ],
@@ -425,6 +435,20 @@ export default class OssManagement extends Vue {
       minWidth: 150
     })
     return false
+  }
+
+  private onFileUploaded() {
+    this.$message.success(this.l('fileSystem.uploadSuccess'))
+    this.handleClearObjects()
+    this.handleGetObjects()
+  }
+
+  private getCurrentPath() {
+    let path = ''
+    if (this.fileSystemRoot.length > 1) {
+      path = this.fileSystemRoot.slice(1).join('')
+    }
+    return path
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {

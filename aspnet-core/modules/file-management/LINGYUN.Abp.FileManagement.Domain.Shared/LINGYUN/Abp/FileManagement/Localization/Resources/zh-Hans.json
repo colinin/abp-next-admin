@@ -7,6 +7,7 @@
     "Abp.FileManagement:020001": "不能删除存在多个子级的对象!",
     "Abp.FileManagement:020402": "对象名称已经存在!",
     "Abp.FileManagement:020404": "未能找到查询的对象!",
+    "Abp.FileManagement:000405": "此路径对象名称已超出允许的最大长度,无法继续创建新对象!",
     "Permission:FileManagement": "文件管理",
     "Permission:FileSystem": "文件系统",
     "Permission:FileManager": "文件",

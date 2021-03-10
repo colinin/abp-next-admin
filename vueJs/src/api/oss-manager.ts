@@ -5,7 +5,7 @@ import { urlStringify } from '@/utils/index'
 const serviceUrl = process.env.VUE_APP_BASE_API
 const containerUrl = '/api/file-management/containes'
 const objectUrl = '/api/file-management/objects'
-export const objectUploadUrl = objectUrl + '/upload'
+export const objectUploadUrl = serviceUrl + objectUrl + '/upload'
 export const staticUrl = '/api/files/static/'
 
 export default class OssManager {
@@ -29,7 +29,7 @@ export default class OssManager {
     return ApiService.Delete(_url, serviceUrl)
   }
 
-  public static createFolder(bucket: string, name: string, path: string = "") {
+  public static createFolder(bucket: string, name: string, path: string = '') {
     const input = {
       bucket: bucket,
       object: name,
@@ -43,7 +43,7 @@ export default class OssManager {
     return ApiService.Get<OssObjectResultList>(_url, serviceUrl)
   }
 
-  public static getObject(bucket: string, object: string, path: string = "") {
+  public static getObject(bucket: string, object: string, path: string = '') {
     let _url = objectUrl + '?bucket=' + bucket + '&object=' + object
     if (path) {
       _url += '&path=' + path
@@ -51,7 +51,39 @@ export default class OssManager {
     return ApiService.Get<OssObject>(_url, serviceUrl)
   }
 
-  public static getObjectData(bucket: string, object: string, path: string = "") {
+  public static getObjectData(bucket: string, object: string, path: string = '') {
+    return ApiService.HttpRequest<Blob>({
+      url: this.generateOssUrl(bucket, object, path),
+      baseURL: serviceUrl,
+      method: 'GET',
+      responseType: 'blob'
+    })
+  }
+
+  public static deleteObject(bucket: string, object: string, path: string = '') {
+    let _url = objectUrl + '?bucket=' + bucket + '&object=' + object
+    if (path) {
+      _url += '&path=' + path
+    }
+    return ApiService.Delete(_url, serviceUrl)
+  }
+
+  public static bulkDeleteObject(bucket: string, objects: string[], path: string = '') {
+    const _url = objectUrl + '/bulk-delete'
+    return ApiService
+      .HttpRequest({
+        url: _url,
+        baseURL: serviceUrl,
+        method: 'DELETE',
+        data: {
+          bucket: bucket,
+          path: path,
+          objects: objects
+        }
+      })
+  }
+
+  public static generateOssUrl(bucket: string, object: string, path: string = '', prefix: string = '') {
     let _url = staticUrl + bucket + '/'
     if (path) {
       // 某些情况下要对 / 编码
@@ -61,20 +93,10 @@ export default class OssManager {
       }
     }
     _url += object
-    return ApiService.HttpRequest<Blob>({
-      url: _url,
-      baseURL: serviceUrl,
-      method: 'GET',
-      responseType: 'blob'
-    })
-  }
-
-  public static deleteObject(bucket: string, object: string, path: string = "") {
-    let _url = objectUrl + '?bucket=' + bucket + '&object=' + object
-    if (path) {
-      _url += '&path=' + path
+    if (prefix) {
+      _url = prefix + _url
     }
-    return ApiService.Delete(_url, serviceUrl)
+    return _url
   }
 }
 

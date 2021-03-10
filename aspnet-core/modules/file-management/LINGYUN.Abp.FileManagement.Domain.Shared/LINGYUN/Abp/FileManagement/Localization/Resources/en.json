@@ -7,6 +7,7 @@
     "Abp.FileManagement:020001": "An object that has more than one child cannot be deleted!",
     "Abp.FileManagement:020402": "The object name already exists!",
     "Abp.FileManagement:020404": "The queried object could not be found!",
+    "Abp.FileManagement:000405": "The path object name has exceeded the allowable maximum length and cannot continue to create a new object!",
     "Permission:FileManagement": "File management",
     "Permission:FileSystem": "File system",
     "Permission:FileManager": "Files",

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
-using Volo.Abp.MultiTenancy;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.IO;
-using Volo.Abp;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.FileManagement.FileSystem
 {
@@ -44,11 +44,23 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
 
         public virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
         {
-            var filesPath = request.Objects.Select(x => CalculateFilePath(request.Bucket, x));
+            var objectPath = !request.Path.IsNullOrWhiteSpace()
+                ? request.Path.EnsureEndsWith('/')
+                : "";
+            var filesPath = request.Objects.Select(x => CalculateFilePath(request.Bucket, objectPath + x));
 
             foreach (var file in filesPath)
             {
-                if (File.Exists(file))
+                if (Directory.Exists(file))
+                {
+                    if (Directory.GetFileSystemEntries(file).Length > 0)
+                    {
+                        throw new BusinessException(code: FileManagementErrorCodes.ContainerDeleteWithNotEmpty);
+                        // throw new ContainerDeleteWithNotEmptyException("00101", $"Can't not delete container {name}, because it is not empty!");
+                    }
+                    Directory.Delete(file);
+                }
+                else if (File.Exists(file))
                 {
                     File.Delete(file);
                 }
@@ -60,6 +72,7 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
         public virtual Task<OssContainer> CreateAsync(string name)
         {
             var filePath = CalculateFilePath(name);
+            ThrowOfPathHasTooLong(filePath);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -91,6 +104,8 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
             var filePath = CalculateFilePath(request.Bucket, objectName);
             if (!request.Content.IsNullOrEmpty())
             {
+                ThrowOfPathHasTooLong(filePath);
+
                 if (File.Exists(filePath))
                 {
                     throw new BusinessException(code: FileManagementErrorCodes.ObjectAlreadyExists);
@@ -126,6 +141,7 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
             }
             else
             {
+                ThrowOfPathHasTooLong(filePath);
                 if (Directory.Exists(filePath))
                 {
                     throw new BusinessException(code: FileManagementErrorCodes.ObjectAlreadyExists);
@@ -159,14 +175,15 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
             var filePath = CalculateFilePath(name);
             if (!Directory.Exists(filePath))
             {
-                // 非空目录无法删除
-                if (Directory.GetFiles(filePath).Length > 0)
-                {
-                    throw new BusinessException(code: FileManagementErrorCodes.ContainerDeleteWithNotEmpty);
-                    // throw new ContainerDeleteWithNotEmptyException("00101", $"Can't not delete container {name}, because it is not empty!");
-                }
-                Directory.Delete(filePath);
+                throw new BusinessException(code: FileManagementErrorCodes.ContainerNotFound);
             }
+            // 非空目录无法删除
+            if (Directory.GetFileSystemEntries(filePath).Length > 0)
+            {
+                throw new BusinessException(code: FileManagementErrorCodes.ContainerDeleteWithNotEmpty);
+                // throw new ContainerDeleteWithNotEmptyException("00101", $"Can't not delete container {name}, because it is not empty!");
+            }
+            Directory.Delete(filePath);
 
             return Task.CompletedTask;
         }
@@ -177,13 +194,13 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
                 ? request.Object
                 : request.Path.EnsureEndsWith('/') + request.Object;
             var filePath = CalculateFilePath(request.Bucket, objectName);
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
             else if (Directory.Exists(filePath))
             {
-                if (Directory.GetFiles(filePath).Length > 0)
+                if (Directory.GetFileSystemEntries(filePath).Length > 0)
                 {
                     throw new BusinessException(code: FileManagementErrorCodes.ObjectDeleteWithNotEmpty);
                 }
@@ -507,6 +524,16 @@ namespace LINGYUN.Abp.FileManagement.FileSystem
             }
 
             return blobPath;
+        }
+
+        private void ThrowOfPathHasTooLong(string path)
+        {
+            // Windows 133 260
+            // Linux 255 4096
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && path.Length >= 255) // 预留5位
+            //{
+            //    throw new BusinessException(code: FileManagementErrorCodes.OssNameHasTooLong);
+            //}
         }
     }
 }

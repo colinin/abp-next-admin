@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LINGYUN.Abp.FileManagement
+﻿namespace LINGYUN.Abp.FileManagement
 {
     public static class FileManagementErrorCodes
     {
@@ -15,5 +11,7 @@ namespace LINGYUN.Abp.FileManagement
         public const string ObjectDeleteWithNotEmpty = Namespace + ":020001";
         public const string ObjectAlreadyExists = Namespace + ":020402";
         public const string ObjectNotFound = Namespace + ":020404";
+
+        public const string OssNameHasTooLong = Namespace + ":000405";
     }
 }
