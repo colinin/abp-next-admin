@@ -4,7 +4,7 @@ using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.FileManagement;
+using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(PlatformApplicationContractModule),
         typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpFileManagementApplicationContractsModule),
+        typeof(AbpOssManagementApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),
         typeof(LINGYUN.Abp.Account.AbpAccountApplicationContractsModule),// 引用类似的包主要用于聚合权限管理和设置
         typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),

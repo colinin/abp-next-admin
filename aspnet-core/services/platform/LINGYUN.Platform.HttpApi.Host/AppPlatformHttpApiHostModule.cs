@@ -2,12 +2,13 @@
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.FileManagement;
-using LINGYUN.Abp.FileManagement.Aliyun;
-using LINGYUN.Abp.FileManagement.FileSystem;
-using LINGYUN.Abp.FileManagement.FileSystem.ImageSharp;
+using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.OssManagement;
+using LINGYUN.Abp.OssManagement.FileSystem;
+using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
+using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,7 +20,6 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -59,11 +59,12 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Platform
 {
     [DependsOn(
-        // typeof(AbpFileManagementAliyunModule),
-        typeof(AbpFileManagementFileSystemModule),           // 本地文件系统提供者模块
-        typeof(AbpFileManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
-        typeof(AbpFileManagementApplicationModule),
-        typeof(AbpFileManagementHttpApiModule),
+        // typeof(AbpOssManagementAliyunModule),
+        typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
+        typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
+        typeof(AbpOssManagementApplicationModule),
+        typeof(AbpOssManagementHttpApiModule),
+        typeof(AbpOssManagementSettingManagementModule),
         typeof(PlatformApplicationModule),
         typeof(PlatformHttpApiModule),
         typeof(PlatformEntityFrameworkCoreModule),
@@ -79,7 +80,7 @@ namespace LINGYUN.Platform
         typeof(AbpNotificationModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpFeaturesValidationRedisModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)

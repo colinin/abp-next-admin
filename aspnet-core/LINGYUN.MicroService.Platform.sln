@@ -23,17 +23,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi.Ho
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{4096EC6A-EEAD-4E5B-B087-393D7A4E5874}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "file-management", "file-management", "{C7D0EB39-3418-4A7C-AD94-FAB76F023E88}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "oss-management", "oss-management", "{C7D0EB39-3418-4A7C-AD94-FAB76F023E88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Domain.Shared", "modules\file-management\LINGYUN.Abp.FileManagement.Domain.Shared\LINGYUN.Abp.FileManagement.Domain.Shared.csproj", "{4D3C1EBD-1A4A-4300-A889-72DA0E082BAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Domain.Shared", "modules\oss-management\LINGYUN.Abp.OssManagement.Domain.Shared\LINGYUN.Abp.OssManagement.Domain.Shared.csproj", "{4D3C1EBD-1A4A-4300-A889-72DA0E082BAE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Domain", "modules\file-management\LINGYUN.Abp.FileManagement.Domain\LINGYUN.Abp.FileManagement.Domain.csproj", "{D6D4C667-B58C-4266-9929-AFE54C8F0FBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Domain", "modules\oss-management\LINGYUN.Abp.OssManagement.Domain\LINGYUN.Abp.OssManagement.Domain.csproj", "{D6D4C667-B58C-4266-9929-AFE54C8F0FBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Application.Contracts", "modules\file-management\LINGYUN.Abp.FileManagement.Application.Contracts\LINGYUN.Abp.FileManagement.Application.Contracts.csproj", "{A1561B9D-2EAB-4C6A-AE62-9D517A450D4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application.Contracts", "modules\oss-management\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj", "{A1561B9D-2EAB-4C6A-AE62-9D517A450D4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.Application", "modules\file-management\LINGYUN.Abp.FileManagement.Application\LINGYUN.Abp.FileManagement.Application.csproj", "{1C3A25AF-9A59-4532-88A4-E57BECFA7E96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application", "modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj", "{1C3A25AF-9A59-4532-88A4-E57BECFA7E96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FileManagement.HttpApi", "modules\file-management\LINGYUN.Abp.FileManagement.HttpApi\LINGYUN.Abp.FileManagement.HttpApi.csproj", "{C616C167-E5DF-4141-98BE-F98C58890122}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.HttpApi", "modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi\LINGYUN.Abp.OssManagement.HttpApi.csproj", "{C616C167-E5DF-4141-98BE-F98C58890122}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tenants", "tenants", "{8CDB2F58-9541-4FB2-8A37-079C5E6A1689}"
 EndProject
@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.EntityFram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Domain.Tests", "tests\LINGYUN.Platform.Domain.Tests\LINGYUN.Platform.Domain.Tests.csproj", "{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.Aliyun", "modules\file-management\LINGYUN.Abp.FileManagement.Aliyun\LINGYUN.Abp.FileManagement.Aliyun.csproj", "{104EDC09-0CEA-4AB0-BFF5-B009D4679419}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.Aliyun", "modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj", "{104EDC09-0CEA-4AB0-BFF5-B009D4679419}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{265D5E44-682B-49BC-984A-BDD8CA45E60E}"
 EndProject
@@ -57,7 +57,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "modules\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.FileManagement.FileSystem", "modules\file-management\LINGYUN.Abp.FileManagement.FileSystem\LINGYUN.Abp.FileManagement.FileSystem.csproj", "{B5569DCD-445E-445B-87E7-D8D4E03F0F76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.FileSystem", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj", "{B5569DCD-445E-445B-87E7-D8D4E03F0F76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp.csproj", "{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "modules\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{644F2582-D655-43B5-9EA4-D010C94B33AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setting-management", "setting-management", "{3855CE63-91CF-4F96-97F6-BEAB444B25CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{D1D288D1-3178-439F-8EFD-E29D6F66E673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.SettingManagement", "modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj", "{07D1B07A-3C95-40A8-AA53-619EC067FD45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +161,26 @@ Global
 		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5569DCD-445E-445B-87E7-D8D4E03F0F76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644F2582-D655-43B5-9EA4-D010C94B33AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644F2582-D655-43B5-9EA4-D010C94B33AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644F2582-D655-43B5-9EA4-D010C94B33AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644F2582-D655-43B5-9EA4-D010C94B33AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1D288D1-3178-439F-8EFD-E29D6F66E673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D288D1-3178-439F-8EFD-E29D6F66E673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D288D1-3178-439F-8EFD-E29D6F66E673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D288D1-3178-439F-8EFD-E29D6F66E673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07D1B07A-3C95-40A8-AA53-619EC067FD45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07D1B07A-3C95-40A8-AA53-619EC067FD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07D1B07A-3C95-40A8-AA53-619EC067FD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07D1B07A-3C95-40A8-AA53-619EC067FD45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,6 +211,12 @@ Global
 		{8A393F7F-85A2-48ED-9B56-9CEFF3BDE34A} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
 		{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
 		{B5569DCD-445E-445B-87E7-D8D4E03F0F76} = {C7D0EB39-3418-4A7C-AD94-FAB76F023E88}
+		{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1} = {C7D0EB39-3418-4A7C-AD94-FAB76F023E88}
+		{D121A3CF-7A7F-4349-ACCA-BED9433AFFEC} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
+		{644F2582-D655-43B5-9EA4-D010C94B33AF} = {265D5E44-682B-49BC-984A-BDD8CA45E60E}
+		{3855CE63-91CF-4F96-97F6-BEAB444B25CB} = {15BDA03E-DE8E-46E4-96A8-CA3F2872E812}
+		{D1D288D1-3178-439F-8EFD-E29D6F66E673} = {3855CE63-91CF-4F96-97F6-BEAB444B25CB}
+		{07D1B07A-3C95-40A8-AA53-619EC067FD45} = {C7D0EB39-3418-4A7C-AD94-FAB76F023E88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03D3B66F-8926-4C00-B7AB-A21761EC859E}

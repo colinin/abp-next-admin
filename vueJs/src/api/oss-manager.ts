@@ -3,8 +3,8 @@ import { PagedAndSortedResultRequestDto } from './types'
 import { urlStringify } from '@/utils/index'
 
 const serviceUrl = process.env.VUE_APP_BASE_API
-const containerUrl = '/api/file-management/containes'
-const objectUrl = '/api/file-management/objects'
+const containerUrl = '/api/oss-management/containes'
+const objectUrl = '/api/oss-management/objects'
 export const objectUploadUrl = serviceUrl + objectUrl + '/upload'
 export const staticUrl = '/api/files/static/'
 
