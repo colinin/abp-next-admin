@@ -118,6 +118,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-permission="['AbpOssManagement.OssObject']"
         :label="$t('global.operaActions')"
         align="center"
         width="200"
@@ -125,21 +126,20 @@
       >
         <template slot-scope="{row}">
           <el-button
-            v-permission="['AbpOssManagement.FileSystem.FileManager']"
             size="mini"
             type="success"
             icon="el-icon-tickets"
             @click="handleShowOssObject(row)"
           />
           <el-button
-            v-permission="[row.isFolder ? 'AbpFileManagement.FileSystem.Delete' : 'AbpFileManagement.FileSystem.FileManager.Delete']"
+            v-permission="['AbpOssManagement.OssObject.Delete']"
             size="mini"
             type="danger"
             icon="el-icon-delete"
             @click="handleDeleteOssObject(row)"
           />
           <el-button
-            v-permission="['AbpFileManagement.FileSystem.FileManager.Download']"
+            v-permission="['AbpOssManagement.OssObject.Download']"
             :disabled="row.isFolder"
             size="mini"
             type="info"
@@ -293,6 +293,8 @@ export default class OssManagement extends Vue {
 
   private onBucketChanged(bucket: string) {
     this.bucket = bucket
+    this.fileSystemRoot.length = 1
+    this.getObjectRequest.prefix = ''
     this.handleClearObjects()
     this.handleGetObjects()
   }
@@ -379,8 +381,32 @@ export default class OssManagement extends Vue {
     $contextmenu({
       items: [
         {
+          label: '创建容器',
+          disabled: !checkPermission(['AbpOssManagement.Container.Create']),
+          onClick: () => {
+            this.$prompt(this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString(),
+              '创建容器', {
+                showInput: true,
+                inputValidator: (val) => {
+                  return !(!val || val.length === 0)
+                },
+                inputErrorMessage: '名称必须输入',
+                inputPlaceholder: this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString()
+              }).then((val: any) => {
+              const name = val.value + '/'
+              OssManagerApi
+                .createBucket(name.replace('//', '/'))
+                .then(() => {
+                  this.$message.success(this.l('successful'))
+                  this.handleGetBuckets()
+                  this.handleGetObjects()
+                })
+            }).catch(_ => _)
+          }
+        },
+        {
           label: this.$t('fileSystem.addFolder'),
-          disabled: !checkPermission(['AbpFileManagement.FileSystem.Create']),
+          disabled: !checkPermission(['AbpOssManagement.OssObject.Create']),
           onClick: () => {
             this.$prompt(this.$t('global.pleaseInputBy', { key: this.$t('fileSystem.name') }).toString(),
               this.$t('fileSystem.addFolder').toString(), {
@@ -405,7 +431,7 @@ export default class OssManagement extends Vue {
         },
         {
           label: this.$t('fileSystem.upload'),
-          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Create']),
+          disabled: !checkPermission(['AbpOssManagement.OssObject.Create']),
           onClick: () => {
             this.uploadPath = this.getCurrentPath()
             this.showUploadOss = true
@@ -414,7 +440,7 @@ export default class OssManagement extends Vue {
         },
         {
           label: this.$t('fileSystem.bacthDelete'),
-          disabled: !checkPermission(['AbpFileManagement.FileSystem.FileManager.Delete']),
+          disabled: !checkPermission(['AbpOssManagement.OssObject.Delete']),
           onClick: () => {
             // 未公布批量删除接口
             const table = this.$refs.ossObjectTable as any

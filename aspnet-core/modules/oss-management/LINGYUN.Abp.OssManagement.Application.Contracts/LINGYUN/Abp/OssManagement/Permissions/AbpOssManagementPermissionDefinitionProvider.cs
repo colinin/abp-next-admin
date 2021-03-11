@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.OssManagement.Permissions
             var ossobject = ossManagement.AddPermission(AbpOssManagementPermissions.OssObject.Default, L("Permission:OssObject"));
             ossobject.AddChild(AbpOssManagementPermissions.OssObject.Create, L("Permission:Create"));
             ossobject.AddChild(AbpOssManagementPermissions.OssObject.Delete, L("Permission:Delete"));
+            ossobject.AddChild(AbpOssManagementPermissions.OssObject.Download, L("Permission:Download"));
         }
 
         private static LocalizableString L(string name)

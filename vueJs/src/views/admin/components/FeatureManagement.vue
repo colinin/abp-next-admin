@@ -36,8 +36,7 @@
                 v-if="feature.valueType.name === 'ToggleStringValueType'"
               >
                 <el-switch
-                  :value="getBooleanValue(feature.value)"
-                  @change="(value) => handleValueChanged(feature, value)"
+                  v-model="feature.value"
                 />
               </div>
               <div
@@ -46,7 +45,9 @@
                 <el-input
                   v-if="feature.valueType.validator.name === 'NUMERIC'"
                   v-model.number="feature.value"
-                  @change="(value) => handleValueChanged(feature, value)"
+                  :min="feature.valueType.validator.properties.MinValue"
+                  :max="feature.valueType.validator.properties.MaxValue"
+                  type="number"
                 />
                 <el-input
                   v-else
@@ -122,15 +123,9 @@ import { ElForm } from 'element-ui/types/form'
       const featureRules: {[key: string]: any}[] = new Array<{[key: string]: any}>()
       if (validator.name === 'NUMERIC' && validator.properties) {
         const ruleRang: {[key: string]: any} = {}
-        // TODO: 需要动态验证数值范围
-        // 暂时不提交
-        // 可行性一、对返回数据使用计算属性，在获取数据之后就组装好验证类，传递给对应的form-item的rules
-        // 可行性二、TODO...
-        ruleRang.pattern = RegExp('^[^' + validator.properties.MinValue + ']\\d{0,4}$|^' + validator.properties.MaxValue + '$')
-        // ruleRang.pattern = ^\d{0,11}$
-        // ruleRang.type = 'number'
-        // ruleRang.min = validator.properties.MinValue
-        // ruleRang.max = validator.properties.MaxValue
+        ruleRang.type = 'number'
+        ruleRang.min = validator.properties.MinValue
+        ruleRang.max = validator.properties.MaxValue
         ruleRang.trigger = 'blur'
         ruleRang.message = localizer('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: validator.properties.MinValue, 1: validator.properties.MaxValue })
         featureRules.push(ruleRang)
@@ -196,17 +191,22 @@ export default class extends Vue {
    */
   private featureGroups = new FeatureGroups()
 
+  get numericValue() {
+    return (gi: number, fi: number) => {
+      if (this.featureGroups) {
+        return Number(this.featureGroups.groups[gi].features[fi].value)
+      }
+      return 0
+    }
+  }
+
   mounted() {
     this.handleGetFeatures()
   }
 
-  @Watch('providerKey')
+  @Watch('loadFeature')
   onProviderKeyChanged() {
     this.handleGetFeatures()
-  }
-
-  private handleValueChanged(feature: Feature, value: any) {
-    feature.value = String(value)
   }
 
   /**
@@ -226,6 +226,22 @@ export default class extends Vue {
         .getFeatures(this.providerName, this.providerKey)
         .then(res => {
           this.featureGroups = res
+          // 需要改变值类型, 有没有其他的解决方案,
+          this.featureGroups
+            .groups
+            .forEach(group => {
+              group.features
+                .forEach(feature => {
+                  switch (feature.valueType?.validator.name) {
+                    case 'BOOLEAN' :
+                      feature.value = feature.value === 'true'
+                      break
+                    case 'NUMERIC' :
+                      feature.value = Number(feature.value)
+                      break
+                  }
+                })
+            })
           if (this.featureGroups.groups.length > 0) {
             this.selectTab = this.featureGroups.groups[0].name
           }
@@ -245,7 +261,8 @@ export default class extends Vue {
           this.featureGroups.groups.forEach(group => {
             group.features.forEach(feature => {
               if (feature.valueType != null) {
-                updateFeatures.features.push(new Feature(feature.name, feature.value))
+                // 需要全部转换为string类型
+                updateFeatures.features.push(new Feature(feature.name, String(feature.value)))
               }
             })
           })
