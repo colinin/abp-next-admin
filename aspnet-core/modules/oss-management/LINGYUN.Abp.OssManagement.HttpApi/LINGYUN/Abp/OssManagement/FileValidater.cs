@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.OssManagement
 
     public class FileValidation
     {
-        public const string CacheKey = "Abp.FileManagement.FileValidation";
+        public const string CacheKey = "Abp.OssManagement.FileValidation";
         public int SizeLimit { get; set; }
         public string[] AllowedExtensions { get; set; }
         public FileValidation()

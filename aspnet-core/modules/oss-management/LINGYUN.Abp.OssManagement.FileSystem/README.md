@@ -1,4 +1,4 @@
-# LINGYUN.Abp.FileManagement.FileSystem
+# LINGYUN.Abp.OssManagement.FileSystem
 
 本地文件系统oss容器接口 
 
@@ -7,7 +7,7 @@
 模块按需引用
 
 ```csharp
-[DependsOn(typeof(AbpFileManagementFileSystemModule))]
+[DependsOn(typeof(AbpOssManagementFileSystemModule))]
 public class YouProjectModule : AbpModule
 {
   // other

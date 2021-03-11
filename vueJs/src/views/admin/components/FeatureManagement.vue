@@ -46,7 +46,6 @@
                 <el-input
                   v-if="feature.valueType.validator.name === 'NUMERIC'"
                   v-model.number="feature.value"
-                  type="number"
                   @change="(value) => handleValueChanged(feature, value)"
                 />
                 <el-input
@@ -65,7 +64,7 @@
                   <el-option
                     v-for="valueItem in feature.valueType.itemSource.items"
                     :key="valueItem.value"
-                    :label="localizer(valueItem.displayText.resourceName + ':' + valueItem.displayText.name)"
+                    :label="localizer(valueItem.displayText.resourceName + '.' + valueItem.displayText.name)"
                     :value="valueItem.value"
                   />
                 </el-select>
@@ -106,6 +105,11 @@ import { ElForm } from 'element-ui/types/form'
         }
         return false
       }
+    },
+    getNumericValue() {
+      return (value: any) => {
+        return Number(value)
+      }
     }
   },
   filters: {
@@ -116,17 +120,22 @@ import { ElForm } from 'element-ui/types/form'
      */
     inputRuleFilter(validator: any, localizer: any) {
       const featureRules: {[key: string]: any}[] = new Array<{[key: string]: any}>()
-      if (validator.name === 'NUMERIC') {
+      if (validator.name === 'NUMERIC' && validator.properties) {
         const ruleRang: {[key: string]: any} = {}
-        ruleRang.pattern = RegExp('^(' + validator.minValue + '|[1-9]d?|' + validator.maxValue + ')$')
-        // ruleRang.pattern = /^(1|[1-9]\d?|10)$/
-        // ruleRang.min = validator.minValue
-        // ruleRang.max = validator.maxValue
+        // TODO: 需要动态验证数值范围
+        // 暂时不提交
+        // 可行性一、对返回数据使用计算属性，在获取数据之后就组装好验证类，传递给对应的form-item的rules
+        // 可行性二、TODO...
+        ruleRang.pattern = RegExp('^[^' + validator.properties.MinValue + ']\\d{0,4}$|^' + validator.properties.MaxValue + '$')
+        // ruleRang.pattern = ^\d{0,11}$
+        // ruleRang.type = 'number'
+        // ruleRang.min = validator.properties.MinValue
+        // ruleRang.max = validator.properties.MaxValue
         ruleRang.trigger = 'blur'
-        ruleRang.message = localizer('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: validator.minValue, 1: validator.maxValue })
+        ruleRang.message = localizer('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: validator.properties.MinValue, 1: validator.properties.MaxValue })
         featureRules.push(ruleRang)
-      } else if (validator.name === 'STRING') {
-        if (validator.allowNull && validator.allowNull.toLowerCase() === 'true') {
+      } else if (validator.name === 'STRING' && validator.properties) {
+        if (validator.properties.AllowNull && validator.properties.AllowNull.toLowerCase() === 'true') {
           const ruleRequired: {[key: string]: any} = {}
           ruleRequired.required = true
           ruleRequired.trigger = 'blur'
@@ -134,10 +143,10 @@ import { ElForm } from 'element-ui/types/form'
           featureRules.push(ruleRequired)
         }
         const ruleString: {[key: string]: any} = {}
-        ruleString.min = validator.minLength
-        ruleString.max = validator.maxLength
+        ruleString.min = validator.properties.MinLength
+        ruleString.max = validator.properties.MaxLength
         ruleString.trigger = 'blur'
-        ruleString.message = localizer('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: validator.minValue, 1: validator.maxValue })
+        ruleString.message = localizer('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: validator.properties.MinValue, 1: validator.properties.MaxValue })
         featureRules.push(ruleString)
       }
       return featureRules
@@ -149,6 +158,15 @@ import { ElForm } from 'element-ui/types/form'
      */
     localizer(name: string, values?: any[]) {
       return this.$t(name, values)
+    },
+    validatorNumberRange(rule: any, value: any, callback: any) {
+      if (value) {
+        const num = Number(value)
+        if (num < rule.min ||
+            num > rule.max) {
+          callback(new Error(this.$t('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', { 0: rule.min, 1: rule.max }).toString()))
+        }
+      }
     }
   }
 })
@@ -176,8 +194,6 @@ export default class extends Vue {
   /**
    * 用于拼接动态表单的功能数据,需要把abp返回的数据做一次调整
    */
-  // private features = new FeatureItems()
-
   private featureGroups = new FeatureGroups()
 
   mounted() {
@@ -206,12 +222,14 @@ export default class extends Vue {
    */
   private handleGetFeatures() {
     if (this.loadFeature) {
-      FeatureManagementService.getFeatures(this.providerName, this.providerKey).then(res => {
-        this.featureGroups = res
-        if (this.featureGroups.groups.length > 0) {
-          this.selectTab = this.featureGroups.groups[0].name
-        }
-      })
+      FeatureManagementService
+        .getFeatures(this.providerName, this.providerKey)
+        .then(res => {
+          this.featureGroups = res
+          if (this.featureGroups.groups.length > 0) {
+            this.selectTab = this.featureGroups.groups[0].name
+          }
+        })
     }
   }
 

@@ -125,7 +125,7 @@
       >
         <template slot-scope="{row}">
           <el-button
-            v-permission="['AbpFileManagement.FileSystem.FileManager']"
+            v-permission="['AbpOssManagement.FileSystem.FileManager']"
             size="mini"
             type="success"
             icon="el-icon-tickets"

@@ -1,4 +1,4 @@
-# LINGYUN.Abp.FileManagement.Aliyun
+# LINGYUN.Abp.OssManagement.Aliyun
 
 阿里云oss容器接口 
 
@@ -7,7 +7,7 @@
 模块按需引用
 
 ```csharp
-[DependsOn(typeof(AbpFileManagementAliyunModule))]
+[DependsOn(typeof(AbpOssManagementAliyunModule))]
 public class YouProjectModule : AbpModule
 {
   // other
