@@ -32,7 +32,7 @@ export class ValueType {
 export class Feature {
   name!: string
   displayName?: string
-  value!: string
+  value!: any
   description?: string
   valueType?: ValueType
   depth?: number

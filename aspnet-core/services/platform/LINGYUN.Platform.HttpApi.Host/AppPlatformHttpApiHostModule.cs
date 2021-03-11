@@ -2,9 +2,13 @@
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.FileManagement;
+using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.OssManagement;
+using LINGYUN.Abp.OssManagement.FileSystem;
+using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
+using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +25,8 @@ using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -35,7 +41,10 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
+using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -46,17 +55,16 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Http.Client.IdentityModel.Web;
-using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 namespace LINGYUN.Platform
 {
     [DependsOn(
-        typeof(AbpFileManagementApplicationModule),
-        typeof(AbpFileManagementHttpApiModule),
+        // typeof(AbpOssManagementAliyunModule),
+        typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
+        typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
+        typeof(AbpOssManagementApplicationModule),
+        typeof(AbpOssManagementHttpApiModule),
+        typeof(AbpOssManagementSettingManagementModule),
         typeof(PlatformApplicationModule),
         typeof(PlatformHttpApiModule),
         typeof(PlatformEntityFrameworkCoreModule),
@@ -72,7 +80,7 @@ namespace LINGYUN.Platform
         typeof(AbpNotificationModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpFeaturesValidationRedisModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)
@@ -210,19 +218,6 @@ namespace LINGYUN.Platform
                 options.IsEnabled = true;
             });
 
-            var tenantResolveCfg = configuration.GetSection("App:Domains");
-            if (tenantResolveCfg.Exists())
-            {
-                Configure<AbpTenantResolveOptions>(options =>
-                {
-                    var domains = tenantResolveCfg.Get<string[]>();
-                    foreach (var domain in domains)
-                    {
-                        options.AddDomainTenantResolver(domain);
-                    }
-                });
-            }
-
             Configure<AbpAuditingOptions>(options =>
             {
                 options.ApplicationName = "Platform";
@@ -313,6 +308,8 @@ namespace LINGYUN.Platform
             app.UseVirtualFiles();
             // 本地化
             app.UseAbpRequestLocalization();
+            // 多租户
+            app.UseMultiTenancy();
             //路由
             app.UseRouting();
             // 认证
@@ -322,8 +319,6 @@ namespace LINGYUN.Platform
             app.UseJwtTokenMiddleware();
             // 授权
             app.UseAuthorization();
-            // 多租户
-            app.UseMultiTenancy();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面

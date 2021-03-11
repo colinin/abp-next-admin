@@ -1,9 +1,6 @@
-﻿using LINGYUN.Abp.FileManagement.Settings;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
@@ -354,25 +351,6 @@ namespace LINGYUN.Abp.SettingManagement
                 ValueType.String);
 
             settingGroups.Add(emailSettingGroup);
-
-            #endregion
-
-            #region 文件设置
-
-            var fileSettingGroup = new SettingGroupDto(L["DisplayName:FileManagement"], L["Description:FileManagement"]);
-            var fileSystemSetting = fileSettingGroup.AddSetting(L["DisplayName:FileManagement.FileSystem"], L["Description:FileManagement.FileSystem"]);
-            fileSystemSetting.AddDetail(
-                SettingDefinitionManager.Get(AbpFileManagementSettingNames.FileLimitLength),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(AbpFileManagementSettingNames.FileLimitLength, providerName, providerKey),
-                ValueType.Number);
-            fileSystemSetting.AddDetail(
-                SettingDefinitionManager.Get(AbpFileManagementSettingNames.AllowFileExtensions),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(AbpFileManagementSettingNames.AllowFileExtensions, providerName, providerKey),
-                ValueType.String);
-
-            settingGroups.Add(fileSettingGroup);
 
             #endregion
 

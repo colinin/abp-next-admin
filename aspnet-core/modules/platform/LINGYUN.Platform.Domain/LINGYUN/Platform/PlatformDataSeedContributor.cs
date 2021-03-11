@@ -59,6 +59,8 @@ namespace LINGYUN.Platform
                 await SeedContainerMenuAsync(layout, data);
                 // 网关管理菜单数据
                 await SeedApiGatewayMenuAsync(layout, data);
+                // Oss对象管理菜单数据
+                await SeedOssManagementMenuAsync(layout, data);
             }
         }
 
@@ -727,6 +729,50 @@ namespace LINGYUN.Platform
                     { "roles", new string[] { "ApiGateway.AggregateRoute " } }
               },
               new string[] { "admin" });
+        }
+
+        private async Task SeedOssManagementMenuAsync(Layout layout, Data data)
+        {
+            var ossManagementMenu = await SeedMenuAsync(
+                layout,
+                data,
+                "oss-management",
+                "/oss-management",
+                CodeNumberGenerator.CreateCode(8),
+                layout.Path,
+                "Manage Object Storage",
+                "/oss-manager",
+                "Manage Object Storage",
+                null,
+                layout.TenantId,
+                new Dictionary<string, object>()
+                {
+                    { "title", "oss-management" },
+                    { "icon", "file-system" },
+                    { "alwaysShow", true },
+                    { "roles", new string[] { "AbpOssManagement.Container", "AbpOssManagement.OssObject" } },
+                },
+                new string[] { "admin" });
+
+            await SeedMenuAsync(
+               layout,
+               data,
+               "oss-manager",
+                "oss-manager",
+                CodeNumberGenerator.AppendCode(ossManagementMenu.Code, CodeNumberGenerator.CreateCode(1)),
+                "views/oss-management/index.vue",
+                "Manage Oss Object",
+                "",
+                "Manage Oss Object",
+                ossManagementMenu.Id,
+                ossManagementMenu.TenantId,
+               new Dictionary<string, object>()
+               {
+                    { "title", "oss-objects" },
+                    { "icon", "file-system" },
+                    { "roles", new string[] { "AbpOssManagement.OssObject" } }
+               },
+               new string[] { "admin" });
         }
 
         private async Task<Menu> SeedMenuAsync(

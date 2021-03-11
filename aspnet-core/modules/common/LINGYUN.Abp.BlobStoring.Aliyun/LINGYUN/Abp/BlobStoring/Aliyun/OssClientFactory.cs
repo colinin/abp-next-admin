@@ -1,5 +1,7 @@
 ﻿using Aliyun.OSS;
 using LINGYUN.Abp.Aliyun;
+using System.Threading.Tasks;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
@@ -8,11 +10,21 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
     public class OssClientFactory : AliyunClientFactory<IOss, AliyunBlobProviderConfiguration>, IOssClientFactory, ITransientDependency
     {
+        protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
         public OssClientFactory(
-            ISettingProvider settingProvider, 
+            ISettingProvider settingProvider,
+            IBlobContainerConfigurationProvider configurationProvider, 
             IDistributedCache<AliyunBasicSessionCredentialsCacheItem> cache) 
             : base(settingProvider, cache)
         {
+            ConfigurationProvider = configurationProvider;
+        }
+
+        public virtual async Task<IOss> CreateAsync<TContainer>()
+        {
+            var configuration = ConfigurationProvider.Get<TContainer>();
+
+            return await CreateAsync(configuration.GetAliyunConfiguration());
         }
         /// <summary>
         /// 普通方式构建Oss客户端
