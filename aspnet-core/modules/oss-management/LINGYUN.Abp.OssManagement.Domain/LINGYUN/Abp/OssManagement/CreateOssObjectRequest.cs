@@ -10,6 +10,7 @@ namespace LINGYUN.Abp.OssManagement
         public string Bucket { get; }
         public string Path { get; }
         public string Object { get; }
+        public bool Overwrite { get; set; }
         public Stream Content { get; private set; }
         public TimeSpan? ExpirationTime { get; }
         public CreateOssObjectRequest(

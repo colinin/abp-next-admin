@@ -67,7 +67,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                 ? request.Object
                 : objectPath + request.Object;
 
-            if (ObjectExists(ossClient, request.Bucket, objectName))
+            if (!request.Overwrite && ObjectExists(ossClient, request.Bucket, objectName))
             {
                 throw new BusinessException(code: OssManagementErrorCodes.ObjectAlreadyExists);
             }

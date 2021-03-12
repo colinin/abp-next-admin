@@ -65,7 +65,10 @@ namespace LINGYUN.Abp.OssManagement
                 input.Object,
                 input.Content,
                 input.Path,
-                input.ExpirationTime);
+                input.ExpirationTime)
+            {
+                Overwrite = input.Overwrite
+            };
             var ossObject = await oss.CreateObjectAsync(createOssObjectRequest);
 
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);

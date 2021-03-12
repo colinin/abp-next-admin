@@ -10,6 +10,7 @@ namespace LINGYUN.Abp.OssManagement
         public string Bucket { get; set; }
         public string Path { get; set; }
         public string Object { get; set; }
+        public bool Overwrite { get; set; }
 
         [DisableAuditing]
         [DisableValidation]

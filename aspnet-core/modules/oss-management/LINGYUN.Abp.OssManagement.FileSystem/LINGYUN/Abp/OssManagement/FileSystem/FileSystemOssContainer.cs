@@ -106,7 +106,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             {
                 ThrowOfPathHasTooLong(filePath);
 
-                if (File.Exists(filePath))
+                FileMode fileMode = request.Overwrite ? FileMode.Create : FileMode.CreateNew;
+                if (!request.Overwrite && File.Exists(filePath))
                 {
                     throw new BusinessException(code: OssManagementErrorCodes.ObjectAlreadyExists);
                     // throw new OssObjectAlreadyExistsException($"Can't not put object {objectName} in container {request.Bucket}, Because a file with the same name already exists in the directory!");
@@ -114,7 +115,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
 
                 DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
-                using (var fileStream = File.Open(filePath, FileMode.CreateNew, FileAccess.Write))
+                using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
                 {
                     await request.Content.CopyToAsync(fileStream);
 

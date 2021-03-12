@@ -24,6 +24,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{4096EC6A-EEAD-4E5B-B087-393D7A4E5874}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "oss-management", "oss-management", "{C7D0EB39-3418-4A7C-AD94-FAB76F023E88}"
+	ProjectSection(SolutionItems) = preProject
+		modules\oss-management\README.md = modules\oss-management\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Domain.Shared", "modules\oss-management\LINGYUN.Abp.OssManagement.Domain.Shared\LINGYUN.Abp.OssManagement.Domain.Shared.csproj", "{4D3C1EBD-1A4A-4300-A889-72DA0E082BAE}"
 EndProject
@@ -49,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.EntityFram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Domain.Tests", "tests\LINGYUN.Platform.Domain.Tests\LINGYUN.Platform.Domain.Tests.csproj", "{C60A06F2-0F4C-483F-BE2B-B103F0D726CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.Aliyun", "modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj", "{104EDC09-0CEA-4AB0-BFF5-B009D4679419}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Aliyun", "modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj", "{104EDC09-0CEA-4AB0-BFF5-B009D4679419}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{265D5E44-682B-49BC-984A-BDD8CA45E60E}"
 EndProject
@@ -57,7 +60,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "modules\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{95E0D070-ACFB-40DF-A4EC-FC75EA5AF6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.FileSystem", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj", "{B5569DCD-445E-445B-87E7-D8D4E03F0F76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj", "{B5569DCD-445E-445B-87E7-D8D4E03F0F76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp.csproj", "{1AA232B1-5999-43AE-A5C8-7973AFCC8BD1}"
 EndProject
@@ -69,7 +72,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setting-management", "setti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{D1D288D1-3178-439F-8EFD-E29D6F66E673}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.SettingManagement", "modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj", "{07D1B07A-3C95-40A8-AA53-619EC067FD45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.SettingManagement", "modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj", "{07D1B07A-3C95-40A8-AA53-619EC067FD45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

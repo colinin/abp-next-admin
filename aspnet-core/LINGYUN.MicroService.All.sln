@@ -179,7 +179,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.HttpAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "oss-management", "oss-management", "{B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}"
 	ProjectSection(SolutionItems) = preProject
-		modules\cloud-aliyun\LINGYUN.Abp.Aliyun\README.md = modules\cloud-aliyun\LINGYUN.Abp.Aliyun\README.md
+		modules\oss-management\README.md = modules\oss-management\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application", "modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj", "{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0}"
