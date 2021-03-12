@@ -23,6 +23,7 @@
         >
           <el-switch
             :value="isSubscred(notifier)"
+            @change="onUserSubscredChanged(notifier)"
           />
         </el-form-item>
       </el-card>
@@ -32,8 +33,10 @@
 
 <script lang="ts">
 import NotificationApiService, { NotificationGroup, UserSubscreNotification } from '@/api/notification'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
+import { mixins } from 'vue-class-component'
 import PanThumb from '@/components/PanThumb/index.vue'
+import EventBusMiXin from '@/mixins/EventBusMiXin'
 
 @Component({
   name: 'MyNotifier',
@@ -41,7 +44,7 @@ import PanThumb from '@/components/PanThumb/index.vue'
     PanThumb
   }
 })
-export default class extends Vue {
+export default class extends mixins(EventBusMiXin) {
   private notifierGroups = new Array<NotificationGroup>()
   private mySubscredNotifiers = new Array<UserSubscreNotification>()
 
@@ -52,6 +55,17 @@ export default class extends Vue {
   }
 
   mounted() {
+    this.subscribe('onSubscribed', this.onSubscribed)
+    this.subscribe('onUnSubscribed', this.onUnSubscribed)
+    this.handleGetMyNotifications()
+  }
+
+  destroyed() {
+    this.unSubscribe('onSubscribed')
+    this.unSubscribe('onUnSubscribed')
+  }
+
+  private handleGetMyNotifications() {
     NotificationApiService
       .getAssignableNotifiers()
       .then(res => {
@@ -62,6 +76,29 @@ export default class extends Vue {
       .then(res => {
         this.mySubscredNotifiers = res.items
       })
+  }
+
+  private onUserSubscredChanged(notifier: any) {
+    const index = this.mySubscredNotifiers.findIndex(x => x.name === notifier.name)
+    if (index >= 0) {
+      this.mySubscredNotifiers.splice(index, 1)
+      this.trigger('onUnSubscribed', notifier.name)
+    } else {
+      const userSubscre = new UserSubscreNotification()
+      userSubscre.name = notifier.name
+      this.mySubscredNotifiers.push(userSubscre)
+      this.trigger('onSubscribed', userSubscre)
+    }
+  }
+
+  private onSubscribed(userSubscre: UserSubscreNotification) {
+    NotificationApiService
+      .subscribeNotifier(userSubscre)
+  }
+
+  private onUnSubscribed(name: string) {
+    NotificationApiService
+      .unSubscribeNotifier(name)
   }
 }
 </script>
