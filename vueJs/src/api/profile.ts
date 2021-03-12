@@ -48,6 +48,7 @@ export class MyProfile extends MyProfileBase {
 }
 
 export class UpdateMyProfile extends MyProfileBase {
+  extraProperties?: {[key: string]: any }
 }
 
 export class ChangePassword {

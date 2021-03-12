@@ -47,7 +47,7 @@
                 </el-button>
                 <avatar-upload
                   v-model="showImageUpload"
-                  field="avatar"
+                  field="file"
                   :width="300"
                   :height="300"
                   :params="params"
@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import MyProfileService, { MyProfile, UpdateMyProfile } from '@/api/profile'
-import { FileUploadUrl } from '@/api/filemanagement'
+import OssManagerApi from '@/api/oss-manager'
 import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
 import AvatarUpload from '@/components/AvatarUpload/index.vue'
@@ -108,13 +108,14 @@ export default class extends Vue {
   private showImageUpload = false
   private headers: any = {}
   private params: any = {}
-  private uploadUrl = FileUploadUrl
+  private uploadUrl = ''
 
   get myAvatar() {
     if (this.myProfile.extraProperties) {
-      const avatar = this.myProfile.extraProperties.avatar
+      const avatar = this.myProfile.extraProperties.AvatarUrl
       if (avatar) {
-        return avatar
+        // 处理下图片与组件大小一致
+        return avatar + '/w_300,h_300'
       }
     }
     return ''
@@ -122,7 +123,7 @@ export default class extends Vue {
 
   set myAvatar(avatar: string) {
     if (this.myProfile.extraProperties) {
-      this.myProfile.extraProperties.avatar = avatar
+      this.myProfile.extraProperties.AvatarUrl = avatar
     }
   }
 
@@ -137,13 +138,8 @@ export default class extends Vue {
     this.headers.Authorization = UserModule.token
   }
 
-  private handleSrcFileSet(fileName: string, fileType: any, fileSize: any) {
-    this.params.FileName = fileName
-    this.params.ChunkSize = fileSize
-    this.params.CurrentChunkSize = fileSize
-    this.params.ChunkNumber = 1
-    this.params.TotalChunks = 1
-    this.params.TotalSize = fileSize
+  private handleSrcFileSet(fileName: string) {
+    this.uploadUrl = OssManagerApi.generateOssUrl('user-account', fileName, UserModule.userName + '/', '/api')
   }
 
   private handleUploadFail(status: any, field: any) {
@@ -151,10 +147,9 @@ export default class extends Vue {
     console.log(field)
   }
 
-  private onCropUploadSuccess(jsonData: any, field: string) {
+  private onCropUploadSuccess() {
     this.showImageUpload = false
-    console.log(jsonData)
-    console.log(field)
+    this.myAvatar = this.uploadUrl
   }
 
   private handleUpdateMyProfile() {
@@ -169,6 +164,7 @@ export default class extends Vue {
               this.myProfile.surname,
               this.myProfile.phoneNumber
             )
+            updateProfile.extraProperties = this.myProfile.extraProperties
             MyProfileService.updateMyProfile(updateProfile).then(profile => {
               this.myProfile = profile
               this.$message.success(this.$t('AbpAccount.PersonalSettingsSaved').toString())

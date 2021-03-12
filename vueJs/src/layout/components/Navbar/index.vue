@@ -41,7 +41,7 @@
               {{ $t('AbpAccount.PersonalInfo') }}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/profile-setting/">
+          <router-link to="/profile/setting">
             <el-dropdown-item>
               <svg-icon name="setting" />
               {{ $t('AbpAccount.PersonalSettings') }}

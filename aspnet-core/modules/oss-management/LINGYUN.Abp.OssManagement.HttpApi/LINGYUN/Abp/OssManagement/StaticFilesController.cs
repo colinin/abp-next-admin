@@ -32,9 +32,10 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpPost]
         [Route("{bucket}")]
-        [Route("{bucket}/{path}")]
+        [Route("{bucket}/p/{path}")]
+        [Route("{bucket}/p/{path}/{name}")]
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task<OssObjectDto> UploadAsync(string bucket, string path, [FromForm] IFormFile file)
+        public virtual async Task<OssObjectDto> UploadAsync(string bucket, string path, string name, [FromForm] IFormFile file)
         {
             if (file == null || file.Length <= 0)
             {
@@ -45,8 +46,9 @@ namespace LINGYUN.Abp.OssManagement
             {
                 Bucket = HttpUtility.UrlDecode(bucket),
                 Path = HttpUtility.UrlDecode(path),
-                Object = file.FileName,
-                Content = file.OpenReadStream()
+                Object = name ?? file.FileName,
+                Content = file.OpenReadStream(),
+                Overwrite = true
             };
 
             return await _ossObjectAppService.CreateAsync(createOssObjectInput);
