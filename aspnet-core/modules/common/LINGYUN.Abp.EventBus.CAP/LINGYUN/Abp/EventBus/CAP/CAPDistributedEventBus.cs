@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.EventBus.CAP
 {
@@ -43,21 +45,42 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// </summary>
         protected ConcurrentDictionary<string, Type> EventTypes { get; }
         /// <summary>
+        /// 当前用户
+        /// </summary>
+        protected ICurrentUser CurrentUser { get; }
+        /// <summary>
+        /// 当前客户端
+        /// </summary>
+        protected ICurrentClient CurrentClient { get; }
+    /// <summary>
+    /// 取消令牌
+    /// </summary>
+    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        /// <summary>
         /// constructor
         /// </summary>
         /// <param name="serviceScopeFactory"></param>
         /// <param name="distributedEventBusOptions"></param>
         /// <param name="capPublisher"></param>
+        /// <param name="currentUser"></param>
         /// <param name="currentTenant"></param>
+        /// <param name="currentClient"></param>
+        /// <param name="cancellationTokenProvider"></param>
         /// <param name="customDistributedEventSubscriber"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             ICapPublisher capPublisher,
+            ICurrentUser currentUser,
+            ICurrentClient currentClient,
             ICurrentTenant currentTenant,
+            ICancellationTokenProvider cancellationTokenProvider,
             ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
             : base(serviceScopeFactory, currentTenant)
         {
             CapPublisher = capPublisher;
+            CurrentUser = currentUser;
+            CurrentClient = currentClient;
+            CancellationTokenProvider = cancellationTokenProvider;
             CustomDistributedEventSubscriber = customDistributedEventSubscriber;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -159,7 +182,16 @@ namespace LINGYUN.Abp.EventBus.CAP
         public override async Task PublishAsync(Type eventType, object eventData)
         {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-            await CapPublisher.PublishAsync(eventName, eventData);
+            await CapPublisher
+                .PublishAsync(
+                    eventName, eventData,
+                    new Dictionary<string, string>
+                    {
+                        { AbpCAPHeaders.UserId, CurrentUser.Id?.ToString() ?? "" },
+                        { AbpCAPHeaders.ClientId, CurrentClient.Id ?? "" },
+                        { AbpCAPHeaders.TenantId, CurrentTenant.Id?.ToString() ?? "" },
+                    },
+                    CancellationTokenProvider.FallbackToProvider());
         }
         /// <summary>
         /// 获取事件处理器工厂列表

@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using DotNetCore.CAP.Internal;
 using DotNetCore.CAP.Processor;
+using LINGYUN.Abp.EventBus.CAP;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Remove(capProcessingServiceDescriptor);
             }
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IProcessingServer, AbpCapProcessingServer>());
+            // 替换为自己的实现
+            services.AddSingleton<ISubscribeInvoker, AbpCAPSubscribeInvoker>();
             return services;
         }
     }
