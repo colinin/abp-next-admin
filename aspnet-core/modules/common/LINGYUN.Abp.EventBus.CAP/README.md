@@ -16,3 +16,7 @@ public class YouProjectModule : AbpModule
 {
   // other
 }
+
+## 变更历史
+
+【2021-03-14】 增加多租户的支持

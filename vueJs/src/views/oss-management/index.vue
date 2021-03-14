@@ -363,7 +363,7 @@ export default class OssManagement extends Vue {
     if (!oss.isFolder) {
       const link = document.createElement('a')
       link.style.display = 'none'
-      link.href = OssManagerApi.generateOssUrl(this.bucket, oss.name, oss.path, '/api/')
+      link.href = OssManagerApi.generateOssUrl(this.bucket, oss.name, oss.path)
       link.setAttribute('download', oss.name)
       document.body.appendChild(link)
       link.click()

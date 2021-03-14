@@ -84,14 +84,16 @@ export default class OssManager {
   }
 
   public static generateOssUrl(bucket: string, object: string, path: string = '', prefix: string = '') {
-    let _url = staticUrl + bucket + '/'
+    let _url = staticUrl + bucket
     _url += bucket.endsWith('/') ? '' : '/'
     if (path) {
-      // 某些情况下要对 / 编码
-      _url += 'p/' + path.replace('/', '%2F')
-      if (_url.endsWith('%2F')) {
-        _url = _url.substring(0, _url.length - 3) + '/'
+      _url += 'p/'
+      // 对 Path部分的 URL 编码
+      let _path = encodeURIComponent(path)
+      if (_path.endsWith('%2F')) {
+        _path = _path.substring(0, _path.length - 3)
       }
+      _url += _path.endsWith('/') ? _path : _path + '/'
     }
     _url += object
     if (prefix) {
