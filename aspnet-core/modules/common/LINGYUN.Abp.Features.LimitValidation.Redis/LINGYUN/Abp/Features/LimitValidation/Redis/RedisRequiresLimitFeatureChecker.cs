@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Features.LimitValidation.Redis
@@ -27,16 +26,16 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
         private IDatabaseAsync _redis;
         private IServer _server;
 
-        private IVirtualFileProvider _virtualFileProvider;
-        private ICurrentTenant _currentTenant;
-        private AbpRedisRequiresLimitFeatureOptions _options;
+        private readonly IVirtualFileProvider _virtualFileProvider;
+        private readonly IRedisLimitFeatureNamingNormalizer _featureNamingNormalizer;
+        private readonly AbpRedisRequiresLimitFeatureOptions _options;
         private readonly string _instance;
 
         private readonly SemaphoreSlim _connectionLock = new SemaphoreSlim(initialCount: 1, maxCount: 1);
 
         public RedisRequiresLimitFeatureChecker(
-            ICurrentTenant currentTenant,
             IVirtualFileProvider virtualFileProvider,
+            IRedisLimitFeatureNamingNormalizer featureNamingNormalizer,
             IOptions<AbpRedisRequiresLimitFeatureOptions> optionsAccessor)
         {
             if (optionsAccessor == null)
@@ -45,8 +44,8 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             }
 
             _options = optionsAccessor.Value;
-            _currentTenant = currentTenant;
             _virtualFileProvider = virtualFileProvider;
+            _featureNamingNormalizer = featureNamingNormalizer;
 
             _instance = _options.InstanceName ?? string.Empty;
 
@@ -93,11 +92,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
 
         private string NormalizeKey(RequiresLimitFeatureContext context)
         {
-            if (_currentTenant.IsAvailable)
-            {
-                return $"{_instance}t:RequiresLimitFeature;t:{_currentTenant.Id};f:{context.LimitFeature}";
-            }
-            return $"{_instance}c:RequiresLimitFeature;f:{context.LimitFeature}";
+            return _featureNamingNormalizer.NormalizeFeatureName(_instance, context);
         }
 
         private void RegistenConnectionEvent(ConnectionMultiplexer connection)

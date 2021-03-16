@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.FeatureManagement.Client
         {
             if (providerKey != null)
             {
-                base.NormalizeProviderKeyAsync(providerKey);
+                return base.NormalizeProviderKeyAsync(providerKey);
             }
 
             return Task.FromResult(CurrentClient.Id);

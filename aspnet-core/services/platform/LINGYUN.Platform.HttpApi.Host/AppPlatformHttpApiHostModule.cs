@@ -81,6 +81,8 @@ namespace LINGYUN.Platform
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpFeaturesValidationRedisModule),
+        // typeof(AbpFeaturesClientModule),// 当需要客户端特性限制时取消注释此模块
+        // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutofacModule)

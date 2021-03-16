@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\FeatureManagement\Localization\Client\*.json" />
-    <Content Remove="LINGYUN\Abp\FeatureManagement\Localization\Client\*.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\FeatureManagement\Client\Localization\Resources\*.json" />
+    <Content Remove="LINGYUN\Abp\FeatureManagement\Client\Localization\Resources\*.json" />
   </ItemGroup>
 
   <ItemGroup>
