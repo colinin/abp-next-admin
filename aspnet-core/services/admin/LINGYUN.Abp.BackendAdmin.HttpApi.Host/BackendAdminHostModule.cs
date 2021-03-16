@@ -4,16 +4,17 @@ using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.OssManagement;
+using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TenantManagement;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform;
-using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -80,6 +81,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpFeatureManagementClientModule),
         typeof(AbpAuditingApplicationModule),
         typeof(AbpAuditingHttpApiModule),
         typeof(AbpTenantManagementApplicationModule),

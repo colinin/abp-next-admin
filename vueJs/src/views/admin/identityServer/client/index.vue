@@ -201,6 +201,12 @@
                 {{ $t('AbpIdentityServer.Permissions') }}
               </el-dropdown-item>
               <el-dropdown-item
+                v-permission="['FeatureManagement.ManageHostFeatures']"
+                :command="{key: 'features', row}"
+              >
+                {{ $t('AbpFeatureManagement.ManageFeatures') }}
+              </el-dropdown-item>
+              <el-dropdown-item
                 :command="{key: 'clone', row}"
                 :disabled="!checkPermission(['AbpIdentityServer.Clients.Clone'])"
               >
@@ -255,6 +261,12 @@
       :show-dialog="showEditClientDialog"
       @closed="onEditClientDialogClosed"
     />
+
+    <client-feature-edit-form
+      :show-dialog="showManageClientFeatureDialog"
+      :client-id="editClient.clientId"
+      @closed="showManageClientFeatureDialog=false"
+    />
   </div>
 </template>
 
@@ -270,6 +282,7 @@ import ClientCloneForm from './components/ClientCloneForm.vue'
 import PermissionForm from '@/components/PermissionForm/index.vue'
 import ClientCreateForm from './components/ClientCreateForm.vue'
 import ClientEditForm from './components/ClientEditForm.vue'
+import ClientFeatureEditForm from './components/ClientFeatureEditForm.vue'
 
 import IdentityServer4Service from '@/api/identity-server4'
 import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
@@ -281,7 +294,8 @@ import ClientService, { Client, ClientGetByPaged } from '@/api/clients'
     PermissionForm,
     ClientEditForm,
     ClientCloneForm,
-    ClientCreateForm
+    ClientCreateForm,
+    ClientFeatureEditForm
   },
   methods: {
     checkPermission,
@@ -306,6 +320,7 @@ export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
   private showCreateClientDialog = false
   private showCloneClientDialog = false
   private showEditClientPermissionDialog = false
+  private showManageClientFeatureDialog = false
 
   public dataFilter = new ClientGetByPaged()
   private supportedGrantypes = new Array<string>()
@@ -394,6 +409,9 @@ export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
         break
       case 'permissions':
         this.showEditClientPermissionDialog = true
+        break
+      case 'features':
+        this.showManageClientFeatureDialog = true
         break
       case 'delete' :
         this.handleDeleteClient(command.row.id, command.row.clientId)

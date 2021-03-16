@@ -101,6 +101,10 @@ export default class OssManager {
     }
     return _url
   }
+
+  public static generateDownloadUrl(bucket: string, object: string, path: string = '') {
+    return this.generateOssUrl(bucket, object, path, serviceUrl)
+  }
 }
 
 export class GetOssContainerRequest extends PagedAndSortedResultRequestDto {

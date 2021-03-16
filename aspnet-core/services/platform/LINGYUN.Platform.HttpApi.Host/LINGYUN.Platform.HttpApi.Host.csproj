@@ -53,8 +53,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
-    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+    <ProjectReference Include="..\..\..\modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj" />
     <ProjectReference Include="..\..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp.csproj" />
