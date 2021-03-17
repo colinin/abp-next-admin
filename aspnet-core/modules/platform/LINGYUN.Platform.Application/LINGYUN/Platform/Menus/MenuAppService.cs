@@ -14,7 +14,7 @@ using Volo.Abp.Users;
 
 namespace LINGYUN.Platform.Menus
 {
-    [Authorize(PlatformPermissions.Menu.Default)]
+    [Authorize]
     public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
     {
         protected DataItemMappingOptions DataItemMapping { get; }
@@ -37,7 +37,6 @@ namespace LINGYUN.Platform.Menus
             DataItemMapping = options.Value;
         }
 
-        [Authorize]
         public virtual async Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input)
         {
             var myMenus = await MenuRepository.GetUserMenusAsync(
@@ -49,6 +48,7 @@ namespace LINGYUN.Platform.Menus
                 ObjectMapper.Map<List<Menu>, List<MenuDto>>(myMenus));
         }
 
+        [Authorize(PlatformPermissions.Menu.Default)]
         public virtual async Task<MenuDto> GetAsync(Guid id)
         {
             var menu = await MenuRepository.GetAsync(id);
@@ -56,6 +56,7 @@ namespace LINGYUN.Platform.Menus
             return ObjectMapper.Map<Menu, MenuDto>(menu);
         }
 
+        [Authorize(PlatformPermissions.Menu.Default)]
         public virtual async Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
         {
             var menus = await MenuRepository.GetAllAsync(
@@ -66,6 +67,7 @@ namespace LINGYUN.Platform.Menus
                 ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
         }
 
+        [Authorize(PlatformPermissions.Menu.Default)]
         public virtual async Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
         {
             var count = await MenuRepository.GetCountAsync(input.Filter, input.PlatformType, input.ParentId, input.LayoutId);
