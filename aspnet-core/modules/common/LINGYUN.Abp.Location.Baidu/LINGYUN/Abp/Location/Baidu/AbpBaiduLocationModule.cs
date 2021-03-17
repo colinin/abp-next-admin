@@ -5,13 +5,15 @@ using System;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Location.Baidu
 {
     [DependsOn(
-        typeof(AbpLocationModule), 
-        typeof(AbpJsonModule))]
+        typeof(AbpLocationModule),
+        typeof(AbpJsonModule),
+        typeof(AbpThreadingModule))]
     public class AbpBaiduLocationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

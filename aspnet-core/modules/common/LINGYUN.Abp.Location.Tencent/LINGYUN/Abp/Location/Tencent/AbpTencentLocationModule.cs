@@ -2,13 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Location.Tencent
 {
-    [DependsOn(typeof(AbpLocationModule))]
+    [DependsOn(
+        typeof(AbpLocationModule),
+        typeof(AbpJsonModule),
+        typeof(AbpThreadingModule))]
     public class AbpTencentLocationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

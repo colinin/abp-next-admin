@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Location.Tencent.Model
         /// 该POI到逆地址解析传入的坐标的直线距离
         /// </summary>
         [JsonProperty("_distance")]
-        public string Distance { get; set; }
+        public double Distance { get; set; }
         /// <summary>
         /// 行政区划信息
         /// </summary>

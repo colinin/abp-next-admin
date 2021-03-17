@@ -3,15 +3,15 @@
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 # List of solutions used only in development mode
-$batchCommandPaths = @(
-        "../aspnet-core/services/start-auth-server.bat",
-		"../aspnet-core/services/start-identity-server.bat",
-		"../aspnet-core/services/start-backend-admin.bat",
-		"../aspnet-core/services/start-apigateway-host.bat",
-		"../aspnet-core/services/start-apigateway-admin.bat",
-		"../aspnet-core/services/start-messages.bat",
-		"../aspnet-core/services/start-platform.bat"
-	)
+[PsObject[]]$serviceArray = @()
+
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/account/AuthServer.Host"; Service = "identityserver" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host"; Service = "admin" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/identity-server/LINGYUN.Abp.IdentityServer4.HttpApi.Host"; Service = "identityserver4-admin" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/apigateway/LINGYUN.ApiGateway.Host"; Service = "apigateway-host" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/apigateway/LINGYUN.ApiGateway.HttpApi.Host"; Service = "apigateway-admin" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/messages/LINGYUN.Abp.MessageService.HttpApi.Host"; Service = "messages" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/platform/LINGYUN.Platform.HttpApi.Host"; Service = "platform" }
 
 Write-host ""
 Write-host ":::::::::::::: !!! You are in development mode !!! ::::::::::::::" -ForegroundColor red -BackgroundColor  yellow

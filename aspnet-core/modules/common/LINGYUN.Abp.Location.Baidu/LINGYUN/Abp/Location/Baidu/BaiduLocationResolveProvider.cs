@@ -15,9 +15,9 @@ namespace LINGYUN.Abp.Location.Baidu
             BaiduLocationHttpClient = baiduHttpRequestClient;
         }
 
-        public virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
         {
-            return Task.FromResult(new IPGecodeLocation());
+            return await BaiduLocationHttpClient.IPGeocodeAsync(ipAddress);
         }
 
         public virtual async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50)

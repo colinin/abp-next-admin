@@ -1,15 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Location.Baidu.Model
 {
     public class BaiduReGeocode
     {
         /// <summary>
+        /// 经纬度坐标
+        /// </summary>
+        [JsonProperty("location")]
+        [JsonPropertyName("location")]
+        public BaiduLocation Location { get; set; }
+        /// <summary>
         /// 结构化地址信息
         /// </summary>
         [JsonProperty("formatted_address")]
-        public string Address { get; set; }
+        [JsonPropertyName("formatted_address")]
+        public string FormattedAddress { get; set; }
         /// <summary>
         /// 坐标所在商圈信息，如 "人民大学,中关村,苏州街"。
         /// 最多返回3个。
@@ -35,6 +43,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 当前位置结合POI的语义化结果描述
         /// </summary>
         [JsonProperty("sematic_description")]
+        [JsonPropertyName("sematic_description")]
         public string SematicDescription { get; set; }
         public BaiduReGeocode()
         {

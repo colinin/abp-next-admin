@@ -40,6 +40,54 @@ namespace LINGYUN.Abp.Location.Baidu
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
+        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        {
+            var requestParamters = new Dictionary<string, string>
+            {
+                { "ip", ipAddress },
+                { "ak", Options.AccessKey },
+                { "coor", Options.CoordType }
+            };
+            var baiduMapUrl = "http://api.map.baidu.com";
+            var baiduMapPath = "/location/ip";
+            if (Options.CaculateAKSN)
+            {
+                // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
+                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
+                requestParamters.Add("sn", sn);
+            }
+            var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
+            var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
+            var baiduLocationResponse = JsonSerializer.Deserialize<BaiduIpGeocodeResponse>(responseContent);
+            if (!baiduLocationResponse.IsSuccess())
+            {
+                var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
+                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
+                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
+                var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
+                localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
+                if (Options.VisableErrorToClient)
+                {
+                    throw new UserFriendlyException(localizerErrorMessage);
+                }
+                throw new AbpException($"Resolution address failed:{localizerErrorMessage}!");
+            }
+            var location = new IPGecodeLocation
+            {
+                Province = baiduLocationResponse.Content.AddressDetail?.Province,
+                City = baiduLocationResponse.Content.AddressDetail?.City,
+                AdCode = baiduLocationResponse.Content.AddressDetail?.CityCode.ToString(),
+            };
+            var point = baiduLocationResponse.Content.Point.ToPoint();
+            location.Location.Latitude = point.Y;
+            location.Location.Longitude = point.X;
+
+            location.AddAdditional("Address", baiduLocationResponse.Address);
+            location.AddAdditional("Content", baiduLocationResponse.Content);
+
+            return location;
+        }
+
         public virtual async Task<GecodeLocation> GeocodeAsync(string address, string city = null)
         {
             var requestParamters = new Dictionary<string, string>
@@ -133,25 +181,42 @@ namespace LINGYUN.Abp.Location.Baidu
             {
                 Street = baiduLocationResponse.Result.AddressComponent.Street,
                 AdCode = baiduLocationResponse.Result.AddressComponent.AdCode.ToString(),
-                Address = baiduLocationResponse.Result.Address,
+                Address = baiduLocationResponse.Result.FormattedAddress,
+                FormattedAddress = baiduLocationResponse.Result.SematicDescription,
                 City = baiduLocationResponse.Result.AddressComponent.City,
                 Country = baiduLocationResponse.Result.AddressComponent.Country,
                 District = baiduLocationResponse.Result.AddressComponent.District,
                 Number = baiduLocationResponse.Result.AddressComponent.StreetNumber,
                 Province = baiduLocationResponse.Result.AddressComponent.Province,
                 Town = baiduLocationResponse.Result.AddressComponent.Town,
-                Pois = baiduLocationResponse.Result.Pois.Select(p => new Poi
+                Pois = baiduLocationResponse.Result.Pois.Select(p =>
                 {
-                    Address = p.Address,
-                    Name = p.Name,
-                    Tag = p.Tag,
-                    Type = p.PoiType
+                    var poi = new Poi
+                    {
+                        Address = p.Address,
+                        Name = p.Name,
+                        Tag = p.Tag,
+                        Type = p.PoiType
+                    };
+                    if (int.TryParse(p.Distance, out int distance))
+                    {
+                        poi.Distance = distance;
+                    }
+
+                    return poi;
                 }).ToList(),
                 Roads = baiduLocationResponse.Result.Roads.Select(r => new Road
                 {
                     Name = r.Name
                 }).ToList()
             };
+            // 如果存在Poi组,取最近的一个poi作为实际地址
+            if (location.Pois.Any())
+            {
+                var nearPoi = location.Pois.OrderBy(x => x.Distance).FirstOrDefault();
+                location.Address = nearPoi.Address;
+                location.FormattedAddress = nearPoi.Name;
+            }
             location.AddAdditional("BaiduLocation", baiduLocationResponse.Result);
 
             return location;

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Location.Baidu.Model
 {
@@ -8,6 +9,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 地址信息
         /// </summary>
         [JsonProperty("addr")]
+        [JsonPropertyName("addr")]
         public string Address { get; set; }
         /// <summary>
         /// 名称
@@ -38,6 +40,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 电话
         /// </summary>
         [JsonProperty("tel")]
+        [JsonPropertyName("tel")]
         public string TelPhone { get; set; }
         /// <summary>
         /// poi唯一标识
@@ -47,12 +50,14 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 邮编
         /// </summary>
         [JsonProperty("zip")]
+        [JsonPropertyName("zip")]
         public string Post { get; set; }
         /// <summary>
         /// poi对应的主点poi（如，海底捞的主点为上地华联，该字段则为上地华联的poi信息。
         /// 如无，该字段为空），包含子字段和pois基础召回字段相同。
         /// </summary>
-        [JsonProperty("parent_poi")] 
+        [JsonProperty("parent_poi")]
+        [JsonPropertyName("parent_poi")]
         public BaiduPoi ParentPoi { get; set; }
     }
 }

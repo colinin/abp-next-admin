@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.Location.Baidu
         /// extensions_poi=1，返回pois数据，
         /// 默认显示周边1000米内的poi。
         /// </summary>
-        public string ExtensionsPoi { get; set; } = "0";
+        public string ExtensionsPoi { get; set; } = "1";
         /// <summary>
         /// 当取值为true时，召回坐标周围最近的3条道路数据。
         /// 区别于行政区划中的street参数（street参数为行政区划中的街道，和普通道路不对应）
