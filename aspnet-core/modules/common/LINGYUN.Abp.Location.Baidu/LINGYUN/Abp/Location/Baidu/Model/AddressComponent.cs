@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Location.Baidu.Model
 {
@@ -15,16 +16,19 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 国家国家编码
         /// </summary>
         [JsonProperty("country_code")]
+        [JsonPropertyName("country_code")]
         public int CountryCode { get; set; }
         /// <summary>
         /// 国家英文缩写（三位）
         /// </summary>
         [JsonProperty("country_code_iso")]
+        [JsonPropertyName("country_code_iso")]
         public string CountryCodeIso { get; set; }
         /// <summary>
         /// 国家英文缩写（两位）
         /// </summary>
         [JsonProperty("country_code_iso2")]
+        [JsonPropertyName("country_code_iso2")]
         public string CountryCodeIso2 { get; set; }
         /// <summary>
         /// 省名
@@ -40,6 +44,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// country、province、city、district、town分别对应0-4级，若city_level=3，则district层级为该国家的city层级）
         /// </summary>
         [JsonProperty("city_level")]
+        [JsonPropertyName("city_level")]
         public int CityLevel { get; set; }
         /// <summary>
         /// 区县名
@@ -53,6 +58,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 乡镇id
         /// </summary>
         [JsonProperty("town_code")]
+        [JsonPropertyName("town_code")]
         public string TownCode { get; set; }
         /// <summary>
         /// 街道名（行政区划中的街道层级）
@@ -62,6 +68,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 街道门牌号
         /// </summary>
         [JsonProperty("street_number")]
+        [JsonPropertyName("street_number")]
         public string StreetNumber { get; set; }
         /// <summary>
         /// 行政区划代码

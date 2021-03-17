@@ -134,20 +134,35 @@ namespace LINGYUN.Abp.Location.Tencent
                 Street = tencentLocationResponse.Result.AddressComponent.Street,
                 AdCode = tencentLocationResponse.Result.AddressInfo?.NationCode,
                 Address = tencentLocationResponse.Result.Address,
+                FormattedAddress = tencentLocationResponse.Result.FormattedAddress?.ReCommend,
                 City = tencentLocationResponse.Result.AddressComponent.City,
                 Country = tencentLocationResponse.Result.AddressComponent.Nation,
                 District = tencentLocationResponse.Result.AddressComponent.District,
                 Number = tencentLocationResponse.Result.AddressComponent.StreetNumber,
                 Province = tencentLocationResponse.Result.AddressComponent.Province,
                 Town = tencentLocationResponse.Result.AddressReference.Town.Title,
-                Pois = tencentLocationResponse.Result.Pois.Select(p => new Poi
+                Pois = tencentLocationResponse.Result.Pois.Select(p =>
                 {
-                    Address = p.Address,
-                    Name = p.Title,
-                    Tag = p.Id,
-                    Type = p.CateGory
+                    var poi = new Poi
+                    {
+                        Address = p.Address,
+                        Name = p.Title,
+                        Tag = p.Id,
+                        Type = p.CateGory,
+                        Distance = Convert.ToInt32(p.Distance)
+                    };
+
+                    return poi;
                 }).ToList()
             };
+            if ((location.Address.IsNullOrWhiteSpace() ||
+                location.FormattedAddress.IsNullOrWhiteSpace()) &&
+                location.Pois.Any())
+            {
+                var nearPoi = location.Pois.OrderBy(x => x.Distance).FirstOrDefault();
+                location.Address = nearPoi.Address;
+                location.FormattedAddress = nearPoi.Name;
+            }
             location.AddAdditional("TencentLocation", tencentLocationResponse.Result);
 
             return location;

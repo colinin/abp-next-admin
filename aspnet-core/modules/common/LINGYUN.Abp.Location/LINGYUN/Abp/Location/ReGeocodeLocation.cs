@@ -12,6 +12,10 @@ namespace LINGYUN.Abp.Location
         /// </summary>
         public string Address { get; set; }
         /// <summary>
+        /// 格式化的地址描述
+        /// </summary>
+        public string FormattedAddress { get; set; }
+        /// <summary>
         /// 国家
         /// </summary>
         public string Country { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Location.Baidu.Model
 {
@@ -19,6 +20,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model
         /// 请求中的坐标与所归属区域面的相对位置关系
         /// </summary>
         [JsonProperty("direction_desc")]
+        [JsonPropertyName("direction_desc")]
         public string DirectionDesc { get; set; }
         /// <summary>
         /// poi唯一标识

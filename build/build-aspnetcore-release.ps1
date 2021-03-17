@@ -1,11 +1,10 @@
 . "./build-aspnetcore-common.ps1"
 
 # Build all solutions
-foreach ($batchCommandPath in $batchCommandPaths) {    
-    $file = [io.fileinfo]$batchCommandPath;
-    Write-Host $file.DirectoryName
-    Set-Location $file.DirectoryName
-    CMD /c $file.Name --publish -Wait
+foreach ($service in $serviceArray) {    
+    Set-Location $service.Path
+    $publishPath = $service.Path + "/../../Publish/" + $service.Service
+    dotnet publish -c Release -o $publishPath --no-cache --no-restore
 }
 
 Set-Location $rootFolder
