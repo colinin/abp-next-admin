@@ -17,6 +17,8 @@ using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 using Volo.Abp.Users;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 namespace LINGYUN.Abp.SettingManagement
 {
@@ -25,17 +27,20 @@ namespace LINGYUN.Abp.SettingManagement
     {
         protected AbpLocalizationOptions LocalizationOptions { get; }
 
+        protected IDistributedEventBus EventBus { get; }
         protected ISettingManager SettingManager { get; }
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
 
         protected IDistributedCache<SettingCacheItem> Cache { get; }
         public SettingAppService(
+            IDistributedEventBus eventBus,
             ISettingManager settingManager,
             IDistributedCache<SettingCacheItem> cache,
             IOptions<AbpLocalizationOptions> localizationOptions,
             ISettingDefinitionManager settingDefinitionManager)
         {
             Cache = cache;
+            EventBus = eventBus;
             SettingManager = settingManager;
             SettingDefinitionManager = settingDefinitionManager;
             LocalizationOptions = localizationOptions.Value;
@@ -50,6 +55,12 @@ namespace LINGYUN.Abp.SettingManagement
                 await SettingManager.SetGlobalAsync(setting.Name, setting.Value);
             }
 
+            CurrentUnitOfWork.OnCompleted(async () =>
+            {
+                // 发送刷新用户缓存事件
+                await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
+            });
+
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
@@ -62,6 +73,12 @@ namespace LINGYUN.Abp.SettingManagement
                 {
                     await SettingManager.SetForTenantAsync(CurrentTenant.GetId(), setting.Name, setting.Value);
                 }
+
+                CurrentUnitOfWork.OnCompleted(async () =>
+                {
+                    // 发送刷新用户缓存事件
+                    await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
+                });
 
                 await CurrentUnitOfWork.SaveChangesAsync();
             }

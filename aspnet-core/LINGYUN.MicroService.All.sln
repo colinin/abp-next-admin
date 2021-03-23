@@ -286,9 +286,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis.Client", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj", "{48DE251A-3482-4934-BC26-F99D2235AC9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Location.Tencent.Tests", "tests\LINGYUN.Abp.Location.Tencent.Tests\LINGYUN.Abp.Location.Tencent.Tests.csproj", "{94B47385-E47F-4FD7-A3A9-A7AA122EFC93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent.Tests", "tests\LINGYUN.Abp.Location.Tencent.Tests\LINGYUN.Abp.Location.Tencent.Tests.csproj", "{94B47385-E47F-4FD7-A3A9-A7AA122EFC93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Location.Baidu.Tests", "tests\LINGYUN.Abp.Location.Baidu.Tests\LINGYUN.Abp.Location.Baidu.Tests.csproj", "{C892CD81-50AE-49E5-BF44-A0C28A1614CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu.Tests", "tests\LINGYUN.Abp.Location.Baidu.Tests\LINGYUN.Abp.Location.Baidu.Tests.csproj", "{C892CD81-50AE-49E5-BF44-A0C28A1614CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AspNetCore.Mvc.Client", "modules\common\LINGYUN.Abp.AspNetCore.Mvc.Client\LINGYUN.Abp.AspNetCore.Mvc.Client.csproj", "{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -764,6 +766,10 @@ Global
 		{C892CD81-50AE-49E5-BF44-A0C28A1614CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C892CD81-50AE-49E5-BF44-A0C28A1614CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C892CD81-50AE-49E5-BF44-A0C28A1614CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -908,6 +914,7 @@ Global
 		{48DE251A-3482-4934-BC26-F99D2235AC9F} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{94B47385-E47F-4FD7-A3A9-A7AA122EFC93} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{C892CD81-50AE-49E5-BF44-A0C28A1614CC} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
