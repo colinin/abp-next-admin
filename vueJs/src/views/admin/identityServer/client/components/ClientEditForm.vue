@@ -658,8 +658,6 @@
             :client="client"
             :allowed-create-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
             :allowed-delete-prop="checkPermission(['AbpIdentityServer.Clients.ManageProperties'])"
-            :allowed-create-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
-            :allowed-delete-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
           />
         </el-tab-pane>
       </el-tabs>
@@ -676,6 +674,7 @@
           class="confirm"
           type="primary"
           icon="el-icon-check"
+          :loading="changeClient"
           @click="onSave"
         >
           {{ $t('AbpIdentityServer.Save') }}
@@ -727,6 +726,8 @@ export default class extends Vue {
 
   @Prop({ default: () => { return new Array<string>() } })
   private supportedGrantypes!: string[]
+
+  private changeClient = false
 
   get title() {
     return this.l('AbpIdentityServer.Client:Name', { 0: this.client.clientName })
@@ -836,6 +837,7 @@ export default class extends Vue {
     const clientEditForm = this.$refs.formClient as any
     clientEditForm.validate((valid: boolean) => {
       if (valid) {
+        this.changeClient = true
         const updateClient = new ClientUpdate()
         this.updateClientByInput(updateClient)
         updateClient.updateByClient(this.client)
@@ -845,6 +847,10 @@ export default class extends Vue {
             this.client = client
             const successMessage = this.l('global.successful')
             this.$message.success(successMessage)
+            this.onFormClosed()
+          })
+          .finally(() => {
+            this.changeClient = false
           })
       }
     })
@@ -865,6 +871,7 @@ export default class extends Vue {
   private resetFormFields() {
     const clientEditForm = this.$refs.formClient as any
     clientEditForm.resetFields()
+    this.changeClient = false
   }
 
   private l(name: string, values?: any[] | { [key: string]: any }) {
