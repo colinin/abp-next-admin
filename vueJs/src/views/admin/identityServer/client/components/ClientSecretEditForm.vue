@@ -12,7 +12,7 @@
       </el-checkbox>
     </el-form-item>
     <SecretEditForm
-      v-model="client.secret"
+      v-model="client.clientSecrets"
       :allowed-create-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
       :allowed-delete-secret="checkPermission(['AbpIdentityServer.Clients.ManageSecrets'])"
     />
