@@ -32,6 +32,7 @@
                     type="warning"
                     center
                     show-icon
+                    :closable="false"
                   />
                 </div>
               </el-image>

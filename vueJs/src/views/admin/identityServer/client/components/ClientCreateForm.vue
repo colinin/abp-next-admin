@@ -82,7 +82,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import { Form } from 'element-ui'
 import GrantTypeEditForm from './GrantTypeEditForm.vue'
@@ -95,7 +96,7 @@ import ClientApiService, { ClientCreate } from '@/api/clients'
     GrantTypeEditForm
   }
 })
-export default class ClientCreateForm extends Vue {
+export default class ClientCreateForm extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -111,7 +112,7 @@ export default class ClientCreateForm extends Vue {
         ClientApiService
           .create(this.client)
           .then(() => {
-            this.$message.success(this.$t('global.successful').toString())
+            this.$message.success(this.l('global.successful'))
             this.onFormClosed(true)
           })
       }

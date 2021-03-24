@@ -113,12 +113,13 @@ import ClaimTypeApiService, {
   IdentityClaimTypeUpdate,
   IdentityClaimTypeCreateOrUpdateBase
 } from '@/api/cliam-type'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 @Component({
   name: 'CreateOrUpdateCliamTypeForm'
 })
-export default class CreateOrUpdateCliamTypeForm extends Vue {
+export default class CreateOrUpdateCliamTypeForm extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private claimTypeId!: string
 
@@ -205,10 +206,6 @@ export default class CreateOrUpdateCliamTypeForm extends Vue {
     claimType.regexDescription = this.claimType.regexDescription
     claimType.required = this.claimType.required
     claimType.description = this.claimType.description
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

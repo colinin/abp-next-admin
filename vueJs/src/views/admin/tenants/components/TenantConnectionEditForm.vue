@@ -105,7 +105,8 @@
 
 <script lang="ts">
 import TenantService, { TenantConnectionString } from '@/api/tenant-management'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import { checkPermission } from '@/utils/permission'
 
 @Component({
@@ -114,7 +115,7 @@ import { checkPermission } from '@/utils/permission'
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private tenantId!: string
 
@@ -199,10 +200,6 @@ export default class extends Vue {
 
   public resetFields() {
     this.tenantConnection = TenantConnectionString.empty()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

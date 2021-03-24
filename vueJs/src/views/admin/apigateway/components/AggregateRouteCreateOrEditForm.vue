@@ -140,7 +140,8 @@
 
 <script lang="ts">
 import ElInputTag from '@/components/InputTag/index.vue'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import ApiGatewayService, { RouteGroupAppIdDto, AggregateReRoute, AggregateReRouteCreate, AggregateReRouteUpdate } from '@/api/apigateway'
 
 @Component({
@@ -149,7 +150,7 @@ import ApiGatewayService, { RouteGroupAppIdDto, AggregateReRoute, AggregateReRou
     ElInputTag
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private aggregateRouteId!: string
 
@@ -241,10 +242,6 @@ export default class extends Vue {
     this.aggregateRoute = AggregateReRoute.empty()
     const formAggregateRoute = this.$refs.formAggregateRoute as any
     formAggregateRoute.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

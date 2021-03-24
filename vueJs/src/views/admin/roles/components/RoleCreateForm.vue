@@ -62,13 +62,14 @@
 
 <script lang="ts">
 import { Form } from 'element-ui'
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import RoleApiService, { CreateRoleDto } from '@/api/roles'
 
 @Component({
   name: 'RoleCreateForm'
 })
-export default class RoleCreateForm extends Vue {
+export default class RoleCreateForm extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -85,7 +86,7 @@ export default class RoleCreateForm extends Vue {
     roleCreateForm.validate(valid => {
       if (valid) {
         RoleApiService.createRole(this.createRole).then(res => {
-          const message = this.$t('roles.createRoleSuccess', { name: res.name }).toString()
+          const message = this.l('roles.createRoleSuccess', { name: res.name })
           this.$message.success(message)
           this.onFormClosed(true)
         })

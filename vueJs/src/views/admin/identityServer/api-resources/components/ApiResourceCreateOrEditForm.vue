@@ -165,7 +165,8 @@ import ApiResourceService, {
   ApiResourceUpdate,
   ApiResourceCreateOrUpdate
 } from '@/api/api-resources'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import ClaimTypeApiService from '@/api/cliam-type'
 import IdentityServer4Service from '@/api/identity-server4'
 import { checkPermission } from '@/utils/permission'
@@ -198,7 +199,7 @@ import UserClaimEditForm from '../../components/UserClaimEditForm.vue'
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -339,10 +340,6 @@ export default class extends Vue {
   public resetFields() {
     const frmApiResource = this.$refs.formApiResource as any
     frmApiResource.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

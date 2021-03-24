@@ -49,7 +49,8 @@
 import { checkPermission } from '@/utils/permission'
 import { generateTree } from '@/utils/index'
 
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins, Vue } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import DataDictionaryService, { Data } from '@/api/data-dictionary'
 
 import CreateOrUpdateDataDialog from './CreateOrUpdateDataDialog.vue'
@@ -70,7 +71,7 @@ const $contextmenu = Vue.prototype.$contextmenu
     }
   }
 })
-export default class DataDictionaryTree extends Vue {
+export default class DataDictionaryTree extends Mixins(LocalizationMiXin) {
   private showDataDialog = false
   private isEditData = false
   private editDataId = ''
@@ -95,7 +96,7 @@ export default class DataDictionaryTree extends Vue {
     $contextmenu({
       items: [
         {
-          label: this.$t('AppPlatform.Data:Edit'),
+          label: this.l('AppPlatform.Data:Edit'),
           icon: 'el-icon-edit',
           disabled: !checkPermission(['Platform.DataDictionary.Update']),
           onClick: () => {
@@ -103,7 +104,7 @@ export default class DataDictionaryTree extends Vue {
           }
         },
         {
-          label: this.$t('AppPlatform.Data:AddNew'),
+          label: this.l('AppPlatform.Data:AddNew'),
           icon: 'ivu-icon ivu-icon-md-add',
           disabled: !checkPermission(['Platform.DataDictionary.Create']),
           onClick: () => {
@@ -111,7 +112,7 @@ export default class DataDictionaryTree extends Vue {
           }
         },
         {
-          label: this.$t('AppPlatform.Data:AppendItem'),
+          label: this.l('AppPlatform.Data:AppendItem'),
           disabled: !checkPermission(['Platform.DataDictionary.ManageItems']),
           onClick: () => {
             this.$emit('onDataChecked', data.id)
@@ -119,7 +120,7 @@ export default class DataDictionaryTree extends Vue {
           }
         },
         {
-          label: this.$t('AppPlatform.Data:Delete'),
+          label: this.l('AppPlatform.Data:Delete'),
           icon: 'el-icon-delete',
           disabled: !checkPermission(['Platform.DataDictionary.Delete']),
           onClick: () => {
@@ -181,10 +182,6 @@ export default class DataDictionaryTree extends Vue {
     if (data.id !== undefined) {
       this.$emit('onDataChecked', data.id)
     }
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

@@ -17,7 +17,6 @@ import adminRouter from './modules/admin'
 import auditingRouter from './modules/auditing'
 import apigatewayRouter from './modules/apigateway'
 import identityServerRouter from './modules/identityServer'
-import fileManagementRouter from './modules/file-management'
 import containerRouter from './modules/container'
 
 Vue.use(Router)
@@ -159,7 +158,6 @@ export const asyncRoutes: RouteConfig[] = [
   auditingRouter,
   apigatewayRouter,
   identityServerRouter,
-  fileManagementRouter,
   containerRouter,
   {
     path: '*',

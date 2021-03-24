@@ -86,8 +86,7 @@ import { checkPermission } from '@/utils/permission'
 
 import EventBusMiXin from '@/mixins/EventBusMiXin'
 import DataListMiXin from '@/mixins/DataListMiXin'
-import { Prop, Watch } from 'vue-property-decorator'
-import Component, { mixins } from 'vue-class-component'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 
 import RoleApiService, { RoleGetPagedDto } from '@/api/roles'
@@ -102,7 +101,7 @@ import OrganizationUnitService from '@/api/organizationunit'
     checkPermission
   }
 })
-export default class extends mixins(DataListMiXin, EventBusMiXin) {
+export default class extends Mixins(DataListMiXin, EventBusMiXin) {
   @Prop({ default: '' })
   private organizationUnitId!: string
 
@@ -133,8 +132,8 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
   }
 
   private handleDeleteRole(row: any) {
-    this.$confirm(this.$t('AbpIdentity.OrganizationUnit:AreYouSureRemoveRole', { 0: row.name }).toString(),
-      this.$t('AbpIdentity.AreYouSure').toString(), {
+    this.$confirm(this.l('AbpIdentity.OrganizationUnit:AreYouSureRemoveRole', { 0: row.name }),
+      this.l('AbpIdentity.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             RoleApiService

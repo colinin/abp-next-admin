@@ -77,13 +77,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import ApiGateWayService, { RouteGroupDto, RouteGroupUpdateDto, RouteGroupCreateDto } from '@/api/apigateway'
 
 @Component({
   name: 'RouteGroupCreateOrEditForm'
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private appId!: string
 
@@ -157,10 +158,6 @@ export default class extends Vue {
     const routerEditForm = this.$refs.formRouteGroup as any
     routerEditForm.resetFields()
     this.$emit('closed', false)
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

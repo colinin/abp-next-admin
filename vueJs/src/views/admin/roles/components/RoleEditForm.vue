@@ -55,7 +55,8 @@
 
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import RoleService, { RoleDto, UpdateRoleDto } from '@/api/roles'
 import { Form } from 'element-ui'
 
@@ -65,7 +66,7 @@ import { Form } from 'element-ui'
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private roleId!: string
 
@@ -108,10 +109,6 @@ export default class extends Vue {
     const roleEditForm = this.$refs.roleEditForm as Form
     roleEditForm.resetFields()
     this.$emit('closed', changed)
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

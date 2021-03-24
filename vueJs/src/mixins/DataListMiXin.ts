@@ -1,11 +1,13 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { PagedResultDto, ListResultDto, PagedAndSortedResultRequestDto } from '@/api/types'
+
+import LocalizationMiXin from './LocalizationMiXin'
 /**
  * 数据列表mixin
  * 复写大部分数据列表事件
  */
 @Component
-export default class DataListMiXin extends Vue {
+export default class DataListMiXin extends Mixins(LocalizationMiXin) {
   /** 数据列表 */
   public dataList = new Array<any>()
   /** 数据总数 */
@@ -122,15 +124,4 @@ export default class DataListMiXin extends Vue {
   protected handleSortChange(column: any) {
     this.dataFilter.sorting = column.prop
   }
-
-  /**
-   * 本地化接口
-   * @param name 本地化名称
-   * @param values 参数
-   */
-  protected l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
-  }
-
-  /** 还可以添加 eventbus 的通用处理器 */
 }

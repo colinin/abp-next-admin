@@ -73,7 +73,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import { Form } from 'element-ui'
 import DataDictionaryService, {
@@ -85,7 +86,7 @@ import DataDictionaryService, {
 @Component({
   name: 'CreateOrUpdateDataDialog'
 })
-export default class CreateOrUpdateDataDialog extends Vue {
+export default class CreateOrUpdateDataDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -130,7 +131,7 @@ export default class CreateOrUpdateDataDialog extends Vue {
             DataDictionaryService
               .update(this.data.id, update)
               .then(() => {
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           } else {
@@ -142,7 +143,7 @@ export default class CreateOrUpdateDataDialog extends Vue {
             DataDictionaryService
               .create(create)
               .then(() => {
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           }

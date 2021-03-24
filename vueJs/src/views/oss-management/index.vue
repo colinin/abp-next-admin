@@ -170,7 +170,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins, Vue } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import OssManagerApi, {
   GetOssContainerRequest,
   GetOssObjectRequest,
@@ -227,7 +228,7 @@ const $contextmenu = Vue.prototype.$contextmenu
     }
   }
 })
-export default class OssManagement extends Vue {
+export default class OssManagement extends Mixins(LocalizationMiXin) {
   private bucket = ''
   private ossObjectEnd = false
   private objectLoading = false
@@ -475,10 +476,6 @@ export default class OssManagement extends Vue {
       path = this.fileSystemRoot.slice(1).join('')
     }
     return path
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

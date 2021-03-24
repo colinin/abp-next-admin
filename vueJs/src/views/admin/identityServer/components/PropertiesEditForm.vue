@@ -97,7 +97,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import { Property } from '@/api/identity-server4'
 import { Form } from 'element-ui'
 
@@ -108,7 +109,7 @@ import { Form } from 'element-ui'
     event: 'change'
   }
 })
-export default class PropertiesEditForm extends Vue {
+export default class PropertiesEditForm extends Mixins(LocalizationMiXin) {
   @Prop({ default: () => { return new Array<Property>() } })
   private properties!: Property[]
 
@@ -145,10 +146,6 @@ export default class PropertiesEditForm extends Vue {
 
   private onDelete(key: string) {
     this.$emit('change', this.properties.filter(prop => prop.key !== key))
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

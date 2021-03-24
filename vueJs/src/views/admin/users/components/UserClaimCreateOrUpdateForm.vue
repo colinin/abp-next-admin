@@ -124,7 +124,8 @@
 <script lang="ts">
 import { dateFormat } from '@/utils/index'
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import UserService, { UserClaim, UserClaimCreateOrUpdate, UserClaimDelete } from '@/api/users'
 import ClaimTypeApiService, { IdentityClaimType, IdentityClaimValueType } from '@/api/cliam-type'
 import { Form } from 'element-ui'
@@ -135,7 +136,7 @@ import { Form } from 'element-ui'
     checkPermission
   }
 })
-export default class UserClaimCreateOrUpdateForm extends Vue {
+export default class UserClaimCreateOrUpdateForm extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private userId!: string
 
@@ -271,7 +272,7 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     userClaimForm.validate(valid => {
       if (valid) {
         UserService.addUserClaim(this.userId, this.editUserClaim).then(() => {
-          this.$message.success(this.$t('global.successful').toString())
+          this.$message.success(this.l('global.successful'))
           userClaimForm.resetFields()
           this.handleGetUserClaims()
         })
@@ -283,10 +284,6 @@ export default class UserClaimCreateOrUpdateForm extends Vue {
     const userClaimForm = this.$refs.userClaimForm as Form
     userClaimForm.resetFields()
     this.$emit('closed', changed)
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

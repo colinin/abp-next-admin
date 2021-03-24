@@ -102,8 +102,7 @@
 <script lang="ts">
 import EventBusMiXin from '@/mixins/EventBusMiXin'
 import DataListMiXin from '@/mixins/DataListMiXin'
-import Component, { mixins } from 'vue-class-component'
-import { Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 
 import { checkPermission } from '@/utils/permission'
@@ -127,7 +126,7 @@ import OrganizationUnitService from '@/api/organizationunit'
     checkPermission
   }
 })
-export default class extends mixins(DataListMiXin, EventBusMiXin) {
+export default class extends Mixins(DataListMiXin, EventBusMiXin) {
   @Prop({ default: '' })
   private organizationUnitId!: string
 
@@ -158,8 +157,8 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
   }
 
   private handleDeleteUser(row: any) {
-    this.$confirm(this.$t('AbpIdentity.OrganizationUnit:AreYouSureRemoveUser', { 0: row.userName }).toString(),
-      this.$t('AbpIdentity.AreYouSure').toString(), {
+    this.$confirm(this.l('AbpIdentity.OrganizationUnit:AreYouSureRemoveUser', { 0: row.userName }),
+      this.l('AbpIdentity.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             UserApiService
