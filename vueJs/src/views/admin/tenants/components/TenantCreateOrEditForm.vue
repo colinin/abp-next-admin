@@ -70,12 +70,13 @@
 
 <script lang="ts">
 import TenantService, { TenantCreateOrEdit } from '@/api/tenant-management'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 @Component({
   name: 'TenantCreateOrEditForm'
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private tenantId!: string
 
@@ -164,10 +165,6 @@ export default class extends Vue {
     this.tenant = TenantCreateOrEdit.empty()
     const frmTenant = this.$refs.formTenant as any
     frmTenant.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

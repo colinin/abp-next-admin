@@ -151,8 +151,7 @@
 <script lang="ts">
 import EventBusMiXin from '@/mixins/EventBusMiXin'
 import DataListMiXin from '@/mixins/DataListMiXin'
-import Component, { mixins } from 'vue-class-component'
-import { Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 
 import OrganizationUnitService, { OrganizationUnitAddUser } from '@/api/organizationunit'
@@ -173,7 +172,7 @@ import { Form, Table } from 'element-ui'
     }
   }
 })
-export default class extends mixins(DataListMiXin, EventBusMiXin) {
+export default class extends Mixins(DataListMiXin, EventBusMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -222,8 +221,8 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
 
   private onFormClosed() {
     if (this.ouAddUser.userIds.length > 0) {
-      this.$confirm(this.$t('AbpIdentity.AreYouSureYouWantToCancelEditingWarningMessage').toString(),
-        this.$t('AbpIdentity.AreYouSure').toString(), {
+      this.$confirm(this.l('AbpIdentity.AreYouSureYouWantToCancelEditingWarningMessage'),
+        this.l('AbpIdentity.AreYouSure'), {
           callback: (action) => {
             if (action === 'confirm') {
               this.resetFields()

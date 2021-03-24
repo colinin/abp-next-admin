@@ -65,7 +65,8 @@
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
 
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins, Vue } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import OrganizationUnitService, { OrganizationUnit } from '@/api/organizationunit'
 
 import { Tree } from 'element-ui'
@@ -114,7 +115,7 @@ class OrganizationUnitItem {
     CreateOrUpdateOrganizationUnit
   }
 })
-export default class OrganizationUnitTree extends Vue {
+export default class OrganizationUnitTree extends Mixins(LocalizationMiXin) {
   private showUserReferenceDialog = false
   private showRoleReferenceDialog = false
 
@@ -278,10 +279,6 @@ export default class OrganizationUnitTree extends Vue {
     if (data.id !== undefined) {
       this.$emit('onOrganizationUnitChecked', data.id)
     }
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

@@ -122,7 +122,8 @@ import ApiScopeService, {
   ApiScopeUpdate,
   ApiScopeCreateOrUpdate
 } from '@/api/api-scopes'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import { checkPermission } from '@/utils/permission'
 import { dateFormat } from '@/utils/index'
 import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
@@ -147,7 +148,7 @@ import UserClaimEditForm from '../../components/UserClaimEditForm.vue'
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -248,10 +249,6 @@ export default class extends Vue {
   public resetFields() {
     const formApiScope = this.$refs.formApiScope as any
     formApiScope.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

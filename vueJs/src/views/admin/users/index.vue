@@ -342,12 +342,12 @@ export default class extends mixins(DataListMiXin, EventBusMiXin) {
 
   /** 响应删除用户事件 */
   private handleDeleteUser(row: any) {
-    this.$confirm(this.$t('AbpIdentity.UserDeletionConfirmationMessage', { 0: row.userName }).toString(),
-      this.$t('AbpIdentity.AreYouSure').toString(), {
+    this.$confirm(this.l('AbpIdentity.UserDeletionConfirmationMessage', { 0: row.userName }),
+      this.l('AbpIdentity.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             UserApiService.deleteUser(row.id).then(() => {
-              this.$message.success(this.$t('global.successful').toString())
+              this.$message.success(this.l('global.successful'))
               this.refreshPagedData()
             })
           }

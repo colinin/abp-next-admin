@@ -113,8 +113,10 @@
 
 <script lang="ts">
 import ApiGatewayService, { AggregateReRouteConfigCreate, AggregateReRoute } from '@/api/apigateway'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop, Watch, Mixins } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
+
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 @Component({
   name: 'AggregateRouteConfigEditForm',
@@ -122,7 +124,7 @@ import { checkPermission } from '@/utils/permission'
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private aggregateRouteId!: string
 
@@ -184,10 +186,6 @@ export default class extends Vue {
   public resetFields() {
     this.aggregateRouteId = ''
     this.routeConfig = AggregateReRouteConfigCreate.empty()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

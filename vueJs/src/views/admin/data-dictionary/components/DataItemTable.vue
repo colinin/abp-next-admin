@@ -109,6 +109,7 @@
 
 <script lang="ts">
 import EventBusMiXin from '@/mixins/EventBusMiXin'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import Component, { mixins } from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
@@ -153,7 +154,7 @@ import CreateOrUpdateDataItemDialog from './CreateOrUpdateDataItemDialog.vue'
     checkPermission
   }
 })
-export default class extends mixins(EventBusMiXin) {
+export default class extends mixins(EventBusMiXin, LocalizationMiXin) {
   @Prop({ default: '' })
   private dataId!: string
 
@@ -207,8 +208,8 @@ export default class extends mixins(EventBusMiXin) {
   }
 
   private handleDeleteItem(row: any) {
-    this.$confirm(this.$t('AppPlatform.Data:WillDelete', { 0: row.displayName }).toString(),
-      this.$t('AppPlatform.AreYouSure').toString(), {
+    this.$confirm(this.l('AppPlatform.Data:WillDelete', { 0: row.displayName }),
+      this.l('AppPlatform.AreYouSure'), {
         callback: (action) => {
           if (action === 'confirm') {
             DataDictionaryService

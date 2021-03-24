@@ -214,10 +214,6 @@ export default class SecretEditForm extends Vue {
     console.log(type, value)
     this.$emit('change', this.secrets.filter(secret => secret.value !== value || secret.type !== type))
   }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
-  }
 }
 </script>
 

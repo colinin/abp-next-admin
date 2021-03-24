@@ -139,7 +139,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import { Form } from 'element-ui'
 import DataService, { Data } from '@/api/data-dictionary'
@@ -154,7 +155,7 @@ import LayoutService, {
 @Component({
   name: 'CreateOrUpdateLayoutDialog'
 })
-export default class CreateOrUpdateLayoutDialog extends Vue {
+export default class CreateOrUpdateLayoutDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -175,9 +176,9 @@ export default class CreateOrUpdateLayoutDialog extends Vue {
 
   get title() {
     if (this.isEdit) {
-      return this.$t('AppPlatform.Layout:EditByName', { 0: this.layout.displayName })
+      return this.l('AppPlatform.Layout:EditByName', { 0: this.layout.displayName })
     }
-    return this.$t('AppPlatform.Layout:AddNew')
+    return this.l('AppPlatform.Layout:AddNew')
   }
 
   @Watch('showDialog')
@@ -221,12 +222,12 @@ export default class CreateOrUpdateLayoutDialog extends Vue {
               .update(this.layoutId, update)
               .then(res => {
                 this.layout = res
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           } else {
             if (!this.dataId) {
-              this.$message.warning(this.$t('pleaseSelectBy', { key: this.$t('AppPlatform.DisplayName:DataDictionary') }).toString())
+              this.$message.warning(this.l('pleaseSelectBy', { key: this.l('AppPlatform.DisplayName:DataDictionary') }))
               return
             }
             const create = new LayoutCreate()
@@ -236,7 +237,7 @@ export default class CreateOrUpdateLayoutDialog extends Vue {
               .create(create)
               .then(res => {
                 this.layout = res
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           }

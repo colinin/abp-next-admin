@@ -111,7 +111,8 @@ import { Route } from 'vue-router'
 import { Dictionary } from 'vue-router/types/router'
 import TenantBox from '@/components/TenantBox/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import UserService, { UserResetPasswordData } from '@/api/users'
 import { AbpModule } from '@/store/modules/abp'
 
@@ -122,7 +123,7 @@ import { AbpModule } from '@/store/modules/abp'
     TenantBox
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   private passwordType = 'password'
   private redirect?: string
 
@@ -244,10 +245,6 @@ export default class extends Vue {
         })
       }
     })
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 
   private resetLoginButton() {

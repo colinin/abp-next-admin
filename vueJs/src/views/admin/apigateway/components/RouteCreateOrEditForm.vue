@@ -539,7 +539,8 @@
 import ElInputTag from '@/components/InputTag/index.vue'
 import HostAndPortInputTag from './HostAndPortInputTag.vue'
 import DictionaryInputTag from './DictionaryInputTag.vue'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import ApiGateWayService, { LoadBalancerDescriptor, RouteGroupAppIdDto, ReRouteDto, ReRouteCreateDto, ReRouteUpdateDto } from '@/api/apigateway'
 
 @Component({
@@ -550,7 +551,7 @@ import ApiGateWayService, { LoadBalancerDescriptor, RouteGroupAppIdDto, ReRouteD
     HostAndPortInputTag
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private routeId!: number
 
@@ -667,10 +668,6 @@ export default class extends Vue {
     routeEditForm.resetFields()
     this.activeTablePane = 'basicOptions'
     this.$emit('closed')
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

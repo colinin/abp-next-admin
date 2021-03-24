@@ -146,7 +146,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import { Form } from 'element-ui'
 import DataDictionaryService, {
@@ -158,7 +159,7 @@ import DataDictionaryService, {
 @Component({
   name: 'CreateOrUpdateDataItemDialog'
 })
-export default class CreateOrUpdateDataItemDialog extends Vue {
+export default class CreateOrUpdateDataItemDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -177,9 +178,9 @@ export default class CreateOrUpdateDataItemDialog extends Vue {
 
   get title() {
     if (this.isEdit) {
-      return this.$t('AppPlatform.Data:EditItem')
+      return this.l('AppPlatform.Data:EditItem')
     }
-    return this.$t('AppPlatform.Data:AppendItem')
+    return this.l('AppPlatform.Data:AppendItem')
   }
 
   private onSave() {
@@ -197,7 +198,7 @@ export default class CreateOrUpdateDataItemDialog extends Vue {
             DataDictionaryService
               .updateItem(this.dataId, this.dataItem.name, update)
               .then(() => {
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           } else {
@@ -211,7 +212,7 @@ export default class CreateOrUpdateDataItemDialog extends Vue {
             DataDictionaryService
               .appendItem(this.dataId, create)
               .then(() => {
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           }

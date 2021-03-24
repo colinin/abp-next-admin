@@ -177,7 +177,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import { Form } from 'element-ui'
 import MenuService, {
@@ -197,7 +198,7 @@ import MenuMetaInput from './MenuMetaInput.vue'
     MenuMetaInput
   }
 })
-export default class CreateOrUpdateMenuDialog extends Vue {
+export default class CreateOrUpdateMenuDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -216,9 +217,9 @@ export default class CreateOrUpdateMenuDialog extends Vue {
 
   get title() {
     if (this.isEdit) {
-      return this.$t('AppPlatform.Menu:EditByName', { 0: this.menu.displayName })
+      return this.l('AppPlatform.Menu:EditByName', { 0: this.menu.displayName })
     }
-    return this.$t('AppPlatform.Menu:AddNew')
+    return this.l('AppPlatform.Menu:AddNew')
   }
 
   get dataItems() {
@@ -303,12 +304,12 @@ export default class CreateOrUpdateMenuDialog extends Vue {
               .update(this.menuId, updateMenu)
               .then(res => {
                 this.menu = res
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           } else {
             if (!this.layoutId) {
-              this.$message.warning(this.$t('pleaseSelectBy', { key: this.$t('AppPlatform.DisplayName:Layout') }).toString())
+              this.$message.warning(this.l('pleaseSelectBy', { key: this.l('AppPlatform.DisplayName:Layout') }))
               return
             }
             const createMenu = new MenuCreate()
@@ -319,7 +320,7 @@ export default class CreateOrUpdateMenuDialog extends Vue {
               .create(createMenu)
               .then(res => {
                 this.menu = res
-                this.$message.success(this.$t('successful').toString())
+                this.$message.success(this.l('successful'))
                 this.onFormClosed(true)
               })
           }

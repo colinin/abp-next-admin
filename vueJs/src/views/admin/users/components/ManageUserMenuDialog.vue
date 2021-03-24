@@ -72,7 +72,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import MenuService, { Menu, GetAllMenu, UserMenu } from '@/api/menu'
 import { generateTree } from '@/utils'
 import { PlatformType, PlatformTypes } from '@/api/layout'
@@ -81,7 +82,7 @@ import { Tree } from 'element-ui'
 @Component({
   name: 'ManageUserMenuDialog'
 })
-export default class ManageUserMenuDialog extends Vue {
+export default class ManageUserMenuDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -100,9 +101,9 @@ export default class ManageUserMenuDialog extends Vue {
 
   get confirmButtonTitle() {
     if (this.confirmButtonBusy) {
-      return this.$t('AbpUi.SavingWithThreeDot')
+      return this.l('AbpUi.SavingWithThreeDot')
     }
-    return this.$t('AbpUi.Save')
+    return this.l('AbpUi.Save')
   }
 
   @Watch('showDialog', { immediate: true })
@@ -143,7 +144,7 @@ export default class ManageUserMenuDialog extends Vue {
     MenuService
       .setUserMenu(userMenu)
       .then(() => {
-        this.$message.success(this.$t('successful').toString())
+        this.$message.success(this.l('successful'))
         this.onFormClosed()
       })
   }

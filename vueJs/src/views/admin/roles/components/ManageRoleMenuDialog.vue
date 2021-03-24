@@ -72,7 +72,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import MenuService, { Menu, GetAllMenu, RoleMenu } from '@/api/menu'
 import { generateTree } from '@/utils'
 import { PlatformType, PlatformTypes } from '@/api/layout'
@@ -81,7 +82,7 @@ import { Tree } from 'element-ui'
 @Component({
   name: 'ManageRoleMenuDialog'
 })
-export default class ManageRoleMenuDialog extends Vue {
+export default class ManageRoleMenuDialog extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -143,7 +144,7 @@ export default class ManageRoleMenuDialog extends Vue {
     MenuService
       .setRoleMenu(roleMenu)
       .then(() => {
-        this.$message.success(this.$t('successful').toString())
+        this.$message.success(this.l('successful'))
         this.onFormClosed()
       })
   }

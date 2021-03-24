@@ -157,7 +157,7 @@ import { dateFormat, abpPagerFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
 import LayoutService, { Layout, GetLayoutByPaged, PlatformTypes } from '@/api/layout'
 import DataListMiXin from '@/mixins/DataListMiXin'
-import Component, { mixins } from 'vue-class-component'
+import { Component, Mixins } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 import CreateOrUpdateLayoutDialog from './components/CreateOrUpdateLayoutDialog.vue'
 
@@ -176,7 +176,7 @@ import CreateOrUpdateLayoutDialog from './components/CreateOrUpdateLayoutDialog.
     checkPermission
   }
 })
-export default class extends mixins(DataListMiXin) {
+export default class extends Mixins(DataListMiXin) {
   public dataFilter = new GetLayoutByPaged()
   private showEditDialog = false
   private editLayoutId = ''

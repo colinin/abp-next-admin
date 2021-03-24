@@ -130,11 +130,11 @@
 </template>
 
 <script lang="ts">
-import Component, { mixins } from 'vue-class-component'
-import { Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import { checkPermission } from '@/utils/permission'
 import { AbpModule } from '@/store/modules/abp'
 import EventBusMiXin from '@/mixins/EventBusMiXin'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import RoleService from '@/api/roles'
 import { IRoleData } from '@/api/types'
@@ -146,7 +146,7 @@ import UserApiService, { UserCreate, UserUpdate, User, UserCreateOrUpdate } from
     checkPermission
   }
 })
-export default class extends mixins(EventBusMiXin) {
+export default class extends Mixins(EventBusMiXin, LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -299,10 +299,6 @@ export default class extends mixins(EventBusMiXin) {
     this.activedTabPane = 'infomation'
     const editUserForm = this.$refs.editUserForm as any
     editUserForm.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

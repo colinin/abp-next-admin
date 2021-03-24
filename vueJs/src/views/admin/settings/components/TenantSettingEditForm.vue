@@ -6,7 +6,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import SettingEditForm from './SettingEditForm.vue'
 import SettingService, { SettingGroup, SettingsUpdate } from '@/api/settings'
 
@@ -16,7 +17,7 @@ import SettingService, { SettingGroup, SettingsUpdate } from '@/api/settings'
     SettingEditForm
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   private settingGroups = new Array<SettingGroup>()
 
   mounted() {
@@ -29,7 +30,7 @@ export default class extends Vue {
 
   private onSettingSaving(settings: SettingsUpdate) {
     SettingService.setCurrentTenantSettings(settings).then(() => {
-      this.$message.success(this.$t('AbpSettingManagement.SuccessfullySaved').toString())
+      this.$message.success(this.l('AbpSettingManagement.SuccessfullySaved'))
     })
   }
 }

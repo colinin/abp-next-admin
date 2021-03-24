@@ -135,7 +135,8 @@
 import { checkPermission } from '@/utils/permission'
 
 import { Form } from 'element-ui'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 import PropertiesEditForm from '../../components/PropertiesEditForm.vue'
 import UserClaimEditForm from '../../components/UserClaimEditForm.vue'
@@ -154,7 +155,7 @@ import IdentityResourceService, {
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: ConstrainBoolean
 
@@ -245,10 +246,6 @@ export default class extends Vue {
   private resetFields() {
     const frmIdentityResource = this.$refs.formIdentityResource as Form
     frmIdentityResource.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

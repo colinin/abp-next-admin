@@ -352,7 +352,8 @@
 
 <script lang="ts">
 import { checkPermission } from '@/utils/permission'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 import ApiGatewayService, {
   RouteGroupAppIdDto,
   LoadBalancerDescriptor,
@@ -368,7 +369,7 @@ import ApiGatewayService, {
     checkPermission
   }
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: '' })
   private appId!: string
 
@@ -450,10 +451,6 @@ export default class extends Vue {
     const formGlobal = this.$refs.formGlobal as any
     formGlobal.resetFields()
     this.$emit('closed', false)
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

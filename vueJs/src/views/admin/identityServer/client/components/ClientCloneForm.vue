@@ -151,12 +151,13 @@
 
 <script lang="ts">
 import ClientService, { ClientClone } from '@/api/clients'
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+import LocalizationMiXin from '@/mixins/LocalizationMiXin'
 
 @Component({
   name: 'ClientCloneForm'
 })
-export default class extends Vue {
+export default class extends Mixins(LocalizationMiXin) {
   @Prop({ default: false })
   private showDialog!: boolean
 
@@ -198,10 +199,6 @@ export default class extends Vue {
   public resetFields() {
     const frmClient = this.$refs.formCloneClient as any
     frmClient.resetFields()
-  }
-
-  private l(name: string, values?: any[] | { [key: string]: any }) {
-    return this.$t(name, values).toString()
   }
 }
 </script>

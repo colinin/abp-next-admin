@@ -312,19 +312,19 @@ export default class extends mixins(DataListMiXin) {
     setDefaultRoleDto.isDefault = setDefault
     setDefaultRoleDto.concurrencyStamp = role.concurrencyStamp
     RoleService.updateRole(role.id, setDefaultRoleDto).then(role => {
-      this.$message.success(this.$t('roles.roleHasBeenSetDefault', { name: role.name }).toString())
+      this.$message.success(this.l('roles.roleHasBeenSetDefault', { name: role.name }))
       this.refreshPagedData()
     })
   }
 
   /** 删除角色 */
   private handleDeleteRole(role: RoleDto) {
-    this.$confirm(this.$t('roles.delNotRecoverData').toString(),
-      this.$t('roles.whetherDeleteRole', { name: role.name }).toString(), {
+    this.$confirm(this.l('roles.delNotRecoverData'),
+      this.l('roles.whetherDeleteRole', { name: role.name }), {
         callback: (action) => {
           if (action === 'confirm') {
             RoleService.deleteRole(role.id).then(() => {
-              this.$message.success(this.$t('roles.roleHasBeenDeleted', { name: role.name }).toString())
+              this.$message.success(this.l('roles.roleHasBeenDeleted', { name: role.name }))
               this.refreshPagedData()
             })
           }
