@@ -207,44 +207,12 @@ export class ControllerApiDescriptionModel {
   type!: string
   interfaces = new Array<ControllerInterfaceApiDescriptionModel>()
   actions: {[key: string]: ActionApiDescriptionModel} = {}
-
-  public static getAction(
-    actionName: string,
-    actions: {[key: string]: ActionApiDescriptionModel}) {
-    const actionKeys = Object.keys(actions)
-    const index = actionKeys.findIndex(key => {
-      const a = actions[key]
-      if (a.name.toLowerCase() === actionName.toLowerCase()) {
-        return a
-      }
-    })
-    if (index < 0) {
-      throw new Error(`没有找到名为 ${actionName} 的方法定义!`)
-    }
-    return actions[actionKeys[index]]
-  }
 }
 
 export class ModuleApiDescriptionModel {
   rootPath = 'app'
   remoteServiceName = 'Default'
   controllers: {[key: string]: ControllerApiDescriptionModel} = {}
-
-  public static getController(
-    controllerName: string,
-    controllers: {[key: string]: ControllerApiDescriptionModel}) {
-    const controllerKeys = Object.keys(controllers)
-    const index = controllerKeys.findIndex(key => {
-      const c = controllers[key]
-      if (c.controllerName.toLowerCase() === controllerName.toLowerCase()) {
-        return c
-      }
-    })
-    if (index < 0) {
-      throw new Error(`没有找到名为 ${controllerName} 的接口定义!`)
-    }
-    return controllers[controllerKeys[index]]
-  }
 }
 
 export class TypeApiDescriptionModel {
@@ -259,30 +227,4 @@ export class TypeApiDescriptionModel {
 export class ApplicationApiDescriptionModel {
   modules: {[key: string]: ModuleApiDescriptionModel} = {}
   types: {[key: string]: TypeApiDescriptionModel} = {}
-
-  public static getAction(
-    remoteService: string,
-    controllerName: string,
-    actionName: string,
-    modules: {[key: string]: ModuleApiDescriptionModel}) {
-    const module = this.getModule(remoteService, modules)
-    const controller = ModuleApiDescriptionModel.getController(controllerName, module.controllers)
-    return ControllerApiDescriptionModel.getAction(actionName, controller.actions)
-  }
-
-  private static getModule(
-    remoteService: string,
-    modules: {[key: string]: ModuleApiDescriptionModel}) {
-    const moduleKeys = Object.keys(modules)
-    const index = moduleKeys.findIndex(key => {
-      const m = modules[key]
-      if (m.remoteServiceName.toLowerCase() === remoteService.toLowerCase()) {
-        return m
-      }
-    })
-    if (index < 0) {
-      throw new Error(`没有找到名为 ${remoteService} 的服务定义!`)
-    }
-    return modules[moduleKeys[index]]
-  }
 }

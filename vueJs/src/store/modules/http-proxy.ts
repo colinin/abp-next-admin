@@ -22,24 +22,15 @@ class HttpProxy extends VuexModule implements IHttpProxy {
   public async Initialize() {
     const dynamicApiJson = getItem(dynamicApiKey)
     if (dynamicApiJson) {
-      this.SET_API_DESCRIPTOR(JSON.parse(dynamicApiJson))
-      return
+      const apiDescriptor = JSON.parse(dynamicApiJson) as ApplicationApiDescriptionModel
+      if (apiDescriptor) {
+        this.SET_API_DESCRIPTOR(apiDescriptor)
+        return
+      }
     }
     const dynamicApi = await DynamicApiService.get()
     this.SET_API_DESCRIPTOR(dynamicApi)
     setItem(dynamicApiKey, JSON.stringify(dynamicApi))
-  }
-
-  @Action({ rawError: true })
-  public findAction(service: {
-    name: string,
-    controller: string,
-    action: string
-  }) {
-    return ApplicationApiDescriptionModel
-      .getAction(
-        service.name, service.controller, service.action,
-        this.applicationApiDescriptionModel.modules)
   }
 }
 

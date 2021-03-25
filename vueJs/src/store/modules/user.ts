@@ -136,7 +136,7 @@ class User extends VuexModule implements IUserState {
 
   @Action
   private async PostLogin() {
-    const abpConfig = await AbpModule.LoadAbpConfiguration()
+    const abpConfig = await AbpModule.Initialize()
     this.SET_CURRENTUSERINFO(abpConfig.currentUser)
   }
 }

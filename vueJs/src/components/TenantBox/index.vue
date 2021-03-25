@@ -49,7 +49,7 @@ export default class extends Vue {
         })
       } else {
         AbpModule.configuration.currentTenant.isAvailable = false
-        AbpModule.LoadAbpConfiguration().finally(() => {
+        AbpModule.Initialize().finally(() => {
           this.$emit('input', '')
         })
       }

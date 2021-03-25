@@ -59,6 +59,7 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
+Vue.prototype.$r = {}
 
 new Vue({
   router,

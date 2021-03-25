@@ -35,7 +35,7 @@
         :label="$t('AbpIdentityServer.Client:Id')"
         prop="clientId"
         sortable
-        width="150px"
+        width="180px"
       >
         <template slot-scope="{row}">
           <span>{{ row.clientId }}</span>
@@ -45,7 +45,7 @@
         :label="$t('AbpIdentityServer.Grants:Key')"
         prop="key"
         sortable
-        width="150px"
+        width="300px"
       >
         <template slot-scope="{row}">
           <span>{{ row.key }}</span>
@@ -65,7 +65,7 @@
         :label="$t('AbpIdentityServer.Grants:SessionId')"
         prop="sessionId"
         sortable
-        width="140px"
+        width="180px"
       >
         <template slot-scope="{row}">
           <span>{{ row.sessionId }}</span>
@@ -75,7 +75,7 @@
         :label="$t('AbpIdentityServer.Description')"
         prop="description"
         sortable
-        width="140px"
+        width="200px"
       >
         <template slot-scope="{row}">
           <span>{{ row.description }}</span>
@@ -84,7 +84,7 @@
       <el-table-column
         :label="$t('global.operaActions')"
         align="center"
-        width="250px"
+        width="150px"
       >
         <template slot-scope="{row}">
           <el-button
@@ -92,18 +92,14 @@
             type="success"
             icon="el-icon-tickets"
             @click="onShowProfile(row.id)"
-          >
-            {{ $t('AbpIdentityServer.Grants:Profile') }}
-          </el-button>
+          />
           <el-button
             :disabled="!checkPermission(['AbpIdentityServer.Grants.Delete'])"
             size="mini"
             type="danger"
             icon="el-icon-delete"
             @click="onDeleted(row.id, row.key)"
-          >
-            {{ $t('AbpIdentityServer.Grants:Delete') }}
-          </el-button>
+          />
         </template>
       </el-table-column>
     </el-table>

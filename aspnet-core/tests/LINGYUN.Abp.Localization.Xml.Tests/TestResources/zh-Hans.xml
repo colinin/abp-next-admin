@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="lingyun.abp">
+ <culture name="zh-Hans" />
+ <texts>
+  <text key="Hello World" value="世界你好!" />
+  <text key="C# Test" value="C#测试" />
+ </texts>
+</localization>
