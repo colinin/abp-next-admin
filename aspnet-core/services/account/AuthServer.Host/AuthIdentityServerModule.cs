@@ -19,7 +19,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using System;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -41,6 +43,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -89,6 +92,7 @@ namespace AuthServer.Host
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
 
             PreConfigure<CapOptions>(options =>
             {
@@ -100,6 +104,29 @@ namespace AuthServer.Host
                 })
                 .UseDashboard();
             });
+
+            var cerConfig = configuration.GetSection("Certificates");
+            if (hostingEnvironment.IsProduction() &&
+                cerConfig.Exists())
+            {
+                // 开发环境下存在证书配置
+                // 且证书文件存在则使用自定义的证书文件来启动Ids服务器
+                var cerPath = Path.Combine(hostingEnvironment.ContentRootPath, cerConfig["CerPath"]);
+                if (File.Exists(cerPath))
+                {
+                    PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+                    {
+                        options.AddDeveloperSigningCredential = false;
+                    });
+
+                    var cer = new X509Certificate2(cerPath, cerConfig["Password"]);
+
+                    PreConfigure<IIdentityServerBuilder>(builder =>
+                    {
+                        builder.AddSigningCredential(cer);
+                    });
+                }
+            }
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -280,6 +307,7 @@ namespace AuthServer.Host
             }
             else
             {
+                // 需要实现一个错误页面
                 app.UseErrorPage();
                 app.UseHsts();
             }
