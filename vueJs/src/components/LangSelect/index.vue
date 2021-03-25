@@ -40,7 +40,7 @@ export default class extends Vue {
     AppModule.SetLanguage(lang)
     this.$i18n.locale = lang
     this.localization.currentCulture.cultureName = lang
-    AbpModule.LoadAbpConfiguration().then(() => {
+    AbpModule.Initialize().then(() => {
       this.$message({
         message: 'Switch Language Success',
         type: 'success'

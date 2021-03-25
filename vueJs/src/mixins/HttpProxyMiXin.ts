@@ -7,7 +7,9 @@ import {
   ApiVersionInfo,
   ParameterBindingSources,
   UrlBuilder,
-  ApplicationApiDescriptionModel
+  ApplicationApiDescriptionModel,
+  ModuleApiDescriptionModel,
+  ControllerApiDescriptionModel
 } from '@/api/dynamic-api'
 /**
  * 动态Http代理组件
@@ -16,6 +18,8 @@ import {
   name: 'HttpProxyMiXin'
 })
 export default class HttpProxyMiXin extends Vue {
+  private apiDescriptor = HttpProxyModule.applicationApiDescriptionModel
+
   protected pagedRequest<TResult>(options: {
     service: string,
     controller: string,
@@ -32,10 +36,9 @@ export default class HttpProxyMiXin extends Vue {
     action: string,
     data?: any
   }) {
-    const action = ApplicationApiDescriptionModel
-      .getAction(
-        options.service, options.controller, options.action,
-        HttpProxyModule.applicationApiDescriptionModel.modules)
+    const module = this.getModule(options.service, this.apiDescriptor.modules)
+    const controller = this.getController(options.controller, module.controllers)
+    const action = this.getAction(options.action, controller.actions)
     const apiVersion = this.getApiVersionInfo(action)
     let url = process.env.REMOTE_SERVICE_BASE_URL || ''
     url = this.ensureEndsWith(url, '/') + UrlBuilder.generateUrlWithParameters(action, options.data, apiVersion)
@@ -45,6 +48,54 @@ export default class HttpProxyMiXin extends Vue {
       method: action?.httpMethod,
       data: options.data
     })
+  }
+
+  private getModule(
+    remoteService: string,
+    modules: {[key: string]: ModuleApiDescriptionModel}) {
+    const moduleKeys = Object.keys(modules)
+    const index = moduleKeys.findIndex(key => {
+      const m = modules[key]
+      if (m.remoteServiceName.toLowerCase() === remoteService.toLowerCase()) {
+        return m
+      }
+    })
+    if (index < 0) {
+      throw new Error(`没有找到名为 ${remoteService} 的服务定义!`)
+    }
+    return modules[moduleKeys[index]]
+  }
+
+  private getController(
+    controllerName: string,
+    controllers: {[key: string]: ControllerApiDescriptionModel}) {
+    const controllerKeys = Object.keys(controllers)
+    const index = controllerKeys.findIndex(key => {
+      const c = controllers[key]
+      if (c.controllerName.toLowerCase() === controllerName.toLowerCase()) {
+        return c
+      }
+    })
+    if (index < 0) {
+      throw new Error(`没有找到名为 ${controllerName} 的接口定义!`)
+    }
+    return controllers[controllerKeys[index]]
+  }
+  
+  private getAction(
+    actionName: string,
+    actions: {[key: string]: ActionApiDescriptionModel}) {
+    const actionKeys = Object.keys(actions)
+    const index = actionKeys.findIndex(key => {
+      const a = actions[key]
+      if (a.name.toLowerCase() === actionName.toLowerCase()) {
+        return a
+      }
+    })
+    if (index < 0) {
+      throw new Error(`没有找到名为 ${actionName} 的方法定义!`)
+    }
+    return actions[actionKeys[index]]
   }
 
   private getApiVersionInfo(action: ActionApiDescriptionModel) {

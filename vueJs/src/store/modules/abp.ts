@@ -27,7 +27,7 @@ class AbpConfiguration extends VuexModule implements IAbpState {
   }
 
   @Action({ rawError: true })
-  public LoadAbpConfiguration() {
+  public Initialize() {
     return new Promise<AbpConfig>((resolve, reject) => {
       AbpConfigurationService.getAbpConfiguration().then(config => {
         this.SET_ABPCONFIGURATION(config)

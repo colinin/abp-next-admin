@@ -17,14 +17,14 @@ import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.
     ServiceWorkerUpdatePopup
   }
 })
-export default class extends Vue {
+export default class App extends Vue {
   created() {
-    this.initializeAbpConfiguration()
+    this.initialize()
   }
 
-  private async initializeAbpConfiguration() {
+  private async initialize() {
     await HttpProxyModule.Initialize()
-    await AbpModule.LoadAbpConfiguration()
+    await AbpModule.Initialize()
   }
 }
 </script>
