@@ -26,6 +26,13 @@ services:
       - identity-server-sts
     restart: always
 
+  localization-service:
+    build:
+      context: ./aspnet-core/services/Publish/localization
+    volumes: 
+      - /var/opt/abp/logs/localization:/app/Logs
+    restart: always
+
   platform-service:
     build:
       context: ./aspnet-core/services/Publish/platform

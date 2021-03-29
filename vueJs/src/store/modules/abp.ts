@@ -1,8 +1,9 @@
 import store from '@/store'
 import { setLanguage } from '@/lang/index'
 import { getOrDefault, setItem } from '@/utils/localStorage'
-import AbpConfigurationService, { IAbpConfiguration, AbpConfiguration as AbpConfig } from '@/api/abpconfiguration'
+import AbpConfigurationService, { IAbpConfiguration, AbpConfiguration as AbpConfig, CurrentUser } from '@/api/abpconfiguration'
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
+
 
 export interface IAbpState {
   configuration: IAbpConfiguration
@@ -29,13 +30,21 @@ class AbpConfiguration extends VuexModule implements IAbpState {
   @Action({ rawError: true })
   public Initialize() {
     return new Promise<AbpConfig>((resolve, reject) => {
-      AbpConfigurationService.getAbpConfiguration().then(config => {
-        this.SET_ABPCONFIGURATION(config)
-        this.SET_ABPLOCALIZER(config)
-        return resolve(config)
-      }).catch(error => {
-        return reject(error)
-      })
+      AbpConfigurationService
+        .getAbpConfiguration()
+        .then(config => {
+          this.SET_ABPCONFIGURATION(config)
+          this.SET_ABPLOCALIZER(config)
+          if (config.currentUser?.id) {
+            this.context.dispatch('setCurrentUserInfo', config.currentUser)
+          } else {
+            this.context.dispatch('setCurrentUserInfo', new CurrentUser())
+          }
+          return resolve(config)
+        })
+        .catch(error => {
+          return reject(error)
+        })
     })
   }
 }

@@ -61,6 +61,8 @@ namespace LINGYUN.Platform
                 await SeedApiGatewayMenuAsync(layout, data);
                 // Oss对象管理菜单数据
                 await SeedOssManagementMenuAsync(layout, data);
+                // 本地化管理菜单数据
+                await SeedLocalizationManagementMenuAsync(layout, data);
             }
         }
 
@@ -775,6 +777,90 @@ namespace LINGYUN.Platform
                new string[] { "admin" });
         }
 
+        private async Task SeedLocalizationManagementMenuAsync(Layout layout, Data data)
+        {
+            var localizationManagementMenu = await SeedMenuAsync(
+                layout,
+                data,
+                "localization-management",
+                "/localization-management",
+                CodeNumberGenerator.CreateCode(9),
+                layout.Path,
+                "Manage Localization",
+                "/localization",
+                "Manage Localization",
+                null,
+                layout.TenantId,
+                new Dictionary<string, object>()
+                {
+                    { "title", "localization" },
+                    { "icon", "localization" },
+                    { "alwaysShow", true },
+                    { "roles", new string[] { "LocalizationManagement.Resource", "LocalizationManagement.Language", "LocalizationManagement.Text" } },
+                },
+                new string[] { "admin" });
+
+            await SeedMenuAsync(
+               layout,
+               data,
+               "resource",
+                "resource",
+                CodeNumberGenerator.AppendCode(localizationManagementMenu.Code, CodeNumberGenerator.CreateCode(1)),
+                "views/localization-management/resources/index.vue",
+                "Manage Resource",
+                "",
+                "Manage Resource",
+                localizationManagementMenu.Id,
+                localizationManagementMenu.TenantId,
+               new Dictionary<string, object>()
+               {
+                    { "title", "resource" },
+                    { "icon", "resource" },
+                    { "roles", new string[] { "LocalizationManagement.Resource" } }
+               },
+               new string[] { "admin" });
+
+            await SeedMenuAsync(
+               layout,
+               data,
+               "language",
+                "language",
+                CodeNumberGenerator.AppendCode(localizationManagementMenu.Code, CodeNumberGenerator.CreateCode(2)),
+                "views/localization-management/languages/index.vue",
+                "Manage Language",
+                "",
+                "Manage Language",
+                localizationManagementMenu.Id,
+                localizationManagementMenu.TenantId,
+               new Dictionary<string, object>()
+               {
+                    { "title", "language" },
+                    { "icon", "language" },
+                    { "roles", new string[] { "LocalizationManagement.Language" } }
+               },
+               new string[] { "admin" });
+
+            await SeedMenuAsync(
+               layout,
+               data,
+               "text",
+                "text",
+                CodeNumberGenerator.AppendCode(localizationManagementMenu.Code, CodeNumberGenerator.CreateCode(3)),
+                "views/localization-management/texts/index.vue",
+                "Manage Text",
+                "",
+                "Manage Text",
+                localizationManagementMenu.Id,
+                localizationManagementMenu.TenantId,
+               new Dictionary<string, object>()
+               {
+                    { "title", "text" },
+                    { "icon", "text" },
+                    { "roles", new string[] { "LocalizationManagement.Text" } }
+               },
+               new string[] { "admin" });
+
+        }
         private async Task<Menu> SeedMenuAsync(
             Layout layout,
             Data data,

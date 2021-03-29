@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 14/03/2021 08:56:20
+ Date: 29/03/2021 21:22:25
 */
 
 SET NAMES utf8mb4;
@@ -54,12 +54,12 @@ CREATE TABLE `appapigatewayaggregate`  (
   `Priority` int(0) NULL DEFAULT NULL,
   `UpstreamHttpMethod` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayaggregate
 -- ----------------------------
-INSERT INTO `appapigatewayaggregate` VALUES (5, '{}', 'db569f15577848568bee9616d6b8b53c', 'TEST-APP', 'abp接口代理服务', 1263083077348196352, 'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,identity-server-api-definition,', '/api/abp/api-definition', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
+INSERT INTO `appapigatewayaggregate` VALUES (5, '{}', '90044e20fde546bab1bdd45999f8208a', 'TEST-APP', 'abp接口代理服务', 1263083077348196352, 'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,identity-server-api-definition,localization-api-definition,', '/api/abp/api-definition', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
 INSERT INTO `appapigatewayaggregate` VALUES (6, '{}', '870a2c5df9b34f8c9514aef0250fbb47', 'TEST-APP', 'abp框架配置', 1263102116090970112, 'apigateway-configuration,platform-configuration,backend-admin-configuration,messages-configuration,identity-server-configuration,', '/api/abp/application-configuration', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
 INSERT INTO `appapigatewayaggregate` VALUES (8, '{}', 'edc962f7e0844bb09cb0fb731f358b4b', 'TEST-APP', '我的消息订阅', 1322503807309881344, 'assignables-notifilers,my-subscribes,', '/api/my-subscribes/assignables-notifilers', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
 INSERT INTO `appapigatewayaggregate` VALUES (9, '{}', 'c65227b8a0e143b2a0b6186ffde3dfc1', 'TEST-APP', '全局设置', 1329708867127799808, 'setting-global,wechat-setting-global,aliyun-setting-global,oss-management-global,', '/api/setting-management/settings/by-global', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
@@ -79,7 +79,7 @@ CREATE TABLE `appapigatewayaggregateconfig`  (
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_AppApiGatewayAggregateConfig_AggregateReRouteId`(`AggregateReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAggregateConfig_AppApiGatewayAggregate_Aggregat~` FOREIGN KEY (`AggregateReRouteId`) REFERENCES `appapigatewayaggregate` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayauthoptions
@@ -93,7 +93,7 @@ CREATE TABLE `appapigatewayauthoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayAuthOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAuthOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 190 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayauthoptions
@@ -246,6 +246,20 @@ INSERT INTO `appapigatewayauthoptions` VALUES (187, 1368856927887581184, '', '')
 INSERT INTO `appapigatewayauthoptions` VALUES (188, 1368857128383700992, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (189, 1369560306297233408, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (190, 1369560450472239104, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (191, 1371705034307375104, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (192, 1376442078396276736, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (193, 1376442309850554368, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (194, 1376442440536678400, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (195, 1376442557943635968, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (196, 1376442689674141696, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (197, 1376442971032248320, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (198, 1376443123021242368, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (199, 1376443238851141632, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (200, 1376443392249421824, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (201, 1376443586777047040, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (202, 1376467826087682048, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (203, 1376467990894469120, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (204, 1376468110214029312, '', '');
 
 -- ----------------------------
 -- Table structure for appapigatewaybalanceroptions
@@ -263,7 +277,7 @@ CREATE TABLE `appapigatewaybalanceroptions`  (
   UNIQUE INDEX `IX_AppApiGatewayBalancerOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayGlobalConfiguratio~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 193 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaybalanceroptions
@@ -417,6 +431,20 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (190, NULL, 136885692788758118
 INSERT INTO `appapigatewaybalanceroptions` VALUES (191, NULL, 1368857128383700992, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (192, NULL, 1369560306297233408, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (193, NULL, 1369560450472239104, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (194, NULL, 1371705034307375104, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (195, NULL, 1376442078396276736, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (196, NULL, 1376442309850554368, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (197, NULL, 1376442440536678400, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (198, NULL, 1376442557943635968, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (199, NULL, 1376442689674141696, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (200, NULL, 1376442971032248320, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (201, NULL, 1376443123021242368, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (202, NULL, 1376443238851141632, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (203, NULL, 1376443392249421824, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (204, NULL, 1376443586777047040, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (205, NULL, 1376467826087682048, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (206, NULL, 1376467990894469120, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (207, NULL, 1376468110214029312, '', '', 0);
 
 -- ----------------------------
 -- Table structure for appapigatewaycacheoptions
@@ -430,7 +458,7 @@ CREATE TABLE `appapigatewaycacheoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayCacheOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayCacheOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 190 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaycacheoptions
@@ -583,6 +611,20 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (187, 1368856927887581184, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (188, 1368857128383700992, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (189, 1369560306297233408, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (190, 1369560450472239104, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (191, 1371705034307375104, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (192, 1376442078396276736, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (193, 1376442309850554368, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (194, 1376442440536678400, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (195, 1376442557943635968, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (196, 1376442689674141696, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (197, 1376442971032248320, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (198, 1376443123021242368, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (199, 1376443238851141632, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (200, 1376443392249421824, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (201, 1376443586777047040, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (202, 1376467826087682048, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (203, 1376467990894469120, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (204, 1376468110214029312, 0, '');
 
 -- ----------------------------
 -- Table structure for appapigatewaydiscovery
@@ -602,7 +644,7 @@ CREATE TABLE `appapigatewaydiscovery`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayDiscovery_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayDiscovery_AppApiGatewayGlobalConfiguration_Item~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaydiscovery
@@ -623,7 +665,7 @@ CREATE TABLE `appapigatewaydynamicreroute`  (
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayDynamicReRoute_DynamicReRouteId`(`DynamicReRouteId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayglobalconfiguration
@@ -643,7 +685,7 @@ CREATE TABLE `appapigatewayglobalconfiguration`  (
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayGlobalConfiguration_ItemId`(`ItemId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayglobalconfiguration
@@ -692,7 +734,7 @@ CREATE TABLE `appapigatewayhttpoptions`  (
   UNIQUE INDEX `IX_AppApiGatewayHttpOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayGlobalConfiguration_It~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 193 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayhttpoptions
@@ -846,6 +888,20 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (190, NULL, 1368856927887581184, 0
 INSERT INTO `appapigatewayhttpoptions` VALUES (191, NULL, 1368857128383700992, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (192, NULL, 1369560306297233408, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (193, NULL, 1369560450472239104, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (194, NULL, 1371705034307375104, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (195, NULL, 1376442078396276736, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (196, NULL, 1376442309850554368, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (197, NULL, 1376442440536678400, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (198, NULL, 1376442557943635968, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (199, NULL, 1376442689674141696, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (200, NULL, 1376442971032248320, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (201, NULL, 1376443123021242368, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (202, NULL, 1376443238851141632, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (203, NULL, 1376443392249421824, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (204, NULL, 1376443586777047040, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (205, NULL, 1376467826087682048, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (206, NULL, 1376467990894469120, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (207, NULL, 1376468110214029312, 0, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for appapigatewayqosoptions
@@ -863,7 +919,7 @@ CREATE TABLE `appapigatewayqosoptions`  (
   UNIQUE INDEX `IX_AppApiGatewayQoSOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayGlobalConfiguration_Ite~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 193 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayqosoptions
@@ -1017,6 +1073,20 @@ INSERT INTO `appapigatewayqosoptions` VALUES (190, NULL, 1368856927887581184, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (191, NULL, 1368857128383700992, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (192, NULL, 1369560306297233408, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (193, NULL, 1369560450472239104, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (194, NULL, 1371705034307375104, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (195, NULL, 1376442078396276736, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (196, NULL, 1376442309850554368, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (197, NULL, 1376442440536678400, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (198, NULL, 1376442557943635968, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (199, NULL, 1376442689674141696, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (200, NULL, 1376442971032248320, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (201, NULL, 1376443123021242368, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (202, NULL, 1376443238851141632, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (203, NULL, 1376443392249421824, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (204, NULL, 1376443586777047040, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (205, NULL, 1376467826087682048, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (206, NULL, 1376467990894469120, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (207, NULL, 1376468110214029312, 50, 60000, 30000);
 
 -- ----------------------------
 -- Table structure for appapigatewayratelimitoptions
@@ -1033,7 +1103,7 @@ CREATE TABLE `appapigatewayratelimitoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayRateLimitOptions_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitOptions_AppApiGatewayGlobalConfigurati~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitoptions
@@ -1058,7 +1128,7 @@ CREATE TABLE `appapigatewayratelimitrule`  (
   UNIQUE INDEX `IX_AppApiGatewayRateLimitRule_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayDynamicReRoute_Dynam~` FOREIGN KEY (`DynamicReRouteId`) REFERENCES `appapigatewaydynamicreroute` (`DynamicReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 190 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitrule
@@ -1211,6 +1281,20 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (187, 1368856927887581184, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (188, 1368857128383700992, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (189, 1369560306297233408, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (190, 1369560450472239104, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (191, 1371705034307375104, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (192, 1376442078396276736, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (193, 1376442309850554368, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (194, 1376442440536678400, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (195, 1376442557943635968, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (196, 1376442689674141696, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (197, 1376442971032248320, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (198, 1376443123021242368, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (199, 1376443238851141632, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (200, 1376443392249421824, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (201, 1376443586777047040, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (202, 1376467826087682048, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (203, 1376467990894469120, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (204, 1376468110214029312, NULL, '', 0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewayreroute
@@ -1250,7 +1334,7 @@ CREATE TABLE `appapigatewayreroute`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayReRoute_ReRouteId`(`ReRouteId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayReRoute_AppId_DownstreamPathTemplate_UpstreamPa~`(`AppId`, `DownstreamPathTemplate`, `UpstreamPathTemplate`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 197 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 212 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayreroute
@@ -1403,6 +1487,20 @@ INSERT INTO `appapigatewayreroute` VALUES (194, '{}', '6c1a0f98129d418cba55a52db
 INSERT INTO `appapigatewayreroute` VALUES (195, '{}', 'de285bf4b6114032a45d5611ea8e3101', 1368857128383700992, '【Oss对象存储】- 静态文件管理', '/api/files/static/{everything}', '', '', '/api/api/files/static/{everything}', 'POST,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (196, '{}', '6287c30d31c147faae917cb6e52636ec', 1369560306297233408, '【Oss对象存储】- 获取公共配置', '/api/setting-management/oss-management/by-global', '', '', '/api/setting-management/oss-management/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-global', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (197, '{}', '1012bb902aba47ada9a374fc73ed2632', 1369560450472239104, '【Oss对象存储】- 获取租户配置', '/api/setting-management/oss-management/by-current-tenant', '', '', '/api/setting-management/oss-management/by-current-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-current-tenant', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (198, '{}', '3ff4788f62744b27bc30f7247fb76b08', 1371705034307375104, '【Oss对象存储】- 静态文件', '/api/files/static/{everything}', '', '', '/api/files/static/{everything}', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (199, '{}', '2203b1db040942a3bbe1ed86b57a8501', 1376442078396276736, '【本地化管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/localization/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', 'localization-api-definition', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (200, '{}', '67206f8a85d94666a0c707697e706742', 1376442309850554368, '【本地化管理】- 资源管理', '/api/localization/resources', '', '', '/api/localization/resources', 'POST,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (201, '{}', '055929710e414c5e97fc9168a1c25182', 1376442440536678400, '【本地化管理】- 管理单个资源', '/api/localization/resources/{id}', '', '', '/api/localization/resources/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (202, '{}', 'c314a94d515045a4a27763aa5d3631de', 1376442557943635968, '【本地化管理】- 获取所有资源', '/api/localization/resources/all', '', '', '/api/localization/resources/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (203, '{}', '67fb0a90132c4a02b7ff44f82bf9fd13', 1376442689674141696, '【本地化管理】- 语言管理', '/api/localization/languages', '', '', '/api/localization/languages', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (204, '{}', 'c6fab01d2b37434886f07bb601c36599', 1376442971032248320, '【本地化管理】- 管理单个语言', '/api/localization/languages/{id}', '', '', '/api/localization/languages/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (205, '{}', '074c20491b294a068fbb1df7874d0d4d', 1376443123021242368, '【本地化管理】- 获取所有语言', '/api/localization/languages/all', '', '', '/api/localization/languages/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (206, '{}', '75e48367d8f14ef99541abdb86d30b96', 1376443238851141632, '【本地化管理】- 文档管理', '/api/localization/texts', '', '', '/api/localization/texts', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (207, '{}', '5f8d7d88a97f4ff7b3bdb6fb105d527e', 1376443392249421824, '【本地化管理】- 管理单个文档', '/api/localization/texts/{id}', '', '', '/api/localization/texts/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (208, '{}', '35f470892bf04571ab49efadb2cb1eb5', 1376443586777047040, '【本地化管理】- 通过文化名称查询文档', '/api/localization/texts/by-culture-key', '', '', '/api/localization/texts/by-culture-key', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (209, '{}', '72073c75c2fa4e1db162c7a74004558f', 1376467826087682048, '【身份认证服务】- 发送登录验证码', '/api/account/phone/send-signin-code', '', '', '/api/account/phone/send-signin-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (210, '{}', 'e8e2f943dd56456f8f5dd957dd30e8b9', 1376467990894469120, '【身份认证服务】- 发送重置密码短信', '/api/account/phone/send-password-reset-code', '', '', '/api/account/phone/send-password-reset-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (211, '{}', '89fd6b8a830d457f9d1d43263c7074b4', 1376468110214029312, '【身份认证服务】- 发送注册短信', '/api/account/phone/send-register-code', '', '', '/api/account/phone/send-register-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 
 -- ----------------------------
 -- Table structure for appapigatewayroutegroup
@@ -1446,7 +1544,7 @@ CREATE TABLE `appapigatewaysecurityoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewaySecurityOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewaySecurityOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 190 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaysecurityoptions
@@ -1599,6 +1697,20 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (187, 1368856927887581184, '',
 INSERT INTO `appapigatewaysecurityoptions` VALUES (188, 1368857128383700992, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (189, 1369560306297233408, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (190, 1369560450472239104, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (191, 1371705034307375104, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (192, 1376442078396276736, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (193, 1376442309850554368, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (194, 1376442440536678400, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (195, 1376442557943635968, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (196, 1376442689674141696, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (197, 1376442971032248320, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (198, 1376443123021242368, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (199, 1376443238851141632, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (200, 1376443392249421824, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (201, 1376443586777047040, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (202, 1376467826087682048, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (203, 1376467990894469120, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (204, 1376468110214029312, '', '');
 
 -- ----------------------------
 -- Table structure for cap.published
@@ -1616,6 +1728,26 @@ CREATE TABLE `cap.published`  (
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cap.published
+-- ----------------------------
+INSERT INTO `cap.published` VALUES (1376442080048832512, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442080048832512\",\"cap-corr-id\":\"1376442080048832512\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:52:19 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:52:19.593051+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:52:20', '2021-03-30 15:52:20', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376442309972189184, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442309972189184\",\"cap-corr-id\":\"1376442309972189184\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:53:14 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:53:14.4154232+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:53:14', '2021-03-30 15:53:14', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376442440738004992, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442440738004992\",\"cap-corr-id\":\"1376442440738004992\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:53:45 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:53:45.5924626+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:53:46', '2021-03-30 15:53:46', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376442558023327744, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442558023327744\",\"cap-corr-id\":\"1376442558023327744\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:54:13 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:54:13.5549538+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:54:14', '2021-03-30 15:54:14', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376442689783193600, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442689783193600\",\"cap-corr-id\":\"1376442689783193600\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:54:44 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:54:44.9636224+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:54:45', '2021-03-30 15:54:45', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376442971116134400, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376442971116134400\",\"cap-corr-id\":\"1376442971116134400\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:55:52 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:55:52.0442879+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:55:52', '2021-03-30 15:55:52', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376443123109322752, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376443123109322752\",\"cap-corr-id\":\"1376443123109322752\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:56:28 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:56:28.2817305+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:56:28', '2021-03-30 15:56:28', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376443238922444800, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376443238922444800\",\"cap-corr-id\":\"1376443238922444800\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:56:55 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:56:55.8946549+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:56:56', '2021-03-30 15:56:56', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376443392333307904, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376443392333307904\",\"cap-corr-id\":\"1376443392333307904\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:57:32 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:57:32.4706372+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:57:32', '2021-03-30 15:57:32', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376443586886098944, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376443586886098944\",\"cap-corr-id\":\"1376443586886098944\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午3:58:18 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T15:58:18.8481239+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 15:58:19', '2021-03-30 15:58:19', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376467826179956736, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376467826179956736\",\"cap-corr-id\":\"1376467826179956736\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午5:34:37 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T17:34:37.9529723+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 17:34:38', '2021-03-30 17:34:38', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376467990969966592, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376467990969966592\",\"cap-corr-id\":\"1376467990969966592\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午5:35:17 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T17:35:17.2420976+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 17:35:17', '2021-03-30 17:35:17', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376468110281138176, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376468110281138176\",\"cap-corr-id\":\"1376468110281138176\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午5:35:45 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T17:35:45.6880229+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Create\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 17:35:46', '2021-03-30 17:35:46', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376516577204494336, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376516577204494336\",\"cap-corr-id\":\"1376516577204494336\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午8:48:21 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T20:48:21.103384+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Modify\",\"Object\":\"ReRoute\"}}', 0, '2021-03-29 20:48:21', '2021-03-30 20:48:21', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376516622045798400, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376516622045798400\",\"cap-corr-id\":\"1376516622045798400\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午8:48:31 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T20:48:31.7941785+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Update\",\"Object\":\"AggregateRoute\"}}', 0, '2021-03-29 20:48:32', '2021-03-30 20:48:32', 'Succeeded');
+INSERT INTO `cap.published` VALUES (1376516635597594624, 'v1', 'LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData', '{\"Headers\":{\"cap-abp-user-id\":\"bf289dbb-838e-a89b-c622-39f51dcc4f43\",\"cap-abp-client-id\":\"vue-admin-element\",\"cap-abp-tenant-id\":\"\",\"cap-msg-id\":\"1376516635597594624\",\"cap-corr-id\":\"1376516635597594624\",\"cap-corr-seq\":\"0\",\"cap-msg-name\":\"LINGYUN.ApiGateway.EventBus.ApigatewayConfigChangeEventData\",\"cap-msg-type\":\"Object\",\"cap-senttime\":\"2021/3/29 下午8:48:35 +08:00\"},\"Value\":{\"DateTime\":\"2021-03-29T20:48:35.0253124+08:00\",\"AppId\":\"TEST-APP\",\"Method\":\"Update\",\"Object\":\"AggregateRoute\"}}', 0, '2021-03-29 20:48:35', '2021-03-30 20:48:35', 'Succeeded');
 
 -- ----------------------------
 -- Table structure for cap.received

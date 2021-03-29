@@ -266,31 +266,38 @@ export default class extends Mixins(LocalizationMiXin) {
 
   private handleUserLogin() {
     const frmLogin = this.$refs.formLogin as any
-    frmLogin.validate(async(valid: boolean) => {
+    frmLogin.validate((valid: boolean) => {
       if (valid) {
         this.logining = true
-        try {
-          if (this.loginType === 'password') {
-            const userLogin = {
-              username: this.loginForm.username,
-              password: this.loginForm.password
-            }
-            await UserModule.Login(userLogin)
-            this.$router.push({
-              path: this.redirect || '/'
-            })
-          } else {
-            const phoneLogin = {
-              phoneNumber: this.loginForm.phoneNumber,
-              verifyCode: this.loginForm.verifyCode
-            }
-            await UserModule.PhoneLogin(phoneLogin)
-            this.$router.push({
-              path: this.redirect || '/'
-            })
+        if (this.loginType === 'password') {
+          const userLogin = {
+            username: this.loginForm.username,
+            password: this.loginForm.password
           }
-        } catch {
-          this.resetLoginButton()
+          UserModule.Login(userLogin)
+            .then(() => {
+              this.$router.push({
+                path: this.redirect || '/'
+              })
+            })
+            .finally(() => {
+              this.resetLoginButton()
+            })
+        } else {
+          const phoneLogin = {
+            phoneNumber: this.loginForm.phoneNumber,
+            verifyCode: this.loginForm.verifyCode
+          }
+          UserModule.PhoneLogin(phoneLogin)
+            .then(() => {
+              console.log(this.$router)
+              this.$router.push({
+                path: this.redirect || '/'
+              })
+            })
+            .finally(() => {
+              this.resetLoginButton()
+            })
         }
       }
     })

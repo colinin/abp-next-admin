@@ -45,6 +45,7 @@ export default class extends Vue {
         message: 'Switch Language Success',
         type: 'success'
       })
+      this.$emit('onLanguageSwitch')
     })
   }
 }

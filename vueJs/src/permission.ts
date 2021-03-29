@@ -34,8 +34,6 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
       // Check whether the user has obtained his permission roles
       if (PermissionModule.authorizedPermissions.length === 0) {
         try {
-          UserModule.RefreshCurrentUser()
-
           await PermissionModule.GenerateRoutes()
           console.log(PermissionModule.dynamicRoutes)
           // Dynamically add accessible routes

@@ -15,6 +15,13 @@ services:
     ports:
       - "30015:80"
 
+  localization-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "30030:80"
+
   platform-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production

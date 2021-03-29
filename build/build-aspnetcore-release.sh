@@ -40,6 +40,13 @@ dotnet restore
 dotnet publish -c Release -o ../../Publish/messages --no-cache --no-restore
 cp -r -f Dockerfile ../../Publish/messages/Dockerfile
 
+echo "开始构建本地化管理服务"
+cd $workdir"/../aspnet-core/services/localization/LINGYUN.Abp.LocalizationManagement.HttpApi.Host"
+
+dotnet restore
+dotnet publish -c Release -o ../../Publish/localization --no-cache --no-restore
+cp -r -f Dockerfile ../../Publish/localization/Dockerfile
+
 echo "开始构建网关管理服务"
 cd $workdir"/../aspnet-core/services/apigateway/LINGYUN.ApiGateway.HttpApi.Host"
 
