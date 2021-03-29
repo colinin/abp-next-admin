@@ -1,7 +1,7 @@
 
 [English](./README.en.md) | 简体中文
 
-[更新说明](./RELEASE.MD) 更新说明
+[更新说明](./RELEASE.md) 更新说明
 
 ## 总览
 
