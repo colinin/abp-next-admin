@@ -3,6 +3,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OssManagement;
@@ -11,6 +12,8 @@ using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
+using LINGYUN.Platform.Localization;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -54,6 +57,7 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Platform
@@ -76,6 +80,7 @@ namespace LINGYUN.Platform
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpNotificationModule),
         typeof(AbpEmailingExceptionHandlingModule),
@@ -266,6 +271,8 @@ namespace LINGYUN.Platform
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources.AddDynamic();
             });
 
             Configure<AbpClaimsMapOptions>(options =>

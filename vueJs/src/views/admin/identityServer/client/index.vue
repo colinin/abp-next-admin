@@ -339,7 +339,7 @@ export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
       service: 'IdentityServer',
       controller: 'Client',
       action: 'GetListAsync',
-      data: {
+      params: {
         input: filter
       }
     })

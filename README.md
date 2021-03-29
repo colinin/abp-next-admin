@@ -1,6 +1,8 @@
 
 [English](./README.en.md) | 简体中文
 
+[更新说明](./RELEASE.MD) 更新说明
+
 ## 总览
 
 这是一个基于 [vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) 的Abp框架后台管理界面

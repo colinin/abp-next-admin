@@ -5,7 +5,6 @@ import { getItem, setItem, removeItem } from '@/utils/localStorage'
 import { resetRouter } from '@/router'
 import { TagsViewModule } from './tags-view'
 import { PermissionModule } from '@/store/modules/permission'
-import { AbpModule } from '@/store/modules/abp'
 import store from '@/store'
 
 export interface IUserState {
@@ -59,41 +58,59 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action({ rawError: true })
-  public RefreshCurrentUser() {
-    this.SET_CURRENTUSERINFO(AbpModule.configuration.currentUser)
+  public setCurrentUserInfo(currentUser: CurrentUser) {
+    this.context.commit('SET_CURRENTUSERINFO', currentUser)
   }
 
   @Action({ rawError: true })
-  public async Login(userInfo: { username: string, password: string}) {
+  public Login(userInfo: { username: string, password: string}) {
     const userLoginData = new UserLoginData()
     userLoginData.userName = userInfo.username
     userLoginData.password = userInfo.password
-    const loginResult = await UserApiService.userLogin(userLoginData)
-    const token = loginResult.token_type + ' ' + loginResult.access_token
-    this.SET_TOKEN(token)
-    this.SET_REFRESHTOKEN(loginResult.refresh_token)
-    await this.PostLogin()
+    return new Promise((resolve, reject) => {
+      UserApiService
+        .userLogin(userLoginData)
+        .then(result => {
+          const token = result.token_type + ' ' + result.access_token
+          this.SET_TOKEN(token)
+          this.SET_REFRESHTOKEN(result.refresh_token)
+          this.context.dispatch('Initialize')
+          return resolve(result)
+        })
+        .catch(error => {
+          return reject(error)
+        })
+    })
   }
 
   @Action({ rawError: true })
-  public async PhoneLogin(userInfo: { phoneNumber: string, verifyCode: string}) {
+  public PhoneLogin(userInfo: { phoneNumber: string, verifyCode: string}) {
     const userLoginData = new UserLoginPhoneData()
     userLoginData.phoneNumber = userInfo.phoneNumber
     userLoginData.verifyCode = userInfo.verifyCode
-    const loginResult = await UserApiService.userLoginWithPhone(userLoginData)
-    const token = loginResult.token_type + ' ' + loginResult.access_token
-    this.SET_TOKEN(token)
-    this.SET_REFRESHTOKEN(loginResult.refresh_token)
-    await this.PostLogin()
+    return new Promise((resolve, reject) => {
+      UserApiService
+        .userLoginWithPhone(userLoginData)
+        .then(result => {
+          const token = result.token_type + ' ' + result.access_token
+          this.SET_TOKEN(token)
+          this.SET_REFRESHTOKEN(result.refresh_token)
+          this.context.dispatch('Initialize')
+          return resolve(result)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
   }
 
-  @Action
+  @Action({ rawError: true })
   public ResetToken() {
     removeItem(tokenKey)
     this.SET_TOKEN('')
   }
 
-  @Action
+  @Action({ rawError: true })
   public async LogOut() {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')
@@ -114,7 +131,7 @@ class User extends VuexModule implements IUserState {
     PermissionModule.ResetRoutes()
   }
 
-  @Action
+  @Action({ rawError: true })
   public RefreshSession() {
     return new Promise((resolve, reject) => {
       const refreshToken = getItem(refreshTokenKey)
@@ -132,12 +149,6 @@ class User extends VuexModule implements IUserState {
         return resolve('')
       }
     })
-  }
-
-  @Action
-  private async PostLogin() {
-    const abpConfig = await AbpModule.Initialize()
-    this.SET_CURRENTUSERINFO(abpConfig.currentUser)
   }
 }
 

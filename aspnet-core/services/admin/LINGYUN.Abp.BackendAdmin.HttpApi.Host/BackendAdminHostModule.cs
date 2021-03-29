@@ -5,6 +5,8 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
+using LINGYUN.Abp.LocalizationManagement;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.OssManagement;
@@ -15,6 +17,7 @@ using LINGYUN.Abp.TenantManagement;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -62,6 +65,7 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.BackendAdmin
@@ -72,6 +76,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(ApiGatewayApplicationContractsModule),
         typeof(AbpOssManagementApplicationContractsModule),
         typeof(AbpMessageServiceApplicationContractsModule),
+        typeof(AbpLocalizationManagementApplicationContractsModule),
         typeof(LINGYUN.Abp.Account.AbpAccountApplicationContractsModule),// 引用类似的包主要用于聚合权限管理和设置
         typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),
         typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule),
@@ -98,6 +103,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
@@ -309,6 +315,8 @@ namespace LINGYUN.Abp.BackendAdmin
                         "vue-admin-element-ui",
                         new NameValue("zh-Hans", "zh"),
                         new NameValue("en", "en"));
+
+                options.Resources.AddDynamic();
             });
 
             Configure<AbpClaimsMapOptions>(options =>

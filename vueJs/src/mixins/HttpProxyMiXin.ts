@@ -1,5 +1,5 @@
 import ApiService from '@/api/serviceBase'
-import { PagedResultDto } from '@/api/types'
+import { PagedResultDto, ListResultDto } from '@/api/types'
 import { Component, Vue } from 'vue-property-decorator'
 import { HttpProxyModule } from '@/store/modules/http-proxy'
 import {
@@ -18,7 +18,11 @@ import {
   name: 'HttpProxyMiXin'
 })
 export default class HttpProxyMiXin extends Vue {
-  private apiDescriptor = HttpProxyModule.applicationApiDescriptionModel
+  private apiDescriptor!: ApplicationApiDescriptionModel
+
+  created() {
+    this.apiDescriptor = HttpProxyModule.applicationApiDescriptionModel
+  }
 
   protected pagedRequest<TResult>(options: {
     service: string,
@@ -30,18 +34,29 @@ export default class HttpProxyMiXin extends Vue {
     return this.request<PagedResultDto<TResult>>(options)
   }
 
+  protected listRequest<TResult>(options: {
+    service: string,
+    controller: string,
+    action: string,
+    data?: any,
+    params?: any
+  }) {
+    return this.request<ListResultDto<TResult>>(options)
+  }
+
   protected request<TResult>(options: {
     service: string,
     controller: string,
     action: string,
-    data?: any
+    data?: any,
+    params?: any
   }) {
     const module = this.getModule(options.service, this.apiDescriptor.modules)
     const controller = this.getController(options.controller, module.controllers)
     const action = this.getAction(options.action, controller.actions)
     const apiVersion = this.getApiVersionInfo(action)
     let url = process.env.REMOTE_SERVICE_BASE_URL || ''
-    url = this.ensureEndsWith(url, '/') + UrlBuilder.generateUrlWithParameters(action, options.data, apiVersion)
+    url = this.ensureEndsWith(url, '/') + UrlBuilder.generateUrlWithParameters(action, options.params, apiVersion)
   
     return ApiService.HttpRequest<TResult>({
       url: url,

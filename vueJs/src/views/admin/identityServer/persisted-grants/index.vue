@@ -175,7 +175,7 @@ export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
       service: 'IdentityServer',
       controller: 'PersistedGrant',
       action: 'GetListAsync',
-      data: {
+      params: {
         input: filter
       }
     })

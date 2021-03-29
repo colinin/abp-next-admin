@@ -2,7 +2,7 @@
 
 ## 模块说明
 
-本地化组件的Json本地文件系统集成，Abp内置组件仅集成了基于IVirtualFileProvider的实现  
+本地化组件的Json本地文件系统集成  
 
 此组件基于PhysicalFileProvider  
 
@@ -35,6 +35,20 @@
                     // json文件格式与Abp默认json格式保持一致
                     // 详情见: https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.fileproviders.physicalfileprovider?view=dotnet-plat-ext-5.0
                     .AddPhysicalJson(Path.Combine(Directory.GetCurrentDirectory(), "Resources"));
+            });
+
+            // 等同于如下方法
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                // 将本地文件系统映射为虚拟文件系统
+                options.FileSets.AddPhysical(Path.Combine(Directory.GetCurrentDirectory(), "Resources"));
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<YouResource>("en")
+                    .AddVirtualJson("/Resources"); // json本地化虚拟文件路径
             });
         }
     }

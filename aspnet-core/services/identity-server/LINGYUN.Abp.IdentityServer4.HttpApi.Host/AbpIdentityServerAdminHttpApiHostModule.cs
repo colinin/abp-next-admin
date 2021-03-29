@@ -2,8 +2,10 @@ using DotNetCore.CAP;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Sms.Aliyun;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -33,6 +35,7 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -44,6 +47,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.IdentityServer4
@@ -63,6 +67,7 @@ namespace LINGYUN.Abp.IdentityServer4
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
@@ -274,6 +279,8 @@ namespace LINGYUN.Abp.IdentityServer4
                 options.Resources
                        .Get<IdentityResource>()
                        .AddVirtualJson("/LINGYUN/Abp/IdentityServer4/Localization");
+
+                options.Resources.AddDynamic(typeof(IdentityResource));
             });
 
             Configure<AbpClaimsMapOptions>(options =>
