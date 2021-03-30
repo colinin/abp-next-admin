@@ -195,7 +195,7 @@ export default class extends mixins(DataListMiXin, HttpProxyMiXin) {
               service: 'IdentityServer',
               controller: 'PersistedGrant',
               action: 'DeleteAsync',
-              data: {
+              params: {
                 id: id
               }
             }).then(() => {

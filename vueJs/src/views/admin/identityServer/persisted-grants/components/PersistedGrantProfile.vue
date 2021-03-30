@@ -138,7 +138,7 @@ export default class extends Mixins(HttpProxyMiXin) {
         service: 'IdentityServer',
         controller: 'PersistedGrant',
         action: 'GetAsync',
-        data: {
+        params: {
           id: this.id
         }
       }).then(res => {
