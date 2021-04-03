@@ -6,7 +6,7 @@
           <el-row style="width: 100%;">
             <el-col :span="20">
               <el-input
-                v-model="filter"
+                v-model="dataFilter.filter"
                 :placeholder="$t('LocalizationManagement.SearchFilter')"
               >
                 <el-button
