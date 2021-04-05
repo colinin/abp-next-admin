@@ -176,7 +176,6 @@ import { dateFormat, abpPagerFormat } from '@/utils/index'
   }
 })
 export default class extends Mixins(DataListMiXin, HttpProxyMiXin) {
-  private filter = ''
   public dataFilter = new GetResourcesInput()
 
   private showEditDialog = false
@@ -187,7 +186,6 @@ export default class extends Mixins(DataListMiXin, HttpProxyMiXin) {
   }
 
   protected processDataFilter() {
-    this.dataFilter.filter = this.filter
     this.dataFilter.skipCount = abpPagerFormat(this.currentPage, this.pageSize)
   }
 
