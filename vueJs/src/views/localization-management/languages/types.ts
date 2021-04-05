@@ -13,7 +13,7 @@ export class Language extends AuditedEntityDto {
 }
 
 export class GetLanguagesInput extends PagedAndSortedResultRequestDto {
-  filter?: string
+  filter = ''
 }
 
 export class CreateOrUpdateLanguageInput {

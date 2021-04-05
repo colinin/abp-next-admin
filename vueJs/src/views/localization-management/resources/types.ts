@@ -12,7 +12,7 @@ export class Resource extends AuditedEntityDto {
 }
 
 export class GetResourcesInput extends PagedAndSortedResultRequestDto {
-  filter?: string
+  filter = ''
 }
 
 export class CreateOrUpdateResourceInput {
