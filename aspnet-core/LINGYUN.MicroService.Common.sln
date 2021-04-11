@@ -128,6 +128,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Json.Tests", "tests\LINGYUN.Abp.Localization.Json.Tests\LINGYUN.Abp.Localization.Json.Tests.csproj", "{BA2F4EC9-BC2C-482A-9123-BDACB8B15295}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{7FDFB22F-1BFF-4E05-9427-78B7A8461D50}"
+	ProjectSection(SolutionItems) = preProject
+		modules\dapr\README.md = modules\dapr\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "modules\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj", "{C72E0407-06FE-4CAA-86E5-30FF216A7B82}"
 EndProject
@@ -135,7 +138,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.Ide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.IdentityModel.Web", "modules\dapr\LINGYUN.Abp.Dapr.Actors.IdentityModel.Web\LINGYUN.Abp.Dapr.Actors.IdentityModel.Web.csproj", "{E263A9ED-D5DB-4495-A0C7-6268ED92EB92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{E74FF671-6E5E-430C-9211-ED910634DDBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{E74FF671-6E5E-430C-9211-ED910634DDBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
