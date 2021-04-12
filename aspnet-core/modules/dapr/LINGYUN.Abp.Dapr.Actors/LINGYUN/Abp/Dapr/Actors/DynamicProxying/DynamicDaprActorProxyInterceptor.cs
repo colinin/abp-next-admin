@@ -46,6 +46,19 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
+            var isAsyncMethod = invocation.Method.IsAsync();
+            if (!isAsyncMethod)
+            {
+                // see: https://docs.dapr.io/developing-applications/sdks/dotnet/dotnet-actors/dotnet-actors-howto/
+                // Dapr Actor文档: Actor方法的返回类型必须为Task或Task<object>
+                throw new AbpException("The return type of Actor method must be Task or Task<object>");
+            }
+            if (invocation.Arguments.Length > 1)
+            {
+                // see: https://docs.dapr.io/developing-applications/sdks/dotnet/dotnet-actors/dotnet-actors-howto/
+                // Dapr Actor文档: Actor方法最多可以有一个参数
+                throw new AbpException("Actor method can have one argument at a maximum");
+            }
             await MakeRequestAsync(invocation);
         }
 
@@ -61,7 +74,8 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
             };
 
             // 自定义请求处理器
-            // 可添加请求头
+            // 添加请求头用于传递状态
+            // TODO: Actor一次只能处理一个请求,使用状态管理来传递状态的可行性?
             var httpClientHandler = new DaprHttpClientHandler();
             
             // 身份认证处理
@@ -71,7 +85,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
 
             AddHeaders(httpClientHandler);
 
-            // 构建代理服务
+            // 代理工厂
             var proxyFactory = new ActorProxyFactory(actorProxyOptions, (HttpMessageHandler)httpClientHandler);
 
             await MakeRequestAsync(invocation, proxyFactory, remoteServiceConfig);
@@ -86,34 +100,29 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
             var actorId = new ActorId(configuration.ActorId);
 
             var invokeType = typeof(TService);
+            // 约定的 RemoteServiceAttribute 为Actor名称
             var remoteServiceAttr = invokeType.GetTypeInfo().GetCustomAttribute<RemoteServiceAttribute>();
             var actorType = remoteServiceAttr != null
                 ? remoteServiceAttr.Name
                 : invokeType.Name;
-            var isAsyncMethod = invocation.Method.IsAsync();
+            
 
             try
             {
+                // 创建强类型代理
                 var actorProxy = proxyFactory.CreateActorProxy<TService>(actorId, actorType);
-                if (isAsyncMethod)
-                {
-                    // 调用异步Actor
-                    var task = (Task)invocation.Method.Invoke(actorProxy, invocation.Arguments);
-                    await task;
+                // 远程调用
+                var task = (Task)invocation.Method.Invoke(actorProxy, invocation.Arguments);
+                await task;
 
-                    if (!invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
-                    {
-                        // 处理返回值
-                        invocation.ReturnValue = typeof(Task<>)
-                            .MakeGenericType(invocation.Method.ReturnType.GenericTypeArguments[0])
-                            .GetProperty(nameof(Task<object>.Result), BindingFlags.Public | BindingFlags.Instance)
-                            .GetValue(task);
-                    }
-                }
-                else
+                // 存在返回值
+                if (!invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
                 {
-                    // 调用同步Actor
-                    invocation.ReturnValue = invocation.Method.Invoke(actorProxy, invocation.Arguments);
+                    // 处理返回值
+                    invocation.ReturnValue = typeof(Task<>)
+                        .MakeGenericType(invocation.Method.ReturnType.GenericTypeArguments[0])
+                        .GetProperty(nameof(Task<object>.Result), BindingFlags.Public | BindingFlags.Instance)
+                        .GetValue(task);
                 }
             }
             catch (ActorMethodInvocationException amie) // 其他异常忽略交给框架处理
