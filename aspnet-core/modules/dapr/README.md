@@ -1,3 +1,5 @@
+[Client](./LINGYUN.Abp.Dapr.Client/README.md) | Dapr.Client 文档
+
 # Dapr.Actors 集成
 
 ## 配置使用
@@ -30,7 +32,7 @@ public class SystemActorInterfaceModule : AbpModule
 
 ```c#
 
-public class SystemActor : Actor 
+public class SystemActor : Actor, ISystemActor 
 {
     public Task<string> GetAsync() 
     {
