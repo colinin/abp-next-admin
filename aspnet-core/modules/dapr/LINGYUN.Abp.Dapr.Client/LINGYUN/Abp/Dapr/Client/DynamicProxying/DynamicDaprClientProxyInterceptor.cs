@@ -1,5 +1,4 @@
 ﻿using Dapr.Client;
-using LINGYUN.Abp.Dapr.Client.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -18,6 +17,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
@@ -37,11 +37,12 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
+        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IDaprApiDescriptionFinder ApiDescriptionFinder { get; }
         protected AbpDaprRemoteServiceOptions AbpRemoteServiceOptions { get; }
         protected AbpDaprClientProxyOptions ClientProxyOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
-        protected IRemoteServiceDaprClientAuthenticator ClientAuthenticator { get; }
+        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
 
         public ILogger<DynamicDaprClientProxyInterceptor<TService>> Logger { get; set; }
 
@@ -58,7 +59,8 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             IOptionsSnapshot<AbpDaprRemoteServiceOptions> remoteServiceOptions,
             IDaprApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
-            IRemoteServiceDaprClientAuthenticator clientAuthenticator,
+            IDynamicProxyHttpClientFactory dynamicProxyHttpClientFactory,
+            IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
@@ -68,6 +70,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
+            HttpClientFactory = dynamicProxyHttpClientFactory;
             AbpCorrelationIdOptions = correlationIdOptions.Value;
             ApiDescriptionFinder = apiDescriptionFinder;
             JsonSerializer = jsonSerializer;
@@ -162,13 +165,21 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
             AddHeaders(invocation, action, requestMessage, apiVersion);
 
-            await ClientAuthenticator.AuthenticateAsync(
-                new RemoteServiceDaprClientAuthenticateContext(
+            var client = HttpClientFactory.Create(AbpDaprClientModule.DaprHttpClient);
+            await ClientAuthenticator.Authenticate(
+                new RemoteServiceHttpClientAuthenticateContext(
+                    client,
                     requestMessage,
                     remoteServiceConfig,
                     clientConfig.RemoteServiceName
                 )
             );
+            // 其他库可能将授权标头写入到HttpClient中
+            if (requestMessage.Headers.Authorization == null &&
+                client.DefaultRequestHeaders.Authorization != null) 
+            {
+                requestMessage.Headers.Authorization = client.DefaultRequestHeaders.Authorization;
+            }
 
             var response = await DaprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken());
 

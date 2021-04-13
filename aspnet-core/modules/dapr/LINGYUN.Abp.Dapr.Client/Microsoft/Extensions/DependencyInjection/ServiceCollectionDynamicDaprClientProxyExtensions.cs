@@ -1,13 +1,16 @@
 ﻿using Castle.DynamicProxy;
+using Dapr.Client;
 using JetBrains.Annotations;
 using LINGYUN.Abp.Dapr.Client;
 using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -17,11 +20,34 @@ namespace Microsoft.Extensions.DependencyInjection
         private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
         public static IServiceCollection AddDaprClient(
-            [NotNull] this IServiceCollection services)
+            [NotNull] this IServiceCollection services,
+            Action<DaprClientBuilder> setup = null)
         {
             Check.NotNull(services, nameof(services));
 
-            services.TryAddSingleton(provider => provider.GetRequiredService<IDaprClientFactory>().Create());
+            services.TryAddSingleton(provider =>
+            {
+                var abpSystemTextJsonSerializerOptions = provider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerOptions>>().Value;
+                var abpDaprClientOptions = provider.GetRequiredService<IOptions<AbpDaprClientOptions>>().Value;
+
+                var builder = new DaprClientBuilder()
+                .UseHttpEndpoint(abpDaprClientOptions.HttpEndpoint)
+                .UseJsonSerializationOptions(abpSystemTextJsonSerializerOptions.JsonSerializerOptions);
+
+                if (!abpDaprClientOptions.GrpcEndpoint.IsNullOrWhiteSpace() &&
+                    abpDaprClientOptions.GrpcChannelOptions != null)
+                {
+                    builder
+                        .UseGrpcEndpoint(abpDaprClientOptions.GrpcEndpoint)
+                        .UseGrpcChannelOptions(abpDaprClientOptions.GrpcChannelOptions);
+                }
+
+                setup?.Invoke(builder);
+
+                return builder.Build();
+            });
+
+            services.AddHttpClient(AbpDaprClientModule.DaprHttpClient);
 
             return services;
         }
