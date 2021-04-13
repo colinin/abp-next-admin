@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.Http.Client;
 
 namespace LINGYUN.Abp.Dapr.Client
 {
-    public class DaprRemoteServiceConfiguration : Dictionary<string, string>
+    public class DaprRemoteServiceConfiguration : RemoteServiceConfiguration
     {
         /// <summary>
         /// Base AppId.
@@ -13,25 +14,17 @@ namespace LINGYUN.Abp.Dapr.Client
             set => this[nameof(AppId)] = value;
         }
 
-        /// <summary>
-        /// Version.
-        /// </summary>
-        public string Version
-        {
-            get => this.GetOrDefault(nameof(Version));
-            set => this[nameof(Version)] = value;
-        }
-
         public DaprRemoteServiceConfiguration()
         {
         }
 
         public DaprRemoteServiceConfiguration(
             string appId,
+            string baseUil,
             string version)
+            : base(baseUil, version)
         {
             this[nameof(AppId)] = appId;
-            this[nameof(Version)] = version;
         }
     }
 }
