@@ -65,7 +65,6 @@ public class SystemAppService : ApplicationService, ISystemAppService
 
 ```c#
 
-// 模块会自动搜索实现了IActor的服务,注册为Dapr的Actors
 [DependsOn(
         typeof(SystemInterfaceModule),
         typeof(AbpAspNetCoreMvcModule))]
@@ -75,7 +74,7 @@ public class SystemServerModule : AbpModule
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(SystemInterfaceModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(SystemServerModule).Assembly);
         });
     }
 }
@@ -130,7 +129,7 @@ public class SystemActorClientModule : AbpModule
     {
         // 注册代理类似于 Volo.Abp.Http.Client 模块
         context.Services.AddDaprClientProxies(
-            typeof(SystemInterfaceModule).Assembly, // 搜索 SystemActorInterfaceModule 模块下的IActor定义
+            typeof(SystemInterfaceModule).Assembly, // 搜索 SystemInterfaceModule 模块下的IRemoteService定义创建代理
             RemoteServiceName
         );
     }
