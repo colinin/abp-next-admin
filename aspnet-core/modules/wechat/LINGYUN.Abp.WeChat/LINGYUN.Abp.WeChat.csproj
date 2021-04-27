@@ -18,9 +18,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Features" Version="4.2.1" />
-		<PackageReference Include="Volo.Abp.Caching" Version="4.2.1" />
-		<PackageReference Include="Volo.Abp.Json" Version="4.2.1" />
+		<PackageReference Include="Volo.Abp.Features" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Caching" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Json" Version="4.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.0" />
 	</ItemGroup>
 

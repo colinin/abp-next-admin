@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Cli.Core" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ProjectManagement.Domain.Shared\LINGYUN.Abp.ProjectManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

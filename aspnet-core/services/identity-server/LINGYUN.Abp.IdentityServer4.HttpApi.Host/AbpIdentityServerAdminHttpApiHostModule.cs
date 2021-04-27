@@ -313,7 +313,7 @@ namespace LINGYUN.Abp.IdentityServer4
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             // 本地化
             app.UseAbpRequestLocalization();
             //路由

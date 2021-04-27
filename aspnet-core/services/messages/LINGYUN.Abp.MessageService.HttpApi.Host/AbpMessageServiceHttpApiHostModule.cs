@@ -310,7 +310,7 @@ namespace LINGYUN.Abp.MessageService
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             // 本地化
             app.UseAbpRequestLocalization();
             //路由
@@ -323,7 +323,6 @@ namespace LINGYUN.Abp.MessageService
             app.UseHangfireJwtToken();
             // 认证
             app.UseAuthentication();
-            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
             // 授权

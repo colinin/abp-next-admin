@@ -38,10 +38,12 @@ namespace LINGYUN.Abp.Identity
 
         public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)
         {
-            if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
-            {
-                throw new BusinessException(Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor);
-            }
+            // Removed See: https://github.com/abpframework/abp/pull/7719
+            //if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
+            //{
+            //    throw new BusinessException(Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor);
+            //}
+            // TODO: Abp官方移除了双因素的设置,不排除以后会增加,如果在用户接口中启用了双因素认证,可能造成登录失败!
             await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 

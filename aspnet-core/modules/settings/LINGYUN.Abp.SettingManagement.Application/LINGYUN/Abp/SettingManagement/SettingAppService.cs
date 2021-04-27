@@ -8,7 +8,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Emailing;
-using Volo.Abp.Identity.Features;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -283,20 +282,21 @@ namespace LINGYUN.Abp.SettingManagement
 
             #region 双因素
 
-            var twoFactorSetting = identitySetting.AddSetting(L["DisplayName:Identity.TwoFactor"], L["Description:Identity.TwoFactor"]);
-            twoFactorSetting.AddDetail(
-                SettingDefinitionManager.Get(IdentitySettingNames.TwoFactor.Behaviour),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(IdentitySettingNames.TwoFactor.Behaviour, providerName, providerKey),
-                ValueType.Option)
-                .AddOption(IdentityTwoFactorBehaviour.Optional.ToString(), IdentityTwoFactorBehaviour.Optional.ToString())
-                .AddOption(IdentityTwoFactorBehaviour.Forced.ToString(), IdentityTwoFactorBehaviour.Forced.ToString())
-                .AddOption(IdentityTwoFactorBehaviour.Disabled.ToString(), IdentityTwoFactorBehaviour.Disabled.ToString());
-            twoFactorSetting.AddDetail(
-                SettingDefinitionManager.Get(IdentitySettingNames.TwoFactor.UsersCanChange),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(IdentitySettingNames.TwoFactor.UsersCanChange, providerName, providerKey),
-                ValueType.Boolean);
+            // Removed See: https://github.com/abpframework/abp/pull/7719
+            //var twoFactorSetting = identitySetting.AddSetting(L["DisplayName:Identity.TwoFactor"], L["Description:Identity.TwoFactor"]);
+            //twoFactorSetting.AddDetail(
+            //    SettingDefinitionManager.Get(IdentitySettingNames.TwoFactor.Behaviour),
+            //    StringLocalizerFactory,
+            //    await SettingManager.GetOrNullAsync(IdentitySettingNames.TwoFactor.Behaviour, providerName, providerKey),
+            //    ValueType.Option)
+            //    .AddOption(IdentityTwoFactorBehaviour.Optional.ToString(), IdentityTwoFactorBehaviour.Optional.ToString())
+            //    .AddOption(IdentityTwoFactorBehaviour.Forced.ToString(), IdentityTwoFactorBehaviour.Forced.ToString())
+            //    .AddOption(IdentityTwoFactorBehaviour.Disabled.ToString(), IdentityTwoFactorBehaviour.Disabled.ToString());
+            //twoFactorSetting.AddDetail(
+            //    SettingDefinitionManager.Get(IdentitySettingNames.TwoFactor.UsersCanChange),
+            //    StringLocalizerFactory,
+            //    await SettingManager.GetOrNullAsync(IdentitySettingNames.TwoFactor.UsersCanChange, providerName, providerKey),
+            //    ValueType.Boolean);
 
             #endregion
 

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<content Remove="LINGYUN\Abp\ProjectManagement\Localization\Domain\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\ProjectManagement\Localization\Domain\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Validation" Version="4.3.0" />
+	</ItemGroup>
+
+</Project>

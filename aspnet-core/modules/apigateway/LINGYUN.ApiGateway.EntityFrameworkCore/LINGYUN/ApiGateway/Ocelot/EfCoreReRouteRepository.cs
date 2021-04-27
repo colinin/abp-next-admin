@@ -17,26 +17,26 @@ namespace LINGYUN.ApiGateway.Ocelot
         {
         }
 
-        public async Task<ReRoute> GetByNameAsync(string routeName)
+        public virtual async Task<ReRoute> GetByNameAsync(string routeName)
         {
             var reRoute = await (await WithDetailsAsync()).Where(x => x.ReRouteName.Equals(routeName)).FirstOrDefaultAsync();
             return reRoute ?? throw new EntityNotFoundException(typeof(ReRoute), routeName);
         }
 
-        public async Task<ReRoute> GetByReRouteIdAsync(long routeId)
+        public virtual async Task<ReRoute> GetByReRouteIdAsync(long routeId)
         {
             var reRoute = await (await WithDetailsAsync()).Where(x => x.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
             return reRoute ?? throw new EntityNotFoundException(typeof(ReRoute), routeId);
         }
 
-        public async Task<List<ReRoute>> GetByAppIdAsync(string appId)
+        public virtual async Task<List<ReRoute>> GetByAppIdAsync(string appId)
         {
             return await (await WithDetailsAsync())
                 .Where(r => r.AppId.Equals(appId))
                 .ToListAsync();
         }
 
-        public async Task<(List<ReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
+        public virtual async Task<(List<ReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
             string sorting = "", int skipCount = 1, int maxResultCount = 100)
         {
             var resultReRoutes = await (await WithDetailsAsync())
@@ -56,7 +56,7 @@ namespace LINGYUN.ApiGateway.Ocelot
             return ValueTuple.Create(resultReRoutes, total);
         }
 
-        public async Task RemoveAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task RemoveAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var dbContext = await GetDbContextAsync();
             var entityType = dbContext.Model.FindEntityType(typeof(ReRoute));
@@ -82,6 +82,7 @@ namespace LINGYUN.ApiGateway.Ocelot
                 x => x.SecurityOptions);
         }
 
+        [Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<ReRoute> WithDetails()
         {
             return WithDetails(

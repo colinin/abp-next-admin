@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="Polly" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.Core" Version="4.2.1" />
+    <PackageReference Include="Volo.Abp.Core" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

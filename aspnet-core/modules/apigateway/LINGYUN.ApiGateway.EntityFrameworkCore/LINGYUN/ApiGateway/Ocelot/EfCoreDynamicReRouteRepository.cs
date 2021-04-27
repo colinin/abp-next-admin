@@ -15,12 +15,12 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         }
 
-        public async Task<DynamicReRoute> GetByItemIdAsync(int itemId)
+        public virtual async Task<DynamicReRoute> GetByItemIdAsync(int itemId)
         {
             return await (await GetQueryableAsync()).Where(x => x.DynamicReRouteId.Equals(itemId)).FirstOrDefaultAsync();
         }
 
-        public async Task<List<DynamicReRoute>> GetByAppIdAsync(string appId)
+        public virtual async Task<List<DynamicReRoute>> GetByAppIdAsync(string appId)
         {
             return await (await WithDetailsAsync()).Where(x => x.AppId.Equals(appId)).ToListAsync();
         }
@@ -30,6 +30,7 @@ namespace LINGYUN.ApiGateway.Ocelot
             return await WithDetailsAsync(x => x.RateLimitRule); ;
         }
 
+        [System.Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<DynamicReRoute> WithDetails()
         {
             return WithDetails(x => x.RateLimitRule);

@@ -232,12 +232,11 @@ namespace LINGYUN.ApiGateway
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             //路由
             app.UseRouting();
             // 认证
             app.UseAuthentication();
-            app.UseAbpClaimsMap();
             // 多租户
             // app.UseMultiTenancy();
             // 本地化

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
@@ -23,15 +24,26 @@ namespace LINGYUN.Abp.PermissionManagement.Identity
 
         protected IUserRoleFinder UserRoleFinder { get; }
         public IdentityPermissionManager(
-            IPermissionDefinitionManager permissionDefinitionManager, 
+            IPermissionDefinitionManager permissionDefinitionManager,
+            IPermissionStateManager permissionStateManager,
             IPermissionGrantRepository permissionGrantRepository, 
             IPermissionStore permissionStore, 
             IServiceProvider serviceProvider, 
             IGuidGenerator guidGenerator, 
             IOptions<PermissionManagementOptions> options, 
             ICurrentTenant currentTenant,
+             IDistributedCache<PermissionGrantCacheItem> cache,
             IUserRoleFinder userRoleFinder) 
-            : base(permissionDefinitionManager, permissionGrantRepository, permissionStore, serviceProvider, guidGenerator, options, currentTenant)
+            : base(
+                  permissionDefinitionManager, 
+                  permissionStateManager, 
+                  permissionGrantRepository, 
+                  permissionStore, 
+                  serviceProvider, 
+                  guidGenerator, 
+                  options, 
+                  currentTenant, 
+                  cache)
         {
             UserRoleFinder = userRoleFinder;
         }

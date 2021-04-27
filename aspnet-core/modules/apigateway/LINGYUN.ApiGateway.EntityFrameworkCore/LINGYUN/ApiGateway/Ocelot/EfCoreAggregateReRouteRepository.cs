@@ -15,24 +15,24 @@ namespace LINGYUN.ApiGateway.Ocelot
         {
         }
 
-        public async Task<bool> AggregateReRouteNameExistsAsync(string name)
+        public virtual async Task<bool> AggregateReRouteNameExistsAsync(string name)
         {
             return await (await GetDbSetAsync()).AnyAsync(ar => ar.Name.Equals(name));
         }
 
-        public async Task<AggregateReRoute> GetByRouteIdAsync(long routeId)
+        public virtual async Task<AggregateReRoute> GetByRouteIdAsync(long routeId)
         {
             return await (await WithDetailsAsync())
                 .Where(ar => ar.ReRouteId.Equals(routeId)).FirstOrDefaultAsync();
         }
 
-        public async Task<List<AggregateReRoute>> GetByAppIdAsync(string appId)
+        public virtual async Task<List<AggregateReRoute>> GetByAppIdAsync(string appId)
         {
             return await (await WithDetailsAsync())
                 .Where(ar => ar.AppId.Equals(appId)).ToListAsync();
         }
 
-        public async Task<(List<AggregateReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
+        public virtual async Task<(List<AggregateReRoute> routes, long total)> GetPagedListAsync(string appId, string filter = "", 
             string sorting = "", int skipCount = 1, int maxResultCount = 100)
         {
             var resultReRoutes = await (await WithDetailsAsync())

@@ -19,9 +19,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Localization" Version="4.2.1" />
-		<PackageReference Include="Volo.Abp.Json" Version="4.2.1" />
-		<PackageReference Include="Volo.Abp.Settings" Version="4.2.1" />
+		<PackageReference Include="Volo.Abp.Localization" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Json" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Settings" Version="4.3.0" />
 	</ItemGroup>
 
 </Project>
