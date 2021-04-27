@@ -117,13 +117,14 @@ namespace LINGYUN.Abp.MessageService
             // 解决某些不支持类型的序列化
             Configure<AbpJsonOptions>(options =>
             {
-                options.UseHybridSerializer = true;
+                // See: https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0#always-use-the-newtonsoft-json
+                options.UseHybridSerializer = false;
             });
             // 中文序列化的编码问题
-            Configure<AbpSystemTextJsonSerializerOptions>(options =>
-            {
-                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            });
+            //Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            //{
+            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            //});
 
             // 加解密
             Configure<AbpStringEncryptionOptions>(options =>
