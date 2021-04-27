@@ -80,6 +80,7 @@ namespace LINGYUN.Platform.Datas
             return (await GetQueryableAsync()).IncludeDetails();
         }
 
+        [System.Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<Data> WithDetails()
         {
             return GetQueryable().IncludeDetails();

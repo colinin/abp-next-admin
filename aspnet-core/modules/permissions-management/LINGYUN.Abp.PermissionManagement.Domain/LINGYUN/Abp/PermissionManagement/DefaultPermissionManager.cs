@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -43,14 +44,24 @@ namespace LINGYUN.Abp.PermissionManagement
 
         protected IPermissionStore PermissionStore { get; }
         public DefaultPermissionManager(
-            IPermissionDefinitionManager permissionDefinitionManager, 
+            IPermissionDefinitionManager permissionDefinitionManager,
+            IPermissionStateManager permissionStateManager,
             IPermissionGrantRepository permissionGrantRepository,
             IPermissionStore permissionStore,
             IServiceProvider serviceProvider, 
             IGuidGenerator guidGenerator, 
             IOptions<PermissionManagementOptions> options, 
-            ICurrentTenant currentTenant) 
-            : base(permissionDefinitionManager, permissionGrantRepository, serviceProvider, guidGenerator, options, currentTenant)
+            ICurrentTenant currentTenant,
+            IDistributedCache<PermissionGrantCacheItem> cache) 
+            : base(
+                  permissionDefinitionManager, 
+                  permissionStateManager, 
+                  permissionGrantRepository,
+                  serviceProvider, 
+                  guidGenerator, 
+                  options, 
+                  currentTenant,
+                  cache)
         {
             ServiceProvider = serviceProvider;
             PermissionStore = permissionStore;
@@ -71,6 +82,11 @@ namespace LINGYUN.Abp.PermissionManagement
             var result = new PermissionWithGrantedProviders(permission.Name, false);
 
             if (!permission.IsEnabled)
+            {
+                return result;
+            }
+
+            if (!await PermissionStateManager.IsEnabledAsync(permission))
             {
                 return result;
             }

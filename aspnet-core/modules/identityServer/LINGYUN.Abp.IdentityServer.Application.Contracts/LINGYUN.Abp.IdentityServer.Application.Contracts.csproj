@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.2.1" />
-	  <PackageReference Include="Volo.Abp.Authorization" Version="4.2.1" />
-	  <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="4.2.1" />
+	  <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.3.0" />
+	  <PackageReference Include="Volo.Abp.Authorization" Version="4.3.0" />
+	  <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

@@ -243,6 +243,7 @@ namespace LINGYUN.Platform.Menus
             return (await GetQueryableAsync()).IncludeDetails();
         }
 
+        [System.Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<Menu> WithDetails()
         {
             return GetQueryable().IncludeDetails();

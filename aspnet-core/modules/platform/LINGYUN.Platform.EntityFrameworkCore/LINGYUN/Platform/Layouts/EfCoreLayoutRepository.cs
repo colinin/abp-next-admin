@@ -71,6 +71,7 @@ namespace LINGYUN.Platform.Layouts
             return (await GetQueryableAsync()).IncludeDetails();
         }
 
+        [System.Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<Layout> WithDetails()
         {
             return GetQueryable().IncludeDetails();

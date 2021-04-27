@@ -17,7 +17,7 @@ namespace LINGYUN.ApiGateway.Ocelot
 
         }
 
-        public async Task<GlobalConfiguration> GetByItemIdAsync(long itemId)
+        public virtual async Task<GlobalConfiguration> GetByItemIdAsync(long itemId)
         {
             var globalConfiguration = await (await WithDetailsAsync()).Where(x => x.ItemId.Equals(itemId)).FirstOrDefaultAsync();
             if(globalConfiguration == null)
@@ -27,7 +27,7 @@ namespace LINGYUN.ApiGateway.Ocelot
             return globalConfiguration;
         }
 
-        public async Task<GlobalConfiguration> GetByAppIdAsync(string appId)
+        public virtual async Task<GlobalConfiguration> GetByAppIdAsync(string appId)
         {
             return await (await WithDetailsAsync())
                 .Where(g => g.AppId.Equals(appId))
@@ -61,6 +61,7 @@ namespace LINGYUN.ApiGateway.Ocelot
                 x => x.ServiceDiscoveryProvider);
         }
 
+        [Obsolete("将在abp框架移除之后删除")]
         public override IQueryable<GlobalConfiguration> WithDetails()
         {
             return WithDetails(

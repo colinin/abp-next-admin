@@ -315,14 +315,13 @@ namespace AuthServer.Host
             // app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseWeChatSignature();
             app.UseMultiTenancy();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
-            app.UseAbpClaimsMap();
             app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
