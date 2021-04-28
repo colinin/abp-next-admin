@@ -35,11 +35,7 @@ class AbpConfiguration extends VuexModule implements IAbpState {
         .then(config => {
           this.SET_ABPCONFIGURATION(config)
           this.SET_ABPLOCALIZER(config)
-          if (config.currentUser?.id) {
-            this.context.dispatch('setCurrentUserInfo', config.currentUser)
-          } else {
-            this.context.dispatch('setCurrentUserInfo', new CurrentUser())
-          }
+          this.context.dispatch('setCurrentUserInfo', config.currentUser ?? new CurrentUser())
           return resolve(config)
         })
         .catch(error => {
