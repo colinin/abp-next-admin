@@ -3,6 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from 'element-ui'
 import { Route } from 'vue-router'
+import { AbpModule } from '@/store/modules/abp'
 import { UserModule } from '@/store/modules/user'
 import { PermissionModule } from '@/store/modules/permission'
 import i18n from '@/lang' // Internationalization
@@ -31,11 +32,14 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
       next({ path: '/' })
       NProgress.done()
     } else {
+      // 如果用户已登录,重新获取框架信息
+      if (!AbpModule.configuration?.currentUser?.id) {
+        await AbpModule.Initialize()
+      }
       // Check whether the user has obtained his permission roles
       if (PermissionModule.authorizedPermissions.length === 0) {
         try {
           await PermissionModule.GenerateRoutes()
-          console.log(PermissionModule.dynamicRoutes)
           // Dynamically add accessible routes
           router.addRoutes(PermissionModule.dynamicRoutes)
           // Hack: ensure addRoutes is complete

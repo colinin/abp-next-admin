@@ -24,7 +24,7 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_IDENTITY_SERVER]: {
         // IdentityServer4 address
-        target: 'http://localhost:44385',
+        target: 'http://10.21.15.28:44385',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVER]: ''
@@ -32,7 +32,7 @@ module.exports = {
       },
       [process.env.VUE_APP_SIGNALR_SERVER]: {
         // api gateway address websocket protocol
-        target: 'ws://localhost:30000',
+        target: 'ws://10.21.15.28:30000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_SIGNALR_SERVER]: ''
@@ -41,7 +41,7 @@ module.exports = {
       },
       [process.env.VUE_APP_BASE_API]: {
         // api gateway address
-        target: 'http://localhost:30000',
+        target: 'http://10.21.15.28:30000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

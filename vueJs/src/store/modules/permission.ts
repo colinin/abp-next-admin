@@ -92,7 +92,7 @@ class Permission extends VuexModule implements IPermissionState {
   }
 
   @Action
-  public async GetPermissions() {
+  public async RefreshPermissions() {
     const authPermissions = new Array<string>()
     const grantedPolicies = AbpModule.configuration.auth.grantedPolicies
     if (grantedPolicies) {
@@ -112,7 +112,7 @@ class Permission extends VuexModule implements IPermissionState {
 
   @Action
   public async GenerateRoutes() {
-    await this.GetPermissions() // 保留授权
+    await this.RefreshPermissions() // 保留授权
     // 没必要再针对admin角色授权,改成全部后台授权
     // if (this.authorizedPermissions.includes('admin')) {
     //   accessedRoutes = asyncRoutes

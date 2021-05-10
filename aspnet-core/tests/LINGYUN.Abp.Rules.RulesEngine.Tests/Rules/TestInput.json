@@ -1,0 +1,42 @@
+[
+  {
+    "WorkflowName": "TestInputValidation",
+    "Rules": [
+      {
+        "RuleName": "InputRequired",
+        "ErrorMessage": "字段 Required 必须输入!",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "!string.IsNullOrWhiteSpace(input1.Required)"
+      },
+      {
+        "RuleName": "MustBeGreaterThan100",
+        "ErrorMessage": "字段 Integer1 必须大于100!",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "input1.Integer1 > 100"
+      },
+      {
+        "RuleName": "MustBeLessThan100",
+        "ErrorMessage": "字段 Integer2 必须小于100!",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "input1.Integer2 < 100"
+      },
+      {
+        "RuleName": "SumMustBeGreaterThan150",
+        "ErrorMessage": "字段 Integer1 与 Integer2 之和 必须大于150!",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "input1.Integer1 + input1.Integer2 > 150"
+      },
+      {
+        "RuleName": "RequiredLengthMustBeGreaterThan5",
+        "ErrorMessage": "字段 Length 长度必须大于5!",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "input1.Length.Length > 5"
+      }
+    ]
+  }
+]

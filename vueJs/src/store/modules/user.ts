@@ -74,7 +74,6 @@ class User extends VuexModule implements IUserState {
           const token = result.token_type + ' ' + result.access_token
           this.SET_TOKEN(token)
           this.SET_REFRESHTOKEN(result.refresh_token)
-          this.context.dispatch('Initialize')
           return resolve(result)
         })
         .catch(error => {
@@ -95,7 +94,6 @@ class User extends VuexModule implements IUserState {
           const token = result.token_type + ' ' + result.access_token
           this.SET_TOKEN(token)
           this.SET_REFRESHTOKEN(result.refresh_token)
-          this.context.dispatch('Initialize')
           return resolve(result)
         })
         .catch(error => {
