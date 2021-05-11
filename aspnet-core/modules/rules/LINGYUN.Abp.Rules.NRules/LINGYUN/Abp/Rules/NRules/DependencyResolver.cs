@@ -3,11 +3,11 @@ using System;
 
 namespace LINGYUN.Abp.Rules.NRules
 {
-    public class DefaultDependencyResolver : IDependencyResolver
+    public class DependencyResolver : IDependencyResolver
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public DefaultDependencyResolver(
+        public DependencyResolver(
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
