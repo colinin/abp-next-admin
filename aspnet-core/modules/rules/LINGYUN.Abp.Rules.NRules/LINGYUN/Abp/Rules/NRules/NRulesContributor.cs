@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NRules;
-using NRules.RuleModel;
+using NRules.Fluent;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,28 +12,38 @@ namespace LINGYUN.Abp.Rules.NRules
 {
     public class NRulesContributor : RuleContributorBase, ISingletonDependency
     {
-        private ISessionFactory _sessionFactory;
+        private readonly AbpNRulesOptions _options;
+        private readonly IServiceProvider _serviceProvider;
+
+        public NRulesContributor(
+            IServiceProvider serviceProvider,
+            IOptions<AbpNRulesOptions> options)
+        {
+            _options = options.Value;
+            _serviceProvider = serviceProvider;
+        }
 
         public override void Initialize(RulesInitializationContext context)
         {
-            var repository = context.GetRequiredService<IRuleRepository>();
-            _sessionFactory = repository.Compile();
-            _sessionFactory.DependencyResolver = new DefaultDependencyResolver(context.ServiceProvider);
-            _sessionFactory.ActionInterceptor = new DefaultActionInterceptor();
+            context.GetRequiredService<RuleRepository>()
+                .Load(loader => loader.From(_options.DefinitionRules));
         }
 
         public override Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
         {
-            var session = _sessionFactory.CreateSession();
-
-            session.Insert(input);
-            if (@params != null && @params.Any())
+            using (var scope = _serviceProvider.CreateScope())
             {
-                session.InsertAll(@params);
-            }
+                var session = scope.ServiceProvider.GetRequiredService<ISession>();
 
-            // TODO: 需要研究源码
-            session.Fire(cancellationToken);
+                session.Insert(input);
+                if (@params != null && @params.Any())
+                {
+                    session.InsertAll(@params);
+                }
+
+                // TODO: 需要研究源码
+                session.Fire(cancellationToken);
+            }
 
             return Task.CompletedTask;
         }

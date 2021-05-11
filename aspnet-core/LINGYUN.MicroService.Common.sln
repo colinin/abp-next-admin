@@ -152,6 +152,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine.Tests", "tests\LINGYUN.Abp.Rules.RulesEngine.Tests\LINGYUN.Abp.Rules.RulesEngine.Tests.csproj", "{CF253F0A-3A45-40EE-875F-0E57C8968C48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Rules.NRules.Tests", "tests\LINGYUN.Abp.Rules.NRules.Tests\LINGYUN.Abp.Rules.NRules.Tests.csproj", "{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -394,6 +396,10 @@ Global
 		{CF253F0A-3A45-40EE-875F-0E57C8968C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF253F0A-3A45-40EE-875F-0E57C8968C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF253F0A-3A45-40EE-875F-0E57C8968C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -470,6 +476,7 @@ Global
 		{B8E5026B-188F-422F-A1EA-502C4A394585} = {C8891F1A-E6E5-448A-B527-EBFA44D20808}
 		{E861BE01-689D-4637-A5DC-E78E234F83FB} = {C8891F1A-E6E5-448A-B527-EBFA44D20808}
 		{CF253F0A-3A45-40EE-875F-0E57C8968C48} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
+		{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}

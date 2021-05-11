@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NRules.Fluent;
-using NRules.RuleModel;
+using System;
+using System.Collections.Generic;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Rules.NRules
@@ -9,13 +9,36 @@ namespace LINGYUN.Abp.Rules.NRules
         typeof(AbpRulesModule))]
     public class AbpNRulesModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            AddDefinitionRules(context.Services);
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddSingleton<IRuleRepository, RuleRepository>();
+            context.Services.AddNRules();
 
             Configure<AbpRulesOptions>(options =>
             {
                 options.Contributors.Add<NRulesContributor>();
+            });
+        }
+
+        private static void AddDefinitionRules(IServiceCollection services)
+        {
+            var definitionRules = new List<Type>();
+
+            services.OnRegistred(context =>
+            {
+                if (typeof(RuleBase).IsAssignableFrom(context.ImplementationType))
+                {
+                    definitionRules.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpNRulesOptions>(options =>
+            {
+                options.DefinitionRules.AddIfNotContains(definitionRules);
             });
         }
     }
