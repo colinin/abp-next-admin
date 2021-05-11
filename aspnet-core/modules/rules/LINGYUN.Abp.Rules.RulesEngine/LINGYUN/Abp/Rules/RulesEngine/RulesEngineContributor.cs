@@ -31,12 +31,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
 
         public override void Initialize(RulesInitializationContext context)
         {
-            var reSetting = new ReSettings
-            {
-                NestedRuleExecutionMode = NestedRuleExecutionMode.Performance
-            };
-
-            _ruleEngine = new Engine(Logger, reSetting);
+            _ruleEngine = CreateRulesEngine();
 
             foreach (var contributor in _workflowRulesContributors)
             {
@@ -65,6 +60,19 @@ namespace LINGYUN.Abp.Rules.RulesEngine
             {
                 contributor.Shutdown();
             }
+        }
+        /// <summary>
+        /// 重写自行构建规则引擎
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Engine CreateRulesEngine()
+        {
+            var reSetting = new ReSettings
+            {
+                NestedRuleExecutionMode = NestedRuleExecutionMode.Performance
+            };
+
+            return new Engine(Logger, reSetting);
         }
 
         protected virtual async Task ExecuteRulesAsync<T>(T input, WorkflowRules[] workflowRules, object[] @params = null)

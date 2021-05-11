@@ -152,7 +152,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine.Tests", "tests\LINGYUN.Abp.Rules.RulesEngine.Tests\LINGYUN.Abp.Rules.RulesEngine.Tests.csproj", "{CF253F0A-3A45-40EE-875F-0E57C8968C48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Rules.NRules.Tests", "tests\LINGYUN.Abp.Rules.NRules.Tests\LINGYUN.Abp.Rules.NRules.Tests.csproj", "{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.NRules.Tests", "tests\LINGYUN.Abp.Rules.NRules.Tests\LINGYUN.Abp.Rules.NRules.Tests.csproj", "{EF03A0A7-A93E-4DEF-A33E-F5A82E995FBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
