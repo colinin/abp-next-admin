@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -19,38 +18,96 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
+        #region Add DaprClient Builder
+
         public static IServiceCollection AddDaprClient(
-            [NotNull] this IServiceCollection services,
-            Action<DaprClientBuilder> setup = null)
+            [NotNull] this IServiceCollection services)
         {
-            Check.NotNull(services, nameof(services));
-
-            services.TryAddSingleton(provider =>
+            if (services == null)
             {
-                var abpSystemTextJsonSerializerOptions = provider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerOptions>>().Value;
-                var abpDaprClientOptions = provider.GetRequiredService<IOptions<AbpDaprClientOptions>>().Value;
+                throw new ArgumentNullException(nameof(services));
+            }
 
-                var builder = new DaprClientBuilder()
-                .UseHttpEndpoint(abpDaprClientOptions.HttpEndpoint)
-                .UseJsonSerializationOptions(abpSystemTextJsonSerializerOptions.JsonSerializerOptions);
+            services.AddLogging();
+            services.AddOptions();
 
-                if (!abpDaprClientOptions.GrpcEndpoint.IsNullOrWhiteSpace() &&
-                    abpDaprClientOptions.GrpcChannelOptions != null)
-                {
-                    builder
-                        .UseGrpcEndpoint(abpDaprClientOptions.GrpcEndpoint)
-                        .UseGrpcChannelOptions(abpDaprClientOptions.GrpcChannelOptions);
-                }
-
-                setup?.Invoke(builder);
-
-                return builder.Build();
-            });
-
-            services.AddHttpClient(AbpDaprClientModule.DaprHttpClient);
+            services.TryAddSingleton<DefaultDaprClientFactory>();
+            services.TryAddSingleton<IDaprClientFactory>(serviceProvider => serviceProvider.GetRequiredService<DefaultDaprClientFactory>());
 
             return services;
         }
+
+        public static IDaprClientBuilder AddDaprClient(
+            [NotNull] this IServiceCollection services,
+            string name)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            services.AddDaprClient();
+
+            return new DefaultDaprClientBuilder(services, name);
+        }
+
+        public static IDaprClientBuilder AddDaprClient(
+           [NotNull] this IServiceCollection services,
+           string name,
+           Action<DaprClientBuilder> configureClient)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (configureClient == null)
+            {
+                throw new ArgumentNullException(nameof(configureClient));
+            }
+
+            services.AddDaprClient();
+
+            var builder = new DefaultDaprClientBuilder(services, name);
+            builder.ConfigureDaprClient(configureClient);
+            return builder;
+        }
+
+        public static IDaprClientBuilder AddDaprClient(
+            [NotNull] this IServiceCollection services, 
+            string name, 
+            Action<IServiceProvider, DaprClientBuilder> configureClient)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (configureClient == null)
+            {
+                throw new ArgumentNullException(nameof(configureClient));
+            }
+
+            services.AddDaprClient();
+            var builder = new DefaultDaprClientBuilder(services, name);
+            builder.ConfigureDaprClient(configureClient);
+            return builder;
+        }
+
+
+        #endregion
+
+        #region Add DaprClient Proxies
 
         public static IServiceCollection AddDaprClientProxies(
             [NotNull] this IServiceCollection services,
@@ -96,7 +153,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Check.NotNull(type, nameof(type));
             Check.NotNullOrWhiteSpace(remoteServiceConfigurationName, nameof(remoteServiceConfigurationName));
 
-            // AddHttpClientFactory(services, remoteServiceConfigurationName);
+            services.AddDaprClientFactory(remoteServiceConfigurationName);
 
             services.Configure<AbpDaprClientProxyOptions>(options =>
             {
@@ -124,6 +181,64 @@ namespace Microsoft.Extensions.DependencyInjection
                 );
             }
 
+            services.AddTransient(
+                typeof(IDaprClientProxy<>).MakeGenericType(type),
+                serviceProvider =>
+                {
+                    var service = ProxyGeneratorInstance
+                        .CreateInterfaceProxyWithoutTarget(
+                            type,
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
+                            (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
+                        );
+
+                    return Activator.CreateInstance(
+                        typeof(DaprClientProxy<>).MakeGenericType(type),
+                        service
+                    );
+                });
+
+            return services;
+        }
+
+        private static IServiceCollection AddDaprClientFactory(
+            [NotNull] this IServiceCollection services,
+            [NotNull] string remoteServiceConfigurationName = DaprRemoteServiceConfigurationDictionary.DefaultName)
+        {
+            var preOptions = services.ExecutePreConfiguredActions<AbpDaprClientBuilderOptions>();
+
+            if (preOptions.ConfiguredProxyClients.Contains(remoteServiceConfigurationName))
+            {
+                return services;
+            }
+
+            var clientBuilder = services.AddDaprClient(remoteServiceConfigurationName, (IServiceProvider provider, DaprClientBuilder builder) =>
+            {
+                var options = provider.GetRequiredService<IOptions<AbpDaprRemoteServiceOptions>>().Value;
+                builder.UseHttpEndpoint(
+                    options.RemoteServices
+                        .GetConfigurationOrDefault(remoteServiceConfigurationName).BaseUrl);
+
+                foreach (var clientBuildAction in preOptions.ProxyClientBuildActions)
+                {
+                    clientBuildAction(remoteServiceConfigurationName, provider, builder);
+                }
+            });
+
+            clientBuilder.ConfigureDaprClient((client) =>
+            {
+                foreach (var clientBuildAction in preOptions.ProxyClientActions)
+                {
+                    clientBuildAction(remoteServiceConfigurationName, client);
+                }
+            });
+            
+
+            services.PreConfigure<AbpDaprClientBuilderOptions>(options =>
+            {
+                options.ConfiguredProxyClients.Add(remoteServiceConfigurationName);
+            });
+
             return services;
         }
 
@@ -136,5 +251,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 && !type.IsGenericType
                 && typeof(IRemoteService).IsAssignableFrom(type);
         }
+
+        #endregion
     }
 }

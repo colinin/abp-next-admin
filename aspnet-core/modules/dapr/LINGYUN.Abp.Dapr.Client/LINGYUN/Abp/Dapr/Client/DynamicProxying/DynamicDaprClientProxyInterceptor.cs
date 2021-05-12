@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
     {
         protected static MethodInfo MakeRequestAndGetResultAsyncMethod { get; }
 
-        protected DaprClient DaprClient { get; }
+        protected IDaprClientFactory DaprClientFactory { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
         protected ICurrentTenant CurrentTenant { get; }
@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         }
 
         public DynamicDaprClientProxyInterceptor(
-            DaprClient daprClient,
+            IDaprClientFactory daprClientFactory,
             IOptions<AbpDaprClientProxyOptions> clientProxyOptions,
             IOptionsSnapshot<AbpDaprRemoteServiceOptions> remoteServiceOptions,
             IDaprApiDescriptionFinder apiDescriptionFinder,
@@ -66,7 +66,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
             ICurrentTenant currentTenant)
         {
-            DaprClient = daprClient;
+            DaprClientFactory = daprClientFactory;
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
@@ -145,6 +145,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
             // 遵循远端   api/abp/api-definition
             var action = await ApiDescriptionFinder.FindActionAsync(
+                clientConfig.RemoteServiceName,
                 remoteServiceConfig.AppId,
                 typeof(TService),
                 invocation.Method
@@ -156,7 +157,8 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             // 需要合并端点作为dapr远程调用的方法名称
             var methodName = UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
-            var requestMessage = DaprClient.CreateInvokeMethodRequest(
+            var daprClient = DaprClientFactory.CreateClient(clientConfig.RemoteServiceName);
+            var requestMessage = daprClient.CreateInvokeMethodRequest(
                 action.GetHttpMethod(),
                 remoteServiceConfig.AppId,
                 methodName);
@@ -165,23 +167,25 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
             AddHeaders(invocation, action, requestMessage, apiVersion);
 
-            var client = HttpClientFactory.Create(AbpDaprClientModule.DaprHttpClient);
+            var httpClient = HttpClientFactory.Create(AbpDaprClientModule.DaprHttpClient);
             await ClientAuthenticator.Authenticate(
                 new RemoteServiceHttpClientAuthenticateContext(
-                    client,
+                    httpClient,
                     requestMessage,
-                    remoteServiceConfig,
+                    new RemoteServiceConfiguration(
+                        remoteServiceConfig.BaseUrl, 
+                        remoteServiceConfig.Version),
                     clientConfig.RemoteServiceName
                 )
             );
             // 其他库可能将授权标头写入到HttpClient中
             if (requestMessage.Headers.Authorization == null &&
-                client.DefaultRequestHeaders.Authorization != null) 
+                httpClient.DefaultRequestHeaders.Authorization != null) 
             {
-                requestMessage.Headers.Authorization = client.DefaultRequestHeaders.Authorization;
+                requestMessage.Headers.Authorization = httpClient.DefaultRequestHeaders.Authorization;
             }
 
-            var response = await DaprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken());
+            var response = await daprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken());
 
             if (!response.IsSuccessStatusCode)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
@@ -17,10 +18,7 @@ namespace LINGYUN.Abp.Dapr.Client
         {
             var configuration = context.Services.GetConfiguration();
             Configure<AbpDaprRemoteServiceOptions>(configuration);
-            Configure<AbpDaprClientOptions>(configuration.GetSection("Dapr:Client"));
-
-            // DaprClient应该配置为单例的实现
-            context.Services.AddDaprClient();
+            context.Services.AddHttpClient(DaprHttpClient);
         }
     }
 }

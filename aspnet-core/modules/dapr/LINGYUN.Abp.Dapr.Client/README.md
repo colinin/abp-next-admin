@@ -100,14 +100,10 @@ dapr run --app-id myapp --app-port 5000 -H 50000 -G 40001 -- dotnet run
 ```json
 
 {
-    "Dapr": {
-        "Client": {
-            "HttpEndpoint": "http://127.0.0.1:50000"
-        }
-    },
     "RemoteServices": {
         "System": {
-            "AppId": "myapp"
+            "AppId": "myapp",
+            "BaseUrl": "http://127.0.0.1:50000"
         }
     }
 }
@@ -155,24 +151,16 @@ public class InvokeClass
 
 
 ## 配置项说明
-
-* AbpDaprClientOptions.GrpcEndpoint Dapr暴露的Grpc端点, 对应 **DaprClientBuilder.GrpcEndpoint**  
-* AbpDaprClientOptions.HttpEndpoint Dapr暴露的Http端点, 对应 **DaprClientBuilder.HttpEndpoint**  
-* AbpDaprClientOptions.GrpcChannelOptions 通过Grpc调用远程服务的配置项, 对应 **DaprClientBuilder.GrpcChannelOptions**  
     
 * AbpDaprRemoteServiceOptions.RemoteServices 配置Dapr.AppId
 
 ```json
 
 {
-    "Dapr": {
-        "Client": {
-            "HttpEndpoint": "http://127.0.0.1:50000"
-        }
-    },
     "RemoteServices": {
         "System": {
-            "AppId": "myapp"
+            "AppId": "myapp",
+            "BaserUrl": ""http://127.0.0.1:50000""
         }
     }
 }
