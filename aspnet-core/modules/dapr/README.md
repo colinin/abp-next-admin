@@ -75,9 +75,8 @@ dapr run --app-id myapp --app-port 5000 -H 50000 -G 40001 -- dotnet run
 ```json
 
 {
-    "RemoteActors": {
-        "System": {
-            "ActorId": "1",
+    "RemoteServices": {
+        "Shop": {
             "BaseUrl": "http://127.0.0.1:50000"
         }
     }
@@ -99,7 +98,7 @@ public class SystemActorClientModule : AbpModule
         // 注册代理类似于 Volo.Abp.Http.Client 模块
         context.Services.AddDaprActorProxies(
             typeof(SystemActorInterfaceModule).Assembly, // 搜索 SystemActorInterfaceModule 模块下的IActor定义
-            RemoteServiceName
+            "Shop"
         );
     }
 }
