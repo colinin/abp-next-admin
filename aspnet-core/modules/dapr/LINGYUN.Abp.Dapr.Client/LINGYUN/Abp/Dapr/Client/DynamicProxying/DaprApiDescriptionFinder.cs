@@ -27,15 +27,15 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
         protected ICurrentTenant CurrentTenant { get; }
 
-        protected DaprClient DaprClient { get; }
+        protected IDaprClientFactory DaprClientFactory { get; }
         public DaprApiDescriptionFinder(
-            DaprClient daprClient,
+            IDaprClientFactory daprClientFactory,
             IApiDescriptionCache cache, 
             IOptions<AbpCorrelationIdOptions> abpCorrelationIdOptions, 
             ICorrelationIdProvider correlationIdProvider, 
             ICurrentTenant currentTenant) 
         {
-            DaprClient = daprClient;
+            DaprClientFactory = daprClientFactory;
 
             Cache = cache;
             AbpCorrelationIdOptions = abpCorrelationIdOptions.Value;
@@ -44,9 +44,9 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public virtual async Task<ActionApiDescriptionModel> FindActionAsync(string appId, Type serviceType, MethodInfo method)
+        public virtual async Task<ActionApiDescriptionModel> FindActionAsync(string service, string appId, Type serviceType, MethodInfo method)
         {
-            var apiDescription = await GetApiDescriptionAsync(appId);
+            var apiDescription = await GetApiDescriptionAsync(service, appId);
 
             //TODO: Cache finding?
 
@@ -88,18 +88,19 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             throw new AbpException($"Could not found remote action for method: {method} on the appId: {appId}");
         }
 
-        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string appId)
+        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string service, string appId)
         {
-            return await Cache.GetAsync(appId, () => GetApiDescriptionFromServerAsync(appId));
+            return await Cache.GetAsync(appId, () => GetApiDescriptionFromServerAsync(service, appId));
         }
 
-        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string appId)
+        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string service, string appId)
         {
-            var requestMessage = DaprClient.CreateInvokeMethodRequest(HttpMethod.Get, appId, "api/abp/api-definition");
+            var client = DaprClientFactory.CreateClient(service);
+            var requestMessage = client.CreateInvokeMethodRequest(HttpMethod.Get, appId, "api/abp/api-definition");
 
             AddHeaders(requestMessage);
 
-            var response = await DaprClient.InvokeMethodWithResponseAsync(
+            var response = await client.InvokeMethodWithResponseAsync(
                 requestMessage,
                 CancellationTokenProvider.Token);
 

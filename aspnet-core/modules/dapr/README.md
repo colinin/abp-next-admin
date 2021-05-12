@@ -75,14 +75,10 @@ dapr run --app-id myapp --app-port 5000 -H 50000 -G 40001 -- dotnet run
 ```json
 
 {
-    "Dapr": {
-        "Client": {
-            "HttpEndpoint": "http://127.0.0.1:50000"
-        }
-    },
     "RemoteActors": {
         "System": {
-            "ActorId": "1"
+            "ActorId": "1",
+            "BaseUrl": "http://127.0.0.1:50000"
         }
     }
 }
