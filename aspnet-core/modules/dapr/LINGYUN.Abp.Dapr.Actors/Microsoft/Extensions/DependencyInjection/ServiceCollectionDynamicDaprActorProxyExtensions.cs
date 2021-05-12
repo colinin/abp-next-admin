@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -19,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddDaprActorProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
-            [NotNull] string remoteServiceConfigurationName = DaprActorConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultServices = true)
         {
             Check.NotNull(services, nameof(assembly));
@@ -40,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddDaprActorProxy<T>(
             [NotNull] this IServiceCollection services,
-            [NotNull] string remoteServiceConfigurationName = DaprActorConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultService = true)
         {
             return services.AddDaprActorProxy(
@@ -53,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddDaprActorProxy(
             [NotNull] this IServiceCollection services,
             [NotNull] Type type,
-            [NotNull] string remoteServiceConfigurationName = DaprActorConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultService = true)
         {
             Check.NotNull(services, nameof(services));

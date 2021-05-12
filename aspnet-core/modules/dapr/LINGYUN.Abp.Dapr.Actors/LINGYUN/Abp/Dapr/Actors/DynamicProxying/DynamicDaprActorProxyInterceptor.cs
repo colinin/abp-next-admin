@@ -1,6 +1,5 @@
 ﻿using Dapr.Actors;
 using Dapr.Actors.Client;
-using LINGYUN.Abp.Dapr.Actors.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -8,13 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Client.Authentication;
+using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -24,22 +24,24 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
          where TService: IActor
     {
         protected ICurrentTenant CurrentTenant { get; }
-        protected AbpDaprActorOptions DaprActorOptions { get; }
+        protected AbpDaprRemoteServiceOptions DaprServiceOptions { get; }
         protected AbpDaprActorProxyOptions DaprActorProxyOptions { get; }
-        protected IDaprActorProxyAuthenticator ActoryProxyAuthenticator { get; }
-
+        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
+        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
         public ILogger<DynamicDaprActorProxyInterceptor<TService>> Logger { get; set; }
 
         public DynamicDaprActorProxyInterceptor(
             IOptions<AbpDaprActorProxyOptions> daprActorProxyOptions,
-            IOptionsSnapshot<AbpDaprActorOptions> daprActorOptions,
-            IDaprActorProxyAuthenticator actorProxyAuthenticator,
+            IOptionsSnapshot<AbpDaprRemoteServiceOptions> daprActorOptions,
+            IDynamicProxyHttpClientFactory httpClientFactory,
+            IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICurrentTenant currentTenant)
         {
             CurrentTenant = currentTenant;
-            ActoryProxyAuthenticator = actorProxyAuthenticator;
+            HttpClientFactory = httpClientFactory;
+            ClientAuthenticator = clientAuthenticator;
             DaprActorProxyOptions = daprActorProxyOptions.Value;
-            DaprActorOptions = daprActorOptions.Value;
+            DaprServiceOptions = daprActorOptions.Value;
 
             Logger = NullLogger<DynamicDaprActorProxyInterceptor<TService>>.Instance;
         }
@@ -66,7 +68,13 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
         {
             // 获取Actor配置
             var actorProxyConfig = DaprActorProxyOptions.ActorProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicDaprActorProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = DaprActorOptions.RemoteActors.GetConfigurationOrDefault(actorProxyConfig.RemoteServiceName);
+            var remoteServiceConfig = DaprServiceOptions.RemoteServices.GetConfigurationOrDefault(actorProxyConfig.RemoteServiceName);
+
+            // Actors的定义太多, 可以考虑使用默认的 BaseUrl 作为远程地址
+            if (remoteServiceConfig.BaseUrl.IsNullOrWhiteSpace())
+            {
+                throw new AbpException($"Could not get BaseUrl for {actorProxyConfig.RemoteServiceName} Or Default.");
+            }
 
             var actorProxyOptions = new ActorProxyOptions
             {
@@ -77,35 +85,48 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
             // 添加请求头用于传递状态
             // TODO: Actor一次只能处理一个请求,使用状态管理来传递状态的可行性?
             var httpClientHandler = new DaprHttpClientHandler();
-            
-            // 身份认证处理
-            await ActoryProxyAuthenticator.AuthenticateAsync(
-                new DaprActorProxyAuthenticateContext(
-                    httpClientHandler, remoteServiceConfig, actorProxyConfig.RemoteServiceName));
 
             AddHeaders(httpClientHandler);
+
+            httpClientHandler.PreConfigure(async (requestMessage) =>
+            {
+                // 占位
+                var httpClient = HttpClientFactory.Create(AbpDaprActorsModule.DaprHttpClient);
+
+                await ClientAuthenticator.Authenticate(
+                    new RemoteServiceHttpClientAuthenticateContext(
+                        httpClient,
+                        requestMessage,
+                        remoteServiceConfig,
+                        actorProxyConfig.RemoteServiceName));
+                // 标头
+                if (requestMessage.Headers.Authorization == null &&
+                    httpClient.DefaultRequestHeaders.Authorization != null)
+                {
+                    requestMessage.Headers.Authorization = httpClient.DefaultRequestHeaders.Authorization;
+                }
+            });
 
             // 代理工厂
             var proxyFactory = new ActorProxyFactory(actorProxyOptions, (HttpMessageHandler)httpClientHandler);
 
-            await MakeRequestAsync(invocation, proxyFactory, remoteServiceConfig);
+            await MakeRequestAsync(invocation, proxyFactory);
         }
 
         private async Task MakeRequestAsync(
             IAbpMethodInvocation invocation,
-            ActorProxyFactory proxyFactory,
-            DaprActorConfiguration configuration
+            ActorProxyFactory proxyFactory
             )
         {
-            var actorId = new ActorId(configuration.ActorId);
-
             var invokeType = typeof(TService);
+
             // 约定的 RemoteServiceAttribute 为Actor名称
             var remoteServiceAttr = invokeType.GetTypeInfo().GetCustomAttribute<RemoteServiceAttribute>();
             var actorType = remoteServiceAttr != null
                 ? remoteServiceAttr.Name
                 : invokeType.Name;
-            
+
+            var actorId = new ActorId(invokeType.FullName);
 
             try
             {
@@ -155,7 +176,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
             var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
             if (!currentCulture.IsNullOrEmpty())
             {
-                handler.PreConfigure(request => request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture)));
+                handler.AcceptLanguage(currentCulture);
             }
         }
     }

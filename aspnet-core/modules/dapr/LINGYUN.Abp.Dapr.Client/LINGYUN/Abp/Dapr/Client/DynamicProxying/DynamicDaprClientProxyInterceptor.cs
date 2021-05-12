@@ -172,9 +172,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
                 new RemoteServiceHttpClientAuthenticateContext(
                     httpClient,
                     requestMessage,
-                    new RemoteServiceConfiguration(
-                        remoteServiceConfig.BaseUrl, 
-                        remoteServiceConfig.Version),
+                    remoteServiceConfig,
                     clientConfig.RemoteServiceName
                 )
             );

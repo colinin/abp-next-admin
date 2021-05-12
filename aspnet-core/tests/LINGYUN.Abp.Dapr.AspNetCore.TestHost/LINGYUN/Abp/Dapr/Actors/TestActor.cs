@@ -13,11 +13,11 @@ namespace LINGYUN.Abp.Dapr.Actors
         {
         }
 
-        public async Task<ListResultDto<NameValue>> GetAsync()
+        public async Task<List<NameValue>> GetAsync()
         {
             var values = await GetValuesByStateAsync();
 
-            return new ListResultDto<NameValue>(values);
+            return values;
         }
 
         public async Task<NameValue> UpdateAsync()
