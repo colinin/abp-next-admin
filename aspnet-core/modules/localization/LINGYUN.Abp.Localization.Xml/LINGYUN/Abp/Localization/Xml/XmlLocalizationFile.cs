@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace LINGYUN.Abp.Localization.Xml
 {
     [Serializable]
-    [XmlRoot(Namespace = "lingyun.abp", ElementName = "localization")]
+    [XmlRoot(ElementName = "localization")]
     public class XmlLocalizationFile
     {
         [XmlElement("culture")]
