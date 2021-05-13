@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using RulesEngine.Models;
@@ -10,38 +11,43 @@ using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
 {
-    public abstract class FileProviderWorkflowRulesContributor : IWorkflowRulesContributor
+    public abstract class FileProviderWorkflowRulesResolveContributor : WorkflowRulesResolveContributorBase
     {
-        protected IMemoryCache RulesCache { get; }
-        protected IJsonSerializer JsonSerializer { get; }
+        protected IMemoryCache RulesCache { get; private set; }
+        protected IJsonSerializer JsonSerializer { get; private set; }
 
         protected IFileProvider FileProvider { get; private set; }
 
-        protected FileProviderWorkflowRulesContributor(
-            IMemoryCache ruleCache,
-            IJsonSerializer jsonSerializer)
+        protected FileProviderWorkflowRulesResolveContributor()
         {
-            RulesCache = ruleCache;
-            JsonSerializer = jsonSerializer;
         }
 
-        public void Initialize()
+        public override void Initialize(RulesInitializationContext context)
         {
-            FileProvider = BuildFileProvider();
+            Initialize(context.ServiceProvider);
+
+            RulesCache = context.ServiceProvider.GetRequiredService<IMemoryCache>();
+            JsonSerializer = context.ServiceProvider.GetRequiredService<IJsonSerializer>();
+
+            FileProvider = BuildFileProvider(context);
         }
 
-        protected abstract IFileProvider BuildFileProvider();
+        protected virtual void Initialize(IServiceProvider serviceProvider)
+        {
+        }
 
-        public async Task<WorkflowRules[]> LoadAsync<T>(CancellationToken cancellationToken = default)
+        protected abstract IFileProvider BuildFileProvider(RulesInitializationContext context);
+
+        public override async Task ResolveAsync(IWorkflowRulesResolveContext context)
         {
             if (FileProvider != null)
             {
-                return await GetCachedRulesAsync<T>(cancellationToken);
+                context.WorkflowRules = await GetCachedRulesAsync(context.Type);
             }
-            return new WorkflowRules[0];
+            context.Handled = true;
         }
 
-        public void Shutdown()
+        public override void Shutdown()
         {
             if (FileProvider != null && FileProvider is IDisposable resource)
             {
@@ -49,28 +55,28 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
             }
         }
 
-        private async Task<WorkflowRules[]> GetCachedRulesAsync<T>(CancellationToken cancellationToken = default)
+        private async Task<WorkflowRules[]> GetCachedRulesAsync(Type type, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var ruleId = GetRuleId<T>();
+            var ruleId = GetRuleId(type);
 
             return await RulesCache.GetOrCreateAsync(ruleId,
                 async (entry) =>
                 {
                     entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
 
-                    return await GetFileSystemRulesAsync<T>(cancellationToken);
+                    return await GetFileSystemRulesAsync(type, cancellationToken);
                 });
         }
-        protected abstract int GetRuleId<T>();
+        protected abstract int GetRuleId(Type type);
 
-        protected abstract string GetRuleName<T>();
+        protected abstract string GetRuleName(Type type);
 
-        protected virtual async Task<WorkflowRules[]> GetFileSystemRulesAsync<T>(CancellationToken cancellationToken = default)
+        protected virtual async Task<WorkflowRules[]> GetFileSystemRulesAsync(Type type, CancellationToken cancellationToken = default)
         {
-            var ruleId = GetRuleId<T>();
-            var ruleFile = GetRuleName<T>();
+            var ruleId = GetRuleId(type);
+            var ruleFile = GetRuleName(type);
             var fileInfo = FileProvider.GetFileInfo(ruleFile);
             if (fileInfo != null && fileInfo.Exists)
             {

@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using RulesEngine;
+﻿using RulesEngine;
 using RulesEngine.Interfaces;
 using RulesEngine.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,50 +13,33 @@ namespace LINGYUN.Abp.Rules.RulesEngine
     public class RulesEngineContributor : RuleContributorBase, ISingletonDependency
     {
         private IRulesEngine _ruleEngine;
-        private readonly IEnumerable<IWorkflowRulesContributor> _workflowRulesContributors;
+        private readonly IWorkflowRulesResolver _workflowRulesResolver;
 
         public RulesEngineContributor(
-            IServiceProvider serviceProvider,
-            IOptions<AbpRulesEngineOptions> options)
+            IWorkflowRulesResolver workflowRulesResolver)
         {
-            _workflowRulesContributors = options.Value
-                .Contributors
-                .Select(serviceProvider.GetRequiredService)
-                .Cast<IWorkflowRulesContributor>()
-                .ToArray();
+            _workflowRulesResolver = workflowRulesResolver;
         }
 
         public override void Initialize(RulesInitializationContext context)
         {
             _ruleEngine = CreateRulesEngine();
 
-            foreach (var contributor in _workflowRulesContributors)
-            {
-                contributor.Initialize();
-            }
+            _workflowRulesResolver.Initialize(context);
         }
 
         public override async Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
         {
-            List<WorkflowRules> workflowRules = new();
+            var result = await _workflowRulesResolver.ResolveWorkflowRulesAsync(typeof(T));
 
-            foreach (var contributor in _workflowRulesContributors)
+            if (result.WorkflowRules.Any())
             {
-                workflowRules.AddRange(await contributor.LoadAsync<T>(cancellationToken));
-            }
-
-            if (workflowRules.Any())
-            {
-                await ExecuteRulesAsync(input, workflowRules.ToArray(), @params);
+                await ExecuteRulesAsync(input, result.WorkflowRules.ToArray(), @params);
             }
         }
 
         public override void Shutdown()
         {
-            foreach (var contributor in _workflowRulesContributors)
-            {
-                contributor.Shutdown();
-            }
         }
         /// <summary>
         /// 重写自行构建规则引擎
