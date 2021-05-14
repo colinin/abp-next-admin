@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -23,15 +23,12 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Auditing;
@@ -46,7 +43,6 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -63,8 +59,6 @@ namespace AuthServer.Host
     [DependsOn(
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
@@ -81,6 +75,7 @@ namespace AuthServer.Host
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule)
@@ -133,15 +128,6 @@ namespace AuthServer.Host
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
-
-            // 请求代理配置
-            Configure<ForwardedHeadersOptions>(options =>
-            {
-                configuration.GetSection("App:Forwarded").Bind(options);
-                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -300,8 +286,6 @@ namespace AuthServer.Host
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            // 从请求头中解析真实的客户机连接信息
-            app.UseForwardedHeaders();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

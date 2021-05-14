@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Aliyun.SettingManagement;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
@@ -17,7 +18,6 @@ using LINGYUN.Abp.TenantManagement;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.ApiGateway;
 using LINGYUN.Platform;
-using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -30,8 +30,6 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -52,7 +50,6 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -65,7 +62,6 @@ using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
-using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.BackendAdmin
@@ -110,6 +106,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAliyunSmsModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpAutofacModule)
         )]
     public class BackendAdminHostModule : AbpModule
@@ -134,15 +131,6 @@ namespace LINGYUN.Abp.BackendAdmin
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = hostingEnvironment.BuildConfiguration();
-
-            // 请求代理配置
-            Configure<ForwardedHeadersOptions>(options =>
-            {
-                configuration.GetSection("App:Forwarded").Bind(options);
-                // 对于生产环境,为安全考虑需要在配置中指定受信任代理服务器
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
 
             // 配置Ef
             Configure<AbpDbContextOptions>(options =>
@@ -345,8 +333,6 @@ namespace LINGYUN.Abp.BackendAdmin
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            // 代理的中间件应放在其他中间件之前
-            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统

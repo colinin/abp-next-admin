@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -55,6 +56,7 @@ namespace LINGYUN.Abp.LocalizationManagement
         typeof(AbpCAPEventBusModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpAutofacModule)
         )]
     public class AbpLocalizationManagementHttpApiHostModule : AbpModule
@@ -233,7 +235,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             // 本地化
             app.UseAbpRequestLocalization();
             // 多租户

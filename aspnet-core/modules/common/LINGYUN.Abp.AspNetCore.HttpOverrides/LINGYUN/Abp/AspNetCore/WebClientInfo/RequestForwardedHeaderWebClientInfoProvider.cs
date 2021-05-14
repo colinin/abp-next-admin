@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.AspNetCore.WebClientInfo
             if (requestHeaders != null &&
                 requestHeaders.TryGetValue(Options.ForwardedForHeaderName, out StringValues headers) == true)
             {
-                if (StringValues.IsNullOrEmpty(headers))
+                if (!StringValues.IsNullOrEmpty(headers))
                 {
                     return headers.Last();
                 }
