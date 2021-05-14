@@ -107,7 +107,7 @@ namespace LINGYUN.Abp.EventBus.CAP
         {
             if (attribute.Group == null)
             {
-                attribute.Group = CapOptions.DefaultGroup + "." + CapOptions.Version;
+                attribute.Group = CapOptions.DefaultGroupName + "." + CapOptions.Version;
             }
             else
             {
