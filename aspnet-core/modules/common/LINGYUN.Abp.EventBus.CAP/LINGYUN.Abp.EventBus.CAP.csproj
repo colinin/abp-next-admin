@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace />
     <Description>Cap分布式事件总线</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP" Version="3.1.2" />
+    <PackageReference Include="DotNetCore.CAP" Version="5.0.2" />
     <PackageReference Include="Volo.Abp.BackgroundWorkers" Version="4.3.0" />
     <PackageReference Include="Volo.Abp.EventBus" Version="4.3.0" />
   </ItemGroup>
