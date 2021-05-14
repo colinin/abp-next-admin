@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.ApiGateway.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,8 +20,6 @@ using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.Autofac;
@@ -29,7 +28,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Encryption;
@@ -44,7 +42,8 @@ namespace LINGYUN.ApiGateway
         typeof(AbpAutoMapperModule),
         typeof(ApiGatewayHttpApiClientModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpAspNetCoreModule)
+        typeof(AbpAspNetCoreModule),
+        typeof(AbpAspNetCoreHttpOverridesModule)
         )]
     public class ApiGatewayHostModule : AbpModule
     {
@@ -195,8 +194,7 @@ namespace LINGYUN.ApiGateway
         {
             var app = context.GetApplicationBuilder();
 
-            // 网关不需要加代理中间件
-
+            app.UseForwardedHeaders();
             app.UseAuditing();
             app.UseStaticFiles();
             app.UseRouting();
@@ -210,6 +208,7 @@ namespace LINGYUN.ApiGateway
                     appNext.UseRouting();
                     appNext.UseConfiguredEndpoints();
                 });
+
             // 启用ws协议
             app.UseWebSockets();
             app.UseOcelot().Wait();

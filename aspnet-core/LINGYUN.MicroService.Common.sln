@@ -156,6 +156,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.AspNetCore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.Tests", "tests\LINGYUN.Abp.Dapr.Actors.Tests\LINGYUN.Abp.Dapr.Actors.Tests.csproj", "{CF30221B-CA7A-42CD-B91A-B7224AB2F38B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{191BB108-546E-4E70-978E-D6A8149C319C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -406,6 +408,10 @@ Global
 		{CF30221B-CA7A-42CD-B91A-B7224AB2F38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF30221B-CA7A-42CD-B91A-B7224AB2F38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF30221B-CA7A-42CD-B91A-B7224AB2F38B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191BB108-546E-4E70-978E-D6A8149C319C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191BB108-546E-4E70-978E-D6A8149C319C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191BB108-546E-4E70-978E-D6A8149C319C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191BB108-546E-4E70-978E-D6A8149C319C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -484,6 +490,7 @@ Global
 		{26E87199-F0AD-4B30-B0E4-080B12E6F8FC} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{8968EDAF-9F5C-4786-AF2A-D3928B70C3EC} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{CF30221B-CA7A-42CD-B91A-B7224AB2F38B} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
+		{191BB108-546E-4E70-978E-D6A8149C319C} = {086BE5BE-8594-4DA7-8819-935FEF76DABD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}
