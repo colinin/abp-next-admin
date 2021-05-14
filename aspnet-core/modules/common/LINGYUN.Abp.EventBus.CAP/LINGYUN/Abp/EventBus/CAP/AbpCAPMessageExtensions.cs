@@ -16,16 +16,17 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <returns></returns>
         public static bool TryGetTenantId(
             this Message message,
-            out Guid tenantId)
+            out Guid? tenantId)
         {
             if (message.Headers.TryGetValue(AbpCAPHeaders.TenantId, out string tenantStr))
             {
-                if (Guid.TryParse(tenantStr, out tenantId))
+                if (Guid.TryParse(tenantStr, out Guid id))
                 {
+                    tenantId = id;
                     return true;
                 }
             }
-
+            tenantId = null;
             return false;
         }
         /// <summary>
@@ -36,7 +37,7 @@ namespace LINGYUN.Abp.EventBus.CAP
         public static Guid? GetTenantIdOrNull(
             this Message message)
         {
-            if (message.TryGetTenantId(out Guid tenantId))
+            if (message.TryGetTenantId(out Guid? tenantId))
             {
                 return tenantId;
             }
