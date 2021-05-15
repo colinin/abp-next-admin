@@ -188,7 +188,7 @@
             CAP消息扩展
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.TryGetTenantId(DotNetCore.CAP.Messages.Message,System.Guid@)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.TryGetTenantId(DotNetCore.CAP.Messages.Message,System.Nullable{System.Guid}@)">
             <summary>
             尝试获取消息标头中的租户标识
             </summary>
