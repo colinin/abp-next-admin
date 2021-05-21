@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP" Version="5.0.2" />
+    <PackageReference Include="DotNetCore.CAP" Version="5.0.3" />
     <PackageReference Include="Volo.Abp.BackgroundWorkers" Version="4.3.0" />
     <PackageReference Include="Volo.Abp.EventBus" Version="4.3.0" />
   </ItemGroup>
