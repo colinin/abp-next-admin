@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LINGYUN.Abp.IdentityServer4.HttpApi.Host
+namespace LINGYUN.Abp.IdentityServer4
 {
     public class Startup
     {

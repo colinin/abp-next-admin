@@ -11,18 +11,9 @@ namespace LINGYUN.ApiGateway
     {
         public static int Main(string[] args)
         {
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-            Log.Logger = new LoggerConfiguration()
-               .ReadFrom.Configuration(configuration)
-               .CreateLogger();
             try
             {
-                Log.Information("Starting web host.");
+                Log.Information("Starting ApiGatewayAdmin.Host.");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
@@ -43,7 +34,10 @@ namespace LINGYUN.ApiGateway
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseSerilog()
+                .UseSerilog((context, provider, config) =>
+                {
+                    config.ReadFrom.Configuration(context.Configuration);
+                })
                 .UseAutofac();
     }
 }

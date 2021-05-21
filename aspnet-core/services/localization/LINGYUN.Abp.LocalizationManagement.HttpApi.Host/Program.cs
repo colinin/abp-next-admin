@@ -5,26 +5,18 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace LINGYUN.Abp.LocalizationManagement.HttpApi.Host
+namespace LINGYUN.Abp.LocalizationManagement
 {
     public class Program
     {
         public static int Main(string[] args)
         {
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-            Log.Logger = new LoggerConfiguration()
-               .ReadFrom.Configuration(configuration)
-               .CreateLogger();
             try
             {
-                Log.Information("Starting web host.");
-                CreateHostBuilder(args).Build().Run();
+                var hostBuilder = CreateHostBuilder(args).Build();
+                Log.Information("Starting LocalizationManagement.Host.");
+                hostBuilder.Run();
+
                 return 0;
             }
             catch (Exception ex)
@@ -39,12 +31,15 @@ namespace LINGYUN.Abp.LocalizationManagement.HttpApi.Host
         }
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
-           Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+           Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseSerilog()
+                .UseSerilog((context, provider, config) =>
+                {
+                    config.ReadFrom.Configuration(context.Configuration);
+                })
                 .UseAutofac();
     }
 }
