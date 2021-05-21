@@ -21,6 +21,10 @@ namespace DotNetCore.CAP
     public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
     {
         /// <summary>
+        /// CAP配置
+        /// </summary>
+        protected CapOptions CapOptions { get; }
+        /// <summary>
         /// Abp分布式事件配置
         /// </summary>
         protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
@@ -34,8 +38,10 @@ namespace DotNetCore.CAP
         /// </summary>
         public ConsumerServiceSelector(
             IServiceProvider serviceProvider,
+            IOptions<CapOptions> capOptions,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions) : base(serviceProvider)
         {
+            CapOptions = capOptions.Value;
             ServiceProvider = serviceProvider;
             AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         }
@@ -70,9 +76,12 @@ namespace DotNetCore.CAP
                             if (executorDescriptorList.Any(x => new ConsumerExecutorDescriptorComparer().Equals(x, consumerExecutorDescriptor)))
                             {
                                 // 如果存在多个消费者,后续的消费者需要重新定义分组才能不被 CAP 框架过滤掉
-                                consumerExecutorDescriptor.Attribute.Group = handler.IsGenericType
-                                    ? handler.GetGenericTypeDefinition().FullName
-                                    : handler.FullName;
+                                var groupAliaName = handler.IsGenericType
+                                    ? handler.GetGenericTypeDefinition().Name
+                                    : handler.Name;
+
+                                // TODO: 2021-05-21 直接使用类型全名作为GroupName会引起用户困惑,加上组别名称在前
+                                consumerExecutorDescriptor.Attribute.Group = $"{CapOptions.DefaultGroupName}.{groupAliaName}";
                                 SetSubscribeAttribute(consumerExecutorDescriptor.Attribute);
 
                             }
