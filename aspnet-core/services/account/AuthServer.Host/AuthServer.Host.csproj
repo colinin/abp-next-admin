@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.0.2" />
-    <PackageReference Include="DotNetCore.CAP.MySql" Version="5.0.2" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.0.2" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.0.3" />
+    <PackageReference Include="DotNetCore.CAP.MySql" Version="5.0.3" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.0.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
