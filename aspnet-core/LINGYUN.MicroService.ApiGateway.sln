@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{7588F35B-7C0E-4D80-B43A-8A5C9AC6FE03}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ApiGateway.Host", "services\apigateway\LINGYUN.Abp.ApiGateway.Host\LINGYUN.Abp.ApiGateway.Host.csproj", "{A38139F5-A856-4CA2-89F8-51798ED557CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{7588F35B-7C0E-4D80-B43A-8A5C9AC6FE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7588F35B-7C0E-4D80-B43A-8A5C9AC6FE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7588F35B-7C0E-4D80-B43A-8A5C9AC6FE03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A38139F5-A856-4CA2-89F8-51798ED557CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A38139F5-A856-4CA2-89F8-51798ED557CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A38139F5-A856-4CA2-89F8-51798ED557CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A38139F5-A856-4CA2-89F8-51798ED557CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{D6629DD3-BA0F-44B5-A97F-3B992ECAB85D} = {630FB448-8C5C-438F-930D-B0209407DE6A}
 		{1DA1835B-9EA4-4095-A8CF-10E2778206D3} = {D6629DD3-BA0F-44B5-A97F-3B992ECAB85D}
 		{7588F35B-7C0E-4D80-B43A-8A5C9AC6FE03} = {D6629DD3-BA0F-44B5-A97F-3B992ECAB85D}
+		{A38139F5-A856-4CA2-89F8-51798ED557CC} = {F3B1B755-37B6-420B-9E82-A5BDFF2BF647}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B327C65A-BD15-480D-825E-9D5A870C521A}

@@ -5,7 +5,7 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace LINGYUN.ApiGateway
+namespace LINGYUN.Abp.ApiGateway
 {
     public class Program
     {
