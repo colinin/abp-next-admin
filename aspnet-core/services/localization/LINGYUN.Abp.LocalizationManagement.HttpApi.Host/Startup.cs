@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.LocalizationManagement.HttpApi.Host
+namespace LINGYUN.Abp.LocalizationManagement
 {
     public class Startup
     {

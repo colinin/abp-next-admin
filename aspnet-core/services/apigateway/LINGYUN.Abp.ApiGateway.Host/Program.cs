@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.ApiGateway
             try
             {
                 var hostBuilder = CreateHostBuilder(args).Build();
-                Log.Information("Starting web host.");
+                Log.Information("Starting ApiGateway.Host.");
                 hostBuilder.Run();
 
                 return 0;
@@ -34,9 +34,7 @@ namespace LINGYUN.Abp.ApiGateway
            Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder
-                        .UseKestrel()
-                        .UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog((context, provider, config) =>
                 {

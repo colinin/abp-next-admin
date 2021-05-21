@@ -11,7 +11,7 @@ namespace AuthServer.Host
         {
             try
             {
-                Log.Information("Starting web host.");
+                Log.Information("Starting AuthServer.Host.");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
@@ -28,13 +28,13 @@ namespace AuthServer.Host
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-                .UseSerilog((ctx, cfg) =>
-                {
-                    cfg = cfg.ReadFrom.Configuration(ctx.Configuration);
-                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .UseSerilog((context, provider, config) =>
+                {
+                    config.ReadFrom.Configuration(context.Configuration);
                 })
                 .UseAutofac();
     }
