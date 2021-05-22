@@ -58,9 +58,9 @@ const filterDynamicRoutes = (menus: Menu[]) => {
         title: menu.meta.title,
         displayName: menu.displayName,
         roles: mapMetaArray('roles', menu.meta) // 需要转换为正确的array类型
-      }
+      },
+      component: resolve => require([`@/${menu.component}`], resolve) // 需要这种格式才可以正确加载动态路由
     }
-    r.component = resolve => require([`@/${menu.component}`], resolve) // 需要这种格式才可以正确加载动态路由
     if (menu.children && menu.children.length > 0) {
       r.children = filterDynamicRoutes(menu.children)
     }
