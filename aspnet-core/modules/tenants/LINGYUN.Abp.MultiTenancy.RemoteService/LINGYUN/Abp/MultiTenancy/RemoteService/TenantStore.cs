@@ -124,7 +124,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
                 }
                 Logger.LogDebug($"Not found in the cache, getting from the remote service: {cacheKey}");
 
-                var tenantDto = await _tenantAppService.GetAsync(new TenantGetByNameInputDto(name));
+                var tenantDto = await _tenantAppService.GetAsync(name);
                 var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(tenantDto.Id);
                 var connectionStrings = new ConnectionStrings();
                 foreach (var tenantConnectionString in tenantConnectionStringsDto.Items)

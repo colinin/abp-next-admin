@@ -2,6 +2,7 @@
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
@@ -18,6 +19,11 @@ namespace LINGYUN.ApiGateway
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(ApiGatewayHttpApiModule).Assembly);
+            });
+
+            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(ApiGatewayResource), typeof(ApiGatewayApplicationContractsModule).Assembly);
             });
         }
 

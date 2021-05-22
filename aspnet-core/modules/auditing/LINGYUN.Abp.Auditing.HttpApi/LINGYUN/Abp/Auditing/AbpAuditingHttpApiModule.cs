@@ -1,6 +1,7 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AuditLogging.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -17,6 +18,11 @@ namespace LINGYUN.Abp.Auditing
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAuditingHttpApiModule).Assembly);
+            });
+
+            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.AddAssemblyResource(typeof(AuditLoggingResource), typeof(AbpAuditingApplicationContractsModule).Assembly);
             });
         }
 
