@@ -9,6 +9,11 @@
             消费者查找器
             </summary>
         </member>
+        <member name="P:DotNetCore.CAP.ConsumerServiceSelector.CapOptions">
+            <summary>
+            CAP配置
+            </summary>
+        </member>
         <member name="P:DotNetCore.CAP.ConsumerServiceSelector.AbpDistributedEventBusOptions">
             <summary>
             Abp分布式事件配置
@@ -19,7 +24,7 @@
             服务提供者
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
+        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{DotNetCore.CAP.CapOptions},Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
             <summary>
             Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
             </summary>

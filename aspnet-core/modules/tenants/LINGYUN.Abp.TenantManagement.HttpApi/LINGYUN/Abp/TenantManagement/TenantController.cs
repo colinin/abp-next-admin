@@ -55,9 +55,9 @@ namespace LINGYUN.Abp.TenantManagement
 
         [HttpGet]
         [Route("{id}/connection-string/{name}")]
-        public virtual Task<TenantConnectionStringDto> GetConnectionStringAsync(TenantConnectionGetByNameInputDto tenantConnectionGetByName)
+        public virtual Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
         {
-            return TenantAppService.GetConnectionStringAsync(tenantConnectionGetByName);
+            return TenantAppService.GetConnectionStringAsync(id, name);
         }
 
         [HttpGet]
@@ -76,16 +76,16 @@ namespace LINGYUN.Abp.TenantManagement
 
         [HttpDelete]
         [Route("{id}/connection-string/{name}")]
-        public virtual Task DeleteConnectionStringAsync(TenantConnectionGetByNameInputDto tenantConnectionGetByName)
+        public virtual Task DeleteConnectionStringAsync(Guid id, string name)
         {
-            return TenantAppService.DeleteConnectionStringAsync(tenantConnectionGetByName);
+            return TenantAppService.DeleteConnectionStringAsync(id, name);
         }
 
         [HttpGet]
-        [Route("name/{name}")]
-        public virtual Task<TenantDto> GetAsync(TenantGetByNameInputDto tenantGetByNameInput)
+        [Route("by-name/{name}")]
+        public virtual Task<TenantDto> GetAsync(string name)
         {
-            return TenantAppService.GetAsync(tenantGetByNameInput);
+            return TenantAppService.GetAsync(name);
         }
     }
 }

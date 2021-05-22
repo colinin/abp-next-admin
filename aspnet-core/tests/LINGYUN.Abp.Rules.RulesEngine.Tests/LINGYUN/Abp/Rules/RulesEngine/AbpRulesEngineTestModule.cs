@@ -1,7 +1,7 @@
+using LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical;
 using LINGYUN.Abp.Tests;
 using System.IO;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LINGYUN.Abp.Rules.RulesEngine
 {
@@ -12,9 +12,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddMemoryCache();
-
-            Configure<AbpRulesEngineOptions>(options =>
+            Configure<AbpRulesEnginePthsicalFileResolveOptions>(options =>
             {
                 options.PhysicalPath = Path.Combine(Directory.GetCurrentDirectory(), "Rules");
             });

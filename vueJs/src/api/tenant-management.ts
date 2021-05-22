@@ -51,26 +51,26 @@ export default class TenantService {
 
   public static getTenantConnections(id: string) {
     let _url = '/api/tenant-management/tenants/'
-    _url += id + '/concatenation'
+    _url += id + '/connection-string'
     return ApiService.Get<ListResultDto<TenantConnectionString>>(_url, serviceUrl)
   }
 
   public static getTenantConnectionByName(id: string, name: string) {
     let _url = '/api/tenant-management/tenants/'
-    _url += id + '/concatenation/'
+    _url += id + '/connection-string/'
     _url += name
     return ApiService.Get<TenantConnectionString>(_url, serviceUrl)
   }
 
   public static setTenantConnection(id: string, payload: TenantConnectionString) {
     let _url = '/api/tenant-management/tenants/'
-    _url += id + '/concatenation'
+    _url += id + '/connection-string'
     return ApiService.Put<TenantConnectionString>(_url, payload, serviceUrl)
   }
 
   public static deleteTenantConnectionByName(id: string, name: string) {
     let _url = '/api/tenant-management/tenants/'
-    _url += id + '/concatenation/'
+    _url += id + '/connection-string/'
     _url += name
     return ApiService.Delete(_url, serviceUrl)
   }

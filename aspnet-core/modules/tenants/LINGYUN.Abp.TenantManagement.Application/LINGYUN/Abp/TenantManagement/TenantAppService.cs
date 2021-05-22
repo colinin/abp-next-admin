@@ -38,12 +38,12 @@ namespace LINGYUN.Abp.TenantManagement
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
-        public virtual async Task<TenantDto> GetAsync(TenantGetByNameInputDto tenantGetByNameInput)
+        public virtual async Task<TenantDto> GetAsync(string name)
         {
-            var tenant = await TenantRepository.FindByNameAsync(tenantGetByNameInput.Name, false);
+            var tenant = await TenantRepository.FindByNameAsync(name, false);
             if (tenant == null)
             {
-                throw new UserFriendlyException(L["TenantNotFoundByName", tenantGetByNameInput.Name]);
+                throw new UserFriendlyException(L["TenantNotFoundByName", name]);
             }
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
@@ -119,15 +119,15 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task<TenantConnectionStringDto> GetConnectionStringAsync(TenantConnectionGetByNameInputDto tenantConnectionGetByName)
+        public virtual async Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
         {
-            var tenant = await TenantRepository.GetAsync(tenantConnectionGetByName.Id);
+            var tenant = await TenantRepository.GetAsync(id);
 
-            var tenantConnectionString = tenant.FindConnectionString(tenantConnectionGetByName.Name);
+            var tenantConnectionString = tenant.FindConnectionString(name);
 
             return new TenantConnectionStringDto
             {
-                Name = tenantConnectionGetByName.Name,
+                Name = name,
                 Value = tenantConnectionString
             };
         }
@@ -164,11 +164,11 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task DeleteConnectionStringAsync(TenantConnectionGetByNameInputDto tenantConnectionGetByName)
+        public virtual async Task DeleteConnectionStringAsync(Guid id, string name)
         {
-            var tenant = await TenantRepository.GetAsync(tenantConnectionGetByName.Id);
+            var tenant = await TenantRepository.GetAsync(id);
 
-            tenant.RemoveConnectionString(tenantConnectionGetByName.Name);
+            tenant.RemoveConnectionString(name);
 
             var updateEventData = new UpdateEventData
             {
