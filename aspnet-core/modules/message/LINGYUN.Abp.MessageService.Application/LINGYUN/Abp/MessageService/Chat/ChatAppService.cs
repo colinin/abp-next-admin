@@ -9,6 +9,7 @@ using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
+    [Authorize]
     public class ChatAppService : ApplicationService, IChatAppService
     {
         protected IMessageSender MessageSender => LazyServiceProvider.LazyGetRequiredService<IMessageSender>();
@@ -24,7 +25,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userGroupStore = userGroupStore;
         }
 
-        [Authorize]
         public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
         {
             var chatMessageCount = await _messageStore

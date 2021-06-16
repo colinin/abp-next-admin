@@ -18,12 +18,6 @@ const componentsRouter: RouteConfig = {
       meta: { title: 'tinymce' }
     },
     {
-      path: 'markdown',
-      component: () => import(/* webpackChunkName: "markdown" */ '@/views/components-demo/markdown.vue'),
-      name: 'MarkdownDemo',
-      meta: { title: 'markdown' }
-    },
-    {
       path: 'json-editor',
       component: () => import(/* webpackChunkName: "json-editor" */ '@/views/components-demo/json-editor.vue'),
       name: 'JsonEditorDemo',

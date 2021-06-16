@@ -15,7 +15,7 @@
     "test:unit": "jest --clearCache && vue-cli-service test:unit"
   },
   "dependencies": {
-    "@microsoft/signalr": "^3.1.4",
+    "@microsoft/signalr": "^5.0.7",
     "@tinymce/tinymce-vue": "^3.2.0",
     "axios": "^0.21.1",
     "clipboard": "^2.0.6",
@@ -43,7 +43,6 @@
     "simple-progress-webpack-plugin": "^1.1.2",
     "sortablejs": "^1.10.2",
     "tinymce": "^5.2.1",
-    "tui-editor": "^1.4.10",
     "view-design": "^4.2.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

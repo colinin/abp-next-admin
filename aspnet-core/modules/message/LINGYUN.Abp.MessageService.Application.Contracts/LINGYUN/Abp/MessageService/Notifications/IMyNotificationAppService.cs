@@ -14,8 +14,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             >,
         IDeleteAppService<long>
     {
-        Task SendNofiterAsync(NotificationSendDto input);
-
         Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync();
     }
 }
