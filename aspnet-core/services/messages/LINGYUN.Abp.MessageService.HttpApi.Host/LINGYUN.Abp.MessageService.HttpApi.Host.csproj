@@ -45,6 +45,7 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
+    <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />

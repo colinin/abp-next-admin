@@ -1,10 +1,9 @@
 ﻿using Hangfire;
 using JetBrains.Annotations;
+using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.BackgroundJobs;
 
-namespace LINGYUN.Abp.BackgroundJobs.Hangfire
+namespace Volo.Abp.BackgroundJobs
 {
     public static class IBackgroundJobManagerExtensions
     {
@@ -27,7 +26,7 @@ namespace LINGYUN.Abp.BackgroundJobs.Hangfire
 
             var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
 
-            RecurringJob.AddOrUpdate<HangfireJobExecutionAdapter<TArgs>>(jobName, adapter => adapter.Execute(args), cron);
+            RecurringJob.AddOrUpdate<HangfireJobExecutionAdapter<TArgs>>(jobName, adapter => adapter.ExecuteAsync(args), cron);
 
             return Task.CompletedTask;
         }

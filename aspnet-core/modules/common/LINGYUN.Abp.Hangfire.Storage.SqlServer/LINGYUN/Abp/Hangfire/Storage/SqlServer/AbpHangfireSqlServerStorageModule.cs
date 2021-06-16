@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Hangfire.Storage.SqlServer
     {
         private SqlServerStorage _jobStorage;
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
 
@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.Hangfire.Storage.SqlServer
                 return _jobStorage;
             });
 
-            context.Services.AddHangfire(config =>
+            PreConfigure<IGlobalConfiguration>(config =>
             {
                 config.UseStorage(_jobStorage);
             });

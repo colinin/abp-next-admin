@@ -11,5 +11,9 @@
     <PackageReference Include="Volo.Abp.HangFire" Version="4.3.0" />
     <PackageReference Include="Volo.Abp.BackgroundJobs" Version="4.3.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj" />
+  </ItemGroup>
 
 </Project>
