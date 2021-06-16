@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.MessageService.Subscriptions;
-using LINGYUN.Abp.MessageService.Utils;
 using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -30,8 +29,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        private readonly ISnowflakeIdGenerator _snowflakeIdGenerator;
-
         private readonly INotificationRepository _notificationRepository;
 
         private readonly IUserNotificationRepository _userNotificationRepository;
@@ -44,7 +41,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             ICurrentTenant currentTenant,
             IJsonSerializer jsonSerializer,
             IUnitOfWorkManager unitOfWorkManager,
-            ISnowflakeIdGenerator snowflakeIdGenerator,
             INotificationRepository notificationRepository,
             IUserSubscribeRepository userSubscribeRepository,
             IUserNotificationRepository userNotificationRepository
@@ -55,7 +51,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             _currentTenant = currentTenant;
             _jsonSerializer = jsonSerializer;
             _unitOfWorkManager = unitOfWorkManager;
-            _snowflakeIdGenerator = snowflakeIdGenerator;
             _notificationRepository = notificationRepository;
             _userSubscribeRepository = userSubscribeRepository;
             _userNotificationRepository = userNotificationRepository;
@@ -322,12 +317,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (_currentTenant.Change(notification.TenantId))
             {
-                // var notifyId = notification.GetId();
-                var notifyId = _snowflakeIdGenerator.Create();
-                // 保存主键，防止前端js long类型溢出
-                // notification.Data["id"] = notifyId.ToString();
-
-                var notify = new Notification(notifyId, notification.Name,
+                var notify = new Notification(
+                    notification.GetId(), 
+                    notification.Name,
                     notification.Data.GetType().AssemblyQualifiedName,
                     _jsonSerializer.Serialize(notification.Data), 
                     notification.Severity, notification.TenantId)

@@ -169,14 +169,14 @@
             constructor
             </summary>
             <param name="messageType"></param>
-            <param name="prigin"></param>
+            <param name="origin"></param>
         </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String)">
             <summary>
             constructor
             </summary>
             <param name="messageType"></param>
-            <param name="prigin"></param>
+            <param name="origin"></param>
             <param name="message"></param>
         </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String,System.Exception)">
@@ -184,7 +184,7 @@
             constructor
             </summary>
             <param name="messageType"></param>
-            <param name="prigin"></param>
+            <param name="origin"></param>
             <param name="message"></param>
             <param name="innerException"></param>
         </member>

@@ -12,4 +12,8 @@
     <PackageReference Include="Volo.Abp.EventBus" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
+  </ItemGroup>
+
 </Project>

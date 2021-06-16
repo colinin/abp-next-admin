@@ -19,6 +19,8 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -34,6 +36,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -104,27 +107,13 @@ namespace LINGYUN.Abp.IdentityServer4
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseMySQL();
-                //if (hostingEnvironment.IsDevelopment())
-                //{
-                //    options.PreConfigure(ctx =>
-                //    {
-                //        ctx.DbContextOptions.EnableDetailedErrors();
-                //        ctx.DbContextOptions.EnableSensitiveDataLogging();
-                //    });
-                //}
             });
 
-            // 解决某些不支持类型的序列化
-            Configure<AbpJsonOptions>(options =>
-            {
-                // See: https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0#always-use-the-newtonsoft-json
-                options.UseHybridSerializer = false;
-            });
             // 中文序列化的编码问题
-            //Configure<AbpSystemTextJsonSerializerOptions>(options =>
-            //{
-            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            //});
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            });
 
             // 加解密
             Configure<AbpStringEncryptionOptions>(options =>
@@ -269,11 +258,6 @@ namespace LINGYUN.Abp.IdentityServer4
                        .AddVirtualJson("/LINGYUN/Abp/IdentityServer4/Localization");
 
                 options.Resources.AddDynamic(typeof(IdentityResource));
-            });
-
-            Configure<AbpClaimsMapOptions>(options =>
-            {
-                options.Maps.TryAdd("name", () => AbpClaimTypes.UserName);
             });
 
             context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

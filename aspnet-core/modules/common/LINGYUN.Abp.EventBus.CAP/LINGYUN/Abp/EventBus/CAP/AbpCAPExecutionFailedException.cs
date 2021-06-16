@@ -21,36 +21,36 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// constructor
         /// </summary>
         /// <param name="messageType"></param>
-        /// <param name="prigin"></param>
-        public AbpCAPExecutionFailedException(MessageType messageType, Message prigin)
+        /// <param name="origin"></param>
+        public AbpCAPExecutionFailedException(MessageType messageType, Message origin)
         {
             MessageType = messageType;
-            Origin = prigin;
+            Origin = origin;
         }
 
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="messageType"></param>
-        /// <param name="prigin"></param>
+        /// <param name="origin"></param>
         /// <param name="message"></param>
-        public AbpCAPExecutionFailedException(MessageType messageType, Message prigin, string message) : base(message)
+        public AbpCAPExecutionFailedException(MessageType messageType, Message origin, string message) : base(message)
         {
             MessageType = messageType;
-            Origin = prigin;
+            Origin = origin;
         }
 
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="messageType"></param>
-        /// <param name="prigin"></param>
+        /// <param name="origin"></param>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public AbpCAPExecutionFailedException(MessageType messageType, Message prigin, string message, Exception innerException) : base(message, innerException)
+        public AbpCAPExecutionFailedException(MessageType messageType, Message origin, string message, Exception innerException) : base(message, innerException)
         {
             MessageType = messageType;
-            Origin = prigin;
+            Origin = origin;
         }
     }
 }

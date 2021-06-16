@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.Group;
-using LINGYUN.Abp.MessageService.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,8 +28,6 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         private readonly IMessageRepository _messageRepository;
 
-        private readonly ISnowflakeIdGenerator _snowflakeIdGenerator;
-
         private readonly IUserChatSettingRepository _userChatSettingRepository;
         public MessageStore(
             IFriendStore friendStore,
@@ -39,7 +36,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             IUnitOfWorkManager unitOfWorkManager,
             IGroupRepository groupRepository,
             IMessageRepository messageRepository,
-            ISnowflakeIdGenerator snowflakeIdGenerator,
             IUserChatSettingRepository userChatSettingRepository)
         {
             _friendStore = friendStore;
@@ -48,7 +44,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             _unitOfWorkManager = unitOfWorkManager;
             _groupRepository = groupRepository;
             _messageRepository = messageRepository;
-            _snowflakeIdGenerator = snowflakeIdGenerator;
             _userChatSettingRepository = userChatSettingRepository;
         }
 
@@ -208,15 +203,18 @@ namespace LINGYUN.Abp.MessageService.Chat
             {
                 throw new BusinessException(MessageServiceErrorCodes.UserHasBlack);
             }
-            var messageId = _snowflakeIdGenerator.Create();
-            var message = new UserMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
+
+            var message = new UserMessage(
+                long.Parse(chatMessage.MessageId), 
+                chatMessage.FormUserId, 
+                chatMessage.FormUserName, 
+                chatMessage.Content, 
+                chatMessage.MessageType);
 
             message.SendToUser(chatMessage.ToUserId.Value);
             message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
 
             await _messageRepository.InsertUserMessageAsync(message, cancellationToken);
-
-            chatMessage.MessageId = messageId.ToString();
         }
 
         protected virtual async Task StoreGroupMessageAsync(
@@ -242,15 +240,18 @@ namespace LINGYUN.Abp.MessageService.Chat
                 // 当前群组不允许匿名发言
                 throw new BusinessException(MessageServiceErrorCodes.GroupNotAllowedToSpeakAnonymously);
             }
-            var messageId = _snowflakeIdGenerator.Create();
-            var message = new GroupMessage(messageId, chatMessage.FormUserId, chatMessage.FormUserName, chatMessage.Content, chatMessage.MessageType);
+
+            var message = new GroupMessage(
+                long.Parse(chatMessage.MessageId), 
+                chatMessage.FormUserId, 
+                chatMessage.FormUserName, 
+                chatMessage.Content, 
+                chatMessage.MessageType);
 
             message.SendToGroup(groupId);
             message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
 
             await _messageRepository.InsertGroupMessageAsync(message, cancellationToken);
-
-            chatMessage.MessageId = messageId.ToString();
         }
     }
 }

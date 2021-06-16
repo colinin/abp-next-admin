@@ -63,7 +63,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
                         return;
                     }
                     Logger.LogDebug($"Found a singalr client, begin senging notifications");
-                    await signalRClients.SendAsync("getNotification", notification, cancellationToken);
+                    await signalRClients.SendAsync(_options.MethodName, notification, cancellationToken);
                 }
                 catch (Exception ex)
                 {

@@ -6,10 +6,6 @@ namespace LINGYUN.Abp.Notifications
     public class AbpNotificationOptions
     {
         /// <summary>
-        /// 通知系统对于某个应用的定义
-        /// </summary>
-        public string Application { get; set; }
-        /// <summary>
         /// 自定义通知集合
         /// </summary>
         public ITypeList<INotificationDefinitionProvider> DefinitionProviders { get; }
@@ -23,7 +19,6 @@ namespace LINGYUN.Abp.Notifications
         public NotificationDataMappingDictionary NotificationDataMappings { get; }
         public AbpNotificationOptions()
         {
-            Application = "Abp";
             PublishProviders = new TypeList<INotificationPublishProvider>();
             DefinitionProviders = new TypeList<INotificationDefinitionProvider>();
             NotificationDataMappings = new NotificationDataMappingDictionary();

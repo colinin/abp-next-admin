@@ -5,14 +5,14 @@ services:
     build:
       context: ./aspnet-core/services/Publish/identityserver
     volumes: 
-      - /var/opt/abp/logs/ids-sts:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\ids-sts:/app/Logs
     restart: always
 
   identity-server-admin:
     build:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes: 
-      - /var/opt/abp/logs/ids-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\ids-admin:/app/Logs
     depends_on: 
       - identity-server-sts
     restart: always
@@ -21,7 +21,7 @@ services:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes: 
-      - /var/opt/abp/logs/backend-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\backend-admin:/app/Logs
     depends_on: 
       - identity-server-sts
     restart: always
@@ -30,15 +30,15 @@ services:
     build:
       context: ./aspnet-core/services/Publish/localization
     volumes: 
-      - /var/opt/abp/logs/localization:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\localization:/app/Logs
     restart: always
 
   platform-service:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes: 
-      - /var/opt/abp/logs/platform:/app/Logs
-      - /var/opt/abp/data/platform:/app/file-blob-storing
+      - D:\Projects\Development\Abp\Application\logs\platform:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\platform:/app/file-blob-storing
     depends_on: 
       - identity-server-sts
     restart: always
@@ -47,7 +47,7 @@ services:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes: 
-      - /var/opt/abp/logs/messages:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\messages:/app/Logs
     depends_on: 
       - identity-server-sts
     restart: always
@@ -56,7 +56,7 @@ services:
     build:
       context: ./aspnet-core/services/Publish/apigateway-admin
     volumes: 
-      - /var/opt/abp/logs/apigateway-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\apigateway-admin:/app/Logs
     depends_on: 
       - identity-server-sts
       - admin-service
@@ -66,7 +66,7 @@ services:
     build:
       context: ./aspnet-core/services/Publish/apigateway-host
     volumes: 
-      - /var/opt/abp/logs/apigateway-host:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\apigateway-host:/app/Logs
     depends_on: 
       - identity-server-sts
       - apigateway-admin-service
