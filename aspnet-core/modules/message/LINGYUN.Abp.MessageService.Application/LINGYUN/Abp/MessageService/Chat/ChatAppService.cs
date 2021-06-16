@@ -128,9 +128,9 @@ namespace LINGYUN.Abp.MessageService.Chat
             // TODO：向其他租户发送消息?
             input.TenantId ??= CurrentTenant.Id;
 
-            await MessageSender.SendMessageAsync(input);
+            var messageId = await MessageSender.SendMessageAsync(input);
 
-            return new ChatMessageSendResultDto(input.MessageId);
+            return new ChatMessageSendResultDto(messageId);
         }
     }
 }

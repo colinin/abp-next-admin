@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.MessageService.Utils;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -22,7 +23,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
     /// 作用在于SignalR客户端只会与一台服务器建立连接,
     /// 只有启用了SignlR服务端的才能真正将消息发布到客户端
     /// </remarks>
-    public class NotificationEventHandler : IDistributedEventHandler<NotificationEventData>, ITransientDependency
+    public class NotificationEventHandler : IDistributedEventHandler<NotificationEto<NotificationData>>, ITransientDependency
     {
         /// <summary>
         /// Reference to <see cref="ILogger<DefaultNotificationDispatcher>"/>.
@@ -36,10 +37,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// Reference to <see cref="IJsonSerializer"/>.
         /// </summary>
         protected IJsonSerializer JsonSerializer { get; }
-        /// <summary>
-        /// Reference to <see cref="ISnowflakeIdGenerator"/>.
-        /// </summary>
-        protected ISnowflakeIdGenerator SnowflakeIdGenerator { get; }
         /// <summary>
         /// Reference to <see cref="IBackgroundJobManager"/>.
         /// </summary>
@@ -69,7 +66,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             IBackgroundJobManager backgroundJobManager,
             IOptions<AbpNotificationOptions> options,
             INotificationStore notificationStore,
-            ISnowflakeIdGenerator snowflakeIdGenerator,
             INotificationDefinitionManager notificationDefinitionManager,
             INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
@@ -78,7 +74,6 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             JsonSerializer = jsonSerializer;
             BackgroundJobManager = backgroundJobManager;
             NotificationStore = notificationStore;
-            SnowflakeIdGenerator = snowflakeIdGenerator;
             NotificationDefinitionManager = notificationDefinitionManager;
             NotificationSubscriptionManager = notificationSubscriptionManager;
             NotificationPublishProviderManager = notificationPublishProviderManager;
@@ -87,19 +82,14 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         }
 
         [UnitOfWork]
-        public virtual async Task HandleEventAsync(NotificationEventData eventData)
+        public virtual async Task HandleEventAsync(NotificationEto<NotificationData> eventData)
         {
-            // 这样做的话就要注意了
-            // 当只有一个消费者订阅时,事件总线会认为消息已经处理,从而发布Ack指令,从消息队列中移除此消息
-            // 可能造成通知数据丢失
-            var application = Options.Application ?? "Abp";
-            if (!string.Equals(application, eventData.Application, StringComparison.InvariantCultureIgnoreCase))
+            // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
+            var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
+            if (notification == null)
             {
-                // 不是当前监听应用的消息不做处理
                 return;
             }
-            // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
-            var notification = NotificationDefinitionManager.Get(eventData.Name);
 
             var notificationInfo = new NotificationInfo
             {
@@ -111,7 +101,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
                 TenantId = eventData.TenantId,
                 Type = notification.NotificationType
             };
-            notificationInfo.SetId(SnowflakeIdGenerator.Create());
+            notificationInfo.SetId(eventData.Id);
 
             // TODO: 可以做成一个接口来序列化消息
             notificationInfo.Data  = NotificationDataConverter.Convert(notificationInfo.Data);

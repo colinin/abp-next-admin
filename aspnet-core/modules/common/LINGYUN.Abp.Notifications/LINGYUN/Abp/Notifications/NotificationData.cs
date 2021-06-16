@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -10,6 +11,8 @@ namespace LINGYUN.Abp.Notifications
     /// TODO: 2020-10-29 针对不同语言的用户,如果在发布时期就本地化语言是错误的设计
     /// 把通知的标题和内容设计为 <see cref="LocalizableStringInfo"/> 让客户端自行本地化
     /// </remarks>
+    [Serializable]
+    [EventName("notifications")]
     public class NotificationData
     {
         /// <summary>

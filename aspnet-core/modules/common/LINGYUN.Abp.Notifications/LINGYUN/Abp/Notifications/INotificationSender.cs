@@ -17,7 +17,8 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="userId">用户,为空标识发给所有订阅用户</param>
         /// <param name="tenantId">租户</param>
         /// <param name="severity">严重级别</param>
-        Task SendNofiterAsync(
+        /// <returns>通知标识</returns>
+        Task<string> SendNofiterAsync(
             string name,
             NotificationData data,
             UserIdentifier user = null,
@@ -31,7 +32,8 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="users">用户列表,为空标识发给所有订阅用户</param>
         /// <param name="tenantId">租户</param>
         /// <param name="severity">严重级别</param>
-        Task SendNofitersAsync(
+        /// <returns>通知标识</returns>
+        Task<string> SendNofitersAsync(
             string name,
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,

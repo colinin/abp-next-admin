@@ -27,6 +27,8 @@ using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -44,6 +46,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -117,17 +120,11 @@ namespace LINGYUN.Platform
                 options.UseMySQL();
             });
 
-            // 解决某些不支持类型的序列化
-            Configure<AbpJsonOptions>(options =>
-            {
-                // See: https://docs.abp.io/en/abp/4.0/Migration-Guides/Abp-4_0#always-use-the-newtonsoft-json
-                options.UseHybridSerializer = false;
-            });
             //// 中文序列化的编码问题
-            //Configure<AbpSystemTextJsonSerializerOptions>(options =>
-            //{
-            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            //});
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            });
 
             Configure<KestrelServerOptions>(options =>
             {

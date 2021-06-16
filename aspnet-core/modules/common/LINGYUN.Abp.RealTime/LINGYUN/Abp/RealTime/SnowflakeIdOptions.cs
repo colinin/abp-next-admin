@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.MessageService.Utils
+﻿namespace LINGYUN.Abp.RealTime
 {
     public class SnowflakeIdOptions
     {

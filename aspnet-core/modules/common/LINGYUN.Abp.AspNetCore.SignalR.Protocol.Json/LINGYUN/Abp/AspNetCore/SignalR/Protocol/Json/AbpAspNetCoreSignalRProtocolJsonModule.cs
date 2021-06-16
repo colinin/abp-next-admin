@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Modularity;
 
@@ -11,12 +11,18 @@ namespace LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json
         typeof(AbpAspNetCoreSignalRModule))]
     public class AbpAspNetCoreSignalRProtocolJsonModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<ISignalRServerBuilder>(builder =>
+            {
+                builder.AddJsonProtocol();
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var newtonsoftJsonOptions = new NewtonsoftJsonHubProtocolOptions();
-            context.Services.ExecutePreConfiguredActions(newtonsoftJsonOptions);
-
-            context.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IHubProtocol, NewtonsoftJsonHubProtocol>());
+            context.Services.TryAddEnumerable(ServiceDescriptor
+                .Transient<IConfigureOptions<JsonHubProtocolOptions>, JsonHubProtocolOptionsSetup>());
         }
     }
 }

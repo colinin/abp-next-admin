@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Auditing;
+using Volo.Abp.EventBus;
 using Volo.Abp.ObjectExtending;
 
 namespace LINGYUN.Abp.IM.Messages
 {
+    [Serializable]
+    [EventName("im.message")]
     public class ChatMessage : ExtensibleObject
     {
         /// <summary>

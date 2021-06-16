@@ -3,11 +3,11 @@ using System;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.MessageService.Utils
+namespace LINGYUN.Abp.RealTime
 {
     // reference: https://github.com/dotnetcore/CAP
     // reference: https://blog.csdn.net/lq18050010830/article/details/89845790
-    public class SnowflakeIdGenerator : ISnowflakeIdGenerator, ISingletonDependency
+    public class SnowflakeIdrGenerator : ISnowflakeIdrGenerator, ISingletonDependency
     {
         public const long Twepoch = 1288834974657L;
 
@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.MessageService.Utils
 
         protected SnowflakeIdOptions Options { get; }
 
-        public SnowflakeIdGenerator(IOptions<SnowflakeIdOptions> options)
+        public SnowflakeIdrGenerator(IOptions<SnowflakeIdOptions> options)
         {
             Options = options.Value;
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LINGYUN.Abp.RealTime;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
@@ -24,18 +25,24 @@ namespace LINGYUN.Abp.Notifications
         /// Reference to <see cref="IDistributedEventBus"/>.
         /// </summary>
         public IDistributedEventBus DistributedEventBus { get; }
+        /// <summary>
+        /// Reference to <see cref="IMessageIdGenerator"/>.
+        /// </summary>
+        protected ISnowflakeIdrGenerator SnowflakeIdGenerator { get; }
 
         protected AbpNotificationOptions Options { get; }
         public NotificationSender(
            IDistributedEventBus distributedEventBus,
+           ISnowflakeIdrGenerator snowflakeIdrGenerator,
            IOptions<AbpNotificationOptions> options)
         {
             Options = options.Value;
             DistributedEventBus = distributedEventBus;
+            SnowflakeIdGenerator = snowflakeIdrGenerator;
             Logger = NullLogger<NotificationSender>.Instance;
         }
 
-        public async Task SendNofiterAsync(
+        public async Task<string> SendNofiterAsync(
             string name, 
             NotificationData data, 
             UserIdentifier user = null,
@@ -44,44 +51,45 @@ namespace LINGYUN.Abp.Notifications
         {
             if (user == null)
             {
-                await PublishNofiterAsync(name, data, null, tenantId, severity);
+                return await PublishNofiterAsync(name, data, null, tenantId, severity);
                 
             }
             else
             {
-                await PublishNofiterAsync(name, data, new List<UserIdentifier> { user }, tenantId, severity);
+                return await  PublishNofiterAsync(name, data, new List<UserIdentifier> { user }, tenantId, severity);
             }
         }
 
-        public async Task SendNofitersAsync(
+        public async Task<string> SendNofitersAsync(
             string name, 
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null, 
             NotificationSeverity severity = NotificationSeverity.Info)
         {
-            await PublishNofiterAsync(name, data, users, tenantId, severity);
+            return await PublishNofiterAsync(name, data, users, tenantId, severity);
         }
 
-        protected async Task PublishNofiterAsync(
+        protected async Task<string> PublishNofiterAsync(
             string name, 
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null,
             NotificationSeverity severity = NotificationSeverity.Info)
         {
-            await DistributedEventBus
-                .PublishAsync(
-                    new NotificationEventData
-                    {
-                        Application = Options.Application,
-                        TenantId = tenantId,
-                        Users = users?.ToList(),
-                        Name = name,
-                        Data = data,
-                        CreationTime = DateTime.Now,
-                        Severity = severity
-                    });
+            var eto = new NotificationEto<NotificationData>(data)
+            {
+                Id = SnowflakeIdGenerator.Create(),
+                TenantId = tenantId,
+                Users = users?.ToList(),
+                Name = name,
+                CreationTime = DateTime.Now,
+                Severity = severity
+            };
+
+            await DistributedEventBus.PublishAsync(eto);
+
+            return eto.Id.ToString();
         }
     }
 }

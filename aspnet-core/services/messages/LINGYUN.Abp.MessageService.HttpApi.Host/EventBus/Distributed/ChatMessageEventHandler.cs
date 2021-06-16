@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.IM;
 using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,7 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 {
-    public class ChatMessageEventHandler : IDistributedEventHandler<ChatMessage>, ITransientDependency
+    public class ChatMessageEventHandler : IDistributedEventHandler<RealTimeEto<ChatMessage>>, ITransientDependency
     {
         /// <summary>
         /// Reference to <see cref="ILogger<DefaultNotificationDispatcher>"/>.
@@ -35,17 +36,17 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             Logger = NullLogger<ChatMessageEventHandler>.Instance;
         }
 
-        public virtual async Task HandleEventAsync(ChatMessage eventData)
+        public virtual async Task HandleEventAsync(RealTimeEto<ChatMessage> eventData)
         {
             Logger.LogDebug($"Persistent chat message.");
 
-            await MessageStore.StoreMessageAsync(eventData);
+            await MessageStore.StoreMessageAsync(eventData.Data);
 
             // 发送消息
             foreach (var provider in MessageSenderProviderManager.Providers)
             {
                 Logger.LogDebug($"Sending message with provider {provider.Name}");
-                await provider.SendMessageAsync(eventData);
+                await provider.SendMessageAsync(eventData.Data);
             }
         }
     }
