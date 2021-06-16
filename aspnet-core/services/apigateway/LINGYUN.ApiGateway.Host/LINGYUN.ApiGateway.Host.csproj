@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.0.3" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.0.3" />
-    <PackageReference Include="DotNetCore.CAP.Sqlite" Version="5.0.3" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.1.0" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.1.0" />
+    <PackageReference Include="DotNetCore.CAP.Sqlite" Version="5.1.0" />
 	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
     <PackageReference Include="Ocelot.Provider.Polly" Version="16.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />

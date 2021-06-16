@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return await _chatAppService.GetMyLastChatMessageAsync(input);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("send-message")]
         public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {

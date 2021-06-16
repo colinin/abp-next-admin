@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.0.3" />
-    <PackageReference Include="DotNetCore.CAP.MySql" Version="5.0.3" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.0.3" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="5.1.0" />
+    <PackageReference Include="DotNetCore.CAP.MySql" Version="5.1.0" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

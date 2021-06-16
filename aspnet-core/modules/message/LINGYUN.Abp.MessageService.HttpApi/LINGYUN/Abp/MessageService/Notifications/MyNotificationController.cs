@@ -19,12 +19,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             MyNotificationAppService = myNotificationAppService;
         }
 
-        [HttpPost]
-        public virtual async Task SendNofiterAsync(NotificationSendDto input)
-        {
-            await MyNotificationAppService.SendNofiterAsync(input);
-        }
-
         [HttpDelete]
         [Route("{id}")]
         public virtual async Task DeleteAsync(long id)

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Notifications;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -7,6 +8,7 @@ using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
+    [Authorize]
     public class MyNotificationAppService : ApplicationService, IMyNotificationAppService
     {
         protected INotificationSender NotificationSender { get; }
