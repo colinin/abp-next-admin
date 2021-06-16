@@ -67,9 +67,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{25267137-08BE-44A6-9F7E-7783CC8C62E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests.csproj", "{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests\LINGYUN.Abp.MessageService.EntityFrameworkCore.Tests.csproj", "{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MessageService.Domain.Tests", "tests\LINGYUN.Abp.MessageService.Domain.Tests\LINGYUN.Abp.MessageService.Domain.Tests.csproj", "{097319B9-D062-4A54-8F8C-001C180E2CB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Domain.Tests", "tests\LINGYUN.Abp.MessageService.Domain.Tests\LINGYUN.Abp.MessageService.Domain.Tests.csproj", "{097319B9-D062-4A54-8F8C-001C180E2CB3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundJobs.Hangfire", "modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj", "{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Dashboard", "modules\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj", "{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundWorkers.Hangfire", "modules\common\LINGYUN.Abp.BackgroundWorkers.Hangfire\LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj", "{32D4DB5D-74D1-4166-85EA-B2D8F14B8058}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{C49B50D4-5D63-47E6-82F7-E742181CF9DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -189,6 +199,26 @@ Global
 		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{097319B9-D062-4A54-8F8C-001C180E2CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +255,11 @@ Global
 		{25267137-08BE-44A6-9F7E-7783CC8C62E8} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
 		{CB6D56DA-539B-4D4F-81CD-D683ADEBFB5F} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
 		{097319B9-D062-4A54-8F8C-001C180E2CB3} = {42800C56-9473-4B96-BF29-1B0F25C867F4}
+		{737EF17D-477F-4C73-A4CC-0DA6CBD3BB97} = {C00828FB-E7D5-4086-BA50-02022594AB73}
+		{0B6AAACE-A1DE-4063-8DA8-E7EBA30186E4} = {C00828FB-E7D5-4086-BA50-02022594AB73}
+		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48} = {C00828FB-E7D5-4086-BA50-02022594AB73}
+		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058} = {C00828FB-E7D5-4086-BA50-02022594AB73}
+		{C49B50D4-5D63-47E6-82F7-E742181CF9DE} = {C00828FB-E7D5-4086-BA50-02022594AB73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6238659A-7267-49B9-A499-8746BDEED6B8}

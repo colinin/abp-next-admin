@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LINGYUN\Abp\Hangfire\Dashboard\Localization\Resources\en.json" />
+    <None Remove="LINGYUN\Abp\Hangfire\Dashboard\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Hangfire\Dashboard\Localization\Resources\en.json" />
+    <EmbeddedResource Include="LINGYUN\Abp\Hangfire\Dashboard\Localization\Resources\zh-Hans.json" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Authorization" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.Hangfire" Version="4.3.0" />
+	</ItemGroup>
+
+</Project>

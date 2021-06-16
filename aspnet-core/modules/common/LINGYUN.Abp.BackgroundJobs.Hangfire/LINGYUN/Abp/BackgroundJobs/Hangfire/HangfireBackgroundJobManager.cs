@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.BackgroundJobs.Hangfire
             {
                 return Task.FromResult(
                     BackgroundJob.Enqueue<HangfireJobExecutionAdapter<TArgs>>(
-                        adapter => adapter.Execute(args)
+                        adapter => adapter.ExecuteAsync(args)
                     )
                 );
             }
@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.BackgroundJobs.Hangfire
             {
                 return Task.FromResult(
                     BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(
-                        adapter => adapter.Execute(args),
+                        adapter => adapter.ExecuteAsync(args),
                         delay.Value
                     )
                 );

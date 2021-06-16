@@ -13,7 +13,8 @@ namespace LINGYUN.Abp.Notifications
 {
     // TODO: 需要重命名 AbpNotificationsModule
     [DependsOn(
-        typeof(AbpBackgroundJobsModule),
+        typeof(AbpBackgroundWorkersModule),
+        typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpJsonModule))]
     public class AbpNotificationModule : AbpModule
     {
@@ -23,7 +24,7 @@ namespace LINGYUN.Abp.Notifications
             AutoAddDefinitionProviders(context.Services);
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpNotificationCleanupOptions>>().Value;
             if (options.IsEnabled)
