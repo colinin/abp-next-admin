@@ -296,11 +296,22 @@ namespace LINGYUN.Abp.BackendAdmin
                         "vue-admin-element-ui",
                         new NameValue("zh-Hans", "zh"),
                         new NameValue("en", "en"));
+
+                // vben admin 语言映射
+                options
+                    .AddLanguagesMapOrUpdate(
+                        "vben-admin-ui",
+                        new NameValue("zh_CN", "zh-Hans"));
+
                 options
                     .AddLanguageFilesMapOrUpdate(
                         "vue-admin-element-ui",
                         new NameValue("zh-Hans", "zh"),
                         new NameValue("en", "en"));
+                options
+                    .AddLanguageFilesMapOrUpdate(
+                        "vben-admin-ui",
+                        new NameValue("zh_CN", "zh-Hans"));
 
                 options.Resources.AddDynamic();
             });
