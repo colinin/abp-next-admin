@@ -37,9 +37,9 @@ import DataDictionaryTree from './components/DataDictionaryTree.vue'
   }
 })
 export default class extends Vue {
-  private selectDataId = ''
+  private selectDataId: string | null = null
 
-  private onDataChecked(dataId: string) {
+  private onDataChecked(dataId: string | null) {
     this.selectDataId = dataId
   }
 }
