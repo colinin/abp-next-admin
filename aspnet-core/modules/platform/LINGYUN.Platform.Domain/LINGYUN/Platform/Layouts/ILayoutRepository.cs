@@ -21,12 +21,12 @@ namespace LINGYUN.Platform.Layouts
             CancellationToken cancellationToken = default);
 
         Task<int> GetCountAsync(
-            PlatformType? platformType = null,
+            string framework = "",
             string filter = "",
             CancellationToken cancellationToken = default);
 
         Task<List<Layout>> GetPagedListAsync(
-            PlatformType? platformType = null,
+            string framework = "",
             string filter = "",
             string sorting = nameof(Layout.Name),
             bool reverse = false,

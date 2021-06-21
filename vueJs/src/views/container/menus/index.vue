@@ -12,19 +12,19 @@
         </el-form-item>
         <el-form-item
           label-width="100px"
-          :label="$t('AppPlatform.DisplayName:PlatformType')"
+          :label="$t('AppPlatform.DisplayName:UIFramework')"
         >
           <el-select
-            v-model="dataQueryFilter.platformType"
+            v-model="dataQueryFilter.framework"
             class="filter-item"
             clearable
-            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:UIFramework')})"
           >
             <el-option
-              v-for="item in platformTypes"
-              :key="item.key"
-              :label="item.key"
-              :value="item.value"
+              v-for="framework in uiFrameworks"
+              :key="framework"
+              :label="framework"
+              :value="framework"
             />
           </el-select>
         </el-form-item>
@@ -178,6 +178,7 @@
       :show-dialog="showEditDialog"
       :menu-id="editMenuId"
       :parent-id="parentMenuId"
+      :ui-frameworks="uiFrameworks"
       @closed="onMenuEditDialogClosed"
     />
   </div>
@@ -186,8 +187,9 @@
 <script lang="ts">
 import { dateFormat, generateTree } from '@/utils'
 import { checkPermission } from '@/utils/permission'
-import LayoutService, { PlatformTypes, Layout } from '@/api/layout'
+import LayoutService, { Layout } from '@/api/layout'
 import MenuService, { Menu, GetAllMenu } from '@/api/menu'
+import DataService from '@/api/data-dictionary'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import Component, { mixins } from 'vue-class-component'
 import Pagination from '@/components/Pagination/index.vue'
@@ -215,9 +217,10 @@ export default class extends mixins(DataListMiXin) {
   private parentMenuId = ''
   private layouts = new Array<Layout>()
 
-  private platformTypes = PlatformTypes
+  private uiFrameworks: string[] = []
 
   mounted() {
+    this.getUIFrameworks()
     this.handleGetLayouts()
     this.refreshData()
   }
@@ -232,6 +235,14 @@ export default class extends mixins(DataListMiXin) {
       })
       .finally(() => {
         this.dataLoading = false
+      })
+  }
+
+  private getUIFrameworks() {
+    DataService
+      .getByName('UI Framewark')
+      .then(res => {
+        this.uiFrameworks = res.items.map(item => item.name)
       })
   }
 

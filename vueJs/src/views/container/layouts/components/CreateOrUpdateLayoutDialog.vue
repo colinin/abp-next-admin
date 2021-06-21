@@ -16,25 +16,27 @@
       label-width="120px"
     >
       <el-form-item
-        :label="$t('AppPlatform.DisplayName:PlatformType')"
+        v-if="!isEdit"
+        prop="framework"
+        :label="$t('AppPlatform.DisplayName:UIFramework')"
         :rules="{
           required: true,
-          message: $t('pleaseInputBy', {key: $t('AppPlatform.DisplayName:PlatformType')}),
+          message: $t('pleaseInputBy', {key: $t('AppPlatform.DisplayName:UIFramework')}),
           trigger: 'blur'
         }"
       >
         <el-select
-          v-model="layout.platformType"
+          v-model="layout.framework"
           style="width: 100%;"
           class="filter-item"
           clearable
-          :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
+          :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:UIFramework')})"
         >
           <el-option
-            v-for="platformType in platformTypes"
-            :key="platformType.key"
-            :label="platformType.key"
-            :value="platformType.value"
+            v-for="framework in uiFrameworks"
+            :key="framework"
+            :label="framework"
+            :value="framework"
           />
         </el-select>
       </el-form-item>
@@ -148,8 +150,7 @@ import LayoutService, {
   Layout,
   LayoutCreateOrUpdate,
   LayoutCreate,
-  LayoutUpdate,
-  PlatformTypes
+  LayoutUpdate
 } from '@/api/layout'
 
 @Component({
@@ -162,9 +163,11 @@ export default class CreateOrUpdateLayoutDialog extends Mixins(LocalizationMiXin
   @Prop({ default: null })
   private layoutId!: string
 
+  @Prop({ default: [] })
+  private uiFrameworks!: string[]
+
   private layout = new Layout()
   private datas = new Array<Data>()
-  private platformTypes = PlatformTypes
   private dataId = ''
 
   get isEdit() {
@@ -233,6 +236,7 @@ export default class CreateOrUpdateLayoutDialog extends Mixins(LocalizationMiXin
             const create = new LayoutCreate()
             this.updateMenuByInput(create)
             create.dataId = this.dataId
+            create.framework = this.layout.framework
             LayoutService
               .create(create)
               .then(res => {
@@ -257,7 +261,6 @@ export default class CreateOrUpdateLayoutDialog extends Mixins(LocalizationMiXin
     update.displayName = this.layout.displayName
     update.description = this.layout.description
     update.redirect = this.layout.redirect
-    update.platformType = this.layout.platformType
   }
 }
 </script>

@@ -13,6 +13,8 @@ namespace LINGYUN.Platform.Datas
             DataCreateDto,
             DataUpdateDto>
     {
+        Task<DataDto> GetAsync(string name);
+
         Task<ListResultDto<DataDto>> GetAllAsync();
 
         Task CreateItemAsync(Guid id, DataItemCreateDto input);

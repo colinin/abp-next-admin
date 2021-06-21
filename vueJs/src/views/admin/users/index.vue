@@ -13,7 +13,7 @@
       />
       <el-button
         class="filter-item"
-        style="margin-left: 10px; text-alignt"
+        style="margin-left: 10px;"
         type="primary"
         @click="refreshPagedData"
       >

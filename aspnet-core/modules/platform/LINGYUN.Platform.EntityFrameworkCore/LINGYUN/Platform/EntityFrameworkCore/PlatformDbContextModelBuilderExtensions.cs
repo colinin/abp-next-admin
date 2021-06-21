@@ -31,6 +31,11 @@ namespace LINGYUN.Platform.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Layouts", options.Schema);
 
+                b.Property(p => p.Framework)
+                    .HasMaxLength(LayoutConsts.MaxFrameworkLength)
+                    .HasColumnName(nameof(Layout.Framework))
+                    .IsRequired();
+
                 b.ConfigureRoute();
             });
 
@@ -40,6 +45,10 @@ namespace LINGYUN.Platform.EntityFrameworkCore
 
                 b.ConfigureRoute();
 
+                b.Property(p => p.Framework)
+                    .HasMaxLength(LayoutConsts.MaxFrameworkLength)
+                    .HasColumnName(nameof(Menu.Framework))
+                    .IsRequired();
                 b.Property(p => p.Component)
                     .HasMaxLength(MenuConsts.MaxComponentLength)
                     .HasColumnName(nameof(Menu.Component))

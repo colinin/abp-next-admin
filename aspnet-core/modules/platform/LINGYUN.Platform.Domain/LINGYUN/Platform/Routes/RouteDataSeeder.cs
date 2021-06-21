@@ -36,7 +36,7 @@ namespace LINGYUN.Platform.Routes
             string path, 
             string displayName,
             Guid dataId, 
-            PlatformType platformType = PlatformType.None, 
+            string framework, 
             string redirect = "", 
             string description = "",
             Guid? tenantId = null, 
@@ -51,7 +51,7 @@ namespace LINGYUN.Platform.Routes
                     name,
                     displayName,
                     dataId,
-                    platformType,
+                    framework,
                     redirect,
                     description,
                     tenantId);
@@ -94,9 +94,9 @@ namespace LINGYUN.Platform.Routes
                     code,
                     component,
                     displayName,
+                    layout.Framework,
                     redirect,
                     description,
-                    layout.PlatformType,
                     parentId,
                     tenantId)
                 {

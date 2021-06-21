@@ -10,9 +10,9 @@ namespace LINGYUN.Platform.Layouts
     public class Layout : Route
     {
         /// <summary>
-        /// 所属平台
+        /// 框架
         /// </summary>
-        public virtual PlatformType PlatformType { get; protected set; }
+        public virtual string Framework { get; protected set; }
         /// <summary>
         /// 约定的Meta采用哪种数据字典,主要是约束路由必须字段的一致性
         /// </summary>
@@ -26,14 +26,14 @@ namespace LINGYUN.Platform.Layouts
             [NotNull] string name,
             [NotNull] string displayName,
             [NotNull] Guid dataId,
-            [NotNull] PlatformType platformType = PlatformType.None,
+            [NotNull] string framework,
             [CanBeNull] string redirect = "",
             [CanBeNull] string description = "",
             [CanBeNull] Guid? tenantId = null) 
             : base(id, path, name, displayName, redirect, description, tenantId)
         {
             DataId = dataId;
-            PlatformType = platformType;
+            Framework = framework;
         }
     }
 }

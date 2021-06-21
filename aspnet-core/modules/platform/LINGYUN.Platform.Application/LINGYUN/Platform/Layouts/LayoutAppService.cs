@@ -1,7 +1,4 @@
-﻿using LINGYUN.Platform.Datas;
-using LINGYUN.Platform.Permissions;
-using LINGYUN.Platform.Routes;
-using LINGYUN.Platform.Utils;
+﻿using LINGYUN.Platform.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -28,7 +25,7 @@ namespace LINGYUN.Platform.Layouts
             var layout = await LayoutRepository.FindByNameAsync(input.Name);
             if (layout != null)
             {
-                throw new UserFriendlyException($"已经存在名为 {input.Name} 的布局!");
+                throw new UserFriendlyException(L["DuplicateLayout", input.Name]);
             }
 
             layout = new Layout(
@@ -37,7 +34,7 @@ namespace LINGYUN.Platform.Layouts
                 input.Name,
                 input.DisplayName,
                 input.DataId,
-                input.PlatformType,
+                input.Framework,
                 input.Redirect,
                 input.Description,
                 CurrentTenant.Id);
@@ -79,10 +76,10 @@ namespace LINGYUN.Platform.Layouts
 
         public virtual async Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
         {
-            var count = await LayoutRepository.GetCountAsync(input.PlatformType, input.Filter);
+            var count = await LayoutRepository.GetCountAsync(input.Framework, input.Filter);
 
             var layouts = await LayoutRepository.GetPagedListAsync(
-                input.PlatformType, input.Filter,
+                input.Framework, input.Filter,
                 input.Sorting, input.Reverse, false,
                 input.SkipCount, input.MaxResultCount);
 

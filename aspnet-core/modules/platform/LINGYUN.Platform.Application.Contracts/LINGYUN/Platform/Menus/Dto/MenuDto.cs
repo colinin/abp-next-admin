@@ -15,9 +15,9 @@ namespace LINGYUN.Platform.Menus
         /// </summary>
         public string Component { get; set; }
         /// <summary>
-        /// 所属平台
+        /// 框架
         /// </summary>
-        public PlatformType PlatformType { get; set; }
+        public string Framework { get; set; }
         /// <summary>
         /// 父节点
         /// </summary>

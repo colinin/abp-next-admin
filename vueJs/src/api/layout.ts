@@ -38,38 +38,6 @@ export default class LayoutService {
   }
 }
 
-export enum PlatformType {
-  None = 0,
-  WinCe = 2,
-  WinForm = 4,
-  Desktop = WinCe | WinForm,
-  WebForm = 8,
-  WebMvc = 16,
-  WebMvvm = 32,
-  Web = WebForm | WebMvc | WebMvvm,
-  Android = 64,
-  iOS = 128,
-  Mobile = Android | iOS,
-  MiniProgram = 256,
-  All = Desktop | Web | Mobile | MiniProgram
-}
-
-export const PlatformTypes = [
-  { key: 'None', value: PlatformType.None },
-  { key: 'WinCe', value: PlatformType.WinCe },
-  { key: 'WinForm', value: PlatformType.WinForm },
-  { key: 'Desktop', value: PlatformType.Desktop },
-  { key: 'WebForm', value: PlatformType.WebForm },
-  { key: 'WebMvc', value: PlatformType.WebMvc },
-  { key: 'WebMvvm', value: PlatformType.WebMvvm },
-  { key: 'Web', value: PlatformType.Web },
-  { key: 'Android', value: PlatformType.Android },
-  { key: 'iOS', value: PlatformType.iOS },
-  { key: 'Mobile', value: PlatformType.Mobile },
-  { key: 'MiniProgram', value: PlatformType.MiniProgram },
-  { key: 'All', value: PlatformType.All }
-]
-
 export class Route {
   id!: string
   name!: string
@@ -81,7 +49,7 @@ export class Route {
 }
 
 export class Layout extends Route {
-  platformType!: PlatformType
+  framework!: string
   dataId!: string
 }
 
@@ -91,11 +59,11 @@ export class LayoutCreateOrUpdate {
   displayName!: string
   description?: string
   redirect?: string
-  platformType!: PlatformType
 }
 
 export class LayoutCreate extends LayoutCreateOrUpdate {
   dataId!: string
+  framework!: string
 }
 
 export class LayoutUpdate extends LayoutCreateOrUpdate {
@@ -105,5 +73,5 @@ export class LayoutUpdate extends LayoutCreateOrUpdate {
 export class GetLayoutByPaged extends PagedAndSortedResultRequestDto {
   filter = ''
   reverse = false
-  platformType?: PlatformType | null
+  framework = ''
 }

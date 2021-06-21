@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -21,13 +20,15 @@ namespace LINGYUN.Platform.Datas
 
         public virtual bool AllowBeNull { get;  set; }
 
+        public virtual bool IsStatic { get; set; }
+
         public virtual ValueType ValueType { get; protected set; }
 
         public virtual Guid DataId { get; protected set; }
 
         protected DataItem() { }
 
-        public DataItem(
+        internal DataItem(
             [NotNull] Guid id,
             [NotNull] Guid dataId,
             [NotNull] string name,

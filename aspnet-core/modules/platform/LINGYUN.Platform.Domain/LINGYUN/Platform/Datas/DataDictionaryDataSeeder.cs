@@ -30,6 +30,7 @@ namespace LINGYUN.Platform.Datas
             string description = "",
             Guid? parentId = null,
             Guid? tenantId = null,
+            bool isStatic = false,
             CancellationToken cancellationToken = default)
         {
             using (CurrentTenant.Change(tenantId))
@@ -45,9 +46,12 @@ namespace LINGYUN.Platform.Datas
                         displayName,
                         description,
                         parentId,
-                        tenantId);
+                        tenantId)
+                    {
+                        IsStatic = isStatic
+                    };
 
-                    data = await DataRepository.InsertAsync(data);
+                    data = await DataRepository.InsertAsync(data, true);
                 }
 
                 return data;

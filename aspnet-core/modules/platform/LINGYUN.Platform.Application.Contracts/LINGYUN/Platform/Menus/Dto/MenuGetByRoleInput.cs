@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LINGYUN.Platform.Routes;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Platform.Menus
 {
@@ -8,6 +10,7 @@ namespace LINGYUN.Platform.Menus
         [StringLength(80)]
         public string Role { get; set; }
 
-        public PlatformType PlatformType { get; set; }
+        [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
+        public string Framework { get; set; }
     }
 }

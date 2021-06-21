@@ -57,21 +57,21 @@ namespace LINGYUN.Platform.Menus
         }
 
         public virtual async Task<Menu> FindMainAsync(
-            PlatformType platformType = PlatformType.None,
+            string framework = "",
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Where(menu => menu.PlatformType.HasFlag(platformType) && menu.Path == "/")
+                .Where(menu => menu.Framework.Equals(framework) && menu.Path == "/")
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Menu>> GetRoleMenusAsync(
-            string[] roles, 
-            PlatformType platformType = PlatformType.None, 
+            string[] roles,
+            string framework = "",
             CancellationToken cancellationToken = default)
         {
             var menuQuery = (await GetDbSetAsync())
-                .Where(menu => menu.PlatformType.HasFlag(platformType));
+                .Where(menu => menu.Framework.Equals(framework));
 
             var roleMenuQuery = (await GetDbContextAsync()).Set<RoleMenu>()
                     .Where(menu => roles.Contains(menu.RoleName));
@@ -87,12 +87,12 @@ namespace LINGYUN.Platform.Menus
 
         public virtual async Task<List<Menu>> GetUserMenusAsync(
             Guid userId, 
-            string[] roles, 
-            PlatformType platformType = PlatformType.None, 
+            string[] roles,
+            string framework = "",
             CancellationToken cancellationToken = default)
         {
             var menuQuery = (await GetDbSetAsync())
-                .Where(menu => menu.PlatformType.HasFlag(platformType));
+                .Where(menu => menu.Framework.Equals(framework));
 
             var dbContext = await GetDbContextAsync();
             var userMenuQuery = from userMenu in dbContext.Set<UserMenu>()
@@ -147,7 +147,7 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             CancellationToken cancellationToken = default)
@@ -158,7 +158,7 @@ namespace LINGYUN.Platform.Menus
             return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
-                .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
+                .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
                         menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
@@ -169,7 +169,7 @@ namespace LINGYUN.Platform.Menus
 
         public virtual async Task<int> GetCountAsync(
             string filter = "",
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             CancellationToken cancellationToken = default)
@@ -177,7 +177,7 @@ namespace LINGYUN.Platform.Menus
             return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
-                .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
+                .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu => 
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
                         menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
@@ -189,7 +189,7 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             int skipCount = 0, 
@@ -202,7 +202,7 @@ namespace LINGYUN.Platform.Menus
             return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                 .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
-                .WhereIf(platformType.HasValue, menu => menu.PlatformType.HasFlag(platformType.Value))
+                .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
                         menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||

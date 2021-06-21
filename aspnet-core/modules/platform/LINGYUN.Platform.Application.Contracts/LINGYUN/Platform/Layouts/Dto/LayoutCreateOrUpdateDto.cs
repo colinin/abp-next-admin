@@ -23,7 +23,5 @@ namespace LINGYUN.Platform.Layouts
 
         [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxRedirectLength))]
         public string Redirect { get; set; }
-
-        public PlatformType PlatformType { get; set; }
     }
 }

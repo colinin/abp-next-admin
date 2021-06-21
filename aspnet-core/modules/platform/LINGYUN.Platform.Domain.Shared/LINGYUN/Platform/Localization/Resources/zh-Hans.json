@@ -50,6 +50,11 @@
     "Data:AppendItem": "添加项目",
     "Data:EditItem": "编辑项目",
     "Data:RemoveItem": "删除项目",
-    "Data:Items": "字典项目"
+    "Data:Items": "字典项目",
+    "DuplicateData": "已经存在名为 {0} 的数据字典!",
+    "DuplicateDataItem": "已经存在名为 {0} 的数据字典项!",
+    "DataItemNotFound": "不存在名为 {0} 的数据字典项!",
+    "UnableRemoveHasChildNode": "当前数据字典存在子节点,无法删除!",
+    "DuplicateLayout": "已经存在名为 {0} 的布局!"
   }
 }

@@ -12,19 +12,19 @@
         </el-form-item>
         <el-form-item
           label-width="100px"
-          :label="$t('AppPlatform.DisplayName:PlatformType')"
+          :label="$t('AppPlatform.DisplayName:UIFramework')"
         >
           <el-select
-            v-model="dataFilter.platformType"
+            v-model="dataFilter.framework"
             class="filter-item"
             clearable
-            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:UIFramework')})"
           >
             <el-option
-              v-for="item in platformTypes"
-              :key="item.key"
-              :label="item.key"
-              :value="item.value"
+              v-for="framework in uiFrameworks"
+              :key="framework"
+              :label="framework"
+              :value="framework"
             />
           </el-select>
         </el-form-item>
@@ -147,6 +147,7 @@
     <create-or-update-layout-dialog
       :show-dialog="showEditDialog"
       :layout-id="editLayoutId"
+      :ui-frameworks="uiFrameworks"
       @closed="onLayoutEditDialogClosed"
     />
   </div>
@@ -155,11 +156,13 @@
 <script lang="ts">
 import { dateFormat, abpPagerFormat } from '@/utils'
 import { checkPermission } from '@/utils/permission'
-import LayoutService, { Layout, GetLayoutByPaged, PlatformTypes } from '@/api/layout'
+import LayoutService, { Layout, GetLayoutByPaged } from '@/api/layout'
 import DataListMiXin from '@/mixins/DataListMiXin'
 import { Component, Mixins } from 'vue-property-decorator'
 import Pagination from '@/components/Pagination/index.vue'
 import CreateOrUpdateLayoutDialog from './components/CreateOrUpdateLayoutDialog.vue'
+
+import DataService from '@/api/data-dictionary'
 
 @Component({
   name: 'Layouts',
@@ -181,10 +184,11 @@ export default class extends Mixins(DataListMiXin) {
   private showEditDialog = false
   private editLayoutId = ''
 
-  private platformTypes = PlatformTypes
+  private uiFrameworks: string[] = []
 
   mounted() {
     this.refreshPagedData()
+    this.getUIFrameworks()
   }
 
   protected processDataFilter() {
@@ -193,6 +197,14 @@ export default class extends Mixins(DataListMiXin) {
 
   protected getPagedList(filter: any) {
     return LayoutService.getList(filter)
+  }
+
+  private getUIFrameworks() {
+    DataService
+      .getByName('UI Framewark')
+      .then(res => {
+        this.uiFrameworks = res.items.map(item => item.name)
+      })
   }
 
   private handleRemoveLayout(layout: Layout) {

@@ -50,6 +50,11 @@
     "Data:AppendItem": "Append Item",
     "Data:EditItem": "Edit Item",
     "Data:RemoveItem": "Remove Item",
-    "Data:Items": "Data Items"
+    "Data:Items": "Data Items",
+    "DuplicateData": "A data dictionary named {0} already exists!",
+    "DuplicateDataItem": "A data dictionary entry named {0} already exists!",
+    "DataItemNotFound": "There is no data dictionary entry named {0}!",
+    "UnableRemoveHasChildNode": "Current data dictionary exists child node, cannot delete!",
+    "DuplicateLayout": "A layout named {0} already exists!"
   }
 }

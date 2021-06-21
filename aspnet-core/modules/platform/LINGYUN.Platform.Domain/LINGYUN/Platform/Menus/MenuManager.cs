@@ -1,4 +1,5 @@
-﻿using LINGYUN.Platform.Utils;
+﻿using LINGYUN.Platform.Layouts;
+using LINGYUN.Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,14 @@ namespace LINGYUN.Platform.Menus
 
         [UnitOfWork]
         public virtual async Task<Menu> CreateAsync(
+            Layout layout,
             Guid id,
-            Guid layoutId,
             string path,
             string name,
             string component,
             string displayName,
             string redirect = "",
             string description = "",
-            PlatformType platformType = PlatformType.None,
             Guid? parentId = null,
             Guid? tenantId = null,
             bool isPublic = false)
@@ -50,15 +50,15 @@ namespace LINGYUN.Platform.Menus
             }
             var menu = new Menu(
                 id,
-                layoutId,
+                layout.Id,
                 path,
                 name,
                 code,
                 component,
                 displayName,
+                layout.Framework,
                 redirect,
                 description,
-                platformType,
                 parentId,
                 tenantId)
             {

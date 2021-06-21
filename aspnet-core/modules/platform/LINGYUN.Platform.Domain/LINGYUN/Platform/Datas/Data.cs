@@ -27,6 +27,8 @@ namespace LINGYUN.Platform.Datas
 
         public virtual Guid? ParentId { get; set; }
 
+        public virtual bool IsStatic { get; set; }
+
         public virtual ICollection<DataItem> Items { get; protected set; }
 
         protected Data() 
@@ -68,7 +70,8 @@ namespace LINGYUN.Platform.Datas
             [CanBeNull] string defaultValue,
             ValueType valueType = ValueType.String,
             string description = "",
-            bool allowBeNull = true)
+            bool allowBeNull = true,
+            bool isStatic = false)
         {
             Check.NotNull(guidGenerator, nameof(guidGenerator));
             Check.NotNull(name, nameof(name));
@@ -86,7 +89,10 @@ namespace LINGYUN.Platform.Datas
                     description,
                     allowBeNull,
                     TenantId
-                    );
+                    )
+                {
+                    IsStatic = isStatic
+                };
                 Items.Add(dataItem);
             }
 

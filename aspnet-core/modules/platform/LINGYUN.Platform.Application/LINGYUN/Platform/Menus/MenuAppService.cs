@@ -42,7 +42,7 @@ namespace LINGYUN.Platform.Menus
             var myMenus = await MenuRepository.GetUserMenusAsync(
                 CurrentUser.GetId(), 
                 CurrentUser.Roles,
-                input.PlatformType);
+                input.Framework);
 
             return new ListResultDto<MenuDto>(
                 ObjectMapper.Map<List<Menu>, List<MenuDto>>(myMenus));
@@ -61,7 +61,7 @@ namespace LINGYUN.Platform.Menus
         {
             var menus = await MenuRepository.GetAllAsync(
                 input.Filter, input.Sorting, input.Reverse,
-                input.PlatformType, input.ParentId, input.LayoutId);
+                input.Framework, input.ParentId, input.LayoutId);
 
             return new ListResultDto<MenuDto>(
                 ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
@@ -70,11 +70,11 @@ namespace LINGYUN.Platform.Menus
         [Authorize(PlatformPermissions.Menu.Default)]
         public virtual async Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
         {
-            var count = await MenuRepository.GetCountAsync(input.Filter, input.PlatformType, input.ParentId, input.LayoutId);
+            var count = await MenuRepository.GetCountAsync(input.Filter, input.Framework, input.ParentId, input.LayoutId);
 
             var menus = await MenuRepository.GetListAsync(
                 input.Filter, input.Sorting, input.Reverse,
-                input.PlatformType, input.ParentId, input.LayoutId,
+                input.Framework, input.ParentId, input.LayoutId,
                 input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<MenuDto>(count,
@@ -88,15 +88,14 @@ namespace LINGYUN.Platform.Menus
             var data = await DataRepository.GetAsync(layout.DataId);
 
             var menu = await MenuManager.CreateAsync(
+                layout,
                 GuidGenerator.Create(),
-                layout.Id,
                 input.Path,
                 input.Name,
                 input.Component,
                 input.DisplayName,
                 input.Redirect,
                 input.Description,
-                layout.PlatformType,
                 input.ParentId,
                 CurrentTenant.Id,
                 input.IsPublic);
@@ -210,7 +209,7 @@ namespace LINGYUN.Platform.Menus
         [Authorize(PlatformPermissions.Menu.ManageUsers)]
         public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
         {
-            var menus = await MenuRepository.GetUserMenusAsync(input.UserId, input.Roles, input.PlatformType);
+            var menus = await MenuRepository.GetUserMenusAsync(input.UserId, input.Roles, input.Framework);
 
             return new ListResultDto<MenuDto>(
                ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
@@ -231,7 +230,7 @@ namespace LINGYUN.Platform.Menus
         [Authorize(PlatformPermissions.Menu.ManageRoles)]
         public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
         {
-            var menus = await MenuRepository.GetRoleMenusAsync(new string[] { input.Role }, input.PlatformType);
+            var menus = await MenuRepository.GetRoleMenusAsync(new string[] { input.Role }, input.Framework);
 
             return new ListResultDto<MenuDto>(
                ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));

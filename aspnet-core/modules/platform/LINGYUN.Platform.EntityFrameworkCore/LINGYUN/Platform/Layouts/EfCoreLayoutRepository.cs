@@ -30,12 +30,12 @@ namespace LINGYUN.Platform.Layouts
         }
 
         public virtual async Task<int> GetCountAsync(
-            PlatformType? platformType = null, 
+            string framework = "",
             string filter = "", 
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .WhereIf(platformType.HasValue, x => x.PlatformType == platformType.Value)
+                .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework.Equals(framework))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                         x.Name.Contains(filter) || x.DisplayName.Contains(filter) ||
                         x.Description.Contains(filter) || x.Redirect.Contains(filter))
@@ -43,7 +43,7 @@ namespace LINGYUN.Platform.Layouts
         }
 
         public virtual async Task<List<Layout>> GetPagedListAsync(
-            PlatformType? platformType = null, 
+            string framework = "",
             string filter = "",
             string sorting = nameof(Layout.Name),
             bool reverse = false,
@@ -57,7 +57,7 @@ namespace LINGYUN.Platform.Layouts
 
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
-                .WhereIf(platformType.HasValue, x => x.PlatformType == platformType.Value)
+                .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework.Equals(framework))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                         x.Name.Contains(filter) || x.DisplayName.Contains(filter) ||
                         x.Description.Contains(filter) || x.Redirect.Contains(filter))
