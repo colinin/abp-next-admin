@@ -13,6 +13,7 @@ namespace LINGYUN.Platform.Datas
             string description = "",
             Guid? parentId = null,
             Guid? tenantId = null,
+            bool isStatic = false,
             CancellationToken cancellationToken = default);
     }
 }

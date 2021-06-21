@@ -11,9 +11,9 @@ namespace LINGYUN.Platform.Menus
     public class Menu : Route
     {
         /// <summary>
-        /// 所属平台
+        /// 框架
         /// </summary>
-        public virtual PlatformType PlatformType { get; set; }
+        public virtual string Framework { get; set; }
         /// <summary>
         /// 菜单编号
         /// </summary>
@@ -46,9 +46,9 @@ namespace LINGYUN.Platform.Menus
             [NotNull] string code,
             [NotNull] string component,
             [NotNull] string displayName,
+            [NotNull] string framework,
             string redirect = "",
             string description = "",
-            PlatformType platformType = PlatformType.None,
             Guid? parentId = null,
             Guid? tenantId = null) 
             : base(id, path, name, displayName, redirect, description, tenantId)
@@ -58,7 +58,7 @@ namespace LINGYUN.Platform.Menus
             LayoutId = layoutId;
             Code = code;
             Component = component;// 下属的一级菜单的Component应该是布局页, 例如vue-admin中的 component: Layout, 其他前端框架雷同, 此处应传递布局页的路径让前端import
-            PlatformType = platformType;
+            Framework = framework;
             ParentId = parentId;
 
             IsPublic = false;

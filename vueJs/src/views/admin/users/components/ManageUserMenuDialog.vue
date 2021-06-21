@@ -14,21 +14,21 @@
       <el-card>
         <el-form-item
           label-width="120px"
-          :label="$t('AppPlatform.DisplayName:PlatformType')"
+          :label="$t('AppPlatform.DisplayName:UIFramework')"
         >
           <el-select
-            v-model="getMenuQuery.platformType"
+            v-model="getMenuQuery.framework"
             style="width: 100%;"
             class="filter-item"
             clearable
-            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
-            @change="onPlatformTypeChanged"
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:UIFramework')})"
+            @change="onFrameworkChanged"
           >
             <el-option
-              v-for="item in platformTypes"
-              :key="item.key"
-              :label="item.key"
-              :value="item.value"
+              v-for="framework in uiFrameworks"
+              :key="framework"
+              :label="framework"
+              :value="framework"
             />
           </el-select>
         </el-form-item>
@@ -74,9 +74,9 @@
 <script lang="ts">
 import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import LocalizationMiXin from '@/mixins/LocalizationMiXin'
+import DataService from '@/api/data-dictionary'
 import MenuService, { Menu, GetAllMenu, UserMenu } from '@/api/menu'
 import { generateTree } from '@/utils'
-import { PlatformType, PlatformTypes } from '@/api/layout'
 import { Tree } from 'element-ui'
 
 @Component({
@@ -90,9 +90,9 @@ export default class ManageUserMenuDialog extends Mixins(LocalizationMiXin) {
   private userId!: string
 
   private menus = new Array<Menu>()
+  private uiFrameworks: string[] = []
   private userMenuIds = new Array<string>()
   private getMenuQuery = new GetAllMenu()
-  private platformTypes = PlatformTypes
   private confirmButtonBusy = false
   private menuProps = {
     children: 'children',
@@ -111,9 +111,21 @@ export default class ManageUserMenuDialog extends Mixins(LocalizationMiXin) {
     this.handleGetUserMenus()
   }
 
-  private onPlatformTypeChanged() {
+  monted() {
+    this.getUIFrameworks()
+  }
+
+  private onFrameworkChanged() {
     this.handleGetMenus()
     this.handleGetUserMenus()
+  }
+
+  private getUIFrameworks() {
+    DataService
+      .getByName('UI Framewark')
+      .then(res => {
+        this.uiFrameworks = res.items.map(item => item.name)
+      })
   }
 
   private handleGetMenus() {
@@ -127,7 +139,7 @@ export default class ManageUserMenuDialog extends Mixins(LocalizationMiXin) {
   private handleGetUserMenus() {
     if (this.showDialog && this.userId) {
       MenuService
-        .getUserMenuList(this.userId, this.getMenuQuery.platformType || PlatformType.None)
+        .getUserMenuList(this.userId, this.getMenuQuery.framework)
         .then(res => {
           this.userMenuIds = res.items.map(item => item.id)
         })

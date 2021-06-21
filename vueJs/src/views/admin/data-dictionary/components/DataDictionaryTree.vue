@@ -10,7 +10,7 @@
           style="float: right;"
           type="primary"
           icon="ivu-icon ivu-icon-md-add"
-          @click="handleEditData('')"
+          @click="handleEditData(null)"
         >
           {{ $t('AppPlatform.Data:AddNew') }}
         </el-button>
@@ -74,7 +74,7 @@ const $contextmenu = Vue.prototype.$contextmenu
 export default class DataDictionaryTree extends Mixins(LocalizationMiXin) {
   private showDataDialog = false
   private isEditData = false
-  private editDataId = ''
+  private editDataId: string | null = ''
   private editDataTitle = ''
   private datas = []
 
@@ -108,7 +108,7 @@ export default class DataDictionaryTree extends Mixins(LocalizationMiXin) {
           icon: 'ivu-icon ivu-icon-md-add',
           disabled: !checkPermission(['Platform.DataDictionary.Create']),
           onClick: () => {
-            this.handleEditData('')
+            this.handleEditData(null)
           }
         },
         {
@@ -153,15 +153,13 @@ export default class DataDictionaryTree extends Mixins(LocalizationMiXin) {
     }
   }
 
-  private handleEditData(dataId: string) {
+  private handleEditData(dataId: string | null) {
     this.editDataTitle = this.l('AppPlatform.Data:AddNew')
     this.isEditData = false
+    this.editDataId = dataId
     if (dataId) {
-      this.editDataId = dataId
       this.isEditData = true
       this.editDataTitle = this.l('AppPlatform.Data:Edit')
-    } else {
-      this.editDataId = ''
     }
     this.showDataDialog = true
   }

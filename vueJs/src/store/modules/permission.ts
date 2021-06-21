@@ -5,7 +5,6 @@ import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'
 import { AbpModule } from '@/store/modules/abp'
 import MenuService, { Menu } from '@/api/menu'
-import { PlatformType } from '@/api/layout'
 import { generateTree } from '@/utils'
 
 const mapMetaBoolean = (key: string, meta: any) => {
@@ -121,7 +120,7 @@ class Permission extends VuexModule implements IPermissionState {
     // }
 
     // 取消注释用来启用后端动态路由配置
-    const { items } = await MenuService.getMyMenuList(PlatformType.WebMvvm)
+    const { items } = await MenuService.getMyMenuList('Vue Element Admin')
     const dynamicRoutes = filterDynamicRoutes(generateTree(items))
     this.SET_ROUTES(dynamicRoutes)
 

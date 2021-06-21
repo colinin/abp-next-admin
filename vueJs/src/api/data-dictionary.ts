@@ -13,6 +13,11 @@ export default class DataDictionaryService {
     return ApiService.Get<Data>(_url, serviceUrl)
   }
 
+  public static getByName(name: string) {
+    const _url = sourceUrl + '/by-name/' + name
+    return ApiService.Get<Data>(_url, serviceUrl)
+  }
+
   public static getList(payload: GetDataByPaged) {
     const _url = sourceUrl + '?' + urlStringify(payload)
     return ApiService.Get<PagedResultDto<Data >>(_url, serviceUrl)

@@ -14,21 +14,21 @@
       <el-card>
         <el-form-item
           label-width="120px"
-          :label="$t('AppPlatform.DisplayName:PlatformType')"
+          :label="$t('AppPlatform.DisplayName:UIFramework')"
         >
           <el-select
-            v-model="getMenuQuery.platformType"
+            v-model="getMenuQuery.framework"
             style="width: 100%;"
             class="filter-item"
             clearable
-            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:PlatformType')})"
-            @change="onPlatformTypeChanged"
+            :placeholder="$t('pleaseSelectBy', {name: $t('AppPlatform.DisplayName:UIFramework')})"
+            @change="onFrameworksChanged"
           >
             <el-option
-              v-for="item in platformTypes"
-              :key="item.key"
-              :label="item.key"
-              :value="item.value"
+              v-for="framework in uiFrameworks"
+              :key="framework"
+              :label="framework"
+              :value="framework"
             />
           </el-select>
         </el-form-item>
@@ -74,9 +74,9 @@
 <script lang="ts">
 import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import LocalizationMiXin from '@/mixins/LocalizationMiXin'
+import DataService from '@/api/data-dictionary'
 import MenuService, { Menu, GetAllMenu, RoleMenu } from '@/api/menu'
 import { generateTree } from '@/utils'
-import { PlatformType, PlatformTypes } from '@/api/layout'
 import { Tree } from 'element-ui'
 
 @Component({
@@ -92,7 +92,7 @@ export default class ManageRoleMenuDialog extends Mixins(LocalizationMiXin) {
   private menus = new Array<Menu>()
   private roleMenuIds = new Array<string>()
   private getMenuQuery = new GetAllMenu()
-  private platformTypes = PlatformTypes
+  private uiFrameworks: string[] = []
   private confirmButtonBusy = false
   private menuProps = {
     children: 'children',
@@ -111,9 +111,21 @@ export default class ManageRoleMenuDialog extends Mixins(LocalizationMiXin) {
     this.handleGetRoleMenus()
   }
 
-  private onPlatformTypeChanged() {
+  monted() {
+    this.getUIFrameworks()
+  }
+
+  private onFrameworksChanged() {
     this.handleGetMenus()
     this.handleGetRoleMenus()
+  }
+
+  private getUIFrameworks() {
+    DataService
+      .getByName('UI Framewark')
+      .then(res => {
+        this.uiFrameworks = res.items.map(item => item.name)
+      })
   }
 
   private handleGetMenus() {
@@ -127,7 +139,7 @@ export default class ManageRoleMenuDialog extends Mixins(LocalizationMiXin) {
   private handleGetRoleMenus() {
     if (this.showDialog && this.roleName) {
       MenuService
-        .getRoleMenuList(this.roleName, this.getMenuQuery.platformType || PlatformType.None)
+        .getRoleMenuList(this.roleName, this.getMenuQuery.framework)
         .then(res => {
           this.roleMenuIds = res.items.map(item => item.id)
         })

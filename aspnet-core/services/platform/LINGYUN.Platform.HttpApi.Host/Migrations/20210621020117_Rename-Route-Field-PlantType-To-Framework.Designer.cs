@@ -3,15 +3,17 @@ using System;
 using LINGYUN.Platform.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.Migrations
 {
     [DbContext(typeof(PlatformHttpApiHostMigrationsDbContext))]
-    partial class PlatformHttpApiHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210621020117_Rename-Route-Field-PlantType-To-Framework")]
+    partial class RenameRouteFieldPlantTypeToFramework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

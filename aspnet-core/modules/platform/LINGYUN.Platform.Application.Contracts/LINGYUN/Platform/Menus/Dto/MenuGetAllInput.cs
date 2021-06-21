@@ -1,11 +1,14 @@
-﻿using System;
+﻿using LINGYUN.Platform.Routes;
+using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Platform.Menus
 {
     public class MenuGetAllInput : ISortedResultRequest
     {
-        public PlatformType? PlatformType { get; set; }
+        [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
+        public string Framework { get; set; }
 
         public string Filter { get; set; }
 

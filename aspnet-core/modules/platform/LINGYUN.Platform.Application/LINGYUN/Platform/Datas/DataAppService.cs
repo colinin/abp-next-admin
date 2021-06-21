@@ -27,7 +27,7 @@ namespace LINGYUN.Platform.Datas
             var data = await DataRepository.FindByNameAsync(input.Name);
             if (data != null)
             {
-                throw new UserFriendlyException("指定名称的数据字典已经存在!");
+                throw new UserFriendlyException(L["DuplicateData", input.Name]);
             }
 
             string code = string.Empty;
@@ -70,10 +70,17 @@ namespace LINGYUN.Platform.Datas
             var children = await DataRepository.GetChildrenAsync(data.Id);
             if (children.Any())
             {
-                throw new UserFriendlyException("当前数据字典存在子节点,无法删除!");
+                throw new UserFriendlyException(L["UnableRemoveHasChildNode"]);
             }
 
             await DataRepository.DeleteAsync(data);
+        }
+
+        public virtual async Task<DataDto> GetAsync(string name)
+        {
+            var data = await DataRepository.FindByNameAsync(name);
+
+            return ObjectMapper.Map<Data, DataDto>(data);
         }
 
         public virtual async Task<DataDto> GetAsync(Guid id)
@@ -134,7 +141,7 @@ namespace LINGYUN.Platform.Datas
             var dataItem = data.FindItem(name);
             if (dataItem == null)
             {
-                throw new UserFriendlyException($"不存在名为 {name} 的数据字典项!");
+                throw new UserFriendlyException(L["DataItemNotFound", name]);
             }
 
             if (!string.Equals(dataItem.DefaultValue, input.DefaultValue, StringComparison.InvariantCultureIgnoreCase))
@@ -151,7 +158,7 @@ namespace LINGYUN.Platform.Datas
             }
             dataItem.AllowBeNull = input.AllowBeNull;
 
-            data = await DataRepository.UpdateAsync(data);
+            await DataRepository.UpdateAsync(data);
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
@@ -162,7 +169,7 @@ namespace LINGYUN.Platform.Datas
             var dataItem = data.FindItem(input.Name);
             if (dataItem != null)
             {
-                throw new UserFriendlyException($"已经存在名为 {input.Name} 的数据字典项!");
+                throw new UserFriendlyException(L["DuplicateDataItem", input.Name]);
             }
 
             data.AddItem(

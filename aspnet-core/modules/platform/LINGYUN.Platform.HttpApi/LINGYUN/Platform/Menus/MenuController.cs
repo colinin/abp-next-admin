@@ -86,8 +86,8 @@ namespace LINGYUN.Platform.Menus
         }
 
         [HttpGet]
-        [Route("by-user/{userId}/{platformType}")]
-        public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, PlatformType platformType)
+        [Route("by-user/{userId}/{framework}")]
+        public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, string framework)
         {
             var userRoles = await UserRoleFinder.GetRolesAsync(userId);
 
@@ -95,7 +95,7 @@ namespace LINGYUN.Platform.Menus
             {
                 UserId = userId,
                 Roles = userRoles,
-                PlatformType = platformType
+                Framework = framework
             };
             return await MenuAppService.GetUserMenuListAsync(getMenuByUser);
         }
@@ -115,13 +115,13 @@ namespace LINGYUN.Platform.Menus
         }
 
         [HttpGet]
-        [Route("by-role/{role}/{platformType}")]
-        public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(string role, PlatformType platformType)
+        [Route("by-role/{role}/{framework}")]
+        public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(string role, string framework)
         {
             return await MenuAppService.GetRoleMenuListAsync(new MenuGetByRoleInput
             {
                 Role = role,
-                PlatformType = platformType
+                Framework = framework
             });
         }
     }

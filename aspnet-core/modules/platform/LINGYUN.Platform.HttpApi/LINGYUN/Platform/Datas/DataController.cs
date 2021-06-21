@@ -48,6 +48,13 @@ namespace LINGYUN.Platform.Datas
         }
 
         [HttpGet]
+        [Route("by-name/{name}")]
+        public virtual async Task<DataDto> GetAsync(string name)
+        {
+            return await DataAppService.GetAsync(name);
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public virtual async Task<DataDto> GetAsync(Guid id)
         {

@@ -24,7 +24,7 @@ namespace LINGYUN.Platform.Menus
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Menu> FindMainAsync(
-            PlatformType platformType = PlatformType.None,
+            string framework = "",
             CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取子节点
@@ -59,7 +59,7 @@ namespace LINGYUN.Platform.Menus
         Task<List<Menu>> GetUserMenusAsync(
             Guid userId,
             string[] roles,
-            PlatformType platformType = PlatformType.None,
+            string framework = "",
             CancellationToken cancellationToken = default);
         /// <summary>
         /// 查找角色可访问菜单
@@ -70,12 +70,12 @@ namespace LINGYUN.Platform.Menus
         /// <returns></returns>
         Task<List<Menu>> GetRoleMenusAsync(
             string[] roles,
-            PlatformType platformType = PlatformType.None,
+            string framework = "",
             CancellationToken cancellationToken = default);
 
         Task<int> GetCountAsync(
             string filter = "",
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             CancellationToken cancellationToken = default);
@@ -84,7 +84,7 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             int skipCount = 0,
@@ -95,7 +95,7 @@ namespace LINGYUN.Platform.Menus
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
-            PlatformType? platformType = null,
+            string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             CancellationToken cancellationToken = default);

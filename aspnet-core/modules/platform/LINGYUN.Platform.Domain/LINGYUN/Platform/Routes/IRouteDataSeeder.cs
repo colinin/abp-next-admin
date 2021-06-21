@@ -13,7 +13,7 @@ namespace LINGYUN.Platform.Routes
             string path,
             string displayName,
             Guid dataId,
-            PlatformType platformType = PlatformType.None,
+            string framework,
             string redirect = "",
             string description = "",
             Guid? tenantId = null,

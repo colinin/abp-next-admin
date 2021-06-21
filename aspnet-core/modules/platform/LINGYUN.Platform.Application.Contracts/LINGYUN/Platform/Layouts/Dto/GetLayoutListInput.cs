@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿using LINGYUN.Platform.Routes;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Platform.Layouts
 {
@@ -8,6 +10,7 @@ namespace LINGYUN.Platform.Layouts
 
         public bool Reverse { get; set; }
 
-        public PlatformType? PlatformType { get; set; }
+        [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
+        public string Framework { get; set; }
     }
 }

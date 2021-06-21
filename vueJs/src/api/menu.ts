@@ -1,5 +1,5 @@
 import ApiService from './serviceBase'
-import { Route, PlatformType } from './layout'
+import { Route } from './layout'
 import { urlStringify } from '@/utils/index'
 import { ISortedResultRequest, PagedResultDto, PagedAndSortedResultRequestDto, ListResultDto } from './types'
 
@@ -24,18 +24,18 @@ export default class MenuService {
     return ApiService.Get<PagedResultDto<Menu>>(_url, serviceUrl)
   }
 
-  public static getMyMenuList(platformType: PlatformType) {
-    const _url = sourceUrl + '/by-current-user?platformType=' + platformType
+  public static getMyMenuList(framework: string) {
+    const _url = sourceUrl + '/by-current-user?framework=' + framework
     return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
   }
 
-  public static getRoleMenuList(role: string, platformType: PlatformType) {
-    const _url = sourceUrl + `/by-role/${role}/${platformType}`
+  public static getRoleMenuList(role: string, framework: string) {
+    const _url = sourceUrl + `/by-role/${role}/${framework}`
     return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
   }
 
-  public static getUserMenuList(userId: string, platformType: PlatformType) {
-    const _url = sourceUrl + `/by-user/${userId}/${platformType}`
+  public static getUserMenuList(userId: string, framework: string) {
+    const _url = sourceUrl + `/by-user/${userId}/${framework}`
     return ApiService.Get<ListResultDto<Menu>>(_url, serviceUrl)
   }
 
@@ -72,7 +72,6 @@ export class MenuCreateOrUpdate {
   description?: string
   redirect?: string
   isPublic!: boolean
-  platformType!: PlatformType
   meta: {[key: string]: any} = {}
 }
 
@@ -91,7 +90,7 @@ export class GetAllMenu implements ISortedResultRequest {
   reverse = false
   parentId?: string
   layoutId?: string
-  platformType?: PlatformType
+  framework = ''
 }
 
 export class GetMenuByPaged extends PagedAndSortedResultRequestDto {
@@ -99,14 +98,14 @@ export class GetMenuByPaged extends PagedAndSortedResultRequestDto {
   reverse = false
   layoutId?: string
   parentId?: string
-  platformType?: PlatformType
+  framework = ''
 }
 
 export class Menu extends Route {
   code!: string
   layoutId!: string
   component!: string
-  platformType!: PlatformType
+  framework = ''
   parentId?: string
   isPublic!: boolean
   children = new Array<Menu>()
