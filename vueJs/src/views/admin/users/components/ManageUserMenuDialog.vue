@@ -111,7 +111,7 @@ export default class ManageUserMenuDialog extends Mixins(LocalizationMiXin) {
     this.handleGetUserMenus()
   }
 
-  monted() {
+  mounted() {
     this.getUIFrameworks()
   }
 

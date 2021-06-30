@@ -111,7 +111,7 @@ export default class ManageRoleMenuDialog extends Mixins(LocalizationMiXin) {
     this.handleGetRoleMenus()
   }
 
-  monted() {
+  mounted() {
     this.getUIFrameworks()
   }
 
