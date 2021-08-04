@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HangFire.SqlServer" Version="1.7.22" />
-    <PackageReference Include="Volo.Abp.HangFire" Version="4.3.0" />
+    <PackageReference Include="HangFire.SqlServer" Version="1.7.24" />
+    <PackageReference Include="Volo.Abp.HangFire" Version="4.4.0" />
   </ItemGroup>
 
 </Project>

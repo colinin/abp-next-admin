@@ -63,8 +63,9 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="distributedEventBusOptions"></param>
         /// <param name="capPublisher"></param>
         /// <param name="currentUser"></param>
-        /// <param name="currentTenant"></param>
         /// <param name="currentClient"></param>
+        /// <param name="currentTenant"></param>
+        /// <param name="eventErrorHandler"></param>
         /// <param name="cancellationTokenProvider"></param>
         /// <param name="customDistributedEventSubscriber"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
@@ -73,9 +74,10 @@ namespace LINGYUN.Abp.EventBus.CAP
             ICurrentUser currentUser,
             ICurrentClient currentClient,
             ICurrentTenant currentTenant,
+            IEventErrorHandler eventErrorHandler,
             ICancellationTokenProvider cancellationTokenProvider,
             ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
-            : base(serviceScopeFactory, currentTenant)
+            : base(serviceScopeFactory, currentTenant, eventErrorHandler)
         {
             CapPublisher = capPublisher;
             CurrentUser = currentUser;

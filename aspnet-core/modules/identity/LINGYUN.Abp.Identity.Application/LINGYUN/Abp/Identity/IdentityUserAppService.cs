@@ -110,8 +110,7 @@ namespace LINGYUN.Abp.Identity
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangePasswordAsync(Guid id, ChangePasswordInput input)
         {
-            await IdentityOptions.SetAsync();
-            var user = await UserManager.GetByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user.IsExternal)
             {
@@ -125,18 +124,58 @@ namespace LINGYUN.Abp.Identity
                 return;
             }
 
-            (await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword)).CheckErrors();
+            if (input.CurrentPassword.IsNullOrWhiteSpace())
+            {
+                // 管理员重置用户密码
+                var resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
+                (await UserManager.ResetPasswordAsync(user, resetToken, input.NewPassword)).CheckErrors();
+            }
+            else
+            {
+                // 用户重置密码
+                (await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword)).CheckErrors();
+            }
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, ChangeTwoFactorEnabledDto input)
         {
-            await IdentityOptions.SetAsync();
-            var user = await UserManager.GetByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
             await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
+        public virtual async Task LockAsync(Guid id, int seconds)
+        {
+            var user = await GetUserAsync(id);
+            //if (!UserManager.SupportsUserLockout)
+            //{
+            //    throw new UserFriendlyException(L["Volo.Abp.Identity:UserLockoutNotEnabled"]);
+            //}
+            var endDate = new DateTimeOffset(Clock.Now).AddSeconds(seconds);
+            (await UserManager.SetLockoutEndDateAsync(user, endDate)).CheckErrors();
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
+        public virtual async Task UnLockAsync(Guid id)
+        {
+            var user = await GetUserAsync(id);
+            (await UserManager.SetLockoutEndDateAsync(user, null)).CheckErrors();
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        protected virtual async Task<IdentityUser> GetUserAsync(Guid id)
+        {
+            await IdentityOptions.SetAsync();
+            var user = await UserManager.GetByIdAsync(id);
+
+            return user;
         }
     }
 }

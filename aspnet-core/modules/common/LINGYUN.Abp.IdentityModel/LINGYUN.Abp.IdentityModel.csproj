@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Caching" Version="4.3.0" />
-    <PackageReference Include="Volo.Abp.IdentityModel" Version="4.3.0" />
+    <PackageReference Include="Volo.Abp.Caching" Version="4.4.0" />
+    <PackageReference Include="Volo.Abp.IdentityModel" Version="4.4.0" />
   </ItemGroup>
 
 </Project>

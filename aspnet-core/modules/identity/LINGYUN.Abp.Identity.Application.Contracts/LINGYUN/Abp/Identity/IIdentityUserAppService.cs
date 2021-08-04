@@ -45,5 +45,18 @@ namespace LINGYUN.Abp.Identity
         /// <param name="input"></param>
         /// <returns></returns>
         Task ChangePasswordAsync(Guid id, ChangePasswordInput input);
+        /// <summary>
+        /// 锁定
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="seconds">锁定时长</param>
+        /// <returns></returns>
+        Task LockAsync(Guid id, int seconds);
+        /// <summary>
+        /// 解除锁定
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task UnLockAsync(Guid id);
     }
 }

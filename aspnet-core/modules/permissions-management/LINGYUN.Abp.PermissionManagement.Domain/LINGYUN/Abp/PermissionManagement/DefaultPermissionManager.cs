@@ -9,6 +9,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.PermissionManagement
 {
@@ -45,7 +46,7 @@ namespace LINGYUN.Abp.PermissionManagement
         protected IPermissionStore PermissionStore { get; }
         public DefaultPermissionManager(
             IPermissionDefinitionManager permissionDefinitionManager,
-            IPermissionStateManager permissionStateManager,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
             IPermissionGrantRepository permissionGrantRepository,
             IPermissionStore permissionStore,
             IServiceProvider serviceProvider, 
@@ -54,8 +55,8 @@ namespace LINGYUN.Abp.PermissionManagement
             ICurrentTenant currentTenant,
             IDistributedCache<PermissionGrantCacheItem> cache) 
             : base(
-                  permissionDefinitionManager, 
-                  permissionStateManager, 
+                  permissionDefinitionManager,
+                  simpleStateCheckerManager, 
                   permissionGrantRepository,
                   serviceProvider, 
                   guidGenerator, 
@@ -86,7 +87,7 @@ namespace LINGYUN.Abp.PermissionManagement
                 return result;
             }
 
-            if (!await PermissionStateManager.IsEnabledAsync(permission))
+            if (!await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
                 return result;
             }

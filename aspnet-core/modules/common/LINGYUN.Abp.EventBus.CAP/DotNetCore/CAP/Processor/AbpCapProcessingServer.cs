@@ -41,9 +41,13 @@ namespace DotNetCore.CAP.Processor
         /// <summary>
         /// Start
         /// </summary>
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Starting the processing server.");
+            stoppingToken.Register(() =>
+            {
+                _cts.Cancel();
+            });
 
             _context = new ProcessingContext(_provider, _cts.Token);
 

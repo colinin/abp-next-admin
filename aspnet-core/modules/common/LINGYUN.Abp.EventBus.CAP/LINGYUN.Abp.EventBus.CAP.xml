@@ -94,7 +94,7 @@
             <param name="loggerFactory"></param>
             <param name="provider"></param>
         </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Start">
+        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Start(System.Threading.CancellationToken)">
             <summary>
             Start
             </summary>
@@ -292,7 +292,7 @@
             取消令牌
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.EventBus.IEventErrorHandler,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
             <summary>
             constructor
             </summary>
@@ -300,8 +300,9 @@
             <param name="distributedEventBusOptions"></param>
             <param name="capPublisher"></param>
             <param name="currentUser"></param>
-            <param name="currentTenant"></param>
             <param name="currentClient"></param>
+            <param name="currentTenant"></param>
+            <param name="eventErrorHandler"></param>
             <param name="cancellationTokenProvider"></param>
             <param name="customDistributedEventSubscriber"></param>
         </member>

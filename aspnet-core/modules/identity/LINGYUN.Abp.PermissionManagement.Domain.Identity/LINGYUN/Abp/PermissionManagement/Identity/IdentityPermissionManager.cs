@@ -9,6 +9,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.SimpleStateChecking;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.PermissionManagement.Identity
@@ -25,7 +26,7 @@ namespace LINGYUN.Abp.PermissionManagement.Identity
         protected IUserRoleFinder UserRoleFinder { get; }
         public IdentityPermissionManager(
             IPermissionDefinitionManager permissionDefinitionManager,
-            IPermissionStateManager permissionStateManager,
+            ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
             IPermissionGrantRepository permissionGrantRepository, 
             IPermissionStore permissionStore, 
             IServiceProvider serviceProvider, 
@@ -35,8 +36,8 @@ namespace LINGYUN.Abp.PermissionManagement.Identity
              IDistributedCache<PermissionGrantCacheItem> cache,
             IUserRoleFinder userRoleFinder) 
             : base(
-                  permissionDefinitionManager, 
-                  permissionStateManager, 
+                  permissionDefinitionManager,
+                  simpleStateCheckerManager, 
                   permissionGrantRepository, 
                   permissionStore, 
                   serviceProvider, 
