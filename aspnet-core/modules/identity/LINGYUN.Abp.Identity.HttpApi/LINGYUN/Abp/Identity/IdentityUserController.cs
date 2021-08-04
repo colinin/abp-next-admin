@@ -91,5 +91,19 @@ namespace LINGYUN.Abp.Identity
         {
             await UserAppService.ChangeTwoFactorEnabledAsync(id, input);
         }
+
+        [HttpPut]
+        [Route("{id}/lock/{seconds}")]
+        public virtual async Task LockAsync(Guid id, int seconds)
+        {
+            await UserAppService.LockAsync(id, seconds);
+        }
+
+        [HttpPut]
+        [Route("{id}/unlock")]
+        public virtual async Task UnLockAsync(Guid id)
+        {
+            await UserAppService.UnLockAsync(id);
+        }
     }
 }

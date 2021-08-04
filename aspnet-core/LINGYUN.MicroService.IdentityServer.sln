@@ -55,6 +55,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.Domain", "modules\identityServer\LINGYUN.Abp.IdentityServer.Domain\LINGYUN.Abp.IdentityServer.Domain.csproj", "{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "theming", "theming", "{1D7CE7E0-37AB-477B-919B-B1EB2899A17E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.AntDesign", "theming\Volo.Abp.AspNetCore.Components.WebAssembly.AntDesign\Volo.Abp.AspNetCore.Components.WebAssembly.AntDesign.csproj", "{596BB67C-7765-4481-9C8B-EAE0D9726B75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +137,10 @@ Global
 		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{596BB67C-7765-4481-9C8B-EAE0D9726B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{596BB67C-7765-4481-9C8B-EAE0D9726B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{596BB67C-7765-4481-9C8B-EAE0D9726B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{596BB67C-7765-4481-9C8B-EAE0D9726B75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +170,7 @@ Global
 		{F762D1BB-66FB-421A-A917-D80B7DCC0DC0} = {AF8AECC8-0F42-4FC5-B3C0-00987BA8279F}
 		{D63C0CA8-554D-43F2-8DB4-8B464E4C1CDA} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
 		{79CAF2CA-E9E1-48A5-A21F-3786383C12E0} = {98887A8F-7040-4FA1-842F-A4C77A61ED09}
+		{596BB67C-7765-4481-9C8B-EAE0D9726B75} = {1D7CE7E0-37AB-477B-919B-B1EB2899A17E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCB77471-9ECB-4666-A316-1D6A6285A468}
