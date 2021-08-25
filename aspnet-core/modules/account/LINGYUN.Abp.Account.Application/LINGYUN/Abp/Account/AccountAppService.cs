@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.Account
 
             var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code, options.AppId, options.AppSecret);
 
-            var user = await UserManager.FindByLoginAsync(AbpWeChatMiniProgramConsts.ProviderKey, wehchatOpenId.OpenId);
+            var user = await UserManager.FindByLoginAsync(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId);
             if (user != null)
             {
                 // 应该要抛出微信号已注册异常,而不是直接返回注册用户数据,否则造成用户信息泄露
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Account
 
             (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
-            var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderKey, wehchatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
+            var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
             (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
 
             await CurrentUnitOfWork.SaveChangesAsync();
