@@ -109,7 +109,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
                     new UserLoginInfo(
                         LoginProvider,
                         wechatOpenId.OpenId,
-                        LoginProvider))).CheckErrors();
+                        AbpWeChatGlobalConsts.DisplayName))).CheckErrors();
             }
 
             if (await UserManager.IsLockedOutAsync(currentUser))
