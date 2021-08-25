@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.WeChat.OpenId
+﻿using System;
+
+namespace LINGYUN.Abp.WeChat.OpenId
 {
     public class WeChatOpenIdCacheItem
     {
@@ -15,6 +17,12 @@
             Code = code;
             WeChatOpenId = weChatOpenId;
         }
+
+        public static string CalculateCacheKey(string appId, Guid userId)
+        {
+            return "app:" + appId + ";user:" + userId.ToString("D");
+        }
+
 
         public static string CalculateCacheKey(string appId, string code)
         {

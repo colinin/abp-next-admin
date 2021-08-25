@@ -7,6 +7,7 @@ using IdentityServer4.Validation;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Abp.WeChat.OpenId;
 using LINGYUN.Abp.WeChat.Security.Claims;
+using LINGYUN.Abp.WeChat.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -15,9 +16,14 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Localization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Settings;
+using Volo.Abp.Uow;
 using IdentityResource = Volo.Abp.Identity.Localization.IdentityResource;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -26,10 +32,12 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
     public abstract class WeChatGrantValidator : IExtensionGrantValidator
     {
         public abstract string GrantType { get; }
-        public abstract string LoginProviderKey { get; }
+        public abstract string LoginProvider { get; }
         public abstract string AuthenticationMethod { get; }
 
         public ILogger Logger { protected get; set; }
+        public IAbpLazyServiceProvider ServiceProvider { protected get; set; }
+
         protected IEventService EventService { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
         protected IIdentityUserRepository UserRepository { get; }
@@ -57,6 +65,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
 
         protected abstract Task<WeChatOpenId> FindOpenIdAsync(string code);
 
+        [UnitOfWork]
         public async Task ValidateAsync(ExtensionGrantValidationContext context)
         {
             var raw = context.Request.Raw;
@@ -77,12 +86,30 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             }
 
             var wechatOpenId = await FindOpenIdAsync(wechatCode);
-            var currentUser = await UserManager.FindByLoginAsync(LoginProviderKey, wechatOpenId.OpenId);
+            var currentUser = await UserManager.FindByLoginAsync(LoginProvider, wechatOpenId.OpenId);
             if (currentUser == null)
             {
-                Logger.LogWarning("Invalid grant type: wechat openid not register", wechatOpenId.OpenId);
-                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityServerLocalizer["InvalidGrant:WeChatNotRegister"]);
-                return;
+                var settingProvider = ServiceProvider.LazyGetRequiredService<ISettingProvider>();
+                // TODO 检查启用用户注册是否有必要引用账户模块
+                if (! await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
+                    ! await settingProvider.IsTrueAsync(WeChatSettingNames.EnabledQuickLogin))
+                {
+                    Logger.LogWarning("Invalid grant type: wechat openid not register", wechatOpenId.OpenId);
+                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityServerLocalizer["InvalidGrant:WeChatNotRegister"]);
+                    return;
+                }
+                var guiGenerator = ServiceProvider.LazyGetRequiredService<IGuidGenerator>();
+                var currentTenant = ServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+                var userName = "wxid-" + wechatOpenId.OpenId.ToMd5().ToLower();
+                var userEmail = $"{userName}@{currentTenant.Name ?? "default"}.io";
+                currentUser = new IdentityUser(guiGenerator.Create(), userName, userEmail, currentTenant.Id);
+                (await UserManager.CreateAsync(currentUser)).CheckErrors();
+                (await UserManager.AddLoginAsync(
+                    currentUser,
+                    new UserLoginInfo(
+                        LoginProvider,
+                        wechatOpenId.OpenId,
+                        LoginProvider))).CheckErrors();
             }
 
             if (await UserManager.IsLockedOutAsync(currentUser))

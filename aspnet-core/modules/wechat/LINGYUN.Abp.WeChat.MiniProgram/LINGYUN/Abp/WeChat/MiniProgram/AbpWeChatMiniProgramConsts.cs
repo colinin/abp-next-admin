@@ -5,7 +5,7 @@
         /// <summary>
         /// 微信小程序对应的Provider名称
         /// </summary>
-        public static string ProviderKey { get; set; } = "WeChat.MiniProgram";
+        public static string ProviderName { get; set; } = "WeChat.MiniProgram";
 
         /// <summary>
         /// 微信小程序授权类型

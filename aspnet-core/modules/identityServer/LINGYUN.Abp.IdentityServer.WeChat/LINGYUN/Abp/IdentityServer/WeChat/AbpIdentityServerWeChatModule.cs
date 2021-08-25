@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.IdentityServer.WeChat.MiniProgram;
+﻿using LINGYUN.Abp.Identity.WeChat;
+using LINGYUN.Abp.IdentityServer.WeChat.MiniProgram;
 using LINGYUN.Abp.IdentityServer.WeChat.Official;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
@@ -15,6 +16,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
     [DependsOn(
         typeof(AbpWeChatOfficialModule),
         typeof(AbpWeChatMiniProgramModule),
+        typeof(AbpIdentityWeChatModule),
         typeof(AbpIdentityServerDomainModule))]
     public class AbpIdentityServerWeChatModule : AbpModule
     {

@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
     {
         public override string GrantType => AbpWeChatOfficialConsts.GrantType;
 
-        public override string LoginProviderKey => AbpWeChatOfficialConsts.ProviderKey;
+        public override string LoginProvider => AbpWeChatOfficialConsts.ProviderName;
 
         public override string AuthenticationMethod => AbpWeChatOfficialConsts.AuthenticationMethod;
 

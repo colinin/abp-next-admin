@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.MiniProgram
     {
         public override string GrantType => AbpWeChatMiniProgramConsts.GrantType;
 
-        public override string LoginProviderKey => AbpWeChatMiniProgramConsts.ProviderKey;
+        public override string LoginProvider => AbpWeChatMiniProgramConsts.ProviderName;
 
         public override string AuthenticationMethod => AbpWeChatMiniProgramConsts.AuthenticationMethod;
 

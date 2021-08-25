@@ -4,6 +4,9 @@
     "Features:WeChat": "微信开发",
     "Permission:WeChat": "微信开发",
     "DisplayName:WeChat": "微信开发平台",
-    "Description:WeChat": "微信开发平台"
+    "Description:WeChat": "微信开发平台",
+    "UserLogin": "用户登录",
+    "DisplayName:WeChat.EnabledQuickLogin": "启用快捷登录",
+    "Description:WeChat.EnabledQuickLogin": "用户可在未注册时通过 wx.login 得到的code直接登录"
   }
 }

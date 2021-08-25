@@ -16,17 +16,17 @@ namespace LINGYUN.Abp.WeChat.Token
         /// <summary>
         /// 错误消息
         /// </summary>
-        [JsonProperty("errmsg")] 
+        [JsonProperty("errmsg")]
         public string ErrorMessage { get; set; }
         /// <summary>
         /// 访问令牌
         /// </summary>
-        [JsonProperty("access_token")] 
+        [JsonProperty("access_token")]
         public string AccessToken { get; set; }
         /// <summary>
         /// 过期时间,单位(s)
         /// </summary>
-        [JsonProperty("expires_in")] 
+        [JsonProperty("expires_in")]
         public int ExpiresIn { get; set; }
 
         public WeChatToken ToWeChatToken()

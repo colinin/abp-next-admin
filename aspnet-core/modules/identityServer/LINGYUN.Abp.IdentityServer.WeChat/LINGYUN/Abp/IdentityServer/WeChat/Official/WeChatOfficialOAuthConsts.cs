@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
         /// <summary>
         /// 微信提供者标识
         /// </summary>
-        public static string ProviderKey => AbpWeChatOfficialConsts.ProviderKey;
+        public static string ProviderKey => AbpWeChatOfficialConsts.ProviderName;
         /// <summary>
         /// 微信提供者显示名称
         /// </summary>
