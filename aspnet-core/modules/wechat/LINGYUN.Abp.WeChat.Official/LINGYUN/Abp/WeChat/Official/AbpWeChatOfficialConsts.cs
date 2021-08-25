@@ -5,7 +5,7 @@
         /// <summary>
         /// 微信公众号对应的Provider名称
         /// </summary>
-        public static string ProviderKey { get; set; } = "WeChat.Official";
+        public static string ProviderName { get; set; } = "WeChat.Official";
 
         /// <summary>
         /// 微信公众平台授权类型

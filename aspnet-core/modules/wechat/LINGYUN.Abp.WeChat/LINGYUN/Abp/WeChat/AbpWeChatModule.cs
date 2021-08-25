@@ -7,6 +7,7 @@ using Volo.Abp.Features;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.WeChat
@@ -14,7 +15,8 @@ namespace LINGYUN.Abp.WeChat
     [DependsOn(
         typeof(AbpCachingModule),
         typeof(AbpFeaturesModule),
-        typeof(AbpJsonModule))]
+        typeof(AbpJsonModule),
+        typeof(AbpSettingsModule))]
     public class AbpWeChatModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -4,6 +4,9 @@
     "Features:WeChat": "WeChat",
     "Permission:WeChat": "WeChat",
     "DisplayName:WeChat": "WeChat",
-    "Description:WeChat": "WeChat"
+    "Description:WeChat": "WeChat",
+    "UserLogin": "User Login",
+    "DisplayName:WeChat.EnabledQuickLogin": "Enabled Quick Login",
+    "Description:WeChat.EnabledQuickLogin": "Users can login directly with the code given by wx.login when they are not registered"
   }
 }

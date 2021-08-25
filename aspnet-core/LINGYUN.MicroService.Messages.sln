@@ -81,6 +81,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundWorke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{C49B50D4-5D63-47E6-82F7-E742181CF9DE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "modules\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{DC71289C-18A7-4E4B-A653-E66941EB19AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +221,10 @@ Global
 		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C49B50D4-5D63-47E6-82F7-E742181CF9DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC71289C-18A7-4E4B-A653-E66941EB19AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC71289C-18A7-4E4B-A653-E66941EB19AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC71289C-18A7-4E4B-A653-E66941EB19AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC71289C-18A7-4E4B-A653-E66941EB19AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -260,6 +266,7 @@ Global
 		{05DCBA6B-480A-4D2F-9855-F66F5B7F3A48} = {C00828FB-E7D5-4086-BA50-02022594AB73}
 		{32D4DB5D-74D1-4166-85EA-B2D8F14B8058} = {C00828FB-E7D5-4086-BA50-02022594AB73}
 		{C49B50D4-5D63-47E6-82F7-E742181CF9DE} = {C00828FB-E7D5-4086-BA50-02022594AB73}
+		{DC71289C-18A7-4E4B-A653-E66941EB19AE} = {78164C5C-63B9-4FB6-ACC9-6496E236C946}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6238659A-7267-49B9-A499-8746BDEED6B8}

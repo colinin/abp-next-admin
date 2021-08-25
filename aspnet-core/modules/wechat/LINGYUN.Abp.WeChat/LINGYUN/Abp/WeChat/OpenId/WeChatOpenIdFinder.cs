@@ -2,13 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Authorization;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.WeChat.OpenId
 {
@@ -18,23 +21,36 @@ namespace LINGYUN.Abp.WeChat.OpenId
     {
         public ILogger<WeChatOpenIdFinder> Logger { get; set; }
         protected ICurrentTenant CurrentTenant { get; }
+        protected ICurrentUser CurrentUser { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
-        protected IJsonSerializer JsonSerializer { get; }
         protected IDistributedCache<WeChatOpenIdCacheItem> Cache { get; }
         public WeChatOpenIdFinder(
+            ICurrentUser currentUser,
             ICurrentTenant currentTenant,
-            IJsonSerializer jsonSerializer,
             IHttpClientFactory httpClientFactory,
             IDistributedCache<WeChatOpenIdCacheItem> cache)
         {
+            CurrentUser = currentUser;
             CurrentTenant = currentTenant;
-            JsonSerializer = jsonSerializer;
             HttpClientFactory = httpClientFactory;
 
             Cache = cache;
 
             Logger = NullLogger<WeChatOpenIdFinder>.Instance;
         }
+
+        public virtual async Task<WeChatOpenId> FindAsync(string appId)
+        {
+            if (!CurrentUser.IsAuthenticated)
+            {
+                throw new AbpAuthorizationException("Try to get wechat information when the user is not logged in!");
+            }
+            var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.Id.Value);
+            var openIdCache = await Cache.GetAsync(cacheKey);
+            return openIdCache?.WeChatOpenId ??
+                throw new AbpException("The wechat login session has expired. Use 'wx.login' result code to exchange the sessionKey");
+        }
+
         public virtual async Task<WeChatOpenId> FindAsync(string code, string appId, string appSecret)
         {
             // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
@@ -70,7 +86,8 @@ namespace LINGYUN.Abp.WeChat.OpenId
 
             var response = await client.RequestWeChatOpenIdAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var weChatOpenIdResponse = JsonSerializer.Deserialize<WeChatOpenIdResponse>(responseContent);
+            // 改为直接引用 Newtownsoft.Json
+            var weChatOpenIdResponse = JsonConvert.DeserializeObject<WeChatOpenIdResponse>(responseContent);
             var weChatOpenId = weChatOpenIdResponse.ToWeChatOpenId();
             cacheItem = new WeChatOpenIdCacheItem(code, weChatOpenId);
 
@@ -86,6 +103,11 @@ namespace LINGYUN.Abp.WeChat.OpenId
 
 
             await Cache.SetAsync(cacheKey, cacheItem, cacheOptions);
+
+            if (CurrentUser.IsAuthenticated)
+            {
+                await Cache.SetAsync(WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.Id.Value), cacheItem, cacheOptions);
+            }
 
             Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 

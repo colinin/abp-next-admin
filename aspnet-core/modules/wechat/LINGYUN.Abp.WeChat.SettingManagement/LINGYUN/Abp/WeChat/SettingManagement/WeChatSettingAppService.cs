@@ -2,6 +2,7 @@
 using LINGYUN.Abp.WeChat.Localization;
 using LINGYUN.Abp.WeChat.MiniProgram.Settings;
 using LINGYUN.Abp.WeChat.Official.Settings;
+using LINGYUN.Abp.WeChat.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -44,6 +45,13 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
         {
             var settingGroups = new List<SettingGroupDto>();
             var wechatSettingGroup = new SettingGroupDto(L["DisplayName:WeChat"], L["Description:WeChat"]);
+
+            var loginSetting = wechatSettingGroup.AddSetting(L["UserLogin"], L["UserLogin"]);
+            loginSetting.AddDetail(
+                SettingDefinitionManager.Get(WeChatSettingNames.EnabledQuickLogin),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(WeChatSettingNames.EnabledQuickLogin, providerName, providerKey),
+                ValueType.Boolean);
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
             if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Official))

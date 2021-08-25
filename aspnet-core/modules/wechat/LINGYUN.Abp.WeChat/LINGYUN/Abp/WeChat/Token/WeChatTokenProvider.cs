@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.WeChat.Token
 {
@@ -15,14 +15,11 @@ namespace LINGYUN.Abp.WeChat.Token
     {
         public ILogger<WeChatTokenProvider> Logger { get; set; }
         protected IHttpClientFactory HttpClientFactory { get; }
-        protected IJsonSerializer JsonSerializer { get; }
         protected IDistributedCache<WeChatTokenCacheItem> Cache { get; }
         public WeChatTokenProvider(
-            IJsonSerializer jsonSerializer,
             IHttpClientFactory httpClientFactory,
             IDistributedCache<WeChatTokenCacheItem> cache)
         {
-            JsonSerializer = jsonSerializer;
             HttpClientFactory = httpClientFactory;
 
             Cache = cache;
@@ -70,7 +67,8 @@ namespace LINGYUN.Abp.WeChat.Token
 
             var response = await client.RequestWeChatCodeTokenAsync(request, cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var weChatTokenResponse = JsonSerializer.Deserialize<WeChatTokenResponse>(responseContent);
+            // 改为直接引用 Newtownsoft.Json
+            var weChatTokenResponse = JsonConvert.DeserializeObject<WeChatTokenResponse>(responseContent);
             var weChatToken = weChatTokenResponse.ToWeChatToken();
             cacheItem = new WeChatTokenCacheItem(appId, weChatToken);
 
