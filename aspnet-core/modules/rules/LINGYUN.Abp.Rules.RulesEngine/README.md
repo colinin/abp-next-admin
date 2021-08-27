@@ -41,7 +41,7 @@ PhysicalPath/CurrentTenant.Id[如果存在]/验证规则实体类型名称[typeo
                 options.WorkflowRulesResolvers.Add(new FakeWorkflowRulesResolveContributor());
             });
 
-            Configure<AbpRulesEnginePthsicalFileResolveOptions>(options =>
+            Configure<AbpRulesEnginePhysicalFileResolveOptions>(options =>
             {
                 // 指定真实存在的本地文件路径, 否则将不会检索本地规则文件
                 options.PhysicalPath = Path.Combine(Directory.GetCurrentDirectory(), "Rules");

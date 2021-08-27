@@ -1,4 +1,5 @@
-﻿using RulesEngine;
+﻿using Microsoft.Extensions.Options;
+using RulesEngine;
 using RulesEngine.Interfaces;
 using RulesEngine.Models;
 using System.Collections.Generic;
@@ -13,18 +14,20 @@ namespace LINGYUN.Abp.Rules.RulesEngine
     public class RulesEngineContributor : RuleContributorBase, ISingletonDependency
     {
         private IRulesEngine _ruleEngine;
+        private readonly AbpRulesEngineOptions _options;
         private readonly IWorkflowRulesResolver _workflowRulesResolver;
 
         public RulesEngineContributor(
-            IWorkflowRulesResolver workflowRulesResolver)
+            IWorkflowRulesResolver workflowRulesResolver,
+            IOptions<AbpRulesEngineOptions> options)
         {
+            _options = options.Value;
             _workflowRulesResolver = workflowRulesResolver;
         }
 
         public override void Initialize(RulesInitializationContext context)
         {
             _ruleEngine = CreateRulesEngine();
-
             _workflowRulesResolver.Initialize(context);
         }
 
@@ -47,17 +50,13 @@ namespace LINGYUN.Abp.Rules.RulesEngine
         /// <returns></returns>
         protected virtual Engine CreateRulesEngine()
         {
-            var reSetting = new ReSettings
-            {
-                NestedRuleExecutionMode = NestedRuleExecutionMode.Performance
-            };
-
-            return new Engine(Logger, reSetting);
+            return new Engine(Logger, _options.Settings);
         }
 
         protected virtual async Task ExecuteRulesAsync<T>(T input, WorkflowRules[] workflowRules, object[] @params = null)
         {
-            _ruleEngine.AddWorkflow(workflowRules);
+            // TODO: 性能缺陷 规则文件每一次调用都会重复编译
+            _ruleEngine.AddOrUpdateWorkflow(workflowRules);
 
             // 传入参与验证的实体参数
             var inputs = new List<object>()

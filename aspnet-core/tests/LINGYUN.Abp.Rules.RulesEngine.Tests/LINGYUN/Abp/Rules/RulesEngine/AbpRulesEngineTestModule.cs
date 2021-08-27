@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpRulesEnginePthsicalFileResolveOptions>(options =>
+            Configure<AbpRulesEnginePhysicalFileResolveOptions>(options =>
             {
                 options.PhysicalPath = Path.Combine(Directory.GetCurrentDirectory(), "Rules");
             });

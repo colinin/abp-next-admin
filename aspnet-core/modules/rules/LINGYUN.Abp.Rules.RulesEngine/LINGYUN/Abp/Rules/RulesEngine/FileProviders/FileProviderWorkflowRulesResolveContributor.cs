@@ -17,7 +17,6 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
         protected IJsonSerializer JsonSerializer { get; private set; }
 
         protected IFileProvider FileProvider { get; private set; }
-
         protected FileProviderWorkflowRulesResolveContributor()
         {
         }
@@ -26,8 +25,8 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
         {
             Initialize(context.ServiceProvider);
 
-            RulesCache = context.ServiceProvider.GetRequiredService<IMemoryCache>();
-            JsonSerializer = context.ServiceProvider.GetRequiredService<IJsonSerializer>();
+            RulesCache = context.GetRequiredService<IMemoryCache>();
+            JsonSerializer = context.GetRequiredService<IJsonSerializer>();
 
             FileProvider = BuildFileProvider(context);
         }
@@ -81,11 +80,11 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
             if (fileInfo != null && fileInfo.Exists)
             {
                 // 规则文件监控
-                // TODO: 删除模块的规则缓存还需要删除RulesEngine中rulesCache已编译的规则缓存
                 ChangeToken.OnChange(
                     () => FileProvider.Watch(ruleFile),
                     (int ruleId) =>
                     {
+                        // 清除规则缓存
                         RulesCache.Remove(ruleId);
                     }, ruleId);
 
