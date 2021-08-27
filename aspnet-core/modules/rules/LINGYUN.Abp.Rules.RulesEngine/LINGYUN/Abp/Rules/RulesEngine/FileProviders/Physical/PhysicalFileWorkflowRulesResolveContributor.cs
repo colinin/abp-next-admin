@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical
 
         private RuleIdGenerator _ruleIdGenerator;
         private AbpRulesEngineOptions _rulesEngineOptions;
-        private AbpRulesEnginePthsicalFileResolveOptions _fileResolveOptions;
+        private AbpRulesEnginePhysicalFileResolveOptions _fileResolveOptions;
 
         public PhysicalFileWorkflowRulesResolveContributor()
         {
@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical
         {
             _ruleIdGenerator = serviceProvider.GetRequiredService<RuleIdGenerator>();
             _rulesEngineOptions = serviceProvider.GetRequiredService<IOptions<AbpRulesEngineOptions>>().Value;
-            _fileResolveOptions = serviceProvider.GetRequiredService<IOptions<AbpRulesEnginePthsicalFileResolveOptions>>().Value;
+            _fileResolveOptions = serviceProvider.GetRequiredService<IOptions<AbpRulesEnginePhysicalFileResolveOptions>>().Value;
         }
 
         protected override IFileProvider BuildFileProvider(RulesInitializationContext context)
