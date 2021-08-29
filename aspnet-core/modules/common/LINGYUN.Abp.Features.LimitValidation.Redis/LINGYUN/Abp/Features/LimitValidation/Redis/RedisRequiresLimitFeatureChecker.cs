@@ -85,7 +85,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             var result = await _redis.ScriptEvaluateAsync(luaSha1, keys, values);
             if (result.Type == ResultType.Error)
             {
-                throw new AbpException($"脚本执行错误:{result}");
+                throw new AbpException($"Script evaluate error: {result}");
             }
             return (int)result;
         }
@@ -93,20 +93,6 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
         private string NormalizeKey(RequiresLimitFeatureContext context)
         {
             return _featureNamingNormalizer.NormalizeFeatureName(_instance, context);
-        }
-
-        private void RegistenConnectionEvent(ConnectionMultiplexer connection)
-        {
-            if (connection != null)
-            {
-                connection.ConnectionFailed += OnConnectionFailed;
-                connection.ConnectionRestored += OnConnectionRestored;
-                connection.ErrorMessage += OnErrorMessage;
-                connection.ConfigurationChanged += OnConfigurationChanged;
-                connection.HashSlotMoved += OnHashSlotMoved;
-                connection.InternalError += OnInternalError;
-                connection.ConfigurationChangedBroadcast += OnConfigurationChangedBroadcast;
-            }
         }
 
         private async Task ConnectAsync(CancellationToken token = default(CancellationToken))
@@ -134,7 +120,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
                     _redisConfig.AllowAdmin = true;
                     _redisConfig.SetDefaultPorts();
                     _connection = await ConnectionMultiplexer.ConnectAsync(_redisConfig);
-                    RegistenConnectionEvent(_connection);
+                    // fix: 无需关注redis连接事件
                     _redis = _connection.GetDatabase();
                     _server = _connection.GetServer(_redisConfig.EndPoints[0]);
                 }
@@ -143,47 +129,6 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             {
                 _connectionLock.Release();
             }
-        }
-
-        private void OnConfigurationChangedBroadcast(object sender, EndPointEventArgs e)
-        {
-            Logger.LogInformation("Redis server master/slave changes");
-        }
-
-        private void OnInternalError(object sender, InternalErrorEventArgs e)
-        {
-            Logger.LogError("Redis internal error, origin:{0}, connectionType:{1}",
-                e.Origin, e.ConnectionType);
-            Logger.LogError(e.Exception, "Redis internal error");
-
-        }
-
-        private void OnHashSlotMoved(object sender, HashSlotMovedEventArgs e)
-        {
-            Logger.LogInformation("Redis configuration changed");
-        }
-
-        private void OnConfigurationChanged(object sender, EndPointEventArgs e)
-        {
-            Logger.LogInformation("Redis configuration changed");
-        }
-
-        private void OnErrorMessage(object sender, RedisErrorEventArgs e)
-        {
-            Logger.LogWarning("Redis error, message:{0}", e.Message);
-        }
-
-        private void OnConnectionRestored(object sender, ConnectionFailedEventArgs e)
-        {
-            Logger.LogWarning("Redis connection restored, failureType:{0}, connectionType:{1}",
-                e.FailureType, e.ConnectionType);
-        }
-
-        private void OnConnectionFailed(object sender, ConnectionFailedEventArgs e)
-        {
-            Logger.LogError("Redis connection failed, failureType:{0}, connectionType:{1}",
-                e.FailureType, e.ConnectionType);
-            Logger.LogError(e.Exception, "Redis lock connection failed");
         }
     }
 }

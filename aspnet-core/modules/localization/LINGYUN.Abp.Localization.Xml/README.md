@@ -51,7 +51,7 @@ Xml文件格式如下
 ```xml
 
 <?xml version="1.0" encoding="utf-8"?>
-<localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="lingyun.abp">
+<localization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
  <culture name="en" />
  <texts>
   <text key="Hello China" value="Hello China!" />
