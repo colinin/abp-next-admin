@@ -156,6 +156,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Http
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM.SignalR", "modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj", "{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "modules\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -406,6 +408,10 @@ Global
 		{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -484,6 +490,7 @@ Global
 		{CF30221B-CA7A-42CD-B91A-B7224AB2F38B} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{191BB108-546E-4E70-978E-D6A8149C319C} = {086BE5BE-8594-4DA7-8819-935FEF76DABD}
 		{DEB98AD7-9630-4F32-89E6-C1A118D1D18C} = {B91F26C5-B148-4094-B5F1-71E5F945DBED}
+		{00F1D30E-A6F6-464F-A80B-D423CFAA79A3} = {22C61434-D29A-4376-AD56-F5089F3E617A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}

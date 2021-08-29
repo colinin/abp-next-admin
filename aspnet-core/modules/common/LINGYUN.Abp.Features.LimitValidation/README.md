@@ -24,6 +24,50 @@ public class YouProjectModule : AbpModule
 {
   // other
 }
+
+public static class FakeFeatureNames 
+{
+    public const string GroupName = "FakeFeature.Tests";
+    // 类型限制调用次数功能名称
+    public const string ClassLimitFeature = GroupName + ".LimitFeature";
+    // 方法限制调用次数功能名称
+    public const string MethodLimitFeature = GroupName + ".MethodLimitFeature";
+    // 限制调用间隔功能名称
+    public const string IntervalFeature = GroupName + ".IntervalFeature";
+}
+
+// 流量限制依赖自定义功能
+public class FakeFeatureDefinitionProvider : FeatureDefinitionProvider
+{
+    public override void Define(IFeatureDefinitionContext context)
+    {
+        var featureGroup = context.AddGroup(FakeFeatureNames.GroupName);
+        featureGroup.AddFeature(
+            name: FakeFeatureNames.ClassLimitFeature,
+            defaultValue: 1000.ToString(), // 周期内最大允许调用1000次
+            valueType: new ToggleStringValueType(new NumericValueValidator(1, 1000)));
+        featureGroup.AddFeature(
+            name: FakeFeatureNames.MethodLimitFeature,
+            defaultValue: 100.ToString(), // 周期内最大允许调用100次
+            valueType: new ToggleStringValueType(new NumericValueValidator(1, 1000)));
+        featureGroup.AddFeature(
+            name: FakeFeatureNames.IntervalFeature,
+            defaultValue: 1.ToString(),   // 限制周期
+            valueType: new ToggleStringValueType(new NumericValueValidator(1, 1000)));
+    }
+}
+
+// 按照预设的参数,类型在一天钟内仅允许调用1000次
+[RequiresLimitFeature(FakeFeatureNames.ClassLimitFeature, FakeFeatureNames.IntervalFeature, LimitPolicy.Days)]
+public class FakeLimitClass
+{
+    // 按照预设的参数,方法在一分钟内仅允许调用100次
+    [RequiresLimitFeature(FakeFeatureNames.MethodLimitFeature, FakeFeatureNames.IntervalFeature, LimitPolicy.Minute)]
+    public void LimitMethod() 
+    {
+        // other...
+    }
+}
 ```
 
 如果需要自行处理功能限制策略时长,请覆盖对应策略的默认策略,返回的时钟刻度单位始终是秒  
