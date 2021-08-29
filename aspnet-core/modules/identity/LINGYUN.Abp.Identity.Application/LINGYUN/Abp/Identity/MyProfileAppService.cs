@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
