@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.OssManagement.Permissions;
+﻿using LINGYUN.Abp.OssManagement.Localization;
+using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,8 @@ namespace LINGYUN.Abp.OssManagement
         {
             _ossObjectAppService = ossObjectAppService;
             _staticFilesAppServic = staticFilesAppServic;
+
+            LocalizationResource = typeof(AbpOssManagementResource);
         }
 
         [HttpPost]
@@ -35,9 +38,9 @@ namespace LINGYUN.Abp.OssManagement
         [Route("{bucket}/p/{path}")]
         [Route("{bucket}/p/{path}/{name}")]
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task<OssObjectDto> UploadAsync(string bucket, string path, string name, [FromForm] IFormFile file)
+        public virtual async Task<OssObjectDto> UploadAsync(string bucket, string path, string name)
         {
-            if (file == null || file.Length <= 0)
+            if (Request.ContentLength <= 0)
             {
                 ThrowValidationException(L["FileNotBeNullOrEmpty"], "File");
             }
@@ -46,8 +49,8 @@ namespace LINGYUN.Abp.OssManagement
             {
                 Bucket = HttpUtility.UrlDecode(bucket),
                 Path = HttpUtility.UrlDecode(path),
-                Object = name ?? file.FileName,
-                Content = file.OpenReadStream(),
+                Object = name ?? Request.Form.Files[0].FileName,
+                Content = Request.Form.Files[0].OpenReadStream(),
                 Overwrite = true
             };
 

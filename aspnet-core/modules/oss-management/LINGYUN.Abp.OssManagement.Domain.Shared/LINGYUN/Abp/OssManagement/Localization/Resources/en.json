@@ -15,6 +15,7 @@
     "Permission:Delete": "Delete",
     "Permission:Upload": "Upload",
     "Permission:Download": "Download",
+    "FileNotBeNullOrEmpty": "Upload file not be null!",
     "FileNotFound": "The specified file does not exist!",
     "PathNotFound": "The specified directory does not exist!",
     "FilePathNotFound": "The file or directory does not exist!",
