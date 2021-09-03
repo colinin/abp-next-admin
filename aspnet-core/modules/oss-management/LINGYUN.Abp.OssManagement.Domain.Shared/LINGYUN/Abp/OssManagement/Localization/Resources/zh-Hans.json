@@ -15,6 +15,7 @@
     "Permission:Delete": "删除",
     "Permission:Upload": "上传",
     "Permission:Download": "下载",
+    "FileNotBeNullOrEmpty": "上传文件不能为空!",
     "FileNotFound": "指定的文件不存在!",
     "PathNotFound": "指定的目录不存在!",
     "FilePathNotFound": "文件或目录不存在!",
