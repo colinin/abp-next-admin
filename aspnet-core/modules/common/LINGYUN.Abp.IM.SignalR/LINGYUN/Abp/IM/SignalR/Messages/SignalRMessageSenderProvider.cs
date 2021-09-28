@@ -8,6 +8,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.IM.SignalR.Messages
 {
@@ -23,7 +24,7 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
         public SignalRMessageSenderProvider(
            IOnlineClientManager onlineClientManager,
            IHubContext<MessagesHub> hubContext,
-           IServiceProvider serviceProvider,
+           IAbpLazyServiceProvider serviceProvider,
            IOptions<AbpIMSignalROptions> options)
             : base(serviceProvider)
         {

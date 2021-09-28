@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading.Tasks;
@@ -11,33 +10,14 @@ namespace LINGYUN.Abp.IM.Messages
     {
         public abstract string Name { get; }
 
-        protected IServiceProvider ServiceProvider { get; }
+        protected IAbpLazyServiceProvider ServiceProvider { get; }
 
-        protected readonly object ServiceProviderLock = new object();
-
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-        private ILoggerFactory _loggerFactory;
+        protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-        {
-            if (reference == null)
-            {
-                lock (ServiceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = ServiceProvider.GetRequiredService<TService>();
-                    }
-                }
-            }
-
-            return reference;
-        }
-
-        protected MessageSenderProviderBase(IServiceProvider serviceProvider)
+        protected MessageSenderProviderBase(IAbpLazyServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
         }
