@@ -1,4 +1,4 @@
-[Actors](../README.md) | Dapr.Actors 文档
+[Actors](../README.md) | Dapr.Client 文档
 
 # LINGYUN.Abp.Dapr.Client
 
@@ -160,7 +160,7 @@ public class InvokeClass
     "RemoteServices": {
         "System": {
             "AppId": "myapp",
-            "BaserUrl": ""http://127.0.0.1:50000""
+            "BaserUrl": "http://127.0.0.1:50000"
         }
     }
 }
