@@ -1,4 +1,4 @@
-[Client](./LINGYUN.Abp.Dapr.Client/README.md) | Dapr.Client 文档
+[Client](./LINGYUN.Abp.Dapr.Client/README.md) | Dapr.Actors 文档
 
 # Dapr.Actors 集成
 
