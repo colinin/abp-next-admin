@@ -18,6 +18,7 @@ using Volo.Abp.Timing;
 using Volo.Abp.Users;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.SettingManagement
 {
@@ -49,6 +50,9 @@ namespace LINGYUN.Abp.SettingManagement
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
         public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
         {
+            // 增加特性检查
+            await CheckFeatureAsync();
+
             foreach (var setting in input.Settings)
             {
                 await SettingManager.SetGlobalAsync(setting.Name, setting.Value);
@@ -66,6 +70,9 @@ namespace LINGYUN.Abp.SettingManagement
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
         public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
+            // 增加特性检查
+            await CheckFeatureAsync();
+
             if (CurrentTenant.IsAvailable)
             {
                 foreach (var setting in input.Settings)
@@ -372,6 +379,11 @@ namespace LINGYUN.Abp.SettingManagement
             #endregion
 
             return new ListResultDto<SettingGroupDto>(settingGroups);
+        }
+
+        protected virtual async Task CheckFeatureAsync()
+        {
+            await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
         }
     }
 }
