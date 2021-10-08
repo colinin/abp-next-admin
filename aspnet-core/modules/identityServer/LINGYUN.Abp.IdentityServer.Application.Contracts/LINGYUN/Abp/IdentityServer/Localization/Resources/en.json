@@ -55,6 +55,7 @@
     "Name": "Name",
     "DisplayName": "Display Name",
     "Description": "Description",
+    "Enabled": "Enabled",
     "Required": "Required",
     "Emphasize": "Emphasize",
     "ShowInDiscoveryDocument": "Show In Discovery Document",

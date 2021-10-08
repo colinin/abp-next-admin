@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
                 input.SkipCount, input.MaxResultCount,
                 input.Filter);
             // 未加Filter过滤器? 结果数不准
-            var apiResourceCount = await ApiResourceRepository.GetCountAsync();
+            var apiResourceCount = await ApiResourceRepository.GetCountAsync(input.Filter);
 
             return new PagedResultDto<ApiResourceDto>(apiResourceCount,
                 ObjectMapper.Map<List<ApiResource>, List<ApiResourceDto>>(apiResources));
