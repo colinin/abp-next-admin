@@ -55,6 +55,7 @@
     "Name": "名称",
     "DisplayName": "显示名称",
     "Description": "描述",
+    "Enabled": "启用",
     "Required": "必要",
     "Emphasize": "强调",
     "ShowInDiscoveryDocument": "在发现文档中显示",
