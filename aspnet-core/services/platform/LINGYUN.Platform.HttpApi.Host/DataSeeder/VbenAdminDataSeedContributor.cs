@@ -60,6 +60,10 @@ namespace LINGYUN.Platform.DataSeeder
                 await SeedPlatformMenuAsync(layout, layoutData);
                 // 网关菜单
                 await SeedApiGatewayMenuAsync(layout, layoutData);
+                // 多语言菜单
+                await SeedLocalizationMenuAsync(layout, layoutData);
+                // 对象存储菜单
+                await SeedOssManagementMenuAsync(layout, layoutData);
             }
         }
 
@@ -849,6 +853,148 @@ namespace LINGYUN.Platform.DataSeeder
                 new string[] { "vben-admin" });
         }
 
+        private async Task SeedLocalizationMenuAsync(Layout layout, Data data)
+        {
+            var localization = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Localization",    //name
+                "/localization",   //path
+                CodeNumberGenerator.CreateCode(26), //code
+                layout.Path,    //component
+                "Localization", //displayName
+                "",     //redirect
+                "Localization", //description 
+                null,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Localization" },
+                    { "icon", "ant-design:translation-outlined" },
+                    { "hideTab", false },
+                    { "ignoreAuth", false },
+                },
+                new string[] { "vben-admin" });
+            var languages = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Languages",    //name
+                "/localization/languages",   //path
+                CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(1)), //code
+                "/localization/languages/index",    //component
+                "Languages", //displayName
+                "",     //redirect
+                "Languages", //description 
+                localization.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Languages" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "vben-admin" });
+            var resources = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Resources",    //name
+                "/localization/resources",   //path
+                CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(2)), //code
+                "/localization/resources/index",    //component
+                "Resources", //displayName
+                "",     //redirect
+                "Resources", //description 
+                localization.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Resources" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "vben-admin" });
+            var texts = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Texts",    //name
+                "/localization/texts",   //path
+                CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(3)), //code
+                "/localization/texts/index",    //component
+                "Texts", //displayName
+                "",     //redirect
+                "Texts", //description 
+                localization.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Texts" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "vben-admin" });
+        }
+
+        private async Task SeedOssManagementMenuAsync(Layout layout, Data data)
+        {
+            var oss = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "OssManagement",    //name
+                "/oss",   //path
+                CodeNumberGenerator.CreateCode(27), //code
+                layout.Path,    //component
+                "Oss Management", //displayName
+                "",     //redirect
+                "Oss Management", //description 
+                null,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Oss Management" },
+                    { "icon", "ant-design:file-twotone" },
+                    { "hideTab", false },
+                    { "ignoreAuth", false },
+                },
+                new string[] { "vben-admin" });
+            var containers = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Containers",    //name
+                "/oss/containers",   //path
+                CodeNumberGenerator.AppendCode(oss.Code, CodeNumberGenerator.CreateCode(1)), //code
+                "/oss-management/containers/index",    //component
+                "Containers", //displayName
+                "",     //redirect
+                "Containers", //description 
+                oss.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Containers" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "vben-admin" });
+            var objects = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Objects",    //name
+                "/oss/objects",   //path
+                CodeNumberGenerator.AppendCode(oss.Code, CodeNumberGenerator.CreateCode(2)), //code
+                "/oss-management/objects/index",    //component
+                "Objects", //displayName
+                "",     //redirect
+                "Objects", //description 
+                oss.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "Objects" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "vben-admin" });
+        }
 
         private async Task<Menu> SeedMenuAsync(
             Layout layout,
