@@ -523,6 +523,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             }
             if (!blobName.IsNullOrWhiteSpace())
             {
+                // fix: If the user passes /, the disk root directory is retrieved
+                blobName = blobName.Equals("/") ? "./" : blobName;
                 blobPath = Path.Combine(blobPath, blobName);
             }
 
