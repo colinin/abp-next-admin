@@ -439,7 +439,9 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             var copyFileSystemNames = fileSystemNames;
             if (markIndex > 0)
             {
-                copyFileSystemNames = fileSystemNames[(markIndex+1)..];
+                // fix: 翻页查询数组可能引起下标越界
+                // copyFileSystemNames = fileSystemNames[(markIndex+1)..];
+                copyFileSystemNames = fileSystemNames[markIndex..];
             }
             // 截取指定数量的Oss对象
             int maxResultCount = request.MaxKeys ?? 10;
