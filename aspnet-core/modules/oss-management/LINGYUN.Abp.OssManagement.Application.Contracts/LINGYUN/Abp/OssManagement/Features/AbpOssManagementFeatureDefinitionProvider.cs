@@ -15,8 +15,10 @@ namespace LINGYUN.Abp.OssManagement.Features
 
             var ossFeature = featureGroup.AddFeature(
                 name: AbpOssManagementFeatureNames.OssObject.Default,
+                defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:OssObject"),
-                description: L("Features:Description:OssObject"));
+                description: L("Features:Description:OssObject"),
+                valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
             ossFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.DownloadFile, 
