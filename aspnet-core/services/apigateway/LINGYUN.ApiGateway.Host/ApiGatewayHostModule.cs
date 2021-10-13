@@ -76,6 +76,13 @@ namespace LINGYUN.ApiGateway
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            // fix: 不限制请求体大小，解决上传文件问题
+            Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = null;
+                options.Limits.MaxRequestBufferSize = null;
+            });
             
             Configure<AbpAutoMapperOptions>(options =>
             {
