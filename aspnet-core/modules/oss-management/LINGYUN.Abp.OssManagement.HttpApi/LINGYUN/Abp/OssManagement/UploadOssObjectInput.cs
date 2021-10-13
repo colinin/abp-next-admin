@@ -18,12 +18,12 @@ namespace LINGYUN.Abp.OssManagement
         /// 常规块大小
         /// </summary>
         [Required]
-        public int ChunkSize { get; set; }
+        public long ChunkSize { get; set; }
         /// <summary>
         /// 当前块大小
         /// </summary>
         [Required]
-        public int CurrentChunkSize { get; set; }
+        public long CurrentChunkSize { get; set; }
         /// <summary>
         /// 当前上传中块的索引
         /// </summary>
@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.OssManagement
         /// 总文件大小
         /// </summary>
         [Required]
-        public int TotalSize { get; set; }
+        public long TotalSize { get; set; }
 
         #endregion
 
