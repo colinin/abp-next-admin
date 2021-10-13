@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.ExceptionHandling.Emailing.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -13,6 +14,10 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var configuration = context.Services.GetConfiguration();
+            Configure<AbpEmailExceptionHandlingOptions>(
+                configuration.GetSection("ExceptionHandling:Emailing"));
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingExceptionHandlingModule>();
