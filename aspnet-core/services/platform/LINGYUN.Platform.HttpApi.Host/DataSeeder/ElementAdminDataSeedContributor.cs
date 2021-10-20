@@ -241,9 +241,9 @@ namespace LINGYUN.Platform.DataSeeder
         private async Task SeedAdminMenuAsync(Layout layout, Data data)
         {
             var adminMenu = await SeedMenuAsync(
-                layout, 
+                layout,
                 data,
-                "admin", 
+                "admin",
                 "/admin",
                 CodeNumberGenerator.CreateCode(2),
                 layout.Path,
@@ -938,7 +938,7 @@ namespace LINGYUN.Platform.DataSeeder
                     menu.SetProperty(item.Key, item.Value);
                 }
             }
-            
+
             if (roles != null)
             {
                 foreach (var role in roles)

@@ -140,7 +140,8 @@ namespace LINGYUN.Abp.MessageService.Group
                                  gp.AllowAnonymous,
                                  gp.AllowSendMessage,
                                  gp.MaxUserCount,
-                                 gp.Name
+                                 gp.Name,
+                                 gp.GroupId,
                              }
                              into cg
                              select new IM.Group.Group
@@ -149,6 +150,7 @@ namespace LINGYUN.Abp.MessageService.Group
                                  AllowSendMessage = cg.Key.AllowSendMessage,
                                  MaxUserLength = cg.Key.MaxUserCount,
                                  Name = cg.Key.Name,
+                                 Id = cg.Key.GroupId.ToString(),
                                  GroupUserCount = cg.Count()
                              };
 

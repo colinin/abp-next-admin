@@ -3,6 +3,10 @@
     public class Group
     {
         /// <summary>
+        /// 群组标识
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
         /// 群组名称
         /// </summary>
         public string Name { get; set; }

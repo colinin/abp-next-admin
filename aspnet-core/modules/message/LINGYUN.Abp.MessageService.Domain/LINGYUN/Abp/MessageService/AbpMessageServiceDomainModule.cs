@@ -24,23 +24,6 @@ namespace LINGYUN.Abp.MessageService
             {
                 options.AddProfile<MessageServiceDomainAutoMapperProfile>(validate: true);
             });
-
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpMessageServiceDomainModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                       .Get<MessageServiceResource>()
-                       .AddVirtualJson("/LINGYUN/Abp/MessageService/Localization/Resources");
-            });
-
-            Configure<AbpExceptionLocalizationOptions>(options =>
-            {
-                options.MapCodeNamespace(MessageServiceErrorCodes.Namespace, typeof(MessageServiceResource));
-            });
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)

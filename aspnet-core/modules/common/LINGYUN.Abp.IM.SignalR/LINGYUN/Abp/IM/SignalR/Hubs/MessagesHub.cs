@@ -43,8 +43,9 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
             foreach (var group in userGroups)
             {
-                await Groups.AddToGroupAsync(client.ConnectionId, group.Name);
-                var groupClient = Clients.Group(group.Name);
+                // 应使用群组标识
+                await Groups.AddToGroupAsync(client.ConnectionId, group.Id);
+                var groupClient = Clients.Group(group.Id);
                 if (groupClient != null)
                 {
                     // 发送用户上线通知
