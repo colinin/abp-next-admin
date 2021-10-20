@@ -30,11 +30,8 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<List<UserFriend>> GetAllMembersAsync(
             Guid userId,
             string sorting = nameof(UserChatFriend.RemarkName),
-            bool reverse = false,
              CancellationToken cancellationToken = default)
         {
-            sorting = reverse ? sorting + " DESC" : sorting;
-
             var dbContext = await GetDbContextAsync();
             var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
                                   join ucc in dbContext.Set<UserChatCard>()
@@ -61,7 +58,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                   };
 
             return await userFriendQuery
-                .OrderBy(sorting ?? $"{nameof(UserChatFriend.RemarkName)} DESC")
+                .OrderBy(sorting ?? nameof(UserChatFriend.RemarkName))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -95,10 +92,14 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserFriend>> GetMembersAsync(Guid userId, string filter = "", string sorting = nameof(UserChatFriend.UserId), bool reverse = false, int skipCount = 0, int maxResultCount = 10, CancellationToken cancellationToken = default)
+        public virtual async Task<List<UserFriend>> GetMembersAsync(
+            Guid userId, 
+            string filter = "", 
+            string sorting = nameof(UserChatFriend.UserId), 
+            int skipCount = 0, 
+            int maxResultCount = 10, 
+            CancellationToken cancellationToken = default)
         {
-            sorting = reverse ? sorting + " desc" : sorting;
-
             var dbContext = await GetDbContextAsync();
             // 过滤用户资料
             var userChatCardQuery = dbContext.Set<UserChatCard>()
@@ -134,7 +135,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                   };
 
             return await userFriendQuery
-                .OrderBy(sorting)
+                .OrderBy(sorting ?? nameof(UserChatFriend.UserId))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

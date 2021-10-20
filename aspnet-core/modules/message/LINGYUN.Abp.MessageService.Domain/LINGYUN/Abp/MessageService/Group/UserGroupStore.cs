@@ -133,14 +133,13 @@ namespace LINGYUN.Abp.MessageService.Group
             Guid? tenantId, 
             long groupId,
             string sorting = nameof(GroupUserCard.UserId), 
-            bool reverse = false, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await _userChatGroupRepository.GetMembersAsync(groupId, sorting, reverse, skipCount, maxResultCount, cancellationToken);
+                return await _userChatGroupRepository.GetMembersAsync(groupId, sorting, skipCount, maxResultCount, cancellationToken);
             }
         }
     }

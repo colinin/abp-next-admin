@@ -66,7 +66,6 @@ namespace LINGYUN.Abp.IM.Group
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="groupId"></param>
-        /// <param name="filter"></param>
         /// <param name="sorting"></param>
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
@@ -75,7 +74,6 @@ namespace LINGYUN.Abp.IM.Group
             Guid? tenantId, 
             long groupId,
             string sorting = nameof(GroupUserCard.UserId), 
-            bool reverse = false, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);

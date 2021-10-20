@@ -12,8 +12,8 @@
         public string UserOnlineMethod { get; set; }
         public AbpIMSignalROptions()
         {
-            GetChatMessageMethod = "getChatMessage";
-            UserOnlineMethod = "onUserOnlined";
+            GetChatMessageMethod = "get-chat-message";
+            UserOnlineMethod = "on-user-onlined";
         }
     }
 }

@@ -99,7 +99,7 @@ export default class extends mixins(EventBusMiXin) {
         .withUrl('/signalr-hubs/signalr-hubs/notifications', { accessTokenFactory: () => userToken })
         .withAutomaticReconnect({ nextRetryDelayInMilliseconds: () => 60000 })
         .build()
-      this.connection.on('getNotification', data => this.onNotificationReceived(data))
+      this.connection.on('get-notification', data => this.onNotificationReceived(data))
       this.connection.onclose(error => {
         console.log('signalr connection has closed, error:')
         console.log(error)
@@ -180,7 +180,7 @@ export default class extends mixins(EventBusMiXin) {
   }
 
   private handleClickNotification(notificationId: string) {
-    this.connection.invoke('ChangeState', notificationId, ReadState.Read).then(() => {
+    this.connection.invoke('change-state', notificationId, ReadState.Read).then(() => {
       const removeNotifyIndex = this.notifications.findIndex(n => n.id === notificationId)
       this.notifications.splice(removeNotifyIndex, 1)
       this.trigger('onNotificationReadChanged')

@@ -27,7 +27,6 @@ namespace LINGYUN.Abp.MessageService.Chat
         Task<List<UserFriend>> GetAllMembersAsync(
             Guid userId,
             string sorting = nameof(UserChatFriend.RemarkName),
-            bool reverse = false,
              CancellationToken cancellationToken = default);
 
         Task<int> GetMembersCountAsync(
@@ -39,7 +38,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid userId,
             string filter = "",
             string sorting = nameof(UserChatFriend.UserId),
-            bool reverse = false,
             int skipCount = 0,
             int maxResultCount = 10,
              CancellationToken cancellationToken = default);

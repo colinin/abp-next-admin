@@ -28,6 +28,10 @@
     {
         public const string Namespace = "LINGYUN.Abp.Message";
         /// <summary>
+        /// 试图撤回过期消息
+        /// </summary>
+        public const string ExpiredMessageCannotBeReCall = Namespace + ":01303";
+        /// <summary>
         /// 消息不完整
         /// </summary>
         public const string MessageIncomplete = Namespace + ":01400";

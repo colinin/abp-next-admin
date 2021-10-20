@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var chatMessages = await _messageStore
                 .GetChatMessageAsync(CurrentTenant.Id, CurrentUser.GetId(), input.ReceiveUserId, 
-                    input.Filter, input.Sorting, input.Reverse,
+                    input.Filter, input.Sorting,
                     input.MessageType, input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(chatMessageCount, chatMessages);
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             var chatMessages = await _messageStore
                 .GetLastChatMessagesAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Sorting, input.Reverse, input.MaxResultCount);
+                    input.Sorting, input.MaxResultCount);
 
             return new ListResultDto<LastChatMessage>(chatMessages);
         }
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var groupMessages = await _messageStore
                 .GetGroupMessageAsync(CurrentTenant.Id, input.GroupId,
-                    input.Filter, input.Sorting, input.Reverse,
+                    input.Filter, input.Sorting,
                     input.MessageType, input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<ChatMessage>(groupMessageCount, groupMessages);

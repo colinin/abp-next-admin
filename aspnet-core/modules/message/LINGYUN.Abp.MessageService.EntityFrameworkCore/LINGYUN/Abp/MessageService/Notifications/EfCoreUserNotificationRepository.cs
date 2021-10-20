@@ -101,15 +101,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
             Guid userId, 
             string filter = "",
             string sorting = nameof(Notification.CreationTime),
-            bool reverse = true,
             NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(Notification.CreationTime);
-            sorting = reverse ? sorting + " DESC" : sorting;
-
             var dbContext = await GetDbContextAsync();
             var userNotifilerQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
@@ -124,7 +120,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
                     nf.NotificationName.Contains(filter) ||
                     nf.NotificationTypeName.Contains(filter))
-                .OrderBy(sorting)
+                .OrderBy(sorting ??= nameof(Notification.CreationTime))
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));

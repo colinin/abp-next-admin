@@ -5,6 +5,5 @@ namespace LINGYUN.Abp.MessageService.Chat
     public class GetMyFriendsDto : ISortedResultRequest
     {
         public string Sorting { get; set; }
-        public bool Reverse { get; set; }
     }
 }

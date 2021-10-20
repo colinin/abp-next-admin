@@ -247,7 +247,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             Guid userId,
             string filter = "",
             string sorting = nameof(NotificationInfo.CreationTime),
-            bool reverse = true,
             NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
@@ -256,7 +255,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (_currentTenant.Change(tenantId))
             {
                 var notifications = await _userNotificationRepository
-                    .GetListAsync(userId, filter, sorting, reverse, readState, skipCount, maxResultCount, cancellationToken);
+                    .GetListAsync(userId, filter, sorting, readState, skipCount, maxResultCount, cancellationToken);
 
                 return _objectMapper.Map<List<Notification>, List<NotificationInfo>>(notifications);
             }

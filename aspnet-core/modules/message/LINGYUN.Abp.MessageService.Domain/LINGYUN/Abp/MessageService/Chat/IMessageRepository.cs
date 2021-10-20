@@ -13,7 +13,15 @@ namespace LINGYUN.Abp.MessageService.Chat
             UserMessage userMessage,
             CancellationToken cancellationToken = default);
 
+        Task UpdateUserMessageAsync(
+            UserMessage userMessage,
+            CancellationToken cancellationToken = default);
+
         Task InsertGroupMessageAsync(
+            GroupMessage groupMessage,
+            CancellationToken cancellationToken = default);
+
+        Task UpdateGroupMessageAsync(
             GroupMessage groupMessage,
             CancellationToken cancellationToken = default);
 
@@ -48,7 +56,6 @@ namespace LINGYUN.Abp.MessageService.Chat
         Task<List<LastChatMessage>> GetLastMessagesByOneFriendAsync(
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
-            bool reverse = true,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
 
@@ -57,7 +64,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid receiveUserId,
             string filter = "", 
             string sorting = nameof(UserMessage.MessageId), 
-            bool reverse = true,
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -73,7 +79,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             long groupId,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            bool reverse = true,
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -91,7 +96,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             long groupId, 
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            bool reverse = true,
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,

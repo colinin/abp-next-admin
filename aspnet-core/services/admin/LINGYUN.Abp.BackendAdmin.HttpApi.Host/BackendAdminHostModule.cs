@@ -1,23 +1,16 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
-using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
-using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TenantManagement;
-using LINGYUN.Abp.WeChat.SettingManagement;
-using LINGYUN.ApiGateway;
-using LINGYUN.Platform;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -51,7 +44,6 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
-using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -71,14 +63,6 @@ namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(PlatformApplicationContractModule),
-        typeof(ApiGatewayApplicationContractsModule),
-        typeof(AbpOssManagementApplicationContractsModule),
-        typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(AbpLocalizationManagementApplicationContractsModule),
-        typeof(LINGYUN.Abp.Account.AbpAccountApplicationContractsModule),// 引用类似的包主要用于聚合权限管理和设置
-        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationContractsModule),
-        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationContractsModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
         typeof(AbpPermissionManagementApplicationModule),
@@ -90,8 +74,6 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAuditingHttpApiModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpWeChatSettingManagementModule),// 微信配置管理模块
-        typeof(AbpAliyunSettingManagementModule),// 阿里云配置管理模块
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
         typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包

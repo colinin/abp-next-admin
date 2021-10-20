@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
 using System;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
@@ -37,8 +36,7 @@ namespace LINGYUN.Abp.WeChat
                 options =>
                 {
                     options.BaseAddress = new Uri("https://api.weixin.qq.com");
-                }).AddTransientHttpErrorPolicy(builder =>
-                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
+                });
         }
     }
 }

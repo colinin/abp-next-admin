@@ -74,7 +74,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             long groupId,
             string filter = "",
             string sorting = nameof(ChatMessage.MessageId),
-            bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -83,7 +82,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             using (_currentTenant.Change(tenantId))
             {
                 var groupMessages = await _messageRepository
-                    .GetGroupMessagesAsync(groupId, filter, sorting, reverse, type, skipCount, maxResultCount, cancellationToken);
+                    .GetGroupMessagesAsync(groupId, filter, sorting, type, skipCount, maxResultCount, cancellationToken);
 
                 var chatMessages = _objectMapper.Map<List<GroupMessage>, List<ChatMessage>>(groupMessages);
 
@@ -97,7 +96,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid receiveUserId, 
             string filter = "",
             string sorting = nameof(ChatMessage.MessageId),
-            bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -106,7 +104,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             using (_currentTenant.Change(tenantId))
             {
                 var userMessages = await _messageRepository
-                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, reverse, type, skipCount, maxResultCount, cancellationToken);
+                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, type, skipCount, maxResultCount, cancellationToken);
 
                 var chatMessages = _objectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
 
@@ -118,7 +116,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
-            bool reverse = true,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default
             )
@@ -126,7 +123,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             using (_currentTenant.Change(tenantId))
             {
                 return await _messageRepository
-                    .GetLastMessagesByOneFriendAsync(userId, sorting, reverse, maxResultCount, cancellationToken);
+                    .GetLastMessagesByOneFriendAsync(userId, sorting, maxResultCount, cancellationToken);
             }
         }
 

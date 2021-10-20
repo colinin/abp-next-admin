@@ -5,8 +5,6 @@ namespace LINGYUN.Abp.MessageService.Chat
     public class MyFriendGetByPagedDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
-
-        public bool Reverse { get; set; }
     }
 
     public class MyLastContractFriendGetByPagedDto : PagedResultRequestDto

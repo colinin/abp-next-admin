@@ -6,6 +6,5 @@ namespace LINGYUN.Abp.MessageService.Chat
     {
         public int MaxResultCount { get; set; }
         public string Sorting { get; set; }
-        public bool Reverse { get; set; }
     }
 }

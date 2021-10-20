@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.MessageService.Localization
 {
-    [LocalizationResourceName("MessageService")]
+    [LocalizationResourceName("AbpMessageService")]
     public class MessageServiceResource
     {
     }

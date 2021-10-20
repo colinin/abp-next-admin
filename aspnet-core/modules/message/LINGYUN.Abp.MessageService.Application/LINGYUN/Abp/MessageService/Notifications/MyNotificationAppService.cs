@@ -112,7 +112,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             var notifications = await NotificationStore
                 .GetUserNotificationsAsync(
                     CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Filter, input.Sorting, input.Reverse,
+                    input.Filter, input.Sorting,
                     input.ReadState, input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<NotificationInfo>(notificationCount, notifications);

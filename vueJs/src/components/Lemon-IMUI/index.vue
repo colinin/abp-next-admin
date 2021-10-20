@@ -523,7 +523,7 @@ export default class extends mixins(EventBusMiXin) {
         .withUrl('/signalr-hubs/signalr-hubs/messages', { accessTokenFactory: () => userToken })
         .withAutomaticReconnect({ nextRetryDelayInMilliseconds: () => 60000 })
         .build()
-      this.connection.on('getChatMessage', this.handleReceiveMessage)
+      this.connection.on('get-chat-message', this.handleReceiveMessage)
       this.connection.onreconnected(() => {
         this.handleInitIMUI()
       })
@@ -592,7 +592,7 @@ export default class extends mixins(EventBusMiXin) {
       })
       const chatMessage = Message.tryParseToChatMessage(message)
       this.connection
-        .invoke('SendMessage', chatMessage)
+        .invoke('send', chatMessage)
         .then(() => {
           imui
             .updateMessage(message.id, message.toContactId, {
@@ -616,7 +616,7 @@ export default class extends mixins(EventBusMiXin) {
     const imui = this.$refs.IMUI as any
     const chatMessage = Message.tryParseToChatMessage(message)
     this.connection
-      .invoke('SendMessage', chatMessage)
+      .invoke('send', chatMessage)
       .then(() => {
         setTimeout(() => {
           next()

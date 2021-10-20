@@ -61,14 +61,10 @@ namespace LINGYUN.Abp.MessageService.Group
         public virtual async Task<List<GroupUserCard>> GetMembersAsync(
             long groupId, 
             string sorting = nameof(UserChatCard.UserId), 
-            bool reverse = false, 
             int skipCount = 0, 
             int maxResultCount = 10, 
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(UserChatCard.UserId);
-            sorting = reverse ? sorting + " desc" : sorting;
-
             var dbContext = await GetDbContextAsync();
             var cardQuery = from gp in dbContext.Set<ChatGroup>()
                              join ucg in dbContext.Set<UserChatGroup>()

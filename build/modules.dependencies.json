@@ -1,0 +1,51 @@
+[
+  {
+    "tag": "net5.0",
+    "dependencies": [
+      {
+        "service": "Backend-Admin",
+        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
+        "depPath": "/../aspnet-core/LocalNuget/net5.0/",
+        "dependencies": [
+          "LINGYUN.ApiGateway.Application.Contracts.dll",
+          "LINGYUN.ApiGateway.Domain.Shared.dll",
+          "LINGYUN.Abp.Aliyun.SettingManagement.dll",
+          "LINGYUN.Abp.Sms.Aliyun.dll",
+          "LINGYUN.Abp.Aliyun.dll",
+          "LINGYUN.Abp.WeChat.MiniProgram.dll",
+          "LINGYUN.Abp.WeChat.Official.dll",
+          "LINGYUN.Abp.WeChat.dll",
+          "LINGYUN.Abp.WeChat.SettingManagement.dll",
+          "LINGYUN.Abp.LocalizationManagement.Application.Contracts.dll",
+          "LINGYUN.Abp.LocalizationManagement.Domain.Shared.dll",
+          "LINGYUN.Abp.OssManagement.Application.Contracts.dll",
+          "LINGYUN.Abp.OssManagement.Domain.Shared.dll",
+          "LINGYUN.Abp.MessageService.Application.Contracts.dll",
+          "LINGYUN.Abp.IM.dll",
+          "LINGYUN.Abp.MessageService.Domain.Shared.dll",
+          "LINGYUN.Abp.RealTime.dll",
+          "LINGYUN.Abp.Notifications.dll",
+          "LINGYUN.Platform.Application.Contracts.dll",
+          "LINGYUN.Platform.Domain.Shared.dll"
+        ]
+      },
+      {
+        "service": "Backend-Admin",
+        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
+        "depPath": "/../aspnet-core/services/identity-server/LINGYUN.Abp.IdentityServer4.HttpApi.Host/bin/Debug/net5.0",
+        "dependencies": [
+          "LINGYUN.Abp.Account.Application.Contracts.dll",
+          "Volo.Abp.Account.Application.Contracts.dll",
+          "Volo.Abp.Identity.Application.Contracts.dll",
+          "LINGYUN.Abp.Identity.Application.Contracts.dll",
+          "LINGYUN.Abp.Identity.Domain.Shared.dll",
+          "Volo.Abp.Identity.Domain.Shared.dll",
+          "Volo.Abp.Users.Domain.Shared.dll",
+          "Volo.Abp.Users.Abstractions.dll",
+          "LINGYUN.Abp.IdentityServer.Application.Contracts.dll",
+          "Volo.Abp.IdentityServer.Domain.Shared.dll"
+        ]
+      }
+    ]
+  }
+]
