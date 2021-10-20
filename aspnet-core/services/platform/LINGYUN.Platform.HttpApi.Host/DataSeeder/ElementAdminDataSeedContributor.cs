@@ -40,31 +40,32 @@ namespace LINGYUN.Platform.DataSeeder
 
         public virtual async Task SeedAsync(DataSeedContext context)
         {
-            using (CurrentTenant.Change(context.TenantId))
-            {
-                var uiItem = await SeedUIFrameworkDataAsync(context.TenantId);
-                var data = await SeedLayoutDataAsync(context.TenantId);
-                // 预置
-                var layout = await SeedDefaultLayoutAsync(data, uiItem);
-                // 首页
-                await SeedHomeMenuAsync(layout, data);
-                // 管理菜单预置菜单数据
-                await SeedAdminMenuAsync(layout, data);
-                // saas菜单数据
-                await SeedSaasMenuAsync(layout, data);
-                // 身份资源菜单数据
-                await SeedIdentityServerMenuAsync(layout, data);
-                // 审计日志菜单数据
-                await SeedAuditingMenuAsync(layout, data);
-                // 布局容器预置菜单数据
-                await SeedContainerMenuAsync(layout, data);
-                // 网关管理菜单数据
-                await SeedApiGatewayMenuAsync(layout, data);
-                // Oss对象管理菜单数据
-                await SeedOssManagementMenuAsync(layout, data);
-                // 本地化管理菜单数据
-                await SeedLocalizationManagementMenuAsync(layout, data);
-            }
+            await Task.CompletedTask;
+            //using (CurrentTenant.Change(context.TenantId))
+            //{
+            //    var uiItem = await SeedUIFrameworkDataAsync(context.TenantId);
+            //    var data = await SeedLayoutDataAsync(context.TenantId);
+            //    // 预置
+            //    var layout = await SeedDefaultLayoutAsync(data, uiItem);
+            //    // 首页
+            //    await SeedHomeMenuAsync(layout, data);
+            //    // 管理菜单预置菜单数据
+            //    await SeedAdminMenuAsync(layout, data);
+            //    // saas菜单数据
+            //    await SeedSaasMenuAsync(layout, data);
+            //    // 身份资源菜单数据
+            //    await SeedIdentityServerMenuAsync(layout, data);
+            //    // 审计日志菜单数据
+            //    await SeedAuditingMenuAsync(layout, data);
+            //    // 布局容器预置菜单数据
+            //    await SeedContainerMenuAsync(layout, data);
+            //    // 网关管理菜单数据
+            //    await SeedApiGatewayMenuAsync(layout, data);
+            //    // Oss对象管理菜单数据
+            //    await SeedOssManagementMenuAsync(layout, data);
+            //    // 本地化管理菜单数据
+            //    await SeedLocalizationManagementMenuAsync(layout, data);
+            //}
         }
 
         private async Task<DataItem> SeedUIFrameworkDataAsync(Guid? tenantId)
