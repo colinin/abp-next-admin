@@ -28,7 +28,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30025:80"
-  
+
   messages-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -56,7 +56,3 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30000:80"
-
-  abp-vue-admin-client:
-    ports:
-      - "40000:80"
