@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Notifications;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
@@ -44,10 +45,18 @@ namespace LINGYUN.Abp.MessageService.EventBus
                 .WriteLocalizedData(
                     new LocalizableStringInfo(
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "WelcomeToApplicationFormUser"),
+                        "WelcomeToApplicationFormUser",
+                        new Dictionary<object, object>
+                        {
+                            { "User", eventData.Entity.UserName }
+                        }),
                     new LocalizableStringInfo(
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "WelcomeToApplicationFormUser"),
+                        "WelcomeToApplicationFormUser",
+                        new Dictionary<object, object>
+                        {
+                            { "User", eventData.Entity.UserName }
+                        }),
                     DateTime.Now, eventData.Entity.UserName);
 
             await _notificationSender

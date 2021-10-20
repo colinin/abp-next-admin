@@ -146,7 +146,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 
             users = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
 
-            if (users.Count() > 0)
+            if (users.Any())
             {
                 // 持久化用户通知
                 Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");

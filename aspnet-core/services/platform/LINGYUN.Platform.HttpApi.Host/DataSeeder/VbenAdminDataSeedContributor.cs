@@ -288,7 +288,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", true },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var analysis = await SeedMenuAsync(
                 layout, //layout
@@ -308,7 +308,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var workbench = await SeedMenuAsync(
                 layout, //layout
@@ -328,7 +328,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task SeedManageMenuAsync(Layout layout, Data data)
@@ -352,7 +352,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var identity = await SeedMenuAsync(
                 layout, //layout
@@ -372,7 +372,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var user = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -391,7 +391,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var role = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -410,7 +410,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var claimTypes = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -429,7 +429,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var organizationUnits = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -448,7 +448,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var securityLog = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -468,7 +468,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "requiredFeatures", "AbpAuditing.Logging.SecurityLog" } // 此路由需要依赖安全日志特性
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var auditLogs = await SeedMenuAsync(
                 layout, //layout
@@ -489,7 +489,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "requiredFeatures", "AbpAuditing.Logging.AuditLog" } // 此路由需要依赖审计日志特性
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var settings = await SeedMenuAsync(
                 layout, //layout
@@ -510,7 +510,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "requiredFeatures", "SettingManagement.Enable" } // 此路由需要依赖设置管理特性
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
             var identityServer = await SeedMenuAsync(
                 layout, //layout
@@ -530,7 +530,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var clients = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -549,7 +549,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var apiResource = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -568,7 +568,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var identityResources = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -587,7 +587,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var apiScopes = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -606,7 +606,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var persistedGrants = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -625,7 +625,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
 
         }
 
@@ -650,7 +650,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var tenants = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -669,7 +669,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task SeedPlatformMenuAsync(Layout layout, Data data)
@@ -693,7 +693,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var dataDictionary = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -712,7 +712,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var layouts = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -731,7 +731,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var menus = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -750,7 +750,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task SeedApiGatewayMenuAsync(Layout layout, Data data)
@@ -774,7 +774,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var routeGroup = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -793,7 +793,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var global = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -812,7 +812,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var route = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -831,7 +831,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var aggregate = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -850,7 +850,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task SeedLocalizationMenuAsync(Layout layout, Data data)
@@ -874,7 +874,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var languages = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -893,7 +893,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var resources = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -912,7 +912,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var texts = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -931,7 +931,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task SeedOssManagementMenuAsync(Layout layout, Data data)
@@ -955,7 +955,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var containers = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -974,7 +974,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
             var objects = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
@@ -993,7 +993,7 @@ namespace LINGYUN.Platform.DataSeeder
                     { "icon", "" },
                     { "hideTab", false },
                 },
-                new string[] { "vben-admin" });
+                new string[] { "admin" });
         }
 
         private async Task<Menu> SeedMenuAsync(
