@@ -73,11 +73,6 @@ services:
       - apigateway-admin-service
     restart: always
 
-  abp-vue-admin-client:
-    build:
-      context: ./aspnet-core/services/Publish/client
-    restart: always
-
 volumes:
   dbdata:
 
