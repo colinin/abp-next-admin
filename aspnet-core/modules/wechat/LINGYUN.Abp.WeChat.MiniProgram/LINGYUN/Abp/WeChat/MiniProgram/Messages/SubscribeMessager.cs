@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.OpenId;
+﻿using LINGYUN.Abp.Features.LimitValidation;
+using LINGYUN.Abp.WeChat.MiniProgram.Features;
+using LINGYUN.Abp.WeChat.OpenId;
 using LINGYUN.Abp.WeChat.Token;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -11,9 +13,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
 {
+    [RequiresFeature(WeChatMiniProgramFeatures.Enable)]
     public class SubscribeMessager : ISubscribeMessager, ITransientDependency
     {
         public ILogger<SubscribeMessager> Logger { get; set; }
@@ -35,6 +39,12 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             Logger = NullLogger<SubscribeMessager>.Instance;
         }
 
+        [RequiresFeature(WeChatMiniProgramFeatures.Messages.Enable)]
+        [RequiresLimitFeature(
+            WeChatMiniProgramFeatures.Messages.SendLimit,
+            WeChatMiniProgramFeatures.Messages.SendLimitInterval,
+            LimitPolicy.Month,
+            WeChatMiniProgramFeatures.Messages.DefaultSendLimit)]
         public virtual async Task SendAsync(
             Guid toUser,
             string templateId,
@@ -58,6 +68,12 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             await SendAsync(messageData, cancellation);
         }
 
+        [RequiresFeature(WeChatMiniProgramFeatures.Messages.Enable)]
+        [RequiresLimitFeature(
+            WeChatMiniProgramFeatures.Messages.SendLimit,
+            WeChatMiniProgramFeatures.Messages.SendLimitInterval,
+            LimitPolicy.Month,
+            WeChatMiniProgramFeatures.Messages.DefaultSendLimit)]
         public virtual async Task SendAsync(SubscribeMessage message, CancellationToken cancellationToken = default)
         {
             var options = await MiniProgramOptionsFactory.CreateAsync();

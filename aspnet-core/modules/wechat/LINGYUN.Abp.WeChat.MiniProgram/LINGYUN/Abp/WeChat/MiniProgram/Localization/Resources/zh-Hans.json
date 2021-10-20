@@ -10,6 +10,20 @@
     "DisplayName:WeChat.MiniProgram.Token": "小程序Token",
     "Description:WeChat.MiniProgram.Token": "微信小程序Token,详情见:https://developers.weixin.qq.com/miniprogram/dev/framework/",
     "DisplayName:WeChat.MiniProgram.EncodingAESKey": "小程序EncodingAESKey",
-    "Description:WeChat.MiniProgram.EncodingAESKey": "微信小程序EncodingAESKey,详情见:https://developers.weixin.qq.com/miniprogram/dev/framework/"
+    "Description:WeChat.MiniProgram.EncodingAESKey": "微信小程序EncodingAESKey,详情见:https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "Features:WeChat.MiniProgram": "微信小程序",
+    "Features:WeChat.MiniProgramDesc": "微信小程序",
+    "Features:WeChat.MiniProgram.Enable": "微信小程序",
+    "Features:WeChat.MiniProgram.EnableDesc": "在应用程序中启用微信小程序功能",
+    "Features:WeChat.MiniProgram.EnableAuthorization": "微信小程序认证",
+    "Features:WeChat.MiniProgram.EnableAuthorizationDesc": "在应用程序中启用微信小程序认证",
+    "Features:WeChat.MiniProgram.Messages": "模板消息",
+    "Features:WeChat.MiniProgram.MessagesDesc": "模板消息",
+    "Features:WeChat.MiniProgram.EnableMessages": "启用模板消息",
+    "Features:WeChat.MiniProgram.EnableMessagesDesc": "在应用程序中启用微信小程序模板消息",
+    "Features:WeChat.MiniProgram.SendLimit": "发送消息限制",
+    "Features:WeChat.MiniProgram.SendLimitDesc": "在一定周期内限制微信小程序模板消息调用上限",
+    "Features:WeChat.MiniProgram.SendLimitInterval": "发送消息限制时长",
+    "Features:WeChat.MiniProgram.SendLimitIntervalDesc": "限制模板消息调用上限的时长,周期为月"
   }
 }

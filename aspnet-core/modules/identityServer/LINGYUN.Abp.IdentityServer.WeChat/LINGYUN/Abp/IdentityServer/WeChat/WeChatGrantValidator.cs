@@ -68,6 +68,11 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
         [UnitOfWork]
         public async Task ValidateAsync(ExtensionGrantValidationContext context)
         {
+            if (!await CheckFeatureAsync(context))
+            {
+                return;
+            }
+
             var raw = context.Request.Raw;
             var credential = raw.Get(OidcConstants.TokenRequest.GrantType);
             if (credential == null || !credential.Equals(GrantType))
@@ -91,8 +96,8 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             {
                 var settingProvider = ServiceProvider.LazyGetRequiredService<ISettingProvider>();
                 // TODO 检查启用用户注册是否有必要引用账户模块
-                if (! await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
-                    ! await settingProvider.IsTrueAsync(WeChatSettingNames.EnabledQuickLogin))
+                if (!await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
+                    !await settingProvider.IsTrueAsync(WeChatSettingNames.EnabledQuickLogin))
                 {
                     Logger.LogWarning("Invalid grant type: wechat openid not register", wechatOpenId.OpenId);
                     context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityServerLocalizer["InvalidGrant:WeChatNotRegister"]);
@@ -138,6 +143,11 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
 
             // 登录之后需要更新安全令牌
             (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
+        }
+
+        protected virtual Task<bool> CheckFeatureAsync(ExtensionGrantValidationContext context)
+        {
+            return Task.FromResult(true);
         }
     }
 }
