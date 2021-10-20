@@ -10,6 +10,20 @@
     "DisplayName:WeChat.MiniProgram.Token": "Token",
     "Description:WeChat.MiniProgram.Token": "Token,See:https://developers.weixin.qq.com/miniprogram/dev/framework/",
     "DisplayName:WeChat.MiniProgram.EncodingAESKey": "Encoding AES Key",
-    "Description:WeChat.MiniProgram.EncodingAESKey": "Encoding AES Key,See:https://developers.weixin.qq.com/miniprogram/dev/framework/"
+    "Description:WeChat.MiniProgram.EncodingAESKey": "Encoding AES Key,See:https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "Features:WeChat.MiniProgram": "Mini Program",
+    "Features:WeChat.MiniProgramDesc": "Mini Program",
+    "Features:WeChat.MiniProgram.Enable": "Enable",
+    "Features:WeChat.MiniProgram.EnableDesc": "Enable Wechat MiniProgram",
+    "Features:WeChat.MiniProgram.EnableAuthorization": "Authentication",
+    "Features:WeChat.MiniProgram.EnableAuthorizationDesc": "Enable wechat mini program authentication",
+    "Features:WeChat.MiniProgram.Messages": "Template Message",
+    "Features:WeChat.MiniProgram.MessagesDesc": "Template Message",
+    "Features:WeChat.MiniProgram.EnableMessages": "Enable Template Message",
+    "Features:WeChat.MiniProgram.EnableMessagesDesc": "Enable wechat applet template message",
+    "Features:WeChat.MiniProgram.SendLimit": "Send Limit",
+    "Features:WeChat.MiniProgram.SendLimitDesc": "Limit wechat applet template message certain period",
+    "Features:WeChat.MiniProgram.SendLimitInterval": "Send Duration",
+    "Features:WeChat.MiniProgram.SendLimitIntervalDesc": "Limit template message can be invoked, unit is Month"
   }
 }
