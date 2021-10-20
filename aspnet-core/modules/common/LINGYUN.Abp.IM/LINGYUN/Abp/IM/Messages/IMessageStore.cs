@@ -38,7 +38,6 @@ namespace LINGYUN.Abp.IM.Messages
         /// <param name="groupId"></param>
         /// <param name="filter"></param>
         /// <param name="sorting"></param>
-        /// <param name="reverse"></param>
         /// <param name="type"></param>
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
@@ -48,7 +47,6 @@ namespace LINGYUN.Abp.IM.Messages
             long groupId, 
             string filter = "", 
             string sorting = nameof(ChatMessage.MessageId),
-            bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
@@ -59,14 +57,12 @@ namespace LINGYUN.Abp.IM.Messages
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="sorting"></param>
-        /// <param name="reverse"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
         Task<List<LastChatMessage>> GetLastChatMessagesAsync(
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
-            bool reverse = true,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default
             );
@@ -99,7 +95,6 @@ namespace LINGYUN.Abp.IM.Messages
             Guid receiveUserId, 
             string filter = "", 
             string sorting = nameof(ChatMessage.MessageId),
-            bool reverse = true, 
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,

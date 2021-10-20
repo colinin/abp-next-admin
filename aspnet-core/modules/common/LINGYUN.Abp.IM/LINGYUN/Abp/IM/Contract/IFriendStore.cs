@@ -26,13 +26,11 @@ namespace LINGYUN.Abp.IM.Contract
         /// <param name="tenantId"></param>
         /// <param name="userId"></param>
         /// <param name="sorting"></param>
-        /// <param name="reverse"></param>
         /// <returns></returns>
         Task<List<UserFriend>> GetListAsync(
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
-            bool reverse = false,
             CancellationToken cancellationToken = default
             );
         /// <summary>
@@ -54,7 +52,6 @@ namespace LINGYUN.Abp.IM.Contract
         /// <param name="userId"></param>
         /// <param name="filter"></param>
         /// <param name="sorting"></param>
-        /// <param name="reverse"></param>
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
@@ -63,7 +60,6 @@ namespace LINGYUN.Abp.IM.Contract
             Guid userId,
             string filter = "",
             string sorting = nameof(UserFriend.UserId),
-            bool reverse = false,
             int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);

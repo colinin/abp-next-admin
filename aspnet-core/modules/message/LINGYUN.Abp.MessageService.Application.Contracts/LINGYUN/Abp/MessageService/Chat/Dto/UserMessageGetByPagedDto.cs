@@ -9,7 +9,6 @@ namespace LINGYUN.Abp.MessageService.Chat
     {
         [Required]
         public Guid ReceiveUserId { get; set; }
-        public bool Reverse { get; set; }
         public string Filter { get; set; }
         public MessageType? MessageType { get; set; }
     }

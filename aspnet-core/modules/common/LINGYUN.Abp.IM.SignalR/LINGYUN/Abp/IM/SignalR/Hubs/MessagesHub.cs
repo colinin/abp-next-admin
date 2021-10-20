@@ -17,6 +17,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
     [Authorize]
     public class MessagesHub : OnlineClientHubBase
     {
+        protected IMessageProcessor Processor => LazyServiceProvider.LazyGetRequiredService<IMessageProcessor>();
+
         protected AbpIMSignalROptions Options { get; }
         protected IFriendStore FriendStore { get; }
         protected IMessageStore MessageStore { get; }
@@ -67,8 +69,9 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         /// </summary>
         /// <param name="chatMessage"></param>
         /// <returns></returns>
-        [HubMethodName("SendMessage")]
-        public virtual async Task SendMessageAsync(ChatMessage chatMessage)
+        // [HubMethodName("SendMessage")]
+        [HubMethodName("send")]
+        public virtual async Task SendAsync(ChatMessage chatMessage)
         {
             // 持久化
             await MessageStore.StoreMessageAsync(chatMessage, cancellationToken: Context.ConnectionAborted);
@@ -81,6 +84,18 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             {
                 await SendMessageToUserAsync(chatMessage);
             }
+        }
+
+        [HubMethodName("recall")]
+        public virtual async Task ReCallAsync(ChatMessage chatMessage)
+        {
+            await Processor.ReCallAsync(chatMessage);
+        }
+
+        [HubMethodName("read")]
+        public virtual async Task ReadAsync(ChatMessage chatMessage)
+        {
+            await Processor.ReadAsync(chatMessage);
         }
 
         protected virtual async Task SendMessageToGroupAsync(ChatMessage chatMessage)

@@ -39,7 +39,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             Guid userId, 
             string filter = "", 
             string sorting = nameof(Notification.CreationTime),
-            bool reverse = true,
             NotificationReadState? readState = null,
             int skipCount = 0, 
             int maxResultCount = 10,

@@ -44,7 +44,6 @@ namespace LINGYUN.Abp.MessageService.Group
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="sorting"></param>
-        /// <param name="reverse"></param>
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
         /// <param name="cancellationToken"></param>
@@ -52,7 +51,6 @@ namespace LINGYUN.Abp.MessageService.Group
         Task<List<GroupUserCard>> GetMembersAsync(
             long groupId, 
             string sorting = nameof(GroupUserCard.UserId),
-            bool reverse = false,
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);

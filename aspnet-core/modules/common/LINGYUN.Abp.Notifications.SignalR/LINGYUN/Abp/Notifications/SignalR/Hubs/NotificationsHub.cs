@@ -44,7 +44,8 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
             }
         }
 
-        [HubMethodName("MySubscriptions")]
+        // [HubMethodName("MySubscriptions")]
+        [HubMethodName("my-subscriptions")]
         public virtual async Task<ListResultDto<NotificationSubscriptionInfo>> GetMySubscriptionsAsync()
         {
             var subscriptions = await NotificationStore
@@ -54,7 +55,8 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
         }
 
         [UnitOfWork]
-        [HubMethodName("GetNotification")]
+        // [HubMethodName("GetNotification")]
+        [HubMethodName("get-notifications")]
         public virtual async Task<ListResultDto<NotificationInfo>> GetNotificationAsync()
         {
             var userNotifications = await NotificationStore
@@ -63,7 +65,8 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
             return new ListResultDto<NotificationInfo>(userNotifications);
         }
 
-        [HubMethodName("ChangeState")]
+        // [HubMethodName("ChangeState")]
+        [HubMethodName("change-state")]
         public virtual async Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
         {
             await NotificationStore

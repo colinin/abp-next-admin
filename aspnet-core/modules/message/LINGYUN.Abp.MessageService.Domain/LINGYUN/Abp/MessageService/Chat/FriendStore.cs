@@ -136,13 +136,12 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
-            bool reverse = false,
             CancellationToken cancellationToken = default
             )
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await GetAllFriendByCacheItemAsync(userId, sorting, reverse, cancellationToken);
+                return await GetAllFriendByCacheItemAsync(userId, sorting, cancellationToken);
             }
         }
 
@@ -164,7 +163,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid userId, 
             string filter = "", 
             string sorting = nameof(UserFriend.UserId), 
-            bool reverse = false, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
@@ -172,7 +170,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             using (_currentTenant.Change(tenantId))
             {
                 return await _userChatFriendRepository
-                    .GetMembersAsync(userId, filter, sorting, reverse,
+                    .GetMembersAsync(userId, filter, sorting,
                         skipCount, maxResultCount, cancellationToken);
             }
         }
@@ -254,7 +252,6 @@ namespace LINGYUN.Abp.MessageService.Chat
         protected virtual async Task<List<UserFriend>> GetAllFriendByCacheItemAsync(
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
-            bool reverse = false,
             CancellationToken cancellationToken = default
             )
         {
@@ -270,7 +267,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             _logger.LogDebug($"Not found in the cache: {cacheKey}");
             var friends = await _userChatFriendRepository
-                    .GetAllMembersAsync(userId, sorting, reverse, cancellationToken);
+                    .GetAllMembersAsync(userId, sorting, cancellationToken);
             cacheItem = new UserFriendCacheItem(friends);
             _logger.LogDebug($"Set item in the cache: {cacheKey}");
             await _cache.SetAsync(cacheKey, cacheItem, token: cancellationToken);

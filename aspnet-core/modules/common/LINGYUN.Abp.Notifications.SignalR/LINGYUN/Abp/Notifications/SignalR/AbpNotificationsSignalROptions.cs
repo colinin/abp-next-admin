@@ -9,7 +9,7 @@
 
         public AbpNotificationsSignalROptions()
         {
-            MethodName = "getNotification";
+            MethodName = "get-notification";
         }
     }
 }

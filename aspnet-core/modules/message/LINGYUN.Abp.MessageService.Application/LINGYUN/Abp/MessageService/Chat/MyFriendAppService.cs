@@ -45,8 +45,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
         {
             var myFriends = await FriendStore
-                .GetListAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Sorting, input.Reverse);
+                .GetListAsync(
+                    CurrentTenant.Id,
+                    CurrentUser.GetId(),
+                    input.Sorting);
 
             return new ListResultDto<UserFriend>(myFriends);
         }
@@ -57,7 +59,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var myFriends = await FriendStore
                 .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Filter, input.Sorting, input.Reverse, 
+                    input.Filter, input.Sorting, 
                     input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<UserFriend>(myFrientCount, myFriends);

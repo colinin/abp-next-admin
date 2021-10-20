@@ -26,7 +26,6 @@ namespace LINGYUN.Abp.MessageService.Chat
             int? endAge = null,
             Sex? sex = null,
             string sorting = nameof(UserChatCard.UserId),
-            bool reverse = false,
             int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);

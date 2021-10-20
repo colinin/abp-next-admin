@@ -37,13 +37,11 @@ namespace LINGYUN.Abp.MessageService.Chat
             long groupId, 
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            bool reverse = true,
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting = reverse ? sorting + " desc" : sorting;
             var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId))
@@ -77,13 +75,11 @@ namespace LINGYUN.Abp.MessageService.Chat
             long groupId,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            bool reverse = true,
             MessageType? type = null,
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting = reverse ? sorting + " desc" : sorting;
             var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
@@ -153,13 +149,9 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<List<LastChatMessage>> GetLastMessagesByOneFriendAsync(
             Guid userId,
             string sorting = nameof(LastChatMessage.SendTime),
-            bool reverse = true,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(LastChatMessage.SendTime);
-            sorting = reverse ? sorting + " DESC" : sorting;
-
             var dbContext = await GetDbContextAsync();
             var groupMsgQuery = dbContext.Set<UserMessage>()
                 .Where(msg => msg.ReceiveUserId == userId || msg.CreatorId == userId)
@@ -187,7 +179,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                    };
 
             return await userMessageQuery
-                .OrderBy(sorting)
+                .OrderBy(sorting ?? nameof(LastChatMessage.SendTime))
                 .Take(maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -197,20 +189,17 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid receiveUserId,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            bool reverse = true,
             MessageType? type = null, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(UserMessage.MessageId);
-            sorting = reverse ? sorting + " desc" : sorting;
             var userMessages = await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                              x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
-                .OrderBy(sorting)
+                .OrderBy(sorting ?? nameof(UserMessage.MessageId))
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -243,12 +232,26 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .AddAsync(groupMessage, GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task UpdateGroupMessageAsync(
+            GroupMessage groupMessage,
+            CancellationToken cancellationToken = default)
+        {
+            (await GetDbContextAsync()).Set<GroupMessage>().Update(groupMessage);
+        }
+
         public virtual async Task InsertUserMessageAsync(
             UserMessage userMessage,
             CancellationToken cancellationToken = default)
         {
             await (await GetDbContextAsync()).Set<UserMessage>()
                 .AddAsync(userMessage, GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task UpdateUserMessageAsync(
+            UserMessage userMessage,
+            CancellationToken cancellationToken = default)
+        {
+            (await GetDbContextAsync()).Set<UserMessage>().Update(userMessage);
         }
     }
 }

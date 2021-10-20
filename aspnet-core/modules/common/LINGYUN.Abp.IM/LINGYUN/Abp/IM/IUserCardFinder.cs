@@ -33,7 +33,6 @@ namespace LINGYUN.Abp.IM
         /// <param name="endAge">起止年龄</param>
         /// <param name="sex">性别</param>
         /// <param name="sorting">排序字段</param>
-        /// <param name="reverse">是否倒序</param>
         /// <param name="skipCount">起始记录位置</param>
         /// <param name="maxResultCount">最大返回数量</param>
         /// <returns></returns>
@@ -44,7 +43,6 @@ namespace LINGYUN.Abp.IM
             int? endAge = null,
             Sex? sex = null,
             string sorting = nameof(UserCard.UserId),
-            bool reverse = false,
             int skipCount = 0,
             int maxResultCount = 10);
         /// <summary>

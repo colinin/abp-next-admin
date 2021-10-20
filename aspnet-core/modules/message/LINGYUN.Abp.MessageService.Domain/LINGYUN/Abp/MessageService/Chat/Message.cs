@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 发送状态
         /// </summary>
-        public virtual MessageSendState SendState { get; protected set; }
+        public virtual MessageState SendState { get; protected set; }
         protected Message() { }
         public Message(long id, Guid sendUserId, string sendUserName, string content, MessageType type = MessageType.Text)
         {
@@ -41,9 +41,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             Content = content;
             Type = type;
             CreationTime = DateTime.Now;
+            ChangeSendState();
         }
 
-        public void ChangeSendState(MessageSendState state = MessageSendState.Send)
+        public void ChangeSendState(MessageState state = MessageState.Send)
         {
             SendState = state;
         }

@@ -110,7 +110,6 @@ namespace LINGYUN.Abp.Notifications
             Guid userId,
             string filter = "",
             string sorting = nameof(NotificationInfo.CreationTime),
-            bool reverse = true,
             NotificationReadState? readState = null,
             int skipCount = 1,
             int maxResultCount = 10,
