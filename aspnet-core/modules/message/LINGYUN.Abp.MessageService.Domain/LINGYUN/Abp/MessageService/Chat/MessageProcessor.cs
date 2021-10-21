@@ -16,9 +16,14 @@ namespace LINGYUN.Abp.MessageService.Chat
         private readonly IMessageRepository _repository;
         private readonly ISettingProvider _settingProvider;
 
-        public MessageProcessor(IMessageRepository repository)
+        public MessageProcessor(
+            IClock clock,
+            IMessageRepository repository,
+            ISettingProvider settingProvider)
         {
+            _clock = clock;
             _repository = repository;
+            _settingProvider = settingProvider;
         }
 
         public virtual async Task ReadAsync(ChatMessage message)
