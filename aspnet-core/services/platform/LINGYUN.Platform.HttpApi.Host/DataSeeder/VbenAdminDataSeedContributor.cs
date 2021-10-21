@@ -54,16 +54,21 @@ namespace LINGYUN.Platform.DataSeeder
                 await SeedDashboardMenuAsync(layout, layoutData);
                 // 管理菜单
                 await SeedManageMenuAsync(layout, layoutData);
-                // Saas菜单
-                await SeedSaasMenuAsync(layout, layoutData);
                 // 平台菜单
                 await SeedPlatformMenuAsync(layout, layoutData);
-                // 网关菜单
-                await SeedApiGatewayMenuAsync(layout, layoutData);
-                // 多语言菜单
-                await SeedLocalizationMenuAsync(layout, layoutData);
                 // 对象存储菜单
                 await SeedOssManagementMenuAsync(layout, layoutData);
+
+                // 特定于宿主的菜单不能写入到租户数据中
+                if (!context.TenantId.HasValue)
+                {
+                    // 多语言菜单
+                    await SeedLocalizationMenuAsync(layout, layoutData);
+                    // Saas菜单
+                    await SeedSaasMenuAsync(layout, layoutData);
+                    // 网关菜单
+                    await SeedApiGatewayMenuAsync(layout, layoutData);
+                }
             }
         }
 
@@ -512,7 +517,10 @@ namespace LINGYUN.Platform.DataSeeder
                 },
                 new string[] { "admin" });
 
-            var identityServer = await SeedMenuAsync(
+            // 特定于宿主的菜单不能写入到租户数据中
+            if (!manage.TenantId.HasValue)
+            {
+                var identityServer = await SeedMenuAsync(
                 layout, //layout
                 data,   //data
                 "IdentityServer",    //name
@@ -531,102 +539,102 @@ namespace LINGYUN.Platform.DataSeeder
                     { "hideTab", false },
                 },
                 new string[] { "admin" });
-            var clients = await SeedMenuAsync(
-                layout, //layout
-                data,   //data
-                "Clients",    //name
-                "/manage/identity-server/clients",   //path
-                CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(1)), //code
-                "/identity-server/clients/index",    //component
-                "Clients", //displayName
-                "",     //redirect
-                "Clients", //description 
-                identityServer.Id,   //parentId
-                layout.TenantId,    //tenantId
-                new Dictionary<string, object>()    //meta
-                {
+                var clients = await SeedMenuAsync(
+                    layout, //layout
+                    data,   //data
+                    "Clients",    //name
+                    "/manage/identity-server/clients",   //path
+                    CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(1)), //code
+                    "/identity-server/clients/index",    //component
+                    "Clients", //displayName
+                    "",     //redirect
+                    "Clients", //description 
+                    identityServer.Id,   //parentId
+                    layout.TenantId,    //tenantId
+                    new Dictionary<string, object>()    //meta
+                    {
                     { "title", "Clients" },
                     { "icon", "" },
                     { "hideTab", false },
-                },
-                new string[] { "admin" });
-            var apiResource = await SeedMenuAsync(
-                layout, //layout
-                data,   //data
-                "ApiResources",    //name
-                "/manage/identity-server/api-resources",   //path
-                CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(2)), //code
-                "/identity-server/api-resources/index",    //component
-                "Api Resources", //displayName
-                "",     //redirect
-                "Api Resources", //description 
-                identityServer.Id,   //parentId
-                layout.TenantId,    //tenantId
-                new Dictionary<string, object>()    //meta
-                {
+                    },
+                    new string[] { "admin" });
+                var apiResource = await SeedMenuAsync(
+                    layout, //layout
+                    data,   //data
+                    "ApiResources",    //name
+                    "/manage/identity-server/api-resources",   //path
+                    CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(2)), //code
+                    "/identity-server/api-resources/index",    //component
+                    "Api Resources", //displayName
+                    "",     //redirect
+                    "Api Resources", //description 
+                    identityServer.Id,   //parentId
+                    layout.TenantId,    //tenantId
+                    new Dictionary<string, object>()    //meta
+                    {
                     { "title", "Api Resources" },
                     { "icon", "" },
                     { "hideTab", false },
-                },
-                new string[] { "admin" });
-            var identityResources = await SeedMenuAsync(
-                layout, //layout
-                data,   //data
-                "IdentityResources",    //name
-                "/manage/identity-server/identity-resources",   //path
-                CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(3)), //code
-                "/identity-server/identity-resources/index",    //component
-                "Identity Resources", //displayName
-                "",     //redirect
-                "Identity Resources", //description 
-                identityServer.Id,   //parentId
-                layout.TenantId,    //tenantId
-                new Dictionary<string, object>()    //meta
-                {
+                    },
+                    new string[] { "admin" });
+                var identityResources = await SeedMenuAsync(
+                    layout, //layout
+                    data,   //data
+                    "IdentityResources",    //name
+                    "/manage/identity-server/identity-resources",   //path
+                    CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(3)), //code
+                    "/identity-server/identity-resources/index",    //component
+                    "Identity Resources", //displayName
+                    "",     //redirect
+                    "Identity Resources", //description 
+                    identityServer.Id,   //parentId
+                    layout.TenantId,    //tenantId
+                    new Dictionary<string, object>()    //meta
+                    {
                     { "title", "Identity Resources" },
                     { "icon", "" },
                     { "hideTab", false },
-                },
-                new string[] { "admin" });
-            var apiScopes = await SeedMenuAsync(
-                layout, //layout
-                data,   //data
-                "ApiScopes",    //name
-                "/manage/identity-server/api-scopes",   //path
-                CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(4)), //code
-                "/identity-server/api-scopes/index",    //component
-                "Api Scopes", //displayName
-                "",     //redirect
-                "Api Scopes", //description 
-                identityServer.Id,   //parentId
-                layout.TenantId,    //tenantId
-                new Dictionary<string, object>()    //meta
-                {
+                    },
+                    new string[] { "admin" });
+                var apiScopes = await SeedMenuAsync(
+                    layout, //layout
+                    data,   //data
+                    "ApiScopes",    //name
+                    "/manage/identity-server/api-scopes",   //path
+                    CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(4)), //code
+                    "/identity-server/api-scopes/index",    //component
+                    "Api Scopes", //displayName
+                    "",     //redirect
+                    "Api Scopes", //description 
+                    identityServer.Id,   //parentId
+                    layout.TenantId,    //tenantId
+                    new Dictionary<string, object>()    //meta
+                    {
                     { "title", "Api Scopes" },
                     { "icon", "" },
                     { "hideTab", false },
-                },
-                new string[] { "admin" });
-            var persistedGrants = await SeedMenuAsync(
-                layout, //layout
-                data,   //data
-                "PersistedGrants",    //name
-                "/manage/identity-server/persisted-grants",   //path
-                CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(5)), //code
-                "/identity-server/persisted-grants/index",    //component
-                "Persisted Grants", //displayName
-                "",     //redirect
-                "Persisted Grants", //description 
-                identityServer.Id,   //parentId
-                layout.TenantId,    //tenantId
-                new Dictionary<string, object>()    //meta
-                {
+                    },
+                    new string[] { "admin" });
+                var persistedGrants = await SeedMenuAsync(
+                    layout, //layout
+                    data,   //data
+                    "PersistedGrants",    //name
+                    "/manage/identity-server/persisted-grants",   //path
+                    CodeNumberGenerator.AppendCode(identityServer.Code, CodeNumberGenerator.CreateCode(5)), //code
+                    "/identity-server/persisted-grants/index",    //component
+                    "Persisted Grants", //displayName
+                    "",     //redirect
+                    "Persisted Grants", //description 
+                    identityServer.Id,   //parentId
+                    layout.TenantId,    //tenantId
+                    new Dictionary<string, object>()    //meta
+                    {
                     { "title", "Persisted Grants" },
                     { "icon", "" },
                     { "hideTab", false },
-                },
-                new string[] { "admin" });
-
+                    },
+                    new string[] { "admin" });
+            }
         }
 
         private async Task SeedSaasMenuAsync(Layout layout, Data data)
