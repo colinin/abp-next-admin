@@ -72,10 +72,10 @@ namespace LINGYUN.Platform.DataSeeder
         {
             var data = await DataDictionaryDataSeeder
                 .SeedAsync(
-                    "UI Framewark",
+                    "UI Framework",
                     CodeNumberGenerator.CreateCode(2),
                     "UI框架",
-                    "UI Framewark",
+                    "UI Framework",
                     null,
                     tenantId,
                     true);
