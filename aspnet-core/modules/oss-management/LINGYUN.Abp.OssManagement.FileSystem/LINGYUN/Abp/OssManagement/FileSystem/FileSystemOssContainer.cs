@@ -515,6 +515,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             {
                 blobPath = Path.Combine(blobPath, "tenants", CurrentTenant.Id.Value.ToString("D"));
             }
+            // fix bug: 新租户可能无法检索不存在的目录，blob的根目录将自动创建
+            DirectoryHelper.CreateIfNotExists(blobPath);
 
             if (fileSystemConfiguration.AppendContainerNameToBasePath &&
                 !bucketName.IsNullOrWhiteSpace())
