@@ -5,7 +5,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
 {
-    public class UploadPublicFileInput
+    public class UploadFileInput
     {
         public string Path { get; set; }
         public string Object { get; set; }

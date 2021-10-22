@@ -14,11 +14,13 @@ namespace LINGYUN.Abp.OssManagement
     public class PrivateFileAppService : FileAppServiceBase, IPrivateFileAppService
     {
         public PrivateFileAppService(
+            IFileUploader fileUploader,
             IFileValidater fileValidater,
             IOssContainerFactory ossContainerFactory)
-            : base(fileValidater, ossContainerFactory)
+            : base(fileUploader, fileValidater, ossContainerFactory)
         {
         }
+
         protected override string GetCurrentBucket()
         {
             return "users";

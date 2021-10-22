@@ -109,7 +109,6 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             {
                 ThrowOfPathHasTooLong(filePath);
 
-                FileMode fileMode = request.Overwrite ? FileMode.Create : FileMode.CreateNew;
                 if (!request.Overwrite && File.Exists(filePath))
                 {
                     throw new BusinessException(code: OssManagementErrorCodes.ObjectAlreadyExists);
@@ -118,6 +117,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
 
                 DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
+                FileMode fileMode = request.Overwrite ? FileMode.Create : FileMode.CreateNew;
                 using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
                 {
                     await request.Content.CopyToAsync(fileStream);

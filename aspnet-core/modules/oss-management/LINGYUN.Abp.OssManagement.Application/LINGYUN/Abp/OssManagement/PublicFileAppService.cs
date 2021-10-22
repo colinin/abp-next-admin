@@ -3,11 +3,13 @@
     public class PublicFileAppService : FileAppServiceBase, IPublicFileAppService
     {
         public PublicFileAppService(
-            IFileValidater fileValidater,
-            IOssContainerFactory ossContainerFactory)
-            : base(fileValidater, ossContainerFactory)
+           IFileUploader fileUploader,
+           IFileValidater fileValidater,
+           IOssContainerFactory ossContainerFactory)
+           : base(fileUploader, fileValidater, ossContainerFactory)
         {
         }
+
         protected override string GetCurrentBucket()
         {
             return "public";

@@ -10,15 +10,35 @@ namespace LINGYUN.Abp.OssManagement
 {
     public abstract class FileAppServiceBase : OssManagementApplicationServiceBase, IFileAppService
     {
+        private readonly IFileUploader _fileUploader;
         private readonly IFileValidater _fileValidater;
         private readonly IOssContainerFactory _ossContainerFactory;
 
         protected FileAppServiceBase(
+            IFileUploader fileUploader,
             IFileValidater fileValidater,
             IOssContainerFactory ossContainerFactory)
         {
+            _fileUploader = fileUploader;
             _fileValidater = fileValidater;
             _ossContainerFactory = ossContainerFactory;
+        }
+
+        public virtual async Task UploadAsync(UploadFileChunkInput input)
+        {
+            await _fileUploader.UploadAsync(
+                new UploadFileChunkInput
+                {
+                    Bucket = GetCurrentBucket(),
+                    Content = input.Content,
+                    FileName = input.FileName,
+                    TotalSize = input.TotalSize,
+                    ChunkSize = input.ChunkSize,
+                    ChunkNumber = input.ChunkNumber,
+                    TotalChunks = input.TotalChunks,
+                    CurrentChunkSize = input.CurrentChunkSize,
+                    Path = GetCurrentPath(HttpUtility.UrlDecode(input.Path))
+                });
         }
 
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
@@ -26,7 +46,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.UploadLimit,
             AbpOssManagementFeatureNames.OssObject.UploadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<OssObjectDto> UploadAsync(UploadPublicFileInput input)
+        public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
         {
             await _fileValidater.ValidationAsync(new UploadFile
             {

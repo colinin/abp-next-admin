@@ -27,6 +27,24 @@ namespace LINGYUN.Abp.OssManagement
             LocalizationResource = typeof(AbpOssManagementResource);
         }
 
+
+        [HttpPost]
+        [Route("upload")]
+        public virtual async Task UploadAsync([FromForm] UploadOssObjectInput input)
+        {
+            await _publicFileAppService.UploadAsync(new UploadFileChunkInput
+            {
+                Path = input.Path,
+                FileName = input.FileName,
+                TotalSize = input.TotalSize,
+                ChunkSize = input.ChunkSize,
+                ChunkNumber = input.ChunkNumber,
+                TotalChunks = input.TotalChunks,
+                CurrentChunkSize = input.CurrentChunkSize,
+                Content = input.File?.OpenReadStream(),
+            });
+        }
+
         [HttpPost]
         [Route("{path}")]
         [Route("{path}/{name}")]
@@ -40,7 +58,7 @@ namespace LINGYUN.Abp.OssManagement
             var file = Request.Form.Files[0];
             var fileName = name ?? file.FileName;
 
-            var createOssObjectInput = new UploadPublicFileInput
+            var createOssObjectInput = new UploadFileInput
             {
                 Path = path,
                 Object = fileName,
