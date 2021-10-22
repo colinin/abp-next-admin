@@ -6,11 +6,6 @@
 
 LocalizationManagement项目提供支持  
 
-
-由于框架设计为延迟初始化,当某个本地化资源被使用的时候才会进行初始化  
-当资源被第一次使用到的时候,才会注册动态变更事件  
-详情见: [DynamicLocalizationResourceContributor](./LINGYUN/Abp/Localization/Dynamic/DynamicLocalizationResourceContributor.cs#L29-L34)
-
 ## 配置使用
 
 ```csharp
@@ -35,3 +30,9 @@ public class YouProjectModule : AbpModule
   }
 }
 ```
+
+## 注意事项
+
+动态资源在启动时加载，如果通过LocalizationManagement模块查询，可能受后端存储资源体量影响整体启动时间  
+
+详情见: [DynamicLocalizationInitializeService](./LINGYUN/Abp/Localization/Dynamic/DynamicLocalizationInitializeService.cs#L25-L38)
