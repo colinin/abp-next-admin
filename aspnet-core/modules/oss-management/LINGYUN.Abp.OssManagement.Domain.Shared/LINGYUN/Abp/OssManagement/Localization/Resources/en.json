@@ -1,6 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Abp.OssManagement:010000": "System definition containers cannot be deleted!",
     "Abp.OssManagement:010001": "Cannot delete a container that has more than one object!",
     "Abp.OssManagement:010402": "The container name already exists!",
     "Abp.OssManagement:010404": "The queried container could not be found!",

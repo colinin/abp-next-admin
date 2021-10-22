@@ -25,6 +25,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
         protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected FileSystemOssOptions Options { get; }
+        protected AbpOssManagementOptions OssOptions { get; }
 
         public FileSystemOssContainer(
             ICurrentTenant currentTenant,
@@ -32,7 +33,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             IServiceProvider serviceProvider,
             IBlobFilePathCalculator blobFilePathCalculator,
             IBlobContainerConfigurationProvider configurationProvider,
-            IOptions<FileSystemOssOptions> options)
+            IOptions<FileSystemOssOptions> options,
+            IOptions<AbpOssManagementOptions> ossOptions)
         {
             CurrentTenant = currentTenant;
             Environment = environment;
@@ -40,6 +42,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             FilePathCalculator = blobFilePathCalculator;
             ConfigurationProvider = configurationProvider;
             Options = options.Value;
+            OssOptions = ossOptions.Value;
         }
 
         public virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
@@ -173,6 +176,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
 
         public virtual Task DeleteAsync(string name)
         {
+            CheckStaticBucket(name);
+
             var filePath = CalculateFilePath(name);
             if (!Directory.Exists(filePath))
             {
@@ -531,6 +536,14 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             }
 
             return blobPath;
+        }
+
+        protected virtual void CheckStaticBucket(string bucket)
+        {
+            if (OssOptions.CheckStaticBucket(bucket))
+            {
+                throw new BusinessException(code: OssManagementErrorCodes.ContainerDeleteWithStatic);
+            }
         }
 
         private void ThrowOfPathHasTooLong(string path)

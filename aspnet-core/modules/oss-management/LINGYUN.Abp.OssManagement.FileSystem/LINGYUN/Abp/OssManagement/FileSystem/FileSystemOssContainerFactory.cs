@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
         protected IBlobFilePathCalculator FilePathCalculator { get; }
         protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
         protected IOptions<FileSystemOssOptions> Options { get; }
+        protected IOptions<AbpOssManagementOptions> OssOptions { get; }
 
         public FileSystemOssContainerFactory(
             ICurrentTenant currentTenant,
@@ -22,7 +23,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             IServiceProvider serviceProvider,
             IBlobFilePathCalculator blobFilePathCalculator,
             IBlobContainerConfigurationProvider configurationProvider,
-            IOptions<FileSystemOssOptions> options)
+            IOptions<FileSystemOssOptions> options,
+            IOptions<AbpOssManagementOptions> ossOptions)
         {
             Environment = environment;
             CurrentTenant = currentTenant;
@@ -30,6 +32,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             FilePathCalculator = blobFilePathCalculator;
             ConfigurationProvider = configurationProvider;
             Options = options;
+            OssOptions = ossOptions;
         }
 
         public IOssContainer Create()
@@ -40,7 +43,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 ServiceProvider,
                 FilePathCalculator,
                 ConfigurationProvider,
-                Options);
+                Options,
+                OssOptions);
         }
     }
 }

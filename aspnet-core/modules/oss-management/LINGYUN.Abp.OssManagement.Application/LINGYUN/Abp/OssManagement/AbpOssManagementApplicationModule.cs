@@ -1,13 +1,17 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LINGYUN.Abp.OssManagement
 {
     [DependsOn(
-        typeof(AbpAutoMapperModule),
         typeof(AbpOssManagementDomainModule),
-        typeof(AbpOssManagementApplicationContractsModule))]
+        typeof(AbpOssManagementApplicationContractsModule),
+        typeof(AbpCachingModule),
+        typeof(AbpAutoMapperModule),
+        typeof(AbpDddApplicationModule))]
     public class AbpOssManagementApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

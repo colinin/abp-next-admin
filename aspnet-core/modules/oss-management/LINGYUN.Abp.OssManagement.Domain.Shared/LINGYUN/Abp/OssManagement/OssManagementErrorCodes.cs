@@ -4,6 +4,7 @@
     {
         public const string Namespace = "Abp.OssManagement";
 
+        public const string ContainerDeleteWithStatic = Namespace + ":010000";
         public const string ContainerDeleteWithNotEmpty = Namespace + ":010001";
         public const string ContainerAlreadyExists = Namespace + ":010402";
         public const string ContainerNotFound = Namespace + ":010404";

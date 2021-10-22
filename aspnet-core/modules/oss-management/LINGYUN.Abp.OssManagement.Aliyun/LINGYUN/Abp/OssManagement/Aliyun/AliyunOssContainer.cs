@@ -126,6 +126,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
 
         public virtual async Task DeleteAsync(string name)
         {
+            // 阿里云oss在控制台设置即可，无需改变
             var ossClient = await CreateClientAsync();
 
             if (BucketExists(ossClient, name))

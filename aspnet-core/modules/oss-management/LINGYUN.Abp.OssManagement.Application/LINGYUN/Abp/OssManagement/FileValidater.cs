@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.OssManagement
             _stringLocalizer = stringLocalizer;
         }
 
-        public virtual async Task ValidationAsync(UploadOssObjectInput input)
+        public virtual async Task ValidationAsync(UploadFile input)
         {
             var validation = await GetByCacheItemAsync();
             if (validation.SizeLimit * 1024 * 1024 < input.TotalSize)

@@ -3,17 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.OssManagement
 {
-    public class UploadOssObjectInput 
+    public class UploadOssObjectInput : UploadFile
     {
         public string Bucket { get; set; }
         public string Path { get; set; }
 
         #region 配合Uplaoder 分块传输
-        /// <summary>
-        /// 文件名
-        /// </summary>
-        [Required]
-        public string FileName { get; set; }
         /// <summary>
         /// 常规块大小
         /// </summary>
@@ -34,11 +29,6 @@ namespace LINGYUN.Abp.OssManagement
         /// </summary>
         [Required]
         public int TotalChunks { get; set; }
-        /// <summary>
-        /// 总文件大小
-        /// </summary>
-        [Required]
-        public long TotalSize { get; set; }
 
         #endregion
 

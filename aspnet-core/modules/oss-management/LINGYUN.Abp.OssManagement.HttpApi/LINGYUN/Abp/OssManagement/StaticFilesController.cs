@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.OssManagement.Localization;
 using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,9 +14,10 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
 {
-    [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/files/static")]
+    [RemoteService(false)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class StaticFilesController : AbpController
     {
         private readonly IOssObjectAppService _ossObjectAppService;
