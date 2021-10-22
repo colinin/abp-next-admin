@@ -47,5 +47,19 @@
         ]
       }
     ]
+  },
+  {
+    "tag": "netstandard2.0",
+    "dependencies": [
+      {
+        "service": "Backend-Admin",
+        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
+        "depPath": "/../aspnet-core/LocalNuget/netstandard2.0/",
+        "dependencies": [
+          "LINGYUN.Abp.Features.LimitValidation.dll",
+          "LINGYUN.Abp.Features.LimitValidation.Redis.dll"
+        ]
+      }
+    ]
   }
 ]

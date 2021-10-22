@@ -2,6 +2,12 @@
 
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
+$buildSolutionPath = Join-Path $rootFolder "../aspnet-core/"
+
+Set-Location $buildSolutionPath
+
+dotnet build LINGYUN.MicroService.All.sln
+
 # List of solutions used only in development mode
 $dependenciesFile = Join-Path $rootFolder "../build/modules.dependencies.json"
 
