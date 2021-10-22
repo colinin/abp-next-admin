@@ -6,8 +6,10 @@ namespace LINGYUN.Abp.OssManagement
 {
     public interface IFileAppService : IApplicationService
     {
-        Task<OssObjectDto> UploadAsync(UploadPublicFileInput input);
+        Task<OssObjectDto> UploadAsync(UploadFileInput input);
 
         Task<Stream> GetAsync(GetPublicFileInput input);
+
+        Task UploadAsync(UploadFileChunkInput input);
     }
 }

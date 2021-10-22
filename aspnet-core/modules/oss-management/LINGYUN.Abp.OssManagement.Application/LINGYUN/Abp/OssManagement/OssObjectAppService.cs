@@ -1,60 +1,27 @@
-﻿using LINGYUN.Abp.Features.LimitValidation;
-using LINGYUN.Abp.OssManagement.Features;
-using LINGYUN.Abp.OssManagement.Permissions;
+﻿using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Threading.Tasks;
-using Volo.Abp.Features;
-using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
 {
     [Authorize(AbpOssManagementPermissions.OssObject.Default)]
     public class OssObjectAppService : OssManagementApplicationServiceBase, IOssObjectAppService
     {
-        protected IFileValidater FileValidater { get; }
+        protected FileUploadMerger Merger { get; }
         protected IOssContainerFactory OssContainerFactory { get; }
 
         public OssObjectAppService(
-            IFileValidater fileValidater,
+            FileUploadMerger merger,
             IOssContainerFactory ossContainerFactory)
         {
-            FileValidater = fileValidater;
+            Merger = merger;
             OssContainerFactory = ossContainerFactory;
         }
 
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
-        [RequiresLimitFeature(
-            AbpOssManagementFeatureNames.OssObject.UploadLimit,
-            AbpOssManagementFeatureNames.OssObject.UploadInterval,
-            LimitPolicy.Month)]
         public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
-            if (!input.Content.IsNullOrEmpty())
-            {
-                await FileValidater.ValidationAsync(new UploadFile
-                {
-                    TotalSize = input.Content.Length,
-                    FileName = input.Object
-                });
-            }
-
-            var oss = CreateOssContainer();
-
-            var createOssObjectRequest = new CreateOssObjectRequest(
-                input.Bucket,
-                input.Object,
-                input.Content,
-                input.Path,
-                input.ExpirationTime)
-            {
-                Overwrite = input.Overwrite
-            };
-            var ossObject = await oss.CreateObjectAsync(createOssObjectRequest);
+            var ossObject = await Merger.MergeAsync(input);
 
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
         }
@@ -87,15 +54,6 @@ namespace LINGYUN.Abp.OssManagement
         protected virtual IOssContainer CreateOssContainer()
         {
             return OssContainerFactory.Create();
-        }
-
-        private static void ThrowValidationException(string message, string memberName)
-        {
-            throw new AbpValidationException(message,
-                new List<ValidationResult>
-                {
-                    new ValidationResult(message, new[] {memberName})
-                });
         }
     }
 }
