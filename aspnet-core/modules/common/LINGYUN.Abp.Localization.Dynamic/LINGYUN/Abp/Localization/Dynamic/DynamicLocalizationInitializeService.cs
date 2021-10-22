@@ -6,7 +6,7 @@ using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.Localization.Dynamic
 {
-    public class DynamicLocalizationInitializeService : IHostedService
+    public class DynamicLocalizationInitializeService : BackgroundService
     {
         protected ILocalizationStore Store { get; }
         protected AbpLocalizationOptions LocalizationOptions { get; }
@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Localization.Dynamic
             LocalizationOptions = localizationOptions.Value;
         }
 
-        public virtual async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             foreach (var resource in LocalizationOptions.Resources)
             {
@@ -30,16 +30,14 @@ namespace LINGYUN.Abp.Localization.Dynamic
                 {
                     if (contributor.GetType().IsAssignableFrom(typeof(DynamicLocalizationResourceContributor)))
                     {
-                        var resourceLocalizationDic = await Store.GetLocalizationDictionaryAsync(resource.Value.ResourceName);
+                        var resourceLocalizationDic = await Store
+                            .GetLocalizationDictionaryAsync(
+                                resource.Value.ResourceName,
+                                stoppingToken);
                         DynamicOptions.AddOrUpdate(resource.Value.ResourceName, resourceLocalizationDic);
                     }
                 }
             }
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }
