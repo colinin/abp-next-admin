@@ -13,6 +13,13 @@ namespace LINGYUN.Abp.OssManagement.Features
                 name: AbpOssManagementFeatureNames.GroupName,
                 displayName: L("Features:OssManagement"));
 
+            featureGroup.AddFeature(
+                name: AbpOssManagementFeatureNames.PublicAccess,
+                defaultValue: false.ToString(),
+                displayName: L("Features:DisplayName:PublicAccess"),
+                description: L("Features:Description:PublicAccess"),
+                valueType: new ToggleStringValueType(new BooleanValueValidator()));
+
             var ossFeature = featureGroup.AddFeature(
                 name: AbpOssManagementFeatureNames.OssObject.Default,
                 defaultValue: true.ToString(),
