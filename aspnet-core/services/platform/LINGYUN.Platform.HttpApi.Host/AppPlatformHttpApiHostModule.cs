@@ -172,6 +172,13 @@ namespace LINGYUN.Platform
                 options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
                 options.Handlers.Add<System.Data.DBConcurrencyException>();
             });
+
+            Configure<Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions>(options =>
+            {
+                // 是否发送错误详情
+                options.SendExceptionsDetailsToClients = false;
+            });
+
             // 自定义需要发送邮件通知的异常类型
             Configure<AbpEmailExceptionHandlingOptions>(options =>
             {
@@ -319,6 +326,8 @@ namespace LINGYUN.Platform
             });
             // 审计日志
             app.UseAuditing();
+            // 工作单元
+            app.UseUnitOfWork();
             // 路由
             app.UseConfiguredEndpoints();
 

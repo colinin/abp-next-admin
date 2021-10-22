@@ -1,17 +1,13 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.OssManagement.Features;
 using LINGYUN.Abp.OssManagement.Permissions;
-using LINGYUN.Abp.OssManagement.Settings;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Features;
-using Volo.Abp.IO;
-using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
@@ -19,11 +15,14 @@ namespace LINGYUN.Abp.OssManagement
     [Authorize(AbpOssManagementPermissions.OssObject.Default)]
     public class OssObjectAppService : OssManagementApplicationServiceBase, IOssObjectAppService
     {
+        protected IFileValidater FileValidater { get; }
         protected IOssContainerFactory OssContainerFactory { get; }
 
         public OssObjectAppService(
+            IFileValidater fileValidater,
             IOssContainerFactory ossContainerFactory)
         {
+            FileValidater = fileValidater;
             OssContainerFactory = ossContainerFactory;
         }
 
@@ -37,25 +36,11 @@ namespace LINGYUN.Abp.OssManagement
         {
             if (!input.Content.IsNullOrEmpty())
             {
-                // 检查文件大小
-                var fileSizeLimited = await SettingProvider
-                    .GetAsync(
-                        AbpOssManagementSettingNames.FileLimitLength,
-                        AbpOssManagementSettingNames.DefaultFileLimitLength);
-                if (fileSizeLimited * 1024 * 1024 < input.Content.Length)
+                await FileValidater.ValidationAsync(new UploadFile
                 {
-                    ThrowValidationException(L["UploadFileSizeBeyondLimit", fileSizeLimited], nameof(input.Content));
-                }
-
-                // 文件扩展名
-                var fileExtensionName = FileHelper.GetExtension(input.Object);
-                var fileAllowExtension = await SettingProvider.GetOrNullAsync(AbpOssManagementSettingNames.AllowFileExtensions);
-                // 检查文件扩展名
-                if (!fileAllowExtension.Split(',')
-                    .Any(fe => fe.Equals(fileExtensionName, StringComparison.CurrentCultureIgnoreCase)))
-                {
-                    ThrowValidationException(L["NotAllowedFileExtensionName", fileExtensionName], "FileName");
-                }
+                    TotalSize = input.Content.Length,
+                    FileName = input.Object
+                });
             }
 
             var oss = CreateOssContainer();

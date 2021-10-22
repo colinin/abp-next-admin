@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj" />
   </ItemGroup>
 

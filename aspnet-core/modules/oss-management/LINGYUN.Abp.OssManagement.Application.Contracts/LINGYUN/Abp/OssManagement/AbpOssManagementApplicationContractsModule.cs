@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.OssManagement
 {
     [DependsOn(
         typeof(AbpOssManagementDomainSharedModule),
-        typeof(AbpDddApplicationModule))]
+        typeof(AbpDddApplicationContractsModule))]
     public class AbpOssManagementApplicationContractsModule : AbpModule
     {
     }

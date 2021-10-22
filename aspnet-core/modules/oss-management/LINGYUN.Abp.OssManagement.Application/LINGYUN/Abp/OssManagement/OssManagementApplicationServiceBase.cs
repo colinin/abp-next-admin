@@ -3,7 +3,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.OssManagement
 {
-    public class OssManagementApplicationServiceBase : ApplicationService
+    public abstract class OssManagementApplicationServiceBase : ApplicationService
     {
         protected OssManagementApplicationServiceBase()
         {
