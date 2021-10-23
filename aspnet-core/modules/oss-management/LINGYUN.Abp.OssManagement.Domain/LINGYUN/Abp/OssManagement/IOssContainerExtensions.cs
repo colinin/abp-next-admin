@@ -47,10 +47,11 @@ namespace LINGYUN.Abp.OssManagement
             this IOssContainer ossContainer,
             string prefix = null,
             string marker = null,
+            int skipCount = 0,
             int maxResultCount = 10)
         {
             return await ossContainer.GetListAsync(
-                new GetOssContainersRequest(prefix, marker, maxResultCount));
+                new GetOssContainersRequest(prefix, marker, skipCount, maxResultCount));
         }
 
         public static async Task<OssObject> GetObjectAsync(
@@ -70,10 +71,11 @@ namespace LINGYUN.Abp.OssManagement
             string marker = null, 
             string delimiter = null, 
             string encodingType = null,
+            int skipCount = 0,
             int maxResultCount = 10)
         {
             return await ossContainer.GetObjectsAsync(
-                new GetOssObjectsRequest(name, prefix, marker, delimiter, encodingType, maxResultCount));
+                new GetOssObjectsRequest(name, prefix, marker, delimiter, encodingType, skipCount, maxResultCount));
         }
     }
 }

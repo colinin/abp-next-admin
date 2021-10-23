@@ -337,30 +337,11 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             {
                 return x.CompareTo(y);
             });
-
-            
-            // 需要计算从哪个位置截断
-            int markIndex = 0;
-            if (!request.Marker.IsNullOrWhiteSpace())
-            {
-                markIndex = directories.FindIndex(x => x.EndsWith(request.Marker));
-                if (markIndex < 0)
-                {
-                    markIndex = 0;
-                }
-            }
-
-            var spiltDirectories = directories;
-
-            if (markIndex > 0)
-            {
-                spiltDirectories = directories[markIndex..];
-            }
-            // 截取指定数量的目录
-            int maxResultCount = request.MaxKeys ?? 10;
             // 容器对应的目录信息集合
-            var directoryInfos = spiltDirectories
-                .Take(maxResultCount)
+            // 本地文件系统直接用PageBy即可
+            var directoryInfos = directories
+                .AsQueryable()
+                .PageBy(request.Current, request.MaxKeys ?? 10)
                 .Select(file => new DirectoryInfo(file))
                 .ToArray();
             var nextMarkerIndex = directories.FindIndex(x => x.EndsWith(directoryInfos[directoryInfos.Length - 1].Name));
@@ -431,38 +412,41 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 return x.CompareTo(y);
             });
 
-            // 需要计算从哪个位置截断
-            int markIndex = 0;
-            if (!request.Marker.IsNullOrWhiteSpace())
+            //// 需要计算从哪个位置截断
+            //int markIndex = 0;
+            //if (!request.Marker.IsNullOrWhiteSpace())
+            //{
+            //    markIndex = fileSystemNames.FindIndex(x => x.EndsWith(request.Marker));
+            //    if (markIndex < 0)
+            //    {
+            //        markIndex = 0;
+            //    }
+            //}
+
+            //// 需要截断Oss对象列表
+            //var copyFileSystemNames = fileSystemNames;
+            //if (markIndex > 0)
+            //{
+            //    // fix: 翻页查询数组可能引起下标越界
+            //    // copyFileSystemNames = fileSystemNames[(markIndex+1)..];
+            //    copyFileSystemNames = fileSystemNames[markIndex..];
+            //}
+            // Oss对象信息集合
+
+            static FileSystemInfo ConvertFileSystem(string path)
             {
-                markIndex = fileSystemNames.FindIndex(x => x.EndsWith(request.Marker));
-                if (markIndex < 0)
+                if (File.Exists(path))
                 {
-                    markIndex = 0;
+                    return new FileInfo(path);
                 }
+
+                return new DirectoryInfo(path);
             }
 
-            // 需要截断Oss对象列表
-            var copyFileSystemNames = fileSystemNames;
-            if (markIndex > 0)
-            {
-                // fix: 翻页查询数组可能引起下标越界
-                // copyFileSystemNames = fileSystemNames[(markIndex+1)..];
-                copyFileSystemNames = fileSystemNames[markIndex..];
-            }
-            // 截取指定数量的Oss对象
-            int maxResultCount = request.MaxKeys ?? 10;
-            // Oss对象信息集合
-            var fileSystems = copyFileSystemNames
-                .Take(maxResultCount)
-                .Select<string, FileSystemInfo>(file =>
-                {
-                    if (File.Exists(file))
-                    {
-                        return new FileInfo(file);
-                    }
-                    return new DirectoryInfo(file);
-                })
+            var fileSystems = fileSystemNames
+                .AsQueryable()
+                .PageBy(request.Current, request.MaxKeys ?? 10)
+                .Select(ConvertFileSystem)
                 .ToArray();
 
             // 计算下一页起始标记文件/目录名称
