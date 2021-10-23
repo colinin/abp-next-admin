@@ -338,41 +338,43 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 return x.CompareTo(y);
             });
 
-            var spiltDirectories = directories;
-            // 计算标记的位置进行截断
+            
+            // 需要计算从哪个位置截断
+            int markIndex = 0;
             if (!request.Marker.IsNullOrWhiteSpace())
             {
-                var markIndex = directories.FindIndex(x => x.EndsWith(request.Marker));
+                markIndex = directories.FindIndex(x => x.EndsWith(request.Marker));
                 if (markIndex < 0)
                 {
-                    directories = new string[0];
-                }
-                else
-                {
-                    var markDirectories = new string[directories.Length - markIndex];
-                    Array.Copy(directories, markIndex, markDirectories, 0, markDirectories.Length);
-                    directories = markDirectories;
+                    markIndex = 0;
                 }
             }
-            // 需要截断最大的容器集合
-            if (request.MaxKeys.HasValue)
+
+            var spiltDirectories = directories;
+
+            if (markIndex > 0)
             {
-                spiltDirectories = directories.Take(request.MaxKeys ?? directories.Length).ToArray();
+                spiltDirectories = directories[markIndex..];
             }
-            var nextDirectory = spiltDirectories.Length < directories.Length ? directories[spiltDirectories.Length] : "";
-            if (!nextDirectory.IsNullOrWhiteSpace())
-            {
-                // 下一个标记的目录名称
-                
-                nextDirectory = new DirectoryInfo(nextDirectory).Name;
-            }
+            // 截取指定数量的目录
+            int maxResultCount = request.MaxKeys ?? 10;
             // 容器对应的目录信息集合
-            var directoryInfos = spiltDirectories.Select(x => new DirectoryInfo(x));
+            var directoryInfos = spiltDirectories
+                .Take(maxResultCount)
+                .Select(file => new DirectoryInfo(file))
+                .ToArray();
+            var nextMarkerIndex = directories.FindIndex(x => x.EndsWith(directoryInfos[directoryInfos.Length - 1].Name));
+            string nextMarker = "";
+            if (nextMarkerIndex >= 0 && nextMarkerIndex + 1 < directories.Length)
+            {
+                nextMarker = directories[nextMarkerIndex + 1];
+                nextMarker = new DirectoryInfo(nextMarker).Name;
+            }
             // 返回Oss容器描述集合
             var response = new GetOssContainersResponse(
                 request.Prefix,
                 request.Marker,
-                nextDirectory,
+                nextMarker,
                 directories.Length,
                 directoryInfos.Select(x => new OssContainer(
                     x.Name,
