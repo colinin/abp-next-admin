@@ -10,6 +10,7 @@ namespace LINGYUN.Abp.OssManagement
         public string Delimiter { get; }
         public string Marker { get; }
         public string EncodingType { get; }
+        public int Current { get; }
         public int? MaxKeys { get; }
         public GetOssObjectsRequest(
             [NotNull] string bucketName,
@@ -17,6 +18,7 @@ namespace LINGYUN.Abp.OssManagement
             string marker = null,
             string delimiter = null,
             string encodingType = null,
+            int current = 0,
             int maxKeys = 10)
         {
             Check.NotNullOrWhiteSpace(bucketName, nameof(bucketName));
@@ -26,6 +28,7 @@ namespace LINGYUN.Abp.OssManagement
             Marker = marker;
             Delimiter = delimiter;
             EncodingType = encodingType;
+            Current = current;
             MaxKeys = maxKeys;
         }
     }

@@ -239,6 +239,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
         {
             var ossClient = await CreateClientAsync();
 
+            // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
             var aliyunRequest = new ListBucketsRequest
             {
                 Marker = request.Marker,
@@ -275,6 +276,8 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             var marker = !objectPath.IsNullOrWhiteSpace() && !request.Marker.IsNullOrWhiteSpace()
                 ? request.Marker.Replace(objectPath, "")
                 : request.Marker;
+
+            // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
             var aliyunRequest = new ListObjectsRequest(request.BucketName)
             {
                 Marker = !marker.IsNullOrWhiteSpace() ? objectPath + marker : marker,
