@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.SettingM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application.Contracts", "modules\oss-management\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj", "{5C3D0A48-4EE3-4968-9826-5F52ADDC22C4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy", "modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj", "{360B5928-DD64-42AA-8C99-07EFC5224C24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{5C3D0A48-4EE3-4968-9826-5F52ADDC22C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C3D0A48-4EE3-4968-9826-5F52ADDC22C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C3D0A48-4EE3-4968-9826-5F52ADDC22C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360B5928-DD64-42AA-8C99-07EFC5224C24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360B5928-DD64-42AA-8C99-07EFC5224C24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360B5928-DD64-42AA-8C99-07EFC5224C24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360B5928-DD64-42AA-8C99-07EFC5224C24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,6 +209,7 @@ Global
 		{EAD2F955-88CA-4570-AB81-31FB2FF02605} = {B36F627B-FD7D-4357-A623-F01AFF78B80D}
 		{3FD9C35C-3A8D-49F5-B7C5-4828AA3407AB} = {B36F627B-FD7D-4357-A623-F01AFF78B80D}
 		{5C3D0A48-4EE3-4968-9826-5F52ADDC22C4} = {8F972C8E-F047-4883-A4BF-3423A2BAED36}
+		{360B5928-DD64-42AA-8C99-07EFC5224C24} = {CB1A2EB0-34D4-41C4-BF01-C99EFBBF09EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1573B900-87BA-4AD3-B785-6DD78127ADEF}

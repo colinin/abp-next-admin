@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TenantManagement.HttpApi.Client\LINGYUN.Abp.TenantManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 

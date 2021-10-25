@@ -50,8 +50,13 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
                     }
                     var cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
 
-                    var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString());
-                    await _cache.SetAsync(cacheKey, cacheItem);
+                    await _cache.SetAsync(
+                        TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString()),
+                        cacheItem);
+
+                    await _cache.SetAsync(
+                        TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Name),
+                        cacheItem);
                 }
             }
             catch (Exception ex)

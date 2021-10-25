@@ -93,17 +93,11 @@ namespace LINGYUN.Abp.TenantManagement
         public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             var tenant = await TenantRepository.GetAsync(id, false);
-            var updateEventData = new UpdateEventData
-            {
-                Id = tenant.Id,
-                OriginName = tenant.Name,
-                Name = input.Name
-            };
+
             await TenantManager.ChangeNameAsync(tenant, input.Name);
             input.MapExtraPropertiesTo(tenant);
             await TenantRepository.UpdateAsync(tenant);
 
-            await EventBus.PublishAsync(updateEventData);
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
@@ -146,15 +140,14 @@ namespace LINGYUN.Abp.TenantManagement
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.SetConnectionString(tenantConnectionStringCreateOrUpdate.Name, tenantConnectionStringCreateOrUpdate.Value);
-            var updateEventData = new UpdateEventData
+
+            var eventData = new ConnectionStringChangedEventData
             {
                 Id = tenant.Id,
-                OriginName = tenant.Name,
-                Name = tenant.Name
+                OriginName = tenantConnectionStringCreateOrUpdate.Name,
+                Name = tenantConnectionStringCreateOrUpdate.Name
             };
-            // abp当前版本(3.0.0)在EntityChangeEventHelper中存在一个问题,无法发送框架默认的Eto,预计3.1.0修复
-            // 发送自定义的事件数据来确保缓存被更新
-            await EventBus.PublishAsync(updateEventData);
+            await EventBus.PublishAsync(eventData);
 
             return new TenantConnectionStringDto
             {
@@ -170,13 +163,13 @@ namespace LINGYUN.Abp.TenantManagement
 
             tenant.RemoveConnectionString(name);
 
-            var updateEventData = new UpdateEventData
+            var eventData = new ConnectionStringChangedEventData
             {
                 Id = tenant.Id,
-                OriginName = tenant.Name,
-                Name = tenant.Name
+                OriginName = name,
+                Name = name
             };
-            await EventBus.PublishAsync(updateEventData);
+            await EventBus.PublishAsync(eventData);
 
             await TenantRepository.UpdateAsync(tenant);
         }

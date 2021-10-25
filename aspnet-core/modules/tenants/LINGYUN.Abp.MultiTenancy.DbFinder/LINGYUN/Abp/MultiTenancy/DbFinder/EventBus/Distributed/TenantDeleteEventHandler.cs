@@ -19,8 +19,11 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
 
         public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
         {
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString());
-            await _cache.RemoveAsync(cacheKey);
+            await _cache.RemoveAsync(
+                TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString()));
+
+            await _cache.RemoveAsync(
+                TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Name));
         }
     }
 }
