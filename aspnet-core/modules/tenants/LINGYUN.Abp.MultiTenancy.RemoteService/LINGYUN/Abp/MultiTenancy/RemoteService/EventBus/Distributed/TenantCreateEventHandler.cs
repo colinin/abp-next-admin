@@ -33,8 +33,13 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService.EventBus.Distributed
             }
             var cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
 
-            var cacheKey = TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString());
-            await _cache.SetAsync(cacheKey, cacheItem);
+            await _cache.SetAsync(
+                TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString()),
+                cacheItem);
+
+            await _cache.SetAsync(
+                TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Name),
+                cacheItem);
         }
     }
 }

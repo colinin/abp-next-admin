@@ -12,10 +12,10 @@ abp 多租户远程服务组件,引用此模块将首先从分布式缓存查询
 
 ``` shell
  // .NET CLI
- dotnet add package Volo.Abp.Http.Client.IdentityModel --version 3.0.0
+ dotnet add package Volo.Abp.Http.Client.IdentityModel
  
  // Package Manager
-Install-Package Volo.Abp.Http.Client.IdentityModel -Version 3.0.0
+Install-Package Volo.Abp.Http.Client.IdentityModel
  
 ```
 
@@ -30,13 +30,13 @@ Install-Package Volo.Abp.Http.Client.IdentityModel -Version 3.0.0
 ```json
 {
   "RemoteServices": {
-    "TenantManagement": {
+    "AbpTenantManagement": {
       "BaseUrl": "http://localhost:30000/",
-      "IdentityClient": "tenant-finder-client"
+      "IdentityClient": "InternalServiceClient"
     }
   },
   "IdentityClients": {
-    "tenant-finder-client": {
+    "InternalServiceClient": {
       "Authority": "http://localhost:44385",
       "RequireHttps": false,
       "GrantType": "client_credentials",

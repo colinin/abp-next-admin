@@ -12,10 +12,10 @@ abp 多租户数据库查询组件,引用此模块将首先从分布式缓存查
 
 ``` shell
  // .NET CLI
- dotnet add package Volo.Abp.TenantManagement.EntityFrameworkCore --version 3.0.0
+ dotnet add package Volo.Abp.TenantManagement.EntityFrameworkCore
  
  // Package Manager
-Install-Package Volo.Abp.TenantManagement.EntityFrameworkCore -Version 3.0.0
+Install-Package Volo.Abp.TenantManagement.EntityFrameworkCore
  
 ```
 
