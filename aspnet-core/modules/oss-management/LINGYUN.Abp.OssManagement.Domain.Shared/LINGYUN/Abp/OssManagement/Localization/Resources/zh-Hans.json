@@ -33,6 +33,7 @@
     "Description:FileLimitLength": "上传文件的限制大小,单位(MB)",
     "DisplayName:AllowFileExtensions": "文件扩展名",
     "Description:AllowFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号",
+    "DisplayName:Status": "状态",
     "Features:OssManagement": "对象存储",
     "Features:DisplayName:PublicAccess": "公共访问",
     "Features:Description:PublicAccess": "是否允许未经授权的用户访问公共目录",
