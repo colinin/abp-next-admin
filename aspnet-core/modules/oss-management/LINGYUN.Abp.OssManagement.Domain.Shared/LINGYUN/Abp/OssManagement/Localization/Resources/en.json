@@ -50,6 +50,13 @@
     "Features:DisplayName:UploadInterval": "Limit Uploads Interval",
     "Features:Description:UploadInterval": "The update period that limits the number of files uploaded. The time scale is: month. Default: 1",
     "Features:DisplayName:MaxUploadFileCount": "Maximum number of upload files",
-    "Features:Description:MaxUploadFileCount": "Limit the number of files a user uploads at a time"
+    "Features:Description:MaxUploadFileCount": "Limit the number of files a user uploads at a time",
+    "Objects:UploadFile": "Upload File",
+    "Upload:SelectFile": "Select File",
+    "Upload:Completed": "Completed",
+    "Upload:Error": "Error",
+    "Upload:Pause": "Pause",
+    "Upload:Resume": "Resume",
+    "Upload:Cancel": "Cancel"
   }
 }

@@ -33,12 +33,6 @@ namespace LINGYUN.Abp.OssManagement
             
             try
             {
-                // 重新开始
-                if (input.ChunkNumber == 1)
-                {
-                    DirectoryHelper.DeleteIfExists(tempFilePath);
-                }
-
                 DirectoryHelper.CreateIfNotExists(tempFilePath);
 
                 if (cancellationToken.IsCancellationRequested)
