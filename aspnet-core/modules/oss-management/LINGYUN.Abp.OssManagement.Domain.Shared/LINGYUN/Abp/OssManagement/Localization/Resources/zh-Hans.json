@@ -50,6 +50,13 @@
     "Features:DisplayName:UploadInterval": "限制上传文件周期",
     "Features:Description:UploadInterval": "限制上传文件次数的更新周期,时间刻度为：月,默认：1",
     "Features:DisplayName:MaxUploadFileCount": "上传文件数量",
-    "Features:Description:MaxUploadFileCount": "用户单次上传文件的限制数量"
+    "Features:Description:MaxUploadFileCount": "用户单次上传文件的限制数量",
+    "Objects:UploadFile": "上传文件",
+    "Upload:SelectFile": "选择文件",
+    "Upload:Completed": "完成",
+    "Upload:Error": "错误",
+    "Upload:Pause": "暂停",
+    "Upload:Resume": "重传",
+    "Upload:Cancel": "取消"
   }
 }
