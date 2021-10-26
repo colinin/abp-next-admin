@@ -33,6 +33,7 @@
     "Description:FileLimitLength": "Limit size of uploaded file in MB",
     "DisplayName:AllowFileExtensions": "File extension",
     "Description:AllowFileExtensions": "List of allowed extensions to upload files, with multiple extensions separated by, don't need a notation",
+    "DisplayName:Status": "Status",
     "Features:OssManagement": "Oss management",
     "Features:DisplayName:PublicAccess": "Public Access",
     "Features:Description:PublicAccess": "Whether to allow unauthorized users to access public directories",
