@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -21,9 +23,25 @@ namespace LINGYUN.Abp.OssManagement
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
         public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
-            var ossObject = await Merger.MergeAsync(input);
+            // 内容为空时建立目录
+            if (input.Content.IsNullOrEmpty())
+            {
+                var oss = CreateOssContainer();
+                var request = new CreateOssObjectRequest(
+                    HttpUtility.UrlDecode(input.Bucket),
+                    HttpUtility.UrlDecode(input.Object),
+                    input.Content,
+                    HttpUtility.UrlDecode(input.Path));
+                var ossObject = await oss.CreateObjectAsync(request);
 
-            return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
+                return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
+            } 
+            else
+            {
+                var ossObject = await Merger.MergeAsync(input);
+
+                return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
+            }
         }
 
         [Authorize(AbpOssManagementPermissions.OssObject.Delete)]
