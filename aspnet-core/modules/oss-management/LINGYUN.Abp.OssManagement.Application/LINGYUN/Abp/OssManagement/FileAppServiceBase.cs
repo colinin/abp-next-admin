@@ -24,6 +24,7 @@ namespace LINGYUN.Abp.OssManagement
             _ossContainerFactory = ossContainerFactory;
         }
 
+        [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
         public virtual async Task UploadAsync(UploadFileChunkInput input)
         {
             await _fileUploader.UploadAsync(
