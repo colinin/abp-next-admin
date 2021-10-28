@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+	  <PackageReference Include="Volo.Abp.AutoMapper" Version="4.4.0" />
+	  <PackageReference Include="Volo.Abp.Json" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

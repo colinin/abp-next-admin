@@ -52,16 +52,21 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
+        typeof(AbpLoggingSerilogElasticsearchModule),
+        typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
@@ -77,7 +82,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
         typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+        //typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
@@ -92,6 +97,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAutofacModule)
         )]
     public class BackendAdminHostModule : AbpModule
@@ -346,6 +352,7 @@ namespace LINGYUN.Abp.BackendAdmin
             });
             // 审计日志
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             // 处理微信消息
             // app.UseWeChatSignature();
             // 路由
