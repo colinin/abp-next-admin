@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using LINGYUN.Abp.Auditing.AuditLogs;
 using LINGYUN.Abp.Auditing.Logging;
-using LINGYUN.Abp.Auditing.Security;
-using Volo.Abp.AuditLogging;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity;
+using LINGYUN.Abp.Auditing.SecurityLogs;
+using LINGYUN.Abp.AuditLogging;
+using LINGYUN.Abp.Logging;
 
 namespace LINGYUN.Abp.Auditing
 {
@@ -19,7 +19,12 @@ namespace LINGYUN.Abp.Auditing
             CreateMap<AuditLog, AuditLogDto>()
                 .MapExtraProperties();
 
-            CreateMap<IdentitySecurityLog, SecurityLogDto>();
+            CreateMap<SecurityLog, SecurityLogDto>()
+                .MapExtraProperties();
+
+            CreateMap<LogField, LogFieldDto>();
+            CreateMap<LogException, LogExceptionDto>();
+            CreateMap<LogInfo, LogDto>();
         }
     }
 }

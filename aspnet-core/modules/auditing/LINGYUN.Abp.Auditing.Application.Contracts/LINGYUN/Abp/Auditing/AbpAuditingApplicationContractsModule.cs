@@ -3,7 +3,6 @@ using Volo.Abp.AuditLogging;
 using Volo.Abp.AuditLogging.Localization;
 using Volo.Abp.Authorization;
 using Volo.Abp.Features;
-using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -14,7 +13,6 @@ namespace LINGYUN.Abp.Auditing
         typeof(AbpFeaturesModule),
         typeof(AbpAuthorizationModule),
         typeof(AbpAuditLoggingDomainSharedModule),
-        typeof(AbpIdentityDomainSharedModule),
         typeof(AbpDddApplicationContractsModule))]
     public class AbpAuditingApplicationContractsModule : AbpModule
     {

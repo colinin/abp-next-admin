@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AuditLogging;
+﻿using LINGYUN.Abp.AuditLogging;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.Auditing
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
-        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpAuditLoggingModule),
         typeof(AbpAuditingApplicationContractsModule))]
     public class AbpAuditingApplicationModule : AbpModule
     {
