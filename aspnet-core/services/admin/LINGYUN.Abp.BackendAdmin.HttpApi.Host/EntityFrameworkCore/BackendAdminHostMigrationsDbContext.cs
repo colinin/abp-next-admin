@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -20,7 +19,6 @@ namespace LINGYUN.Abp.BackendAdmin.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ConfigureAuditLogging();
             modelBuilder.ConfigureFeatureManagement();
             modelBuilder.ConfigureTenantManagement();
             modelBuilder.ConfigureSettingManagement();

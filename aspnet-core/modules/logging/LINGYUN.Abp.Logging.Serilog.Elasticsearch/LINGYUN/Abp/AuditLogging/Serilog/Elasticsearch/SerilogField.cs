@@ -2,6 +2,12 @@
 {
     public class SerilogField
     {
+        [Nest.PropertyName(AbpLoggingEnricherPropertyNames.MachineName)]
+        public string MachineName { get; set; }
+
+        [Nest.PropertyName(AbpLoggingEnricherPropertyNames.EnvironmentName)]
+        public string Environment { get; set; }
+
         [Nest.PropertyName("SourceContext")]
         public string Context { get; set; }
 

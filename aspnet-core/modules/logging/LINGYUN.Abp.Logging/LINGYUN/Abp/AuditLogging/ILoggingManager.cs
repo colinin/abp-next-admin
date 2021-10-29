@@ -14,6 +14,8 @@ namespace LINGYUN.Abp.Logging
         Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            string machineName = null,
+            string environment = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -29,6 +31,8 @@ namespace LINGYUN.Abp.Logging
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
+            string machineName = null,
+            string environment = null,
             string context = null,
             string requestId = null,
             string requestPath = null,

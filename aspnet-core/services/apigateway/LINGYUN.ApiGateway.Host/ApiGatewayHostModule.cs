@@ -19,21 +19,18 @@ using Ocelot.Middleware.Multiplexer;
 using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
-using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Http.Client.IdentityModel;
-using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security.Encryption;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.ApiGateway
@@ -45,7 +42,7 @@ namespace LINGYUN.ApiGateway
         typeof(AbpAutoMapperModule),
         typeof(ApiGatewayHttpApiClientModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpAspNetCoreModule),
+        typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAspNetCoreHttpOverridesModule)
         )]
     public class ApiGatewayHostModule : AbpModule
@@ -120,22 +117,6 @@ namespace LINGYUN.ApiGateway
                 var redisConfig = ConfigurationOptions.Parse(options.Configuration);
                 options.ConfigurationOptions = redisConfig;
                 options.InstanceName = configuration["Redis:InstanceName"];
-            });
-
-            // 加解密
-            Configure<AbpStringEncryptionOptions>(options =>
-            {
-                var encryptionConfiguration = configuration.GetSection("Encryption");
-                if (encryptionConfiguration.Exists())
-                {
-                    options.DefaultPassPhrase = encryptionConfiguration["PassPhrase"] ?? options.DefaultPassPhrase;
-                    options.DefaultSalt = encryptionConfiguration.GetSection("Salt").Exists()
-                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["Salt"])
-                        : options.DefaultSalt;
-                    options.InitVectorBytes = encryptionConfiguration.GetSection("InitVector").Exists()
-                        ? Encoding.ASCII.GetBytes(encryptionConfiguration["InitVector"])
-                        : options.InitVectorBytes;
-                }
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -215,6 +196,7 @@ namespace LINGYUN.ApiGateway
 
             // 启用ws协议
             app.UseWebSockets();
+            app.UseAbpSerilogEnrichers();
             app.UseOcelot().Wait();
         }
     }
