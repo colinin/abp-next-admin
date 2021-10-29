@@ -13,19 +13,3 @@ public class YouProjectModule : AbpModule
   // other
 }
 ```
-
-## 配置项
-
-*  AbpLoggingOptions.ApplicationPropertyName	用于自定义ApplicationName字段的名称  
-*  AbpLoggingOptions.ApplicationName			在日志中标识当前应用的名称  
-
-## appsettings.json
-
-```json
-{
-  "Logging": {
-    "ApplicationName": "app"
-  }
-}
-
-```

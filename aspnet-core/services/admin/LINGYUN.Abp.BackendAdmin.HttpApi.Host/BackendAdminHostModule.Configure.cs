@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -28,6 +29,11 @@ namespace LINGYUN.Abp.BackendAdmin
 {
     public partial class BackendAdminHostModule
     {
+        private void PreConfigureApp()
+        {
+            AbpSerilogEnrichersConsts.ApplicationName = "Backend-Admin";
+        }
+
         private void PreConfigureCAP(IConfiguration configuration)
         {
             PreConfigure<CapOptions>(options =>

@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.MessageService.Localization;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -28,6 +29,11 @@ namespace LINGYUN.Abp.MessageService
 {
     public partial class AbpMessageServiceHttpApiHostModule
     {
+        private void PreConfigureApp()
+        {
+            AbpSerilogEnrichersConsts.ApplicationName = "MessageService";
+        }
+
         private void PreConfigureCAP(IConfiguration configuration)
         {
             PreConfigure<CapOptions>(options =>
@@ -86,7 +92,7 @@ namespace LINGYUN.Abp.MessageService
 
             Configure<AbpAuditingOptions>(options =>
             {
-                options.ApplicationName = "Localization";
+                options.ApplicationName = "MessageService";
                 // 是否启用实体变更记录
                 var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
                 if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())

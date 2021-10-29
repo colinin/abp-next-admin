@@ -4,6 +4,7 @@
     {
         public string MachineName { get; set; }
         public string Environment { get; set; }
+        public string Application { get; set; }
         public string Context { get; set; }
         public string ActionId { get; set; }
         public string ActionName { get; set; }

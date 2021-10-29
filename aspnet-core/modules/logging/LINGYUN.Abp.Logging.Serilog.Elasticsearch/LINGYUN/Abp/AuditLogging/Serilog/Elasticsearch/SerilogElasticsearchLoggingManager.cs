@@ -67,6 +67,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             DateTime? endTime = null,
             string machineName = null,
             string environment = null,
+            string application = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -83,6 +84,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 endTime,
                 machineName,
                 environment,
+                application,
                 context,
                 requestId,
                 requestPath,
@@ -107,6 +109,9 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         /// <param name="skipCount"></param>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
+        /// <param name="machineName"></param>
+        /// <param name="environment"></param>
+        /// <param name="application"></param>
         /// <param name="context"></param>
         /// <param name="requestId"></param>
         /// <param name="requestPath"></param>
@@ -125,6 +130,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             DateTime? endTime = null,
             string machineName = null,
             string environment = null,
+            string application = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -145,6 +151,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 endTime,
                 machineName,
                 environment,
+                application,
                 context,
                 requestId,
                 requestPath,
@@ -182,6 +189,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             DateTime? endTime = null,
             string machineName = null,
             string environment = null,
+            string application = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -207,6 +215,10 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             if (!environment.IsNullOrWhiteSpace())
             {
                 querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Environment.Suffix("keyword")).Value(environment)));
+            }
+            if (!application.IsNullOrWhiteSpace())
+            {
+                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Application.Suffix("keyword")).Value(application)));
             }
             if (!context.IsNullOrWhiteSpace())
             {

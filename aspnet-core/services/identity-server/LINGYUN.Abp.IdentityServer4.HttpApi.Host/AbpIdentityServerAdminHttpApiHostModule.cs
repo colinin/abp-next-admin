@@ -4,6 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,8 +25,8 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.Abp.IdentityServer4
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
         typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
@@ -41,6 +42,7 @@ namespace LINGYUN.Abp.IdentityServer4
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule),
@@ -55,6 +57,7 @@ namespace LINGYUN.Abp.IdentityServer4
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
             PreConfigureIdentity();
         }

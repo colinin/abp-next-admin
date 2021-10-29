@@ -10,6 +10,7 @@ using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.Platform
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
@@ -71,6 +73,7 @@ namespace LINGYUN.Platform
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
         }
 

@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.ApiGateway.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,7 @@ namespace LINGYUN.ApiGateway
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAutoMapperModule),
@@ -49,6 +51,7 @@ namespace LINGYUN.ApiGateway
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            AbpSerilogEnrichersConsts.ApplicationName = "ApiGateWay";
             var configuration = context.Services.GetConfiguration();
 
             // 不启用则使用本地配置文件的方式启动Ocelot
