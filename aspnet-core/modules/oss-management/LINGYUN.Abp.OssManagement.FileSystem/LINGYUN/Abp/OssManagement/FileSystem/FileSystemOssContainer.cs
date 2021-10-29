@@ -118,7 +118,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
                 FileMode fileMode = request.Overwrite ? FileMode.Create : FileMode.CreateNew;
-                using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
+                using (var fileStream = File.Open(filePath, fileMode, FileAccess.ReadWrite))
                 {
                     await request.Content.CopyToAsync(fileStream);
 

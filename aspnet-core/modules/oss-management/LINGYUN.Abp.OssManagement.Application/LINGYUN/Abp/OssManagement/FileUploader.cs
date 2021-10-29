@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.OssManagement
                 if (cancellationToken.IsCancellationRequested)
                 {
                     // 如果取消请求,删除临时目录
-                    Directory.Delete(tempFilePath, true);
+                    DirectoryHelper.DeleteIfExists(tempFilePath, true);
                     return;
                 }
 
@@ -54,6 +54,9 @@ namespace LINGYUN.Abp.OssManagement
 
                 if (input.ChunkNumber == input.TotalChunks)
                 {
+                    var mergeTmpFile = Path.Combine(tempFilePath, input.FileName);
+                    // 创建临时合并文件流
+                    using var mergeFileStream = new FileStream(mergeTmpFile, FileMode.Create, FileAccess.ReadWrite);
                     var createOssObjectInput = new CreateOssObjectInput
                     {
                         Bucket = input.Bucket,
@@ -63,24 +66,23 @@ namespace LINGYUN.Abp.OssManagement
                     // 合并文件
                     var mergeSavedFile = Path.Combine(tempFilePath, $"{input.FileName}");
                     // 获取并排序所有分片文件
-                    var mergeFiles = Directory.GetFiles(tempFilePath).OrderBy(f => f.Length).ThenBy(f => f);
+                    var mergeFiles = Directory.GetFiles(tempFilePath, "*.upd").OrderBy(f => f.Length).ThenBy(f => f);
                     // 创建临时合并文件
-                    using var memoryStream = new MemoryStream();
                     foreach (var mergeFile in mergeFiles)
                     {
                         // 读取当前文件字节
                         var mergeFileBytes = await FileHelper.ReadAllBytesAsync(mergeFile);
                         // 写入到合并文件流
-                        await memoryStream.WriteAsync(mergeFileBytes, 0, mergeFileBytes.Length, cancellationToken);
+                        await mergeFileStream.WriteAsync(mergeFileBytes, 0, mergeFileBytes.Length, cancellationToken);
                         Array.Clear(mergeFileBytes, 0, mergeFileBytes.Length);
                         // 删除已参与合并的临时文件分片
                         FileHelper.DeleteIfExists(mergeFile);
                     }
-                    createOssObjectInput.SetContent(memoryStream);
+                    createOssObjectInput.SetContent(mergeFileStream);
                     // 分离出合并接口,合并时计算上传次数
                     await _fileUploadMerger.MergeAsync(createOssObjectInput);
                     // 文件保存之后删除临时文件目录
-                    Directory.Delete(tempFilePath, true);
+                    DirectoryHelper.DeleteIfExists(tempFilePath, true);
                 }
             }
             catch
