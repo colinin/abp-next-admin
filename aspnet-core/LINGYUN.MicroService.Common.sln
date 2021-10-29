@@ -172,9 +172,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.El
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{23F4260D-87C1-4AA6-A302-0A8A76D53BA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Logging", "modules\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{CE7E525F-8628-4076-8A2E-B615B944D140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging", "modules\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{CE7E525F-8628-4076-8A2E-B615B944D140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "modules\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{CD556F2A-A96B-43A2-8BB3-6C0EBA27EB02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "modules\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{CD556F2A-A96B-43A2-8BB3-6C0EBA27EB02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
