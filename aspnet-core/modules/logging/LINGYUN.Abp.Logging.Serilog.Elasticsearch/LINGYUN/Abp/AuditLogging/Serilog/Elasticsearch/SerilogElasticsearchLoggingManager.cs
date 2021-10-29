@@ -65,6 +65,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            string machineName = null,
+            string environment = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -79,6 +81,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
+                machineName,
+                environment,
                 context,
                 requestId,
                 requestPath,
@@ -119,6 +123,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
+            string machineName = null,
+            string environment = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -137,6 +143,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
+                machineName,
+                environment,
                 context,
                 requestId,
                 requestPath,
@@ -172,6 +180,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         protected virtual List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>> BuildQueryDescriptor(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            string machineName = null,
+            string environment = null,
             string context = null,
             string requestId = null,
             string requestPath = null,
@@ -189,6 +199,14 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             if (endTime.HasValue)
             {
                 querys.Add((log) => log.DateRange((q) => q.Field(f => f.TimeStamp).LessThanOrEquals(endTime)));
+            }
+            if (!machineName.IsNullOrWhiteSpace())
+            {
+                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.MachineName.Suffix("keyword")).Value(machineName)));
+            }
+            if (!environment.IsNullOrWhiteSpace())
+            {
+                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Environment.Suffix("keyword")).Value(environment)));
             }
             if (!context.IsNullOrWhiteSpace())
             {

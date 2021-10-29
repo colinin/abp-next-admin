@@ -7,6 +7,8 @@ namespace LINGYUN.Abp.Auditing.Logging
     {
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public string MachineName { get; set; }
+        public string Environment { get; set; }
         public string Context { get; set; }
         public string RequestId { get; set; }
         public string RequestPath { get; set; }
