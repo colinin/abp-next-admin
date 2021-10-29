@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using System;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -23,6 +30,51 @@ namespace AuthServer.Host
 {
     public partial class AuthIdentityServerModule
     {
+        private void PreConfigureApp()
+        {
+            AbpSerilogEnrichersConsts.ApplicationName = "Identity-Server-STS";
+        }
+
+        private void PreConfigureCAP(IConfiguration configuration)
+        {
+            PreConfigure<CapOptions>(options =>
+            {
+                options
+                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                })
+                .UseDashboard();
+            });
+        }
+
+        private void PreConfigureCertificate(IConfiguration configuration, IWebHostEnvironment environment)
+        {
+            var cerConfig = configuration.GetSection("Certificates");
+            if (environment.IsProduction() &&
+                cerConfig.Exists())
+            {
+                // 开发环境下存在证书配置
+                // 且证书文件存在则使用自定义的证书文件来启动Ids服务器
+                var cerPath = Path.Combine(environment.ContentRootPath, cerConfig["CerPath"]);
+                if (File.Exists(cerPath))
+                {
+                    PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+                    {
+                        options.AddDeveloperSigningCredential = false;
+                    });
+
+                    var cer = new X509Certificate2(cerPath, cerConfig["Password"]);
+
+                    PreConfigure<IIdentityServerBuilder>(builder =>
+                    {
+                        builder.AddSigningCredential(cer);
+                    });
+                }
+            }
+        }
+
         private void ConfigureDbContext()
         {
             Configure<AbpDbContextOptions>(options =>

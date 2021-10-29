@@ -38,6 +38,7 @@
     <ProjectReference Include="..\..\..\modules\apigateway\LINGYUN.ApiGateway.HttpApi.Client\LINGYUN.ApiGateway.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+    <ProjectReference Include="..\..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
   </ItemGroup>
 
 </Project>

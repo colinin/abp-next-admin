@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -22,6 +23,11 @@ namespace LINGYUN.ApiGateway
 {
     public partial class ApiGatewayHttpApiHostModule
     {
+        private void PreConfigureApp()
+        {
+            AbpSerilogEnrichersConsts.ApplicationName = "ApiGateWay-Admin";
+        }
+
         private void PreConfigureCAP(IConfiguration configuration)
         {
             PreConfigure<CapOptions>(options =>

@@ -71,6 +71,7 @@
     <ProjectReference Include="..\..\..\modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\modules\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\identity\LINGYUN.Abp.PermissionManagement.Domain.Identity\LINGYUN.Abp.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />

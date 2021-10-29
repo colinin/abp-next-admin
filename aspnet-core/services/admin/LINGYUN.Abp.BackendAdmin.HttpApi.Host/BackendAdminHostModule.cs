@@ -8,6 +8,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TenantManagement;
@@ -37,6 +38,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.Abp.BackendAdmin
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpLoggingSerilogElasticsearchModule),
         typeof(AbpAuditLoggingElasticsearchModule),
@@ -77,6 +79,7 @@ namespace LINGYUN.Abp.BackendAdmin
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
         }
 

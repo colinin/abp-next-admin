@@ -14,6 +14,7 @@ using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.Abp.MessageService
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
@@ -70,6 +72,7 @@ namespace LINGYUN.Abp.MessageService
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
         }
 

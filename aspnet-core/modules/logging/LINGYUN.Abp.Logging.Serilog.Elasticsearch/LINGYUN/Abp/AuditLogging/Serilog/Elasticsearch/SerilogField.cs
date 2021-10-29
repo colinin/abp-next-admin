@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
+﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
+
+namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 {
     public class SerilogField
     {
@@ -7,6 +9,9 @@
 
         [Nest.PropertyName(AbpLoggingEnricherPropertyNames.EnvironmentName)]
         public string Environment { get; set; }
+
+        [Nest.PropertyName(AbpSerilogEnrichersConsts.ApplicationNamePropertyName)]
+        public string Application { get; set; }
 
         [Nest.PropertyName("SourceContext")]
         public string Context { get; set; }

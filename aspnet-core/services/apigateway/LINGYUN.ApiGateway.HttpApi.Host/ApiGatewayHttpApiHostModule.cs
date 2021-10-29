@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.ApiGateway
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(ApiGatewayApplicationModule),
@@ -41,6 +43,7 @@ namespace LINGYUN.ApiGateway
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
         }
 

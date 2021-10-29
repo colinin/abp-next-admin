@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +33,11 @@ namespace LINGYUN.Abp.IdentityServer4
 {
     public partial class AbpIdentityServerAdminHttpApiHostModule
     {
+        private void PreConfigureApp()
+        {
+            AbpSerilogEnrichersConsts.ApplicationName = "Identity-Server-Admin";
+        }
+
         private void PreConfigureCAP(IConfiguration configuration)
         {
             PreConfigure<CapOptions>(options =>

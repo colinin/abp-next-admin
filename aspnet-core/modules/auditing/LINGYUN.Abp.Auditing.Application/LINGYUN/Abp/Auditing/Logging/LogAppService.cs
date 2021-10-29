@@ -25,19 +25,20 @@ namespace LINGYUN.Abp.Auditing.Logging
         {
             var count = await _manager.GetCountAsync(
                 input.StartTime, input.EndTime,
-                input.MachineName, input.Environment, 
-                input.Context, input.RequestId, 
-                input.RequestPath, input.CorrelationId, 
-                input.ProcessId, input.ThreadId,
-                input.HasException);
+                input.MachineName, input.Environment,
+                input.Application, input.Context, 
+                input.RequestId,  input.RequestPath,
+                input.CorrelationId, input.ProcessId, 
+                input.ThreadId, input.HasException);
 
             var logs = await _manager.GetListAsync(
                 input.Sorting, input.MaxResultCount, input.SkipCount,
                 input.StartTime, input.EndTime,
-                input.MachineName, input.Environment, input.Context, 
+                input.MachineName, input.Environment,
+                input.Application, input.Context,
                 input.RequestId, input.RequestPath,
-                input.CorrelationId, input.ProcessId, input.ThreadId,
-                input.HasException, 
+                input.CorrelationId, input.ProcessId,
+                input.ThreadId, input.HasException,
                 includeDetails: false);
 
             return new PagedResultDto<LogDto>(count,

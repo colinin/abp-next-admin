@@ -4,6 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +23,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LINGYUN.Abp.LocalizationManagement
 {
     [DependsOn(
+        typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
@@ -46,6 +48,7 @@ namespace LINGYUN.Abp.LocalizationManagement
         {
             var configuration = context.Services.GetConfiguration();
 
+            PreConfigureApp();
             PreConfigureCAP(configuration);
         }
 

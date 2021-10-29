@@ -60,6 +60,7 @@
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
     <ProjectReference Include="..\..\..\modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
     <ProjectReference Include="..\..\..\modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
+    <ProjectReference Include="..\..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
     <ProjectReference Include="..\..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj" />
     <ProjectReference Include="..\..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj" />

@@ -18,6 +18,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
     [Dependency(ReplaceServices = true)]
     public class ElasticsearchSecurityLogManager : ISecurityLogManager, ISingletonDependency
     {
+        private readonly AbpSecurityLogOptions _securityLogOptions;
         private readonly AbpElasticsearchOptions _elasticsearchOptions;
         private readonly AbpAuditLoggingElasticsearchOptions _options;
         private readonly ICurrentTenant _currentTenant;
@@ -29,6 +30,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         public ElasticsearchSecurityLogManager(
             ICurrentTenant currentTenant,
             IGuidGenerator guidGenerator,
+            IOptions<AbpSecurityLogOptions> securityLogOptions,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
             IOptions<AbpAuditLoggingElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory)
@@ -37,6 +39,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             _currentTenant = currentTenant;
             _guidGenerator = guidGenerator;
             _clientFactory = clientFactory;
+            _securityLogOptions = securityLogOptions.Value;
             _elasticsearchOptions = elasticsearchOptions.Value;
 
             Logger = NullLogger<ElasticsearchSecurityLogManager>.Instance;
@@ -46,6 +49,12 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             SecurityLogInfo securityLogInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            // TODO: 框架不把这玩意儿放在 ISecurityLogManager?
+            if (!_securityLogOptions.IsEnabled)
+            {
+                return;
+            }
+
             var client = _clientFactory.Create();
 
             var securityLog = new SecurityLog(
