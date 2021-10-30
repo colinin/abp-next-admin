@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.Auditing.Logging
         public virtual async Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)
         {
             var count = await _manager.GetCountAsync(
-                input.StartTime, input.EndTime,
+                input.StartTime, input.EndTime, input.Level,
                 input.MachineName, input.Environment,
                 input.Application, input.Context, 
                 input.RequestId,  input.RequestPath,
@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Auditing.Logging
 
             var logs = await _manager.GetListAsync(
                 input.Sorting, input.MaxResultCount, input.SkipCount,
-                input.StartTime, input.EndTime,
+                input.StartTime, input.EndTime, input.Level,
                 input.MachineName, input.Environment,
                 input.Application, input.Context,
                 input.RequestId, input.RequestPath,
