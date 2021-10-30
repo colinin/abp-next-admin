@@ -148,8 +148,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         {
             var client = _clientFactory.Create();
 
-            var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("desc", StringComparison.InvariantCultureIgnoreCase)
-                ? SortOrder.Descending : SortOrder.Ascending;
+            var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
+                ? SortOrder.Ascending : SortOrder.Descending;
             sorting = sorting ?? "timestamp";
 
             var querys = BuildQueryDescriptor(
@@ -218,7 +218,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             }
             if (level.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Level.Suffix("keyword")).Value(level)));
+                querys.Add((log) => log.Term((q) => q.Field(f => f.Level.Suffix("keyword")).Value(level.ToString())));
             }
             if (!machineName.IsNullOrWhiteSpace())
             {
