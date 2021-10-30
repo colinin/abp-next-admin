@@ -150,6 +150,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
             var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("desc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortOrder.Descending : SortOrder.Ascending;
+            sorting = sorting ?? "timestamp";
 
             var querys = BuildQueryDescriptor(
                 startTime,
