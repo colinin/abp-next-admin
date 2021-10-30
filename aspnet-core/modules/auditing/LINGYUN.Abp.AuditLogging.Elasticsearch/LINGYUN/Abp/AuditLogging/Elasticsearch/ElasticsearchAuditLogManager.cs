@@ -119,11 +119,6 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 ? sorting.Split()[0]
                 : nameof(AuditLog.ExecutionTime);
 
-            if (_elasticsearchOptions.FieldCamelCase)
-            {
-                sorting = sorting.ToCamelCase();
-            }
-
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
@@ -159,7 +154,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray())))
                    .Source(ConvertFileSystem)
-                   .Sort(log => log.Field(sorting, sortOrder))
+                   .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
                    .Size(maxResultCount),
                 cancellationToken);
@@ -342,6 +337,35 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return _options.IndexPrefix.IsNullOrWhiteSpace()
                 ? "audit-log"
                 : $"{_options.IndexPrefix}-audit-log";
+        }
+
+        private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "Id", "Id.keyword" },
+            { "ApplicationName", "ApplicationName.keyword" },
+            { "UserId", "UserId.keyword" },
+            { "UserName", "UserName.keyword" },
+            { "TenantId", "TenantId.keyword" },
+            { "TenantName", "TenantName.keyword" },
+            { "ImpersonatorUserId", "ImpersonatorUserId.keyword" },
+            { "ImpersonatorTenantId", "ImpersonatorTenantId.keyword" },
+            { "ClientName", "ClientName.keyword" },
+            { "ClientIpAddress", "ClientIpAddress.keyword" },
+            { "ClientId", "ClientId.keyword" },
+            { "CorrelationId", "CorrelationId.keyword" },
+            { "BrowserInfo", "BrowserInfo.keyword" },
+            { "HttpMethod", "HttpMethod.keyword" },
+            { "Url", "Url.keyword" }
+        };
+        protected virtual string GetField(string field)
+        {
+            field = _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
+            if (_fieldMaps.TryGetValue(field, out string mapField))
+            {
+                return mapField;
+            }
+
+            return field;
         }
     }
 }
