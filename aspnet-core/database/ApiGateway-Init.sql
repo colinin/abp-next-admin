@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 本机服务器
+ Source Server         : 28 mysql
  Source Server Type    : MySQL
- Source Server Version : 80020
- Source Host           : localhost:3306
+ Source Server Version : 50736
+ Source Host           : 127.0.0.1:3306
  Source Schema         : apigateway
 
  Target Server Type    : MySQL
- Target Server Version : 80020
+ Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 21/06/2021 11:40:37
+ Date: 30/10/2021 13:52:29
 */
 
 SET NAMES utf8mb4;
@@ -36,64 +36,107 @@ INSERT INTO `__efmigrationshistory` VALUES ('20200618090102_Modify-ReRoute-Index
 INSERT INTO `__efmigrationshistory` VALUES ('20200908020925_Upgrade-abp-3.1.0', '3.1.7');
 
 -- ----------------------------
+-- Table structure for api.gateway.published
+-- ----------------------------
+DROP TABLE IF EXISTS `api.gateway.published`;
+CREATE TABLE `api.gateway.published`  (
+  `Id` bigint(20) NOT NULL,
+  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `Retries` int(11) NULL DEFAULT NULL,
+  `Added` datetime(0) NOT NULL,
+  `ExpiresAt` datetime(0) NULL DEFAULT NULL,
+  `StatusName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE,
+  INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of api.gateway.published
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for api.gateway.received
+-- ----------------------------
+DROP TABLE IF EXISTS `api.gateway.received`;
+CREATE TABLE `api.gateway.received`  (
+  `Id` bigint(20) NOT NULL,
+  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Name` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `Retries` int(11) NULL DEFAULT NULL,
+  `Added` datetime(0) NOT NULL,
+  `ExpiresAt` datetime(0) NULL DEFAULT NULL,
+  `StatusName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE,
+  INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for appapigatewayaggregate
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayaggregate`;
 CREATE TABLE `appapigatewayaggregate`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ReRouteId` bigint(0) NOT NULL,
+  `ReRouteId` bigint(20) NOT NULL,
   `ReRouteKeys` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `UpstreamPathTemplate` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `UpstreamHost` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `ReRouteIsCaseSensitive` tinyint(1) NOT NULL DEFAULT 0,
   `Aggregator` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Priority` int(0) NULL DEFAULT NULL,
+  `Priority` int(11) NULL DEFAULT NULL,
   `UpstreamHttpMethod` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayaggregate
 -- ----------------------------
-INSERT INTO `appapigatewayaggregate` VALUES (5, '{}', '90044e20fde546bab1bdd45999f8208a', 'TEST-APP', 'abp接口代理服务', 1263083077348196352, 'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,identity-server-api-definition,localization-api-definition,', '/api/abp/api-definition', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
-INSERT INTO `appapigatewayaggregate` VALUES (6, '{}', '870a2c5df9b34f8c9514aef0250fbb47', 'TEST-APP', 'abp框架配置', 1263102116090970112, 'apigateway-configuration,platform-configuration,backend-admin-configuration,messages-configuration,identity-server-configuration,', '/api/abp/application-configuration', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
+INSERT INTO `appapigatewayaggregate` VALUES (5, '{}', '2ac8c1ba3c4a4237a0bcbb32e94f39d0', 'TEST-APP', 'abp接口代理服务', 1263083077348196352, 'platform-api-definition,backend-admin-api-definition,messages-api-definition,apigateway-api-definition,identity-server-api-definition,localization-api-definition,', '/api/abp/api-definition', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
+INSERT INTO `appapigatewayaggregate` VALUES (6, '{}', '6998c8498dff43b98b691396cf134155', 'TEST-APP', 'abp框架配置', 1263102116090970112, 'apigateway-configuration,platform-configuration,backend-admin-configuration,messages-configuration,identity-server-configuration,', '/api/abp/application-configuration', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
 INSERT INTO `appapigatewayaggregate` VALUES (8, '{}', 'edc962f7e0844bb09cb0fb731f358b4b', 'TEST-APP', '我的消息订阅', 1322503807309881344, 'assignables-notifilers,my-subscribes,', '/api/my-subscribes/assignables-notifilers', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
-INSERT INTO `appapigatewayaggregate` VALUES (9, '{}', 'c65227b8a0e143b2a0b6186ffde3dfc1', 'TEST-APP', '全局设置', 1329708867127799808, 'setting-global,wechat-setting-global,aliyun-setting-global,oss-management-global,', '/api/setting-management/settings/by-global', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
-INSERT INTO `appapigatewayaggregate` VALUES (10, '{}', '29fb4cbfcdfe41478b931df8c549992b', 'TEST-APP', '当前租户设置', 1329709265255329792, 'setting-current-tenant,wechat-setting-current-tenant,aliyun-setting-current-tenant,oss-management-current-tenant,', '/api/setting-management/settings/by-current-tenant', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
+INSERT INTO `appapigatewayaggregate` VALUES (9, '{}', '2265e9f270364b3f9c31afef52853203', 'TEST-APP', '全局设置', 1329708867127799808, 'setting-global,wechat-setting-global,aliyun-setting-global,oss-management-global,', '/api/setting-management/settings/by-global', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
+INSERT INTO `appapigatewayaggregate` VALUES (10, '{}', '47a65aba264d402ba2c0b1e068979611', 'TEST-APP', '当前租户设置', 1329709265255329792, 'setting-current-tenant,wechat-setting-current-tenant,aliyun-setting-current-tenant,oss-management-current-tenant,', '/api/setting-management/settings/by-current-tenant', '', 1, 'AbpApiDefinitionAggregator', NULL, '');
 
 -- ----------------------------
 -- Table structure for appapigatewayaggregateconfig
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayaggregateconfig`;
 CREATE TABLE `appapigatewayaggregateconfig`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
   `ReRouteKey` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Parameter` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `JsonPath` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `AggregateReRouteId` int(0) NULL DEFAULT NULL,
+  `AggregateReRouteId` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_AppApiGatewayAggregateConfig_AggregateReRouteId`(`AggregateReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAggregateConfig_AppApiGatewayAggregate_Aggregat~` FOREIGN KEY (`AggregateReRouteId`) REFERENCES `appapigatewayaggregate` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of appapigatewayaggregateconfig
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for appapigatewayauthoptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayauthoptions`;
 CREATE TABLE `appapigatewayauthoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
   `AuthenticationProviderKey` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `AllowedScopes` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayAuthOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAuthOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayauthoptions
@@ -169,6 +212,14 @@ INSERT INTO `appapigatewayauthoptions` VALUES (101, 1290849478956199936, '', '')
 INSERT INTO `appapigatewayauthoptions` VALUES (102, 1290849628051124224, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (103, 1290849798553776128, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (105, 1291259822512693248, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (106, 1292620505149145088, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (107, 1292620665505775616, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (108, 1292620843398791168, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (109, 1292621027574874112, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (110, 1292621363161137152, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (111, 1292621494837116928, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (112, 1292621629260365824, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (113, 1292622526073864192, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (114, 1293470838745821184, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (115, 1293471661785706496, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (116, 1293472678392721408, '', '');
@@ -191,7 +242,6 @@ INSERT INTO `appapigatewayauthoptions` VALUES (132, 1316628769783480320, '', '')
 INSERT INTO `appapigatewayauthoptions` VALUES (133, 1316628940663619584, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (134, 1316629112428756992, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (135, 1316652047017246720, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (136, 1316913899996737536, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (137, 1319200951383199744, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (138, 1319221929807024128, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (139, 1319554431134306304, '', '');
@@ -235,49 +285,76 @@ INSERT INTO `appapigatewayauthoptions` VALUES (176, 1341652247554379776, '', '')
 INSERT INTO `appapigatewayauthoptions` VALUES (177, 1341652385555369984, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (178, 1342457939827552256, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (179, 1342458050112581632, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (180, 1363382062055915520, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (181, 1363382298501414912, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (182, 1368854800347848704, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (183, 1368855936576413696, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (184, 1368856295889854464, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (185, 1368856703572008960, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (186, 1368856819242524672, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (187, 1368856927887581184, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (188, 1368857128383700992, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (189, 1369560306297233408, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (190, 1369560450472239104, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (191, 1371705034307375104, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (192, 1376442078396276736, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (193, 1376442309850554368, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (194, 1376442440536678400, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (195, 1376442557943635968, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (196, 1376442689674141696, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (197, 1376442971032248320, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (198, 1376443123021242368, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (199, 1376443238851141632, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (200, 1376443392249421824, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (201, 1376443586777047040, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (202, 1376467826087682048, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (203, 1376467990894469120, '', '');
-INSERT INTO `appapigatewayauthoptions` VALUES (204, 1376468110214029312, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (180, 1363657602699718656, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (181, 1363657779665793024, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (182, 1363662350572154880, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (183, 1370283697803829248, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (184, 1370283782075785216, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (185, 1370283867966742528, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (186, 1370283988712366080, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (187, 1370284066516705280, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (188, 1370284158262910976, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (189, 1370284253045792768, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (190, 1370284344397733888, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (191, 1370284429890232320, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (197, 1370914923144478720, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (198, 1371844966074970112, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (199, 1371845082676621312, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (200, 1371845219528372224, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (203, 1375612899682799616, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (204, 1375613095783288832, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (205, 1375613222187028480, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (206, 1375613355029024768, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (207, 1375613462969438208, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (208, 1375613567365664768, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (209, 1375613732239560704, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (210, 1375613833662025728, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (211, 1375679597777637376, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (213, 1376863669256433664, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (214, 1376866215333179392, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (215, 1377049120932081664, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (216, 1377050475599998976, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (217, 1393020696332705792, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (218, 1393501090957946880, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (219, 1395924337284407296, '', '');
 INSERT INTO `appapigatewayauthoptions` VALUES (220, 1406817452004757504, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (221, 1421397683162664960, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (222, 1431443151332106240, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (223, 1431443363240927232, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (224, 1431444869667151872, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (225, 1431445043261005824, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (226, 1431445186324520960, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (227, 1431445363160571904, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (228, 1431464934529622016, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (229, 1431499449952165888, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (230, 1431803251955654656, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (231, 1431806909455851520, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (232, 1432189824874373120, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (233, 1432190028071624704, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (234, 1440680494805778432, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (235, 1440680915444137984, '', '');
+INSERT INTO `appapigatewayauthoptions` VALUES (236, 1442413171470688256, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (237, 1449257280751026176, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (238, 1454289352609521664, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (239, 1454289896489115648, NULL, '');
+
 -- ----------------------------
 -- Table structure for appapigatewaybalanceroptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewaybalanceroptions`;
 CREATE TABLE `appapigatewaybalanceroptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ItemId` bigint(0) NULL DEFAULT NULL,
-  `ReRouteId` bigint(0) NULL DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemId` bigint(20) NULL DEFAULT NULL,
+  `ReRouteId` bigint(20) NULL DEFAULT NULL,
   `Type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Expiry` int(0) NULL DEFAULT NULL,
+  `Expiry` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayBalancerOptions_ItemId`(`ItemId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayBalancerOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayGlobalConfiguratio~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaybalanceroptions
@@ -354,6 +431,14 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (104, NULL, 129084947895619993
 INSERT INTO `appapigatewaybalanceroptions` VALUES (105, NULL, 1290849628051124224, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (106, NULL, 1290849798553776128, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (108, NULL, 1291259822512693248, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (109, NULL, 1292620505149145088, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (110, NULL, 1292620665505775616, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (111, NULL, 1292620843398791168, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (112, NULL, 1292621027574874112, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (113, NULL, 1292621363161137152, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (114, NULL, 1292621494837116928, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (115, NULL, 1292621629260365824, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (116, NULL, 1292622526073864192, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (117, NULL, 1293470838745821184, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (118, NULL, 1293471661785706496, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (119, NULL, 1293472678392721408, '', '', 0);
@@ -376,7 +461,6 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (135, NULL, 131662876978348032
 INSERT INTO `appapigatewaybalanceroptions` VALUES (136, NULL, 1316628940663619584, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (137, NULL, 1316629112428756992, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (138, NULL, 1316652047017246720, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (139, NULL, 1316913899996737536, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (140, NULL, 1319200951383199744, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (141, NULL, 1319221929807024128, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (142, NULL, 1319554431134306304, '', '', 0);
@@ -420,46 +504,78 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (179, NULL, 134165224755437977
 INSERT INTO `appapigatewaybalanceroptions` VALUES (180, NULL, 1341652385555369984, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (181, NULL, 1342457939827552256, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (182, NULL, 1342458050112581632, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (183, NULL, 1363382062055915520, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (184, NULL, 1363382298501414912, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (185, NULL, 1368854800347848704, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (186, NULL, 1368855936576413696, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (187, NULL, 1368856295889854464, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (188, NULL, 1368856703572008960, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (189, NULL, 1368856819242524672, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (190, NULL, 1368856927887581184, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (191, NULL, 1368857128383700992, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (192, NULL, 1369560306297233408, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (193, NULL, 1369560450472239104, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (194, NULL, 1371705034307375104, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (195, NULL, 1376442078396276736, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (196, NULL, 1376442309850554368, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (197, NULL, 1376442440536678400, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (198, NULL, 1376442557943635968, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (199, NULL, 1376442689674141696, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (200, NULL, 1376442971032248320, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (201, NULL, 1376443123021242368, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (202, NULL, 1376443238851141632, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (203, NULL, 1376443392249421824, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (204, NULL, 1376443586777047040, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (205, NULL, 1376467826087682048, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (206, NULL, 1376467990894469120, '', '', 0);
-INSERT INTO `appapigatewaybalanceroptions` VALUES (207, NULL, 1376468110214029312, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (183, NULL, 1363657602699718656, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (184, NULL, 1363657779665793024, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (185, NULL, 1363662350572154880, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (186, 1364484859756847104, NULL, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (187, NULL, 1370283697803829248, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (188, NULL, 1370283782075785216, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (189, NULL, 1370283867966742528, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (190, NULL, 1370283988712366080, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (191, NULL, 1370284066516705280, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (192, NULL, 1370284158262910976, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (193, NULL, 1370284253045792768, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (194, NULL, 1370284344397733888, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (195, NULL, 1370284429890232320, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (201, NULL, 1370914923144478720, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (202, 1371652231699025920, NULL, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (203, NULL, 1371844966074970112, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (204, NULL, 1371845082676621312, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (205, NULL, 1371845219528372224, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (208, NULL, 1375612899682799616, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (209, NULL, 1375613095783288832, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (210, NULL, 1375613222187028480, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (211, NULL, 1375613355029024768, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (212, NULL, 1375613462969438208, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (213, NULL, 1375613567365664768, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (214, NULL, 1375613732239560704, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (215, NULL, 1375613833662025728, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (216, NULL, 1375679597777637376, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (218, 1376862654239059968, NULL, 'LeastConnection', '', 60000);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (219, NULL, 1376863669256433664, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (220, NULL, 1376866215333179392, 'LeastConnection', '', 60000);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (221, NULL, 1377049120932081664, 'LeastConnection', '', 60000);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (222, NULL, 1377050475599998976, 'LeastConnection', '', 60000);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (223, NULL, 1393020696332705792, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (224, NULL, 1393501090957946880, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (225, 1393502847586988032, NULL, 'LeastConnection', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (226, NULL, 1395924337284407296, '', '', 0);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (227, NULL, 1406817452004757504, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (228, 1416295790013263872, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (230, 1417661085990727680, NULL, 'NoLoadBalancer', NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (231, NULL, 1421397683162664960, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (232, NULL, 1431443151332106240, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (233, NULL, 1431443363240927232, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (234, NULL, 1431444869667151872, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (235, NULL, 1431445043261005824, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (236, NULL, 1431445186324520960, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (237, NULL, 1431445363160571904, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (238, NULL, 1431464934529622016, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (239, NULL, 1431499449952165888, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (240, NULL, 1431803251955654656, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (241, NULL, 1431806909455851520, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (242, NULL, 1432189824874373120, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (243, NULL, 1432190028071624704, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (244, NULL, 1440680494805778432, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (245, NULL, 1440680915444137984, '', '', 0);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (246, NULL, 1442413171470688256, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (247, NULL, 1449257280751026176, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (248, NULL, 1454289352609521664, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (249, NULL, 1454289896489115648, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaycacheoptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewaycacheoptions`;
 CREATE TABLE `appapigatewaycacheoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
-  `TtlSeconds` int(0) NULL DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
+  `TtlSeconds` int(11) NULL DEFAULT NULL,
   `Region` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayCacheOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayCacheOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaycacheoptions
@@ -535,6 +651,14 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (101, 1290849478956199936, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (102, 1290849628051124224, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (103, 1290849798553776128, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (105, 1291259822512693248, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (106, 1292620505149145088, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (107, 1292620665505775616, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (108, 1292620843398791168, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (109, 1292621027574874112, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (110, 1292621363161137152, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (111, 1292621494837116928, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (112, 1292621629260365824, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (113, 1292622526073864192, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (114, 1293470838745821184, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (115, 1293471661785706496, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (116, 1293472678392721408, 0, '');
@@ -557,7 +681,6 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (132, 1316628769783480320, 0, '')
 INSERT INTO `appapigatewaycacheoptions` VALUES (133, 1316628940663619584, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (134, 1316629112428756992, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (135, 1316652047017246720, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (136, 1316913899996737536, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (137, 1319200951383199744, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (138, 1319221929807024128, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (139, 1319554431134306304, NULL, NULL);
@@ -601,67 +724,99 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (176, 1341652247554379776, 0, '')
 INSERT INTO `appapigatewaycacheoptions` VALUES (177, 1341652385555369984, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (178, 1342457939827552256, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (179, 1342458050112581632, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (180, 1363382062055915520, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (181, 1363382298501414912, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (182, 1368854800347848704, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (183, 1368855936576413696, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (184, 1368856295889854464, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (185, 1368856703572008960, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (186, 1368856819242524672, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (187, 1368856927887581184, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (188, 1368857128383700992, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (189, 1369560306297233408, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (190, 1369560450472239104, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (191, 1371705034307375104, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (192, 1376442078396276736, NULL, NULL);
-INSERT INTO `appapigatewaycacheoptions` VALUES (193, 1376442309850554368, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (194, 1376442440536678400, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (195, 1376442557943635968, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (196, 1376442689674141696, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (197, 1376442971032248320, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (198, 1376443123021242368, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (199, 1376443238851141632, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (200, 1376443392249421824, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (201, 1376443586777047040, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (202, 1376467826087682048, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (203, 1376467990894469120, 0, '');
-INSERT INTO `appapigatewaycacheoptions` VALUES (204, 1376468110214029312, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (180, 1363657602699718656, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (181, 1363657779665793024, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (182, 1363662350572154880, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (183, 1370283697803829248, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (184, 1370283782075785216, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (185, 1370283867966742528, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (186, 1370283988712366080, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (187, 1370284066516705280, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (188, 1370284158262910976, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (189, 1370284253045792768, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (190, 1370284344397733888, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (191, 1370284429890232320, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (197, 1370914923144478720, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (198, 1371844966074970112, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (199, 1371845082676621312, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (200, 1371845219528372224, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (203, 1375612899682799616, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (204, 1375613095783288832, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (205, 1375613222187028480, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (206, 1375613355029024768, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (207, 1375613462969438208, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (208, 1375613567365664768, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (209, 1375613732239560704, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (210, 1375613833662025728, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (211, 1375679597777637376, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (213, 1376863669256433664, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (214, 1376866215333179392, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (215, 1377049120932081664, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (216, 1377050475599998976, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (217, 1393020696332705792, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (218, 1393501090957946880, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (219, 1395924337284407296, 0, '');
 INSERT INTO `appapigatewaycacheoptions` VALUES (220, 1406817452004757504, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (221, 1421397683162664960, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (222, 1431443151332106240, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (223, 1431443363240927232, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (224, 1431444869667151872, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (225, 1431445043261005824, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (226, 1431445186324520960, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (227, 1431445363160571904, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (228, 1431464934529622016, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (229, 1431499449952165888, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (230, 1431803251955654656, 0, '');
+INSERT INTO `appapigatewaycacheoptions` VALUES (231, 1431806909455851520, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (232, 1432189824874373120, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (233, 1432190028071624704, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (234, 1440680494805778432, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (235, 1440680915444137984, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (236, 1442413171470688256, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (237, 1449257280751026176, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (238, 1454289352609521664, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (239, 1454289896489115648, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaydiscovery
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewaydiscovery`;
 CREATE TABLE `appapigatewaydiscovery`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ItemId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemId` bigint(20) NOT NULL,
   `Host` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Port` int(0) NULL DEFAULT NULL,
+  `Port` int(11) NULL DEFAULT NULL,
   `Type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Token` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `ConfigurationKey` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `PollingInterval` int(0) NULL DEFAULT NULL,
+  `PollingInterval` int(11) NULL DEFAULT NULL,
   `Namespace` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Scheme` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayDiscovery_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayDiscovery_AppApiGatewayGlobalConfiguration_Item~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaydiscovery
 -- ----------------------------
 INSERT INTO `appapigatewaydiscovery` VALUES (1, 1260841964962947072, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (2, 1364484859756847104, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (3, 1371652231699025920, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (4, 1376862654239059968, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (5, 1393502847586988032, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (6, 1416295790013263872, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `appapigatewaydiscovery` VALUES (7, 1417661085990727680, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaydynamicreroute
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewaydynamicreroute`;
 CREATE TABLE `appapigatewaydynamicreroute`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `DynamicReRouteId` bigint(0) NOT NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `DynamicReRouteId` bigint(20) NOT NULL,
   `ServiceName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `DownstreamHttpVersion` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -674,10 +829,10 @@ CREATE TABLE `appapigatewaydynamicreroute`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayglobalconfiguration`;
 CREATE TABLE `appapigatewayglobalconfiguration`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `ItemId` bigint(0) NOT NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `ItemId` bigint(20) NOT NULL,
   `RequestIdKey` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `BaseUrl` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `DownstreamScheme` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -687,7 +842,7 @@ CREATE TABLE `appapigatewayglobalconfiguration`  (
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayGlobalConfiguration_ItemId`(`ItemId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayglobalconfiguration
@@ -699,34 +854,34 @@ INSERT INTO `appapigatewayglobalconfiguration` VALUES (1, '{}', 'f7973118f2c2425
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayheaders`;
 CREATE TABLE `appapigatewayheaders`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
   `Key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Value` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayhostandport
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayhostandport`;
 CREATE TABLE `appapigatewayhostandport`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
   `Host` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Port` int(0) NULL DEFAULT 0,
+  `Port` int(11) NULL DEFAULT 0,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for appapigatewayhttpoptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayhttpoptions`;
 CREATE TABLE `appapigatewayhttpoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ItemId` bigint(0) NULL DEFAULT NULL,
-  `ReRouteId` bigint(0) NULL DEFAULT NULL,
-  `MaxConnectionsPerServer` int(0) NULL DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemId` bigint(20) NULL DEFAULT NULL,
+  `ReRouteId` bigint(20) NULL DEFAULT NULL,
+  `MaxConnectionsPerServer` int(11) NULL DEFAULT NULL,
   `AllowAutoRedirect` tinyint(1) NOT NULL,
   `UseCookieContainer` tinyint(1) NOT NULL,
   `UseTracing` tinyint(1) NOT NULL,
@@ -736,7 +891,7 @@ CREATE TABLE `appapigatewayhttpoptions`  (
   UNIQUE INDEX `IX_AppApiGatewayHttpOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayGlobalConfiguration_It~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayhttpoptions
@@ -813,6 +968,14 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (104, NULL, 1290849478956199936, 0
 INSERT INTO `appapigatewayhttpoptions` VALUES (105, NULL, 1290849628051124224, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (106, NULL, 1290849798553776128, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (108, NULL, 1291259822512693248, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (109, NULL, 1292620505149145088, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (110, NULL, 1292620665505775616, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (111, NULL, 1292620843398791168, 100, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (112, NULL, 1292621027574874112, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (113, NULL, 1292621363161137152, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (114, NULL, 1292621494837116928, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (115, NULL, 1292621629260365824, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (116, NULL, 1292622526073864192, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (117, NULL, 1293470838745821184, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (118, NULL, 1293471661785706496, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (119, NULL, 1293472678392721408, 0, 0, 0, 0, 0);
@@ -835,7 +998,6 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (135, NULL, 1316628769783480320, 0
 INSERT INTO `appapigatewayhttpoptions` VALUES (136, NULL, 1316628940663619584, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (137, NULL, 1316629112428756992, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (138, NULL, 1316652047017246720, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (139, NULL, 1316913899996737536, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (140, NULL, 1319200951383199744, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (141, NULL, 1319221929807024128, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (142, NULL, 1319554431134306304, 0, 0, 0, 0, 0);
@@ -879,50 +1041,82 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (179, NULL, 1341652247554379776, 0
 INSERT INTO `appapigatewayhttpoptions` VALUES (180, NULL, 1341652385555369984, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (181, NULL, 1342457939827552256, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (182, NULL, 1342458050112581632, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (183, NULL, 1363382062055915520, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (184, NULL, 1363382298501414912, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (185, NULL, 1368854800347848704, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (186, NULL, 1368855936576413696, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (187, NULL, 1368856295889854464, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (188, NULL, 1368856703572008960, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (189, NULL, 1368856819242524672, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (190, NULL, 1368856927887581184, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (191, NULL, 1368857128383700992, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (192, NULL, 1369560306297233408, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (193, NULL, 1369560450472239104, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (194, NULL, 1371705034307375104, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (195, NULL, 1376442078396276736, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (196, NULL, 1376442309850554368, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (197, NULL, 1376442440536678400, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (198, NULL, 1376442557943635968, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (199, NULL, 1376442689674141696, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (200, NULL, 1376442971032248320, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (201, NULL, 1376443123021242368, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (202, NULL, 1376443238851141632, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (203, NULL, 1376443392249421824, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (204, NULL, 1376443586777047040, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (205, NULL, 1376467826087682048, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (206, NULL, 1376467990894469120, 0, 0, 0, 0, 0);
-INSERT INTO `appapigatewayhttpoptions` VALUES (207, NULL, 1376468110214029312, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (183, NULL, 1363657602699718656, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (184, NULL, 1363657779665793024, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (185, NULL, 1363662350572154880, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (186, 1364484859756847104, NULL, 1000, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (187, NULL, 1370283697803829248, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (188, NULL, 1370283782075785216, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (189, NULL, 1370283867966742528, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (190, NULL, 1370283988712366080, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (191, NULL, 1370284066516705280, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (192, NULL, 1370284158262910976, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (193, NULL, 1370284253045792768, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (194, NULL, 1370284344397733888, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (195, NULL, 1370284429890232320, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (201, NULL, 1370914923144478720, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (202, 1371652231699025920, NULL, 1000, 0, 1, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (203, NULL, 1371844966074970112, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (204, NULL, 1371845082676621312, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (205, NULL, 1371845219528372224, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (208, NULL, 1375612899682799616, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (209, NULL, 1375613095783288832, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (210, NULL, 1375613222187028480, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (211, NULL, 1375613355029024768, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (212, NULL, 1375613462969438208, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (213, NULL, 1375613567365664768, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (214, NULL, 1375613732239560704, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (215, NULL, 1375613833662025728, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (216, NULL, 1375679597777637376, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (218, 1376862654239059968, NULL, 1000, 1, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (219, NULL, 1376863669256433664, 0, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (220, NULL, 1376866215333179392, 1000, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (221, NULL, 1377049120932081664, 0, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (222, NULL, 1377050475599998976, 0, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (223, NULL, 1393020696332705792, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (224, NULL, 1393501090957946880, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (225, 1393502847586988032, NULL, 1000, 0, 1, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (226, NULL, 1395924337284407296, 0, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (227, NULL, 1406817452004757504, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (228, 1416295790013263872, NULL, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (230, 1417661085990727680, NULL, NULL, 1, 0, 0, 1);
+INSERT INTO `appapigatewayhttpoptions` VALUES (231, NULL, 1421397683162664960, NULL, 0, 0, 1, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (232, NULL, 1431443151332106240, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (233, NULL, 1431443363240927232, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (234, NULL, 1431444869667151872, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (235, NULL, 1431445043261005824, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (236, NULL, 1431445186324520960, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (237, NULL, 1431445363160571904, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (238, NULL, 1431464934529622016, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (239, NULL, 1431499449952165888, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (240, NULL, 1431803251955654656, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (241, NULL, 1431806909455851520, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (242, NULL, 1432189824874373120, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (243, NULL, 1432190028071624704, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (244, NULL, 1440680494805778432, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (245, NULL, 1440680915444137984, 0, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (246, NULL, 1442413171470688256, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (247, NULL, 1449257280751026176, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (248, NULL, 1454289352609521664, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (249, NULL, 1454289896489115648, NULL, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for appapigatewayqosoptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayqosoptions`;
 CREATE TABLE `appapigatewayqosoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ItemId` bigint(0) NULL DEFAULT NULL,
-  `ReRouteId` bigint(0) NULL DEFAULT NULL,
-  `ExceptionsAllowedBeforeBreaking` int(0) NULL DEFAULT NULL,
-  `DurationOfBreak` int(0) NULL DEFAULT NULL,
-  `TimeoutValue` int(0) NULL DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemId` bigint(20) NULL DEFAULT NULL,
+  `ReRouteId` bigint(20) NULL DEFAULT NULL,
+  `ExceptionsAllowedBeforeBreaking` int(11) NULL DEFAULT NULL,
+  `DurationOfBreak` int(11) NULL DEFAULT NULL,
+  `TimeoutValue` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayQoSOptions_ItemId`(`ItemId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayQoSOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayGlobalConfiguration_Ite~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayqosoptions
@@ -999,6 +1193,14 @@ INSERT INTO `appapigatewayqosoptions` VALUES (104, NULL, 1290849478956199936, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (105, NULL, 1290849628051124224, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (106, NULL, 1290849798553776128, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (108, NULL, 1291259822512693248, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (109, NULL, 1292620505149145088, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (110, NULL, 1292620665505775616, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (111, NULL, 1292620843398791168, 50, 60000, 1200000);
+INSERT INTO `appapigatewayqosoptions` VALUES (112, NULL, 1292621027574874112, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (113, NULL, 1292621363161137152, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (114, NULL, 1292621494837116928, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (115, NULL, 1292621629260365824, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (116, NULL, 1292622526073864192, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (117, NULL, 1293470838745821184, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (118, NULL, 1293471661785706496, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (119, NULL, 1293472678392721408, 50, 60000, 30000);
@@ -1021,7 +1223,6 @@ INSERT INTO `appapigatewayqosoptions` VALUES (135, NULL, 1316628769783480320, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (136, NULL, 1316628940663619584, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (137, NULL, 1316629112428756992, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (138, NULL, 1316652047017246720, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (139, NULL, 1316913899996737536, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (140, NULL, 1319200951383199744, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (141, NULL, 1319221929807024128, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (142, NULL, 1319554431134306304, 50, 60000, 30000);
@@ -1065,74 +1266,106 @@ INSERT INTO `appapigatewayqosoptions` VALUES (179, NULL, 1341652247554379776, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (180, NULL, 1341652385555369984, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (181, NULL, 1342457939827552256, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (182, NULL, 1342458050112581632, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (183, NULL, 1363382062055915520, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (184, NULL, 1363382298501414912, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (185, NULL, 1368854800347848704, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (186, NULL, 1368855936576413696, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (187, NULL, 1368856295889854464, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (188, NULL, 1368856703572008960, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (189, NULL, 1368856819242524672, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (190, NULL, 1368856927887581184, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (191, NULL, 1368857128383700992, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (192, NULL, 1369560306297233408, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (193, NULL, 1369560450472239104, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (194, NULL, 1371705034307375104, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (195, NULL, 1376442078396276736, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (196, NULL, 1376442309850554368, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (197, NULL, 1376442440536678400, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (198, NULL, 1376442557943635968, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (199, NULL, 1376442689674141696, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (200, NULL, 1376442971032248320, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (201, NULL, 1376443123021242368, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (202, NULL, 1376443238851141632, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (203, NULL, 1376443392249421824, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (204, NULL, 1376443586777047040, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (205, NULL, 1376467826087682048, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (206, NULL, 1376467990894469120, 50, 60000, 30000);
-INSERT INTO `appapigatewayqosoptions` VALUES (207, NULL, 1376468110214029312, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (183, NULL, 1363657602699718656, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (184, NULL, 1363657779665793024, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (185, NULL, 1363662350572154880, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (186, 1364484859756847104, NULL, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (187, NULL, 1370283697803829248, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (188, NULL, 1370283782075785216, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (189, NULL, 1370283867966742528, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (190, NULL, 1370283988712366080, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (191, NULL, 1370284066516705280, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (192, NULL, 1370284158262910976, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (193, NULL, 1370284253045792768, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (194, NULL, 1370284344397733888, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (195, NULL, 1370284429890232320, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (201, NULL, 1370914923144478720, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (202, 1371652231699025920, NULL, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (203, NULL, 1371844966074970112, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (204, NULL, 1371845082676621312, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (205, NULL, 1371845219528372224, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (208, NULL, 1375612899682799616, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (209, NULL, 1375613095783288832, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (210, NULL, 1375613222187028480, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (211, NULL, 1375613355029024768, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (212, NULL, 1375613462969438208, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (213, NULL, 1375613567365664768, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (214, NULL, 1375613732239560704, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (215, NULL, 1375613833662025728, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (216, NULL, 1375679597777637376, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (218, 1376862654239059968, NULL, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (219, NULL, 1376863669256433664, 50, 60000, 1200000);
+INSERT INTO `appapigatewayqosoptions` VALUES (220, NULL, 1376866215333179392, 50, 60000, 1200000);
+INSERT INTO `appapigatewayqosoptions` VALUES (221, NULL, 1377049120932081664, 50, 60000, 1200000);
+INSERT INTO `appapigatewayqosoptions` VALUES (222, NULL, 1377050475599998976, 50, 60000, 1200000);
+INSERT INTO `appapigatewayqosoptions` VALUES (223, NULL, 1393020696332705792, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (224, NULL, 1393501090957946880, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (225, 1393502847586988032, NULL, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (226, NULL, 1395924337284407296, 50, 60000, 30000);
 INSERT INTO `appapigatewayqosoptions` VALUES (227, NULL, 1406817452004757504, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (228, 1416295790013263872, NULL, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (230, 1417661085990727680, NULL, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (231, NULL, 1421397683162664960, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (232, NULL, 1431443151332106240, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (233, NULL, 1431443363240927232, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (234, NULL, 1431444869667151872, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (235, NULL, 1431445043261005824, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (236, NULL, 1431445186324520960, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (237, NULL, 1431445363160571904, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (238, NULL, 1431464934529622016, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (239, NULL, 1431499449952165888, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (240, NULL, 1431803251955654656, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (241, NULL, 1431806909455851520, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (242, NULL, 1432189824874373120, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (243, NULL, 1432190028071624704, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (244, NULL, 1440680494805778432, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (245, NULL, 1440680915444137984, 50, 60000, 30000);
+INSERT INTO `appapigatewayqosoptions` VALUES (246, NULL, 1442413171470688256, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (247, NULL, 1449257280751026176, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (248, NULL, 1454289352609521664, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (249, NULL, 1454289896489115648, 50, 60000, 10000);
 
 -- ----------------------------
 -- Table structure for appapigatewayratelimitoptions
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayratelimitoptions`;
 CREATE TABLE `appapigatewayratelimitoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ItemId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemId` bigint(20) NOT NULL,
   `ClientIdHeader` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'ClientId',
   `QuotaExceededMessage` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `RateLimitCounterPrefix` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'ocelot',
   `DisableRateLimitHeaders` tinyint(1) NOT NULL,
-  `HttpStatusCode` int(0) NULL DEFAULT 429,
+  `HttpStatusCode` int(11) NULL DEFAULT 429,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayRateLimitOptions_ItemId`(`ItemId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitOptions_AppApiGatewayGlobalConfigurati~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitoptions
 -- ----------------------------
-INSERT INTO `appapigatewayratelimitoptions` VALUES (1, 1260841964962947072, 'ClientId', '您的操作过快,请稍后再试!', 'ocelot', 1, 429);
+INSERT INTO `appapigatewayratelimitoptions` VALUES (1, 1260841964962947072, 'ClientId', '{\n  \"error\": {\n    \"code\": \"429\",\n    \"message\": \"您的操作过快,请稍后再试!\",\n    \"details\": \"您的操作过快,请稍后再试!\",\n    \"data\": {},\n    \"validationErrors\": []\n  }\n}', 'ocelot', 1, 429);
 
 -- ----------------------------
 -- Table structure for appapigatewayratelimitrule
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayratelimitrule`;
 CREATE TABLE `appapigatewayratelimitrule`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NULL DEFAULT NULL,
-  `DynamicReRouteId` bigint(0) NULL DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NULL DEFAULT NULL,
+  `DynamicReRouteId` bigint(20) NULL DEFAULT NULL,
   `ClientWhitelist` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `EnableRateLimiting` tinyint(1) NOT NULL,
   `Period` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `PeriodTimespan` double NULL DEFAULT NULL,
-  `Limit` bigint(0) NULL DEFAULT NULL,
+  `Limit` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayRateLimitRule_DynamicReRouteId`(`DynamicReRouteId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayRateLimitRule_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayDynamicReRoute_Dynam~` FOREIGN KEY (`DynamicReRouteId`) REFERENCES `appapigatewaydynamicreroute` (`DynamicReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitrule
@@ -1208,6 +1441,14 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (101, 1290849478956199936, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (102, 1290849628051124224, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (103, 1290849798553776128, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (105, 1291259822512693248, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (106, 1292620505149145088, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (107, 1292620665505775616, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (108, 1292620843398791168, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (109, 1292621027574874112, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (110, 1292621363161137152, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (111, 1292621494837116928, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (112, 1292621629260365824, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (113, 1292622526073864192, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (114, 1293470838745821184, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (115, 1293471661785706496, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (116, 1293472678392721408, NULL, '', 0, NULL, NULL, NULL);
@@ -1230,7 +1471,6 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (132, 1316628769783480320, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (133, 1316628940663619584, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (134, 1316629112428756992, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (135, 1316652047017246720, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (136, 1316913899996737536, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (137, 1319200951383199744, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (138, 1319221929807024128, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (139, 1319554431134306304, NULL, '', 0, NULL, NULL, NULL);
@@ -1274,42 +1514,68 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (176, 1341652247554379776, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (177, 1341652385555369984, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (178, 1342457939827552256, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (179, 1342458050112581632, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (180, 1363382062055915520, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (181, 1363382298501414912, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (182, 1368854800347848704, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (183, 1368855936576413696, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (184, 1368856295889854464, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (185, 1368856703572008960, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (186, 1368856819242524672, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (187, 1368856927887581184, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (188, 1368857128383700992, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (189, 1369560306297233408, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (190, 1369560450472239104, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (191, 1371705034307375104, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (192, 1376442078396276736, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (193, 1376442309850554368, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (194, 1376442440536678400, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (195, 1376442557943635968, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (196, 1376442689674141696, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (197, 1376442971032248320, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (198, 1376443123021242368, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (199, 1376443238851141632, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (200, 1376443392249421824, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (201, 1376443586777047040, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (202, 1376467826087682048, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (203, 1376467990894469120, NULL, '', 0, NULL, NULL, NULL);
-INSERT INTO `appapigatewayratelimitrule` VALUES (204, 1376468110214029312, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (180, 1363657602699718656, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (181, 1363657779665793024, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (182, 1363662350572154880, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (183, 1370283697803829248, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (184, 1370283782075785216, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (185, 1370283867966742528, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (186, 1370283988712366080, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (187, 1370284066516705280, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (188, 1370284158262910976, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (189, 1370284253045792768, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (190, 1370284344397733888, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (191, 1370284429890232320, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (197, 1370914923144478720, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (198, 1371844966074970112, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (199, 1371845082676621312, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (200, 1371845219528372224, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (203, 1375612899682799616, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (204, 1375613095783288832, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (205, 1375613222187028480, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (206, 1375613355029024768, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (207, 1375613462969438208, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (208, 1375613567365664768, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (209, 1375613732239560704, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (210, 1375613833662025728, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (211, 1375679597777637376, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (213, 1376863669256433664, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (214, 1376866215333179392, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (215, 1377049120932081664, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (216, 1377050475599998976, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (217, 1393020696332705792, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (218, 1393501090957946880, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (219, 1395924337284407296, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (220, 1406817452004757504, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (221, 1421397683162664960, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (222, 1431443151332106240, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (223, 1431443363240927232, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (224, 1431444869667151872, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (225, 1431445043261005824, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (226, 1431445186324520960, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (227, 1431445363160571904, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (228, 1431464934529622016, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (229, 1431499449952165888, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (230, 1431803251955654656, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (231, 1431806909455851520, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (232, 1432189824874373120, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (233, 1432190028071624704, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (234, 1440680494805778432, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (235, 1440680915444137984, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (236, 1442413171470688256, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (237, 1449257280751026176, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (238, 1454289352609521664, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (239, 1454289896489115648, NULL, '', 0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewayreroute
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewayreroute`;
 CREATE TABLE `appapigatewayreroute`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `ReRouteId` bigint(0) NOT NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `ReRouteId` bigint(20) NOT NULL,
   `ReRouteName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `DownstreamPathTemplate` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ChangeDownstreamPathTemplate` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -1331,15 +1597,15 @@ CREATE TABLE `appapigatewayreroute`  (
   `DelegatingHandlers` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `UpstreamHost` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Priority` int(0) NULL DEFAULT NULL,
-  `Timeout` int(0) NULL DEFAULT NULL,
+  `Priority` int(11) NULL DEFAULT NULL,
+  `Timeout` int(11) NULL DEFAULT NULL,
   `DangerousAcceptAnyServerCertificateValidator` tinyint(1) NOT NULL,
   `DownstreamHttpVersion` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `AppId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayReRoute_ReRouteId`(`ReRouteId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayReRoute_AppId_DownstreamPathTemplate_UpstreamPa~`(`AppId`, `DownstreamPathTemplate`, `UpstreamPathTemplate`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 212 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 503 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayreroute
@@ -1394,8 +1660,8 @@ INSERT INTO `appapigatewayreroute` VALUES (60, '{}', '8409117162504f71aa66982f05
 INSERT INTO `appapigatewayreroute` VALUES (61, '{}', '9f520820071b4e14bc94ab57989cea1f', 1263304204797648896, '【平台服务】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/platform/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'platform-configuration', 0, 120000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (62, '{}', '530ab314560f41678b40f48da9383d51', 1263304872891555840, '【后台管理】- 租户管理', '/api/tenant-management/tenants', '', '', '/api/tenant-management/tenants', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (63, '{}', '21334c6da4c349cc883c38c13de0e754', 1263305106250047488, '【后台管理】- 特定租户管理', '/api/tenant-management/tenants/{id}', '', '', '/api/tenant-management/tenants/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (64, '{}', 'cc8fdf1b2d0b414ebf2dc51a6dc78305', 1263305244594970624, '【后台管理】- 租户连接字符串', '/api/tenant-management/tenants/{id}/connection-string', '', '', '/api/tenant-management/tenants/{id}/connection-string', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 2, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (65, '{}', 'aaf285ed10da4024ba561d5cf8c6322b', 1263305430536855552, '【后台管理】- 特定租户连接字符串', '/api/tenant-management/tenants/{id}/connection-string/{name}', '', '', '/api/tenant-management/tenants/{id}/connection-string/{name}', 'GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (64, '{}', 'cc8fdf1b2d0b414ebf2dc51a6dc78305', 1263305244594970624, '【后台管理】- 租户连接字符串', '/api/tenant-management/tenants/{id}/connection-string', '', '', '/api/tenant-management/tenants/{id}/concatenation', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 2, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (65, '{}', 'aaf285ed10da4024ba561d5cf8c6322b', 1263305430536855552, '【后台管理】- 特定租户连接字符串', '/api/tenant-management/tenants/{id}/connection-string/{name}', '', '', '/api/tenant-management/tenants/{id}/concatenation/{name}', 'GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 1, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (66, '{}', '6a7da198f4c84d94969a437adc47642b', 1263639172959174656, '【后台管理】- 全局设置', '/api/setting-management/settings/by-global', '', '', '/api/setting-management/settings/by-global/app', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'setting-global', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (67, '{}', '755b4dce5c34444785fa3b647fef4131', 1264799968944640000, '【身份认证服务】- 验证手机号', '/api/account/phone/verify', '', '', '/api/account/phone/verify', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (68, '{}', '535191c570ae453ab320012304d7a62c', 1264800070161584128, '【身份认证服务】- 手机号注册', '/api/account/phone/register', '', '', '/api/account/phone/register', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
@@ -1415,6 +1681,14 @@ INSERT INTO `appapigatewayreroute` VALUES (108, '{}', '9362040d10a94fb991f60bc39
 INSERT INTO `appapigatewayreroute` VALUES (109, '{}', 'a7df3a04805d4cc8a6e6b3823c6dd468', 1290849628051124224, '【后台管理】- 用户设置', '/api/setting-management/settings/by-user/{userId}', '', '', '/api/setting-management/settings/by-user/{userId}', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (110, '{}', 'ef6e38a529a345fab67f6a627cf20635', 1290849798553776128, '【后台管理】- 当前用户设置', '/api/setting-management/settings/by-current-user', '', '', '/api/setting-management/settings/by-current-user', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (112, '{}', '9844fed6507844f2ac64bd08649bd3a6', 1291259822512693248, '【身份认证服务】- 查询组织机构根节点', '/api/identity/organization-units/root-node', '', '', '/api/identity/organization-units/root-node', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (113, '{}', '24d8794cf8f943b4ac45d2bcccf7c128', 1292620505149145088, '【平台服务】- 文件系统', '/api/file-management/file-system', '', '', '/api/file-management/file-system', 'GET,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (114, '{}', '0acf6762d3af43efb655107e0039f5fc', 1292620665505775616, '【平台服务】- 文件系统 - 目录管理', '/api/file-management/file-system/folders', '', '', '/api/file-management/file-system/folders', 'POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (115, '{}', '8b4363f70865419089b5f62ba35382df', 1292620843398791168, '【平台服务】- 文件系统 - 文件管理', '/api/file-management/file-system/files', '', '', '/api/file-management/file-system/files', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 1200000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (116, '{}', '7eb315567bbc470bbbfd26923c5d0aba', 1292621027574874112, '【平台服务】- 文件系统 - 复制目录', '/api/file-management/file-system/folders/copy', '', '', '/api/file-management/file-system/folders/copy', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (117, '{}', 'af5853680cff454fa66ff6022f18da23', 1292621363161137152, '【平台服务】- 文件系统 - 移动目录', '/api/file-management/file-system/folders/move', '', '', '/api/file-management/file-system/folders/move', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (118, '{}', '6daa6d8c8adb466899988fd8181c29a8', 1292621494837116928, '【平台服务】- 文件系统 - 复制文件', '/api/file-management/file-system/files/copy', '', '', '/api/file-management/file-system/files/copy', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (119, '{}', '9560caaa3bd9424984c44724aa54bfe9', 1292621629260365824, '【平台服务】- 文件系统 - 移动文件', '/api/file-management/file-system/files/move', '', '', '/api/file-management/file-system/files/move', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (120, '{}', 'fc2aaa6035484201b9014912930fb7cb', 1292622526073864192, '【平台服务】- 文件系统 - 详情页', '/api/file-management/file-system/profile', '', '', '/api/file-management/file-system/profile', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (121, '{}', 'c6c7b027000942dda8ba0d2e2d8cf705', 1293470838745821184, '【后台管理】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/backend-admin/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'backend-admin-configuration', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (122, '{}', 'becd4342079d4399abda5b5ba3b46fdc', 1293471661785706496, '【消息服务】- 框架配置', '/api/abp/application-configuration', '', '', '/api/abp/messages/application-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30020,', '', '', 'messages-configuration', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (123, '{}', 'c828140cee3043c18ffc274f6461f0f2', 1293472678392721408, '【后台管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/backend-admin/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'backend-admin-api-definition', 0, 30000, 1, '', 'TEST-APP');
@@ -1437,7 +1711,6 @@ INSERT INTO `appapigatewayreroute` VALUES (139, '{}', '0379fcb3a9cd4b13b562b3b5b
 INSERT INTO `appapigatewayreroute` VALUES (140, '{}', 'de25c9a80d994f728b37eb483b2f5127', 1316628940663619584, '【身份认证服务】- 管理声明类型', '/api/identity/claim-types/{id}', '', '', '/api/identity/claim-types/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (141, '{}', '25c19106baff4cf3a877ae8cd690a1b5', 1316629112428756992, '【身份认证服务】- 查询在用的声明类型列表', '/api/identity/claim-types/actived-list', '', '', '/api/identity/claim-types/actived-list', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (142, '{}', '7d3b941d8c4d4d3ebc05b6332308b992', 1316652047017246720, '【身份认证服务】- 管理用户声明', '/api/identity/users/{id}/claims', '', '', '/api/identity/users/{id}/claims', 'POST,PUT,DELETE,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (143, '{}', 'b86af44a34a14db4b482df8550f1bde1', 1316913899996737536, '【身份认证管理】- 管理角色声明', '/api/identity/roles/claims/{id}', '', '', '/api/identity/roles/claims/{id}', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (144, '{}', '51a14bc295044de985ae014fbcc5bddf', 1319200951383199744, '【IdentityServer4】- 发现端点', '/.well-known/openid-configuration', '', '', '/.well-known/openid-configuration', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (145, '{}', '9d859a444d774e93818237e53b6cc102', 1319221929807024128, '【身份认证服务】- 查询所有组织机构', '/api/identity/organization-units/all', '', '', '/api/identity/organization-units/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (146, '{}', '89f42175b24540caba2a1fded145acf8', 1319554431134306304, '【身份认证服务】- 管理组织机构用户', '/api/identity/organization-units/{id}/users', '', '', '/api/identity/organization-units/{id}/users', 'POST,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
@@ -1481,32 +1754,41 @@ INSERT INTO `appapigatewayreroute` VALUES (183, '{}', '26a1ef4016704dab8c254f90b
 INSERT INTO `appapigatewayreroute` VALUES (184, '{}', '3bfc1fef7f5446638f91c9b6e2fb12db', 1341652385555369984, '【身份认证服务】- 管理Api范围', '/api/identity-server/api-scopes/{id}', '', '', '/api/identity-server/api-scopes/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (185, '{}', '3288c25dd61e491db95313ca72016918', 1342457939827552256, '【身份认证服务】- 持久授权', '/api/identity-server/persisted-grants', '', '', '/api/identity-server/persisted-grants', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (186, '{}', '23f94678093148f58ba842096c3a0e39', 1342458050112581632, '【身份认证服务】- 管理持久授权', '/api/identity-server/persisted-grants/{id}', '', '', '/api/identity-server/persisted-grants/{id}', 'GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (187, '{}', '1f61a3e35b374277ae2c13c671bc5d30', 1363382062055915520, '【阿里云】- 阿里云公共配置', '/api/setting-management/aliyun/by-global', '', '', '/api/setting-management/aliyun/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'aliyun-setting-global', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (188, '{}', '46001a60f3d54b85a8417f6af24066e5', 1363382298501414912, '【阿里云】- 阿里云租户配置', '/api/setting-management/aliyun/by-current-tenant', '', '', '/api/setting-management/aliyun/by-current-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'aliyun-setting-current-tenant', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (189, '{}', '0d21bec8bcc044bf9000227663039ef4', 1368854800347848704, '【Oss对象存储】- 管理容器（Bucket）', '/api/oss-management/containes/{name}', '', '', '/api/oss-management/containes/{name}', 'POST,GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (190, '{}', 'ca33dc2834e4439d9ca7827fb31c70f8', 1368855936576413696, '【Oss对象存储】- 获取容器列表', '/api/oss-management/containes', '', '', '/api/oss-management/containes', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (191, '{}', 'e00fb37d9757471fbd1e64dca92e5d7d', 1368856295889854464, '【Oss对象存储】- 获取对象列表', '/api/oss-management/containes/objects', '', '', '/api/oss-management/containes/objects', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (192, '{}', 'cef75a4f7eac43789a3e246229fd5a1b', 1368856703572008960, '【Oss对象存储】- 管理Oss对象', '/api/oss-management/objects', '', '', '/api/oss-management/objects', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (193, '{}', 'ee0d5e6de17c481ca2c0ee5c156b1973', 1368856819242524672, '【Oss对象存储】- 上传Oss对象', '/api/oss-management/objects/upload', '', '', '/api/oss-management/objects/upload', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (194, '{}', '6c1a0f98129d418cba55a52dbdd88937', 1368856927887581184, '【Oss对象存储】- 批量删除Oss对象', '/api/oss-management/objects/bulk-delete', '', '', '/api/oss-management/objects/bulk-delete', 'DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (195, '{}', 'de285bf4b6114032a45d5611ea8e3101', 1368857128383700992, '【Oss对象存储】- 静态文件管理', '/api/files/static/{everything}', '', '', '/api/api/files/static/{everything}', 'POST,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (196, '{}', '6287c30d31c147faae917cb6e52636ec', 1369560306297233408, '【Oss对象存储】- 获取公共配置', '/api/setting-management/oss-management/by-global', '', '', '/api/setting-management/oss-management/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-global', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (197, '{}', '1012bb902aba47ada9a374fc73ed2632', 1369560450472239104, '【Oss对象存储】- 获取租户配置', '/api/setting-management/oss-management/by-current-tenant', '', '', '/api/setting-management/oss-management/by-current-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-current-tenant', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (198, '{}', '3ff4788f62744b27bc30f7247fb76b08', 1371705034307375104, '【Oss对象存储】- 静态文件', '/api/files/static/{everything}', '', '', '/api/files/static/{everything}', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (199, '{}', '2203b1db040942a3bbe1ed86b57a8501', 1376442078396276736, '【本地化管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/localization/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', 'localization-api-definition', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (200, '{}', '67206f8a85d94666a0c707697e706742', 1376442309850554368, '【本地化管理】- 资源管理', '/api/localization/resources', '', '', '/api/localization/resources', 'POST,GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (201, '{}', '055929710e414c5e97fc9168a1c25182', 1376442440536678400, '【本地化管理】- 管理单个资源', '/api/localization/resources/{id}', '', '', '/api/localization/resources/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (202, '{}', 'c314a94d515045a4a27763aa5d3631de', 1376442557943635968, '【本地化管理】- 获取所有资源', '/api/localization/resources/all', '', '', '/api/localization/resources/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (203, '{}', '67fb0a90132c4a02b7ff44f82bf9fd13', 1376442689674141696, '【本地化管理】- 语言管理', '/api/localization/languages', '', '', '/api/localization/languages', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (204, '{}', 'c6fab01d2b37434886f07bb601c36599', 1376442971032248320, '【本地化管理】- 管理单个语言', '/api/localization/languages/{id}', '', '', '/api/localization/languages/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (205, '{}', '074c20491b294a068fbb1df7874d0d4d', 1376443123021242368, '【本地化管理】- 获取所有语言', '/api/localization/languages/all', '', '', '/api/localization/languages/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (206, '{}', '75e48367d8f14ef99541abdb86d30b96', 1376443238851141632, '【本地化管理】- 文档管理', '/api/localization/texts', '', '', '/api/localization/texts', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (207, '{}', '5f8d7d88a97f4ff7b3bdb6fb105d527e', 1376443392249421824, '【本地化管理】- 管理单个文档', '/api/localization/texts/{id}', '', '', '/api/localization/texts/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (208, '{}', '35f470892bf04571ab49efadb2cb1eb5', 1376443586777047040, '【本地化管理】- 通过文化名称查询文档', '/api/localization/texts/by-culture-key', '', '', '/api/localization/texts/by-culture-key', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (209, '{}', '72073c75c2fa4e1db162c7a74004558f', 1376467826087682048, '【身份认证服务】- 发送登录验证码', '/api/account/phone/send-signin-code', '', '', '/api/account/phone/send-signin-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (210, '{}', 'e8e2f943dd56456f8f5dd957dd30e8b9', 1376467990894469120, '【身份认证服务】- 发送重置密码短信', '/api/account/phone/send-password-reset-code', '', '', '/api/account/phone/send-password-reset-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (211, '{}', '89fd6b8a830d457f9d1d43263c7074b4', 1376468110214029312, '【身份认证服务】- 发送注册短信', '/api/account/phone/send-register-code', '', '', '/api/account/phone/send-register-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (187, '{}', '3123cac8174142e5b024b30898dc3e6b', 1363657602699718656, '【阿里云】- 阿里云公共配置', '/api/setting-management/aliyun/by-global', '', '', '/api/setting-management/aliyun/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'aliyun-setting-global', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (188, '{}', 'c112dd1b259a44e58a992480eb237526', 1363657779665793024, '【阿里云】- 阿里云租户配置', '/api/setting-management/aliyun/by-current-tenant', '', '', '/api/setting-management/aliyun/by-current-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', 'aliyun-setting-current-tenant', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (189, '{}', '9b27e192f9094d2c8e32e9a0fa9fb589', 1363662350572154880, '【身份认证服务】- 发送重置密码短信', '/api/account/phone/send-password-reset-code', '', '', '/api/account/phone/send-password-reset-code', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (190, '{}', 'a118a783851e4dbbbbaa4e1cfd2b4079', 1370283697803829248, '【Oss对象存储】- 管理容器（Bucket）', '/api/oss-management/containes/{name}', '', '', '/api/oss-management/containes/{name}', 'POST,GET,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (191, '{}', '02c0d3e9ae6f4f3a91cb2b09954b8df1', 1370283782075785216, '【Oss对象存储】- 获取容器列表', '/api/oss-management/containes', '', '', '/api/oss-management/containes', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (192, '{}', 'b9eca50649a742129cff9767484b45bd', 1370283867966742528, '【Oss对象存储】- 获取对象列表', '/api/oss-management/containes/objects', '', '', '/api/oss-management/containes/objects', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (193, '{}', 'ac2c34befa0e4838b32b73b2b1f31cb6', 1370283988712366080, '【Oss对象存储】- 管理Oss对象', '/api/oss-management/objects', '', '', '/api/oss-management/objects', 'GET,POST,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (194, '{}', '84d3ebd88d8842acb134524d0d1a3f72', 1370284066516705280, '【Oss对象存储】- 上传Oss对象', '/api/oss-management/objects/upload', '', '', '/api/oss-management/objects/upload', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', NULL, '', 0, 3000000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (195, '{}', '69baeb0faf3d4fd29e1a4010fb9d7be5', 1370284158262910976, '【Oss对象存储】- 批量删除Oss对象', '/api/oss-management/objects/bulk-delete', '', '', '/api/oss-management/objects/bulk-delete', 'DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (196, '{}', '12a080797fe846f19fb47b0e2718617f', 1370284253045792768, '【Oss对象存储】- 静态文件管理', '/api/files/static/{everything}', '', '', '/api/api/files/static/{everything}', 'POST,GET,OPTIONS,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (197, '{}', 'cd88951cb09e4e3ca7defa469b8aa399', 1370284344397733888, '【Oss对象存储】- 获取公共配置', '/api/setting-management/oss-management/by-global', '', '', '/api/setting-management/oss-management/by-global', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-global', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (198, '{}', 'd991900c932d4793b7ae0cd6fee264a6', 1370284429890232320, '【Oss对象存储】- 获取租户配置', '/api/setting-management/oss-management/by-current-tenant', '', '', '/api/setting-management/oss-management/by-current-tenant', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', 'oss-management-current-tenant', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (204, '{}', '2caffdb6c441469db8ad820115b5638b', 1370914923144478720, '【Oss对象存储】- 外部访问静态文件', '/api/files/static/{everything}', '', '', '/api/files/static/{everything}', 'GET,POST,OPTIONS,DELETE,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 1200000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (205, '{}', '71e8dad2c3674b37bc6d52d19378d1d2', 1371844966074970112, '【位置服务】- 逆地址解析', '/api/location/re-gercode', '', '', '/api/location/re-gercode', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:40011,', '', NULL, '', 1, 30000, 1, '', 'w-shop');
+INSERT INTO `appapigatewayreroute` VALUES (206, '{}', '0f4561aaad3840cb912a5b9ba70064fb', 1371845082676621312, '【位置服务】- 地理位置解析', '/api/location/gercode', '', '', '/api/location/gercode', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:40011,', '', '', '', 0, 30000, 1, '', 'w-shop');
+INSERT INTO `appapigatewayreroute` VALUES (207, '{}', '76092a930ab345f0899f5258e3580e4a', 1371845219528372224, '【位置服务】- 逆地址解析-通过IP地址', '/api/location/ip-gercode', '', '', '/api/location/ip-gercode', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:40011,', '', '', '', 0, 30000, 1, '', 'w-shop');
+INSERT INTO `appapigatewayreroute` VALUES (211, '{}', '9c4188bbc68f455a8d21899f3d257aa8', 1375612899682799616, '【本地化管理】- 本地化语言', '/api/localization/languages', '', '', '/api/localization/languages', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (212, '{}', '84a18bc0531a4f7d8c5c6868b2732395', 1375613095783288832, '【本地化管理】- 语言管理', '/api/localization/languages/{id}', '', '', '/api/localization/languages/{id}', 'GET,DELETE,PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (213, '{}', '941a9d7c8c1c49a2afa7c24d33d170df', 1375613222187028480, '【本地化管理】- 获取所有语言', '/api/localization/languages/all', '', '', '/api/localization/languages/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (214, '{}', '616a39bec0b94d90911a1a95bf66d327', 1375613355029024768, '【本地化管理】- 资源管理', '/api/localization/resources', '', '', '/api/localization/resources', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (215, '{}', '07d74f02e2ff4efd88e11744eb76c5d2', 1375613462969438208, '【本地化管理】- 管理单个资源', '/api/localization/resources/{id}', '', '', '/api/localization/resources/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (216, '{}', '1f8fbd2d416744f6b76cb4ac223e3e5a', 1375613567365664768, '【本地化管理】- 获取所有资源', '/api/localization/resources/all', '', '', '/api/localization/resources/all', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (217, '{}', 'ad15a2e9e2e24a019dc3b892ea674934', 1375613732239560704, '【本地化管理】- 文本管理', '/api/localization/texts', '', '', '/api/localization/texts', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (218, '{}', '2582e861680a42d78ec2cc7f853bf303', 1375613833662025728, '【本地化管理】- 管理单个文本', '/api/localization/texts/{id}', '', '', '/api/localization/texts/{id}', 'GET,PUT,DELETE,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (219, '{}', '701ddf9f15844e968f0a980018d5e687', 1375679597777637376, '【本地化管理】- 接口代理', '/api/abp/api-definition', '', '', '/api/abp/localization/api-definition', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30030,', '', '', 'localization-api-definition', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (225, '{}', '13249916a52a4568b55b6c3fa813b374', 1393020696332705792, '【后台管理】- 路由代理测试', '/api/connect', '', '', '/api/connect', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (482, '{}', '295034c498744783ba0ecf3b80546ca5', 1395924337284407296, '【后台管理】- 通过名称查询租户', '/api/tenant-management/tenants/name/{name}', '', '', '/api/tenant-management/tenants/name/{name}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (483, '{}', 'be25633a37d14ab4b94803698c528e4c', 1406817452004757504, '【平台服务】- 参照名称查询字典', '/api/platform/datas/by-name/{name}', '', '', '/api/platform/datas/by-name/{name}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (484, '{}', 'a95d0fe8a6eb4b5484ebd47878f7092f', 1421397683162664960, '【身份认证服务】- 管理角色声明', '/api​/identity​/roles​/{id}​/claims', '', NULL, '/api​/identity​/roles​/{id}​/claims', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30015,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (493, '{}', '7f1af94bf83343fd91bf9e8eaa0e2fc5', 1431803251955654656, '【身份认证服务】- 换取token', '/connect/token', '', '', '/connect/token', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (494, '{}', 'dd09d208eca64c91b804377f45c85974', 1431806909455851520, '【身份认证服务】- 用户信息', '/connect/userinfo', '', '', '/connect/userinfo', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (495, '{}', 'f0660047374f43b3bcdf3555799488c6', 1432189824874373120, '【身份认证服务】- 发送变更手机号短信', '/api/identity/my-profile/send-phone-number-change-code', '', '', '/api/identity/my-profile/send-phone-number-change-code', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (496, '{}', 'da9dbe339b3e453abf79df15fe774bda', 1432190028071624704, '【身份认证服务】- 变更手机号', '/api/identity/my-profile/change-phone-number', '', '', '/api/identity/my-profile/change-phone-number', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
+IINSERT INTO `appapigatewayreroute` VALUES (501, '{}', '4019724446ad4a609916b6fb4eb2b489', 1454289352609521664, '【后台管理】- 系统日志列表', '/api/auditing/logging', '', NULL, '/api/auditing/logging', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (502, '{}', '03fd15647a4b41f3bd650fdbaa069cc0', 1454289896489115648, '【后台管理】- 系统日志', '/api/auditing/logging/{everything}', '', NULL, '/api/auditing/logging/{everything}', 'GET,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
 
 -- ----------------------------
 -- Table structure for appapigatewayroutegroup
@@ -1515,7 +1797,7 @@ DROP TABLE IF EXISTS `appapigatewayroutegroup`;
 CREATE TABLE `appapigatewayroutegroup`  (
   `Id` char(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `ExtraProperties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `ConcurrencyStamp` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `CreationTime` datetime(6) NOT NULL,
   `CreatorId` char(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `LastModificationTime` datetime(6) NULL DEFAULT NULL,
@@ -1543,14 +1825,14 @@ INSERT INTO `appapigatewayroutegroup` VALUES ('08d7f735-a83b-49ab-8cee-5d602502b
 -- ----------------------------
 DROP TABLE IF EXISTS `appapigatewaysecurityoptions`;
 CREATE TABLE `appapigatewaysecurityoptions`  (
-  `Id` int(0) NOT NULL AUTO_INCREMENT,
-  `ReRouteId` bigint(0) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ReRouteId` bigint(20) NOT NULL,
   `IPAllowedList` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `IPBlockedList` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewaySecurityOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewaySecurityOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaysecurityoptions
@@ -1626,6 +1908,14 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (101, 1290849478956199936, '',
 INSERT INTO `appapigatewaysecurityoptions` VALUES (102, 1290849628051124224, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (103, 1290849798553776128, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (105, 1291259822512693248, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (106, 1292620505149145088, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (107, 1292620665505775616, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (108, 1292620843398791168, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (109, 1292621027574874112, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (110, 1292621363161137152, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (111, 1292621494837116928, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (112, 1292621629260365824, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (113, 1292622526073864192, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (114, 1293470838745821184, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (115, 1293471661785706496, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (116, 1293472678392721408, '', '');
@@ -1648,7 +1938,6 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (132, 1316628769783480320, '',
 INSERT INTO `appapigatewaysecurityoptions` VALUES (133, 1316628940663619584, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (134, 1316629112428756992, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (135, 1316652047017246720, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (136, 1316913899996737536, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (137, 1319200951383199744, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (138, 1319221929807024128, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (139, 1319554431134306304, '', '');
@@ -1692,49 +1981,75 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (176, 1341652247554379776, '',
 INSERT INTO `appapigatewaysecurityoptions` VALUES (177, 1341652385555369984, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (178, 1342457939827552256, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (179, 1342458050112581632, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (180, 1363382062055915520, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (181, 1363382298501414912, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (182, 1368854800347848704, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (183, 1368855936576413696, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (184, 1368856295889854464, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (185, 1368856703572008960, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (186, 1368856819242524672, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (187, 1368856927887581184, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (188, 1368857128383700992, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (189, 1369560306297233408, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (190, 1369560450472239104, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (191, 1371705034307375104, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (192, 1376442078396276736, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (193, 1376442309850554368, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (194, 1376442440536678400, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (195, 1376442557943635968, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (196, 1376442689674141696, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (197, 1376442971032248320, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (198, 1376443123021242368, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (199, 1376443238851141632, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (200, 1376443392249421824, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (201, 1376443586777047040, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (202, 1376467826087682048, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (203, 1376467990894469120, '', '');
-INSERT INTO `appapigatewaysecurityoptions` VALUES (204, 1376468110214029312, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (180, 1363657602699718656, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (181, 1363657779665793024, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (182, 1363662350572154880, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (183, 1370283697803829248, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (184, 1370283782075785216, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (185, 1370283867966742528, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (186, 1370283988712366080, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (187, 1370284066516705280, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (188, 1370284158262910976, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (189, 1370284253045792768, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (190, 1370284344397733888, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (191, 1370284429890232320, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (197, 1370914923144478720, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (198, 1371844966074970112, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (199, 1371845082676621312, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (200, 1371845219528372224, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (203, 1375612899682799616, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (204, 1375613095783288832, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (205, 1375613222187028480, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (206, 1375613355029024768, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (207, 1375613462969438208, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (208, 1375613567365664768, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (209, 1375613732239560704, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (210, 1375613833662025728, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (211, 1375679597777637376, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (213, 1376863669256433664, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (214, 1376866215333179392, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (215, 1377049120932081664, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (216, 1377050475599998976, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (217, 1393020696332705792, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (218, 1393501090957946880, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (219, 1395924337284407296, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (220, 1406817452004757504, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (221, 1421397683162664960, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (222, 1431443151332106240, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (223, 1431443363240927232, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (224, 1431444869667151872, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (225, 1431445043261005824, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (226, 1431445186324520960, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (227, 1431445363160571904, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (228, 1431464934529622016, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (229, 1431499449952165888, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (230, 1431803251955654656, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (231, 1431806909455851520, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (232, 1432189824874373120, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (233, 1432190028071624704, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (234, 1440680494805778432, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (235, 1440680915444137984, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (236, 1442413171470688256, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (237, 1449257280751026176, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (238, 1454289352609521664, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (239, 1454289896489115648, '', '');
 
 -- ----------------------------
 -- Table structure for cap.published
 -- ----------------------------
 DROP TABLE IF EXISTS `cap.published`;
 CREATE TABLE `cap.published`  (
-  `Id` bigint(0) NOT NULL,
-  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `Name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
-  `Retries` int(0) NULL DEFAULT NULL,
+  `Id` bigint(20) NOT NULL,
+  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `Retries` int(11) NULL DEFAULT NULL,
   `Added` datetime(0) NOT NULL,
   `ExpiresAt` datetime(0) NULL DEFAULT NULL,
-  `StatusName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `StatusName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cap.published
@@ -1745,17 +2060,17 @@ CREATE TABLE `cap.published`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `cap.received`;
 CREATE TABLE `cap.received`  (
-  `Id` bigint(0) NOT NULL,
-  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `Name` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
-  `Retries` int(0) NULL DEFAULT NULL,
+  `Id` bigint(20) NOT NULL,
+  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Name` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `Retries` int(11) NULL DEFAULT NULL,
   `Added` datetime(0) NOT NULL,
   `ExpiresAt` datetime(0) NULL DEFAULT NULL,
-  `StatusName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `StatusName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
