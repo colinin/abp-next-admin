@@ -114,8 +114,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         {
             var client = _clientFactory.Create();
 
-            var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("desc", StringComparison.InvariantCultureIgnoreCase)
-                ? SortOrder.Descending : SortOrder.Ascending;
+            var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
+                ? SortOrder.Ascending : SortOrder.Descending;
             sorting = !sorting.IsNullOrWhiteSpace()
                 ? sorting.Split()[0]
                 : nameof(SecurityLog.CreationTime);
