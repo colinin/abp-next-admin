@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace LINGYUN.Abp.Logging
         Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,
@@ -32,6 +34,7 @@ namespace LINGYUN.Abp.Logging
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
+            LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,

@@ -27,7 +27,8 @@ namespace LINGYUN.Abp.Logging
 
         public Task<long> GetCountAsync(
             DateTime? startTime = null, 
-            DateTime? endTime = null, 
+            DateTime? endTime = null,
+            LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,
@@ -50,6 +51,7 @@ namespace LINGYUN.Abp.Logging
             int skipCount = 0, 
             DateTime? startTime = null,
             DateTime? endTime = null,
+            LogLevel? level = null,
              string machineName = null,
             string environment = null,
             string application = null,

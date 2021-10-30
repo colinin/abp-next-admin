@@ -120,11 +120,6 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 ? sorting.Split()[0]
                 : nameof(SecurityLog.CreationTime);
 
-            if (_elasticsearchOptions.FieldCamelCase)
-            {
-                sorting = sorting.ToCamelCase();
-            }
-
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
@@ -141,7 +136,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray())))
                    .Source(log => log.IncludeAll())
-                   .Sort(log => log.Field(sorting, sortOrder))
+                   .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
                    .Size(maxResultCount),
                 cancellationToken);
@@ -253,6 +248,32 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return _options.IndexPrefix.IsNullOrWhiteSpace() 
                 ? "security-log"
                 : $"{_options.IndexPrefix}-security-log";
+        }
+
+        private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "Id", "Id.keyword" },
+            { "ApplicationName", "ApplicationName.keyword" },
+            { "UserId", "UserId.keyword" },
+            { "UserName", "UserName.keyword" },
+            { "TenantId", "TenantId.keyword" },
+            { "TenantName", "TenantName.keyword" },
+            { "Identity", "Identity.keyword" },
+            { "Action", "Action.keyword" },
+            { "BrowserInfo", "BrowserInfo.keyword" },
+            { "ClientIpAddress", "ClientIpAddress.keyword" },
+            { "ClientId", "ClientId.keyword" },
+            { "CorrelationId", "CorrelationId.keyword" },
+        };
+        protected virtual string GetField(string field)
+        {
+            field = _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
+            if (_fieldMaps.TryGetValue(field, out string mapField))
+            {
+                return mapField;
+            }
+
+            return field;
         }
     }
 }

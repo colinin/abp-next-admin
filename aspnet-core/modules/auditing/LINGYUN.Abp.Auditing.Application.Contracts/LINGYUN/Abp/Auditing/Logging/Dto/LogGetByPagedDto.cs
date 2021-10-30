@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.Auditing.Logging
@@ -7,6 +8,7 @@ namespace LINGYUN.Abp.Auditing.Logging
     {
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public LogLevel? Level { get; set; }
         public string MachineName { get; set; }
         public string Environment { get; set; }
         public string Application { get; set; }

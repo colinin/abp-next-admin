@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -65,6 +66,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            Microsoft.Extensions.Logging.LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,
@@ -82,6 +84,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
+                level,
                 machineName,
                 environment,
                 application,
@@ -104,11 +107,12 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         /// <summary>
         /// 获取日志列表
         /// </summary>
-        /// <param name="sorting">排序字段，注意：忽略排序字段仅使用timestamp排序，根据传递的ASC、DESC字段区分倒序还是正序</param>
+        /// <param name="sorting">排序字段</param>
         /// <param name="maxResultCount"></param>
         /// <param name="skipCount"></param>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
+        /// <param name="level"></param>
         /// <param name="machineName"></param>
         /// <param name="environment"></param>
         /// <param name="application"></param>
@@ -128,6 +132,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             int skipCount = 0,
             DateTime? startTime = null,
             DateTime? endTime = null,
+            Microsoft.Extensions.Logging.LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,
@@ -149,6 +154,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             var querys = BuildQueryDescriptor(
                 startTime,
                 endTime,
+                level,
                 machineName,
                 environment,
                 application,
@@ -176,7 +182,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray())))
                    .Source(ConvertFileSystem)
-                   .Sort(log => log.Field("@timestamp", sortOrder))
+                   .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
                    .Size(maxResultCount),
                 cancellationToken);
@@ -187,6 +193,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         protected virtual List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>> BuildQueryDescriptor(
             DateTime? startTime = null,
             DateTime? endTime = null,
+            Microsoft.Extensions.Logging.LogLevel? level = null,
             string machineName = null,
             string environment = null,
             string application = null,
@@ -207,6 +214,10 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             if (endTime.HasValue)
             {
                 querys.Add((log) => log.DateRange((q) => q.Field(f => f.TimeStamp).LessThanOrEquals(endTime)));
+            }
+            if (level.HasValue)
+            {
+                querys.Add((log) => log.Term((q) => q.Field(f => f.Level.Suffix("keyword")).Value(level)));
             }
             if (!machineName.IsNullOrWhiteSpace())
             {
@@ -290,6 +301,38 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 return IndexFormatRegex.Replace(_options.IndexFormat, @"$1*$2");
             }
             return string.Format(_options.IndexFormat, offset.Value).ToLowerInvariant();
+        }
+
+        private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "timestamp", "@timestamp" },
+            { "level", "level.keyword" },
+            { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.keyword" },
+            { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.keyword" },
+            { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.keyword" },
+            { "context", "fields.Context.keyword" },
+            { "actionid", "fields.ActionId.keyword" },
+            { "actionname", "fields.ActionName.keyword" },
+            { "requestid", "fields.RequestId.keyword" },
+            { "requestpath", "fields.RequestPath.keyword" },
+            { "connectionid", "fields.ConnectionId.keyword" },
+            { "correlationid", "fields.CorrelationId.keyword" },
+            { "clientid", "fields.ClientId.keyword" },
+            { "userid", "fields.UserId.keyword" },
+            { "processid", "fields.ProcessId" },
+            { "threadid", "fields.ThreadId" },
+        };
+        protected virtual string GetField(string field)
+        {
+            foreach (var fieldMap in _fieldMaps)
+            {
+                if (field.ToLowerInvariant().Contains(fieldMap.Key))
+                {
+                    return fieldMap.Value;
+                }
+            }
+
+            return field;
         }
     }
 }
