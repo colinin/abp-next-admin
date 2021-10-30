@@ -281,14 +281,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/dashboard",   //path
                 CodeNumberGenerator.CreateCode(21), //code
                 layout.Path,    //component
-                "Dashboard", //displayName
+                "仪表盘", //displayName
                 "/dashboard/analysis",     //redirect
-                "Dashboard", //description 
+                "仪表盘", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "routes.dashboard.welcome" },
+                    { "title", "仪表盘" },
                     { "icon", "ant-design:home-outlined" },
                     { "hideTab", false },
                     { "ignoreAuth", true },
@@ -302,14 +302,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/dashboard/analysis",   //path
                 CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/dashboard/analysis/index",    //component
-                "Analysis", //displayName
+                "分析页", //displayName
                 "",     //redirect
-                "Analysis", //description 
+                "分析页", //description 
                 menu.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "routes.dashboard.analysis" },
+                    { "title", "分析页" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -322,14 +322,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/dashboard/workbench",   //path
                 CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/dashboard/workbench/index",    //component
-                "Workbench", //displayName
+                "工作台", //displayName
                 "",     //redirect
-                "Workbench", //description 
+                "工作台", //description 
                 menu.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "routes.dashboard.workbench" },
+                    { "title", "工作台" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -345,14 +345,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage",   //path
                 CodeNumberGenerator.CreateCode(22), //code
                 layout.Path,    //component
-                "Manage", //displayName
+                "管理", //displayName
                 "",     //redirect
-                "Manage", //description 
+                "管理", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Manage" },
+                    { "title", "管理" },
                     { "icon", "ant-design:control-outlined" },
                     { "hideTab", false },
                     { "ignoreAuth", false },
@@ -366,14 +366,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity",   //path
                 CodeNumberGenerator.AppendCode(manage.Code, CodeNumberGenerator.CreateCode(1)), //code
                 layout.Path,    //component
-                "Identity", //displayName
+                "身份认证管理", //displayName
                 "",     //redirect
-                "Identity", //description 
+                "身份认证管理", //description 
                 manage.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Identity" },
+                    { "title", "身份认证管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -385,14 +385,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity/user",   //path
                 CodeNumberGenerator.AppendCode(identity.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/identity/user/index",    //component
-                "User", //displayName
+                "用户", //displayName
                 "",     //redirect
-                "User", //description 
+                "用户", //description 
                 identity.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Users" },
+                    { "title", "用户" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -404,14 +404,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity/role",   //path
                 CodeNumberGenerator.AppendCode(identity.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/identity/role/index",    //component
-                "Role", //displayName
+                "角色", //displayName
                 "",     //redirect
-                "Role", //description 
+                "角色", //description 
                 identity.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Roles" },
+                    { "title", "角色" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -423,14 +423,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity/claim-types",   //path
                 CodeNumberGenerator.AppendCode(identity.Code, CodeNumberGenerator.CreateCode(3)), //code
                 "/identity/claim-types/index",    //component
-                "Claim", //displayName
+                "身份标识", //displayName
                 "",     //redirect
-                "Claim", //description 
+                "身份标识", //description 
                 identity.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Claim Types" },
+                    { "title", "身份标识" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -442,14 +442,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity/organization-units",   //path
                 CodeNumberGenerator.AppendCode(identity.Code, CodeNumberGenerator.CreateCode(4)), //code
                 "/identity/organization-units/index",    //component
-                "Organization Units", //displayName
+                "组织机构", //displayName
                 "",     //redirect
-                "Organization Units", //description 
+                "组织机构", //description 
                 identity.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Organization Units" },
+                    { "title", "组织机构" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -461,14 +461,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/identity/security-logs",   //path
                 CodeNumberGenerator.AppendCode(identity.Code, CodeNumberGenerator.CreateCode(5)), //code
                 "/identity/security-logs/index",    //component
-                "Security Logs", //displayName
+                "安全日志", //displayName
                 "",     //redirect
-                "Security Logs", //description 
+                "安全日志", //description 
                 identity.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Security Logs" },
+                    { "title", "安全日志" },
                     { "icon", "" },
                     { "hideTab", false },
                     { "requiredFeatures", "AbpAuditing.Logging.SecurityLog" } // 此路由需要依赖安全日志特性
@@ -482,14 +482,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/audit-logs",   //path
                 CodeNumberGenerator.AppendCode(manage.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/auditing/index",    //component
-                "Audit Logs", //displayName
+                "审计日志", //displayName
                 "",     //redirect
-                "Audit Logs", //description 
+                "审计日志", //description 
                 manage.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Audit Logs" },
+                    { "title", "审计日志" },
                     { "icon", "" },
                     { "hideTab", false },
                     { "requiredFeatures", "AbpAuditing.Logging.AuditLog" } // 此路由需要依赖审计日志特性
@@ -503,14 +503,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/manage/settings",   //path
                 CodeNumberGenerator.AppendCode(manage.Code, CodeNumberGenerator.CreateCode(3)), //code
                 "/sys/settings/index",    //component
-                "Settings", //displayName
+                "设置", //displayName
                 "",     //redirect
-                "Settings", //description 
+                "设置", //description 
                 manage.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Settings" },
+                    { "title", "设置" },
                     { "icon", "" },
                     { "hideTab", false },
                     { "requiredFeatures", "SettingManagement.Enable" } // 此路由需要依赖设置管理特性
@@ -635,6 +635,26 @@ namespace LINGYUN.Platform.DataSeeder
                     },
                     new string[] { "admin" });
             }
+
+            var logging = await SeedMenuAsync(
+                layout, //layout
+                data,   //data
+                "Logs",    //name
+                "/sys/logs",   //path
+                CodeNumberGenerator.AppendCode(manage.Code, CodeNumberGenerator.CreateCode(5)), //code
+                "/sys/logging/index",    //component
+                "系统日志", //displayName
+                "",     //redirect
+                "系统日志", //description 
+                manage.Id,   //parentId
+                layout.TenantId,    //tenantId
+                new Dictionary<string, object>()    //meta
+                {
+                    { "title", "系统日志" },
+                    { "icon", "" },
+                    { "hideTab", false },
+                },
+                new string[] { "admin" });
         }
 
         private async Task SeedSaasMenuAsync(Layout layout, Data data)
@@ -666,14 +686,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/saas/tenants",   //path
                 CodeNumberGenerator.AppendCode(saas.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/saas/tenant/index",    //component
-                "Tenants", //displayName
+                "租户管理", //displayName
                 "",     //redirect
-                "Tenants", //description 
+                "租户管理", //description 
                 saas.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Tenants" },
+                    { "title", "租户管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -689,14 +709,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/platform",   //path
                 CodeNumberGenerator.CreateCode(24), //code
                 layout.Path,    //component
-                "Platform", //displayName
+                "平台管理", //displayName
                 "",     //redirect
-                "Platform", //description 
+                "平台管理", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Platform" },
+                    { "title", "平台管理" },
                     { "icon", "" },
                     { "hideTab", false },
                     { "ignoreAuth", false },
@@ -709,14 +729,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/platform/data-dic",   //path
                 CodeNumberGenerator.AppendCode(platform.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/platform/dataDic/index",    //component
-                "Data Dictionary", //displayName
+                "数据字典", //displayName
                 "",     //redirect
-                "Data Dictionary", //description 
+                "数据字典", //description 
                 platform.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Data Dictionary" },
+                    { "title", "数据字典" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -728,14 +748,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/platform/layout",   //path
                 CodeNumberGenerator.AppendCode(platform.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/platform/layout/index",    //component
-                "Layout", //displayName
+                "布局", //displayName
                 "",     //redirect
-                "Layout", //description 
+                "布局", //description 
                 platform.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Layout" },
+                    { "title", "布局" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -747,14 +767,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/platform/menu",   //path
                 CodeNumberGenerator.AppendCode(platform.Code, CodeNumberGenerator.CreateCode(3)), //code
                 "/platform/menu/index",    //component
-                "Menu", //displayName
+                "菜单", //displayName
                 "",     //redirect
-                "Menu", //description 
+                "菜单", //description 
                 platform.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Menu" },
+                    { "title", "菜单" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -770,14 +790,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/api-gateway",   //path
                 CodeNumberGenerator.CreateCode(25), //code
                 layout.Path,    //component
-                "ApiGateway", //displayName
+                "网关管理", //displayName
                 "",     //redirect
-                "ApiGateway", //description 
+                "网关管理", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "ApiGateway" },
+                    { "title", "网关管理" },
                     { "icon", "ant-design:gateway-outlined" },
                     { "hideTab", false },
                     { "ignoreAuth", false },
@@ -790,14 +810,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/api-gateway/group",   //path
                 CodeNumberGenerator.AppendCode(apiGateway.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/api-gateway/group/index",    //component
-                "Route Group", //displayName
+                "路由分组", //displayName
                 "",     //redirect
-                "Route Group", //description 
+                "路由分组", //description 
                 apiGateway.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Route Group" },
+                    { "title", "路由分组" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -809,14 +829,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/api-gateway/global",   //path
                 CodeNumberGenerator.AppendCode(apiGateway.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/api-gateway/global/index",    //component
-                "Global Configuration", //displayName
+                "公共配置", //displayName
                 "",     //redirect
-                "Global Configuration", //description 
+                "公共配置", //description 
                 apiGateway.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Global Configuration" },
+                    { "title", "公共配置" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -828,14 +848,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/api-gateway/route",   //path
                 CodeNumberGenerator.AppendCode(apiGateway.Code, CodeNumberGenerator.CreateCode(3)), //code
                 "/api-gateway/route/index",    //component
-                "Route", //displayName
+                "路由管理", //displayName
                 "",     //redirect
-                "Route", //description 
+                "路由管理", //description 
                 apiGateway.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Route" },
+                    { "title", "路由管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -847,14 +867,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/api-gateway/aggregate",   //path
                 CodeNumberGenerator.AppendCode(apiGateway.Code, CodeNumberGenerator.CreateCode(4)), //code
                 "/api-gateway/aggregate/index",    //component
-                "Aggregate Route", //displayName
+                "聚合路由", //displayName
                 "",     //redirect
-                "Aggregate Route", //description 
+                "聚合路由", //description 
                 apiGateway.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Aggregate Route" },
+                    { "title", "聚合路由" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -870,14 +890,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/localization",   //path
                 CodeNumberGenerator.CreateCode(26), //code
                 layout.Path,    //component
-                "Localization", //displayName
+                "本地化管理", //displayName
                 "",     //redirect
-                "Localization", //description 
+                "本地化管理", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Localization" },
+                    { "title", "本地化管理" },
                     { "icon", "ant-design:translation-outlined" },
                     { "hideTab", false },
                     { "ignoreAuth", false },
@@ -890,14 +910,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/localization/languages",   //path
                 CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/localization/languages/index",    //component
-                "Languages", //displayName
+                "语言管理", //displayName
                 "",     //redirect
-                "Languages", //description 
+                "语言管理", //description 
                 localization.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Languages" },
+                    { "title", "语言管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -909,14 +929,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/localization/resources",   //path
                 CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/localization/resources/index",    //component
-                "Resources", //displayName
+                "资源管理", //displayName
                 "",     //redirect
-                "Resources", //description 
+                "资源管理", //description 
                 localization.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Resources" },
+                    { "title", "资源管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -928,14 +948,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/localization/texts",   //path
                 CodeNumberGenerator.AppendCode(localization.Code, CodeNumberGenerator.CreateCode(3)), //code
                 "/localization/texts/index",    //component
-                "Texts", //displayName
+                "文档管理", //displayName
                 "",     //redirect
-                "Texts", //description 
+                "文档管理", //description 
                 localization.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Texts" },
+                    { "title", "文档管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -951,14 +971,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/oss",   //path
                 CodeNumberGenerator.CreateCode(27), //code
                 layout.Path,    //component
-                "Oss Management", //displayName
+                "对象存储", //displayName
                 "",     //redirect
-                "Oss Management", //description 
+                "对象存储", //description 
                 null,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Oss Management" },
+                    { "title", "对象存储" },
                     { "icon", "ant-design:file-twotone" },
                     { "hideTab", false },
                     { "ignoreAuth", false },
@@ -971,14 +991,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/oss/containers",   //path
                 CodeNumberGenerator.AppendCode(oss.Code, CodeNumberGenerator.CreateCode(1)), //code
                 "/oss-management/containers/index",    //component
-                "Containers", //displayName
+                "容器管理", //displayName
                 "",     //redirect
-                "Containers", //description 
+                "容器管理", //description 
                 oss.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Containers" },
+                    { "title", "容器管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
@@ -990,14 +1010,14 @@ namespace LINGYUN.Platform.DataSeeder
                 "/oss/objects",   //path
                 CodeNumberGenerator.AppendCode(oss.Code, CodeNumberGenerator.CreateCode(2)), //code
                 "/oss-management/objects/index",    //component
-                "Objects", //displayName
+                "文件管理", //displayName
                 "",     //redirect
-                "Objects", //description 
+                "文件管理", //description 
                 oss.Id,   //parentId
                 layout.TenantId,    //tenantId
                 new Dictionary<string, object>()    //meta
                 {
-                    { "title", "Objects" },
+                    { "title", "文件管理" },
                     { "icon", "" },
                     { "hideTab", false },
                 },
