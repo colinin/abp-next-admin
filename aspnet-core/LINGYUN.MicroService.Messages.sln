@@ -93,6 +93,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{69F5D2A0-480E-4461-9C30-1678F23258C1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{298D561E-3AFB-4161-82F1-DF0F8C54BBB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +249,10 @@ Global
 		{69F5D2A0-480E-4461-9C30-1678F23258C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69F5D2A0-480E-4461-9C30-1678F23258C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69F5D2A0-480E-4461-9C30-1678F23258C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{298D561E-3AFB-4161-82F1-DF0F8C54BBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{298D561E-3AFB-4161-82F1-DF0F8C54BBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{298D561E-3AFB-4161-82F1-DF0F8C54BBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{298D561E-3AFB-4161-82F1-DF0F8C54BBB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -294,6 +300,7 @@ Global
 		{321FC8A7-D595-431A-AC14-1F5E1B901BCF} = {91E005C0-3A78-47C2-86F1-A21362ED350E}
 		{4D594462-D10D-46AF-980E-95EDE676F1CF} = {F566D959-7F56-4EB4-A448-A87AEFC92178}
 		{69F5D2A0-480E-4461-9C30-1678F23258C1} = {F566D959-7F56-4EB4-A448-A87AEFC92178}
+		{298D561E-3AFB-4161-82F1-DF0F8C54BBB4} = {C00828FB-E7D5-4086-BA50-02022594AB73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6238659A-7267-49B9-A499-8746BDEED6B8}

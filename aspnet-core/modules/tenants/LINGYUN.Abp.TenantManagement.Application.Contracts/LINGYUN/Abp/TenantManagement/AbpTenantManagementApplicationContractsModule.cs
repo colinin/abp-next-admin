@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Application;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Localization;
@@ -24,6 +25,11 @@ namespace LINGYUN.Abp.TenantManagement
                 options.Resources
                        .Get<AbpTenantManagementResource>()
                        .AddVirtualJson("/LINGYUN/Abp/TenantManagement/Localization/Resources");
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("LINGYUN.Abp.MultiTenancy", typeof(AbpTenantManagementResource));
             });
         }
     }

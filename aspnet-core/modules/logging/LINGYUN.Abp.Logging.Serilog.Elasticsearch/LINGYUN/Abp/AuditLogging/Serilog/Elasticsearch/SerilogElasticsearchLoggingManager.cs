@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
@@ -21,6 +22,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         private static readonly Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
 
         private readonly IObjectMapper _objectMapper;
+        private readonly ICurrentTenant _currentTenant;
         private readonly AbpLoggingSerilogElasticsearchOptions _options;
         private readonly IElasticsearchClientFactory _clientFactory;
 
@@ -28,10 +30,12 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
         public SerilogElasticsearchLoggingManager(
             IObjectMapper objectMapper,
+            ICurrentTenant currentTenant,
             IOptions<AbpLoggingSerilogElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory)
         {
             _objectMapper = objectMapper;
+            _currentTenant = currentTenant;
             _clientFactory = clientFactory;
             _options = options.Value;
 
@@ -50,15 +54,71 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         {
             var client = _clientFactory.Create();
 
-            var response = await client.SearchAsync<SerilogInfo>(
-                dsl =>
-                    dsl.Index(CreateIndex())
-                       .Query(
-                            (q) => q.Bool(
-                                (b) => b.Should(
-                                    (s) => s.Term(
-                                        (t) => t.Field("@timestamp").Value(id))))),
-                cancellationToken);
+            ISearchResponse<SerilogInfo> response;
+
+            if (_currentTenant.IsAvailable)
+            {
+                /*
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "fields.TenantId.keyword": {
+                                        "value": _currentTenant.GetId()
+                                    }
+                                }
+                            },
+                            {
+                                "term": {
+                                    "@timestamp": {
+                                        "value": "2021-10-31T09:53:12.3406273+08:00"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+                */
+                response = await client.SearchAsync<SerilogInfo>(
+                    dsl =>
+                        dsl.Index(CreateIndex())
+                           .Query(
+                                (q) => q.Bool(
+                                    (b) => b.Must(
+                                        (s) => s.Term(
+                                            (t) => t.Field("@timestamp").Value(id)),
+                                        (s) => s.Term(
+                                            (t) => t.Field(f => f.Fields.TenantId.Suffix("keyword")).Value(_currentTenant.GetId()))))),
+                    cancellationToken);
+            }
+            else
+            {
+                /*
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "@timestamp": {
+                                        "value": "2021-10-31T09:53:12.3406273+08:00"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+                */
+                response = await client.SearchAsync<SerilogInfo>(
+                    dsl =>
+                        dsl.Index(CreateIndex())
+                           .Query(
+                                (q) => q.Bool(
+                                    (b) => b.Must(
+                                        (s) => s.Term(
+                                            (t) => t.Field("@timestamp").Value(id))))),
+                    cancellationToken);
+            }
 
             return _objectMapper.Map<SerilogInfo, LogInfo>(response.Documents.FirstOrDefault());
         }
@@ -96,7 +156,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 threadId,
                 hasException);
 
-            var response = await client.CountAsync<SerilogInfo>((dsl) => 
+            var response = await client.CountAsync<SerilogInfo>((dsl) =>
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
                 cancellationToken);
@@ -167,7 +227,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 threadId,
                 hasException);
 
-            SourceFilterDescriptor<SerilogInfo> ConvertFileSystem(SourceFilterDescriptor<SerilogInfo> selector)
+            SourceFilterDescriptor<SerilogInfo> SourceFilter(SourceFilterDescriptor<SerilogInfo> selector)
             {
                 selector.IncludeAll();
                 if (!includeDetails)
@@ -182,7 +242,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             var response = await client.SearchAsync<SerilogInfo>((dsl) =>
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray())))
-                   .Source(ConvertFileSystem)
+                   .Source(SourceFilter)
                    .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
                    .Size(maxResultCount),
@@ -208,6 +268,10 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         {
             var querys = new List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>>();
 
+            if (_currentTenant.IsAvailable)
+            {
+                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.TenantId.Suffix("keyword")).Value(_currentTenant.GetId())));
+            }
             if (startTime.HasValue)
             {
                 querys.Add((log) => log.DateRange((q) => q.Field(f => f.TimeStamp).GreaterThanOrEquals(startTime)));

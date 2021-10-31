@@ -1,6 +1,4 @@
-﻿using LINGYUN.Abp.MessageService.Utils;
-using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.RealTime;
+﻿using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -12,6 +10,7 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Distributed
@@ -33,6 +32,10 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// Reference to <see cref="AbpNotificationOptions"/>.
         /// </summary>
         protected AbpNotificationOptions Options { get; }
+        /// <summary>
+        /// Reference to <see cref="ICurrentTenant"/>.
+        /// </summary>
+        protected ICurrentTenant CurrentTenant { get; }
         /// <summary>
         /// Reference to <see cref="IJsonSerializer"/>.
         /// </summary>
@@ -62,6 +65,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// Initializes a new instance of the <see cref="NotificationEventHandler"/> class.
         /// </summary>
         public NotificationEventHandler(
+            ICurrentTenant currentTenant,
             IJsonSerializer jsonSerializer,
             IBackgroundJobManager backgroundJobManager,
             IOptions<AbpNotificationOptions> options,
@@ -71,6 +75,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
             Options = options.Value;
+            CurrentTenant = currentTenant;
             JsonSerializer = jsonSerializer;
             BackgroundJobManager = backgroundJobManager;
             NotificationStore = notificationStore;
@@ -84,37 +89,40 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         [UnitOfWork]
         public virtual async Task HandleEventAsync(NotificationEto<NotificationData> eventData)
         {
-            // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
-            var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
-            if (notification == null)
+            using (CurrentTenant.Change(eventData.TenantId))
             {
-                return;
+                // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
+                var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
+                if (notification == null)
+                {
+                    return;
+                }
+
+                var notificationInfo = new NotificationInfo
+                {
+                    Name = notification.Name,
+                    CreationTime = eventData.CreationTime,
+                    Data = eventData.Data,
+                    Severity = eventData.Severity,
+                    Lifetime = notification.NotificationLifetime,
+                    TenantId = eventData.TenantId,
+                    Type = notification.NotificationType
+                };
+                notificationInfo.SetId(eventData.Id);
+
+                // TODO: 可以做成一个接口来序列化消息
+                notificationInfo.Data = NotificationDataConverter.Convert(notificationInfo.Data);
+
+                Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
+
+                // 持久化通知
+                await NotificationStore.InsertNotificationAsync(notificationInfo);
+
+                var providers = Enumerable
+                     .Reverse(NotificationPublishProviderManager.Providers);
+
+                await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
             }
-
-            var notificationInfo = new NotificationInfo
-            {
-                Name = notification.Name,
-                CreationTime = eventData.CreationTime,
-                Data = eventData.Data,
-                Severity = eventData.Severity,
-                Lifetime = notification.NotificationLifetime,
-                TenantId = eventData.TenantId,
-                Type = notification.NotificationType
-            };
-            notificationInfo.SetId(eventData.Id);
-
-            // TODO: 可以做成一个接口来序列化消息
-            notificationInfo.Data  = NotificationDataConverter.Convert(notificationInfo.Data);
-
-            Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
-
-            // 持久化通知
-            await NotificationStore.InsertNotificationAsync(notificationInfo);
-
-            var providers = Enumerable
-                 .Reverse(NotificationPublishProviderManager.Providers);
-
-            await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
         }
 
         /// <summary>
@@ -182,7 +190,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         /// <param name="subscriptionUserIdentifiers">订阅用户列表</param>
         /// <returns></returns>
         protected async Task PublishAsync(
-            INotificationPublishProvider provider, 
+            INotificationPublishProvider provider,
             NotificationInfo notificationInfo,
             IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
         {

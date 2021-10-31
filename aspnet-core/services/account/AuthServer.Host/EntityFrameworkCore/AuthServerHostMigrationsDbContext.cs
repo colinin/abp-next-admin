@@ -17,7 +17,6 @@ namespace AuthServer.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.UseMySQL();
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureIdentityServer();
         }

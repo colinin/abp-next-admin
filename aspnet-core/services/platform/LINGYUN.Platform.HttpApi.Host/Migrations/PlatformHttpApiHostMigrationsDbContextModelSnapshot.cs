@@ -17,7 +17,7 @@ namespace LINGYUN.Platform.Migrations
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.7");
+                .HasAnnotation("ProductVersion", "5.0.11");
 
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
@@ -28,13 +28,13 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(1024)")
                         .HasColumnName("Code");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
-                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
@@ -55,17 +55,17 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(1024)")
                         .HasColumnName("Description");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(128)")
                         .HasColumnName("DisplayName");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
@@ -88,7 +88,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("Name");
 
                     b.Property<Guid?>("ParentId")
@@ -119,7 +119,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
-                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
@@ -135,7 +135,7 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("DefaultValue")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(128)")
                         .HasColumnName("DefaultValue");
 
                     b.Property<Guid?>("DeleterId")
@@ -148,17 +148,17 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(1024)")
                         .HasColumnName("Description");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(128)")
                         .HasColumnName("DisplayName");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
@@ -181,7 +181,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("Name");
 
                     b.Property<Guid?>("TenantId")
@@ -209,7 +209,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
-                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
@@ -232,22 +232,22 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(128)")
                         .HasColumnName("DisplayName");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
                     b.Property<string>("Framework")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(64)")
                         .HasColumnName("Framework");
 
                     b.Property<bool>("IsDeleted")
@@ -267,17 +267,17 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(64)")
                         .HasColumnName("Name");
 
                     b.Property<string>("Path")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Path");
 
                     b.Property<string>("Redirect")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Redirect");
 
                     b.Property<Guid?>("TenantId")
@@ -298,19 +298,19 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(23)
-                        .HasColumnType("varchar(23) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(23)")
                         .HasColumnName("Code");
 
                     b.Property<string>("Component")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Component");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
-                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
@@ -330,22 +330,22 @@ namespace LINGYUN.Platform.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(128)")
                         .HasColumnName("DisplayName");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
                     b.Property<string>("Framework")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(64)")
                         .HasColumnName("Framework");
 
                     b.Property<bool>("IsDeleted")
@@ -371,7 +371,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(64)")
                         .HasColumnName("Name");
 
                     b.Property<Guid?>("ParentId")
@@ -379,12 +379,12 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("Path")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Path");
 
                     b.Property<string>("Redirect")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Redirect");
 
                     b.Property<Guid?>("TenantId")
@@ -424,7 +424,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(256)")
                         .HasColumnName("RoleName");
 
                     b.Property<Guid?>("TenantId")
@@ -486,7 +486,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
-                        .HasColumnType("varchar(40) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
@@ -507,11 +507,11 @@ namespace LINGYUN.Platform.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(2048)
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(2048)")
                         .HasColumnName("Description");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
@@ -541,13 +541,13 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("Title");
 
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(20)")
                         .HasColumnName("Version");
 
                     b.HasKey("Id");
@@ -591,18 +591,18 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Name");
 
                     b.Property<string>("Path")
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Path");
 
                     b.Property<string>("SHA256")
                         .IsRequired()
                         .HasMaxLength(65)
-                        .HasColumnType("varchar(65) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(65)")
                         .HasColumnName("SHA256");
 
                     b.Property<long>("Size")
@@ -615,7 +615,7 @@ namespace LINGYUN.Platform.Migrations
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasColumnType("varchar(20)")
                         .HasColumnName("Version");
 
                     b.HasKey("Id");
