@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.MultiTenancy.DbFinder;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
@@ -10,9 +9,12 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.MultiTenancy.RemoteService.EventBus.Distributed
+namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
 {
-    public class ConnectionStringChangedEventHandler : IDistributedEventHandler<ConnectionStringChangedEventData>, ITransientDependency
+    public class ConnectionStringChangedEventHandler : 
+        IDistributedEventHandler<ConnectionStringCreatedEventData>,
+        IDistributedEventHandler<ConnectionStringDeletedEventData>,
+        ITransientDependency
     {
         private readonly ILogger<ConnectionStringChangedEventHandler> _logger;
         private readonly ICurrentTenant _currentTenant;
@@ -32,7 +34,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService.EventBus.Distributed
         }
 
         [UnitOfWork]
-        public virtual async Task HandleEventAsync(ConnectionStringChangedEventData eventData)
+        public virtual async Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
         {
             try
             {
@@ -57,6 +59,25 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService.EventBus.Distributed
                     await _cache.SetAsync(
                         TenantConfigurationCacheItem.CalculateCacheKey(eventData.Name),
                         cacheItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+            }
+        }
+
+        public virtual async Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+        {
+            try
+            {
+                using (_currentTenant.Change(null))
+                {
+                    await _cache.RemoveManyAsync(
+                        new string[] {
+                            TenantConfigurationCacheItem.CalculateCacheKey(eventData.Id.ToString()),
+                            TenantConfigurationCacheItem.CalculateCacheKey(eventData.Name)
+                        });
                 }
             }
             catch (Exception ex)

@@ -145,15 +145,20 @@ namespace LINGYUN.Abp.TenantManagement
         public virtual async Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate)
         {
             var tenant = await TenantRepository.GetAsync(id);
-            tenant.SetConnectionString(tenantConnectionStringCreateOrUpdate.Name, tenantConnectionStringCreateOrUpdate.Value);
-
-            var eventData = new ConnectionStringChangedEventData
+            if (tenant.FindConnectionString(tenantConnectionStringCreateOrUpdate.Name) == null)
             {
-                Id = tenant.Id,
-                OriginName = tenantConnectionStringCreateOrUpdate.Name,
-                Name = tenantConnectionStringCreateOrUpdate.Name
-            };
-            await EventBus.PublishAsync(eventData);
+                CurrentUnitOfWork.OnCompleted(async () =>
+                {
+                    var eventData = new ConnectionStringCreatedEventData
+                    {
+                        Id = tenant.Id,
+                        Name = tenantConnectionStringCreateOrUpdate.Name
+                    };
+
+                    await EventBus.PublishAsync(eventData);
+                });
+            }
+            tenant.SetConnectionString(tenantConnectionStringCreateOrUpdate.Name, tenantConnectionStringCreateOrUpdate.Value);
 
             return new TenantConnectionStringDto
             {
@@ -169,10 +174,9 @@ namespace LINGYUN.Abp.TenantManagement
 
             tenant.RemoveConnectionString(name);
 
-            var eventData = new ConnectionStringChangedEventData
+            var eventData = new ConnectionStringDeletedEventData
             {
                 Id = tenant.Id,
-                OriginName = name,
                 Name = name
             };
             await EventBus.PublishAsync(eventData);
