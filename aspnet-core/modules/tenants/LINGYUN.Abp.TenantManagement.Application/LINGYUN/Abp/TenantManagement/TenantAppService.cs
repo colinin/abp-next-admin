@@ -70,21 +70,27 @@ namespace LINGYUN.Abp.TenantManagement
             var tenant = await TenantManager.CreateAsync(input.Name);
             input.MapExtraPropertiesTo(tenant);
 
+            if (!input.UseSharedDatabase && !input.DefaultConnectionString.IsNullOrWhiteSpace())
+            {
+                tenant.SetDefaultConnectionString(input.DefaultConnectionString);
+            }
+
             await TenantRepository.InsertAsync(tenant);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-
-            var createEventData = new CreateEventData
+            CurrentUnitOfWork.OnCompleted(async () =>
             {
-                Id = tenant.Id,
-                Name = tenant.Name,
-                AdminUserId = GuidGenerator.Create(),
-                AdminEmailAddress = input.AdminEmailAddress,
-                AdminPassword = input.AdminPassword
-            };
-            // 因为项目各自独立，租户增加时添加管理用户必须通过事件总线
-            // 而 TenantEto 对象没有包含所需的用户名密码，需要独立发布事件
-            await EventBus.PublishAsync(createEventData);
+                var createEventData = new CreateEventData
+                {
+                    Id = tenant.Id,
+                    Name = tenant.Name,
+                    AdminUserId = GuidGenerator.Create(),
+                    AdminEmailAddress = input.AdminEmailAddress,
+                    AdminPassword = input.AdminPassword
+                };
+                // 因为项目各自独立，租户增加时添加管理用户必须通过事件总线
+                // 而 TenantEto 对象没有包含所需的用户名密码，需要独立发布事件
+                await EventBus.PublishAsync(createEventData);
+            });
 
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }

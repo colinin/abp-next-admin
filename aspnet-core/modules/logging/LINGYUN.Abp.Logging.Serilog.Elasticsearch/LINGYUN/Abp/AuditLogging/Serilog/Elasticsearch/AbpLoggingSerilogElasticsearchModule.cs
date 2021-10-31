@@ -1,10 +1,7 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch

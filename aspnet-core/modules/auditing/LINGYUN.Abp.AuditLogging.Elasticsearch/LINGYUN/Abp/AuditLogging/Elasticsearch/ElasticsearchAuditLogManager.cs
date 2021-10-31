@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 hasException,
                 httpStatusCode);
 
-            var response = await client.CountAsync<AuditLog>(dsl => 
+            var response = await client.CountAsync<AuditLog>(dsl =>
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
                 cancellationToken);
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortOrder.Ascending : SortOrder.Descending;
-            sorting = !sorting.IsNullOrWhiteSpace() 
+            sorting = !sorting.IsNullOrWhiteSpace()
                 ? sorting.Split()[0]
                 : nameof(AuditLog.ExecutionTime);
 
@@ -135,7 +135,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 hasException,
                 httpStatusCode);
 
-            SourceFilterDescriptor<AuditLog> ConvertFileSystem(SourceFilterDescriptor<AuditLog> selector)
+            SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
             {
                 selector.IncludeAll();
                 if (!includeDetails)
@@ -153,7 +153,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             var response = await client.SearchAsync<AuditLog>(dsl =>
                 dsl.Index(CreateIndex())
                    .Query(log => log.Bool(b => b.Must(querys.ToArray())))
-                   .Source(ConvertFileSystem)
+                   .Source(SourceFilter)
                    .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
                    .Size(maxResultCount),
@@ -163,8 +163,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         }
 
         public virtual async Task<AuditLog> GetAsync(
-            Guid id, 
-            bool includeDetails = false, 
+            Guid id,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             var client = _clientFactory.Create();
@@ -219,9 +219,9 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             var auditLog = await _converter.ConvertAsync(auditLogInfo);
 
             var response = await client.IndexAsync(
-                auditLog, 
+                auditLog,
                 (x) => x.Index(CreateIndex())
-                        .Id(auditLog.Id), 
+                        .Id(auditLog.Id),
                 cancellationToken);
 
             return response.Id;
@@ -359,13 +359,12 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         };
         protected virtual string GetField(string field)
         {
-            field = _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
             if (_fieldMaps.TryGetValue(field, out string mapField))
             {
-                return mapField;
+                return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
             }
 
-            return field;
+            return _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
         }
     }
 }

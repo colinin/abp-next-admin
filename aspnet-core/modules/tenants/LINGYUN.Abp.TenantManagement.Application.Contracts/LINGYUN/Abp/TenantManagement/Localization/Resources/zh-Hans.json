@@ -4,6 +4,7 @@
     "DisplayName:Name": "名称",
     "DisplayName:Value": "值",
     "TenantNotFoundById": "租户: {0} 不存在!",
-    "TenantNotFoundByName": "租户: {0} 不存在!"
+    "TenantNotFoundByName": "租户: {0} 不存在!",
+    "LINGYUN.Abp.MultiTenancy:010001": "无法连接的数据库字符串!"
   }
 }

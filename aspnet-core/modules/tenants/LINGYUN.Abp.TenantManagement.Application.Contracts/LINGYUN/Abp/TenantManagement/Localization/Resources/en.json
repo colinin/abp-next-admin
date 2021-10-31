@@ -4,6 +4,7 @@
     "DisplayName:Name": "Name",
     "DisplayName:Value": "Value",
     "TenantNotFoundById": "Tenant: {0} not found!",
-    "TenantNotFoundByName": "Tenant: {0} not found!"
+    "TenantNotFoundByName": "Tenant: {0} not found!",
+    "LINGYUN.Abp.MultiTenancy:010001": "The database string that cannot be connected!"
   }
 }

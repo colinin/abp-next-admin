@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
@@ -55,6 +56,7 @@ namespace LINGYUN.Platform
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+        typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpNotificationModule),
         typeof(AbpEmailingExceptionHandlingModule),

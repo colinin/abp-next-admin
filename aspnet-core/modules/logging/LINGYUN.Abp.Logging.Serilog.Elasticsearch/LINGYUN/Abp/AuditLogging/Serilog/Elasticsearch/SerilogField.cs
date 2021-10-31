@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
+using System;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 {
@@ -39,6 +40,9 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
         [Nest.PropertyName("UserId")]
         public string UserId { get; set; }
+
+        [Nest.PropertyName("TenantId")]
+        public Guid? TenantId { get; set; }
 
         [Nest.PropertyName("ProcessId")]
         public int ProcessId { get; set; }

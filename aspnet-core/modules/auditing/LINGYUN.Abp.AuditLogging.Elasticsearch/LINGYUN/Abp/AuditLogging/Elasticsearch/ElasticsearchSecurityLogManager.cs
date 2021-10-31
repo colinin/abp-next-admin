@@ -245,7 +245,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             {
                 return $"{_options.IndexPrefix}-security-log-{_currentTenant.Id:N}";
             }
-            return _options.IndexPrefix.IsNullOrWhiteSpace() 
+            return _options.IndexPrefix.IsNullOrWhiteSpace()
                 ? "security-log"
                 : $"{_options.IndexPrefix}-security-log";
         }
@@ -267,13 +267,12 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         };
         protected virtual string GetField(string field)
         {
-            field = _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
             if (_fieldMaps.TryGetValue(field, out string mapField))
             {
-                return mapField;
+                return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
             }
 
-            return field;
+            return _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
         }
     }
 }

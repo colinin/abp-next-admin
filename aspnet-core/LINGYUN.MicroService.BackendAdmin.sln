@@ -89,6 +89,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{2AF1B4CF-471E-40FA-AF7B-CD730DA5EB7F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{380FF8BB-8924-470B-B52A-53A7E28C324D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{765D9D60-9F22-4A58-964E-5747003431BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +223,10 @@ Global
 		{2AF1B4CF-471E-40FA-AF7B-CD730DA5EB7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF1B4CF-471E-40FA-AF7B-CD730DA5EB7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF1B4CF-471E-40FA-AF7B-CD730DA5EB7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{765D9D60-9F22-4A58-964E-5747003431BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{765D9D60-9F22-4A58-964E-5747003431BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{765D9D60-9F22-4A58-964E-5747003431BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{765D9D60-9F22-4A58-964E-5747003431BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,6 +273,8 @@ Global
 		{0C800A57-2658-4640-99A1-A02805EE6E99} = {FC5C41DC-3E6E-4775-A6A2-D5B5B490B13D}
 		{EBDD5D30-7F82-46EB-A4E9-213932D14047} = {FC5C41DC-3E6E-4775-A6A2-D5B5B490B13D}
 		{2AF1B4CF-471E-40FA-AF7B-CD730DA5EB7F} = {FC5C41DC-3E6E-4775-A6A2-D5B5B490B13D}
+		{380FF8BB-8924-470B-B52A-53A7E28C324D} = {ED23B2F3-87C1-44B6-8906-9DE739422C2C}
+		{765D9D60-9F22-4A58-964E-5747003431BB} = {380FF8BB-8924-470B-B52A-53A7E28C324D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1573B900-87BA-4AD3-B785-6DD78127ADEF}

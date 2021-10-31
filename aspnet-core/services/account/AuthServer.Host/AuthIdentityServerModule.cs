@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
@@ -53,6 +54,7 @@ namespace AuthServer.Host
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
         typeof(AbpAspNetCoreHttpOverridesModule),

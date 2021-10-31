@@ -3,6 +3,7 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
+using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
@@ -48,6 +49,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+        typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpHangfireMySqlStorageModule),
         typeof(AbpBackgroundJobsHangfireModule),

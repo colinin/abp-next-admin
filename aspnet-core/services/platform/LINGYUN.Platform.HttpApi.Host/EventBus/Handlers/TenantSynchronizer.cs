@@ -1,8 +1,14 @@
-﻿using LINGYUN.Abp.MultiTenancy;
+﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.MultiTenancy;
+using LINGYUN.Platform.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Platform.EventBus.Handlers
 {
@@ -11,10 +17,25 @@ namespace LINGYUN.Platform.EventBus.Handlers
         ITransientDependency
     {
         protected IDataSeeder DataSeeder { get; }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected IDbSchemaMigrator DbSchemaMigrator { get; }
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        public TenantSynchronizer(IDataSeeder dataSeeder)
+        protected ILogger<TenantSynchronizer> Logger { get; }
+
+        public TenantSynchronizer(
+            IDataSeeder dataSeeder,
+            ICurrentTenant currentTenant,
+            IDbSchemaMigrator dbSchemaMigrator,
+            IUnitOfWorkManager unitOfWorkManager,
+            ILogger<TenantSynchronizer> logger)
         {
             DataSeeder = dataSeeder;
+            CurrentTenant = currentTenant;
+            DbSchemaMigrator = dbSchemaMigrator;
+            UnitOfWorkManager = unitOfWorkManager;
+
+            Logger = logger;
         }
 
         /// <summary>
@@ -24,8 +45,26 @@ namespace LINGYUN.Platform.EventBus.Handlers
         /// <returns></returns>
         public virtual async Task HandleEventAsync(CreateEventData eventData)
         {
-            await DataSeeder.SeedAsync(
-                new DataSeedContext(eventData.Id));
+            using (var unitOfWork = UnitOfWorkManager.Begin())
+            {
+                using (CurrentTenant.Change(eventData.Id, eventData.Name))
+                {
+                    Logger.LogInformation("Migrating the new tenant database with platform...");
+                    // 迁移租户数据
+                    await DbSchemaMigrator.MigrateAsync<PlatformHttpApiHostMigrationsDbContext>(
+                        (connectionString, builder) =>
+                        {
+                            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
+                            return new PlatformHttpApiHostMigrationsDbContext(builder.Options);
+                        });
+                    Logger.LogInformation("Migrated the new tenant database  with platform.");
+
+                    await DataSeeder.SeedAsync(new DataSeedContext(eventData.Id));
+
+                    await unitOfWork.SaveChangesAsync();
+                }
+            }
         }
     }
 }
