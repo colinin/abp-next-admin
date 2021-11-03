@@ -19,6 +19,16 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
+        public virtual async Task<Menu> GetLastMenuAsync(
+            Guid? parentId = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(x => x.ParentId == parentId)
+                .OrderByDescending(x => x.CreationTime)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<bool> UserHasInMenuAsync(
             Guid userId,
             string menuName,

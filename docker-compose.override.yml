@@ -6,6 +6,7 @@ services:
       context: ./aspnet-core/services/Publish/identityserver
     volumes:
       - /var/opt/abp/logs/ids-sts:/app/Logs
+      - /var/opt/abp/data/ids-sts/Modules:/app/Modules
     restart: always
 
   identity-server-admin:
@@ -13,6 +14,7 @@ services:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes:
       - /var/opt/abp/logs/ids-admin:/app/Logs
+      - /var/opt/abp/data/ids-admin/Modules:/app/Modules
     depends_on:
       - identity-server-sts
     restart: always
@@ -32,6 +34,7 @@ services:
       context: ./aspnet-core/services/Publish/localization
     volumes:
       - /var/opt/abp/logs/localization:/app/Logs
+      - /var/opt/abp/data/localization/Modules:/app/Modules
     restart: always
 
   platform-service:
@@ -39,6 +42,7 @@ services:
       context: ./aspnet-core/services/Publish/platform
     volumes:
       - /var/opt/abp/logs/platform:/app/Logs
+      - /var/opt/abp/data/platform/Modules:/app/Modules
       - /var/opt/abp/data/platform:/app/file-blob-storing
     depends_on:
       - identity-server-sts
@@ -49,6 +53,7 @@ services:
       context: ./aspnet-core/services/Publish/messages
     volumes:
       - /var/opt/abp/logs/messages:/app/Logs
+      - /var/opt/abp/data/messages/Modules:/app/Modules
     depends_on:
       - identity-server-sts
     restart: always
@@ -58,6 +63,7 @@ services:
       context: ./aspnet-core/services/Publish/apigateway-admin
     volumes:
       - /var/opt/abp/logs/apigateway-admin:/app/Logs
+      - /var/opt/abp/data/apigateway-admin/Modules:/app/Modules
     depends_on:
       - identity-server-sts
       - admin-service
@@ -68,6 +74,7 @@ services:
       context: ./aspnet-core/services/Publish/apigateway-host
     volumes:
       - /var/opt/abp/logs/apigateway-host:/app/Logs
+      - /var/opt/abp/data/apigateway-host/Modules:/app/Modules
     depends_on:
       - identity-server-sts
       - apigateway-admin-service

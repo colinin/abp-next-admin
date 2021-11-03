@@ -15,7 +15,6 @@ namespace LINGYUN.Abp.Elasticsearch
         /// 默认：false
         /// </summary>
         public bool FieldCamelCase { get; set; }
-        public string TypeName { get; set; }
         public string NodeUris { get; set; }
         public int ConnectionLimit { get; set; }
         public string UserName { get; set; }
@@ -26,7 +25,6 @@ namespace LINGYUN.Abp.Elasticsearch
 
         public AbpElasticsearchOptions()
         {
-            TypeName = "_doc";
             ConnectionLimit = ConnectionConfiguration.DefaultConnectionLimit;
             ConnectionTimeout = ConnectionConfiguration.DefaultTimeout;
         }

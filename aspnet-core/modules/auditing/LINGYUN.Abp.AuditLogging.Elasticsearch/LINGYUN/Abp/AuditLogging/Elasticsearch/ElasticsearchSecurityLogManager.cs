@@ -16,7 +16,7 @@ using Volo.Abp.SecurityLog;
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
     [Dependency(ReplaceServices = true)]
-    public class ElasticsearchSecurityLogManager : ISecurityLogManager, ISingletonDependency
+    public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDependency
     {
         private readonly AbpSecurityLogOptions _securityLogOptions;
         private readonly AbpElasticsearchOptions _elasticsearchOptions;
@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             IGuidGenerator guidGenerator,
             IOptions<AbpSecurityLogOptions> securityLogOptions,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-            IOptions<AbpAuditLoggingElasticsearchOptions> options,
+            IOptionsSnapshot<AbpAuditLoggingElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory)
         {
             _options = options.Value;
