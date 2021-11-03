@@ -12,6 +12,7 @@ using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,7 @@ namespace LINGYUN.Platform
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpUINavigationVueVbenAdminModule),
         // typeof(AbpOssManagementAliyunModule),
         typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
         typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
