@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpLoggingSerilogElasticsearchModule),
         typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(AbpSettingManagementHttpApiModule),
         typeof(AbpPermissionManagementApplicationModule),

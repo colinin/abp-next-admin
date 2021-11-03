@@ -9,6 +9,15 @@ namespace LINGYUN.Platform.Menus
     public interface IMenuRepository : IBasicRepository<Menu, Guid>
     {
         /// <summary>
+        /// 获取最后一个菜单
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Menu> GetLastMenuAsync(
+            Guid? parentId = null,
+            CancellationToken cancellationToken = default);
+        /// <summary>
         /// 根据名称查询菜单
         /// </summary>
         /// <param name="menuName"></param>

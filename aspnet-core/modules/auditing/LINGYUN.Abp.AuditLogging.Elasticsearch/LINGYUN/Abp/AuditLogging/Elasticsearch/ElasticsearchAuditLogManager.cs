@@ -17,7 +17,7 @@ using Volo.Abp;
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
     [Dependency(ReplaceServices = true)]
-    public class ElasticsearchAuditLogManager : IAuditLogManager, ISingletonDependency
+    public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependency
     {
         private readonly AbpAuditingOptions _auditingOptions;
         private readonly AbpElasticsearchOptions _elasticsearchOptions;
@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         public ElasticsearchAuditLogManager(
             ICurrentTenant currentTenant,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-            IOptions<AbpAuditLoggingElasticsearchOptions> options,
+            IOptionsSnapshot<AbpAuditLoggingElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory,
             IOptions<AbpAuditingOptions> auditingOptions,
             IAuditLogInfoToAuditLogConverter converter)
