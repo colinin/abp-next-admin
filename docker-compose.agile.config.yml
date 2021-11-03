@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  agile-config:
+    image: kklldog/agile_config:latest
+    environment:
+      - adminConsole=true
+      - db:provider=mysql
+      - db:conn=Server=localhost;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+    ports:
+      - "5000:5000"
+    volumes:
+      - /etc/localtime:/etc/localtime
+    restart: always
+
+  identity-server-sts:
+    depends_on:
+      - agile-config

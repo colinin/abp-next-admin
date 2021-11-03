@@ -36,6 +36,14 @@ namespace LINGYUN.Platform
                 {
                     webBuilder.UseStartup<Startup>();
                 })
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var configuration = config.Build();
+                    if (configuration.GetSection("AgileConfig").Exists())
+                    {
+                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                    }
+                })
                 .UseSerilog((context, provider, config) =>
                 {
                     config.ReadFrom.Configuration(context.Configuration);

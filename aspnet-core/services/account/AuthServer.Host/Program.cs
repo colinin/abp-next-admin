@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
@@ -31,6 +32,14 @@ namespace AuthServer.Host
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var configuration = config.Build();
+                    if (configuration.GetSection("AgileConfig").Exists())
+                    {
+                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                    }
                 })
                 .UseSerilog((context, provider, config) =>
                 {
