@@ -9,14 +9,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using ValueType = LINGYUN.Platform.Datas.ValueType;
 
 namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
 {
-    public class AbpUINavigationVueVbenAdminDataSeeder : INavigationDataSeeder, ITransientDependency
+    public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
     {
         private static int _lastCodeNumber = 0;
         protected ICurrentTenant CurrentTenant { get; }
@@ -27,7 +26,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
         protected ILayoutRepository LayoutRepository { get; }
         protected AbpUINavigationVueVbenAdminOptions Options { get; }
 
-        public AbpUINavigationVueVbenAdminDataSeeder(
+        public VueVbenAdminNavigationSeedContributor(
             ICurrentTenant currentTenant,
             IRouteDataSeeder routeDataSeeder,
             IMenuRepository menuRepository,
@@ -46,9 +45,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             Options = options.Value;
         }
 
-        public virtual async Task SeedAsync(
-            IReadOnlyCollection<ApplicationMenu> menus, 
-            MultiTenancySides multiTenancySides = MultiTenancySides.Both)
+        public override async Task SeedAsync(NavigationSeedContext context)
         {
             var uiDataItem = await SeedUIFrameworkDataAsync(CurrentTenant.Id);
 
@@ -63,7 +60,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 Interlocked.Exchange(ref _lastCodeNumber, _lastNumber);
             }
 
-            await SeedDefinitionMenusAsync(layout, layoutData, menus, multiTenancySides);
+            await SeedDefinitionMenusAsync(layout, layoutData, context.Menus, context.MultiTenancySides);
         }
 
         private async Task SeedDefinitionMenusAsync(
