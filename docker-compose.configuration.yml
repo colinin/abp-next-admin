@@ -121,7 +121,7 @@ services:
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://127.0.0.1:44385/
       - AuthServer__ApiName=lingyun-abp-application
-  
+
   messages-service:
     environment:
       - App__CorsOrigins=http://127.0.0.1:40000,http://127.0.0.1:30000
