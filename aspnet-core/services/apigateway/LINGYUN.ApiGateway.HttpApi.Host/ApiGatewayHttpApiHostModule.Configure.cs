@@ -33,7 +33,10 @@ namespace LINGYUN.ApiGateway
             PreConfigure<CapOptions>(options =>
             {
                 options
-                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseMySql(mySqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+                })
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);

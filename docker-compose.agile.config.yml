@@ -14,5 +14,89 @@ services:
     restart: always
 
   identity-server-sts:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.AuthServer
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=AuthServer
+      - AgileConfig__tag=AuthServer
+    depends_on:
+      - agile-config
+
+  identity-server-admin:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.IdentityServer.Admin
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=IdentityServer.Admin
+      - AgileConfig__tag=IdentityServer.Admin
+    depends_on:
+      - agile-config
+
+  admin-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Backend.Admin
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Backend.Admin
+      - AgileConfig__tag=Backend.Admin
+    depends_on:
+      - agile-config
+
+  localization-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Localization
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Localization
+      - AgileConfig__tag=Localization
+    depends_on:
+      - agile-config
+
+  platform-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Platform
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Platform
+      - AgileConfig__tag=Platform
+    depends_on:
+      - agile-config
+
+  messages-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Messages
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Messages
+      - AgileConfig__tag=Messages
+    depends_on:
+      - agile-config
+
+  apigateway-admin-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Apigateway.Admin
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Apigateway.Admin
+      - AgileConfig__tag=Apigateway.Admin
+    depends_on:
+      - agile-config
+
+  apigateway-host-service:
+    environment:
+      - AgileConfig__env=PROD
+      - AgileConfig__appId=LINGYUN.Abp.Apigateway
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Apigateway
+      - AgileConfig__tag=Apigateway
     depends_on:
       - agile-config
