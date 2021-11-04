@@ -98,6 +98,7 @@ namespace AuthServer.Host.EventBus.Handlers
 
         private async Task SeedTenantAdminAsync(CreateEventData eventData)
         {
+            const string tenantAdminUserName = "admin";
             const string tenantAdminRoleName = "admin";
             var tenantAdminRoleId = Guid.Empty; ;
 
@@ -120,8 +121,11 @@ namespace AuthServer.Host.EventBus.Handlers
             var tenantAdminUser = await IdentityUserManager.FindByNameAsync(eventData.AdminEmailAddress);
             if (tenantAdminUser == null)
             {
-                tenantAdminUser = new IdentityUser(eventData.AdminUserId, eventData.AdminEmailAddress,
-                eventData.AdminEmailAddress, eventData.Id);
+                tenantAdminUser = new IdentityUser(
+                    eventData.AdminUserId,
+                    tenantAdminUserName,
+                    eventData.AdminEmailAddress, 
+                    eventData.Id);
 
                 tenantAdminUser.AddRole(tenantAdminRoleId);
 
