@@ -43,7 +43,10 @@ namespace LINGYUN.Abp.IdentityServer4
             PreConfigure<CapOptions>(options =>
             {
                 options
-                .UseMySql(configuration.GetConnectionString("Default"))
+                .UseMySql(mySqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+                })
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
