@@ -2,3 +2,4 @@ bin
 obj
 Logs
 appsettings.*.json
+event-bus-cap.db

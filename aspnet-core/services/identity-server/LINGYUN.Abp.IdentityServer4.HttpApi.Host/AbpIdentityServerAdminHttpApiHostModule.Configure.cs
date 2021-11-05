@@ -215,6 +215,7 @@ namespace LINGYUN.Abp.IdentityServer4
                             new string[] { }
                         }
                     });
+                    options.OperationFilter<TenantHeaderParamter>();
                 });
         }
 

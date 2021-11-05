@@ -1,31 +1,37 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.ApiGateway.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Ocelot.Configuration.Repository;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware.Multiplexer;
+using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Volo.Abp.Auditing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.ApiGateway
 {
-    public partial class ApiGatewayHttpApiHostModule
+    public partial class ApiGatewayHostModule
     {
         private void PreConfigureApp()
         {
-            AbpSerilogEnrichersConsts.ApplicationName = "ApiGateWay-Admin";
+            AbpSerilogEnrichersConsts.ApplicationName = "ApiGateWay";
         }
 
         private void PreConfigureCAP(IConfiguration configuration)
@@ -33,10 +39,8 @@ namespace LINGYUN.ApiGateway
             PreConfigure<CapOptions>(options =>
             {
                 options
-                .UseMySql(mySqlOptions =>
-                {
-                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
-                })
+                .UseSqlite("Data Source=./event-bus-cap.db")
+                .UseDashboard()
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
@@ -44,21 +48,48 @@ namespace LINGYUN.ApiGateway
             });
         }
 
+        private void PreConfigureApiGateway(IServiceCollection services, IConfiguration configuration)
+        {
+            // 不启用则使用本地配置文件的方式启动Ocelot
+            if (configuration.GetValue<bool>("EnabledDynamicOcelot"))
+            {
+                services.AddSingleton<IFileConfigurationRepository, ApiHttpClientFileConfigurationRepository>();
+            }
+        }
 
-        private void ConfigureAutoMapper()
+        private void ConfigureKestrelServer(IConfiguration configuration, bool isDevelopment = true)
+        {
+            // fix: 不限制请求体大小，解决上传文件问题
+            Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = null;
+                options.Limits.MaxRequestBufferSize = null;
+            });
+
+            if (!isDevelopment)
+            {
+                // Ssl证书
+                var sslOptions = configuration.GetSection("App:SslOptions");
+                if (sslOptions.Exists())
+                {
+                    var fileName = sslOptions["FileName"];
+                    var password = sslOptions["Password"];
+                    Configure<KestrelServerOptions>(options =>
+                    {
+                        options.ConfigureEndpointDefaults(cfg =>
+                        {
+                            cfg.UseHttps(fileName, password);
+                        });
+                    });
+                }
+            }
+        }
+
+        private void ConfigureAbpAutoMapper()
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<ApiGatewayHttpApiHostAutoMapperProfile>(validate: true);
-            });
-        }
-
-        private void ConfigureDbContext()
-        {
-            // 配置Ef
-            Configure<AbpDbContextOptions>(options =>
-            {
-                options.UseMySQL();
+                options.AddProfile<ApiGatewayMapperProfile>(validate: true);
             });
         }
 
@@ -71,6 +102,50 @@ namespace LINGYUN.ApiGateway
             });
         }
 
+        private void ConfigureVirtualFileSystem()
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<ApiGatewayHostModule>();
+            });
+        }
+
+        private void ConfigureLocalization()
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+                options.Resources
+                    .Get<ApiGatewayResource>()
+                    .AddVirtualJson("/Localization/Host");
+            });
+        }
+
+        private void ConfigureMvc(IServiceCollection services)
+        {
+            var mvcBuilder = services.AddMvc();
+            mvcBuilder.AddApplicationPart(typeof(ApiGatewayHostModule).Assembly);
+
+            Configure<AbpEndpointRouterOptions>(options =>
+            {
+                options.EndpointConfigureActions.Add(endpointContext =>
+                {
+                    endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                    endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                });
+            });
+        }
+
+        private void ConfigureOcelot(IServiceCollection services)
+        {
+            services
+                .AddOcelot()
+                .AddPolly()
+                .AddSingletonDefinedAggregator<AbpApiDefinitionAggregator>();
+        }
+
         private void ConfigureCaching(IConfiguration configuration)
         {
             Configure<AbpDistributedCacheOptions>(options =>
@@ -80,7 +155,7 @@ namespace LINGYUN.ApiGateway
                 // 滑动过期30天
                 options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
                 // 绝对过期60天
-                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(60);
+                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
             });
 
             Configure<RedisCacheOptions>(options =>
@@ -91,46 +166,17 @@ namespace LINGYUN.ApiGateway
             });
         }
 
-        private void ConfigureVirtualFileSystem()
+        private void ConfigureApiGateway(IConfiguration configuration)
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<ApiGatewayHttpApiHostModule>();
-            });
-        }
-
-        private void ConfigureMultiTenancy(IConfiguration configuration)
-        {
-            // 多租户
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = false;
-            });
-        }
-
-        private void ConfigureAuditing(IConfiguration configuration)
-        {
-            Configure<AbpAuditingOptions>(options =>
-            {
-                options.ApplicationName = "ApiGateWay-Admin";
-                // 是否启用实体变更记录
-                var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
-                if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
-                {
-                    options
-                    .EntityHistorySelectors
-                    .AddAllEntities();
-                }
-            });
+            Configure<ApiGatewayOptions>(configuration.GetSection("ApiGateway"));
         }
 
         private void ConfigureSwagger(IServiceCollection services)
         {
-            // Swagger
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiGateway API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Open API Document", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -156,20 +202,9 @@ namespace LINGYUN.ApiGateway
                 });
         }
 
-        private void ConfigureLocalization()
-        {
-            // 支持本地化语言类型
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-            });
-        }
-
         private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
         {
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
@@ -182,7 +217,7 @@ namespace LINGYUN.ApiGateway
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 services
                     .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "ApiGatewayAdmin-Protection-Keys");
+                    .PersistKeysToStackExchangeRedis(redis, "ApiGatewayHost-Protection-Keys");
             }
         }
     }

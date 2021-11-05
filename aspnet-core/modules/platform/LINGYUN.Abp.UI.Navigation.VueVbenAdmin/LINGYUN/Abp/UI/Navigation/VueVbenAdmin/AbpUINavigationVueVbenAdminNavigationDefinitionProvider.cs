@@ -178,6 +178,17 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     component: "/sys/logging/index",
                     description: "系统日志"));
 
+            manage.AddItem(
+                new ApplicationMenu(
+                    name: "ApiDocument",
+                    displayName: "Api 文档",
+                    url: "/openapi",
+                    component: "IFrame",
+                    description: "Api 文档",
+                    multiTenancySides: MultiTenancySides.Host)
+                // TODO: 注意在部署完毕之后手动修改此菜单iframe地址
+                .SetProperty("frameSrc", "http://127.0.0.1:30000/swagger/index.html"));
+
             return new NavigationDefinition(manage);
         }
 

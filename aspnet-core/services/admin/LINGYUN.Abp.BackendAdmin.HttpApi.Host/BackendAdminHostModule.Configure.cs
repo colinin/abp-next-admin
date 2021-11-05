@@ -206,6 +206,7 @@ namespace LINGYUN.Abp.BackendAdmin
                             new string[] { }
                         }
                     });
+                    options.OperationFilter<TenantHeaderParamter>();
                 });
         }
 
