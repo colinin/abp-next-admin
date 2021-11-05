@@ -17,7 +17,7 @@
   "dependencies": {
     "@microsoft/signalr": "^5.0.7",
     "@tinymce/tinymce-vue": "^3.2.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "clipboard": "^2.0.6",
     "codemirror": "^5.52.2",
     "core-js": "^3.6.4",
