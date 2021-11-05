@@ -170,6 +170,7 @@ namespace LINGYUN.Abp.LocalizationManagement
                             new string[] { }
                         }
                     });
+                    options.OperationFilter<TenantHeaderParamter>();
                 });
         }
 

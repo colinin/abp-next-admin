@@ -185,6 +185,7 @@ namespace LINGYUN.Abp.MessageService
                             new string[] { }
                         }
                     });
+                    options.OperationFilter<TenantHeaderParamter>();
                 });
         }
 

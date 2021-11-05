@@ -215,6 +215,7 @@ namespace LINGYUN.Platform
                             new string[] { }
                         }
                     });
+                    options.OperationFilter<TenantHeaderParamter>();
                 });
         }
 

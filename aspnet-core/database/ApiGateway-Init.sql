@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 30/10/2021 13:52:29
+ Date: 05/11/2021 09:45:37
 */
 
 SET NAMES utf8mb4;
@@ -36,10 +36,10 @@ INSERT INTO `__efmigrationshistory` VALUES ('20200618090102_Modify-ReRoute-Index
 INSERT INTO `__efmigrationshistory` VALUES ('20200908020925_Upgrade-abp-3.1.0', '3.1.7');
 
 -- ----------------------------
--- Table structure for api.gateway.published
+-- Table structure for apa.published
 -- ----------------------------
-DROP TABLE IF EXISTS `api.gateway.published`;
-CREATE TABLE `api.gateway.published`  (
+DROP TABLE IF EXISTS `apa.published`;
+CREATE TABLE `apa.published`  (
   `Id` bigint(20) NOT NULL,
   `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -53,14 +53,14 @@ CREATE TABLE `api.gateway.published`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of api.gateway.published
+-- Records of apa.published
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for api.gateway.received
+-- Table structure for apa.received
 -- ----------------------------
-DROP TABLE IF EXISTS `api.gateway.received`;
-CREATE TABLE `api.gateway.received`  (
+DROP TABLE IF EXISTS `apa.received`;
+CREATE TABLE `apa.received`  (
   `Id` bigint(20) NOT NULL,
   `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `Name` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -123,6 +123,10 @@ CREATE TABLE `appapigatewayaggregateconfig`  (
 -- ----------------------------
 -- Records of appapigatewayaggregateconfig
 -- ----------------------------
+INSERT INTO `appapigatewayaggregateconfig` VALUES (1, 1418025237863149568, 'fff', NULL, NULL, 11);
+INSERT INTO `appapigatewayaggregateconfig` VALUES (2, 1418025237863149568, 'sss', NULL, NULL, 11);
+INSERT INTO `appapigatewayaggregateconfig` VALUES (3, 1418025237863149568, '242424', '', '', 11);
+INSERT INTO `appapigatewayaggregateconfig` VALUES (4, 1420228420337348608, 'sss', 'ds', 'f', 12);
 
 -- ----------------------------
 -- Table structure for appapigatewayauthoptions
@@ -136,7 +140,7 @@ CREATE TABLE `appapigatewayauthoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayAuthOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayAuthOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayauthoptions
@@ -337,6 +341,12 @@ INSERT INTO `appapigatewayauthoptions` VALUES (236, 1442413171470688256, NULL, '
 INSERT INTO `appapigatewayauthoptions` VALUES (237, 1449257280751026176, NULL, '');
 INSERT INTO `appapigatewayauthoptions` VALUES (238, 1454289352609521664, NULL, '');
 INSERT INTO `appapigatewayauthoptions` VALUES (239, 1454289896489115648, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (240, 1456263181821501440, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (241, 1456263413661655040, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (242, 1456263574232195072, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (243, 1456263679999959040, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (244, 1456263785251823616, NULL, '');
+INSERT INTO `appapigatewayauthoptions` VALUES (245, 1456263957046321152, NULL, '');
 
 -- ----------------------------
 -- Table structure for appapigatewaybalanceroptions
@@ -354,7 +364,7 @@ CREATE TABLE `appapigatewaybalanceroptions`  (
   UNIQUE INDEX `IX_AppApiGatewayBalancerOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayGlobalConfiguratio~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayBalancerOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaybalanceroptions
@@ -562,6 +572,12 @@ INSERT INTO `appapigatewaybalanceroptions` VALUES (246, NULL, 144241317147068825
 INSERT INTO `appapigatewaybalanceroptions` VALUES (247, NULL, 1449257280751026176, NULL, NULL, NULL);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (248, NULL, 1454289352609521664, NULL, NULL, NULL);
 INSERT INTO `appapigatewaybalanceroptions` VALUES (249, NULL, 1454289896489115648, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (250, NULL, 1456263181821501440, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (251, NULL, 1456263413661655040, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (252, NULL, 1456263574232195072, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (253, NULL, 1456263679999959040, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (254, NULL, 1456263785251823616, NULL, NULL, NULL);
+INSERT INTO `appapigatewaybalanceroptions` VALUES (255, NULL, 1456263957046321152, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaycacheoptions
@@ -575,7 +591,7 @@ CREATE TABLE `appapigatewaycacheoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayCacheOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayCacheOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaycacheoptions
@@ -776,6 +792,12 @@ INSERT INTO `appapigatewaycacheoptions` VALUES (236, 1442413171470688256, NULL, 
 INSERT INTO `appapigatewaycacheoptions` VALUES (237, 1449257280751026176, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (238, 1454289352609521664, NULL, NULL);
 INSERT INTO `appapigatewaycacheoptions` VALUES (239, 1454289896489115648, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (240, 1456263181821501440, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (241, 1456263413661655040, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (242, 1456263574232195072, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (243, 1456263679999959040, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (244, 1456263785251823616, NULL, NULL);
+INSERT INTO `appapigatewaycacheoptions` VALUES (245, 1456263957046321152, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewaydiscovery
@@ -848,7 +870,7 @@ CREATE TABLE `appapigatewayglobalconfiguration`  (
 -- Records of appapigatewayglobalconfiguration
 -- ----------------------------
 INSERT INTO `appapigatewayglobalconfiguration` VALUES (1, '{}', 'f7973118f2c2425c8cc96b59883b99aa', 1260841964962947072, NULL, 'http://localhost:30000', 'HTTP', NULL, 0, 1, 'TEST-APP');
-
+I
 -- ----------------------------
 -- Table structure for appapigatewayheaders
 -- ----------------------------
@@ -891,7 +913,7 @@ CREATE TABLE `appapigatewayhttpoptions`  (
   UNIQUE INDEX `IX_AppApiGatewayHttpOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayGlobalConfiguration_It~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayHttpOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayhttpoptions
@@ -1099,6 +1121,12 @@ INSERT INTO `appapigatewayhttpoptions` VALUES (246, NULL, 1442413171470688256, N
 INSERT INTO `appapigatewayhttpoptions` VALUES (247, NULL, 1449257280751026176, NULL, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (248, NULL, 1454289352609521664, NULL, 0, 0, 0, 0);
 INSERT INTO `appapigatewayhttpoptions` VALUES (249, NULL, 1454289896489115648, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (250, NULL, 1456263181821501440, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (251, NULL, 1456263413661655040, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (252, NULL, 1456263574232195072, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (253, NULL, 1456263679999959040, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (254, NULL, 1456263785251823616, NULL, 0, 0, 0, 0);
+INSERT INTO `appapigatewayhttpoptions` VALUES (255, NULL, 1456263957046321152, NULL, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for appapigatewayqosoptions
@@ -1116,7 +1144,7 @@ CREATE TABLE `appapigatewayqosoptions`  (
   UNIQUE INDEX `IX_AppApiGatewayQoSOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayGlobalConfiguration_Ite~` FOREIGN KEY (`ItemId`) REFERENCES `appapigatewayglobalconfiguration` (`ItemId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayQoSOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayqosoptions
@@ -1324,6 +1352,12 @@ INSERT INTO `appapigatewayqosoptions` VALUES (246, NULL, 1442413171470688256, 50
 INSERT INTO `appapigatewayqosoptions` VALUES (247, NULL, 1449257280751026176, 50, 60000, 10000);
 INSERT INTO `appapigatewayqosoptions` VALUES (248, NULL, 1454289352609521664, 50, 60000, 10000);
 INSERT INTO `appapigatewayqosoptions` VALUES (249, NULL, 1454289896489115648, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (250, NULL, 1456263181821501440, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (251, NULL, 1456263413661655040, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (252, NULL, 1456263574232195072, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (253, NULL, 1456263679999959040, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (254, NULL, 1456263785251823616, 50, 60000, 10000);
+INSERT INTO `appapigatewayqosoptions` VALUES (255, NULL, 1456263957046321152, 50, 60000, 10000);
 
 -- ----------------------------
 -- Table structure for appapigatewayratelimitoptions
@@ -1347,6 +1381,7 @@ CREATE TABLE `appapigatewayratelimitoptions`  (
 -- ----------------------------
 INSERT INTO `appapigatewayratelimitoptions` VALUES (1, 1260841964962947072, 'ClientId', '{\n  \"error\": {\n    \"code\": \"429\",\n    \"message\": \"您的操作过快,请稍后再试!\",\n    \"details\": \"您的操作过快,请稍后再试!\",\n    \"data\": {},\n    \"validationErrors\": []\n  }\n}', 'ocelot', 1, 429);
 
+
 -- ----------------------------
 -- Table structure for appapigatewayratelimitrule
 -- ----------------------------
@@ -1365,7 +1400,7 @@ CREATE TABLE `appapigatewayratelimitrule`  (
   UNIQUE INDEX `IX_AppApiGatewayRateLimitRule_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayDynamicReRoute_Dynam~` FOREIGN KEY (`DynamicReRouteId`) REFERENCES `appapigatewaydynamicreroute` (`DynamicReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `FK_AppApiGatewayRateLimitRule_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayratelimitrule
@@ -1566,6 +1601,12 @@ INSERT INTO `appapigatewayratelimitrule` VALUES (236, 1442413171470688256, NULL,
 INSERT INTO `appapigatewayratelimitrule` VALUES (237, 1449257280751026176, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (238, 1454289352609521664, NULL, '', 0, NULL, NULL, NULL);
 INSERT INTO `appapigatewayratelimitrule` VALUES (239, 1454289896489115648, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (240, 1456263181821501440, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (241, 1456263413661655040, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (242, 1456263574232195072, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (243, 1456263679999959040, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (244, 1456263785251823616, NULL, '', 0, NULL, NULL, NULL);
+INSERT INTO `appapigatewayratelimitrule` VALUES (245, 1456263957046321152, NULL, '', 0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for appapigatewayreroute
@@ -1605,7 +1646,7 @@ CREATE TABLE `appapigatewayreroute`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `AK_AppApiGatewayReRoute_ReRouteId`(`ReRouteId`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewayReRoute_AppId_DownstreamPathTemplate_UpstreamPa~`(`AppId`, `DownstreamPathTemplate`, `UpstreamPathTemplate`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 503 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 511 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewayreroute
@@ -1782,13 +1823,18 @@ INSERT INTO `appapigatewayreroute` VALUES (219, '{}', '701ddf9f15844e968f0a98001
 INSERT INTO `appapigatewayreroute` VALUES (225, '{}', '13249916a52a4568b55b6c3fa813b374', 1393020696332705792, '【后台管理】- 路由代理测试', '/api/connect', '', '', '/api/connect', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (482, '{}', '295034c498744783ba0ecf3b80546ca5', 1395924337284407296, '【后台管理】- 通过名称查询租户', '/api/tenant-management/tenants/name/{name}', '', '', '/api/tenant-management/tenants/name/{name}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30010,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (483, '{}', 'be25633a37d14ab4b94803698c528e4c', 1406817452004757504, '【平台服务】- 参照名称查询字典', '/api/platform/datas/by-name/{name}', '', '', '/api/platform/datas/by-name/{name}', 'GET,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30025,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-INSERT INTO `appapigatewayreroute` VALUES (484, '{}', 'a95d0fe8a6eb4b5484ebd47878f7092f', 1421397683162664960, '【身份认证服务】- 管理角色声明', '/api​/identity​/roles​/{id}​/claims', '', NULL, '/api​/identity​/roles​/{id}​/claims', 'GET,POST,PUT,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30015,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (493, '{}', '7f1af94bf83343fd91bf9e8eaa0e2fc5', 1431803251955654656, '【身份认证服务】- 换取token', '/connect/token', '', '', '/connect/token', 'POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (494, '{}', 'dd09d208eca64c91b804377f45c85974', 1431806909455851520, '【身份认证服务】- 用户信息', '/connect/userinfo', '', '', '/connect/userinfo', 'GET,POST,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:44385,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (495, '{}', 'f0660047374f43b3bcdf3555799488c6', 1432189824874373120, '【身份认证服务】- 发送变更手机号短信', '/api/identity/my-profile/send-phone-number-change-code', '', '', '/api/identity/my-profile/send-phone-number-change-code', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (496, '{}', 'da9dbe339b3e453abf79df15fe774bda', 1432190028071624704, '【身份认证服务】- 变更手机号', '/api/identity/my-profile/change-phone-number', '', '', '/api/identity/my-profile/change-phone-number', 'PUT,', '', '', '', '', '', '', '', 1, '', '', 'HTTP', '127.0.0.1:30015,', '', '', '', 0, 30000, 1, '', 'TEST-APP');
-IINSERT INTO `appapigatewayreroute` VALUES (501, '{}', '4019724446ad4a609916b6fb4eb2b489', 1454289352609521664, '【后台管理】- 系统日志列表', '/api/auditing/logging', '', NULL, '/api/auditing/logging', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (501, '{}', '4019724446ad4a609916b6fb4eb2b489', 1454289352609521664, '【后台管理】- 系统日志列表', '/api/auditing/logging', '', NULL, '/api/auditing/logging', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
 INSERT INTO `appapigatewayreroute` VALUES (502, '{}', '03fd15647a4b41f3bd650fdbaa069cc0', 1454289896489115648, '【后台管理】- 系统日志', '/api/auditing/logging/{everything}', '', NULL, '/api/auditing/logging/{everything}', 'GET,DELETE,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (503, '{}', '31dfee95c57b4558b9d96c92ed07334d', 1456263181821501440, '【后台管理服务】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/admin/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30010,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (504, '{}', '6dd0dce5366d40e0930c09940253653d', 1456263413661655040, '【身份认证服务】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/ids-admin/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30015,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (505, '{}', '611409b212844d9c9d90445e09c59cd0', 1456263574232195072, '【消息服务】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/messages/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30020,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (506, '{}', 'c2fd89c2cc9a4823be4d691eaad75c45', 1456263679999959040, '【平台服务】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/platform/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30025,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (507, '{}', '814d4b9e3c7b4179950047fb43c1ab82', 1456263785251823616, '【本地化管理】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/localization/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30030,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
+INSERT INTO `appapigatewayreroute` VALUES (508, '{}', '34fd7f3411fe487bbf6d1cb487349b86', 1456263957046321152, '【服务网关管理】- Api文档', '/swagger/v1/swagger.json', '', NULL, '/apigateway-admin/v1/swagger.json', 'GET,', '', '', '', '', '', '', NULL, 1, NULL, NULL, 'HTTP', '127.0.0.1:30001,', '', NULL, NULL, 0, 10000, 1, NULL, 'TEST-APP');
 
 -- ----------------------------
 -- Table structure for appapigatewayroutegroup
@@ -1832,7 +1878,7 @@ CREATE TABLE `appapigatewaysecurityoptions`  (
   PRIMARY KEY (`Id`) USING BTREE,
   UNIQUE INDEX `IX_AppApiGatewaySecurityOptions_ReRouteId`(`ReRouteId`) USING BTREE,
   CONSTRAINT `FK_AppApiGatewaySecurityOptions_AppApiGatewayReRoute_ReRouteId` FOREIGN KEY (`ReRouteId`) REFERENCES `appapigatewayreroute` (`ReRouteId`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of appapigatewaysecurityoptions
@@ -2033,44 +2079,11 @@ INSERT INTO `appapigatewaysecurityoptions` VALUES (236, 1442413171470688256, '',
 INSERT INTO `appapigatewaysecurityoptions` VALUES (237, 1449257280751026176, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (238, 1454289352609521664, '', '');
 INSERT INTO `appapigatewaysecurityoptions` VALUES (239, 1454289896489115648, '', '');
-
--- ----------------------------
--- Table structure for cap.published
--- ----------------------------
-DROP TABLE IF EXISTS `cap.published`;
-CREATE TABLE `cap.published`  (
-  `Id` bigint(20) NOT NULL,
-  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `Retries` int(11) NULL DEFAULT NULL,
-  `Added` datetime(0) NOT NULL,
-  `ExpiresAt` datetime(0) NULL DEFAULT NULL,
-  `StatusName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`Id`) USING BTREE,
-  INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of cap.published
--- ----------------------------
-
--- ----------------------------
--- Table structure for cap.received
--- ----------------------------
-DROP TABLE IF EXISTS `cap.received`;
-CREATE TABLE `cap.received`  (
-  `Id` bigint(20) NOT NULL,
-  `Version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Name` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `Group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `Retries` int(11) NULL DEFAULT NULL,
-  `Added` datetime(0) NOT NULL,
-  `ExpiresAt` datetime(0) NULL DEFAULT NULL,
-  `StatusName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`Id`) USING BTREE,
-  INDEX `IX_ExpiresAt`(`ExpiresAt`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `appapigatewaysecurityoptions` VALUES (240, 1456263181821501440, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (241, 1456263413661655040, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (242, 1456263574232195072, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (243, 1456263679999959040, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (244, 1456263785251823616, '', '');
+INSERT INTO `appapigatewaysecurityoptions` VALUES (245, 1456263957046321152, '', '');
 
 SET FOREIGN_KEY_CHECKS = 1;
