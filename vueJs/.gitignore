@@ -5,6 +5,7 @@ vue.config.js
 .env.production
 task
 yarn.lock
+package-lock.json
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
