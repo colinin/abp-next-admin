@@ -42,7 +42,7 @@
     "script-loader": "^0.7.2",
     "simple-progress-webpack-plugin": "^1.1.2",
     "sortablejs": "^1.10.2",
-    "tinymce": "^5.2.1",
+    "tinymce": "^5.10.0",
     "view-design": "^4.2.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
