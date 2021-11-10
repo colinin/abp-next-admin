@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
         public DbSet<UserChatCard> UserChatCards { get; set; }
         public DbSet<UserGroupCard> UserGroupCards { get; set; }
 
-        public MessageServiceDbContext(DbContextOptions<MessageServiceDbContext> options) 
+        public MessageServiceDbContext(DbContextOptions<MessageServiceDbContext> options)
             : base(options)
         {
         }

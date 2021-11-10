@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Contract;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -35,6 +36,13 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task DeleteAsync(MyFriendOperationDto input)
         {
             await MyFriendAppService.DeleteAsync(input);
+        }
+
+        [HttpGet]
+        [Route("{friendId}")]
+        public virtual async Task<UserFriend> GetAsync(Guid friendId)
+        {
+            return await MyFriendAppService.GetAsync(friendId);
         }
 
         [HttpGet]

@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.UserId, p.NotificationId })
-                .HasName("IX_Tenant_User_Notification_Id");
+                 .HasDatabaseName("IX_Tenant_User_Notification_Id");
             });
 
             builder.Entity<UserSubscribe>(b =>
@@ -57,8 +57,8 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.HasIndex(p => new { p.TenantId, p.UserId, p.NotificationName })
-                .HasName("IX_Tenant_User_Notification_Name")
-                .IsUnique();
+                 .HasDatabaseName("IX_Tenant_User_Notification_Name")
+                 .IsUnique();
             });
 
             builder.Entity<UserMessage>(b =>
@@ -123,7 +123,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
 
                 b.HasIndex(p => new { p.TenantId, p.UserId });
             });
-            
+
 
             builder.Entity<UserChatSetting>(b =>
             {
@@ -171,6 +171,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.Notice).HasMaxLength(ChatGroupConsts.MaxNoticeLength);
                 b.Property(p => p.Address).HasMaxLength(ChatGroupConsts.MaxAddressLength);
                 b.Property(p => p.Description).HasMaxLength(ChatGroupConsts.MaxDescriptionLength);
+                b.Property(p => p.AvatarUrl).HasMaxLength(ChatGroupConsts.MaxAvatarUrlLength);
 
                 b.ConfigureByConvention();
 
