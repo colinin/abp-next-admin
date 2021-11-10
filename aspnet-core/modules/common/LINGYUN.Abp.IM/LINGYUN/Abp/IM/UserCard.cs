@@ -40,6 +40,8 @@ namespace LINGYUN.Abp.IM
         /// </summary>
         public DateTime? Birthday { get; set; }
 
+        public bool Online { get; set; }
+
         #endregion
     }
 }

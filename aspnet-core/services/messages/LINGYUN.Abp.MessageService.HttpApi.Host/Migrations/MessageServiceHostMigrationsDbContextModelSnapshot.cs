@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.11");
+                .HasAnnotation("ProductVersion", "5.0.12");
 
             modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserChatCard", b =>
                 {
@@ -65,6 +65,9 @@ namespace LINGYUN.Abp.MessageService.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<DateTime?>("LastOnlineTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("NickName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -75,6 +78,9 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.Property<string>("Sign")
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")
@@ -248,7 +254,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppUserMessages");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.ChatGroup", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Groups.ChatGroup", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,6 +272,10 @@ namespace LINGYUN.Abp.MessageService.Migrations
 
                     b.Property<bool>("AllowSendMessage")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
@@ -317,7 +327,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppChatGroups");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.GroupChatBlack", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Groups.GroupChatBlack", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,7 +358,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppGroupChatBlacks");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.GroupMessage", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Groups.GroupMessage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -405,7 +415,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppGroupMessages");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.UserChatGroup", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Groups.UserChatGroup", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -436,7 +446,7 @@ namespace LINGYUN.Abp.MessageService.Migrations
                     b.ToTable("AppUserChatGroups");
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Group.UserGroupCard", b =>
+            modelBuilder.Entity("LINGYUN.Abp.MessageService.Groups.UserGroupCard", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

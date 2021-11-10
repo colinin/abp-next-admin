@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         IMessageRepository, ITransientDependency
     {
         public EfCoreMessageRepository(
-            IDbContextProvider<IMessageServiceDbContext> dbContextProvider) 
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
@@ -34,11 +34,11 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<List<GroupMessage>> GetGroupMessagesAsync(
-            long groupId, 
+            long groupId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
@@ -57,8 +57,8 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<long> GetGroupMessagesCountAsync(
             long groupId,
-            string filter = "", 
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
@@ -71,12 +71,12 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<List<GroupMessage>> GetUserGroupMessagesAsync(
-            Guid sendUserId, 
+            Guid sendUserId,
             long groupId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            MessageType? type = null,
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
@@ -94,10 +94,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<long> GetUserGroupMessagesCountAsync(
-            Guid sendUserId, 
-            long groupId, 
-            string filter = "",
+            Guid sendUserId,
+            long groupId,
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
@@ -110,8 +110,8 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<long> GetCountAsync(
             long groupId,
-            string filter = "",
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbContextAsync()).Set<GroupMessage>()
@@ -124,8 +124,8 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<long> GetCountAsync(
             Guid sendUserId,
             Guid receiveUserId,
-            string filter = "",
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbContextAsync()).Set<UserMessage>()
@@ -146,15 +146,17 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<LastChatMessage>> GetLastMessagesByOneFriendAsync(
+        public virtual async Task<List<LastChatMessage>> GetLastMessagesAsync(
             Guid userId,
+            MessageState? state = null,
             string sorting = nameof(LastChatMessage.SendTime),
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
             var groupMsgQuery = dbContext.Set<UserMessage>()
-                .Where(msg => msg.ReceiveUserId == userId || msg.CreatorId == userId)
+                .Where(msg => msg.ReceiveUserId == userId)
+                .WhereIf(state.HasValue, x => x.SendState == state)
                 .GroupBy(msg => new { msg.CreatorId, msg.ReceiveUserId })
                 .Select(msg => new
                 {
@@ -187,10 +189,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<List<UserMessage>> GetUserMessagesAsync(
             Guid sendUserId,
             Guid receiveUserId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
@@ -208,10 +210,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<long> GetUserMessagesCountAsync(
-            Guid sendUserId, 
+            Guid sendUserId,
             Guid receiveUserId,
-            string filter = "", 
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             var userMessagesCount = await (await GetDbContextAsync()).Set<UserMessage>()

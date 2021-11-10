@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.IM.Messages;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,35 +26,36 @@ namespace LINGYUN.Abp.MessageService.Chat
             CancellationToken cancellationToken = default);
 
         Task<UserMessage> GetUserMessageAsync(
-            long id, 
+            long id,
             CancellationToken cancellationToken = default);
 
         Task<GroupMessage> GetGroupMessageAsync(
-            long id, 
+            long id,
             CancellationToken cancellationToken = default);
 
         Task<long> GetUserMessagesCountAsync(
-            Guid sendUserId, 
-            Guid receiveUserId, 
-            string filter = "", 
-            MessageType? type = null, 
+            Guid sendUserId,
+            Guid receiveUserId,
+            MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
             long groupId,
-            string filter = "",
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
             Guid sendUserId,
             Guid receiveUserId,
-            string filter = "",
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
 
-        Task<List<LastChatMessage>> GetLastMessagesByOneFriendAsync(
+        Task<List<LastChatMessage>> GetLastMessagesAsync(
             Guid userId,
+            MessageState? state = null,
             string sorting = nameof(LastChatMessage.SendTime),
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
@@ -62,42 +63,42 @@ namespace LINGYUN.Abp.MessageService.Chat
         Task<List<UserMessage>> GetUserMessagesAsync(
             Guid sendUserId,
             Guid receiveUserId,
-            string filter = "", 
-            string sorting = nameof(UserMessage.MessageId), 
-            MessageType? type = null, 
-            int skipCount = 0, 
+            MessageType? type = null,
+            string filter = "",
+            string sorting = nameof(UserMessage.MessageId),
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
 
         Task<long> GetGroupMessagesCountAsync(
-            long groupId, 
-            string filter = "",
+            long groupId,
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
 
         Task<List<GroupMessage>> GetGroupMessagesAsync(
             long groupId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
 
         Task<long> GetUserGroupMessagesCountAsync(
-            Guid sendUserId, 
-            long groupId, 
-            string filter = "", 
+            Guid sendUserId,
+            long groupId,
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default);
 
         Task<List<GroupMessage>> GetUserGroupMessagesAsync(
-            Guid sendUserId, 
-            long groupId, 
+            Guid sendUserId,
+            long groupId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(UserMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default);
     }

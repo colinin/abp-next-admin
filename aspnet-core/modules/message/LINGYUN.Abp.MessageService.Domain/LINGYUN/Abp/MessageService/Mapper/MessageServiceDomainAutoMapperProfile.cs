@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.Chat;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using LINGYUN.Abp.Notifications;
-using Newtonsoft.Json;
-using System;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 
@@ -57,6 +56,11 @@ namespace LINGYUN.Abp.MessageService.Mapper
             CreateMessageMap<UserMessage, LastChatMessage>()
                 .ForMember(dto => dto.ToUserId, map => map.MapFrom(src => src.ReceiveUserId))
                 .Ignore(dto => dto.GroupId);
+
+            CreateMap<ChatGroup, Group>()
+                .ForMember(g => g.Id, map => map.MapFrom(src => src.GroupId.ToString()))
+                .ForMember(g => g.MaxUserLength, map => map.MapFrom(src => src.MaxUserCount))
+                .Ignore(g => g.GroupUserCount);
         }
 
         protected IMappingExpression<TSource, TDestination> CreateMessageMap<TSource, TDestination>()

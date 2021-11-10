@@ -9,6 +9,10 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     public interface IUserChatCardRepository : IBasicRepository<UserChatCard, long>
     {
+        Task<UserChatCard> FindByUserIdAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default);
+
         Task<bool> CheckUserIdExistsAsync(
             Guid userId,
             CancellationToken cancellationToken = default);

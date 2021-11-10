@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.IM.Messages;
-using LINGYUN.Abp.MessageService.Group;
+using LINGYUN.Abp.MessageService.Groups;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -70,19 +70,26 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<List<ChatMessage>> GetGroupMessageAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             long groupId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(ChatMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
             {
                 var groupMessages = await _messageRepository
-                    .GetGroupMessagesAsync(groupId, filter, sorting, type, skipCount, maxResultCount, cancellationToken);
+                    .GetGroupMessagesAsync(
+                        groupId,
+                        type,
+                        filter,
+                        sorting,
+                        skipCount,
+                        maxResultCount,
+                        cancellationToken);
 
                 var chatMessages = _objectMapper.Map<List<GroupMessage>, List<ChatMessage>>(groupMessages);
 
@@ -91,20 +98,28 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         public virtual async Task<List<ChatMessage>> GetChatMessageAsync(
-            Guid? tenantId, 
-            Guid sendUserId, 
-            Guid receiveUserId, 
+            Guid? tenantId,
+            Guid sendUserId,
+            Guid receiveUserId,
+            MessageType? type = null,
             string filter = "",
             string sorting = nameof(ChatMessage.MessageId),
-            MessageType? type = null, 
-            int skipCount = 0, 
+            int skipCount = 0,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
             {
                 var userMessages = await _messageRepository
-                    .GetUserMessagesAsync(sendUserId, receiveUserId, filter, sorting, type, skipCount, maxResultCount, cancellationToken);
+                    .GetUserMessagesAsync(
+                        sendUserId,
+                        receiveUserId,
+                        type,
+                        filter,
+                        sorting,
+                        skipCount,
+                        maxResultCount,
+                        cancellationToken);
 
                 var chatMessages = _objectMapper.Map<List<UserMessage>, List<ChatMessage>>(userMessages);
 
@@ -115,6 +130,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<List<LastChatMessage>> GetLastChatMessagesAsync(
             Guid? tenantId,
             Guid userId,
+            MessageState? state = null,
             string sorting = nameof(LastChatMessage.SendTime),
             int maxResultCount = 10,
             CancellationToken cancellationToken = default
@@ -123,34 +139,34 @@ namespace LINGYUN.Abp.MessageService.Chat
             using (_currentTenant.Change(tenantId))
             {
                 return await _messageRepository
-                    .GetLastMessagesByOneFriendAsync(userId, sorting, maxResultCount, cancellationToken);
+                    .GetLastMessagesAsync(userId, state, sorting, maxResultCount, cancellationToken);
             }
         }
 
         public virtual async Task<long> GetGroupMessageCountAsync(
-            Guid? tenantId, 
-            long groupId, 
-            string filter = "",
+            Guid? tenantId,
+            long groupId,
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await _messageRepository.GetCountAsync(groupId, filter, type, cancellationToken);
+                return await _messageRepository.GetCountAsync(groupId, type, filter, cancellationToken);
             }
         }
 
         public virtual async Task<long> GetChatMessageCountAsync(
             Guid? tenantId,
-            Guid sendUserId, 
-            Guid receiveUserId, 
-            string filter = "", 
+            Guid sendUserId,
+            Guid receiveUserId,
             MessageType? type = null,
+            string filter = "",
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await _messageRepository.GetCountAsync(sendUserId, receiveUserId, filter, type, cancellationToken);
+                return await _messageRepository.GetCountAsync(sendUserId, receiveUserId, type, filter, cancellationToken);
             }
         }
 
@@ -202,10 +218,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
 
             var message = new UserMessage(
-                long.Parse(chatMessage.MessageId), 
-                chatMessage.FormUserId, 
-                chatMessage.FormUserName, 
-                chatMessage.Content, 
+                long.Parse(chatMessage.MessageId),
+                chatMessage.FormUserId,
+                chatMessage.FormUserName,
+                chatMessage.Content,
                 chatMessage.MessageType);
 
             message.SendToUser(chatMessage.ToUserId.Value);
@@ -215,7 +231,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         protected virtual async Task StoreGroupMessageAsync(
-            ChatMessage chatMessage, 
+            ChatMessage chatMessage,
             long groupId,
             CancellationToken cancellationToken = default)
         {
@@ -239,10 +255,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
 
             var message = new GroupMessage(
-                long.Parse(chatMessage.MessageId), 
-                chatMessage.FormUserId, 
-                chatMessage.FormUserName, 
-                chatMessage.Content, 
+                long.Parse(chatMessage.MessageId),
+                chatMessage.FormUserId,
+                chatMessage.FormUserName,
+                chatMessage.Content,
                 chatMessage.MessageType);
 
             message.SendToGroup(groupId);

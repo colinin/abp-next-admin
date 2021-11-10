@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.MessageService.Localization;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -23,6 +24,11 @@ namespace LINGYUN.Abp.MessageService.Chat
             UserChatCardRepository = userChatCardRepository;
 
             LocalizationResource = typeof(MessageServiceResource);
+        }
+
+        public virtual async Task<UserFriend> GetAsync(Guid friendId)
+        {
+            return await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId);
         }
 
         public virtual async Task CreateAsync(MyFriendCreateDto input)
@@ -59,7 +65,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var myFriends = await FriendStore
                 .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Filter, input.Sorting, 
+                    input.Filter, input.Sorting,
                     input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<UserFriend>(myFrientCount, myFriends);

@@ -53,6 +53,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// </summary>
         public virtual int Age { get; protected set; }
 
+        public virtual DateTime? LastOnlineTime { get; protected set; }
+
+        public virtual UserOnlineState State { get; protected set; }
+
         protected UserChatCard()
         {
         }
@@ -60,9 +64,9 @@ namespace LINGYUN.Abp.MessageService.Chat
         public UserChatCard(
             Guid userId,
             string userName,
-            Sex sex, 
+            Sex sex,
             string nickName = null,
-            string avatarUrl = "", 
+            string avatarUrl = "",
             Guid? tenantId = null)
         {
             Sex = sex;
@@ -85,6 +89,15 @@ namespace LINGYUN.Abp.MessageService.Chat
             AvatarUrl = url;
         }
 
+        public void ChangeState(IClock clock, UserOnlineState state)
+        {
+            State = state;
+            if (State == UserOnlineState.Online)
+            {
+                LastOnlineTime = clock.Now;
+            }
+        }
+
         public UserCard ToUserCard()
         {
             return new UserCard
@@ -98,7 +111,8 @@ namespace LINGYUN.Abp.MessageService.Chat
                 Sign = Sign,
                 UserId = UserId,
                 UserName = UserName,
-                TenantId = TenantId
+                TenantId = TenantId,
+                Online = State == UserOnlineState.Online,
             };
         }
     }

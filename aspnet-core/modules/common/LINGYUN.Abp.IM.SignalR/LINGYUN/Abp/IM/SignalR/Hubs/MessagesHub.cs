@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.IM.Contract;
-using LINGYUN.Abp.IM.Group;
+using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime.Client;
 using LINGYUN.Abp.RealTime.SignalR;
@@ -18,6 +18,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
     public class MessagesHub : OnlineClientHubBase
     {
         protected IMessageProcessor Processor => LazyServiceProvider.LazyGetRequiredService<IMessageProcessor>();
+
+        protected IUserOnlineChanger OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
 
         protected AbpIMSignalROptions Options { get; }
         protected IFriendStore FriendStore { get; }
@@ -39,21 +41,43 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         protected override async Task OnClientConnectedAsync(IOnlineClient client)
         {
             await base.OnClientConnectedAsync(client);
-            // 加入通讯组
+
+            // 用户上线
+            await OnlineChanger?.ChangeAsync(client.TenantId, client.UserId.Value, UserOnlineState.Online);
+
+            await SendUserOnlineStateAsync(client);
+        }
+
+        protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
+        {
+            await base.OnClientDisconnectedAsync(client);
+
+            // 用户下线
+            await OnlineChanger?.ChangeAsync(client.TenantId, client.UserId.Value, UserOnlineState.Offline);
+
+            await SendUserOnlineStateAsync(client, false);
+        }
+
+        protected virtual async Task SendUserOnlineStateAsync(IOnlineClient client, bool isOnlined = true)
+        {
+            var methodName = isOnlined ? Options.UserOnlineMethod : Options.UserOfflineMethod;
+
             var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
             foreach (var group in userGroups)
             {
-                // 应使用群组标识
-                await Groups.AddToGroupAsync(client.ConnectionId, group.Id);
+                if (isOnlined)
+                {
+                    // 应使用群组标识
+                    await Groups.AddToGroupAsync(client.ConnectionId, group.Id);
+                }
                 var groupClient = Clients.Group(group.Id);
                 if (groupClient != null)
                 {
-                    // 发送用户上线通知
-                    await groupClient.SendAsync(Options.UserOnlineMethod, client.TenantId, client.UserId.Value);
+                    // 发送用户下线通知
+                    await groupClient.SendAsync(methodName, client.TenantId, client.UserId.Value);
                 }
             }
 
-            // 发送好友上线通知
             var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value);
             if (userFriends.Count > 0)
             {
@@ -61,7 +85,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 var userClients = Clients.Users(friendClientIds);
                 if (userClients != null)
                 {
-                    await userClients.SendAsync(Options.UserOnlineMethod, client.TenantId, client.UserId.Value);
+                    await userClients.SendAsync(methodName, client.TenantId, client.UserId.Value);
                 }
             }
         }

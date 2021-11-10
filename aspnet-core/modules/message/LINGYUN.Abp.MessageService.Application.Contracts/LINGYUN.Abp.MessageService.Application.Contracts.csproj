@@ -28,8 +28,4 @@
     <ProjectReference Include="..\..\message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="LINGYUN\Abp\MessageService\Group\" />
-  </ItemGroup>
-
 </Project>
