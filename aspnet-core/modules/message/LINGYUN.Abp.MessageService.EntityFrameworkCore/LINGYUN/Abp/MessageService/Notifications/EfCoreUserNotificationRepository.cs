@@ -17,13 +17,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
         IUserNotificationRepository, ITransientDependency
     {
         public EfCoreUserNotificationRepository(
-            IDbContextProvider<IMessageServiceDbContext> dbContextProvider) 
+            IDbContextProvider<IMessageServiceDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
 
         public virtual async Task<bool> AnyAsync(
-            Guid userId, 
+            Guid userId,
             long notificationId,
             CancellationToken cancellationToken = default)
         {
@@ -75,7 +75,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         public virtual async Task<int> GetCountAsync(
-            Guid userId, 
+            Guid userId,
             string filter = "",
             NotificationReadState? readState = null,
             CancellationToken cancellationToken = default)
@@ -98,7 +98,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         public virtual async Task<List<Notification>> GetListAsync(
-            Guid userId, 
+            Guid userId,
             string filter = "",
             string sorting = nameof(Notification.CreationTime),
             NotificationReadState? readState = null,
@@ -106,6 +106,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            sorting ??= $"{nameof(Notification.CreationTime)} DESC";
             var dbContext = await GetDbContextAsync();
             var userNotifilerQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
@@ -120,7 +121,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
                     nf.NotificationName.Contains(filter) ||
                     nf.NotificationTypeName.Contains(filter))
-                .OrderBy(sorting ??= nameof(Notification.CreationTime))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));

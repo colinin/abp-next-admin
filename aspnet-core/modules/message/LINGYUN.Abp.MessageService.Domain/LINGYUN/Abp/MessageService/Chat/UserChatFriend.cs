@@ -20,6 +20,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// </summary>
         public virtual Guid FrientId { get; protected set; }
         /// <summary>
+        /// 系统预置
+        /// </summary>
+        public virtual bool IsStatic { get; set; }
+        /// <summary>
         /// 已添加黑名单
         /// </summary>
         public virtual bool Black { get; set; }

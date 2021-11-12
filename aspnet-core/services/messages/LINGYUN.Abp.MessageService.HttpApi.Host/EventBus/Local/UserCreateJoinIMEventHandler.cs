@@ -30,6 +30,8 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
         public virtual async Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
         {
             await SeedChatDataAsync(eventData.Entity);
+
+            await SeedUserSubscriptionNotifiersAsync(eventData.Entity);
         }
 
         protected virtual async Task SeedChatDataAsync(IUserData user)

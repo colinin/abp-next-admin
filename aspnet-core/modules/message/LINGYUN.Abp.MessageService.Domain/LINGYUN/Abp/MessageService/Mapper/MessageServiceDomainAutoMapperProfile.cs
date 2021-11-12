@@ -6,8 +6,10 @@ using LINGYUN.Abp.MessageService.Groups;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
 using LINGYUN.Abp.Notifications;
+using System;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace LINGYUN.Abp.MessageService.Mapper
 {
@@ -15,32 +17,26 @@ namespace LINGYUN.Abp.MessageService.Mapper
     {
         public MessageServiceDomainAutoMapperProfile()
         {
-            //CreateMap<Notification, NotificationInfo>()
-            //    .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId))
-            //    .ForMember(dto => dto.Name, map => map.MapFrom(src => src.NotificationName))
-            //    .ForMember(dto => dto.Lifetime, map => map.Ignore())
-            //    .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
-            //    .ForMember(dto => dto.Severity, map => map.MapFrom(src => src.Severity))
-            //    .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
-            //    {
-            //        var dataType = Type.GetType(src.NotificationTypeName);
-            //        var data = JsonConvert.DeserializeObject(src.NotificationData, dataType);
-            //        if(data != null && data is NotificationData notificationData)
-            //        {
-            //            if (notificationData.NeedLocalizer())
-            //            {
-            //                var title = JsonConvert.DeserializeObject<LocalizableStringInfo>(notificationData.TryGetData("title").ToString());
-            //                var message = JsonConvert.DeserializeObject<LocalizableStringInfo>(notificationData.TryGetData("message").ToString());
-            //                notificationData.TrySetData("title", title);
-            //                notificationData.TrySetData("message", message);
-            //            }
-            //            return notificationData;
-            //        }
-            //        return new NotificationData();
-            //    }));
-
             CreateMap<Notification, NotificationInfo>()
-                .ConvertUsing<NotificationTypeConverter>();
+                .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId))
+                .ForMember(dto => dto.Name, map => map.MapFrom(src => src.NotificationName))
+                .ForMember(dto => dto.Lifetime, map => map.Ignore())
+                .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
+                .ForMember(dto => dto.Severity, map => map.MapFrom(src => src.Severity))
+                .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
+                {
+                    var dataType = Type.GetType(src.NotificationTypeName);
+                    var data = Activator.CreateInstance(dataType);
+                    if (data is NotificationData notificationData)
+                    {
+                        notificationData.ExtraProperties = src.ExtraProperties;
+                        return notificationData;
+                    }
+                    return new NotificationData();
+                }));
+
+            //CreateMap<Notification, NotificationInfo>()
+            //    .ConvertUsing<NotificationTypeConverter>();
 
             CreateMap<UserSubscribe, NotificationSubscriptionInfo>();
 
@@ -50,10 +46,6 @@ namespace LINGYUN.Abp.MessageService.Mapper
                 .Ignore(dto => dto.ToUserId);
 
             CreateMessageMap<UserMessage, ChatMessage>()
-                .ForMember(dto => dto.ToUserId, map => map.MapFrom(src => src.ReceiveUserId))
-                .Ignore(dto => dto.GroupId);
-
-            CreateMessageMap<UserMessage, LastChatMessage>()
                 .ForMember(dto => dto.ToUserId, map => map.MapFrom(src => src.ReceiveUserId))
                 .Ignore(dto => dto.GroupId);
 
@@ -74,8 +66,9 @@ namespace LINGYUN.Abp.MessageService.Mapper
                .ForMember(dto => dto.FormUserName, map => map.MapFrom(src => src.SendUserName))
                .ForMember(dto => dto.SendTime, map => map.MapFrom(src => src.CreationTime))
                .ForMember(dto => dto.MessageType, map => map.MapFrom(src => src.Type))
+               .ForMember(dto => dto.Source, map => map.MapFrom(src => src.Source))
                .ForMember(dto => dto.IsAnonymous, map => map.MapFrom(src => src.GetProperty(nameof(ChatMessage.IsAnonymous), false)))
-               .MapExtraProperties();
+               .MapExtraProperties(MappingPropertyDefinitionChecks.None);
         }
     }
 }

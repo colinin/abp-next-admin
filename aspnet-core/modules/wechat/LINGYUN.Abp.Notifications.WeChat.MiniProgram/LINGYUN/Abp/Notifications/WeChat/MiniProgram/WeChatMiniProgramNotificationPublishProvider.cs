@@ -72,13 +72,13 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
                 await SubscribeMessager
                     .SendAsync(
                         identifier.UserId, templateId, redirect, weAppLang,
-                        weAppState, notification.Data.Properties, cancellationToken);
+                        weAppState, notification.Data.ExtraProperties, cancellationToken);
             }
             else
             {
                 var weChatWeAppNotificationData = new SubscribeMessage(templateId, redirect, weAppState, weAppLang);
                 // 写入模板数据
-                weChatWeAppNotificationData.WriteData(notification.Data.Properties);
+                weChatWeAppNotificationData.WriteData(notification.Data.ExtraProperties);
 
                 Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
 
@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
 
         protected string GetOrDefault(NotificationData data, string key, string defaultValue)
         {
-            if (data.Properties.TryGetValue(key, out object value))
+            if (data.ExtraProperties.TryGetValue(key, out object value))
             {
                 // 取得了数据就删除对应键值
                 // data.Properties.Remove(key);

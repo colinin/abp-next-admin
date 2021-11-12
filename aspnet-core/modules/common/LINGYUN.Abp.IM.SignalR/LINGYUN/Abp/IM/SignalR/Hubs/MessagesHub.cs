@@ -1,16 +1,24 @@
 ﻿using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.IM.Groups;
+using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.RealTime;
 using LINGYUN.Abp.RealTime.Client;
+using LINGYUN.Abp.RealTime.Localization;
 using LINGYUN.Abp.RealTime.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.Data;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
@@ -20,6 +28,10 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         protected IMessageProcessor Processor => LazyServiceProvider.LazyGetRequiredService<IMessageProcessor>();
 
         protected IUserOnlineChanger OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
+
+        protected ISnowflakeIdrGenerator SnowflakeIdrGenerator => LazyServiceProvider.LazyGetService<ISnowflakeIdrGenerator>();
+
+        protected IExceptionToErrorInfoConverter ErrorInfoConverter => LazyServiceProvider.LazyGetService<IExceptionToErrorInfoConverter>();
 
         protected AbpIMSignalROptions Options { get; }
         protected IFriendStore FriendStore { get; }
@@ -98,23 +110,53 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         [HubMethodName("send")]
         public virtual async Task SendAsync(ChatMessage chatMessage)
         {
-            // 持久化
-            await MessageStore.StoreMessageAsync(chatMessage, cancellationToken: Context.ConnectionAborted);
-
-            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
-            {
-                await SendMessageToGroupAsync(chatMessage);
-            }
-            else
-            {
-                await SendMessageToUserAsync(chatMessage);
-            }
+            await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
         }
 
         [HubMethodName("recall")]
         public virtual async Task ReCallAsync(ChatMessage chatMessage)
         {
             await Processor.ReCallAsync(chatMessage);
+            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+            {
+                await SendMessageAsync(
+                    Options.ReCallChatMessageMethod,
+                    ChatMessage.SystemLocalized(
+                        chatMessage.FormUserId,
+                        chatMessage.GroupId,
+                        new LocalizableStringInfo(
+                            LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
+                            "Messages:RecallMessage",
+                            new Dictionary<object, object>
+                            {
+                                { "User", chatMessage.FormUserName }
+                            }),
+                        Clock,
+                        chatMessage.MessageType,
+                        chatMessage.TenantId)
+                    .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
+                    callbackException: false);
+            }
+            else
+            {
+                await SendMessageAsync(
+                    Options.ReCallChatMessageMethod,
+                    ChatMessage.SystemLocalized(
+                        chatMessage.ToUserId.Value,
+                        chatMessage.FormUserId,
+                        new LocalizableStringInfo(
+                            LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
+                            "Messages:RecallMessage",
+                            new Dictionary<object, object>
+                            {
+                                { "User", chatMessage.FormUserName }
+                            }),
+                        Clock,
+                        chatMessage.MessageType,
+                        chatMessage.TenantId)
+                    .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
+                    callbackException: false);
+            }
         }
 
         [HubMethodName("read")]
@@ -123,7 +165,58 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             await Processor.ReadAsync(chatMessage);
         }
 
-        protected virtual async Task SendMessageToGroupAsync(ChatMessage chatMessage)
+        protected virtual async Task SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
+        {
+            // 持久化
+            try
+            {
+                chatMessage.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
+                chatMessage.MessageId = SnowflakeIdrGenerator.Create().ToString();
+                await MessageStore.StoreMessageAsync(chatMessage);
+
+                if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+                {
+                    await SendMessageToGroupAsync(methodName, chatMessage);
+                }
+                else
+                {
+                    await SendMessageToUserAsync(methodName, chatMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (callbackException && ex is IBusinessException)
+                {
+                    var errorInfo = ErrorInfoConverter.Convert(ex, false);
+                    if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+                    {
+                        await SendMessageToGroupAsync(
+                            methodName,
+                            ChatMessage.System(
+                                chatMessage.FormUserId,
+                                chatMessage.GroupId,
+                                errorInfo.Message,
+                                Clock,
+                                chatMessage.MessageType,
+                                chatMessage.TenantId));
+                    }
+                    else
+                    {
+                        await SendMessageToUserAsync(
+                            methodName,
+                            ChatMessage.System(
+                                chatMessage.ToUserId.Value,
+                                chatMessage.FormUserId,
+                                errorInfo.Message,
+                                Clock,
+                                chatMessage.MessageType,
+                                chatMessage.TenantId));
+                    }
+                }
+            }
+        }
+
+        protected virtual async Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
         {
             var signalRClient = Clients.Group(chatMessage.GroupId);
             if (signalRClient == null)
@@ -132,10 +225,10 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 return;
             }
 
-            await signalRClient.SendAsync(Options.GetChatMessageMethod, chatMessage, cancellationToken: Context.ConnectionAborted);
+            await signalRClient.SendAsync(methodName, chatMessage);
         }
 
-        protected virtual async Task SendMessageToUserAsync(ChatMessage chatMessage)
+        protected virtual async Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
         {
             var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
             var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
@@ -150,7 +243,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                         Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
                         continue;
                     }
-                    await signalRClient.SendAsync(Options.GetChatMessageMethod, chatMessage, cancellationToken: Context.ConnectionAborted);
+                    await signalRClient.SendAsync(methodName, chatMessage);
                 }
                 catch (Exception ex)
                 {

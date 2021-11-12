@@ -109,15 +109,12 @@ namespace LINGYUN.Abp.MessageService
             app.UseRouting();
             // 跨域
             app.UseCors(DefaultCorsPolicyName);
-            // 加入自定义中间件
             app.UseSignalRJwtToken();
-            // TODO: 还有没有其他方法在iframe中传递身份令牌?
-            app.UseHangfireAuthorication();
             // 认证
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
-            // 授权
             app.UseAuthorization();
             // 多租户
             app.UseMultiTenancy();

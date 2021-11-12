@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.MessageService.Groups
 
                         await _userChatGroupRepository.InsertAsync(userGroup, cancellationToken: cancellationToken);
 
-                        await unitOfWork.SaveChangesAsync(cancellationToken);
+                        await unitOfWork.CompleteAsync(cancellationToken);
                     }
                 }
             }
@@ -109,7 +109,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 {
                     await _userChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId, cancellationToken);
 
-                    await unitOfWork.SaveChangesAsync(cancellationToken);
+                    await unitOfWork.CompleteAsync(cancellationToken);
                 }
             }
         }

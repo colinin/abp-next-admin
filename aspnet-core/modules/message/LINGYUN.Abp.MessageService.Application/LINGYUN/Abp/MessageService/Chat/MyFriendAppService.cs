@@ -35,7 +35,10 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             var friendCard = await UserChatCardRepository.GetMemberAsync(input.FriendId);
 
-            await FriendStore.AddMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
+            await FriendStore.AddMemberAsync(
+                CurrentTenant.Id,
+                CurrentUser.GetId(),
+                input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
         }
 
         public virtual async Task AddRequestAsync(MyFriendAddRequestDto input)

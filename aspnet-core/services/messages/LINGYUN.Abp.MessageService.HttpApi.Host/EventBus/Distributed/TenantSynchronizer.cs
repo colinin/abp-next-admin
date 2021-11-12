@@ -3,6 +3,7 @@ using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MultiTenancy;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -62,7 +63,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Distributed
 
                     await SendNotificationAsync(eventData);
 
-                    await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.CompleteAsync();
                 }
             }
         }

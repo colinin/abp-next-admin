@@ -30,8 +30,8 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             if (!message.GroupId.IsNullOrWhiteSpace())
             {
-                long groupId = long.Parse(message.GroupId);
-                var groupMessage = await _repository.GetGroupMessageAsync(groupId);
+                long messageId = long.Parse(message.MessageId);
+                var groupMessage = await _repository.GetGroupMessageAsync(messageId);
                 groupMessage.ChangeSendState(MessageState.Read);
 
                 await _repository.UpdateGroupMessageAsync(groupMessage);
@@ -56,8 +56,8 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             if (!message.GroupId.IsNullOrWhiteSpace())
             {
-                long groupId = long.Parse(message.GroupId);
-                var groupMessage = await _repository.GetGroupMessageAsync(groupId);
+                long messageId = long.Parse(message.MessageId);
+                var groupMessage = await _repository.GetGroupMessageAsync(messageId);
                 if (hasExpiredMessage(groupMessage))
                 {
                     throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)

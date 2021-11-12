@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.RealTime.Localization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

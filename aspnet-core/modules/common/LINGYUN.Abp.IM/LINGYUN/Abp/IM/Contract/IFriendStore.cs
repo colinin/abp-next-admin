@@ -101,6 +101,7 @@ namespace LINGYUN.Abp.IM.Contract
             Guid userId,
             Guid friendId,
             string remarkName = "",
+            bool isStatic = false,
             CancellationToken cancellationToken = default);
         /// <summary>
         /// 添加好友请求
@@ -114,7 +115,7 @@ namespace LINGYUN.Abp.IM.Contract
             Guid? tenantId,
             Guid userId,
             Guid friendId,
-            string remarkName = "", 
+            string remarkName = "",
             string description = "",
             CancellationToken cancellationToken = default);
         /// <summary>

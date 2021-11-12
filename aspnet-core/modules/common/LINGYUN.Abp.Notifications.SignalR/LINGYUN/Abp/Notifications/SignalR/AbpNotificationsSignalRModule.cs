@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
                 options.PublishProviders.Add<SignalRNotificationPublishProvider>();
                 options.NotificationDataMappings
                        .MappingDefault(SignalRNotificationPublishProvider.ProviderName,
-                       data => data);
+                       data => data.ToSignalRData());
             });
 
             Configure<AbpAspNetCoreSignalRJwtTokenMapPathOptions>(options =>

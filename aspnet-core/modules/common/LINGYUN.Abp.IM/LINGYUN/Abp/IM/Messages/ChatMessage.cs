@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using LINGYUN.Abp.RealTime.Localization;
+using System;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.EventBus;
-using Volo.Abp.ObjectExtending;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.IM.Messages
 {
     [Serializable]
     [EventName("im.message")]
-    public class ChatMessage : ExtensibleObject
+    public class ChatMessage : IHasExtraProperties
     {
         /// <summary>
         /// 租户
@@ -59,24 +59,178 @@ namespace LINGYUN.Abp.IM.Messages
         /// </summary>
         public MessageType MessageType { get; set; } = MessageType.Text;
 
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public MessageSourceTye Source { get; set; } = MessageSourceTye.User;
+
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
+
+        public ChatMessage()
         {
-            var results = ExtensibleObjectValidator.GetValidationErrors(this, validationContext);
-
-            foreach (var result in ValidateReceiver(validationContext))
-            {
-                results.Add(result);
-            }
-
-            return results;
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
         }
 
-        protected virtual IEnumerable<ValidationResult> ValidateReceiver(ValidationContext validationContext)
+        public static ChatMessage User(
+            Guid formUserId,
+            string formUserName,
+            Guid toUserId,
+            string content,
+            IClock clock,
+            bool isAnonymous = false,
+            MessageType type = MessageType.Text,
+            MessageSourceTye souce = MessageSourceTye.User,
+            Guid? tenantId = null)
         {
-            if (GroupId.IsNullOrWhiteSpace() && !ToUserId.HasValue)
+            return new ChatMessage
             {
-                yield return new ValidationResult("");
+                FormUserId = formUserId,
+                FormUserName = formUserName,
+                ToUserId = toUserId,
+                Content = content,
+                SendTime = clock.Now,
+                IsAnonymous = isAnonymous,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = souce,
+            };
+        }
+        public static ChatMessage System(
+            Guid formUserId,
+            Guid toUserId,
+            string content,
+            IClock clock,
+            MessageType type = MessageType.Text,
+            Guid? tenantId = null)
+        {
+            return new ChatMessage
+            {
+                FormUserId = formUserId,
+                FormUserName = "system",
+                ToUserId = toUserId,
+                Content = content,
+                SendTime = clock.Now,
+                IsAnonymous = false,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = MessageSourceTye.System,
             }
+            .SetProperty("L", false);
+        }
+
+        /// <summary>
+        /// 本地化系统消息
+        /// 用户消息与群组消息不能使用多语言
+        /// </summary>
+        /// <param name="formUserId"></param>
+        /// <param name="toUserId"></param>
+        /// <param name="content"></param>
+        /// <param name="clock"></param>
+        /// <param name="type"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public static ChatMessage SystemLocalized(
+            Guid formUserId,
+            Guid toUserId,
+            LocalizableStringInfo content,
+            IClock clock,
+            MessageType type = MessageType.Text,
+            Guid? tenantId = null)
+        {
+            return new ChatMessage
+            {
+                FormUserId = formUserId,
+                FormUserName = "system",
+                ToUserId = toUserId,
+                Content = "",
+                SendTime = clock.Now,
+                IsAnonymous = false,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = MessageSourceTye.System,
+            }
+            .SetProperty("L", true)
+            .SetProperty(nameof(ChatMessage.Content).ToPascalCase(), content);
+        }
+
+        public static ChatMessage System(
+            Guid formUserId,
+            string groupId,
+            string content,
+            IClock clock,
+            MessageType type = MessageType.Text,
+            Guid? tenantId = null)
+        {
+            return new ChatMessage
+            {
+                FormUserId = formUserId,
+                FormUserName = "system",
+                GroupId = groupId,
+                Content = content,
+                SendTime = clock.Now,
+                IsAnonymous = false,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = MessageSourceTye.System,
+            }
+            .SetProperty("L", false);
+        }
+        /// <summary>
+        /// 本地化系统消息
+        /// 用户消息与群组消息不能使用多语言
+        /// </summary>
+        /// <param name="formUserId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="content"></param>
+        /// <param name="clock"></param>
+        /// <param name="type"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public static ChatMessage SystemLocalized(
+            Guid formUserId,
+            string groupId,
+            LocalizableStringInfo content,
+            IClock clock,
+            MessageType type = MessageType.Text,
+            Guid? tenantId = null)
+        {
+            return new ChatMessage
+            {
+                FormUserId = formUserId,
+                FormUserName = "system",
+                GroupId = groupId,
+                Content = "",
+                SendTime = clock.Now,
+                IsAnonymous = false,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = MessageSourceTye.System,
+            }
+            .SetProperty("L", true)
+            .SetProperty(nameof(ChatMessage.Content).ToPascalCase(), content);
+        }
+
+        public static ChatMessage Group(
+            Guid formUserId,
+            string formUserName,
+            string groupId,
+            string content,
+            IClock clock,
+            bool isAnonymous = false,
+            MessageType type = MessageType.Text,
+            MessageSourceTye souce = MessageSourceTye.User,
+            Guid? tenantId = null)
+        {
+            return new ChatMessage
+            {
+                FormUserId = formUserId,
+                FormUserName = formUserName,
+                GroupId = groupId,
+                Content = content,
+                SendTime = clock.Now,
+                IsAnonymous = isAnonymous,
+                MessageType = type,
+                TenantId = tenantId,
+                Source = souce,
+            };
         }
     }
 }
