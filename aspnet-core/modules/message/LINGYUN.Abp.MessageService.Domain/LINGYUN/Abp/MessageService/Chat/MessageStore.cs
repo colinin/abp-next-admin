@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                     {
                         await StoreUserMessageAsync(chatMessage, cancellationToken);
                     }
-                    await unitOfWork.SaveChangesAsync(cancellationToken);
+                    await unitOfWork.CompleteAsync(cancellationToken);
                 }
             }
         }
@@ -138,6 +138,11 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (_currentTenant.Change(tenantId))
             {
+                //var messages = await _messageRepository
+                //    .GetLastMessagesAsync(userId, state, sorting, maxResultCount, cancellationToken);
+
+                //return _objectMapper.Map<List<LastMessage>, List<LastChatMessage>>(messages);
+
                 return await _messageRepository
                     .GetLastMessagesAsync(userId, state, sorting, maxResultCount, cancellationToken);
             }
@@ -221,11 +226,12 @@ namespace LINGYUN.Abp.MessageService.Chat
                 long.Parse(chatMessage.MessageId),
                 chatMessage.FormUserId,
                 chatMessage.FormUserName,
+                chatMessage.ToUserId.Value,
                 chatMessage.Content,
-                chatMessage.MessageType);
+                chatMessage.MessageType,
+                chatMessage.Source);
 
-            message.SendToUser(chatMessage.ToUserId.Value);
-            message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
+            message.ExtraProperties.AddIfNotContains(chatMessage.ExtraProperties);
 
             await _messageRepository.InsertUserMessageAsync(message, cancellationToken);
         }
@@ -258,11 +264,12 @@ namespace LINGYUN.Abp.MessageService.Chat
                 long.Parse(chatMessage.MessageId),
                 chatMessage.FormUserId,
                 chatMessage.FormUserName,
+                groupId,
                 chatMessage.Content,
-                chatMessage.MessageType);
+                chatMessage.MessageType,
+                chatMessage.Source);
 
-            message.SendToGroup(groupId);
-            message.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
+            message.ExtraProperties.AddIfNotContains(chatMessage.ExtraProperties);
 
             await _messageRepository.InsertGroupMessageAsync(message, cancellationToken);
         }

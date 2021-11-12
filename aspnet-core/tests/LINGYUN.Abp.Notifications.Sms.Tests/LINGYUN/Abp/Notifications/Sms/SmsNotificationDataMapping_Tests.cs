@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.Notifications.Sms
             mappingStandardData.TryGetData("phoneNumber").ShouldBeNull();
             mappingStandardData.TryGetData("template").ShouldBeNull();
             mappingStandardData.TryGetData("otherDataKey").ShouldBeNull();
-            mappingStandardData.Properties.Count.ShouldBe(6);
+            mappingStandardData.ExtraProperties.Count.ShouldBe(6);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace LINGYUN.Abp.Notifications.Sms
             mappingOriginData.TryGetData(NotificationSmsOptions.TemplateParamsPrefix + "phoneNumber").ShouldNotBeNull();
             mappingOriginData.TryGetData(NotificationSmsOptions.TemplateParamsPrefix + "template").ShouldNotBeNull();
             mappingOriginData.TryGetData("otherDataKey").ShouldNotBeNull();
-            mappingOriginData.Properties.Count.ShouldBe(9);
+            mappingOriginData.ExtraProperties.Count.ShouldBe(9);
         }
     }
 }

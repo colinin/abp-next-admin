@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LINGYUN.Abp.RealTime.Localization;
+using System;
+using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.Notifications
@@ -13,12 +14,12 @@ namespace LINGYUN.Abp.Notifications
     /// </remarks>
     [Serializable]
     [EventName("notifications")]
-    public class NotificationData
+    public class NotificationData : IHasExtraProperties
     {
         /// <summary>
         /// 用来标识是否需要本地化的信息
         /// </summary>
-        public const string LocalizerKey = "localizer";
+        public const string LocalizerKey = "L";
 
         public virtual string Type => GetType().FullName;
 
@@ -26,39 +27,21 @@ namespace LINGYUN.Abp.Notifications
         {
             get
             {
-                if(Properties.TryGetValue(key, out object @obj))
-                {
-                    return @obj;
-                }
-                return null;
+                return this.GetProperty(key);
             }
-            set { Properties[key] = value; }
-        }
-
-        public Dictionary<string, object> Properties
-        {
-            get { return _properties; }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                foreach (var keyValue in value)
-                {
-                    if (!_properties.ContainsKey(keyValue.Key))
-                    {
-                        _properties[keyValue.Key] = keyValue.Value;
-                    }
-                }
+                this.SetProperty(key, value);
             }
         }
-        private readonly Dictionary<string, object> _properties;
+
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
 
         public NotificationData()
         {
-            _properties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
+
             TrySetData(LocalizerKey, false);
         }
         /// <summary>
@@ -73,7 +56,7 @@ namespace LINGYUN.Abp.Notifications
         public NotificationData WriteLocalizedData(
             LocalizableStringInfo title,
             LocalizableStringInfo message,
-            DateTime createTime, 
+            DateTime createTime,
             string formUser,
             LocalizableStringInfo description = null)
         {
@@ -146,7 +129,7 @@ namespace LINGYUN.Abp.Notifications
         {
             var data = ToStandardData(sourceData);
 
-            foreach(var property in sourceData.Properties)
+            foreach (var property in sourceData.ExtraProperties)
             {
                 if (property.Key.StartsWith(prefix))
                 {
@@ -159,19 +142,11 @@ namespace LINGYUN.Abp.Notifications
 
         public object TryGetData(string key)
         {
-            if (Properties.TryGetValue(key, out object value))
-            {
-                return value;
-            }
-            return null;
+            return this.GetProperty(key);
         }
         public void TrySetData(string key, object value)
         {
-            if (value != null && !Properties.ContainsKey(key))
-            {
-                Properties.Add(key, value);
-            }
-            Properties[key] = value;
+            this.SetProperty(key, value);
         }
         /// <summary>
         /// 需要本地化

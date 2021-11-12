@@ -11,13 +11,16 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual Guid ReceiveUserId { get; set; }
 
         protected UserMessage() { }
-        public UserMessage(long id, Guid sendUserId, string sendUserName, string content, MessageType type = MessageType.Text)
-            : base(id, sendUserId, sendUserName, content, type)
-        {
-
-        }
-
-        public void SendToUser(Guid receiveUserId)
+        public UserMessage(
+            long id,
+            Guid sendUserId,
+            string sendUserName,
+            Guid receiveUserId,
+            string content,
+            MessageType type = MessageType.Text,
+            MessageSourceTye source = MessageSourceTye.User,
+            Guid? tenantId = null)
+            : base(id, sendUserId, sendUserName, content, type, source, tenantId)
         {
             ReceiveUserId = receiveUserId;
         }

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Timing;
@@ -25,8 +24,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         private readonly ICurrentTenant _currentTenant;
 
-        private readonly IJsonSerializer _jsonSerializer;
-
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         private readonly INotificationRepository _notificationRepository;
@@ -39,7 +36,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             IClock clock,
             IObjectMapper objectMapper,
             ICurrentTenant currentTenant,
-            IJsonSerializer jsonSerializer,
             IUnitOfWorkManager unitOfWorkManager,
             INotificationRepository notificationRepository,
             IUserSubscribeRepository userSubscribeRepository,
@@ -49,7 +45,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             _clock = clock;
             _objectMapper = objectMapper;
             _currentTenant = currentTenant;
-            _jsonSerializer = jsonSerializer;
             _unitOfWorkManager = unitOfWorkManager;
             _notificationRepository = notificationRepository;
             _userSubscribeRepository = userSubscribeRepository;
@@ -57,9 +52,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         public virtual async Task ChangeUserNotificationReadStateAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             Guid userId,
-            long notificationId, 
+            long notificationId,
             NotificationReadState readState,
             CancellationToken cancellationToken = default)
         {
@@ -72,7 +67,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     notification.ChangeReadState(readState);
                     await _userNotificationRepository.UpdateAsync(notification);
 
-                    await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.CompleteAsync();
                 }
             }
         }
@@ -87,7 +82,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 var notify = await _notificationRepository.GetByIdAsync(notification.GetId(), cancellationToken);
                 await _notificationRepository.DeleteAsync(notify.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
@@ -99,7 +94,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             {
                 await _notificationRepository.DeleteExpritionAsync(batchCount, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
@@ -117,7 +112,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userNotificationRepository
                     .DeleteAsync(notify.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
@@ -132,13 +127,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userSubscribeRepository
                     .DeleteUserSubscriptionAsync(notificationName, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task DeleteUserSubscriptionAsync(
             Guid? tenantId,
-            Guid userId, 
+            Guid userId,
             string notificationName,
             CancellationToken cancellationToken = default)
         {
@@ -150,12 +145,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userSubscribeRepository
                     .DeleteAsync(userSubscribe.Id, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task DeleteUserSubscriptionAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             IEnumerable<UserIdentifier> identifiers,
             string notificationName,
             CancellationToken cancellationToken = default)
@@ -166,12 +161,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userSubscribeRepository
                     .DeleteUserSubscriptionAsync(notificationName, identifiers.Select(ids => ids.UserId), cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task<NotificationInfo> GetNotificationOrNullAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             long notificationId,
             CancellationToken cancellationToken = default)
         {
@@ -185,7 +180,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             string notificationName,
             IEnumerable<UserIdentifier> identifiers = null,
             CancellationToken cancellationToken = default)
@@ -262,7 +257,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -317,11 +312,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (_currentTenant.Change(notification.TenantId))
             {
                 var notify = new Notification(
-                    notification.GetId(), 
+                    notification.GetId(),
                     notification.Name,
                     notification.Data.GetType().AssemblyQualifiedName,
-                    _jsonSerializer.Serialize(notification.Data), 
-                    notification.Severity, notification.TenantId)
+                    notification.Data,
+                    notification.Severity,
+                    notification.TenantId)
                 {
                     CreationTime = _clock.Now,
                     Type = notification.Type,
@@ -331,14 +327,14 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
                 await _notificationRepository.InsertAsync(notify, cancellationToken: cancellationToken);
 
-                notification.Id = notify.NotificationId.ToString();
+                notification.SetId(notify.NotificationId);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task InsertUserNotificationAsync(
-            NotificationInfo notification, 
+            NotificationInfo notification,
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -349,7 +345,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userNotificationRepository
                     .InsertAsync(userNotification, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
@@ -371,12 +367,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userSubscribeRepository
                     .InsertAsync(userSubscription, cancellationToken: cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task InsertUserSubscriptionAsync(
-            Guid? tenantId, 
+            Guid? tenantId,
             IEnumerable<UserIdentifier> identifiers,
             string notificationName,
             CancellationToken cancellationToken = default)
@@ -394,23 +390,23 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userSubscribeRepository
                     .InsertUserSubscriptionAsync(userSubscribes, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
 
         public virtual async Task<bool> IsSubscribedAsync(
-            Guid? tenantId, 
-            Guid userId, 
+            Guid? tenantId,
+            Guid userId,
             string notificationName,
             CancellationToken cancellationToken = default)
         {
             using (_currentTenant.Change(tenantId))
-            return await _userSubscribeRepository
-                    .UserSubscribeExistsAysnc(notificationName, userId, cancellationToken);
+                return await _userSubscribeRepository
+                        .UserSubscribeExistsAysnc(notificationName, userId, cancellationToken);
         }
 
         public virtual async Task InsertUserNotificationsAsync(
-            NotificationInfo notification, 
+            NotificationInfo notification,
             IEnumerable<Guid> userIds,
             CancellationToken cancellationToken = default)
         {
@@ -431,7 +427,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 await _userNotificationRepository
                     .InsertUserNotificationsAsync(userNofitications, cancellationToken);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
     }

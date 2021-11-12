@@ -12,12 +12,16 @@ namespace LINGYUN.Abp.MessageService.Groups
         public virtual long GroupId { get; protected set; }
 
         protected GroupMessage() { }
-        public GroupMessage(long id, Guid sendUserId, string sendUserName, string content, MessageType type = MessageType.Text)
-            : base(id, sendUserId, sendUserName, content, type)
-        {
-
-        }
-        public void SendToGroup(long groupId)
+        public GroupMessage(
+            long id,
+            Guid sendUserId,
+            string sendUserName,
+            long groupId,
+            string content,
+            MessageType type = MessageType.Text,
+            MessageSourceTye source = MessageSourceTye.User,
+            Guid? tenantId = null)
+            : base(id, sendUserId, sendUserName, content, type, source, tenantId)
         {
             GroupId = groupId;
         }

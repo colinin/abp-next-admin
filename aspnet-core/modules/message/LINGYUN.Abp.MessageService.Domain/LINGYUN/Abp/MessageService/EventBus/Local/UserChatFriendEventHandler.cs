@@ -3,6 +3,7 @@ using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.EventBus.Local
 {
-    public class UserChatFriendEventHandler : 
+    public class UserChatFriendEventHandler :
         ILocalEventHandler<EntityCreatedEventData<UserChatFriend>>,
         ILocalEventHandler<EntityDeletedEventData<UserChatFriend>>,
         ILocalEventHandler<EntityUpdatedEventData<UserChatFriend>>,
@@ -105,7 +106,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                         "Notifications:RequestAddNewFriend",
                         new Dictionary<object, object> { { "name", _currentUser.UserName } }),
-                    DateTime.Now, 
+                    DateTime.Now,
                     _currentUser.UserName,
                     new LocalizableStringInfo(
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
