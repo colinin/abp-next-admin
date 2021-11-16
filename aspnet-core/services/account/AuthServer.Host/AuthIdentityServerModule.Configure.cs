@@ -100,9 +100,9 @@ namespace AuthServer.Host
                 // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
                 options.KeyPrefix = "LINGYUN.Abp.Application";
                 // 滑动过期30天
-                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30);
+                options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30d);
                 // 绝对过期60天
-                options.GlobalCacheEntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+                options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60d);
             });
 
             Configure<RedisCacheOptions>(options =>
@@ -175,8 +175,11 @@ namespace AuthServer.Host
                 var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
                 services
                     .AddDataProtection()
-                    .PersistKeysToStackExchangeRedis(redis, "AuthServer-Protection-Keys");
+                    .SetApplicationName("LINGYUN.Abp.Application")
+                    .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
             }
+
+            services.AddSameSiteCookiePolicy();
         }
         private void ConfigureMultiTenancy(IConfiguration configuration)
         {
