@@ -92,10 +92,6 @@ namespace AuthServer.Host
             ConfigureMultiTenancy(configuration);
             ConfigureCors(context.Services, configuration);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-            context.Services.ConfigureNonBreakingSameSiteCookies();
-
-            
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
