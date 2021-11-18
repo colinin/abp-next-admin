@@ -6,6 +6,12 @@ namespace LINGYUN.Abp.Identity
     public interface IMyProfileAppService : IApplicationService
     {
         /// <summary>
+        /// 设置声明
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task SetClaimAsync(IdentityUserClaimSetDto input);
+        /// <summary>
         /// 改变二次认证
         /// </summary>
         /// <param name="input"></param>

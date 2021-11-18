@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
@@ -33,6 +34,29 @@ namespace LINGYUN.Abp.Identity
             IdentityOptions = identityOptions;
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
+        }
+
+        public virtual async Task SetClaimAsync(IdentityUserClaimSetDto input)
+        {
+            await IdentityOptions.SetAsync();
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            var newClaim = new Claim(input.ClaimType, input.ClaimValue);
+            var currentClaim = user.FindClaim(newClaim);
+            if (currentClaim != null)
+            {
+                // Replace With Claim Value Empty?
+                // (await UserManager.ReplaceClaimAsync(user, currentClaim.ToClaim(), newClaim)).CheckErrors();
+                user.ReplaceClaim(currentClaim.ToClaim(), newClaim);
+            }
+            else
+            {
+                // (await UserManager.AddClaimAsync(user, newClaim)).CheckErrors();
+                user.AddClaim(GuidGenerator, newClaim);
+            }
+           (await UserManager.UpdateAsync(user)).CheckErrors();
+
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)

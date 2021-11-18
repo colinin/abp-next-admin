@@ -21,6 +21,14 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpPut]
+        [Route("/claims")]
+        public virtual async Task SetClaimAsync(IdentityUserClaimSetDto input)
+        {
+            await MyProfileAppService.SetClaimAsync(input);
+        }
+
+
+        [HttpPut]
         [Route("change-two-factor")]
         public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)
         {
