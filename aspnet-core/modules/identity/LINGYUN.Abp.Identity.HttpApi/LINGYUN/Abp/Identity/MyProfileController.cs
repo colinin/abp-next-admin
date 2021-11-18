@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpPut]
-        [Route("/claims")]
+        [Route("claims")]
         public virtual async Task SetClaimAsync(IdentityUserClaimSetDto input)
         {
             await MyProfileAppService.SetClaimAsync(input);
