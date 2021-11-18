@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Identity
                 origanzationUnit.RemoveRole(id);
             }
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.Identity
         {
             await OrganizationUnitManager.RemoveRoleFromOrganizationUnitAsync(id, ouId);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         #endregion
@@ -88,7 +88,7 @@ namespace LINGYUN.Abp.Identity
             role.AddClaim(GuidGenerator, claim);
             await IdentityRoleRepository.UpdateAsync(role);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         [Authorize(IdentityPermissions.Roles.ManageClaims)]
@@ -103,7 +103,7 @@ namespace LINGYUN.Abp.Identity
 
                 await IdentityRoleRepository.UpdateAsync(role);
 
-                await CurrentUnitOfWork.SaveChangesAsync();
+                await CurrentUnitOfWork.CompleteAsync();
             }
         }
 
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.Identity
 
             await IdentityRoleRepository.UpdateAsync(role);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         #endregion

@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
             var persistedGrant = await PersistentGrantRepository.GetAsync(id);
 
             await PersistentGrantRepository.DeleteAsync(persistedGrant);
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         public virtual async Task<PersistedGrantDto> GetAsync(Guid id)

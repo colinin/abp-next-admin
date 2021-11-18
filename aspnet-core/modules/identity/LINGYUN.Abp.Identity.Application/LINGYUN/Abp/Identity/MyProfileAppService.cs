@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.Identity
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeDto input)
@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.Identity
             // 更换手机号
             (await UserManager.ChangePhoneNumberAsync(user, input.NewPhoneNumber, input.Code)).CheckErrors();
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);

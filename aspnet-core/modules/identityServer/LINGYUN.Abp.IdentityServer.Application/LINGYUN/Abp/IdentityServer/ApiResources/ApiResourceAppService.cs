@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
             apiResource = await ApiResourceRepository.InsertAsync(apiResource);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
         }
@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
             apiResource = await ApiResourceRepository.UpdateAsync(apiResource);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
         }
@@ -84,7 +84,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             var apiResource = await ApiResourceRepository.GetAsync(id);
             await ApiResourceRepository.DeleteAsync(apiResource);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         protected virtual async Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
