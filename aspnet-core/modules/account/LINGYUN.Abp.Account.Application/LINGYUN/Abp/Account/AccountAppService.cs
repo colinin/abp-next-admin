@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.Account
             var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
             (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public virtual async Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
@@ -168,7 +168,7 @@ namespace LINGYUN.Abp.Account
 
                     await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
 
-                    await CurrentUnitOfWork.CompleteAsync();
+                    await CurrentUnitOfWork.SaveChangesAsync();
 
                     return;
                 }
@@ -244,7 +244,7 @@ namespace LINGYUN.Abp.Account
             // 移除缓存项
             await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)

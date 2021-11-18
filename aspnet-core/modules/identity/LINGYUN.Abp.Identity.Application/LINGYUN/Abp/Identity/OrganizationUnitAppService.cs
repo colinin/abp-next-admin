@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.Identity
             input.MapExtraPropertiesTo(origanizationUnit);
 
             await OrganizationUnitManager.CreateAsync(origanizationUnit);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
         }
@@ -198,7 +198,7 @@ namespace LINGYUN.Abp.Identity
             input.MapExtraPropertiesTo(origanizationUnit);
 
             await OrganizationUnitManager.UpdateAsync(origanizationUnit);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
         }
@@ -215,7 +215,7 @@ namespace LINGYUN.Abp.Identity
                 await UserManager.AddToOrganizationUnitAsync(user, origanizationUnit);
             }
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
@@ -230,7 +230,7 @@ namespace LINGYUN.Abp.Identity
                 await OrganizationUnitManager.AddRoleToOrganizationUnitAsync(role, origanizationUnit);
             }
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }

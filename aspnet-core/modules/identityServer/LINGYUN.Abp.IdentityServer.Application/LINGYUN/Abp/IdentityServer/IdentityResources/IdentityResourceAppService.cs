@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
                 input.ShowInDiscoveryDocument);
             await UpdateApiResourceByInputAsync(identityResource, input);
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             identityResource = await IdentityResourceRepository.InsertAsync(identityResource);
 
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             await UpdateApiResourceByInputAsync(identityResource, input);
             identityResource = await IdentityResourceRepository.UpdateAsync(identityResource);
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
         }

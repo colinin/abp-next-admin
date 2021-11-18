@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.Identity
 
             await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds);
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.Identity
         {
             await UserManager.RemoveFromOrganizationUnitAsync(id, ouId);
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         #endregion
@@ -80,7 +80,7 @@ namespace LINGYUN.Abp.Identity
             user.AddClaim(GuidGenerator, claim);
             (await UserManager.UpdateAsync(user)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(IdentityPermissions.Users.ManageClaims)]
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Identity
             user.ReplaceClaim(oldClaim, newClaim);
             (await UserManager.UpdateAsync(user)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(IdentityPermissions.Users.ManageClaims)]
@@ -102,7 +102,7 @@ namespace LINGYUN.Abp.Identity
             user.RemoveClaim(new Claim(input.ClaimType, input.ClaimValue));
             (await UserManager.UpdateAsync(user)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         #endregion
@@ -144,7 +144,7 @@ namespace LINGYUN.Abp.Identity
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
@@ -158,7 +158,7 @@ namespace LINGYUN.Abp.Identity
             var endDate = new DateTimeOffset(Clock.Now).AddSeconds(seconds);
             (await UserManager.SetLockoutEndDateAsync(user, endDate)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
@@ -167,7 +167,7 @@ namespace LINGYUN.Abp.Identity
             var user = await GetUserAsync(id);
             (await UserManager.SetLockoutEndDateAsync(user, null)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         protected virtual async Task<IdentityUser> GetUserAsync(Guid id)
