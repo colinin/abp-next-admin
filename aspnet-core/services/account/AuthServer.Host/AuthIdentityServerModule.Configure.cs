@@ -1,4 +1,6 @@
-﻿using DotNetCore.CAP;
+﻿using AuthServer.IdentityResources;
+using DotNetCore.CAP;
+using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -85,6 +87,15 @@ namespace AuthServer.Host
                 options.UseMySQL();
             });
         }
+
+        private void ConfigureDataSeeder()
+        {
+            Configure<CustomIdentityResourceDataSeederOptions>(options =>
+            {
+                options.Resources.Add(new CustomIdentityResources.AvatarUrl());
+            });
+        }
+
         private void ConfigureJsonSerializer()
         {
             // 中文序列化的编码问题

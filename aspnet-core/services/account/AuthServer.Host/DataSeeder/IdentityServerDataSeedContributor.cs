@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IdentityServer;
+using LINGYUN.Abp.IdentityServer.IdentityResources;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace AuthServer.DataSeeder
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IApiScopeRepository _apiScopeRepository;
         private readonly IClientRepository _clientRepository;
+        private readonly ICustomIdentityResourceDataSeeder _customIdentityResourceDataSeeder;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IWeChatResourceDataSeeder _weChatResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
@@ -38,6 +40,7 @@ namespace AuthServer.DataSeeder
             IApiResourceRepository apiResourceRepository,
             IWeChatResourceDataSeeder weChatResourceDataSeeder,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
+            ICustomIdentityResourceDataSeeder customIdentityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant)
         {
@@ -48,8 +51,9 @@ namespace AuthServer.DataSeeder
             _apiResourceRepository = apiResourceRepository;
             _weChatResourceDataSeeder = weChatResourceDataSeeder;
             _identityResourceDataSeeder = identityResourceDataSeeder;
+            _customIdentityResourceDataSeeder = customIdentityResourceDataSeeder;
             _guidGenerator = guidGenerator;
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
@@ -64,6 +68,7 @@ namespace AuthServer.DataSeeder
             using (_currentTenant.Change(context?.TenantId))
             {
                 await _identityResourceDataSeeder.CreateStandardResourcesAsync();
+                await _customIdentityResourceDataSeeder.CreateCustomResourcesAsync();
                 await CreateWeChatClaimTypeAsync();
                 await CreateApiResourcesAsync();
                 await CreateApiScopesAsync();
