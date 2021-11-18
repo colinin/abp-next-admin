@@ -3,18 +3,24 @@ using DotNetCore.CAP.Serialization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Buffers;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 
 namespace LINGYUN.Abp.EventBus.CAP
 {
     public class AbpCapSerializer : ISerializer
     {
+        private readonly IJsonSerializer _jsonSerializer;
         private readonly AbpSystemTextJsonSerializerOptions _jsonSerializerOptions;
 
-        public AbpCapSerializer(IOptions<AbpSystemTextJsonSerializerOptions> options)
+        public AbpCapSerializer(
+            IJsonSerializer jsonSerializer, 
+            IOptions<AbpSystemTextJsonSerializerOptions> options)
         {
+            _jsonSerializer = jsonSerializer;
             _jsonSerializerOptions = options.Value;
         }
 
@@ -29,8 +35,9 @@ namespace LINGYUN.Abp.EventBus.CAP
             {
                 return Task.FromResult(new TransportMessage(message.Headers, null));
             }
-
-            var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(message.Value, _jsonSerializerOptions.JsonSerializerOptions);
+            var messageStr = _jsonSerializer.Serialize(message.Value);
+            var jsonBytes = Encoding.UTF8.GetBytes(messageStr);
+            // var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(message.Value, _jsonSerializerOptions.JsonSerializerOptions);
             return Task.FromResult(new TransportMessage(message.Headers, jsonBytes));
         }
 
@@ -41,19 +48,23 @@ namespace LINGYUN.Abp.EventBus.CAP
                 return Task.FromResult(new Message(transportMessage.Headers, null));
             }
 
-            var obj = JsonSerializer.Deserialize(transportMessage.Body, valueType, _jsonSerializerOptions.JsonSerializerOptions);
+            var messageBytes = Encoding.UTF8.GetString(transportMessage.Body);
+            var obj = _jsonSerializer.Deserialize(valueType, messageBytes);
+            // var obj = JsonSerializer.Deserialize(transportMessage.Body, valueType, _jsonSerializerOptions.JsonSerializerOptions);
 
             return Task.FromResult(new Message(transportMessage.Headers, obj));
         }
 
         public string Serialize(Message message)
         {
-            return JsonSerializer.Serialize(message, _jsonSerializerOptions.JsonSerializerOptions);
+            return _jsonSerializer.Serialize(message);
+            // return JsonSerializer.Serialize(message, _jsonSerializerOptions.JsonSerializerOptions);
         }
 
         public Message Deserialize(string json)
         {
-            return JsonSerializer.Deserialize<Message>(json, _jsonSerializerOptions.JsonSerializerOptions);
+            return _jsonSerializer.Deserialize<Message>(json);
+            // return JsonSerializer.Deserialize<Message>(json, _jsonSerializerOptions.JsonSerializerOptions);
         }
 
         public object Deserialize(object value, Type valueType)
