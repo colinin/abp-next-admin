@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
 
             await UpdateApiScopeByInputAsync(apiScope, input);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             apiScope = await ApiScopeRepository.InsertAsync(apiScope);
 
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
 
             await ApiScopeRepository.DeleteAsync(apiScope);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         public virtual async Task<ApiScopeDto> GetAsync(Guid id)
@@ -86,7 +86,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
             await UpdateApiScopeByInputAsync(apiScope, input);
             apiScope = await ApiScopeRepository.UpdateAsync(apiScope);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
         }

@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             client = await ClientRepository.InsertAsync(client);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             var client = await ClientRepository.GetAsync(id);
             await ClientRepository.DeleteAsync(client);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
         }
 
         public virtual async Task<ClientDto> GetAsync(Guid id)
@@ -312,7 +312,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
 
             client = await ClientRepository.UpdateAsync(client);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
@@ -445,7 +445,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             }
             client = await ClientRepository.InsertAsync(client);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.CompleteAsync();
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
