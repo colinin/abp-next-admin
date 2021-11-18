@@ -88,6 +88,7 @@ namespace AuthServer.Host
             ConfigureVirtualFileSystem();
             ConfigureLocalization();
             ConfigureAuditing();
+            ConfigureDataSeeder();
             ConfigureUrls(configuration);
             ConfigureMultiTenancy(configuration);
             ConfigureCors(context.Services, configuration);
