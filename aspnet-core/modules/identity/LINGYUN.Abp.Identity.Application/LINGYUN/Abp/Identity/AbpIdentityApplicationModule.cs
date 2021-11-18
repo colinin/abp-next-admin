@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
-using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.Identity
 {
@@ -13,7 +10,7 @@ namespace LINGYUN.Abp.Identity
         typeof(AbpIdentityDomainModule))]
     public class AbpIdentityApplicationModule : AbpModule
     {
-        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+        // private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpIdentityApplicationModule>();
@@ -24,22 +21,22 @@ namespace LINGYUN.Abp.Identity
             });
         }
 
-        public override void PostConfigureServices(ServiceConfigurationContext context)
-        {
-            OneTimeRunner.Run(() =>
-            {
-                ObjectExtensionManager.Instance
-                    .AddOrUpdateProperty<string>(
-                        new[]
-                        {
-                            typeof(IdentityUserDto),
-                            typeof(IdentityUserCreateDto),
-                            typeof(IdentityUserUpdateDto),
-                            typeof(ProfileDto),
-                            typeof(UpdateProfileDto)
-                        },
-                        ExtensionIdentityUserConsts.AvatarUrlField);
-            });
-        }
+        //public override void PostConfigureServices(ServiceConfigurationContext context)
+        //{
+        //    OneTimeRunner.Run(() =>
+        //    {
+        //        ObjectExtensionManager.Instance
+        //            .AddOrUpdateProperty<string>(
+        //                new[]
+        //                {
+        //                    typeof(IdentityUserDto),
+        //                    typeof(IdentityUserCreateDto),
+        //                    typeof(IdentityUserUpdateDto),
+        //                    typeof(ProfileDto),
+        //                    typeof(UpdateProfileDto)
+        //                },
+        //                ExtensionIdentityUserConsts.AvatarUrlField);
+        //    });
+        //}
     }
 }

@@ -3,15 +3,17 @@ using System;
 using AuthServer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace AuthServer.Migrations
 {
     [DbContext(typeof(AuthServerHostMigrationsDbContext))]
-    partial class AuthServerHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211118030445_Remote-Field-AvatarUrl-With-IdentityUser")]
+    partial class RemoteFieldAvatarUrlWithIdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
