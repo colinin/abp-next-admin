@@ -2,7 +2,7 @@
 
 namespace AuthServer.Migrations
 {
-    public partial class RemoteFieldAvatarUrlWithIdentityUser : Migration
+    public partial class RemoveFieldAvatarUrlWithIdentityUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

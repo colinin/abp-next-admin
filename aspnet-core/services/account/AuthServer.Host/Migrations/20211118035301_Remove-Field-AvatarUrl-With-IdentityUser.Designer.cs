@@ -10,8 +10,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace AuthServer.Migrations
 {
     [DbContext(typeof(AuthServerHostMigrationsDbContext))]
-    [Migration("20211118030445_Remote-Field-AvatarUrl-With-IdentityUser")]
-    partial class RemoteFieldAvatarUrlWithIdentityUser
+    [Migration("20211118035301_Remove-Field-AvatarUrl-With-IdentityUser")]
+    partial class RemoveFieldAvatarUrlWithIdentityUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
