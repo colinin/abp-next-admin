@@ -59,7 +59,18 @@ namespace LINGYUN.Abp.Identity
             await CurrentUnitOfWork.CompleteAsync();
         }
 
-        public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)
+        public virtual async Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
+        {
+            await IdentityOptions.SetAsync();
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            return new TwoFactorEnabledDto
+            {
+                Enabled = await UserManager.GetTwoFactorEnabledAsync(user),
+            };
+        }
+
+        public virtual async Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
         {
             // Removed See: https://github.com/abpframework/abp/pull/7719
             //if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))

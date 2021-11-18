@@ -138,7 +138,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
-        public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, ChangeTwoFactorEnabledDto input)
+        public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, TwoFactorEnabledDto input)
         {
             var user = await GetUserAsync(id);
 
