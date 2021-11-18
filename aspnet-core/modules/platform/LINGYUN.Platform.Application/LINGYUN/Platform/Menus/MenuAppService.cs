@@ -121,7 +121,7 @@ namespace LINGYUN.Platform.Menus
                 }
             }
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Menu, MenuDto>(menu);
         }
@@ -188,7 +188,7 @@ namespace LINGYUN.Platform.Menus
             menu.IsPublic = input.IsPublic;
 
             await MenuManager.UpdateAsync(menu);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Menu, MenuDto>(menu);
         }

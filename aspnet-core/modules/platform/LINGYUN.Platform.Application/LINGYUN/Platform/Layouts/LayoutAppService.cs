@@ -40,7 +40,7 @@ namespace LINGYUN.Platform.Layouts
                 CurrentTenant.Id);
 
             layout = await LayoutRepository.InsertAsync(layout);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Layout, LayoutDto>(layout);
         }
@@ -56,7 +56,7 @@ namespace LINGYUN.Platform.Layouts
             //}
 
             await LayoutRepository.DeleteAsync(layout);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public virtual async Task<LayoutDto> GetAsync(Guid id)
@@ -113,7 +113,7 @@ namespace LINGYUN.Platform.Layouts
                 layout.Redirect = input.Redirect;
             }
             layout = await LayoutRepository.UpdateAsync(layout);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Layout, LayoutDto>(layout);
         }

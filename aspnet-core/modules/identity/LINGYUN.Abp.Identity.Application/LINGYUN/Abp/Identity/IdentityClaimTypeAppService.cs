@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Identity
                 input.ValueType
             );
             identityClaimType = await IdentityClaimTypeManager.CreateAsync(identityClaimType);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
         }
@@ -105,7 +105,7 @@ namespace LINGYUN.Abp.Identity
             }
 
             identityClaimType = await IdentityClaimTypeManager.UpdateAsync(identityClaimType);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
         }

@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.SettingManagement
                 await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
             });
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
@@ -86,7 +86,7 @@ namespace LINGYUN.Abp.SettingManagement
                     await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
                 });
 
-                await CurrentUnitOfWork.CompleteAsync();
+                await CurrentUnitOfWork.SaveChangesAsync();
             }
         }
 

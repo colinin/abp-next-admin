@@ -56,7 +56,7 @@ namespace LINGYUN.Abp.Identity
             }
            (await UserManager.UpdateAsync(user)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public virtual async Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
@@ -83,7 +83,7 @@ namespace LINGYUN.Abp.Identity
 
             (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeDto input)
@@ -129,7 +129,7 @@ namespace LINGYUN.Abp.Identity
             // 更换手机号
             (await UserManager.ChangePhoneNumberAsync(user, input.NewPhoneNumber, input.Code)).CheckErrors();
 
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);

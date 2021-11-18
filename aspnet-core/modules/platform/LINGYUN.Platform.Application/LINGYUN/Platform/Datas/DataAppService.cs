@@ -57,7 +57,7 @@ namespace LINGYUN.Platform.Datas
                 );
 
             data = await DataRepository.InsertAsync(data);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Data, DataDto>(data);
         }
@@ -129,7 +129,7 @@ namespace LINGYUN.Platform.Datas
             }
 
             data = await DataRepository.UpdateAsync(data);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Data, DataDto>(data);
         }
@@ -159,7 +159,7 @@ namespace LINGYUN.Platform.Datas
             dataItem.AllowBeNull = input.AllowBeNull;
 
             await DataRepository.UpdateAsync(data);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
@@ -182,7 +182,7 @@ namespace LINGYUN.Platform.Datas
                 input.AllowBeNull);
 
             await DataRepository.UpdateAsync(data);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
@@ -192,7 +192,7 @@ namespace LINGYUN.Platform.Datas
             data.RemoveItem(name);
 
             await DataRepository.UpdateAsync(data);
-            await CurrentUnitOfWork.CompleteAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }
