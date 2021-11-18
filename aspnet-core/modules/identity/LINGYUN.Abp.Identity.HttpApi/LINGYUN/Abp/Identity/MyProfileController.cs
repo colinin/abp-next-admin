@@ -27,10 +27,16 @@ namespace LINGYUN.Abp.Identity
             await MyProfileAppService.SetClaimAsync(input);
         }
 
+        [HttpGet]
+        [Route("two-factor")]
+        public virtual async Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
+        {
+            return await MyProfileAppService.GetTwoFactorEnabledAsync();
+        }
 
         [HttpPut]
         [Route("change-two-factor")]
-        public virtual async Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input)
+        public virtual async Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
         {
             await MyProfileAppService.ChangeTwoFactorEnabledAsync(input);
         }

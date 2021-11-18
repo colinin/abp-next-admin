@@ -12,11 +12,16 @@ namespace LINGYUN.Abp.Identity
         /// <returns></returns>
         Task SetClaimAsync(IdentityUserClaimSetDto input);
         /// <summary>
+        /// 获取二次认证状态
+        /// </summary>
+        /// <returns></returns>
+        Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync();
+        /// <summary>
         /// 改变二次认证
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task ChangeTwoFactorEnabledAsync(ChangeTwoFactorEnabledDto input);
+        Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input);
         /// <summary>
         /// 发送改变手机号验证码
         /// </summary>
