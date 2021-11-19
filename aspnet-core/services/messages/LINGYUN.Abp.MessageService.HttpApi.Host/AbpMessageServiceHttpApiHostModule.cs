@@ -7,7 +7,7 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
-using LINGYUN.Abp.Identity.WeChat;
+//using LINGYUN.Abp.Identity.WeChat;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
@@ -27,9 +27,9 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Identity.EntityFrameworkCore;
+//using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+//using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
@@ -42,12 +42,12 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpMessageServiceApplicationModule),
         typeof(AbpMessageServiceHttpApiModule),
-        typeof(AbpIdentityWeChatModule),
+        //typeof(AbpIdentityWeChatModule),
         typeof(AbpMessageServiceEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
+        //typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        //typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
