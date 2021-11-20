@@ -1,6 +1,10 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Languages": "Languages",
+    "Resources": "Resources",
+    "Texts": "Texts",
+
     "Delete": "Delete",
     "DisplayName:Any": "Any",
     "DisplayName:CreationTime": "Creation Time",

@@ -870,7 +870,7 @@ CREATE TABLE `appapigatewayglobalconfiguration`  (
 -- Records of appapigatewayglobalconfiguration
 -- ----------------------------
 INSERT INTO `appapigatewayglobalconfiguration` VALUES (1, '{}', 'f7973118f2c2425c8cc96b59883b99aa', 1260841964962947072, NULL, 'http://localhost:30000', 'HTTP', NULL, 0, 1, 'TEST-APP');
-I
+
 -- ----------------------------
 -- Table structure for appapigatewayheaders
 -- ----------------------------

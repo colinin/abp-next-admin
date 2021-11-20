@@ -1,2 +1,4 @@
 .vs
 LocalNuget
+*.DotSettings.user
+**/*.csproj.user

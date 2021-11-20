@@ -1,6 +1,10 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Languages": "语言",
+    "Resources": "资源",
+    "Texts": "文档",
+
     "Delete": "删除",
     "DisplayName:Any": "所有",
     "DisplayName:CreationTime": "创建时间",
