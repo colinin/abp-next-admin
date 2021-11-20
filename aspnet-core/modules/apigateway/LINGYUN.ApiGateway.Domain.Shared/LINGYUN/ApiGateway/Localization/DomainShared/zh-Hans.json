@@ -134,7 +134,7 @@
     "AddQueriesToRequest": "查询参数转换",
     "EnableRateLimiting": "启用流量控制",
     "RefreshList": "刷新列表",
-    "AddReoute": "添加路由",
+    "AddRoute": "添加路由",
     "EditRoute": "编辑路由",
     "DeleteSelection": "删除选择",
     "DeleteAll": "删除所有",
