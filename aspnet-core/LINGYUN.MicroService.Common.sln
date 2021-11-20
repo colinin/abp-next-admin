@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{02EA4E78-5891-43BC-944F-3E52FEE032E4}"
 EndProject
@@ -188,9 +188,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "modules\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{E16CCB14-E629-48E6-9603-53BBFF185318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DataProtection.Tests", "tests\LINGYUN.Abp.DataProtection.Tests\LINGYUN.Abp.DataProtection.Tests.csproj", "{FBE7D8CB-1D99-4342-A953-B9AB46E0B14D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.Tests", "tests\LINGYUN.Abp.DataProtection.Tests\LINGYUN.Abp.DataProtection.Tests.csproj", "{FBE7D8CB-1D99-4342-A953-B9AB46E0B14D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{2F556889-006C-4A9C-8CA3-E31200C06FC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Dapr", "modules\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{73C9A7E7-846D-49E2-B223-E705D6C48BE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -498,6 +500,10 @@ Global
 		{2F556889-006C-4A9C-8CA3-E31200C06FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F556889-006C-4A9C-8CA3-E31200C06FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F556889-006C-4A9C-8CA3-E31200C06FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73C9A7E7-846D-49E2-B223-E705D6C48BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C9A7E7-846D-49E2-B223-E705D6C48BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C9A7E7-846D-49E2-B223-E705D6C48BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C9A7E7-846D-49E2-B223-E705D6C48BE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -594,6 +600,7 @@ Global
 		{E16CCB14-E629-48E6-9603-53BBFF185318} = {A0910407-CE69-4DC8-9721-F4324C22EEA8}
 		{FBE7D8CB-1D99-4342-A953-B9AB46E0B14D} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{2F556889-006C-4A9C-8CA3-E31200C06FC9} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
+		{73C9A7E7-846D-49E2-B223-E705D6C48BE7} = {7FDFB22F-1BFF-4E05-9427-78B7A8461D50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}
