@@ -7,7 +7,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.SettingManagement
 {
-    [DependsOn(typeof(AbpDddApplicationModule))]
+    [DependsOn(typeof(AbpDddApplicationContractsModule))]
     [DependsOn(typeof(AbpSettingManagementDomainSharedModule))]
     public class AbpSettingManagementApplicationContractsModule : AbpModule
     {
