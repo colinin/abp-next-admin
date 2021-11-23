@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpPost]
         [Route("upload")]
-        public virtual async Task UploadAsync(UploadFileChunkInput input)
+        public virtual async Task UploadAsync([FromForm] UploadFileChunkInput input)
         {
             await _publicFileAppService.UploadAsync(input);
         }
@@ -46,11 +46,11 @@ namespace LINGYUN.Abp.OssManagement
 
 
         [HttpGet]
-        [Route("{name}")]
-        [Route("{name}/{process}")]
-        [Route("p/{path}/{name}")]
-        [Route("p/{path}/{name}/{process}")]
-        public virtual async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
+        [Route("{Name}")]
+        [Route("{Name}/{Process}")]
+        [Route("p/{Path}/{Name}")]
+        [Route("p/{Path}/{Name}/{Process}")]
+        public virtual async Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
         {
             return await _publicFileAppService.GetAsync(input);
         }
