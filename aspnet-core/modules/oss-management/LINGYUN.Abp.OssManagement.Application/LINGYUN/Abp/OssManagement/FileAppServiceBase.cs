@@ -116,7 +116,7 @@ namespace LINGYUN.Abp.OssManagement
             await ossContainer.DeleteObjectAsync(
                 GetCurrentBucket(),
                 HttpUtility.UrlDecode(input.Name),
-                GetCurrentPath(HttpUtility.UrlDecode(input.Path)));
+                GetCurrentPath(input.Path));
         }
 
         protected virtual string GetCurrentBucket()
@@ -126,6 +126,11 @@ namespace LINGYUN.Abp.OssManagement
 
         protected virtual string GetCurrentPath(string path)
         {
+            if (path.IsNullOrWhiteSpace())
+            {
+                return "";
+            }
+            path = HttpUtility.UrlDecode(path);
             path = path.RemovePreFix(".").RemovePreFix("/");
             return path;
         }
