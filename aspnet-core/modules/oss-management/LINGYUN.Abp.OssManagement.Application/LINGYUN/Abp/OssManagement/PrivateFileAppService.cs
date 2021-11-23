@@ -181,6 +181,10 @@ namespace LINGYUN.Abp.OssManagement
         {
             path = base.GetCurrentPath(path);
             var userId = CurrentUser.GetId().ToString("N");
+            if (path.IsNullOrWhiteSpace())
+            {
+                return userId;
+            }
             return path.StartsWith(userId) ? path : $"{userId}/{path}";
         }
     }

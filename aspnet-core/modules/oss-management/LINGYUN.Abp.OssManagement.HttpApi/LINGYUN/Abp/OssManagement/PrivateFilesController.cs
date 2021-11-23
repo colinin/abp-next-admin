@@ -15,7 +15,6 @@ namespace LINGYUN.Abp.OssManagement
     [Area("oss-management")]
     [Route("api/files/private")]
     [RemoteService(false)]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class PrivateFilesController : AbpController
     {
         private readonly IPrivateFileAppService _privateFileAppService;
