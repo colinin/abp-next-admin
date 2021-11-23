@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.OssManagement
         public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
             // 内容为空时建立目录
-            if (input.File.ContentLength.HasValue)
+            if (input.File == null || !input.File.ContentLength.HasValue)
             {
                 var oss = CreateOssContainer();
                 var request = new CreateOssObjectRequest(

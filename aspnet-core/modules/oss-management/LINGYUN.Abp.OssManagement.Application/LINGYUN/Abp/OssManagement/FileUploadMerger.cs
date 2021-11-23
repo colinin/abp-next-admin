@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.OssManagement
             LimitPolicy.Month)]
         public virtual async Task<OssObject> MergeAsync(CreateOssObjectInput input)
         {
-            if (!input.File.ContentLength.HasValue)
+            if (input.File == null || !input.File.ContentLength.HasValue)
             {
                 ThrowValidationException(_stringLocalizer["FileNotBeNullOrEmpty"], "File");
             }
