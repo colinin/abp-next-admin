@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpPost]
         [Route("upload")]
-        public virtual async Task UploadAsync(UploadFileChunkInput input)
+        public virtual async Task UploadAsync([FromForm] UploadFileChunkInput input)
         {
             await _service.UploadAsync(input);
         }
