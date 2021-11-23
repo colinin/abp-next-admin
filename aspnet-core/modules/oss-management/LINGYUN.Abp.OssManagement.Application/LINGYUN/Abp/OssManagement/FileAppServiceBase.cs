@@ -2,11 +2,14 @@
 using LINGYUN.Abp.OssManagement.Features;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.Features;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -33,7 +36,7 @@ namespace LINGYUN.Abp.OssManagement
                 new UploadFileChunkInput
                 {
                     Bucket = GetCurrentBucket(),
-                    Content = input.Content,
+                    File = input.File,
                     FileName = input.FileName,
                     TotalSize = input.TotalSize,
                     ChunkSize = input.ChunkSize,
@@ -51,9 +54,14 @@ namespace LINGYUN.Abp.OssManagement
             LimitPolicy.Month)]
         public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
         {
+            if (!input.File.ContentLength.HasValue)
+            {
+                ThrowValidationException(L["FileNotBeNullOrEmpty"], "File");
+            }
+
             await FileValidater.ValidationAsync(new UploadFile
             {
-                TotalSize = input.Content.Length,
+                TotalSize = input.File.ContentLength.Value,
                 FileName = input.Object
             });
 
@@ -62,7 +70,7 @@ namespace LINGYUN.Abp.OssManagement
             var createOssObjectRequest = new CreateOssObjectRequest(
                  GetCurrentBucket(),
                  HttpUtility.UrlDecode(input.Object),
-                 input.Content,
+                 input.File.GetStream(),
                  GetCurrentPath(HttpUtility.UrlDecode(input.Path)))
             {
                 Overwrite = input.Overwrite
@@ -91,7 +99,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.DownloadLimit,
             AbpOssManagementFeatureNames.OssObject.DownloadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<Stream> GetAsync(GetPublicFileInput input)
+        public virtual async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
             var ossObjectRequest = new GetOssObjectRequest(
                 GetCurrentBucket(),
@@ -106,7 +114,7 @@ namespace LINGYUN.Abp.OssManagement
             var ossContainer = OssContainerFactory.Create();
             var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
 
-            return ossObject.Content;
+            return new RemoteStreamContent(ossObject.Content);
         }
 
         public virtual async Task DeleteAsync(GetPublicFileInput input)
@@ -133,6 +141,15 @@ namespace LINGYUN.Abp.OssManagement
             path = HttpUtility.UrlDecode(path);
             path = path.RemovePreFix(".").RemovePreFix("/");
             return path;
+        }
+
+        private static void ThrowValidationException(string message, string memberName)
+        {
+            throw new AbpValidationException(message,
+                new List<ValidationResult>
+                {
+                    new ValidationResult(message, new[] {memberName})
+                });
         }
     }
 }

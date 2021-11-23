@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.OssManagement
@@ -63,7 +64,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.DownloadLimit,
             AbpOssManagementFeatureNames.OssObject.DownloadInterval,
             LimitPolicy.Month)]
-        public override async Task<Stream> GetAsync(GetPublicFileInput input)
+        public override async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
             await CheckPublicAccessAsync();
             await FeatureChecker.CheckEnabledAsync(AbpOssManagementFeatureNames.OssObject.DownloadFile);

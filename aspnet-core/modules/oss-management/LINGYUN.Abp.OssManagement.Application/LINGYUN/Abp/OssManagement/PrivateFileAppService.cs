@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
+using Volo.Abp.Content;
 using Volo.Abp.IO;
 using Volo.Abp.Users;
 
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize]
-        public override async Task<Stream> GetAsync(GetPublicFileInput input)
+        public override async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
             return await base.GetAsync(input);
         }

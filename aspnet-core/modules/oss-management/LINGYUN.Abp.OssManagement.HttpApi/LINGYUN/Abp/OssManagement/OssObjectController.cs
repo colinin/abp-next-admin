@@ -34,20 +34,9 @@ namespace LINGYUN.Abp.OssManagement
         [Route("upload")]
         [DisableAuditing]
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task UploadAsync([FromForm] UploadOssObjectInput input)
+        public virtual async Task UploadAsync(UploadFileChunkInput input)
         {
-            await FileUploader.UploadAsync(new UploadFileChunkInput
-            {
-                Path = input.Path,
-                Bucket = input.Bucket,
-                FileName = input.FileName,
-                TotalSize = input.TotalSize,
-                ChunkSize = input.ChunkSize,
-                ChunkNumber = input.ChunkNumber,
-                TotalChunks = input.TotalChunks,
-                CurrentChunkSize = input.CurrentChunkSize,
-                Content = input.File?.OpenReadStream(),
-            }, HttpContext.RequestAborted);
+            await FileUploader.UploadAsync(input);
         }
 
         [HttpDelete]

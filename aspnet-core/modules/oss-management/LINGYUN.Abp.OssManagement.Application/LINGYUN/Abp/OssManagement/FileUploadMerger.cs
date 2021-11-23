@@ -40,23 +40,23 @@ namespace LINGYUN.Abp.OssManagement
             LimitPolicy.Month)]
         public virtual async Task<OssObject> MergeAsync(CreateOssObjectInput input)
         {
-            if (input.Content.IsNullOrEmpty())
+            if (!input.File.ContentLength.HasValue)
             {
                 ThrowValidationException(_stringLocalizer["FileNotBeNullOrEmpty"], "File");
             }
 
             await _fileValidater.ValidationAsync(new UploadFile
             {
-                TotalSize = input.Content.Length,
-                FileName = input.Object
+                TotalSize = input.File.ContentLength.Value,
+                FileName = input.FileName
             });
 
             var oss = CreateOssContainer();
 
             var createOssObjectRequest = new CreateOssObjectRequest(
                 input.Bucket,
-                input.Object,
-                input.Content,
+                input.FileName,
+                input.File.GetStream(),
                 input.Path,
                 input.ExpirationTime)
             {
