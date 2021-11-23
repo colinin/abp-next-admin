@@ -14,6 +14,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -64,6 +65,11 @@ namespace LINGYUN.ApiGateway
 
         private void ConfigureJsonSerializer()
         {
+            // 统一时间日期格式
+            Configure<AbpJsonOptions>(options =>
+            {
+                options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+            });
             // 中文序列化的编码问题
             Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
