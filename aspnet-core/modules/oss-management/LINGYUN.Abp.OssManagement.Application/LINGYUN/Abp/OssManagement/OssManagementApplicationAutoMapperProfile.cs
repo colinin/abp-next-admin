@@ -12,6 +12,8 @@ namespace LINGYUN.Abp.OssManagement
 
             CreateMap<GetOssContainersResponse, OssContainersResultDto>();
             CreateMap<GetOssObjectsResponse, OssObjectsResultDto>();
+
+            CreateMap<FileShareCacheItem, MyFileShareDto>();
         }
     }
 }

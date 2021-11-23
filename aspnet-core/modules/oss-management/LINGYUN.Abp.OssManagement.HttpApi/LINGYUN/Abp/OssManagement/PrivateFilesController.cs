@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Http;
 using Volo.Abp.Validation;
@@ -69,6 +70,13 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [HttpGet]
+        [Route("search")]
+        public virtual async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
+        {
+            return await _privateFileAppService.GetListAsync(input);
+        }
+
+        [HttpGet]
         [Route("{name}")]
         [Route("{name}/{process}")]
         [Route("p/{path}/{name}")]
@@ -92,6 +100,20 @@ namespace LINGYUN.Abp.OssManagement
                     fileStream,
                     MimeTypes.GetByExtension(Path.GetExtension(input.Name))
                     );
+        }
+
+        [HttpGet]
+        [Route("share")]
+        public virtual async Task<ListResultDto<MyFileShareDto>> GetShareListAsync()
+        {
+            return await _privateFileAppService.GetShareListAsync();
+        }
+
+        [HttpPost]
+        [Route("share")]
+        public virtual async Task<FileShareDto> ShareAsync([FromBody] FileShareInput input)
+        {
+            return await _privateFileAppService.ShareAsync(input);
         }
 
         private static void ThrowValidationException(string message, string memberName)

@@ -1,33 +1,35 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.OssManagement.Features;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.OssManagement
 {
     public abstract class FileAppServiceBase : OssManagementApplicationServiceBase, IFileAppService
     {
-        private readonly IFileUploader _fileUploader;
-        private readonly IFileValidater _fileValidater;
-        private readonly IOssContainerFactory _ossContainerFactory;
+        protected IFileUploader FileUploader { get; }
+        protected IFileValidater FileValidater { get; }
+        protected IOssContainerFactory OssContainerFactory { get; }
 
         protected FileAppServiceBase(
             IFileUploader fileUploader,
             IFileValidater fileValidater,
             IOssContainerFactory ossContainerFactory)
         {
-            _fileUploader = fileUploader;
-            _fileValidater = fileValidater;
-            _ossContainerFactory = ossContainerFactory;
+            FileUploader = fileUploader;
+            FileValidater = fileValidater;
+            OssContainerFactory = ossContainerFactory;
         }
 
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
         public virtual async Task UploadAsync(UploadFileChunkInput input)
         {
-            await _fileUploader.UploadAsync(
+            await FileUploader.UploadAsync(
                 new UploadFileChunkInput
                 {
                     Bucket = GetCurrentBucket(),
@@ -49,13 +51,13 @@ namespace LINGYUN.Abp.OssManagement
             LimitPolicy.Month)]
         public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
         {
-            await _fileValidater.ValidationAsync(new UploadFile
+            await FileValidater.ValidationAsync(new UploadFile
             {
                 TotalSize = input.Content.Length,
                 FileName = input.Object
             });
 
-            var oss = _ossContainerFactory.Create();
+            var oss = OssContainerFactory.Create();
 
             var createOssObjectRequest = new CreateOssObjectRequest(
                  GetCurrentBucket(),
@@ -69,6 +71,19 @@ namespace LINGYUN.Abp.OssManagement
             var ossObject = await oss.CreateObjectAsync(createOssObjectRequest);
 
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
+        }
+
+        public virtual async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
+        {
+            var ossContainer = OssContainerFactory.Create();
+            var response = await ossContainer.GetObjectsAsync(
+                GetCurrentBucket(),
+                GetCurrentPath(HttpUtility.UrlDecode(input.Path)),
+                skipCount: 0,
+                maxResultCount: input.MaxResultCount);
+
+            return new ListResultDto<OssObjectDto>(
+                ObjectMapper.Map<List<OssObject>, List<OssObjectDto>>(response.Objects));
         }
 
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.DownloadFile)]
@@ -88,10 +103,20 @@ namespace LINGYUN.Abp.OssManagement
                 MD5 = true,
             };
 
-            var ossContainer = _ossContainerFactory.Create();
+            var ossContainer = OssContainerFactory.Create();
             var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
 
             return ossObject.Content;
+        }
+
+        public virtual async Task DeleteAsync(GetPublicFileInput input)
+        {
+            var ossContainer = OssContainerFactory.Create();
+
+            await ossContainer.DeleteObjectAsync(
+                GetCurrentBucket(),
+                HttpUtility.UrlDecode(input.Name),
+                GetCurrentPath(HttpUtility.UrlDecode(input.Path)));
         }
 
         protected virtual string GetCurrentBucket()
