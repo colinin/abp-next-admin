@@ -32,19 +32,9 @@ namespace LINGYUN.Abp.OssManagement
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
         public virtual async Task UploadAsync(UploadFileChunkInput input)
         {
-            await FileUploader.UploadAsync(
-                new UploadFileChunkInput
-                {
-                    Bucket = GetCurrentBucket(),
-                    File = input.File,
-                    FileName = input.FileName,
-                    TotalSize = input.TotalSize,
-                    ChunkSize = input.ChunkSize,
-                    ChunkNumber = input.ChunkNumber,
-                    TotalChunks = input.TotalChunks,
-                    CurrentChunkSize = input.CurrentChunkSize,
-                    Path = GetCurrentPath(HttpUtility.UrlDecode(input.Path))
-                });
+            input.Bucket = GetCurrentBucket();
+            input.Path = GetCurrentPath(HttpUtility.UrlDecode(input.Path));
+            await FileUploader.UploadAsync(input);
         }
 
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
@@ -54,7 +44,7 @@ namespace LINGYUN.Abp.OssManagement
             LimitPolicy.Month)]
         public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
         {
-            if (!input.File.ContentLength.HasValue)
+            if (input.File == null || !input.File.ContentLength.HasValue)
             {
                 ThrowValidationException(L["FileNotBeNullOrEmpty"], "File");
             }
