@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.OssManagement
         public string Name { get; }
         public string FullName { get; set; }
         public string Prefix { get; }
+        public string MD5{ get; }
         public long Size { get; }
         public Stream Content => _content;
         public DateTime? CreationDate { get; }
@@ -23,6 +24,7 @@ namespace LINGYUN.Abp.OssManagement
         public OssObject(
            string name,
            string prefix,
+           string md5,
            DateTime? creationDate = null,
            long size = 0,
            DateTime? lastModifiedDate = null,
@@ -31,6 +33,7 @@ namespace LINGYUN.Abp.OssManagement
         {
             Name = name;
             Prefix = prefix;
+            MD5 = md5;
             CreationDate = creationDate;
             LastModifiedDate = lastModifiedDate;
             Size = size;

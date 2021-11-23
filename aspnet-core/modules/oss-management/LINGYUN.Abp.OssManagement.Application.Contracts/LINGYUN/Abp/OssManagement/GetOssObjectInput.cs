@@ -11,5 +11,6 @@ namespace LINGYUN.Abp.OssManagement
 
         [Required]
         public string Object { get; set; }
+        public bool MD5 { get; set; }
     }
 }
