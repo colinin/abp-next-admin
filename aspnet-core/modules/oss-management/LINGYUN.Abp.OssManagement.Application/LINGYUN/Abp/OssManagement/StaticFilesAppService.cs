@@ -28,7 +28,10 @@ namespace LINGYUN.Abp.OssManagement
                 HttpUtility.UrlDecode(input.Bucket), // 需要处理特殊字符
                 HttpUtility.UrlDecode(input.Name),
                 HttpUtility.UrlDecode(input.Path),
-                HttpUtility.UrlDecode(input.Process));
+                HttpUtility.UrlDecode(input.Process))
+            {
+                MD5 = true,
+            };
 
             var ossContainer = OssContainerFactory.Create();
             var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);

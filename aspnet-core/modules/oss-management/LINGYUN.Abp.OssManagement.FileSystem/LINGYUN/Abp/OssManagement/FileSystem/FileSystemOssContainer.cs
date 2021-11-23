@@ -117,17 +117,22 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
 
                 DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
+                string fileMd5 = "";
                 FileMode fileMode = request.Overwrite ? FileMode.Create : FileMode.CreateNew;
                 using (var fileStream = File.Open(filePath, fileMode, FileAccess.ReadWrite))
                 {
                     await request.Content.CopyToAsync(fileStream);
 
+                    fileMd5 = fileStream.MD5();
+
                     await fileStream.FlushAsync();
                 }
+
                 var fileInfo = new FileInfo(filePath);
                 var ossObject = new OssObject(
                 fileInfo.Name,
                 objectPath,
+                fileMd5,
                 fileInfo.CreationTime,
                 fileInfo.Length,
                 fileInfo.LastWriteTime,
@@ -157,6 +162,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 var ossObject = new OssObject(
                 directoryInfo.Name.EnsureEndsWith('/'),
                 objectPath,
+                "",
                 directoryInfo.CreationTime,
                 0L,
                 directoryInfo.LastWriteTime,
@@ -267,6 +273,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 var ossObject = new OssObject(
                     directoryInfo.Name.EnsureEndsWith('/'),
                     objectPath,
+                    "",
                     directoryInfo.CreationTime,
                     0L,
                     directoryInfo.LastWriteTime,
@@ -283,9 +290,12 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             else
             {
                 var fileInfo = new FileInfo(filePath);
-                var ossObject = new OssObject(
+                using (var fileStream = File.OpenRead(filePath))
+                {
+                    var ossObject = new OssObject(
                     fileInfo.Name,
                     objectPath,
+                    request.MD5 ? fileStream.MD5() : "",
                     fileInfo.CreationTime,
                     fileInfo.Length,
                     fileInfo.LastWriteTime,
@@ -294,11 +304,10 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                     { "IsReadOnly",  fileInfo.IsReadOnly.ToString() },
                     { "LastAccessTime",  fileInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     })
-                {
-                    FullName = fileInfo.FullName.Replace(Environment.ContentRootPath, "")
-                };
-                using (var fileStream = File.OpenRead(filePath))
-                {
+                    {
+                        FullName = fileInfo.FullName.Replace(Environment.ContentRootPath, "")
+                    };
+
                     var memoryStream = new MemoryStream();
                     await fileStream.CopyToAsync(memoryStream);
                     ossObject.SetContent(memoryStream);
@@ -318,9 +327,9 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                             }
                         }
                     }
-                }
 
-                return ossObject;
+                    return ossObject;
+                }
             }
         }
 
@@ -470,6 +479,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 fileSystems.Select(x => new OssObject(
                     (x is DirectoryInfo) ? x.Name.EnsureEndsWith('/') : x.Name,
                     request.Prefix,
+                    request.MD5 ? (x as FileInfo)?.OpenRead().MD5() ?? "" : "",
                     x.CreationTime,
                     (x as FileInfo)?.Length ?? 0L,
                     x.LastWriteTime,

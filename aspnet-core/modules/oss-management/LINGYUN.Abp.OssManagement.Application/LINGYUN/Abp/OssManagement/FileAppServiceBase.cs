@@ -83,7 +83,10 @@ namespace LINGYUN.Abp.OssManagement
                 // 需要处理特殊字符
                 HttpUtility.UrlDecode(input.Name),
                 GetCurrentPath(HttpUtility.UrlDecode(input.Path)),
-                HttpUtility.UrlDecode(input.Process));
+                HttpUtility.UrlDecode(input.Process))
+            {
+                MD5 = true,
+            };
 
             var ossContainer = _ossContainerFactory.Create();
             var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);

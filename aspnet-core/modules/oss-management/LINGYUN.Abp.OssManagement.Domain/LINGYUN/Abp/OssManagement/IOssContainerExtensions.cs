@@ -58,10 +58,14 @@ namespace LINGYUN.Abp.OssManagement
             this IOssContainer ossContainer,
             string bucket,
             string @object,
-            string path = "")
+            string path = "",
+            bool md5 = false)
         {
             return await ossContainer.GetObjectAsync(
-                new GetOssObjectRequest(bucket, @object, path));
+                new GetOssObjectRequest(bucket, @object, path)
+                {
+                    MD5 = md5,
+                });
         }
 
         public static async Task<GetOssObjectsResponse> GetObjectsAsync(
@@ -71,11 +75,15 @@ namespace LINGYUN.Abp.OssManagement
             string marker = null, 
             string delimiter = null, 
             string encodingType = null,
+            bool md5 = false,
             int skipCount = 0,
             int maxResultCount = 10)
         {
             return await ossContainer.GetObjectsAsync(
-                new GetOssObjectsRequest(name, prefix, marker, delimiter, encodingType, skipCount, maxResultCount));
+                new GetOssObjectsRequest(name, prefix, marker, delimiter, encodingType, skipCount, maxResultCount)
+                {
+                    MD5 = md5,
+                });
         }
     }
 }

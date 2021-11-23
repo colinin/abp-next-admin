@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.OssManagement
         {
             var oss = CreateOssContainer();
 
-            var ossObject = await oss.GetObjectAsync(input.Bucket, input.Object, input.Path);
+            var ossObject = await oss.GetObjectAsync(input.Bucket, input.Object, input.Path, input.MD5);
 
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
         }

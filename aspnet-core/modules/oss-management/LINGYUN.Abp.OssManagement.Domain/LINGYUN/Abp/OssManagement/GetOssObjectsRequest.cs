@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.OssManagement
         public string EncodingType { get; }
         public int Current { get; }
         public int? MaxKeys { get; }
+        public bool MD5 { get; set; }
         public GetOssObjectsRequest(
             [NotNull] string bucketName,
             string prefix = null,

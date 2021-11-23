@@ -9,5 +9,6 @@ namespace LINGYUN.Abp.OssManagement
         public string Delimiter { get; set; }
         public string Marker { get; set; }
         public string EncodingType { get; set; }
+        public bool MD5 { get; set; }
     }
 }

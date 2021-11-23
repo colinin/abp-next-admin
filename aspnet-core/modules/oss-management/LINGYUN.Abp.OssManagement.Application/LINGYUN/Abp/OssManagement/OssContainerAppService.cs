@@ -56,7 +56,7 @@ namespace LINGYUN.Abp.OssManagement
 
             var ossObjectResponse = await oss.GetObjectsAsync(
                 input.Bucket, input.Prefix, input.Marker,
-                input.Delimiter, input.EncodingType,
+                input.Delimiter, input.EncodingType, input.MD5,
                 input.SkipCount, input.MaxResultCount);
 
             return ObjectMapper.Map<GetOssObjectsResponse, OssObjectsResultDto>(ossObjectResponse);

@@ -105,6 +105,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                     ? objectName.Replace(objectPath, "")
                     : objectName,
                 objectPath,
+                aliyunObject.ETag,
                 DateTime.Now,
                 aliyunObject.ContentLength,
                 DateTime.Now,
@@ -215,6 +216,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                     ? aliyunOssObject.Key.Replace(objectPath, "")
                     : aliyunOssObject.Key,
                 request.Path,
+                aliyunOssObject.Metadata.ETag,
                 aliyunOssObject.Metadata.LastModified,
                 aliyunOssObject.Metadata.ContentLength,
                 aliyunOssObject.Metadata.LastModified,
@@ -295,6 +297,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                                     ? x.Key.Replace(objectPath, "")
                                     : x.Key, // 去除目录名称
                                    request.Prefix,
+                                   x.ETag,
                                    x.LastModified,
                                    x.Size,
                                    x.LastModified,
@@ -316,6 +319,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                         .Select(x => new OssObject(
                             x.Replace(objectPath, ""),
                             request.Prefix,
+                            "",
                             null,
                             0L,
                             null,
