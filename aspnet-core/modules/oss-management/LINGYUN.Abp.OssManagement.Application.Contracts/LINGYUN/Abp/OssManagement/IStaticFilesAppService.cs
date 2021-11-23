@@ -1,11 +1,11 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
     public interface IStaticFilesAppService: IApplicationService
     {
-        Task<Stream> GetAsync(GetStaticFileInput input);
+        Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input);
     }
 }

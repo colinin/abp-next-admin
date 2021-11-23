@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Volo.Abp.Auditing;
+using Volo.Abp.Content;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
@@ -9,18 +10,19 @@ namespace LINGYUN.Abp.OssManagement
     {
         public string Bucket { get; set; }
         public string Path { get; set; }
-        public string Object { get; set; }
+        public string FileName { get; set; }
         public bool Overwrite { get; set; }
 
         [DisableAuditing]
         [DisableValidation]
-        public Stream Content { get; set; }
+        public IRemoteStreamContent File { get; set; }
+
         public TimeSpan? ExpirationTime { get; set; }
 
         public void SetContent(Stream content)
         {
-            Content = content;
-            Content?.Seek(0, SeekOrigin.Begin);
+            content.Seek(0, SeekOrigin.Begin);
+            File = new RemoteStreamContent(content);
         }
     }
 }

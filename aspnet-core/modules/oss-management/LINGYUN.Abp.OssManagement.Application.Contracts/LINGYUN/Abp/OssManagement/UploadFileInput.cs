@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
 using Volo.Abp.Auditing;
+using Volo.Abp.Content;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement
@@ -14,6 +14,6 @@ namespace LINGYUN.Abp.OssManagement
         [Required]
         [DisableAuditing]
         [DisableValidation]
-        public Stream Content { get; set; }
+        public IRemoteStreamContent File { get; set; }
     }
 }

@@ -1,21 +1,17 @@
 ﻿using LINGYUN.Abp.OssManagement.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Http;
-using Volo.Abp.Validation;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
+    [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/files/public")]
-    [RemoteService(false)]
-    public class PublicFilesController : AbpController
+    public class PublicFilesController : AbpController, IPublicFileAppService
     {
         private readonly IPublicFileAppService _publicFileAppService;
 
@@ -29,44 +25,16 @@ namespace LINGYUN.Abp.OssManagement
 
 
         [HttpPost]
-        [Route("upload")]
-        public virtual async Task UploadAsync([FromForm] UploadOssObjectInput input)
+        public virtual async Task<OssObjectDto> UploadAsync([FromForm] UploadFileInput input)
         {
-            await _publicFileAppService.UploadAsync(new UploadFileChunkInput
-            {
-                Path = input.Path,
-                FileName = input.FileName,
-                TotalSize = input.TotalSize,
-                ChunkSize = input.ChunkSize,
-                ChunkNumber = input.ChunkNumber,
-                TotalChunks = input.TotalChunks,
-                CurrentChunkSize = input.CurrentChunkSize,
-                Content = input.File?.OpenReadStream(),
-            });
+            return await _publicFileAppService.UploadAsync(input);
         }
 
         [HttpPost]
-        [Route("{path}")]
-        [Route("{path}/{name}")]
-        public virtual async Task<OssObjectDto> UploadAsync(string path, string name)
+        [Route("upload")]
+        public virtual async Task UploadAsync(UploadFileChunkInput input)
         {
-            if (Request.ContentLength <= 0)
-            {
-                ThrowValidationException(L["FileNotBeNullOrEmpty"], "File");
-            }
-
-            var file = Request.Form.Files[0];
-            var fileName = name ?? file.FileName;
-
-            var createOssObjectInput = new UploadFileInput
-            {
-                Path = path,
-                Object = fileName,
-                Content = file.OpenReadStream(),
-                Overwrite = true
-            };
-
-            return await _publicFileAppService.UploadAsync(createOssObjectInput);
+            await _publicFileAppService.UploadAsync(input);
         }
 
         [HttpGet]
@@ -76,39 +44,21 @@ namespace LINGYUN.Abp.OssManagement
             return await _publicFileAppService.GetListAsync(input);
         }
 
+
         [HttpGet]
         [Route("{name}")]
         [Route("{name}/{process}")]
         [Route("p/{path}/{name}")]
         [Route("p/{path}/{name}/{process}")]
-        public virtual async Task<IActionResult> GetAsync(string path, string name, string process)
+        public virtual async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
-            var input = new GetPublicFileInput
-            {
-                Name = name,
-                Path = path,
-                Process = process
-            };
-            var fileStream = await _publicFileAppService.GetAsync(input);
-
-            if (fileStream.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
-            return File(
-                    fileStream,
-                    MimeTypes.GetByExtension(Path.GetExtension(input.Name))
-                    );
+            return await _publicFileAppService.GetAsync(input);
         }
 
-        private static void ThrowValidationException(string message, string memberName)
+        [HttpDelete]
+        public virtual async Task DeleteAsync(GetPublicFileInput input)
         {
-            throw new AbpValidationException(message,
-                new List<ValidationResult>
-                {
-                    new ValidationResult(message, new[] {memberName})
-                });
+            await _publicFileAppService.DeleteAsync(input);
         }
     }
 }

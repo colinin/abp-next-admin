@@ -24,13 +24,13 @@ namespace LINGYUN.Abp.OssManagement
         public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
             // 内容为空时建立目录
-            if (input.Content.IsNullOrEmpty())
+            if (input.File.ContentLength.HasValue)
             {
                 var oss = CreateOssContainer();
                 var request = new CreateOssObjectRequest(
                     HttpUtility.UrlDecode(input.Bucket),
-                    HttpUtility.UrlDecode(input.Object),
-                    input.Content,
+                    HttpUtility.UrlDecode(input.FileName),
+                    Stream.Null,
                     HttpUtility.UrlDecode(input.Path));
                 var ossObject = await oss.CreateObjectAsync(request);
 

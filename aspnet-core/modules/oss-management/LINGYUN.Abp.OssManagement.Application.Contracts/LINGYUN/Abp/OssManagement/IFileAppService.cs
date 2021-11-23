@@ -1,7 +1,7 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.OssManagement
     {
         Task<OssObjectDto> UploadAsync(UploadFileInput input);
 
-        Task<Stream> GetAsync(GetPublicFileInput input);
+        Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input);
 
         Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input);
 
