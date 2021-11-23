@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Http;
 using Volo.Abp.Validation;
@@ -67,6 +68,13 @@ namespace LINGYUN.Abp.OssManagement
             };
 
             return await _publicFileAppService.UploadAsync(createOssObjectInput);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public virtual async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
+        {
+            return await _publicFileAppService.GetListAsync(input);
         }
 
         [HttpGet]
