@@ -384,11 +384,9 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
         {
             // 先定位检索的目录
             var filePath = CalculateFilePath(request.BucketName, request.Prefix);
-            if (!Directory.Exists(filePath))
-            {
-                throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-                // throw new ContainerNotFoundException($"Can't not found container {request.BucketName} in file system");
-            }
+            //fix BUG: 用户目录可能不存在，自动创建。
+            DirectoryHelper.CreateIfNotExists(filePath);
+
             // 目录也属于Oss对象,需要抽象的文件系统集合来存储
             var fileSystemNames = Directory.GetFileSystemEntries(filePath);
             int maxFilesCount = fileSystemNames.Length;

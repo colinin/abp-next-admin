@@ -133,7 +133,7 @@ namespace LINGYUN.Abp.MessageService
             // 路由
             app.UseConfiguredEndpoints();
 
-            SeedData(context);
+            //SeedData(context);
         }
     }
 }
