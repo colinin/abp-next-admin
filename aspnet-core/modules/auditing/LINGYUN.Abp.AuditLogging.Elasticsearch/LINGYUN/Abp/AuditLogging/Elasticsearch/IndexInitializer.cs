@@ -98,7 +98,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                                               .Date(p => p.Name(n => n.CreationTime).Format(dateTimeFormat)))));
                 if (indexCreateResponse.IsValid)
                 {
-
+                    Logger.LogWarning("Failed to initialize index and security log may not be retrieved.");
+                    Logger.LogWarning(indexCreateResponse.OriginalException.ToString());
                 }
             }
         }
