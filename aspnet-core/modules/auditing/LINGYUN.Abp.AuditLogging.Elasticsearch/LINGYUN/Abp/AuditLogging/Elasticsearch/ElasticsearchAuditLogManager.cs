@@ -11,8 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
@@ -21,27 +19,24 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
     {
         private readonly AbpAuditingOptions _auditingOptions;
         private readonly AbpElasticsearchOptions _elasticsearchOptions;
-        private readonly AbpAuditLoggingElasticsearchOptions _options;
-        private readonly ICurrentTenant _currentTenant;
+        private readonly IIndexNameNormalizer _indexNameNormalizer;
         private readonly IElasticsearchClientFactory _clientFactory;
         private readonly IAuditLogInfoToAuditLogConverter _converter;
 
         public ILogger<ElasticsearchAuditLogManager> Logger { protected get; set; }
 
         public ElasticsearchAuditLogManager(
-            ICurrentTenant currentTenant,
+            IIndexNameNormalizer indexNameNormalizer,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-            IOptionsSnapshot<AbpAuditLoggingElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory,
             IOptions<AbpAuditingOptions> auditingOptions,
             IAuditLogInfoToAuditLogConverter converter)
         {
-            _options = options.Value;
             _converter = converter;
             _clientFactory = clientFactory;
-            _currentTenant = currentTenant;
             _auditingOptions = auditingOptions.Value;
             _elasticsearchOptions = elasticsearchOptions.Value;
+            _indexNameNormalizer = indexNameNormalizer;
 
             Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
         }
@@ -330,13 +325,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
         protected virtual string CreateIndex()
         {
-            if (_currentTenant.IsAvailable)
-            {
-                return $"{_options.IndexPrefix}-audit-log-{_currentTenant.Id:N}";
-            }
-            return _options.IndexPrefix.IsNullOrWhiteSpace()
-                ? "audit-log"
-                : $"{_options.IndexPrefix}-audit-log";
+            return _indexNameNormalizer.NormalizeIndex("audit-log");
         }
 
         private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
