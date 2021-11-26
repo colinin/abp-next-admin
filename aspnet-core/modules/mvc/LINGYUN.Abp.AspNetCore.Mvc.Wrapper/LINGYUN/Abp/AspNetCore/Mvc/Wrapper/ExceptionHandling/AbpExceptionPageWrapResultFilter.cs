@@ -23,9 +23,9 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
     {
         protected override bool ShouldHandleException(PageHandlerExecutingContext context)
         {
-            if (!context.ActionDescriptor.CanWarpRsult())
+            if (context.ActionDescriptor.CanWarpRsult())
             {
-                return false;
+                return true;
             }
             return base.ShouldHandleException(context);
         }

@@ -26,9 +26,9 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
         {
             var wrapResultChecker = context.GetRequiredService<IWrapResultChecker>();
 
-            if (!wrapResultChecker.WrapOnException(context))
+            if (wrapResultChecker.WrapOnException(context))
             {
-                return false;
+                return true;
             }
             return base.ShouldHandleException(context);
         }
@@ -55,7 +55,6 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
 
             await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
 
-            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
             context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
             context.HttpContext.Response.StatusCode = (int)wrapResultOptions.HttpStatusCode;
 
