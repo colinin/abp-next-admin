@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.SecurityLog;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
@@ -20,25 +19,22 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
     {
         private readonly AbpSecurityLogOptions _securityLogOptions;
         private readonly AbpElasticsearchOptions _elasticsearchOptions;
-        private readonly AbpAuditLoggingElasticsearchOptions _options;
-        private readonly ICurrentTenant _currentTenant;
+        private readonly IIndexNameNormalizer _indexNameNormalizer;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IElasticsearchClientFactory _clientFactory;
 
         public ILogger<ElasticsearchSecurityLogManager> Logger { protected get; set; }
 
         public ElasticsearchSecurityLogManager(
-            ICurrentTenant currentTenant,
             IGuidGenerator guidGenerator,
+            IIndexNameNormalizer indexNameNormalizer,
             IOptions<AbpSecurityLogOptions> securityLogOptions,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-            IOptionsSnapshot<AbpAuditLoggingElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory)
         {
-            _options = options.Value;
-            _currentTenant = currentTenant;
             _guidGenerator = guidGenerator;
             _clientFactory = clientFactory;
+            _indexNameNormalizer = indexNameNormalizer;
             _securityLogOptions = securityLogOptions.Value;
             _elasticsearchOptions = elasticsearchOptions.Value;
 
@@ -240,14 +236,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
         protected virtual string CreateIndex()
         {
-            // TODO: 会出现索引很长的情况...
-            if (_currentTenant.IsAvailable)
-            {
-                return $"{_options.IndexPrefix}-security-log-{_currentTenant.Id:N}";
-            }
-            return _options.IndexPrefix.IsNullOrWhiteSpace()
-                ? "security-log"
-                : $"{_options.IndexPrefix}-security-log";
+            return _indexNameNormalizer.NormalizeIndex("security-log");
         }
 
         private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)

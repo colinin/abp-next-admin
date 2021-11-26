@@ -15,6 +15,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         {
             var configuration = context.Services.GetConfiguration();
             Configure<AbpAuditLoggingElasticsearchOptions>(configuration.GetSection("AuditLogging:Elasticsearch"));
+
+            context.Services.AddHostedService<IndexInitializerService>();
         }
     }
 }
