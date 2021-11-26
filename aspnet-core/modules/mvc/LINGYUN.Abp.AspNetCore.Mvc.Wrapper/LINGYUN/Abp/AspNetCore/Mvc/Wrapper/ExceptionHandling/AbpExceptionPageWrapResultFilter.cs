@@ -21,15 +21,6 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
     [ExposeServices(typeof(AbpExceptionPageFilter))]
     public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransientDependency
     {
-        protected override bool ShouldHandleException(PageHandlerExecutingContext context)
-        {
-            if (context.ActionDescriptor.CanWarpRsult())
-            {
-                return true;
-            }
-            return base.ShouldHandleException(context);
-        }
-
         protected override async Task HandleAndWrapException(PageHandlerExecutedContext context)
         {
             var wrapResultChecker = context.GetRequiredService<IWrapResultChecker>();

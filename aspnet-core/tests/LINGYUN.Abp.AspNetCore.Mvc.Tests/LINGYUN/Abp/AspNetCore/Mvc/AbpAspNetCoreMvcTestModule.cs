@@ -15,6 +15,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
+using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -84,6 +85,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc
                 options.IgnoreControllers.Add<AbpApiDefinitionController>();
                 // api/abp/application-configuration
                 options.IgnoreReturnTypes.Add<ApplicationConfigurationDto>();
+                options.IgnoreReturnTypes.Add<IRemoteStreamContent>();
 
                 options.IgnorePrefixUrls.Add("/api/dont/wrap-result-test");
 

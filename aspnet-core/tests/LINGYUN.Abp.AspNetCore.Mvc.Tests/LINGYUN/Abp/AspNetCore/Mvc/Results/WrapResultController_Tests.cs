@@ -12,6 +12,14 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
     public class WrapResultController_Tests : AbpAspNetCoreMvcTestBase
     {
         [Fact]
+        public async Task Should_Return_Not_Wrap_Result_For_Abp_Remote_Stream_Content()
+        {
+            var result = await GetResponseAsStringAsync("/api/wrap-result-test/get-text");
+            result.ShouldNotBeNull();
+            result.ShouldBe("text");
+        }
+
+        [Fact]
         public async Task Should_Return_Not_Wrap_Result_For_Abp_Api_Definition()
         {
             var result = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition");

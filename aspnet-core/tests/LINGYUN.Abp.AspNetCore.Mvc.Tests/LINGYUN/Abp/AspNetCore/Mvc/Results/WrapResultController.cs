@@ -4,8 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Results
 {
@@ -15,6 +19,18 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
         public WrapResultController() 
         {
             LocalizationResource = typeof(MvcTestResource);
+        }
+
+        [HttpGet]
+        [Route("get-text")]
+        public async Task<IRemoteStreamContent> DontWrapRemoteStreamContext()
+        {
+            var textBytes = Encoding.UTF8.GetBytes("text");
+
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(textBytes);
+
+            return new RemoteStreamContent(memoryStream);
         }
 
         [HttpGet]
