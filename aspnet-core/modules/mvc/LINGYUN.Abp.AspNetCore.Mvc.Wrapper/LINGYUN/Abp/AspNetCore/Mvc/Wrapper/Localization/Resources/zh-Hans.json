@@ -1,0 +1,6 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Wrapper:NotFound": "在服务器中没有找到请求的资源."
+  }
+}
