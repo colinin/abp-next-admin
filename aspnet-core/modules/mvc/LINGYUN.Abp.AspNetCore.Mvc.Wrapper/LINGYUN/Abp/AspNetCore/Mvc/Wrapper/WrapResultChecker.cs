@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 {
@@ -126,13 +127,14 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 
         protected virtual bool CheckForReturnType(ControllerActionDescriptor controllerActionDescriptor)
         {
-            if (controllerActionDescriptor.MethodInfo.ReturnType.IsDefined(typeof(IgnoreWrapResultAttribute), true))
+            var returnType = AsyncHelper.UnwrapTask(controllerActionDescriptor.MethodInfo.ReturnType);
+
+            if (returnType.IsDefined(typeof(IgnoreWrapResultAttribute), true))
             {
                 return false;
             }
 
-            return !Options.IgnoreReturnTypes.Any(type =>
-                controllerActionDescriptor.MethodInfo.ReturnType.IsAssignableFrom(type));
+            return !Options.IgnoreReturnTypes.Any(type => returnType.IsAssignableFrom(type));
         }
 
         protected virtual bool CheckForException(Exception exception)

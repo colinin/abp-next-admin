@@ -22,19 +22,15 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
     [ExposeServices(typeof(AbpExceptionFilter))]
     public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDependency
     {
-        protected override bool ShouldHandleException(ExceptionContext context)
+        protected override async Task HandleAndWrapException(ExceptionContext context)
         {
             var wrapResultChecker = context.GetRequiredService<IWrapResultChecker>();
 
-            if (wrapResultChecker.WrapOnException(context))
+            if (!wrapResultChecker.WrapOnException(context))
             {
-                return true;
+                await base.HandleAndWrapException(context);
+                return;
             }
-            return base.ShouldHandleException(context);
-        }
-
-        protected override async Task HandleAndWrapException(ExceptionContext context)
-        {
             //TODO: Trigger an AbpExceptionHandled event or something like that.
             var wrapResultOptions = context.GetRequiredService<IOptions<AbpAspNetCoreMvcWrapperOptions>>().Value;
             var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;

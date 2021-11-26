@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ProxyScripting;
+using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -47,6 +48,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
                 options.IgnoreReturnTypes.Add<ApplicationApiDescriptionModel>();
                 // api/abp/application-configuration
                 options.IgnoreReturnTypes.Add<ApplicationConfigurationDto>();
+                // 
+                options.IgnoreReturnTypes.Add<IRemoteStreamContent>();
                 // Abp/ServiceProxyScript
                 options.IgnoreControllers.Add<AbpServiceProxyScriptController>();
 
