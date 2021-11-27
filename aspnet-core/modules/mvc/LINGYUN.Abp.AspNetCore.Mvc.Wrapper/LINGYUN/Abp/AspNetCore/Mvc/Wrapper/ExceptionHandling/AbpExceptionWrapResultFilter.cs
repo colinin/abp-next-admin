@@ -51,24 +51,17 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
 
             await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
 
+            var exceptionWrapHandler = context.GetRequiredService<IExceptionWrapHandlerFactory>();
+            var exceptionWrapContext = new ExceptionWrapContext(context.Exception, remoteServiceErrorInfo, context.HttpContext.RequestServices);
+            exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
+            var wrapResult = new WrapResult(
+                exceptionWrapContext.ErrorInfo.Code,
+                exceptionWrapContext.ErrorInfo.Message,
+                exceptionWrapContext.ErrorInfo.Details);
+            context.Result = new ObjectResult(wrapResult);
+
             context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
             context.HttpContext.Response.StatusCode = (int)wrapResultOptions.HttpStatusCode;
-
-            // Warp Error Response
-            string errorCode = remoteServiceErrorInfo.Code;
-            if (context.Exception is IHasErrorCode exceptionWithErrorCode)
-            {
-                if (!exceptionWithErrorCode.Code.IsNullOrWhiteSpace() &&
-                    exceptionWithErrorCode.Code.Contains(":"))
-                {
-                    errorCode = exceptionWithErrorCode.Code.Split(':')[1];
-                }
-                else
-                {
-                    errorCode = exceptionWithErrorCode.Code;
-                }
-            }
-            context.Result = new ObjectResult(new WrapResult(errorCode, remoteServiceErrorInfo.Message, remoteServiceErrorInfo.Details));
 
             context.Exception = null; //Handled!
         }
