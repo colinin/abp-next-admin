@@ -10,5 +10,7 @@ namespace LINGYUN.Abp.Dapr.ServiceInvocation
         Task<ListResultDto<NameValue>> GetAsync();
 
         Task<NameValue> UpdateAsync();
+
+        Task<TestNeedWrapObject> GetWrapedAsync(string name);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Dapr.Client;
+using LINGYUN.Abp.Wrapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -41,6 +42,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         protected IDaprApiDescriptionFinder ApiDescriptionFinder { get; }
         protected AbpDaprRemoteServiceOptions AbpRemoteServiceOptions { get; }
         protected AbpDaprClientProxyOptions ClientProxyOptions { get; }
+        protected AbpWrapperOptions WrapperOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
 
@@ -64,6 +66,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
+            IOptions<AbpWrapperOptions> wrapperOptions,
             ICurrentTenant currentTenant)
         {
             DaprClientFactory = daprClientFactory;
@@ -77,6 +80,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             ClientAuthenticator = clientAuthenticator;
             ClientProxyOptions = clientProxyOptions.Value;  
             AbpRemoteServiceOptions = remoteServiceOptions.Value;
+            WrapperOptions = wrapperOptions.Value;
 
             Logger = NullLogger<DynamicDaprClientProxyInterceptor<TService>>.Instance;
         }
@@ -111,7 +115,8 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
-            var responseContent = await MakeRequestAsync(invocation);
+            var response = await MakeRequestAsync(invocation);
+            var responseContent = response.Content;
 
             if (typeof(T) == typeof(IRemoteStreamContent))
             {
@@ -123,22 +128,47 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
                     ContentType = responseContent.Headers.ContentType?.ToString()
                 };
             }
-
             var stringContent = await responseContent.ReadAsStringAsync();
-            if (typeof(T) == typeof(string))
-            {
-                return (T)(object)stringContent;
-            }
 
             if (stringContent.IsNullOrWhiteSpace())
             {
                 return default;
             }
 
+            // 对于包装后的结果需要处理
+            if (response.Headers.Contains(AbpHttpWrapConsts.AbpWrapResult))
+            {
+                var wrapResult = JsonSerializer.Deserialize<WrapResult<T>>(stringContent);
+
+                if (!string.Equals(wrapResult.Code, WrapperOptions.CodeWithSuccess))
+                {
+                    var errorInfo = new RemoteServiceErrorInfo(
+                        wrapResult.Message,
+                        wrapResult.Details,
+                        wrapResult.Code);
+                    throw new AbpRemoteCallException(errorInfo)
+                    {
+                        HttpStatusCode = (int)WrapperOptions.HttpStatusCode
+                    };
+                }
+
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)(object)wrapResult.Result;
+                }
+
+                return wrapResult.Result;
+            }
+
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)stringContent;
+            }
+
             return JsonSerializer.Deserialize<T>(stringContent);
         }
 
-        private async Task<HttpContent> MakeRequestAsync(IAbpMethodInvocation invocation)
+        private async Task<HttpResponseMessage> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientProxyOptions.DaprClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {typeof(TService).FullName}.");
             var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
@@ -190,7 +220,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
                 await ThrowExceptionForResponseAsync(response);
             }
 
-            return response.Content;
+            return response;
         }
 
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)

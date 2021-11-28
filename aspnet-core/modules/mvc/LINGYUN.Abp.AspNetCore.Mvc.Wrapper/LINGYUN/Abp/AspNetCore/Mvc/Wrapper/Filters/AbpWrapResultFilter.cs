@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping;
+using LINGYUN.Abp.Wrapper;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;

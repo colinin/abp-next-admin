@@ -7,5 +7,6 @@ namespace LINGYUN.Abp.Dapr
         typeof(AbpDddApplicationContractsModule))]
     public class AbpDaprTestModule : AbpModule
     {
+
     }
 }

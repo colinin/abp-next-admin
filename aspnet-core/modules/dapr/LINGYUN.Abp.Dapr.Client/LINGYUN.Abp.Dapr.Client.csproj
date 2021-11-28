@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj" />
   </ItemGroup>
 

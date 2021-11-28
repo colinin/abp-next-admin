@@ -11,7 +11,9 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
     <ProjectReference Include="..\..\modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Dapr.Tests\LINGYUN.Abp.Dapr.Tests.csproj" />
   </ItemGroup>
 

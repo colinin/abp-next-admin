@@ -6,18 +6,16 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using System.Reflection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 {
     public class WrapResultChecker : IWrapResultChecker, ISingletonDependency
     {
-        protected AbpAspNetCoreMvcWrapperOptions Options { get; }
+        protected AbpWrapperOptions Options { get; }
 
-        public WrapResultChecker(IOptionsMonitor<AbpAspNetCoreMvcWrapperOptions> optionsMonitor)
+        public WrapResultChecker(IOptionsMonitor<AbpWrapperOptions> optionsMonitor)
         {
             Options = optionsMonitor.CurrentValue;
         }

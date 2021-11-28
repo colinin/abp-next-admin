@@ -31,9 +31,9 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping
 
             if (!(jsonResult.Value is WrapResult))
             {
-                var options = context.GetRequiredService<IOptions<AbpAspNetCoreMvcWrapperOptions>>().Value;
+                var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
 
-                jsonResult.Value = new WrapResult(options.CodeWithFound, jsonResult.Value);
+                jsonResult.Value = new WrapResult(options.CodeWithSuccess, jsonResult.Value);
             }
         }
     }

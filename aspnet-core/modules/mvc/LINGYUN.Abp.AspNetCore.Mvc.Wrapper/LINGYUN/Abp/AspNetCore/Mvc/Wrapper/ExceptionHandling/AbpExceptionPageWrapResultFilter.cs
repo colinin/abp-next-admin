@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
                 return;
             }
 
-            var wrapResultOptions = context.GetRequiredService<IOptions<AbpAspNetCoreMvcWrapperOptions>>().Value;
+            var wrapOptions = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
             var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
             var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
             var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, exceptionHandlingOptions.SendExceptionsDetailsToClients);
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
             context.Result = new ObjectResult(wrapResult);
 
             context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-            context.HttpContext.Response.StatusCode = (int)wrapResultOptions.HttpStatusCode;
+            context.HttpContext.Response.StatusCode = (int)wrapOptions.HttpStatusCode;
 
             context.Exception = null; //Handled!
         }

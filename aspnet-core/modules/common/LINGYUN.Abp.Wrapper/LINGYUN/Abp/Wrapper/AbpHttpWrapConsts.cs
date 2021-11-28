@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
+﻿namespace LINGYUN.Abp.Wrapper
 {
     public static class AbpHttpWrapConsts
     {

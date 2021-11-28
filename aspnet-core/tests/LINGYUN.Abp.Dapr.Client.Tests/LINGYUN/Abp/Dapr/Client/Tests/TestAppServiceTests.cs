@@ -23,6 +23,14 @@ namespace LINGYUN.Abp.Dapr.Client.Tests
         }
 
         [Fact]
+        public async Task Should_Get_Wraped_Object()
+        {
+            var result = await _service.GetWrapedAsync("Test");
+
+            result.Name.ShouldBe("Test");
+        }
+
+        [Fact]
         public async Task Update_Result_Value_Should_Value_Updated_1()
         {
             var result = await _service.UpdateAsync();

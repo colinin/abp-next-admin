@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
                 mvcOptions.Filters.AddService(typeof(AbpWrapResultFilter));
             });
 
-            Configure<AbpAspNetCoreMvcWrapperOptions>(options =>
+            Configure<AbpWrapperOptions>(options =>
             {
                 // 即使重写端点也不包装返回结果
                 // api/abp/api-definition

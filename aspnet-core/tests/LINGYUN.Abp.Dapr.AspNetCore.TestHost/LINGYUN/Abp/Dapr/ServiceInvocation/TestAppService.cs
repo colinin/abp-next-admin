@@ -37,5 +37,17 @@ namespace LINGYUN.Abp.Dapr.ServiceInvocation
 
             return Task.FromResult(_cache[0]);
         }
+
+        [HttpGet]
+        [Route("{name}")]
+        public Task<TestNeedWrapObject> GetWrapedAsync(string name)
+        {
+            var obj = new TestNeedWrapObject
+            {
+                Name = name
+            };
+
+            return Task.FromResult(obj);
+        }
     }
 }
