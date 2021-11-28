@@ -212,6 +212,11 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             {
                 requestMessage.Headers.Authorization = httpClient.DefaultRequestHeaders.Authorization;
             }
+            // 增加一个可配置的请求消息
+            foreach (var clientRequestAction in ClientProxyOptions.ProxyRequestActions)
+            {
+                clientRequestAction(remoteServiceConfig.AppId, requestMessage);
+            }
 
             var response = await daprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken());
 
