@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -70,6 +71,11 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
                     return false;
                 }
 
+                if (!CheckForInterfaces(descriptor))
+                {
+                    return false;
+                }
+
                 if (!CheckForMethod(descriptor))
                 {
                     return false;
@@ -121,6 +127,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 
             return !Options.IgnoreNamespaces.Any(nsp =>
                 controllerActionDescriptor.ControllerTypeInfo.Namespace.StartsWith(nsp));
+        }
+
+        protected virtual bool CheckForInterfaces(ControllerActionDescriptor controllerActionDescriptor)
+        {
+            return !Options.IgnoredInterfaces.Any(type =>
+                type.IsAssignableFrom(controllerActionDescriptor.ControllerTypeInfo));
         }
 
         protected virtual bool CheckForReturnType(ControllerActionDescriptor controllerActionDescriptor)

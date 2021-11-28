@@ -61,9 +61,9 @@ namespace LINGYUN.Abp.Wrapper
         /// </summary>
         public ITypeList<Exception> IgnoreExceptions { get; }
         /// <summary>
-        /// 忽略服务类型
+        /// 忽略接口类型
         /// </summary>
-        public ITypeList IgnoreBaseTypes { get; }
+        public ITypeList IgnoredInterfaces { get; }
 
         internal IDictionary<Type, IExceptionWrapHandler> ExceptionHandles { get; }
 
@@ -79,7 +79,10 @@ namespace LINGYUN.Abp.Wrapper
 
             IgnoreControllers = new TypeList();
             IgnoreReturnTypes = new TypeList();
-            IgnoreBaseTypes = new TypeList();
+            IgnoredInterfaces = new TypeList()
+            {
+                typeof(IWrapDisabled)
+            };
             IgnoreExceptions = new TypeList<Exception>();
 
             CodeWithEmptyResult = (_) => "404";

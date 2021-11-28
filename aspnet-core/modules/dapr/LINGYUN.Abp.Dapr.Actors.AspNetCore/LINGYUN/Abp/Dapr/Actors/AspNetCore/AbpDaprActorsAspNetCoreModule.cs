@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Dapr.Actors.AspNetCore
 
             Configure<AbpWrapperOptions>(options =>
             {
-                options.IgnoreBaseTypes.TryAdd<IActor>();
+                options.IgnoredInterfaces.TryAdd<IActor>();
             });
         }
 
