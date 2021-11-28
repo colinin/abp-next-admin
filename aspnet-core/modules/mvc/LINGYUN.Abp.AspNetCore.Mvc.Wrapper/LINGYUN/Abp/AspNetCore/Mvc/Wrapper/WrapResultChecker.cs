@@ -44,6 +44,11 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 
         protected virtual bool CheckForBase(FilterContext context)
         {
+            if (context.HttpContext.Request.Headers.ContainsKey(AbpHttpWrapConsts.AbpDontWrapResult))
+            {
+                return false;
+            }
+
             if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
             {
                 if (!context.ActionDescriptor.HasObjectResult())
