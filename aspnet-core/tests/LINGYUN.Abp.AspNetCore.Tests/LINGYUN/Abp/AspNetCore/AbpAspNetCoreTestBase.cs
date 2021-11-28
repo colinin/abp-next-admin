@@ -1,6 +1,8 @@
 ﻿using Microsoft.Net.Http.Headers;
 using Shouldly;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -17,15 +19,22 @@ namespace LINGYUN.Abp.AspNetCore
     public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
         where TStartup : class
     {
-        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+        protected IDictionary<string, string> RequestHeaders { get; }
+
+        protected AbpAspNetCoreTestBase()
         {
-            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
+            RequestHeaders = new Dictionary<string, string>();
+        }
+
+        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
+        {
+            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode, xmlHttpRequest);
             return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
 
-        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
         {
-            using (var response = await GetResponseAsync(url, expectedStatusCode))
+            using (var response = await GetResponseAsync(url, expectedStatusCode, xmlHttpRequest))
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -39,6 +48,10 @@ namespace LINGYUN.Abp.AspNetCore
                 if (xmlHttpRequest)
                 {
                     requestMessage.Headers.Add(HeaderNames.XRequestedWith, "XMLHttpRequest");
+                }
+                foreach (var header in RequestHeaders)
+                {
+                    requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
                 var response = await Client.SendAsync(requestMessage);
                 response.StatusCode.ShouldBe(expectedStatusCode);
