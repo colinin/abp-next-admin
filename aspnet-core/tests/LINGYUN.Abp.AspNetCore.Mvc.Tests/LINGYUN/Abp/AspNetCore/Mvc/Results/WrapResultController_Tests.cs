@@ -39,7 +39,15 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
         {
             var result = await GetResponseAsObjectAsync<TestResultObject>("/api/dont/wrap-result-test");
             result.ShouldNotBeNull();
-            result.Name.ShouldBe("Not Wrap");
+            result.Name.ShouldBe("Not Wrap For Url Prefix");
+        }
+
+        [Fact]
+        public async Task Should_Return_Not_Wrap_Result_For_Interfaces_With_Dont_Wrapper()
+        {
+            var result = await GetResponseAsObjectAsync<TestResultObject>("/api/dont-base-type/wrap-result-test");
+            result.ShouldNotBeNull();
+            result.Name.ShouldBe("Not Wrap For Base Type");
         }
 
         [Fact]

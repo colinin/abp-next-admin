@@ -80,10 +80,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc
                 options.IgnoreExceptions.Clear();
                 options.IgnoreNamespaces.Clear();
                 options.IgnorePrefixUrls.Clear();
+                options.IgnoredInterfaces.Clear();
                 options.IgnoreReturnTypes.Clear();
 
                 // api/abp/api-definition
                 options.IgnoreControllers.Add<AbpApiDefinitionController>();
+                options.IgnoredInterfaces.Add<IWrapDisabled>();
                 // api/abp/application-configuration
                 options.IgnoreReturnTypes.Add<ApplicationConfigurationDto>();
                 options.IgnoreReturnTypes.Add<IRemoteStreamContent>();
