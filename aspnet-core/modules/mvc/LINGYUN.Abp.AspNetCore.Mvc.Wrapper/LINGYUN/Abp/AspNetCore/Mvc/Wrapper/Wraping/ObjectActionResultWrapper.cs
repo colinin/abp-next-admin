@@ -31,17 +31,17 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping
 
             if (!(objectResult.Value is WrapResult))
             {
-                var options = context.GetRequiredService<IOptions<AbpAspNetCoreMvcWrapperOptions>>().Value;
+                var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
 
-                if (objectResult.Value != null)
-                {
-                    objectResult.Value = new WrapResult(options.CodeWithFound, objectResult.Value);
-                }
-                else
+                if (objectResult.Value == null && options.ErrorWithEmptyResult)
                 {
                     var code = options.CodeWithEmptyResult(context.HttpContext.RequestServices);
                     var message = options.MessageWithEmptyResult(context.HttpContext.RequestServices);
                     objectResult.Value = new WrapResult(code, message);
+                }
+                else
+                {
+                    objectResult.Value = new WrapResult(options.CodeWithSuccess, objectResult.Value);
                 }
 
                 objectResult.DeclaredType = typeof(WrapResult);

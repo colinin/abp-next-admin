@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Wrapper;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Dapr.Client
 {
     [DependsOn(
-        typeof(AbpHttpClientModule)
+        typeof(AbpHttpClientModule),
+        typeof(AbpWrapperModule)
         )]
     public class AbpDaprClientModule : AbpModule
     {

@@ -86,7 +86,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
         public async Task Should_Return_Wrap_Result_For_Empty_Object_Return_Value()
         {
             var result = await GetResponseAsObjectAsync<WrapResult<TestResultObject>>("/api/wrap-result-test/wrap-empty");
-            result.Code.ShouldBe("404");
+            result.Code.ShouldBe("0");
             result.Result.ShouldBeNull();
         }
 

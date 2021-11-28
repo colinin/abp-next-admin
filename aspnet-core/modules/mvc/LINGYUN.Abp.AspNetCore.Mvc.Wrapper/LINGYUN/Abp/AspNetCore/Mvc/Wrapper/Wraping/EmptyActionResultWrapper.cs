@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping
     {
         public void Wrap(FilterContext context)
         {
-            var options = context.GetRequiredService<IOptions<AbpAspNetCoreMvcWrapperOptions>>().Value;
+            var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
             var code = options.CodeWithEmptyResult(context.HttpContext.RequestServices);
             var message = options.MessageWithEmptyResult(context.HttpContext.RequestServices);
             switch (context)

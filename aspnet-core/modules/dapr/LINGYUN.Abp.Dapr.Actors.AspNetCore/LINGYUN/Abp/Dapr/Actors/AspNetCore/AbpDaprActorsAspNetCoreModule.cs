@@ -1,5 +1,6 @@
 ﻿using Dapr.Actors;
 using Dapr.Actors.Runtime;
+using LINGYUN.Abp.Wrapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,8 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.Dapr.Actors.AspNetCore
 {
     [DependsOn(
-        typeof(AbpAspNetCoreModule))]
+        typeof(AbpAspNetCoreModule),
+        typeof(AbpWrapperModule))]
     public class AbpDaprActorsAspNetCoreModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -27,6 +29,11 @@ namespace LINGYUN.Abp.Dapr.Actors.AspNetCore
                 {
                     endpointContext.Endpoints.MapActorsHandlers();
                 });
+            });
+
+            Configure<AbpWrapperOptions>(options =>
+            {
+                options.IgnoreBaseTypes.TryAdd<IActor>();
             });
         }
 

@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Results;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.Wrapper;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -70,7 +71,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc
             {
             });
 
-            Configure<AbpAspNetCoreMvcWrapperOptions>(options =>
+            Configure<AbpWrapperOptions>(options =>
             {
                 options.IsEnabled = true;
 
