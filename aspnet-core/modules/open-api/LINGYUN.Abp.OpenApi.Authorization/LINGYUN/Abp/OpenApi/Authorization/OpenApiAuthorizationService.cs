@@ -46,17 +46,18 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return true;
             }
 
-            if (_currentClient.IsAuthenticated && 
-                _openApiOptions.HasWhiteClient(_currentClient.Id))
-            {
-                return true;
-            }
+            // TODO: 不够优雅，应该用接口来实现
+            //if (_currentClient.IsAuthenticated && 
+            //    _openApiOptions.HasWhiteClient(_currentClient.Id))
+            //{
+            //    return true;
+            //}
 
-            if (!string.IsNullOrWhiteSpace(_clientInfoProvider.ClientIpAddress) &&
-                _openApiOptions.HasWhiteIpAddress(_clientInfoProvider.ClientIpAddress))
-            {
-                return true;
-            }
+            //if (!string.IsNullOrWhiteSpace(_clientInfoProvider.ClientIpAddress) &&
+            //    _openApiOptions.HasWhiteIpAddress(_clientInfoProvider.ClientIpAddress))
+            //{
+            //    return true;
+            //}
 
             BusinessException exception;
             if (!httpContext.Request.QueryString.HasValue)

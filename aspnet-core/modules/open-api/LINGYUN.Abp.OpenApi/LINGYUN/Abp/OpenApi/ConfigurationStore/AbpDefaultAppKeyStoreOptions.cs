@@ -2,11 +2,11 @@
 {
     public class AbpDefaultAppKeyStoreOptions
     {
-        public AppDescriptor[] Apps { get; set; }
+        public AppDescriptor[] AppDescriptors { get; set; }
 
         public AbpDefaultAppKeyStoreOptions()
         {
-            Apps = new AppDescriptor[0];
+            AppDescriptors = new AppDescriptor[0];
         }
     }
 }

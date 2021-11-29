@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.OpenApi.Localization;
+﻿using LINGYUN.Abp.OpenApi.ConfigurationStore;
+using LINGYUN.Abp.OpenApi.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -18,6 +19,7 @@ namespace LINGYUN.Abp.OpenApi
             var configuration = context.Services.GetConfiguration();
 
             Configure<AbpOpenApiOptions>(configuration.GetSection("OpenApi"));
+            Configure<AbpDefaultAppKeyStoreOptions>(configuration);
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
