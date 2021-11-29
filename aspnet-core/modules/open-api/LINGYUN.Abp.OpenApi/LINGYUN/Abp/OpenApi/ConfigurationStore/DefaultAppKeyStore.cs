@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.OpenApi.ConfigurationStore
 
         public AppDescriptor Find(string appKey)
         {
-            return _options.Apps?.FirstOrDefault(t => t.AppKey == appKey);
+            return _options.AppDescriptors?.FirstOrDefault(t => t.AppKey == appKey);
         }
     }
 }
