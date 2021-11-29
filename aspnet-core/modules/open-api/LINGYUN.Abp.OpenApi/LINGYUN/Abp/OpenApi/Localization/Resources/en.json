@@ -1,0 +1,11 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "AbpOpenApi:9100": "Invalid appKey {AppKey}.",
+    "AbpOpenApi:9101": "appKey not found.",
+    "AbpOpenApi:9110": "Invalid sign.",
+    "AbpOpenApi:9111": "sign not found.",
+    "AbpOpenApi:9210": "Request timed out or the session expired.",
+    "AbpOpenApi:9211": "timestamp not found."
+  }
+}
