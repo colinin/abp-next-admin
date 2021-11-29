@@ -14,6 +14,8 @@ namespace LINGYUN.Abp.OssManagement
         /// </summary>
         public string Process { get; }
 
+        public bool CreatePathIsNotExists { get; set; } = false;
+
         public GetOssObjectRequest(
             [NotNull] string bucket,
             [NotNull] string @object,

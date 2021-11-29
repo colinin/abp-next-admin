@@ -59,12 +59,14 @@ namespace LINGYUN.Abp.OssManagement
             string bucket,
             string @object,
             string path = "",
-            bool md5 = false)
+            bool md5 = false,
+            bool createPathIsNotExists = false)
         {
             return await ossContainer.GetObjectAsync(
                 new GetOssObjectRequest(bucket, @object, path)
                 {
                     MD5 = md5,
+                    CreatePathIsNotExists = createPathIsNotExists
                 });
         }
 
@@ -77,12 +79,14 @@ namespace LINGYUN.Abp.OssManagement
             string encodingType = null,
             bool md5 = false,
             int skipCount = 0,
-            int maxResultCount = 10)
+            int maxResultCount = 10,
+            bool createPathIsNotExists = false)
         {
             return await ossContainer.GetObjectsAsync(
                 new GetOssObjectsRequest(name, prefix, marker, delimiter, encodingType, skipCount, maxResultCount)
                 {
                     MD5 = md5,
+                    CreatePathIsNotExists = createPathIsNotExists,
                 });
         }
     }

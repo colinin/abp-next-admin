@@ -264,11 +264,14 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             var filePath = CalculateFilePath(request.Bucket, objectName);
             if (!File.Exists(filePath))
             {
-                if (!Directory.Exists(filePath))
+                if (!Directory.Exists(filePath) && !request.CreatePathIsNotExists)
                 {
                     throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
                     // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with file system");
                 }
+
+                DirectoryHelper.CreateIfNotExists(filePath);
+
                 var directoryInfo = new DirectoryInfo(filePath);
                 var ossObject = new OssObject(
                     directoryInfo.Name.EnsureEndsWith('/'),
@@ -384,11 +387,12 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
         {
             // 先定位检索的目录
             var filePath = CalculateFilePath(request.BucketName, request.Prefix);
-            if (!Directory.Exists(filePath))
+            if (!Directory.Exists(filePath) && !request.CreatePathIsNotExists)
             {
                 throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
                 // throw new ContainerNotFoundException($"Can't not found container {request.BucketName} in file system");
             }
+            DirectoryHelper.CreateIfNotExists(filePath);
             // 目录也属于Oss对象,需要抽象的文件系统集合来存储
             var fileSystemNames = Directory.GetFileSystemEntries(filePath);
             int maxFilesCount = fileSystemNames.Length;
