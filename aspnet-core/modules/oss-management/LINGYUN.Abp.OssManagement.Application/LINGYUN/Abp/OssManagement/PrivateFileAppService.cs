@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Features.LimitValidation;
+using LINGYUN.Abp.OssManagement.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using System.Web;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Content;
+using Volo.Abp.Features;
 using Volo.Abp.IO;
 using Volo.Abp.Users;
 
@@ -37,15 +40,44 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize]
+        [RequiresFeature(AbpOssManagementFeatureNames.OssObject.DownloadFile)]
+        [RequiresLimitFeature(
+            AbpOssManagementFeatureNames.OssObject.DownloadLimit,
+            AbpOssManagementFeatureNames.OssObject.DownloadInterval,
+            LimitPolicy.Month)]
         public override async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
-            return await base.GetAsync(input);
+            var ossObjectRequest = new GetOssObjectRequest(
+                 GetCurrentBucket(),
+                 // 需要处理特殊字符
+                 HttpUtility.UrlDecode(input.Name),
+                 GetCurrentPath(HttpUtility.UrlDecode(input.Path)),
+                 HttpUtility.UrlDecode(input.Process))
+            {
+                MD5 = true,
+                // TODO: 用户访问自身目录可以实现无限制创建目录层级?
+                CreatePathIsNotExists = true,
+            };
+
+            var ossContainer = OssContainerFactory.Create();
+            var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
+
+            return new RemoteStreamContent(ossObject.Content);
         }
 
         [Authorize]
         public override async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
         {
-            return await base.GetListAsync(input);
+            var ossContainer = OssContainerFactory.Create();
+            var response = await ossContainer.GetObjectsAsync(
+                GetCurrentBucket(),
+                GetCurrentPath(HttpUtility.UrlDecode(input.Path)),
+                skipCount: 0,
+                maxResultCount: input.MaxResultCount,
+                createPathIsNotExists: true); // TODO: 用户访问自身目录可以实现无限制创建目录层级?
+
+            return new ListResultDto<OssObjectDto>(
+                ObjectMapper.Map<List<OssObject>, List<OssObjectDto>>(response.Objects));
         }
 
         [Authorize]

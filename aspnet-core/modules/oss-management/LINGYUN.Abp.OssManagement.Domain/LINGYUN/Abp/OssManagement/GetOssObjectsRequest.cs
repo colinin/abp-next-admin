@@ -13,6 +13,7 @@ namespace LINGYUN.Abp.OssManagement
         public int Current { get; }
         public int? MaxKeys { get; }
         public bool MD5 { get; set; }
+        public bool CreatePathIsNotExists { get; set; } = false;
         public GetOssObjectsRequest(
             [NotNull] string bucketName,
             string prefix = null,
