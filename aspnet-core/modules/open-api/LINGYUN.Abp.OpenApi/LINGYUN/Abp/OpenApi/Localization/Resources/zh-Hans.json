@@ -1,0 +1,11 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "AbpOpenApi:9100": "无效的应用标识 {AppKey}.",
+    "AbpOpenApi:9101": "未携带应用标识(appKey).",
+    "AbpOpenApi:9110": "无效的签名 sign.",
+    "AbpOpenApi:9111": "未携带签名(sign).",
+    "AbpOpenApi:9210": "请求超时或会话已过期.",
+    "AbpOpenApi:9211": "未携带时间戳标识."
+  }
+}
