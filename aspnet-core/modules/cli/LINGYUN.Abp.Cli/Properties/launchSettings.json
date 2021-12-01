@@ -1,8 +1,7 @@
 {
   "profiles": {
     "LINGYUN.Abp.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "create MyCompany.MyProject -pk MyPackage -t lam -dbms sqlserver -cs \"Server=127.0.0.1;Database=master;User Id=sa;Password=662871\" -o \"D:\\Projects\\MicroService\\CRM\\Vue\\vue-abp\\aspnet-core\\modules\\cli\\LINGYUN.Abp.Cli\\bin\\Debug\\net5.0\\TTT\""
+      "commandName": "Project"
     }
   }
 }

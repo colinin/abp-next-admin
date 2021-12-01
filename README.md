@@ -7,6 +7,44 @@
 
 这是一个基于 [vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) 的Abp框架后台管理界面
 
+
+## 快速搭建微服务启动项目
+
+### 1、安装dotnet工具
+
+```shell
+  dotnet tool install --global LINGYUN.Abp.Cli --version 4.4.0
+```
+
+### 2、安装.NET模板
+
+```shell
+  dotnet new --install LINGYUN.Abp.MicroService.Templates::4.4.0
+```
+
+### 3、使用cli创建一个项目
+
+```shell
+  # 使用 sqlserver 连接字符串初始化一个项目
+  # MyCompanyName 公司名称
+  # MyProjectName 项目名称
+  # MyPackageName 包名
+  # -o  输出到指定目录,见abp cli
+  # --dbms  指定数据库驱动,见abp cli
+  # --cs    指定数据库连接字符串
+  # --no-random-port 不使用随机端口（默认应用端口5000、dapr监听端口3500）
+  labp create MyCompanyName.MyProjectName -pk MyPackageName -o "D:\Project" --dbms sqlserver --cs "Server=127.0.0.1;Database=MyProject;User Id=sa;Password=123456" --no-random-port
+
+  cd D:\Project\host\MyPackageName.MyCompanyName.MyProjectName.HttpApi.Host
+
+  dotnet restore
+
+  dotnet run
+
+  start http://127.0.0.1:5000/
+
+```
+
 ## 前端文档
 
 [文档](https://armour.github.io/vue-typescript-admin-docs/zh)
