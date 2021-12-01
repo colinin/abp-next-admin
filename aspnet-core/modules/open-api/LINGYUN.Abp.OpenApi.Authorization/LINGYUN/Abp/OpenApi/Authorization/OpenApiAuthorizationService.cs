@@ -201,15 +201,14 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return;
             }
 
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
             await context.Response.WriteAsync(errorInfo.Message);
         }
 
         private static string CalculationSignature(string url, string appSecret, IDictionary<string, string> queryDictionary)
         {
-            queryDictionary.TryAdd("appSecret", appSecret);
             var queryString = BuildQuery(queryDictionary);
-            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString));
+            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString, appSecret));
 
             return encodeUrl.ToMd5();
         }
@@ -217,7 +216,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private static string BuildQuery(IDictionary<string, string> queryStringDictionary)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var queryString in queryStringDictionary.OrderBy(q => q.Key))
+            foreach (var queryString in queryStringDictionary)
             {
                 sb.Append(queryString.Key)
                   .Append('=')
