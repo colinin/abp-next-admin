@@ -153,7 +153,7 @@ namespace OpenApi
 
         private static string UrlEncode(string str)
         {
-            return HttpUtility.UrlEncode(str);
+            return HttpUtility.UrlEncode(str, Encoding.UTF8).ToUpper();
         }
     }
 }
