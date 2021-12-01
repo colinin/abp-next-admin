@@ -2,3 +2,5 @@
 LocalNuget
 *.DotSettings.user
 **/*.csproj.user
+templates
+nupkg
