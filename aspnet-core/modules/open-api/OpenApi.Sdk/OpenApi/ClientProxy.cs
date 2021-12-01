@@ -68,8 +68,12 @@ namespace OpenApi
                 "&t=",
                 timeStamp);
             var quertString = ReverseQueryString(requestUrl);
+            // 密钥参与计算
+            quertString.Add("appSecret", appSecret);
             // 对请求参数签名
-            var sign = CalculationSignature(baseUrl, appSecret, quertString);
+            var sign = CalculationSignature(baseUrl, quertString);
+            // 移除密钥
+            quertString.Remove("appSecret");
             // 签名随请求传递
             quertString.Add("sign", sign);
             // 重新拼接请求参数
@@ -125,14 +129,13 @@ namespace OpenApi
             return queryDic;
         }
 
-        private static string CalculationSignature(string url, string appSecret, IDictionary<string, string> queryDictionary)
+        private static string CalculationSignature(string url, IDictionary<string, string> queryDictionary)
         {
             var queryString = BuildQuery(queryDictionary);
             var requestUrl = string.Concat(
                 url,
                 url.Contains('?') ? "" : "?",
-                queryString,
-                appSecret);
+                queryString);
             var encodeUrl = UrlEncode(requestUrl);
             return encodeUrl.ToMd5();
         }
@@ -140,7 +143,7 @@ namespace OpenApi
         private static string BuildQuery(IDictionary<string, string> queryStringDictionary)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var queryString in queryStringDictionary)
+            foreach (var queryString in queryStringDictionary.OrderBy(q => q.Key))
             {
                 sb.Append(queryString.Key)
                   .Append('=')

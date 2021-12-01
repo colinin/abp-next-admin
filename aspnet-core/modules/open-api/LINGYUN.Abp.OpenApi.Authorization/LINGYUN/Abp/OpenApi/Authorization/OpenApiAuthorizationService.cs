@@ -131,7 +131,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             }
 
             var queryDictionary = new Dictionary<string, string>();
-            var queryStringCollection = httpContext.Request.Query.OrderBy(q => q.Key);
+            var queryStringCollection = httpContext.Request.Query;
             foreach (var queryString in queryStringCollection)
             {
                 if (queryString.Key.Equals(AbpOpenApiConsts.SignatureFieldName))
@@ -140,8 +140,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 }
                 queryDictionary.Add(queryString.Key, queryString.Value.ToString());
             }
-
-            var requiredSign = CalculationSignature(httpContext.Request.Path.Value, appDescriptor.AppSecret, queryDictionary);
+            queryDictionary.TryAdd("appSecret", appDescriptor.AppSecret);
+            var requiredSign = CalculationSignature(httpContext.Request.Path.Value, queryDictionary);
             if (!string.Equals(requiredSign, sign.ToString()))
             {
                 exception = new BusinessException(
@@ -205,10 +205,10 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             await context.Response.WriteAsync(errorInfo.Message);
         }
 
-        private static string CalculationSignature(string url, string appSecret, IDictionary<string, string> queryDictionary)
+        private static string CalculationSignature(string url, IDictionary<string, string> queryDictionary)
         {
             var queryString = BuildQuery(queryDictionary);
-            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString, appSecret));
+            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString));
 
             return encodeUrl.ToMd5();
         }
@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private static string BuildQuery(IDictionary<string, string> queryStringDictionary)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var queryString in queryStringDictionary)
+            foreach (var queryString in queryStringDictionary.OrderBy(q => q.Key))
             {
                 sb.Append(queryString.Key)
                   .Append('=')
