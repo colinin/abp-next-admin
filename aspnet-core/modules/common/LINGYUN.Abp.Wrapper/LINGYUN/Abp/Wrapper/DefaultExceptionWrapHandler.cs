@@ -28,6 +28,12 @@ namespace LINGYUN.Abp.Wrapper
             // 没有处理的异常代码统一用配置代码处理
             if (context.ErrorInfo.Code.IsNullOrWhiteSpace())
             {
+                if (context.StatusCode.HasValue)
+                {
+                    context.WithCode(context.StatusCode.ToString());
+                    return;
+                }
+                // TODO: 先从TttpStatusCodeFinder中查找
                 var wrapperOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
                 context.WithCode(wrapperOptions.CodeWithUnhandled);
             }

@@ -205,10 +205,11 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             await context.Response.WriteAsync(errorInfo.Message);
         }
 
-        private static string CalculationSignature(string url, string appKey, IDictionary<string, string> queryDictionary)
+        private static string CalculationSignature(string url, string appSecret, IDictionary<string, string> queryDictionary)
         {
+            queryDictionary.TryAdd("appSecret", appSecret);
             var queryString = BuildQuery(queryDictionary);
-            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString, appKey));
+            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString));
 
             return encodeUrl.ToMd5();
         }
@@ -216,7 +217,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private static string BuildQuery(IDictionary<string, string> queryStringDictionary)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var queryString in queryStringDictionary)
+            foreach (var queryString in queryStringDictionary.OrderBy(q => q.Key))
             {
                 sb.Append(queryString.Key)
                   .Append('=')
@@ -229,7 +230,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
         private static string UrlEncode(string str)
         {
-            return HttpUtility.UrlEncode(str);
+            return HttpUtility.UrlEncode(str, Encoding.UTF8).ToUpper();
         }
     }
 }

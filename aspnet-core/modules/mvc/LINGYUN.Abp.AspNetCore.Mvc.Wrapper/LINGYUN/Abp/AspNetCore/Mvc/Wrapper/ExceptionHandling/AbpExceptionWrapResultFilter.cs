@@ -51,8 +51,13 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
 
             await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
 
+            var statusCodFinder = context.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var exceptionWrapHandler = context.GetRequiredService<IExceptionWrapHandlerFactory>();
-            var exceptionWrapContext = new ExceptionWrapContext(context.Exception, remoteServiceErrorInfo, context.HttpContext.RequestServices);
+            var exceptionWrapContext = new ExceptionWrapContext(
+                context.Exception, 
+                remoteServiceErrorInfo, 
+                context.HttpContext.RequestServices,
+                statusCodFinder.GetStatusCode(context.HttpContext, context.Exception));
             exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
             var wrapResult = new WrapResult(
                 exceptionWrapContext.ErrorInfo.Code,

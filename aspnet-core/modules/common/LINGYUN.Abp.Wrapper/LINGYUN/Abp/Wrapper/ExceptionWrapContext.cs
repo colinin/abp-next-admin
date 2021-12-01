@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Volo.Abp.Http;
 
 namespace LINGYUN.Abp.Wrapper
@@ -8,14 +9,17 @@ namespace LINGYUN.Abp.Wrapper
         public Exception Exception { get; }
         public IServiceProvider ServiceProvider { get; }
         public RemoteServiceErrorInfo ErrorInfo { get; }
+        public HttpStatusCode? StatusCode { get; set; }
         public ExceptionWrapContext(
             Exception exception,
             RemoteServiceErrorInfo errorInfo,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            HttpStatusCode? statusCode = null)
         {
             Exception = exception;
             ErrorInfo = errorInfo;
             ServiceProvider = serviceProvider;
+            StatusCode = statusCode;
         }
 
         public ExceptionWrapContext WithCode(string code)
