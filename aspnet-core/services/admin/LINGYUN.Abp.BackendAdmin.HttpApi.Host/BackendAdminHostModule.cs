@@ -5,6 +5,7 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -73,6 +74,7 @@ namespace LINGYUN.Abp.BackendAdmin
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class BackendAdminHostModule : AbpModule
@@ -110,8 +112,6 @@ namespace LINGYUN.Abp.BackendAdmin
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            // 本地化
-            app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
             // 认证
@@ -120,6 +120,10 @@ namespace LINGYUN.Abp.BackendAdmin
             app.UseJwtTokenMiddleware();
             // 多租户
             app.UseMultiTenancy();
+            // 本地化
+            app.UseMapRequestLocalization();
+            // 授权
+            app.UseAuthorization();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面

@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
@@ -169,6 +170,18 @@ namespace LINGYUN.ApiGateway
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+            });
+
+            Configure<AbpLocalizationCultureMapOptions>(options =>
+            {
+                var zhHansCultureMapInfo = new CultureMapInfo
+                {
+                    TargetCulture = "zh-Hans",
+                    SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+                };
+
+                options.CulturesMaps.Add(zhHansCultureMapInfo);
+                options.UiCulturesMaps.Add(zhHansCultureMapInfo);
             });
         }
 

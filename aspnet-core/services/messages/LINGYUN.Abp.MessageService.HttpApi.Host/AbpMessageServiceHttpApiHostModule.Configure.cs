@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -230,6 +231,18 @@ namespace LINGYUN.Abp.MessageService
                        .AddVirtualJson("/Localization/HttpApiHost");
 
                 options.Resources.AddDynamic();
+            });
+
+            Configure<AbpLocalizationCultureMapOptions>(options =>
+            {
+                var zhHansCultureMapInfo = new CultureMapInfo
+                {
+                    TargetCulture = "zh-Hans",
+                    SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+                };
+
+                options.CulturesMaps.Add(zhHansCultureMapInfo);
+                options.UiCulturesMaps.Add(zhHansCultureMapInfo);
             });
         }
 

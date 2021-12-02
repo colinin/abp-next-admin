@@ -4,6 +4,7 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
@@ -69,6 +70,7 @@ namespace LINGYUN.Platform
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class AppPlatformHttpApiHostModule : AbpModule
@@ -108,16 +110,16 @@ namespace LINGYUN.Platform
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            // 本地化
-            app.UseAbpRequestLocalization();
-            // 多租户
-            app.UseMultiTenancy();
             //路由
             app.UseRouting();
             // 认证
             app.UseAuthentication();
             // jwt
             app.UseJwtTokenMiddleware();
+            // 多租户
+            app.UseMultiTenancy();
+            // 本地化
+            app.UseMapRequestLocalization();
             // 授权
             app.UseAuthorization();
             // Swagger
@@ -129,9 +131,8 @@ namespace LINGYUN.Platform
             });
             // 审计日志
             app.UseAuditing();
+            // 记录请求信息
             app.UseAbpSerilogEnrichers();
-            // 工作单元
-            app.UseUnitOfWork();
             // 路由
             app.UseConfiguredEndpoints();
 

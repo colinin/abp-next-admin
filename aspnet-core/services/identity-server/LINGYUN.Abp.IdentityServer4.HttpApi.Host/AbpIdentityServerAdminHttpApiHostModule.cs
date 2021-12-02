@@ -2,6 +2,7 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -49,6 +50,7 @@ namespace LINGYUN.Abp.IdentityServer4
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class AbpIdentityServerAdminHttpApiHostModule : AbpModule
@@ -87,8 +89,6 @@ namespace LINGYUN.Abp.IdentityServer4
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            // 本地化
-            app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
             // 认证
@@ -98,6 +98,10 @@ namespace LINGYUN.Abp.IdentityServer4
             app.UseJwtTokenMiddleware();
             // 多租户
             app.UseMultiTenancy();
+            // 本地化
+            app.UseMapRequestLocalization();
+            // 授权
+            app.UseAuthorization();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面

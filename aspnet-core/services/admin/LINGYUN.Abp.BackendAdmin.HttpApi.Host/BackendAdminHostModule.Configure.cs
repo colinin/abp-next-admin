@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
@@ -109,7 +110,7 @@ namespace LINGYUN.Abp.BackendAdmin
                 options.SendStackTrace = true;
                 // 未指定异常接收者的默认接收邮件
                 // 请指定自己的邮件地址
-                // options.DefaultReceiveEmail = "colin.in@foxmail.com";
+                // options.DefaultReceiveEmail = "";
             });
         }
 
@@ -239,17 +240,19 @@ namespace LINGYUN.Abp.BackendAdmin
                         "vben-admin-ui",
                         new NameValue("zh_CN", "zh-Hans"));
 
-                options
-                    .AddLanguageFilesMapOrUpdate(
-                        "vue-admin-element-ui",
-                        new NameValue("zh-Hans", "zh"),
-                        new NameValue("en", "en"));
-                options
-                    .AddLanguageFilesMapOrUpdate(
-                        "vben-admin-ui",
-                        new NameValue("zh_CN", "zh-Hans"));
-
                 options.Resources.AddDynamic();
+            });
+
+            Configure<AbpLocalizationCultureMapOptions>(options =>
+            {
+                var zhHansCultureMapInfo = new CultureMapInfo
+                {
+                    TargetCulture = "zh-Hans",
+                    SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+                };
+
+                options.CulturesMaps.Add(zhHansCultureMapInfo);
+                options.UiCulturesMaps.Add(zhHansCultureMapInfo);
             });
         }
 

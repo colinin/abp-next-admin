@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.ApiGateway.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace LINGYUN.ApiGateway
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class ApiGatewayHttpApiHostModule : AbpModule
@@ -78,7 +80,7 @@ namespace LINGYUN.ApiGateway
             // 多租户
             // app.UseMultiTenancy();
             // 本地化
-            app.UseAbpRequestLocalization();
+            app.UseMapRequestLocalization();
             // 认证
             app.UseAuthorization();
             // Swagger
