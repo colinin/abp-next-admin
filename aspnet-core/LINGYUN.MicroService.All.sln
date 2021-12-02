@@ -369,6 +369,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{995756A1-A379-4797-89F0-87D219B5AF00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Localization.CultureMap", "modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -963,6 +965,10 @@ Global
 		{995756A1-A379-4797-89F0-87D219B5AF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{995756A1-A379-4797-89F0-87D219B5AF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{995756A1-A379-4797-89F0-87D219B5AF00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1145,6 +1151,7 @@ Global
 		{93317D44-835C-4F5E-B85D-580D51D5FFF4} = {DC33925B-264D-421B-96CC-46F853CBCC70}
 		{DAF80936-FBEC-45AB-92DF-34966B0148FD} = {DC33925B-264D-421B-96CC-46F853CBCC70}
 		{995756A1-A379-4797-89F0-87D219B5AF00} = {DC33925B-264D-421B-96CC-46F853CBCC70}
+		{EB73D2CC-B1BE-471A-B76E-35F288CD0E16} = {90E88EAC-4291-4406-8D88-EFDF61B11292}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

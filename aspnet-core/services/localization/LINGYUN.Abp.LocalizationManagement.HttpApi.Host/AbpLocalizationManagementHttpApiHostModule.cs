@@ -3,6 +3,7 @@ using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -42,6 +43,7 @@ namespace LINGYUN.Abp.LocalizationManagement
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class AbpLocalizationManagementHttpApiHostModule : AbpModule
@@ -80,14 +82,14 @@ namespace LINGYUN.Abp.LocalizationManagement
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            // 本地化
-            app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
             // 认证
             app.UseAuthentication();
             // jwt
             app.UseJwtTokenMiddleware();
+            // 本地化
+            app.UseMapRequestLocalization();
             // 授权
             app.UseAuthorization();
             // Swagger

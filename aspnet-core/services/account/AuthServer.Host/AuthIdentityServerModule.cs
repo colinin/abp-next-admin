@@ -6,6 +6,7 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.WeChat;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -58,6 +59,7 @@ namespace AuthServer.Host
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpAliyunSmsModule)
@@ -118,10 +120,10 @@ namespace AuthServer.Host
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseWeChatSignature();
-            app.UseMultiTenancy();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
-            app.UseAbpRequestLocalization();
+            app.UseMultiTenancy();
+            app.UseMapRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

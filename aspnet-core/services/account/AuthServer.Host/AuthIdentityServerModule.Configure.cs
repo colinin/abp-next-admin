@@ -1,6 +1,7 @@
 ﻿using AuthServer.IdentityResources;
 using DotNetCore.CAP;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -158,6 +159,18 @@ namespace AuthServer.Host
                 options.Resources
                     .Get<AccountResource>()
                     .AddVirtualJson("/Localization/Resources");
+            });
+
+            Configure<AbpLocalizationCultureMapOptions>(options =>
+            {
+                var zhHansCultureMapInfo = new CultureMapInfo
+                {
+                    TargetCulture = "zh-Hans",
+                    SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+                };
+
+                options.CulturesMaps.Add(zhHansCultureMapInfo);
+                options.UiCulturesMaps.Add(zhHansCultureMapInfo);
             });
         }
         private void ConfigureAuditing()

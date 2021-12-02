@@ -9,6 +9,7 @@ using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Hangfire.Storage.MySql;
 using LINGYUN.Abp.Identity.WeChat;
 using LINGYUN.Abp.IM.SignalR;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -64,6 +65,7 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
+        typeof(AbpLocalizationCultureMapModule),
         typeof(AbpAutofacModule)
         )]
     public partial class AbpMessageServiceHttpApiHostModule : AbpModule
@@ -103,8 +105,6 @@ namespace LINGYUN.Abp.MessageService
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            // 本地化
-            app.UseAbpRequestLocalization();
             //路由
             app.UseRouting();
             // 跨域
@@ -115,9 +115,12 @@ namespace LINGYUN.Abp.MessageService
             app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
-            app.UseAuthorization();
             // 多租户
             app.UseMultiTenancy();
+            // 本地化
+            app.UseMapRequestLocalization();
+            // 授权
+            app.UseAuthorization();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面
