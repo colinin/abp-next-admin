@@ -77,6 +77,7 @@ namespace LINGYUN.Abp.MessageService
             var configuration = context.Services.GetConfiguration();
 
             PreConfigureApp();
+            PreCongifureHangfire();
             PreConfigureCAP(configuration);
         }
 
@@ -110,6 +111,7 @@ namespace LINGYUN.Abp.MessageService
             // 跨域
             app.UseCors(DefaultCorsPolicyName);
             app.UseSignalRJwtToken();
+            app.UseHangfireAuthorication();
             // 认证
             app.UseAuthentication();
             app.UseAbpClaimsMap();

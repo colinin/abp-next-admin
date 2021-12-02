@@ -1,32 +1,46 @@
-﻿using Hangfire.Annotations;
-using Hangfire.Dashboard;
+﻿using Hangfire.Dashboard;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Threading;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
 {
-    public class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
+    public class DashboardAuthorizationFilter : IDashboardAsyncAuthorizationFilter
     {
-        internal readonly static string[] AllowRoutePrefixs = new string[]
+        private readonly string[] _requiredPermissionNames;
+
+        public DashboardAuthorizationFilter(params string[] requiredPermissionNames)
         {
-            "/stats",
-            "/js",
-            "/css",
-            "/fonts"
-        };
-        public bool Authorize([NotNull] DashboardContext context)
+            _requiredPermissionNames = requiredPermissionNames;
+        }
+
+        public async Task<bool> AuthorizeAsync(DashboardContext context)
         {
-            if (AllowRoutePrefixs.Any(url => context.Request.Path.StartsWith(url)))
+            if (!IsLoggedIn(context))
+            {
+                return false;
+            }
+
+            if (_requiredPermissionNames.IsNullOrEmpty())
             {
                 return true;
             }
 
-            var httpContext = context.GetHttpContext();
-            var permissionChecker = httpContext.RequestServices.GetRequiredService<IPermissionChecker>();
-            return AsyncHelper.RunSync(async () => 
-                await permissionChecker.IsGrantedAsync(httpContext.User, HangfireDashboardPermissions.Dashboard.Default));
+            return await IsPermissionGrantedAsync(context, _requiredPermissionNames);
+        }
+
+        private static bool IsLoggedIn(DashboardContext context)
+        {
+            var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
+            return currentUser.IsAuthenticated;
+        }
+
+        private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
+        {
+            var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IDashboardPermissionChecker>();
+            return await permissionChecker.IsGrantedAsync(context, requiredPermissionNames);
         }
     }
 }

@@ -4,7 +4,8 @@
     "Permission:MessageService": "消息服务",
     "Permission:Notification": "通知管理",
     "Permission:Delete": "删除",
-    "Permission:Hangfire": "Hangfire仪表板",
+    "Permission:Hangfire": "Hangfire",
+    "Permission:Dashboard": "仪表板",
     "Permission:ManageQueue": "管理队列"
   }
 }
