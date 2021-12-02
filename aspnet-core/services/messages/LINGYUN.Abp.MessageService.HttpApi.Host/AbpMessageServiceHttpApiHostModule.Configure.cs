@@ -1,7 +1,10 @@
 ﻿using DotNetCore.CAP;
+using Hangfire.Dashboard;
 using LINGYUN.Abp.ExceptionHandling;
+using LINGYUN.Abp.Hangfire.Dashboard.Authorization;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MessageService.Localization;
+using LINGYUN.Abp.MessageService.Permissions;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
@@ -27,6 +30,8 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.VirtualFileSystem;
 
+using HangfireDashboardOptions = Hangfire.DashboardOptions;
+
 namespace LINGYUN.Abp.MessageService
 {
     public partial class AbpMessageServiceHttpApiHostModule
@@ -50,6 +55,19 @@ namespace LINGYUN.Abp.MessageService
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
                 })
                 .UseDashboard();
+            });
+        }
+
+        private void PreCongifureHangfire()
+        {
+            PreConfigure<HangfireDashboardOptions>(options =>
+            {
+                options.AsyncAuthorization = new IDashboardAsyncAuthorizationFilter[]
+                {
+                    new DashboardAuthorizationFilter(
+                        MessageServicePermissions.Hangfire.Dashboard,
+                        MessageServicePermissions.Hangfire.ManageQueue)
+                };
             });
         }
 

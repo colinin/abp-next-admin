@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Http
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            // 通过 iframe 加载页面的话,需要手动传递 access_token 到参数列表
+            // 通过 iframe 加载页面的话,初次传递 access_token 到 QueryString
             if (context.Request.Path.StartsWithSegments("/hangfire") && 
                 context.User.Identity?.IsAuthenticated != true)
             {

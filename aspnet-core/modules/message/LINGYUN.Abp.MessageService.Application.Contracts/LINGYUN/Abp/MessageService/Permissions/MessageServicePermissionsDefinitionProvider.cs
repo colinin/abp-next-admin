@@ -14,6 +14,7 @@ namespace LINGYUN.Abp.MessageService.Permissions
             noticeGroup.AddChild(MessageServicePermissions.Notification.Delete, L("Permission:Delete"));
 
             var hangfirePermission = group.AddPermission(MessageServicePermissions.Hangfire.Default, L("Permission:Hangfire"));
+            hangfirePermission.AddChild(MessageServicePermissions.Hangfire.Dashboard, L("Permission:Dashboard"));
             hangfirePermission.AddChild(MessageServicePermissions.Hangfire.ManageQueue, L("Permission:ManageQueue"));
         }
 

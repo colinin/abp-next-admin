@@ -15,6 +15,8 @@
         {
             public const string Default = GroupName + ".Hangfire";
 
+            public const string Dashboard = Default + ".Dashboard";
+
             public const string ManageQueue = Default + ".ManageQueue";
         }
     }

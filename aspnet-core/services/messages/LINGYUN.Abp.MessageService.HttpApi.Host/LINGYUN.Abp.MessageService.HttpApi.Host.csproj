@@ -71,4 +71,8 @@
     <ProjectReference Include="..\..\..\modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>
