@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Abp.RabbitMQ;
 using WorkflowCore.Interface;
@@ -19,6 +20,13 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
             {
                 options.UseQueueProvider(provider => provider.GetRequiredService<AbpRabbitMqQueueProvider>());
             });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            context.ServiceProvider
+                .GetRequiredService<AbpRabbitMqQueueProvider>()
+                .Dispose();
         }
     }
 }

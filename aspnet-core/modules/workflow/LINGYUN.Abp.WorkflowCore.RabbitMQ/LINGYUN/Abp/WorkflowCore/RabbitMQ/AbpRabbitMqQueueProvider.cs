@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
 using System.Threading;
@@ -12,7 +14,6 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
 {
     public class AbpRabbitMqQueueProvider : IQueueProvider
     {
-        private string ChannelPrefix = "WorkflowQueue.";
         protected bool IsDiposed { get; private set; }
         protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
 
@@ -21,7 +22,8 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
         protected IChannelPool ChannelPool { get; }
         protected IQueueNameNormalizer QueueNameNormalizer { get; }
         protected AbpRabbitMQWorkflowCoreOptions RabbitMQWorkflowCoreOptions { get; }
-        protected WorkflowQueueConfiguration QueueConfiguration { get; }
+
+        public ILogger<AbpRabbitMqQueueProvider> Logger { get; set; }
 
         public bool IsDequeueBlocking => false;
 
@@ -34,22 +36,17 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
             QueueNameNormalizer = queueNameNormalizer;
             RabbitMQWorkflowCoreOptions = options.Value;
 
-            QueueConfiguration = GetOrCreateWorkflowQueueConfiguration();
-        }
-
-        protected virtual WorkflowQueueConfiguration GetOrCreateWorkflowQueueConfiguration()
-        {
-            return new WorkflowQueueConfiguration(
-                RabbitMQWorkflowCoreOptions.DefaultQueueNamePrefix + "Workflow-Core",
-                durable: true, 
-                exclusive: false, 
-                autoDelete: false);
+            Logger = NullLogger<AbpRabbitMqQueueProvider>.Instance;
         }
 
         public async Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
         {
+            CheckDisposed();
+
             using (await SyncObj.LockAsync(cancellationToken))
             {
+                await EnsureInitializedAsync();
+
                 ChannelAccessor.Channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                 var msg = ChannelAccessor.Channel.BasicGet(QueueNameNormalizer.NormalizeKey(queue), false);
@@ -65,8 +62,12 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
 
         public async Task QueueWork(string id, QueueType queue)
         {
+            CheckDisposed();
+
             using (await SyncObj.LockAsync())
             {
+                await EnsureInitializedAsync();
+
                 var body = Encoding.UTF8.GetBytes(id);
 
                 ChannelAccessor.Channel.BasicPublish(
@@ -117,11 +118,27 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
             }
 
             ChannelAccessor = ChannelPool.Acquire(
-                ChannelPrefix + QueueConfiguration.QueueName,
-                QueueConfiguration.ConnectionName
+                RabbitMQWorkflowCoreOptions.DefaultChannelName,
+                RabbitMQWorkflowCoreOptions.DefaultConnectionName
             );
 
+            CreateDeclareWorkflowQueue(QueueType.Event);
+            CreateDeclareWorkflowQueue(QueueType.Workflow);
+            CreateDeclareWorkflowQueue(QueueType.Index);
+
             return Task.CompletedTask;
+        }
+
+        protected virtual void CreateDeclareWorkflowQueue(QueueType queue)
+        {
+            var queueName = QueueNameNormalizer.NormalizeKey(queue);
+            var configuration = new WorkflowQueueConfiguration(
+                queueName: queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+
+            configuration.Declare(ChannelAccessor.Channel);
         }
 
         protected void CheckDisposed()

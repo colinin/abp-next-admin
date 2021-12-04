@@ -2,7 +2,7 @@
 {
     public static class WorkflowDbProperties
     {
-        public const string ConnectionStringName = "WorkflowCore";
+        public const string ConnectionStringName = "AbpWorkflowCore";
 
         public static string TablePrefix = "WF_";
     }
