@@ -4,3 +4,4 @@ LocalNuget
 **/*.csproj.user
 templates
 nupkg
+consoles
