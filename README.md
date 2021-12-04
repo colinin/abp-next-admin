@@ -51,31 +51,27 @@
 
 ## 截图
 
-![登录页](./vueJs/images/userLogin.png)
+![系统日志](./vueJs/images/logging.png)
 
-![租户管理](./vueJs/images/tenant.png)
+![审计日志](./vueJs/images/audit-log.png)
 
-![组织机构](./vueJs/images/organization-units.png)
+![安全日志](./vueJs/images/security-log.png)
 
-![审计日志](./vueJs/images/auditing-logs.png)
+![网关管理](./vueJs/images/apigateway.png)
 
-![安全日志](./vueJs/images/security-logs.png)
+![数据字典](./vueJs/images/data-dictionary.png)
 
-![角色页](./vueJs/images/userRoles.png)
+![对象存储](./vueJs/images/oss.png)
 
-![权限页](./vueJs/images/userPermissions.png)
+![特性管理](./vueJs/images/features.png)
 
-![实时通知](./vueJs/images/im-notifications.png)
+![系统设置](./vueJs/images/settings.png)
 
-![实时通讯](./vueJs/images/im-realtime-message.png)
+![菜单管理](./vueJs/images/menus.png)
 
-![声明类型](./vueJs/images/claim-types.png)
+![组织机构](./vueJs/images/organization-unit.png)
 
-![客户端管理](./vueJs/images/client.png)
-
-![Api资源管理](./vueJs/images/api-resources.png)
-
-![聚合路由](./vueJs/images/aggregate.png)
+![本地化管理](./vueJs/images/localization.png)
 
 ## 相关项目
 

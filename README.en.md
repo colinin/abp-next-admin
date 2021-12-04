@@ -10,31 +10,27 @@ This is a [vue-typescript-admin-template](http://armour.github.io/vue-typescript
 
 ## Screenshots
 
-![Login](./vueJs/images/userLogin.png)
+![Logging](./vueJs/images/logging.png)
 
-![Tenant](./vueJs/images/tenant.png)
+![AuditLog](./vueJs/images/audit-log.png)
 
-![OrganizationUnit](./vueJs/images/organization-units.png)
+![SecurityLog](./vueJs/images/security-log.png)
 
-![AuditLog](./vueJs/images/auditing-logs.png)
+![ApiGateway](./vueJs/images/apigateway.png)
 
-![SecurityLog](./vueJs/images/security-logs.png)
+![Data Dictionary](./vueJs/images/data-dictionary.png)
 
-![Role](./vueJs/images/userRoles.png)
+![Oss Management](./vueJs/images/oss.png)
 
-![Permission](./vueJs/images/userPermissions.png)
+![Features](./vueJs/images/features.png)
 
-![Notification](./vueJs/images/im-notifications.png)
+![Settings](./vueJs/images/settings.png)
 
-![IM](./vueJs/images/im-realtime-message.png)
+![Menus](./vueJs/images/menus.png)
 
-![ClaimType](./vueJs/images/claim-types.png)
+![OrganizationUnits](./vueJs/images/organization-unit.png)
 
-![Client](./vueJs/images/client.png)
-
-![ApiResource](./vueJs/images/api-resources.png)
-
-![AggregateRoute](./vueJs/images/aggregate.png)
+![Localization](./vueJs/images/localization.png)
 
 ## Related Projects
 
