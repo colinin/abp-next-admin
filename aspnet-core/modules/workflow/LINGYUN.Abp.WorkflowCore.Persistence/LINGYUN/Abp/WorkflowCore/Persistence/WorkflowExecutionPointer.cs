@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 using WorkflowCore.Models;
@@ -114,16 +112,16 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             StepId = pointer.StepId;
             StepName = pointer.StepName;
             Active = pointer.Active;
-            PersistenceData = JsonConvert.SerializeObject(pointer.PersistenceData);
+            PersistenceData = pointer.PersistenceData.SerializeObject();
             EventName = pointer.EventName;
             EventKey = pointer.EventKey;
             EventPublished = pointer.EventPublished;
-            EventData = JsonConvert.SerializeObject(pointer.EventData);
+            EventData = pointer.EventData.SerializeObject();
             RetryCount = pointer.RetryCount;
             Children = pointer.Children.JoinAsString(";");
-            ContextItem = JsonConvert.SerializeObject(pointer.ContextItem);
+            ContextItem = pointer.ContextItem.SerializeObject();
             PredecessorId = pointer.PredecessorId;
-            Outcome = JsonConvert.SerializeObject(pointer.Outcome);
+            Outcome = pointer.Outcome.SerializeObject();
             Scope = pointer.Scope.JoinAsString(";");
             Status = pointer.Status;
             SleepUntil = pointer.SleepUntil;
@@ -135,8 +133,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 var findAttr = FindAttribute(attribute.Key);
                 if (findAttr == null)
                 {
-                    findAttr = new WorkflowExtensionAttribute(Id, attribute.Key, attribute.Value.SerializeObject());
-
+                    AddAttribute(attribute.Key, attribute.Value.SerializeObject());
                 }
                 else
                 {

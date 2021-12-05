@@ -8,6 +8,10 @@ namespace System
 
         public static string SerializeObject(this object obj, JsonSerializerSettings serializerSettings = null)
         {
+            if (obj is string objStr)
+            {
+                return objStr;
+            }
             return JsonConvert.SerializeObject(obj, serializerSettings ?? SerializerSettings);
         }
 
