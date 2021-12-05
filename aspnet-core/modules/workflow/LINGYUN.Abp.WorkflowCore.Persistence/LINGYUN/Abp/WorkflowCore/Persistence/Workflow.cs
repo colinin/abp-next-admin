@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -70,7 +69,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             IGuidGenerator guidGenerator, 
             ICurrentTenant currentTenant)
         {
-            Data = JsonConvert.SerializeObject(instance.Data);
+            Data = instance.Data.SerializeObject();
             CreationTime = instance.CreateTime;
             WorkflowDefinitionId = instance.WorkflowDefinitionId;
             Version = instance.Version;
