@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.WorkflowCore.LifeCycleEvent
 
         public async Task PublishNotification(EventData evt)
         {
-            var data = evt.SerializeObject(_serializerSettings);
+            var data = evt.SerializeObject(serializerSettings: _serializerSettings);
             var wrapEvent = new LifeCycleEventWrap(data);
             await _eventBus.PublishAsync(wrapEvent);
         }
