@@ -3,7 +3,7 @@ using WorkflowCore.Interface;
 
 namespace LINGYUN.Abp.WorkflowCore
 {
-    public abstract class WorkflowBase : IWorkflow, ISingletonDependency
+    public abstract class WorkflowBase : IWorkflow, ITransientDependency
     {
         public abstract string Id { get; }
 

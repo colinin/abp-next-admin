@@ -35,8 +35,8 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             int version,
             string description,
             string reference,
+            WorkflowStatus status,
             long? nextExecution = null,
-            WorkflowStatus status = WorkflowStatus.Terminated,
             DateTime? completeTime = null,
             Guid? tenantId = null) : base(id)
         {

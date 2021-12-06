@@ -4,11 +4,11 @@ namespace System
 {
     public static class ObjectSerializerExtensions
     {
-        private static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        private readonly static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
 
-        public static string SerializeObject(this object obj, JsonSerializerSettings serializerSettings = null)
+        public static string SerializeObject(this object obj, bool handlingString = false, JsonSerializerSettings serializerSettings = null)
         {
-            if (obj is string objStr)
+            if (obj is string objStr && !handlingString)
             {
                 return objStr;
             }
@@ -17,7 +17,7 @@ namespace System
 
         public static object DeserializeObject(this string str, JsonSerializerSettings serializerSettings = null)
         {
-            return JsonConvert.DeserializeObject(str, serializerSettings ?? SerializerSettings);
+            return JsonConvert.DeserializeObject(str ?? string.Empty, serializerSettings ?? SerializerSettings);
         } 
     }
 }

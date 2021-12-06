@@ -17,18 +17,19 @@ namespace WorkflowCore.Models
                 generator.Create(),
                 instance.CreateTime,
                 instance.WorkflowDefinitionId,
-                instance.Data.SerializeObject(),
+                instance.Data.SerializeObject(handlingString: true),
                 instance.Version,
                 instance.Description,
                 instance.Reference,
-                instance.NextExecution,
                 instance.Status,
+                instance.NextExecution,
                 instance.CompleteTime,
                 currentTenant.Id);
 
             foreach (var pointer in instance.ExecutionPointers)
             {
-                pointer.ToWorkflowExecutionPointer(workflow, generator, currentTenant);
+                var toPointer = pointer.ToWorkflowExecutionPointer(workflow, generator, currentTenant);
+                workflow.AddPointer(toPointer);
             }
 
             return workflow;
@@ -46,16 +47,16 @@ namespace WorkflowCore.Models
                 executionPointer.StepId,
                 executionPointer.StepName,
                 executionPointer.Active,
-                executionPointer.PersistenceData.SerializeObject(),
+                executionPointer.PersistenceData.SerializeObject(handlingString: true),
                 executionPointer.EventName,
                 executionPointer.EventKey,
                 executionPointer.EventPublished,
-                executionPointer.EventData.SerializeObject(),
+                executionPointer.EventData.SerializeObject(handlingString: true),
                 executionPointer.RetryCount,
                 executionPointer.Children.JoinAsString(";"),
-                executionPointer.ContextItem.SerializeObject(),
+                executionPointer.ContextItem.SerializeObject(handlingString: true),
                 executionPointer.PredecessorId,
-                executionPointer.Outcome.SerializeObject(),
+                executionPointer.Outcome.SerializeObject(handlingString: true),
                 executionPointer.Scope.JoinAsString(";"),
                 executionPointer.Status,
                 executionPointer.SleepUntil,
@@ -65,7 +66,7 @@ namespace WorkflowCore.Models
 
             foreach (var attribute in executionPointer.ExtensionAttributes)
             {
-                pointer.AddAttribute(attribute.Key, attribute.Value.SerializeObject());
+                pointer.AddAttribute(attribute.Key, attribute.Value.SerializeObject(handlingString: true));
             }
 
             executionPointer.Id = pointer.Id.ToString();
@@ -82,7 +83,7 @@ namespace WorkflowCore.Models
                 generator.Create(),
                 @event.EventName,
                 @event.EventKey,
-                @event.EventData.SerializeObject(),
+                @event.EventData.SerializeObject(handlingString: true),
                 @event.EventTime,
                 currentTenant.Id)
             {
@@ -105,7 +106,7 @@ namespace WorkflowCore.Models
                 subscription.EventName,
                 subscription.EventKey,
                 subscription.SubscribeAsOf,
-                subscription.SubscriptionData.SerializeObject(),
+                subscription.SubscriptionData.SerializeObject(handlingString: true),
                 subscription.ExternalToken,
                 subscription.ExternalWorkerId,
                 subscription.ExternalTokenExpiry,

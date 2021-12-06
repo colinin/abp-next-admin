@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 WorkflowDefinitionId = workflow.WorkflowDefinitionId,
                 CompleteTime = workflow.CompleteTime.ToNullableUtcDateTime(),
                 CreateTime = workflow.CreationTime.ToUtcDateTime(),
-                Data = workflow.Data.SerializeObject(),
+                Data = workflow.Data.DeserializeObject(),
                 Status = workflow.Status,
                 Description = workflow.Description,
                 NextExecution = workflow.NextExecution,

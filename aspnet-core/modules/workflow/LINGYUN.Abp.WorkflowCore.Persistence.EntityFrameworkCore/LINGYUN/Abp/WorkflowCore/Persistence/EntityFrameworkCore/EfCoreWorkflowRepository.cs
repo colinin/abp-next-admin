@@ -36,5 +36,13 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 .PageBy(skip, take)
                 .ToListAsync();
         }
+
+        public override async Task<IQueryable<Workflow>> WithDetailsAsync()
+        {
+            var quertable = await base.WithDetailsAsync();
+            return quertable
+                .Include(x => x.ExecutionPointers)
+                    .ThenInclude(p => p.ExtensionAttributes);
+        }
     }
 }
