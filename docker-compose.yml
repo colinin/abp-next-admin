@@ -43,14 +43,7 @@ services:
     ports:
       - "44385:80"
 
-  apigateway-admin-service:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-    ports:
-      - "30001:80"
-
-  apigateway-host-service:
+  internat-apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
