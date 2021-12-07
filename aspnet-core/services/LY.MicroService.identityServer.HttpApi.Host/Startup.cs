@@ -4,7 +4,7 @@ using System.IO;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
 
-namespace LY.MicroService.identityServer;
+namespace LY.MicroService.IdentityServer;
 
 public class Startup
 {

@@ -5,7 +5,7 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace LY.MicroService.identityServer;
+namespace LY.MicroService.IdentityServer;
 
 public class Program
 {

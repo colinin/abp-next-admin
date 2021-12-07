@@ -12,4 +12,4 @@ VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 VOLUME [ "./app/file-blob-storing" ]
 
-ENTRYPOINT ["dotnet", "LINGYUN.Platform.HttpApi.Host.dll"]
+ENTRYPOINT ["dotnet", "LY.MicroService.PlatformManagement.HttpApi.Host.dll"]

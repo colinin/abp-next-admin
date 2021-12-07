@@ -23,7 +23,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace LY.MicroService.identityServer;
+namespace LY.MicroService.IdentityServer;
 
 [DependsOn(
         typeof(AbpSerilogEnrichersApplicationModule),

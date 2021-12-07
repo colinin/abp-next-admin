@@ -28,7 +28,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LY.MicroService.identityServer;
+namespace LY.MicroService.IdentityServer;
 
 public partial class IdentityServerHttpApiHostModule
 {
@@ -165,7 +165,7 @@ public partial class IdentityServerHttpApiHostModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<IdentityServerHttpApiHostModule>("LY.MicroService.identityServer");
+            options.FileSets.AddEmbedded<IdentityServerHttpApiHostModule>("LY.MicroService.IdentityServer");
         });
     }
 

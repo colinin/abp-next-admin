@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.Identity;
-using LY.MicroService.identityServer.Emailing.Templates;
+using LY.MicroService.IdentityServer.Emailing.Templates;
 using Microsoft.Extensions.Localization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ using Volo.Abp.Identity.Localization;
 using Volo.Abp.Sms;
 using Volo.Abp.TextTemplating;
 
-namespace LY.MicroService.identityServer;
+namespace LY.MicroService.IdentityServer;
 
 public class UserSecurityCodeSender : IUserSecurityCodeSender, ITransientDependency
 {

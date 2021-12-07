@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "LY.MicroService.identityServer.HttpApi.Host": {
+    "LY.MicroService.IdentityServer.HttpApi.Host": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,

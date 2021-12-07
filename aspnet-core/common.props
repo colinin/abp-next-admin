@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>5.0.0-rc1</Version>
-    <Authors>LINGYUN</Authors>
+    <Version>5.0.0-rc.1</Version>
+    <Authors>colin</Authors>
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
     <PackageProjectUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -10,6 +10,12 @@
     <RepositoryUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+	  <Compile Remove="LocalNuget\**" />
+	  <EmbeddedResource Remove="LocalNuget\**" />
+	  <None Remove="LocalNuget\**" />
+	</ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>$(SolutionDir)LocalNuget</OutputPath>
