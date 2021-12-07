@@ -11,8 +11,11 @@ using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.EventBus.CAP
@@ -22,12 +25,8 @@ namespace LINGYUN.Abp.EventBus.CAP
     /// </summary>
     [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(CAPDistributedEventBus))]
-    public class CAPDistributedEventBus : EventBusBase, IDistributedEventBus
+    public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEventBus
     {
-        /// <summary>
-        /// Abp分布式事件总线配置
-        /// </summary>
-        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         /// <summary>
         /// CAP消息发布接口
         /// </summary>
@@ -65,8 +64,10 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="currentUser"></param>
         /// <param name="currentClient"></param>
         /// <param name="currentTenant"></param>
-        /// <param name="eventErrorHandler"></param>
+        /// <param name="unitOfWorkManager"></param>
         /// <param name="cancellationTokenProvider"></param>
+        /// <param name="guidGenerator"></param>
+        /// <param name="clock"></param>
         /// <param name="customDistributedEventSubscriber"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
@@ -74,17 +75,24 @@ namespace LINGYUN.Abp.EventBus.CAP
             ICurrentUser currentUser,
             ICurrentClient currentClient,
             ICurrentTenant currentTenant,
-            IEventErrorHandler eventErrorHandler,
+            IUnitOfWorkManager unitOfWorkManager,
+            IGuidGenerator guidGenerator,
+            IClock clock,
             ICancellationTokenProvider cancellationTokenProvider,
             ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
-            : base(serviceScopeFactory, currentTenant, eventErrorHandler)
+            : base(
+                  serviceScopeFactory, 
+                  currentTenant,
+                  unitOfWorkManager, 
+                  distributedEventBusOptions,
+                  guidGenerator,
+                  clock)
         {
             CapPublisher = capPublisher;
             CurrentUser = currentUser;
             CurrentClient = currentClient;
             CancellationTokenProvider = cancellationTokenProvider;
             CustomDistributedEventSubscriber = customDistributedEventSubscriber;
-            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
         }
@@ -165,23 +173,12 @@ namespace LINGYUN.Abp.EventBus.CAP
             GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
         /// <summary>
-        /// 订阅事件
-        /// </summary>
-        /// <typeparam name="TEvent">事件类型</typeparam>
-        /// <param name="handler">事件处理器</param>
-        /// <returns></returns>
-        public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
-        {
-            return Subscribe(typeof(TEvent), handler);
-        }
-
-        /// <summary>
         /// 发布事件
         /// </summary>
         /// <param name="eventType">事件类型</param>
         /// <param name="eventData">事件数据对象</param>
         /// <returns></returns>
-        public override async Task PublishAsync(Type eventType, object eventData)
+        protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
         {
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             await CapPublisher
@@ -241,6 +238,28 @@ namespace LINGYUN.Abp.EventBus.CAP
             }
 
             return false;
+        }
+
+        public override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+        {
+            // cap自行实现
+            return Task.CompletedTask;
+        }
+
+        public override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
+        {
+            // cap自行实现
+            return Task.CompletedTask;
+        }
+
+        protected override byte[] Serialize(object eventData)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+        {
+            unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
         }
     }
 }

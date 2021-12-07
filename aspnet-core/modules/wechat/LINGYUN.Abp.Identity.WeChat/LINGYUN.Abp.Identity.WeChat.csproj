@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
@@ -8,11 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Identity.Domain" Version="4.4.0" />
+		<PackageReference Include="Volo.Abp.Identity.Domain" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
 	</ItemGroup>
 
 

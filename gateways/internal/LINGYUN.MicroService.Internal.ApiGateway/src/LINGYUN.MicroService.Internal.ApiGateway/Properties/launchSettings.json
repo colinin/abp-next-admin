@@ -1,0 +1,20 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:51466/",
+      "sslPort": 44332
+    }
+  },
+  "profiles": {
+    "LINGYUN.MicroService.Internal.ApiGateway": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://127.0.0.1:30443;http://127.0.0.1:30000"
+    }
+  }
+}

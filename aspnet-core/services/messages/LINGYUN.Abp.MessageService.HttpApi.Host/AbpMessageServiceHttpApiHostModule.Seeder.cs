@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.Data;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.MessageService
@@ -13,7 +12,7 @@ namespace LINGYUN.Abp.MessageService
             if (context.GetEnvironment().IsDevelopment())
             {
                 AsyncHelper.RunSync(async () =>
-                    await context.ServiceProvider.GetRequiredService<IDataSeeder>()
+                    await context.ServiceProvider.GetRequiredService<IMessageDataSeeder>()
                         .SeedAsync());
             }
         }

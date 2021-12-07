@@ -14,7 +14,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client.Authentication;
-using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -26,14 +26,14 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
         protected ICurrentTenant CurrentTenant { get; }
         protected AbpDaprRemoteServiceOptions DaprServiceOptions { get; }
         protected AbpDaprActorProxyOptions DaprActorProxyOptions { get; }
-        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
+        protected IProxyHttpClientFactory HttpClientFactory { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
         public ILogger<DynamicDaprActorProxyInterceptor<TService>> Logger { get; set; }
 
         public DynamicDaprActorProxyInterceptor(
             IOptions<AbpDaprActorProxyOptions> daprActorProxyOptions,
             IOptionsSnapshot<AbpDaprRemoteServiceOptions> daprActorOptions,
-            IDynamicProxyHttpClientFactory httpClientFactory,
+            IProxyHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICurrentTenant currentTenant)
         {

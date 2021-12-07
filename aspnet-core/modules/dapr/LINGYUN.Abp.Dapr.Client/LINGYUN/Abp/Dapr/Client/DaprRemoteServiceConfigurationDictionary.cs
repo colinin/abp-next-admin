@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using Volo.Abp;
 
 namespace LINGYUN.Abp.Dapr.Client
@@ -13,11 +14,19 @@ namespace LINGYUN.Abp.Dapr.Client
             set => this[DefaultName] = value;
         }
 
+        [NotNull]
         public DaprRemoteServiceConfiguration GetConfigurationOrDefault(string name)
         {
             return this.GetOrDefault(name)
                    ?? Default
                    ?? throw new AbpException($"Dapr remote service '{name}' was not found and there is no default configuration.");
+        }
+
+        [CanBeNull]
+        public DaprRemoteServiceConfiguration GetConfigurationOrDefaultOrNull(string name)
+        {
+            return this.GetOrDefault(name)
+                   ?? Default;
         }
     }
 }

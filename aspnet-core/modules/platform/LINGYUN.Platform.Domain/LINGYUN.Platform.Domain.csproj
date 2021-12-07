@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
-  
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.AutoMapper" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.BlobStoring" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.Settings" Version="4.4.0" />
-  </ItemGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Platform.Domain.Shared\LINGYUN.Platform.Domain.Shared.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.BlobStoring" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Platform.Domain.Shared\LINGYUN.Platform.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

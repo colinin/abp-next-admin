@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -8,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Application" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.Sms" Version="4.4.0" />
+    <PackageReference Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

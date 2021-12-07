@@ -1,26 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.4.0" />
-	  <PackageReference Include="Volo.Abp.Authorization" Version="4.4.0" />
-	  <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\IdentityServer\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
 </Project>

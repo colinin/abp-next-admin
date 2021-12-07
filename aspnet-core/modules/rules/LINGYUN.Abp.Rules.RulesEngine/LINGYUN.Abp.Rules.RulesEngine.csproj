@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
@@ -9,7 +10,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="RulesEngine" Version="3.3.0" />
-	  <PackageReference Include="Volo.Abp.Json" Version="4.4.0" />
+	  <PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

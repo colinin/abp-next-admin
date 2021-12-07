@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using Hangfire;
 using Hangfire.Dashboard;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.Hangfire.Dashboard.Authorization;
@@ -282,6 +283,11 @@ namespace LINGYUN.Abp.MessageService
                     .SetApplicationName("LINGYUN.Abp.Application")
                     .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
             }
+        }
+
+        private void ConfigureHangfireServer(IServiceCollection services)
+        {
+            services.AddHangfireServer();
         }
     }
 }

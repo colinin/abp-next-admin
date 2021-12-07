@@ -1,0 +1,64 @@
+{
+  "Aggregates": [
+    // 动态代理聚合
+    {
+      "RouteKeys": [
+        "platform-api-definition",
+        "backend-admin-api-definition",
+        "messages-api-definition",
+        "ids-admin-api-definition",
+        "localization-api-definition"
+      ],
+      "UpstreamPathTemplate": "/api/abp/api-definition",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    },
+    // 框架配置聚合
+    {
+      "RouteKeys": [
+        "platform-configuration",
+        "backend-admin-configuration",
+        "messages-configuration",
+        "ids-admin-configuration",
+        "localization-configuration"
+      ],
+      "UpstreamPathTemplate": "/api/abp/application-configuration",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    },
+    // 全局设置
+    {
+      "RouteKeys": [
+        "setting-global",
+        "wechat-setting-global",
+        "aliyun-setting-global",
+        "oss-management-setting-global"
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/by-global",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    },
+    // 租户设置
+    {
+      "RouteKeys": [
+        "setting-current-tenant",
+        "wechat-setting-current-tenant",
+        "aliyun-setting-current-tenant",
+        "oss-management-setting-current-tenant"
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/by-current-tenant",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    },
+    // 用户订阅
+    {
+      "RouteKeys": [
+        "assignables-notifilers",
+        "my-subscribes"
+      ],
+      "UpstreamPathTemplate": "/api/my-subscribes/assignables-notifilers",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    }
+  ]
+}

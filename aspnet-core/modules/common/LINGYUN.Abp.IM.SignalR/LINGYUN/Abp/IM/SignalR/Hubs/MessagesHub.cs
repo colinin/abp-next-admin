@@ -25,13 +25,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
     [Authorize]
     public class MessagesHub : OnlineClientHubBase
     {
-        protected IMessageProcessor Processor => LazyServiceProvider.LazyGetRequiredService<IMessageProcessor>();
+        protected IMessageProcessor Processor => LazyServiceProvider.LazyGetService<IMessageProcessor>();
 
         protected IUserOnlineChanger OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
 
-        protected ISnowflakeIdrGenerator SnowflakeIdrGenerator => LazyServiceProvider.LazyGetService<ISnowflakeIdrGenerator>();
+        protected ISnowflakeIdrGenerator SnowflakeIdrGenerator => LazyServiceProvider.LazyGetRequiredService<ISnowflakeIdrGenerator>();
 
-        protected IExceptionToErrorInfoConverter ErrorInfoConverter => LazyServiceProvider.LazyGetService<IExceptionToErrorInfoConverter>();
+        protected IExceptionToErrorInfoConverter ErrorInfoConverter => LazyServiceProvider.LazyGetRequiredService<IExceptionToErrorInfoConverter>();
 
         protected AbpIMSignalROptions Options { get; }
         protected IFriendStore FriendStore { get; }
@@ -116,7 +116,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         [HubMethodName("recall")]
         public virtual async Task ReCallAsync(ChatMessage chatMessage)
         {
-            await Processor.ReCallAsync(chatMessage);
+            await Processor?.ReCallAsync(chatMessage);
             if (!chatMessage.GroupId.IsNullOrWhiteSpace())
             {
                 await SendMessageAsync(
@@ -162,7 +162,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         [HubMethodName("read")]
         public virtual async Task ReadAsync(ChatMessage chatMessage)
         {
-            await Processor.ReadAsync(chatMessage);
+            await Processor?.ReadAsync(chatMessage);
         }
 
         protected virtual async Task SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
@@ -187,7 +187,11 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             {
                 if (callbackException && ex is IBusinessException)
                 {
-                    var errorInfo = ErrorInfoConverter.Convert(ex, false);
+                    var errorInfo = ErrorInfoConverter.Convert(ex, options =>
+                    {
+                        options.SendExceptionsDetailsToClients = false;
+                        options.SendStackTraceToClients = false;
+                    });
                     if (!chatMessage.GroupId.IsNullOrWhiteSpace())
                     {
                         await SendMessageToGroupAsync(

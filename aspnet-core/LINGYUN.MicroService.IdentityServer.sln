@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{7C727110-59CA-495B-8143-C5DDEDE41289}"
 EndProject
@@ -70,6 +70,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{596F645E-19F4-45C4-BED6-7BB6B32F5684}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{0F8184B5-37B8-432E-8017-04B903175D31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localization", "{0A54DCB0-29EA-45AA-974A-A0FFEA8F20DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{1D2790A9-7871-4918-99CA-5BA00D2F9038}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{CFE2828B-8F60-4852-B79D-27D0032638A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +175,14 @@ Global
 		{0F8184B5-37B8-432E-8017-04B903175D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F8184B5-37B8-432E-8017-04B903175D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F8184B5-37B8-432E-8017-04B903175D31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D2790A9-7871-4918-99CA-5BA00D2F9038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D2790A9-7871-4918-99CA-5BA00D2F9038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D2790A9-7871-4918-99CA-5BA00D2F9038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D2790A9-7871-4918-99CA-5BA00D2F9038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFE2828B-8F60-4852-B79D-27D0032638A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFE2828B-8F60-4852-B79D-27D0032638A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFE2828B-8F60-4852-B79D-27D0032638A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFE2828B-8F60-4852-B79D-27D0032638A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,6 +219,9 @@ Global
 		{489CC1F9-C648-4E3C-869B-0CEE0454EE9E} = {42D02351-CF36-402A-B89A-F10D3DAD8EC8}
 		{596F645E-19F4-45C4-BED6-7BB6B32F5684} = {ACA1734A-4BF5-4DF9-94CF-3E5B3535B480}
 		{0F8184B5-37B8-432E-8017-04B903175D31} = {572DBB40-4637-4C01-8491-8686F7E22B45}
+		{0A54DCB0-29EA-45AA-974A-A0FFEA8F20DC} = {7C727110-59CA-495B-8143-C5DDEDE41289}
+		{1D2790A9-7871-4918-99CA-5BA00D2F9038} = {0A54DCB0-29EA-45AA-974A-A0FFEA8F20DC}
+		{CFE2828B-8F60-4852-B79D-27D0032638A1} = {572DBB40-4637-4C01-8491-8686F7E22B45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCB77471-9ECB-4666-A316-1D6A6285A468}

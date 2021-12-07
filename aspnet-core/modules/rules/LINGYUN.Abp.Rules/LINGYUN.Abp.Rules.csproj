@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
@@ -8,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Volo.Abp.MultiTenancy" Version="4.4.0" />
+	  <PackageReference Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

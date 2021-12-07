@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.Dapr.Actors.Tests
                 ConfigurationHelper.BuildConfiguration(
                     new AbpConfigurationBuilderOptions
                     {
-                        EnvironmentName = "Development",
+                        EnvironmentName = "Testing",
                         BasePath = Directory.GetCurrentDirectory()
                     }));
         }

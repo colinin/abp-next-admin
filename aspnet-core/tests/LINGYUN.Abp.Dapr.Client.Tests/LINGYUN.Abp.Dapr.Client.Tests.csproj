@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	  <RootNamespace />
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -20,13 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj" />
     <ProjectReference Include="..\..\modules\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Dapr.Tests\LINGYUN.Abp.Dapr.Tests.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.Development.json">
+    <None Update="appsettings.Testing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

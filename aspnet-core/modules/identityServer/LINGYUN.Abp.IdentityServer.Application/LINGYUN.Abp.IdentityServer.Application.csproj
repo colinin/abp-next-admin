@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application" Version="4.4.0" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Domain\LINGYUN.Abp.IdentityServer.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.IdentityServer.Domain\LINGYUN.Abp.IdentityServer.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

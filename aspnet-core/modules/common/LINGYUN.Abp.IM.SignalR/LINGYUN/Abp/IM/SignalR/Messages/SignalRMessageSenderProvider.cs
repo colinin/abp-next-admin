@@ -108,7 +108,11 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
                 var errorInfoConverter = ServiceProvider.LazyGetService<IExceptionToErrorInfoConverter>();
                 if (errorInfoConverter != null)
                 {
-                    var errorInfo = errorInfoConverter.Convert(ex, false);
+                    var errorInfo = errorInfoConverter.Convert(ex, options =>
+                    {
+                        options.SendExceptionsDetailsToClients = false;
+                        options.SendStackTraceToClients = false;
+                    });
                     if (!chatMessage.GroupId.IsNullOrWhiteSpace())
                     {
                         await TrySendMessageToGroupAsync(

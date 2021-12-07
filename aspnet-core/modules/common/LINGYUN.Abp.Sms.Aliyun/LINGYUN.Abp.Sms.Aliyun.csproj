@@ -1,29 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-    <Description>阿里云短信服务</Description>
-  </PropertyGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+		<Description>阿里云短信服务</Description>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Sms" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Sms\Aliyun\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
+	</ItemGroup>
 
 </Project>

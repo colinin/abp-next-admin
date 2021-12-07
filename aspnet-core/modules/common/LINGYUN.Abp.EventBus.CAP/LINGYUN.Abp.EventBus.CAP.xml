@@ -252,11 +252,6 @@
             CAP分布式事件总线
             </summary>
         </member>
-        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.AbpDistributedEventBusOptions">
-            <summary>
-            Abp分布式事件总线配置
-            </summary>
-        </member>
         <member name="F:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CapPublisher">
             <summary>
             CAP消息发布接口
@@ -292,7 +287,7 @@
             取消令牌
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.EventBus.IEventErrorHandler,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
             <summary>
             constructor
             </summary>
@@ -302,8 +297,10 @@
             <param name="currentUser"></param>
             <param name="currentClient"></param>
             <param name="currentTenant"></param>
-            <param name="eventErrorHandler"></param>
+            <param name="unitOfWorkManager"></param>
             <param name="cancellationTokenProvider"></param>
+            <param name="guidGenerator"></param>
+            <param name="clock"></param>
             <param name="customDistributedEventSubscriber"></param>
         </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Subscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
@@ -341,15 +338,7 @@
             </summary>
             <param name="eventType">事件类型</param>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Subscribe``1(Volo.Abp.EventBus.Distributed.IDistributedEventHandler{``0})">
-            <summary>
-            订阅事件
-            </summary>
-            <typeparam name="TEvent">事件类型</typeparam>
-            <param name="handler">事件处理器</param>
-            <returns></returns>
-        </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.PublishAsync(System.Type,System.Object)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.PublishToEventBusAsync(System.Type,System.Object)">
             <summary>
             发布事件
             </summary>

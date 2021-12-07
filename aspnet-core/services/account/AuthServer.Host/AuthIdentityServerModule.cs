@@ -46,7 +46,7 @@ namespace AuthServer.Host
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityApplicationModule),
-        typeof(AbpIdentityHttpApiModule),
+        // typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpIdentityServerSmsValidatorModule),
         typeof(AbpIdentityServerWeChatModule),

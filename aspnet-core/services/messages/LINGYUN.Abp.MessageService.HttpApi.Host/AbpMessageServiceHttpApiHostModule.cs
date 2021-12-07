@@ -96,6 +96,7 @@ namespace LINGYUN.Abp.MessageService
             ConfigureCors(context.Services, configuration);
             ConfigureLocalization();
             ConfigureAuditing(configuration);
+            ConfigureHangfireServer(context.Services);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
 
@@ -133,7 +134,8 @@ namespace LINGYUN.Abp.MessageService
             // 审计日志
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseHangfireServer();
+            // 将在 2.0.0版本移除
+            // app.UseHangfireServer();
             app.UseHangfireDashboard();
             // 路由
             app.UseConfiguredEndpoints();
