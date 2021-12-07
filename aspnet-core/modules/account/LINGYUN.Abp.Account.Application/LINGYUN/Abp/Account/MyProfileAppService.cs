@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
@@ -6,25 +7,27 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Account.Localization;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Account
 {
     [Authorize]
-    public class MyProfileAppService : IdentityAppServiceBase, IMyProfileAppService
+    public class MyProfileAppService : ApplicationService, IMyProfileAppService
     {
         protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IdentityUserManager UserManager { get; }
-        protected IIdentityUserRepository UserRepository { get; }
+        protected Identity.IIdentityUserRepository UserRepository { get; }
         protected IOptions<IdentityOptions> IdentityOptions { get; }
 
         public MyProfileAppService(
             IdentityUserManager userManager,
-            IIdentityUserRepository userRepository,
+            Identity.IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
             IOptions<IdentityOptions> identityOptions,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache)
@@ -34,9 +37,11 @@ namespace LINGYUN.Abp.Identity
             IdentityOptions = identityOptions;
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
+
+            LocalizationResource = typeof(AccountResource);
         }
 
-        public virtual async Task SetClaimAsync(IdentityUserClaimSetDto input)
+        public virtual async Task SetClaimAsync(ChangeUserClaimInput input)
         {
             await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
@@ -86,11 +91,11 @@ namespace LINGYUN.Abp.Identity
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeDto input)
+        public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
-            var interval = await SettingProvider.GetAsync(Settings.IdentitySettingNames.User.SmsRepetInterval, 1);
+            var interval = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, 1);
             if (securityTokenCacheItem != null)
             {
                 throw new UserFriendlyException(L["SendRepeatPhoneVerifyCode", interval]);
@@ -99,10 +104,10 @@ namespace LINGYUN.Abp.Identity
             // 是否已有用户使用手机号绑定
             if (await UserRepository.IsPhoneNumberConfirmedAsync(input.NewPhoneNumber))
             {
-                throw new BusinessException(IdentityErrorCodes.DuplicatePhoneNumber);
+                throw new BusinessException(Identity.IdentityErrorCodes.DuplicatePhoneNumber);
             }
             var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
-            var template = await SettingProvider.GetOrNullAsync(Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed);
+            var template = await SettingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed);
             var token = await UserManager.GenerateChangePhoneNumberTokenAsync(user, input.NewPhoneNumber);
             // 发送验证码
             await SecurityCodeSender.SendPhoneConfirmedCodeAsync(input.NewPhoneNumber, token, template);
@@ -116,12 +121,12 @@ namespace LINGYUN.Abp.Identity
                     });
         }
 
-        public virtual async Task ChangePhoneNumberAsync(ChangePhoneNumberDto input)
+        public virtual async Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
         {
             // 是否已有用户使用手机号绑定
             if (await UserRepository.IsPhoneNumberConfirmedAsync(input.NewPhoneNumber))
             {
-                throw new BusinessException(IdentityErrorCodes.DuplicatePhoneNumber);
+                throw new BusinessException(Identity.IdentityErrorCodes.DuplicatePhoneNumber);
             }
             await IdentityOptions.SetAsync();
             //TODO: 可以查询缓存用 securityTokenCacheItem.SecurityToken 与 user.SecurityStamp 作对比

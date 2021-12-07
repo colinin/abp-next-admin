@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Account
 {
     public interface IMyProfileAppService : IApplicationService
     {
@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.Identity
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task SetClaimAsync(IdentityUserClaimSetDto input);
+        Task SetClaimAsync(ChangeUserClaimInput input);
         /// <summary>
         /// 获取二次认证状态
         /// </summary>
@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.Identity
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeDto input);
+        Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input);
         /// <summary>
         /// 改变手机绑定
         /// </summary>
@@ -36,6 +36,6 @@ namespace LINGYUN.Abp.Identity
         /// <remarks>
         /// 需二次认证,主要是为了无法用到重定向页面修改相关信息的地方（点名微信小程序）
         /// </remarks>
-        Task ChangePhoneNumberAsync(ChangePhoneNumberDto input);
+        Task ChangePhoneNumberAsync(ChangePhoneNumberInput input);
     }
 }

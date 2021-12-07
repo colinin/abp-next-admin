@@ -12,9 +12,13 @@
 
 4、移除网关管理模块, 使用本地文件作为路由配置;
 
+5、移除动态网关数据库脚本文件;
+
+6、将 Profile 相关api从Identity模块移动到Account模块;
+
 5、加入Fody统一配置ConfigureAwait;
 
-6、使用Directory.Build.props统一管理导入版本。
+6、使用Directory.Build.props统一管理导入版本;
 
 # [2021-03-29]
 1、增加动态本地化组件支持,用于在运行时替换本地化文本,需要实现 ILocalizationStore;

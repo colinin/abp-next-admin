@@ -4,12 +4,12 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Account
 {
     [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
-    [Area("identity")]
+    [Area("account")]
     [ControllerName("Profile")]
-    [Route("/api/identity/my-profile")]
+    [Route("/api/account/my-profile")]
     public class MyProfileController : AbpController, IMyProfileAppService
     {
         protected IMyProfileAppService MyProfileAppService { get; }
@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Identity
 
         [HttpPut]
         [Route("claims")]
-        public virtual async Task SetClaimAsync(IdentityUserClaimSetDto input)
+        public virtual async Task SetClaimAsync(ChangeUserClaimInput input)
         {
             await MyProfileAppService.SetClaimAsync(input);
         }
@@ -43,14 +43,14 @@ namespace LINGYUN.Abp.Identity
 
         [HttpPut]
         [Route("send-phone-number-change-code")]
-        public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeDto input)
+        public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
         {
             await MyProfileAppService.SendChangePhoneNumberCodeAsync(input);
         }
 
         [HttpPut]
         [Route("change-phone-number")]
-        public virtual async Task ChangePhoneNumberAsync(ChangePhoneNumberDto input)
+        public virtual async Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
         {
             await MyProfileAppService.ChangePhoneNumberAsync(input);
         }
