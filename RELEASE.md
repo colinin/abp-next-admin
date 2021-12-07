@@ -16,9 +16,9 @@
 
 6、将 Profile 相关api从Identity模块移动到Account模块;
 
-5、加入Fody统一配置ConfigureAwait;
+7、加入Fody统一配置ConfigureAwait;
 
-6、使用Directory.Build.props统一管理导入版本;
+8、使用Directory.Build.props统一管理导入版本;
 
 # [2021-03-29]
 1、增加动态本地化组件支持,用于在运行时替换本地化文本,需要实现 ILocalizationStore;
