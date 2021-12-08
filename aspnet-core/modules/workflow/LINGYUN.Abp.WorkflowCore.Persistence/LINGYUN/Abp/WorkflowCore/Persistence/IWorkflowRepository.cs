@@ -7,9 +7,9 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore.Persistence
 {
-    public interface IWorkflowRepository : IRepository<Workflow, Guid>
+    public interface IWorkflowRepository : IRepository<PersistedWorkflow, Guid>
     {
-        Task<List<Workflow>> GetListAsync(
+        Task<List<PersistedWorkflow>> GetListAsync(
             WorkflowStatus? status,
             string type,
             DateTime? createdFrom,

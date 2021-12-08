@@ -7,12 +7,12 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
     [ConnectionStringName(WorkflowDbProperties.ConnectionStringName)]
     public interface IWorkflowDbContext : IEfCoreDbContext
     {
-        DbSet<Workflow> Workflows { get; set; }
-        DbSet<WorkflowEvent> WorkflowEvents { get; set; }
-        DbSet<WorkflowEventSubscription> WorkflowEventSubscriptions { get; set; }
-        DbSet<WorkflowExecutionError> WorkflowExecutionErrors { get; set; }
-        DbSet<WorkflowExecutionPointer> WorkflowExecutionPointers { get; set; }
-        DbSet<WorkflowExtensionAttribute> WorkflowExtensionAttributes { get; set; }
-        DbSet<WorkflowScheduledCommand> WorkflowScheduledCommands { get; set; }
+        DbSet<PersistedWorkflow> Workflows { get; set; }
+        DbSet<PersistedEvent> WorkflowEvents { get; set; }
+        DbSet<PersistedSubscription> WorkflowEventSubscriptions { get; set; }
+        DbSet<PersistedExecutionError> WorkflowExecutionErrors { get; set; }
+        DbSet<PersistedExecutionPointer> WorkflowExecutionPointers { get; set; }
+        DbSet<PersistedExtensionAttribute> WorkflowExtensionAttributes { get; set; }
+        DbSet<PersistedScheduledCommand> WorkflowScheduledCommands { get; set; }
     }
 }

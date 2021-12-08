@@ -60,7 +60,7 @@ services:
 
   internat-apigateway:
     build:
-      context: ./gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.ApiGateway
+      context: ./aspnet-core/services/Publish/internal-apigateway
     volumes:
       - /var/opt/abp/logs/internat-apigateway:/app/Logs
       - /var/opt/abp/data/internat-apigateway/Modules:/app/Modules

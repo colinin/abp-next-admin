@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,6 +17,8 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
 {
     public class AbpWorkflowPersistenceProvider : IPersistenceProvider, IUnitOfWorkEnabled, ITransientDependency
     {
+        public ILogger<AbpWorkflowPersistenceProvider> Logger { protected get; set; }
+
         private readonly ICurrentTenant _currentTenant;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IWorkflowRepository _workflowRepository;
@@ -46,6 +50,8 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             _executionErrorRepository = executionErrorRepository;
             _subscriptionRepository = subscriptionRepository;
             _scheduledCommandRepository = scheduledCommandRepository;
+
+            Logger = NullLogger<AbpWorkflowPersistenceProvider>.Instance;
         }
 
         public virtual async Task ClearSubscriptionToken(
@@ -68,7 +74,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             Event newEvent, 
             CancellationToken cancellationToken = default)
         {
-            var we = newEvent.ToWorkflowEvent(_guidGenerator, _currentTenant);
+            var we = newEvent.ToPersistable(_guidGenerator, _currentTenant);
 
             await _workflowEventRepository.InsertAsync(we, cancellationToken: cancellationToken);
 
@@ -81,7 +87,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             EventSubscription subscription,
             CancellationToken cancellationToken = default)
         {
-            var wes = subscription.ToWorkflowEventSubscription(_guidGenerator, _currentTenant);
+            var wes = subscription.ToPersistable(_guidGenerator, _currentTenant);
 
             await _subscriptionRepository.InsertAsync(wes, cancellationToken: cancellationToken);
 
@@ -94,7 +100,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             WorkflowInstance workflow, 
             CancellationToken cancellationToken = default)
         {
-            var wf = workflow.ToWorkflow(_guidGenerator, _currentTenant);
+            var wf = workflow.ToPersistable(_guidGenerator, _currentTenant);
 
             await _workflowRepository.InsertAsync(wf, cancellationToken: cancellationToken);
 
@@ -269,7 +275,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
         {
             if (errors.Any())
             {
-                var workflowExecutionErrors = errors.Select(x => x.ToWorkflowExecutionError(_currentTenant));
+                var workflowExecutionErrors = errors.Select(x => x.ToPersistable(_currentTenant));
 
                 await _executionErrorRepository.InsertManyAsync(workflowExecutionErrors, cancellationToken: cancellationToken);
             }
@@ -285,13 +291,13 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             var wf = await _workflowRepository.FindAsync(workflowId, includeDetails: true, cancellationToken: cancellationToken);
             if (wf == null)
             {
-                wf = workflow.ToWorkflow(_guidGenerator, _currentTenant);
+                wf = workflow.ToPersistable(_guidGenerator, _currentTenant);
 
                 await _workflowRepository.InsertAsync(wf, cancellationToken: cancellationToken);
             }
             else
             {
-                wf.Update(workflow, _guidGenerator, _currentTenant);
+                wf = workflow.ToPersistable(_guidGenerator, _currentTenant, wf);
 
                 await _workflowRepository.UpdateAsync(wf, cancellationToken: cancellationToken);
             }
@@ -302,24 +308,35 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             Func<ScheduledCommand, Task> action, 
             CancellationToken cancellationToken = default)
         {
-            var quertable = await _scheduledCommandRepository.GetQueryableAsync();
-            var commands = await _asyncQueryableExecuter.ToListAsync(
-                quertable.Where(x => x.ExecuteTime < asOf.UtcDateTime.Ticks),
-                cancellationToken);
-
-            foreach (var command in commands)
+            try
             {
-                await action(command.ToScheduledCommand());
-            }
+                var quertable = await _scheduledCommandRepository.GetQueryableAsync();
+                var commands = await _asyncQueryableExecuter.ToListAsync(
+                    quertable.Where(x => x.ExecuteTime < asOf.UtcDateTime.Ticks),
+                    cancellationToken);
 
-            await _scheduledCommandRepository.DeleteManyAsync(commands, cancellationToken: cancellationToken);
+                foreach (var command in commands)
+                {
+                    await action(command.ToScheduledCommand());
+                }
+
+                await _scheduledCommandRepository.DeleteManyAsync(commands, cancellationToken: cancellationToken);
+            }
+            catch(Exception ex)
+            {
+                // TODO
+                Logger.LogWarning("Process Commands Error: {0}", ex.Message);
+            }
         }
 
         public virtual async Task ScheduleCommand(ScheduledCommand command)
         {
-            var workflowCommand = command.ToWorkflowScheduledCommand(_currentTenant);
+            if (!await _scheduledCommandRepository.CheckExistsAsync(command.CommandName, command.Data))
+            {
+                var workflowCommand = command.ToPersistable(_currentTenant);
 
-            await _scheduledCommandRepository.InsertAsync(workflowCommand);
+                await _scheduledCommandRepository.InsertAsync(workflowCommand);
+            }
         }
 
         public virtual async Task<bool> SetSubscriptionToken(

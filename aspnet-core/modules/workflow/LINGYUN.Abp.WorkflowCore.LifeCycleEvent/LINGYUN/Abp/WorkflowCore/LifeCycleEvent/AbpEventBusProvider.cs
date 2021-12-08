@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Json;
 using WorkflowCore.Interface;
 using EventData = WorkflowCore.Models.LifeCycleEvents.LifeCycleEvent;
 
@@ -16,25 +14,21 @@ namespace LINGYUN.Abp.WorkflowCore.LifeCycleEvent
         private Queue<Action<EventData>> _deferredSubscribers = new Queue<Action<EventData>>();
 
         private readonly IDistributedEventBus _eventBus;
-        private readonly ILoggerFactory _loggerFactory;
 
-        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All,
-            ReferenceLoopHandling = ReferenceLoopHandling.Error,
+        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings 
+        { 
+            TypeNameHandling = TypeNameHandling.All
         };
 
         public AbpEventBusProvider(
-            ILoggerFactory loggerFactory,
             IDistributedEventBus distributedEventBus)
         {
-            _loggerFactory = loggerFactory;
             _eventBus = distributedEventBus;
         }
 
         public async Task PublishNotification(EventData evt)
         {
-            var data = evt.SerializeObject(serializerSettings: _serializerSettings);
+            var data = JsonConvert.SerializeObject(evt, _serializerSettings);
             var wrapEvent = new LifeCycleEventWrap(data);
             await _eventBus.PublishAsync(wrapEvent);
         }
@@ -47,7 +41,7 @@ namespace LINGYUN.Abp.WorkflowCore.LifeCycleEvent
                 var action = _deferredSubscribers.Dequeue();
                 _eventBus.Subscribe<LifeCycleEventWrap>((data) =>
                 {
-                    var unWrapData = data.Data.DeserializeObject(_serializerSettings);
+                    var unWrapData = JsonConvert.DeserializeObject(data.Data, _serializerSettings);
                     action(unWrapData as EventData);
 
                     return Task.CompletedTask;
@@ -71,7 +65,7 @@ namespace LINGYUN.Abp.WorkflowCore.LifeCycleEvent
             {
                 _eventBus.Subscribe<LifeCycleEventWrap>((data) =>
                 {
-                    var unWrapData = data.Data.DeserializeObject(_serializerSettings);
+                    var unWrapData = JsonConvert.DeserializeObject(data.Data, _serializerSettings);
                     action(unWrapData as EventData);
 
                     return Task.CompletedTask;

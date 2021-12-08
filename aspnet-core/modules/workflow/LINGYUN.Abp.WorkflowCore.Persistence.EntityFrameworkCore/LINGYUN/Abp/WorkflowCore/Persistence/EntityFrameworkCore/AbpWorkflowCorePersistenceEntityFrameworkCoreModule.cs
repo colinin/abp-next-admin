@@ -12,11 +12,11 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<WorkflowDbContext>(options =>
             {
-                options.AddRepository<Workflow, EfCoreWorkflowRepository>();
-                options.AddRepository<WorkflowEvent, EfCoreWorkflowEventRepository>();
-                options.AddRepository<WorkflowExecutionError, EfCoreWorkflowExecutionErrorRepository>();
-                options.AddRepository<WorkflowScheduledCommand, EfCoreWorkflowScheduledCommandRepository>();
-                options.AddRepository<WorkflowEventSubscription, EfCoreWorkflowEventSubscriptionRepository>();
+                options.AddRepository<PersistedWorkflow, EfCoreWorkflowRepository>();
+                options.AddRepository<PersistedEvent, EfCoreWorkflowEventRepository>();
+                options.AddRepository<PersistedExecutionError, EfCoreWorkflowExecutionErrorRepository>();
+                options.AddRepository<PersistedScheduledCommand, EfCoreWorkflowScheduledCommandRepository>();
+                options.AddRepository<PersistedSubscription, EfCoreWorkflowEventSubscriptionRepository>();
             });
         }
     }

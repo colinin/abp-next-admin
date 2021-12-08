@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            builder.Entity<Workflow>(b =>
+            builder.Entity<PersistedWorkflow>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "Workflow");
 
@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.HasIndex(p => p.NextExecution);
             });
 
-            builder.Entity<WorkflowExecutionPointer>(b =>
+            builder.Entity<PersistedExecutionPointer>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "ExecutionPointer");
 
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.ConfigureByConvention();
             });
 
-            builder.Entity<WorkflowExtensionAttribute>(b =>
+            builder.Entity<PersistedExtensionAttribute>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "ExtensionAttribute");
 
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.ConfigureByConvention();
             });
 
-            builder.Entity<WorkflowEvent>(b =>
+            builder.Entity<PersistedEvent>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "Event");
 
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.HasIndex(x => x.IsProcessed);
             });
 
-            builder.Entity<WorkflowEventSubscription>(b =>
+            builder.Entity<PersistedSubscription>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "Subscription");
 
@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.HasIndex(x => x.EventKey);
             });
 
-            builder.Entity<WorkflowExecutionError>(b =>
+            builder.Entity<PersistedExecutionError>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "ExecutionError");
 
@@ -86,7 +86,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore
                 b.ConfigureByConvention();
             });
 
-            builder.Entity<WorkflowScheduledCommand>(b =>
+            builder.Entity<PersistedScheduledCommand>(b =>
             {
                 b.ToTable(WorkflowDbProperties.TablePrefix + "ScheduledCommand");
 
