@@ -163,7 +163,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             var response = await client.SearchAsync<Event>(
                 dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
-                    .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
+                    .Source(s => s.Includes(e => e.Field(f => f.Id))),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -185,7 +185,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             var response = await client.SearchAsync<EventSubscription>(
                 dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
-                    .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword"))))
+                    .Source(s => s.Includes(e => e.Field(f => f.Id)))
                     .Sort(s => s.Field(f => f.SubscribeAsOf, SortOrder.Ascending))
                     .Take(1),
                 ct: cancellationToken);
@@ -208,7 +208,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             var response = await client.SearchAsync<Event>(
                 dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
-                    .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
+                    .Source(s => s.Includes(e => e.Field(f => f.Id))),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -229,7 +229,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             var response = await client.SearchAsync<WorkflowInstance>(
                 dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
-                    .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
+                    .Source(s => s.Includes(e => e.Field(f => f.Id))),
                 ct: cancellationToken);
 
             CheckResponse(response);
