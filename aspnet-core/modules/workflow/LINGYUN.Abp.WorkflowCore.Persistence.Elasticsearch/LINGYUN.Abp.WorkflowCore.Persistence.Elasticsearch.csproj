@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

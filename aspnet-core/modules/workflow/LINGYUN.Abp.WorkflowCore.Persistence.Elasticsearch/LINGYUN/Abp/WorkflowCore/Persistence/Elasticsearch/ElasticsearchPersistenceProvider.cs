@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
 using LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Threading;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
@@ -21,18 +21,21 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         private readonly ILogger<ElasticsearchPersistenceProvider> _logger;
 
         private readonly IGuidGenerator _guidGenerator;
+        private readonly IPersistenceIndexNameNormalizer _indexNameNormalizer;
+        private readonly IPersistenceIndexInitializer _indexInitializer;
         private readonly IElasticsearchClientFactory _elasticsearchClientFactory;
-        private readonly AbpWorkflowCorePersistenceElasticsearchOptions _options;
 
         public ElasticsearchPersistenceProvider(
             IGuidGenerator guidGenerator,
             IElasticsearchClientFactory elasticsearchClientFactory,
-            IOptions<AbpWorkflowCorePersistenceElasticsearchOptions> options,
+            IPersistenceIndexInitializer indexInitializer,
+            IPersistenceIndexNameNormalizer indexNameNormalizer,
             ILogger<ElasticsearchPersistenceProvider> logger)
         {
             _guidGenerator = guidGenerator;
             _elasticsearchClientFactory = elasticsearchClientFactory;
-            _options = options.Value;
+            _indexInitializer = indexInitializer;
+            _indexNameNormalizer = indexNameNormalizer;
             _logger = logger;
         }
 
@@ -46,7 +49,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.GetAsync<EventSubscription>(
                 id,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex)),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -63,7 +66,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                 await client.UpdateAsync<EventSubscription>(
                     id,
-                    dsl => dsl.Index(CreateIndex())
+                    dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex))
                               .Doc(response.Source),
                     ct: cancellationToken);
             }
@@ -79,7 +82,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.IndexAsync(
                 newEvent,
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex))
                           .Id(newEventId),
                 ct: cancellationToken);
 
@@ -98,7 +101,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.IndexAsync(
                 subscription,
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex))
                           .Id(newSubscriptionId),
                 ct: cancellationToken);
 
@@ -117,7 +120,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.IndexAsync(
                 workflow,
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex))
                           .Id(newWorkflowId),
                 ct: cancellationToken);
 
@@ -128,14 +131,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
         public void EnsureStoreExists()
         {
-            // TODO: 为什么是同步API...
-            var client = CreateClient();
-
-            var response = client.Indices.Exists(CreateIndex());
-            if (!response.Exists)
-            {
-                client.Indices.Create(CreateIndex());
-            }
+            AsyncHelper.RunSync(async () => await _indexInitializer.InitializeAsync());
         }
 
         public virtual async Task<Event> GetEvent(string id, CancellationToken cancellationToken = default)
@@ -146,7 +142,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.GetAsync<Event>(
                 eventId,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex)),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -165,7 +161,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             terms.Add(x => x.DateRange(t => t.Field(f => f.EventTime).GreaterThanOrEquals(asOf)));
 
             var response = await client.SearchAsync<Event>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
                 ct: cancellationToken);
@@ -187,7 +183,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             terms.Add(x => x.DateRange(t => t.Field(f => f.SubscribeAsOf).LessThanOrEquals(asOf)));
 
             var response = await client.SearchAsync<EventSubscription>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword"))))
                     .Sort(s => s.Field(f => f.SubscribeAsOf, SortOrder.Ascending))
@@ -210,7 +206,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             terms.Add(x => x.DateRange(t => t.Field(f => f.EventTime).LessThanOrEquals(now)));
 
             var response = await client.SearchAsync<Event>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
                 ct: cancellationToken);
@@ -231,7 +227,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             terms.Add(x => x.Term(t => t.Field(f => f.Status).Value(WorkflowStatus.Runnable)));
 
             var response = await client.SearchAsync<WorkflowInstance>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.Includes(e => e.Field(f => f.Id.Suffix("keyword")))),
                 ct: cancellationToken);
@@ -249,7 +245,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.GetAsync<EventSubscription>(
                 id,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex)),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -269,7 +265,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             terms.Add(x => x.DateRange(t => t.Field(f => f.SubscribeAsOf).LessThanOrEquals(now)));
 
             var response = await client.SearchAsync<EventSubscription>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.IncludeAll()),
                 ct: cancellationToken);
@@ -286,7 +282,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.GetAsync<WorkflowInstance>(
                 workflowId,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex)),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -318,7 +314,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
 
             var response = await client.SearchAsync<WorkflowInstance>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex))
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.IncludeAll())
                     .Skip(skip)
@@ -334,7 +330,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             var client = CreateClient();
 
             var response = await client.SearchAsync<WorkflowInstance>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex))
                     .Query(q =>
                         q.Bool(b =>
                             b.Should(s =>
@@ -350,12 +346,13 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         public virtual async Task MarkEventProcessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
+            var indexName = CreateIndex(PersistenceIndexConsts.EventIndex);
 
             var client = CreateClient();
 
             var response = await client.GetAsync<Event>(
                 eventId,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(indexName),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -366,7 +363,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                 await client.UpdateAsync<Event>(
                     id,
-                    dsl => dsl.Index(CreateIndex())
+                    dsl => dsl.Index(indexName)
                               .Doc(response.Source),
                     ct: cancellationToken);
             }
@@ -375,12 +372,13 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         public virtual async Task MarkEventUnprocessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
+            var indexName = CreateIndex(PersistenceIndexConsts.EventIndex);
 
             var client = CreateClient();
 
             var response = await client.GetAsync<Event>(
                 eventId,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(indexName),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -391,7 +389,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                 await client.UpdateAsync<Event>(
                     id,
-                    dsl => dsl.Index(CreateIndex())
+                    dsl => dsl.Index(indexName)
                               .Doc(response.Source),
                     ct: cancellationToken);
             }
@@ -406,7 +404,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                 var response = await client.IndexManyAsync(
                     errors,
-                    CreateIndex(),
+                    CreateIndex(PersistenceIndexConsts.ExecutionErrorIndex),
                     cancellationToken: cancellationToken);
 
                 CheckResponse(response);
@@ -416,19 +414,20 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         public virtual async Task PersistWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
         {
             var workflowId = Guid.Parse(workflow.Id);
+            var indexName = CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex);
 
             var client = CreateClient();
 
             var response = await client.GetAsync<WorkflowInstance>(
                 workflowId,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(indexName),
                 ct: cancellationToken);
 
             CheckResponse(response);
 
             await client.UpdateAsync<WorkflowInstance>(
                     workflowId,
-                    dsl => dsl.Index(CreateIndex())
+                    dsl => dsl.Index(indexName)
                               .Doc(workflow),
                     ct: cancellationToken);
         }
@@ -436,13 +435,14 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         public virtual async Task ProcessCommands(DateTimeOffset asOf, Func<ScheduledCommand, Task> action, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
+            var indexName = CreateIndex(PersistenceIndexConsts.ScheduledCommandIndex);
 
             var terms = new List<Func<QueryContainerDescriptor<PersistedScheduledCommand>, QueryContainer>>();
 
             terms.Add(x => x.LongRange(t => t.Field(f => f.ExecuteTime).LessThan(asOf.Ticks)));
 
             var response = await client.SearchAsync<PersistedScheduledCommand>(
-                dsl => dsl.Index(CreateIndex())
+                dsl => dsl.Index(indexName)
                     .Query(q => q.Bool(b => b.Filter(terms)))
                     .Source(s => s.IncludeAll()),
                 ct: cancellationToken);
@@ -457,7 +457,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                     await client.DeleteAsync<PersistedScheduledCommand>(
                         command.Id,
-                        dsl => dsl.Index(CreateIndex()),
+                        dsl => dsl.Index(indexName),
                         ct: cancellationToken);
                 }
                 catch (Exception)
@@ -477,7 +477,9 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.IndexAsync(
                 persistedCommand,
-                dsl => dsl.Index(CreateIndex()).Id(persistedCommand.Id));
+                dsl => dsl
+                    .Index(CreateIndex(PersistenceIndexConsts.ScheduledCommandIndex))
+                    .Id(persistedCommand.Id));
 
             CheckResponse(response);
         }
@@ -485,12 +487,13 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
         public virtual async Task<bool> SetSubscriptionToken(string eventSubscriptionId, string token, string workerId, DateTime expiry, CancellationToken cancellationToken = default)
         {
             var id = Guid.Parse(eventSubscriptionId);
+            var indexName = CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex);
 
             var client = CreateClient();
 
             var response = await client.GetAsync<EventSubscription>(
                 id,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(indexName),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -503,7 +506,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
                 var uptResponse = await client.UpdateAsync<EventSubscription>(
                     id,
-                    dsl => dsl.Index(CreateIndex())
+                    dsl => dsl.Index(indexName)
                               .Doc(response.Source),
                     ct: cancellationToken);
 
@@ -521,7 +524,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
             var response = await client.DeleteAsync<EventSubscription>(
                 id,
-                dsl => dsl.Index(CreateIndex()),
+                dsl => dsl.Index(CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex)),
                 ct: cancellationToken);
 
             CheckResponse(response);
@@ -532,9 +535,9 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return _elasticsearchClientFactory.Create();
         }
 
-        private string CreateIndex()
+        private string CreateIndex(string index)
         {
-            return _options.IndexFormat;
+            return _indexNameNormalizer.NormalizeIndex(index);
         }
 
         private void CheckResponse(IResponse response)
