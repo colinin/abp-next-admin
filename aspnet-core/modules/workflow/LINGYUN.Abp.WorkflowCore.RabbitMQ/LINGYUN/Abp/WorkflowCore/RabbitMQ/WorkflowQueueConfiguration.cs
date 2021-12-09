@@ -8,9 +8,8 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
             string queueName,
             bool durable = true, 
             bool exclusive = false, 
-            bool autoDelete = false, 
-            string deadLetterQueueName = null) 
-            : base(queueName, durable, exclusive, autoDelete, deadLetterQueueName)
+            bool autoDelete = false) 
+            : base(queueName, durable, exclusive, autoDelete)
         {
         }
     }

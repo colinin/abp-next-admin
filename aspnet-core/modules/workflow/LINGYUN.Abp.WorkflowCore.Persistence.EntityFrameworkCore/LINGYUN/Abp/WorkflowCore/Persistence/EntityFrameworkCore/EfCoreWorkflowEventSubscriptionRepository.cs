@@ -5,7 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.WorkflowCore.Persistence
 {
-    public class EfCoreWorkflowEventSubscriptionRepository : EfCoreRepository<WorkflowDbContext, WorkflowEventSubscription, Guid>, IWorkflowEventSubscriptionRepository
+    public class EfCoreWorkflowEventSubscriptionRepository : EfCoreRepository<WorkflowDbContext, PersistedSubscription, Guid>, IWorkflowEventSubscriptionRepository
     {
         public EfCoreWorkflowEventSubscriptionRepository(IDbContextProvider<WorkflowDbContext> dbContextProvider) 
             : base(dbContextProvider)

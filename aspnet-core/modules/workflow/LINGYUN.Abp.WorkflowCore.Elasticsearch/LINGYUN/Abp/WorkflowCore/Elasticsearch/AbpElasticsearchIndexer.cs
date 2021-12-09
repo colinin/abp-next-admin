@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Volo.Abp;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 using WorkflowCore.Models.Search;
@@ -46,7 +47,7 @@ namespace LINGYUN.Abp.WorkflowCore.Elasticsearch
             if (!result.ApiCall.Success)
             {
                 _logger.LogError(default(EventId), result.ApiCall.OriginalException, $"Failed to index workflow {workflow.Id}");
-                throw new ApplicationException($"Failed to index workflow {workflow.Id}", result.ApiCall.OriginalException);
+                throw new AbpException($"Failed to index workflow {workflow.Id}", result.ApiCall.OriginalException);
             }
         }
 

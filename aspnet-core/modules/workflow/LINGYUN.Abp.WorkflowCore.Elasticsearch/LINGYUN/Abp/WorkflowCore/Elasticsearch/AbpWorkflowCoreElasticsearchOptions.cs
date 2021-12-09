@@ -3,12 +3,12 @@
     public class AbpWorkflowCoreElasticsearchOptions
     {
         /// <summary>
-        /// Default value: "workflows".
+        /// Default value: "abp.workflows".
         /// </summary>
         public string IndexFormat { get; set; }
         public AbpWorkflowCoreElasticsearchOptions()
         {
-            IndexFormat = "workflows";
+            IndexFormat = "abp.workflows";
         }
     }
 }

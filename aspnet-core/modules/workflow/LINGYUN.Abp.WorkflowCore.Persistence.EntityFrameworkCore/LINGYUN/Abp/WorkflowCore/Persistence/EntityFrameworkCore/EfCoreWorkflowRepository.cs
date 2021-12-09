@@ -11,14 +11,14 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore.Persistence
 {
-    public class EfCoreWorkflowRepository : EfCoreRepository<WorkflowDbContext, Workflow, Guid>, IWorkflowRepository
+    public class EfCoreWorkflowRepository : EfCoreRepository<WorkflowDbContext, PersistedWorkflow, Guid>, IWorkflowRepository
     {
         public EfCoreWorkflowRepository(IDbContextProvider<WorkflowDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
         }
 
-        public virtual async Task<List<Workflow>> GetListAsync(
+        public virtual async Task<List<PersistedWorkflow>> GetListAsync(
             WorkflowStatus? status,
             string type,
             DateTime? createdFrom,
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 .ToListAsync();
         }
 
-        public override async Task<IQueryable<Workflow>> WithDetailsAsync()
+        public override async Task<IQueryable<PersistedWorkflow>> WithDetailsAsync()
         {
             var quertable = await base.WithDetailsAsync();
             return quertable

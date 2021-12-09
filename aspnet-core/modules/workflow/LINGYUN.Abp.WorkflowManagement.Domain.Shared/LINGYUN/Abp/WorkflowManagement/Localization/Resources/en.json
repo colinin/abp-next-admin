@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:WorkflowManagement": "WorkflowManagement",
+    "Permission:ManageSettings": "Manage Settings"
+  }
+}
