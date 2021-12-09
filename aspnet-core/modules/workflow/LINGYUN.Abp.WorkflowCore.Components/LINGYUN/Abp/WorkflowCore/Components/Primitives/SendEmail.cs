@@ -12,21 +12,21 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore.Components.Primitives
 {
-    public class EmailStepBody : StepBodyAsyncBase
+    public class SendEmail : StepBodyAsyncBase
     {
-        public ILogger<EmailStepBody> Logger { protected get; set; }
+        public ILogger<SendEmail> Logger { protected get; set; }
 
         private readonly IEmailSender _emailSender;
         private readonly ITemplateRenderer _templateRenderer;
 
-        public EmailStepBody(
+        public SendEmail(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer)
         {
             _emailSender = emailSender;
             _templateRenderer = templateRenderer;
 
-            Logger = NullLogger<EmailStepBody>.Instance;
+            Logger = NullLogger<SendEmail>.Instance;
         }
 
         [NotNull]

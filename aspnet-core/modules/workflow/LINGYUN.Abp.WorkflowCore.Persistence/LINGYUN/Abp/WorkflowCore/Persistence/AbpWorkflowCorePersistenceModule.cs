@@ -10,8 +10,8 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddSingleton<IPersistenceProvider, AbpWorkflowPersistenceProvider>();
-            context.Services.AddSingleton<AbpWorkflowPersistenceProvider>();
+            context.Services.AddTransient<IPersistenceProvider, AbpWorkflowPersistenceProvider>();
+            context.Services.AddTransient<AbpWorkflowPersistenceProvider>();
 
             PreConfigure<WorkflowOptions>(options =>
             {

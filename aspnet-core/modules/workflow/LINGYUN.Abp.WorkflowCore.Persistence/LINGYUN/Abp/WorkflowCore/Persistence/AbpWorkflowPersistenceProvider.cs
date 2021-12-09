@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
@@ -15,7 +14,7 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore.Persistence
 {
-    public class AbpWorkflowPersistenceProvider : IPersistenceProvider, IUnitOfWorkEnabled, ITransientDependency
+    public class AbpWorkflowPersistenceProvider : IPersistenceProvider, IUnitOfWorkEnabled
     {
         public ILogger<AbpWorkflowPersistenceProvider> Logger { protected get; set; }
 

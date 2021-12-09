@@ -9,18 +9,18 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore.Components.Primitives
 {
-    public class SmsStepBody : StepBodyAsyncBase
+    public class SendSms : StepBodyAsyncBase
     {
-        public ILogger<SmsStepBody> Logger { protected get; set; }
+        public ILogger<SendSms> Logger { protected get; set; }
 
 
         private readonly ISmsSender _smsSender;
 
-        public SmsStepBody(ISmsSender smsSender)
+        public SendSms(ISmsSender smsSender)
         {
             _smsSender = smsSender;
 
-            Logger = NullLogger<SmsStepBody>.Instance;
+            Logger = NullLogger<SendSms>.Instance;
         }
 
         [NotNull]
