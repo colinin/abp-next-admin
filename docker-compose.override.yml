@@ -58,26 +58,12 @@ services:
       - identity-server-sts
     restart: always
 
-  apigateway-admin-service:
+  internat-apigateway:
     build:
-      context: ./aspnet-core/services/Publish/apigateway-admin
+      context: ./gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.ApiGateway
     volumes:
-      - /var/opt/abp/logs/apigateway-admin:/app/Logs
-      - /var/opt/abp/data/apigateway-admin/Modules:/app/Modules
-    depends_on:
-      - identity-server-sts
-      - admin-service
-    restart: always
-
-  apigateway-host-service:
-    build:
-      context: ./aspnet-core/services/Publish/apigateway-host
-    volumes:
-      - /var/opt/abp/logs/apigateway-host:/app/Logs
-      - /var/opt/abp/data/apigateway-host/Modules:/app/Modules
-    depends_on:
-      - identity-server-sts
-      - apigateway-admin-service
+      - /var/opt/abp/logs/internat-apigateway:/app/Logs
+      - /var/opt/abp/data/internat-apigateway/Modules:/app/Modules
     restart: always
 
 volumes:

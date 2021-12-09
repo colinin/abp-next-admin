@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.HangFire" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs" Version="4.4.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj" />
-  </ItemGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.HangFire" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj" />
+	</ItemGroup>
 
 </Project>

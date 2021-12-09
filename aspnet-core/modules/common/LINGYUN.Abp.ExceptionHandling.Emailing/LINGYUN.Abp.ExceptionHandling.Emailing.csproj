@@ -1,32 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\zh-Hans.json" />
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\en.tpl" />
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\zh-Hans.tpl" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\en.tpl" />
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\zh-Hans.tpl" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\zh-Hans.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\en.tpl" />
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\zh-Hans.tpl" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Localization\Resources\zh-Hans.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\en.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Emailing\Templates\SendEmail\zh-Hans.tpl" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Emailing" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
+	</ItemGroup>
 
 </Project>

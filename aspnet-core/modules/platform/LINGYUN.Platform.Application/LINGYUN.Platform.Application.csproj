@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
-  
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
-    <ProjectReference Include="..\LINGYUN.Platform.Domain\LINGYUN.Platform.Domain.csproj" />
-  </ItemGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Platform.Domain\LINGYUN.Platform.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

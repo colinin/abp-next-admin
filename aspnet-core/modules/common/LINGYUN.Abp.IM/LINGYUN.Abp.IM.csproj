@@ -1,27 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\IM\Localization\Resources\*.json" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\IM\Localization\Resources\*.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\IM\Localization\Resources\*.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Auditing" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.EventBus" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\IM\Localization\Resources\*.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
+	</ItemGroup>
 
 </Project>

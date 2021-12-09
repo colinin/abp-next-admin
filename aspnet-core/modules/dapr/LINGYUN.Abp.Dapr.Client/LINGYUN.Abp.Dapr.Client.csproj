@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
-	
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-	  <RootNamespace />
-  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Http.Client" Version="4.4.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj" />
+	</ItemGroup>
 
 </Project>

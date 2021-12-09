@@ -1,0 +1,180 @@
+{
+  "Routes": [
+    // 框架端点
+    {
+      "DownstreamPathTemplate": "/api/abp/application-configuration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/ids-admin/application-configuration",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "ids-admin-configuration"
+    },
+    // 框架动态API端点
+    {
+      "DownstreamPathTemplate": "/api/abp/api-definition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/ids-admin/api-definition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "ids-admin-api-definition"
+    },
+    // 身份标识管理
+    {
+      "DownstreamPathTemplate": "/api/identity/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    // 身份认证服务器管理
+    {
+      "DownstreamPathTemplate": "/api/identity-server/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity-server/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    // 用户账户管理
+    {
+      "DownstreamPathTemplate": "/api/account/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    // API 文档
+    {
+      "DownstreamPathTemplate": "/swagger/v1/swagger.json",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30015
+        }
+      ],
+      "UpstreamPathTemplate": "/ids-admin/v1/swagger.json",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    }
+  ]
+}

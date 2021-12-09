@@ -1,25 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\TenantManagement\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
 </Project>

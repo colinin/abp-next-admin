@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="4.4.0" />
-	<PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

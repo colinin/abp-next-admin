@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

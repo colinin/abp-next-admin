@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  vue-vben-client:
+    build:
+      context: .
+    restart: always
+    ports:
+      - "40080:80"
+
+volumes:
+  dbdata:
+
+networks:
+  linyun-abp:

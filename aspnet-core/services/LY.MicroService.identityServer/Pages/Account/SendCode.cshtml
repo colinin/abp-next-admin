@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model LY.MicroService.IdentityServer.Pages.Account.SendCodeModel
+@inject IHtmlLocalizer<AccountResource> L
+
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["TwoFactor"]</h4>
+        <form method="post" class="mt-4">
+            <abp-input asp-for="RememberMe" />
+            <input asp-for="ReturnUrl" />
+            <input asp-for="ReturnUrlHash" />
+            <div class="form-group">
+                <abp-select asp-for="Input.SelectedProvider" label="@L["SelectedProvider"].Value" asp-items="@Model.Providers"></abp-select>
+            </div>
+            <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["SendVerifyCode"]</abp-button>
+        </form>
+    </div>
+</div>
+

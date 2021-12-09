@@ -108,36 +108,6 @@ namespace LINGYUN.Abp.Identity
         #endregion
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
-        public virtual async Task ChangePasswordAsync(Guid id, ChangePasswordInput input)
-        {
-            var user = await GetUserAsync(id);
-
-            if (user.IsExternal)
-            {
-                throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
-            }
-
-            if (user.PasswordHash == null)
-            {
-                (await UserManager.AddPasswordAsync(user, input.NewPassword)).CheckErrors();
-
-                return;
-            }
-
-            if (input.CurrentPassword.IsNullOrWhiteSpace())
-            {
-                // 管理员重置用户密码
-                var resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
-                (await UserManager.ResetPasswordAsync(user, resetToken, input.NewPassword)).CheckErrors();
-            }
-            else
-            {
-                // 用户重置密码
-                (await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword)).CheckErrors();
-            }
-        }
-
-        [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, TwoFactorEnabledDto input)
         {
             var user = await GetUserAsync(id);

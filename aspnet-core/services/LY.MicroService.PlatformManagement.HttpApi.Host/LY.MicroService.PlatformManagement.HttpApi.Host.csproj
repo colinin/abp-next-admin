@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>LY.MicroService.PlatformManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="$(SerilogEnrichersProcessPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="$(SerilogEnrichersThreadPackageVersion)" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="$(SerilogSinksElasticsearchPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCorePackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.BlobStoring.FileSystem" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+		<ProjectReference Include="..\..\modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
+		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
+		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+		<ProjectReference Include="..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.ImageSharp.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi\LINGYUN.Abp.OssManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application\LINGYUN.Platform.Application.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
+		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
+	</ItemGroup>
+
+</Project>

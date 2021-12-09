@@ -35,10 +35,13 @@ namespace LINGYUN.Abp.Cli.Commands
             }
         }
 
+        protected ICmdHelper CmdHelper { get; }
         public ILogger<CreateCommand> Logger { get; set; }
 
-        public LocalFileCreateProjectService()
+        public LocalFileCreateProjectService(ICmdHelper cmdHelper)
         {
+            CmdHelper = cmdHelper;
+
             Logger = NullLogger<CreateCommand>.Instance;
         }
 

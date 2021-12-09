@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
@@ -8,9 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Auditing" Version="4.4.0" />
-		<PackageReference Include="Volo.Abp.Guids" Version="4.4.0" />
-		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="4.4.0" />
+		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
-  
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Http.Client" Version="4.4.0" />
-  </ItemGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

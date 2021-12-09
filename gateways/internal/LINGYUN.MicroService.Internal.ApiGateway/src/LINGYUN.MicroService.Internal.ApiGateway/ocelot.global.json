@@ -1,0 +1,24 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:30000",
+    "DownstreamScheme": "HTTP",
+    "HttpHandlerOptions": {
+      "UseTracing": true
+    },
+    "RateLimitOptions": {
+      "DisableRateLimitHeaders": false,
+      "ClientIdHeader": "ClientId",
+      "RateLimitCounterPrefix": "ocelot",
+      "QuotaExceededMessage": "您的操作过快,请稍后再试!",
+      "HttpStatusCode": 429
+    },
+    "QoSOptions": {
+      "TimeoutValue": 30000,
+      "DurationOfBreak": 60000,
+      "ExceptionsAllowedBeforeBreaking": 30
+    },
+    "LoadBalancerOptions": {
+      "Type": "RoundRobin"
+    }
+  }
+}

@@ -1,31 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.Authorization" Version="4.4.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
-    <None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
+		<None Remove="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
-    <ProjectReference Include="..\..\message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\ApplicationContracts\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+		<ProjectReference Include="..\..\message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

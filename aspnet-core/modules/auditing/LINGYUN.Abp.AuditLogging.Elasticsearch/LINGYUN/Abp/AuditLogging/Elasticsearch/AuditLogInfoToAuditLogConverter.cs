@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,12 +16,18 @@ namespace LINGYUN.Abp.AuditLogging
     public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter, ITransientDependency
     {
         protected IGuidGenerator GuidGenerator { get; }
+        protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
         protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
         protected IJsonSerializer JsonSerializer { get; }
 
-        public AuditLogInfoToAuditLogConverter(IGuidGenerator guidGenerator, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter, IJsonSerializer jsonSerializer)
+        public AuditLogInfoToAuditLogConverter(
+            IGuidGenerator guidGenerator, 
+            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions,
+            IExceptionToErrorInfoConverter exceptionToErrorInfoConverter, 
+            IJsonSerializer jsonSerializer)
         {
             GuidGenerator = guidGenerator;
+            ExceptionHandlingOptions = exceptionHandlingOptions.Value;
             ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
             JsonSerializer = jsonSerializer;
         }
@@ -50,8 +57,12 @@ namespace LINGYUN.Abp.AuditLogging
                               .ToList()
                           ?? new List<AuditLogAction>();
 
-            var remoteServiceErrorInfos = auditLogInfo.Exceptions?.Select(exception => ExceptionToErrorInfoConverter.Convert(exception, true))
-                                          ?? new List<RemoteServiceErrorInfo>();
+            var remoteServiceErrorInfos = auditLogInfo.Exceptions?.Select(exception => 
+                ExceptionToErrorInfoConverter.Convert(exception, options =>
+                {
+                    options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
+                    options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
+                })) ?? new List<RemoteServiceErrorInfo>();
 
             var exceptions = remoteServiceErrorInfos.Any()
                 ? JsonSerializer.Serialize(remoteServiceErrorInfos, indented: true)

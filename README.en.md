@@ -1,126 +1,90 @@
 English | [简体中文](./README.md)
 
+[RELEASE](./RELEASE.md) RELEASE
+
 ## Overview
 
-This is a [vue-typescript-admin-template](http://armour.github.io/vue-typescript-admin-template) -based Abp framework background management interface
+This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp framework background management interface
 
-## Documentation
+## Quick Start
 
-[Docs](https://armour.github.io/vue-typescript-admin-docs)
+### 1、Install cli
+
+```shell
+  dotnet tool install --global LINGYUN.Abp.Cli --version 4.4.0
+```
+
+### 2、Install .NET Template
+
+```shell
+  dotnet new --install LINGYUN.Abp.MicroService.Templates::4.4.0
+```
+
+### 3、Use cli create new project
+
+```shell
+  # use sqlserver
+  # MyCompanyName you company name
+  # MyProjectName you project name
+  # MyPackageName you package name
+  # -o  See: abp cli
+  # --dbms  See: abp cli
+  # --cs    See: abp cli
+  # --no-random-port See: abp cli
+  labp create MyCompanyName.MyProjectName -pk MyPackageName -o "D:\Project" --dbms sqlserver --cs "Server=127.0.0.1;Database=MyProject;User Id=sa;Password=123456" --no-random-port
+
+  cd D:\Project\host\MyPackageName.MyCompanyName.MyProjectName.HttpApi.Host
+
+  dotnet restore
+
+  dotnet run
+
+  start http://127.0.0.1:5000/
+
+```
 
 ## Screenshots
 
-![Logging](./vueJs/images/logging.png)
+![Logging](./apps/vue/images/logging.png)
 
-![AuditLog](./vueJs/images/audit-log.png)
+![Audit Log](./apps/vue/images/audit-log.png)
 
-![SecurityLog](./vueJs/images/security-log.png)
+![Security Log](./apps/vue/images/security-log.png)
 
-![ApiGateway](./vueJs/images/apigateway.png)
+![Data Dictionary](./apps/vue/images/data-dictionary.png)
 
-![Data Dictionary](./vueJs/images/data-dictionary.png)
+![Oss Management](./apps/vue/images/oss.png)
 
-![Oss Management](./vueJs/images/oss.png)
+![Feature Management](./apps/vue/images/features.png)
 
-![Features](./vueJs/images/features.png)
+![Settings](./apps/vue/images/settings.png)
 
-![Settings](./vueJs/images/settings.png)
+![Dynamic Manus](./apps/vue/images/menus.png)
 
-![Menus](./vueJs/images/menus.png)
+![Organization Unit](./apps/vue/images/organization-unit.png)
 
-![OrganizationUnits](./vueJs/images/organization-unit.png)
-
-![Localization](./vueJs/images/localization.png)
+![Localization Management](./apps/vue/images/localization.png)
 
 ## Related Projects
 
-[Armour/vue-typescript-admin-mock-server](https://github.com/armour/vue-typescript-admin-mock-server) (mock server for this project)
+[abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
-[Armour/vue-typescript-admin-docs](https://github.com/armour/vue-typescript-admin-docs) (documentation source for this project)
+[EasyAbp/Cap](https://github.com/EasyAbp/Abp.EventBus.CAP) (EasyAbp)
 
 Javascript version:
 
-[PanJiaChen/vue-admin-template](https://github.com/PanJiaChen/vue-admin-template) (a vue2.0 minimal admin template) 
-
-[PanJiaChen/vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) (full features supported vue admin) 
-
-[PanJiaChen/electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin) (a vue electron admin project)
-
-## Features
-
-```txt
-- Login / Logout
-
-- Permission Authentication
-  - Page permission
-  - Directive permission
-  - Permission configuration page
-  - Two-step login
-
-- Multi-environment build
-  - Dev / Stage / Prod
-
-- Global Features
-  - I18n
-  - Dynamic themes
-  - Dynamic sidebar (supports multi-level routing)
-  - Dynamic breadcrumb
-  - Tags-view (supports right-click operation)
-  - Clipboard
-  - Svg icons
-  - Search
-  - Screenfull
-  - Settings
-  - Mock data / Mock server
-  - PWA support
-
-- Components
-  - Editors
-    - Rich Text Editor
-    - Markdown Editor
-    - JSON Editor
-  - Avatar Upload
-  - Back To Top
-  - CountTo
-  - Dropzone
-  - Draggable Dialog
-  - Draggable Kanban
-  - Draggable List
-  - Draggable Select
-  - ECharts
-  - Mixin
-  - SplitPane
-  - Sticky
-
-- Table
-  - Dynamic Table
-  - Draggable Table
-  - Inline Edit Table
-  - Complex Table
-
-- Excel
-  - Export Excel
-  - Upload Excel
-  - Excel Visualization
-
-- Zip
-  - Export zip
-
-- PDF
-  - Download pdf
-
-- Dashboard
-- Guide Page
-- Advanced Example Page
-- Error Log
-- Error Page
-  - 401
-  - 404
-```
+[vue-vben-admin](https://github.com/anncwb/vue-vben-admin.git) (vue-vben-admin)
 
 ## Preparation
 
-You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) locally. The project is based on [typescript](https://www.typescriptlang.org/), [vue](https://vuejs.org/index.html), [vuex](https://vuex.vuejs.org/), [vue-router](https://router.vuejs.org/), [vue-cli](https://github.com/vuejs/vue-cli) , [axios](https://github.com/axios/axios) and [element-ui](https://github.com/ElemeFE/element), Understanding and learning these knowledge in advance will greatly help you on using this project.
+- [node](http://nodejs.org/) and [git](https://git-scm.com/) - Project development environment
+- [Vite](https://vitejs.dev/) - Familiar with vite features
+- [Vue3](https://v3.vuejs.org/) - Familiar with Vue basic syntax
+- [TypeScript](https://www.typescriptlang.org/) - Familiar with the basic syntax of `TypeScript`
+- [Es6+](http://es6.ruanyifeng.com/) - Familiar with es6 basic syntax
+- [Vue-Router-Next](https://next.router.vuejs.org/) - Familiar with the basic use of vue-router
+- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui basic use
+- [Mock.js](https://github.com/nuysoft/Mock) - mockjs basic syntax
 
 ## Project Structure
 
@@ -135,34 +99,26 @@ You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) l
 │   ├── assets                 # module assets like fonts, images (processed by webpack)
 │   ├── components             # global components
 │   ├── directives             # global directives
-│   ├── filters                # global filter
-│   ├── icons                  # svg icons
-│   ├── lang                   # i18n language
-│   ├── layout                 # global layout
-│   ├── pwa                    # PWA service worker related files
+│   ├── enums                  # global enums
+│   ├── hooks                  # global hooks
+│   ├── locales                # locales
+│   ├── layout                 # layouts
 │   ├── router                 # router
+│   ├── settings               # global settings
 │   ├── store                  # store
-│   ├── styles                 # global css
 │   ├── utils                  # global utils
 │   ├── views                  # views
 │   ├── App.vue                # main app component
 │   ├── main.ts                # app entry file
-│   ├── permission.ts          # permission authentication
-│   ├── settings.ts            # setting file
-│   └── shims.d.ts             # type definition shims
+├── types                      # types
 ├── tests/                     # tests
-├── .circleci/                 # automated CI configuration
-├── .browserslistrc            # browserslist config file (to support Autoprefixer)
-├── .editorconfig              # editor code format consistency config
 ├── .env.xxx                   # env variable configuration
 ├── .eslintrc.js               # eslint config
-├── babel.config.js            # babel config
-├── cypress.json               # e2e test config
 ├── jest.config.js             # jest unit test config
 ├── package.json               # package.json
 ├── postcss.config.js          # postcss config
 ├── tsconfig.json              # typescript config
-└── vue.config.js              # vue-cli config
+└── vite.config.js             # vue vite config
 ```
 
 ## Project setup
@@ -182,70 +138,20 @@ yarn install
 Modify the server address that the development environment will use for the proxy. Provide the following three addresses: IdentityService, IdentityServer, and ApiService
 
 ```bash
-
-    proxy: {
-      // change xxx-api/login => /mock-api/v1/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_IDENTITY_SERVER]: {
-        // IdentityServer4 Server address, used for authentication
-        target: 'http://localhost:44385',
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_IDENTITY_SERVER]: ''
-        }
-      },
-      [process.env.VUE_APP_SIGNALR_SERVER]: {
-        // SignalR address for the messaging service, SignalR USES WebSocket communication, so a separate proxy address is required
-        target: 'ws://localhost:30000',
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_SIGNALR_SERVER]: ''
-        },
-        logLevel: 'debug'
-      },
-      [process.env.VUE_APP_BASE_API]: {
-        // All other business is through the gateway proxy, directly fill in the gateway address
-        target: 'http://localhost:30000',
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        },
-        logLevel: 'debug'
-      }
-    }
-
+VITE_PROXY = [["/connect","http://127.0.0.1:44385"],["/api","http://127.0.0.1:30000"],["/signalr-hubs","ws://127.0.0.1:30000"]]
 ```
 
 Modify the actual address of the production environment, as above
 
 ```bash
-
-# Base api
-# Remeber to change this to your production server address
-# Here I used my mock server for this project
-# VUE_APP_BASE_API = 'https://vue-typescript-admin-mock-server.armour.now.sh/mock-api/v1/'
-
-# Business services
-VUE_APP_BASE_API = '/api'
-# SignalR
-VUE_APP_SIGNALR_SERVER = '/signalr-hubs'
-# IdentityServer4
-VUE_APP_BASE_IDENTITY_SERVER = '/connect'
-
-# default tenant name
-VUE_APP_TENANT_NAME = ''
+# STS Connect
+# token issue
+VITE_GLOB_AUTHORITY='http://127.0.0.1:44385'
 # client id
-VUE_APP_CLIENT_ID = 'vue-admin-element'
+VITE_GLOB_CLIENT_ID='vue-admin-element'
 # client secret
-VUE_APP_CLIENT_SECRET = '1q2w3e*'
-
+VITE_GLOB_CLIENT_SECRET='1q2w3e*'
 ```
-
-### Initializes appsettings.json
-
-In directory **./aspnet-core/configuration** ,Copy the given settings file to your own project directory (only if you are cloning the repository for the first time)
-
-Make sure the configuration file is the same as the connection configuration of your development environment middleware, such as RabbitMQ, MySql, Redis, and so on
 
 ### EntityFramework migration
 
@@ -262,14 +168,6 @@ dotnet ef database update
 ```
 
 - You can also use quick migration script files: **./build/build-aspnetcore-ef-update.ps1**
-
-
-### Initializes the apigateway database
-
-In the **2020-08-05 16:25:00** submission, the **apigateway-init.SQL** file has been read and written to the **DataSeeder** type. Starting the gateway management project will automatically initialize the gateway data.
-
-Make sure the **aspnet-core/Database/apigateway-init.sql** file exists
-
 
 ### Configure the RabbitMQ
 
@@ -295,23 +193,23 @@ start-all-service.bat
 
 ```shell
 
-cd vueJs
+cd apps/vue
 
-start-vue-admin.bat
+yarn dev
 
 ```
 
 #### Compiles and minifies for production
 
 ```bash
-yarn run build:prod
+yarn run build
 ```
 
 ### About Docker container
 
 **Step 1**: Building background services, powershell script: **./build/build-aspnetcore-release.ps1**,  **Warning: after the release of service need configuration file: appsettings.Production.json**
 
-**Step 2**: Build the front-end, **./build/build-vue-element-admin.ps1**
+**Step 2**: Build the front-end, **./build/build-vue-apps.ps1**
 
 **Step 3**: Build after the release of the address of the default in **./aspnet-core/services/Publish**, change nginx proxy server address: **./client/docker/nginx/default.conf**
 
@@ -322,7 +220,7 @@ yarn run build:prod
 #### Lints and fixes files
 
 ```bash
-yarn run lint
+yarn lint:eslint
 ```
 
 #### Run your unit tests
@@ -331,34 +229,60 @@ yarn run lint
 yarn run test:unit
 ```
 
-#### Run your end-to-end tests
 
-```bash
-yarn run test:e2e
-```
+## How to contribute
 
-#### Generate all svg components
+You are very welcome to join！Raise an issue Or submit a Pull Request。
 
-```bash
-yarn run svg
-```
+**Pull Request:**
 
-#### Customize Vue configuration
+1. Fork code!
+2. Create your own branch: `git checkout -b feat/xxxx`
+3. Submit your changes: `git commit -am 'feat(function): add xxxxx'`
+4. Push your branch: `git push origin feat/xxxx`
+5. submit`pull request`
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Git Contribution submission specification
 
-## Browsers support
+- reference [vue](./apps/vue/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
-Modern browsers and Internet Explorer 10+.
+  - `feat` Add new features
+  - `fix` Fix the problem/BUG
+  - `style` The code style is related and does not affect the running result
+  - `perf` Optimization/performance improvement
+  - `refactor` Refactor
+  - `revert` Undo edit
+  - `test` Test related
+  - `docs` Documentation/notes
+  - `chore` Dependency update/scaffolding configuration modification etc.
+  - `workflow` Workflow improvements
+  - `ci` Continuous integration
+  - `types` Type definition file changes
+  - `wip` In development
 
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
+## Related warehouse
 
-## Contributing
+If these plugins are helpful to you, you can give a star support
 
-See [CONTRIBUTING.md](https://github.com/Armour/vue-typescript-admin-template/blob/master/.github/CONTRIBUTING.md)
+- [vite-plugin-mock](https://github.com/anncwb/vite-plugin-mock) - Used for local and development environment data mock
+- [vite-plugin-html](https://github.com/anncwb/vite-plugin-html) - Used for html template conversion and compression
+- [vite-plugin-style-import](https://github.com/anncwb/vite-plugin-style-import) - Used for component library style introduction on demand
+- [vite-plugin-theme](https://github.com/anncwb/vite-plugin-theme) - Used for online switching of theme colors and other color-related configurations
+- [vite-plugin-imagemin](https://github.com/anncwb/vite-plugin-imagemin) - Used to pack compressed image resources
+- [vite-plugin-compression](https://github.com/anncwb/vite-plugin-compression) - Used to pack input .gz|.brotil files
+- [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - Used to quickly generate svg sprite
+
+## Browser support
+
+The `Chrome 80+` browser is recommended for local development
+
+Support modern browsers, not IE
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
+| :-: | :-: | :-: | :-: | :-: |
+| not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
+
 
 ## License
 
-[MIT License](https://github.com/Armour/vue-typescript-admin-template/blob/master/LICENSE)
+[MIT License](./LICENSE)

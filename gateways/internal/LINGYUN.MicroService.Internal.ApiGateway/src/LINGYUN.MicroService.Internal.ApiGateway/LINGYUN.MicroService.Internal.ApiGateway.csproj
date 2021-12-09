@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>LINGYUN.MicroService.Internal.ApiGateway</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Ocelot.Provider.Polly" Version="16.0.1" />
+		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="$(SerilogEnrichersProcessPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="$(SerilogEnrichersThreadPackageVersion)" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="$(SerilogSinksElasticsearchPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCorePackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+	</ItemGroup>
+
+</Project>

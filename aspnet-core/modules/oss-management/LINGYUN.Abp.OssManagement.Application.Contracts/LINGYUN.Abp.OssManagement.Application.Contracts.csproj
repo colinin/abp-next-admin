@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-    <Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <ItemGroup>
-	<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.4.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.OssManagement.Domain.Shared\LINGYUN.Abp.OssManagement.Domain.Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.OssManagement.Domain.Shared\LINGYUN.Abp.OssManagement.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

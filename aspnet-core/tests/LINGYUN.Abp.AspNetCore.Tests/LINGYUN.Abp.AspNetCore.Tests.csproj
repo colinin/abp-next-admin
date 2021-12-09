@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	  <RootNamespace />
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -18,8 +18,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 	  <PackageReference Include="Shouldly" Version="3.0.2" />
-	  <PackageReference Include="Volo.Abp.Autofac" Version="4.4.0" />
-	  <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="4.4.0" />
+	  <PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+	  <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="$(VoloAbpPackageVersion)" />
   </ItemGroup>
 
 </Project>

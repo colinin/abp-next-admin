@@ -7,7 +7,6 @@ namespace LINGYUN.Abp.Cli.Commands
     public class ProjectCreateArgs : ProjectBuildArgs
     {
         public string PackageName { get; }
-        public string OutputFolder { get; }
         public string ApplicationPort { get; }
         public string DaprPort { get; }
         public ProjectCreateArgs(
@@ -32,6 +31,7 @@ namespace LINGYUN.Abp.Cli.Commands
                   solutionName, 
                   templateName, 
                   version,
+                  outputFolder,
                   databaseProvider,
                   databaseManagementSystem,
                   uiFramework, 
@@ -44,7 +44,6 @@ namespace LINGYUN.Abp.Cli.Commands
                   connectionString)
         {
             PackageName = packageName;
-            OutputFolder = outputFolder;
             ApplicationPort = applicationPort;
             DaprPort = daprPort;
         }

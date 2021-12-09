@@ -1,30 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\en.json" />
-    <None Remove="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\en.json" />
+		<None Remove="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\en.json" />
-    <EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\zh-Hans.json" />
-  </ItemGroup>
-	
-  <ItemGroup>
-	<PackageReference Include="Volo.Abp.Localization" Version="4.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\en.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\ExceptionHandling\Notifications\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
 
-	
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+	</ItemGroup>
 
 </Project>

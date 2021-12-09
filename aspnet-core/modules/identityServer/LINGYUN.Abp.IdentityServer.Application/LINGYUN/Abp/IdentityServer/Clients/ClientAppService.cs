@@ -283,9 +283,14 @@ namespace LINGYUN.Abp.IdentityServer.Clients
                 client.Properties.RemoveAll(prop => !input.Properties.Any(inputProp => prop.Key == inputProp.Key));
                 foreach (var inputProp in input.Properties)
                 {
-                    if (client.FindProperty(inputProp.Key, inputProp.Value) == null)
+                    var findProp = client.FindProperty(inputProp.Key);
+                    if (findProp == null)
                     {
                         client.AddProperty(inputProp.Key, inputProp.Value);
+                    }
+                    else
+                    {
+                        findProp.Value = inputProp.Value;
                     }
                 }
             }
