@@ -7,9 +7,11 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { VAxios } from './Axios';
 import { checkResponse } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
-import { RequestEnum, ContentTypeEnum } from '/@/enums/httpEnum';
+import { useMessage } from '/@/hooks/web/useMessage';
+import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
 import { isString } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
+import { useI18n } from '/@/hooks/web/useI18n';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { joinTimestamp, formatRequestDate } from './helper';
@@ -18,6 +20,7 @@ import { Persistent } from '../../cache/persistent';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
+const { createMessage, createErrorModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -27,14 +30,39 @@ const transform: AxiosTransform = {
    * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    const { t } = useI18n();
     const { isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
     }
+
+    const { data } = res;
+    if (!data) {
+      // return '[HTTP] Request has no return value';
+      throw new Error(t('sys.api.apiRequestFailed'));
+    }
+      
+    // 对包装结果处理
+    if (res.headers['_abpwrapresult'] === 'true') {
+      const { code, result, message, details } = data;
+      const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.CODE;
+      if (hasSuccess) {
+        return result;
+      }
+
+      const title = details ? message : t('sys.api.errorTip');
+      const content = details ? details : message;
+      if (options.errorMessageMode === 'modal') {
+          createErrorModal({ title: title, content: content });
+        } else if (options.errorMessageMode === 'message') {
+          createMessage.error(content);
+        }
+    
+        throw new Error(content || t('sys.api.apiRequestFailed'));
+    }
+
     return res.data;
-    // 不进行任何处理，直接返回
-    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
   },
 
   // 请求之前处理config
