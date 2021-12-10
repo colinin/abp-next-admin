@@ -8,13 +8,13 @@ import {
 } from './model/profilesModel';
 
 enum Api {
-  Get = '/api/identity/my-profile',
-  Update = '/api/identity/my-profile',
-  ChangePassword = '/api/identity/my-profile/change-password',
-  SendChangePhoneNumberCode = '/api/identity/my-profile/send-phone-number-change-code',
-  ChangePhoneNumber = '/api/identity/my-profile/change-phone-number',
-  GetTwoFactorEnabled = '/api/identity/my-profile/two-factor',
-  ChangeTwoFactorEnabled = '/api/identity/my-profile/change-two-factor',
+  Get = '/api/account/my-profile',
+  Update = '/api/account/my-profile',
+  ChangePassword = '/api/account/my-profile/change-password',
+  SendChangePhoneNumberCode = '/api/account/my-profile/send-phone-number-change-code',
+  ChangePhoneNumber = '/api/account/my-profile/change-phone-number',
+  GetTwoFactorEnabled = '/api/account/my-profile/two-factor',
+  ChangeTwoFactorEnabled = '/api/account/my-profile/change-two-factor',
 }
 
 export const get = () => {
