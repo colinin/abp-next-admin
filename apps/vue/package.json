@@ -36,7 +36,7 @@
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons-vue": "^6.0.1",
     "@iconify/iconify": "^2.0.4",
-    "@microsoft/signalr": "^5.0.11",
+    "@microsoft/signalr": "^6.0.0",
     "@vueuse/core": "^6.7.4",
     "@vueuse/shared": "^6.7.4",
     "@zxcvbn-ts/core": "^1.0.0-beta.0",

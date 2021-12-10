@@ -3,12 +3,9 @@ using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime;
-using LINGYUN.Abp.RealTime.Client;
 using LINGYUN.Abp.RealTime.Localization;
-using LINGYUN.Abp.RealTime.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -17,13 +14,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Data;
 using Volo.Abp.Localization;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.IM.SignalR.Hubs
 {
     [Authorize]
-    public class MessagesHub : OnlineClientHubBase
+    public class MessagesHub : AbpHub
     {
         protected IMessageProcessor Processor => LazyServiceProvider.LazyGetService<IMessageProcessor>();
 
@@ -33,72 +32,50 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
 
         protected IExceptionToErrorInfoConverter ErrorInfoConverter => LazyServiceProvider.LazyGetRequiredService<IExceptionToErrorInfoConverter>();
 
-        protected AbpIMSignalROptions Options { get; }
-        protected IFriendStore FriendStore { get; }
-        protected IMessageStore MessageStore { get; }
-        protected IUserGroupStore UserGroupStore { get; }
+        protected AbpIMSignalROptions Options => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIMSignalROptions>>().Value;
 
-        public MessagesHub(
-            IFriendStore friendStore,
-            IMessageStore messageStore,
-            IUserGroupStore userGroupStore,
-            IOptions<AbpIMSignalROptions> options)
+        protected IFriendStore FriendStore => LazyServiceProvider.LazyGetRequiredService<IFriendStore>();
+
+        protected IMessageStore MessageStore => LazyServiceProvider.LazyGetRequiredService<IMessageStore>();
+
+        protected IUserGroupStore UserGroupStore => LazyServiceProvider.LazyGetRequiredService<IUserGroupStore>();
+
+        public override async Task OnConnectedAsync()
         {
-            FriendStore = friendStore;
-            MessageStore = messageStore;
-            UserGroupStore = userGroupStore;
-            Options = options.Value;
+            await base.OnConnectedAsync();
+
+            await SendUserOnlineStateAsync();
         }
 
-        protected override async Task OnClientConnectedAsync(IOnlineClient client)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await base.OnClientConnectedAsync(client);
+            await base.OnDisconnectedAsync(exception);
 
-            // 用户上线
-            await OnlineChanger?.ChangeAsync(client.TenantId, client.UserId.Value, UserOnlineState.Online);
-
-            await SendUserOnlineStateAsync(client);
+            await SendUserOnlineStateAsync(false);
         }
 
-        protected override async Task OnClientDisconnectedAsync(IOnlineClient client)
-        {
-            await base.OnClientDisconnectedAsync(client);
-
-            // 用户下线
-            await OnlineChanger?.ChangeAsync(client.TenantId, client.UserId.Value, UserOnlineState.Offline);
-
-            await SendUserOnlineStateAsync(client, false);
-        }
-
-        protected virtual async Task SendUserOnlineStateAsync(IOnlineClient client, bool isOnlined = true)
+        protected virtual async Task SendUserOnlineStateAsync(bool isOnlined = true)
         {
             var methodName = isOnlined ? Options.UserOnlineMethod : Options.UserOfflineMethod;
 
-            var userGroups = await UserGroupStore.GetUserGroupsAsync(client.TenantId, client.UserId.Value);
+            var userGroups = await UserGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
             foreach (var group in userGroups)
             {
                 if (isOnlined)
                 {
                     // 应使用群组标识
-                    await Groups.AddToGroupAsync(client.ConnectionId, group.Id);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, group.Id);
                 }
                 var groupClient = Clients.Group(group.Id);
-                if (groupClient != null)
-                {
-                    // 发送用户下线通知
-                    await groupClient.SendAsync(methodName, client.TenantId, client.UserId.Value);
-                }
+                await groupClient.SendAsync(methodName, CurrentTenant.Id, CurrentUser.GetId());
             }
 
-            var userFriends = await FriendStore.GetListAsync(client.TenantId, client.UserId.Value);
+            var userFriends = await FriendStore.GetListAsync(CurrentTenant.Id, CurrentUser.GetId());
             if (userFriends.Count > 0)
             {
                 var friendClientIds = userFriends.Select(friend => friend.FriendId.ToString()).ToImmutableArray();
                 var userClients = Clients.Users(friendClientIds);
-                if (userClients != null)
-                {
-                    await userClients.SendAsync(methodName, client.TenantId, client.UserId.Value);
-                }
+                await userClients.SendAsync(methodName, CurrentTenant.Id, CurrentUser.GetId());
             }
         }
         /// <summary>
@@ -106,9 +83,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         /// </summary>
         /// <param name="chatMessage"></param>
         /// <returns></returns>
-        // [HubMethodName("SendMessage")]
         [HubMethodName("send")]
-        public virtual async Task SendAsync(ChatMessage chatMessage)
+        public virtual async Task SendMessageAsync(ChatMessage chatMessage)
         {
             await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
         }
@@ -223,39 +199,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         protected virtual async Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
         {
             var signalRClient = Clients.Group(chatMessage.GroupId);
-            if (signalRClient == null)
-            {
-                Logger.LogDebug("Can not get group " + chatMessage.GroupId + " from SignalR hub!");
-                return;
-            }
-
             await signalRClient.SendAsync(methodName, chatMessage);
         }
 
         protected virtual async Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
         {
-            var onlineClientContext = new OnlineClientContext(chatMessage.TenantId, chatMessage.ToUserId.GetValueOrDefault());
-            var onlineClients = OnlineClientManager.GetAllByContext(onlineClientContext);
-
-            foreach (var onlineClient in onlineClients)
-            {
-                try
-                {
-                    var signalRClient = Clients.Client(onlineClient.ConnectionId);
-                    if (signalRClient == null)
-                    {
-                        Logger.LogDebug("Can not get user " + onlineClientContext.UserId + " with connectionId " + onlineClient.ConnectionId + " from SignalR hub!");
-                        continue;
-                    }
-                    await signalRClient.SendAsync(methodName, chatMessage);
-                }
-                catch (Exception ex)
-                {
-                    // 发送异常记录就行了,因为消息已经持久化
-                    Logger.LogWarning("Could not send message to user: {0}", chatMessage.ToUserId);
-                    Logger.LogWarning("Send to user message error: {0}", ex.Message);
-                }
-            }
+            var onlineClients = Clients.User(chatMessage.ToUserId.GetValueOrDefault().ToString());
+            await onlineClients.SendAsync(methodName, chatMessage);
         }
     }
 }

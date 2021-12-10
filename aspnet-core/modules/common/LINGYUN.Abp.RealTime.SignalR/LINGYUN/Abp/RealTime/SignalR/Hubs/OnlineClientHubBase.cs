@@ -17,13 +17,21 @@ namespace LINGYUN.Abp.RealTime.SignalR
             await base.OnConnectedAsync();
 
             IOnlineClient onlineClient = CreateClientForCurrentConnection();
+            OnlineClientManager.Add(onlineClient);
+
             await OnConnectedAsync(onlineClient);
         }
 
-        public virtual async Task OnConnectedAsync(IOnlineClient client)
+        public async Task OnConnectedAsync(IOnlineClient client)
         {
             Logger.LogDebug("A client is connected: " + client.ToString());
-            OnlineClientManager.Add(client);
+
+            // 角色添加进组
+            foreach (var role in client.Roles)
+            {
+                await Groups.AddToGroupAsync(client.ConnectionId, role);
+            }
+
             await OnClientConnectedAsync(client);
         }
 
@@ -36,15 +44,22 @@ namespace LINGYUN.Abp.RealTime.SignalR
             await base.OnDisconnectedAsync(exception);
         }
 
-        public virtual async Task OnDisconnectedAsync(IOnlineClient client)
+        public async Task OnDisconnectedAsync(IOnlineClient client)
         {
             if (client != null)
             {
                 try
                 {
+                    // 角色添加进组
+                    foreach (var role in client.Roles)
+                    {
+                        await Groups.RemoveFromGroupAsync(client.ConnectionId, role);
+                    }
+
                     Logger.LogDebug("A client is disconnected: " + client);
                     // 移除在线客户端
                     OnlineClientManager.Remove(Context.ConnectionId);
+
                     await OnClientDisconnectedAsync(client);
                 }
                 catch (Exception ex)
@@ -70,22 +85,14 @@ namespace LINGYUN.Abp.RealTime.SignalR
             };
         }
 
-        protected virtual async Task OnClientConnectedAsync(IOnlineClient client)
+        protected virtual Task OnClientConnectedAsync(IOnlineClient client)
         {
-            // 角色添加进组
-            foreach (var role in client.Roles)
-            {
-                await Groups.AddToGroupAsync(client.ConnectionId, role);
-            }
+            return Task.CompletedTask;   
         }
 
-        protected virtual async Task OnClientDisconnectedAsync(IOnlineClient client)
+        protected virtual Task OnClientDisconnectedAsync(IOnlineClient client)
         {
-            // 角色添加进组
-            foreach (var role in client.Roles)
-            {
-                await Groups.RemoveFromGroupAsync(client.ConnectionId, role);
-            }
+            return Task.CompletedTask;
         }
     }
 }

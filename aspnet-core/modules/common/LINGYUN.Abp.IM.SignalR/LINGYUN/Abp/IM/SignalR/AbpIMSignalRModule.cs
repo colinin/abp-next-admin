@@ -1,7 +1,6 @@
-﻿using LINGYUN.Abp.AspNetCore.SignalR.JwtToken;
-using LINGYUN.Abp.IM.Localization;
+﻿using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.IM.SignalR.Messages;
-using LINGYUN.Abp.RealTime.SignalR;
+using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -10,8 +9,7 @@ namespace LINGYUN.Abp.IM.SignalR
 {
     [DependsOn(
         typeof(AbpIMModule),
-        typeof(AbpRealTimeSignalRModule),
-        typeof(AbpAspNetCoreSignalRJwtTokenModule))]
+        typeof(AbpAspNetCoreSignalRModule))]
     public class AbpIMSignalRModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -31,11 +29,6 @@ namespace LINGYUN.Abp.IM.SignalR
                 options.Resources
                     .Get<AbpIMResource>()
                     .AddVirtualJson("/LINGYUN/Abp/IM/SignalR/Localization/Resources");
-            });
-
-            Configure<AbpAspNetCoreSignalRJwtTokenMapPathOptions>(options =>
-            {
-                options.MapPath("messages");
             });
         }
     }

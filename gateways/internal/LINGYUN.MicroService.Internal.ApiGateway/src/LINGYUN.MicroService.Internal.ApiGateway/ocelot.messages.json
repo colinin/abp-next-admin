@@ -1,6 +1,6 @@
 {
   "Routes": [
-    // ¿ò¼Ü¶Ëµã
+    // ï¿½ï¿½Ü¶Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/application-configuration",
       "DownstreamScheme": "http",
@@ -26,7 +26,7 @@
       },
       "Key": "messages-configuration"
     },
-    // ¿ò¼Ü¶¯Ì¬API¶Ëµã
+    // ï¿½ï¿½Ü¶ï¿½Ì¬APIï¿½Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/api-definition",
       "DownstreamScheme": "http",
@@ -52,7 +52,7 @@
       },
       "Key": "messages-api-definition"
     },
-    // ¼´Ê±Í¨Ñ¶
+    // ï¿½ï¿½Ê±Í¨Ñ¶
     {
       "DownstreamPathTemplate": "/api/im/{everything}",
       "DownstreamScheme": "http",
@@ -83,7 +83,7 @@
         "UseTracing": true
       }
     },
-    // Hangfire ÒÇ±í°å
+    // Hangfire ï¿½Ç±ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/hangfire/{everything}",
       "DownstreamScheme": "http",
@@ -114,7 +114,7 @@
         "UseTracing": true
       }
     },
-    // ÓÃ»§¶©ÔÄ
+    // ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/my-subscribes/{everything}",
       "DownstreamScheme": "http",
@@ -145,7 +145,7 @@
         "UseTracing": true
       }
     },
-    // ÓÃ»§¶©ÔÄÁÐ±í
+    // ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
     {
       "DownstreamPathTemplate": "/api/my-subscribes/all",
       "DownstreamScheme": "http",
@@ -178,7 +178,7 @@
       "Priority": 99,
       "Key": "my-subscribes"
     },
-    // ÓÃ»§¿ÉÓÃÍ¨Öª
+    // ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öª
     {
       "DownstreamPathTemplate": "/api/my-notifilers/assignables",
       "DownstreamScheme": "http",
@@ -211,9 +211,9 @@
       "Priority": 99,
       "Key": "assignables-notifilers"
     },
-    // ÓÃ»§Í¨Öª
+    // ï¿½Ã»ï¿½Í¨Öª
     {
-      "DownstreamPathTemplate": "/api/my-notifilers/{everything}",
+      "DownstreamPathTemplate": "/api/my-notifilers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -221,8 +221,8 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-notifilers/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamPathTemplate": "/api/my-notifilers",
+      "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
       },
@@ -242,7 +242,42 @@
         "UseTracing": true
       }
     },
-    // API ÎÄµµ
+    {
+      "DownstreamPathTemplate": "/api/my-notifilers/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/my-notifilers/{id}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    // API ï¿½Äµï¿½
     {
       "DownstreamPathTemplate": "/swagger/v1/swagger.json",
       "DownstreamScheme": "http",
@@ -273,7 +308,7 @@
         "UseTracing": true
       }
     },
-    // ¼¯ÏßÆ÷
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/signalr-hubs/{everything}",
       "DownstreamScheme": "ws",

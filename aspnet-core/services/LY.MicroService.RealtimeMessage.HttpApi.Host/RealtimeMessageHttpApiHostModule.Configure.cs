@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
@@ -273,6 +274,21 @@ public partial class RealtimeMessageHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/signalr-hubs")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         if (!isDevelopment)

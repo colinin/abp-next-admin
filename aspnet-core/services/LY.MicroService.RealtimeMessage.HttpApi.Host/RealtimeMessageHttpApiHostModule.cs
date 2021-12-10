@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -61,7 +60,6 @@ namespace LY.MicroService.RealtimeMessage
         typeof(AbpNotificationsSignalRModule),
         typeof(AbpNotificationsWeChatMiniProgramModule),
         typeof(AbpNotificationsExceptionHandlingModule),
-        typeof(AbpAspNetCoreSignalRProtocolJsonModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
@@ -112,8 +110,6 @@ namespace LY.MicroService.RealtimeMessage
             app.UseRouting();
             // 跨域
             app.UseCors(DefaultCorsPolicyName);
-            app.UseSignalRJwtToken();
-            app.UseHangfireAuthorication();
             // 认证
             app.UseAuthentication();
             app.UseAbpClaimsMap();

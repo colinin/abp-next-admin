@@ -22,9 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.RealTime.SignalR\LINGYUN.Abp.RealTime.SignalR.csproj" />
 	</ItemGroup>
 
 </Project>

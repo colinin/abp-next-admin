@@ -175,7 +175,11 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         protected virtual async Task Unauthorized(HttpContext context, BusinessException exception)
         {
             var errorInfoConverter = context.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
-            var errorInfo = errorInfoConverter.Convert(exception, false);
+            var errorInfo = errorInfoConverter.Convert(exception, options =>
+            {
+                options.SendExceptionsDetailsToClients = false;
+                options.SendStackTraceToClients = false;
+            });
 
             var exceptionWrapHandlerFactory = context.RequestServices.GetRequiredService<IExceptionWrapHandlerFactory>();
             var exceptionWrapContext = new ExceptionWrapContext(
