@@ -29,7 +29,7 @@ export function useMessages() {
   const { createConfirm, createMessage } = useMessage();
   const signalR = useSignalR({
     autoStart: false,
-    serverUrl: '/signalr-hubs/signalr-hubs/messages',
+    serverUrl: '/signalr-hubs/messages',
   });
 
   onMounted(() => {

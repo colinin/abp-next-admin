@@ -11,7 +11,7 @@
     "LY.MicroService.RealtimeMessage.HttpApi.Host": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "http://127.0.0.1:30020",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

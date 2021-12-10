@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
                             triggertime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
                             sendstacktrace = EmailOptions.SendStackTrace,
                             stacktrace = context.Exception.ToString(),
-                            footer = EmailOptions.DefaultContentFooter ?? "Copyright to LINGYUN © 2020"
+                            footer = EmailOptions.DefaultContentFooter ?? $"Copyright to LY Colin © {DateTime.Now.Year}"
                         });
 
                 await EmailSender.SendAsync(receivedUsers,

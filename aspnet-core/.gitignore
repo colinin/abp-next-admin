@@ -5,3 +5,4 @@ LocalNuget
 templates
 nupkg
 consoles
+*.configs.cache

@@ -1044,7 +1044,7 @@
       "Key": "assignables-notifilers"
     },
     {
-      "DownstreamPathTemplate": "/api/my-notifilers/{everything}",
+      "DownstreamPathTemplate": "/api/my-notifilers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1052,7 +1052,37 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-notifilers/{everything}",
+      "UpstreamPathTemplate": "/api/my-notifilers",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/my-notifilers/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/my-notifilers/{id}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
