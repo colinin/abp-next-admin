@@ -8,6 +8,6 @@ enum Api {
 export const changeAvatar = (input: ChangeAvatar) => {
   return defAbpHttp.post<void>({
     url: Api.ChangeAvatar,
-    data: input.avatarUrl,
+    data: input,
   });
 };
