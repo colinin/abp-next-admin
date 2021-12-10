@@ -28,8 +28,3 @@ export interface ChangePhoneNumber {
 export interface TwoFactorEnabled {
   enabled: boolean;
 }
-
-export interface IdentityUserClaimSet {
-  claimType: string;
-  claimValue: string;
-}

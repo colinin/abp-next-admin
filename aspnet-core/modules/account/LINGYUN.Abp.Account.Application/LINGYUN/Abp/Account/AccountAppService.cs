@@ -12,8 +12,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Account.Localization;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
@@ -22,40 +20,29 @@ using IIdentityUserRepository = LINGYUN.Abp.Identity.IIdentityUserRepository;
 
 namespace LINGYUN.Abp.Account
 {
-    public class AccountAppService : ApplicationService, IAccountAppService
+    public class AccountAppService : AccountApplicationServiceBase, IAccountAppService
     {
         protected ITotpService TotpService { get; }
-        protected IdentityUserStore UserStore { get; }
-        protected IdentityUserManager UserManager { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
-        protected IOptions<IdentityOptions> IdentityOptions { get; }
         protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
         protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
 
         public AccountAppService(
             ITotpService totpService,
-            IdentityUserStore userStore,
-            IdentityUserManager userManager,
             IWeChatOpenIdFinder weChatOpenIdFinder,
             IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache,
-            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
-            IOptions<IdentityOptions> identityOptions)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
         {
             TotpService = totpService;
-            UserStore = userStore;
-            UserManager = userManager;
             UserRepository = userRepository;
             WeChatOpenIdFinder = weChatOpenIdFinder;
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
-            IdentityOptions = identityOptions;
-
-            LocalizationResource = typeof(AccountResource);
         }
 
         public virtual async Task RegisterAsync(WeChatRegisterDto input)

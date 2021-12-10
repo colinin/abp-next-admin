@@ -26,7 +26,7 @@ export function useNotifications() {
     list: [],
   });
   const signalR = useSignalR({
-    serverUrl: '/signalr-hubs/notifications',
+    serverUrl: '/signalr-hubs/signalr-hubs/notifications',
   });
 
   onMounted(() => {

@@ -53,7 +53,6 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            var sss = app.ApplicationServices.GetRequiredService<IOptions<FileConfiguration>>();
             app.UseForwardedHeaders();
             app.UseAuditing();
             app.UseStaticFiles();

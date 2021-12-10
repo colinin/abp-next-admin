@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Account
 {
-    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
     [ControllerName("Profile")]
     [Route("/api/account/my-profile")]
@@ -18,13 +18,6 @@ namespace LINGYUN.Abp.Account
             IMyProfileAppService myProfileAppService)
         {
             MyProfileAppService = myProfileAppService;
-        }
-
-        [HttpPut]
-        [Route("claims")]
-        public virtual async Task SetClaimAsync(ChangeUserClaimInput input)
-        {
-            await MyProfileAppService.SetClaimAsync(input);
         }
 
         [HttpGet]

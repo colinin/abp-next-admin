@@ -5,7 +5,6 @@ import {
   ChangePassword,
   ChangePhoneNumber,
   TwoFactorEnabled,
-  IdentityUserClaimSet,
 } from './model/profilesModel';
 
 enum Api {
@@ -16,7 +15,6 @@ enum Api {
   ChangePhoneNumber = '/api/identity/my-profile/change-phone-number',
   GetTwoFactorEnabled = '/api/identity/my-profile/two-factor',
   ChangeTwoFactorEnabled = '/api/identity/my-profile/change-two-factor',
-  SetClaim = '/api/identity/my-profile/claims',
 }
 
 export const get = () => {
@@ -35,13 +33,6 @@ export const update = (input: UpdateMyProfile) => {
 export const changePassword = (input: ChangePassword) => {
   return defAbpHttp.post<void>({
     url: Api.ChangePassword,
-    data: input,
-  });
-};
-
-export const setClaim = (input: IdentityUserClaimSet) => {
-  return defAbpHttp.put<void>({
-    url: Api.SetClaim,
     data: input,
   });
 };
