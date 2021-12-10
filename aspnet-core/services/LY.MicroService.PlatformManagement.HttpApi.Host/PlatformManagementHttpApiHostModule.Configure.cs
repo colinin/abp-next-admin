@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
@@ -258,6 +259,20 @@ public partial class PlatformManagementHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/api/files")))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         if (!isDevelopment)
