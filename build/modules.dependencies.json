@@ -4,7 +4,7 @@
     "dependencies": [
       {
         "service": "Backend-Admin",
-        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
+        "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
         "depPath": "/../aspnet-core/LocalNuget/net6.0/",
         "dependencies": [
           "LINGYUN.Abp.Aliyun.SettingManagement.dll",
@@ -29,8 +29,8 @@
       },
       {
         "service": "Backend-Admin",
-        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
-        "depPath": "/../aspnet-core/services/identity-server/LINGYUN.Abp.IdentityServer4.HttpApi.Host/bin/Debug/net6.0",
+        "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
+        "depPath": "/../aspnet-core/services/LY.MicroService.IdentityServer.HttpApi.Host/bin/Debug/net6.0",
         "dependencies": [
           "LINGYUN.Abp.Account.Application.Contracts.dll",
           "Volo.Abp.Account.Application.Contracts.dll",
@@ -51,7 +51,7 @@
     "dependencies": [
       {
         "service": "Backend-Admin",
-        "path": "/../aspnet-core/services/admin/LINGYUN.Abp.BackendAdmin.HttpApi.Host/Modules/",
+        "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
         "depPath": "/../aspnet-core/LocalNuget/netstandard2.0/",
         "dependencies": [
           "LINGYUN.Abp.Features.LimitValidation.dll",
