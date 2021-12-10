@@ -1,6 +1,6 @@
 {
   "Routes": [
-    // ¿ò¼Ü¶Ëµã
+    // ï¿½ï¿½Ü¶Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/application-configuration",
       "DownstreamScheme": "http",
@@ -26,7 +26,7 @@
       },
       "Key": "platform-configuration"
     },
-    // ¿ò¼Ü¶¯Ì¬API¶Ëµã
+    // ï¿½ï¿½Ü¶ï¿½Ì¬APIï¿½Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/api-definition",
       "DownstreamScheme": "http",
@@ -52,7 +52,7 @@
       },
       "Key": "platform-api-definition"
     },
-    // ¶ÔÏó´æ´¢
+    // ï¿½ï¿½ï¿½ï¿½æ´¢
     {
       "DownstreamPathTemplate": "/api/oss-management/{everything}",
       "DownstreamScheme": "http",
@@ -83,7 +83,7 @@
         "UseTracing": true
       }
     },
-    // Æ½Ì¨¹ÜÀí
+    // Æ½Ì¨ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/platform/{everything}",
       "DownstreamScheme": "http",
@@ -114,7 +114,7 @@
         "UseTracing": true
       }
     },
-    // ÎÄ¼þ·ÃÎÊ
+    // ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/files/{everything}",
       "DownstreamScheme": "http",
@@ -145,7 +145,42 @@
         "UseTracing": true
       }
     },
-    // ¶ÔÏó´æ´¢×â»§ÉèÖÃ
+    {
+      "DownstreamPathTemplate": "/api/files/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30025
+        }
+      ],
+      "UpstreamPathTemplate": "/api/api/files/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    // ï¿½ï¿½ï¿½ï¿½æ´¢ï¿½â»§ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/oss-management/by-current-tenant",
       "DownstreamScheme": "http",
@@ -177,7 +212,7 @@
       },
       "Key": "oss-management-setting-current-tenant"
     },
-    // ¶ÔÏó´æ´¢È«¾ÖÉèÖÃ
+    // ï¿½ï¿½ï¿½ï¿½æ´¢È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/oss-management/by-global",
       "DownstreamScheme": "http",
@@ -209,7 +244,7 @@
       },
       "Key": "oss-management-setting-global"
     },
-    // API ÎÄµµ
+    // API ï¿½Äµï¿½
     {
       "DownstreamPathTemplate": "/swagger/v1/swagger.json",
       "DownstreamScheme": "http",

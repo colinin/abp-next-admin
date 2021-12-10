@@ -37,7 +37,8 @@
   import headerImg from '/@/assets/icons/64x64/color-user.png';
   import { useUserStore } from '/@/store/modules/user';
   import { upload } from '/@/api/oss-management/private';
-  import { get as getProfile, update as updateProfile, setClaim } from '/@/api/account/profiles';
+  import { changeAvatar } from '/@/api/account/claims';
+  import { get as getProfile, update as updateProfile } from '/@/api/account/profiles';
   import { UpdateMyProfile } from '/@/api/account/model/profilesModel';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useProfile } from './useProfile';
@@ -83,14 +84,9 @@
           upload(params.file, 'avatar', params.filename)
             .then((res) => {
               const path = encodeURIComponent(res.data.path.substring(0, res.data.path.length - 1));
-              setClaim({
-                claimType: 'avatarUrl',
-                claimValue: `${path}/${res.data.name}`,
-              })
-                .then(() => {
-                  resolve(res as unknown as void);
-                })
-                .catch((err) => reject(err));
+              changeAvatar({ avatarUrl: `${path}/${res.data.name}` }).then(() => {
+                resolve(res as unknown as void);
+              }).catch((err) => reject(err));
             })
             .catch((err) => reject(err));
         });

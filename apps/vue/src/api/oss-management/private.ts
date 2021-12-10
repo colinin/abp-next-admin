@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 import { ListResultDto } from '../model/baseModel';
 
 enum Api {
-  Upload = '/api/api/files/private/{path}/{name}',
+  Upload = '/api/api/files/private',
   Get = '/api/api/files/private/p/{path}/{name}',
   GetList = '/api/files/private/search',
   Share = '/api/files/private/share',
@@ -21,9 +21,10 @@ export const upload = (file: Blob, path: string, name: string) => {
     defHttp
       .uploadFile<OssObject>(
         {
-          url: format(Api.Upload, { path: path, name: name }),
+          url: Api.Upload,
         },
         {
+          data: { path: path, object: name },
           file: file,
         },
       )

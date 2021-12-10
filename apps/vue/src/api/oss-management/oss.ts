@@ -48,6 +48,8 @@ export const downloadBlob = (bucket: string, path: string, object: string) => {
       accept: 'application/json',
     },
     responseType: 'blob',
+  }, {
+    apiUrl: '/api'
   });
 };
 

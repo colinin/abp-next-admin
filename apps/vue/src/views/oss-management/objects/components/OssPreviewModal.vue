@@ -15,7 +15,8 @@
   import { ImagePreview } from '/@/components/Preview';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
-  import { downloadBlob } from '/@/api/oss-management/oss';
+  import { generateOssUrl } from '/@/api/oss-management/oss';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
 
   export default defineComponent({
     name: 'OssPreviewModal',
@@ -29,21 +30,14 @@
         bucket.value = data.bucket;
         objects.value = data.objects;
       });
+      const userStore = useUserStoreWithOut();
 
       watch(
         () => unref(objects),
-        async (objs) => {
-          previewImages.value = [];
-          const images: any[] = [];
-          for (let i = 0; i < objs.length; i++) {
-            const blob = await downloadBlob(unref(bucket), objs[i].path, objs[i].name);
-            images.push({
-              src: URL.createObjectURL(blob),
-              width: '100%',
-              height: '100%',
-            });
-          }
-          previewImages.value = images;
+        (objs) => {
+          previewImages.value = objs.map(x => {
+            return generateOssUrl(unref(bucket), x.path, x.name) + "?access_token=" + userStore.getToken;
+          });
         },
       );
 

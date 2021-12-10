@@ -941,6 +941,42 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/my-subscribes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/my-subscribes",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Priority": 99
+    },
+    {
       "DownstreamPathTemplate": "/api/my-subscribes/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1300,6 +1336,41 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/files/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30025
+        }
+      ],
+      "UpstreamPathTemplate": "/api/api/files/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/setting-management/oss-management/by-current-tenant",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1396,6 +1467,56 @@
       "HttpHandlerOptions": {
         "UseTracing": true
       }
+    },
+    {
+      "DownstreamPathTemplate": "/signalr-hubs/messages",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30020
+        }
+      ],
+      "UpstreamPathTemplate": "/signalr-hubs/messages",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {},
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "RouteIsCaseSensitive": false,
+      "Priority": 99
+    },
+    {
+      "DownstreamPathTemplate": "/signalr-hubs/notifications",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30020
+        }
+      ],
+      "UpstreamPathTemplate": "/signalr-hubs/notifications",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {},
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "RouteIsCaseSensitive": false,
+      "Priority": 99
     },
     {
       "DownstreamPathTemplate": "/signalr-hubs/{everything}",
