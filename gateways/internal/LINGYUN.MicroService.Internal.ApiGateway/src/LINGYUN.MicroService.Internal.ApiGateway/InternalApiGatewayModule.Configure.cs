@@ -120,7 +120,8 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
 
         private void ConfigureOcelot(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IFileConfigurationRepository, DiskFileConfigurationAggragatorRepository>();
+            // 需要合并自定义配置取消注释
+            // services.AddSingleton<IFileConfigurationRepository, DiskFileConfigurationAggragatorRepository>();
             services
                 .AddOcelot(configuration)
                 .AddPolly()
