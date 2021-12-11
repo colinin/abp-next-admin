@@ -56,3 +56,7 @@ export class SettingGroup {
   description?: string;
   settings = new Array<Setting>();
 }
+
+export interface SettingGroupResult {
+  items: SettingGroup[];
+}

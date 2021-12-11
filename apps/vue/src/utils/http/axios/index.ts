@@ -38,13 +38,14 @@ const transform: AxiosTransform = {
     }
 
     const { data } = res;
-    if (!data) {
-      // return '[HTTP] Request has no return value';
-      throw new Error(t('sys.api.apiRequestFailed'));
-    }
-      
+    
     // 对包装结果处理
     if (res.headers['_abpwrapresult'] === 'true') {
+      if (!data) {
+        // return '[HTTP] Request has no return value';
+        throw new Error(t('sys.api.apiRequestFailed'));
+      }
+        
       const { code, result, message, details } = data;
       const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.CODE;
       if (hasSuccess) {
@@ -62,7 +63,7 @@ const transform: AxiosTransform = {
         throw new Error(content || t('sys.api.apiRequestFailed'));
     }
 
-    return res.data;
+    return data;
   },
 
   // 请求之前处理config
