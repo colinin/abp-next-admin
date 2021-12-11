@@ -1,13 +1,8 @@
 ﻿using LINGYUN.Abp.SettingManagement;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.OssManagement.SettingManagement
 {
-    public interface IOssManagementSettingAppService
+    public interface IOssManagementSettingAppService : IReadonlySettingAppService
     {
-        Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync();
-
-        Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync();
     }
 }

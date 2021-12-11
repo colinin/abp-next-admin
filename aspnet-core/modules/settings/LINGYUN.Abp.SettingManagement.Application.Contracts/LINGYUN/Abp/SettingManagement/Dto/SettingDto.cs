@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.SettingManagement
@@ -12,6 +14,8 @@ namespace LINGYUN.Abp.SettingManagement
 
         public List<SettingDetailsDto> Details { get; set; } = new List<SettingDetailsDto>();
 
+        
+
         public SettingDto()
         {
 
@@ -23,8 +27,20 @@ namespace LINGYUN.Abp.SettingManagement
             Description = description;
         }
 
-        public SettingDetailsDto AddDetail(SettingDefinition setting, IStringLocalizerFactory factory, string value, ValueType type)
+#nullable enable
+        public SettingDetailsDto? AddDetail(
+            SettingDefinition setting, 
+            IStringLocalizerFactory factory, 
+            string value, 
+            ValueType type,
+            string keepProvider = "")
         {
+            if (setting.Providers.Any() &&
+                !keepProvider.IsNullOrWhiteSpace() &&
+                !setting.Providers.Any(p => p.Equals(keepProvider)))
+            {
+                return null;
+            }
             var detail = new SettingDetailsDto()
             {
                 DefaultValue = setting.DefaultValue,
@@ -35,9 +51,11 @@ namespace LINGYUN.Abp.SettingManagement
                 Value = value,
                 ValueType = type
             };
+            detail.Providers.AddRange(setting.Providers);
             Details.Add(detail);
 
             return detail;
         }
     }
+#nullable disable
 }

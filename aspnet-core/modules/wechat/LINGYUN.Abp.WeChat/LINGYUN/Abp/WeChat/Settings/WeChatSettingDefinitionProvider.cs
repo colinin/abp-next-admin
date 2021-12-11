@@ -17,6 +17,10 @@ namespace LINGYUN.Abp.WeChat.Settings
                     L("Description:WeChat.EnabledQuickLogin"),
                     isVisibleToClients: true,
                     isEncrypted: false)
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName)
             );
         }
 

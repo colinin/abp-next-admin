@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.OssManagement.SettingManagement
@@ -22,14 +21,14 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
 
         [HttpGet]
         [Route("by-current-tenant")]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await WeChatSettingAppService.GetAllForCurrentTenantAsync();
         }
 
         [HttpGet]
         [Route("by-global")]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await WeChatSettingAppService.GetAllForGlobalAsync();
         }

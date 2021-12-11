@@ -26,6 +26,8 @@ namespace LINGYUN.Abp.SettingManagement
         /// </summary>
         public List<OptionDto> Options { get; set; } = new List<OptionDto>();
 
+        public List<string> Providers { get; set; } = new List<string>();
+
         public SettingDetailsDto WithSlot(string slot)
         {
             Slot = slot;

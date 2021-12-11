@@ -23,6 +23,7 @@ namespace LINGYUN.Platform.Settings
                     description: L("Description:VersionFileLimitLength"), 
                     isVisibleToClients: true)
                 .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -32,6 +33,7 @@ namespace LINGYUN.Platform.Settings
                     description: L("Description:AllowVersionFileExtensions"), 
                     isVisibleToClients: true)
                 .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
             };

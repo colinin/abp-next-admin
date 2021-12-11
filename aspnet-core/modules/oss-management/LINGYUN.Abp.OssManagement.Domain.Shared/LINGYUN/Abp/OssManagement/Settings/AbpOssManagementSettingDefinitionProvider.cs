@@ -22,6 +22,7 @@ namespace LINGYUN.Abp.OssManagement.Settings
                     description: L("Description:FileLimitLength"), 
                     isVisibleToClients: true)
                 .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -31,6 +32,7 @@ namespace LINGYUN.Abp.OssManagement.Settings
                     description: L("Description:AllowFileExtensions"), 
                     isVisibleToClients: true)
                 .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
             };

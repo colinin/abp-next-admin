@@ -15,7 +15,12 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 AccountSettingNames.IsSelfRegistrationEnabled,
                 "true",
                 L("DisplayName:Abp.Account.IsSelfRegistrationEnabled"),
-                L("Description:Abp.Account.IsSelfRegistrationEnabled"), isVisibleToClients: true)
+                L("Description:Abp.Account.IsSelfRegistrationEnabled"),
+                isVisibleToClients: true)
+            .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName)
         );
 
         context.Add(
@@ -23,7 +28,12 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 AccountSettingNames.EnableLocalLogin,
                 "true",
                 L("DisplayName:Abp.Account.EnableLocalLogin"),
-                L("Description:Abp.Account.EnableLocalLogin"), isVisibleToClients: true)
+                L("Description:Abp.Account.EnableLocalLogin"),
+                isVisibleToClients: true)
+            .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName)
         );
     }
 

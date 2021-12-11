@@ -3,9 +3,7 @@ using LINGYUN.Abp.WeChat.Localization;
 using LINGYUN.Abp.WeChat.MiniProgram.Settings;
 using LINGYUN.Abp.WeChat.Official.Settings;
 using LINGYUN.Abp.WeChat.Settings;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
@@ -31,19 +29,19 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
             LocalizationResource = typeof(WeChatResource);
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
+        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
-            var settingGroups = new List<SettingGroupDto>();
+            var settingGroups = new SettingGroupResult();
             var wechatSettingGroup = new SettingGroupDto(L["DisplayName:WeChat"], L["Description:WeChat"]);
 
             var loginSetting = wechatSettingGroup.AddSetting(L["UserLogin"], L["UserLogin"]);
@@ -51,7 +49,8 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
                 SettingDefinitionManager.Get(WeChatSettingNames.EnabledQuickLogin),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(WeChatSettingNames.EnabledQuickLogin, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
             if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Official))
@@ -63,27 +62,32 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
                     SettingDefinitionManager.Get(WeChatOfficialSettingNames.AppId),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.AppId, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 officialSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatOfficialSettingNames.AppSecret),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.AppSecret, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 officialSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatOfficialSettingNames.Url),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.Url, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 officialSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatOfficialSettingNames.Token),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.Token, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 officialSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatOfficialSettingNames.EncodingAESKey),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.EncodingAESKey, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
 
                 #endregion
             }
@@ -97,28 +101,33 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
                     SettingDefinitionManager.Get(WeChatMiniProgramSettingNames.AppId),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatMiniProgramSettingNames.AppId, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 miniProgramSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatMiniProgramSettingNames.AppSecret),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatMiniProgramSettingNames.AppSecret, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 miniProgramSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatMiniProgramSettingNames.Token),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatMiniProgramSettingNames.Token, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 miniProgramSetting.AddDetail(
                     SettingDefinitionManager.Get(WeChatMiniProgramSettingNames.EncodingAESKey),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatMiniProgramSettingNames.EncodingAESKey, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
 
                 #endregion
             }
 
-            settingGroups.Add(wechatSettingGroup);
-            return new ListResultDto<SettingGroupDto>(settingGroups);
+            settingGroups.AddGroup(wechatSettingGroup);
+
+            return settingGroups;
         }
     }
 }
