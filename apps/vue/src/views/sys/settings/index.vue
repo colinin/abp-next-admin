@@ -29,7 +29,7 @@
   const abpStore = useAbpStoreWithOut();
 
   onMounted(() => {
-    if (abpStore.getApplication.currentTenant.isAvailable) {
+    if (abpStore.getApplication.currentTenant.id) {
       settingFormRef.value = {
         providerName: 'T',
         providerKey: abpStore.getApplication.currentTenant.id,
