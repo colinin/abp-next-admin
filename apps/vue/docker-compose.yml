@@ -7,9 +7,10 @@ services:
     restart: always
     ports:
       - "40080:80"
-
-volumes:
-  dbdata:
+    networks:
+      - framework
 
 networks:
-  linyun-abp:
+  framework:
+    external:
+      name: ly_app_net
