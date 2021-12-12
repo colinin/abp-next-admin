@@ -67,8 +67,6 @@ namespace LY.MicroService.WorkflowManagement
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAlwaysAllowAuthorization();
-
             PreConfigureApp();
         }
 
