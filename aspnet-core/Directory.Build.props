@@ -3,6 +3,7 @@
 		<VoloAbpPackageVersion>5.0.0-rc.2</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>5.0.0-rc.2</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.5.0</DaprPackageVersion>
+		<DistributedLockRedisPackageVersion>1.0.1</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>5.2.0</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>

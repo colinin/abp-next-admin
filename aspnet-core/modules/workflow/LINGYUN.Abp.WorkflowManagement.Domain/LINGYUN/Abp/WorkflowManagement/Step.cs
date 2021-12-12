@@ -6,7 +6,7 @@ using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowManagement
 {
-    public class Step : Entity<Guid>, IMultiTenant
+    public abstract class Step : Entity<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; protected set; }
         public virtual Guid WorkflowId { get; protected set; }
@@ -14,9 +14,9 @@ namespace LINGYUN.Abp.WorkflowManagement
         public virtual string StepType { get; protected set; }
         public virtual string CancelCondition { get; set; }
         public virtual WorkflowErrorHandling? ErrorBehavior { get; protected set; }
-        public virtual int? RetryInterval { get; set; }
+        public virtual TimeSpan? RetryInterval { get; set; }
         public virtual bool Saga { get; set; }
-        public virtual Guid? NextStep { get; protected set; }
+        public virtual Guid? ParentId { get; protected set; }
         public virtual ExtraPropertyDictionary Inputs { get; set; }
         public virtual ExtraPropertyDictionary Outputs { get; set; }
         public virtual ExtraPropertyDictionary SelectNextStep { get; set; }
@@ -27,16 +27,16 @@ namespace LINGYUN.Abp.WorkflowManagement
             SelectNextStep = new ExtraPropertyDictionary();
         }
 
-        public Step(
+        protected Step(
             Guid id,
             Guid workflowId,
             string name,
             string stepType,
             string cancelCondition,
             WorkflowErrorHandling? errorBehavior = null,
-            int? retryInterval = null,
+            TimeSpan? retryInterval = null,
             bool saga = false,
-            Guid? nextStep = null,
+            Guid? parentId = null,
             Guid? tenantId = null) : base(id)
         {
             Name = name;
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.WorkflowManagement
             ErrorBehavior = errorBehavior;
             RetryInterval = retryInterval;
             Saga = saga;
-            NextStep = nextStep;
+            ParentId = parentId;
             TenantId = tenantId;
 
             Inputs = new ExtraPropertyDictionary();

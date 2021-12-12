@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowCore.Pe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowCore.RabbitMQ", "modules\workflow\LINGYUN.Abp.WorkflowCore.RabbitMQ\LINGYUN.Abp.WorkflowCore.RabbitMQ.csproj", "{8F904E49-E6DA-499D-8127-DB60DA6B2EE9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{15F788FB-C7D0-4EE2-B1D9-EB9F3CCB7F33}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflow-components", "workflow-components", "{15F788FB-C7D0-4EE2-B1D9-EB9F3CCB7F33}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowCore.Components", "modules\workflow\LINGYUN.Abp.WorkflowCore.Components\LINGYUN.Abp.WorkflowCore.Components.csproj", "{13D116F7-C158-48D3-A78A-6F2BFAED1CDF}"
 EndProject
@@ -37,7 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowManagem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore", "modules\workflow\LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore\LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore.csproj", "{C4B1160A-BF25-4868-B962-342ABA4A96EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch", "modules\workflow\LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch\LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch.csproj", "{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch", "modules\workflow\LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch\LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch.csproj", "{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{6CB521FC-AC40-49A6-B9A5-91399CAA59AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WorkflowManagement.HttpApi.Host", "services\LY.MicroService.WorkflowManagement.HttpApi.Host\LY.MicroService.WorkflowManagement.HttpApi.Host.csproj", "{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,10 @@ Global
 		{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +133,7 @@ Global
 		{99BDFED5-907F-44C9-8BA0-90E1725BE211} = {C4496993-41F5-4821-829E-B80A8B3BC260}
 		{C4B1160A-BF25-4868-B962-342ABA4A96EF} = {C4496993-41F5-4821-829E-B80A8B3BC260}
 		{9F9453F3-7124-4C22-91E3-0DC41A4FD8AB} = {A2963E0D-D290-40B2-9B36-75F4A5922ABF}
+		{D5ED348D-D6F0-4093-BD7D-20E05AA1EB7B} = {6CB521FC-AC40-49A6-B9A5-91399CAA59AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

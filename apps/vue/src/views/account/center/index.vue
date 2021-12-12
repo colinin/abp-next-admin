@@ -59,7 +59,7 @@
         },
         {
           key: 'setting',
-          name: L('User'),
+          name: L('DisplayName:UserSetting'),
           component: 'setting',
         },
       ];

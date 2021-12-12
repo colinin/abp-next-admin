@@ -13,7 +13,9 @@ namespace LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<WorkflowManagementDbContext>(options =>
             {
-                options.AddDefaultRepositories(includeAllEntities: true);
+                options.AddRepository<Workflow, EfCoreWorkflowRepository>();
+                options.AddRepository<StepNode, EfCoreStepNodeRepository>();
+                options.AddRepository<CompensateNode, EfCoreCompensateNodeRepository>();
             });
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
+using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowManagement
 {
@@ -18,6 +19,10 @@ namespace LINGYUN.Abp.WorkflowManagement
         /// </summary>
         public virtual bool IsEnabled { get; protected set; }
         /// <summary>
+        /// 名称
+        /// </summary>
+        public virtual string Name { get; set; }
+        /// <summary>
         /// 显示名称
         /// </summary>
         public virtual string DisplayName { get; set; }
@@ -30,16 +35,31 @@ namespace LINGYUN.Abp.WorkflowManagement
         /// </summary>
         public virtual int Version { get; protected set; }
 
+        public virtual WorkflowErrorHandling ErrorBehavior { get; set; }
+
+        public virtual TimeSpan? ErrorRetryInterval { get; set; }
+
         protected Workflow()
         {
         }
 
         public Workflow(
             Guid id,
+            string name,
             string displayName,
             string description = "",
-            int version = 1) : base(id)
+            int version = 1,
+            WorkflowErrorHandling errorBehavior = WorkflowErrorHandling.Retry,
+            TimeSpan? errorRetryInterval = null,
+            Guid? tenantId = null) : base(id)
         {
+            Name = name;
+            DisplayName = displayName;
+            Description = description;
+            Version = version;
+            ErrorBehavior = errorBehavior;
+            ErrorRetryInterval = errorRetryInterval;
+            TenantId = tenantId;
         }
     }
 }

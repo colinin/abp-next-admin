@@ -1,0 +1,21 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:20890",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "LINGYUN.Abp.WorkflowManagement.HttpApi.Host": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://127.0.0.1:30035",
+      "dotnetRunMessages": "true"
+    }
+  }
+}

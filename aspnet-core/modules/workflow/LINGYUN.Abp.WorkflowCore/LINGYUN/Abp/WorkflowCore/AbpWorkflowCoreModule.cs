@@ -2,13 +2,12 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using WorkflowCore.Interface;
+using WorkflowCore.Models;
 
 namespace LINGYUN.Abp.WorkflowCore
 {
@@ -22,6 +21,14 @@ namespace LINGYUN.Abp.WorkflowCore
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddConventionalRegistrar(new AbpWorkflowCoreConventionalRegistrar());
+
+            context.Services.AddSingleton<IQueueProvider, AbpUnitOfWorkQueueProvider>();
+            context.Services.AddSingleton<AbpUnitOfWorkQueueProvider>();
+
+            PreConfigure<WorkflowOptions>(options =>
+            {
+                options.UseQueueProvider(provider => provider.GetRequiredService<AbpUnitOfWorkQueueProvider>());
+            });
 
             AutoAddDefinitionWorkflows(context.Services);
         }

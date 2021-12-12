@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.WorkflowCore.DistributedLock
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddMemoryCache();
             context.Services.AddSingleton<IDistributedLockProvider, AbpDistributedLockProvider>();
             context.Services.AddSingleton<AbpDistributedLockProvider>();
 

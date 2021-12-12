@@ -6,13 +6,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
 using WorkflowCore.Interface;
 
 namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
 {
-    public class AbpRabbitMqQueueProvider : IQueueProvider
+    [Dependency(ReplaceServices = true)]
+    public class AbpRabbitMqQueueProvider : IQueueAdapterProvider, ISingletonDependency
     {
         protected bool IsDiposed { get; private set; }
         protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
@@ -61,6 +63,11 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
         }
 
         public async Task QueueWork(string id, QueueType queue)
+        {
+            await QueueWorkAsync(id, queue);
+        }
+
+        protected virtual async Task QueueWorkAsync(string id, QueueType queue)
         {
             CheckDisposed();
 
