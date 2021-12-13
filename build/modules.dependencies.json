@@ -55,7 +55,9 @@
         "depPath": "/../aspnet-core/LocalNuget/netstandard2.0/",
         "dependencies": [
           "LINGYUN.Abp.Features.LimitValidation.dll",
-          "LINGYUN.Abp.Features.LimitValidation.Redis.dll"
+          "LINGYUN.Abp.Features.LimitValidation.Redis.dll",
+          "LINGYUN.Abp.WorkflowManagement.Application.Contracts.dll",
+          "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll"
         ]
       }
     ]

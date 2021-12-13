@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.WorkflowManagement
                 if (!_workflowManager.IsRegistered(workflow))
                 {
                     var stepNodes = await _stepNodeRepository
-                    .GetAllChildrenWithWorkflowAsync(workflow.Id, cancellationToken: cancellationToken);
+                        .GetAllChildrenWithWorkflowAsync(workflow.Id, cancellationToken: cancellationToken);
                     var compensateNodes = await _compensateNodeRepository
                         .GetAllChildrenWithWorkflowAsync(workflow.Id, cancellationToken: cancellationToken);
 

@@ -93,7 +93,7 @@ namespace LY.MicroService.WorkflowManagement
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
             // 开发取消权限检查
-            // context.Services.AddAlwaysAllowAuthorization();
+            context.Services.AddAlwaysAllowAuthorization();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -50,11 +50,6 @@ public class WorkflowEngineManager : IWorkflowEngineManager, ISingletonDependenc
         _logger.LogInformation("Migrated workflow management context.");
     }
 
-    public async Task RegisterAsync(CancellationToken cancellationToken = default)
-    {
-
-    }
-
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         await _workflowHost.StartAsync(cancellationToken);
