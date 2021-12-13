@@ -10,13 +10,12 @@ namespace LINGYUN.Abp.WorkflowManagement
     {
         public WorkflowManagementApplicationMapperProfile()
         {
+            CreateMap<ExecutionPointer, ExecutionPointerDto>()
+                .ForMember(dto => dto.Status, map => map.MapFrom(src => src.Status.ToString()));
             CreateMap<WorkflowInstance, WorkflowInstanceDto>()
-                .ForMember(dto => dto.WorkflowId, map => map.MapFrom(src => src.Id.ToString()))
                 .ForMember(dto => dto.DefinitionId, map => map.MapFrom(src => src.Id.ToString()))
-                .ForMember(dto => dto.StartTime, map => map.MapFrom(src => src.CreateTime))
-                .ForMember(dto => dto.EndTime, map => map.MapFrom(src => src.CompleteTime));
+                .ForMember(dto => dto.Status, map => map.MapFrom(src => src.Status.ToString()));
             CreateMap<PendingActivity, PendingActivityDto>();
-
 
             CreateMap<StepNode, StepNodeDto>();
             CreateMap<CompensateNode, StepNodeDto>();

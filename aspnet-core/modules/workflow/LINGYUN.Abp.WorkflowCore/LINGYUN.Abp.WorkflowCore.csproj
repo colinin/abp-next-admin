@@ -12,11 +12,11 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
-		<!--<PackageReference Include="WorkflowCore.DSL" Version="3.6.1" />-->
+		<PackageReference Include="WorkflowCore.DSL" Version="3.6.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <ProjectReference Include="..\..\..\consoles\source\src\WorkflowCore.DSL\WorkflowCore.DSL.csproj" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 </Project>
