@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.Auditing;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Json;
@@ -23,6 +25,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
+using LINGYUN.Abp.WorkflowCore.Components;
 
 namespace LY.MicroService.WorkflowManagement
 {
@@ -37,6 +40,21 @@ namespace LY.MicroService.WorkflowManagement
         {
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+
+        private void ConfigureBlobStoring(IServiceCollection services, IConfiguration configuration)
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                services.ExecutePreConfiguredActions(options);
+                options.Containers.Configure<WorkflowContainer>((containerConfiguration) =>
+                {
+                    containerConfiguration.UseOssManagement(config =>
+                    {
+                        config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket] ?? "workflow";
+                    });
+                });
+            });
         }
 
         private void ConfigureDbContext()

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -39,6 +40,7 @@ namespace LY.MicroService.WorkflowManagement
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpEventBusRabbitMqModule),
+        typeof(AbpBlobStoringOssManagementModule),
         typeof(WorkflowManagementApplicationModule),
         typeof(WorkflowManagementHttpApiModule),
         typeof(WorkflowManagementEntityFrameworkCoreModule),
@@ -84,6 +86,7 @@ namespace LY.MicroService.WorkflowManagement
             ConfigureAuditing(configuration);
             ConfigureMultiTenancy(configuration);
             ConfigureSwagger(context.Services);
+            ConfigureBlobStoring(context.Services, configuration);
             ConfigureDistributedLock(context.Services, configuration);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
