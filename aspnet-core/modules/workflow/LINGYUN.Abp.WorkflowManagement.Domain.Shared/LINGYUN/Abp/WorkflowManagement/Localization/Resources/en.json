@@ -2,6 +2,11 @@
   "culture": "en",
   "texts": {
     "Permission:WorkflowManagement": "WorkflowManagement",
+    "Permission:Engine": "Engine",
+    "Permission:Initialize": "Initialize",
+    "Permission:WorkflowDef": "Definition",
+    "Permission:Create": "Create",
+    "Permission:Delete": "Delete",
     "Permission:ManageSettings": "Manage Settings"
   }
 }

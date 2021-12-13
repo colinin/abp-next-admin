@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.WorkflowManagement.Workflows
 {
-    public class WorkflowCreateDto
+    public class WorkflowDefinitionCreateDto
     {
         /// <summary>
         /// 是否启用

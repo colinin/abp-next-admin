@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.WorkflowManagement
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var workflows = await _workflowRepository.GetListAsync(cancellationToken: stoppingToken);
+            var workflows = await _workflowRepository.GetListAsync(x => x.IsEnabled, cancellationToken: stoppingToken);
 
             foreach (var workflow in workflows)
             {

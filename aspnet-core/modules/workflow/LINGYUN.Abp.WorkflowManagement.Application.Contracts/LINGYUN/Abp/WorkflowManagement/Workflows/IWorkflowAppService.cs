@@ -5,11 +5,9 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
 {
     public interface IWorkflowAppService : IApplicationService
     {
-        Task<WorkflowDto> GetAsync(string id);
+        Task<WorkflowInstanceDto> GetAsync(string id);
 
-        Task CreateAsync(WorkflowCreateDto input);
-
-        Task<WorkflowDto> StartAsync(string id, WorkflowStartInput input);
+        Task<WorkflowInstanceDto> StartAsync(string id, WorkflowStartInput input);
 
         Task SuspendAsync(string id);
 

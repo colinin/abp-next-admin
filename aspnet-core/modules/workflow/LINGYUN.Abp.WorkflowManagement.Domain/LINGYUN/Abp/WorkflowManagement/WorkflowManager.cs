@@ -29,6 +29,14 @@ namespace LINGYUN.Abp.WorkflowManagement
             _persistenceProvider = persistenceProvider;
         }
 
+        public virtual void UnRegister(Workflow workflow)
+        {
+            if (_registry.IsRegistered(workflow.Id.ToString(), workflow.Version))
+            {
+                _registry.DeregisterWorkflow(workflow.Id.ToString(), workflow.Version);
+            }
+        }
+
         public virtual WorkflowDefinition Register(
             Workflow workflow,
             ICollection<StepNode> steps,

@@ -64,11 +64,6 @@ namespace LY.MicroService.WorkflowManagement
             {
                 options.UseMySQL();
             });
-
-            Configure<AbpUnitOfWorkOptions>(options =>
-            {
-
-            });
         }
 
         private void ConfigureJsonSerializer()

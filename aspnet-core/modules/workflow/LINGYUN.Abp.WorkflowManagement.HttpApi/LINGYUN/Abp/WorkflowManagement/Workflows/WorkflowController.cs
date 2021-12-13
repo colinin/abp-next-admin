@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<WorkflowDto> GetAsync(string id)
+        public virtual async Task<WorkflowInstanceDto> GetAsync(string id)
         {
             return await _service.GetAsync(id);
         }
@@ -32,14 +32,8 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         }
 
         [HttpPost]
-        public virtual async Task CreateAsync(WorkflowCreateDto input)
-        {
-            await _service.CreateAsync(input);
-        }
-
-        [HttpPost]
         [Route("{id}/start")]
-        public virtual async Task<WorkflowDto> StartAsync(string id, WorkflowStartInput input)
+        public virtual async Task<WorkflowInstanceDto> StartAsync(string id, WorkflowStartInput input)
         {
             return await _service.StartAsync(id, input);
         }

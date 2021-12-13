@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.WorkflowManagement
         /// <summary>
         /// 是否启用
         /// </summary>
-        public virtual bool IsEnabled { get; protected set; }
+        public virtual bool IsEnabled { get; set; }
         /// <summary>
         /// 名称
         /// </summary>

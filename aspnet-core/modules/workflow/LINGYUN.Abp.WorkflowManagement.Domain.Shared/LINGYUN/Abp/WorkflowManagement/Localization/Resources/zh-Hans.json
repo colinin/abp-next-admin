@@ -1,7 +1,12 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Permission:WorkflowManagement": "WorkflowManagement",
+    "Permission:WorkflowManagement": "工作流管理",
+    "Permission:Engine": "流程引擎",
+    "Permission:Initialize": "初始化",
+    "Permission:WorkflowDef": "流程定义",
+    "Permission:Create": "创建",
+    "Permission:Delete": "删除",
     "Permission:ManageSettings": "管理设置"
   }
 }

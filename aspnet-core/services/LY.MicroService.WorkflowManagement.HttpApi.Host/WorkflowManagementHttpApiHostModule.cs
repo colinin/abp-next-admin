@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -60,6 +61,7 @@ namespace LY.MicroService.WorkflowManagement
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+        typeof(AbpDataDbMigratorModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpSwashbuckleModule),
@@ -89,6 +91,9 @@ namespace LY.MicroService.WorkflowManagement
             ConfigureBlobStoring(context.Services, configuration);
             ConfigureDistributedLock(context.Services, configuration);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+            // 开发取消权限检查
+            // context.Services.AddAlwaysAllowAuthorization();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

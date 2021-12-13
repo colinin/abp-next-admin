@@ -27,14 +27,16 @@ namespace LINGYUN.Abp.Data.DbMigrator
             [NotNull] Func<string, DbContextOptionsBuilder<TDbContext>, TDbContext> configureDbContext) 
             where TDbContext : AbpDbContext<TDbContext>
         {
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
             var connectionStringResolver = _serviceProvider
                 .GetRequiredService<IConnectionStringResolver>();
-            var connectionString = await connectionStringResolver.ResolveAsync();
 
+            var connectionString = await connectionStringResolver.ResolveAsync(connectionStringName);
+            var defaultConnectionString = _dbConnectionOptions.GetConnectionStringOrNull(connectionStringName);
             // 租户连接字符串与默认连接字符串相同,则不执行迁移脚本
             if (string.Equals(
                 connectionString,
-                _dbConnectionOptions.ConnectionStrings.Default,
+                defaultConnectionString,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 return;

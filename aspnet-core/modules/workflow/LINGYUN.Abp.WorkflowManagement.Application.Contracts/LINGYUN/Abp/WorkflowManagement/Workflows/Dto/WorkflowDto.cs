@@ -1,16 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.WorkflowManagement.Workflows
 {
-    public class WorkflowDto
+    public class WorkflowDto : AuditedEntityDto<Guid>
     {
-        public string WorkflowId { get; set; }
-        public object Data { get; set; }
-        public string DefinitionId { get; set; }
+        public bool IsEnabled { get; set; }
+
+        public string Name { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public string Description { get; set; }
+
         public int Version { get; set; }
-        public string Status { get; set; }
-        public string Reference { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+
+        public TimeSpan? ErrorRetryInterval { get; set; }
+
+        public List<StepNodeDto> Steps { get; set; } = new List<StepNodeDto>();
+
+        public List<StepNodeDto> CompensateNodes { get; set; } = new List<StepNodeDto>();
     }
 }
