@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.WorkflowCore.Components.Primitives
                 foreach (var attachment in attachments)
                 {
                     var stream = await _blobContainer.GetOrNullAsync(attachment);
-                    if (stream != null)
+                    if (stream != null && stream != Stream.Null)
                     {
                         mailMessage.Attachments.Add(new Attachment(stream, Path.GetFileName(attachment)));
                     }

@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
                 Logger.LogWarning("An error occurred while getting the OSS object and an empty data stream will be returned");
                 Logger.LogWarning(ex.Message);
 
-                return Stream.Null;
+                return null;
             }
         }
 
