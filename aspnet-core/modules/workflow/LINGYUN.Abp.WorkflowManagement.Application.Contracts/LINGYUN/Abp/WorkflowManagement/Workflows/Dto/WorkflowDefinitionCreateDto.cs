@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.WorkflowManagement.Workflows
 {
@@ -11,20 +13,29 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         /// <summary>
         /// 名称
         /// </summary>
+        [Required]
+        [DynamicStringLength(typeof(WorkflowConsts), nameof(WorkflowConsts.MaxNameLength))]
         public string Name { get; set; }
         /// <summary>
         /// 显示名称
         /// </summary>
+        [Required]
+        [DynamicStringLength(typeof(WorkflowConsts), nameof(WorkflowConsts.MaxDisplayNameLength))]
         public string DisplayName { get; set; }
         /// <summary>
         /// 描述
         /// </summary>
+        [DynamicStringLength(typeof(WorkflowConsts), nameof(WorkflowConsts.MaxDescriptionLength))] 
         public string Description { get; set; }
         /// <summary>
         /// 版本号
         /// </summary>
+        [Required]
+        [Range(1, 100)]
         public int Version { get; set; }
 
+        [Required]
+        [MinLength(1)]
         public List<StepDto> Steps { get; set; } = new List<StepDto>();
     }
 }

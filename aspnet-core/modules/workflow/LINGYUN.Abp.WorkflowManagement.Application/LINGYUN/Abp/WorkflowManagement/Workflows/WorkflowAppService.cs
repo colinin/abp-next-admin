@@ -35,7 +35,9 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             var result = await _controller.ResumeWorkflow(id);
             if (!result)
             {
-                throw new BusinessException();
+                throw new BusinessException(
+                        WorkflowManagementErrorCodes.SuspendError,
+                        "The workflow cannot be resumed at this time. Please check the log");
             }
         }
 
@@ -65,7 +67,9 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             var result = await _controller.SuspendWorkflow(id);
             if (!result)
             {
-                throw new BusinessException();
+                throw new BusinessException(
+                      WorkflowManagementErrorCodes.SuspendError,
+                      "The workflow cannot be suspend at this time. Please check the log");
             }
         }
 
@@ -74,7 +78,9 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             var result = await _controller.TerminateWorkflow(id);
             if (!result)
             {
-                throw new BusinessException();
+                throw new BusinessException(
+                    WorkflowManagementErrorCodes.TerminateError,
+                    "The workflow cannot be terminated at this time. Please check the log");
             }
         }
     }
