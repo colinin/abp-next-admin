@@ -50,4 +50,5 @@ File-Management更名为Oss-Management
 ## 更新日志
 
 *【2021-03-10】 变更FileManagement命名空间为OssManagement  
-*【2021-10-22】	增加PublicFilesController用于身份认证通过的用户上传/下载文件,所有操作限定在用户目录下
+*【2021-10-22】	增加PublicFilesController用于身份认证通过的用户上传/下载文件,所有操作限定在用户目录下  
+*【2021-12-13】	增加LINGYUN.Abp.BlobStoring.OssManagement用于实现Oss代理二进制文件存储  
