@@ -13,7 +13,6 @@ namespace LINGYUN.Abp.WorkflowManagement
             CreateMap<ExecutionPointer, ExecutionPointerDto>()
                 .ForMember(dto => dto.Status, map => map.MapFrom(src => src.Status.ToString()));
             CreateMap<WorkflowInstance, WorkflowInstanceDto>()
-                .ForMember(dto => dto.DefinitionId, map => map.MapFrom(src => src.Id.ToString()))
                 .ForMember(dto => dto.Status, map => map.MapFrom(src => src.Status.ToString()));
             CreateMap<PendingActivity, PendingActivityDto>();
 

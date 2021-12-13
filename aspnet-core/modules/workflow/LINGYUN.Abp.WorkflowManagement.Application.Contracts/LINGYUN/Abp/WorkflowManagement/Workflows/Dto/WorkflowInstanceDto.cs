@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
     {
         public string Id { get; set; }
         public object Data { get; set; }
-        public string DefinitionId { get; set; }
+        public string WorkflowDefinitionId { get; set; }
         public int Version { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
