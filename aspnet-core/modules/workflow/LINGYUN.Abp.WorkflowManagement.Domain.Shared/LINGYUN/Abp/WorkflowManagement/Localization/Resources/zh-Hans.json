@@ -4,6 +4,7 @@
     "Permission:WorkflowManagement": "工作流管理",
     "Permission:Engine": "流程引擎",
     "Permission:Initialize": "初始化",
+    "Permission:Register": "注册组件",
     "Permission:WorkflowDef": "流程定义",
     "Permission:Create": "创建",
     "Permission:Delete": "删除",

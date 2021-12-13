@@ -15,6 +15,7 @@ public class WorkflowEngineManager : IWorkflowEngineManager, ISingletonDependenc
 {
     private readonly IWorkflowHost _workflowHost;
     private readonly IDbSchemaMigrator _dbSchemaMigrator;
+
     private readonly ILogger<WorkflowEngineManager> _logger;
     public WorkflowEngineManager(
         IWorkflowHost workflowHost,
@@ -47,6 +48,11 @@ public class WorkflowEngineManager : IWorkflowEngineManager, ISingletonDependenc
                 return new WorkflowManagementDbContext(builder.Options);
             });
         _logger.LogInformation("Migrated workflow management context.");
+    }
+
+    public async Task RegisterAsync(CancellationToken cancellationToken = default)
+    {
+
     }
 
     public async Task StartAsync(CancellationToken cancellationToken = default)

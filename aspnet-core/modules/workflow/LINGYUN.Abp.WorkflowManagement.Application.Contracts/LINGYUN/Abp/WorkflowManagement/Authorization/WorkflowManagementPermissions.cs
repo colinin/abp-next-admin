@@ -11,6 +11,8 @@
             public const string Default = GroupName + ".Engine";
 
             public const string Initialize = Default + ".Initialize";
+
+            public const string Register = Default + ".Register";
         }
 
         public static class WorkflowDef

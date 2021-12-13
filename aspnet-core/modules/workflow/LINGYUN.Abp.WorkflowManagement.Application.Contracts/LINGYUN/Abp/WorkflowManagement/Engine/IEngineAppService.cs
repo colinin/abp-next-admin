@@ -6,5 +6,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Engine
     public interface IEngineAppService : IApplicationService
     {
         Task InitializeAsync();
+
+        Task RegisterAsync();
     }
 }

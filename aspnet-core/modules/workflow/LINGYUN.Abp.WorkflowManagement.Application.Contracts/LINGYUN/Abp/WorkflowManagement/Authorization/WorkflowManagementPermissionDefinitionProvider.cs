@@ -16,6 +16,9 @@ namespace LINGYUN.Abp.WorkflowManagement.Authorization
             engine.AddChild(
                 WorkflowManagementPermissions.Engine.Initialize,
                 L("Permission:Initialize"));
+            engine.AddChild(
+                WorkflowManagementPermissions.Engine.Register,
+                L("Permission:Register"));
 
             var workflow = group.AddPermission(
                 WorkflowManagementPermissions.WorkflowDef.Default,

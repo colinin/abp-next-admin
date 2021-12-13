@@ -23,5 +23,12 @@ namespace LINGYUN.Abp.WorkflowManagement.Engine
         {
             await _service.InitializeAsync();
         }
+
+        [HttpPost]
+        [Route("register")]
+        public virtual async Task RegisterAsync()
+        {
+            await _service.RegisterAsync();
+        }
     }
 }

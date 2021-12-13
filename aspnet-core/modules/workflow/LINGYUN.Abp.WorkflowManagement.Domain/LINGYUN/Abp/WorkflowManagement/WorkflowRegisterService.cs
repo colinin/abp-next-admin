@@ -6,35 +6,17 @@ namespace LINGYUN.Abp.WorkflowManagement
 {
     public class WorkflowRegisterService : BackgroundService
     {
-        private readonly WorkflowManager _workflowManager;
-
-        private readonly IWorkflowRepository _workflowRepository;
-        private readonly IStepNodeRepository _stepNodeRepository;
-        private readonly ICompensateNodeRepository _compensateNodeRepository;
+        private readonly IWorkflowRegistryManager _registryManager;
 
         public WorkflowRegisterService(
-            WorkflowManager workflowManager,
-            IWorkflowRepository workflowRepository,
-            IStepNodeRepository stepNodeRepository,
-            ICompensateNodeRepository compensateNodeRepository)
+            IWorkflowRegistryManager registryManager)
         {
-            _workflowManager = workflowManager;
-            _workflowRepository = workflowRepository;
-            _stepNodeRepository = stepNodeRepository;
-            _compensateNodeRepository = compensateNodeRepository;
+            _registryManager = registryManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var workflows = await _workflowRepository.GetListAsync(x => x.IsEnabled, cancellationToken: stoppingToken);
-
-            foreach (var workflow in workflows)
-            {
-                var stepNodes = await _stepNodeRepository.GetAllChildrenWithWorkflowAsync(workflow.Id, cancellationToken: stoppingToken);
-                var compensateNodes = await _compensateNodeRepository.GetAllChildrenWithWorkflowAsync(workflow.Id, cancellationToken: stoppingToken);
-
-                _workflowManager.Register(workflow, stepNodes, compensateNodes);
-            }
+            await _registryManager.RegisterAsync(stoppingToken);
         }
     }
 }

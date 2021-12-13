@@ -27,8 +27,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             int take,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync())
-                .Include(x => x.ExecutionPointers)
+            return await (await WithDetailsAsync())
                 .WhereIf(status.HasValue, x => x.Status == status.Value)
                 .WhereIf(!type.IsNullOrWhiteSpace(), x => x.WorkflowDefinitionId.Equals(type))
                 .WhereIf(createdFrom.HasValue, x => x.CreationTime >= createdFrom.Value)
@@ -37,12 +36,22 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 .ToListAsync();
         }
 
+        public virtual async Task<List<PersistedWorkflow>> GetOlderListAsync(
+            WorkflowStatus status,
+            DateTime olderThan,
+            bool includeDetails = false,
+            int? maxResultCount = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await WithDetailsAsync())
+                .Where(x => x.Status == status && x.CompleteTime < olderThan)
+                .ToListAsync();
+        }
+
         public override async Task<IQueryable<PersistedWorkflow>> WithDetailsAsync()
         {
             var quertable = await base.WithDetailsAsync();
-            return quertable
-                .Include(x => x.ExecutionPointers)
-                    .ThenInclude(p => p.ExtensionAttributes);
+            return quertable.IncludeIf(true);
         }
     }
 }

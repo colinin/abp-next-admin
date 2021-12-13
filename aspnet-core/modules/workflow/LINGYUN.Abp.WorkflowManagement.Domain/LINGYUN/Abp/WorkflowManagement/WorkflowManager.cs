@@ -19,19 +19,20 @@ namespace LINGYUN.Abp.WorkflowManagement
     public class WorkflowManager : DomainService, ITransientDependency
     {
         private readonly IWorkflowRegistry _registry;
-        private readonly IPersistenceProvider _persistenceProvider;
 
-        public WorkflowManager(
-            IWorkflowRegistry registry,
-            IPersistenceProvider persistenceProvider)
+        public WorkflowManager(IWorkflowRegistry registry)
         {
             _registry = registry;
-            _persistenceProvider = persistenceProvider;
+        }
+
+        public virtual bool IsRegistered(Workflow workflow)
+        {
+            return _registry.IsRegistered(workflow.Id.ToString(), workflow.Version);
         }
 
         public virtual void UnRegister(Workflow workflow)
         {
-            if (_registry.IsRegistered(workflow.Id.ToString(), workflow.Version))
+            if (IsRegistered(workflow))
             {
                 _registry.DeregisterWorkflow(workflow.Id.ToString(), workflow.Version);
             }
@@ -42,22 +43,28 @@ namespace LINGYUN.Abp.WorkflowManagement
             ICollection<StepNode> steps,
             ICollection<CompensateNode> compensates)
         {
-            var dataType = typeof(Dictionary<string, object>);
-            var source = new DefinitionSourceV1
+            if (!IsRegistered(workflow))
             {
-                Id = workflow.Id.ToString(),
-                Version = workflow.Version,
-                Description = workflow.Description ?? workflow.DisplayName,
-                DataType = $"{dataType.FullName}, {dataType.Assembly}",
-                DefaultErrorBehavior = workflow.ErrorBehavior,
-                DefaultErrorRetryInterval = workflow.ErrorRetryInterval,
-                Steps = ConvertSteps(steps, compensates)
-            };
+                var dataType = typeof(Dictionary<string, object>);
+                var source = new DefinitionSourceV1
+                {
+                    Id = workflow.Id.ToString(),
+                    Version = workflow.Version,
+                    Description = workflow.Description ?? workflow.DisplayName,
+                    DataType = $"{dataType.FullName}, {dataType.Assembly}",
+                    DefaultErrorBehavior = workflow.ErrorBehavior,
+                    DefaultErrorRetryInterval = workflow.ErrorRetryInterval,
+                    Steps = ConvertSteps(steps, compensates)
+                };
 
-            var def = Convert(source);
-            _registry.RegisterWorkflow(def);
+                var def = Convert(source);
 
-            return def;
+                _registry.RegisterWorkflow(def);
+
+                return def;
+            }
+
+            return _registry.GetDefinition(workflow.Id.ToString(), workflow.Version);
         }
 
         private List<StepSourceV1> ConvertSteps(
