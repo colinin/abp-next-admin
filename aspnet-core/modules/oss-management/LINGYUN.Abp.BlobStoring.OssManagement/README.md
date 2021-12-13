@@ -40,6 +40,7 @@ public class YouProjectModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
         Configure<AbpBlobStoringOptions>(options =>
         {
             services.ExecutePreConfiguredActions(options);
