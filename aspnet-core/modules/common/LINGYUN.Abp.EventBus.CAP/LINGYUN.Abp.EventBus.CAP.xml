@@ -4,110 +4,45 @@
         <name>LINGYUN.Abp.EventBus.CAP</name>
     </assembly>
     <members>
-        <member name="T:DotNetCore.CAP.ConsumerServiceSelector">
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector">
             <summary>
             消费者查找器
             </summary>
         </member>
-        <member name="P:DotNetCore.CAP.ConsumerServiceSelector.CapOptions">
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.CapOptions">
             <summary>
             CAP配置
             </summary>
         </member>
-        <member name="P:DotNetCore.CAP.ConsumerServiceSelector.AbpDistributedEventBusOptions">
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.AbpDistributedEventBusOptions">
             <summary>
             Abp分布式事件配置
             </summary>
         </member>
-        <member name="P:DotNetCore.CAP.ConsumerServiceSelector.ServiceProvider">
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.ServiceProvider">
             <summary>
             服务提供者
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{DotNetCore.CAP.CapOptions},Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{DotNetCore.CAP.CapOptions},Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
             <summary>
             Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
             </summary>
         </member>
-        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.FindConsumersFromInterfaceTypes(System.IServiceProvider)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.FindConsumersFromInterfaceTypes(System.IServiceProvider)">
             <summary>
             查找消费者集合
             </summary>
             <param name="provider"></param>
             <returns></returns>
         </member>
-        <member name="M:DotNetCore.CAP.ConsumerServiceSelector.GetHandlerDescription(System.Type,System.Type)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.GetHandlerDescription(System.Type,System.Type)">
             <summary>
             获取事件处理器集合
             </summary>
             <param name="eventType"></param>
             <param name="typeInfo"></param>
             <returns></returns>
-        </member>
-        <member name="T:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker">
-            <summary>
-            过期消息清理任务
-            </summary>
-        </member>
-        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Options">
-            <summary>
-            过期消息清理配置
-            </summary>
-        </member>
-        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Initializer">
-            <summary>
-            Initializer
-            </summary>
-        </member>
-        <member name="P:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.Storage">
-            <summary>
-            Storage
-            </summary>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.#ctor(Volo.Abp.Threading.AbpAsyncTimer,DotNetCore.CAP.Persistence.IDataStorage,DotNetCore.CAP.Persistence.IStorageInitializer,Microsoft.Extensions.Options.IOptions{LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
-            <summary>
-            创建过期消息清理任务
-            </summary>
-            <param name="timer"></param>
-            <param name="storage"></param>
-            <param name="initializer"></param>
-            <param name="options"></param>
-            <param name="serviceScopeFactory"></param>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapExpiresMessageCleanupBackgroundWorker.DoWorkAsync(Volo.Abp.BackgroundWorkers.PeriodicBackgroundWorkerContext)">
-            <summary>
-            异步执行任务
-            </summary>
-            <param name="workerContext"></param>
-            <returns></returns>
-        </member>
-        <member name="T:DotNetCore.CAP.Processor.AbpCapProcessingServer">
-            <summary>
-            CapProcessingServer
-            </summary>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.#ctor(Microsoft.Extensions.Logging.ILogger{DotNetCore.CAP.Processor.AbpCapProcessingServer},Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider)">
-            <summary>
-            CapProcessingServer
-            </summary>
-            <param name="logger"></param>
-            <param name="loggerFactory"></param>
-            <param name="provider"></param>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Start(System.Threading.CancellationToken)">
-            <summary>
-            Start
-            </summary>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Pulse">
-            <summary>
-            Pulse
-            </summary>
-        </member>
-        <member name="M:DotNetCore.CAP.Processor.AbpCapProcessingServer.Dispose">
-            <summary>
-            Dispose
-            </summary>
         </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule">
             <summary>
@@ -120,12 +55,6 @@
             </summary>
             <param name="context"></param>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule.OnApplicationInitialization(Volo.Abp.ApplicationInitializationContext)">
-            <summary>
-            OnApplicationInitialization
-            </summary>
-            <param name="context"></param>
-        </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions">
             <summary>
             过期消息清理配置项
@@ -135,18 +64,6 @@
             <summary>
             发布消息处理失败通知
             default: false
-            </summary>
-        </member>
-        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.CleanUpExpiresMessageBatch">
-            <summary>
-            批量清理数量
-            default: 1000
-            </summary>
-        </member>
-        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.CleanUpExpiresMessageInterval">
-            <summary>
-            执行间隔(ms)
-            default: 3600000 (1 hours)
             </summary>
         </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException">
@@ -282,12 +199,17 @@
             当前客户端
             </summary>
         </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.JsonSerializer">
+            <summary>
+            typeof <see cref="T:Volo.Abp.Json.IJsonSerializer"/>
+            </summary>
+        </member>
         <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CancellationTokenProvider">
             <summary>
             取消令牌
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Json.IJsonSerializer,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber)">
             <summary>
             constructor
             </summary>
@@ -297,6 +219,7 @@
             <param name="currentUser"></param>
             <param name="currentClient"></param>
             <param name="currentTenant"></param>
+            <param name="jsonSerializer"></param>
             <param name="unitOfWorkManager"></param>
             <param name="cancellationTokenProvider"></param>
             <param name="guidGenerator"></param>

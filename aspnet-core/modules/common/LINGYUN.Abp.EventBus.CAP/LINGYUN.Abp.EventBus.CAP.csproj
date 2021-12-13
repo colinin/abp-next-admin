@@ -1,21 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\configureawait.props" />
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace />
-    <Description>Cap分布式事件总线</Description>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>$(SolutionDir)modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace />
+		<Description>Cap分布式事件总线</Description>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DocumentationFile>$(SolutionDir)modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP" Version="$(DotNetCoreCAPPackageVersion)" />
-    <PackageReference Include="Volo.Abp.BackgroundWorkers" Version="$(VoloAbpPackageVersion)" />
-    <PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
-	<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DotNetCore.CAP" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
 </Project>

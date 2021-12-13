@@ -1,5 +1,5 @@
-﻿using DotNetCore.CAP.Internal;
-using LINGYUN.Abp.EventBus.CAP;
+﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -10,15 +10,15 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
-namespace DotNetCore.CAP
+namespace LINGYUN.Abp.EventBus.CAP
 {
     /// <summary>
     /// 消费者查找器
     /// </summary>
     [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
-    [ExposeServices(typeof(IConsumerServiceSelector), typeof(ConsumerServiceSelector))]
+    [ExposeServices(typeof(IConsumerServiceSelector), typeof(AbpCAPConsumerServiceSelector))]
 
-    public class ConsumerServiceSelector : Internal.ConsumerServiceSelector
+    public class AbpCAPConsumerServiceSelector : ConsumerServiceSelector
     {
         /// <summary>
         /// CAP配置
@@ -36,7 +36,7 @@ namespace DotNetCore.CAP
         /// <summary>
         /// Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
         /// </summary>
-        public ConsumerServiceSelector(
+        public AbpCAPConsumerServiceSelector(
             IServiceProvider serviceProvider,
             IOptions<CapOptions> capOptions,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions) : base(serviceProvider)
