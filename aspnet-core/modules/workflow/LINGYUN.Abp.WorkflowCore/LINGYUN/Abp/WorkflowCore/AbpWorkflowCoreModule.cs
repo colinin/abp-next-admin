@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.WorkflowCore.Middleware;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,10 @@ namespace LINGYUN.Abp.WorkflowCore
                 context.Services.ExecutePreConfiguredActions(options);
             });
             context.Services.AddWorkflowDSL();
+
+            context.Services.AddWorkflowMiddleware<FeatureCheckWorkflowMiddleware>();
+
+            context.Services.AddWorkflowStepMiddleware<MultiTenancyStepMiddleware>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

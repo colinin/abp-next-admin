@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.WorkflowManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.WorkflowManagement.Migrations
 {
     [DbContext(typeof(WorkflowManagementMigrationsDbContext))]
-    partial class WorkflowManagementMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211214085456_Add-Entity-Workflow-Data-With-WF-Management")]
+    partial class AddEntityWorkflowDataWithWFManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

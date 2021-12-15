@@ -10,60 +10,59 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace LY.MicroService.WorkflowManagement.EventBus.Handlers
-{
-    public class TenantSynchronizer :
+namespace LY.MicroService.WorkflowManagement.EventBus.Handlers;
+
+public class TenantSynchronizer :
         IDistributedEventHandler<CreateEventData>,
         ITransientDependency
+{
+    protected IDataSeeder DataSeeder { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IDbSchemaMigrator DbSchemaMigrator { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
+    protected ILogger<TenantSynchronizer> Logger { get; }
+
+    public TenantSynchronizer(
+        IDataSeeder dataSeeder,
+        ICurrentTenant currentTenant,
+        IDbSchemaMigrator dbSchemaMigrator,
+        IUnitOfWorkManager unitOfWorkManager,
+        ILogger<TenantSynchronizer> logger)
     {
-        protected IDataSeeder DataSeeder { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected IDbSchemaMigrator DbSchemaMigrator { get; }
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        DataSeeder = dataSeeder;
+        CurrentTenant = currentTenant;
+        DbSchemaMigrator = dbSchemaMigrator;
+        UnitOfWorkManager = unitOfWorkManager;
 
-        protected ILogger<TenantSynchronizer> Logger { get; }
+        Logger = logger;
+    }
 
-        public TenantSynchronizer(
-            IDataSeeder dataSeeder,
-            ICurrentTenant currentTenant,
-            IDbSchemaMigrator dbSchemaMigrator,
-            IUnitOfWorkManager unitOfWorkManager,
-            ILogger<TenantSynchronizer> logger)
+    /// <summary>
+    /// 租户创建之后需要预置种子数据
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
+    public virtual async Task HandleEventAsync(CreateEventData eventData)
+    {
+        using (var unitOfWork = UnitOfWorkManager.Begin())
         {
-            DataSeeder = dataSeeder;
-            CurrentTenant = currentTenant;
-            DbSchemaMigrator = dbSchemaMigrator;
-            UnitOfWorkManager = unitOfWorkManager;
-
-            Logger = logger;
-        }
-
-        /// <summary>
-        /// 租户创建之后需要预置种子数据
-        /// </summary>
-        /// <param name="eventData"></param>
-        /// <returns></returns>
-        public virtual async Task HandleEventAsync(CreateEventData eventData)
-        {
-            using (var unitOfWork = UnitOfWorkManager.Begin())
+            using (CurrentTenant.Change(eventData.Id, eventData.Name))
             {
-                using (CurrentTenant.Change(eventData.Id, eventData.Name))
-                {
-                    Logger.LogInformation("Migrating the new tenant database with WorkflowManagement...");
-                    // 迁移租户数据
-                    await DbSchemaMigrator.MigrateAsync<WorkflowManagementDbContext>(
-                        (connectionString, builder) =>
-                        {
-                            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                Logger.LogInformation("Migrating the new tenant database with WorkflowManagement...");
+                // 迁移租户数据
+                await DbSchemaMigrator.MigrateAsync<WorkflowManagementDbContext>(
+                    (connectionString, builder) =>
+                    {
+                        builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-                            return new WorkflowManagementDbContext(builder.Options);
-                        });
-                    Logger.LogInformation("Migrated the new tenant database with WorkflowManagement...");
+                        return new WorkflowManagementDbContext(builder.Options);
+                    });
+                Logger.LogInformation("Migrated the new tenant database with WorkflowManagement...");
 
-                    await DataSeeder.SeedAsync(new DataSeedContext(eventData.Id));
+                await DataSeeder.SeedAsync(new DataSeedContext(eventData.Id));
 
-                    await unitOfWork.SaveChangesAsync();
-                }
+                await unitOfWork.SaveChangesAsync();
             }
         }
     }

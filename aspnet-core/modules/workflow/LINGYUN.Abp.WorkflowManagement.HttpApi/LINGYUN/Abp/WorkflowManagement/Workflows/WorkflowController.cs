@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
 
         [HttpPost]
         [Route("{id}/start")]
-        public virtual async Task<WorkflowInstanceDto> StartAsync(string id, WorkflowStartInput input)
+        public virtual async Task<WorkflowInstanceDto> StartAsync(Guid id, WorkflowStartInput input)
         {
             return await _service.StartAsync(id, input);
         }

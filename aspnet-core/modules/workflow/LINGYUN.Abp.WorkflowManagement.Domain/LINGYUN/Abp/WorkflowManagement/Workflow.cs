@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using WorkflowCore.Models;
 
@@ -39,8 +43,11 @@ namespace LINGYUN.Abp.WorkflowManagement
 
         public virtual TimeSpan? ErrorRetryInterval { get; set; }
 
+        public virtual ICollection<WorkflowData> Datas { get; protected set; }
+
         protected Workflow()
         {
+            Datas = new Collection<WorkflowData>();
         }
 
         public Workflow(
@@ -60,6 +67,35 @@ namespace LINGYUN.Abp.WorkflowManagement
             ErrorBehavior = errorBehavior;
             ErrorRetryInterval = errorRetryInterval;
             TenantId = tenantId;
+
+            Datas = new Collection<WorkflowData>();
+        }
+
+        public void AddData(
+            IGuidGenerator guidGenerator,
+            string name,
+            string displayName,
+            DataType dataType,
+            bool isRequired = false,
+            bool isCaseSensitive = false)
+        {
+            if (FindData(name) == null)
+            {
+                Datas.Add(new WorkflowData(
+                    guidGenerator.Create(),
+                    Id,
+                    name,
+                    displayName,
+                    dataType,
+                    isRequired,
+                    isCaseSensitive,
+                    TenantId));
+            }
+        }
+
+        public WorkflowData FindData(string name)
+        {
+            return Datas.FirstOrDefault(x => x.Name.Equals(name));
         }
     }
 }

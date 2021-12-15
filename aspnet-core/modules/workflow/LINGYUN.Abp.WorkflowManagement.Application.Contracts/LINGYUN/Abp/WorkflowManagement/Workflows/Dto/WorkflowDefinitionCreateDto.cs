@@ -34,6 +34,11 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         [Range(1, 100)]
         public int Version { get; set; }
 
+        /// <summary>
+        /// 输入数据约束
+        /// </summary>
+        public List<WorkflowDataDto> Datas { get; set; } = new List<WorkflowDataDto>();
+
         [Required]
         [MinLength(1)]
         public List<StepDto> Steps { get; set; } = new List<StepDto>();

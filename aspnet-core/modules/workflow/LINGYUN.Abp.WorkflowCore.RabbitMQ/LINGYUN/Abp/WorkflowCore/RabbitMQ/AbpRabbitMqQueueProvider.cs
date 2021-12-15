@@ -43,6 +43,7 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
 
         public async Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
         {
+            // TODO: 存在已知的问题,在多租户情况下, 从队列获取的工作流标识将无法查询到工作流实例
             CheckDisposed();
 
             using (await SyncObj.LockAsync(cancellationToken))
@@ -76,7 +77,7 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
                 await EnsureInitializedAsync();
 
                 var body = Encoding.UTF8.GetBytes(id);
-
+                
                 ChannelAccessor.Channel.BasicPublish(
                     exchange: "",
                     routingKey: QueueNameNormalizer.NormalizeKey(queue),

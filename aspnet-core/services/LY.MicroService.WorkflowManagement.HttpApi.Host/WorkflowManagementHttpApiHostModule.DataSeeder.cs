@@ -4,18 +4,17 @@ using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Threading;
 
-namespace LY.MicroService.WorkflowManagement
+namespace LY.MicroService.WorkflowManagement;
+
+public partial class WorkflowManagementHttpApiHostModule
 {
-    public partial class WorkflowManagementHttpApiHostModule
+    private void SeedData(ApplicationInitializationContext context)
     {
-        private void SeedData(ApplicationInitializationContext context)
+        if (context.GetEnvironment().IsDevelopment())
         {
-            if (context.GetEnvironment().IsDevelopment())
-            {
-                AsyncHelper.RunSync(async () =>
-                    await context.ServiceProvider.GetRequiredService<IDataSeeder>()
-                        .SeedAsync());
-            }
+            AsyncHelper.RunSync(async () =>
+                await context.ServiceProvider.GetRequiredService<IDataSeeder>()
+                    .SeedAsync());
         }
     }
 }

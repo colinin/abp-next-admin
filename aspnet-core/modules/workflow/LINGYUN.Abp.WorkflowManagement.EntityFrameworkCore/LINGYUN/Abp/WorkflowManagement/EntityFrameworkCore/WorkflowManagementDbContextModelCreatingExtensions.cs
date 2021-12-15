@@ -30,6 +30,20 @@ namespace LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore
                 b.Property(p => p.Name).HasMaxLength(WorkflowConsts.MaxNameLength).IsRequired();
                 b.Property(p => p.Description).HasMaxLength(WorkflowConsts.MaxDescriptionLength);
 
+                b.HasMany(u => u.Datas).WithOne().HasForeignKey(uc => uc.WorkflowId).IsRequired();
+
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<WorkflowData>(b =>
+            {
+                b.ToTable(options.TablePrefix + "DefinitionData", options.Schema);
+
+                b.Property(p => p.DisplayName).HasMaxLength(WorkflowDataConsts.MaxDisplayNameLength).IsRequired();
+                b.Property(p => p.Name).HasMaxLength(WorkflowDataConsts.MaxNameLength).IsRequired();
+
+                b.HasIndex(p => p.WorkflowId);
+
                 b.ConfigureByConvention();
             });
 

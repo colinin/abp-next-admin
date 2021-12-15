@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WorkflowManagement.Workflows
@@ -7,7 +8,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
     {
         Task<WorkflowInstanceDto> GetAsync(string id);
 
-        Task<WorkflowInstanceDto> StartAsync(string id, WorkflowStartInput input);
+        Task<WorkflowInstanceDto> StartAsync(Guid id, WorkflowStartInput input);
 
         Task SuspendAsync(string id);
 

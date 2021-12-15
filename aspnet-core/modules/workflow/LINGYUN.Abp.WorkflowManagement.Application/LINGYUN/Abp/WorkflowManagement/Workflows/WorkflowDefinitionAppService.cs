@@ -47,6 +47,17 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
                 IsEnabled = input.IsEnabled,
             };
 
+            foreach (var data in input.Datas)
+            {
+                workflowDef.AddData(
+                    GuidGenerator,
+                    data.Name,
+                    data.DisplayName,
+                    data.DataType,
+                    data.IsRequired,
+                    data.IsCaseSensitive);
+            }
+
             var stepDefNodes = new List<StepNode>();
             var stepCompensateDefNodes = new List<CompensateNode>();
 

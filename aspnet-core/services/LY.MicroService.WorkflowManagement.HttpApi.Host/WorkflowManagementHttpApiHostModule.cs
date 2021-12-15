@@ -34,9 +34,9 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace LY.MicroService.WorkflowManagement
-{
-    [DependsOn(
+namespace LY.MicroService.WorkflowManagement;
+
+[DependsOn(
         typeof(AbpSerilogEnrichersApplicationModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreSerilogModule),
@@ -67,64 +67,63 @@ namespace LY.MicroService.WorkflowManagement
         typeof(AbpSwashbuckleModule),
         typeof(AbpAutofacModule)
         )]
-    public partial class WorkflowManagementHttpApiHostModule : AbpModule
+public partial class WorkflowManagementHttpApiHostModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigureApp();
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureDbContext();
+        ConfigureLocalization();
+        ConfigureJsonSerializer();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureCaching(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureMultiTenancy(configuration);
+        ConfigureSwagger(context.Services);
+        ConfigureBlobStoring(context.Services, configuration);
+        ConfigureDistributedLock(context.Services, configuration);
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        // 开发取消权限检查
+        // context.Services.AddAlwaysAllowAuthorization();
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseStaticFiles();
+        app.UseCorrelationId();
+        app.UseRouting();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        app.UseMultiTenancy();
+        app.UseAbpRequestLocalization(options => options.SetDefaultCulture(CultureInfo.CurrentCulture.Name));
+        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseAbpSwaggerUI(options =>
         {
-            PreConfigureApp();
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
+            options.OAuthScopes("WorkflowManagement");
+        });
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
 
-            ConfigureDbContext();
-            ConfigureLocalization();
-            ConfigureJsonSerializer();
-            ConfigureExceptionHandling();
-            ConfigureVirtualFileSystem();
-            ConfigureCaching(configuration);
-            ConfigureAuditing(configuration);
-            ConfigureMultiTenancy(configuration);
-            ConfigureSwagger(context.Services);
-            ConfigureBlobStoring(context.Services, configuration);
-            ConfigureDistributedLock(context.Services, configuration);
-            ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-            // 开发取消权限检查
-            // context.Services.AddAlwaysAllowAuthorization();
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
-
-            app.UseStaticFiles();
-            app.UseCorrelationId();
-            app.UseRouting();
-            app.UseCors();
-            app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
-            app.UseMultiTenancy();
-            app.UseAbpRequestLocalization(options => options.SetDefaultCulture(CultureInfo.CurrentCulture.Name));
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-
-                var configuration = context.GetConfiguration();
-                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-                options.OAuthScopes("WorkflowManagement");
-            });
-            app.UseAuditing();
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
-
-            SeedData(context);
-        }
+        SeedData(context);
     }
 }
