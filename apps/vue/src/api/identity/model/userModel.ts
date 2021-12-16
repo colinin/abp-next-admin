@@ -57,6 +57,8 @@ export class User extends FullAuditedEntityDto implements IUser {
   lockoutEnd?: Date = undefined;
   /** 并发令牌 */
   concurrencyStamp = '';
+  /** 已激活的用户 */
+  isActive = true;
   /** 角色列表 */
   roleNames: string[] = [];
 }

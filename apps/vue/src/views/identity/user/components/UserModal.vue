@@ -34,8 +34,11 @@
           <FormItem name="phoneNumber" :label="L('DisplayName:PhoneNumber')">
             <BInput v-model:value="userRef.phoneNumber" />
           </FormItem>
-          <FormItem :label="L('LockoutEnabled')">
-            <Checkbox v-model:checked="userRef.lockoutEnabled">{{ L('LockoutEnabled') }}</Checkbox>
+          <FormItem :label="L('DisplayName:IsActive')">
+            <Checkbox v-model:checked="userRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
+          </FormItem>
+          <FormItem :label="L('DisplayName:LockoutEnabled')">
+            <Checkbox v-model:checked="userRef.lockoutEnabled">{{ L('DisplayName:LockoutEnabled') }}</Checkbox>
           </FormItem>
         </TabPane>
         <TabPane key="role" :tab="L('Roles')">
