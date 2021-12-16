@@ -1,8 +1,5 @@
-﻿using DotNetCore.CAP.Processor;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
-using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
@@ -11,9 +8,7 @@ namespace LINGYUN.Abp.EventBus.CAP
     /// <summary>
     /// AbpCAPEventBusModule
     /// </summary>
-    [DependsOn(
-        typeof(AbpEventBusModule),
-        typeof(AbpBackgroundWorkersModule))]
+    [DependsOn(typeof(AbpEventBusModule))]
     public class AbpCAPEventBusModule : AbpModule
     {
         /// <summary>
@@ -30,6 +25,9 @@ namespace LINGYUN.Abp.EventBus.CAP
 
             context.Services.AddCAPEventBus(options =>
             {
+                // 取消默认的五分钟高频清理
+                // options.CollectorCleaningInterval = 360_0000;
+
                 configuration.GetSection("CAP:EventBus").Bind(options);
                 context.Services.ExecutePreConfiguredActions(options);
                 if (options.FailedThresholdCallback == null)
@@ -45,20 +43,6 @@ namespace LINGYUN.Abp.EventBus.CAP
                     };
                 }
             });
-        }
-
-        /// <summary>
-        /// OnApplicationInitialization
-        /// </summary>
-        /// <param name="context"></param>
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .Add(
-                        context.ServiceProvider
-                            .GetRequiredService<AbpCapExpiresMessageCleanupBackgroundWorker>()
-                    );
         }
     }
 }

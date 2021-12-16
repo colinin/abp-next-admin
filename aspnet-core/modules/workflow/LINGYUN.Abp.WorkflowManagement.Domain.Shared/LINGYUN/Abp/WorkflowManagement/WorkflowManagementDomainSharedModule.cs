@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.WorkflowManagement
             {
                 options.Resources
                     .Add<WorkflowManagementResource>()
-                    .AddVirtualJson("/Abp/WorkflowManagement/Localization/Resources");
+                    .AddVirtualJson("/LINGYUN/Abp/WorkflowManagement/Localization/Resources");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

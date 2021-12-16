@@ -1,43 +1,53 @@
 version: '3.4'
 
 services:
-  identity-server-sts:
+  sts-server:
     build:
       context: ./aspnet-core/services/Publish/identityserver
     volumes:
       - /var/opt/abp/logs/ids-sts:/app/Logs
       - /var/opt/abp/data/ids-sts/Modules:/app/Modules
     restart: always
+    networks:
+      - framework
 
-  identity-server-admin:
+  sts-api:
     build:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes:
       - /var/opt/abp/logs/ids-admin:/app/Logs
       - /var/opt/abp/data/ids-admin/Modules:/app/Modules
     depends_on:
-      - identity-server-sts
+      - sts-server
     restart: always
+    networks:
+      - framework
 
-  admin-service:
+  admin-api:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes:
       - /var/opt/abp/logs/backend-admin:/app/Logs
       - /var/opt/abp/data/backend-admin/Modules:/app/Modules
     depends_on:
-      - identity-server-sts
+      - sts-server
     restart: always
+    networks:
+      - framework
 
-  localization-service:
+  localization-api:
     build:
       context: ./aspnet-core/services/Publish/localization
     volumes:
       - /var/opt/abp/logs/localization:/app/Logs
       - /var/opt/abp/data/localization/Modules:/app/Modules
     restart: always
+    depends_on:
+      - sts-server
+    networks:
+      - framework
 
-  platform-service:
+  platform-api:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes:
@@ -45,29 +55,34 @@ services:
       - /var/opt/abp/data/platform/Modules:/app/Modules
       - /var/opt/abp/data/platform:/app/file-blob-storing
     depends_on:
-      - identity-server-sts
+      - sts-server
     restart: always
+    networks:
+      - framework
 
-  messages-service:
+  messages-api:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes:
       - /var/opt/abp/logs/messages:/app/Logs
       - /var/opt/abp/data/messages/Modules:/app/Modules
     depends_on:
-      - identity-server-sts
+      - sts-server
     restart: always
+    networks:
+      - framework
 
-  internat-apigateway:
+  internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway
     volumes:
-      - /var/opt/abp/logs/internat-apigateway:/app/Logs
-      - /var/opt/abp/data/internat-apigateway/Modules:/app/Modules
+      - /var/opt/abp/logs/internal-apigateway:/app/Logs
+      - /var/opt/abp/data/internal-apigateway/Modules:/app/Modules
     restart: always
-
-volumes:
-  dbdata:
+    networks:
+      - framework
 
 networks:
-  linyun-abp:
+  framework:
+    external:
+      name: ly_app_net

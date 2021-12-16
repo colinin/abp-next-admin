@@ -14,7 +14,7 @@
       </a-col>
     </a-row>
     <div :class="`${prefixCls}-bottom`">
-      <Tabs>
+      <Tabs tab-position="top" v-model:activeKey="activeTabKey">
         <template v-for="item in components" :key="item.key">
           <TabPane :tab="item.name">
             <component :is="item.component" />
@@ -27,13 +27,14 @@
 
 <script lang="ts">
   import { Tag, Tabs, Row, Col } from 'ant-design-vue';
-  import { defineComponent, computed } from 'vue';
+  import { defineComponent, computed, ref } from 'vue';
   import { CollapseContainer } from '/@/components/Container/index';
   import Icon from '/@/components/Icon/index';
   import headerImg from '/@/assets/images/header.jpg';
   import { useUserStore } from '/@/store/modules/user';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import Cloud from './Cloud.vue';
+  import Setting from './Setting.vue';
   export default defineComponent({
     components: {
       Cloud,
@@ -42,20 +43,29 @@
       Tag,
       Tabs,
       TabPane: Tabs.TabPane,
+      Setting,
       [Row.name]: Row,
       [Col.name]: Col,
     },
     setup() {
       const userStore = useUserStore();
-      const { L } = useLocalization('AbpOssManagement');
+      const activeTabKey = ref('cloud');
+      const { L } = useLocalization('AbpOssManagement', 'AbpSettingManagement');
       const components = [
         {
+          key: 'cloud',
           name: L('MyCloud'),
           component: 'cloud',
+        },
+        {
+          key: 'setting',
+          name: L('DisplayName:UserSetting'),
+          component: 'setting',
         },
       ];
       const userInfo = computed(() => userStore.getUserInfo);
       return {
+        activeTabKey,
         prefixCls: 'account-center',
         userInfo,
         headerImg,

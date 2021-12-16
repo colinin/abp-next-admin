@@ -5,6 +5,8 @@
     "Permission:Settings": "Settings",
     "Permission:Update": "Update",
     "Permission:Manager": "Manager",
+    "DisplayName:UserSetting": "User Settings",
+    "Description:UserSetting": "User defined settings",
     "DisplayName:System": "System",
     "Description:System": "System",
     "DisplayName:System.Language": "Language",

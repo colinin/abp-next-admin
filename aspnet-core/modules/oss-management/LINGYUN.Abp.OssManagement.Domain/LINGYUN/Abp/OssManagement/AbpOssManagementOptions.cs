@@ -16,9 +16,16 @@ namespace LINGYUN.Abp.OssManagement
         {
             StaticBuckets = new List<string>
             {
+                // 公共目录
                 "public",
+                // 用户私有目录
                 "users",
+                // 系统目录
                 "system",
+                // 工作流
+                "workflow",
+                // 图标
+                "icons"
             };
         }
 

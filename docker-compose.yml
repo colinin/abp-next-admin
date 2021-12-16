@@ -1,49 +1,49 @@
 version: '3.4'
 
 services:
-  admin-service:
+  admin-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30010:80"
 
-  identity-server-admin:
+  sts-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30015:80"
 
-  localization-service:
+  localization-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30030:80"
 
-  platform-service:
+  platform-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30025:80"
 
-  messages-service:
+  messages-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30020:80"
 
-  identity-server-sts:
+  sts-server:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "44385:80"
 
-  internat-apigateway:
+  internal-apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80

@@ -2,9 +2,7 @@
 using LINGYUN.Abp.OssManagement.Permissions;
 using LINGYUN.Abp.OssManagement.Settings;
 using LINGYUN.Abp.SettingManagement;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
@@ -31,24 +29,23 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
             LocalizationResource = typeof(AbpOssManagementResource);
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
+        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
-            var settingGroups = new List<SettingGroupDto>();
+            var settingGroups = new SettingGroupResult();
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
             if (await PermissionChecker.IsGrantedAsync(AbpOssManagementPermissions.OssObject.Default))
             {
-
                 var ossSettingGroup = new SettingGroupDto(L["DisplayName:OssManagement"], L["Description:OssManagement"]);
 
                 var ossObjectSetting = ossSettingGroup.AddSetting(L["DisplayName:OssObject"], L["Description:OssObject"]);
@@ -64,10 +61,10 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
                     await SettingManager.GetOrNullAsync(AbpOssManagementSettingNames.AllowFileExtensions, providerName, providerKey),
                     ValueType.String);
 
-                settingGroups.Add(ossSettingGroup);
+                settingGroups.AddGroup(ossSettingGroup);
             }
 
-            return new ListResultDto<SettingGroupDto>(settingGroups);
+            return settingGroups;
         }
     }
 }

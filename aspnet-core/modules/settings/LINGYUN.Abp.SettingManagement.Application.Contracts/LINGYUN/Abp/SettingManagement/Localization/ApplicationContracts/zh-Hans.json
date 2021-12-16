@@ -5,6 +5,8 @@
     "Permission:Settings": "配置管理",
     "Permission:Update": "变更",
     "Permission:Manager": "管理",
+    "DisplayName:UserSetting": "用户设置",
+    "Description:UserSetting": "用户自定义的设置项",
     "DisplayName:System": "系统设置",
     "Description:System": "与系统相关的配置项",
     "DisplayName:System.Language": "语言",

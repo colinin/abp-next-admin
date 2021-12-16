@@ -2,7 +2,7 @@
   <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
     <Row type="flex">
       <Col :span="24">
-        <Tabs v-model:activeKey="activeTabKey">
+        <Tabs v-model:activeKey="activeTabKey" :tab-position="tabPosition">
           <TabPane
             v-for="(group, tabIndex) in settingGroups"
             :key="tabIndex"
@@ -108,7 +108,10 @@
       type: Function as PropType<(...args: any) => Promise<any>>,
       required: true,
     },
-    tabPosition: { type: String },
+    tabPosition: {
+      type: String,
+      defaultValue: 'top',
+    },
   } as const; // 对于存在必输项的props see: https://blog.csdn.net/q535999731/article/details/109578885
 
   export default defineComponent({

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -67,6 +68,15 @@ namespace LINGYUN.Abp.OssManagement
             var ossObject = await oss.GetObjectAsync(input.Bucket, input.Object, input.Path, input.MD5);
 
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
+        }
+
+        public virtual async Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
+        {
+            var oss = CreateOssContainer();
+
+            var ossObject = await oss.GetObjectAsync(input.Bucket, input.Object, input.Path, input.MD5);
+
+            return new RemoteStreamContent(ossObject.Content, ossObject.Name);
         }
 
         protected virtual IOssContainer CreateOssContainer()

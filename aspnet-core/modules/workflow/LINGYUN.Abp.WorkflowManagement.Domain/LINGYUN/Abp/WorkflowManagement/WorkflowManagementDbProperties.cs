@@ -2,7 +2,7 @@
 {
     public static class WorkflowManagementDbProperties
     {
-        public static string DbTablePrefix { get; set; } = "WorkflowManagement_";
+        public static string DbTablePrefix { get; set; } = "WF_";
 
         public static string DbSchema { get; set; } = null;
 

@@ -30,10 +30,9 @@ namespace LINGYUN.Abp.Wrapper
             {
                 if (context.StatusCode.HasValue)
                 {
-                    context.WithCode(context.StatusCode.ToString());
+                    context.WithCode(((int)context.StatusCode).ToString());
                     return;
                 }
-                // TODO: 先从TttpStatusCodeFinder中查找
                 var wrapperOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
                 context.WithCode(wrapperOptions.CodeWithUnhandled);
             }

@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                                             .Properties((np => 
                                                 np.Object<ExtraPropertyDictionary>(p => p.Name(n => n.ExtraProperties))
                                                   .Date(p => p.Name(n => n.ExecutionTime).Format(dateTimeFormat))))))));
-                if (indexCreateResponse.IsValid)
+                if (!indexCreateResponse.IsValid)
                 {
                     Logger.LogWarning("Failed to initialize index and audit log may not be retrieved.");
                     Logger.LogWarning(indexCreateResponse.OriginalException.ToString());
@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                                        .Properties(mp => 
                                             mp.Object<ExtraPropertyDictionary>(p => p.Name(n => n.ExtraProperties))
                                               .Date(p => p.Name(n => n.CreationTime).Format(dateTimeFormat)))));
-                if (indexCreateResponse.IsValid)
+                if (!indexCreateResponse.IsValid)
                 {
                     Logger.LogWarning("Failed to initialize index and security log may not be retrieved.");
                     Logger.LogWarning(indexCreateResponse.OriginalException.ToString());

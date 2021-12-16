@@ -2,9 +2,7 @@
 using LINGYUN.Abp.Aliyun.Settings;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun.Settings;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
@@ -31,19 +29,19 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
             LocalizationResource = typeof(AliyunResource);
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
+        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
-            var settingGroups = new List<SettingGroupDto>();
+            var settingGroups = new SettingGroupResult();
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
             if (await PermissionChecker.IsGrantedAsync(AliyunSettingPermissionNames.Settings))
@@ -57,42 +55,50 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.RegionId),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.RegionId, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.AccessKeyId),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.AccessKeyId, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.AccessKeySecret),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.AccessKeySecret, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.RamRoleArn),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.RamRoleArn, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.RoleSessionName),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.RoleSessionName, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.Policy),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.Policy, providerName, providerKey),
-                    ValueType.String);
+                    ValueType.String,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.UseSecurityTokenService),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.UseSecurityTokenService, providerName, providerKey),
-                    ValueType.Boolean);
+                    ValueType.Boolean,
+                    providerName);
                 ramSetting.AddDetail(
                     SettingDefinitionManager.Get(AliyunSettingNames.Authorization.DurationSeconds),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.DurationSeconds, providerName, providerKey),
-                    ValueType.Number);
+                    ValueType.Number,
+                    providerName);
 
                 #endregion
 
@@ -103,44 +109,51 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.Domain),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.Version),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.Version, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.ActionName),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultPhoneNumber),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultPhoneNumber, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultSignName),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultSignName, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultTemplateCode),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultTemplateCode, providerName, providerKey),
-                   ValueType.String);
+                   ValueType.String,
+                    providerName);
                 smsSetting.AddDetail(
                    SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.VisableErrorToClient),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient, providerName, providerKey),
-                   ValueType.Boolean);
+                   ValueType.Boolean,
+                    providerName);
 
                 #endregion
 
-                settingGroups.Add(aliyunSettingGroup);
+                settingGroups.AddGroup(aliyunSettingGroup);
             }
 
-            return new ListResultDto<SettingGroupDto>(settingGroups);
+            return settingGroups;
         }
     }
 }

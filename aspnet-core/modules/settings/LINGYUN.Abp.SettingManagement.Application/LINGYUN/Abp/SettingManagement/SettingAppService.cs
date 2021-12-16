@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Caching;
 using Volo.Abp.Emailing;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Features;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -16,9 +17,6 @@ using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 using Volo.Abp.Users;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.SettingManagement
 {
@@ -92,18 +90,18 @@ namespace LINGYUN.Abp.SettingManagement
 
         //[Authorize]
         [AllowAnonymous]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
         [AllowAnonymous]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
+        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
             /*
              * 2020-11-19
@@ -117,7 +115,9 @@ namespace LINGYUN.Abp.SettingManagement
              * 最初的设计才是不合理的,前端不能硬编码设置管理界面,这应该是后端的事情
              */ 
 
-            var settingGroups = new List<SettingGroupDto>();
+            // 2021-12-11 重新约定返回格式, 当用户明确只需要对应提供者设置才返回，否则为空数组
+
+            var settingGroups = new SettingGroupResult();
 
             #region 系统设置
 
@@ -128,16 +128,18 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(LocalizationSettingNames.DefaultLanguage),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage, providerName, providerKey),
-                ValueType.Option)
-                .AddOptions(LocalizationOptions.Languages.Select(l => new OptionDto(l.DisplayName, l.CultureName)));
+                ValueType.Option,
+                providerName)
+                ?.AddOptions(LocalizationOptions.Languages.Select(l => new OptionDto(l.DisplayName, l.CultureName)));
             // 时区
             var timingSetting = sysSettingGroup.AddSetting(L["DisplayName:System.Timing"], L["Description:System.Timing"]);
             timingSetting.AddDetail(
                SettingDefinitionManager.Get(TimingSettingNames.TimeZone),
                StringLocalizerFactory,
                await SettingManager.GetOrNullAsync(TimingSettingNames.TimeZone, providerName, providerKey),
-               ValueType.String);
-            settingGroups.Add(sysSettingGroup);
+               ValueType.String,
+               providerName);
+            settingGroups.AddGroup(sysSettingGroup);
 
             #endregion
 
@@ -152,14 +154,16 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(AccountSettingNames.EnableLocalLogin),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(AccountSettingNames.EnableLocalLogin, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             accountSetting.AddDetail(
                 SettingDefinitionManager.Get(AccountSettingNames.IsSelfRegistrationEnabled),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
 
-            settingGroups.Add(securitySettingGroup);
+            settingGroups.AddGroup(securitySettingGroup);
 
             #endregion
 
@@ -175,17 +179,20 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(IdentitySettingNames.Lockout.AllowedForNewUsers),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Lockout.AllowedForNewUsers, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             lockoutSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Lockout.LockoutDuration),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Lockout.LockoutDuration, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
             lockoutSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Lockout.MaxFailedAccessAttempts),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
 
             #endregion
 
@@ -196,37 +203,44 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(IdentitySettingNames.User.IsEmailUpdateEnabled),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.User.IsUserNameUpdateEnabled),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsNewUserRegister),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsNewUserRegister, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsResetPassword),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsResetPassword, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsUserSignin),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsUserSignin, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             userSetting.AddDetail(
                 SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepetInterval),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
 
             #endregion
 
@@ -237,17 +251,20 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             signinSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.SignIn.RequireConfirmedEmail),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             signinSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
 
             #endregion
 
@@ -258,32 +275,38 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequireDigit),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequireDigit, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             passwordSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequiredLength),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequiredLength, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
             passwordSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequiredUniqueChars),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequiredUniqueChars, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
             passwordSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequireLowercase),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequireLowercase, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             passwordSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequireUppercase),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequireUppercase, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             passwordSetting.AddDetail(
                 SettingDefinitionManager.Get(IdentitySettingNames.Password.RequireNonAlphanumeric),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequireNonAlphanumeric, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
 
             #endregion
 
@@ -314,9 +337,10 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
 
-            settingGroups.Add(identitySetting);
+            settingGroups.AddGroup(identitySetting);
 
             #endregion
 
@@ -330,55 +354,64 @@ namespace LINGYUN.Abp.SettingManagement
                 SettingDefinitionManager.Get(EmailSettingNames.DefaultFromAddress),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.DefaultFromAddress, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             defaultMailSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.DefaultFromDisplayName),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.DefaultFromDisplayName, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
 
             var smtpSetting = emailSettingGroup.AddSetting(L["DisplayName:Emailing.Smtp"], L["Description:Emailing.Smtp"]);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.EnableSsl),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.EnableSsl, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.UseDefaultCredentials),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UseDefaultCredentials, providerName, providerKey),
-                ValueType.Boolean);
+                ValueType.Boolean,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.Domain),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Domain, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.Host),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Host, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.Port),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Port, providerName, providerKey),
-                ValueType.Number);
+                ValueType.Number,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.UserName),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UserName, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
             smtpSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.Smtp.Password),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Password, providerName, providerKey),
-                ValueType.String);
+                ValueType.String,
+                providerName);
 
-            settingGroups.Add(emailSettingGroup);
+            settingGroups.AddGroup(emailSettingGroup);
 
             #endregion
 
-            return new ListResultDto<SettingGroupDto>(settingGroups);
+            return settingGroups;
         }
 
         protected virtual async Task CheckFeatureAsync()

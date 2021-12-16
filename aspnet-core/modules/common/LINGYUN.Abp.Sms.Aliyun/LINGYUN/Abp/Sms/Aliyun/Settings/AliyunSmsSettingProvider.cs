@@ -21,41 +21,65 @@ namespace LINGYUN.Abp.Sms.Aliyun.Settings
                     displayName: L("DisplayName:ActionName"),
                     description: L("Description:ActionName"),
                     isVisibleToClients: false
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.DefaultSignName,
                     displayName: L("DisplayName:DefaultSignName"),
                     description: L("Description:DefaultSignName"),
                     isVisibleToClients: false,
                     isEncrypted: true
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.DefaultTemplateCode,
                     displayName: L("DisplayName:DefaultTemplateCode"),
                     description: L("Description:DefaultTemplateCode"),
                     isVisibleToClients: false,
                     isEncrypted: true
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.DefaultPhoneNumber,
                     displayName: L("DisplayName:DefaultPhoneNumber"),
                     description: L("Description:DefaultPhoneNumber"),
                     isVisibleToClients: false
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.Domain,
                     defaultValue: "dysmsapi.aliyuncs.com",
                     displayName: L("DisplayName:Domain"),
                     description: L("Description:Domain"),
                     isVisibleToClients: false
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.Version,
                     defaultValue: "2017-05-25",
                     displayName: L("DisplayName:Version"),
                     description: L("Description:Version"),
                     isVisibleToClients: false
-                ),
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSmsSettingNames.Sms.VisableErrorToClient,
                     defaultValue: false.ToString(),
@@ -63,6 +87,10 @@ namespace LINGYUN.Abp.Sms.Aliyun.Settings
                     description: L("Description:VisableErrorToClient"),
                     isVisibleToClients: false
                 )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName)
             };
         }
 

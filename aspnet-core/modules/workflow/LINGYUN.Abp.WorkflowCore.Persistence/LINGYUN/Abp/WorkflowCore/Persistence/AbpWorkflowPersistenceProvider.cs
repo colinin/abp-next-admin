@@ -108,7 +108,6 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflow.Id;
         }
 
-        [UnitOfWork(IsDisabled = true)]
         public void EnsureStoreExists()
         {
             // TODO:

@@ -351,6 +351,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi", "modu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Authorization", "modules\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj", "{433AD1FB-2DE8-479F-B89E-A17217591538}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "modules\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{65311EC9-7A86-4E73-A587-F06A99474EDD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.OssManagement", "modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj", "{CD9081C6-7CA0-4A93-9318-33E54F3ED275}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.HttpApi.Client", "modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj", "{D262405E-1C72-4F14-A799-40471BAD48DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -909,6 +915,18 @@ Global
 		{433AD1FB-2DE8-479F-B89E-A17217591538}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{433AD1FB-2DE8-479F-B89E-A17217591538}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{433AD1FB-2DE8-479F-B89E-A17217591538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65311EC9-7A86-4E73-A587-F06A99474EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65311EC9-7A86-4E73-A587-F06A99474EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65311EC9-7A86-4E73-A587-F06A99474EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65311EC9-7A86-4E73-A587-F06A99474EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD9081C6-7CA0-4A93-9318-33E54F3ED275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9081C6-7CA0-4A93-9318-33E54F3ED275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD9081C6-7CA0-4A93-9318-33E54F3ED275}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD9081C6-7CA0-4A93-9318-33E54F3ED275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D262405E-1C72-4F14-A799-40471BAD48DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D262405E-1C72-4F14-A799-40471BAD48DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D262405E-1C72-4F14-A799-40471BAD48DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D262405E-1C72-4F14-A799-40471BAD48DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1082,6 +1100,9 @@ Global
 		{3C7A8246-DE82-4330-8697-24EF1B1C515D} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{4059F87E-9762-46C1-AEB1-B1128EA533AE} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
 		{433AD1FB-2DE8-479F-B89E-A17217591538} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
+		{65311EC9-7A86-4E73-A587-F06A99474EDD} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{CD9081C6-7CA0-4A93-9318-33E54F3ED275} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{D262405E-1C72-4F14-A799-40471BAD48DC} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

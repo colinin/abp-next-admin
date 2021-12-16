@@ -21,7 +21,10 @@ namespace LINGYUN.Abp.WorkflowManagement
 
             Configure<AbpDistributedEntityEventOptions>(options =>
             {
+
             });
+
+            context.Services.AddHostedService<WorkflowRegisterService>();
         }
     }
 }

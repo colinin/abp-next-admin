@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -25,7 +26,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [HttpPost]
-        public virtual async Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
+        public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
             return await OssObjectAppService.CreateAsync(input);
         }
@@ -56,6 +57,13 @@ namespace LINGYUN.Abp.OssManagement
         public virtual async Task<OssObjectDto> GetAsync(GetOssObjectInput input)
         {
             return await OssObjectAppService.GetAsync(input);
+        }
+
+        [HttpGet]
+        [Route("download")]
+        public virtual async Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
+        {
+            return await OssObjectAppService.GetContentAsync(input);
         }
     }
 }

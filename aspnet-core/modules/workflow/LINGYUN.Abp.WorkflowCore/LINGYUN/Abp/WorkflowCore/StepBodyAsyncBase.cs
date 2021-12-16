@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.WorkflowCore
 {
-    public abstract class StepBodyAsyncBase : StepBodyAsync
+    public abstract class StepBodyAsyncBase : StepBodyAsync, IStepMultiTenant
     {
     }
 }
