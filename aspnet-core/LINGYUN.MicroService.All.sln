@@ -357,6 +357,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Oss
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.HttpApi.Client", "modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj", "{D262405E-1C72-4F14-A799-40471BAD48DC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data-protection", "data-protection", "{529DF802-97C4-4BF2-BE7C-39663B3D9EA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection", "modules\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj", "{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "modules\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -927,6 +933,14 @@ Global
 		{D262405E-1C72-4F14-A799-40471BAD48DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D262405E-1C72-4F14-A799-40471BAD48DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D262405E-1C72-4F14-A799-40471BAD48DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1103,6 +1117,9 @@ Global
 		{65311EC9-7A86-4E73-A587-F06A99474EDD} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{CD9081C6-7CA0-4A93-9318-33E54F3ED275} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{D262405E-1C72-4F14-A799-40471BAD48DC} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{529DF802-97C4-4BF2-BE7C-39663B3D9EA3} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156} = {529DF802-97C4-4BF2-BE7C-39663B3D9EA3}
+		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D} = {529DF802-97C4-4BF2-BE7C-39663B3D9EA3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
