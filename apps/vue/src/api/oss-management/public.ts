@@ -20,9 +20,10 @@ export const upload = (file: Blob, path: string, name: string) => {
     defHttp
       .uploadFile<OssObject>(
         {
-          url: format(Api.Upload, { path: path, name: name }),
+          url: Api.Upload,
         },
         {
+          data: { path: path, object: name },
           file: file,
         },
       )

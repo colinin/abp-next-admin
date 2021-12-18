@@ -103,8 +103,8 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
         currentChunkSize: currentChunksSize,
         totalChunks: totalChunks,
         totalSize: totalSize,
-        bucket: params.bucket,
-        path: params.path,
+        bucket: params.data?.bucket,
+        path: params.data?.path,
         fileName: fileName,
       };
       return defAbpHttp
