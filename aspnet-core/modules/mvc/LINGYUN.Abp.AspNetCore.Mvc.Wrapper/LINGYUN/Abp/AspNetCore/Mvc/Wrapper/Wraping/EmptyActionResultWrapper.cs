@@ -11,16 +11,28 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping
         public void Wrap(FilterContext context)
         {
             var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
-            var code = options.CodeWithEmptyResult(context.HttpContext.RequestServices);
-            var message = options.MessageWithEmptyResult(context.HttpContext.RequestServices);
             switch (context)
             {
                 case ResultExecutingContext resultExecutingContext:
-                    resultExecutingContext.Result = new ObjectResult(new WrapResult(code, message));
+                    if (options.ErrorWithEmptyResult)
+                    {
+                        var code = options.CodeWithEmptyResult(context.HttpContext.RequestServices);
+                        var message = options.MessageWithEmptyResult(context.HttpContext.RequestServices);
+                        resultExecutingContext.Result = new ObjectResult(new WrapResult(code, message));
+                        return;
+                    }
+                    resultExecutingContext.Result = new ObjectResult(new WrapResult(options.CodeWithSuccess, result: null));
                     return;
 
                 case PageHandlerExecutedContext pageHandlerExecutedContext:
-                    pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult(code, message));
+                    if (options.ErrorWithEmptyResult)
+                    {
+                        var code = options.CodeWithEmptyResult(context.HttpContext.RequestServices);
+                        var message = options.MessageWithEmptyResult(context.HttpContext.RequestServices);
+                        pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult(code, message));
+                        return;
+                    }
+                    pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult(options.CodeWithSuccess, result: null));
                     return;
             }
         }
