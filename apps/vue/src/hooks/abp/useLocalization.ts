@@ -20,7 +20,8 @@ export function useLocalization(resourceName: string, ...mergeResources: string[
 
   function L(key: string, ...args: any[]) {
     if (!key) return '';
-    if (!getResource.value[key]) return key;
+    if (!getResource.value) return key;
+    if (!Reflect.has(getResource.value, key)) return key;
     return format(getResource.value[key], args ?? []);
   }
 
