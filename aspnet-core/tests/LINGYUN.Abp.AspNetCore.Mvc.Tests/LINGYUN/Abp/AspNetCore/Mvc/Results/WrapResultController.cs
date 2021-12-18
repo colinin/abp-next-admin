@@ -90,5 +90,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
         {
             throw new HasDbException();
         }
+
+        [HttpPut]
+        [Route("not-wrap-204")]
+        public Task NotWrapWith204()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

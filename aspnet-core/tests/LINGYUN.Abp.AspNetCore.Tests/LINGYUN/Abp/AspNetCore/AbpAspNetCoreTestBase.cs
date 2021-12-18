@@ -26,23 +26,23 @@ namespace LINGYUN.Abp.AspNetCore
             RequestHeaders = new Dictionary<string, string>();
         }
 
-        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
+        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
-            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode, xmlHttpRequest);
+            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode, xmlHttpRequest, method);
             return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
 
-        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
+        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
-            using (var response = await GetResponseAsync(url, expectedStatusCode, xmlHttpRequest))
+            using (var response = await GetResponseAsync(url, expectedStatusCode, xmlHttpRequest, method))
             {
                 return await response.Content.ReadAsStringAsync();
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false)
+        protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
+            using (var requestMessage = new HttpRequestMessage(method ?? HttpMethod.Get, url))
             {
                 requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
                 if (xmlHttpRequest)

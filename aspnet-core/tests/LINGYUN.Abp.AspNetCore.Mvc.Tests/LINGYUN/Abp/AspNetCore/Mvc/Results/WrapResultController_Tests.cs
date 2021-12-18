@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Wrapper;
 using Shouldly;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Http;
@@ -114,6 +115,15 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Results
             var result = await GetResponseAsObjectAsync<TestResultObject>("/api/wrap-result-test/not-wrap");
             result.ShouldNotBeNull();
             result.Name.ShouldBe("Not Wrap");
+        }
+
+        [Fact]
+        public async Task Should_Return_Not_Wrap_Result_For_Response_204()
+        {
+            var result = await GetResponseAsObjectAsync<WrapResult>("/api/wrap-result-test/not-wrap-204", System.Net.HttpStatusCode.OK, method: HttpMethod.Put);
+            result.ShouldNotBeNull();
+            result.Code.ShouldBe("0");
+            result.Result.ShouldBeNull();
         }
     }
 }

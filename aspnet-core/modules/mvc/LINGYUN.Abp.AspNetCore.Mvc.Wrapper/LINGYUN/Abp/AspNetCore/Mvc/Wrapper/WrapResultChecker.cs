@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using System.Reflection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -44,6 +43,11 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 
         protected virtual bool CheckForBase(FilterContext context)
         {
+            if (!Options.IsEnabled)
+            {
+                return false;
+            }
+
             if (context.HttpContext.Request.Headers.ContainsKey(AbpHttpWrapConsts.AbpDontWrapResult))
             {
                 return false;
