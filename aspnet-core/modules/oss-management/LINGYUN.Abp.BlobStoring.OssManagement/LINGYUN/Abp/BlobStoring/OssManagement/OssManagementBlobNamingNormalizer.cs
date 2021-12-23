@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Web;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 
@@ -8,16 +6,28 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
 {
     public class OssManagementBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
     {
-        public string NormalizeBlobName(string blobName)
+        public virtual string NormalizeBlobName(string blobName)
         {
-            // 路径需要URL编码
-            return HttpUtility.UrlEncode(blobName, Encoding.UTF8);
+            return NormalizeName(blobName);
         }
 
-        public string NormalizeContainerName(string containerName)
+        public virtual string NormalizeContainerName(string containerName)
         {
+            // 尾部添加反斜杠
+            return NormalizeName(containerName).EnsureEndsWith('/');
+        }
+
+        protected virtual string NormalizeName(string name)
+        {
+            // 取消路径修饰符
+            name = name.Replace("./", "").Replace("../", "");
             // 取消反斜杠开头
-            return containerName.EnsureStartsWith('/');
+            if (name.StartsWith("/"))
+            {
+                name = name.Substring(1);
+            }
+
+            return name;
         }
     }
 }

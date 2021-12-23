@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [HttpPost]
-        public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
+        public virtual async Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
         {
             return await OssObjectAppService.CreateAsync(input);
         }
