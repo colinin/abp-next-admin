@@ -1,10 +1,14 @@
 ﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using System;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 {
     public class SerilogField
     {
+        [Nest.PropertyName(AbpSerilogUniqueIdConsts.UniqueIdPropertyName)]
+        public long UniqueId { get; set; }
+
         [Nest.PropertyName(AbpLoggingEnricherPropertyNames.MachineName)]
         public string MachineName { get; set; }
 

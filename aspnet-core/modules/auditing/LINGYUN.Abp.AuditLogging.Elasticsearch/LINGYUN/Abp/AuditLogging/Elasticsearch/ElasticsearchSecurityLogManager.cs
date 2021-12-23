@@ -192,43 +192,43 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(f => f.CreationTime).GreaterThanOrEquals(startTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).GreaterThanOrEquals(startTime)));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(f => f.CreationTime).LessThanOrEquals(endTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).LessThanOrEquals(endTime)));
             }
             if (!applicationName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.ApplicationName.Suffix("keyword")).Value(applicationName)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ApplicationName))).Value(applicationName)));
             }
             if (!identity.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Identity.Suffix("keyword")).Value(identity)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.Identity))).Value(identity)));
             }
             if (!action.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Action.Suffix("keyword")).Value(action)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.Action))).Value(action)));
             }
             if (userId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.UserId.Suffix("keyword")).Value(userId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.UserId))).Value(userId)));
             }
             if (!userName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.UserName.Suffix("keyword")).Value(userName)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.UserName))).Value(userName)));
             }
             if (!clientId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.ClientId.Suffix("keyword")).Value(clientId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ClientId))).Value(clientId)));
             }
             if (!clientIpAddress.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.ClientIpAddress.Suffix("keyword")).Value(clientIpAddress)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ClientIpAddress))).Value(clientIpAddress)));
             }
             if (!correlationId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.CorrelationId.Suffix("keyword")).Value(correlationId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.CorrelationId))).Value(correlationId)));
             }
 
             return querys;
@@ -253,6 +253,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             { "ClientIpAddress", "ClientIpAddress.keyword" },
             { "ClientId", "ClientId.keyword" },
             { "CorrelationId", "CorrelationId.keyword" },
+            { "CreationTime", "CreationTime" },
         };
         protected virtual string GetField(string field)
         {

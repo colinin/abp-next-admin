@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.RealTime;
+﻿using LINGYUN.Abp.IdGenerator;
+using LINGYUN.Abp.RealTime;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -9,19 +10,19 @@ namespace LINGYUN.Abp.IM.Messages
     public class MessageSender : IMessageSender, ITransientDependency
     {
         protected IDistributedEventBus EventBus { get; }
-        protected ISnowflakeIdrGenerator SnowflakeIdrGenerator { get; }
+        protected IDistributedIdGenerator DistributedIdGenerator { get; }
         public MessageSender(
             IDistributedEventBus eventBus,
-            ISnowflakeIdrGenerator snowflakeIdrGenerator)
+            IDistributedIdGenerator distributedIdGenerator)
         {
             EventBus = eventBus;
-            SnowflakeIdrGenerator = snowflakeIdrGenerator;
+            DistributedIdGenerator = distributedIdGenerator;
         }
 
         public virtual async Task<string> SendMessageAsync(ChatMessage chatMessage)
         {
             chatMessage.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
-            chatMessage.MessageId = SnowflakeIdrGenerator.Create().ToString();
+            chatMessage.MessageId = DistributedIdGenerator.Create().ToString();
             // 如果先存储的话,就紧耦合消息处理模块了
             // await Store.StoreMessageAsync(chatMessage);
             var eto = new RealTimeEto<ChatMessage>(chatMessage);

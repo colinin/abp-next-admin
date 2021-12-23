@@ -2,6 +2,7 @@
 {
     public class LogFieldDto
     {
+        public string Id { get; set; }
         public string MachineName { get; set; }
         public string Environment { get; set; }
         public string Application { get; set; }

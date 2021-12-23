@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -71,8 +72,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                             },
                             {
                                 "term": {
-                                    "@timestamp": {
-                                        "value": "2021-10-31T09:53:12.3406273+08:00"
+                                    "fields.UniqueId": {
+                                        "value": "1474021081433481216"
                                     }
                                 }
                             }
@@ -87,9 +88,9 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                                 (q) => q.Bool(
                                     (b) => b.Must(
                                         (s) => s.Term(
-                                            (t) => t.Field("@timestamp").Value(id)),
+                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)),
                                         (s) => s.Term(
-                                            (t) => t.Field(f => f.Fields.TenantId.Suffix("keyword")).Value(_currentTenant.GetId()))))),
+                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId()))))),
                     cancellationToken);
             }
             else
@@ -100,8 +101,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                         "must": [
                             {
                                 "term": {
-                                    "@timestamp": {
-                                        "value": "2021-10-31T09:53:12.3406273+08:00"
+                                    "fields.UniqueId": {
+                                        "value": "1474021081433481216"
                                     }
                                 }
                             }
@@ -116,7 +117,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                                 (q) => q.Bool(
                                     (b) => b.Must(
                                         (s) => s.Term(
-                                            (t) => t.Field("@timestamp").Value(id))))),
+                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id))))),
                     cancellationToken);
             }
 
@@ -210,7 +211,9 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
             var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortOrder.Ascending : SortOrder.Descending;
-            sorting = sorting ?? "timestamp";
+            sorting = !sorting.IsNullOrWhiteSpace()
+                ? sorting.Split()[0]
+                : nameof(SerilogInfo.TimeStamp);
 
             var querys = BuildQueryDescriptor(
                 startTime,
@@ -241,7 +244,9 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
             var response = await client.SearchAsync<SerilogInfo>((dsl) =>
                 dsl.Index(CreateIndex())
-                   .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+                   .Query(log =>
+                        log.Bool(b =>
+                            b.Must(querys.ToArray())))
                    .Source(SourceFilter)
                    .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
@@ -270,55 +275,56 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
             if (_currentTenant.IsAvailable)
             {
-                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.TenantId.Suffix("keyword")).Value(_currentTenant.GetId())));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())));
             }
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(f => f.TimeStamp).GreaterThanOrEquals(startTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(startTime)));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(f => f.TimeStamp).LessThanOrEquals(endTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(endTime)));
             }
             if (level.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Level.Suffix("keyword")).Value(level.ToString())));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(level.ToString())));
             }
             if (!machineName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.MachineName.Suffix("keyword")).Value(machineName)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.MachineName))).Value(machineName)));
             }
             if (!environment.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Environment.Suffix("keyword")).Value(environment)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Environment))).Value(environment)));
             }
             if (!application.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Application.Suffix("keyword")).Value(application)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Application))).Value(application)));
             }
             if (!context.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field((f) => f.Fields.Context.Suffix("keyword")).Value(context)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Context))).Value(context)));
             }
             if (!requestId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Match((q) => q.Field(f => f.Fields.RequestId.Suffix("keyword")).Query(requestId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.RequestId))).Value(requestId)));
             }
             if (!requestPath.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Fields.RequestPath.Suffix("keyword")).Value(requestPath)));
+                // 模糊匹配
+                querys.Add((log) => log.MatchPhrasePrefix((q) => q.Field(f => f.Fields.RequestPath).Query(requestPath)));
             }
             if (!correlationId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Fields.CorrelationId.Suffix("keyword")).Value(correlationId)));
+                querys.Add((log) => log.MatchPhrase((q) => q.Field(GetField(nameof(SerilogInfo.Fields.CorrelationId))).Query(correlationId)));
             }
             if (processId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Fields.ProcessId).Value(processId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ProcessId))).Value(processId)));
             }
             if (threadId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(f => f.Fields.ThreadId).Value(threadId)));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ThreadId))).Value(threadId)));
             }
 
             if (hasException.HasValue)
@@ -386,6 +392,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             { "userid", "fields.UserId.keyword" },
             { "processid", "fields.ProcessId" },
             { "threadid", "fields.ThreadId" },
+            { "id", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },
+            { "uniqueid", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },
         };
         protected virtual string GetField(string field)
         {

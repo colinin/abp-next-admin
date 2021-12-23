@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using Volo.Abp;
-using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.RealTime
+namespace LINGYUN.Abp.IdGenerator.Snowflake
 {
     // reference: https://github.com/dotnetcore/CAP
     // reference: https://blog.csdn.net/lq18050010830/article/details/89845790
-    public class SnowflakeIdrGenerator : ISnowflakeIdrGenerator, ISingletonDependency
+    public class SnowflakeIdGenerator : IDistributedIdGenerator
     {
         public const long Twepoch = 1288834974657L;
 
@@ -22,48 +20,48 @@ namespace LINGYUN.Abp.RealTime
         protected int TimestampLeftShift { get; }
         protected long SequenceMask { get; }
 
-        protected SnowflakeIdOptions Options { get; }
-
-        public SnowflakeIdrGenerator(IOptions<SnowflakeIdOptions> options)
+        private SnowflakeIdGenerator(SnowflakeIdOptions options)
         {
-            Options = options.Value;
-
-            WorkerIdShift = Options.SequenceBits;
-            DatacenterIdShift = Options.SequenceBits + Options.WorkerIdBits;
-            TimestampLeftShift = Options.SequenceBits + Options.WorkerIdBits + Options.DatacenterIdBits;
-            SequenceMask = -1L ^ (-1L << Options.SequenceBits);
+            WorkerIdShift = options.SequenceBits;
+            DatacenterIdShift = options.SequenceBits + options.WorkerIdBits;
+            TimestampLeftShift = options.SequenceBits + options.WorkerIdBits + options.DatacenterIdBits;
+            SequenceMask = -1L ^ (-1L << options.SequenceBits);
         }
 
-        internal void Initialize(long sequence = 0L)
+        public static SnowflakeIdGenerator Create(SnowflakeIdOptions options)
         {
-            Sequence = sequence;
-            MaxWorkerId = -1L ^ (-1L << Options.WorkerIdBits);
-            MaxDatacenterId = -1L ^ (-1L << Options.DatacenterIdBits);
+            var idGenerator = new SnowflakeIdGenerator(options)
+            {
+                Sequence = options.Sequence,
+                MaxWorkerId = -1L ^ (-1L << options.WorkerIdBits),
+                MaxDatacenterId = -1L ^ (-1L << options.DatacenterIdBits)
+            };
 
             if (!int.TryParse(Environment.GetEnvironmentVariable("WORKERID", EnvironmentVariableTarget.Machine), out var workerId))
             {
-                workerId = RandomHelper.GetRandom((int)MaxWorkerId);
+                workerId = RandomHelper.GetRandom((int)idGenerator.MaxWorkerId);
             }
 
             if (!int.TryParse(Environment.GetEnvironmentVariable("DATACENTERID", EnvironmentVariableTarget.Machine), out var datacenterId))
             {
-                datacenterId = RandomHelper.GetRandom((int)MaxDatacenterId);
+                datacenterId = RandomHelper.GetRandom((int)idGenerator.MaxDatacenterId);
             }
 
-            if (workerId > MaxWorkerId || workerId < 0)
-                throw new ArgumentException($"worker Id can't be greater than {MaxWorkerId} or less than 0");
+            if (workerId > idGenerator.MaxWorkerId || workerId < 0)
+                throw new ArgumentException($"worker Id can't be greater than {idGenerator.MaxWorkerId} or less than 0");
 
-            if (datacenterId > MaxDatacenterId || datacenterId < 0)
-                throw new ArgumentException($"datacenter Id can't be greater than {MaxDatacenterId} or less than 0");
+            if (datacenterId > idGenerator.MaxDatacenterId || datacenterId < 0)
+                throw new ArgumentException($"datacenter Id can't be greater than {idGenerator.MaxDatacenterId} or less than 0");
 
-            WorkerId = workerId;
-            DatacenterId = datacenterId;
-            
+            idGenerator.WorkerId = workerId;
+            idGenerator.DatacenterId = datacenterId;
+
+            return idGenerator;
         }
 
-        public long WorkerId { get; protected set; }
-        public long DatacenterId { get; protected set; }
-        public long Sequence { get; protected set; }
+        public long WorkerId { get; internal set; }
+        public long DatacenterId { get; internal set; }
+        public long Sequence { get; internal set; }
 
         public virtual long Create()
         {
