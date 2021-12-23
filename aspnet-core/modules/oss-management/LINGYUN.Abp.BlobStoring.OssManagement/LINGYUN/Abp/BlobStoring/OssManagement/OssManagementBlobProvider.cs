@@ -29,7 +29,8 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
             await _ossObjectAppService.DeleteAsync(new GetOssObjectInput
             {
                 Bucket = configuration.Bucket,
-                Object = args.BlobName
+                Path = GetOssPath(args),
+                Object = GetOssName(args),
             });
             return true;
         }
@@ -42,7 +43,8 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
                 var oss = await _ossObjectAppService.GetAsync(new GetOssObjectInput
                 {
                     Bucket = configuration.Bucket,
-                    Object = args.BlobName
+                    Path = GetOssPath(args),
+                    Object = GetOssName(args),
                 });
                 return oss != null;
             }
@@ -63,12 +65,13 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
                 var content = await _ossObjectAppService.GetContentAsync(new GetOssObjectInput
                 {
                     Bucket = configuration.Bucket,
-                    Object = args.BlobName
+                    Path = GetOssPath(args),
+                    Object = GetOssName(args),
                 });
 
                 return content?.GetStream();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogWarning("An error occurred while getting the OSS object and an empty data stream will be returned");
                 Logger.LogWarning(ex.Message);
@@ -83,10 +86,39 @@ namespace LINGYUN.Abp.BlobStoring.OssManagement
             await _ossObjectAppService.CreateAsync(new CreateOssObjectInput
             {
                 Bucket = configuration.Bucket,
-                Overwrite = true,
-                FileName = args.BlobName,
+                Overwrite = args.OverrideExisting,
+                Path = GetOssPath(args),
+                FileName = GetOssName(args),
                 File = new RemoteStreamContent(args.BlobStream)
             });
+        }
+
+        protected virtual string GetOssPath(BlobProviderArgs args)
+        {
+            // ContainerName: blob
+            // path1/path2/path3/path3/path5/file.txt   =>  blob/path1/path2/path3/path3/path5/
+            var path = args.ContainerName;
+            if (args.BlobName.Contains("/"))
+            {
+                var lastIndex = args.BlobName.LastIndexOf('/');
+                path += args.BlobName.Substring(0, lastIndex);
+            }
+
+            return path.EnsureEndsWith('/');
+        }
+
+        protected virtual string GetOssName(BlobProviderArgs args)
+        {
+            // path1/path2/path3/path3/path5/file.txt   =>  file.txt
+            if (args.BlobName.Contains("/"))
+            {
+                var lastIndex = args.BlobName.LastIndexOf('/');
+
+                // TODO: 用户传递以 / 为结尾符的文件名,让系统抛出异常?
+                return args.BlobName.Substring(lastIndex + 1);
+            }
+
+            return args.BlobName;
         }
     }
 }
