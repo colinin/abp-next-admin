@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.Serilog.Enrichers.Application;
+﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,9 +19,9 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpSerilogEnrichersApplicationModule),
+        typeof(AbpSerilogEnrichersUniqueIdModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAspNetCoreHttpOverridesModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public partial class InternalApiGatewayModule : AbpModule
     {
@@ -53,7 +53,6 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            app.UseForwardedHeaders();
             app.UseAuditing();
             app.UseStaticFiles();
             app.UseRouting();
