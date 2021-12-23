@@ -22,6 +22,11 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 {
     public class DaprApiDescriptionFinder : IDaprApiDescriptionFinder, ITransientDependency
     {
+        public static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
         protected IApiDescriptionCache Cache { get; }
         protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
@@ -112,10 +117,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions);
 
             return result;
         }

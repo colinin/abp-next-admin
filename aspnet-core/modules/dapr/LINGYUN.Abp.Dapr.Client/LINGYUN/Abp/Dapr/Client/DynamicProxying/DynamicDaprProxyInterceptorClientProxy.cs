@@ -13,7 +13,6 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 {
     public class DynamicDaprProxyInterceptorClientProxy<TService> : ClientProxyBase<TService>
     {
-        protected IOptions<AbpDaprRemoteServiceOptions> DaprRemoteServiceOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDaprRemoteServiceOptions>>();
         protected IOptions<AbpDaprClientProxyOptions> DaprClientProxyOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDaprClientProxyOptions>>();
         protected IDaprClientFactory DaprClientFactory => LazyServiceProvider.LazyGetRequiredService<IDaprClientFactory>();
 
@@ -64,28 +63,28 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             return JsonSerializer.Deserialize<T>(stringContent);
         }
 
-        protected override Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
+        protected override async Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
         {
             var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType)
                                ?? throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
-            var remoteServiceConfig = DaprRemoteServiceOptions.Value.RemoteServices.GetConfigurationOrDefaultOrNull(clientConfig.RemoteServiceName);
-
-            return Task.FromResult(remoteServiceConfig?.Version);
+            return remoteServiceConfig?.Version;
         }
 
         private async Task<HttpResponseMessage> MakeRequestAsync(ClientProxyRequestContext requestContext)
         {
             var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType) ?? throw new AbpException($"Could not get DaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
-            var remoteServiceConfig = DaprRemoteServiceOptions.Value.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
+            var appId = remoteServiceConfig.GetAppId();
             var apiVersion = await GetApiVersionInfoAsync(requestContext);
             var methodName = await GetUrlWithParametersAsync(requestContext, apiVersion);
             // See: https://docs.dapr.io/reference/api/service_invocation_api/#examples
             var daprClient = DaprClientFactory.CreateClient(clientConfig.RemoteServiceName);
             var requestMessage = daprClient.CreateInvokeMethodRequest(
                 requestContext.Action.GetHttpMethod(),
-                remoteServiceConfig.AppId,
+                appId,
                 methodName);
             requestMessage.Content = await ClientProxyRequestPayloadBuilder.BuildContentAsync(
                 requestContext.Action,
@@ -119,7 +118,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             // 增加一个可配置的请求消息
             foreach (var clientRequestAction in DaprClientProxyOptions.Value.ProxyRequestActions)
             {
-                clientRequestAction(remoteServiceConfig.AppId, requestMessage);
+                clientRequestAction(appId, requestMessage);
             }
 
             var response = await daprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken(requestContext.Arguments));

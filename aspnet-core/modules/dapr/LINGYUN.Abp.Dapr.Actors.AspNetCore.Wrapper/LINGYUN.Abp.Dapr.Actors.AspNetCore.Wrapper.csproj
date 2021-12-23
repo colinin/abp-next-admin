@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapr.Actors.AspNetCore" Version="$(DaprPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj" />
 	</ItemGroup>
 
 </Project>
