@@ -17,8 +17,11 @@ public static class DaprRemoteServiceConfigurationExtensions
         return configuration.GetOrDefault(AppId) ?? throw new AbpException($"Could not get AppId for RemoteServices Configuration.");
     }
 
-    public static RemoteServiceConfiguration SetAppId([NotNull] this RemoteServiceConfiguration configuration, [CanBeNull] string value)
+    public static RemoteServiceConfiguration SetAppId([NotNull] this RemoteServiceConfiguration configuration, [NotNull] string value)
     {
+        Check.NotNullOrEmpty(configuration, nameof(configuration));
+        Check.NotNullOrEmpty(value, nameof(value));
+
         configuration[AppId] = value;
         return configuration;
     }
