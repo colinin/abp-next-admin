@@ -17,6 +17,7 @@ using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,7 @@ namespace LY.MicroService.RealtimeMessage
 {
     [DependsOn(
         typeof(AbpSerilogEnrichersApplicationModule),
+        typeof(AbpSerilogEnrichersUniqueIdModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),

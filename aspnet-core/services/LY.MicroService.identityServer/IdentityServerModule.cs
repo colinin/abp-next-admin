@@ -10,6 +10,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,34 +37,35 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LY.MicroService.IdentityServer;
 
 [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule),
-        // typeof(AbpIdentityHttpApiModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerSmsValidatorModule),
-        typeof(AbpIdentityServerWeChatModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpDataDbMigratorModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
-        typeof(AbpAspNetCoreHttpOverridesModule),
-        typeof(AbpLocalizationCultureMapModule),
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpAliyunSmsModule)
-        )]
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpAccountApplicationModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAutofacModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpIdentityApplicationModule),
+    // typeof(AbpIdentityHttpApiModule),
+    typeof(AbpIdentityServerEntityFrameworkCoreModule),
+    typeof(AbpIdentityServerSmsValidatorModule),
+    typeof(AbpIdentityServerWeChatModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpDbFinderMultiTenancyModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpAliyunSmsModule)
+    )]
 public partial class IdentityServerModule : AbpModule
 {
     private const string DefaultCorsPolicyName = "Default";
