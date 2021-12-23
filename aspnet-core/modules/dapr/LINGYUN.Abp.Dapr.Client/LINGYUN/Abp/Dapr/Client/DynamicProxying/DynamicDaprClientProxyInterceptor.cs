@@ -29,7 +29,6 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
 
         public ILogger<DynamicDaprClientProxyInterceptor<TService>> Logger { get; set; }
         protected DynamicDaprProxyInterceptorClientProxy<TService> InterceptorClientProxy { get; }
-        protected AbpDaprRemoteServiceOptions AbpRemoteServiceOptions { get; }
         protected AbpDaprClientProxyOptions ClientProxyOptions { get; }
         protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         protected IDaprApiDescriptionFinder ApiDescriptionFinder { get; }
@@ -37,7 +36,6 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         public DynamicDaprClientProxyInterceptor(
             DynamicDaprProxyInterceptorClientProxy<TService> interceptorClientProxy,
             IOptions<AbpDaprClientProxyOptions> clientProxyOptions,
-            IOptions<AbpDaprRemoteServiceOptions> remoteServiceOptions,
             IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider,
             IDaprApiDescriptionFinder apiDescriptionFinder)
         {
@@ -45,7 +43,6 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
             ApiDescriptionFinder = apiDescriptionFinder;
             ClientProxyOptions = clientProxyOptions.Value;
-            AbpRemoteServiceOptions = remoteServiceOptions.Value;
 
             Logger = NullLogger<DynamicDaprClientProxyInterceptor<TService>>.Instance;
         }
@@ -76,11 +73,11 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
         {
             var clientConfig = ClientProxyOptions.DaprClientProxies.GetOrDefault(typeof(TService)) ??
                                throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
             return await ApiDescriptionFinder.FindActionAsync(
                 clientConfig.RemoteServiceName,
-                remoteServiceConfig.AppId,
+                remoteServiceConfig.GetAppId(),
                 typeof(TService),
                 invocation.Method
             );

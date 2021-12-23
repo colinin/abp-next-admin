@@ -17,8 +17,6 @@ namespace LINGYUN.Abp.Dapr.Client
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = context.Services.GetConfiguration();
-            Configure<AbpDaprRemoteServiceOptions>(configuration);
             context.Services.AddHttpClient(DaprHttpClient);
 
             context.Services.AddTransient(typeof(DynamicDaprProxyInterceptorClientProxy<>));

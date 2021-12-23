@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Validation;
 
@@ -23,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddDaprClientProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
-            [NotNull] string remoteServiceConfigurationName = DaprRemoteServiceConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultServices = true)
         {
             Check.NotNull(services, nameof(assembly));
@@ -44,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddDaprClientProxy<T>(
             [NotNull] this IServiceCollection services,
-            [NotNull] string remoteServiceConfigurationName = DaprRemoteServiceConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultService = true)
         {
             return services.AddDaprClientProxy(
@@ -57,7 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddDaprClientProxy(
             [NotNull] this IServiceCollection services,
             [NotNull] Type type,
-            [NotNull] string remoteServiceConfigurationName = DaprRemoteServiceConfigurationDictionary.DefaultName,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
             bool asDefaultService = true)
         {
             Check.NotNull(services, nameof(services));
@@ -114,7 +115,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection AddDaprClientFactory(
             [NotNull] this IServiceCollection services,
-            [NotNull] string remoteServiceConfigurationName = DaprRemoteServiceConfigurationDictionary.DefaultName)
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName)
         {
             var preOptions = services.ExecutePreConfiguredActions<AbpDaprClientBuilderOptions>();
 
@@ -129,7 +130,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var jsonOptions = provider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerOptions>>().Value;
                 builder.UseJsonSerializationOptions(jsonOptions.JsonSerializerOptions);
 
-                var options = provider.GetRequiredService<IOptions<AbpDaprRemoteServiceOptions>>().Value;
+                var options = provider.GetRequiredService<IOptions<AbpRemoteServiceOptions>>().Value;
                 builder.UseHttpEndpoint(
                     options.RemoteServices
                         .GetConfigurationOrDefault(remoteServiceConfigurationName).BaseUrl);

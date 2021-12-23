@@ -13,6 +13,7 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.MultiTenancy;
@@ -24,24 +25,24 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
          where TService: IActor
     {
         protected ICurrentTenant CurrentTenant { get; }
-        protected AbpDaprRemoteServiceOptions DaprServiceOptions { get; }
         protected AbpDaprActorProxyOptions DaprActorProxyOptions { get; }
         protected IProxyHttpClientFactory HttpClientFactory { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
+        protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider { get; }
         public ILogger<DynamicDaprActorProxyInterceptor<TService>> Logger { get; set; }
 
         public DynamicDaprActorProxyInterceptor(
             IOptions<AbpDaprActorProxyOptions> daprActorProxyOptions,
-            IOptionsSnapshot<AbpDaprRemoteServiceOptions> daprActorOptions,
             IProxyHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
+            IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider,
             ICurrentTenant currentTenant)
         {
             CurrentTenant = currentTenant;
             HttpClientFactory = httpClientFactory;
             ClientAuthenticator = clientAuthenticator;
             DaprActorProxyOptions = daprActorProxyOptions.Value;
-            DaprServiceOptions = daprActorOptions.Value;
+            RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
 
             Logger = NullLogger<DynamicDaprActorProxyInterceptor<TService>>.Instance;
         }
@@ -68,7 +69,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
         {
             // 获取Actor配置
             var actorProxyConfig = DaprActorProxyOptions.ActorProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicDaprActorProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = DaprServiceOptions.RemoteServices.GetConfigurationOrDefault(actorProxyConfig.RemoteServiceName);
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(actorProxyConfig.RemoteServiceName);
 
             // Actors的定义太多, 可以考虑使用默认的 BaseUrl 作为远程地址
             if (remoteServiceConfig.BaseUrl.IsNullOrWhiteSpace())
