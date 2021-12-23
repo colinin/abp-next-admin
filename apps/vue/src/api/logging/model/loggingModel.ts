@@ -11,6 +11,7 @@ export interface LogException {
 }
 
 export interface LogField {
+  id: string;
   machineName: string;
   environment: string;
   application: string;

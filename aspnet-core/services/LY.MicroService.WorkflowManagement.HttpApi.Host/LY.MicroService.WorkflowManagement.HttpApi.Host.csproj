@@ -43,6 +43,7 @@
 		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
 		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.Components\LINGYUN.Abp.WorkflowCore.Components.csproj" />

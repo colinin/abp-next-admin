@@ -6,6 +6,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,33 +27,34 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LY.MicroService.IdentityServer;
 
 [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
-        typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
-        typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
-        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
-        typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
-        typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
-        typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpEmailingExceptionHandlingModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpAliyunSmsModule),
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreHttpOverridesModule),
-        typeof(AbpLocalizationCultureMapModule),
-        typeof(AbpAutofacModule)
-        )]
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
+    typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
+    typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
+    typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
+    typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),
+    typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
+    typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
+    typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpAliyunSmsModule),
+    typeof(AbpDbFinderMultiTenancyModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAutofacModule)
+    )]
 public partial class IdentityServerHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

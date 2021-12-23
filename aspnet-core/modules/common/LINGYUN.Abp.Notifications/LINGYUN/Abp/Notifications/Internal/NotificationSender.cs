@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.RealTime;
+﻿using LINGYUN.Abp.IdGenerator;
+using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -26,19 +27,19 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public IDistributedEventBus DistributedEventBus { get; }
         /// <summary>
-        /// Reference to <see cref="IMessageIdGenerator"/>.
+        /// Reference to <see cref="IDistributedIdGenerator"/>.
         /// </summary>
-        protected ISnowflakeIdrGenerator SnowflakeIdGenerator { get; }
+        protected IDistributedIdGenerator DistributedIdGenerator { get; }
 
         protected AbpNotificationOptions Options { get; }
         public NotificationSender(
            IDistributedEventBus distributedEventBus,
-           ISnowflakeIdrGenerator snowflakeIdrGenerator,
+           IDistributedIdGenerator distributedIdGenerator,
            IOptions<AbpNotificationOptions> options)
         {
             Options = options.Value;
             DistributedEventBus = distributedEventBus;
-            SnowflakeIdGenerator = snowflakeIdrGenerator;
+            DistributedIdGenerator = distributedIdGenerator;
             Logger = NullLogger<NotificationSender>.Instance;
         }
 
@@ -79,7 +80,7 @@ namespace LINGYUN.Abp.Notifications
         {
             var eto = new NotificationEto<NotificationData>(data)
             {
-                Id = SnowflakeIdGenerator.Create(),
+                Id = DistributedIdGenerator.Create(),
                 TenantId = tenantId,
                 Users = users?.ToList(),
                 Name = name,

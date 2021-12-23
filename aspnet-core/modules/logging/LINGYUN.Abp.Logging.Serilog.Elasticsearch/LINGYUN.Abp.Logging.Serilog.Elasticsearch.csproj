@@ -18,6 +18,7 @@
 		<ProjectReference Include="..\..\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 	</ItemGroup>
 
 </Project>

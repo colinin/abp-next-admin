@@ -8,6 +8,7 @@ using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,7 @@ namespace LY.MicroService.LocalizationManagement
 {
     [DependsOn(
         typeof(AbpSerilogEnrichersApplicationModule),
+        typeof(AbpSerilogEnrichersUniqueIdModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAuditLoggingElasticsearchModule),
         typeof(AbpAspNetCoreMultiTenancyModule),

@@ -5,6 +5,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WorkflowCore.Components;
 using LINGYUN.Abp.WorkflowCore.DistributedLock;
 using LINGYUN.Abp.WorkflowCore.LifeCycleEvent;
@@ -37,36 +38,37 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LY.MicroService.WorkflowManagement;
 
 [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpEventBusRabbitMqModule),
-        typeof(AbpBlobStoringOssManagementModule),
-        typeof(WorkflowManagementApplicationModule),
-        typeof(WorkflowManagementHttpApiModule),
-        typeof(WorkflowManagementEntityFrameworkCoreModule),
-        typeof(AbpWorkflowCoreComponentsModule),
-        typeof(AbpWorkflowCoreDistributedLockModule),
-        typeof(AbpWorkflowCoreLifeCycleEventModule),
-        typeof(AbpWorkflowCoreRabbitMQModule),
-        typeof(AbpWorkflowCorePersistenceEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpEmailingExceptionHandlingModule),
-        typeof(AbpHttpClientIdentityModelWebModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-        typeof(AbpDataDbMigratorModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpSwashbuckleModule),
-        typeof(AbpAutofacModule)
-        )]
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpEventBusRabbitMqModule),
+    typeof(AbpBlobStoringOssManagementModule),
+    typeof(WorkflowManagementApplicationModule),
+    typeof(WorkflowManagementHttpApiModule),
+    typeof(WorkflowManagementEntityFrameworkCoreModule),
+    typeof(AbpWorkflowCoreComponentsModule),
+    typeof(AbpWorkflowCoreDistributedLockModule),
+    typeof(AbpWorkflowCoreLifeCycleEventModule),
+    typeof(AbpWorkflowCoreRabbitMQModule),
+    typeof(AbpWorkflowCorePersistenceEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpDbFinderMultiTenancyModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAutofacModule)
+    )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

@@ -11,6 +11,7 @@ using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TenantManagement;
@@ -40,43 +41,44 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LY.MicroService.BackendAdmin;
 
 [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpLoggingSerilogElasticsearchModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-        typeof(AbpSettingManagementApplicationModule),
-        typeof(AbpSettingManagementHttpApiModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpFeatureManagementHttpApiModule),
-        typeof(AbpFeatureManagementClientModule),
-        typeof(AbpAuditingApplicationModule),
-        typeof(AbpAuditingHttpApiModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
-        typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-        typeof(AbpDataDbMigratorModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpEmailingExceptionHandlingModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpAliyunSmsModule),
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreHttpOverridesModule),
-        typeof(AbpLocalizationCultureMapModule),
-        typeof(AbpAutofacModule)
-        )]
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpLoggingSerilogElasticsearchModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpSettingManagementHttpApiModule),
+    typeof(AbpPermissionManagementApplicationModule),
+    typeof(AbpPermissionManagementHttpApiModule),
+    typeof(AbpFeatureManagementApplicationModule),
+    typeof(AbpFeatureManagementHttpApiModule),
+    typeof(AbpFeatureManagementClientModule),
+    typeof(AbpAuditingApplicationModule),
+    typeof(AbpAuditingHttpApiModule),
+    typeof(AbpTenantManagementApplicationModule),
+    typeof(AbpTenantManagementHttpApiModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
+    typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpAliyunSmsModule),
+    typeof(AbpDbFinderMultiTenancyModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAutofacModule)
+    )]
 public partial class BackendAdminHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -89,8 +91,9 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddAlwaysAllowAuthorization();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
-        var configuration = hostingEnvironment.BuildConfiguration();
+        var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
         ConfigureJsonSerializer();

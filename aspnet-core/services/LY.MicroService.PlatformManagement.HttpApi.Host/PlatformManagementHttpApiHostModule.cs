@@ -13,6 +13,7 @@ using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
@@ -39,41 +40,42 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace LY.MicroService.PlatformManagement;
 
 [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpUINavigationVueVbenAdminModule),
-        // typeof(AbpOssManagementAliyunModule),
-        typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
-        typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
-        typeof(AbpOssManagementApplicationModule),
-        typeof(AbpOssManagementHttpApiModule),
-        typeof(AbpOssManagementSettingManagementModule),
-        typeof(PlatformApplicationModule),
-        typeof(PlatformHttpApiModule),
-        typeof(PlatformEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelWebModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-        typeof(AbpDataDbMigratorModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpNotificationModule),
-        typeof(AbpEmailingExceptionHandlingModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpFeaturesValidationRedisModule),
-        // typeof(AbpFeaturesClientModule),// 当需要客户端特性限制时取消注释此模块
-        // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
-        typeof(AbpDbFinderMultiTenancyModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreHttpOverridesModule),
-        typeof(AbpLocalizationCultureMapModule),
-        typeof(AbpAutofacModule)
-        )]
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpUINavigationVueVbenAdminModule),
+    // typeof(AbpOssManagementAliyunModule),
+    typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
+    typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
+    typeof(AbpOssManagementApplicationModule),
+    typeof(AbpOssManagementHttpApiModule),
+    typeof(AbpOssManagementSettingManagementModule),
+    typeof(PlatformApplicationModule),
+    typeof(PlatformHttpApiModule),
+    typeof(PlatformEntityFrameworkCoreModule),
+    typeof(AbpIdentityHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpNotificationModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpFeaturesValidationRedisModule),
+    // typeof(AbpFeaturesClientModule),// 当需要客户端特性限制时取消注释此模块
+    // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
+    typeof(AbpDbFinderMultiTenancyModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAutofacModule)
+    )]
 public partial class PlatformManagementHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

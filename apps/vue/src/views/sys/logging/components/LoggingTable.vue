@@ -41,7 +41,7 @@
       const { L } = useLocalization('AbpAuditLogging');
       const [registerModal, { openModal }] = useModal();
       const [registerTable] = useTable({
-        rowKey: 'timeStamp',
+        rowKey: 'fields.id',
         title: L('Logging'),
         columns: getDataColumns(),
         api: getList,

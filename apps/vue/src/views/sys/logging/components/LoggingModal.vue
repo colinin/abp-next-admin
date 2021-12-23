@@ -126,7 +126,7 @@
       const [registerModal] = useModalInner((model) => {
         activeKey.value = 'basic';
         modelRef.value = {} as Log;
-        get(model.timeStamp).then((res) => {
+        get(model.fields.id).then((res) => {
           modelRef.value = res;
         });
       });

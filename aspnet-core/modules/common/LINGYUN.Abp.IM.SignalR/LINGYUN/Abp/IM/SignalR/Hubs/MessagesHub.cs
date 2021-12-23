@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.IM.Contract;
+﻿using LINGYUN.Abp.IdGenerator;
+using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.IM.Messages;
@@ -28,7 +29,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
 
         protected IUserOnlineChanger OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
 
-        protected ISnowflakeIdrGenerator SnowflakeIdrGenerator => LazyServiceProvider.LazyGetRequiredService<ISnowflakeIdrGenerator>();
+        protected IDistributedIdGenerator DistributedIdGenerator => LazyServiceProvider.LazyGetRequiredService<IDistributedIdGenerator>();
 
         protected IExceptionToErrorInfoConverter ErrorInfoConverter => LazyServiceProvider.LazyGetRequiredService<IExceptionToErrorInfoConverter>();
 
@@ -147,7 +148,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             try
             {
                 chatMessage.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
-                chatMessage.MessageId = SnowflakeIdrGenerator.Create().ToString();
+                chatMessage.MessageId = DistributedIdGenerator.Create().ToString();
                 await MessageStore.StoreMessageAsync(chatMessage);
 
                 if (!chatMessage.GroupId.IsNullOrWhiteSpace())
