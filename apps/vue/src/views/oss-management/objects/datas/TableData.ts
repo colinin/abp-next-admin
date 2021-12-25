@@ -20,32 +20,6 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: L('DisplayName:CreationDate'),
-      dataIndex: 'creationDate',
-      align: 'left',
-      width: 160,
-      sorter: true,
-      format: (text) => {
-        if (text) {
-          return formatToDateTime(text, 'YYYY-MM-DD HH:mm:ss');
-        }
-        return text;
-      },
-    },
-    {
-      title: L('DisplayName:LastModifiedDate'),
-      dataIndex: 'lastModifiedDate',
-      align: 'left',
-      width: 160,
-      sorter: true,
-      format: (text) => {
-        if (text) {
-          return formatToDateTime(text, 'YYYY-MM-DD HH:mm:ss');
-        }
-        return text;
-      },
-    },
-    {
       title: L('DisplayName:FileType'),
       dataIndex: 'isFolder',
       align: 'left',
@@ -59,7 +33,7 @@ export function getDataColumns(): BasicColumn[] {
       title: L('DisplayName:Size'),
       dataIndex: 'size',
       align: 'left',
-      width: 'auto',
+      width: 150,
       sorter: true,
       format: (text) => {
         const size = Number(text);
@@ -82,6 +56,32 @@ export function getDataColumns(): BasicColumn[] {
           kb = 1;
         }
         return kb + ' KB';
+      },
+    },
+    {
+      title: L('DisplayName:CreationDate'),
+      dataIndex: 'creationDate',
+      align: 'left',
+      width: 160,
+      sorter: true,
+      format: (text) => {
+        if (text) {
+          return formatToDateTime(text, 'YYYY-MM-DD HH:mm:ss');
+        }
+        return text;
+      },
+    },
+    {
+      title: L('DisplayName:LastModifiedDate'),
+      dataIndex: 'lastModifiedDate',
+      align: 'left',
+      width: 'auto',
+      sorter: true,
+      format: (text) => {
+        if (text) {
+          return formatToDateTime(text, 'YYYY-MM-DD HH:mm:ss');
+        }
+        return text;
       },
     },
   ];

@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.OssManagement
             await FileUploader.UploadAsync(input);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("bulk-delete")]
         public virtual async Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
         {

@@ -57,6 +57,12 @@ export interface OssCopyOrMove {
   toName?: string;
 }
 
+export interface OssObjectBulkDelete {
+  bucket: string;
+  path?: string;
+  objects: string[];
+}
+
 export interface FileShareInput {
   name: string;
   path?: string;
