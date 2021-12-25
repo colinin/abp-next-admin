@@ -5,6 +5,11 @@
         :stop-button-propagation="true"
         :actions="[
           {
+              label: L('CopyLink'),
+              icon: 'ant-design:copy-outlined',
+              onClick: handleCopyLink.bind(null, record),
+            },
+          {
             color: 'error',
             label: L('Delete'),
             icon: 'ant-design:delete-outlined',
@@ -18,9 +23,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineProps, defineEmits, watchEffect } from 'vue';
+  import { watchEffect } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getShareDataColumns } from './data';
   import { getShareList as getShares } from '/@/api/oss-management/private';
@@ -40,7 +46,7 @@
   const emit = defineEmits(['delete:file:share']);
 
   const { L } = useLocalization('AbpOssManagement', 'AbpUi');
-  const { createConfirm } = useMessage();
+  const { createConfirm, createMessage } = useMessage();
   const [registerTable, { setTableData }] = useTable({
     rowKey: 'url',
     columns: getShareDataColumns(),
@@ -73,6 +79,14 @@
     getShares().then((res) => {
       setTableData(res.items);
     });
+  }
+
+  function handleCopyLink(record) {
+    let url = window.location.origin
+    url += '/api/files/share/' + record.url
+    if (copyTextToClipboard(url)) {
+      createMessage.success(L('Successful'))
+    }
   }
 
   function handleDelete(record) {

@@ -6,17 +6,24 @@
           :stop-button-propagation="true"
           :actions="[
             {
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              ifShow: deleteEnabled,
-              onClick: handleDelete.bind(null, record),
+              auth: 'AbpOssManagement.OssObject.Download',
+              ifShow: !record.isFolder,
+              label: L('Objects:Download'),
+              icon: 'ant-design:download-outlined',
+              onClick: handleDownload.bind(null, record),
             },
             {
               label: L('Share'),
               icon: 'ant-design:share-alt-outlined',
               ifShow: shareEnabled,
               onClick: handleShare.bind(null, record),
+            },
+            {
+              color: 'error',
+              label: L('Delete'),
+              icon: 'ant-design:delete-outlined',
+              ifShow: deleteEnabled,
+              onClick: handleDelete.bind(null, record),
             },
           ]"
         />
@@ -29,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, defineProps, defineEmits, watchEffect, nextTick } from 'vue';
+  import { computed, watchEffect, nextTick } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -43,6 +50,7 @@
   import { getList as getPrivates } from '/@/api/oss-management/private';
   import { getList as getPublices } from '/@/api/oss-management/public';
   import { share } from '/@/api/oss-management/private';
+  import { generateOssUrl } from '/@/api/oss-management/oss';
 
   const props = defineProps({
     selectGroup: {
@@ -82,7 +90,7 @@
     immediate: false,
     rowSelection: { type: 'checkbox' },
     actionColumn: {
-      width: 180,
+      width: 240,
       title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
@@ -92,6 +100,13 @@
   const shareEnabled = computed(() => {
     return props.selectGroup === 'private';
   });
+  const bucket = computed(() => {
+    switch (props.selectGroup) {
+      case 'private': return 'users';
+      case 'public': return 'public';
+      default: return '';
+    }
+  })
 
   const [registershareForm, { validate, setFieldsValue, resetFields }] = useForm({
     labelAlign: 'left',
@@ -115,6 +130,15 @@
       emit('append:folder', folders);
       setTableData(res.items.filter((item) => !item.isFolder));
     });
+  }
+
+  function handleDownload(record) {
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = generateOssUrl(bucket.value, record.path, record.name);
+    link.setAttribute('download', record.name);
+    document.body.appendChild(link);
+    link.click();
   }
 
   function handleDelete(record) {

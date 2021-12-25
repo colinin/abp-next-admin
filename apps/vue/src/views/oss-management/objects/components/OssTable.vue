@@ -48,6 +48,14 @@
               @click="handleUpload"
               >{{ L('Objects:UploadFile') }}</a-button
             >
+            <a-button
+              v-if="hasPermission('AbpOssManagement.OssObject.Delete')"
+              :disabled="selectCount <= 0"
+              type="primary"
+              danger
+              @click="handleBulkDelete"
+              >{{ L('Objects:BulkDelete') }}</a-button
+            >
           </template>
           <template #action="{ record }">
             <TableAction
@@ -87,12 +95,12 @@
 
 <script lang="ts">
   import { computed, defineComponent, unref } from 'vue';
-  import { Card, Modal, Tree, Select } from 'ant-design-vue';
+  import { Card, Modal, Tree, Select, message } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { getObjects, deleteObject, generateOssUrl } from '/@/api/oss-management/oss';
+  import { getObjects, deleteObject, bulkDeleteObject, generateOssUrl } from '/@/api/oss-management/oss';
   import { getDataColumns } from '../datas/TableData';
   import { useObjects } from '../hooks/useObjects';
   import OssUploadModal from './OssUploadModal.vue';
@@ -132,7 +140,7 @@
         beforeFetch,
         handleContainerChange,
       } = useObjects();
-      const [registerTable, { reload, setPagination }] = useTable({
+      const [registerTable, { reload, setPagination, getSelectRowKeys }] = useTable({
         rowKey: 'name',
         title: L('DisplayName:OssObject'),
         columns: getDataColumns(),
@@ -148,6 +156,9 @@
         striped: false,
         useSearchForm: false,
         showTableSetting: true,
+        // 启用批量删除功能, 防止误选
+        clickToRowSelect: false,
+        clearSelectOnPageChange: true,
         tableSetting: {
           redo: false,
         },
@@ -166,6 +177,9 @@
       const lockTree = computed(() => {
         return unref(bucket) ? false : true;
       });
+      const selectCount = computed(() => {
+        return getSelectRowKeys().length;
+      })
 
       function handleSelectFolder(folders, e) {
         path.value = e.node.dataRef.path + folders[0];
@@ -187,6 +201,25 @@
               object: record.name,
             }).then(() => {
               reload();
+              message.success(L('Successful'));
+            });
+          },
+        });
+      }
+
+      function handleBulkDelete() {
+        Modal.warning({
+          title: L('AreYouSure'),
+          content: L('Objects:WillBeBulkDeletedMessage'),
+          okCancel: true,
+          onOk: () => {
+            bulkDeleteObject({
+              bucket: unref(bucket),
+              path: unref(path),
+              objects: getSelectRowKeys(),
+            }).then(() => {
+              reload();
+              message.success(L('Successful'));
             });
           },
         });
@@ -227,6 +260,7 @@
         L,
         folders,
         lockTree,
+        selectCount,
         expandedKeys,
         fetchFolders,
         handleSelectFolder,
@@ -238,6 +272,7 @@
         hasPermission,
         registerTable,
         handleDelete,
+        handleBulkDelete,
         handleDownload,
         registerFolderModal,
         registerPreviewModal,

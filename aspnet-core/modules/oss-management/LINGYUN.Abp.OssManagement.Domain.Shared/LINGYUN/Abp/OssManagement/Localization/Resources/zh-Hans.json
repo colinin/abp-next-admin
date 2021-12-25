@@ -65,6 +65,7 @@
     "PublicDocument": "公共文档",
     "MyShare": "我的分享",
     "FileList": "文件列表",
+    "CopyLink": "复制链接",
     "Share": "分享",
     "Containers": "容器",
     "Containers:Create": "创建容器",
@@ -87,6 +88,8 @@
     "Objects:Download": "下载",
     "Objects:FileSystem": "文件管理",
     "Objects:Preview": "预览",
-    "Objects:Root": "根目录"
+    "Objects:Root": "根目录",
+    "Objects:BulkDelete": "批量删除",
+    "Objects:WillBeBulkDeletedMessage": "选择的多个存储对象将被删除!"
   }
 }

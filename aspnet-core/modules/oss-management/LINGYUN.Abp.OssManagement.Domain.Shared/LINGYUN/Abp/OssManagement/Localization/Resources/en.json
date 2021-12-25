@@ -65,6 +65,7 @@
     "PublicDocument": "Public Document",
     "MyShare": "My Share",
     "FileList": "Files",
+    "CopyLink": "Copy Link",
     "Share": "Share",
     "Containers": "Containers",
     "Containers:Create": "Create Container",
@@ -87,6 +88,8 @@
     "Objects:Download": "Download",
     "Objects:FileSystem": "File System",
     "Objects:Preview": "Preview",
-    "Objects:Root": "Root"
+    "Objects:Root": "Root",
+    "Objects:BulkDelete": "Bulk Delete",
+    "Objects:WillBeBulkDeletedMessage": "Multiple selected storage objects will be deleted!"
   }
 }
