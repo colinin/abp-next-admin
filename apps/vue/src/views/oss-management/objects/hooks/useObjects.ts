@@ -28,7 +28,7 @@ export function useObjects() {
       marker: '',
       sorting: '',
       skipCount: 0,
-      maxResultCount: 100,
+      maxResultCount: 1000,
     }).then((res) => {
       containers.value = res.containers;
     });
@@ -58,7 +58,7 @@ export function useObjects() {
       encodingType: '',
       sorting: '',
       skipCount: 0,
-      maxResultCount: 100,
+      maxResultCount: 1000,
     }).then((res) => {
       const fs = res.objects
         .filter((item) => item.isFolder)

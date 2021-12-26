@@ -85,7 +85,7 @@ namespace LY.MicroService.RealtimeMessage
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = hostingEnvironment.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             ConfigureDbContext();
             ConfigureJsonSerializer();
