@@ -78,7 +78,7 @@ export function useObjects() {
   function beforeFetch(request: any) {
     request.bucket = unref(bucket);
     request.prefix = unref(path);
-    request.delimiter = '/';
+    request.delimiter = '';
     formatPagedRequest(request);
   }
 
