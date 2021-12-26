@@ -11,7 +11,7 @@
     "LY.MicroService.PlatformManagement.HttpApi.Host": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "http://127.0.0.1:30025",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -394,8 +394,9 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             }
             DirectoryHelper.CreateIfNotExists(filePath);
             // 目录也属于Oss对象,需要抽象的文件系统集合来存储
-            var fileSystemNames = Directory.GetFileSystemEntries(filePath);
-            int maxFilesCount = fileSystemNames.Length;
+            var fileSystemNames = string.Equals(request.Delimiter, "/")
+                    ? Directory.GetDirectories(filePath)
+                    : Directory.GetFileSystemEntries(filePath);
 
             // 排序所有文件与目录
             Array.Sort(fileSystemNames, delegate (string x, string y)
