@@ -18,18 +18,15 @@ public class TenantCloudSettingAppService : ApplicationService, ITenantCloudSett
     protected ISettingManager SettingManager { get; }
     protected IPermissionChecker PermissionChecker { get; }
     protected ISettingDefinitionManager SettingDefinitionManager { get; }
-    protected ITencentCloudClientFactory TencentCloudClientFactory { get; }
 
     public TenantCloudSettingAppService(
         ISettingManager settingManager,
         IPermissionChecker permissionChecker,
-        ISettingDefinitionManager settingDefinitionManager,
-        ITencentCloudClientFactory tencentCloudClientFactory)
+        ISettingDefinitionManager settingDefinitionManager)
     {
         SettingManager = settingManager;
         PermissionChecker = permissionChecker;
         SettingDefinitionManager = settingDefinitionManager;
-        TencentCloudClientFactory = tencentCloudClientFactory;
 
         LocalizationResource = typeof(TencentCloudResource);
     }
@@ -75,6 +72,12 @@ public class TenantCloudSettingAppService : ApplicationService, ITenantCloudSett
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(TencentCloudSettingNames.SecretKey, providerName, providerKey),
                 ValueType.String,
+                providerName);
+            basicSetting.AddDetail(
+                SettingDefinitionManager.Get(TencentCloudSettingNames.DurationSecond),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCloudSettingNames.SecretKey, providerName, providerKey),
+                ValueType.Number,
                 providerName);
 
             #endregion

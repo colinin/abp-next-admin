@@ -72,15 +72,16 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
-        ConfigureJsonSerializer();
-        ConfigurePermissionManagement();
-        ConfigreExceptionHandling();
-        ConfigureAuditing(configuration);
-        ConfigureCaching(configuration);
-        ConfigureVirtualFileSystem();
-        ConfigureMultiTenancy(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureLocalization();
+        ConfigureJsonSerializer();
+        ConfigreExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigurePermissionManagement();
+        ConfigureCaching(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureSwagger(context.Services);
+        ConfigureMultiTenancy(configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
@@ -91,8 +92,10 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         // 虚拟文件系统
         app.UseStaticFiles();
-        //路由
+        // 路由
         app.UseRouting();
+        // 跨域
+        app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
         app.UseAbpClaimsMap();

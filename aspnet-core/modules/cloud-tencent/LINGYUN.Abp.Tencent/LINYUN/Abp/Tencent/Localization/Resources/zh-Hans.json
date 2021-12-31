@@ -12,6 +12,8 @@
     "Description:SecretId": "密钥Id，只能从腾讯云管理控制台获取。",
     "DisplayName:SecretKey": "密钥Key",
     "Description:SecretKey": "密钥Key，只能从腾讯云管理控制台获取。",
+    "DisplayName:DurationSecond": "持续时间",
+    "Description:DurationSecond": "会话持续时长,单位(秒)",
     "DisplayName:HttpMethod": "请求类型",
     "Description:HttpMethod": "SDK默认使用POST方法，如果你一定要使用GET方法，可以在这里设置。GET方法无法处理一些较大的请求。",
     "DisplayName:Timeout": "超时时间",

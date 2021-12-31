@@ -65,14 +65,15 @@ namespace LY.MicroService.LocalizationManagement
             var configuration = context.Services.GetConfiguration();
 
             ConfigureDbContext();
+            ConfigureLocalization();
             ConfigureJsonSerializer();
             ConfigreExceptionHandling();
-            ConfigureAuditing(configuration);
-            ConfigureCaching(configuration);
             ConfigureVirtualFileSystem();
-            ConfigureMultiTenancy(configuration);
-            ConfigureLocalization();
+            ConfigureCaching(configuration);
+            ConfigureAuditing(configuration);
             ConfigureSwagger(context.Services);
+            ConfigureMultiTenancy(configuration);
+            ConfigureCors(context.Services, configuration);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
 
@@ -85,8 +86,10 @@ namespace LY.MicroService.LocalizationManagement
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            //路由
+            // 路由
             app.UseRouting();
+            // 跨域
+            app.UseCors(DefaultCorsPolicyName);
             // 认证
             app.UseAuthentication();
             // jwt

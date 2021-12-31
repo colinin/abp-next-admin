@@ -88,16 +88,16 @@ namespace LY.MicroService.RealtimeMessage
             var configuration = context.Services.GetConfiguration();
 
             ConfigureDbContext();
+            ConfigureLocalization();
             ConfigureJsonSerializer();
             ConfigreExceptionHandling();
             ConfigureVirtualFileSystem();
-            ConfigureMultiTenancy(configuration);
             ConfigureCaching(configuration);
-            ConfigureSwagger(context.Services);
-            ConfigureCors(context.Services, configuration);
-            ConfigureLocalization();
             ConfigureAuditing(configuration);
+            ConfigureSwagger(context.Services);
+            ConfigureMultiTenancy(configuration);
             ConfigureHangfireServer(context.Services);
+            ConfigureCors(context.Services, configuration);
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
 
@@ -108,7 +108,7 @@ namespace LY.MicroService.RealtimeMessage
             app.UseCorrelationId();
             // 虚拟文件系统
             app.UseStaticFiles();
-            //路由
+            // 路由
             app.UseRouting();
             // 跨域
             app.UseCors(DefaultCorsPolicyName);

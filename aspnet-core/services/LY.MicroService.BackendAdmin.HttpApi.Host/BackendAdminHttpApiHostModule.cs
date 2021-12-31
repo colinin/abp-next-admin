@@ -95,15 +95,16 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
+        ConfigureLocalization();
         ConfigureJsonSerializer();
-        ConfigurePermissionManagement();
         ConfigureExceptionHandling();
-        ConfigureCaching(configuration);
         ConfigureVirtualFileSystem();
-        ConfigureMultiTenancy(configuration);
+        ConfigurePermissionManagement();
+        ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
-        ConfigureLocalization();
+        ConfigureMultiTenancy(configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
@@ -114,8 +115,10 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         // 虚拟文件系统
         app.UseStaticFiles();
-        //路由
+        // 路由
         app.UseRouting();
+        // 跨域
+        app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
         // jwt
