@@ -3,6 +3,7 @@ using LINGYUN.MicroService.Internal.ApiGateway.Localization;
 using LINGYUN.MicroService.Internal.ApiGateway.Ocelot.Configuration.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -17,6 +18,7 @@ using Ocelot.Multiplexer;
 using Ocelot.Provider.Polly;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.Caching;
@@ -29,6 +31,8 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
 {
     public partial class InternalApiGatewayModule
     {
+        protected const string DefaultCorsPolicyName = "Default";
+
         private void PreConfigureApp()
         {
             AbpSerilogEnrichersConsts.ApplicationName = "Internal-ApiGateWay";
@@ -176,6 +180,30 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
                         }
                     });
                 });
+        }
+
+        private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .WithAbpExposedHeaders()
+                        // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
+                        .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
         }
 
         private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

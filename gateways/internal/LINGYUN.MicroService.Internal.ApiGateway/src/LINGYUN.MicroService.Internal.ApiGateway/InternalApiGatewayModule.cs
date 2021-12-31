@@ -47,6 +47,7 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
 
             ConfigureMvc(context.Services);
             ConfigureSwagger(context.Services);
+            ConfigureCors(context.Services, configuration);
             ConfigureOcelot(context.Services, configuration);
         }
 
@@ -56,6 +57,7 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
             app.UseAuditing();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseAbpClaimsMap();
             app.MapWhen(
