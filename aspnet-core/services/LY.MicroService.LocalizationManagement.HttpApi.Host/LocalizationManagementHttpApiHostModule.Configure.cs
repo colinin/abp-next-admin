@@ -4,6 +4,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
@@ -28,6 +30,8 @@ namespace LY.MicroService.LocalizationManagement;
 
 public partial class LocalizationManagementHttpApiHostModule
 {
+    protected const string DefaultCorsPolicyName = "Default";
+
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "Localization";
@@ -202,6 +206,30 @@ public partial class LocalizationManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+    }
+
+    private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
+                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
         });
     }
 

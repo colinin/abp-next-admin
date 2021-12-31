@@ -246,6 +246,8 @@ public partial class IdentityServerModule
                             .ToArray()
                     )
                     .WithAbpExposedHeaders()
+                    // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
+                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()

@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Tencent
                     .AddVirtualJson("/LINGYUN/Abp/Tencent/Localization/Resources");
             });
 
-            context.Services.AddTransient<TencentCloudClientFactory<>>();
+            context.Services.AddTransient(typeof(TencentCloudClientFactory<>));
             //Configure<AbpTencentCloudOptions>(options =>
             //{
             //    按照腾讯SDK, 所有客户端都有三个参数组成, 暂时设计为通过反射构造函数来创建客户端

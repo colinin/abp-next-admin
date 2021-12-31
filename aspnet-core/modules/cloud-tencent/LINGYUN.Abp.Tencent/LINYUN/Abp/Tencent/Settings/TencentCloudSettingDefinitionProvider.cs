@@ -51,6 +51,17 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
+                    TencentCloudSettingNames.DurationSecond,
+                    defaultValue: "600",
+                    displayName: L("DisplayName:DurationSecond"),
+                    description: L("Description:DurationSecond"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
                     TencentCloudSettingNames.Connection.HttpMethod,
                     // 默认 post
                     defaultValue: "POST",

@@ -92,16 +92,17 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
-        ConfigureJsonSerializer();
-        ConfigureKestrelServer();
         ConfigureBlobStoring();
+        ConfigureLocalization();
+        ConfigureKestrelServer();
+        ConfigureJsonSerializer();
         ConfigreExceptionHandling();
-        ConfigureCaching(configuration);
         ConfigureVirtualFileSystem();
-        ConfigureMultiTenancy(configuration);
+        ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
-        ConfigureLocalization();
+        ConfigureMultiTenancy(configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
@@ -113,8 +114,10 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         // 虚拟文件系统
         app.UseStaticFiles();
-        //路由
+        // 路由
         app.UseRouting();
+        // 跨域
+        app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
         // jwt

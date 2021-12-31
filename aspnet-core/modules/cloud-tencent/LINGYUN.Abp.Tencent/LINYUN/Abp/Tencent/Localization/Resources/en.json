@@ -12,6 +12,8 @@
     "Description:SecretId": "The Secret Id can be obtained only from Tencent Cloud Management Console.",
     "DisplayName:SecretKey": "Secret Key",
     "Description:SecretKey": "The Secret Key can be obtained only from Tencent Cloud Management Console.",
+    "DisplayName:DurationSecond": "Duration Seconds",
+    "Description:DurationSecond": "Duration Seconds",
     "DisplayName:HttpMethod": "Http Method",
     "Description:HttpMethod": "The SDK uses the POST method by default, but if you must use the GET method, you can set it here. The GET method cannot handle some large requests.",
     "DisplayName:Timeout": "Timeout",
