@@ -1,0 +1,12 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:TenantCloud.SmsSetting": "短信设置",
+    "DisplayName:AppId": "应用Id",
+    "Description:AppId": "在腾讯云短信控制平台申请的应用标识",
+    "DisplayName:DefaultSignName": "默认签名",
+    "Description:DefaultSignName": "当短信消息体未指定签名时的默认签名",
+    "DisplayName:DefaultTemplateId": "默认模板",
+    "Description:DefaultTemplateId": "当短信消息体未指定模板号时的默认模板标识"
+  }
+}

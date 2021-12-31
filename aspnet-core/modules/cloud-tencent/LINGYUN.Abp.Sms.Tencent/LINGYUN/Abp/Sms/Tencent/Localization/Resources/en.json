@@ -1,0 +1,12 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:TenantCloud.SmsSetting": "Sms Setting",
+    "DisplayName:AppId": "App Id",
+    "Description:AppId": "AppId applied on Tencent Cloud SMS control platform.",
+    "DisplayName:DefaultSignName": "Default Sign Name",
+    "Description:DefaultSignName": "Default signname if no signname is specified in the SMS message body",
+    "DisplayName:DefaultTemplateId": "Default Template Id",
+    "Description:DefaultTemplateId": "Default template id if the Template Id number is not specified in the SMS message body."
+  }
+}

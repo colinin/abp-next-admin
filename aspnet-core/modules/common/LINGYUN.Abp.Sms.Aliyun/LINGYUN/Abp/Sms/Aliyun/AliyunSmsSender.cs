@@ -133,11 +133,17 @@ namespace LINGYUN.Abp.Sms.Aliyun
 
         private void TryAddTemplateParam(CommonRequest request, SmsMessage smsMessage)
         {
-            if (smsMessage.Properties.Count > 0)
+            // 统一一下模板参数名称
+            if (smsMessage.Properties.TryGetValue("TemplateParam", out var templateParam))
             {
-                var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
-                request.AddQueryParameters("TemplateParam", queryParamJson);
+                request.AddQueryParameters("TemplateParam", templateParam.ToString());
             }
+
+            //if (smsMessage.Properties.Count > 0)
+            //{
+            //    var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
+            //    request.AddQueryParameters("TemplateParam", queryParamJson);
+            //}
         }
     }
 }

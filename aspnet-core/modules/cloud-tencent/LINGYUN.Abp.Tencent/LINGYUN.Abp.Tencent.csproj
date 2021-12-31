@@ -10,19 +10,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\en.json" />
-		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\zh-Hans.json" />
+		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="TencentCloudSDK" Version="$(TencentCloudSDKPackageVersion)" />
 	</ItemGroup>
 
 </Project>
