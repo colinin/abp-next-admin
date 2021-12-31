@@ -363,9 +363,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "modules\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.IdGenerator", "modules\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{440C9BD9-85EA-4473-AB1C-7C3562DF4915}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator", "modules\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{440C9BD9-85EA-4473-AB1C-7C3562DF4915}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{23C3B247-523A-4FBF-B785-2F035E0089BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{23C3B247-523A-4FBF-B785-2F035E0089BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A76A4741-AF91-44EF-A7B6-8E7AF4961146}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.SettingManagement", "modules\cloud-tencent\LINGYUN.Abp.Tencent.SettingManagement\LINGYUN.Abp.Tencent.SettingManagement.csproj", "{C7CF4193-6397-4450-AF42-3BACD7CF292E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{8FE2725C-6829-4778-93BA-A53260697AFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "modules\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{A4B972EC-9F0B-4405-9965-766FABC9B07E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.Tencent", "modules\oss-management\LINGYUN.Abp.OssManagement.Tencent\LINGYUN.Abp.OssManagement.Tencent.csproj", "{31E60E23-FD98-4D5E-A137-2B3F2968BA09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -953,6 +966,22 @@ Global
 		{23C3B247-523A-4FBF-B785-2F035E0089BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23C3B247-523A-4FBF-B785-2F035E0089BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23C3B247-523A-4FBF-B785-2F035E0089BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7CF4193-6397-4450-AF42-3BACD7CF292E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7CF4193-6397-4450-AF42-3BACD7CF292E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7CF4193-6397-4450-AF42-3BACD7CF292E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7CF4193-6397-4450-AF42-3BACD7CF292E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE2725C-6829-4778-93BA-A53260697AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE2725C-6829-4778-93BA-A53260697AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE2725C-6829-4778-93BA-A53260697AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE2725C-6829-4778-93BA-A53260697AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4B972EC-9F0B-4405-9965-766FABC9B07E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4B972EC-9F0B-4405-9965-766FABC9B07E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4B972EC-9F0B-4405-9965-766FABC9B07E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4B972EC-9F0B-4405-9965-766FABC9B07E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E60E23-FD98-4D5E-A137-2B3F2968BA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E60E23-FD98-4D5E-A137-2B3F2968BA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E60E23-FD98-4D5E-A137-2B3F2968BA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E60E23-FD98-4D5E-A137-2B3F2968BA09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1134,6 +1163,10 @@ Global
 		{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D} = {529DF802-97C4-4BF2-BE7C-39663B3D9EA3}
 		{440C9BD9-85EA-4473-AB1C-7C3562DF4915} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{23C3B247-523A-4FBF-B785-2F035E0089BD} = {6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02}
+		{C7CF4193-6397-4450-AF42-3BACD7CF292E} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
+		{8FE2725C-6829-4778-93BA-A53260697AFB} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
+		{A4B972EC-9F0B-4405-9965-766FABC9B07E} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
+		{31E60E23-FD98-4D5E-A137-2B3F2968BA09} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
