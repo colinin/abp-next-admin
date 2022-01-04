@@ -3,6 +3,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -39,6 +40,14 @@ public partial class PlatformManagementHttpApiHostModule
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "Platform";
+
+        PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
+        {
+            // 以开放端口区别
+            options.SnowflakeIdOptions.WorkerId = 30025;
+            options.SnowflakeIdOptions.WorkerIdBits = 5;
+            options.SnowflakeIdOptions.DatacenterId = 1;
+        });
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
