@@ -7,6 +7,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Permissions;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -41,6 +42,14 @@ public partial class RealtimeMessageHttpApiHostModule
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "MessageService";
+
+        PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
+        {
+            // 以开放端口区别
+            options.SnowflakeIdOptions.WorkerId = 30020;
+            options.SnowflakeIdOptions.WorkerIdBits = 5;
+            options.SnowflakeIdOptions.DatacenterId = 1;
+        });
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
