@@ -44,7 +44,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         {
             { nameof(TArgs), args },
             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
-            { "JobType", typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName },
+            { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
         };
         var jobInfo = new JobInfo
         {
