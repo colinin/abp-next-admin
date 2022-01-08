@@ -1,4 +1,5 @@
-# Rules in this file were initially inferred by Visual Studio IntelliCode from the D:\Projects\MicroService\CRM\Vue\abp-next-admin\aspnet-core codebase based on best match to current usage at 2021-12-27
+# Rules in this file were initially inferred by Visual Studio IntelliCode from the D:\Projects\MicroService\CRM\Vue\abp-next-admin\aspnet-core codebase based on best match to current usage at 2022-01-07
+# There already existed an .editorconfig file in this directory. Copy rules from this .editorconfig.inferred file to the existing .editorconfig file as desired to have them take effect at this location.
 # You can modify the rules from these initially generated values to suit your own policies
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 [*.cs]
@@ -26,8 +27,8 @@ csharp_new_line_before_else = true
 csharp_new_line_before_members_in_anonymous_types = true
 #require members of object initializers to be on the same line
 csharp_new_line_before_members_in_object_initializers = false
-#require braces to be on a new line for anonymous_types, control_blocks, types, lambdas, object_collection_array_initializers, methods, and anonymous_methods (also known as "Allman" style)
-csharp_new_line_before_open_brace = anonymous_types, control_blocks, types, lambdas, object_collection_array_initializers, methods, anonymous_methods
+#require braces to be on a new line for methods, control_blocks, types, lambdas, object_collection_array_initializers, anonymous_methods, and anonymous_types (also known as "Allman" style)
+csharp_new_line_before_open_brace = methods, control_blocks, types, lambdas, object_collection_array_initializers, anonymous_methods, anonymous_types
 
 #Formatting - organize using options
 
