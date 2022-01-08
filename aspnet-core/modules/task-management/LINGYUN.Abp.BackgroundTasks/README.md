@@ -50,6 +50,8 @@ public class DemoClass
             Cron = "0/5 * * * * ? ",
             TryCount = 10,
             Status = JobStatus.Running,
+            // 定义此字段处理并发
+            LockTimeOut = 120,
         });
 
         // 将一次性任务添加到队列, 将在10（Interval）秒后被执行

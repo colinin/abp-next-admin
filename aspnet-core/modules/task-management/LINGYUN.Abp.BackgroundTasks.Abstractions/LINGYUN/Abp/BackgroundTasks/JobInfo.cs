@@ -62,7 +62,7 @@ public class JobInfo
     /// </summary>
     public JobType JobType { get; set; } = JobType.Once;
     /// <summary>
-    /// Cron表达式，如果是持续任务需要指定
+    /// Cron表达式，如果是周期性任务需要指定
     /// </summary>
     public string Cron { get; set; }
     /// <summary>

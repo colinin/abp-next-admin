@@ -1,6 +1,6 @@
 # LINGYUN.Abp.BackgroundTasks.Quartz
 
-后台任务（队列）模块的Quartz实现, 使用任务适配器来做到任务的幂等性控制.  
+后台任务（队列）模块的Quartz实现.  
 并添加一个监听器用于通知管理者任务状态  
 
 ## 配置使用

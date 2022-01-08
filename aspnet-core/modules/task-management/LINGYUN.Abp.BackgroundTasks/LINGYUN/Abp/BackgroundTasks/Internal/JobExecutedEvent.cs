@@ -28,9 +28,21 @@ internal class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepe
             if (context.EventData.Exception != null)
             {
                 job.TryCount += 1;
+                // 将任务标记为运行中, 会被轮询重新进入队列
                 job.Status = JobStatus.Running;
                 job.Result = context.EventData.Exception.Message;
-                
+
+                // 多次异常后需要重新计算优先级
+                if (job.TryCount <= (job.MaxTryCount / 2) &&
+                    job.TryCount > (job.MaxTryCount / 3))
+                {
+                    job.Priority = JobPriority.BelowNormal;
+                }
+                else if (job.TryCount > (job.MaxTryCount / 1.5))
+                {
+                    job.Priority = JobPriority.Low;
+                }
+
                 if (job.TryCount > job.MaxTryCount)
                 {
                     job.Status = JobStatus.Stopped;
