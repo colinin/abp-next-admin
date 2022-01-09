@@ -57,7 +57,9 @@
           "LINGYUN.Abp.Features.LimitValidation.dll",
           "LINGYUN.Abp.Features.LimitValidation.Redis.dll",
           "LINGYUN.Abp.WorkflowManagement.Application.Contracts.dll",
-          "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll"
+          "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll",
+          "LINGYUN.Abp.TaskManagement.Application.Contracts.dll",
+          "LINGYUN.Abp.TaskManagement.Domain.Shared.dll"
         ]
       }
     ]
