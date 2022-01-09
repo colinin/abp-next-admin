@@ -82,7 +82,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         }
     }
 
-    [UnitOfWork]
     public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException, CancellationToken cancellationToken = default)
     {
         try
@@ -91,9 +90,15 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             var jobId = context.GetString(nameof(JobInfo.Id));
             if (Guid.TryParse(jobId, out var jobUUId))
             {
+                var jobType = context.JobDetail.JobType;
+                if (jobType.IsGenericType)
+                {
+                    jobType = jobType.GetGenericArguments()[0];
+                }
+
                 var jobEventData = new JobEventData(
                     jobUUId,
-                    context.JobDetail.JobType,
+                    jobType,
                     context.JobDetail.Key.Group,
                     context.JobDetail.Key.Name,
                     jobException)
@@ -112,7 +117,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime;
                 if (context.Result != null)
                 {
-                    jobEventData.Result = context.Result.ToString();
+                    jobEventData.Result = context.Result?.ToString();
                 }
                 var tenantIdString = context.GetString(nameof(IMultiTenant.TenantId));
                 if (Guid.TryParse(tenantIdString, out var tenantId))

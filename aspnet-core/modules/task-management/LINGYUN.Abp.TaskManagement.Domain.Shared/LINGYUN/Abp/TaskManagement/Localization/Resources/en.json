@@ -1,6 +1,16 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "Permission:TaskManagement": "TaskManagement"
+    "Permissions:TaskManagement": "Task Management",
+    "Permissions:BackgroundJobs": "Background Jobs",
+    "Permissions:CreateJob": "Create Job",
+    "Permissions:UpdateJob": "Update Job",
+    "Permissions:DeleteJob": "Delete Job",
+    "Permissions:TriggerJob": "Trigger Job",
+    "Permissions:PauseJob": "Pause Job",
+    "Permissions:ResumeJob": "Resume Job",
+    "Permissions:BackgroundJobLogs": "BackgroundJobs Logs",
+    "Permissions:DeleteJobLogs": "Delete Job Logs",
+    "TaskManagement:01000": "A job named {Name} already exists in the Group {Group}!"
   }
 }

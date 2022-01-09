@@ -12,9 +12,9 @@ using Volo.Abp.Reflection;
 namespace LINGYUN.Abp.BackgroundTasks;
 
 [DependsOn(typeof(AbpAuditingModule))]
-[DependsOn(typeof(AbpDistributedLockingModule))]
 [DependsOn(typeof(AbpBackgroundTasksAbstractionsModule))]
 [DependsOn(typeof(AbpBackgroundJobsAbstractionsModule))]
+[DependsOn(typeof(AbpDistributedLockingAbstractionsModule))]
 [DependsOn(typeof(AbpGuidsModule))]
 public class AbpBackgroundTasksModule : AbpModule
 {

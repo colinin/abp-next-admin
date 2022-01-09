@@ -1,6 +1,16 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Permission:TaskManagement": "任务管理"
+    "Permissions:TaskManagement": "任务调度平台",
+    "Permissions:BackgroundJobs": "任务管理",
+    "Permissions:CreateJob": "新建作业",
+    "Permissions:UpdateJob": "编辑作业",
+    "Permissions:DeleteJob": "删除作业",
+    "Permissions:TriggerJob": "触发作业",
+    "Permissions:PauseJob": "暂停作业",
+    "Permissions:ResumeJob": "恢复作业",
+    "Permissions:BackgroundJobLogs": "日志管理",
+    "Permissions:DeleteJobLogs": "删除作业日志",
+    "TaskManagement:01000": "分组 {Group} 中已经存在一个名称为 {Name} 的作业!"
   }
 }

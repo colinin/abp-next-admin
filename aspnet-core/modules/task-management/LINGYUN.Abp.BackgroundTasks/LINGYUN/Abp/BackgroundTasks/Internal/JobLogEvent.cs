@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
@@ -11,7 +12,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Internal;
 /// <remarks>
 /// 任务类型标记了<see cref="DisableAuditingAttribute"/> 特性则不会记录日志
 /// </remarks>
-internal class JobLogEvent : JobEventBase<JobLogEvent>, ITransientDependency
+public class JobLogEvent : JobEventBase<JobLogEvent>, ITransientDependency
 {
     protected async override Task OnJobAfterExecutedAsync(JobEventContext context)
     {

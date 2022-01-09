@@ -32,7 +32,7 @@ public class EfCoreBackgroundJobInfoRepository :
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .AllAsync(x => x.Group.Equals(group) && x.Name.Equals(name),
+            .AnyAsync(x => x.Group.Equals(group) && x.Name.Equals(name),
                 GetCancellationToken(cancellationToken));
     }
 

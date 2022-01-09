@@ -63,6 +63,7 @@ internal class DefaultBackgroundWorker : BackgroundService
             JobType = JobType.Once,
             Priority = JobPriority.High,
             MaxCount = 1,
+            Interval = 30,
             Type = typeof(BackgroundKeepAliveJob).AssemblyQualifiedName,
         };
     }

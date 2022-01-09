@@ -11,7 +11,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.DistributedLocking.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 

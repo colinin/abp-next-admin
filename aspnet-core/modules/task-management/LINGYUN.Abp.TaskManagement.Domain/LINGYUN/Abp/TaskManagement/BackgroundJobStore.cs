@@ -56,6 +56,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             backgroundJobInfo.SetNextRunTime(jobInfo.NextRunTime);
             backgroundJobInfo.SetLastRunTime(jobInfo.LastRunTime);
             backgroundJobInfo.SetStatus(jobInfo.Status);
+            backgroundJobInfo.SetResult(jobInfo.Result);
             backgroundJobInfo.TriggerCount = jobInfo.TriggerCount;
             backgroundJobInfo.TryCount = jobInfo.TryCount;
             backgroundJobInfo.IsAbandoned = jobInfo.IsAbandoned;
@@ -79,6 +80,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             backgroundJobInfo.SetNextRunTime(jobInfo.NextRunTime);
             backgroundJobInfo.SetLastRunTime(jobInfo.LastRunTime);
             backgroundJobInfo.SetStatus(jobInfo.Status);
+            backgroundJobInfo.SetResult(jobInfo.Result);
             backgroundJobInfo.TriggerCount = jobInfo.TriggerCount;
             backgroundJobInfo.IsAbandoned = jobInfo.IsAbandoned;
             backgroundJobInfo.TryCount = jobInfo.TryCount;
@@ -107,7 +109,8 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         var jogLog = new BackgroundJobLog(
             eventData.Type.Name, 
             eventData.Group,
-            eventData.Name)
+            eventData.Name,
+            eventData.RunTime)
         {
             JobId = eventData.Key
         };

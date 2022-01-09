@@ -35,6 +35,10 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
         }
 
         var adapterType = typeof(QuartzJobSimpleAdapter<>);
+        if (job.LockTimeOut > 0)
+        {
+            adapterType = typeof(QuartzJobConcurrentAdapter<>);
+        }
 
         if (!typeof(IJob).IsAssignableFrom(jobType))
         {
@@ -88,6 +92,7 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                 triggerBuilder
                     .WithIdentity(job.Name, job.Group)
                     .WithDescription(job.Description)
+                    .StartAt(Clock.Now.AddSeconds(job.Interval))
                     .EndAt(job.EndTime)
                     .ForJob(job.Name, job.Group)
                     .WithPriority((int)job.Priority)

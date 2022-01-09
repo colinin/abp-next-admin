@@ -4,7 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
-internal class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDependency
+public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDependency
 {
     protected override async Task OnJobAfterExecutedAsync(JobEventContext context)
     {
@@ -15,8 +15,8 @@ internal class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepe
         {
             job.TriggerCount += 1;
             job.NextRunTime = context.EventData.NextRunTime;
-            job.LastRunTime = context.EventData.LastRunTime;
-            job.Result = context.EventData.Result;
+            job.LastRunTime = context.EventData.RunTime;
+            job.Result = context.EventData.Result ?? "OK";
 
             // 一次性任务执行一次后标记为已完成
             if (job.JobType == JobType.Once)
@@ -53,7 +53,7 @@ internal class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepe
             }
 
             // 所有任务达到上限则标记已完成
-            if (job.MaxCount > 0 && job.TriggerCount > job.MaxCount)
+            if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
             {
                 job.Status = JobStatus.Completed;
 

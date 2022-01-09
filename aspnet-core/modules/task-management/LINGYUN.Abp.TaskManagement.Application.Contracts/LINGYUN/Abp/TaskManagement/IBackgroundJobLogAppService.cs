@@ -6,6 +6,7 @@ public interface IBackgroundJobLogAppService :
     IReadOnlyAppService<
         BackgroundJobLogDto,
         long,
-        BackgroundJobLogGetListInput>
+        BackgroundJobLogGetListInput>,
+    IDeleteAppService<long>
 {
 }

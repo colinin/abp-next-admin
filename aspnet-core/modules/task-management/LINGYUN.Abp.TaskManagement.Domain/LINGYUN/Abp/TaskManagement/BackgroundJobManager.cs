@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.TaskManagement;
 
@@ -9,15 +11,18 @@ public class BackgroundJobManager : DomainService
 {
     protected IObjectMapper ObjectMapper { get; }
     protected IJobScheduler JobScheduler { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IBackgroundJobInfoRepository BackgroundJobInfoRepository { get; }
 
     public BackgroundJobManager(
         IObjectMapper objectMapper,
         IJobScheduler jobScheduler,
+        IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository backgroundJobInfoRepository)
     {
         ObjectMapper = objectMapper;
         JobScheduler = jobScheduler;
+        UnitOfWorkManager = unitOfWorkManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
     }
 
@@ -28,7 +33,16 @@ public class BackgroundJobManager : DomainService
         if (jobInfo.IsEnabled && jobInfo.JobType == JobType.Period)
         {
             var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-            await JobScheduler.QueueAsync(job);
+            if (await JobScheduler.ExistsAsync(job))
+            {
+                throw new BusinessException(TaskManagementErrorCodes.JobNameAlreadyExists)
+                    .WithData("Group", job.Group)
+                    .WithData("Name", job.Name);
+            }
+            UnitOfWorkManager.Current.OnCompleted(async () =>
+            {
+                await JobScheduler.QueueAsync(job);
+            });
         }
 
         return jobInfo;
@@ -40,13 +54,19 @@ public class BackgroundJobManager : DomainService
 
         if (!jobInfo.IsEnabled || resetJob)
         {
-            var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-            await JobScheduler.RemoveAsync(job);
+            UnitOfWorkManager.Current.OnCompleted(async () =>
+            {
+                var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
+                await JobScheduler.RemoveAsync(job);
+            });
         }
 
         if (resetJob && jobInfo.JobType == JobType.Period)
         {
-            await QueueAsync(jobInfo);
+            UnitOfWorkManager.Current.OnCompleted(async () =>
+            {
+                await QueueAsync(jobInfo);
+            });
         }
 
         return jobInfo;
@@ -54,10 +74,13 @@ public class BackgroundJobManager : DomainService
 
     public virtual async Task DeleteAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        await JobScheduler.RemoveAsync(job);
-
         await BackgroundJobInfoRepository.DeleteAsync(jobInfo);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
+            await JobScheduler.RemoveAsync(job);
+        });
     }
 
     public virtual async Task QueueAsync(BackgroundJobInfo jobInfo)

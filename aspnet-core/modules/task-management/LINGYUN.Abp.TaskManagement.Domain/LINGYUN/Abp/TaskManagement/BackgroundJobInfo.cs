@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System;
 using System.Collections.Generic;
+using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -20,6 +21,10 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
     /// 任务类型
     /// </summary>
     public virtual string Type { get; protected set; }
+    /// <summary>
+    /// 上一次执行结果
+    /// </summary>
+    public virtual string Result { get; protected set; }
     /// <summary>
     /// 任务参数
     /// </summary>
@@ -111,9 +116,9 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
         int maxCount = 0,
         int maxTryCount = 50) : base(id)
     {
-        Name = name;
-        Group = group;
-        Type = type;
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
+        Group = Check.NotNullOrWhiteSpace(group, nameof(group), BackgroundJobInfoConsts.MaxGroupLength);
+        Type = Check.NotNullOrWhiteSpace(type, nameof(type), BackgroundJobInfoConsts.MaxTypeLength);
         Priority = priority;
         BeginTime = beginTime;
         EndTime = endTime;
@@ -123,13 +128,15 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
 
         Status = JobStatus.Running;
 
+        // TODO: 是否需要将参数挪到另一个实体? 
+        // 任务参数的建议是尽量最小化, 仅存储关键信息
         Args = new ExtraPropertyDictionary();
         Args.AddIfNotContains(args);
     }
 
     public void SetPeriodJob(string cron)
     {
-        Cron = cron;
+        Cron = Check.NotNullOrWhiteSpace(cron, nameof(cron), BackgroundJobInfoConsts.MaxCronLength);
         JobType = JobType.Period;
     }
 
@@ -153,6 +160,20 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
     public void SetNextRunTime(DateTime? nextRunTime)
     {
         NextRunTime = nextRunTime;
+    }
+
+    public void SetResult(string result)
+    {
+        if (result.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+        if (result.Length > BackgroundJobInfoConsts.MaxResultLength)
+        {
+            result = result.Substring(0, BackgroundJobInfoConsts.MaxResultLength - 1);
+        }
+
+        Result = result;
     }
 
     public void SetStatus(JobStatus status)

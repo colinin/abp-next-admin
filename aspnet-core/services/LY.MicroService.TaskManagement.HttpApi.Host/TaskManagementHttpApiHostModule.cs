@@ -6,6 +6,8 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TaskManagement;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,9 +43,9 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpBackgroundTasksQuartzModule),
-    //typeof(TaskManagementApplicationModule),
-    //typeof(TaskManagementHttpApiModule),
-    //typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(TaskManagementApplicationModule),
+    typeof(TaskManagementHttpApiModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

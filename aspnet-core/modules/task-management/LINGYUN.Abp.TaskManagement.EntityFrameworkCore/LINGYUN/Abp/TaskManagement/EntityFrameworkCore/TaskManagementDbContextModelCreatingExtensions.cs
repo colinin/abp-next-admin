@@ -43,6 +43,9 @@ public static class TaskManagementDbContextModelCreatingExtensions
             b.Property(p => p.Description)
                 .HasColumnName(nameof(BackgroundJobInfo.Description))
                 .HasMaxLength(BackgroundJobInfoConsts.MaxDescriptionLength);
+            b.Property(p => p.Result)
+                .HasColumnName(nameof(BackgroundJobInfo.Result))
+                .HasMaxLength(BackgroundJobInfoConsts.MaxResultLength);
             b.Property(p => p.Args)
                 .HasColumnName(nameof(BackgroundJobInfo.Args))
                 .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))

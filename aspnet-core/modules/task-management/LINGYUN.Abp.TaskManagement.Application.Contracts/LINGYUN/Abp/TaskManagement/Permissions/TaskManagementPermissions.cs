@@ -14,4 +14,10 @@ public static class TaskManagementPermissions
         public const string Pause = Default + ".Pause";
         public const string Resume = Default + ".Resume";
     }
+
+    public static class BackgroundJobLogs
+    {
+        public const string Default = GroupName + ".BackgroundJobLogs";
+        public const string Delete = Default + ".Delete";
+    }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Volo.Abp.Auditing;
 
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
+[DisableAuditing]
 internal class BackgroundCleaningJob : IJobRunnable
 {
     public virtual async Task ExecuteAsync(JobRunnableContext context)

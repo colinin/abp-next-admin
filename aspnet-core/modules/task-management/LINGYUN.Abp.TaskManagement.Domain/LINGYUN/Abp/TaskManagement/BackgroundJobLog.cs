@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.TaskManagement;
@@ -13,12 +14,16 @@ public class BackgroundJobLog : Entity<long>
     public virtual DateTime RunTime { get; protected set; }
     public virtual string Exception { get; protected set; }
     protected BackgroundJobLog() { }
-    public BackgroundJobLog(string type, string group, string name)
+    public BackgroundJobLog(
+        string type,
+        string group, 
+        string name,
+        DateTime runTime)
     {
-        JobType = type;
-        JobGroup = group;
-        JobName = name;
-        RunTime = DateTime.Now;
+        JobType = Check.NotNullOrWhiteSpace(type, nameof(type), BackgroundJobInfoConsts.MaxTypeLength);
+        JobGroup = Check.NotNullOrWhiteSpace(group, nameof(group), BackgroundJobInfoConsts.MaxGroupLength);
+        JobName = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
+        RunTime = runTime;
     }
 
     public BackgroundJobLog SetMessage(string message, Exception ex)

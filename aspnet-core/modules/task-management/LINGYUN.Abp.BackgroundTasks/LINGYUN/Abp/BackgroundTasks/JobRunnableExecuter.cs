@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.BackgroundTasks;
 
 public class JobRunnableExecuter : IJobRunnableExecuter, ISingletonDependency
 {
-    protected const string LockKeyFormat = "job:{0},key:{1}";
+    protected const string LockKeyFormat = "p:{0},job:{1},key:{2}";
 
     public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
@@ -26,12 +26,21 @@ public class JobRunnableExecuter : IJobRunnableExecuter, ISingletonDependency
         {
             context.JobData.TryGetValue(nameof(JobInfo.LockTimeOut), out var lockTime);
 
+            // 某些提供者如果无法保证锁一致性, 那么需要用分布式锁
             if (lockTime != null && (lockTime is int time && time > 0))
             {
                 var jobId = context.JobData.GetOrDefault(nameof(JobInfo.Id));
-                var jobLockKey = string.Format(LockKeyFormat, context.JobType.Name, jobId);
+                var jobLockKey = string.Format(LockKeyFormat, tenantId?.ToString() ?? "Default", context.JobType.Name, jobId);
                 var distributedLock = context.ServiceProvider.GetRequiredService<IAbpDistributedLock>();
-                await using (await distributedLock.TryAcquireAsync(jobLockKey, TimeSpan.FromSeconds(time)))
+
+                var handle = await distributedLock.TryAcquireAsync(jobLockKey, TimeSpan.FromSeconds(time));
+                if (handle == null)
+                {
+                    // 抛出异常 通过监听器使其重试
+                    throw new AbpBackgroundTaskConcurrentException(context.JobType);
+                }
+
+                await using (handle)
                 {
                     await InternalExecuteAsync(context);
                 }
