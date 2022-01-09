@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Quartz;
 using System;
+using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
@@ -27,7 +28,7 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
 
     public IJobDetail CreateJob(JobInfo job)
     {
-        var jobType = Type.GetType(job.Type);
+        var jobType = Type.GetType(job.Type) ?? Options.JobProviders.GetOrDefault(job.Type);
         if (jobType == null)
         {
             Logger.LogWarning($"The task: {job.Group} - {job.Name}: {job.Type} is not registered and cannot create an instance of the performer type.");

@@ -8,6 +8,7 @@ public class JobRunnableContext
     public Type JobType { get; }
     public IServiceProvider ServiceProvider { get; }
     public IReadOnlyDictionary<string, object> JobData { get; }
+    public object Result { get; private set; }
     public JobRunnableContext(
         Type jobType,
         IServiceProvider serviceProvider,
@@ -16,5 +17,10 @@ public class JobRunnableContext
         JobType = jobType;
         ServiceProvider = serviceProvider;
         JobData = jobData;
+    }
+
+    public void SetResult(object result)
+    {
+        Result = result;
     }
 }

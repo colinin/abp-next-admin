@@ -29,5 +29,7 @@ public class QuartzJobSimpleAdapter<TJobRunnable> : IJob
             context.MergedJobDataMap.ToImmutableDictionary());
 
         await jobExecuter.ExecuteAsync(jobContext);
+
+        context.Result = jobContext.Result;
     }
 }

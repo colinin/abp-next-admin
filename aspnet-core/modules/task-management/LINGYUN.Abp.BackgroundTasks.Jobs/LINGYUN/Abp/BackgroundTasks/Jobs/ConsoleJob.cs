@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.BackgroundTasks.Primitives;
+namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class ConsoleJob : IJobRunnable
 {

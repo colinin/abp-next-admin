@@ -1,17 +1,15 @@
 ﻿using System;
-using Volo.Abp;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-public class AbpBackgroundTaskConcurrentException : AbpException
+public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
 {
-    public Type JobType { get; }
     /// <summary>
     /// Creates a new <see cref="AbpBackgroundTaskConcurrentException"/> object.
     /// </summary>
     /// <param name="innerException">Inner exception</param>
     public AbpBackgroundTaskConcurrentException(Type jobType)
-        : this(
+        : base(
               jobType,
               $"This job {jobType.Name} cannot be performed because it has been locked by another performer",
               null)
@@ -24,7 +22,7 @@ public class AbpBackgroundTaskConcurrentException : AbpException
     /// <param name="jobType">Execute job type</param>
     /// <param name="innerException">Inner exception</param>
     public AbpBackgroundTaskConcurrentException(Type jobType, Exception innerException)
-        : this(
+        : base(
             jobType,
             $"This job {jobType.Name} cannot be performed because it has been locked by another performer",
             innerException)
@@ -38,8 +36,7 @@ public class AbpBackgroundTaskConcurrentException : AbpException
     /// <param name="message">Exception message</param>
     /// <param name="innerException">Inner exception</param>
     public AbpBackgroundTaskConcurrentException(Type jobType, string message, Exception innerException)
-        : base(message, innerException)
+        : base(jobType, message, innerException)
     {
-        JobType = jobType;
     }
 }

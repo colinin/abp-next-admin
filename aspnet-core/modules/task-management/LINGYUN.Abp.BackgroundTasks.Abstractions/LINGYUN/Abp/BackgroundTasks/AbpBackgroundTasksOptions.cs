@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Collections;
 
 namespace LINGYUN.Abp.BackgroundTasks;
@@ -12,6 +13,13 @@ public class AbpBackgroundTasksOptions
     /// 用户可以实现事件监听实现自定义逻辑
     /// </remarks>
     public ITypeList<IJobEvent> JobMonitors { get; }
+    /// <summary>
+    /// 作业提供者列表
+    /// </summary>
+    /// <remarks>
+    /// 用户实现的作业可以添加在集合中
+    /// </remarks>
+    public IDictionary<string, Type> JobProviders { get; }
     /// <summary>
     /// 任务过期时间
     /// 默认: 15 days
@@ -65,5 +73,12 @@ public class AbpBackgroundTasksOptions
         JobCleanCronExpression = "0 0/10 * * * ? *";
 
         JobMonitors = new TypeList<IJobEvent>();
+        JobProviders = new Dictionary<string, Type>();
+    }
+
+    public void AddProvider<TJobRunnable>(string name)
+        where TJobRunnable : IJobRunnable
+    {
+        JobProviders[name] = typeof(TJobRunnable);
     }
 }
