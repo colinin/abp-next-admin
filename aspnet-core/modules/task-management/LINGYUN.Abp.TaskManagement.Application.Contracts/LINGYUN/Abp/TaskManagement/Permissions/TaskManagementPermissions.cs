@@ -13,6 +13,7 @@ public static class TaskManagementPermissions
         public const string Trigger = Default + ".Trigger";
         public const string Pause = Default + ".Pause";
         public const string Resume = Default + ".Resume";
+        public const string Stop = Default + ".Stop";
     }
 
     public static class BackgroundJobLogs

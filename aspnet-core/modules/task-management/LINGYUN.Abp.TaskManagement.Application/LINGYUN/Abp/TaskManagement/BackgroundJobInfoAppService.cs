@@ -27,7 +27,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     [Authorize(TaskManagementPermissions.BackgroundJobs.Create)]
     public virtual async Task<BackgroundJobInfoDto> CreateAsync(BackgroundJobInfoCreateDto input)
     {
-        if (await BackgroundJobInfoRepository.CheckNameAsync(input.Name, input.Group))
+        if (await BackgroundJobInfoRepository.CheckNameAsync(input.Group, input.Name))
         {
             throw new BusinessException(TaskManagementErrorCodes.JobNameAlreadyExists)
                 .WithData("Group", input.Group)
@@ -78,7 +78,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         var filter = new BackgroundJobInfoFilter
         {
             IsAbandoned = input.IsAbandoned,
-            IsPeriod = input.IsPeriod,
+            JobType = input.JobType,
             BeginCreationTime = input.BeginCreationTime,
             EndCreationTime = input.EndCreationTime,
             BeginLastRunTime = input.BeginLastRunTime,
@@ -124,6 +124,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         await BackgroundJobManager.TriggerAsync(backgroundJobInfo);
     }
 
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
+    public virtual async Task StopAsync(Guid id)
+    {
+        var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await BackgroundJobManager.StopAsync(backgroundJobInfo);
+    }
+
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
     public virtual async Task<BackgroundJobInfoDto> UpdateAsync(Guid id, BackgroundJobInfoUpdateDto input)
     {
@@ -145,6 +153,16 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         backgroundJobInfo.IsEnabled = input.IsEnabled;
         backgroundJobInfo.LockTimeOut = input.LockTimeOut;
         backgroundJobInfo.Description = input.Description;
+        backgroundJobInfo.MaxCount = input.MaxCount;
+        backgroundJobInfo.MaxTryCount = input.MaxTryCount;
+
+        backgroundJobInfo.Args.RemoveAll(x => !input.Args.ContainsKey(x.Key));
+        foreach (var arg in input.Args)
+        {
+            backgroundJobInfo.SetProperty(arg.Key, arg.Value);
+        }
+
+        backgroundJobInfo.SetPriority(input.Priority);
         switch (input.JobType)
         {
             case JobType.Once:

@@ -34,9 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.HttpApi.Host", "services\LY.MicroService.TaskManagement.HttpApi.Host\LY.MicroService.TaskManagement.HttpApi.Host.csproj", "{E8022994-A19F-4540-B9D1-7EF4AA85D18A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Abstractions", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj", "{4A049C32-55F2-4A5F-954A-C8A977C2D87F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Abstractions", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj", "{4A049C32-55F2-4A5F-954A-C8A977C2D87F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Jobs", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj", "{4C59F590-AA6C-4C46-8060-DA65D8305980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Jobs", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj", "{4C59F590-AA6C-4C46-8060-DA65D8305980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

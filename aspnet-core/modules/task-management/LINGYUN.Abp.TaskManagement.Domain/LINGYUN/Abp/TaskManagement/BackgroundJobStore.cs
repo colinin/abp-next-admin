@@ -75,8 +75,10 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 jobInfo.EndTime,
                 jobInfo.Priority,
                 jobInfo.MaxCount,
-                jobInfo.MaxTryCount);
-
+                jobInfo.MaxTryCount)
+            {
+                IsEnabled = true
+            };
             backgroundJobInfo.SetNextRunTime(jobInfo.NextRunTime);
             backgroundJobInfo.SetLastRunTime(jobInfo.LastRunTime);
             backgroundJobInfo.SetStatus(jobInfo.Status);

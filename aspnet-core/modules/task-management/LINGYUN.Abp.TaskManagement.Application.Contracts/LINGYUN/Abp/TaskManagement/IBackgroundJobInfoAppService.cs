@@ -17,4 +17,6 @@ public interface IBackgroundJobInfoAppService :
     Task PauseAsync(Guid id);
 
     Task ResumeAsync(Guid id);
+
+    Task StopAsync(Guid id);
 }

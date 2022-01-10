@@ -5,9 +5,11 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class ConsoleJob : IJobRunnable
 {
+    public const string PropertyMessage = "message";
     public Task ExecuteAsync(JobRunnableContext context)
     {
-        Console.WriteLine($"This message comes from the job: {GetType()}");
+        context.TryGetString(PropertyMessage, out var message);
+        Console.WriteLine($"This message: {message ?? "None"} comes from the job: {GetType()}");
         return Task.CompletedTask;
     }
 }

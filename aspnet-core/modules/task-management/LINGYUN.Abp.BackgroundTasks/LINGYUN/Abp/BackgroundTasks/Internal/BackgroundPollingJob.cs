@@ -14,6 +14,9 @@ internal class BackgroundPollingJob : IJobRunnable
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundTasksOptions>>().Value;
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
 
+        // TODO: 如果积压有大量持续性任务, 可能后面的队列无法被检索到
+        // 通过 NextRunTime 属性过滤，已入队任务重启应用后将无法再次被检索到
+        // 需要借助队列提供者来持久化已入队任务
         var waitingJobs = await store.GetWaitingListAsync(options.MaxJobFetchCount);
 
         if (!waitingJobs.Any())

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Json;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks;
@@ -14,17 +15,23 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
     protected IClock Clock { get; }
     protected IJobStore JobStore { get; }
+    protected IJobScheduler JobScheduler { get; }
     protected IGuidGenerator GuidGenerator { get; }
+    protected IJsonSerializer JsonSerializer { get; }
     protected AbpBackgroundJobOptions Options { get; }
     public BackgroundJobManager(
         IClock clock,
         IJobStore jobStore,
+        IJobScheduler jobScheduler,
         IGuidGenerator guidGenerator,
+        IJsonSerializer jsonSerializer,
         IOptions<AbpBackgroundJobOptions> options)
     {
         Clock = clock;
         JobStore = jobStore;
+        JobScheduler = jobScheduler;
         GuidGenerator = guidGenerator;
+        JsonSerializer = jsonSerializer;
         Options = options.Value;
     }
 
@@ -34,7 +41,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         TimeSpan? delay = null)
     {
         var jobConfiguration = Options.GetJob<TArgs>();
-        var interval = 60;
+        var interval = 0;
         if (delay.HasValue)
         {
             interval = delay.Value.Seconds;
@@ -42,14 +49,15 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         var jobId = GuidGenerator.Create();
         var jobArgs = new Dictionary<string, object>
         {
-            { nameof(TArgs), args },
+            { nameof(TArgs), JsonSerializer.Serialize(args) },
             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
             { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
+            { "JobName", jobConfiguration.JobName },
         };
         var jobInfo = new JobInfo
         {
             Id = jobId,
-            Name = jobConfiguration.JobName,
+            Name = jobId.ToString(),
             Group = "BackgroundJobs",
             Priority = ConverForm(priority),
             BeginTime = DateTime.Now,
@@ -58,12 +66,16 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
             JobType = JobType.Once,
             Interval = interval,
             CreationTime = Clock.Now,
-            Status = JobStatus.Running,
+            // 确保不会被轮询入队
+            Status = JobStatus.None,
             Type = typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName,
         };
 
-        // 作为一次性任务持久化
+        // 存储状态
         await JobStore.StoreAsync(jobInfo);
+
+        // 手动入队
+        await JobScheduler.QueueAsync(jobInfo);
 
         return jobId.ToString();
     }

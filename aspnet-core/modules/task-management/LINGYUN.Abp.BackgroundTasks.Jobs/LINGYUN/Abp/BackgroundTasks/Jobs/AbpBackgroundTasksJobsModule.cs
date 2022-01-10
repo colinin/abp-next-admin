@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Emailing;
+﻿using LINGYUN.Abp.Dapr.Client;
+using Volo.Abp.Emailing;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.Sms;
@@ -8,6 +9,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 [DependsOn(typeof(AbpEmailingModule))]
 [DependsOn(typeof(AbpSmsModule))]
 [DependsOn(typeof(AbpHttpClientModule))]
+[DependsOn(typeof(AbpDaprClientModule))]
 public class AbpBackgroundTasksJobsModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

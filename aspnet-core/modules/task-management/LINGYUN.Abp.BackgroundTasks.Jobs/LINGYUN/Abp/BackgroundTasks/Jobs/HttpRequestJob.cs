@@ -59,12 +59,20 @@ public class HttpRequestJob : IJobRunnable
                 Encoding.UTF8,
                 contentType?.ToString() ?? MimeTypes.Application.Json);
         }
-        if (context.TryGetJobData(PropertyHeaders, out var headers) &&
-            headers is IDictionary<string, string> headersDic)
+        if (context.TryGetJobData(PropertyHeaders, out var headers))
         {
+            var headersDic = new Dictionary<string, object>();
+            if (headers is string headerString)
+            {
+                try
+                {
+                    headersDic = jsonSerializer.Deserialize<Dictionary<string, object>>(headerString);
+                }
+                catch { }
+            }
             foreach (var header in headersDic)
             {
-                httpRequestMesasge.Headers.Add(header.Key, header.Value);
+                httpRequestMesasge.Headers.Add(header.Key, header.Value.ToString());
             }
         }
         // TODO: 和 headers 一起?

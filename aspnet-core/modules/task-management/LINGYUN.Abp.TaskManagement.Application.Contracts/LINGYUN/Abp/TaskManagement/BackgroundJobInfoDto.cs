@@ -1,13 +1,14 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System;
-using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<Guid>
+public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
+    public string ConcurrencyStamp { get; set; }
     /// <summary>
     /// 任务名称
     /// </summary>
@@ -82,6 +83,10 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<Guid>
     /// 连续失败且不会再次执行
     /// </summary>
     public bool IsAbandoned { get; set; }
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool IsEnabled { get; set; }
     /// <summary>
     /// 间隔时间，单位秒，与Cron表达式冲突
     /// 默认: 300

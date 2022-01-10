@@ -180,4 +180,9 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
     {
         Status = status;
     }
+
+    public void SetPriority(JobPriority priority)
+    {
+        Priority = priority;
+    }
 }

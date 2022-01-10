@@ -55,8 +55,9 @@ public class EfCoreBackgroundJobInfoRepository :
     {
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType == JobType.Period && x.Status == JobStatus.Running)
-            .Where(x => x.TriggerCount < x.MaxCount && x.TryCount < x.MaxTryCount)
+            .Where(x => x.JobType == JobType.Period && x.Status == JobStatus.Running && !x.NextRunTime.HasValue)
+            .Where(x => x.MaxCount == 0 || x.TriggerCount < x.MaxCount)
+            .Where(x => x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount)
             .OrderByDescending(x => x.Priority)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -69,8 +70,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
             .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
                 x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
-            .WhereIf(filter.IsPeriod.HasValue && filter.IsPeriod.Value, x => x.JobType == JobType.Period)
-            .WhereIf(filter.IsPeriod.HasValue && !filter.IsPeriod.Value, x => x.JobType != JobType.Period)
+            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
             .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
             .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
             .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
@@ -91,8 +91,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
             .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
                 x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
-            .WhereIf(filter.IsPeriod.HasValue && filter.IsPeriod.Value, x => !string.IsNullOrWhiteSpace(x.Cron))
-            .WhereIf(filter.IsPeriod.HasValue && !filter.IsPeriod.Value, x => string.IsNullOrWhiteSpace(x.Cron))
+            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
             .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
             .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
             .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
@@ -113,8 +112,9 @@ public class EfCoreBackgroundJobInfoRepository :
 
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType != JobType.Period && x.Status == JobStatus.Running)
-            .Where(x => x.TriggerCount < x.MaxCount && x.TryCount < x.MaxTryCount)
+            .Where(x => x.JobType != JobType.Period && x.Status == JobStatus.Running && !x.NextRunTime.HasValue)
+            .Where(x => x.MaxCount == 0 || x.TriggerCount < x.MaxCount)
+            .Where(x => x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount)
             .OrderByDescending(x => x.Priority)
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)

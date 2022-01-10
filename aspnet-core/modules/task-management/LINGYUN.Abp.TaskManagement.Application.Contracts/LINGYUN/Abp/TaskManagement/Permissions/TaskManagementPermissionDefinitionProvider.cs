@@ -42,6 +42,10 @@ public class TaskManagementPermissionDefinitionProvider : PermissionDefinitionPr
             TaskManagementPermissions.BackgroundJobs.Resume,
             L("Permissions:ResumeJob"),
             MultiTenancySides.Host);
+        backgroundJobs.AddChild(
+            TaskManagementPermissions.BackgroundJobs.Stop,
+            L("Permissions:StopJob"),
+            MultiTenancySides.Host);
 
         var backgroundJobLogs = group.AddPermission(
             TaskManagementPermissions.BackgroundJobLogs.Default,

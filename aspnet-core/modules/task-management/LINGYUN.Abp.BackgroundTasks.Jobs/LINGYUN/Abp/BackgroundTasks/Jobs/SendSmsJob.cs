@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Json;
 using Volo.Abp.Sms;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
@@ -16,9 +17,17 @@ public class SendSmsJob : IJobRunnable
         var message = context.GetString(PropertyMessage);
 
         var smsMessage = new SmsMessage(phoneNumber, message);
-        if (context.TryGetJobData(PropertyProperties, out var data) &&
-            data is IDictionary<string, object> properties)
+        if (context.TryGetString(PropertyProperties, out var data))
         {
+            var properties = new Dictionary<string, object>();
+
+            try
+            {
+                var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
+                properties = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
+            }
+            catch { }
+
             smsMessage.Properties.AddIfNotContains(properties);
         }
 

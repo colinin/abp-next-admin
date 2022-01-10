@@ -92,6 +92,13 @@ public class BackgroundJobManager : DomainService
     public virtual async Task TriggerAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
+        //if (!await JobScheduler.ExistsAsync(job))
+        //{
+        //    throw new BusinessException(TaskManagementErrorCodes.JobNotFoundInQueue)
+        //        .WithData("Group", job.Group)
+        //        .WithData("Name", job.Name);
+        //}
+
         await JobScheduler.TriggerAsync(job);
     }
 
@@ -99,11 +106,31 @@ public class BackgroundJobManager : DomainService
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
         await JobScheduler.PauseAsync(job);
+
+        jobInfo.SetStatus(JobStatus.Paused);
+        jobInfo.SetNextRunTime(null);
+
+        await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
     }
 
     public virtual async Task ResumeAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
         await JobScheduler.ResumeAsync(job);
+
+        jobInfo.SetStatus(JobStatus.Running);
+
+        await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+    }
+
+    public virtual async Task StopAsync(BackgroundJobInfo jobInfo)
+    {
+        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
+        await JobScheduler.RemoveAsync(job);
+
+        jobInfo.SetStatus(JobStatus.Stopped);
+        jobInfo.SetNextRunTime(null);
+
+        await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
     }
 }

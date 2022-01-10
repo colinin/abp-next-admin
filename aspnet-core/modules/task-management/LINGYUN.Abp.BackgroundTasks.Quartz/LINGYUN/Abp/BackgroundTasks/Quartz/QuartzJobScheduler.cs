@@ -152,13 +152,12 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
     public virtual async Task TriggerAsync(JobInfo job)
     {
         var jobKey = new JobKey(job.Name, job.Group);
-        if (await Scheduler.CheckExists(jobKey))
+        if (!await Scheduler.CheckExists(jobKey))
         {
-            await Scheduler.TriggerJob(jobKey);
+            job.JobType = JobType.Once;
+
+            await QueueAsync(job);
         }
-        else
-        {
-            throw new AbpException("This task could not be found in task scheduler, please confirm that it is enabled?");
-        }
+        await Scheduler.TriggerJob(jobKey);
     }
 }

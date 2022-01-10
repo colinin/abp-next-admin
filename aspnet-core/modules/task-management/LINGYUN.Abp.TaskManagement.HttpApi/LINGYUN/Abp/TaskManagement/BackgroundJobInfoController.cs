@@ -75,6 +75,14 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     }
 
     [HttpPut]
+    [Route("{id}/stop")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
+    public Task StopAsync(Guid id)
+    {
+        return BackgroundJobInfoAppService.StopAsync(id);
+    }
+
+    [HttpPut]
     [Route("{id}")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
     public Task<BackgroundJobInfoDto> UpdateAsync(Guid id, BackgroundJobInfoUpdateDto input)

@@ -12,6 +12,7 @@ internal class BackgroundKeepAliveJob : IJobRunnable
     {
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
 
+        // TODO: 如果积压有大量周期性任务, 可能后面的队列无法被检索到
         var periodJobs = await store.GetAllPeriodTasksAsync();
 
         if (!periodJobs.Any())

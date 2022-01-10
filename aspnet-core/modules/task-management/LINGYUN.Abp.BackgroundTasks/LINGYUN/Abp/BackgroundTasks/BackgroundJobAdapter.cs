@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -31,7 +32,13 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
     public virtual async Task ExecuteAsync(JobRunnableContext context)
     {
         using var scope = ServiceScopeFactory.CreateScope();
-        var args = context.JobData.GetOrDefault(nameof(TArgs));
+        object args = null;
+        if (context.TryGetString(nameof(TArgs), out var argsJson))
+        {
+            var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
+            args = jsonSerializer.Deserialize<TArgs>(argsJson);
+        }
+
         var jobType = Options.GetJob(typeof(TArgs)).JobType;
         var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args);
         await JobExecuter.ExecuteAsync(jobContext);

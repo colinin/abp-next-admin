@@ -55,9 +55,9 @@ public class BackgroundJobInfoGetListInput: PagedAndSortedResultRequestDto
     /// </summary>
     public bool? IsAbandoned { get; set; }
     /// <summary>
-    /// 是否持续性任务
+    /// 任务类型
     /// </summary>
-    public bool? IsPeriod { get; set; }
+    public JobType? JobType { get; set; }
     /// <summary>
     /// 优先级
     /// </summary>

@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System;
 using Volo.Abp.Data;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.TaskManagement;
 
@@ -17,15 +18,8 @@ public abstract class BackgroundJobInfoCreateOrUpdateDto
     /// <summary>
     /// 描述
     /// </summary>
+    [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxDescriptionLength))]
     public string Description { get; set; }
-    /// <summary>
-    /// 开始时间
-    /// </summary>
-    public DateTime BeginTime { get; set; }
-    /// <summary>
-    /// 结束时间
-    /// </summary>
-    public DateTime? EndTime { get; set; }
     /// <summary>
     /// 任务类别
     /// </summary>
@@ -33,6 +27,7 @@ public abstract class BackgroundJobInfoCreateOrUpdateDto
     /// <summary>
     /// Cron表达式，如果是持续任务需要指定
     /// </summary>
+    [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxCronLength))]
     public string Cron { get; set; }
     /// <summary>
     /// 失败重试上限

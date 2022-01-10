@@ -17,11 +17,13 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             job.NextRunTime = context.EventData.NextRunTime;
             job.LastRunTime = context.EventData.RunTime;
             job.Result = context.EventData.Result ?? "OK";
+            job.Status = JobStatus.Running;
 
             // 一次性任务执行一次后标记为已完成
             if (job.JobType == JobType.Once)
             {
                 job.Status = JobStatus.Completed;
+                job.NextRunTime = null;
             }
 
             // 任务异常后可重试
@@ -47,6 +49,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 {
                     job.Status = JobStatus.Stopped;
                     job.IsAbandoned = true;
+                    job.NextRunTime = null;
 
                     await RemoveJobAsync(context, job);
                 }
@@ -56,6 +59,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
             {
                 job.Status = JobStatus.Completed;
+                job.NextRunTime = null;
 
                 await RemoveJobAsync(context, job);
             }
