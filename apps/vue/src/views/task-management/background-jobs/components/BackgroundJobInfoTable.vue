@@ -131,24 +131,28 @@
   function handlePause(record) {
     pause(record.id).then(() => {
       message.success(L('Successful'));
+      reload();
     });
   }
 
   function handleResume(record) {
     resume(record.id).then(() => {
       message.success(L('Successful'));
+      reload();
     });
   }
 
   function handleTrigger(record) {
     trigger(record.id).then(() => {
       message.success(L('Successful'));
+      reload();
     });
   }
 
   function handleStop(record) {
     stop(record.id).then(() => {
       message.success(L('Successful'));
+      reload();
     });
   }
 

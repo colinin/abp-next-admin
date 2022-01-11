@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -50,8 +52,9 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Status = JobStatus.Stopped;
                     job.IsAbandoned = true;
                     job.NextRunTime = null;
-
                     await RemoveJobAsync(context, job);
+                    // 重试达到上限发布异常通知
+                    await NotifierAsync(context, job);
                 }
             }
             else
@@ -74,5 +77,20 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
     {
         var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
         await jobScheduler.RemoveAsync(jobInfo);
+    }
+
+    private async Task NotifierAsync(JobEventContext context, JobInfo jobInfo)
+    {
+        try
+        {
+            var notifier = context.ServiceProvider.GetRequiredService<IJobExceptionNotifier>();
+            var exceptionContext = new JobExceptionNotificationContext(jobInfo, context.EventData.Exception);
+
+            await notifier.NotifyAsync(exceptionContext);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning($"An exception thow with job exception notify: {ex.Message}");
+        }
     }
 }

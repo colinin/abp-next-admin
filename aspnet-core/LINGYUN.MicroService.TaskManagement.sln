@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Jobs", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj", "{4C59F590-AA6C-4C46-8060-DA65D8305980}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.ExceptionHandling", "modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj", "{8507BBFA-FE56-4426-BBFA-C92906CB8407}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{4C59F590-AA6C-4C46-8060-DA65D8305980}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C59F590-AA6C-4C46-8060-DA65D8305980}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C59F590-AA6C-4C46-8060-DA65D8305980}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8507BBFA-FE56-4426-BBFA-C92906CB8407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8507BBFA-FE56-4426-BBFA-C92906CB8407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8507BBFA-FE56-4426-BBFA-C92906CB8407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8507BBFA-FE56-4426-BBFA-C92906CB8407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{E8022994-A19F-4540-B9D1-7EF4AA85D18A} = {8DA8A2EE-0B26-487E-A6C4-518906E92B1B}
 		{4A049C32-55F2-4A5F-954A-C8A977C2D87F} = {C38EB7EF-BAE9-4129-862A-71C652B81775}
 		{4C59F590-AA6C-4C46-8060-DA65D8305980} = {C38EB7EF-BAE9-4129-862A-71C652B81775}
+		{8507BBFA-FE56-4426-BBFA-C92906CB8407} = {C38EB7EF-BAE9-4129-862A-71C652B81775}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}
