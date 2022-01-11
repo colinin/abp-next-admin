@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -45,6 +46,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),

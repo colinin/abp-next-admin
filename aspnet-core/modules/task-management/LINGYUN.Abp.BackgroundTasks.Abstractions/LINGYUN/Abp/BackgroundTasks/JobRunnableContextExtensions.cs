@@ -71,7 +71,7 @@ public static class JobRunnableContextExtensions
         {
             return value;
         }
-        throw new ArgumentException(key + " not specified.");
+        throw new ArgumentException($"Job required data {key} not specified.");
     }
 
     public static bool TryGetJobData(this JobRunnableContext context, string key, out object value)
