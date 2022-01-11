@@ -3,6 +3,8 @@ declare interface LocalizableStringInfo {
   name: string;
 }
 
+declare type ExtraPropertyDictionary = { [key: string]: any };
+
 declare interface ISelectionStringValueItem {
   value: string;
   displayText: LocalizableStringInfo;

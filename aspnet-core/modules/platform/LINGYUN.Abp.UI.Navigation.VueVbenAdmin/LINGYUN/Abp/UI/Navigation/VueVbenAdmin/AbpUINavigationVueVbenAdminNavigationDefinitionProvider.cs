@@ -14,6 +14,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             context.Add(GetApiGateway());
             context.Add(GetLocalization());
             context.Add(GetOssManagement());
+            context.Add(GetTaskManagement());
         }
 
         private static NavigationDefinition GetDashboard()
@@ -359,6 +360,26 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   description: "文件管理"));
 
             return new NavigationDefinition(oss);
+        }
+
+        private static NavigationDefinition GetTaskManagement()
+        {
+            var task = new ApplicationMenu(
+                name: "TaskManagement",
+                displayName: "任务调度平台",
+                url: "/task-management",
+                component: "",
+                description: "任务调度平台",
+                icon: "");
+            task.AddItem(
+              new ApplicationMenu(
+                  name: "BackgroundJobs",
+                  displayName: "任务管理",
+                  url: "/task-management/background-jobs",
+                  component: "/task-management/background-jobs/index",
+                  description: "任务管理"));
+
+            return new NavigationDefinition(task);
         }
     }
 }

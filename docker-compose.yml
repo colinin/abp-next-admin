@@ -36,6 +36,13 @@ services:
     ports:
       - "30020:80"
 
+  task-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "30040:80"
+
   sts-server:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production

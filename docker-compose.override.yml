@@ -72,6 +72,18 @@ services:
     networks:
       - framework
 
+  task-api:
+    build:
+      context: ./aspnet-core/services/Publish/task-management
+    volumes:
+      - /var/opt/abp/logs/task-management:/app/Logs
+      - /var/opt/abp/data/task-management/Modules:/app/Modules
+    depends_on:
+      - sts-server
+    restart: always
+    networks:
+      - framework
+
   internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway

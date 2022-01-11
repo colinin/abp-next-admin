@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+		<ProjectReference Include="..\..\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\TaskManagement\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\TaskManagement\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>
