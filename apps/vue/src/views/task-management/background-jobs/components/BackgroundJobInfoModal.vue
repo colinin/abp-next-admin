@@ -4,6 +4,7 @@
     :width="800"
     :height="400"
     :title="modalTitle"
+    :help-message="modalTips"
     :mask-closable="false"
     @ok="handleSubmit"
   >
@@ -27,7 +28,7 @@
             <Input :disabled="isEditModal" v-model:value="modelRef.name" autocomplete="off" />
           </FormItem>
           <FormItem name="type" required :label="L('DisplayName:Type')" :extra="L('Description:Type')">
-            <Textarea :readonly="isEditModal" v-model:value="modelRef.type" :auto-size="{ minRows: 3, maxRows: 6 }" />
+            <Textarea :disabled="isEditModal" v-model:value="modelRef.type" :auto-size="{ minRows: 3, maxRows: 6 }" />
           </FormItem>
           <FormItem name="beginTime" :label="L('DisplayName:BeginTime')">
             <DatePicker style="width: 100%;" v-model:value="modelRef.beginTime" />
@@ -204,7 +205,19 @@
     return false;
   });
   const modalTitle = computed(() => {
-    return isEditModal.value ? L('BackgroundJobs:Edit') : L('BackgroundJobs:AddNew');
+    if (!isEditModal.value) {
+      return L('BackgroundJobs:AddNew');
+    }
+    if (modelRef.value.isAbandoned) {
+      return `${L('BackgroundJobs:Edit')} - ${L('DisplayName:IsAbandoned')}`;
+    }
+    return L('BackgroundJobs:Edit');
+  });
+  const modalTips = computed(() => {
+    if (modelRef.value.isAbandoned) {
+      return L('Description:IsAbandoned');
+    }
+    return '';
   });
   const modelRules = reactive({
     group: ruleCreator.fieldRequired({

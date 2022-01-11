@@ -13,7 +13,10 @@
         <Switch :checked="record.isEnabled" disabled />
       </template>
       <template #status="{ record }">
-        <Tag :color="JobStatusColor[record.status]">{{ JobStatusMap[record.status] }}</Tag>
+        <Tooltip v-if="record.isAbandoned" color="orange" :title="L('Description:IsAbandoned')">
+          <Tag :color="JobStatusColor[record.status]">{{ JobStatusMap[record.status] }}</Tag>
+        </Tooltip>
+        <Tag v-else :color="JobStatusColor[record.status]">{{ JobStatusMap[record.status] }}</Tag>
       </template>
       <template #type="{ record }">
         <Tag color="blue">{{ JobTypeMap[record.jobType] }}</Tag>
@@ -43,7 +46,7 @@
             {
               auth: 'TaskManagement.BackgroundJobs.Pause',
               label: L('BackgroundJobs:Pause'),
-              ifShow: record.status === JobStatus.Running,
+              ifShow: [JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
               onClick: handlePause.bind(null, record),
             },
             {
@@ -55,13 +58,13 @@
             {
               auth: 'TaskManagement.BackgroundJobs.Trigger',
               label: L('BackgroundJobs:Trigger'),
-              ifShow: [JobStatus.Running, JobStatus.Completed].includes(record.status),
+              ifShow: [JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(record.status),
               onClick: handleTrigger.bind(null, record),
             },
             {
               auth: 'TaskManagement.BackgroundJobs.Stop',
               label: L('BackgroundJobs:Stop'),
-              ifShow: record.status === JobStatus.Running,
+              ifShow: [JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
               onClick: handleStop.bind(null, record),
             },
           ]"
@@ -73,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Switch, Modal, Tag, message } from 'ant-design-vue';
+  import { Switch, Modal, Tag, Tooltip, message } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';

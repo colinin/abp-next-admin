@@ -15,6 +15,10 @@ public enum JobStatus
     /// </summary>
     Running = 10,
     /// <summary>
+    /// 失败重试
+    /// </summary>
+    FailedRetry = 15,
+    /// <summary>
     /// 已暂停
     /// </summary>
     Paused = 20,

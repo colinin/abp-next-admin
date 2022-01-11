@@ -53,11 +53,11 @@ public class EfCoreBackgroundJobInfoRepository :
 
     public virtual async Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
+        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType == JobType.Period && x.Status == JobStatus.Running && !x.NextRunTime.HasValue)
-            .Where(x => x.MaxCount == 0 || x.TriggerCount < x.MaxCount)
-            .Where(x => x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount)
+            .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
             .OrderByDescending(x => x.Priority)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -101,7 +101,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
             .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
             .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0)
-            .OrderBy(sorting ?? nameof(BackgroundJobInfo.Name))
+            .OrderBy(sorting ?? nameof(BackgroundJobInfo.CreationTime))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -109,12 +109,11 @@ public class EfCoreBackgroundJobInfoRepository :
     public virtual async Task<List<BackgroundJobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
         var now = Clock.Now;
+        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType != JobType.Period && x.Status == JobStatus.Running && !x.NextRunTime.HasValue)
-            .Where(x => x.MaxCount == 0 || x.TriggerCount < x.MaxCount)
-            .Where(x => x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount)
+            .Where(x => x.JobType != JobType.Period && status.Contains(x.Status))
             .OrderByDescending(x => x.Priority)
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)

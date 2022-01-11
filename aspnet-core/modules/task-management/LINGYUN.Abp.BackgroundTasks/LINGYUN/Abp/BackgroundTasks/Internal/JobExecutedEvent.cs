@@ -14,8 +14,8 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
         if (job != null)
         {
             job.TriggerCount += 1;
-            job.NextRunTime = context.EventData.NextRunTime;
             job.LastRunTime = context.EventData.RunTime;
+            job.NextRunTime = context.EventData.NextRunTime;
             job.Result = context.EventData.Result ?? "OK";
             job.Status = JobStatus.Running;
 
@@ -23,15 +23,15 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             if (job.JobType == JobType.Once)
             {
                 job.Status = JobStatus.Completed;
-                job.NextRunTime = null;
             }
 
             // 任务异常后可重试
             if (context.EventData.Exception != null)
             {
                 job.TryCount += 1;
+                job.IsAbandoned = false;
                 // 将任务标记为运行中, 会被轮询重新进入队列
-                job.Status = JobStatus.Running;
+                job.Status = JobStatus.FailedRetry;
                 job.Result = context.EventData.Exception.Message;
 
                 // 多次异常后需要重新计算优先级
@@ -54,14 +54,16 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     await RemoveJobAsync(context, job);
                 }
             }
-
-            // 所有任务达到上限则标记已完成
-            if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
+            else
             {
-                job.Status = JobStatus.Completed;
-                job.NextRunTime = null;
+                // 所有任务达到上限则标记已完成
+                if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
+                {
+                    job.Status = JobStatus.Completed;
+                    job.NextRunTime = null;
 
-                await RemoveJobAsync(context, job);
+                    await RemoveJobAsync(context, job);
+                }
             }
 
             await store.StoreAsync(job);

@@ -7,6 +7,7 @@ export const JobStatusMap = {
   [JobStatus.None]: L('DisplayName:None'),
   [JobStatus.Completed]: L('DisplayName:Completed'),
   [JobStatus.Running]: L('DisplayName:Running'),
+  [JobStatus.FailedRetry]: L('DisplayName:FailedRetry'),
   [JobStatus.Paused]: L('DisplayName:Paused'),
   [JobStatus.Stopped]: L('DisplayName:Stopped'),
 }
@@ -14,8 +15,9 @@ export const JobStatusColor = {
   [JobStatus.None]: '',
   [JobStatus.Completed]: '#339933',
   [JobStatus.Running]: '#3399CC',
+  [JobStatus.FailedRetry]: '#FF6600',
   [JobStatus.Paused]: '#CC6633',
-  [JobStatus.Stopped]: '#FF6600',
+  [JobStatus.Stopped]: '#F00000',
 }
 
 export const JobTypeMap = {

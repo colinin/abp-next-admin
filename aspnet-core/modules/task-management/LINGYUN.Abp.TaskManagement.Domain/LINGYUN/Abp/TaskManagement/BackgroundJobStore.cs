@@ -77,17 +77,17 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 jobInfo.MaxCount,
                 jobInfo.MaxTryCount)
             {
-                IsEnabled = true
+                IsEnabled = true,
+                TriggerCount = jobInfo.TriggerCount,
+                IsAbandoned = jobInfo.IsAbandoned,
+                TryCount = jobInfo.TryCount,
+                LockTimeOut = jobInfo.LockTimeOut,
+                Description = jobInfo.Description
             };
             backgroundJobInfo.SetNextRunTime(jobInfo.NextRunTime);
             backgroundJobInfo.SetLastRunTime(jobInfo.LastRunTime);
             backgroundJobInfo.SetStatus(jobInfo.Status);
             backgroundJobInfo.SetResult(jobInfo.Result);
-            backgroundJobInfo.TriggerCount = jobInfo.TriggerCount;
-            backgroundJobInfo.IsAbandoned = jobInfo.IsAbandoned;
-            backgroundJobInfo.TryCount = jobInfo.TryCount;
-            backgroundJobInfo.LockTimeOut = jobInfo.LockTimeOut;
-            backgroundJobInfo.Description = jobInfo.Description;
             switch (jobInfo.JobType)
             {
                 case JobType.Once:

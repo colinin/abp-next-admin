@@ -90,6 +90,10 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                 {
                     maxCount = 0;
                 }
+                if (job.Status == JobStatus.FailedRetry && job.TryCount < job.MaxTryCount)
+                {
+                    maxCount = job.MaxTryCount <= 0 ? -1 : job.MaxTryCount - 1;
+                }
                 triggerBuilder
                     .WithIdentity(job.Name, job.Group)
                     .WithDescription(job.Description)
