@@ -1,9 +1,10 @@
-﻿using LINGYUN.Abp.ExceptionHandling;
+﻿using LINGYUN.Abp.BackgroundTasks.Jobs;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 
-[DependsOn(typeof(AbpExceptionHandlingModule))]
+[DependsOn(typeof(AbpBackgroundTasksModule))]
+[DependsOn(typeof(AbpBackgroundTasksJobsModule))]
 public class AbpBackgroundTasksExceptionHandlingModule : AbpModule
 {
 
