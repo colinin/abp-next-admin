@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,6 +31,14 @@ public partial class TaskManagementHttpApiHostModule
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "TaskManagement";
+
+        PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
+        {
+            // 以开放端口区别
+            options.SnowflakeIdOptions.WorkerId = 30040;
+            options.SnowflakeIdOptions.WorkerIdBits = 5;
+            options.SnowflakeIdOptions.DatacenterId = 1;
+        });
     }
 
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)

@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.IdentitySer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflow", "workflow", "{E47CDAF7-1046-4886-A0CB-ADF9650F8318}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task-management", "task-management", "{3F453010-BA07-471D-87E5-B12346ED81EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.HttpApi.Host", "services\LY.MicroService.TaskManagement.HttpApi.Host\LY.MicroService.TaskManagement.HttpApi.Host.csproj", "{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,10 @@ Global
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +78,7 @@ Global
 		{B459FB80-74C6-4988-BE65-B0FE84EF0632} = {1D445339-DB00-4A4D-B7C1-6F112A46CFF6}
 		{0DBBB371-B1FC-421E-A4FB-900B016AFE6A} = {A3275CEC-C5CB-4F22-875A-8270B5F4D698}
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB} = {099F0FD1-645D-4029-8149-46523AD34933}
+		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84} = {3F453010-BA07-471D-87E5-B12346ED81EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3905D9F-6EF7-4BFD-80B3-E0DD6AA82228}
