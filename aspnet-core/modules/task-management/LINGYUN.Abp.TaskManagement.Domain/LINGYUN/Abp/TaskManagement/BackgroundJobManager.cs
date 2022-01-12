@@ -116,6 +116,8 @@ public class BackgroundJobManager : DomainService
         await JobScheduler.ResumeAsync(job);
 
         jobInfo.SetStatus(JobStatus.Running);
+        jobInfo.IsAbandoned = false;
+        jobInfo.IsEnabled = true;
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
     }

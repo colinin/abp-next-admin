@@ -7,6 +7,6 @@ public interface IQuartzJobExecutorProvider
 #nullable enable
     IJobDetail? CreateJob(JobInfo job);
 
-    ITrigger CreateTrigger(JobInfo job);
+    ITrigger? CreateTrigger(JobInfo job);
 #nullable disable
 }

@@ -40,7 +40,7 @@
     "DisplayName:CreationTime": "创建时间",
     "DisplayName:Result": "上次执行结果",
     "DisplayName:LastRunTime": "上次执行时间",
-    "DisplayName:NextRunTime": "下次执行时间",
+    "DisplayName:NextRunTime": "下次预期时间",
     "DisplayName:Cron": "Cron表达式",
     "Description:Cron": "类别为周期性作业时有效, 参考: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontrigger.html#introduction",
     "DisplayName:MaxCount": "最大触发次数",

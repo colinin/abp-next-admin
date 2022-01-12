@@ -1,7 +1,6 @@
 ﻿using Quartz;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -84,7 +83,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
                 continue;
             }
 
-            jobDictionary.Add(jobDetail, new ITrigger[] { jobTrigger });
+            jobDictionary[jobDetail] = new ITrigger[] { jobTrigger };
         }
 
         await Scheduler.ScheduleJobs(jobDictionary, false);
