@@ -92,12 +92,9 @@ public class BackgroundJobManager : DomainService
     public virtual async Task TriggerAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        //if (!await JobScheduler.ExistsAsync(job))
-        //{
-        //    throw new BusinessException(TaskManagementErrorCodes.JobNotFoundInQueue)
-        //        .WithData("Group", job.Group)
-        //        .WithData("Name", job.Name);
-        //}
+        job.JobType = JobType.Once;
+        // 延迟两秒触发
+        job.Interval = 2;
 
         await JobScheduler.TriggerAsync(job);
     }

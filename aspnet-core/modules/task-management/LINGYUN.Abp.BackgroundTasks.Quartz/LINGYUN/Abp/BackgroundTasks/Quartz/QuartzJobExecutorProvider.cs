@@ -36,10 +36,12 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
         }
 
         var adapterType = typeof(QuartzJobSimpleAdapter<>);
-        if (job.LockTimeOut > 0)
-        {
-            adapterType = typeof(QuartzJobConcurrentAdapter<>);
-        }
+
+        // 注释, 通过触发器监听锁定
+        //if (job.LockTimeOut > 0)
+        //{
+        //    adapterType = typeof(QuartzJobConcurrentAdapter<>);
+        //}
 
         if (!typeof(IJob).IsAssignableFrom(jobType))
         {

@@ -15,5 +15,7 @@ public class AbpBackgroundTasksQuartzModule : AbpModule
         var _scheduler = context.ServiceProvider.GetRequiredService<IScheduler>();
 
         _scheduler.ListenerManager.AddJobListener(context.ServiceProvider.GetRequiredService<QuartzJobListener>());
+        _scheduler.ListenerManager.AddTriggerListener(context.ServiceProvider.GetRequiredService<QuartzTriggerListener>());
+
     }
 }

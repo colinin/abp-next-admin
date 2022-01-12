@@ -9,6 +9,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="LINGYUN\Abp\BackgroundTasks\ExceptionHandling\Localization\Resources\*.json" />
+		<None Remove="LINGYUN\Abp\BackgroundTasks\ExceptionHandling\Templates\*.tpl" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\BackgroundTasks\ExceptionHandling\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\BackgroundTasks\ExceptionHandling\Templates\*.tpl" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 

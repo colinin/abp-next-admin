@@ -4,11 +4,12 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Quartz;
 using Quartz.Listener;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Uow;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
 
@@ -18,13 +19,16 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
 
     public override string Name => "QuartzJobListener";
 
+    protected IClock Clock { get; }
     protected IJobEventProvider EventProvider { get; }
     protected IServiceProvider ServiceProvider { get; }
 
     public QuartzJobListener(
+        IClock clock,
         IServiceProvider serviceProvider,
         IJobEventProvider eventProvider)
     {
+        Clock = clock;
         ServiceProvider = serviceProvider;
         EventProvider = eventProvider;
 
@@ -50,6 +54,12 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         {
             try
             {
+                var jobEventList = EventProvider.GetAll();
+                if (!jobEventList.Any())
+                {
+                    return;
+                }
+
                 using var scope = ServiceProvider.CreateScope();
                 var jobEventData = new JobEventData(
                     jobUUId,
@@ -60,7 +70,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                     Result = context.Result?.ToString()
                 };
 
-                var jobEventList = EventProvider.GetAll();
                 var eventContext = new JobEventContext(
                     scope.ServiceProvider,
                     jobEventData);
@@ -86,6 +95,12 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
     {
         try
         {
+            var jobEventList = EventProvider.GetAll();
+            if (!jobEventList.Any())
+            {
+                return;
+            }
+
             using var scope = ServiceProvider.CreateScope();
             var jobId = context.GetString(nameof(JobInfo.Id));
             if (Guid.TryParse(jobId, out var jobUUId))
@@ -112,7 +127,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                     jobEventData.RepeatCount = simpleTrigger.RepeatCount;
                 }
                 jobEventData.Description = context.JobDetail.Description;
-                jobEventData.RunTime = context.FireTimeUtc.LocalDateTime;
+                jobEventData.RunTime = Clock.Now;
                 jobEventData.LastRunTime = context.PreviousFireTimeUtc?.LocalDateTime;
                 jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime;
                 if (context.Result != null)
@@ -125,7 +140,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                     jobEventData.TenantId = tenantId;
                 }
 
-                var jobEventList = EventProvider.GetAll();
                 var eventContext = new JobEventContext(
                     scope.ServiceProvider,
                     jobEventData);

@@ -4,6 +4,7 @@ using Volo.Abp.TextTemplating;
 using Volo.Abp.Json;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
@@ -27,6 +28,10 @@ public class SendEmailJob : IJobRunnable
     /// 发送模板消息
     /// </summary>
     public const string PropertyTemplate = "template";
+    /// <summary>
+    /// 可选, 模板消息中的模型参数
+    /// </summary>
+    public const string PropertyModel = "model";
     /// <summary>
     /// 可选, 模板消息中的上下文参数
     /// </summary>
@@ -58,19 +63,40 @@ public class SendEmailJob : IJobRunnable
                 catch { }
             }
 
+            object model = null;
+            if (context.TryGetString(PropertyModel, out var modelString) && !modelString.IsNullOrWhiteSpace())
+            {
+                try
+                {
+                    model = JsonConvert.DeserializeObject(modelString);
+                }
+                catch { }
+            }
+
             var templateRenderer = context.GetRequiredService<ITemplateRenderer>();
 
             var content = await templateRenderer.RenderAsync(
                 templateName: template,
+                model: model,
                 cultureName: culture,
                 globalContext: globalContext);
 
-            await emailSender.QueueAsync(from, to, subject, content, true);
+            await QueueEmail(emailSender, from, to, subject, content, true);
             return;
         }
 
         var body = context.GetString(PropertyBody);
 
-        await emailSender.QueueAsync(from, to, subject, body, false);
+        await QueueEmail(emailSender, from, to, subject, body, false);
+    }
+
+    private async Task QueueEmail(IEmailSender emailSender, string from, string to, string subject, string body, bool isBodyHtml = true)
+    {
+        if (from.IsNullOrWhiteSpace())
+        {
+            await emailSender.SendAsync(to, subject, body, isBodyHtml);
+            return;
+        }
+        await emailSender.SendAsync(from, to, subject, body, isBodyHtml);
     }
 }

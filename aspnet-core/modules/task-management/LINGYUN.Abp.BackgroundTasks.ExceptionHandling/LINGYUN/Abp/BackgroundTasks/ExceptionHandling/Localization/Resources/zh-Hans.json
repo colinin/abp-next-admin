@@ -1,0 +1,15 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TextTemplate:JobExceptionNotifier": "后台作业异常推送模板",
+    "JobExceptionNotifier": "后台作业异常推送",
+    "TenantName": "租户名称",
+    "JobGroup": "作业分组",
+    "JobName": "作业名称",
+    "JobId": "作业标识",
+    "JobType": "作业类型",
+    "TriggerTime": "触发时间",
+    "ErrorMessage": "错误消息",
+    "JobExecuteError": "后台作业异常"
+  }
+}
