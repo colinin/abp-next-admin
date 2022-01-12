@@ -47,7 +47,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Priority = JobPriority.Low;
                 }
 
-                if (job.TryCount > job.MaxTryCount)
+                if (job.TryCount >= job.MaxTryCount)
                 {
                     job.Status = JobStatus.Stopped;
                     job.IsAbandoned = true;

@@ -154,10 +154,11 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
         var jobKey = new JobKey(job.Name, job.Group);
         if (!await Scheduler.CheckExists(jobKey))
         {
-            job.JobType = JobType.Once;
-
             await QueueAsync(job);
         }
-        await Scheduler.TriggerJob(jobKey);
+        else
+        {
+            await Scheduler.TriggerJob(jobKey);
+        }
     }
 }

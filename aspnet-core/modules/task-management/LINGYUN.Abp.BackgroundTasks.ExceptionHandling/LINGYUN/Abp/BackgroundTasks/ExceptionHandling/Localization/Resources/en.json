@@ -1,0 +1,15 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TextTemplate:JobExceptionNotifier": "Background job exception pushes template",
+    "JobExceptionNotifier": "Background job exception push",
+    "TenantName": "TenantName",
+    "JobGroup": "Job Group",
+    "JobName": "Job Name",
+    "JobId": "Job Id",
+    "JobType": "Job Type",
+    "TriggerTime": "Trigger Time",
+    "ErrorMessage": "Error Message",
+    "JobExecuteError": "Background job exception"
+  }
+}

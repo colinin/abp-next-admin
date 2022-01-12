@@ -1,10 +1,16 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.TextTemplating;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
@@ -13,64 +19,89 @@ namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 public class JobExceptionNotifier : IJobExceptionNotifier, ITransientDependency
 {
     public const string Prefix = "exception.";
+    public const string JobGroup = "ExceptionNotifier";
+
+    public ILogger<JobExceptionNotifier> Logger { protected get; set; }
 
     protected IClock Clock { get; }
-    protected IJobStore JobStore { get; }
-    protected IJobScheduler JobScheduler { get; }
+    protected IEmailSender EmailSender { get; }
+    protected ITemplateRenderer TemplateRenderer { get; }
 
     public JobExceptionNotifier(
         IClock clock,
-        IJobStore jobStore,
-        IJobScheduler jobScheduler)
+        IEmailSender emailSender,
+        ITemplateRenderer templateRenderer)
     {
         Clock = clock;
-        JobStore = jobStore;
-        JobScheduler = jobScheduler;
+        EmailSender = emailSender;
+        TemplateRenderer = templateRenderer;
+
+        Logger = NullLogger<JobExceptionNotifier>.Instance;
     }
 
     public virtual async Task NotifyAsync([NotNull] JobExceptionNotificationContext context)
     {
-        var notifyKey = Prefix + SendEmailJob.PropertyTo;
-        if (context.JobInfo.Args.TryGetValue(notifyKey, out var exceptionTo))
+        // 异常所属分组不处理, 防止死循环
+        if (string.Equals(context.JobInfo.Group, JobGroup))
         {
-            var template = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate) ?? "";
-            var subject = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject) ?? "From job execute exception";
-            var globalContext = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyContext) ?? "{}";
-            var from = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom) ?? "";
-            var culture = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture) ?? CultureInfo.CurrentCulture.Name;
+            Logger.LogWarning($"There is a problem executing the job, reason: {context.Exception.Message}");
+            return;
+        }
+        var notifyKey = Prefix + SendEmailJob.PropertyTo;
+        if (context.JobInfo.Args.TryGetValue(notifyKey, out var exceptionTo) &&
+            exceptionTo is string to)
+        {
+            var template = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate)?.ToString() ?? "";
+            var content = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyBody)?.ToString() ?? "";
+            var subject = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject)?.ToString() ?? "From job execute exception";
+            var from = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom)?.ToString() ?? "";
+            var errorMessage = context.Exception.GetBaseException().Message;
 
-            var jobId = Guid.NewGuid();
-            var jobArgs = new Dictionary<string, object>
+            if (template.IsNullOrWhiteSpace())
             {
-                { SendEmailJob.PropertyTo, exceptionTo.ToString() },
-                { SendEmailJob.PropertySubject, subject },
-                { SendEmailJob.PropertyBody, context.Exception.GetBaseException().Message },
-                { SendEmailJob.PropertyTemplate, template },
-                { SendEmailJob.PropertyContext, globalContext },
-                { SendEmailJob.PropertyFrom, from },
-                { SendEmailJob.PropertyCulture, culture }
-            };
-            var jobInfo = new JobInfo
+                await EmailSender.SendAsync(from, to, subject, content, false);
+                return;
+            }
+
+            var footer = context.JobInfo.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {Clock.Now.Year}";
+            var model = new
             {
-                Id = jobId,
-                Name = jobId.ToString(),
-                Group = "ExceptionHandling",
-                Priority = JobPriority.Normal,
-                BeginTime = Clock.Now,
-                Args = jobArgs,
-                Description = subject.ToString(),
-                JobType = JobType.Once,
-                Interval = 5,
-                MaxCount = 1,
-                MaxTryCount = 1,
-                CreationTime = Clock.Now,
-                Status = JobStatus.None,
-                Type = DefaultJobNames.SendEmailJob,
+                Title = subject,
+                Group = context.JobInfo.Group,
+                Name = context.JobInfo.Name,
+                Id = context.JobInfo.Id,
+                Type = context.JobInfo.Type,
+                Triggertime = Clock.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                Message = errorMessage,
+                Tenantname = context.JobInfo.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
+                Footer = footer,
             };
 
-            await JobStore.StoreAsync(jobInfo);
+            var globalContext = new Dictionary<string, object>();
+            if (context.JobInfo.Args.TryGetValue(Prefix + SendEmailJob.PropertyContext, out var ctx) &&
+                ctx is string ctxStr && !ctxStr.IsNullOrWhiteSpace())
+            {
+                try
+                {
+                    globalContext = JsonConvert.DeserializeObject<Dictionary<string, object>>(ctxStr);
+                }
+                catch { }
+            }
 
-            await JobScheduler.TriggerAsync(jobInfo);
+            var culture = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
+
+            content = await TemplateRenderer.RenderAsync(
+                templateName: template,
+                model: model,
+                cultureName: culture,
+                globalContext: globalContext);
+
+            if (from.IsNullOrWhiteSpace())
+            {
+                await EmailSender.SendAsync(to, subject, content, true);
+                return;
+            }
+            await EmailSender.SendAsync(from, to, subject, content, true);
         }
     }
 }
