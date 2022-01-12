@@ -9,7 +9,7 @@ public class ConsoleJob : IJobRunnable
     public Task ExecuteAsync(JobRunnableContext context)
     {
         context.TryGetString(PropertyMessage, out var message);
-        Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}] - This message: {message ?? "None"} comes from the job: {GetType()}");
+        Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] - This message: {message ?? "None"} comes from the job: {GetType()}");
         return Task.CompletedTask;
     }
 }

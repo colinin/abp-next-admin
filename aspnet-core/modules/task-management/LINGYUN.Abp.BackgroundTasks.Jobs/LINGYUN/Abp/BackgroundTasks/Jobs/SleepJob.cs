@@ -9,7 +9,7 @@ public class SleepJob : IJobRunnable
     {
         context.JobData.TryGetValue("Delay", out var sleep);
 
-        Console.WriteLine($"Sleep {sleep ?? 20000} milliseconds.");
+        Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] - Sleep {sleep ?? 20000} milliseconds.");
 
         await Task.Delay(sleep?.To<int>() ?? 20000);
     }

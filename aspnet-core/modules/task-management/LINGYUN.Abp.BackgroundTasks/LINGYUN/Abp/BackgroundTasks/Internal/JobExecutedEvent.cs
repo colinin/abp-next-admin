@@ -34,7 +34,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 job.IsAbandoned = false;
                 // 将任务标记为运行中, 会被轮询重新进入队列
                 job.Status = JobStatus.FailedRetry;
-                job.Result = context.EventData.Exception.Message;
+                job.Result = GetExceptionMessage(context.EventData.Exception);
 
                 // 多次异常后需要重新计算优先级
                 if (job.TryCount <= (job.MaxTryCount / 2) &&
@@ -92,5 +92,15 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
         {
             Logger.LogWarning($"An exception thow with job exception notify: {ex.Message}");
         }
+    }
+
+    private string GetExceptionMessage(Exception exception)
+    {
+        if (exception.InnerException != null)
+        {
+            return exception.Message + "  =>   " + GetExceptionMessage(exception.InnerException);
+        }
+
+        return exception.Message;
     }
 }

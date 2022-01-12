@@ -58,6 +58,7 @@ public class EfCoreBackgroundJobInfoRepository :
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
             .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
+            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
             .OrderByDescending(x => x.Priority)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -114,6 +115,7 @@ public class EfCoreBackgroundJobInfoRepository :
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled && !x.IsAbandoned)
             .Where(x => x.JobType != JobType.Period && status.Contains(x.Status))
+            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
             .OrderByDescending(x => x.Priority)
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)
