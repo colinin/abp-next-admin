@@ -3,6 +3,7 @@ using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -44,7 +45,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             input.EndTime,
             input.Priority,
             input.MaxCount,
-            input.MaxTryCount);
+            input.MaxTryCount,
+            CurrentTenant.Id);
 
         UpdateByInput(backgroundJobInfo, input);
 
@@ -132,6 +134,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         await BackgroundJobManager.StopAsync(backgroundJobInfo);
     }
 
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
+    public virtual async Task StartAsync(Guid id)
+    {
+        var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await BackgroundJobManager.QueueAsync(backgroundJobInfo);
+    }
+
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
     public virtual async Task<BackgroundJobInfoDto> UpdateAsync(Guid id, BackgroundJobInfoUpdateDto input)
     {
@@ -146,6 +156,86 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         await BackgroundJobManager.UpdateAsync(backgroundJobInfo, resetJob);
 
         return ObjectMapper.Map<BackgroundJobInfo, BackgroundJobInfoDto>(backgroundJobInfo);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Delete)]
+    public virtual async Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkDeleteAsync(jobs);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
+    public virtual async Task BulkStopAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkStopAsync(jobs);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
+    public virtual async Task BulkStartAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkQueueAsync(jobs);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
+    public virtual async Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkTriggerAsync(jobs);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
+    public virtual async Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkResumeAsync(jobs);
+    }
+
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
+    public virtual async Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
+    {
+        if (!input.JobIds.Any())
+        {
+            return;
+        }
+        var jobs = await GetListAsync(input);
+
+        await BackgroundJobManager.BulkPauseAsync(jobs);
+    }
+
+    protected virtual async Task<IEnumerable<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoBatchInput input)
+    {
+        var quaryble = await BackgroundJobInfoRepository.GetQueryableAsync();
+        quaryble = quaryble.Where(x => input.JobIds.Contains(x.Id));
+
+        return await AsyncExecuter.ToListAsync(quaryble);
     }
 
     protected virtual void UpdateByInput(BackgroundJobInfo backgroundJobInfo, BackgroundJobInfoCreateOrUpdateDto input)

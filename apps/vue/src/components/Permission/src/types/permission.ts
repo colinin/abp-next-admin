@@ -5,6 +5,7 @@ export interface PermissionProps {
 }
 
 export interface PermissionTree {
+  isRoot: boolean;
   /** 权限标识 */
   name: string;
   /** 显示名称 */

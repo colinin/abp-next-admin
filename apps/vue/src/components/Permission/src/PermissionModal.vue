@@ -6,6 +6,7 @@
     :width="800"
     :min-height="600"
     @ok="handleSubmit"
+    @visible-change="handleVisibleChange"
   >
     <Row>
       <Col :span="24">
@@ -35,7 +36,6 @@
               <BasicTree
                 :checkable="true"
                 :checkStrictly="true"
-                :selectable="false"
                 :disabled="permissionTreeDisabled"
                 :treeData="permission.children"
                 :replaceFields="{
@@ -104,9 +104,27 @@
       } = usePermissions({
         getPropsRef: model,
       });
-      const [registerModal, { closeModal, setModalProps }] = useModalInner((val) => {
+      const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
         model.value = val;
       });
+
+      function handleVisibleChange(visible: boolean) {
+        if (!visible) {
+          model.value.providerKey = '';
+        }
+      }
+
+      function handleSubmit() {
+        changeOkLoading(true);
+        handleSavePermission()
+          .then(() => {
+            message.success(L('Successful'));
+            closeModal();
+          })
+          .finally(() => {
+            changeOkLoading(false);
+          });
+      }
 
       return {
         L,
@@ -119,36 +137,12 @@
         permissionTreeCheckState,
         permissionTreeDisabled,
         handlePermissionGranted,
-        handleSavePermission,
         handleGrantAllPermission,
         handleGrantPermissions,
         registerModal,
-        closeModal,
-        setModalProps,
+        handleSubmit,
+        handleVisibleChange,
       };
-    },
-    methods: {
-      handleSubmit() {
-        this.setModalProps({
-          loading: true,
-          confirmLoading: true,
-          showCancelBtn: false,
-          closable: false,
-        });
-        this.handleSavePermission()
-          .then(() => {
-            message.success(this.L('Successful'));
-            this.closeModal();
-          })
-          .finally(() => {
-            this.setModalProps({
-              loading: false,
-              confirmLoading: false,
-              showCancelBtn: true,
-              closable: true,
-            });
-          });
-      },
     },
   });
 </script>

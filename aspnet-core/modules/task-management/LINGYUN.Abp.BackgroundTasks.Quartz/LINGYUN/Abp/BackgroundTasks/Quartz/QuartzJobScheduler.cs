@@ -24,13 +24,13 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task<bool> ExistsAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         return await Scheduler.CheckExists(jobKey);
     }
 
     public virtual async Task PauseAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         if (await Scheduler.CheckExists(jobKey))
         {
             var triggers = await Scheduler.GetTriggersOfJob(jobKey);
@@ -43,7 +43,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task<bool> QueueAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         if (await Scheduler.CheckExists(jobKey))
         {
             return false;
@@ -86,12 +86,12 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
             jobDictionary[jobDetail] = new ITrigger[] { jobTrigger };
         }
 
-        await Scheduler.ScheduleJobs(jobDictionary, false);
+        await Scheduler.ScheduleJobs(jobDictionary, true);
     }
 
     public virtual async Task<bool> RemoveAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         if (!await Scheduler.CheckExists(jobKey))
         {
             return false;
@@ -109,7 +109,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task ResumeAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         if (await Scheduler.CheckExists(jobKey))
         {
             var triggers = await Scheduler.GetTriggersOfJob(jobKey);
@@ -150,7 +150,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task TriggerAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = new JobKey(job.Id.ToString(), job.Group);
         if (!await Scheduler.CheckExists(jobKey))
         {
             await QueueAsync(job);

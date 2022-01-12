@@ -102,7 +102,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
             .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
             .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0)
-            .OrderBy(sorting ?? nameof(BackgroundJobInfo.CreationTime))
+            .OrderBy(sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC")
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

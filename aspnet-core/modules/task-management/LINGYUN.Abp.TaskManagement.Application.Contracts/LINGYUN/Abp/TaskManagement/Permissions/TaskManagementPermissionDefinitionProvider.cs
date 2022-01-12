@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.TaskManagement.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TaskManagement.Permissions;
 
@@ -11,50 +10,42 @@ public class TaskManagementPermissionDefinitionProvider : PermissionDefinitionPr
     {
         var group = context.AddGroup(
             TaskManagementPermissions.GroupName,
-            L("Permissions:TaskManagement"),
-            MultiTenancySides.Host);
+            L("Permissions:TaskManagement"));
 
         var backgroundJobs = group.AddPermission(
             TaskManagementPermissions.BackgroundJobs.Default,
-            L("Permissions:BackgroundJobs"),
-            MultiTenancySides.Host);
+            L("Permissions:BackgroundJobs"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Create,
-            L("Permissions:CreateJob"),
-            MultiTenancySides.Host);
+            L("Permissions:CreateJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Update,
-            L("Permissions:UpdateJob"),
-            MultiTenancySides.Host);
+            L("Permissions:UpdateJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Delete,
-            L("Permissions:DeleteJob"),
-            MultiTenancySides.Host);
+            L("Permissions:DeleteJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Trigger,
-            L("Permissions:TriggerJob"),
-            MultiTenancySides.Host);
+            L("Permissions:TriggerJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Pause,
-            L("Permissions:PauseJob"),
-            MultiTenancySides.Host);
+            L("Permissions:PauseJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Resume,
-            L("Permissions:ResumeJob"),
-            MultiTenancySides.Host);
+            L("Permissions:ResumeJob"));
+        backgroundJobs.AddChild(
+            TaskManagementPermissions.BackgroundJobs.Start,
+            L("Permissions:StartJob"));
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Stop,
-            L("Permissions:StopJob"),
-            MultiTenancySides.Host);
+            L("Permissions:StopJob"));
 
         var backgroundJobLogs = group.AddPermission(
             TaskManagementPermissions.BackgroundJobLogs.Default,
-            L("Permissions:BackgroundJobLogs"),
-            MultiTenancySides.Host);
+            L("Permissions:BackgroundJobLogs"));
         backgroundJobLogs.AddChild(
             TaskManagementPermissions.BackgroundJobLogs.Delete,
-            L("Permissions:DeleteJobLogs"),
-            MultiTenancySides.Host);
+            L("Permissions:DeleteJobLogs"));
     }
 
     private ILocalizableString L(string name)

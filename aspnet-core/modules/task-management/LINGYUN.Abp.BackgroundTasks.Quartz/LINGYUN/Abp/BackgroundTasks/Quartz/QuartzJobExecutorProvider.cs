@@ -48,13 +48,18 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
             jobType = adapterType.MakeGenericType(jobType);
         }
 
+        // 改为 JobId作为名称
         var jobBuilder = JobBuilder.Create(jobType)
-                .WithIdentity(job.Name, job.Group)
+                .WithIdentity(job.Id.ToString(), job.Group)
                 .WithDescription(job.Description);
 
         jobBuilder.UsingJobData(nameof(JobInfo.Id), job.Id);
         jobBuilder.UsingJobData(nameof(JobInfo.LockTimeOut), job.LockTimeOut);
         jobBuilder.UsingJobData(new JobDataMap(job.Args));
+        if (job.TenantId.HasValue)
+        {
+            jobBuilder.UsingJobData(nameof(JobInfo.TenantId), job.TenantId.ToString());
+        }
 
         return jobBuilder.Build();
     }
@@ -71,11 +76,16 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                     Logger.LogWarning($"The task: {job.Group} - {job.Name} periodic task Cron expression was invalid and the task trigger could not be created.");
                     return null;
                 }
+                if (job.GetCanBeTriggered() == 0)
+                {
+                    Logger.LogWarning($"The task: {job.Group} - {job.Name} reached trigger peak and the task trigger could not be created.");
+                    return null;
+                }
                 triggerBuilder
-                    .WithIdentity(job.Name, job.Group)
+                    .WithIdentity(job.Id.ToString(), job.Group)
                     .WithDescription(job.Description)
                     .EndAt(job.EndTime)
-                    .ForJob(job.Name, job.Group)
+                    .ForJob(job.Id.ToString(), job.Group)
                     .WithPriority((int)job.Priority)
                     .WithCronSchedule(job.Cron);
                 if (job.BeginTime > Clock.Now)
@@ -86,22 +96,26 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
             case JobType.Once:
             case JobType.Persistent:
             default:
+                var maxCount = job.GetCanBeTriggered();
+                if (maxCount == 0)
+                {
+                    Logger.LogWarning($"The task: {job.Group} - {job.Name} reached trigger peak and the task trigger could not be created.");
+                    return null;
+                }
+
                 // Quartz 需要减一位
-                var maxCount = job.MaxCount <= 0 ? -1 : job.MaxCount - 1;
-                if (job.JobType == JobType.Once)
+                maxCount -= 1;
+                if (maxCount < -1)
                 {
-                    maxCount = 0;
+                    maxCount = -1;
                 }
-                if (job.Status == JobStatus.FailedRetry && job.TryCount < job.MaxTryCount)
-                {
-                    maxCount = job.MaxTryCount <= 0 ? -1 : job.MaxTryCount - 1;
-                }
+
                 triggerBuilder
-                    .WithIdentity(job.Name, job.Group)
+                    .WithIdentity(job.Id.ToString(), job.Group)
                     .WithDescription(job.Description)
                     .StartAt(Clock.Now.AddSeconds(job.Interval))
                     .EndAt(job.EndTime)
-                    .ForJob(job.Name, job.Group)
+                    .ForJob(job.Id.ToString(), job.Group)
                     .WithPriority((int)job.Priority)
                     .WithSimpleSchedule(x =>
                         x.WithIntervalInSeconds(job.Interval)

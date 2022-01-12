@@ -18,6 +18,7 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 150,
       sorter: true,
+      fixed: 'left',
     },
     {
       title: L('DisplayName:Name'),
@@ -25,10 +26,11 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 300,
       sorter: true,
+      fixed: 'left',
     },
     {
-      title: L('DisplayName:Type'),
-      dataIndex: 'type',
+      title: L('DisplayName:Description'),
+      dataIndex: 'description',
       align: 'left',
       width: 350,
       sorter: true,
