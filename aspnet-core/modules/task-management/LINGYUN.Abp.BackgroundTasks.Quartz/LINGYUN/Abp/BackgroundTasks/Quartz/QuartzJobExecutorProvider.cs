@@ -15,20 +15,22 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
 
     protected IClock Clock { get; }
     protected AbpBackgroundTasksOptions Options { get; }
-
+    protected IQuartzKeyBuilder KeyBuilder { get; }
     public QuartzJobExecutorProvider(
         IClock clock,
+        IQuartzKeyBuilder keyBuilder,
         IOptions<AbpBackgroundTasksOptions> options)
     {
         Clock = clock;
         Options = options.Value;
+        KeyBuilder = keyBuilder;
 
         Logger = NullLogger<QuartzJobExecutorProvider>.Instance;
     }
 
     public IJobDetail CreateJob(JobInfo job)
     {
-        var jobType = Type.GetType(job.Type) ?? Options.JobProviders.GetOrDefault(job.Type);
+        var jobType = Options.JobProviders.GetOrDefault(job.Type) ?? Type.GetType(job.Type);
         if (jobType == null)
         {
             Logger.LogWarning($"The task: {job.Group} - {job.Name}: {job.Type} is not registered and cannot create an instance of the performer type.");
@@ -50,7 +52,7 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
 
         // 改为 JobId作为名称
         var jobBuilder = JobBuilder.Create(jobType)
-                .WithIdentity(job.Id.ToString(), job.Group)
+                .WithIdentity(KeyBuilder.CreateJobKey(job))
                 .WithDescription(job.Description);
 
         jobBuilder.UsingJobData(nameof(JobInfo.Id), job.Id);
@@ -82,10 +84,10 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                     return null;
                 }
                 triggerBuilder
-                    .WithIdentity(job.Id.ToString(), job.Group)
+                    .WithIdentity(KeyBuilder.CreateTriggerKey(job))
                     .WithDescription(job.Description)
                     .EndAt(job.EndTime)
-                    .ForJob(job.Id.ToString(), job.Group)
+                    .ForJob(KeyBuilder.CreateJobKey(job))
                     .WithPriority((int)job.Priority)
                     .WithCronSchedule(job.Cron);
                 if (job.BeginTime > Clock.Now)
@@ -111,11 +113,11 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                 }
 
                 triggerBuilder
-                    .WithIdentity(job.Id.ToString(), job.Group)
+                    .WithIdentity(KeyBuilder.CreateTriggerKey(job))
                     .WithDescription(job.Description)
                     .StartAt(Clock.Now.AddSeconds(job.Interval))
                     .EndAt(job.EndTime)
-                    .ForJob(job.Id.ToString(), job.Group)
+                    .ForJob(KeyBuilder.CreateJobKey(job))
                     .WithPriority((int)job.Priority)
                     .WithSimpleSchedule(x =>
                         x.WithIntervalInSeconds(job.Interval)

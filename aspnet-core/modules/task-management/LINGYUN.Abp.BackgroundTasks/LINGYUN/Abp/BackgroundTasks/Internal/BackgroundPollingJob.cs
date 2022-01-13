@@ -3,32 +3,36 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
 [DisableAuditing]
-internal class BackgroundPollingJob : IJobRunnable
+public class BackgroundPollingJob : IJobRunnable
 {
     public virtual async Task ExecuteAsync(JobRunnableContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundTasksOptions>>().Value;
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
+        var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
 
-        // TODO: 如果积压有大量持续性任务, 可能后面的队列无法被检索到
-        // 尽量让任务重复次数在可控范围内
-        // 需要借助队列提供者来持久化已入队任务
-        var waitingJobs = await store.GetWaitingListAsync(options.MaxJobFetchCount);
+        context.TryGetMultiTenantId(out var tenantId);
 
-        if (!waitingJobs.Any())
+        using (currentTenant.Change(tenantId))
         {
-            return;
-        }
+            var waitingJobs = await store.GetWaitingListAsync(options.MaxJobFetchCount);
 
-        var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
+            if (!waitingJobs.Any())
+            {
+                return;
+            }
 
-        foreach (var job in waitingJobs)
-        {
-            await jobScheduler.QueueAsync(job);
+            var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
+
+            foreach (var job in waitingJobs)
+            {
+                await jobScheduler.QueueAsync(job);
+            }
         }
     }
 }

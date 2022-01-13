@@ -131,7 +131,8 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             eventData.Type.Name,
             eventData.Group,
             eventData.Name,
-            eventData.RunTime)
+            eventData.RunTime,
+            eventData.TenantId)
             {
                 JobId = eventData.Key
             };

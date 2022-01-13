@@ -6,7 +6,7 @@ using Volo.Abp.Auditing;
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
 [DisableAuditing]
-internal class BackgroundKeepAliveJob : IJobRunnable
+public class BackgroundKeepAliveJob : IJobRunnable
 {
     public virtual async Task ExecuteAsync(JobRunnableContext context)
     {

@@ -25,9 +25,12 @@ internal class DefaultBackgroundWorker : BackgroundService
 
     protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        // 仅轮询宿主端
         await QueuePollingJob();
-        await QueueKeepAliveJob();
         await QueueCleaningJob();
+
+        // 周期性任务改为手动入队
+        // await QueueKeepAliveJob();
     }
 
     private async Task QueueKeepAliveJob()
@@ -54,7 +57,7 @@ internal class DefaultBackgroundWorker : BackgroundService
         {
             Id = Guid.Parse("8F50C5D9-5691-4B99-A52B-CABD91D93C89"),
             Name = nameof(BackgroundKeepAliveJob),
-            Group = "Default",
+            Group = "KeepAlive",
             Description = "Add periodic tasks",
             Args = new Dictionary<string, object>(),
             Status = JobStatus.Running,
@@ -74,7 +77,7 @@ internal class DefaultBackgroundWorker : BackgroundService
         {
             Id = Guid.Parse("C51152E9-F0B8-4252-8352-283BE46083CC"),
             Name = nameof(BackgroundPollingJob),
-            Group = "Default",
+            Group = "Polling",
             Description = "Polling tasks to be executed",
             Args = new Dictionary<string, object>(),
             Status = JobStatus.Running,
@@ -94,7 +97,7 @@ internal class DefaultBackgroundWorker : BackgroundService
         {
             Id = Guid.Parse("AAAF8783-FA06-4CF9-BDCA-11140FB2478F"),
             Name = nameof(BackgroundCleaningJob),
-            Group = "Default",
+            Group = "Cleaning",
             Description = "Cleaning tasks to be executed",
             Args = new Dictionary<string, object>(),
             Status = JobStatus.Running,
