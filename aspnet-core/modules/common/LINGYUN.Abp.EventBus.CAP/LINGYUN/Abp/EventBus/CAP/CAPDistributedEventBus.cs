@@ -76,6 +76,7 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="guidGenerator"></param>
         /// <param name="clock"></param>
         /// <param name="customDistributedEventSubscriber"></param>
+        /// <param name="eventHandlerInvoker"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             ICapPublisher capPublisher,
@@ -87,14 +88,16 @@ namespace LINGYUN.Abp.EventBus.CAP
             IGuidGenerator guidGenerator,
             IClock clock,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICustomDistributedEventSubscriber customDistributedEventSubscriber) 
+            ICustomDistributedEventSubscriber customDistributedEventSubscriber,
+            IEventHandlerInvoker eventHandlerInvoker) 
             : base(
                   serviceScopeFactory, 
                   currentTenant,
                   unitOfWorkManager, 
                   distributedEventBusOptions,
                   guidGenerator,
-                  clock)
+                  clock,
+                  eventHandlerInvoker)
         {
             CapPublisher = capPublisher;
             CurrentUser = currentUser;
@@ -157,6 +160,7 @@ namespace LINGYUN.Abp.EventBus.CAP
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             await PublishAsync(eventName, eventData);
         }
+
         /// <summary>
         /// 获取事件处理器工厂列表
         /// </summary>

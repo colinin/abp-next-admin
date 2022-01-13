@@ -19,7 +19,7 @@ public class JobEventData
     /// <summary>
     /// 任务标识
     /// </summary>
-    public Guid Key { get; }
+    public string Key { get; }
     /// <summary>
     /// 任务状态
     /// </summary>
@@ -75,7 +75,7 @@ public class JobEventData
     /// </summary>
     public bool IsAbandoned { get; set; }
     public JobEventData(
-        Guid key,
+        string key,
         Type type, 
         string group, 
         string name,

@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.TaskManagement;
 public class BackgroundJobLog : Entity<long>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual Guid? JobId { get; set; }
+    public virtual string JobId { get; set; }
     public virtual string JobName { get; protected set; }
     public virtual string JobGroup { get; protected set; }
     public virtual string JobType { get; protected set; }

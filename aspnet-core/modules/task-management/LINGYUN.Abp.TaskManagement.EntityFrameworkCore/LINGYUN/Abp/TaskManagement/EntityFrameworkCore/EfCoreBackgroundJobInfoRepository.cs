@@ -13,7 +13,7 @@ using Volo.Abp.Timing;
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 
 public class EfCoreBackgroundJobInfoRepository :
-    EfCoreRepository<TaskManagementDbContext, BackgroundJobInfo, Guid>,
+    EfCoreRepository<TaskManagementDbContext, BackgroundJobInfo, string>,
     IBackgroundJobInfoRepository
 {
     protected IClock Clock { get; }
@@ -60,6 +60,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
             .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
             .OrderByDescending(x => x.Priority)
+            .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -120,6 +121,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)
             .Take(maxResultCount)
+            .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

@@ -17,7 +17,7 @@ public interface IBackgroundJobLogRepository : IRepository<BackgroundJobLog, lon
     /// <returns></returns>
     Task<int> GetCountAsync(
         BackgroundJobLogFilter filter,
-        Guid? jobId = null,
+        string jobId = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取过滤后的任务日志列表
@@ -31,7 +31,7 @@ public interface IBackgroundJobLogRepository : IRepository<BackgroundJobLog, lon
     /// <returns></returns>
     Task<List<BackgroundJobLog>> GetListAsync(
         BackgroundJobLogFilter filter,
-        Guid? jobId = null,
+        string jobId = null,
         string sorting = nameof(BackgroundJobLog.RunTime),
         int maxResultCount = 10,
         int skipCount = 0,

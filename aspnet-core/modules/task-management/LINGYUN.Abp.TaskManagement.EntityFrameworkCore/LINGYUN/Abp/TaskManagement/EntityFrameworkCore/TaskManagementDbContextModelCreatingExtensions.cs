@@ -60,6 +60,9 @@ public static class TaskManagementDbContextModelCreatingExtensions
         {
             b.ToTable(options.TablePrefix + "BackgroundJobLogs", options.Schema);
 
+            b.Property(p => p.JobId)
+                .HasColumnName(nameof(BackgroundJobLog.JobId))
+                .HasMaxLength(BackgroundJobLogConsts.MaxJobIdLength);
             b.Property(p => p.JobName)
                 .HasColumnName(nameof(BackgroundJobLog.JobName))
                 .HasMaxLength(BackgroundJobInfoConsts.MaxNameLength);

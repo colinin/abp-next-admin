@@ -55,7 +55,7 @@ internal class DefaultBackgroundWorker : BackgroundService
     {
         return new JobInfo
         {
-            Id = Guid.Parse("8F50C5D9-5691-4B99-A52B-CABD91D93C89"),
+            Id = "KeepAlive",
             Name = nameof(BackgroundKeepAliveJob),
             Group = "KeepAlive",
             Description = "Add periodic tasks",
@@ -75,7 +75,7 @@ internal class DefaultBackgroundWorker : BackgroundService
     {
         return new JobInfo
         {
-            Id = Guid.Parse("C51152E9-F0B8-4252-8352-283BE46083CC"),
+            Id = "Polling",
             Name = nameof(BackgroundPollingJob),
             Group = "Polling",
             Description = "Polling tasks to be executed",
@@ -95,7 +95,7 @@ internal class DefaultBackgroundWorker : BackgroundService
     {
         return new JobInfo
         {
-            Id = Guid.Parse("AAAF8783-FA06-4CF9-BDCA-11140FB2478F"),
+            Id = "Cleaning",
             Name = nameof(BackgroundCleaningJob),
             Group = "Cleaning",
             Description = "Cleaning tasks to be executed",

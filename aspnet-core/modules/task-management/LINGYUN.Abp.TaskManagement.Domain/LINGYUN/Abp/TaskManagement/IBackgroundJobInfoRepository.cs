@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, Guid>
+public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, string>
 {
     Task<bool> CheckNameAsync(
         string group,

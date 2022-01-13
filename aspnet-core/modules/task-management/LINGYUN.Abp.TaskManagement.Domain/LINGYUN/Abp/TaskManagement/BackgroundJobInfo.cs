@@ -8,7 +8,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public class BackgroundJobInfo : AuditedAggregateRoot<Guid>, IMultiTenant
+public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
     /// <summary>
@@ -107,7 +107,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>, IMultiTenant
     protected BackgroundJobInfo() { }
 
     public BackgroundJobInfo(
-        Guid id,
+        string id,
         string name,
         string group,
         string type,

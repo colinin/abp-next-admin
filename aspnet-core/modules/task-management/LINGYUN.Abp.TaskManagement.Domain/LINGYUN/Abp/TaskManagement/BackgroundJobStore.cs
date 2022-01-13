@@ -44,7 +44,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<JobInfo> FindAsync(Guid jobId)
+    public async virtual Task<JobInfo> FindAsync(string jobId)
     {
         var jobInfo = await JobInfoRepository.FindAsync(jobId);
 

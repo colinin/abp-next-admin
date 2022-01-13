@@ -60,7 +60,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         };
         var jobInfo = new JobInfo
         {
-            Id = jobId,
+            Id = jobId.ToString(),
             TenantId = CurrentTenant.Id,
             Name = jobId.ToString(),
             Group = "BackgroundJobs",
@@ -82,7 +82,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         // 手动入队
         await JobScheduler.QueueAsync(jobInfo);
 
-        return jobId.ToString();
+        return jobInfo.Id;
     }
 
     private JobPriority ConverForm(BackgroundJobPriority priority)

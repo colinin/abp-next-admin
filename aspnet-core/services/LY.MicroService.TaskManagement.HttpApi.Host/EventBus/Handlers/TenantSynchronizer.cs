@@ -100,7 +100,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             return new JobInfo
             {
-                Id = tenantId,
+                Id = tenantId.ToString(),
                 Name = nameof(BackgroundPollingJob),
                 Group = "Polling",
                 Description = "Polling tasks to be executed",
@@ -121,7 +121,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             return new JobInfo
             {
-                Id = tenantId,
+                Id = tenantId.ToString(),
                 Name = nameof(BackgroundCleaningJob),
                 Group = "Cleaning",
                 Description = "Cleaning tasks to be executed",

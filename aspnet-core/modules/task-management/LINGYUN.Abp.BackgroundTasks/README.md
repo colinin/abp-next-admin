@@ -97,6 +97,11 @@ public class DemoClass
             },
             BackgroundJobPriority.High,
             TimeSpan.FromSeconds(10));
+
+        // 同样可以把框架后台工作者添加到作业调度器中, 不需要更改使用习惯
+        var backgroundWorkManager = ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
+        // 每20秒控制台输出
+        await backgroundWorkManager.AddAsync(ServiceProvider.GetRequiredService<ConsoleWorker>());
     }
 }
 
@@ -112,6 +117,21 @@ public class SmsJob : AsyncBackgroundJob<SmsJobArgs>, ITransientDependency
     {
         Console.WriteLine($"Send sms message: {args.Message}");
 
+        return Task.CompletedTask;
+    }
+}
+
+public class ConsoleWorker : AsyncPeriodicBackgroundWorkerBase, ISingletonDependency
+{
+    public ConsoleWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory)
+        : base(timer, serviceScopeFactory)
+    {
+        timer.Period = 20000;
+    }
+
+    protected override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+    {
+        Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] - ConsoleWorker Do Wrok.");
         return Task.CompletedTask;
     }
 }

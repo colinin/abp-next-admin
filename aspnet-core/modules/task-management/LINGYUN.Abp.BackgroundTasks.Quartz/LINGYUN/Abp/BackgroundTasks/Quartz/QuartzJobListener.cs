@@ -49,52 +49,13 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
 
     public override async Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default)
     {
-        var jobId = context.GetString(nameof(JobInfo.Id));
-        if (Guid.TryParse(jobId, out var jobUUId))
-        {
-            try
-            {
-                var jobEventList = EventProvider.GetAll();
-                if (!jobEventList.Any())
-                {
-                    return;
-                }
-
-                using var scope = ServiceProvider.CreateScope();
-                var jobEventData = new JobEventData(
-                    jobUUId,
-                    context.JobDetail.JobType,
-                    context.JobDetail.Key.Group,
-                    context.JobDetail.Key.Name)
-                {
-                    Result = context.Result?.ToString()
-                };
-
-                var eventContext = new JobEventContext(
-                    scope.ServiceProvider,
-                    jobEventData);
-
-                var index = 0;
-                var taskList = new Task[jobEventList.Count];
-                foreach (var jobEvent in jobEventList)
-                {
-                    taskList[index] = jobEvent.OnJobBeforeExecuted(eventContext);
-                    index++;
-                }
-
-                await Task.WhenAll(taskList);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"The event before the task execution is abnormal：{ex}");
-            }
-        }
-    }
-
-    public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException, CancellationToken cancellationToken = default)
-    {
         try
         {
+            var jobId = context.GetString(nameof(JobInfo.Id));
+            if (jobId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
             var jobEventList = EventProvider.GetAll();
             if (!jobEventList.Any())
             {
@@ -102,58 +63,100 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             }
 
             using var scope = ServiceProvider.CreateScope();
-            var jobId = context.GetString(nameof(JobInfo.Id));
-            if (Guid.TryParse(jobId, out var jobUUId))
+            var jobEventData = new JobEventData(
+                jobId,
+                context.JobDetail.JobType,
+                context.JobDetail.Key.Group,
+                context.JobDetail.Key.Name)
             {
-                var jobType = context.JobDetail.JobType;
-                if (jobType.IsGenericType)
-                {
-                    jobType = jobType.GetGenericArguments()[0];
-                }
+                Result = context.Result?.ToString()
+            };
 
-                var jobEventData = new JobEventData(
-                    jobUUId,
-                    jobType,
-                    context.JobDetail.Key.Group,
-                    context.JobDetail.Key.Name,
-                    jobException)
-                {
-                    Status = JobStatus.Running
-                };
+            var eventContext = new JobEventContext(
+                scope.ServiceProvider,
+                jobEventData);
 
-                if (context.Trigger is ISimpleTrigger simpleTrigger)
-                {
-                    jobEventData.Triggered = simpleTrigger.TimesTriggered;
-                    jobEventData.RepeatCount = simpleTrigger.RepeatCount;
-                }
-                jobEventData.Description = context.JobDetail.Description;
-                jobEventData.RunTime = Clock.Now;
-                jobEventData.LastRunTime = context.PreviousFireTimeUtc?.LocalDateTime;
-                jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime;
-                if (context.Result != null)
-                {
-                    jobEventData.Result = context.Result?.ToString();
-                }
-                var tenantIdString = context.GetString(nameof(IMultiTenant.TenantId));
-                if (Guid.TryParse(tenantIdString, out var tenantId))
-                {
-                    jobEventData.TenantId = tenantId;
-                }
-
-                var eventContext = new JobEventContext(
-                    scope.ServiceProvider,
-                    jobEventData);
-
-                var index = 0;
-                var taskList = new Task[jobEventList.Count];
-                foreach (var jobEvent in jobEventList)
-                {
-                    taskList[index] = jobEvent.OnJobAfterExecuted(eventContext);
-                    index++;
-                }
-
-                await Task.WhenAll(taskList);
+            var index = 0;
+            var taskList = new Task[jobEventList.Count];
+            foreach (var jobEvent in jobEventList)
+            {
+                taskList[index] = jobEvent.OnJobBeforeExecuted(eventContext);
+                index++;
             }
+
+            await Task.WhenAll(taskList);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"The event before the task execution is abnormal：{ex}");
+        }
+    }
+
+    public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var jobId = context.GetString(nameof(JobInfo.Id));
+            if (jobId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var jobEventList = EventProvider.GetAll();
+            if (!jobEventList.Any())
+            {
+                return;
+            }
+
+            using var scope = ServiceProvider.CreateScope();
+            var jobType = context.JobDetail.JobType;
+            if (jobType.IsGenericType)
+            {
+                jobType = jobType.GetGenericArguments()[0];
+            }
+
+            var jobEventData = new JobEventData(
+                jobId,
+                jobType,
+                context.JobDetail.Key.Group,
+                context.JobDetail.Key.Name,
+                jobException)
+            {
+                Status = JobStatus.Running
+            };
+
+            if (context.Trigger is ISimpleTrigger simpleTrigger)
+            {
+                jobEventData.Triggered = simpleTrigger.TimesTriggered;
+                jobEventData.RepeatCount = simpleTrigger.RepeatCount;
+            }
+            jobEventData.Description = context.JobDetail.Description;
+            jobEventData.RunTime = Clock.Now;
+            jobEventData.LastRunTime = context.PreviousFireTimeUtc?.LocalDateTime;
+            jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime;
+            if (context.Result != null)
+            {
+                jobEventData.Result = context.Result?.ToString();
+            }
+            var tenantIdString = context.GetString(nameof(IMultiTenant.TenantId));
+            if (Guid.TryParse(tenantIdString, out var tenantId))
+            {
+                jobEventData.TenantId = tenantId;
+            }
+
+            var eventContext = new JobEventContext(
+                scope.ServiceProvider,
+                jobEventData);
+
+            var index = 0;
+            var taskList = new Task[jobEventList.Count];
+            foreach (var jobEvent in jobEventList)
+            {
+                taskList[index] = jobEvent.OnJobAfterExecuted(eventContext);
+                index++;
+            }
+
+            await Task.WhenAll(taskList);
         }
         catch (Exception ex)
         {

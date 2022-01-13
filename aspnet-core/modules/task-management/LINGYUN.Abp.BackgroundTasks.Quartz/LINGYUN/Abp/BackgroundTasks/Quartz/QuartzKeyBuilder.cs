@@ -15,7 +15,7 @@ public class QuartzKeyBuilder : IQuartzKeyBuilder, ISingletonDependency
 
     public JobKey CreateJobKey(JobInfo jobInfo)
     {
-        var name = jobInfo.Id.ToString();
+        var name = jobInfo.Id;
         var group = CurrentTenant.IsAvailable
             ? $"{CurrentTenant.Id}:{jobInfo.Group}"
             : $"Default:{jobInfo.Group}";
@@ -25,7 +25,7 @@ public class QuartzKeyBuilder : IQuartzKeyBuilder, ISingletonDependency
 
     public TriggerKey CreateTriggerKey(JobInfo jobInfo)
     {
-        var name = jobInfo.Id.ToString();
+        var name = jobInfo.Id;
         var group = CurrentTenant.IsAvailable
             ? $"{CurrentTenant.Id}:{jobInfo.Group}"
             : $"Default:{jobInfo.Group}";

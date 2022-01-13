@@ -41,7 +41,7 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public Task<JobInfo> FindAsync(Guid jobId)
+    public Task<JobInfo> FindAsync(string jobId)
     {
         var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobId));
         return Task.FromResult(job);

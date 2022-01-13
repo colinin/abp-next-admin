@@ -1,7 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>5.0.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>5.0.0</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>5.1.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>5.1.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.5.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.1</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>5.2.0</DotNetCoreCAPPackageVersion>
@@ -10,7 +10,7 @@
 		<TencentCloudSDKPackageVersion>3.0.434</TencentCloudSDKPackageVersion>
 		<AgileConfigClientPackageVersion>1.2.1.5</AgileConfigClientPackageVersion>
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
-		<HangfireMSSQLStoragePackageVersion>1.7.27</HangfireMSSQLStoragePackageVersion>
+		<HangfireMSSQLStoragePackageVersion>1.7.28</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
 		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>

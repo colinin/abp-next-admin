@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
+public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp
 {
     public string ConcurrencyStamp { get; set; }
     /// <summary>
