@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -14,20 +13,17 @@ namespace LINGYUN.Abp.TaskManagement;
 [Dependency(ReplaceServices = true)]
 public class BackgroundJobStore : IJobStore, ITransientDependency
 {
-    protected IDataFilter DataFilter { get; }
     protected IObjectMapper ObjectMapper { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
 
     public BackgroundJobStore(
-        IDataFilter dataFilter,
         IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IBackgroundJobInfoRepository jobInfoRepository,
         IBackgroundJobLogRepository jobLogRepository)
     {
-        DataFilter = dataFilter;
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
         JobInfoRepository = jobInfoRepository;
@@ -36,22 +32,16 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
 
     public async virtual Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
-        using (DataFilter.Disable<IMultiTenant>())
-        {
-            var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(cancellationToken);
+        var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(cancellationToken);
 
-            return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
-        }
+        return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
     public async virtual Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
-        using (DataFilter.Disable<IMultiTenant>())
-        {
-            var jobInfos = await JobInfoRepository.GetWaitingListAsync(maxResultCount, cancellationToken);
+        var jobInfos = await JobInfoRepository.GetWaitingListAsync(maxResultCount, cancellationToken);
 
-            return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
-        }
+        return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
     public async virtual Task<JobInfo> FindAsync(Guid jobId)
@@ -151,14 +141,11 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
     {
-        using (DataFilter.Disable<IMultiTenant>())
-        {
-            var jobs = await JobInfoRepository.GetExpiredJobsAsync(
+        var jobs = await JobInfoRepository.GetExpiredJobsAsync(
                maxResultCount,
                jobExpiratime,
                cancellationToken);
 
-            await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
-        }
+        await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
     }
 }
