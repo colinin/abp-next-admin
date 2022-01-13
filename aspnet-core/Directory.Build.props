@@ -12,6 +12,7 @@
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.7.27</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
+		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
 		<SerilogAspNetCorePackageVersion>4.1.0</SerilogAspNetCorePackageVersion>
