@@ -17,7 +17,7 @@ export interface PropertyChange {
 export interface EntityChange {
   id: string;
   changeTime?: Date;
-  changeType?: ChangeType;
+  changeType: ChangeType;
   entityTenantId?: string;
   entityId?: string;
   entityTypeFullName?: string;

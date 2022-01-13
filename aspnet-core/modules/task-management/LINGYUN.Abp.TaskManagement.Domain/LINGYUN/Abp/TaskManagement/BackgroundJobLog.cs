@@ -1,11 +1,13 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public class BackgroundJobLog : Entity<long>
+public class BackgroundJobLog : Entity<long>, IMultiTenant
 {
+    public virtual Guid? TenantId { get; protected set; }
     public virtual Guid? JobId { get; set; }
     public virtual string JobName { get; protected set; }
     public virtual string JobGroup { get; protected set; }
@@ -18,12 +20,14 @@ public class BackgroundJobLog : Entity<long>
         string type,
         string group, 
         string name,
-        DateTime runTime)
+        DateTime runTime,
+        Guid? tenantId = null)
     {
         JobType = Check.NotNullOrWhiteSpace(type, nameof(type), BackgroundJobInfoConsts.MaxTypeLength);
         JobGroup = Check.NotNullOrWhiteSpace(group, nameof(group), BackgroundJobInfoConsts.MaxGroupLength);
         JobName = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
         RunTime = runTime;
+        TenantId = tenantId;
     }
 
     public BackgroundJobLog SetMessage(string message, Exception ex)

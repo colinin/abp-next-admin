@@ -18,10 +18,10 @@ export function useAuditLog() {
     ['PATCH']: 'pink',
   };
   const entityChangeTypeColor = computed(() => {
-    return (changeType?: ChangeType) => (changeType ? changeTypeColorMap[changeType].color : '');
+    return (changeType: ChangeType) => changeTypeColorMap[changeType].color;
   });
   const entityChangeType = computed(() => {
-    return (changeType?: ChangeType) => (changeType ? changeTypeColorMap[changeType].value : '');
+    return (changeType: ChangeType) => changeTypeColorMap[changeType].value;
   });
   const httpMethodColor = computed(() => {
     return (method?: string) => {

@@ -10,6 +10,10 @@ public class JobInfo
     /// </summary>
     public Guid Id { get; set; }
     /// <summary>
+    /// 租户标识
+    /// </summary>
+    public Guid? TenantId { get; set; }
+    /// <summary>
     /// 任务名称
     /// </summary>
     public string Name { get; set; }
@@ -101,4 +105,39 @@ public class JobInfo
     /// 0或更小不生效
     /// </summary>
     public int LockTimeOut { get; set; }
+
+    public int GetCanBeTriggered()
+    {
+        // 无限次
+        var maxCount = -1;
+
+        // 剩余次数
+        if (MaxCount > 0)
+        {
+            maxCount = MaxCount - TriggerCount;
+            if (maxCount < 0)
+            {
+                maxCount = 0;
+            }
+        }
+
+        // 一次
+        if (JobType == JobType.Once)
+        {
+            maxCount = 1;
+        }
+
+        // 重试
+        if (Status == JobStatus.FailedRetry)
+        {
+            maxCount = MaxTryCount - TryCount;
+
+            if (maxCount < 0)
+            {
+                maxCount = 0;
+            }
+        }
+
+        return maxCount;
+    }
 }

@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
@@ -22,7 +24,10 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
+using Quartz;
+using DotNetCore.CAP;
 
 namespace LY.MicroService.TaskManagement;
 
@@ -38,6 +43,51 @@ public partial class TaskManagementHttpApiHostModule
             options.SnowflakeIdOptions.WorkerId = 30040;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
+        });
+    }
+
+    private void PreConfigureCAP(IConfiguration configuration)
+    {
+        PreConfigure<CapOptions>(options =>
+        {
+            options
+            .UseMySql(mySqlOptions =>
+            {
+                configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+            })
+            .UseRabbitMQ(rabbitMQOptions =>
+            {
+                configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+            })
+            .UseDashboard();
+        });
+    }
+
+    private void PreConfigureQuartz(IConfiguration configuration)
+    {
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            // 如果使用持久化存储, 则配置quartz持久层
+            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
+            {
+                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
+                if (settings != null)
+                {
+                    foreach (var setting in settings)
+                    {
+                        options.Properties[setting.Key] = setting.Value;
+                    }
+                }
+
+                options.Configurator += (config) =>
+                {
+                    config.UsePersistentStore(store =>
+                    {
+                        store.UseProperties = false;
+                        store.UseJsonSerializer();
+                    });
+                };
+            }
         });
     }
 

@@ -3,6 +3,20 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <a-button
+          v-if="hasPermission('TaskManagement.BackgroundJobs.Start')"
+          :disabled="!isMultiSelected"
+          @click="handleStart"
+          >{{ L('BackgroundJobs:Start') }}</a-button
+        >
+        <a-button
+          v-if="hasPermission('TaskManagement.BackgroundJobs.Stop')"
+          type="primary"
+          danger
+          :disabled="!isMultiSelected"
+          @click="handleStop"
+          >{{ L('BackgroundJobs:Stop') }}</a-button
+        >
+        <a-button
           v-if="hasPermission('TaskManagement.BackgroundJobs.Create')"
           type="primary"
           @click="handleAddNew"
@@ -61,12 +75,6 @@
               ifShow: [JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(record.status),
               onClick: handleTrigger.bind(null, record),
             },
-            {
-              auth: 'TaskManagement.BackgroundJobs.Stop',
-              label: L('BackgroundJobs:Stop'),
-              ifShow: [JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
-              onClick: handleStop.bind(null, record),
-            },
           ]"
         />
       </template>
@@ -76,13 +84,14 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, ref } from 'vue';
   import { Switch, Modal, Tag, Tooltip, message } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import { getList, deleteById, pause, resume, trigger, stop } from '/@/api/task-management/backgroundJobInfo';
+  import { getList, pause, resume, trigger, deleteById, bulkStop, bulkStart } from '/@/api/task-management/backgroundJobInfo';
   import { JobStatus } from '/@/api/task-management/model/backgroundJobInfoModel';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
@@ -92,7 +101,7 @@
   const { L } = useLocalization('TaskManagement');
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload }] = useTable({
+  const [registerTable, { reload, getSelectRowKeys }] = useTable({
     rowKey: 'id',
     title: L('BackgroundJobs'),
     columns: getDataColumns(),
@@ -106,8 +115,12 @@
     showIndexColumn: false,
     canResize: false,
     immediate: true,
-    rowSelection: { type: 'radio' },
+    clickToRowSelect: false,
     formConfig: getSearchFormSchemas(),
+    rowSelection: {
+      type: 'checkbox',
+      onChange: handleSelectChange,
+    },
     actionColumn: {
       width: 220,
       title: L('Actions'),
@@ -115,6 +128,14 @@
       slots: { customRender: 'action' },
     },
   });
+  const selectedRowKeys = ref<string[]>([]);
+  const isMultiSelected = computed(() => {
+    return selectedRowKeys.value.length > 0;
+  });
+
+  function handleSelectChange(keys) {
+    selectedRowKeys.value = keys;
+  }
 
   function handleChange() {
     reload();
@@ -149,8 +170,17 @@
     });
   }
 
-  function handleStop(record) {
-    stop(record.id).then(() => {
+  function handleStart() {
+    const selectKeys = getSelectRowKeys();
+    bulkStart(selectKeys).then(() => {
+      message.success(L('Successful'));
+      reload();
+    });
+  }
+
+  function handleStop() {
+    const selectKeys = getSelectRowKeys();
+    bulkStop(selectKeys).then(() => {
       message.success(L('Successful'));
       reload();
     });
@@ -159,10 +189,10 @@
   function handleDelete(record) {
     Modal.warning({
       title: L('AreYouSure'),
-      content: L('ItemWillBeDeletedMessage'),
+      content: L('MultipleSelectJobsWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteById(record.id).then(() => {
+        deleteById(record).then(() => {
           reload();
         });
       },

@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 import type { PermissionProps, PermissionTree } from '../types/permission';
 
 import { computed, watch, unref, ref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { get, update } from '/@/api/permission-management/permission';
 import { PermissionProvider } from '/@/api/permission-management/model/permissionModel';
 import {
@@ -24,7 +24,7 @@ interface UsePermission {
 }
 
 export function usePermissions({ getPropsRef }: UsePermission) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpPermissionManagement');
   /** 弹出层标题 */
   const title = ref('');
   /** 权限树 */
@@ -36,7 +36,7 @@ export function usePermissions({ getPropsRef }: UsePermission) {
    */
   function handleGetPermission(name: string, key?: string) {
     get({ providerName: name, providerKey: key }).then((res) => {
-      title.value = `${t('AbpPermissionManagement.Permissions')} - ${res.entityDisplayName}`;
+      title.value = `${L('Permissions')} - ${res.entityDisplayName}`;
       permissionTree.value = generatePermissionTree(res.groups);
     });
   }
@@ -145,8 +145,10 @@ export function usePermissions({ getPropsRef }: UsePermission) {
     () => unref(getPropsRef).providerKey,
     (key) => {
       permissionTree.value = [];
-      const props = unref(getPropsRef);
-      handleGetPermission(props.providerName, key);
+      if (key) {
+        const props = unref(getPropsRef);
+        handleGetPermission(props.providerName, key);
+      }
     },
   );
 

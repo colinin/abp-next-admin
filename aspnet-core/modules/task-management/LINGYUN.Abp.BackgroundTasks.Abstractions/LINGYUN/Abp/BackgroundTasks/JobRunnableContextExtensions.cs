@@ -41,6 +41,18 @@ public static class JobRunnableContextExtensions
         return false;
     }
 
+    public static bool TryGetMultiTenantId(this JobRunnableContext context, out Guid? tenantId)
+    {
+        tenantId = null;
+        if (context.TryGetString(nameof(JobInfo.TenantId), out var tenantUUIdString) &&
+            Guid.TryParse(tenantUUIdString, out var tenantUUId))
+        {
+            tenantId = tenantUUId;
+            return true;
+        }
+        return false;
+    }
+
     public static T GetJobData<T>(this JobRunnableContext context, string key) where T : struct
     {
         var value = context.GetJobData(key);

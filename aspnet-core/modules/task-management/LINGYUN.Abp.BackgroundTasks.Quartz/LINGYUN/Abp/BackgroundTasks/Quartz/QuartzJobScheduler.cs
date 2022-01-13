@@ -10,27 +10,29 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 {
     protected IJobStore JobStore { get; }
     protected IScheduler Scheduler { get; }
+    protected IQuartzKeyBuilder KeyBuilder { get; }
     protected IQuartzJobExecutorProvider QuartzJobExecutor { get; }
 
     public QuartzJobScheduler(
         IJobStore jobStore,
         IScheduler scheduler,
+        IQuartzKeyBuilder keyBuilder,
         IQuartzJobExecutorProvider quartzJobExecutor)
     {
         JobStore = jobStore;
         Scheduler = scheduler;
+        KeyBuilder = keyBuilder;
         QuartzJobExecutor = quartzJobExecutor;
     }
 
     public virtual async Task<bool> ExistsAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
-        return await Scheduler.CheckExists(jobKey);
+        return await Scheduler.CheckExists(BuildJobKey(job));
     }
 
     public virtual async Task PauseAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey))
         {
             var triggers = await Scheduler.GetTriggersOfJob(jobKey);
@@ -43,7 +45,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task<bool> QueueAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey))
         {
             return false;
@@ -86,12 +88,12 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
             jobDictionary[jobDetail] = new ITrigger[] { jobTrigger };
         }
 
-        await Scheduler.ScheduleJobs(jobDictionary, false);
+        await Scheduler.ScheduleJobs(jobDictionary, true);
     }
 
     public virtual async Task<bool> RemoveAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = BuildJobKey(job);
         if (!await Scheduler.CheckExists(jobKey))
         {
             return false;
@@ -109,7 +111,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task ResumeAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey))
         {
             var triggers = await Scheduler.GetTriggersOfJob(jobKey);
@@ -150,7 +152,7 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual async Task TriggerAsync(JobInfo job)
     {
-        var jobKey = new JobKey(job.Name, job.Group);
+        var jobKey = BuildJobKey(job);
         if (!await Scheduler.CheckExists(jobKey))
         {
             await QueueAsync(job);
@@ -159,5 +161,10 @@ public class QuartzJobScheduler : IJobScheduler, ISingletonDependency
         {
             await Scheduler.TriggerJob(jobKey);
         }
+    }
+
+    private JobKey BuildJobKey(JobInfo job)
+    {
+        return KeyBuilder.CreateJobKey(job);
     }
 }

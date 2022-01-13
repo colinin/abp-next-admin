@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TaskManagement;
 
-public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
+public class BackgroundJobInfo : AuditedAggregateRoot<Guid>, IMultiTenant
 {
+    public virtual Guid? TenantId { get; protected set; }
     /// <summary>
     /// 任务名称
     /// </summary>
@@ -114,7 +116,8 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
         DateTime? endTime = null,
         JobPriority priority = JobPriority.Normal,
         int maxCount = 0,
-        int maxTryCount = 50) : base(id)
+        int maxTryCount = 50,
+        Guid? tenantId = null) : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
         Group = Check.NotNullOrWhiteSpace(group, nameof(group), BackgroundJobInfoConsts.MaxGroupLength);
@@ -125,6 +128,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<Guid>
 
         MaxCount = maxCount;
         MaxTryCount = maxTryCount;
+        TenantId = tenantId;
 
         Status = JobStatus.Running;
 

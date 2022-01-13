@@ -9,6 +9,7 @@
     "Permissions:TriggerJob": "Trigger Job",
     "Permissions:PauseJob": "Pause Job",
     "Permissions:ResumeJob": "Resume Job",
+    "Permissions:StartJob": "Start Job",
     "Permissions:StopJob": "Stop Job",
     "Permissions:BackgroundJobLogs": "BackgroundJobs Logs",
     "Permissions:DeleteJobLogs": "Delete Job Logs",
@@ -72,8 +73,11 @@
     "BackgroundJobs:Pause": "Pause",
     "BackgroundJobs:Resume": "Resume",
     "BackgroundJobs:Trigger": "Trigger",
-    "BackgroundJobs:Stop": "Stop",
+    "BackgroundJobs:Start": "Start Jobs",
+    "BackgroundJobs:Stop": "Stop Jobs",
+    "BackgroundJobs:Delete": "Delete",
     "BasicInfo": "Basic",
-    "Paramters": "Paramters"
+    "Paramters": "Paramters",
+    "MultipleSelectJobsWillBeDeletedMessage": "Multiple jobs selected will be deleted!"
   }
 }

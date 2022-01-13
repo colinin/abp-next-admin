@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.ObjectMapping;
@@ -83,10 +84,24 @@ public class BackgroundJobManager : DomainService
         });
     }
 
+    public virtual async Task BulkDeleteAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        foreach (var jobInfo in jobInfos)
+        {
+            await DeleteAsync(jobInfo);
+        }
+    }
+
     public virtual async Task QueueAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
         await JobScheduler.QueueAsync(job);
+    }
+
+    public virtual async Task BulkQueueAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        var jobs = ObjectMapper.Map<IEnumerable<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
+        await JobScheduler.QueuesAsync(jobs);
     }
 
     public virtual async Task TriggerAsync(BackgroundJobInfo jobInfo)
@@ -99,6 +114,14 @@ public class BackgroundJobManager : DomainService
         await JobScheduler.TriggerAsync(job);
     }
 
+    public virtual async Task BulkTriggerAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        foreach (var jobInfo in jobInfos)
+        {
+            await TriggerAsync(jobInfo);
+        }
+    }
+
     public virtual async Task PauseAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
@@ -108,6 +131,14 @@ public class BackgroundJobManager : DomainService
         jobInfo.SetNextRunTime(null);
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+    }
+
+    public virtual async Task BulkPauseAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        foreach (var jobInfo in jobInfos)
+        {
+            await PauseAsync(jobInfo);
+        }
     }
 
     public virtual async Task ResumeAsync(BackgroundJobInfo jobInfo)
@@ -122,6 +153,14 @@ public class BackgroundJobManager : DomainService
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
     }
 
+    public virtual async Task BulkResumeAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        foreach (var jobInfo in jobInfos)
+        {
+            await ResumeAsync(jobInfo);
+        }
+    }
+
     public virtual async Task StopAsync(BackgroundJobInfo jobInfo)
     {
         var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
@@ -131,5 +170,13 @@ public class BackgroundJobManager : DomainService
         jobInfo.SetNextRunTime(null);
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+    }
+
+    public virtual async Task BulkStopAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    {
+        foreach (var jobInfo in jobInfos)
+        {
+            await StopAsync(jobInfo);
+        }
     }
 }

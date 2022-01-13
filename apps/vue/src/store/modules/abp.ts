@@ -12,7 +12,6 @@ import {
   Auth,
   CurrentUser,
   Localization,
-  Setting,
 } from '/@/api/abp/model/appModel';
 import { ApplicationApiDescriptionModel } from '/@/api/abp/model/apiDefinition';
 

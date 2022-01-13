@@ -6,6 +6,7 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks;
@@ -16,6 +17,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
     protected IClock Clock { get; }
     protected IJobStore JobStore { get; }
     protected IJobScheduler JobScheduler { get; }
+    protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected AbpBackgroundJobOptions Options { get; }
@@ -23,6 +25,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         IClock clock,
         IJobStore jobStore,
         IJobScheduler jobScheduler,
+        ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
         IJsonSerializer jsonSerializer,
         IOptions<AbpBackgroundJobOptions> options)
@@ -30,6 +33,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         Clock = clock;
         JobStore = jobStore;
         JobScheduler = jobScheduler;
+        CurrentTenant = currentTenant;
         GuidGenerator = guidGenerator;
         JsonSerializer = jsonSerializer;
         Options = options.Value;
@@ -57,6 +61,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         var jobInfo = new JobInfo
         {
             Id = jobId,
+            TenantId = CurrentTenant.Id,
             Name = jobId.ToString(),
             Group = "BackgroundJobs",
             Priority = ConverForm(priority),

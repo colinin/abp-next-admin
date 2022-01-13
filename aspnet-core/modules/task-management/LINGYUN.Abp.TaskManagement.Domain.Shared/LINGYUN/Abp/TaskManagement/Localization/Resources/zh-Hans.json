@@ -9,6 +9,7 @@
     "Permissions:TriggerJob": "触发作业",
     "Permissions:PauseJob": "暂停作业",
     "Permissions:ResumeJob": "恢复作业",
+    "Permissions:StartJob": "启动作业",
     "Permissions:StopJob": "停止作业",
     "Permissions:BackgroundJobLogs": "日志管理",
     "Permissions:DeleteJobLogs": "删除作业日志",
@@ -72,8 +73,11 @@
     "BackgroundJobs:Pause": "暂停",
     "BackgroundJobs:Resume": "恢复",
     "BackgroundJobs:Trigger": "触发",
-    "BackgroundJobs:Stop": "停止",
+    "BackgroundJobs:Start": "启动作业",
+    "BackgroundJobs:Stop": "停止作业",
+    "BackgroundJobs:Delete": "删除",
     "BasicInfo": "基本信息",
-    "Paramters": "参数列表"
+    "Paramters": "参数列表",
+    "MultipleSelectJobsWillBeDeletedMessage": "选择的多个作业将被删除!"
   }
 }

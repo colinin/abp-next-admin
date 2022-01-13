@@ -7,6 +7,7 @@ export function generatePermissionTree(permissionGroups: PermissionGroup[]) {
   const trees: PermissionTree[] = [];
   permissionGroups.forEach((g) => {
     const tree: PermissionTree = {
+      isRoot: true,
       name: g.name,
       displayName: g.displayName,
       disabled: false,
@@ -93,7 +94,7 @@ export function getParentList(children: PermissionTree[], name: string) {
 export function toPermissionList(treeList: PermissionTree[]) {
   const permissions: IPermission[] = [];
   for (let index = 0; index < treeList.length; index++) {
-    if (treeList[index].isGranted !== undefined) {
+    if (!treeList[index].isRoot && treeList[index].isGranted !== undefined) {
       permissions.push({
         name: treeList[index].name,
         isGranted: treeList[index].isGranted === true,

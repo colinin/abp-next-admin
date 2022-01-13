@@ -89,4 +89,59 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     {
         return BackgroundJobInfoAppService.UpdateAsync(id, input);
     }
+
+    [HttpPut]
+    [Route("{id}/start")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
+    public Task StartAsync(Guid id)
+    {
+        return BackgroundJobInfoAppService.StartAsync(id);
+    }
+
+    [HttpPut]
+    [Route("bulk-stop")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
+    public Task BulkStopAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkStopAsync(input);
+    }
+
+    [HttpPut]
+    [Route("bulk-start")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
+    public Task BulkStartAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkStartAsync(input);
+    }
+
+    [HttpPut]
+    [Route("bulk-trigger")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
+    public Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkTriggerAsync(input);
+    }
+
+    [HttpPut]
+    [Route("bulk-resume")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
+    public Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkResumeAsync(input);
+    }
+
+    [HttpPut]
+    [Route("bulk-pause")]
+    [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
+    public Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkPauseAsync(input);
+    }
+
+    [HttpPut]
+    [Route("bulk-delete")]
+    public Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
+    {
+        return BackgroundJobInfoAppService.BulkDeleteAsync(input);
+    }
 }
