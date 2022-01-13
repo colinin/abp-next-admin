@@ -22,11 +22,11 @@ public class EfCoreBackgroundJobLogRepository :
 
     public virtual async Task<int> GetCountAsync(
         BackgroundJobLogFilter filter,
-        Guid? jobId = null,
+        string jobId = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(jobId.HasValue, x => x.JobId.Equals(jobId))
+            .WhereIf(!jobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(jobId))
             .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(filter.Type))
             .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(filter.Group))
             .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(filter.Name))
@@ -40,14 +40,14 @@ public class EfCoreBackgroundJobLogRepository :
 
     public virtual async Task<List<BackgroundJobLog>> GetListAsync(
         BackgroundJobLogFilter filter,
-        Guid? jobId = null,
+        string jobId = null,
         string sorting = nameof(BackgroundJobLog.RunTime),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(jobId.HasValue, x => x.JobId.Equals(jobId))
+            .WhereIf(!jobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(jobId))
             .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(filter.Type))
             .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(filter.Group))
             .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(filter.Name))

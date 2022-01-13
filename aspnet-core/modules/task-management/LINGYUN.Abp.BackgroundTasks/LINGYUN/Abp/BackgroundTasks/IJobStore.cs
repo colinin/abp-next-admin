@@ -14,7 +14,7 @@ public interface IJobStore
     Task<List<JobInfo>> GetAllPeriodTasksAsync(
         CancellationToken cancellationToken = default);
 
-    Task<JobInfo> FindAsync(Guid jobId);
+    Task<JobInfo> FindAsync(string jobId);
 
     Task StoreAsync(JobInfo jobInfo);
 

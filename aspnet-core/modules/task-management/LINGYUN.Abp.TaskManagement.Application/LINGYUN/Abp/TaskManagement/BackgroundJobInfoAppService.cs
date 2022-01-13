@@ -35,8 +35,9 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
                 .WithData("Name", input.Name);
         }
 
+        var jobId = GuidGenerator.Create();
         var backgroundJobInfo = new BackgroundJobInfo(
-            GuidGenerator.Create(),
+            jobId.ToString(),
             input.Name,
             input.Group,
             input.Type,
@@ -61,14 +62,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Delete)]
-    public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
         await BackgroundJobManager.DeleteAsync(backgroundJobInfo);
     }
 
-    public virtual async Task<BackgroundJobInfoDto> GetAsync(Guid id)
+    public virtual async Task<BackgroundJobInfoDto> GetAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -103,7 +104,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
-    public virtual async Task PauseAsync(Guid id)
+    public virtual async Task PauseAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -111,7 +112,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
-    public virtual async Task ResumeAsync(Guid id)
+    public virtual async Task ResumeAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -119,7 +120,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
-    public virtual async Task TriggerAsync(Guid id)
+    public virtual async Task TriggerAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -127,7 +128,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
-    public virtual async Task StopAsync(Guid id)
+    public virtual async Task StopAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -135,7 +136,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
-    public virtual async Task StartAsync(Guid id)
+    public virtual async Task StartAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -143,7 +144,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
-    public virtual async Task<BackgroundJobInfoDto> UpdateAsync(Guid id, BackgroundJobInfoUpdateDto input)
+    public virtual async Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 

@@ -8,7 +8,7 @@ public class JobInfo
     /// <summary>
     /// 任务标识
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     /// <summary>
     /// 租户标识
     /// </summary>

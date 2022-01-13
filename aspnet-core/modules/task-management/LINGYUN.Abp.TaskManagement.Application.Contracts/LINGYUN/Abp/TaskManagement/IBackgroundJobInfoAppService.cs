@@ -7,20 +7,20 @@ namespace LINGYUN.Abp.TaskManagement;
 public interface IBackgroundJobInfoAppService :
     ICrudAppService<
         BackgroundJobInfoDto,
-        Guid,
+        string,
         BackgroundJobInfoGetListInput,
         BackgroundJobInfoCreateDto,
         BackgroundJobInfoUpdateDto>
 {
-    Task TriggerAsync(Guid id);
+    Task TriggerAsync(string id);
 
-    Task PauseAsync(Guid id);
+    Task PauseAsync(string id);
 
-    Task ResumeAsync(Guid id);
+    Task ResumeAsync(string id);
 
-    Task StopAsync(Guid id);
+    Task StopAsync(string id);
 
-    Task StartAsync(Guid id);
+    Task StartAsync(string id);
 
     Task BulkDeleteAsync(BackgroundJobInfoBatchInput input);
 

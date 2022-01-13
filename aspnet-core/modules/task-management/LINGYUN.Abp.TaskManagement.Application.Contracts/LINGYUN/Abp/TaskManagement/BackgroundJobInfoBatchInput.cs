@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.TaskManagement;
 
 public class BackgroundJobInfoBatchInput
 {
-    public List<Guid> JobIds { get; set; } = new List<Guid>();
+    public List<string> JobIds { get; set; } = new List<string>();
 }

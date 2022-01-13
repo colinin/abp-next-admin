@@ -192,7 +192,7 @@
       content: L('MultipleSelectJobsWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteById(record).then(() => {
+        deleteById(record.id).then(() => {
           reload();
         });
       },

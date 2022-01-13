@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.TaskManagement;
 
 public class BackgroundJobLogGetListInput : PagedAndSortedResultRequestDto
 {
-    public Guid? JobId { get; set; }
+    public string JobId { get; set; }
     /// <summary>
     /// 其他过滤条件
     /// </summary>

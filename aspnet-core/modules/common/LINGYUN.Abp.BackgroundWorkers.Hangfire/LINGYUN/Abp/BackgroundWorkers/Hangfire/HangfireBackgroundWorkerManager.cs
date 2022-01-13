@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
             ServiceProvider = serviceProvider;
         }
 
-        public void Add(IBackgroundWorker worker)
+        public Task AddAsync(IBackgroundWorker worker)
         {
             var timer = worker.GetType()
                 .GetProperty("Timer", BindingFlags.NonPublic | BindingFlags.Instance)?
@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
 
             if (timer == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var period = timer.GetType()
@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
 
             if (!period.HasValue)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var adapterType = typeof(HangfireBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
@@ -48,6 +48,8 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
                 recurringJobId: worker.GetType().FullName,
                 methodCall: () => workerAdapter.ExecuteAsync(),
                 cronExpression: CronGenerator.FormMilliseconds(period.Value));
+
+            return Task.CompletedTask;
         }
 
         public Task StartAsync(CancellationToken cancellationToken = default)
