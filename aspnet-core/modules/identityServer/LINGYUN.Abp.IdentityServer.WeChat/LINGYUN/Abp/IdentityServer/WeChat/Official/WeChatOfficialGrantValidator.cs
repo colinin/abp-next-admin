@@ -37,11 +37,12 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
             IWeChatOpenIdFinder weChatOpenIdFinder,
             UserManager<IdentityUser> userManager,
             IIdentityUserRepository userRepository,
+            IdentitySecurityLogManager identitySecurityLogManager,
             IStringLocalizer<Volo.Abp.Identity.Localization.IdentityResource> identityLocalizer,
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer,
             IStringLocalizer<WeChatResource> wechatLocalizer,
             AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory)
-            : base(eventService, weChatOpenIdFinder, userManager, userRepository, identityLocalizer, identityServerLocalizer)
+            : base(eventService, weChatOpenIdFinder, userManager, userRepository, identitySecurityLogManager, identityLocalizer, identityServerLocalizer)
         {
             WeChatLocalizer = wechatLocalizer;
             WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;

@@ -3,19 +3,21 @@ using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
-using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
-using IdentityUser = Volo.Abp.Identity.IdentityUser;
+
 using IdentityResource = Volo.Abp.Identity.Localization.IdentityResource;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using IIdentityUserRepository = LINGYUN.Abp.Identity.IIdentityUserRepository;
 
 namespace LINGYUN.Abp.IdentityServer.SmsValidator
 {
@@ -25,6 +27,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
         protected IEventService EventService { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected UserManager<IdentityUser> UserManager { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected IStringLocalizer<IdentityResource> IdentityLocalizer { get; }
         protected IStringLocalizer<AbpIdentityServerResource> IdentityServerLocalizer { get; }
 
@@ -32,6 +35,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             IEventService eventService,
             UserManager<IdentityUser> userManager,
             IIdentityUserRepository userRepository,
+            IdentitySecurityLogManager identitySecurityLogManager,
             IStringLocalizer<IdentityResource> identityLocalizer,
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer,
             ILogger<SmsTokenGrantValidator> logger)
@@ -40,6 +44,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             EventService = eventService;
             UserManager = userManager;
             UserRepository = userRepository;
+            IdentitySecurityLogManager = identitySecurityLogManager;
             IdentityLocalizer = identityLocalizer;
             IdentityServerLocalizer = identityServerLocalizer;
         }
@@ -76,6 +81,9 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             {
                 Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", currentUser.UserName);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityLocalizer["Volo.Abp.Identity:UserLockedOut"]);
+
+                await SaveSecurityLogAsync(context, currentUser, IdentityServerSecurityLogActionConsts.LoginLockedout);
+
                 return;
             }
             
@@ -97,22 +105,80 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
                     context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, userAccessFailedError);
                     await EventService.RaiseAsync(new UserLoginFailureEvent(currentUser.UserName, userAccessFailedError, false));
                 }
+
+                await SaveSecurityLogAsync(context, currentUser, SmsValidatorConsts.SecurityCodeFailed);
+
                 return;
             }
 
-            var sub = await UserManager.GetUserIdAsync(currentUser);
-
-            var additionalClaims = new List<Claim>();
-            if (currentUser.TenantId.HasValue)
-            {
-                additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
-            }
-
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, phoneNumber, null));
-            context.Result = new GrantValidationResult(sub, OidcConstants.AuthenticationMethods.ConfirmationBySms, additionalClaims.ToArray());
 
             // 登录之后需要更新安全令牌
             (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
+
+            await SetSuccessResultAsync(context, currentUser);
+        }
+
+        protected virtual async Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user)
+        {
+            var sub = await UserManager.GetUserIdAsync(user);
+
+            Logger.LogInformation("Credentials validated for username: {username}", user.UserName);
+
+            var additionalClaims = new List<Claim>();
+
+            await AddCustomClaimsAsync(additionalClaims, user, context);
+
+            context.Result = new GrantValidationResult(
+                sub,
+                OidcConstants.AuthenticationMethods.ConfirmationBySms,
+                additionalClaims.ToArray()
+            );
+
+            await SaveSecurityLogAsync(
+                context,
+                user,
+                IdentityServerSecurityLogActionConsts.LoginSucceeded);
+        }
+
+        protected virtual async Task SaveSecurityLogAsync(
+            ExtensionGrantValidationContext context,
+            IdentityUser user,
+            string action)
+        {
+            var logContext = new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = action,
+                UserName = user.UserName,
+                ClientId = await FindClientIdAsync(context)
+            };
+            logContext.WithProperty("GrantType", GrantType);
+
+            await IdentitySecurityLogManager.SaveAsync(logContext);
+        }
+
+        protected virtual Task<string> FindClientIdAsync(ExtensionGrantValidationContext context)
+        {
+            return Task.FromResult(context.Request?.Client?.ClientId);
+        }
+
+        protected virtual Task AddCustomClaimsAsync(
+            List<Claim> customClaims,
+            IdentityUser user,
+            ExtensionGrantValidationContext context)
+        {
+            if (user.TenantId.HasValue)
+            {
+                customClaims.Add(
+                    new Claim(
+                        AbpClaimTypes.TenantId,
+                        user.TenantId?.ToString()
+                    )
+                );
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
