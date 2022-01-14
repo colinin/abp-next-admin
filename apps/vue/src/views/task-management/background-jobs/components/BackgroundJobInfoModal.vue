@@ -28,7 +28,7 @@
             <Input :disabled="isEditModal" v-model:value="modelRef.name" autocomplete="off" />
           </FormItem>
           <FormItem name="type" required :label="L('DisplayName:Type')" :extra="L('Description:Type')">
-            <Textarea :disabled="isEditModal" v-model:value="modelRef.type" :auto-size="{ minRows: 3, maxRows: 6 }" />
+            <TextArea :disabled="isEditModal" v-model:value="modelRef.type" :auto-size="{ minRows: 3, maxRows: 6 }" />
           </FormItem>
           <FormItem name="beginTime" :label="L('DisplayName:BeginTime')">
             <DatePicker style="width: 100%;" v-model:value="modelRef.beginTime" />
@@ -58,10 +58,10 @@
             <InputNumber style="width: 100%;" v-model:value="modelRef.lockTimeOut" />
           </FormItem>
           <FormItem name="description" :label="L('DisplayName:Description')">
-            <Textarea v-model:value="modelRef.description" :row="3" />
+            <TextArea v-model:value="modelRef.description" :row="3" />
           </FormItem>
           <FormItem :label="L('DisplayName:Result')">
-            <Textarea readonly v-model:value="modelRef.result" :auto-size="{ minRows: 6, maxRows: 12 }" />
+            <TextArea readonly v-model:value="modelRef.result" :auto-size="{ minRows: 6, maxRows: 12 }" />
           </FormItem>
         </TabPane>
         <TabPane key="paramters" :tab="L('Paramters')">
@@ -116,7 +116,6 @@
     Tabs,
     Input,
     InputNumber,
-    Textarea,
   } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
@@ -127,6 +126,7 @@
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
+  const TextArea = Input.TextArea;
 
   const emit = defineEmits(['change', 'register']);
   const { L } = useLocalization('TaskManagement');
