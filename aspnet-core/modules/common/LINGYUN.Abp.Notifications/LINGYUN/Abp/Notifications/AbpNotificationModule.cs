@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.Notifications
             }
         }
 
-        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        private void AutoAddDefinitionProviders(IServiceCollection services)
         {
             var definitionProviders = new List<Type>();
 
@@ -61,9 +61,10 @@ namespace LINGYUN.Abp.Notifications
                 }
             });
 
-            services.Configure<AbpNotificationOptions>(options =>
+            var preActions = services.GetPreConfigureActions<AbpNotificationOptions>();
+            Configure<AbpNotificationOptions>(options =>
             {
-                services.ExecutePreConfiguredActions(options);
+                preActions.Configure(options);
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }

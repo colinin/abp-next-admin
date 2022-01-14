@@ -44,9 +44,10 @@ public partial class WorkflowManagementHttpApiHostModule
 
     private void ConfigureBlobStoring(IServiceCollection services, IConfiguration configuration)
     {
+        var preActions = services.GetPreConfigureActions<AbpBlobStoringOptions>();
         Configure<AbpBlobStoringOptions>(options =>
         {
-            services.ExecutePreConfiguredActions(options);
+            preActions.Configure(options);
             options.Containers.Configure<WorkflowContainer>((containerConfiguration) =>
             {
                 containerConfiguration.UseOssManagement(config =>
