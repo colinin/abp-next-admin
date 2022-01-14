@@ -1371,6 +1371,56 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/abp/application-configuration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/application-configuration",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-configuration"
+    },
+    {
+      "DownstreamPathTemplate": "/api/abp/api-definition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/api-definition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-api-definition"
+    },
+    {
       "DownstreamPathTemplate": "/api/task-management/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1585,7 +1635,8 @@
         "backend-admin-api-definition",
         "messages-api-definition",
         "ids-admin-api-definition",
-        "localization-api-definition"
+        "localization-api-definition",
+        "task-api-definition"
       ],
       "UpstreamPathTemplate": "/api/abp/api-definition",
       "Aggregator": "AbpResponseMergeAggregator"
@@ -1596,7 +1647,8 @@
         "backend-admin-configuration",
         "messages-configuration",
         "ids-admin-configuration",
-        "localization-configuration"
+        "localization-configuration",
+        "task-configuration"
       ],
       "UpstreamPathTemplate": "/api/abp/application-configuration",
       "Aggregator": "AbpResponseMergeAggregator",

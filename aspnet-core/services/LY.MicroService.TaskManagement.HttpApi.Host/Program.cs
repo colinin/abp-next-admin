@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.IO;
@@ -49,6 +50,13 @@ public class Program
             await app.InitializeApplicationAsync();
             await app.RunAsync();
             return 0;
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Host terminated unexpectedly!");
+            Console.WriteLine("Host terminated unexpectedly!");
+            Console.WriteLine(ex.ToString());
+            return 1;
         }
         finally
         {

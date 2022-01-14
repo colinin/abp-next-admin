@@ -1,46 +1,35 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.IO;
+using System.Threading.Tasks;
+using Volo.Abp.IO;
+using Volo.Abp.Modularity.PlugIns;
 
-namespace LINGYUN.MicroService.Internal.ApiGateway
+namespace LINGYUN.MicroService.Internal.ApiGateway;
+
+public class Program
 {
-    public class Program
+    public async static Task<int> Main(string[] args)
     {
-        public static int Main(string[] args)
+        try
         {
-            try
-            {
-                var hostBuilder = CreateHostBuilder(args).Build();
-                Log.Information("Starting ApiGateway.Host.");
-                hostBuilder.Run();
+            Log.Information("Starting Internal ApiGateway.");
 
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly!");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-           Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Host.AddAppSettingsSecretsJson()
+                .UseAutofac()
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    // 加入 ocelot配置文件
-                    config
-                          .AddJsonFile($"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json", optional: true, reloadOnChange: true);
+                        // 加入 ocelot配置文件
+                        config.AddJsonFile(
+                        $"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json",
+                        optional: true,
+                        reloadOnChange: true);
 
                     var configuration = config.Build();
                     if (configuration.GetSection("AgileConfig").Exists())
@@ -51,7 +40,33 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
                 .UseSerilog((context, provider, config) =>
                 {
                     config.ReadFrom.Configuration(context.Configuration);
-                })
-                .UseAutofac();
+                });
+            await builder.AddApplicationAsync<InternalApiGatewayModule>(options =>
+            {
+                // 搜索 Modules 目录下所有文件作为插件
+                // 取消显示引用所有其他项目的模块，改为通过插件的形式引用
+                var pluginFolder = Path.Combine(
+                        Directory.GetCurrentDirectory(), "Modules");
+                DirectoryHelper.CreateIfNotExists(pluginFolder);
+                options.PlugInSources.AddFolder(
+                    pluginFolder,
+                    SearchOption.AllDirectories);
+            });
+            var app = builder.Build();
+            await app.InitializeApplicationAsync();
+            await app.RunAsync();
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Host terminated unexpectedly!");
+            Console.WriteLine("Host terminated unexpectedly!");
+            Console.WriteLine(ex.ToString());
+            return 1;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 }
