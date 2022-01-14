@@ -1,5 +1,4 @@
-﻿
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -19,11 +18,13 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
+
 using IdentityResource = Volo.Abp.Identity.Localization.IdentityResource;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -41,6 +42,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
         protected IEventService EventService { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
         protected IIdentityUserRepository UserRepository { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected UserManager<IdentityUser> UserManager { get; }
         protected IStringLocalizer<IdentityResource> IdentityLocalizer { get; }
         protected IStringLocalizer<AbpIdentityServerResource> IdentityServerLocalizer { get; }
@@ -50,12 +52,14 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             IWeChatOpenIdFinder weChatOpenIdFinder,
             UserManager<IdentityUser> userManager,
             IIdentityUserRepository userRepository,
+            IdentitySecurityLogManager identitySecurityLogManager,
             IStringLocalizer<IdentityResource> identityLocalizer,
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer)
         {
             EventService = eventService;
             UserManager = userManager;
             UserRepository = userRepository;
+            IdentitySecurityLogManager = identitySecurityLogManager;
             WeChatOpenIdFinder = weChatOpenIdFinder;
             IdentityLocalizer = identityLocalizer;
             IdentityServerLocalizer = identityServerLocalizer;
@@ -81,7 +85,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityServerLocalizer["InvalidGrant:GrantTypeInvalid"]);
                 return;
             }
-            // TODO: 统一命名规范, 微信认证传递的 code 改为 WeChatOpenIdConsts.WeCahtCodeKey
+
             var wechatCode = raw.Get(AbpWeChatGlobalConsts.TokenName);
             if (wechatCode.IsNullOrWhiteSpace() || wechatCode.IsNullOrWhiteSpace())
             {
@@ -94,6 +98,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             var currentUser = await UserManager.FindByLoginAsync(LoginProvider, wechatOpenId.OpenId);
             if (currentUser == null)
             {
+                // 检查是否允许自注册
                 var settingProvider = ServiceProvider.LazyGetRequiredService<ISettingProvider>();
                 // TODO 检查启用用户注册是否有必要引用账户模块
                 if (!await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
@@ -117,37 +122,108 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
                         AbpWeChatGlobalConsts.DisplayName))).CheckErrors();
             }
 
+            // 检查是否已锁定
             if (await UserManager.IsLockedOutAsync(currentUser))
             {
                 Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", currentUser.UserName);
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, IdentityLocalizer["Volo.Abp.Identity:UserLockedOut"]);
+
+                await SaveSecurityLogAsync(context, currentUser, wechatOpenId, IdentityServerSecurityLogActionConsts.LoginLockedout);
+
                 return;
-            }
-
-            var sub = await UserManager.GetUserIdAsync(currentUser);
-
-            var additionalClaims = new List<Claim>();
-            if (currentUser.TenantId.HasValue)
-            {
-                additionalClaims.Add(new Claim(AbpClaimTypes.TenantId, currentUser.TenantId?.ToString()));
-            }
-            additionalClaims.Add(new Claim(AbpWeChatClaimTypes.OpenId, wechatOpenId.OpenId));
-            if (!wechatOpenId.UnionId.IsNullOrWhiteSpace())
-            {
-                additionalClaims.Add(new Claim(AbpWeChatClaimTypes.UnionId, wechatOpenId.UnionId));
             }
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, wechatOpenId.OpenId, null));
 
-            context.Result = new GrantValidationResult(sub, AuthenticationMethod, additionalClaims.ToArray());
-
             // 登录之后需要更新安全令牌
             (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
+
+            await SetSuccessResultAsync(context, currentUser, wechatOpenId);
         }
 
         protected virtual Task<bool> CheckFeatureAsync(ExtensionGrantValidationContext context)
         {
             return Task.FromResult(true);
+        }
+
+        protected virtual async Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user, WeChatOpenId wechatOpenId)
+        {
+            var sub = await UserManager.GetUserIdAsync(user);
+
+            Logger.LogInformation("Credentials validated for username: {username}", user.UserName);
+
+            var additionalClaims = new List<Claim>();
+
+            await AddCustomClaimsAsync(additionalClaims, user, wechatOpenId, context);
+
+            context.Result = new GrantValidationResult(
+                sub,
+                AuthenticationMethod,
+                additionalClaims.ToArray()
+            );
+
+            await SaveSecurityLogAsync(
+                context,
+                user,
+                wechatOpenId,
+                IdentityServerSecurityLogActionConsts.LoginSucceeded);
+        }
+
+        protected virtual async Task SaveSecurityLogAsync(
+            ExtensionGrantValidationContext context,
+            IdentityUser user,
+            WeChatOpenId wechatOpenId,
+            string action)
+        {
+            var logContext = new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = action,
+                UserName = user.UserName,
+                ClientId = await FindClientIdAsync(context)
+            };
+            logContext.WithProperty("GrantType", GrantType);
+            logContext.WithProperty("Provider", LoginProvider);
+            logContext.WithProperty("Method", AuthenticationMethod);
+
+            await IdentitySecurityLogManager.SaveAsync(logContext);
+        }
+
+        protected virtual Task<string> FindClientIdAsync(ExtensionGrantValidationContext context)
+        {
+            return Task.FromResult(context.Request?.Client?.ClientId);
+        }
+
+        protected virtual Task AddCustomClaimsAsync(
+            List<Claim> customClaims, 
+            IdentityUser user, 
+            WeChatOpenId wechatOpenId,
+            ExtensionGrantValidationContext context)
+        {
+            if (user.TenantId.HasValue)
+            {
+                customClaims.Add(
+                    new Claim(
+                        AbpClaimTypes.TenantId,
+                        user.TenantId?.ToString()
+                    )
+                );
+            }
+
+            customClaims.Add(
+                new Claim(
+                    AbpWeChatClaimTypes.OpenId,
+                    wechatOpenId.OpenId));
+
+            if (!wechatOpenId.UnionId.IsNullOrWhiteSpace())
+            {
+                customClaims.Add(
+                    new Claim(
+                        AbpWeChatClaimTypes.UnionId, 
+                        wechatOpenId.UnionId));
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

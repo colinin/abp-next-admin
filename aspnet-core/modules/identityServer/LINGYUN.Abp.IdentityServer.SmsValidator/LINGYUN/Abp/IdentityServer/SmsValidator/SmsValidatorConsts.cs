@@ -9,5 +9,7 @@
         public const string SmsValidatorTokenName = "phone_verify_code";
 
         public const string SmsValidatorPurpose = "phone_verify";
+
+        public const string SecurityCodeFailed = "SecurityCodeFailed";
     }
 }
