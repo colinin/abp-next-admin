@@ -1,0 +1,87 @@
+{
+  "Routes": [
+    // 框架端点
+    {
+      "DownstreamPathTemplate": "/api/abp/application-configuration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/application-configuration",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-configuration"
+    },
+    // 框架动态API端点
+    {
+      "DownstreamPathTemplate": "/api/abp/api-definition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/api-definition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-api-definition"
+    },
+    // 任务管理
+    {
+      "DownstreamPathTemplate": "/api/task-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/task-management/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    }
+  ]
+}

@@ -54,6 +54,8 @@ public class Program
         catch (Exception ex)
         {
             Log.Fatal(ex, "Host terminated unexpectedly!");
+            Console.WriteLine("Host terminated unexpectedly!");
+            Console.WriteLine(ex.ToString());
             return 1;
         }
         finally

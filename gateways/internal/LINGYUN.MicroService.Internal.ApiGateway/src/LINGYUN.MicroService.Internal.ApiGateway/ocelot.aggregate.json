@@ -7,7 +7,8 @@
         "backend-admin-api-definition",
         "messages-api-definition",
         "ids-admin-api-definition",
-        "localization-api-definition"
+        "localization-api-definition",
+        "task-api-definition"
       ],
       "UpstreamPathTemplate": "/api/abp/api-definition",
       "Aggregator": "AbpResponseMergeAggregator",
@@ -20,7 +21,8 @@
         "backend-admin-configuration",
         "messages-configuration",
         "ids-admin-configuration",
-        "localization-configuration"
+        "localization-configuration",
+        "task-configuration"
       ],
       "UpstreamPathTemplate": "/api/abp/application-configuration",
       "Aggregator": "AbpResponseMergeAggregator",
