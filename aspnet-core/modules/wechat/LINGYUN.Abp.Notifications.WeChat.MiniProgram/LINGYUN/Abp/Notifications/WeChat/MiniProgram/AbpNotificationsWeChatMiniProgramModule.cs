@@ -11,16 +11,18 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var preActions = context.Services.GetPreConfigureActions<AbpNotificationsWeChatMiniProgramOptions>();
+
             Configure<AbpNotificationsWeChatMiniProgramOptions>(options =>
             {
-                context.Services.ExecutePreConfiguredActions(options);
+                preActions.Configure(options);
             });
 
             Configure<AbpNotificationOptions>(options =>
             {
                 options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
 
-                var wechatOptions = context.Services.ExecutePreConfiguredActions<AbpNotificationsWeChatMiniProgramOptions>();
+                var wechatOptions = preActions.Configure();
                 options.NotificationDataMappings
                        .MappingDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName,
                        data => NotificationData.ToStandardData(wechatOptions.DefaultMsgPrefix, data));

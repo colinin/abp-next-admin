@@ -36,9 +36,10 @@ namespace LINGYUN.Abp.WorkflowCore
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var preActions = context.Services.GetPreConfigureActions<WorkflowOptions>();
             context.Services.AddWorkflow(options =>
             {
-                context.Services.ExecutePreConfiguredActions(options);
+                preActions.Configure(options);
             });
             context.Services.AddWorkflowDSL();
 

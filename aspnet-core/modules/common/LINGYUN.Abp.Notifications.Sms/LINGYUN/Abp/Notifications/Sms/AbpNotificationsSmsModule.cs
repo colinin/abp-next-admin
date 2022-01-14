@@ -11,16 +11,18 @@ namespace LINGYUN.Abp.Notifications.Sms
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var preSmsActions = context.Services.GetPreConfigureActions<AbpNotificationsSmsOptions>();
             Configure<AbpNotificationsSmsOptions>(options =>
             {
-                context.Services.ExecutePreConfiguredActions(options);
+                preSmsActions.Configure(options);
             });
 
             Configure<AbpNotificationOptions>(options =>
             {
                 options.PublishProviders.Add<SmsNotificationPublishProvider>();
 
-                var smsOptions = context.Services.ExecutePreConfiguredActions<AbpNotificationsSmsOptions>();
+                var smsOptions = preSmsActions.Configure();
+
                 options.NotificationDataMappings
                        .MappingDefault(
                             SmsNotificationPublishProvider.ProviderName,

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DotNetCore.CAP;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
@@ -23,13 +24,16 @@ namespace LINGYUN.Abp.EventBus.CAP
 
             context.Services.AddTransient<IFailedThresholdCallbackNotifier, FailedThresholdCallbackNotifier>();
 
+            var preActions = context.Services.GetPreConfigureActions<CapOptions>();
+
             context.Services.AddCAPEventBus(options =>
             {
                 // 取消默认的五分钟高频清理
                 // options.CollectorCleaningInterval = 360_0000;
 
                 configuration.GetSection("CAP:EventBus").Bind(options);
-                context.Services.ExecutePreConfiguredActions(options);
+                preActions.Configure(options);
+
                 if (options.FailedThresholdCallback == null)
                 {
                     options.FailedThresholdCallback = async (failed) =>

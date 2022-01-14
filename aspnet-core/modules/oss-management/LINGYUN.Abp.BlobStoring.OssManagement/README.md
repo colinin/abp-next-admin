@@ -41,9 +41,10 @@ public class YouProjectModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
+        var preActions = context.Services.GetPreConfigureActions<AbpBlobStoringOptions>();
         Configure<AbpBlobStoringOptions>(options =>
         {
-            services.ExecutePreConfiguredActions(options);
+            preActions.Configure(options);
             // YouContainer use oss management
             options.Containers.Configure<YouContainer>((containerConfiguration) =>
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Localization;
@@ -24,20 +25,24 @@ namespace LINGYUN.Abp.Localization.Dynamic
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            foreach (var resource in LocalizationOptions.Resources)
+            try
             {
-                foreach (var contributor in resource.Value.Contributors)
+                foreach (var resource in LocalizationOptions.Resources)
                 {
-                    if (contributor.GetType().IsAssignableFrom(typeof(DynamicLocalizationResourceContributor)))
+                    foreach (var contributor in resource.Value.Contributors)
                     {
-                        var resourceLocalizationDic = await Store
-                            .GetLocalizationDictionaryAsync(
-                                resource.Value.ResourceName,
-                                stoppingToken);
-                        DynamicOptions.AddOrUpdate(resource.Value.ResourceName, resourceLocalizationDic);
+                        if (contributor.GetType().IsAssignableFrom(typeof(DynamicLocalizationResourceContributor)))
+                        {
+                            var resourceLocalizationDic = await Store
+                                .GetLocalizationDictionaryAsync(
+                                    resource.Value.ResourceName,
+                                    stoppingToken);
+                            DynamicOptions.AddOrUpdate(resource.Value.ResourceName, resourceLocalizationDic);
+                        }
                     }
                 }
             }
+            catch (OperationCanceledException) { } // 忽略此异常
         }
     }
 }

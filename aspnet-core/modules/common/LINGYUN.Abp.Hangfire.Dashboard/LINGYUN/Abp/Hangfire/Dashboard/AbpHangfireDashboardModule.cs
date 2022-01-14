@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Hangfire;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
@@ -12,10 +13,13 @@ namespace LINGYUN.Abp.Hangfire.Dashboard
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var preActions = context.Services.GetPreConfigureActions<DashboardOptions>();
             context.Services.AddTransient(serviceProvider =>
             {
                 var options = serviceProvider.GetRequiredService<AbpHangfireDashboardOptionsProvider>().Get();
-                return context.Services.ExecutePreConfiguredActions(options);
+                preActions.Configure(options);
+
+                return options;
             });
         }
     }
