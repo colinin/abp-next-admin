@@ -139,6 +139,8 @@
     isEnabled: true,
     priority: JobPriority.Normal,
     jobType: JobType.Once,
+    maxCount: 0,
+    maxTryCount: 0,
     args: {},
   } as BackgroundJobInfo);
   const [registerModal, { closeModal, changeOkLoading }] = useModalInner((model) => {
@@ -282,6 +284,8 @@
         isEnabled: true,
         priority: JobPriority.Normal,
         jobType: JobType.Once,
+        maxCount: 0,
+        maxTryCount: 0,
         args: {},
       } as BackgroundJobInfo;
     });

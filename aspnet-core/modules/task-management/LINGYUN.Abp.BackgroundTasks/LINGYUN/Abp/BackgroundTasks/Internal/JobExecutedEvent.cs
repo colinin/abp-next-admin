@@ -37,30 +37,36 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 {
                     job.TryCount += 1;
                     job.IsAbandoned = false;
-                    // 将任务标记为运行中, 会被轮询重新进入队列
-                    job.Status = JobStatus.FailedRetry;
                     job.Result = GetExceptionMessage(context.EventData.Exception);
 
-                    // 多次异常后需要重新计算优先级
-                    if (job.TryCount <= (job.MaxTryCount / 2) &&
-                        job.TryCount > (job.MaxTryCount / 3))
+                    // 周期性任务不用改变重试策略
+                    if (job.JobType != JobType.Period)
                     {
-                        job.Priority = JobPriority.BelowNormal;
-                    }
-                    else if (job.TryCount > (job.MaxTryCount / 1.5))
-                    {
-                        job.Priority = JobPriority.Low;
+                        // 将任务标记为运行中, 会被轮询重新进入队列
+                        job.Status = JobStatus.FailedRetry;
+                        // 多次异常后需要重新计算优先级
+                        if (job.TryCount <= (job.MaxTryCount / 2) &&
+                            job.TryCount > (job.MaxTryCount / 3))
+                        {
+                            job.Priority = JobPriority.BelowNormal;
+                        }
+                        else if (job.TryCount > (job.MaxTryCount / 1.5))
+                        {
+                            job.Priority = JobPriority.Low;
+                        }
                     }
 
-                    if (job.TryCount >= job.MaxTryCount)
+                    // 当未设置最大重试次数时不会标记停止
+                    if (job.MaxTryCount > 0 && job.TryCount >= job.MaxTryCount)
                     {
                         job.Status = JobStatus.Stopped;
                         job.IsAbandoned = true;
                         job.NextRunTime = null;
                         await RemoveJobAsync(context, job);
-                        // 重试达到上限发布异常通知
-                        await NotifierAsync(context, job);
                     }
+
+                    // 每次重试发布异常通知
+                    await NotifierAsync(context, job);
                 }
                 else
                 {
