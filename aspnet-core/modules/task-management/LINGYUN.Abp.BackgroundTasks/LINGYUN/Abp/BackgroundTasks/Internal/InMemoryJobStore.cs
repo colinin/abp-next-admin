@@ -19,8 +19,12 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
 
     public Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
+        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+
         var jobs = _memoryJobStore
-            .Where(x => x.JobType == JobType.Period && x.Status == JobStatus.Running)
+            .Where(x => !x.IsAbandoned)
+            .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
+            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
             .OrderByDescending(x => x.Priority)
             .ToList();
 
@@ -30,8 +34,12 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
     public Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
         var now = DateTime.Now;
+        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+
         var jobs = _memoryJobStore
-            .Where(x => !x.IsAbandoned && x.JobType != JobType.Period && x.Status == JobStatus.Running)
+            .Where(x => !x.IsAbandoned)
+            .Where(x => x.JobType != JobType.Period && status.Contains(x.Status))
+            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
             .OrderByDescending(x => x.Priority)
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)
@@ -75,8 +83,8 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
     {
         var expiratime = DateTime.Now - jobExpiratime;
 
-        var expriaJobs = _memoryJobStore.Where(
-            x => x.Status == JobStatus.Completed &&
+        var expriaJobs = _memoryJobStore
+            .Where(x => x.Status == JobStatus.Completed &&
                 expiratime.CompareTo(x.LastRunTime ?? x.EndTime ?? x.CreationTime) <= 0)
             .Take(maxResultCount);
 

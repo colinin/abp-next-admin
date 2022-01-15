@@ -43,21 +43,21 @@ public class HttpRequestJob : IJobRunnable
     {
         var url = context.GetString(PropertyUrl);
         var method = context.GetString(PropertyMethod);
-        context.TryGetJobData(PropertyData, out var data);
-        context.TryGetJobData(PropertyContentType, out var contentType);
+        context.TryGetString(PropertyData, out var data);
+        context.TryGetString(PropertyContentType, out var contentType);
 
         var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
 
         var httpRequestMesasge = new HttpRequestMessage(new HttpMethod(method), url);
-        if (data != null)
+        if (!data.IsNullOrWhiteSpace())
         {
             // TODO: 需要支持表单类型
 
             // application/json 支持
             httpRequestMesasge.Content = new StringContent(
-                jsonSerializer.Serialize(data),
+                data,
                 Encoding.UTF8,
-                contentType?.ToString() ?? MimeTypes.Application.Json);
+                contentType ?? MimeTypes.Application.Json);
         }
         if (context.TryGetJobData(PropertyHeaders, out var headers))
         {

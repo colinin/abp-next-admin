@@ -24,6 +24,10 @@ public class SnowflakeIdOptions
     public long Sequence { get; set; }
 
     public int SequenceBits { get; set; }
+    /// <summary>
+    /// 发生时间回退时使用上一个ID
+    /// </summary>
+    public bool UsePreviousInTimeRollback { get; set; }
 
     public SnowflakeIdOptions()
     {
@@ -31,5 +35,6 @@ public class SnowflakeIdOptions
         DatacenterIdBits = 5;
         Sequence = 0L;
         SequenceBits = 12;
+        UsePreviousInTimeRollback = true;
     }
 }

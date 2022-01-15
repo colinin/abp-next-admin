@@ -57,11 +57,12 @@ namespace LINGYUN.Abp.EventBus.CAP
             cancellationToken.ThrowIfCancellationRequested();
 
             var methodInfo = context.ConsumerDescriptor.MethodInfo;
-            var reflectedType = methodInfo.ReflectedType.Name;
+            var reflectedTypeHandle = methodInfo.ReflectedType!.TypeHandle.Value;
+            var methodHandle = methodInfo.MethodHandle.Value;
+            var key = $"{reflectedTypeHandle}_{methodHandle}";
 
             _logger.LogDebug("Executing subscriber method : {0}", methodInfo.Name);
 
-            var key = $"{methodInfo.Module.Name}_{reflectedType}_{methodInfo.MetadataToken}";
             var executor = _executors.GetOrAdd(key, x => ObjectMethodExecutor.Create(methodInfo, context.ConsumerDescriptor.ImplTypeInfo));
 
             using var scope = _serviceProvider.CreateScope();
@@ -77,9 +78,10 @@ namespace LINGYUN.Abp.EventBus.CAP
             var tenantId = message.GetTenantIdOrNull();
             for (var i = 0; i < parameterDescriptors.Count; i++)
             {
-                if (parameterDescriptors[i].IsFromCap)
+                var parameterDescriptor = parameterDescriptors[i];
+                if (parameterDescriptor.IsFromCap)
                 {
-                    executeParameters[i] = new CapHeader(message.Headers);
+                    executeParameters[i] = GetCapProvidedParameter(parameterDescriptor, message, cancellationToken);
                 }
                 else
                 {
@@ -87,7 +89,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                     {
                         if (_serializer.IsJsonType(message.Value))  // use ISerializer when reading from storage, skip other objects if not Json
                         {
-                            var eventData = _serializer.Deserialize(message.Value, parameterDescriptors[i].ParameterType);
+                            var eventData = _serializer.Deserialize(message.Value, parameterDescriptor.ParameterType);
                             // 租户数据也可能存在事件数据中
                             if (tenantId == null && eventData is IMultiTenant tenant)
                             {
@@ -97,7 +99,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                         }
                         else
                         {
-                            var converter = TypeDescriptor.GetConverter(parameterDescriptors[i].ParameterType);
+                            var converter = TypeDescriptor.GetConverter(parameterDescriptor.ParameterType);
                             if (converter.CanConvertFrom(message.Value.GetType()))
                             {
                                 var eventData = converter.ConvertFrom(message.Value);
@@ -110,7 +112,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                             }
                             else
                             {
-                                if (parameterDescriptors[i].ParameterType.IsInstanceOfType(message.Value))
+                                if (parameterDescriptor.ParameterType.IsInstanceOfType(message.Value))
                                 {
                                     // 租户数据也可能存在事件数据中
                                     if (tenantId == null && message.Value is IMultiTenant tenant)
@@ -121,7 +123,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                                 }
                                 else
                                 {
-                                    var eventData = Convert.ChangeType(message.Value, parameterDescriptors[i].ParameterType);
+                                    var eventData = Convert.ChangeType(message.Value, parameterDescriptor.ParameterType);
                                     // 租户数据也可能存在事件数据中
                                     if (tenantId == null && eventData is IMultiTenant tenant)
                                     {
@@ -183,6 +185,29 @@ namespace LINGYUN.Abp.EventBus.CAP
 
                 return new ConsumerExecutedResult(resultObj, message.GetId(), message.GetCallbackName());
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameterDescriptor"></param>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        private static object GetCapProvidedParameter(ParameterDescriptor parameterDescriptor, Message message,
+            CancellationToken cancellationToken)
+        {
+            if (typeof(CancellationToken).IsAssignableFrom(parameterDescriptor.ParameterType))
+            {
+                return cancellationToken;
+            }
+
+            if (parameterDescriptor.ParameterType.IsAssignableFrom(typeof(CapHeader)))
+            {
+                return new CapHeader(message.Headers);
+            }
+
+            throw new ArgumentException(parameterDescriptor.Name);
         }
         /// <summary>
         /// 获取事件处理类实例

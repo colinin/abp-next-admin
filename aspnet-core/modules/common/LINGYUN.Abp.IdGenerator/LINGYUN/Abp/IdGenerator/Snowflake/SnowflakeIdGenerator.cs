@@ -20,8 +20,11 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
         protected int TimestampLeftShift { get; }
         protected long SequenceMask { get; }
 
+        protected SnowflakeIdOptions Options { get; }
+
         private SnowflakeIdGenerator(SnowflakeIdOptions options)
         {
+            Options = options;
             WorkerIdShift = options.SequenceBits;
             DatacenterIdShift = options.SequenceBits + options.WorkerIdBits;
             TimestampLeftShift = options.SequenceBits + options.WorkerIdBits + options.DatacenterIdBits;
@@ -82,15 +85,24 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
             {
                 var timestamp = TimeGen();
 
-                // TODO: 时间回退解决方案, 保存一个时间节点, 当服务器时间发生改变, 从保存的节点开始递增
                 if (timestamp < _lastTimestamp)
-                    throw new Exception(
-                        $"InvalidSystemClock: Clock moved backwards, Refusing to generate id for {_lastTimestamp - timestamp} milliseconds");
+                {
+                    // 如果启用此选项, 发生时间回退时使用上一个时间戳
+                    if (!Options.UsePreviousInTimeRollback)
+                    {
+                        throw new Exception(
+                            $"InvalidSystemClock: Clock moved backwards, Refusing to generate id for {_lastTimestamp - timestamp} milliseconds");
+                    }
+                    timestamp = _lastTimestamp;
+                }
 
                 if (_lastTimestamp == timestamp)
                 {
                     Sequence = (Sequence + 1) & SequenceMask;
-                    if (Sequence == 0) timestamp = TilNextMillis(_lastTimestamp);
+                    if (Sequence == 0L)
+                    {
+                        timestamp = TilNextMillis(_lastTimestamp);
+                    }
                 }
                 else
                 {
@@ -100,7 +112,8 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
                 _lastTimestamp = timestamp;
                 var id = ((timestamp - Twepoch) << TimestampLeftShift) |
                          (DatacenterId << DatacenterIdShift) |
-                         (WorkerId << WorkerIdShift) | Sequence;
+                         (WorkerId << WorkerIdShift) | 
+                         Sequence;
 
                 return id;
             }
