@@ -70,6 +70,9 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 }
                 else
                 {
+                    // 成功一次重置重试次数
+                    job.TryCount = 0;
+
                     // 所有任务达到上限则标记已完成
                     if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
                     {
