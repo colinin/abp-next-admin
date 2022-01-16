@@ -70,6 +70,7 @@
     "BackgroundJobs:AddNew": "New Job",
     "BackgroundJobs:Edit": "Edit Job",
     "BackgroundJobs:AddNewArg": "New Args",
+    "BackgroundJobs:Paramter": "Job Paramter",
     "BackgroundJobs:Pause": "Pause",
     "BackgroundJobs:Resume": "Resume",
     "BackgroundJobs:Trigger": "Trigger",

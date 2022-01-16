@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 
@@ -9,23 +8,22 @@ namespace LINGYUN.Abp.BackgroundTasks.Quartz;
 public class QuartzJobSimpleAdapter<TJobRunnable> : IJob
     where TJobRunnable : IJobRunnable
 {
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public QuartzJobSimpleAdapter(
-        IServiceProvider serviceProvider)
+        IServiceScopeFactory serviceScopeFactory)
     {
-        ServiceProvider = serviceProvider;
+        ServiceScopeFactory = serviceScopeFactory;
     }
 
     public async virtual Task Execute(IJobExecutionContext context)
     {
-        // 任务已经在一个作用域中
-        // using var scope = ServiceProvider.CreateScope();
-        var jobExecuter = ServiceProvider.GetRequiredService<IJobRunnableExecuter>();
+        using var scope = ServiceScopeFactory.CreateScope();
+        var jobExecuter = scope.ServiceProvider.GetRequiredService<IJobRunnableExecuter>();
 
         var jobContext = new JobRunnableContext(
             typeof(TJobRunnable),
-            ServiceProvider,
+            scope.ServiceProvider,
             context.MergedJobDataMap.ToImmutableDictionary());
 
         await jobExecuter.ExecuteAsync(jobContext);

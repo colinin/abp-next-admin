@@ -12,23 +12,21 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
 {
     protected IJobStore JobStore { get; }
     protected IJobScheduler JobScheduler { get; }
-    protected IServiceProvider ServiceProvider { get; }
 
     public BackgroundWorkerManager(
         IJobStore jobStore,
-        IJobScheduler jobScheduler,
-        IServiceProvider serviceProvider)
+        IJobScheduler jobScheduler)
     {
         JobStore = jobStore;
         JobScheduler = jobScheduler;
-        ServiceProvider = serviceProvider;
     }
 
     public async Task AddAsync(IBackgroundWorker worker)
     {
-        var adapterType = typeof(BackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
+        var adapterType = typeof(BackgroundWorkerAdapter<>)
+            .MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
 
-        var workerAdapter = ServiceProvider.GetService(adapterType) as IBackgroundWorkerRunnable;
+        var workerAdapter = Activator.CreateInstance(adapterType) as IBackgroundWorkerRunnable;
 
         var jobInfo = workerAdapter?.BuildWorker(worker);
         if (jobInfo == null)

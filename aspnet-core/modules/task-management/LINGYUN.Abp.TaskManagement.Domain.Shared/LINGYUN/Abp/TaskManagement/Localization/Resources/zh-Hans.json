@@ -70,6 +70,7 @@
     "BackgroundJobs:AddNew": "新建作业",
     "BackgroundJobs:Edit": "编辑作业",
     "BackgroundJobs:AddNewArg": "添加参数",
+    "BackgroundJobs:Paramter": "作业参数",
     "BackgroundJobs:Pause": "暂停",
     "BackgroundJobs:Resume": "恢复",
     "BackgroundJobs:Trigger": "触发",

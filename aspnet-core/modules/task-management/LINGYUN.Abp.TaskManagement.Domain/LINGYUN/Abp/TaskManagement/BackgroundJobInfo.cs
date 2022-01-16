@@ -30,7 +30,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// <summary>
     /// 任务参数
     /// </summary>
-    public virtual ExtraPropertyDictionary Args { get; protected set; }
+    public virtual ExtraPropertyDictionary Args { get; set; }
     /// <summary>
     /// 任务状态
     /// </summary>
