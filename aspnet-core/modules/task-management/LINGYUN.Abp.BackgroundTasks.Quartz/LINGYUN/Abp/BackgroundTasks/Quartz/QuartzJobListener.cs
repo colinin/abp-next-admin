@@ -21,16 +21,16 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
 
     protected IClock Clock { get; }
     protected IJobEventProvider EventProvider { get; }
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public QuartzJobListener(
         IClock clock,
-        IServiceProvider serviceProvider,
-        IJobEventProvider eventProvider)
+        IJobEventProvider eventProvider,
+        IServiceScopeFactory serviceScopeFactory)
     {
         Clock = clock;
-        ServiceProvider = serviceProvider;
         EventProvider = eventProvider;
+        ServiceScopeFactory = serviceScopeFactory;
 
         Logger = NullLogger<QuartzJobListener>.Instance;
     }
@@ -62,7 +62,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 return;
             }
 
-            using var scope = ServiceProvider.CreateScope();
+            using var scope = ServiceScopeFactory.CreateScope();
             var jobEventData = new JobEventData(
                 jobId,
                 context.JobDetail.JobType,
@@ -108,7 +108,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 return;
             }
 
-            using var scope = ServiceProvider.CreateScope();
+            using var scope = ServiceScopeFactory.CreateScope();
             var jobType = context.JobDetail.JobType;
             if (jobType.IsGenericType)
             {
@@ -132,8 +132,10 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             }
             jobEventData.Description = context.JobDetail.Description;
             jobEventData.RunTime = Clock.Now;
-            jobEventData.LastRunTime = context.PreviousFireTimeUtc?.LocalDateTime;
-            jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime;
+            jobEventData.LastRunTime = context.PreviousFireTimeUtc?.LocalDateTime
+                 ?? context.Trigger.GetPreviousFireTimeUtc()?.LocalDateTime;
+            jobEventData.NextRunTime = context.NextFireTimeUtc?.LocalDateTime
+                ?? context.Trigger.GetNextFireTimeUtc()?.LocalDateTime;
             if (context.Result != null)
             {
                 jobEventData.Result = context.Result?.ToString();

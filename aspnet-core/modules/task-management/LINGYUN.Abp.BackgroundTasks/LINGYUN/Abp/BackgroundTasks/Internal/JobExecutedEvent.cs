@@ -113,7 +113,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
     {
         if (exception.InnerException != null)
         {
-            return exception.Message + "  =>   " + GetExceptionMessage(exception.InnerException);
+            return GetExceptionMessage(exception.InnerException);
         }
 
         return exception.Message;

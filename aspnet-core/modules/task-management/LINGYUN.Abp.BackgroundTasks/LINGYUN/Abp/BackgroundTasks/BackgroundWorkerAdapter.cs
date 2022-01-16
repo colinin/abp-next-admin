@@ -14,8 +14,6 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
     where TWorker : IBackgroundWorker
 {
     protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
-    protected IJobStore JobStore => LazyServiceProvider.LazyGetRequiredService<IJobStore>();
-    protected IJobScheduler JobScheduler => LazyServiceProvider.LazyGetRequiredService<IJobScheduler>();
     protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
     private readonly MethodInfo _doWorkAsyncMethod;
@@ -94,7 +92,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
 
     public async Task ExecuteAsync(JobRunnableContext context)
     {
-        var worker = (IBackgroundWorker)ServiceProvider.GetService(typeof(TWorker));
+        var worker = (IBackgroundWorker)context.GetService(typeof(TWorker));
         var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
 
         switch (worker)

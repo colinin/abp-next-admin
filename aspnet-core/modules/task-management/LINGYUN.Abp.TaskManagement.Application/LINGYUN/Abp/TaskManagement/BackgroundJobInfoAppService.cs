@@ -246,11 +246,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         backgroundJobInfo.Description = input.Description;
         backgroundJobInfo.MaxCount = input.MaxCount;
         backgroundJobInfo.MaxTryCount = input.MaxTryCount;
-
-        foreach (var arg in input.Args)
-        {
-            backgroundJobInfo.Args[arg.Key] = arg.Value;
-        }
+        backgroundJobInfo.Args = input.Args;
 
         backgroundJobInfo.SetPriority(input.Priority);
         switch (input.JobType)

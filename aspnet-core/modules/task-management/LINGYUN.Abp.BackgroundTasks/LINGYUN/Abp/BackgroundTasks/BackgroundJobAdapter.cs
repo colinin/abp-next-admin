@@ -14,8 +14,8 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
     public ILogger<BackgroundJobAdapter<TArgs>> Logger { protected get; set; }
 
     protected AbpBackgroundJobOptions Options { get; }
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected IBackgroundJobExecuter JobExecuter { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public BackgroundJobAdapter(
         IOptions<AbpBackgroundJobOptions> options,

@@ -153,6 +153,13 @@
     labelWidth: 120,
     schemas: [
       {
+        field: 'oldKey',
+        component: 'Input',
+        label: 'oldKey',
+        show: false,
+        colProps: { span: 24 },
+      },
+      {
         field: 'key',
         component: 'Input',
         label: L('DisplayName:Key'),
@@ -319,8 +326,12 @@
 
   function handleSaveParam() {
     validate().then((input) => {
+      console.log(input);
       const model = unref(modelRef);
       model.args ??= {};
+      if (input.oldKey && input.key !== input.oldKey) {
+        delete model.args[input.oldKey];
+      }
       model.args[input.key] = input.value;
       resetParamFields();
       closeParamModal();
@@ -330,13 +341,13 @@
   function handleEditParam(record) {
     openParamModal(true);
     nextTick(() => {
-      setParamFields(record);
+      setParamFields(Object.assign({ oldKey: record.key }, record));
     });
   }
 
   function handleDeleteParam(record) {
     const model = unref(modelRef);
     model.args ??= {};
-    delete model.args[record.key]
+    delete model.args[record.key];
   }
 </script>
