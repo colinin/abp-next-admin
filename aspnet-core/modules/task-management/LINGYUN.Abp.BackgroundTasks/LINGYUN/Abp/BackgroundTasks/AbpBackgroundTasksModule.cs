@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.BackgroundTasks.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using Volo.Abp.Auditing;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
@@ -38,6 +39,13 @@ public class AbpBackgroundTasksModule : AbpModule
             options.Resources
                 .Add<BackgroundTasksResource>("en")
                 .AddVirtualJson("/LINGYUN/Abp/BackgroundTasks/Localization/Resources");
+        });
+
+        Configure<AbpBackgroundTasksOptions>(options =>
+        {
+            options.JobMonitors.AddIfNotContains(typeof(JobExecutedEvent));
+            options.JobMonitors.AddIfNotContains(typeof(JobLogEvent));
+            options.JobMonitors.AddIfNotContains(typeof(JobNotifierEvent));
         });
     }
 }

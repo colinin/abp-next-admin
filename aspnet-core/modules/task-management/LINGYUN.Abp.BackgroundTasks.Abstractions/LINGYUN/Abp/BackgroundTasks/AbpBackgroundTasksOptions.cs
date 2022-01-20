@@ -21,6 +21,10 @@ public class AbpBackgroundTasksOptions
     /// </remarks>
     public IDictionary<string, Type> JobProviders { get; }
     /// <summary>
+    /// 启用清理任务
+    /// </summary>
+    public bool JobCleanEnabled { get; set; }
+    /// <summary>
     /// 任务过期时间
     /// 默认: 15 days
     /// </summary>
@@ -41,6 +45,10 @@ public class AbpBackgroundTasksOptions
     /// Cron表达式
     /// </remarks>
     public string JobCleanCronExpression { get; set; }
+    /// <summary>
+    /// 启用轮询任务
+    /// </summary>
+    public bool JobFetchEnabled { get; set; }
     /// <summary>
     /// 每次轮询任务批次大小
     /// 默认: 1000
@@ -64,10 +72,12 @@ public class AbpBackgroundTasksOptions
     public int JobFetchLockTimeOut { get; set; }
     public AbpBackgroundTasksOptions()
     {
+        JobFetchEnabled = true;
         MaxJobFetchCount = 1000;
         JobFetchLockTimeOut = 120;
         JobFetchCronExpression = "0/30 * * * * ? ";
 
+        JobCleanEnabled = true;
         MaxJobCleanCount = 1000;
         JobExpiratime = TimeSpan.FromDays(15d);
         JobCleanCronExpression = "0 0/10 * * * ? *";

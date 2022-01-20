@@ -10,7 +10,7 @@ public abstract class BackgroundJobInfoCreateOrUpdateDto
     /// <summary>
     /// 是否启用
     /// </summary>
-    public bool IsEnabled { get; set; }
+    public bool IsEnabled { get; set; } = true;
     /// <summary>
     /// 任务参数
     /// </summary>

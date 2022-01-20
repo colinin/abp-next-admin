@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using System;
 
 namespace Quartz;
 
@@ -23,5 +24,22 @@ public static class IJobExecutionContextExtensions
         var value = context.MergedJobDataMap.GetInt(key);
 
         return value;
+    }
+
+    public static bool TryGetMultiTenantId(this IJobExecutionContext context, out Guid? tenantId)
+    {
+        return context.TryGetMultiTenantId(nameof(JobInfo.TenantId), out tenantId);
+    }
+
+    public static bool TryGetMultiTenantId(this IJobExecutionContext context, string multiTenancyKey, out Guid? tenantId)
+    {
+        tenantId = null;
+        var tenantUUIdString = context.GetString(multiTenancyKey);
+        if (Guid.TryParse(tenantUUIdString, out var tenantUUId))
+        {
+            tenantId = tenantUUId;
+            return true;
+        }
+        return false;
     }
 }

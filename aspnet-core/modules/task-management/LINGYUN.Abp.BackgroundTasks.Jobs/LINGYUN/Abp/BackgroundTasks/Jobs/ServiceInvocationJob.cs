@@ -57,13 +57,7 @@ public class ServiceInvocationJob : IJobRunnable
                 null);
         }
 
-        Guid? tenantId = null;
-        if (context.TryGetString(PropertyTenant, out var tenant) &&
-            Guid.TryParse(tenant, out var converTenant))
-        {
-            tenantId = converTenant;
-        }
-
+        context.TryGetMultiTenantId(PropertyTenant, out var tenantId);
         var currentTenant = context.GetRequiredService<ICurrentTenant>();
         using (currentTenant.Change(tenantId))
         {

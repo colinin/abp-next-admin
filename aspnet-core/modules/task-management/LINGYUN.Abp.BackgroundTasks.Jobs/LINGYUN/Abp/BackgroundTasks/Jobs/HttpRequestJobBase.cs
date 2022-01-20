@@ -81,7 +81,7 @@ public abstract class HttpRequestJobBase
         var clientFactory = context.GetRequiredService<IHttpClientFactory>();
 
         var client = clientName.IsNullOrWhiteSpace()
-            ? clientFactory.CreateClient()
+            ? clientFactory.CreateClient(BackgroundTasksConsts.DefaultHttpClient)
             : clientFactory.CreateClient(clientName);
 
         var response = await client.SendAsync(request);

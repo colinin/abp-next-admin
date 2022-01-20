@@ -6,18 +6,14 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-public class JobRunnableExecuter : IJobRunnableExecuter, ISingletonDependency
+public class JobRunnableExecuter : IJobRunnableExecuter, ITransientDependency
 {
     public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
-        Guid? tenantId = null;
-        if (context.JobData.TryGetValue(nameof(IMultiTenant.TenantId), out var tenant) &&
-            Guid.TryParse(tenant?.ToString(), out var tid))
-        {
-            tenantId = tid;
-        }
-
         var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+
+        context.TryGetMultiTenantId(out var tenantId);
+
         using (currentTenant.Change(tenantId))
         {
             await InternalExecuteAsync(context);

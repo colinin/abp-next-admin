@@ -4,7 +4,7 @@
 		<LINGYUNAbpPackageVersion>5.1.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.5.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.1</DistributedLockRedisPackageVersion>
-		<DotNetCoreCAPPackageVersion>5.2.0</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>6.0.0</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<TencentCloudSDKPackageVersion>3.0.434</TencentCloudSDKPackageVersion>

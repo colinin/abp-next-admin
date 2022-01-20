@@ -11,6 +11,7 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,14 +32,15 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
-
 using HangfireDashboardOptions = Hangfire.DashboardOptions;
 
 namespace LY.MicroService.RealtimeMessage;
 
 public partial class RealtimeMessageHttpApiHostModule
 {
+    protected static string[] PrefixTokenQueryStrings = new [] { "/signalr-hubs", "/hangfire" };
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "MessageService";
@@ -292,13 +294,34 @@ public partial class RealtimeMessageHttpApiHostModule
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/signalr-hubs")))
+                            PrefixTokenQueryStrings.Any(prefix => path.StartsWithSegments(prefix)))
                         {
-                            // Read the token out of the query string
+                            // 解决仪表板自定义授权问题
                             context.Token = accessToken;
+
+                            var clock = context.HttpContext.RequestServices.GetRequiredService<IClock>();
+                            var protectedProvider = context.HttpContext.RequestServices.GetRequiredService<IDataProtectionProvider>();
+                            var protector = protectedProvider.CreateProtector("_hangfire_tk");
+                            var tokenCookies = protector.Protect(accessToken);
+                            context.HttpContext.Response.Cookies.Append(
+                                "_hangfire_tk",
+                                tokenCookies,
+                                new CookieOptions
+                                {
+                                    Expires = clock.Now.AddMinutes(10)
+                                });
                         }
+
+                        if (context.Token.IsNullOrWhiteSpace() &&
+                            context.Request.Cookies.TryGetValue("_hangfire_tk", out var protectedToken))
+                        {
+                            var protectedProvider = context.HttpContext.RequestServices.GetRequiredService<IDataProtectionProvider>();
+                            var protector = protectedProvider.CreateProtector("_hangfire_tk");
+                            context.Token = protector.Unprotect(protectedToken);
+                        }
+
                         return Task.CompletedTask;
-                    }
+                    },
                 };
             });
 

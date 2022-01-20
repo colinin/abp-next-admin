@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Quartz;
 using Quartz.Listener;
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,7 +68,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 jobId,
                 context.JobDetail.JobType,
                 context.JobDetail.Key.Group,
-                context.JobDetail.Key.Name)
+                context.JobDetail.Key.Name,
+                context.MergedJobDataMap.ToImmutableDictionary())
             {
                 Result = context.Result?.ToString()
             };
@@ -120,6 +122,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 jobType,
                 context.JobDetail.Key.Group,
                 context.JobDetail.Key.Name,
+                context.MergedJobDataMap.ToImmutableDictionary(),
                 jobException)
             {
                 Status = JobStatus.Running
@@ -140,11 +143,9 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             {
                 jobEventData.Result = context.Result?.ToString();
             }
-            var tenantIdString = context.GetString(nameof(IMultiTenant.TenantId));
-            if (Guid.TryParse(tenantIdString, out var tenantId))
-            {
-                jobEventData.TenantId = tenantId;
-            }
+
+            context.TryGetMultiTenantId(out var tenantId);
+            jobEventData.TenantId = tenantId;
 
             var eventContext = new JobEventContext(
                 scope.ServiceProvider,

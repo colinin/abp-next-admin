@@ -11,14 +11,14 @@ namespace LINGYUN.Abp.BackgroundTasks;
 public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
 {
     protected IJobStore JobStore { get; }
-    protected IJobScheduler JobScheduler { get; }
+    protected IJobPublisher JobPublisher { get; }
 
     public BackgroundWorkerManager(
         IJobStore jobStore,
-        IJobScheduler jobScheduler)
+        IJobPublisher jobPublisher)
     {
         JobStore = jobStore;
-        JobScheduler = jobScheduler;
+        JobPublisher = jobPublisher;
     }
 
     public async Task AddAsync(IBackgroundWorker worker)
@@ -37,8 +37,8 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         // 存储状态
         await JobStore.StoreAsync(jobInfo);
 
-        // 手动入队
-        await JobScheduler.QueueAsync(jobInfo);
+        // 发布作业
+        await JobPublisher.PublishAsync(jobInfo);
     }
 
     public Task StartAsync(CancellationToken cancellationToken = default)

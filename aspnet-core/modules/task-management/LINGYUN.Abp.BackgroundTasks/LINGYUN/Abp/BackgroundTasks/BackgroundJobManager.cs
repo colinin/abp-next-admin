@@ -16,7 +16,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
     protected IClock Clock { get; }
     protected IJobStore JobStore { get; }
-    protected IJobScheduler JobScheduler { get; }
+    protected IJobPublisher JobPublisher { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IJsonSerializer JsonSerializer { get; }
@@ -24,7 +24,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
     public BackgroundJobManager(
         IClock clock,
         IJobStore jobStore,
-        IJobScheduler jobScheduler,
+        IJobPublisher jobPublisher,
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
         IJsonSerializer jsonSerializer,
@@ -32,7 +32,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
         Clock = clock;
         JobStore = jobStore;
-        JobScheduler = jobScheduler;
+        JobPublisher = jobPublisher;
         CurrentTenant = currentTenant;
         GuidGenerator = guidGenerator;
         JsonSerializer = jsonSerializer;
@@ -79,8 +79,8 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         // 存储状态
         await JobStore.StoreAsync(jobInfo);
 
-        // 手动入队
-        await JobScheduler.QueueAsync(jobInfo);
+        // 发布作业
+        await JobPublisher.PublishAsync(jobInfo);
 
         return jobInfo.Id;
     }

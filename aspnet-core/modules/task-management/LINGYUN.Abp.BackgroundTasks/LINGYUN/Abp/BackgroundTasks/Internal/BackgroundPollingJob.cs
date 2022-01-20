@@ -27,11 +27,11 @@ public class BackgroundPollingJob : IJobRunnable
                 return;
             }
 
-            var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
+            var jobPublisher = context.ServiceProvider.GetRequiredService<IJobPublisher>();
 
             foreach (var job in waitingJobs)
             {
-                await jobScheduler.QueueAsync(job);
+                await jobPublisher.PublishAsync(job);
             }
         }
     }

@@ -15,19 +15,18 @@ using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 
-[Dependency(ReplaceServices = true)]
-public class JobExceptionNotifier : IJobExceptionNotifier, ITransientDependency
+public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientDependency
 {
     public const string Prefix = "exception.";
     public const string JobGroup = "ExceptionNotifier";
 
-    public ILogger<JobExceptionNotifier> Logger { protected get; set; }
+    public ILogger<JobFailedNotifierProvider> Logger { protected get; set; }
 
     protected IClock Clock { get; }
     protected IEmailSender EmailSender { get; }
     protected ITemplateRenderer TemplateRenderer { get; }
 
-    public JobExceptionNotifier(
+    public JobFailedNotifierProvider(
         IClock clock,
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer)
@@ -36,26 +35,27 @@ public class JobExceptionNotifier : IJobExceptionNotifier, ITransientDependency
         EmailSender = emailSender;
         TemplateRenderer = templateRenderer;
 
-        Logger = NullLogger<JobExceptionNotifier>.Instance;
+        Logger = NullLogger<JobFailedNotifierProvider>.Instance;
     }
 
-    public virtual async Task NotifyAsync([NotNull] JobExceptionNotificationContext context)
+    public virtual async Task NotifyErrorAsync([NotNull] JobEventContext context)
     {
+        var eventData = context.EventData;
         // 异常所属分组不处理, 防止死循环
-        if (string.Equals(context.JobInfo.Group, JobGroup))
+        if (string.Equals(eventData.Group, JobGroup))
         {
-            Logger.LogWarning($"There is a problem executing the job, reason: {context.Exception.Message}");
+            Logger.LogWarning($"There is a problem executing the job, reason: {eventData.Exception.Message}");
             return;
         }
         var notifyKey = Prefix + SendEmailJob.PropertyTo;
-        if (context.JobInfo.Args.TryGetValue(notifyKey, out var exceptionTo) &&
+        if (eventData.Args.TryGetValue(notifyKey, out var exceptionTo) &&
             exceptionTo is string to)
         {
-            var template = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate)?.ToString() ?? "";
-            var content = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyBody)?.ToString() ?? "";
-            var subject = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject)?.ToString() ?? "From job execute exception";
-            var from = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom)?.ToString() ?? "";
-            var errorMessage = context.Exception.GetBaseException().Message;
+            var template = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate)?.ToString() ?? "";
+            var content = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyBody)?.ToString() ?? "";
+            var subject = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject)?.ToString() ?? "From job execute exception";
+            var from = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom)?.ToString() ?? "";
+            var errorMessage = eventData.Exception.GetBaseException().Message;
 
             if (template.IsNullOrWhiteSpace())
             {
@@ -63,22 +63,22 @@ public class JobExceptionNotifier : IJobExceptionNotifier, ITransientDependency
                 return;
             }
 
-            var footer = context.JobInfo.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {Clock.Now.Year}";
+            var footer = eventData.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {Clock.Now.Year}";
             var model = new
             {
                 Title = subject,
-                Group = context.JobInfo.Group,
-                Name = context.JobInfo.Name,
-                Id = context.JobInfo.Id,
-                Type = context.JobInfo.Type,
+                Group = eventData.Group,
+                Name = eventData.Name,
+                Id = eventData.Key,
+                Type = eventData.Type,
                 Triggertime = Clock.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 Message = errorMessage,
-                Tenantname = context.JobInfo.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
+                Tenantname = eventData.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
                 Footer = footer,
             };
 
             var globalContext = new Dictionary<string, object>();
-            if (context.JobInfo.Args.TryGetValue(Prefix + SendEmailJob.PropertyContext, out var ctx) &&
+            if (eventData.Args.TryGetValue(Prefix + SendEmailJob.PropertyContext, out var ctx) &&
                 ctx is string ctxStr && !ctxStr.IsNullOrWhiteSpace())
             {
                 try
@@ -87,8 +87,9 @@ public class JobExceptionNotifier : IJobExceptionNotifier, ITransientDependency
                 }
                 catch { }
             }
+            globalContext.AddIfNotContains(eventData.Args);
 
-            var culture = context.JobInfo.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
+            var culture = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
 
             content = await TemplateRenderer.RenderAsync(
                 templateName: template,

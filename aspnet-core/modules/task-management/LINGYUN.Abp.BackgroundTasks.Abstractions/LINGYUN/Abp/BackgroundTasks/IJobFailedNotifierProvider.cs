@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-public interface IJobExceptionNotifier
+public interface IJobFailedNotifierProvider
 {
-    Task NotifyAsync([NotNull] JobExceptionNotificationContext context);
+    Task NotifyErrorAsync([NotNull] JobEventContext context);
 }
