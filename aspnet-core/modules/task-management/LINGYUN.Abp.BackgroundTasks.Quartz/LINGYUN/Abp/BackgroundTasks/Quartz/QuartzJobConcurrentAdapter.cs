@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -7,8 +7,8 @@ namespace LINGYUN.Abp.BackgroundTasks.Quartz;
 public class QuartzJobConcurrentAdapter<TJobRunnable> : QuartzJobSimpleAdapter<TJobRunnable>
     where TJobRunnable : IJobRunnable
 {
-    public QuartzJobConcurrentAdapter(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+    public QuartzJobConcurrentAdapter(IServiceScopeFactory serviceScopeFactory)
+        : base(serviceScopeFactory)
     {
     }
 }

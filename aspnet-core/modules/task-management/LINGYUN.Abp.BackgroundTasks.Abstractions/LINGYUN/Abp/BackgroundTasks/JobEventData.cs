@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -8,6 +9,10 @@ public class JobEventData
     /// 任务类别
     /// </summary>
     public Type Type { get; }
+    /// <summary>
+    /// 任务参数
+    /// </summary>
+    public IReadOnlyDictionary<string, object> Args { get; }
     /// <summary>
     /// 任务组别
     /// </summary>
@@ -49,16 +54,6 @@ public class JobEventData
     /// </summary>
     public int RepeatCount { get; set; }
     /// <summary>
-    /// 失败重试上限
-    /// 默认：50
-    /// </summary>
-    public int TryCount { get; set; }
-    /// <summary>
-    /// 最大执行次数
-    /// 默认：0, 无限制
-    /// </summary>
-    public int MaxCount { get; set; }
-    /// <summary>
     /// 运行时间
     /// </summary>
     public DateTime RunTime { get; set; }
@@ -70,21 +65,19 @@ public class JobEventData
     /// 下次运行时间
     /// </summary>
     public DateTime? NextRunTime { get; set; }
-    /// <summary>
-    /// 连续失败且不会再次执行
-    /// </summary>
-    public bool IsAbandoned { get; set; }
     public JobEventData(
         string key,
         Type type, 
         string group, 
         string name,
+        IReadOnlyDictionary<string, object> args,
         Exception exception = null)
     {
         Key = key;
         Type = type;
         Group = group;
         Name = name;
+        Args = args;
         Exception = exception;
     }
 }

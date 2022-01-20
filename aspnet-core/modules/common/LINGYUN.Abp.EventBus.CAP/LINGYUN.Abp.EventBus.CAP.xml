@@ -147,6 +147,16 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.GetCapProvidedParameter(DotNetCore.CAP.Internal.ParameterDescriptor,DotNetCore.CAP.Messages.Message,System.Threading.CancellationToken)">
+            <summary>
+            
+            </summary>
+            <param name="parameterDescriptor"></param>
+            <param name="message"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.GetInstance(System.IServiceProvider,DotNetCore.CAP.Internal.ConsumerContext)">
             <summary>
             获取事件处理类实例

@@ -128,7 +128,7 @@ public class JobInfo
         }
 
         // 重试
-        if (Status == JobStatus.FailedRetry)
+        if (Status == JobStatus.FailedRetry && MaxTryCount > 0)
         {
             maxCount = MaxTryCount - TryCount;
 

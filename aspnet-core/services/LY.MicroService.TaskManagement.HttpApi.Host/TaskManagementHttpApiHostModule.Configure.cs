@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.ExceptionHandling;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -10,10 +11,10 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
@@ -26,8 +27,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
-using Quartz;
-using DotNetCore.CAP;
 
 namespace LY.MicroService.TaskManagement;
 

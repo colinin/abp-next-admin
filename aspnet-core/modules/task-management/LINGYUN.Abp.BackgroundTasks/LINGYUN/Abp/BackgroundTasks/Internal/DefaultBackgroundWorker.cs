@@ -10,65 +10,41 @@ namespace LINGYUN.Abp.BackgroundTasks.Internal;
 internal class DefaultBackgroundWorker : BackgroundService
 {
     private readonly IJobStore _jobStore;
-    private readonly IJobScheduler _jobScheduler;
+    private readonly IJobPublisher _jobPublisher;
     private readonly AbpBackgroundTasksOptions _options;
 
     public DefaultBackgroundWorker(
         IJobStore jobStore,
-        IJobScheduler jobScheduler,
+        IJobPublisher jobPublisher,
         IOptions<AbpBackgroundTasksOptions> options)
     {
         _jobStore = jobStore;
-        _jobScheduler = jobScheduler;
+        _jobPublisher = jobPublisher;
         _options = options.Value;
     }
 
     protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // 仅轮询宿主端
         await QueuePollingJob();
         await QueueCleaningJob();
-
-        // 周期性任务改为手动入队
-        // await QueueKeepAliveJob();
-    }
-
-    private async Task QueueKeepAliveJob()
-    {
-        var keepAliveJob = BuildKeepAliveJobInfo();
-        await _jobScheduler.QueueAsync(keepAliveJob);
     }
 
     private async Task QueuePollingJob()
     {
-        var pollingJob = BuildPollingJobInfo();
-        await _jobScheduler.QueueAsync(pollingJob);
+        if (_options.JobFetchEnabled)
+        {
+            var pollingJob = BuildPollingJobInfo();
+            await _jobPublisher.PublishAsync(pollingJob);
+        }
     }
 
     private async Task QueueCleaningJob()
     {
-        var cleaningJob = BuildCleaningJobInfo();
-        await _jobScheduler.QueueAsync(cleaningJob);
-    }
-
-    private JobInfo BuildKeepAliveJobInfo()
-    {
-        return new JobInfo
+        if (_options.JobCleanEnabled)
         {
-            Id = "KeepAlive",
-            Name = nameof(BackgroundKeepAliveJob),
-            Group = "KeepAlive",
-            Description = "Add periodic tasks",
-            Args = new Dictionary<string, object>(),
-            Status = JobStatus.Running,
-            BeginTime = DateTime.Now,
-            CreationTime = DateTime.Now,
-            JobType = JobType.Once,
-            Priority = JobPriority.High,
-            MaxCount = 1,
-            Interval = 30,
-            Type = typeof(BackgroundKeepAliveJob).AssemblyQualifiedName,
-        };
+            var cleaningJob = BuildCleaningJobInfo();
+            await _jobPublisher.PublishAsync(cleaningJob);
+        }
     }
 
     private JobInfo BuildPollingJobInfo()
