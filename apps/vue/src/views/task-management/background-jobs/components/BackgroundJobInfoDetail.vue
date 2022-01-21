@@ -2,7 +2,7 @@
   <PageWrapper>
     <template #title>
       <ArrowLeftOutlined @click="handleBack" />
-      作业详情
+      {{ L('BackgroundJobDetail') }}
     </template>
     <Skeleton :loading="jobInfo === undefined">
       <Card class="mt-4" :title="L('BasicInfo')">
