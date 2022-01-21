@@ -27,6 +27,9 @@ export function getDataColumns(): BasicColumn[] {
       width: 300,
       sorter: true,
       fixed: 'left',
+      slots: {
+        customRender: 'name',
+      }
     },
     {
       title: L('DisplayName:Description'),
@@ -121,6 +124,59 @@ export function getDataColumns(): BasicColumn[] {
       dataIndex: 'tryCount',
       align: 'left',
       width: 100,
+      sorter: true,
+    },
+  ];
+}
+
+export function getLogDataColumns(): BasicColumn[] {
+  return [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      width: 1,
+      ifShow: false,
+    },
+    {
+      title: L('DisplayName:Group'),
+      dataIndex: 'jobGroup',
+      align: 'left',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:Name'),
+      dataIndex: 'jobName',
+      align: 'left',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:Type'),
+      dataIndex: 'jobType',
+      align: 'left',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:LastRunTime'),
+      dataIndex: 'runTime',
+      align: 'left',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:Result'),
+      dataIndex: 'message',
+      align: 'left',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:Exception'),
+      dataIndex: 'exception',
+      align: 'left',
+      width: 150,
       sorter: true,
     },
   ];

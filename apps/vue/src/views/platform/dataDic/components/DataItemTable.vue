@@ -104,7 +104,7 @@
         });
       },
       handleAppendItem() {
-        this.openModal(true, {} as DataItem, true);
+        this.openModal(true, {}, true);
       },
       handleEdit(record: Recordable) {
         // 克隆对象过去,解决清除表单值后再次编辑为空值

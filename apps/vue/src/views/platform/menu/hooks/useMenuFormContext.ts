@@ -23,7 +23,8 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
   const { L } = useLocalization('AppPlatform');
 
   function getMetaFormSchemas(meta: DataItem[]): TabFormSchema[] {
-    return meta.map((item) => {
+    return meta.sort((pre, next) => pre.name.localeCompare(next.name))
+    .map((item) => {
       const schema: TabFormSchema = {
         tab: L('DisplayName:Meta'),
         field: 'meta.'.concat(item.name),
@@ -31,6 +32,11 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         colProps: { span: 24 },
         required: !item.allowBeNull,
         component: 'Input',
+        componentProps: {
+          style: {
+            width: '100%',
+          },
+        }
       };
       switch (item.valueType) {
         case ValueType.Boolean:
@@ -46,7 +52,7 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
               onChange: (e: ChangeEvent) => {
                 model[field] = e.target.checked.toString();
               },
-            });
+            }, () => item.displayName);
           };
           break;
         case ValueType.Date:

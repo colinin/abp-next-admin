@@ -76,3 +76,38 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
     },
   ],
 };
+
+export const ACCOUNT_CENTER_ROUTE: AppRouteRecordRaw = {
+  path: '/account',
+  name: 'Account',
+  component: LAYOUT,
+  redirect: '/account/center',
+  meta: {
+    title: 'Account',
+    hideMenu: true,
+    ignoreAuth: true,
+  },
+  children: [
+    {
+      path: 'settings',
+      name: 'ASettings',
+      component: () => import('/@/views/account/setting/index.vue'),
+      meta: {
+        title: t('routes.basic.accountSetting'),
+        hideMenu: true,
+        ignoreAuth: true,
+      },
+    },
+    {
+      path: 'center',
+      name: 'ACenter',
+      component: () => import('/@/views/account/center/index.vue'),
+      meta: {
+        title: t('routes.basic.accountCenter'),
+        hideMenu: true,
+        ignoreAuth: true,
+      },
+    },
+  ],
+};
+

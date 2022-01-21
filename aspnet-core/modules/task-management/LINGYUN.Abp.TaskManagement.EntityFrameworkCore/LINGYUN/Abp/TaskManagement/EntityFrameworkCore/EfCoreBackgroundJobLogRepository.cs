@@ -56,7 +56,7 @@ public class EfCoreBackgroundJobLogRepository :
             .WhereIf(filter.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
             .WhereIf(filter.BeginRunTime.HasValue, x => x.RunTime.CompareTo(filter.BeginRunTime.Value) >= 0)
             .WhereIf(filter.EndRunTime.HasValue, x => x.RunTime.CompareTo(filter.EndRunTime.Value) <= 0)
-            .OrderBy(sorting ?? nameof(BackgroundJobInfo.Name))
+            .OrderBy(sorting ?? $"{nameof(BackgroundJobLog.RunTime)} DESC")
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
