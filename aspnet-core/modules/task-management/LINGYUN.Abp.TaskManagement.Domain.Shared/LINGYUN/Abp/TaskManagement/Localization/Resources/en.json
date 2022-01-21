@@ -67,6 +67,8 @@
     "DisplayName:AboveNormal": "Above Normal",
     "DisplayName:High": "High",
     "BackgroundJobs": "Jobs",
+    "BackgroundJobDetail": "Job Detail",
+    "BackgroundJobLogs": "Job Logs",
     "BackgroundJobs:AddNew": "New Job",
     "BackgroundJobs:Edit": "Edit Job",
     "BackgroundJobs:AddNewArg": "New Args",

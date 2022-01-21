@@ -67,6 +67,8 @@
     "DisplayName:AboveNormal": "高于正常",
     "DisplayName:High": "高",
     "BackgroundJobs": "作业列表",
+    "BackgroundJobDetail": "作业详情",
+    "BackgroundJobLogs": "作业日志",
     "BackgroundJobs:AddNew": "新建作业",
     "BackgroundJobs:Edit": "编辑作业",
     "BackgroundJobs:AddNewArg": "添加参数",

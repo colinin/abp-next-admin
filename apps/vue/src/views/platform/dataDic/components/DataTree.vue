@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, onMounted } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   import { Modal, Card } from 'ant-design-vue';
@@ -47,7 +47,7 @@
       DataItemModal,
     },
     emits: ['change', 'append-item'],
-    setup() {
+    setup(_, { emit }) {
       const { L } = useLocalization('AppPlatform');
       const title = L('DisplayName:DataDictionary');
       const treeData = ref<Data[]>();
@@ -62,62 +62,45 @@
       const formTitle = ref('');
       const getDataId = ref('');
 
-      return {
-        L,
-        formItems,
-        formTitle,
-        title,
-        getDataId,
-        treeData,
-        replaceFields,
-        registerDataModal,
-        openDataModal,
-        closeDataModal,
-        registerItemModal,
-        openItemModal,
-      };
-    },
-    mounted() {
-      this.onLoadAllDataDic();
-    },
-    methods: {
-      getContentMenus(node: any): ContextMenuItem[] {
+      onMounted(onLoadAllDataDic);
+
+      function getContentMenus(node: any): ContextMenuItem[] {
         return [
           {
-            label: this.L('Data:Edit'),
+            label: L('Data:Edit'),
             handler: () => {
               get(node.eventKey).then((res) => {
-                this.formTitle = this.L('Data:Edit');
-                this.openDataModal(true, res, true);
+                formTitle.value = L('Data:Edit');
+                openDataModal(true, res, true);
               });
             },
             icon: 'ant-design:edit-outlined',
           },
           {
-            label: this.L('Data:AddNew'),
+            label: L('Data:AddNew'),
             handler: () => {
-              this.handleNewData(node.eventKey);
+              handleNewData(node.eventKey);
             },
             icon: 'ant-design:plus-outlined',
           },
           {
-            label: this.L('Data:AppendItem'),
+            label: L('Data:AppendItem'),
             handler: () => {
-              this.getDataId = node.eventKey;
-              this.openItemModal(true, {}, true);
+              getDataId.value = node.eventKey;
+              openItemModal(true, {}, true);
             },
             icon: 'ant-design:plus-square-outlined',
           },
           {
-            label: this.L('Data:Delete'),
+            label: L('Data:Delete'),
             handler: () => {
               Modal.warning({
-                title: this.t('AbpUi.AreYouSure'),
-                content: this.t('AbpUi.ItemWillBeDeletedMessage'),
+                title: L('AbpUi.AreYouSure'),
+                content: L('AbpUi.ItemWillBeDeletedMessage'),
                 okCancel: true,
                 onOk: () => {
                   remove(node.eventKey).then(() => {
-                    this.onLoadAllDataDic();
+                    onLoadAllDataDic();
                   });
                 },
               });
@@ -125,30 +108,34 @@
             icon: 'ant-design:delete-outlined',
           },
         ];
-      },
-      onLoadAllDataDic() {
+      }
+      
+      function onLoadAllDataDic() {
         getAll().then((res) => {
-          this.treeData = listToTree(res.items, {
+          treeData.value = listToTree(res.items, {
             pid: 'parentId',
           });
         });
-      },
-      handleNodeChange(selectKeys: String[]) {
+      }
+
+      function handleNodeChange(selectKeys: String[]) {
         if (selectKeys.length > 0) {
-          this.$emit('change', selectKeys[0]);
+          emit('change', selectKeys[0]);
         }
-      },
-      handleNewData(parentId: string | null) {
-        this.formTitle = this.L('Data:AddNew');
-        this.openDataModal(
+      }
+
+      function handleNewData(parentId: string | null) {
+        formTitle.value = L('Data:AddNew');
+        openDataModal(
           true,
           {
             parentId: parentId,
           } as Data,
           true,
         );
-      },
-      handleSaveChanges(val) {
+      }
+      
+      function handleSaveChanges(val) {
         const api: Promise<Data> = val.id
           ? update(val.id, {
               name: val.name,
@@ -162,9 +149,28 @@
               parentId: val.parentId,
             });
         return api.then(() => {
-          this.onLoadAllDataDic();
+          onLoadAllDataDic();
         });
-      },
+      }
+
+      return {
+        L,
+        formItems,
+        formTitle,
+        title,
+        getDataId,
+        treeData,
+        replaceFields,
+        registerDataModal,
+        openDataModal,
+        closeDataModal,
+        registerItemModal,
+        openItemModal,
+        getContentMenus,
+        handleNewData,
+        handleNodeChange,
+        handleSaveChanges,
+      };
     },
   });
 </script>

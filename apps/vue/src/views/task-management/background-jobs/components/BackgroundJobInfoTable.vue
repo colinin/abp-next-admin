@@ -26,6 +26,9 @@
       <template #enable="{ record }">
         <Switch :checked="record.isEnabled" disabled />
       </template>
+      <template #name="{ record }">
+        <a href="javascript:(0);" @click="handleDetail(record)">{{ record.name }}</a>
+      </template>
       <template #status="{ record }">
         <Tooltip v-if="record.isAbandoned" color="orange" :title="L('Description:IsAbandoned')">
           <Tag :color="JobStatusColor[record.status]">{{ JobStatusMap[record.status] }}</Tag>
@@ -88,6 +91,7 @@
   import { Switch, Modal, Tag, Tooltip, message } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useGo } from '/@/hooks/web/usePage';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
@@ -98,6 +102,7 @@
   import { JobStatusMap, JobStatusColor, JobTypeMap, JobPriorityMap, JobPriorityColor } from '../datas/typing';
   import BackgroundJobInfoModal from './BackgroundJobInfoModal.vue';
 
+  const go = useGo();
   const { L } = useLocalization('TaskManagement');
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
@@ -147,6 +152,10 @@
 
   function handleEdit(record) {
     openModal(true, record);
+  }
+
+  function handleDetail(record) {
+    go(`/task-management/background-jobs/${record.id}`);
   }
 
   function handlePause(record) {
