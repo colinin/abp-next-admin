@@ -16,6 +16,7 @@ using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.Proxying;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -25,6 +26,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
          where TService: IActor
     {
         protected ICurrentTenant CurrentTenant { get; }
+        protected AbpSystemTextJsonSerializerOptions JsonSerializerOptions { get; }
         protected AbpDaprActorProxyOptions DaprActorProxyOptions { get; }
         protected IProxyHttpClientFactory HttpClientFactory { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
@@ -33,6 +35,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
 
         public DynamicDaprActorProxyInterceptor(
             IOptions<AbpDaprActorProxyOptions> daprActorProxyOptions,
+            IOptions<AbpSystemTextJsonSerializerOptions> jsonSerializerOptions,
             IProxyHttpClientFactory httpClientFactory,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider,
@@ -42,6 +45,7 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
             HttpClientFactory = httpClientFactory;
             ClientAuthenticator = clientAuthenticator;
             DaprActorProxyOptions = daprActorProxyOptions.Value;
+            JsonSerializerOptions = jsonSerializerOptions.Value;
             RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
 
             Logger = NullLogger<DynamicDaprActorProxyInterceptor<TService>>.Instance;
@@ -79,7 +83,10 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying
 
             var actorProxyOptions = new ActorProxyOptions
             {
-                HttpEndpoint = remoteServiceConfig.BaseUrl
+                HttpEndpoint = remoteServiceConfig.BaseUrl,
+                RequestTimeout = TimeSpan.FromMilliseconds(remoteServiceConfig.GetRequestTimeOut()),
+                DaprApiToken = remoteServiceConfig.GetApiToken(),
+                JsonSerializerOptions = JsonSerializerOptions.JsonSerializerOptions,
             };
 
             // 自定义请求处理器
