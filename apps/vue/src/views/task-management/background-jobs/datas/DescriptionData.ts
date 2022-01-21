@@ -1,5 +1,6 @@
 import { DescItem } from "/@/components/Description";
 import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { JobStatusMap, JobTypeMap, JobPriorityMap } from './typing';
 
 const { L } = useLocalization('TaskManagement');
 
@@ -52,16 +53,25 @@ export function getDescriptionSchemas() : DescItem[] {
     {
       label: L('DisplayName:Status'),
       field: 'status',
+      render: (val) => {
+        return JobStatusMap[val];
+      },
       span: 1,
     },
     {
       label: L('DisplayName:JobType'),
       field: 'jobType',
+      render: (val) => {
+        return JobTypeMap[val];
+      },
       span: 1,
     },
     {
       label: L('DisplayName:Priority'),
       field: 'priority',
+      render: (val) => {
+        return JobPriorityMap[val];
+      },
       span: 1,
     },
     {
