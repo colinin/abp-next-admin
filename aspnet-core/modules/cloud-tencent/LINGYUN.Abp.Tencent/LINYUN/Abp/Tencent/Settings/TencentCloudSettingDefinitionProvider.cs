@@ -26,6 +26,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -37,6 +38,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -48,6 +50,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -59,6 +62,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -71,6 +75,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -83,6 +88,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -93,6 +99,7 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
         };

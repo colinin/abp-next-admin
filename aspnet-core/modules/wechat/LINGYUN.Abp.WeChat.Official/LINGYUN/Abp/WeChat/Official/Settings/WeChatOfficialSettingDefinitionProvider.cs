@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
                     isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -27,6 +28,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
                     isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -37,6 +39,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
                     isEncrypted: false)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -47,6 +50,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
                     isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -57,6 +61,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
                     isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName)
             );

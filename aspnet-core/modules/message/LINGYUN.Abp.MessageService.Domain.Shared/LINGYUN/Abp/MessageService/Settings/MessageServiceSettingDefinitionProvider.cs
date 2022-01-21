@@ -18,6 +18,7 @@ namespace LINGYUN.Abp.MessageService.Settings
                      isEncrypted: false)
                  .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName)
              );

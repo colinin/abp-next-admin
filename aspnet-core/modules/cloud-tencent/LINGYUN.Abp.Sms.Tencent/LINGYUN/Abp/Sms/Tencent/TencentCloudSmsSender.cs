@@ -56,21 +56,20 @@ namespace LINGYUN.Abp.Sms.Tencent
                 signName = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultSignName);
             }
 
-            if (!smsMessage.Properties.TryGetValue("TemplateParam", out var templateParam))
-            {
-                templateParam = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultSignName);
-            }
-
-            var smsClient = await TencentCloudClientFactory.CreateAsync();
-
             var request = new SendSmsRequest
             {
                 SmsSdkAppId = appId,
                 SignName = signName?.ToString(),
                 TemplateId = templateId?.ToString(),
                 PhoneNumberSet = smsMessage.PhoneNumber.Split(';'),
-                TemplateParamSet = templateParam?.ToString()?.Split(';'),
             };
+
+            if (smsMessage.Properties.Any())
+            {
+                request.TemplateParamSet = smsMessage.Properties.Select(x => x.Value.ToString()).ToArray();
+            }
+
+            var smsClient = await TencentCloudClientFactory.CreateAsync();
 
             var response = await smsClient.SendSms(request);
 
