@@ -19,6 +19,7 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 isVisibleToClients: true)
             .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName)
         );
@@ -32,6 +33,7 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 isVisibleToClients: true)
             .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName)
         );

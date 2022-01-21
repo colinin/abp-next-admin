@@ -24,6 +24,7 @@ namespace LINGYUN.Abp.Sms.Tencent.Settings
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -35,6 +36,7 @@ namespace LINGYUN.Abp.Sms.Tencent.Settings
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -46,6 +48,7 @@ namespace LINGYUN.Abp.Sms.Tencent.Settings
                 )
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
             };

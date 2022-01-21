@@ -19,6 +19,7 @@ namespace LINGYUN.Abp.WeChat.Settings
                     isEncrypted: false)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName)
             );

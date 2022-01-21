@@ -24,6 +24,7 @@ namespace LINGYUN.Platform.Settings
                     isVisibleToClients: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
@@ -34,6 +35,7 @@ namespace LINGYUN.Platform.Settings
                     isVisibleToClients: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
             };

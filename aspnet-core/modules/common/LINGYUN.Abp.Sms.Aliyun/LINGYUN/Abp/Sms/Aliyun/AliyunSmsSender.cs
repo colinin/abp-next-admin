@@ -5,6 +5,8 @@ using LINGYUN.Abp.Aliyun;
 using LINGYUN.Abp.Sms.Aliyun.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -133,17 +135,11 @@ namespace LINGYUN.Abp.Sms.Aliyun
 
         private void TryAddTemplateParam(CommonRequest request, SmsMessage smsMessage)
         {
-            // 统一一下模板参数名称
-            if (smsMessage.Properties.TryGetValue("TemplateParam", out var templateParam))
+            if (smsMessage.Properties.Any())
             {
-                request.AddQueryParameters("TemplateParam", templateParam.ToString());
+                var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
+                request.AddQueryParameters("TemplateParam", queryParamJson);
             }
-
-            //if (smsMessage.Properties.Count > 0)
-            //{
-            //    var queryParamJson = JsonSerializer.Serialize(smsMessage.Properties);
-            //    request.AddQueryParameters("TemplateParam", queryParamJson);
-            //}
         }
     }
 }
