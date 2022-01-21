@@ -1,20 +1,15 @@
-﻿using LINGYUN.Abp.MessageService;
+﻿using LY.MicroService.RealtimeMessage.DataSeeder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Volo.Abp;
-using Volo.Abp.Threading;
 
 namespace LY.MicroService.RealtimeMessage;
 
 public partial class RealtimeMessageHttpApiHostModule
 {
-    private void SeedData(ApplicationInitializationContext context)
+    private static void ConfigureSeedWorker(IServiceCollection services, bool isDevelopment = false)
     {
-        if (context.GetEnvironment().IsDevelopment())
+        if (isDevelopment)
         {
-            AsyncHelper.RunSync(async () =>
-                await context.ServiceProvider.GetRequiredService<IMessageDataSeeder>()
-                    .SeedAsync());
+            services.AddHostedService<RealtimeMessageDataSeederWorker>();
         }
     }
 }

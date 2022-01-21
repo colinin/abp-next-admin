@@ -1,22 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Volo.Abp;
-using Volo.Abp.Data;
-using Volo.Abp.Threading;
+﻿using LY.MicroService.BackendAdmin.DataSeeder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LY.MicroService.BackendAdmin;
 
 public partial class BackendAdminHttpApiHostModule
 {
-    private static void SeedData(ApplicationInitializationContext context)
+    private static void ConfigureSeedWorker(IServiceCollection services, bool isDevelopment = false)
     {
-        if (context.GetEnvironment().IsDevelopment())
+        if (isDevelopment)
         {
-            AsyncHelper.RunSync(async () =>
-            {
-                using var scope = context.ServiceProvider.CreateScope();
-                await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
-            });
+            services.AddHostedService<BackendAdminDataSeederWorker>();
         }
     }
 }

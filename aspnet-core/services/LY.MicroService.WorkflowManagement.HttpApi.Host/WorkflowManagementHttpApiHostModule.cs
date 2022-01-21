@@ -92,6 +92,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
+        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         // 开发取消权限检查
@@ -125,7 +126,5 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
-
-        SeedData(context);
     }
 }

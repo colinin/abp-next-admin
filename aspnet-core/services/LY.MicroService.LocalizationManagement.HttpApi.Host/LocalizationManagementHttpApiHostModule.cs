@@ -74,6 +74,7 @@ namespace LY.MicroService.LocalizationManagement
             ConfigureSwagger(context.Services);
             ConfigureMultiTenancy(configuration);
             ConfigureCors(context.Services, configuration);
+            ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
 
@@ -110,8 +111,6 @@ namespace LY.MicroService.LocalizationManagement
             app.UseAbpSerilogEnrichers();
             // 路由
             app.UseConfiguredEndpoints();
-
-            SeedData(context);
         }
     }
 }

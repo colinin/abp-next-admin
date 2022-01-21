@@ -100,6 +100,7 @@ namespace LY.MicroService.RealtimeMessage
             ConfigureMultiTenancy(configuration);
             ConfigureHangfireServer(context.Services);
             ConfigureCors(context.Services, configuration);
+            ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
         }
 
@@ -140,8 +141,6 @@ namespace LY.MicroService.RealtimeMessage
             app.UseHangfireDashboard();
             // 路由
             app.UseConfiguredEndpoints();
-
-            SeedData(context);
         }
     }
 }
