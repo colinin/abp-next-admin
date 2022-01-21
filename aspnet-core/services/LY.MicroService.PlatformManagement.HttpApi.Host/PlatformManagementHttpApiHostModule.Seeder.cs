@@ -1,20 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Volo.Abp;
-using Volo.Abp.Data;
-using Volo.Abp.Threading;
+﻿using LY.MicroService.PlatformManagement.DataSeeder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LY.MicroService.PlatformManagement;
 
 public partial class PlatformManagementHttpApiHostModule
 {
-    private void SeedData(ApplicationInitializationContext context)
+    private static void ConfigureSeedWorker(IServiceCollection services, bool isDevelopment = false)
     {
-        if (context.GetEnvironment().IsDevelopment())
+        if (isDevelopment)
         {
-            AsyncHelper.RunSync(async () =>
-                await context.ServiceProvider.GetRequiredService<IDataSeeder>()
-                    .SeedAsync());
+            services.AddHostedService<PlatformManagementDataSeederWorker>();
         }
     }
 }

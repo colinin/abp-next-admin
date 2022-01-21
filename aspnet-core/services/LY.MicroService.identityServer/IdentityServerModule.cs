@@ -96,6 +96,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
@@ -130,7 +131,5 @@ public partial class IdentityServerModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
-
-        SeedData(context);
     }
 }
