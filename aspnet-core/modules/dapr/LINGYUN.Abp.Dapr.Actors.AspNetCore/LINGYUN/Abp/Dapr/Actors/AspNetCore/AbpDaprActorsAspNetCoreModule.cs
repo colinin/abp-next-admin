@@ -44,9 +44,11 @@ namespace LINGYUN.Abp.Dapr.Actors.AspNetCore
                     actorRegistrations.Add(actorRegistration);
                 }
             });
-
+            // 使Actor Runtime可配置
+            var preActions = services.GetPreConfigureActions<ActorRuntimeOptions>();
             services.AddActors(options =>
             {
+                preActions.Configure(options);
                 options.Actors.AddIfNotContains(actorRegistrations);
             });
         }

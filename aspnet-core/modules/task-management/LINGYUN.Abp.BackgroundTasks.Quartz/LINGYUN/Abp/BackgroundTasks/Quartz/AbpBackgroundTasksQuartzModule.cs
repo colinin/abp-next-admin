@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using System.Collections.Specialized;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
@@ -18,6 +16,5 @@ public class AbpBackgroundTasksQuartzModule : AbpModule
 
         _scheduler.ListenerManager.AddJobListener(context.ServiceProvider.GetRequiredService<QuartzJobListener>());
         _scheduler.ListenerManager.AddTriggerListener(context.ServiceProvider.GetRequiredService<QuartzTriggerListener>());
-
     }
 }
