@@ -22,16 +22,13 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
 
     public ILogger<JobFailedNotifierProvider> Logger { protected get; set; }
 
-    protected IClock Clock { get; }
     protected IEmailSender EmailSender { get; }
     protected ITemplateRenderer TemplateRenderer { get; }
 
     public JobFailedNotifierProvider(
-        IClock clock,
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer)
     {
-        Clock = clock;
         EmailSender = emailSender;
         TemplateRenderer = templateRenderer;
 
@@ -63,15 +60,15 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
                 return;
             }
 
-            var footer = eventData.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {Clock.Now.Year}";
+            var footer = eventData.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {eventData.RunTime.Year}";
             var model = new
             {
                 Title = subject,
-                Group = eventData.Group,
-                Name = eventData.Name,
                 Id = eventData.Key,
-                Type = eventData.Type,
-                Triggertime = Clock.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                Group = eventData.Args.GetOrDefault(nameof(JobInfo.Group)) ?? eventData.Group,
+                Name = eventData.Args.GetOrDefault(nameof(JobInfo.Name)) ?? eventData.Name,
+                Type = eventData.Args.GetOrDefault(nameof(JobInfo.Type)) ?? eventData.Type.Name,
+                Triggertime = eventData.RunTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Message = errorMessage,
                 Tenantname = eventData.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
                 Footer = footer,

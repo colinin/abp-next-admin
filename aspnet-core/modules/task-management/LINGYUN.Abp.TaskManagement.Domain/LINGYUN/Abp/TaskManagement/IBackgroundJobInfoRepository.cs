@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,17 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     Task<bool> CheckNameAsync(
         string group,
         string name,
+        CancellationToken cancellationToken = default);
+    /// <summary>
+    /// 获取作业
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<JobInfo> FindJobAsync(
+        string id,
+        bool includeDetails = true,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取过期任务列表

@@ -5,11 +5,9 @@ using Quartz;
 using Quartz.Listener;
 using System;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -21,16 +19,13 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
     public override string Name => "QuartzJobListener";
 
     protected IClock Clock { get; }
-    protected IJobEventProvider EventProvider { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public QuartzJobListener(
         IClock clock,
-        IJobEventProvider eventProvider,
         IServiceScopeFactory serviceScopeFactory)
     {
         Clock = clock;
-        EventProvider = eventProvider;
         ServiceScopeFactory = serviceScopeFactory;
 
         Logger = NullLogger<QuartzJobListener>.Instance;
@@ -57,11 +52,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             {
                 return;
             }
-            var jobEventList = EventProvider.GetAll();
-            if (!jobEventList.Any())
-            {
-                return;
-            }
 
             using var scope = ServiceScopeFactory.CreateScope();
             var jobEventData = new JobEventData(
@@ -78,15 +68,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 scope.ServiceProvider,
                 jobEventData);
 
-            var index = 0;
-            var taskList = new Task[jobEventList.Count];
-            foreach (var jobEvent in jobEventList)
-            {
-                taskList[index] = jobEvent.OnJobBeforeExecuted(eventContext);
-                index++;
-            }
-
-            await Task.WhenAll(taskList);
+            var trigger = scope.ServiceProvider.GetRequiredService<IJobEventTrigger>();
+            await trigger.OnJobBeforeExecuted(eventContext);
         }
         catch (Exception ex)
         {
@@ -100,12 +83,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         {
             var jobId = context.GetString(nameof(JobInfo.Id));
             if (jobId.IsNullOrWhiteSpace())
-            {
-                return;
-            }
-
-            var jobEventList = EventProvider.GetAll();
-            if (!jobEventList.Any())
             {
                 return;
             }
@@ -151,15 +128,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 scope.ServiceProvider,
                 jobEventData);
 
-            var index = 0;
-            var taskList = new Task[jobEventList.Count];
-            foreach (var jobEvent in jobEventList)
-            {
-                taskList[index] = jobEvent.OnJobAfterExecuted(eventContext);
-                index++;
-            }
-
-            await Task.WhenAll(taskList);
+            var trigger = scope.ServiceProvider.GetRequiredService<IJobEventTrigger>();
+            await trigger.OnJobAfterExecuted(eventContext);
         }
         catch (Exception ex)
         {

@@ -46,9 +46,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
 
     public async virtual Task<JobInfo> FindAsync(string jobId)
     {
-        var jobInfo = await JobInfoRepository.FindAsync(jobId);
-
-        return ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
+        return await JobInfoRepository.FindJobAsync(jobId);
     }
 
     [UnitOfWork]
@@ -128,7 +126,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             };
 
             jogLog.SetMessage(
-                eventData.Exception == null ? eventData.Result ?? "OK" : "Failed",
+                eventData.Exception == null ? eventData.Result ?? "OK" : GetSourceException(eventData.Exception).Message,
                 eventData.Exception);
 
             await JobLogRepository.InsertAsync(jogLog);
@@ -147,5 +145,14 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                cancellationToken);
 
         await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
+    }
+
+    protected virtual Exception GetSourceException(Exception exception)
+    {
+        if (exception.InnerException != null)
+        {
+            return GetSourceException(exception.InnerException);
+        }
+        return exception;
     }
 }

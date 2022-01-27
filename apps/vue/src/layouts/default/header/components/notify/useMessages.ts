@@ -75,6 +75,10 @@ export function useMessages() {
         message.extraProperties.content.Values as Recordable,
       );
     }
+    if (message.messageType === MessageType.Notifier) {
+      createMessage.info(message.content);
+      return;
+    }
     if (message.groupId) {
       emitter.emit(ChatEventEnum.USER_MESSAGE_GROUP_NEW, message);
     } else {
@@ -117,7 +121,8 @@ export function useMessages() {
       source: MessageSourceTye.User,
       isAnonymous: data.isAnonymous ?? false,
     };
-    signalR.invoke('send', chatMessage).then(() => {
+    signalR.invoke('send', chatMessage).then((id) => {
+      chatMessage.messageId = id;
       !chatMessage.groupId && onMessageReceived(chatMessage);
     });
   }

@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 using Volo.Abp.Content;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public abstract class HttpRequestJobBase
 {
+    // 可选, 请求时指定区域性
+    public const string PropertyCulture = "culture";
+
     protected ICurrentTenant CurrentTenant { get; set; }
 
     protected virtual void InitJob(JobRunnableContext context)
@@ -77,21 +81,25 @@ public abstract class HttpRequestJobBase
         IReadOnlyDictionary<string, string> headers = null,
         string clientName = null)
     {
-        var request = BuildRequestMessage(httpMethod, requestUrl, data, contentType, headers);
-        var clientFactory = context.GetRequiredService<IHttpClientFactory>();
-
-        var client = clientName.IsNullOrWhiteSpace()
-            ? clientFactory.CreateClient(BackgroundTasksConsts.DefaultHttpClient)
-            : clientFactory.CreateClient(clientName);
-
-        var response = await client.SendAsync(request);
-
-        if (!response.IsSuccessStatusCode)
+        context.TryGetString(PropertyCulture, out var culture);
+        using (CultureHelper.Use(culture ?? "en"))
         {
-            await ThrowExceptionForResponseAsync(response);
-        }
+            var request = BuildRequestMessage(httpMethod, requestUrl, data, contentType, headers);
+            var clientFactory = context.GetRequiredService<IHttpClientFactory>();
 
-        return response;
+            var client = clientName.IsNullOrWhiteSpace()
+                ? clientFactory.CreateClient(BackgroundTasksConsts.DefaultHttpClient)
+                : clientFactory.CreateClient(clientName);
+
+            var response = await client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await ThrowExceptionForResponseAsync(response);
+            }
+
+            return response;
+        }
     }
 
     protected virtual HttpRequestMessage BuildRequestMessage(

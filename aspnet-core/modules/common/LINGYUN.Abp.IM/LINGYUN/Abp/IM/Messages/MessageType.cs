@@ -25,6 +25,11 @@
         /// <summary>
         /// 文件
         /// </summary>
-        File = 50
+        File = 50,
+        /// <summary>
+        /// 通知
+        /// 一般用于错误处理
+        /// </summary>
+        Notifier = 100,
     }
 }
