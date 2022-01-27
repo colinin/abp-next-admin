@@ -3,7 +3,6 @@ using LINGYUN.Abp.IM.Contract;
 using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.IM.Messages;
-using LINGYUN.Abp.RealTime;
 using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -85,54 +84,80 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         /// <param name="chatMessage"></param>
         /// <returns></returns>
         [HubMethodName("send")]
-        public virtual async Task SendMessageAsync(ChatMessage chatMessage)
+        public virtual async Task<string> SendMessageAsync(ChatMessage chatMessage)
         {
-            await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
+            return await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
         }
 
         [HubMethodName("recall")]
         public virtual async Task ReCallAsync(ChatMessage chatMessage)
         {
-            await Processor?.ReCallAsync(chatMessage);
-            if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+            try
             {
-                await SendMessageAsync(
-                    Options.ReCallChatMessageMethod,
-                    ChatMessage.SystemLocalized(
-                        chatMessage.FormUserId,
-                        chatMessage.GroupId,
-                        new LocalizableStringInfo(
-                            LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
-                            "Messages:RecallMessage",
-                            new Dictionary<object, object>
-                            {
+                await Processor?.ReCallAsync(chatMessage);
+                if (!chatMessage.GroupId.IsNullOrWhiteSpace())
+                {
+                    await SendMessageAsync(
+                        Options.ReCallChatMessageMethod,
+                        ChatMessage.SystemLocalized(
+                            chatMessage.FormUserId,
+                            chatMessage.GroupId,
+                            new LocalizableStringInfo(
+                                LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
+                                "Messages:RecallMessage",
+                                new Dictionary<object, object>
+                                {
                                 { "User", chatMessage.FormUserName }
-                            }),
-                        Clock,
-                        chatMessage.MessageType,
-                        chatMessage.TenantId)
-                    .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
-                    callbackException: false);
+                                }),
+                            Clock,
+                            chatMessage.MessageType,
+                            chatMessage.TenantId)
+                        .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
+                        callbackException: false);
+                }
+                else
+                {
+                    await SendMessageAsync(
+                        Options.ReCallChatMessageMethod,
+                        ChatMessage.SystemLocalized(
+                            chatMessage.ToUserId.Value,
+                            chatMessage.FormUserId,
+                            new LocalizableStringInfo(
+                                LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
+                                "Messages:RecallMessage",
+                                new Dictionary<object, object>
+                                {
+                                { "User", chatMessage.FormUserName }
+                                }),
+                            Clock,
+                            chatMessage.MessageType,
+                            chatMessage.TenantId)
+                        .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
+                        callbackException: false);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await SendMessageAsync(
-                    Options.ReCallChatMessageMethod,
-                    ChatMessage.SystemLocalized(
-                        chatMessage.ToUserId.Value,
-                        chatMessage.FormUserId,
-                        new LocalizableStringInfo(
-                            LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
-                            "Messages:RecallMessage",
-                            new Dictionary<object, object>
-                            {
-                                { "User", chatMessage.FormUserName }
-                            }),
-                        Clock,
-                        chatMessage.MessageType,
-                        chatMessage.TenantId)
-                    .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
-                    callbackException: false);
+                if (ex is IBusinessException)
+                {
+                    var errorInfo = ErrorInfoConverter.Convert(ex, options =>
+                    {
+                        options.SendExceptionsDetailsToClients = false;
+                        options.SendStackTraceToClients = false;
+                    });
+
+                    await SendMessageAsync(
+                        Options.ReCallChatMessageMethod,
+                        ChatMessage.System(
+                            chatMessage.ToUserId.Value,
+                            chatMessage.FormUserId,
+                            errorInfo.Message,
+                            Clock,
+                            MessageType.Notifier,
+                            chatMessage.TenantId)
+                        .SetProperty(nameof(ChatMessage.MessageId).ToPascalCase(), chatMessage.MessageId),
+                        callbackException: false);
+                }
             }
         }
 
@@ -142,7 +167,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             await Processor?.ReadAsync(chatMessage);
         }
 
-        protected virtual async Task SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
+        protected virtual async Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
         {
             // 持久化
             try
@@ -159,6 +184,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 {
                     await SendMessageToUserAsync(methodName, chatMessage);
                 }
+
+                return chatMessage.MessageId;
             }
             catch (Exception ex)
             {
@@ -178,7 +205,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                                 chatMessage.GroupId,
                                 errorInfo.Message,
                                 Clock,
-                                chatMessage.MessageType,
+                                MessageType.Notifier,
                                 chatMessage.TenantId));
                     }
                     else
@@ -190,11 +217,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                                 chatMessage.FormUserId,
                                 errorInfo.Message,
                                 Clock,
-                                chatMessage.MessageType,
+                                MessageType.Notifier,
                                 chatMessage.TenantId));
                     }
                 }
             }
+
+            return "";
         }
 
         protected virtual async Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)

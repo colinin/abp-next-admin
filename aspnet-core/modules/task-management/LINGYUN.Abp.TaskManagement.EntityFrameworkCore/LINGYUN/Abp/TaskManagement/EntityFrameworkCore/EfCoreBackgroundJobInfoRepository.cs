@@ -36,6 +36,43 @@ public class EfCoreBackgroundJobInfoRepository :
                 GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<JobInfo> FindJobAsync(
+        string id,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(x => x.Id.Equals(id))
+            .Select(x => new JobInfo
+            {
+                Id = x.Id,
+                TenantId = x.TenantId,
+                Name = x.Name,
+                NextRunTime = x.NextRunTime,
+                Args = x.Args,
+                IsAbandoned = x.IsAbandoned,
+                BeginTime = x.BeginTime,
+                EndTime = x.EndTime,
+                CreationTime = x.CreationTime,
+                Cron = x.Cron,
+                MaxCount = x.MaxCount,
+                MaxTryCount = x.MaxTryCount,
+                Description = x.Description,
+                Group = x.Group,
+                Interval = x.Interval,
+                JobType = x.JobType,
+                Status = x.Status,
+                Priority = x.Priority,
+                LastRunTime = x.LastRunTime,
+                LockTimeOut = x.LockTimeOut,
+                Result = x.Result,
+                TriggerCount = x.TriggerCount,
+                TryCount = x.TryCount,
+                Type = x.Type
+            })
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,

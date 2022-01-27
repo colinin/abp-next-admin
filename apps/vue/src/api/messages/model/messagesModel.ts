@@ -14,6 +14,7 @@ export enum MessageType {
   Video = 30,
   Voice = 40,
   File = 50,
+  Notifier = 100,
 }
 
 export enum MessageState {

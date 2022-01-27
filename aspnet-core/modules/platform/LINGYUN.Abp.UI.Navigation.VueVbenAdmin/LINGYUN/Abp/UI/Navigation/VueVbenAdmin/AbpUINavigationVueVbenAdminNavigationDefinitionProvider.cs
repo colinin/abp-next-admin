@@ -11,7 +11,8 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             context.Add(GetManage());
             context.Add(GetSaas());
             context.Add(GetPlatform());
-            context.Add(GetApiGateway());
+            // TODO: 网关不再需要动态管理
+            // context.Add(GetApiGateway());
             context.Add(GetLocalization());
             context.Add(GetOssManagement());
             context.Add(GetTaskManagement());
@@ -222,7 +223,8 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 displayName: "平台管理",
                 url: "/platform",
                 component: "",
-                description: "平台管理");
+                description: "平台管理",
+                icon: "ep:platform");
             platform.AddItem(
               new ApplicationMenu(
                   name: "DataDictionary",
@@ -370,7 +372,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 url: "/task-management",
                 component: "",
                 description: "任务调度平台",
-                icon: "");
+                icon: "bi:list-task");
             task.AddItem(
               new ApplicationMenu(
                   name: "BackgroundJobs",
@@ -378,6 +380,13 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   url: "/task-management/background-jobs",
                   component: "/task-management/background-jobs/index",
                   description: "任务管理"));
+            task.AddItem(
+              new ApplicationMenu(
+                  name: "BackgroundJobInfoDetail",
+                  displayName: "任务详情",
+                  url: "/task-management/background-jobs/:id",
+                  component: "/task-management/background-jobs/components/BackgroundJobInfoDetail",
+                  description: "任务详情"));
 
             return new NavigationDefinition(task);
         }
