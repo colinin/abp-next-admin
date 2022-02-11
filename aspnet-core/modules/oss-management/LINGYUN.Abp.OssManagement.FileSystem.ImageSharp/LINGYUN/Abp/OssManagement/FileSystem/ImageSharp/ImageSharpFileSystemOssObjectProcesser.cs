@@ -24,21 +24,25 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
         
         public virtual async Task ProcessAsync(FileSystemOssObjectContext context)
         {
-            var bytes = await context.OssObject.Content.GetAllBytesAsync();
+            var copyStream = context.OssObject.Content;
+            var bytes = await copyStream.GetAllBytesAsync();
 
             if (IsImage(bytes))
             {
                 var args = context.Process.Split(',');
-                if (DrawGraphics(bytes, args, out Stream content))
+                if (DrawGraphics(bytes, args, out var content))
                 {
                     context.SetContent(content);
+
+                    // 释放原图形流数据
+                    await copyStream.DisposeAsync();
                 }
             }
         }
 
         protected virtual bool DrawGraphics(byte[] fileBytes, string[] args, out Stream content)
         {
-            using var image = Image.Load(fileBytes, out IImageFormat format);
+            using var image = Image.Load(fileBytes, out var format);
 
             // 大小
             var width = GetInt32Prarm(args, "w_");

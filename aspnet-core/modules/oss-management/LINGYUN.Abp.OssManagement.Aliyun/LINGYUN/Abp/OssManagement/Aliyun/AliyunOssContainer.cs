@@ -228,10 +228,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
 
             if (aliyunOssObject.IsSetResponseStream())
             {
-                var memoryStream = new MemoryStream();
-                await aliyunOssObject.Content.CopyToAsync(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                ossObject.SetContent(memoryStream);
+                ossObject.SetContent(aliyunOssObject.Content);
             }
 
             return ossObject;
