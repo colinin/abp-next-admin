@@ -3,7 +3,7 @@
     public static class AuditingFeatureNames
     {
         public const string GroupName = "AbpAuditing";
-        public class Logging
+        public static class Logging
         {
             public const string Default = GroupName + ".Logging";
 

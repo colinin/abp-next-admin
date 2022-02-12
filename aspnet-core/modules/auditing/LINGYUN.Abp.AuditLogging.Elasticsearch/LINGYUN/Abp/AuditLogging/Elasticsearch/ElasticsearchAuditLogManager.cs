@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         }
 
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         {
             var client = _clientFactory.Create();
 
-            var querys = BuildQueryDescriptor(
+            var queries = BuildQueryDescriptor(
                 startTime,
                 endTime,
                 httpMethod,
@@ -79,13 +79,13 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             var response = await client.CountAsync<AuditLog>(dsl =>
                 dsl.Index(CreateIndex())
-                   .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
+                   .Query(log => log.Bool(b => b.Must(queries.ToArray()))),
                 cancellationToken);
 
             return response.Count;
         }
 
-        public virtual async Task<List<AuditLog>> GetListAsync(
+        public async virtual Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -114,7 +114,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 ? sorting.Split()[0]
                 : nameof(AuditLog.ExecutionTime);
 
-            var querys = BuildQueryDescriptor(
+            var queries = BuildQueryDescriptor(
                 startTime,
                 endTime,
                 httpMethod,
@@ -147,7 +147,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             var response = await client.SearchAsync<AuditLog>(dsl =>
                 dsl.Index(CreateIndex())
-                   .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+                   .Query(log => log.Bool(b => b.Must(queries.ToArray())))
                    .Source(SourceFilter)
                    .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
@@ -157,7 +157,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return response.Documents.ToList();
         }
 
-        public virtual async Task<AuditLog> GetAsync(
+        public async virtual Task<AuditLog> GetAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -173,7 +173,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return response.Source;
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var client = _clientFactory.Create();
 
@@ -184,7 +184,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 cancellationToken);
         }
 
-        public virtual async Task<string> SaveAsync(
+        public async virtual Task<string> SaveAsync(
             AuditLogInfo auditInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -205,7 +205,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return "";
         }
 
-        protected virtual async Task<string> SaveLogAsync(
+        protected async virtual Task<string> SaveLogAsync(
             AuditLogInfo auditLogInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -238,55 +238,55 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             bool? hasException = null,
             HttpStatusCode? httpStatusCode = null)
         {
-            var querys = new List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>>();
+            var queries = new List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>>();
 
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).GreaterThanOrEquals(startTime)));
+                queries.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).GreaterThanOrEquals(startTime)));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).LessThanOrEquals(endTime)));
+                queries.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).LessThanOrEquals(endTime)));
             }
             if (!httpMethod.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpMethod))).Value(httpMethod)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpMethod))).Value(httpMethod)));
             }
             if (!url.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Match((q) => q.Field(GetField(nameof(AuditLog.Url))).Query(url)));
+                queries.Add((log) => log.Match((q) => q.Field(GetField(nameof(AuditLog.Url))).Query(url)));
             }
             if (userId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserId))).Value(userId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserId))).Value(userId)));
             }
             if (!userName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserName))).Value(userName)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserName))).Value(userName)));
             }
             if (!applicationName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ApplicationName))).Value(applicationName)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ApplicationName))).Value(applicationName)));
             }
             if (!correlationId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.CorrelationId))).Value(correlationId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.CorrelationId))).Value(correlationId)));
             }
             if (!clientId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientId))).Value(clientId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientId))).Value(clientId)));
             }
             if (!clientIpAddress.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientIpAddress))).Value(clientIpAddress)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientIpAddress))).Value(clientIpAddress)));
             }
             if (maxExecutionDuration.HasValue)
             {
-                querys.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).LessThanOrEquals(maxExecutionDuration)));
+                queries.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).LessThanOrEquals(maxExecutionDuration)));
             }
             if (minExecutionDuration.HasValue)
             {
-                querys.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).GreaterThanOrEquals(minExecutionDuration)));
+                queries.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).GreaterThanOrEquals(minExecutionDuration)));
             }
 
 
@@ -294,7 +294,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             {
                 if (hasException.Value)
                 {
-                    querys.Add(
+                    queries.Add(
                         (q) => q.Bool(
                             (b) => b.Must(
                                 (m) => m.Exists(
@@ -304,7 +304,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 }
                 else
                 {
-                    querys.Add(
+                    queries.Add(
                         (q) => q.Bool(
                             (b) => b.MustNot(
                                 (mn) => mn.Exists(
@@ -317,10 +317,10 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             if (httpStatusCode.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpStatusCode))).Value(httpStatusCode)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpStatusCode))).Value(httpStatusCode)));
             }
 
-            return querys;
+            return queries;
         }
 
         protected virtual string CreateIndex()

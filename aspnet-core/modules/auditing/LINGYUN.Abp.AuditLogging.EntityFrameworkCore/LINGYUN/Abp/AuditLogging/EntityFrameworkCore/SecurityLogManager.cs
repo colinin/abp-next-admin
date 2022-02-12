@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             UnitOfWorkManager = unitOfWorkManager;
         }
 
-        public virtual async Task SaveAsync(
+        public async virtual Task SaveAsync(
             SecurityLogInfo securityLogInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -55,11 +55,11 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
                     new IdentitySecurityLog(GuidGenerator, securityLogInfo),
                     false,
                     cancellationToken);
-                await uow.CompleteAsync();
+                await uow.CompleteAsync(cancellationToken);
             }
         }
 
-        public virtual async Task<SecurityLog> GetAsync(
+        public async virtual Task<SecurityLog> GetAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -69,16 +69,16 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             return ObjectMapper.Map<IdentitySecurityLog, SecurityLog>(securityLog);
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using (var uow = UnitOfWorkManager.Begin(true))
             {
-                await IdentitySecurityLogRepository.DeleteAsync(id);
-                await uow.CompleteAsync();
+                await IdentitySecurityLogRepository.DeleteAsync(id, cancellationToken: cancellationToken);
+                await uow.CompleteAsync(cancellationToken);
             }
         }
 
-        public virtual async Task<List<SecurityLog>> GetListAsync(
+        public async virtual Task<List<SecurityLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
         }
 
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string applicationName = null,
