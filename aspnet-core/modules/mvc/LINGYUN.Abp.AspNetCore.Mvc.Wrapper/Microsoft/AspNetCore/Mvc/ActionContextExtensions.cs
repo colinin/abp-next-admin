@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.Mvc
 {
     public static class ActionContextExtensions
     {
-        public static bool CanWarpRsult(this ActionDescriptor actionDescriptor)
+        public static bool CanWarpResult(this ActionDescriptor actionDescriptor)
         {
             if (actionDescriptor is ControllerActionDescriptor descriptor)
             {

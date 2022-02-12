@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.OpenApi.ConfigurationStore
+﻿using System;
+
+namespace LINGYUN.Abp.OpenApi.ConfigurationStore
 {
     public class AbpDefaultAppKeyStoreOptions
     {
@@ -6,7 +8,7 @@
 
         public AbpDefaultAppKeyStoreOptions()
         {
-            AppDescriptors = new AppDescriptor[0];
+            AppDescriptors = Array.Empty<AppDescriptor>();
         }
     }
 }

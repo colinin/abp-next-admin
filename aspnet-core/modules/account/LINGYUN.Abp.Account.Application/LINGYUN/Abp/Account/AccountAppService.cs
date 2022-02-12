@@ -45,18 +45,18 @@ namespace LINGYUN.Abp.Account
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
         }
 
-        public virtual async Task RegisterAsync(WeChatRegisterDto input)
+        public async virtual Task RegisterAsync(WeChatRegisterDto input)
         {
-            ThowIfInvalidEmailAddress(input.EmailAddress);
+            ThrowIfInvalidEmailAddress(input.EmailAddress);
 
             await CheckSelfRegistrationAsync();
             await IdentityOptions.SetAsync();
 
             var options = await MiniProgramOptionsFactory.CreateAsync();
 
-            var wehchatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code, options.AppId, options.AppSecret);
+            var wechatOpenId = await WeChatOpenIdFinder.FindAsync(input.Code, options.AppId, options.AppSecret);
 
-            var user = await UserManager.FindByLoginAsync(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId);
+            var user = await UserManager.FindByLoginAsync(AbpWeChatMiniProgramConsts.ProviderName, wechatOpenId.OpenId);
             if (user != null)
             {
                 // 应该要抛出微信号已注册异常,而不是直接返回注册用户数据,否则造成用户信息泄露
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.Account
             var userName = input.UserName;
             if (userName.IsNullOrWhiteSpace())
             {
-                userName = "wxid-" + wehchatOpenId.OpenId.ToMd5().ToLower();
+                userName = "wxid-" + wechatOpenId.OpenId.ToMd5().ToLower();
             }
             
             var userEmail = input.EmailAddress;//如果邮件地址不验证,随意写入一个
@@ -79,13 +79,13 @@ namespace LINGYUN.Abp.Account
 
             (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
-            var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
+            var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderName, wechatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
             (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
+        public async virtual Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
         {
             await CheckSelfRegistrationAsync();
             await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
@@ -118,7 +118,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        public virtual async Task RegisterAsync(PhoneRegisterDto input)
+        public async virtual Task RegisterAsync(PhoneRegisterDto input)
         {
             await CheckSelfRegistrationAsync();
             await IdentityOptions.SetAsync();
@@ -164,7 +164,7 @@ namespace LINGYUN.Abp.Account
             throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
         }
 
-        public virtual async Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
+        public async virtual Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
         {
             /*
              * 注解: 微软的重置密码方法通过 UserManager.GeneratePasswordResetTokenAsync 接口生成密码重置Token
@@ -207,7 +207,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        public virtual async Task ResetPasswordAsync(PhoneResetPasswordDto input)
+        public async virtual Task ResetPasswordAsync(PhoneResetPasswordDto input)
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
@@ -234,7 +234,7 @@ namespace LINGYUN.Abp.Account
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
+        public async virtual Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
@@ -260,12 +260,12 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        protected virtual async Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber, bool isConfirmed = true)
+        protected async virtual Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber, bool isConfirmed = true)
         {
             var user = await UserRepository.FindByPhoneNumberAsync(phoneNumber, isConfirmed, true);
             if (user == null)
             {
-                throw new UserFriendlyException(L["PhoneNumberNotRegisterd"]);
+                throw new UserFriendlyException(L["PhoneNumberNotRegistered"]);
             }
             return user;
         }
@@ -274,7 +274,7 @@ namespace LINGYUN.Abp.Account
         /// 检查是否允许用户注册
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task CheckSelfRegistrationAsync()
+        protected async virtual Task CheckSelfRegistrationAsync()
         {
             if (!await SettingProvider.IsTrueAsync(Volo.Abp.Account.Settings.AccountSettingNames.IsSelfRegistrationEnabled))
             {
@@ -282,7 +282,7 @@ namespace LINGYUN.Abp.Account
             }
         }
 
-        protected virtual async Task CheckNewUserPhoneNumberNotBeUsedAsync(string phoneNumber)
+        protected async virtual Task CheckNewUserPhoneNumberNotBeUsedAsync(string phoneNumber)
         {
             if (await UserRepository.IsPhoneNumberUedAsync(phoneNumber))
             {
@@ -290,7 +290,7 @@ namespace LINGYUN.Abp.Account
             }
         }
 
-        private void ThowIfInvalidEmailAddress(string inputEmail)
+        private void ThrowIfInvalidEmailAddress(string inputEmail)
         {
             if (!inputEmail.IsNullOrWhiteSpace() &&
                 !ValidationHelper.IsValidEmailAddress(inputEmail))
