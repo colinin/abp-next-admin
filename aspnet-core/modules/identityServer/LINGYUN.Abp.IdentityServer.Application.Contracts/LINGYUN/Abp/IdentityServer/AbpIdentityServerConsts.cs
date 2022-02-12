@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.IdentityServer
 {
-    public class AbpIdentityServerConsts
+    public static class AbpIdentityServerConsts
     {
         /// <summary>
         /// 远程服务名称

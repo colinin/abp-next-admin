@@ -165,13 +165,13 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
         {
             var state = properties.Items[".xsrf"];
 
-            var isWeChatBrewserRequest = IsWeChatBrowser();
+            var isWeChatBrowserRequest = IsWeChatBrowser();
 
-            var scope = isWeChatBrewserRequest
+            var scope = isWeChatBrowserRequest
                 ? WeChatOfficialOAuthConsts.UserInfoScope
                 : FormatScope();
 
-            var endPoint = isWeChatBrewserRequest
+            var endPoint = isWeChatBrowserRequest
                 ? Options.AuthorizationEndpoint
                 : WeChatOfficialOAuthConsts.QrConnectEndpoint;
 

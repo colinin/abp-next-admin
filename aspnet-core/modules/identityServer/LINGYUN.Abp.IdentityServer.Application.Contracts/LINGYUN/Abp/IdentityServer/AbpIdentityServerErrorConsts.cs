@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.IdentityServer
 {
-    public class AbpIdentityServerErrorConsts
+    public static class AbpIdentityServerErrorConsts
     {
         /// <summary>
         /// 客户端标识已经存在

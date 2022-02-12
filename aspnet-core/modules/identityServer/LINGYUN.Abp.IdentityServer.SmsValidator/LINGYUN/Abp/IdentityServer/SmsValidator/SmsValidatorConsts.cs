@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.IdentityServer.SmsValidator
 {
-    public class SmsValidatorConsts
+    public static class SmsValidatorConsts
     {
         public const string SmsValidatorGrantTypeName = "phone_verify";
 

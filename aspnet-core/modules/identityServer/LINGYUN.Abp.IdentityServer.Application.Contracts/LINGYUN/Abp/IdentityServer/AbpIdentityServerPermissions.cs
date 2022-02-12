@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.IdentityServer
 {
-    public class AbpIdentityServerPermissions
+    public static class AbpIdentityServerPermissions
     {
         public const string GroupName = "AbpIdentityServer";
 
