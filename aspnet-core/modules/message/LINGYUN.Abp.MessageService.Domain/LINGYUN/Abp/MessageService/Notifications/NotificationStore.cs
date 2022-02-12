@@ -61,13 +61,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (_currentTenant.Change(tenantId))
             {
-                var notification = await _userNotificationRepository.GetByIdAsync(userId, notificationId);
+                var notification = await _userNotificationRepository.GetByIdAsync(userId, notificationId, cancellationToken);
                 if (notification != null)
                 {
                     notification.ChangeReadState(readState);
-                    await _userNotificationRepository.UpdateAsync(notification);
+                    await _userNotificationRepository.UpdateAsync(notification, cancellationToken: cancellationToken);
 
-                    await unitOfWork.CompleteAsync();
+                    await unitOfWork.CompleteAsync(cancellationToken);
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                await _notificationRepository.DeleteExpritionAsync(batchCount, cancellationToken);
+                await _notificationRepository.DeleteExpirationAsync(batchCount, cancellationToken);
 
                 await unitOfWork.CompleteAsync(cancellationToken);
             }
@@ -402,7 +402,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             using (_currentTenant.Change(tenantId))
                 return await _userSubscribeRepository
-                        .UserSubscribeExistsAysnc(notificationName, userId, cancellationToken);
+                        .UserSubscribeExistsAsync(notificationName, userId, cancellationToken);
         }
 
         public virtual async Task InsertUserNotificationsAsync(
@@ -413,19 +413,19 @@ namespace LINGYUN.Abp.MessageService.Notifications
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (_currentTenant.Change(notification.TenantId))
             {
-                var userNofitications = new List<UserNotification>();
+                var userNotifications = new List<UserNotification>();
                 foreach (var userId in userIds)
                 {
                     // 重复检查
                     // TODO:如果存在很多个订阅用户,这是个隐患
                     if (!await _userNotificationRepository.AnyAsync(userId, notification.GetId(), cancellationToken))
                     {
-                        var userNofitication = new UserNotification(notification.GetId(), userId, notification.TenantId);
-                        userNofitications.Add(userNofitication);
+                        var userNotification = new UserNotification(notification.GetId(), userId, notification.TenantId);
+                        userNotifications.Add(userNotification);
                     }
                 }
                 await _userNotificationRepository
-                    .InsertUserNotificationsAsync(userNofitications, cancellationToken);
+                    .InsertUserNotificationsAsync(userNotifications, cancellationToken);
 
                 await unitOfWork.CompleteAsync(cancellationToken);
             }

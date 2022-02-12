@@ -37,10 +37,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             using var unitOfWork = _unitOfWorkManager.Begin();
             using (_currentTenant.Change(tenantId))
             {
-                var userChatCard = await _userChatCardRepository.FindByUserIdAsync(userId);
+                var userChatCard = await _userChatCardRepository.FindByUserIdAsync(userId, cancellationToken);
                 userChatCard?.ChangeState(_clock, state);
 
-                await unitOfWork.CompleteAsync();
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
     }

@@ -33,8 +33,8 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (CurrentTenant.Change(user.TenantId))
             {
-                var userHasOpendIm = await UserChatSettingRepository.UserHasOpendImAsync(user.Id);
-                if (!userHasOpendIm)
+                var userHasOpenIm = await UserChatSettingRepository.UserHasOpenImAsync(user.Id);
+                if (!userHasOpenIm)
                 {
                     var userChatSetting = new UserChatSetting(user.Id, user.TenantId);
 

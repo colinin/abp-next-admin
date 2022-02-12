@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             long notificationId,
             CancellationToken cancellationToken = default);
 
-        Task DeleteExpritionAsync(
+        Task DeleteExpirationAsync(
             int batchCount,
             CancellationToken cancellationToken = default);
     }

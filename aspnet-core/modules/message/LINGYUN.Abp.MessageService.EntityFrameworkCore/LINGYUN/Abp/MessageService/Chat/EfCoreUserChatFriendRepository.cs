@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         public virtual async Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
+                .Where(ucf => ucf.UserId == userId && ucf.FriendId == friendId)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                       Black = ucf.Black,
                                       Description = ucc.Description,
                                       DontDisturb = ucf.DontDisturb,
-                                      FriendId = ucf.FrientId,
+                                      FriendId = ucf.FriendId,
                                       NickName = ucc.NickName,
                                       RemarkName = ucf.RemarkName ?? ucc.NickName,
                                       Sex = ucc.Sex,
@@ -69,8 +69,8 @@ namespace LINGYUN.Abp.MessageService.Chat
             var dbContext = await GetDbContextAsync();
             var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
                                   join ucc in dbContext.Set<UserChatCard>()
-                                        on ucf.FrientId equals ucc.UserId
-                                  where ucf.UserId == userId && ucf.FrientId == friendId && ucf.Status == UserFriendStatus.Added
+                                        on ucf.FriendId equals ucc.UserId
+                                  where ucf.UserId == userId && ucf.FriendId == friendId && ucf.Status == UserFriendStatus.Added
                                   select new UserFriend
                                   {
                                       Age = ucc.Age,
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                       Black = ucf.Black,
                                       Description = ucc.Description,
                                       DontDisturb = ucf.DontDisturb,
-                                      FriendId = ucf.FrientId,
+                                      FriendId = ucf.FriendId,
                                       NickName = ucc.NickName,
                                       RemarkName = ucf.RemarkName,
                                       Sex = ucc.Sex,
@@ -116,7 +116,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             // 组合查询
             var userFriendQuery = from ucf in userChatFriendQuery
                                   join ucc in userChatCardQuery // TODO: Need LEFT JOIN?
-                                        on ucf.FrientId equals ucc.UserId
+                                        on ucf.FriendId equals ucc.UserId
                                   where ucf.UserId == userId
                                   select new UserFriend
                                   {
@@ -126,7 +126,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                       Black = ucf.Black,
                                       Description = ucc.Description,
                                       DontDisturb = ucf.DontDisturb,
-                                      FriendId = ucf.FrientId,
+                                      FriendId = ucf.FriendId,
                                       NickName = ucc.NickName,
                                       RemarkName = ucf.RemarkName,
                                       Sex = ucc.Sex,
@@ -156,7 +156,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
                                   join ucc in dbContext.Set<UserChatCard>()
-                                        on ucf.FrientId equals ucc.UserId
+                                        on ucf.FriendId equals ucc.UserId
                                   join um in userReceiveMsgQuery
                                         on ucc.UserId equals um.CreatorId
                                   where ucf.UserId == userId && ucf.Status == UserFriendStatus.Added
@@ -169,7 +169,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                       Black = ucf.Black,
                                       Description = ucc.Description,
                                       DontDisturb = ucf.DontDisturb,
-                                      FriendId = ucf.FrientId,
+                                      FriendId = ucf.FriendId,
                                       NickName = ucc.NickName,
                                       RemarkName = ucf.RemarkName,
                                       Sex = ucc.Sex,
@@ -198,7 +198,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
             var userFriendQuery = from ucf in userChatFriendQuery
                                   join ucc in userChatCardQuery
-                                        on ucf.FrientId equals ucc.UserId
+                                        on ucf.FriendId equals ucc.UserId
                                   where ucf.UserId == userId
                                   select ucc;
 
@@ -212,14 +212,14 @@ namespace LINGYUN.Abp.MessageService.Chat
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId && ucf.Status == UserFriendStatus.Added,
+                .AnyAsync(ucf => ucf.UserId == userId && ucf.FriendId == frientId && ucf.Status == UserFriendStatus.Added,
                     GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<bool> IsAddedAsync(Guid userId, Guid frientId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId,
+                .AnyAsync(ucf => ucf.UserId == userId && ucf.FriendId == frientId,
                     GetCancellationToken(cancellationToken));
         }
     }

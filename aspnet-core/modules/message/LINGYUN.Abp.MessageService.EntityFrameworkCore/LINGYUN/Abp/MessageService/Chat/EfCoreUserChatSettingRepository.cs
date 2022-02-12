@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> UserHasOpendImAsync(Guid userId, CancellationToken cancellationToken = default)
+        public async Task<bool> UserHasOpenImAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .AnyAsync(x => x.UserId.Equals(userId), GetCancellationToken(cancellationToken));

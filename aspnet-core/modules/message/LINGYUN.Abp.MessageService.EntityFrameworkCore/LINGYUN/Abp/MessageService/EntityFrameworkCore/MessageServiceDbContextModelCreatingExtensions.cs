@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId, p.FrientId });
+                b.HasIndex(p => new { p.TenantId, p.UserId, FrientId = p.FriendId });
             });
 
             builder.Entity<UserChatCard>(b =>

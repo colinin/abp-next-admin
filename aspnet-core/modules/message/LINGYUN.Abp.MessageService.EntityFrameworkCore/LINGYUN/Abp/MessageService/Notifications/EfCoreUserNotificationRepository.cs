@@ -58,16 +58,16 @@ namespace LINGYUN.Abp.MessageService.Notifications
             CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
-            var userNotifilerQuery = dbContext.Set<UserNotification>()
+            var userNotifierQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
-            var notifilerQuery = from un in userNotifilerQuery
+            var notifierQuery = from un in userNotifierQuery
                                  join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 
-            return await notifilerQuery
+            return await notifierQuery
                 .OrderBy(nameof(Notification.CreationTime) + " DESC")
                 .Take(maxResultCount)
                 .AsNoTracking()
@@ -81,16 +81,16 @@ namespace LINGYUN.Abp.MessageService.Notifications
             CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
-            var userNotifilerQuery = dbContext.Set<UserNotification>()
+            var userNotifierQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
-            var notifilerQuery = from un in userNotifilerQuery
+            var notifierQuery = from un in userNotifierQuery
                                  join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 
-            return await notifilerQuery
+            return await notifierQuery
                 .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
                     nf.NotificationName.Contains(filter) ||
                     nf.NotificationTypeName.Contains(filter))
@@ -108,16 +108,16 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             sorting ??= $"{nameof(Notification.CreationTime)} DESC";
             var dbContext = await GetDbContextAsync();
-            var userNotifilerQuery = dbContext.Set<UserNotification>()
+            var userNotifierQuery = dbContext.Set<UserNotification>()
                                               .Where(x => x.UserId == userId)
                                               .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
 
-            var notifilerQuery = from un in userNotifilerQuery
+            var notifierQuery = from un in userNotifierQuery
                                  join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
                                  select n;
 
-            return await notifilerQuery
+            return await notifierQuery
                 .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
                     nf.NotificationName.Contains(filter) ||
                     nf.NotificationTypeName.Contains(filter))

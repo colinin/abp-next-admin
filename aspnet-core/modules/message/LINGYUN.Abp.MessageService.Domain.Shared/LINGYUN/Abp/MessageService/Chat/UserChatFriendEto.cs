@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 好友标识
         /// </summary>
-        public Guid FrientId { get; set; }
+        public Guid FriendId { get; set; }
         /// <summary>
         /// 状态
         /// </summary>

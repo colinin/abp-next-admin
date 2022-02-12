@@ -1,17 +1,17 @@
 ﻿namespace LINGYUN.Abp.MessageService.Permissions
 {
-    public class MessageServicePermissions
+    public static class MessageServicePermissions
     {
         public const string GroupName = "MessageService";
 
-        public class Notification
+        public static class Notification
         {
             public const string Default = GroupName + ".Notification";
 
             public const string Delete = Default + ".Delete";
         }
 
-        public class Hangfire
+        public static class Hangfire
         {
             public const string Default = GroupName + ".Hangfire";
 

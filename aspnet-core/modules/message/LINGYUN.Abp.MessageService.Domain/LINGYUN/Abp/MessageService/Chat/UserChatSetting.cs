@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 添加好友需要验证
         /// </summary>
-        public virtual bool RequireAddFriendValition { get; set; }
+        public virtual bool RequireAddFriendValidation { get; set; }
         /// <summary>
         /// 允许接收消息
         /// </summary>
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             AllowAddFriend = true;
             AllowReceiveMessage = true;
             AllowSendMessage = true;
-            RequireAddFriendValition = true;
+            RequireAddFriendValidation = true;
         }
     }
 }

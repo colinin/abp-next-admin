@@ -17,8 +17,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
             tenantsGroup.AddNotification(
                 TenantNotificationNames.NewTenantRegistered,
-                L("Notifications:NewTenantRegisterd"),
-                L("Notifications:NewTenantRegisterd"),
+                L("Notifications:NewTenantRegistered"),
+                L("Notifications:NewTenantRegistered"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.OnlyOne,
                 allowSubscriptionToClients: false

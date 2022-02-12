@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 好友标识
         /// </summary>
-        public virtual Guid FrientId { get; protected set; }
+        public virtual Guid FriendId { get; protected set; }
         /// <summary>
         /// 系统预置
         /// </summary>
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid? tenantId = null)
         {
             UserId = userId;
-            FrientId = friendId;
+            FriendId = friendId;
             RemarkName = remarkName;
             TenantId = tenantId;
             Description = description;
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 {
                     TenantId = TenantId,
                     UserId = UserId,
-                    FrientId = FrientId,
+                    FriendId = FriendId,
                     Status = UserFriendStatus.Added
                 });
             }

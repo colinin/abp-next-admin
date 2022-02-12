@@ -24,7 +24,7 @@
     /// </list>
     /// 
     /// </summary>
-    public class MessageServiceErrorCodes
+    public static class MessageServiceErrorCodes
     {
         public const string Namespace = "LINGYUN.Abp.Message";
         /// <summary>

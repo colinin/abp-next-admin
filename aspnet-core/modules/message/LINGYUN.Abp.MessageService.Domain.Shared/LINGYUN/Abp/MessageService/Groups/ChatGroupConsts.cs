@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.MessageService.Groups
 {
-    public class ChatGroupConsts
+    public static class ChatGroupConsts
     {
         public const int MaxNameLength = 20;
 

@@ -20,7 +20,7 @@
     "LINGYUN.Abp.Message:03411": "The other party is already your friend or has sent an authentication request. The operation cannot be repeated!",
     "Notifications:MultiTenancy": "Multi Tenancy",
     "Notifications:Users": "Users",
-    "Notifications:NewTenantRegisterd": "Tenant creation notification",
+    "Notifications:NewTenantRegistered": "Tenant creation notification",
     "Notifications:WelcomeToApplication": "User Welcome Notice",
     "Notifications:IM": "Instant Messaging",
     "Notifications:FriendValidation": "Friend verification notification",

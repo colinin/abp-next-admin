@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.MessageService.Notifications
 {
-    public class NotificationConsts
+    public static class NotificationConsts
     {
         public const int MaxCateGoryLength = 50;
 

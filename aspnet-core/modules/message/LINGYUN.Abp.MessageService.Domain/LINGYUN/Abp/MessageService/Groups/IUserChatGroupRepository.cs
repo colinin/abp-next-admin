@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.MessageService.Groups
         /// <summary>
         /// 成员是否在群组里
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="groupId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<bool> MemberHasInGroupAsync(

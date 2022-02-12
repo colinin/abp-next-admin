@@ -69,11 +69,11 @@ namespace LINGYUN.Abp.MessageService.Chat
                     userFriend.SetStatus(UserFriendStatus.Added);
                     userFriend.IsStatic = isStatic;
 
-                    await _userChatFriendRepository.InsertAsync(userFriend);
+                    await _userChatFriendRepository.InsertAsync(userFriend, cancellationToken: cancellationToken);
                 }
 
                 var userChatFriend = await _userChatFriendRepository
-                    .FindByUserFriendIdAsync(friendId, userId);
+                    .FindByUserFriendIdAsync(friendId, userId, cancellationToken);
 
                 userChatFriend.SetStatus(UserFriendStatus.Added);
 
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
             using (_currentTenant.Change(tenantId))
             {
-                if (await _userChatFriendRepository.IsAddedAsync(userId, friendId))
+                if (await _userChatFriendRepository.IsAddedAsync(userId, friendId, cancellationToken))
                 {
                     throw new BusinessException(MessageServiceErrorCodes.UseHasBeenAddedTheFriendOrSendAuthorization);
                 }
@@ -106,7 +106,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                         throw new BusinessException(MessageServiceErrorCodes.UseRefuseToAddFriend);
                     }
 
-                    status = userChatSetting.RequireAddFriendValition
+                    status = userChatSetting.RequireAddFriendValidation
                         ? UserFriendStatus.NeedValidation
                         : UserFriendStatus.Added;
                 }

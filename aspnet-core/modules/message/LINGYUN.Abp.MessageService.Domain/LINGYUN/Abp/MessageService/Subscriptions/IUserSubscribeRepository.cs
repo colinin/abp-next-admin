@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 {
     public interface IUserSubscribeRepository : IBasicRepository<UserSubscribe, long>
     {
-        Task<bool> UserSubscribeExistsAysnc(
+        Task<bool> UserSubscribeExistsAsync(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default);

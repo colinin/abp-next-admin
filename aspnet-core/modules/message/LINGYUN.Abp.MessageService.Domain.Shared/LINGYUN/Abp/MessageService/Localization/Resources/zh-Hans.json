@@ -20,7 +20,7 @@
     "LINGYUN.Abp.Message:03411": "对方已是您的好友或已发送验证请求,不能重复操作!",
     "Notifications:MultiTenancy": "租户通知",
     "Notifications:Users": "用户通知",
-    "Notifications:NewTenantRegisterd": "租户创建通知",
+    "Notifications:NewTenantRegistered": "租户创建通知",
     "Notifications:WelcomeToApplication": "用户欢迎通知",
     "Notifications:IM": "即时通讯",
     "Notifications:FriendValidation": "好友验证通知",

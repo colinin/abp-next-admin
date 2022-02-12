@@ -249,9 +249,9 @@ namespace LINGYUN.Abp.MessageService.Chat
             sqlBuilder.AppendLine("   @Sorting");
             sqlBuilder.AppendLine("   LIMIT @MaxResultCount");
 
-            using var dbContection = dbContext.Database.GetDbConnection();
-            await dbContection.OpenAsync();
-            using var command = dbContection.CreateCommand();
+            using var dbConnection = dbContext.Database.GetDbConnection();
+            await dbConnection.OpenAsync(cancellationToken);
+            using var command = dbConnection.CreateCommand();
             command.Transaction = dbContext.Database.CurrentTransaction?.GetDbTransaction();
             command.CommandText = sqlBuilder.ToString();
 
@@ -261,11 +261,11 @@ namespace LINGYUN.Abp.MessageService.Chat
             receivedUser.Value = userId;
             command.Parameters.Add(receivedUser);
 
-            var sorttingParam = command.CreateParameter();
-            sorttingParam.DbType = System.Data.DbType.String;
-            sorttingParam.ParameterName = "@Sorting";
-            sorttingParam.Value = sorting;
-            command.Parameters.Add(sorttingParam);
+            var sortingParam = command.CreateParameter();
+            sortingParam.DbType = System.Data.DbType.String;
+            sortingParam.ParameterName = "@Sorting";
+            sortingParam.Value = sorting;
+            command.Parameters.Add(sortingParam);
 
             var limitParam = command.CreateParameter();
             limitParam.DbType = System.Data.DbType.Int32;
@@ -286,11 +286,11 @@ namespace LINGYUN.Abp.MessageService.Chat
                 var tenantParam = command.CreateParameter();
                 tenantParam.DbType = System.Data.DbType.Guid;
                 tenantParam.ParameterName = "@TenantId";
-                tenantParam.Value = CurrentTenant.Id.Value;
+                tenantParam.Value = CurrentTenant.Id;
                 command.Parameters.Add(tenantParam);
             }
             var messages = new List<LastChatMessage>();
-            using var reader = await command.ExecuteReaderAsync();
+            using var reader = await command.ExecuteReaderAsync(cancellationToken);
 
             T GetValue<T>(DbDataReader reader, int index)
             {
@@ -331,7 +331,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 return dictionary;
             }
 
-            while (reader.Read())
+            while (await reader.ReadAsync(cancellationToken))
             {
                 messages.Add(new LastChatMessage
                 {

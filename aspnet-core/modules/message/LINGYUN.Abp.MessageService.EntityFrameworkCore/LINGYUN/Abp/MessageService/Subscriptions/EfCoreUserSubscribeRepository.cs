@@ -121,7 +121,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> UserSubscribeExistsAysnc(
+        public virtual async Task<bool> UserSubscribeExistsAsync(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -133,7 +133,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         public virtual async Task<List<UserSubscribe>> GetUserSubscribesAsync(
             Guid userId, 
-            string sorting = "Id", 
+            string sorting = nameof(UserSubscribe.Id), 
             int skipCount = 1,
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)

@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.MultiTenancy
 {
-    public class TenantNotificationNames
+    public static class TenantNotificationNames
     {
         public const string GroupName = "Volo.Abp.MultiTenancy";
 

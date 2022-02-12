@@ -4,7 +4,7 @@
     {
         public const string GroupName = "LINGYUN.Abp.Messages";
 
-        public class IM
+        public static class IM
         {
             public const string GroupName = MessageServiceNotificationNames.GroupName + ".IM";
             /// <summary>

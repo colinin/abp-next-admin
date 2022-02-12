@@ -80,7 +80,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     {
                         Name = notification.Name,
                         DisplayName = notification.DisplayName.Localize(StringLocalizerFactory),
-                        Description = notification.Description.Localize(StringLocalizerFactory),
+                        Description = notification.Description?.Localize(StringLocalizerFactory),
                         Lifetime = notification.NotificationLifetime,
                         Type = notification.NotificationType
                     };

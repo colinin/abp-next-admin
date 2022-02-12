@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.MessageService.Chat
 {
-    public class UserChatCardConsts
+    public static class UserChatCardConsts
     {
         public static int MaxUserNameLength { get; set; } = AbpUserConsts.MaxUserNameLength;
         public static int MaxSignLength { get; set; } = 30;

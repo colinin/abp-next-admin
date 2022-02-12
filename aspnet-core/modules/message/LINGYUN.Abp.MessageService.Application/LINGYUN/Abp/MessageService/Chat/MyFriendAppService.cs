@@ -64,14 +64,14 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         public virtual async Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
         {
-            var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
+            var myFriendCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
 
             var myFriends = await FriendStore
                 .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
                     input.Filter, input.Sorting,
                     input.SkipCount, input.MaxResultCount);
 
-            return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
+            return new PagedResultDto<UserFriend>(myFriendCount, myFriends);
         }
     }
 }

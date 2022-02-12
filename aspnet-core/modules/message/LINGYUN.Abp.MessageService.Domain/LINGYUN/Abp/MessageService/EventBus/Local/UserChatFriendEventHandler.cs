@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
         {
             if (eventData.Status == IM.Contract.UserFriendStatus.Added)
             {
-                await SendFriendAddedMessageAsync(eventData.UserId, eventData.FrientId, eventData.TenantId);
+                await SendFriendAddedMessageAsync(eventData.UserId, eventData.FriendId, eventData.TenantId);
             }
         }
 
@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
         {
             // 发送添加好友的第一条消息
 
-            var addNewFirendMessage = new ChatMessage
+            var addNewFriendMessage = new ChatMessage
             {
                 TenantId = tenantId,
                 FormUserId = _currentUser.GetId(), // 本地事件中可以获取到当前用户信息
@@ -88,16 +88,16 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
                 Content = _stringLocalizer["Messages:NewFriend"]
             };
 
-            await _messageSender.SendMessageAsync(addNewFirendMessage);
+            await _messageSender.SendMessageAsync(addNewFriendMessage);
         }
 
         protected virtual async Task SendFriendValidationNotifierAsync(UserChatFriend userChatFriend)
         {
             // 发送好友验证通知
-            var userIdentifer = new UserIdentifier(userChatFriend.FrientId, userChatFriend.RemarkName);
+            var userIdentifier = new UserIdentifier(userChatFriend.FriendId, userChatFriend.RemarkName);
 
-            var friendValidationNotifictionData = new NotificationData();
-            friendValidationNotifictionData
+            var friendValidationNotificationData = new NotificationData();
+            friendValidationNotificationData
                 .WriteLocalizedData(
                     new LocalizableStringInfo(
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
@@ -112,14 +112,14 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
                         LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                         "Notifications:RequestAddNewFriendDetail",
                         new Dictionary<object, object> { { "description", userChatFriend.Description } }));
-            friendValidationNotifictionData.TrySetData("userId", userChatFriend.UserId);
-            friendValidationNotifictionData.TrySetData("frientId", userChatFriend.FrientId);
+            friendValidationNotificationData.TrySetData("userId", userChatFriend.UserId);
+            friendValidationNotificationData.TrySetData("friendId", userChatFriend.FriendId);
 
             await _notificationSender
                 .SendNofiterAsync(
                     MessageServiceNotificationNames.IM.FriendValidation,
-                    friendValidationNotifictionData,
-                    userIdentifer,
+                    friendValidationNotificationData,
+                    userIdentifier,
                     userChatFriend.TenantId);
         }
 

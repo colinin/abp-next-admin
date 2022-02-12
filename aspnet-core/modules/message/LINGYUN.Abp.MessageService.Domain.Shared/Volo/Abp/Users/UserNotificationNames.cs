@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Users
 {
-    public class UserNotificationNames
+    public static class UserNotificationNames
     {
         public const string GroupName = "Volo.Abp.Users";
 
