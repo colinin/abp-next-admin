@@ -12,6 +12,6 @@ namespace LINGYUN.Abp.LocalizationManagement
             string cultureName,
             CancellationToken cancellationToken = default);
 
-        Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default);
+        Task<List<Language>> GetActivatedListAsync(CancellationToken cancellationToken = default);
     }
 }

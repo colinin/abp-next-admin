@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
             string name, 
             CancellationToken cancellationToken = default)
         {
-            return await (await GetDbSetAsync()).AnyAsync(x => x.Name.Equals(name));
+            return await (await GetDbSetAsync()).AnyAsync(x => x.Name.Equals(name), cancellationToken: GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<Resource> FindByNameAsync(

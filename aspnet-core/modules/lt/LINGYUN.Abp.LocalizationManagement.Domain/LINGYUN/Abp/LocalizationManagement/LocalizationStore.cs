@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.LocalizationManagement
         public virtual async Task<List<LanguageInfo>> GetLanguageListAsync(
             CancellationToken cancellationToken = default)
         {
-            var languages = await LanguageRepository.GetActivedListAsync(cancellationToken);
+            var languages = await LanguageRepository.GetActivatedListAsync(cancellationToken);
 
             return languages
                 .Select(x => new LanguageInfo(x.CultureName, x.UiCultureName, x.DisplayName, x.FlagIcon))
@@ -58,20 +58,20 @@ namespace LINGYUN.Abp.LocalizationManagement
 
             foreach (var textGroup in texts.GroupBy(x => x.CultureName))
             {
-                var cultureTextDictionaires = new Dictionary<string, LocalizedString>();
+                var cultureTextDictionaries = new Dictionary<string, LocalizedString>();
                 foreach (var text in textGroup)
                 {
                     // 本地化名称去重
-                    if (!cultureTextDictionaires.ContainsKey(text.Key))
+                    if (!cultureTextDictionaries.ContainsKey(text.Key))
                     {
-                        cultureTextDictionaires[text.Key] = new LocalizedString(text.Key, text.Value.NormalizeLineEndings());
+                        cultureTextDictionaries[text.Key] = new LocalizedString(text.Key, text.Value.NormalizeLineEndings());
                     }
                 }
 
                 // 本地化语言去重
                 if (!dictionaries.ContainsKey(textGroup.Key))
                 {
-                    dictionaries[textGroup.Key] = new StaticLocalizationDictionary(textGroup.Key, cultureTextDictionaires);
+                    dictionaries[textGroup.Key] = new StaticLocalizationDictionary(textGroup.Key, cultureTextDictionaries);
                 }
             }
 

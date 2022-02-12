@@ -4,7 +4,7 @@
     {
         public const string GroupName = "LocalizationManagement";
 
-        public class Resource
+        public static class Resource
         {
             public const string Default = GroupName + ".Resource";
 
@@ -15,7 +15,7 @@
             public const string Delete = Default + ".Delete";
         }
 
-        public class Language
+        public static class Language
         {
             public const string Default = GroupName + ".Language";
 
@@ -26,7 +26,7 @@
             public const string Delete = Default + ".Delete";
         }
 
-        public class Text
+        public static class Text
         {
             public const string Default = GroupName + ".Text";
 

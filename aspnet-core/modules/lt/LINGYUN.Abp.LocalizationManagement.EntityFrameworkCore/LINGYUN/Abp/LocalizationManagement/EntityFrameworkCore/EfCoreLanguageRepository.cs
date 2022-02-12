@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<Language>> GetActivatedListAsync(CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(x => x.Enable)
                 .ToListAsync(GetCancellationToken(cancellationToken));
