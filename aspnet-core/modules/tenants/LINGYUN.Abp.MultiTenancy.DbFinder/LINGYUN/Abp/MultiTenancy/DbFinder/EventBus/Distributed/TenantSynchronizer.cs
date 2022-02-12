@@ -16,6 +16,8 @@ public class TenantSynchronizer :
     IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
     IDistributedEventHandler<EntityUpdatedEto<TenantEto>>,
     IDistributedEventHandler<EntityDeletedEto<TenantEto>>,
+    IDistributedEventHandler<ConnectionStringCreatedEventData>,
+    IDistributedEventHandler<ConnectionStringDeletedEventData>,
     ITransientDependency
 {
     private readonly ILogger<TenantSynchronizer> _logger;
@@ -35,38 +37,82 @@ public class TenantSynchronizer :
         _tenantRepository = tenantRepository;
     }
 
+    /// <summary>
+    /// 处理租户变更事件
+    /// </summary>
+    /// <remarks>
+    /// 更新租户缓存
+    /// </remarks>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
     {
-        await UpdateCacheItemAsync(eventData.Entity);
+        await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
+    /// <summary>
+    /// 处理租户新增事件
+    /// </summary>
+    /// <remarks>
+    /// 更新租户缓存
+    /// </remarks>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
     {
-        await UpdateCacheItemAsync(eventData.Entity);
+        await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
+    /// <summary>
+    /// 处理租户删除事件
+    /// </summary>
+    /// <remarks>
+    /// 删除租户缓存
+    /// </remarks>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
     {
-        using (_currentTenant.Change(null))
-        {
-            await _cache.RemoveManyAsync(
-                new string[]
-                {
-                    TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Name),
-                    TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString()),
-                });
-        }
+        await RemoveCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
-    protected virtual async Task UpdateCacheItemAsync(TenantEto tenant)
+    /// <summary>
+    /// 处理租户连接字符串创建事件
+    /// </summary>
+    /// <remarks>
+    /// 更新租户缓存
+    /// </remarks>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
+    [UnitOfWork]
+    public virtual async Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
+    {
+        await UpdateCacheItemAsync(eventData.TenantId, eventData.TenantName);
+    }
+
+    /// <summary>
+    /// 处理租户连接字符串删除事件
+    /// </summary>
+    /// <remarks>
+    /// 删除租户缓存
+    /// </remarks>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
+    public virtual async Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+    {
+        // TODO: 用更新还是用删除?
+        await RemoveCacheItemAsync(eventData.TenantId, eventData.TenantName);
+    }
+
+    protected virtual async Task UpdateCacheItemAsync(Guid tenantId, string tenantName = null)
     {
         try
         {
             using (_currentTenant.Change(null))
             {
-                var findTenant = await _tenantRepository.FindAsync(tenant.Id, true);
+                var findTenant = await _tenantRepository.FindAsync(tenantId, true);
                 if (findTenant == null)
                 {
                     return;
@@ -76,7 +122,7 @@ public class TenantSynchronizer :
                 {
                     connectionStrings[tenantConnectionString.Name] = tenantConnectionString.Value;
                 }
-                var cacheItem = new TenantConfigurationCacheItem(tenant.Id, tenant.Name, connectionStrings);
+                var cacheItem = new TenantConfigurationCacheItem(findTenant.Id, findTenant.Name, connectionStrings);
 
                 await _cache.SetAsync(
                     TenantConfigurationCacheItem.CalculateCacheKey(findTenant.Id.ToString()),
@@ -90,6 +136,18 @@ public class TenantSynchronizer :
         catch (Exception ex)
         {
             _logger.LogException(ex);
+        }
+    }
+
+    protected virtual async Task RemoveCacheItemAsync(Guid tenantId, string tenantName = null)
+    {
+        using (_currentTenant.Change(null))
+        {
+            await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantId.ToString()));
+            if (!tenantName.IsNullOrWhiteSpace())
+            {
+                await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantName));
+            }
         }
     }
 }
