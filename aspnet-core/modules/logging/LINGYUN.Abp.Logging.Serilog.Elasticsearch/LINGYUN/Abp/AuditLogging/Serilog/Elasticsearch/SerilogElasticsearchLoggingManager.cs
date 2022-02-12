@@ -142,7 +142,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         {
             var client = _clientFactory.Create();
 
-            var querys = BuildQueryDescriptor(
+            var queries = BuildQueryDescriptor(
                 startTime,
                 endTime,
                 level,
@@ -159,7 +159,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
             var response = await client.CountAsync<SerilogInfo>((dsl) =>
                 dsl.Index(CreateIndex())
-                   .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
+                   .Query(log => log.Bool(b => b.Must(queries.ToArray()))),
                 cancellationToken);
 
             return response.Count;
@@ -215,7 +215,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 ? sorting.Split()[0]
                 : nameof(SerilogInfo.TimeStamp);
 
-            var querys = BuildQueryDescriptor(
+            var queries = BuildQueryDescriptor(
                 startTime,
                 endTime,
                 level,
@@ -246,7 +246,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 dsl.Index(CreateIndex())
                    .Query(log =>
                         log.Bool(b =>
-                            b.Must(querys.ToArray())))
+                            b.Must(queries.ToArray())))
                    .Source(SourceFilter)
                    .Sort(log => log.Field(GetField(sorting), sortOrder))
                    .From(skipCount)
@@ -271,60 +271,60 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             int? threadId = null,
             bool? hasException = null)
         {
-            var querys = new List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>>();
+            var queries = new List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>>();
 
             if (_currentTenant.IsAvailable)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())));
             }
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(startTime)));
+                queries.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(startTime)));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(endTime)));
+                queries.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(endTime)));
             }
             if (level.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(level.ToString())));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(level.ToString())));
             }
             if (!machineName.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.MachineName))).Value(machineName)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.MachineName))).Value(machineName)));
             }
             if (!environment.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Environment))).Value(environment)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Environment))).Value(environment)));
             }
             if (!application.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Application))).Value(application)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Application))).Value(application)));
             }
             if (!context.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Context))).Value(context)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Context))).Value(context)));
             }
             if (!requestId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.RequestId))).Value(requestId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.RequestId))).Value(requestId)));
             }
             if (!requestPath.IsNullOrWhiteSpace())
             {
                 // 模糊匹配
-                querys.Add((log) => log.MatchPhrasePrefix((q) => q.Field(f => f.Fields.RequestPath).Query(requestPath)));
+                queries.Add((log) => log.MatchPhrasePrefix((q) => q.Field(f => f.Fields.RequestPath).Query(requestPath)));
             }
             if (!correlationId.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.MatchPhrase((q) => q.Field(GetField(nameof(SerilogInfo.Fields.CorrelationId))).Query(correlationId)));
+                queries.Add((log) => log.MatchPhrase((q) => q.Field(GetField(nameof(SerilogInfo.Fields.CorrelationId))).Query(correlationId)));
             }
             if (processId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ProcessId))).Value(processId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ProcessId))).Value(processId)));
             }
             if (threadId.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ThreadId))).Value(threadId)));
+                queries.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ThreadId))).Value(threadId)));
             }
 
             if (hasException.HasValue)
@@ -336,7 +336,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                             "field": "exceptions"
                         }
                      */
-                    querys.Add(
+                    queries.Add(
                         (q) => q.Exists(
                             (e) => e.Field("exceptions")));
                 }
@@ -354,7 +354,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                             ]
                         }
                      */
-                    querys.Add(
+                    queries.Add(
                         (q) => q.Bool(
                             (b) => b.MustNot(
                                 (m) => m.Exists(
@@ -362,7 +362,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 }
             }
 
-            return querys;
+            return queries;
         }
 
         protected virtual string CreateIndex(DateTimeOffset? offset = null)

@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Logging
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<AbpLoggingEnricherPropertyNames>(configuration.GetSection("Logging"));
+            Configure<AbpLoggingOptions>(configuration.GetSection("Logging"));
         }
     }
 }
