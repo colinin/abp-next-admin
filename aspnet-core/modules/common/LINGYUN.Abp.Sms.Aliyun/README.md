@@ -21,7 +21,7 @@ public class YouProjectModule : AbpModule
 *	AliyunSettingNames.Sms.DefaultSignName				可选,默认签名,当用户调用未传递签名时,默认使用的短信签名  
 *	AliyunSettingNames.Sms.DefaultTemplateCode			可选,默认短信模板号,,当用户调用未传递短信模板时,默认使用的短信模板
 *	AliyunSettingNames.Sms.DefaultPhoneNumber			可选,默认发送号码,当用户调用未传递接收者号码时,默认使用的接收人号码  
-*	AliyunSettingNames.Sms.VisableErrorToClient			可选,展示错误给客户端,当调用短信接口出现错误时,是否返回错误明细给客户端,默认 false  
+*	AliyunSettingNames.Sms.VisibleErrorToClient			可选,展示错误给客户端,当调用短信接口出现错误时,是否返回错误明细给客户端,默认 false  
 
 ## 其他
 

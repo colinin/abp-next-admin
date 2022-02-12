@@ -87,10 +87,10 @@ namespace LINGYUN.Abp.Sms.Aliyun.Settings
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
-                    AliyunSmsSettingNames.Sms.VisableErrorToClient,
+                    AliyunSmsSettingNames.Sms.VisibleErrorToClient,
                     defaultValue: false.ToString(),
-                    displayName: L("DisplayName:VisableErrorToClient"),
-                    description: L("Description:VisableErrorToClient"),
+                    displayName: L("DisplayName:VisibleErrorToClient"),
+                    description: L("Description:VisibleErrorToClient"),
                     isVisibleToClients: false
                 )
                 .WithProviders(

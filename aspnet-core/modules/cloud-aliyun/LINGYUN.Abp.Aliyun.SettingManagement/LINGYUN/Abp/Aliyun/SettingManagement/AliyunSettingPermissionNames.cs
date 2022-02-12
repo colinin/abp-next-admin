@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.Aliyun.SettingManagement
 {
-    public class AliyunSettingPermissionNames
+    public static class AliyunSettingPermissionNames
     {
         public const string GroupName = "Abp.Aliyun";
 

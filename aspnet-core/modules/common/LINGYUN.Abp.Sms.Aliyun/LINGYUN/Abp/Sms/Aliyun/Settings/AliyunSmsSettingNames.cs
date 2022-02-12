@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.Sms.Aliyun.Settings
         /// <summary>
         /// 短信服务
         /// </summary>
-        public class Sms
+        public static class Sms
         {
             public const string Prefix = AliyunSettingNames.Prefix + ".Sms";
             /// <summary>
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Sms.Aliyun.Settings
             /// <summary>
             /// 展示错误给客户端
             /// </summary>
-            public const string VisableErrorToClient = Prefix + ".VisableErrorToClient";
+            public const string VisibleErrorToClient = Prefix + ".VisibleErrorToClient";
         }
     }
 }

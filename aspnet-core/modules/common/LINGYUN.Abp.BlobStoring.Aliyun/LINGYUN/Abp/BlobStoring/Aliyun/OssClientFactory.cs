@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             ConfigurationProvider = configurationProvider;
         }
 
-        public virtual async Task<IOss> CreateAsync<TContainer>()
+        public async virtual Task<IOss> CreateAsync<TContainer>()
         {
             var configuration = ConfigurationProvider.Get<TContainer>();
 

@@ -29,17 +29,17 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
             LocalizationResource = typeof(AliyunResource);
         }
 
-        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
+        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+        protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
             var settingGroups = new SettingGroupResult();
 
@@ -142,9 +142,9 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.VisableErrorToClient),
+                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.VisibleErrorToClient),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.VisibleErrorToClient, providerName, providerKey),
                    ValueType.Boolean,
                     providerName);
 

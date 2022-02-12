@@ -14,7 +14,7 @@ namespace Volo.Abp.Sms
         /// <param name="phoneNumber">发送手机号</param>
         /// <param name="templateParams">短信模板参数</param>
         /// <returns></returns>
-        public static async Task SendAsync(this ISmsSender smsSender, string templateCode, string phoneNumber, IDictionary<string, object> templateParams = null)
+        public async static Task SendAsync(this ISmsSender smsSender, string templateCode, string phoneNumber, IDictionary<string, object> templateParams = null)
         {
             var smsMessage = new SmsMessage(phoneNumber, nameof(AliyunSmsSender));
             smsMessage.Properties.Add("TemplateCode", templateCode);
@@ -34,7 +34,7 @@ namespace Volo.Abp.Sms
         /// <param name="phoneNumber">发送手机号</param>
         /// <param name="templateParams">短信模板参数</param>
         /// <returns></returns>
-        public static async Task SendAsync(this ISmsSender smsSender, string signName, string templateCode, string phoneNumber, IDictionary<string, object> templateParams = null)
+        public async static Task SendAsync(this ISmsSender smsSender, string signName, string templateCode, string phoneNumber, IDictionary<string, object> templateParams = null)
         {
             var smsMessage = new SmsMessage(phoneNumber, nameof(AliyunSmsSender));
             smsMessage.Properties.Add("SignName", signName);

@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
             AcsClientFactory = acsClientFactory;
         }
 
-        public virtual async Task SendAsync(SmsMessage smsMessage)
+        public async virtual Task SendAsync(SmsMessage smsMessage)
         {
             var domain = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain);
             var action = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName);
@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
                 var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsResponse>(responseContent);
                 if (!aliyunResponse.IsSuccess())
                 {
-                    if (await SettingProvider.IsTrueAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient))
+                    if (await SettingProvider.IsTrueAsync(AliyunSmsSettingNames.Sms.VisibleErrorToClient))
                     {
                         throw new UserFriendlyException(aliyunResponse.Code, aliyunResponse.Message);
                     }

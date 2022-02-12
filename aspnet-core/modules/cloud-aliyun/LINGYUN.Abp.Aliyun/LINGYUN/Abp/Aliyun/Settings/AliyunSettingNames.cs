@@ -7,7 +7,7 @@
         /// <summary>
         /// 认证方式
         /// </summary>
-        public class Authorization
+        public static class Authorization
         {
             public const string Prefix = AliyunSettingNames.Prefix + ".Authorization";
             /// <summary>
