@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.AuditLogging
             _manager = manager;
         }
 
-        public async virtual Task SaveAsync(SecurityLogInfo securityLogInfo)
+        public virtual async Task SaveAsync(SecurityLogInfo securityLogInfo)
         {
             await _manager.SaveAsync(securityLogInfo);
         }

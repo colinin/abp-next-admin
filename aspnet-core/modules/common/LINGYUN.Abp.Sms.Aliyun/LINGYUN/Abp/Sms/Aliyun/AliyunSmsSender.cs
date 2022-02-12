@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
             AcsClientFactory = acsClientFactory;
         }
 
-        public async virtual Task SendAsync(SmsMessage smsMessage)
+        public virtual async Task SendAsync(SmsMessage smsMessage)
         {
             var domain = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain);
             var action = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName);

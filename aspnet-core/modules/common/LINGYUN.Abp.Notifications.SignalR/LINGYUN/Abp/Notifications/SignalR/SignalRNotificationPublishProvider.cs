@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
             _hubContext = hubContext;
         }
 
-        protected async override Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
+        protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
         {
             if (identifiers?.Count() == 0)
             {

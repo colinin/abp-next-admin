@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
             Clock = clock;
         }
 
-        protected async override Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
+        protected override async Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
         {
             var notificationSender = context.ServiceProvider.GetRequiredService<INotificationSender>();
 

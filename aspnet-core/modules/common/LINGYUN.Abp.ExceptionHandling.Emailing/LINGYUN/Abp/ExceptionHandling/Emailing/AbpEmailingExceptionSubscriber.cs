@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
             Clock = clock;
         }
 
-        protected async override Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
+        protected override async Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
         {
             // 需不需要用 SettingProvider 来获取?
             var receivedUsers = EmailOptions.GetReceivedEmailOrDefault(context.Exception.GetType());

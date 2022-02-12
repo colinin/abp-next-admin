@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Client
             Cache = cache;
         }
 
-        public async virtual Task HandleEventAsync(CurrentApplicationConfigurationCacheResetEventData eventData)
+        public virtual async Task HandleEventAsync(CurrentApplicationConfigurationCacheResetEventData eventData)
         {
             await Cache.RemoveAsync(CreateCacheKey());
         }

@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Data.DbMigrator
             _dbConnectionOptions = dbConnectionOptions.Value;
         }
 
-        public async virtual Task MigrateAsync<TDbContext>(
+        public virtual async Task MigrateAsync<TDbContext>(
             [NotNull] Func<string, DbContextOptionsBuilder<TDbContext>, TDbContext> configureDbContext) 
             where TDbContext : AbpDbContext<TDbContext>
         {

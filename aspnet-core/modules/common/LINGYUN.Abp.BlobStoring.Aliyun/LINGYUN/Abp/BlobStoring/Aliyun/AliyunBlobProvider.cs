@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             AliyunBlobNameCalculator = aliyunBlobNameCalculator;
         }
 
-        public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+        public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             return false;
         }
 
-        public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+        public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             return await BlobExistsAsync(ossClient, args, blobName);
         }
 
-        public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             return memoryStream;
         }
 
-        public async override Task SaveAsync(BlobProviderSaveArgs args)
+        public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var ossClient = await GetOssClientAsync(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -90,14 +90,14 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             ossClient.PutObject(bucketName, blobName, args.BlobStream);
         }
 
-        protected async virtual Task<IOss> GetOssClientAsync(BlobProviderArgs args)
+        protected virtual async Task<IOss> GetOssClientAsync(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAliyunConfiguration();
             var ossClient = await OssClientFactory.CreateAsync(configuration);
             return ossClient;
         }
 
-        protected async virtual Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
+        protected virtual async Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
         {
             if (! await BucketExistsAsync(ossClient, args))
             {

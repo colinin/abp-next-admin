@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Account
 
         [HttpPost]
         [Route("change-avatar")]
-        public async virtual Task ChangeAvatarAsync(ChangeAvatarInput input)
+        public virtual async Task ChangeAvatarAsync(ChangeAvatarInput input)
         {
             await _service.ChangeAvatarAsync(input);
         }

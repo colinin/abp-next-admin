@@ -23,7 +23,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
         SettingProvider = settingProvider;
     }
 
-    public async virtual Task<TClient> CreateAsync()
+    public virtual async Task<TClient> CreateAsync()
     {
         var clientCacheItem = await GetClientCacheItemAsync();
 
@@ -32,7 +32,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
 
     protected abstract TClient CreateClient(TencentCloudClientCacheItem cloudCache);
 
-    protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
+    protected virtual async Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
             TencentCloudClientCacheItem.CalculateCacheKey(CurrentTenant),
@@ -80,7 +80,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
         SettingProvider = settingProvider;
     }
 
-    public async virtual Task<TClient> CreateAsync(TConfiguration configuration)
+    public virtual async Task<TClient> CreateAsync(TConfiguration configuration)
     {
         var clientCacheItem = await GetClientCacheItemAsync();
 
@@ -89,7 +89,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
 
     protected abstract TClient CreateClient(TConfiguration configuration, TencentCloudClientCacheItem cloudCache);
 
-    protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
+    protected virtual async Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
             TencentCloudClientCacheItem.CalculateCacheKey(CurrentTenant),

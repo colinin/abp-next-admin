@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.ExceptionHandling
             ServiceScopeFactory = serviceScopeFactory;
         }
 
-        public async override Task HandleAsync(ExceptionNotificationContext context)
+        public override async Task HandleAsync(ExceptionNotificationContext context)
         {
             if (context.Handled &&
                 Options.HasNotifierError(context.Exception))

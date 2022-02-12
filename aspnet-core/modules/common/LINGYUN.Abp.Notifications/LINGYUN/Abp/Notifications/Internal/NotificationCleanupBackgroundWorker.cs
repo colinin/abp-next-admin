@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             timer.Period = Options.CleanupPeriod;
         }
 
-        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             try
             {

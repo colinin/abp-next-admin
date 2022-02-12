@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.Notifications
             AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
         }
 
-        public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpNotificationCleanupOptions>>().Value;
             if (options.IsEnabled)

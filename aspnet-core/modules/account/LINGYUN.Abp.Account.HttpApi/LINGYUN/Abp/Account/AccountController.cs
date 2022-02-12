@@ -20,42 +20,42 @@ namespace LINGYUN.Abp.Account
 
         [HttpPost]
         [Route("wechat/register")]
-        public async virtual Task RegisterAsync(WeChatRegisterDto input)
+        public virtual async Task RegisterAsync(WeChatRegisterDto input)
         {
             await AccountAppService.RegisterAsync(input);
         }
 
         [HttpPost]
         [Route("phone/register")]
-        public async virtual Task RegisterAsync(PhoneRegisterDto input)
+        public virtual async Task RegisterAsync(PhoneRegisterDto input)
         {
             await AccountAppService.RegisterAsync(input);
         }
 
         [HttpPut]
         [Route("phone/reset-password")]
-        public async virtual Task ResetPasswordAsync(PhoneResetPasswordDto input)
+        public virtual async Task ResetPasswordAsync(PhoneResetPasswordDto input)
         {
             await AccountAppService.ResetPasswordAsync(input);
         }
 
         [HttpPost]
         [Route("phone/send-signin-code")]
-        public async virtual Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
+        public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
         {
             await AccountAppService.SendPhoneSigninCodeAsync(input);
         }
 
         [HttpPost]
         [Route("phone/send-register-code")]
-        public async virtual Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
+        public virtual async Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
         {
             await AccountAppService.SendPhoneRegisterCodeAsync(input);
         }
 
         [HttpPost]
         [Route("phone/send-password-reset-code")]
-        public async virtual Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
+        public virtual async Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
         {
             await AccountAppService.SendPhoneResetPasswordCodeAsync(input);
         }

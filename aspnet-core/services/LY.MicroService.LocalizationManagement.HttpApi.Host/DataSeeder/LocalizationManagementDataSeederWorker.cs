@@ -14,7 +14,7 @@ public class LocalizationManagementDataSeederWorker : BackgroundService
         DataSeeder = dataSeeder;
     }
 
-    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await DataSeeder.SeedAsync();
     }

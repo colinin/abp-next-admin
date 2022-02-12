@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Notifications.Sms
 
         public override string Name => ProviderName;
 
-        protected async override Task PublishAsync(
+        protected override async Task PublishAsync(
             NotificationInfo notification,
             IEnumerable<UserIdentifier> identifiers,
             CancellationToken cancellationToken = default)

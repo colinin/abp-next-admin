@@ -21,13 +21,13 @@ namespace LINGYUN.Abp.Auditing.Logging
 
         [HttpGet]
         [Route("{id}")]
-        public async virtual Task<LogDto> GetAsync(string id)
+        public virtual async Task<LogDto> GetAsync(string id)
         {
             return await _service.GetAsync(id);
         }
 
         [HttpGet]
-        public async virtual Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)
+        public virtual async Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)
         {
             return await _service.GetListAsync(input);
         }

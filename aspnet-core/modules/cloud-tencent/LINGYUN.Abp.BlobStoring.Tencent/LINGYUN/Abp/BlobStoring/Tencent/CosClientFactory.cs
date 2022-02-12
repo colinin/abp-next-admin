@@ -26,7 +26,7 @@ public class CosClientFactory : AbstractTencentCloudClientFactory<CosXml, Tencen
         ConfigurationProvider = configurationProvider;
     }
 
-    public async virtual Task<CosXml> CreateAsync<TContainer>()
+    public virtual async Task<CosXml> CreateAsync<TContainer>()
     {
         var configuration = ConfigurationProvider.Get<TContainer>();
 

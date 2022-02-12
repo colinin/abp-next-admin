@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.Localization.Dynamic
             Options = options.Value;
         }
 
-        public async virtual Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync()
+        public virtual async Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync()
         {
             var languages = await Store.GetLanguageListAsync();
 

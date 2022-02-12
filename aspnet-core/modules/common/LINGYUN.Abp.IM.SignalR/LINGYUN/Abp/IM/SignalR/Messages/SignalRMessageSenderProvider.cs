@@ -30,17 +30,17 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
             _hubContext = hubContext;
         }
 
-        protected async override Task SendMessageToGroupAsync(ChatMessage chatMessage)
+        protected override async Task SendMessageToGroupAsync(ChatMessage chatMessage)
         {
             await TrySendMessageToGroupAsync(chatMessage, true);
         }
 
-        protected async override Task SendMessageToUserAsync(ChatMessage chatMessage)
+        protected override async Task SendMessageToUserAsync(ChatMessage chatMessage)
         {
             await TrySendMessageToUserAsync(chatMessage, true);
         }
 
-        protected async virtual Task TrySendMessageToGroupAsync(ChatMessage chatMessage, bool sendingExceptionCallback = true)
+        protected virtual async Task TrySendMessageToGroupAsync(ChatMessage chatMessage, bool sendingExceptionCallback = true)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
             }
         }
 
-        protected async virtual Task TrySendMessageToUserAsync(ChatMessage chatMessage, bool sendingExceptionCallback = true)
+        protected virtual async Task TrySendMessageToUserAsync(ChatMessage chatMessage, bool sendingExceptionCallback = true)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
             }
         }
 
-        protected async virtual Task TrySendBusinessErrorMessage(Exception ex, ChatMessage chatMessage)
+        protected virtual async Task TrySendBusinessErrorMessage(Exception ex, ChatMessage chatMessage)
         {
             if (ex is IBusinessException)
             {

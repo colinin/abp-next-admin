@@ -15,17 +15,17 @@ namespace LINGYUN.Abp.Location.Baidu
             BaiduLocationHttpClient = baiduHttpRequestClient;
         }
 
-        public async virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
         {
             return await BaiduLocationHttpClient.IPGeocodeAsync(ipAddress);
         }
 
-        public async virtual Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50)
+        public virtual async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50)
         {
             return await BaiduLocationHttpClient.ReGeocodeAsync(lat, lng, radius);
         }
 
-        public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+        public virtual async Task<GecodeLocation> GeocodeAsync(string address, string city = null)
         {
             return await BaiduLocationHttpClient.GeocodeAsync(address, city);
         }

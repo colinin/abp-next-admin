@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.Sms.Tencent
             Logger = NullLogger<TencentCloudSmsSender>.Instance;
         }
 
-        public async virtual Task SendAsync(SmsMessage smsMessage)
+        public virtual async Task SendAsync(SmsMessage smsMessage)
         {
             var appId = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.AppId);
 

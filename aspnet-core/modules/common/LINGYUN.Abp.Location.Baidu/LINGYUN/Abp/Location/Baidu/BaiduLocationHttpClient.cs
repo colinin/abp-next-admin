@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Location.Baidu
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public async virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
         {
             var requestParameters = new Dictionary<string, string>
             {
@@ -88,7 +88,7 @@ namespace LINGYUN.Abp.Location.Baidu
             return location;
         }
 
-        public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+        public virtual async Task<GecodeLocation> GeocodeAsync(string address, string city = null)
         {
             var requestParameters = new Dictionary<string, string>
             {
@@ -136,7 +136,7 @@ namespace LINGYUN.Abp.Location.Baidu
             return location;
         }
 
-        public async virtual Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
+        public virtual async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
         {
             var requestParameters = new Dictionary<string, string>
             {
@@ -223,7 +223,7 @@ namespace LINGYUN.Abp.Location.Baidu
             return location;
         }
 
-        protected async virtual Task<string> MakeRequestAndGetResultAsync(string url)
+        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url)
         {
             var client = HttpClientFactory.CreateClient(BaiduLocationHttpConsts.HttpClientName);
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);

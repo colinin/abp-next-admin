@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Notifications
             ServiceProvider = serviceProvider;
         }
 
-        public async override Task ExecuteAsync(NotificationPublishJobArgs args)
+        public override async Task ExecuteAsync(NotificationPublishJobArgs args)
         {
             var providerType = Type.GetType(args.ProviderType);
             if (providerType != null)

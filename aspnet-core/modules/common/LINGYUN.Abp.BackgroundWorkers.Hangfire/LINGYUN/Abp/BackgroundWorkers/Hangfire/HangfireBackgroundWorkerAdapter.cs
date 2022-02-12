@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
             _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
-        public async virtual Task ExecuteAsync()
+        public virtual async Task ExecuteAsync()
         {
             var worker = (IBackgroundWorker)ServiceProvider.GetService(typeof(TWorker));
             var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);

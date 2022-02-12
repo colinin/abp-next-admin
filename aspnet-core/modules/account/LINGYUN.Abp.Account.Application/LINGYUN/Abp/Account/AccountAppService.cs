@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.Account
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
         }
 
-        public async virtual Task RegisterAsync(WeChatRegisterDto input)
+        public virtual async Task RegisterAsync(WeChatRegisterDto input)
         {
             ThrowIfInvalidEmailAddress(input.EmailAddress);
 
@@ -85,7 +85,7 @@ namespace LINGYUN.Abp.Account
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public async virtual Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
+        public virtual async Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
         {
             await CheckSelfRegistrationAsync();
             await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
@@ -118,7 +118,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        public async virtual Task RegisterAsync(PhoneRegisterDto input)
+        public virtual async Task RegisterAsync(PhoneRegisterDto input)
         {
             await CheckSelfRegistrationAsync();
             await IdentityOptions.SetAsync();
@@ -164,7 +164,7 @@ namespace LINGYUN.Abp.Account
             throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
         }
 
-        public async virtual Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
+        public virtual async Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
         {
             /*
              * 注解: 微软的重置密码方法通过 UserManager.GeneratePasswordResetTokenAsync 接口生成密码重置Token
@@ -207,7 +207,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        public async virtual Task ResetPasswordAsync(PhoneResetPasswordDto input)
+        public virtual async Task ResetPasswordAsync(PhoneResetPasswordDto input)
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
@@ -234,7 +234,7 @@ namespace LINGYUN.Abp.Account
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public async virtual Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
+        public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
@@ -260,7 +260,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        protected async virtual Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber, bool isConfirmed = true)
+        protected virtual async Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber, bool isConfirmed = true)
         {
             var user = await UserRepository.FindByPhoneNumberAsync(phoneNumber, isConfirmed, true);
             if (user == null)
@@ -274,7 +274,7 @@ namespace LINGYUN.Abp.Account
         /// 检查是否允许用户注册
         /// </summary>
         /// <returns></returns>
-        protected async virtual Task CheckSelfRegistrationAsync()
+        protected virtual async Task CheckSelfRegistrationAsync()
         {
             if (!await SettingProvider.IsTrueAsync(Volo.Abp.Account.Settings.AccountSettingNames.IsSelfRegistrationEnabled))
             {
@@ -282,7 +282,7 @@ namespace LINGYUN.Abp.Account
             }
         }
 
-        protected async virtual Task CheckNewUserPhoneNumberNotBeUsedAsync(string phoneNumber)
+        protected virtual async Task CheckNewUserPhoneNumberNotBeUsedAsync(string phoneNumber)
         {
             if (await UserRepository.IsPhoneNumberUedAsync(phoneNumber))
             {

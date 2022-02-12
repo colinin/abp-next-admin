@@ -22,14 +22,14 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
 
         [HttpGet]
         [Route("by-current-tenant")]
-        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await AppService.GetAllForCurrentTenantAsync();
         }
 
         [HttpGet]
         [Route("by-global")]
-        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await AppService.GetAllForGlobalAsync();
         }

@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             Logger = NullLogger<RedisRequiresLimitFeatureChecker>.Instance;
         }
 
-        public async virtual Task<bool> CheckAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
+        public virtual async Task<bool> CheckAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
         {
             await ConnectAsync(cancellation);
 
@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             return result + 1 <= context.Limit;
         }
 
-        public async virtual Task ProcessAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
+        public virtual async Task ProcessAsync(RequiresLimitFeatureContext context, CancellationToken cancellation = default)
         {
             await ConnectAsync(cancellation);
             

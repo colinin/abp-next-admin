@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
             _permissionChecker = permissionChecker;
         }
 
-        public async virtual Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
+        public virtual async Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
         {
             var localPermissionKey = $"_HDPS:{requiredPermissionNames.JoinAsString(";")}";
 

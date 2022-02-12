@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             UnitOfWorkManager = unitOfWorkManager;
         }
 
-        public async virtual Task SaveAsync(
+        public virtual async Task SaveAsync(
             SecurityLogInfo securityLogInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             }
         }
 
-        public async virtual Task<SecurityLog> GetAsync(
+        public virtual async Task<SecurityLog> GetAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             return ObjectMapper.Map<IdentitySecurityLog, SecurityLog>(securityLog);
         }
 
-        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using (var uow = UnitOfWorkManager.Begin(true))
             {
@@ -78,7 +78,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             }
         }
 
-        public async virtual Task<List<SecurityLog>> GetListAsync(
+        public virtual async Task<List<SecurityLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
         }
 
 
-        public async virtual Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string applicationName = null,

@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.EventBus.CAP
             ExceptionNotifier = exceptionNotifier;
         }
 
-        public async virtual Task NotifyAsync(AbpCAPExecutionFailedException exception)
+        public virtual async Task NotifyAsync(AbpCAPExecutionFailedException exception)
         {
             // 通过额外的选项来控制是否发送消息处理失败的事件
             if (Options.NotifyFailedCallback)

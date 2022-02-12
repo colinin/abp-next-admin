@@ -29,17 +29,17 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
             LocalizationResource = typeof(AliyunResource);
         }
 
-        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
+        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
             var settingGroups = new SettingGroupResult();
 

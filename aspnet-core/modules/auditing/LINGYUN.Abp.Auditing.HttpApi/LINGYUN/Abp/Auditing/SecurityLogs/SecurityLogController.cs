@@ -22,20 +22,20 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
 
         [HttpDelete]
         [Route("{id}")]
-        public async virtual Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             await SecurityLogAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async virtual Task<SecurityLogDto> GetAsync(Guid id)
+        public virtual async Task<SecurityLogDto> GetAsync(Guid id)
         {
             return await SecurityLogAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public async virtual Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)
+        public virtual async Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)
         {
             return await SecurityLogAppService.GetListAsync(input);
         }

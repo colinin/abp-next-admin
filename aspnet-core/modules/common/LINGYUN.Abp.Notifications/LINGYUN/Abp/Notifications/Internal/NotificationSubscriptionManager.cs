@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             _store = store;
         }
 
-        public async virtual Task<List<NotificationSubscriptionInfo>> GetUsersSubscriptionsAsync(
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUsersSubscriptionsAsync(
             Guid? tenantId,
             string notificationName, 
             IEnumerable<UserIdentifier> identifiers = null,
@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             return await _store.GetUserSubscriptionsAsync(tenantId, notificationName, identifiers, cancellationToken);
         }
 
-        public async virtual Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
             Guid? tenantId, 
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             return await _store.GetUserSubscriptionsAsync(tenantId, userId, cancellationToken);
         }
 
-        public async virtual Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
+        public virtual async Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
             Guid? tenantId, 
             string userName,
             CancellationToken cancellationToken = default)
@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             return await _store.GetUserSubscriptionsAsync(tenantId, userName, cancellationToken);
         }
 
-        public async virtual Task<bool> IsSubscribedAsync(
+        public virtual async Task<bool> IsSubscribedAsync(
             Guid? tenantId, 
             Guid userId, 
             string notificationName,
@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             return await _store.IsSubscribedAsync(tenantId, userId, notificationName, cancellationToken);
         }
 
-        public async virtual Task SubscribeAsync(
+        public virtual async Task SubscribeAsync(
             Guid? tenantId,
             UserIdentifier identifier,
             string notificationName,
@@ -63,7 +63,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             await _store.InsertUserSubscriptionAsync(tenantId, identifier, notificationName, cancellationToken);
         }
 
-        public async virtual Task SubscribeAsync(
+        public virtual async Task SubscribeAsync(
             Guid? tenantId, 
             IEnumerable<UserIdentifier> identifiers, 
             string notificationName,
@@ -75,7 +75,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             }
         }
 
-        public async virtual Task UnsubscribeAsync(
+        public virtual async Task UnsubscribeAsync(
             Guid? tenantId, 
             UserIdentifier identifier, 
             string notificationName,
@@ -84,7 +84,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             await _store.DeleteUserSubscriptionAsync(tenantId, identifier.UserId, notificationName, cancellationToken);
         }
 
-        public async virtual Task UnsubscribeAllAsync(
+        public virtual async Task UnsubscribeAllAsync(
             Guid? tenantId, 
             string notificationName,
             CancellationToken cancellationToken = default)
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Notifications.Internal
             await _store.DeleteAllUserSubscriptionAsync(tenantId, notificationName, cancellationToken);
         }
 
-        public async virtual Task UnsubscribeAsync(
+        public virtual async Task UnsubscribeAsync(
             Guid? tenantId,
             IEnumerable<UserIdentifier> identifiers,
             string notificationName,

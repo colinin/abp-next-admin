@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
         }
 
 
-        public async virtual Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -76,7 +76,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
                 cancellationToken);
         }
 
-        public async virtual Task<List<AuditLog>> GetListAsync(
+        public virtual async Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -120,7 +120,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             return ObjectMapper.Map<List<Volo.Abp.AuditLogging.AuditLog>, List<AuditLog>>(auditLogs);
         }
 
-        public async virtual Task<AuditLog> GetAsync(
+        public virtual async Task<AuditLog> GetAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -130,7 +130,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             return ObjectMapper.Map<Volo.Abp.AuditLogging.AuditLog, AuditLog>(auditLog);
         }
 
-        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using (var uow = UnitOfWorkManager.Begin(true))
             {
@@ -139,7 +139,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             }
         }
 
-        public async virtual Task<string> SaveAsync(
+        public virtual async Task<string> SaveAsync(
             AuditLogInfo auditInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -160,7 +160,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             return "";
         }
 
-        protected async virtual Task<string> SaveLogAsync(
+        protected virtual async Task<string> SaveLogAsync(
             AuditLogInfo auditInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
