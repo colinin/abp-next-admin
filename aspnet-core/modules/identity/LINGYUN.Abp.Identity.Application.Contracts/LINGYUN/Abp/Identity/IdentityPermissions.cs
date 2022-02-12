@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.Identity
 {
-    public class IdentityPermissions
+    public static class IdentityPermissions
     {
         public static class Roles
         {

@@ -29,28 +29,28 @@ namespace LINGYUN.Abp.Identity
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
         public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
-            var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id);
+            var organizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id);
 
             return new ListResultDto<OrganizationUnitDto>(
-                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
+                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(organizationUnits));
         }
 
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
         public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input)
         {
-            var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id, true);
+            var organizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id, true);
 
-            var notInRoleOuIds = input.OrganizationUnitIds.Where(ouid => !origanizationUnits.Any(ou => ou.Id.Equals(ouid)));
+            var notInRoleOuIds = input.OrganizationUnitIds.Where(ouid => !organizationUnits.Any(ou => ou.Id.Equals(ouid)));
 
             foreach (var ouId in notInRoleOuIds)
             {
                 await OrganizationUnitManager.AddRoleToOrganizationUnitAsync(id, ouId);
             }
 
-            var removeRoleOriganzationUnits = origanizationUnits.Where(ou => !input.OrganizationUnitIds.Contains(ou.Id));
-            foreach (var origanzationUnit in removeRoleOriganzationUnits)
+            var removeRoleOrganizationUnits = organizationUnits.Where(ou => !input.OrganizationUnitIds.Contains(ou.Id));
+            foreach (var organizationUnit in removeRoleOrganizationUnits)
             {
-                origanzationUnit.RemoveRole(id);
+                organizationUnit.RemoveRole(id);
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();

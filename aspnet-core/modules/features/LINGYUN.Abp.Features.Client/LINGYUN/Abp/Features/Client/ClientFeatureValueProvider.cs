@@ -10,24 +10,24 @@ namespace LINGYUN.Abp.Features.Client
 
         public override string Name => ProviderName;
 
-        protected ICurrentClient CurrentClient;
+        private readonly ICurrentClient _currentClient;
 
         public ClientFeatureValueProvider(
             IFeatureStore featureStore,
             ICurrentClient currentClient)
             : base(featureStore)
         {
-            CurrentClient = currentClient;
+            _currentClient = currentClient;
         }
 
         public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
         {
-            if (!CurrentClient.IsAuthenticated)
+            if (!_currentClient.IsAuthenticated)
             {
                 return null;
             }
 
-            return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentClient.Id);
+            return await FeatureStore.GetOrNullAsync(feature.Name, Name, _currentClient.Id);
         }
     }
 }

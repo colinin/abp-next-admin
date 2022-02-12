@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.Identity
 {
-    public class IdentityErrorCodes
+    public static class IdentityErrorCodes
     {
         /// <summary>
         /// 无法变更静态声明类型

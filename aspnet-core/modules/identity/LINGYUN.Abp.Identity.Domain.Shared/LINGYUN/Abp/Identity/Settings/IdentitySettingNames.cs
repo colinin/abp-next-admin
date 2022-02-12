@@ -25,7 +25,7 @@
             /// <summary>
             /// 验证码重复间隔时间
             /// </summary>
-            public const string SmsRepetInterval = UserPrefix + ".SmsRepetInterval";
+            public const string SmsRepeatInterval = UserPrefix + ".SmsRepeatInterval";
         }
     }
 }

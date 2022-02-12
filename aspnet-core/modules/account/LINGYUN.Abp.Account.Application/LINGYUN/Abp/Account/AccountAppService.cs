@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Account
 
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
-            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
+            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepeatInterval, 1);
 
             if (securityTokenCacheItem != null)
             {
@@ -183,7 +183,7 @@ namespace LINGYUN.Abp.Account
 
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
-            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
+            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepeatInterval, 1);
             // 传递 isConfirmed 用户必须是已确认过手机号的
             var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
             // 能查询到缓存就是重复发送
@@ -238,7 +238,7 @@ namespace LINGYUN.Abp.Account
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
-            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
+            var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepeatInterval, 1);
             if (securityTokenCacheItem != null)
             {
                 throw new UserFriendlyException(L["SendRepeatSmsVerifyCode", interval]);

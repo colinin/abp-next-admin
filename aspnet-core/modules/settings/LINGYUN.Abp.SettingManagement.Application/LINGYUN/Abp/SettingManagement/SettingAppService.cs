@@ -236,9 +236,9 @@ namespace LINGYUN.Abp.SettingManagement
                 ValueType.String,
                 providerName);
             userSetting.AddDetail(
-                SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepetInterval),
+                SettingDefinitionManager.Get(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepeatInterval),
                 StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, providerName, providerKey),
+                await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.User.SmsRepeatInterval, providerName, providerKey),
                 ValueType.Number,
                 providerName);
 

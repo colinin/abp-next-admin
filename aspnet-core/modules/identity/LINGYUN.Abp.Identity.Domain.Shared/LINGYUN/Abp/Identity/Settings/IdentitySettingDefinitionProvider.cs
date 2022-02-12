@@ -54,10 +54,10 @@ namespace LINGYUN.Abp.Identity.Settings
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
-                    name: IdentitySettingNames.User.SmsRepetInterval,
+                    name: IdentitySettingNames.User.SmsRepeatInterval,
                     defaultValue: "5",
-                    displayName: L("DisplayName:Abp.Identity.User.SmsRepetInterval"),
-                    description: L("Description:Abp.Identity.User.SmsRepetInterval"),
+                    displayName: L("DisplayName:Abp.Identity.User.SmsRepeatInterval"),
+                    description: L("Description:Abp.Identity.User.SmsRepeatInterval"),
                     isVisibleToClients: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,

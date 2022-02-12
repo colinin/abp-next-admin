@@ -33,10 +33,10 @@ namespace LINGYUN.Abp.Identity
         {
             var user = await UserManager.GetByIdAsync(id);
 
-            var origanizationUnits = await UserManager.GetOrganizationUnitsAsync(user);
+            var organizationUnits = await UserManager.GetOrganizationUnitsAsync(user);
 
             return new ListResultDto<OrganizationUnitDto>(
-                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
+                ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(organizationUnits));
         }
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]

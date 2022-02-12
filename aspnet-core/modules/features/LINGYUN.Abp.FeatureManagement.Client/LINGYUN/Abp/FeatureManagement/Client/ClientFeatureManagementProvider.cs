@@ -11,14 +11,14 @@ namespace LINGYUN.Abp.FeatureManagement.Client
     {
         public override string Name => ClientFeatureValueProvider.ProviderName;
 
-        protected ICurrentClient CurrentClient;
+        private readonly ICurrentClient _currentClient;
 
         public ClientFeatureManagementProvider(
             ICurrentClient currentClient,
             IFeatureManagementStore store)
             : base(store)
         {
-            CurrentClient = currentClient;
+            _currentClient = currentClient;
         }
 
 
@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.FeatureManagement.Client
                 return base.NormalizeProviderKeyAsync(providerKey);
             }
 
-            return Task.FromResult(CurrentClient.Id);
+            return Task.FromResult(_currentClient.Id);
         }
     }
 }

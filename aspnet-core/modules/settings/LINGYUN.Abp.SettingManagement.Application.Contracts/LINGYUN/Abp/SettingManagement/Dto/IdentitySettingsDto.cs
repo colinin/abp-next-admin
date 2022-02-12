@@ -82,7 +82,7 @@
         /// <summary>
         /// 验证码重复间隔时间
         /// </summary>
-        public SettingDetailsDto SmsRepetInterval { get; set; }
+        public SettingDetailsDto SmsRepeatInterval { get; set; }
         /// <summary>
         /// 用户手机验证短信模板
         /// </summary>

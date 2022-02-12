@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.Account
         {
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
-            var interval = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, 1);
+            var interval = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.SmsRepeatInterval, 1);
             if (securityTokenCacheItem != null)
             {
                 throw new UserFriendlyException(L["SendRepeatPhoneVerifyCode", interval]);
