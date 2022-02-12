@@ -151,7 +151,8 @@ namespace LINGYUN.Abp.TenantManagement
                 {
                     var eventData = new ConnectionStringCreatedEventData
                     {
-                        Id = tenant.Id,
+                        TenantId = tenant.Id,
+                        TenantName = tenant.Name,
                         Name = tenantConnectionStringCreateOrUpdate.Name
                     };
 
@@ -174,12 +175,17 @@ namespace LINGYUN.Abp.TenantManagement
 
             tenant.RemoveConnectionString(name);
 
-            var eventData = new ConnectionStringDeletedEventData
+            CurrentUnitOfWork.OnCompleted(async () =>
             {
-                Id = tenant.Id,
-                Name = name
-            };
-            await EventBus.PublishAsync(eventData);
+                var eventData = new ConnectionStringDeletedEventData
+                {
+                    TenantId = tenant.Id,
+                    TenantName = tenant.Name,
+                    Name = name
+                };
+
+                await EventBus.PublishAsync(eventData);
+            });
 
             await TenantRepository.UpdateAsync(tenant);
         }

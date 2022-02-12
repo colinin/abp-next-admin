@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.TenantManagement;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
@@ -14,6 +15,8 @@ public class TenantSynchronizer :
     IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
     IDistributedEventHandler<EntityUpdatedEto<TenantEto>>,
     IDistributedEventHandler<EntityDeletedEto<TenantEto>>,
+    IDistributedEventHandler<ConnectionStringCreatedEventData>,
+    IDistributedEventHandler<ConnectionStringDeletedEventData>,
     ITransientDependency
 {
     private readonly ICurrentTenant _currentTenant;
@@ -32,33 +35,35 @@ public class TenantSynchronizer :
 
     public virtual async Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
     {
-        await UpdateCacheItemAsync(eventData.Entity);
+        await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
     public virtual async Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
     {
-        await UpdateCacheItemAsync(eventData.Entity);
+        await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
     public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
     {
-        using (_currentTenant.Change(null))
-        {
-            await _cache.RemoveManyAsync(
-                 new string[]
-                 {
-                    TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Name),
-                    TenantConfigurationCacheItem.CalculateCacheKey(eventData.Entity.Id.ToString()),
-                 });
-        }
+        await RemoveCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
 
-    protected virtual async Task UpdateCacheItemAsync(TenantEto tenant)
+    public virtual async Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
+    {
+        await UpdateCacheItemAsync(eventData.TenantId, eventData.TenantName);
+    }
+
+    public virtual async Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+    {
+        await RemoveCacheItemAsync(eventData.TenantId, eventData.TenantName);
+    }
+
+    protected virtual async Task UpdateCacheItemAsync(Guid tenantId, string tenantName = null)
     {
         using (_currentTenant.Change(null))
         {
-            var tenantDto = await _tenantAppService.GetAsync(tenant.Id);
-            var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(tenant.Id);
+            var tenantDto = await _tenantAppService.GetAsync(tenantId);
+            var tenantConnectionStringsDto = await _tenantAppService.GetConnectionStringAsync(tenantId);
             var connectionStrings = new ConnectionStrings();
             foreach (var tenantConnectionString in tenantConnectionStringsDto.Items)
             {
@@ -67,12 +72,27 @@ public class TenantSynchronizer :
             var cacheItem = new TenantConfigurationCacheItem(tenantDto.Id, tenantDto.Name, connectionStrings);
 
             await _cache.SetAsync(
-                 TenantConfigurationCacheItem.CalculateCacheKey(tenant.Id.ToString()),
+                 TenantConfigurationCacheItem.CalculateCacheKey(tenantDto.Id.ToString()),
                  cacheItem);
 
             await _cache.SetAsync(
-                TenantConfigurationCacheItem.CalculateCacheKey(tenant.Name),
+                TenantConfigurationCacheItem.CalculateCacheKey(tenantDto.Name),
                 cacheItem);
+        }
+    }
+
+    protected virtual async Task RemoveCacheItemAsync(Guid tenantId, string tenantName = null)
+    {
+        using (_currentTenant.Change(null))
+        {
+            using (_currentTenant.Change(null))
+            {
+                await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantId.ToString()));
+                if (!tenantName.IsNullOrWhiteSpace())
+                {
+                    await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantName));
+                }
+            }
         }
     }
 }
