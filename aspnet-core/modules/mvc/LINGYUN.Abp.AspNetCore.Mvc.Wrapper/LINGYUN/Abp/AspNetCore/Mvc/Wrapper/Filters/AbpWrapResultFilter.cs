@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wrapping;
 using LINGYUN.Abp.Wrapper;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
