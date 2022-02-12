@@ -74,7 +74,8 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder.EventBus.Distributed
                 using (_currentTenant.Change(null))
                 {
                     await _cache.RemoveManyAsync(
-                        new string[] {
+                        new string[]
+                        {
                             TenantConfigurationCacheItem.CalculateCacheKey(eventData.Id.ToString()),
                             TenantConfigurationCacheItem.CalculateCacheKey(eventData.Name)
                         });
