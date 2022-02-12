@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.Tencent.SettingManagement
 {
-    public class TenantCloudSettingPermissionNames
+    public static class TencentCloudSettingPermissionNames
     {
         public const string GroupName = "Abp.Tencent";
 

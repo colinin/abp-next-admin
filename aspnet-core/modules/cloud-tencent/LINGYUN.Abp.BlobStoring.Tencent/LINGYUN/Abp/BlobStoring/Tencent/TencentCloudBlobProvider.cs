@@ -24,7 +24,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         TencentBlobNameCalculator = tencentBlobNameCalculator;
     }
 
-    public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+    public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
@@ -38,7 +38,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         return false;
     }
 
-    public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+    public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
@@ -46,7 +46,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(ossClient, args, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
@@ -66,7 +66,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         return memoryStream;
     }
 
-    public override async Task SaveAsync(BlobProviderSaveArgs args)
+    public async override Task SaveAsync(BlobProviderSaveArgs args)
     {
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
@@ -100,14 +100,14 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         ossClient.PutObject(putRequest);
     }
 
-    protected virtual async Task<CosXml> GetOssClientAsync(BlobProviderArgs args)
+    protected async virtual Task<CosXml> GetOssClientAsync(BlobProviderArgs args)
     {
         var configuration = args.Configuration.GetTencentConfiguration();
         var ossClient = await CosClientFactory.CreateAsync(configuration);
         return ossClient;
     }
 
-    protected virtual async Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string> refererList = null)
+    protected async virtual Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string> refererList = null)
     {
         if (!await BucketExistsAsync(cos, args))
         {

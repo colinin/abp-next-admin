@@ -22,7 +22,7 @@ public static class TencentCloudSettingNames
     /// <summary>
     /// 连接设置
     /// </summary>
-    public class Connection
+    public static class Connection
     {
         public const string Prefix = TencentCloudSettingNames.Prefix + ".Connection";
         /// <summary>

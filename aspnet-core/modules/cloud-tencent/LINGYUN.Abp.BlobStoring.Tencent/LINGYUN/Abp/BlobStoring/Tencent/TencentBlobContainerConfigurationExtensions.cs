@@ -13,11 +13,11 @@ namespace LINGYUN.Abp.BlobStoring.Tencent
 
         public static BlobContainerConfiguration UseTencentCloud(
             this BlobContainerConfiguration containerConfiguration,
-            Action<TencentBlobProviderConfiguration> aliyunConfigureAction)
+            Action<TencentBlobProviderConfiguration> tencentConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(TencentCloudBlobProvider);
 
-            aliyunConfigureAction(new TencentBlobProviderConfiguration(containerConfiguration));
+            tencentConfigureAction(new TencentBlobProviderConfiguration(containerConfiguration));
 
             return containerConfiguration;
         }

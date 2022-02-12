@@ -8,10 +8,10 @@ namespace LINGYUN.Abp.Sms.Tencent.Settings
     {
         public override void Define(ISettingDefinitionContext context)
         {
-            context.Add(CreateAliyunSettings());
+            context.Add(CreateTencentSettings());
         }
 
-        private SettingDefinition[] CreateAliyunSettings()
+        private SettingDefinition[] CreateTencentSettings()
         {
             return new SettingDefinition[]
             {

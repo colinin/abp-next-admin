@@ -22,8 +22,7 @@ public class TencentCloudClientFactory<TClient> : AbstractTencentCloudClientFact
     {
         var clientCtr = typeof(TClient)
             .GetConstructors()
-            .Where(x => x.GetParameters().Length == 3)
-            .FirstOrDefault();
+            .FirstOrDefault(x => x.GetParameters().Length == 3);
         if (clientCtr != null)
         {
             var cred = new Credential
