@@ -16,10 +16,10 @@ namespace LINGYUN.Abp.UI.Navigation
         public Task<IReadOnlyCollection<ApplicationMenu>> GetAllAsync()
         {
             var navigations = new List<ApplicationMenu>();
-            var navigationDefineitions = NavigationDefinitionManager.GetAll();
-            foreach (var navigationDefineition in navigationDefineitions)
+            var navigationDefinitions = NavigationDefinitionManager.GetAll();
+            foreach (var navigationDefinition in navigationDefinitions)
             {
-                navigations.Add(navigationDefineition.Menu);
+                navigations.Add(navigationDefinition.Menu);
             }
 
             IReadOnlyCollection<ApplicationMenu> menus = navigations.ToImmutableList();
