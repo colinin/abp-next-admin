@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
     {
         protected INotificationStore NotificationStore => LazyServiceProvider.LazyGetRequiredService<INotificationStore>();
 
-        public override async Task OnConnectedAsync()
+        public async override Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
 
@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
             }
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public async override Task OnDisconnectedAsync(Exception exception)
         {
             await base.OnDisconnectedAsync(exception);
 
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
 
         // [HubMethodName("MySubscriptions")]
         [HubMethodName("my-subscriptions")]
-        public virtual async Task<ListResultDto<NotificationSubscriptionInfo>> GetMySubscriptionsAsync()
+        public async virtual Task<ListResultDto<NotificationSubscriptionInfo>> GetMySubscriptionsAsync()
         {
             var subscriptions = await NotificationStore
                 .GetUserSubscriptionsAsync(CurrentTenant.Id, CurrentUser.GetId());
@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
         [UnitOfWork]
         // [HubMethodName("GetNotification")]
         [HubMethodName("get-notifications")]
-        public virtual async Task<ListResultDto<NotificationInfo>> GetNotificationAsync()
+        public async virtual Task<ListResultDto<NotificationInfo>> GetNotificationAsync()
         {
             var userNotifications = await NotificationStore
                 .GetUserNotificationsAsync(CurrentTenant.Id, CurrentUser.GetId(), NotificationReadState.UnRead, 10);
@@ -69,8 +69,9 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
 
         // [HubMethodName("ChangeState")]
         [HubMethodName("change-state")]
-        public virtual async Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
+        public async virtual Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
         {
+            //TODO: check id?
             await NotificationStore
                 .ChangeUserNotificationReadStateAsync(
                     CurrentTenant.Id,

@@ -7,6 +7,6 @@
         public string GetPoi { get; set; } = "1";
         public string Output { get; set; } = "JSON";
         public string Callback { get; set; }
-        public bool VisableErrorToClient { get; set; } = false;
+        public bool VisibleErrorToClient { get; set; } = false;
     }
 }

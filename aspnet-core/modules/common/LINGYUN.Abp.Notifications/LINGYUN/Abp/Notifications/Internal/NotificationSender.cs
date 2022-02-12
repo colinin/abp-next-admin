@@ -52,12 +52,12 @@ namespace LINGYUN.Abp.Notifications
         {
             if (user == null)
             {
-                return await PublishNofiterAsync(name, data, null, tenantId, severity);
+                return await PublishNotificationAsync(name, data, null, tenantId, severity);
                 
             }
             else
             {
-                return await  PublishNofiterAsync(name, data, new List<UserIdentifier> { user }, tenantId, severity);
+                return await  PublishNotificationAsync(name, data, new List<UserIdentifier> { user }, tenantId, severity);
             }
         }
 
@@ -68,10 +68,10 @@ namespace LINGYUN.Abp.Notifications
             Guid? tenantId = null, 
             NotificationSeverity severity = NotificationSeverity.Info)
         {
-            return await PublishNofiterAsync(name, data, users, tenantId, severity);
+            return await PublishNotificationAsync(name, data, users, tenantId, severity);
         }
 
-        protected async Task<string> PublishNofiterAsync(
+        private async Task<string> PublishNotificationAsync(
             string name, 
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,

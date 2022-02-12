@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
             return currentUser.IsAuthenticated;
         }
 
-        private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
+        private async static Task<bool> IsPermissionGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
         {
             var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IDashboardPermissionChecker>();
             return await permissionChecker.IsGrantedAsync(context, requiredPermissionNames);

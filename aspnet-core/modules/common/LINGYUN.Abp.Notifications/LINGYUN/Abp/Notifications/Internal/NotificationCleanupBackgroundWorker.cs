@@ -22,18 +22,18 @@ namespace LINGYUN.Abp.Notifications.Internal
             timer.Period = Options.CleanupPeriod;
         }
 
-        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             try
             {
                 var store = workerContext.ServiceProvider.GetRequiredService<INotificationStore>();
-                Logger.LogDebug("Before cleanup exprition jobs...");
+                Logger.LogDebug("Before cleanup expiration jobs...");
                 await store.DeleteNotificationAsync(Options.CleanupBatchSize);
-                Logger.LogDebug("Exprition jobs cleanup job was successful...");
+                Logger.LogDebug("Expiration jobs cleanup job was successful...");
             }
             catch (Exception ex)
             {
-                Logger.LogWarning("Exprition jobs cleanup job was failed...");
+                Logger.LogWarning("Expiration jobs cleanup job was failed...");
                 Logger.LogWarning("Error:{0}", ex.Message);
             }
         }

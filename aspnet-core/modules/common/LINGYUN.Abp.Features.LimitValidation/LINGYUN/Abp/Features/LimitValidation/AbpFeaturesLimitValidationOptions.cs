@@ -7,10 +7,10 @@ namespace LINGYUN.Abp.Features.LimitValidation
 {
     public class AbpFeaturesLimitValidationOptions
     {
-        public IDictionary<LimitPolicy, Func<int, long>> EffectPolicys { get; }
+        public IDictionary<LimitPolicy, Func<int, long>> EffectPolicies { get; }
         public AbpFeaturesLimitValidationOptions()
         {
-            EffectPolicys = new Dictionary<LimitPolicy, Func<int, long>>();
+            EffectPolicies = new Dictionary<LimitPolicy, Func<int, long>>();
         }
         /// <summary>
         /// 变更功能限制策略时长计算方法
@@ -24,17 +24,17 @@ namespace LINGYUN.Abp.Features.LimitValidation
         {
             Check.NotNull(func, nameof(func));
 
-            if (EffectPolicys.ContainsKey(policy))
+            if (EffectPolicies.ContainsKey(policy))
             {
-                EffectPolicys[policy] = func;
+                EffectPolicies[policy] = func;
             }
             else
             {
-                EffectPolicys.Add(policy, func);
+                EffectPolicies.Add(policy, func);
             }
         }
 
-        internal void MapDefaultEffectPolicys()
+        internal void MapDefaultEffectPolicies()
         {
             MapEffectPolicy(LimitPolicy.Minute, (time) => { return (long)(DateTimeOffset.UtcNow.AddMinutes(time) - DateTimeOffset.UtcNow).TotalSeconds; });
             MapEffectPolicy(LimitPolicy.Hours, (time) => { return (long)(DateTimeOffset.UtcNow.AddHours(time) - DateTimeOffset.UtcNow).TotalSeconds; });

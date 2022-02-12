@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.IM.Messages
             DistributedIdGenerator = distributedIdGenerator;
         }
 
-        public virtual async Task<string> SendMessageAsync(ChatMessage chatMessage)
+        public async virtual Task<string> SendMessageAsync(ChatMessage chatMessage)
         {
             chatMessage.SetProperty(nameof(ChatMessage.IsAnonymous), chatMessage.IsAnonymous);
             chatMessage.MessageId = DistributedIdGenerator.Create().ToString();

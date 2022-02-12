@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.Notifications.Sms
         /// <param name="notification"></param>
         /// <param name="phoneNumbers"></param>
         /// <returns></returns>
-        public virtual async Task SendAsync(NotificationInfo notification, string phoneNumbers)
+        public async virtual Task SendAsync(NotificationInfo notification, string phoneNumbers)
         {
             var templateCode = notification.Data.TryGetData("TemplateCode");
             if (templateCode == null)

@@ -23,22 +23,24 @@ namespace LINGYUN.Abp.Notifications
             ServiceProvider = serviceProvider;
         }
 
-        public override async Task ExecuteAsync(NotificationPublishJobArgs args)
+        public async override Task ExecuteAsync(NotificationPublishJobArgs args)
         {
             var providerType = Type.GetType(args.ProviderType);
-
-            if (ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)
+            if (providerType != null)
             {
-                var notification = await Store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
-                notification.Data = NotificationDataConverter.Convert(notification.Data);
-
-                var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrDefault(notification.Name, publishProvider.Name);
-                if (notifacationDataMapping != null)
+                if (ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)
                 {
-                    notification.Data = notifacationDataMapping.MappingFunc(notification.Data);
+                    var notification = await Store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
+                    notification.Data = NotificationDataConverter.Convert(notification.Data);
+
+                    var notificationDataMapping = Options.NotificationDataMappings
+                        .GetMapItemOrDefault(notification.Name, publishProvider.Name);
+                    if (notificationDataMapping != null)
+                    {
+                        notification.Data = notificationDataMapping.MappingFunc(notification.Data);
+                    }
+                    await publishProvider.PublishAsync(notification, args.UserIdentifiers);
                 }
-                await publishProvider.PublishAsync(notification, args.UserIdentifiers);
             }
         }
     }

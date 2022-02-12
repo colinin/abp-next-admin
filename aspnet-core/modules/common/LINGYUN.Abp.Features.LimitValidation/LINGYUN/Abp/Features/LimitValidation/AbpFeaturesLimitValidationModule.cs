@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
 
             Configure<AbpFeaturesLimitValidationOptions>(options =>
             {
-                options.MapDefaultEffectPolicys();
+                options.MapDefaultEffectPolicies();
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>

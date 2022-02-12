@@ -74,13 +74,14 @@ namespace LINGYUN.Abp.EventBus.CAP
 
         private IEnumerable<ConsumerExecutorDescriptor> GetHandlerDescription(Type eventType, Type typeInfo)
         {
-            var serviceTypeInfo = typeof(IDistributedEventHandler<>)
-                .MakeGenericType(eventType);
-            var method = typeInfo
-                .GetMethod(
+            var method = typeInfo.GetMethod(
                     nameof(IDistributedEventHandler<object>.HandleEventAsync),
                     new[] { eventType }
                 );
+            if(method == null) yield break;
+            
+            var serviceTypeInfo = typeof(IDistributedEventHandler<>)
+                .MakeGenericType(eventType);
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();

@@ -25,7 +25,8 @@ namespace LINGYUN.Abp.Location.Baidu
         protected IServiceProvider ServiceProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
+        private const string BaiduMapApiUrl = "http://api.map.baidu.com";
+        
         public BaiduLocationHttpClient(
             IOptions<BaiduLocationOptions> options,
             IJsonSerializer jsonSerializer,
@@ -40,33 +41,32 @@ namespace LINGYUN.Abp.Location.Baidu
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        public async virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
         {
-            var requestParamters = new Dictionary<string, string>
+            var requestParameters = new Dictionary<string, string>
             {
                 { "ip", ipAddress },
                 { "ak", Options.AccessKey },
                 { "coor", Options.CoordType }
             };
-            var baiduMapUrl = "http://api.map.baidu.com";
             var baiduMapPath = "/location/ip";
             if (Options.CaculateAKSN)
             {
                 // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
-                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
-                requestParamters.Add("sn", sn);
+                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParameters);
+                requestParameters.Add("sn", sn);
             }
-            var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
+            var requestUrl = BuildRequestUrl(BaiduMapApiUrl, baiduMapPath, requestParameters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
             var baiduLocationResponse = JsonSerializer.Deserialize<BaiduIpGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
-                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
-                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
+                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisibleErrorToClient).Localize(localizerFactory);
+                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisibleErrorToClient).Localize(localizerFactory);
                 var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
                 localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
-                if (Options.VisableErrorToClient)
+                if (Options.VisibleErrorToClient)
                 {
                     throw new UserFriendlyException(localizerErrorMessage);
                 }
@@ -88,9 +88,9 @@ namespace LINGYUN.Abp.Location.Baidu
             return location;
         }
 
-        public virtual async Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+        public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
         {
-            var requestParamters = new Dictionary<string, string>
+            var requestParameters = new Dictionary<string, string>
             {
                 { "address", address },
                 { "ak", Options.AccessKey },
@@ -99,27 +99,26 @@ namespace LINGYUN.Abp.Location.Baidu
             };
             if (!city.IsNullOrWhiteSpace())
             {
-                requestParamters.Add("city", city);
+                requestParameters.Add("city", city);
             }
-            var baiduMapUrl = "http://api.map.baidu.com";
             var baiduMapPath = "/geocoding/v3";
             if (Options.CaculateAKSN)
             {
                 // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
-                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
-                requestParamters.Add("sn", sn);
+                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParameters);
+                requestParameters.Add("sn", sn);
             }
-            var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
+            var requestUrl = BuildRequestUrl(BaiduMapApiUrl, baiduMapPath, requestParameters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
             var baiduLocationResponse = JsonSerializer.Deserialize<BaiduGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
-                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
-                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisableErrorToClient).Localize(localizerFactory);
+                var localizerErrorMessage = baiduLocationResponse.GetErrorMessage(Options.VisibleErrorToClient).Localize(localizerFactory);
+                var localizerErrorDescription = baiduLocationResponse.GetErrorMessage(Options.VisibleErrorToClient).Localize(localizerFactory);
                 var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
                 localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
-                if (Options.VisableErrorToClient)
+                if (Options.VisibleErrorToClient)
                 {
                     throw new UserFriendlyException(localizerErrorMessage);
                 }
@@ -137,9 +136,9 @@ namespace LINGYUN.Abp.Location.Baidu
             return location;
         }
 
-        public virtual async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
+        public async virtual Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
         {
-            var requestParamters = new Dictionary<string, string>
+            var requestParameters = new Dictionary<string, string>
             {
                 { "ak", Options.AccessKey },
                 { "output", Options.Output },
@@ -152,16 +151,15 @@ namespace LINGYUN.Abp.Location.Baidu
                 { "extensions_road", Options.ExtensionsRoad ? "true" : "false" },
                 { "extensions_town", Options.ExtensionsTown ? "true" : "false" },
             };
-            var baiduMapUrl = "http://api.map.baidu.com";
             var baiduMapPath = "/reverse_geocoding/v3";
             if (Options.CaculateAKSN)
             {
                 // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
-                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
-                requestParamters.Add("sn", sn);
+                var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParameters);
+                requestParameters.Add("sn", sn);
             }
-            requestParamters["location"] = string.Format("{0}%2C{1}", lat, lng);
-            var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
+            requestParameters["location"] = string.Format("{0}%2C{1}", lat, lng);
+            var requestUrl = BuildRequestUrl(BaiduMapApiUrl, baiduMapPath, requestParameters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
             var baiduLocationResponse = JsonSerializer.Deserialize<BaiduReGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
@@ -171,7 +169,7 @@ namespace LINGYUN.Abp.Location.Baidu
                 var localizerErrorDescription = baiduLocationResponse.GetErrorDescription().Localize(localizerFactory);
                 var localizer = ServiceProvider.GetRequiredService<IStringLocalizer<BaiduLocationResource>>();
                 localizerErrorMessage = localizer["ResolveLocationFailed", localizerErrorMessage, localizerErrorDescription];
-                if (Options.VisableErrorToClient)
+                if (Options.VisibleErrorToClient)
                 {
                     throw new UserFriendlyException(localizerErrorMessage);
                 }
@@ -214,15 +212,18 @@ namespace LINGYUN.Abp.Location.Baidu
             if (location.Pois.Any())
             {
                 var nearPoi = location.Pois.OrderBy(x => x.Distance).FirstOrDefault();
-                location.Address = nearPoi.Address;
-                location.FormattedAddress = nearPoi.Name;
+                if (nearPoi != null)
+                {
+                    location.Address = nearPoi.Address;
+                    location.FormattedAddress = nearPoi.Name;
+                }
             }
             location.AddAdditional("BaiduLocation", baiduLocationResponse.Result);
 
             return location;
         }
 
-        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url)
+        protected async virtual Task<string> MakeRequestAndGetResultAsync(string url)
         {
             var client = HttpClientFactory.CreateClient(BaiduLocationHttpConsts.HttpClientName);
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
@@ -242,14 +243,14 @@ namespace LINGYUN.Abp.Location.Baidu
             return CancellationTokenProvider.Token;
         }
 
-        protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string> paramters)
+        protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string> parameters)
         {
             var requestUrlBuilder = new StringBuilder(128);
             requestUrlBuilder.Append(uri);
             requestUrlBuilder.Append(path).Append("?");
-            foreach (var paramter in paramters)
+            foreach (var parameter in parameters)
             {
-                requestUrlBuilder.AppendFormat("{0}={1}", paramter.Key, paramter.Value);
+                requestUrlBuilder.AppendFormat("{0}={1}", parameter.Key, parameter.Value);
                 requestUrlBuilder.Append("&");
             }
             requestUrlBuilder.Remove(requestUrlBuilder.Length - 1, 1);

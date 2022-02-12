@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         /// <param name="name">名称</param>
         /// <param name="data">数据</param>
-        /// <param name="userId">用户,为空标识发给所有订阅用户</param>
+        /// <param name="user">用户,为空标识发给所有订阅用户</param>
         /// <param name="tenantId">租户</param>
         /// <param name="severity">严重级别</param>
         /// <returns>通知标识</returns>

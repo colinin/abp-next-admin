@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.EventBus.CAP.Internal
     internal class ObjectMethodExecutor
     {
         // ReSharper disable once InconsistentNaming
-        private static readonly ConstructorInfo _objectMethodExecutorAwaitableConstructor =
+        private readonly static ConstructorInfo _objectMethodExecutorAwaitableConstructor =
             typeof(ObjectMethodExecutorAwaitable).GetConstructor(new[]
             {
                 typeof(object), // customAwaitable

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LINGYUN.Abp.Notifications
 {
-    public class NotificationDataConverter
+    public static class NotificationDataConverter
     {
         public static NotificationData Convert(NotificationData notificationData)
         {

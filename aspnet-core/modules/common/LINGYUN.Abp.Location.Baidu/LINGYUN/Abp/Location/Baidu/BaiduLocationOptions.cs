@@ -60,6 +60,6 @@ namespace LINGYUN.Abp.Location.Baidu
         /// <summary>
         /// 展示错误给客户端
         /// </summary>
-        public bool VisableErrorToClient { get; set; } = false;
+        public bool VisibleErrorToClient { get; set; } = false;
     }
 }

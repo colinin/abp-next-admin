@@ -101,15 +101,17 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <returns></returns>
         protected virtual IEnumerable<ConsumerExecutorDescriptor> GetHandlerDescription(Type eventType, Type typeInfo)
         {
-            var serviceTypeInfo = typeof(IDistributedEventHandler<>)
-                .MakeGenericType(eventType);
-            var method = typeInfo
-                .GetMethod(
+            var method = typeInfo.GetMethod(
                     nameof(IDistributedEventHandler<object>.HandleEventAsync),
                     new[] { eventType }
                 );
+            if (method == null) yield break;
+
+            var serviceTypeInfo = typeof(IDistributedEventHandler<>)
+                .MakeGenericType(eventType);
             // TODO: 事件名称定义在事件参数类型,就无法创建多个订阅者类了,增加可选配置,让用户决定事件名称定义在哪里
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+            
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
             var topicAttributes = topicAttr.ToList();
 

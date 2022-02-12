@@ -38,8 +38,8 @@ namespace LINGYUN.Abp.ExceptionHandling
         protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+        protected ILogger Logger => LazyLogger.Value;
+        private Lazy<ILogger> LazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
 
         protected AbpExceptionSubscriberBase(
@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.ExceptionHandling
             ServiceScopeFactory = serviceScopeFactory;
         }
 
-        public override async Task HandleAsync(ExceptionNotificationContext context)
+        public async override Task HandleAsync(ExceptionNotificationContext context)
         {
             if (context.Handled &&
                 Options.HasNotifierError(context.Exception))

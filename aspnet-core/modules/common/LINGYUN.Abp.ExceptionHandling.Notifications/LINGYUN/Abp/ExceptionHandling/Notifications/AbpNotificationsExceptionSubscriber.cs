@@ -4,22 +4,25 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.ExceptionHandling.Notifications
 {
     public class AbpNotificationsExceptionSubscriber : AbpExceptionSubscriberBase
     {
         protected ICurrentTenant CurrentTenant { get; }
+        protected IClock Clock { get; }
         public AbpNotificationsExceptionSubscriber(
             ICurrentTenant currentTenant,
             IServiceScopeFactory serviceScopeFactory, 
-            IOptions<AbpExceptionHandlingOptions> options) 
-            : base(serviceScopeFactory, options)
+            IOptions<AbpExceptionHandlingOptions> options,
+            IClock clock) : base(serviceScopeFactory, options)
         {
             CurrentTenant = currentTenant;
+            Clock = clock;
         }
 
-        protected override async Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
+        protected async override Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
         {
             var notificationSender = context.ServiceProvider.GetRequiredService<INotificationSender>();
 
@@ -29,7 +32,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
             notificationData.WriteStandardData(
                 context.Exception.GetType().FullName, 
                 context.Exception.Message,
-                DateTime.Now, 
+                Clock.Now, 
                 "System");
             
             await notificationSender.SendNofiterAsync(

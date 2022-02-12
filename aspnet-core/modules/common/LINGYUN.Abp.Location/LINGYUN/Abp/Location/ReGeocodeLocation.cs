@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LINGYUN.Abp.Location
 {
@@ -62,8 +63,8 @@ namespace LINGYUN.Abp.Location
 
         public ReGeocodeLocation()
         {
-            Pois = new Poi[0];
-            Roads = new Road[0];
+            Pois = Array.Empty<Poi>();
+            Roads = Array.Empty<Road>();
             Additionals = new Dictionary<string, object>();
         }
 

@@ -40,7 +40,7 @@
         /// <returns></returns>
         public long GetEffectTicks()
         {
-            return Options.EffectPolicys[Policy](Interval);
+            return Options.EffectPolicies[Policy](Interval);
         }
     }
 }

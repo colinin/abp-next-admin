@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
         /// <summary>
         /// 把需要接受异常通知的用户加进处理列表
         /// </summary>
-        /// <param name="ex">处理的异常类型</param>
+        /// <param name="exceptionType">处理的异常类型</param>
         /// <param name="receivedEmails">接收邮件的用户类别,群发用,符号分隔</param>
         public void HandReceivedException(Type exceptionType, string receivedEmails)
         {

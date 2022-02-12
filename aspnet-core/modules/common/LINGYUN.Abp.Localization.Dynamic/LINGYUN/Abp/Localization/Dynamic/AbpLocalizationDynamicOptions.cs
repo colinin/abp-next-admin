@@ -12,11 +12,11 @@ namespace LINGYUN.Abp.Localization.Dynamic
             LocalizationDictionary = new LocalizationDictionary();
         }
 
-        internal void AddOrUpdate(string resourceName, Dictionary<string, ILocalizationDictionary> dictionares)
+        internal void AddOrUpdate(string resourceName, Dictionary<string, ILocalizationDictionary> dictionaries)
         {
-            var _dictionares = LocalizationDictionary
+            var _dictionaries = LocalizationDictionary
                 .GetOrAdd(resourceName, () => new Dictionary<string, ILocalizationDictionary>());
-            _dictionares.AddIfNotContains(dictionares);
+            _dictionaries.AddIfNotContains(dictionaries);
         }
     }
 }

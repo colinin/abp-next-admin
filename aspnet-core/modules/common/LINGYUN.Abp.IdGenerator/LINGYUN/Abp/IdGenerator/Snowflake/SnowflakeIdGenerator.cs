@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
     {
         public const long Twepoch = 1288834974657L;
 
-        private static readonly object _lock = new object();
+        private readonly static object _lock = new object();
         private long _lastTimestamp = -1L;
 
         protected long MaxWorkerId { get; set; }

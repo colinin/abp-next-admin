@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
 
         }
 
-        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        public async override Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
             {
@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
             await PostCheckFeatureAsync(limitFeatureContext);
         }
 
-        protected virtual async Task PreCheckFeatureAsync(RequiresLimitFeatureContext context)
+        protected async virtual Task PreCheckFeatureAsync(RequiresLimitFeatureContext context)
         {
             var allowed = await _limitFeatureChecker.CheckAsync(context);
             if (!allowed)
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
             }
         }
 
-        protected virtual async Task PostCheckFeatureAsync(RequiresLimitFeatureContext context)
+        protected async virtual Task PostCheckFeatureAsync(RequiresLimitFeatureContext context)
         {
             await _limitFeatureChecker.ProcessAsync(context);
         }

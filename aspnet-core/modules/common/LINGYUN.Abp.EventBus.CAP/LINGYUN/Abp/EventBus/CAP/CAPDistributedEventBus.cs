@@ -196,12 +196,12 @@ namespace LINGYUN.Abp.EventBus.CAP
             return false;
         }
 
-        public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
+        public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
         {
             await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData);
         }
 
-        public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
+        public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
         {
             var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
             if (eventType == null)

@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.Wrapper
         /// </summary>
         public ITypeList IgnoredInterfaces { get; }
 
-        internal IDictionary<Type, IExceptionWrapHandler> ExceptionHandles { get; }
+        private IDictionary<Type, IExceptionWrapHandler> ExceptionHandles { get; }
 
         public AbpWrapperOptions()
         {

@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.Emailing;
 using Volo.Abp.TextTemplating;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.ExceptionHandling.Emailing
 {
@@ -16,22 +17,26 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
         protected IStringLocalizer StringLocalizer { get; }
         protected ITemplateRenderer TemplateRenderer { get; }
         protected AbpEmailExceptionHandlingOptions EmailOptions { get; }
+        protected IClock Clock { get; }
+
         public AbpEmailingExceptionSubscriber(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
             IServiceScopeFactory serviceScopeFactory, 
             IOptions<AbpExceptionHandlingOptions> options,
             IOptions<AbpEmailExceptionHandlingOptions> emailOptions,
-            IStringLocalizer<ExceptionHandlingResource> stringLocalizer) 
+            IStringLocalizer<ExceptionHandlingResource> stringLocalizer,
+            IClock clock) 
             : base(serviceScopeFactory, options)
         {
             EmailSender = emailSender;
             EmailOptions = emailOptions.Value;
             StringLocalizer = stringLocalizer;
             TemplateRenderer = templateRenderer;
+            Clock = clock;
         }
 
-        protected override async Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
+        protected async override Task SendErrorNotifierAsync(ExceptionSendNotifierContext context)
         {
             // 需不需要用 SettingProvider 来获取?
             var receivedUsers = EmailOptions.GetReceivedEmailOrDefault(context.Exception.GetType());
@@ -48,7 +53,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
                             type = context.Exception.GetType().FullName,
                             message = context.Exception.Message,
                             loglevel = context.LogLevel.ToString(),
-                            triggertime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                            triggertime = Clock.Now.ToString("yyyy/MM/dd HH:mm:ss"),
                             sendstacktrace = EmailOptions.SendStackTrace,
                             stacktrace = context.Exception.ToString(),
                             footer = EmailOptions.DefaultContentFooter ?? $"Copyright to LY Colin © {DateTime.Now.Year}"

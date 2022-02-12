@@ -55,6 +55,7 @@ namespace LINGYUN.Abp.BackgroundJobs.Hangfire
 
         private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
         {
+            //TODO: why?
             serviceProvider.GetRequiredService<JobStorage>();
             return null;
         }

@@ -14,15 +14,15 @@ namespace LINGYUN.Abp.IM.Messages
 
         protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+        protected ILogger Logger => LazyLogger.Value;
+        private Lazy<ILogger> LazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
         protected MessageSenderProviderBase(IAbpLazyServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
         }
 
-        public virtual async Task SendMessageAsync(ChatMessage chatMessage)
+        public async virtual Task SendMessageAsync(ChatMessage chatMessage)
         {
             try
             {

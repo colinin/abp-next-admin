@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.Notifications.Sms
     {
         public Task<IEnumerable<string>> FindByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellation = default)
         {
-            IEnumerable<string> emptyPhoneList = new string[0];
+            IEnumerable<string> emptyPhoneList = Array.Empty<string>();
 
             return Task.FromResult(emptyPhoneList);
         }

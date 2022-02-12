@@ -40,28 +40,28 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
 
         protected IUserGroupStore UserGroupStore => LazyServiceProvider.LazyGetRequiredService<IUserGroupStore>();
 
-        public override async Task OnConnectedAsync()
+        public async override Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
 
             await SendUserOnlineStateAsync();
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public async override Task OnDisconnectedAsync(Exception exception)
         {
             await base.OnDisconnectedAsync(exception);
 
             await SendUserOnlineStateAsync(false);
         }
 
-        protected virtual async Task SendUserOnlineStateAsync(bool isOnlined = true)
+        protected async virtual Task SendUserOnlineStateAsync(bool isOnline = true)
         {
-            var methodName = isOnlined ? Options.UserOnlineMethod : Options.UserOfflineMethod;
+            var methodName = isOnline ? Options.UserOnlineMethod : Options.UserOfflineMethod;
 
             var userGroups = await UserGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
             foreach (var group in userGroups)
             {
-                if (isOnlined)
+                if (isOnline)
                 {
                     // 应使用群组标识
                     await Groups.AddToGroupAsync(Context.ConnectionId, group.Id);
@@ -84,13 +84,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         /// <param name="chatMessage"></param>
         /// <returns></returns>
         [HubMethodName("send")]
-        public virtual async Task<string> SendMessageAsync(ChatMessage chatMessage)
+        public async virtual Task<string> SendMessageAsync(ChatMessage chatMessage)
         {
             return await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
         }
 
         [HubMethodName("recall")]
-        public virtual async Task ReCallAsync(ChatMessage chatMessage)
+        public async virtual Task ReCallAsync(ChatMessage chatMessage)
         {
             try
             {
@@ -162,12 +162,12 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         }
 
         [HubMethodName("read")]
-        public virtual async Task ReadAsync(ChatMessage chatMessage)
+        public async virtual Task ReadAsync(ChatMessage chatMessage)
         {
             await Processor?.ReadAsync(chatMessage);
         }
 
-        protected virtual async Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
+        protected async virtual Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
         {
             // 持久化
             try
@@ -226,13 +226,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             return "";
         }
 
-        protected virtual async Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
+        protected async virtual Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
         {
             var signalRClient = Clients.Group(chatMessage.GroupId);
             await signalRClient.SendAsync(methodName, chatMessage);
         }
 
-        protected virtual async Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
+        protected async virtual Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
         {
             var onlineClients = Clients.User(chatMessage.ToUserId.GetValueOrDefault().ToString());
             await onlineClients.SendAsync(methodName, chatMessage);

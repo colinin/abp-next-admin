@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.EventBus.CAP.Internal
     /// </remarks>
     internal static class ObjectMethodExecutorFSharpSupport
     {
-        private static readonly object _fsharpValuesCacheLock = new object();
+        private readonly static object _fsharpValuesCacheLock = new object();
         private static Assembly _fsharpCoreAssembly;
         private static MethodInfo _fsharpAsyncStartAsTaskGenericMethod;
         private static PropertyInfo _fsharpOptionOfTaskCreationOptionsNoneProperty;

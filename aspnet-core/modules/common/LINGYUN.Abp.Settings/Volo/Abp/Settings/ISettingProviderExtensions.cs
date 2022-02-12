@@ -7,7 +7,7 @@ namespace Volo.Abp.Settings
 {
     public static class ISettingProviderExtensions
     {
-        public static async Task<string> GetOrDefaultAsync(
+        public async static Task<string> GetOrDefaultAsync(
             [NotNull] this ISettingProvider settingProvider,
             [NotNull] string name,
             [NotNull] IServiceProvider serviceProvider)
@@ -18,8 +18,8 @@ namespace Volo.Abp.Settings
             var value = await settingProvider.GetOrNullAsync(name);
             if (value.IsNullOrWhiteSpace())
             {
-                var settingDefintionManager = serviceProvider.GetRequiredService<ISettingDefinitionManager>();
-                var setting = settingDefintionManager.Get(name);
+                var settingDefinitionManager = serviceProvider.GetRequiredService<ISettingDefinitionManager>();
+                var setting = settingDefinitionManager.Get(name);
                 return setting.DefaultValue;
             }
             return value;

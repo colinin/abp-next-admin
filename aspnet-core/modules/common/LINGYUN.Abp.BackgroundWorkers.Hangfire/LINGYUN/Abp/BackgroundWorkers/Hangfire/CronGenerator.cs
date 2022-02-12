@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
 {
-    public class CronGenerator
+    public static class CronGenerator
     {
         public const long MilliSecondsOfYear = 315_3600_0000L;
         public const long MilliSecondsOfMonth = 26_7840_0000L;

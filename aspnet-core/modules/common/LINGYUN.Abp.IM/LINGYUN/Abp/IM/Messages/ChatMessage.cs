@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.IM.Messages
             IClock clock,
             bool isAnonymous = false,
             MessageType type = MessageType.Text,
-            MessageSourceTye souce = MessageSourceTye.User,
+            MessageSourceTye source = MessageSourceTye.User,
             Guid? tenantId = null)
         {
             return new ChatMessage
@@ -229,7 +229,7 @@ namespace LINGYUN.Abp.IM.Messages
                 IsAnonymous = isAnonymous,
                 MessageType = type,
                 TenantId = tenantId,
-                Source = souce,
+                Source = source,
             };
         }
     }

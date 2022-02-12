@@ -11,8 +11,6 @@ namespace LINGYUN.Abp.IM.Messages
         /// 存储聊天记录
         /// </summary>
         /// <param name="chatMessage"></param>
-        /// <param name="formUserId"></param>
-        /// <param name="toUserId"></param>
         /// <returns></returns>
         Task StoreMessageAsync(
             ChatMessage chatMessage,
