@@ -11,6 +11,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -25,6 +26,8 @@ public class TenantSynchronizer :
         IDistributedEventHandler<EntityDeletedEto<TenantEto>>,
         ITransientDependency
 {
+    private const string ModelDatabaseProviderAnnotationKey = "_Abp_DatabaseProvider";
+
     protected ILogger<TenantSynchronizer> Logger { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
@@ -64,21 +67,31 @@ public class TenantSynchronizer :
             // EfCore MySql 批量删除还是一条一条的语句?
             // PermissionGrantRepository.GetDbSet().RemoveRange(grantPermissions);
             var dbContext = await PermissionGrantRepository.GetDbContextAsync();
-            var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
-            var permissionTableName = permissionEntityType.GetTableName();
-            var batchRmovePermissionSql = string.Empty;
-            if (dbContext.Database.IsMySql())
+            var dbProvider = (EfCoreDatabaseProvider?)dbContext.Model[ModelDatabaseProviderAnnotationKey];
+            if (dbProvider != null)
             {
-                batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Entity.Id);
-            }
-            else
-            {
-                batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Entity.Id);
-            }
+                var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
+                var permissionTableName = permissionEntityType.GetTableName();
+                var batchRmovePermissionSql = string.Empty;
+                switch (dbProvider)
+                {
+                    case EfCoreDatabaseProvider.MySql:
+                        batchRmovePermissionSql = BuildMySqlBatchDeleteScript(permissionTableName, eventData.Entity.Id);
+                        break;
+                    case EfCoreDatabaseProvider.SqlServer:
+                        batchRmovePermissionSql = BuildSqlServerBatchDeleteScript(permissionTableName, eventData.Entity.Id);
+                        break;
+                    default:
+                        Logger.LogWarning($"Tenant permissions data has not removed, Because database provider: {dbProvider} batch statements are not defined!");
+                        return;
+                }
 
-            await dbContext.Database.ExecuteSqlRawAsync(batchRmovePermissionSql);
+                await dbContext.Database.ExecuteSqlRawAsync(batchRmovePermissionSql);
 
-            await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
+
+                Logger.LogInformation("The tenant permissions data has removed!");
+            }
         }
     }
 
@@ -117,22 +130,30 @@ public class TenantSynchronizer :
                 // await PermissionGrantRepository.GetDbSet().AddRangeAsync(grantPermissions);
 
                 var dbContext = await PermissionGrantRepository.GetDbContextAsync();
-                var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
-                var permissionTableName = permissionEntityType.GetTableName();
-                var batchInsertPermissionSql = string.Empty;
-                if (dbContext.Database.IsMySql())
+                var dbProvider = (EfCoreDatabaseProvider?)dbContext.Model[ModelDatabaseProviderAnnotationKey];
+                if (dbProvider != null)
                 {
-                    batchInsertPermissionSql = BuildMySqlBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
-                }
-                else
-                {
-                    batchInsertPermissionSql = BuildSqlServerBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
-                }
-                await dbContext.Database.ExecuteSqlRawAsync(batchInsertPermissionSql);
+                    var permissionEntityType = dbContext.Model.FindEntityType(typeof(PermissionGrant));
+                    var permissionTableName = permissionEntityType.GetTableName();
+                    var batchInsertPermissionSql = string.Empty;
+                    switch (dbProvider)
+                    {
+                        case EfCoreDatabaseProvider.MySql:
+                            batchInsertPermissionSql = BuildMySqlBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
+                            break;
+                        case EfCoreDatabaseProvider.SqlServer:
+                            batchInsertPermissionSql = BuildSqlServerBatchInsertScript(permissionTableName, eventData.Id, grantPermissions);
+                            break;
+                        default:
+                            Logger.LogWarning($"Tenant permissions data has not initialized, Because database provider: {dbProvider} batch statements are not defined!");
+                            return;
+                    }
+                    await dbContext.Database.ExecuteSqlRawAsync(batchInsertPermissionSql);
 
-                await unitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync();
 
-                Logger.LogInformation("The new tenant permissions data initialized!");
+                    Logger.LogInformation("The new tenant permissions data initialized!");
+                }
             }
         }
     }
