@@ -85,13 +85,10 @@ public class TenantSynchronizer :
     {
         using (_currentTenant.Change(null))
         {
-            using (_currentTenant.Change(null))
+            await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantId.ToString()));
+            if (!tenantName.IsNullOrWhiteSpace())
             {
-                await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantId.ToString()));
-                if (!tenantName.IsNullOrWhiteSpace())
-                {
-                    await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantName));
-                }
+                await _cache.RemoveAsync(TenantConfigurationCacheItem.CalculateCacheKey(tenantName));
             }
         }
     }
