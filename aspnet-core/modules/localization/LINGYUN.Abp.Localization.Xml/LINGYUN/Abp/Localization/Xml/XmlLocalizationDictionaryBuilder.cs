@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.Localization.Xml
             }
 
             var dictionary = new Dictionary<string, LocalizedString>();
-            var dublicateNames = new List<string>();
+            var duplicateNames = new List<string>();
             foreach (var item in xmlFile.Texts)
             {
                 if (string.IsNullOrEmpty(item.Key))
@@ -55,17 +55,17 @@ namespace LINGYUN.Abp.Localization.Xml
 
                 if (dictionary.GetOrDefault(item.Key) != null)
                 {
-                    dublicateNames.Add(item.Key);
+                    duplicateNames.Add(item.Key);
                 }
 
                 dictionary[item.Key] = new LocalizedString(item.Key, item.Value.NormalizeLineEndings());
             }
 
-            if (dublicateNames.Count > 0)
+            if (duplicateNames.Count > 0)
             {
                 throw new AbpException(
                     "A dictionary can not contain same key twice. There are some duplicated names: " +
-                    dublicateNames.JoinAsString(", "));
+                    duplicateNames.JoinAsString(", "));
             }
 
             return new StaticLocalizationDictionary(cultureCode, dictionary);

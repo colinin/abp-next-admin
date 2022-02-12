@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.Localization.Xml
 
         [XmlArray("texts")]
         [XmlArrayItem("text")]
-        public LocalizationText[] Texts { get; set; } = new LocalizationText[0];
+        public LocalizationText[] Texts { get; set; } = Array.Empty<LocalizationText>();
 
         public XmlLocalizationFile() { }
 
@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Localization.Xml
         {
             if (encoding == null)
             {
-                throw new ArgumentNullException("encoding");
+                throw new ArgumentNullException(nameof(encoding));
             }
 
             XmlSerializer serializer = new(GetType());
