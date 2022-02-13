@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.SettingManagement
 {
-    public class AbpSettingManagementRemoteServiceConsts
+    public static class AbpSettingManagementRemoteServiceConsts
     {
         public const string RemoteServiceName = "AbpSettingManagement";
     }

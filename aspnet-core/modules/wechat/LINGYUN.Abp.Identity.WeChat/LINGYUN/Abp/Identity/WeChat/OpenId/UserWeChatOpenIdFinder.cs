@@ -38,8 +38,7 @@ namespace LINGYUN.Abp.Identity.WeChat.OpenId
         {
             // 微信扩展登录后openid存储在Login中
             var userLogin = user?.Logins
-                .Where(login => login.LoginProvider == provider)
-                .FirstOrDefault();
+                .FirstOrDefault(login => login.LoginProvider == provider);
 
             return userLogin?.ProviderKey;
         }

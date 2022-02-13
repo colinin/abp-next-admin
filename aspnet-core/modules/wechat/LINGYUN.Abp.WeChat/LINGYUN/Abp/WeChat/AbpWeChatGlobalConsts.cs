@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.WeChat
 {
-    public class AbpWeChatGlobalConsts
+    public static class AbpWeChatGlobalConsts
     {
         /// <summary>
         /// 微信授权名称

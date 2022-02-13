@@ -79,13 +79,13 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             var options = await MiniProgramOptionsFactory.CreateAsync();
 
             var weChatToken = await WeChatTokenProvider.GetTokenAsync(options.AppId, options.AppSecret, cancellationToken);
-            var requestParamters = new Dictionary<string, string>
+            var requestParameters = new Dictionary<string, string>
             {
                 { "access_token", weChatToken.AccessToken }
             };
             var weChatSendNotificationUrl = "https://api.weixin.qq.com";
             var weChatSendNotificationPath = "/cgi-bin/message/subscribe/send";
-            var requestUrl = BuildRequestUrl(weChatSendNotificationUrl, weChatSendNotificationPath, requestParamters);
+            var requestUrl = BuildRequestUrl(weChatSendNotificationUrl, weChatSendNotificationPath, requestParameters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl, message, cancellationToken);
             var response = JsonConvert.DeserializeObject<SubscribeMessageResponse>(responseContent);
 
@@ -116,14 +116,14 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             return resultContent;
         }
 
-        protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string> paramters)
+        protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string> parameters)
         {
             var requestUrlBuilder = new StringBuilder(128);
             requestUrlBuilder.Append(uri);
             requestUrlBuilder.Append(path).Append("?");
-            foreach (var paramter in paramters)
+            foreach (var parameter in parameters)
             {
-                requestUrlBuilder.AppendFormat("{0}={1}", paramter.Key, paramter.Value);
+                requestUrlBuilder.AppendFormat("{0}={1}", parameter.Key, parameter.Value);
                 requestUrlBuilder.Append("&");
             }
             requestUrlBuilder.Remove(requestUrlBuilder.Length - 1, 1);

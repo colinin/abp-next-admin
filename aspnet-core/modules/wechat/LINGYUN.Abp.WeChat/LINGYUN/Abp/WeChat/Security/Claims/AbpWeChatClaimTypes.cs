@@ -5,7 +5,7 @@
     /// <br />
     /// See: <see cref="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html"/>
     /// </summary>
-    public class AbpWeChatClaimTypes
+    public static class AbpWeChatClaimTypes
     {
         /// <summary>
         /// 用户的唯一标识

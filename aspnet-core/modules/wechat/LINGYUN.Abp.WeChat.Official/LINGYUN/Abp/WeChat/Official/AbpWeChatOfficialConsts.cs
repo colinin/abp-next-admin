@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.WeChat.Official
 {
-    public class AbpWeChatOfficialConsts
+    public static class AbpWeChatOfficialConsts
     {
         /// <summary>
         /// 微信公众号对应的Provider名称

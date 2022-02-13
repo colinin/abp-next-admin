@@ -2,11 +2,11 @@
 
 namespace LINGYUN.Abp.SettingManagement
 {
-    public class AbpSettingManagementPermissions
+    public static class AbpSettingManagementPermissions
     {
         public const string GroupName = "AbpSettingManagement";
 
-        public class Settings
+        public static class Settings
         {
             public const string Default = GroupName + ".Settings";
 

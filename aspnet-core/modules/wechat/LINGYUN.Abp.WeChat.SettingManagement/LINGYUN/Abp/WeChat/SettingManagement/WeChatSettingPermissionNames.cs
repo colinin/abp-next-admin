@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.WeChat.SettingManagement
 {
-    public class WeChatSettingPermissionNames
+    public static class WeChatSettingPermissionNames
     {
         public const string GroupName = "Abp.WeChat";
 

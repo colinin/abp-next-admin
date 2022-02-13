@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.WeChat.Official.Settings
 {
-    public class WeChatOfficialSettingNames
+    public static class WeChatOfficialSettingNames
     {
         private const string Prefix = WeChatSettingNames.Prefix + ".Official";
 

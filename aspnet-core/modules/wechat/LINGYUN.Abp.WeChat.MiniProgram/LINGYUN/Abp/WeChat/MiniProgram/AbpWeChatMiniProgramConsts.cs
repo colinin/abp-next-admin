@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.WeChat.MiniProgram
 {
-    public class AbpWeChatMiniProgramConsts
+    public static class AbpWeChatMiniProgramConsts
     {
         /// <summary>
         /// 微信小程序对应的Provider名称
