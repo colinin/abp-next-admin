@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.OssManagement.Settings
 {
-    public class AbpOssManagementSettingNames
+    public static class AbpOssManagementSettingNames
     {
         public const string GroupName = "Abp.OssManagement";
         /// <summary>

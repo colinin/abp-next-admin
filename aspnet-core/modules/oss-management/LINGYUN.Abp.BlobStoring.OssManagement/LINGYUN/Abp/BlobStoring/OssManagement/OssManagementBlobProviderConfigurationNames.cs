@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.BlobStoring.OssManagement
 {
-    public class OssManagementBlobProviderConfigurationNames
+    public static class OssManagementBlobProviderConfigurationNames
     {
         public const string Bucket = "OssManagement:Bucket";
     }

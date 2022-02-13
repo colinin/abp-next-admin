@@ -52,8 +52,8 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                 bucket.CreationDate,
                 new Dictionary<string, string>
                 {
-                    { "Id", bucket.Owner?.Id },
-                    { "DisplayName", bucket.Owner?.DisplayName }
+                    { nameof(Bucket.Owner.Id), bucket.Owner?.Id },
+                    { nameof(Bucket.Owner.DisplayName), bucket.Owner?.DisplayName }
                 });
         }
 
@@ -184,8 +184,8 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                 bucket.Bucket.CreationDate,
                 new Dictionary<string, string>
                 {
-                    { "Id", bucket.Bucket.Owner?.Id },
-                    { "DisplayName", bucket.Bucket.Owner?.DisplayName }
+                    { nameof(Bucket.Owner.Id), bucket.Bucket.Owner?.Id },
+                    { nameof(Bucket.Owner.DisplayName), bucket.Bucket.Owner?.DisplayName }
                 });
         }
 
@@ -260,8 +260,8 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                            x.CreationDate,
                            new Dictionary<string, string>
                            {
-                               { "Id", x.Owner?.Id },
-                               { "DisplayName", x.Owner?.DisplayName }
+                               { nameof(Bucket.Owner.Id), x.Owner?.Id },
+                               { nameof(Bucket.Owner.DisplayName), x.Owner?.DisplayName }
                            }))
                        .ToList());
         }
@@ -300,8 +300,8 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                                    x.LastModified,
                                    new Dictionary<string, string>
                                    {
-                                       { "Id", x.Owner?.Id },
-                                       { "DisplayName", x.Owner?.DisplayName }
+                                       { nameof(Bucket.Owner.Id), x.Owner?.Id },
+                                       { nameof(Bucket.Owner.DisplayName), x.Owner?.DisplayName }
                                    },
                                    x.Key.EndsWith("/"))
                                {

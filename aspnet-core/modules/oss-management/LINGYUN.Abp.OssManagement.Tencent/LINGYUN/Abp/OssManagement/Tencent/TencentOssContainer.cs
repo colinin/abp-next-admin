@@ -15,7 +15,7 @@ using Volo.Abp.Timing;
 namespace LINGYUN.Abp.OssManagement.Tencent
 {
     /// <summary>
-    /// Oss容器的阿里云实现
+    /// Oss容器的腾讯云实现
     /// </summary>
     internal class TencentOssContainer : IOssContainer
     {

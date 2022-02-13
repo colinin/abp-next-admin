@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.OssManagement.Features
 {
-    public class AbpOssManagementFeatureNames
+    public static class AbpOssManagementFeatureNames
     {
         public const string GroupName = "AbpOssManagement";
         /// <summary>
@@ -8,7 +8,7 @@
         /// </summary>
         public const string PublicAccess = GroupName + ".PublicAccess";
 
-        public class OssObject
+        public static class OssObject
         {
             public const string Default = GroupName + ".OssObject";
             /// <summary>

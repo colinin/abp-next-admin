@@ -45,8 +45,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
             using var image = Image.Load(fileBytes, out var format);
 
             // 大小
-            var width = GetInt32Prarm(args, "w_");
-            var height = GetInt32Prarm(args, "h_");
+            var width = GetInt32Param(args, "w_");
+            var height = GetInt32Param(args, "h_");
             if (!width.IsNullOrWhiteSpace() &&
                 !height.IsNullOrWhiteSpace())
             {
@@ -106,7 +106,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
                 .FirstOrDefault();
         }
 
-        private static string GetInt32Prarm(string[] args, string key)
+        private static string GetInt32Param(string[] args, string key)
         {
             if (!args.Any())
             {

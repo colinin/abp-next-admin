@@ -89,7 +89,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 directoryInfo.LastWriteTime,
                 new Dictionary<string, string>
                 {
-                    { "LastAccessTime",  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    { nameof(DirectoryInfo.LastAccessTime),  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                 });
 
             return Task.FromResult(container);
@@ -138,8 +138,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 fileInfo.LastWriteTime,
                 new Dictionary<string, string>
                 {
-                    { "IsReadOnly",  fileInfo.IsReadOnly.ToString() },
-                    { "LastAccessTime",  fileInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    { nameof(FileInfo.IsReadOnly),  fileInfo.IsReadOnly.ToString() },
+                    { nameof(DirectoryInfo.LastAccessTime),  fileInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                 })
                 {
                     FullName = fileInfo.FullName.Replace(Environment.ContentRootPath, "")
@@ -168,7 +168,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 directoryInfo.LastWriteTime,
                 new Dictionary<string, string>
                 {
-                    { "LastAccessTime",  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    { nameof(DirectoryInfo.LastAccessTime),  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                 },
                 true)
                 {
@@ -246,7 +246,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 directoryInfo.LastWriteTime,
                 new Dictionary<string, string>
                 {
-                    { "LastAccessTime",  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    { nameof(DirectoryInfo.LastAccessTime),  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                 });
 
             return Task.FromResult(container);
@@ -282,7 +282,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                     directoryInfo.LastWriteTime,
                     new Dictionary<string, string>
                     { 
-                        { "LastAccessTime",  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                        { nameof(DirectoryInfo.LastAccessTime),  directoryInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     },
                     true)
                 {
@@ -303,8 +303,8 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                     fileInfo.LastWriteTime,
                     new Dictionary<string, string>
                     {
-                    { "IsReadOnly",  fileInfo.IsReadOnly.ToString() },
-                    { "LastAccessTime",  fileInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    { nameof(FileInfo.IsReadOnly),  fileInfo.IsReadOnly.ToString() },
+                    { nameof(DirectoryInfo.LastAccessTime),  fileInfo.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     })
                 {
                     FullName = fileInfo.FullName.Replace(Environment.ContentRootPath, "")
@@ -372,7 +372,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                     x.LastWriteTime,
                     new Dictionary<string, string>
                     {
-                        { "LastAccessTime",  x.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                        { nameof(DirectoryInfo.LastAccessTime),  x.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     }))
                 .ToList());
 
@@ -486,7 +486,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                     x.LastWriteTime,
                     new Dictionary<string, string>
                     {
-                        { "LastAccessTime",  x.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                        { nameof(DirectoryInfo.LastAccessTime),  x.LastAccessTime.ToString("yyyy-MM-dd HH:mm:ss") }
                     },
                     x is DirectoryInfo)
                 {

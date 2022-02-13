@@ -83,8 +83,8 @@ namespace LINGYUN.Abp.OssManagement
             MD5 = md5;
             Url = url;
             ExpirationTime = expirationTime;
-            Roles = roles ?? new string[0];
-            Users = users ?? new string[0];
+            Roles = roles ?? Array.Empty<string>();
+            Users = users ?? Array.Empty<string>();
             MaxAccessCount = maxAccessCount;
         }
 
