@@ -10,7 +10,7 @@ namespace RulesEngine
 {
     public static class ListofRuleResultTreeExtension
     {
-        public static void ThrowOfFaildExecute(this IEnumerable<RuleResultTree> ruleResultTrees)
+        public static void ThrowOfFailedExecute(this IEnumerable<RuleResultTree> ruleResultTrees)
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
 

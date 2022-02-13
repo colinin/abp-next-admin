@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
                     {
                         result.WorkflowRules.AddRange(context.WorkflowRules);
 
-                        if (!_options.MergingRuels)
+                        if (!_options.MergingRules)
                         {
                             break;
                         }

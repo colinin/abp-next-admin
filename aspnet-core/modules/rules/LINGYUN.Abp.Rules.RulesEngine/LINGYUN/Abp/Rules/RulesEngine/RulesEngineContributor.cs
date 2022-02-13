@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
                 // 执行当前的规则
                 var ruleResult = await _ruleEngine.ExecuteAllRulesAsync(workflowRule.WorkflowName, inputs.ToArray());
                 // 用户自定义扩展方法,规则校验错误抛出异常
-                ruleResult.ThrowOfFaildExecute();
+                ruleResult.ThrowOfFailedExecute();
             }
         }
     }
