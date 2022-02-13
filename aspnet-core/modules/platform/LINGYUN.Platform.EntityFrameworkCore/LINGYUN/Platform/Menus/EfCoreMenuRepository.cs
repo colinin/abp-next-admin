@@ -117,7 +117,7 @@ namespace LINGYUN.Platform.Menus
                                     join menu in menuQuery
                                         on roleMenu.MenuId equals menu.Id
                                     where roles.Contains(roleMenu.RoleName)
-                                    select menu; ;
+                                    select menu;
 
                 return await userMenuQuery
                     .Union(roleMenuQuery)

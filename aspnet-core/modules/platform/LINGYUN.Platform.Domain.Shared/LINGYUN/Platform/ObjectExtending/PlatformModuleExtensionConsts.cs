@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Platform.ObjectExtending
 {
-    public class PlatformModuleExtensionConsts
+    public static class PlatformModuleExtensionConsts
     {
         public const string ModuleName = "AppPlatform";
 

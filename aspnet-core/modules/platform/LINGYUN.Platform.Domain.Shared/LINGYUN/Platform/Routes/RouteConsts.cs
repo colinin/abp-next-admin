@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Platform.Routes
 {
-    public class RouteConsts
+    public static class RouteConsts
     {
         public static int MaxNameLength
         {

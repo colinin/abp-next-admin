@@ -89,18 +89,18 @@ namespace LINGYUN.Platform.Versions
 
         public VersionFile FindFile(string name)
         {
-            return Files.Where(x => x.Name.Equals(name)).FirstOrDefault();
+            return Files.FirstOrDefault(x => x.Name.Equals(name));
         }
 
         public VersionFile FindFile(string path, string name)
         {
-            return Files.Where(x => x.Path.Equals(path) && x.Name.Equals(name)).FirstOrDefault();
+            return Files.FirstOrDefault(x => x.Path.Equals(path) && x.Name.Equals(name));
         }
 
         public VersionFile FindFile(string path, string name, string version)
         {
-            return Files.Where(x => x.Path.Equals(path) && x.Name.Equals(name) && x.Version.Equals(version))
-                .FirstOrDefault();
+            return Files
+                .FirstOrDefault(x => x.Path.Equals(path) && x.Name.Equals(name) && x.Version.Equals(version));
         }
 
         public bool FileExists(string name)

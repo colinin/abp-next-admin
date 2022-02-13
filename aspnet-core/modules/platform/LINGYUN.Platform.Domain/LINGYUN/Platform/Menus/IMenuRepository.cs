@@ -29,7 +29,7 @@ namespace LINGYUN.Platform.Menus
         /// <summary>
         /// 查询主菜单,每一个布局页创建的时候都要创建路径为 / 的主菜单
         /// </summary>
-        /// <param name="platformType"></param>
+        /// <param name="framework"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Menu> FindMainAsync(
@@ -62,7 +62,7 @@ namespace LINGYUN.Platform.Menus
         /// </summary>
         /// <param name="userId">用户标识</param>
         /// <param name="roles">角色列表</param>
-        /// <param name="platformType">平台类型</param>
+        /// <param name="framework">平台类型</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<List<Menu>> GetUserMenusAsync(
@@ -74,7 +74,7 @@ namespace LINGYUN.Platform.Menus
         /// 查找角色可访问菜单
         /// </summary>
         /// <param name="roles">角色列表</param>
-        /// <param name="platformType">平台类型</param>
+        /// <param name="framework">平台类型</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<List<Menu>> GetRoleMenusAsync(

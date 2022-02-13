@@ -1,10 +1,10 @@
 ﻿namespace LINGYUN.Platform.Settings
 {
-    public class PlatformSettingNames
+    public static class PlatformSettingNames
     {
         public const string GroupName = "AppPlatform";
 
-        public class AppVersion
+        public static class AppVersion
         {
             public const string Default = GroupName + ".AppVersion";
             /// <summary>

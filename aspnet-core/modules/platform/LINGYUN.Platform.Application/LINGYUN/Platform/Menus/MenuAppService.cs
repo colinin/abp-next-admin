@@ -196,8 +196,8 @@ namespace LINGYUN.Platform.Menus
         [Authorize(PlatformPermissions.Menu.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            var childrens = await MenuRepository.GetChildrenAsync(id);
-            if (childrens.Any())
+            var children = await MenuRepository.GetChildrenAsync(id);
+            if (children.Any())
             {
                 throw new BusinessException(PlatformErrorCodes.DeleteMenuHaveChildren);
             }

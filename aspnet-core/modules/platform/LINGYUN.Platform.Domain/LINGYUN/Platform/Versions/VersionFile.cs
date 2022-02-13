@@ -76,27 +76,27 @@ namespace LINGYUN.Platform.Versions
         public static string NormalizeBlobName(string appVersion, string fileName, string fileVersion,
             string filePath = "")
         {
-            var fileNameWithNotExten = fileName;
+            var fileNameWithNotExtension = fileName;
             // 取出文件扩展名
-            var fileExten = FileHelper.GetExtension(fileName);
-            if (!fileExten.IsNullOrWhiteSpace())
+            var fileExtension = FileHelper.GetExtension(fileName);
+            if (!fileExtension.IsNullOrWhiteSpace())
             {
                 // 取出不带扩展名的文件名
-                fileNameWithNotExten = fileName.Replace(fileExten, "");
+                fileNameWithNotExtension = fileName.Replace(fileExtension, "");
                 // 去掉最后一位扩展名符号
-                fileNameWithNotExten = fileNameWithNotExten.Remove(fileNameWithNotExten.Length - 1);
+                fileNameWithNotExtension = fileNameWithNotExtension.Remove(fileNameWithNotExtension.Length - 1);
             }
             // 转换不受支持的符号
-            fileNameWithNotExten = fileNameWithNotExten.Replace(".", "-");
+            fileNameWithNotExtension = fileNameWithNotExtension.Replace(".", "-");
 
             //路径存储模式 如果传递了绝对路径,需要计算短路径
             if (!filePath.IsNullOrWhiteSpace())
             {
-                return $"{appVersion}/{filePath.Md5()}/{fileNameWithNotExten}/{fileVersion}/{fileName}";
+                return $"{appVersion}/{filePath.Md5()}/{fileNameWithNotExtension}/{fileVersion}/{fileName}";
             }
             // 最终文件名为 应用版本号/文件名(不带扩展名)/文件版本/文件名
             // 例: 1.0.0.0/test-upload-text-file/1.0.0.0/test-upload-text-file.text
-            return $"{appVersion}/{fileNameWithNotExten}/{fileVersion}/{fileName}";
+            return $"{appVersion}/{fileNameWithNotExtension}/{fileVersion}/{fileName}";
         }
     }
 }

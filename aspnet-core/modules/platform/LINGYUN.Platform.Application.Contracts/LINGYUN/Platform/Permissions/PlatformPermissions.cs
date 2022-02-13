@@ -6,7 +6,7 @@ namespace LINGYUN.Platform.Permissions
     {
         public const string GroupName = "Platform";
 
-        public class DataDictionary
+        public static class DataDictionary
         {
             public const string Default = GroupName + ".DataDictionary";
 
@@ -19,7 +19,7 @@ namespace LINGYUN.Platform.Permissions
             public const string ManageItems = Default + ".ManageItems";
         }
 
-        public class Layout
+        public static class Layout
         {
             public const string Default = GroupName + ".Layout";
 
@@ -30,7 +30,7 @@ namespace LINGYUN.Platform.Permissions
             public const string Delete = Default + ".Delete";
         }
 
-        public class Menu
+        public static class Menu
         {
             public const string Default = GroupName + ".Menu";
 
@@ -49,7 +49,7 @@ namespace LINGYUN.Platform.Permissions
         /// <summary>
         /// 文件系统
         /// </summary>
-        public class FileSystem
+        public static class FileSystem
         {
             public const string Default = GroupName + ".FileSystem";
 
@@ -63,7 +63,7 @@ namespace LINGYUN.Platform.Permissions
 
             public const string Move = Default + ".Move";
 
-            public class FileManager
+            public static class FileManager
             {
                 public const string Default = FileSystem.Default + ".FileManager";
 
@@ -81,7 +81,7 @@ namespace LINGYUN.Platform.Permissions
             }
         }
 
-        public class AppVersion
+        public static class AppVersion
         {
             public const string Default = GroupName + ".AppVersion";
 
@@ -89,7 +89,7 @@ namespace LINGYUN.Platform.Permissions
 
             public const string Delete = Default + ".Delete";
 
-            public class FileManager
+            public static class FileManager
             {
                 public const string Default = AppVersion.Default + ".FileManager";
 

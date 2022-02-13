@@ -71,7 +71,7 @@ namespace LINGYUN.Platform.Datas
                 }
                 throw new BusinessException(PlatformErrorCodes.MetaFormatMissMatch);
             });
-            SetMapping(ValueType.Numeic, value =>
+            SetMapping(ValueType.Numeric, value =>
             {
                 if (value != null)
                 {

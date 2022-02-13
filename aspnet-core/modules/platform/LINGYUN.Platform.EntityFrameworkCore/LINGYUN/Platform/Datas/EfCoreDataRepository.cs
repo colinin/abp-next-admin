@@ -56,13 +56,13 @@ namespace LINGYUN.Platform.Datas
 
         public virtual async Task<List<Data>> GetPagedListAsync(
             string filter = "", 
-            string sotring = "Code", 
+            string sorting = nameof(Data.Code), 
             bool includeDetails = false, 
             int skipCount = 0,
             int maxResultCount = 10, 
             CancellationToken cancellationToken = default)
         {
-            sotring ??= nameof(Data.Code);
+            sorting ??= nameof(Data.Code);
 
             var dbSet = await GetDbSetAsync();
             return await dbSet
@@ -70,7 +70,7 @@ namespace LINGYUN.Platform.Datas
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                       x.Code.Contains(filter) || x.Description.Contains(filter) ||
                       x.DisplayName.Contains(filter) || x.Name.Contains(filter))
-                .OrderBy(sotring)
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

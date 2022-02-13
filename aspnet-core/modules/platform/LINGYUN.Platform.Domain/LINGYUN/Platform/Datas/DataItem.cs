@@ -76,7 +76,7 @@ namespace LINGYUN.Platform.Datas
                     }
                     DefaultValue = !AllowBeNull ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") : "";
                     break;
-                case ValueType.Numeic:
+                case ValueType.Numeric:
                     DefaultValue = "0";
                     break;
                 case ValueType.Object:

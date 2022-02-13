@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Platform.Routes
 {
-    public class RoleRouteConsts
+    public static class RoleRouteConsts
     {
         public static int MaxRoleNameLength
         {

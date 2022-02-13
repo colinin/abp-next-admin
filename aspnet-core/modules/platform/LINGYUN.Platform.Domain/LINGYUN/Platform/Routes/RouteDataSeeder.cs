@@ -118,12 +118,12 @@ namespace LINGYUN.Platform.Routes
             if (! await RoleMenuRepository.RoleHasInMenuAsync(roleName, menu.Name, cancellationToken))
             {
                 var roleMenu = new RoleMenu(GuidGenerator.Create(), menu.Id, roleName, tenantId);
-                await RoleMenuRepository.InsertAsync(roleMenu);
+                await RoleMenuRepository.InsertAsync(roleMenu, cancellationToken: cancellationToken);
 
-                var childrens = await MenuRepository.GetChildrenAsync(menu.Id);
-                foreach (var children in childrens)
+                var children = await MenuRepository.GetChildrenAsync(menu.Id, cancellationToken);
+                foreach (var child in children)
                 {
-                    await SeedRoleMenuAsync(roleName, children, tenantId, cancellationToken);
+                    await SeedRoleMenuAsync(roleName, child, tenantId, cancellationToken);
                 }
             }
         }
@@ -137,12 +137,12 @@ namespace LINGYUN.Platform.Routes
             if (!await UserMenuRepository.UserHasInMenuAsync(userId, menu.Name, cancellationToken))
             {
                 var userMenu = new UserMenu(GuidGenerator.Create(), menu.Id, userId, tenantId);
-                await UserMenuRepository.InsertAsync(userMenu);
+                await UserMenuRepository.InsertAsync(userMenu, cancellationToken: cancellationToken);
 
-                var childrens = await MenuRepository.GetChildrenAsync(menu.Id);
-                foreach (var children in childrens)
+                var children = await MenuRepository.GetChildrenAsync(menu.Id, cancellationToken);
+                foreach (var child in children)
                 {
-                    await SeedUserMenuAsync(userId, children, tenantId, cancellationToken);
+                    await SeedUserMenuAsync(userId, child, tenantId, cancellationToken);
                 }
             }
         }

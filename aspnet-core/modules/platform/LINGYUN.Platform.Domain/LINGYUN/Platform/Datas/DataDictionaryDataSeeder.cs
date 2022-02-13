@@ -51,7 +51,7 @@ namespace LINGYUN.Platform.Datas
                         IsStatic = isStatic
                     };
 
-                    data = await DataRepository.InsertAsync(data, true);
+                    data = await DataRepository.InsertAsync(data, true, cancellationToken);
                 }
 
                 return data;
