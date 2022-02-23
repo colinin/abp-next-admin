@@ -19,7 +19,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
-	  <ProjectReference Include="..\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
 	</ItemGroup>
