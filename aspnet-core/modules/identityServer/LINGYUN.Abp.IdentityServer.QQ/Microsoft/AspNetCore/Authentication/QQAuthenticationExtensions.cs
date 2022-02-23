@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Authentication
         /// </summary>
         public static AuthenticationBuilder AddQQConnect(
             this AuthenticationBuilder builder, 
-            Action<QQOAuthOptions> configureOptions)
+            Action<QQConnectOAuthOptions> configureOptions)
         {
             return builder
                 .AddQQConnect(
@@ -36,7 +36,7 @@ namespace Microsoft.AspNetCore.Authentication
         public static AuthenticationBuilder AddQQConnect(
             this AuthenticationBuilder builder, 
             string authenticationScheme,
-            Action<QQOAuthOptions> configureOptions)
+            Action<QQConnectOAuthOptions> configureOptions)
         {
             return builder
                 .AddQQConnect(
@@ -51,10 +51,10 @@ namespace Microsoft.AspNetCore.Authentication
             this AuthenticationBuilder builder, 
             string authenticationScheme, 
             string displayName, 
-            Action<QQOAuthOptions> configureOptions)
+            Action<QQConnectOAuthOptions> configureOptions)
         {
             return builder
-                .AddOAuth<QQOAuthOptions, QQOAuthHandler>(
+                .AddOAuth<QQConnectOAuthOptions, QQConnectOAuthHandler>(
                     authenticationScheme, 
                     displayName, 
                     configureOptions);
