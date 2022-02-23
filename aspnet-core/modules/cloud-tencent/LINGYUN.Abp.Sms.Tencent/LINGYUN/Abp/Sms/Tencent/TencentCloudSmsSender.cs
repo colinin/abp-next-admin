@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.Sms.Tencent.Settings;
-using LINGYUN.Abp.Tencent;
+﻿using LINGYUN.Abp.Tencent;
+using LINGYUN.Abp.Tencent.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -41,19 +41,19 @@ namespace LINGYUN.Abp.Sms.Tencent
 
         public virtual async Task SendAsync(SmsMessage smsMessage)
         {
-            var appId = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.AppId);
+            var appId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Sms.AppId);
 
-            Check.NotNullOrWhiteSpace(appId, TencentCloudSmsSettingNames.AppId);
+            Check.NotNullOrWhiteSpace(appId, TencentCloudSettingNames.Sms.AppId);
 
             // 统一使用 TemplateCode作为模板参数, 解决不一样的sms提供商参数差异
             if (!smsMessage.Properties.TryGetValue("TemplateCode", out var templateId))
             {
-                templateId = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultTemplateId);
+                templateId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Sms.DefaultTemplateId);
             }
 
             if (!smsMessage.Properties.TryGetValue("SignName", out var signName))
             {
-                signName = await SettingProvider.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultSignName);
+                signName = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Sms.DefaultSignName);
             }
 
             var request = new SendSmsRequest

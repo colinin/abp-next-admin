@@ -380,7 +380,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Ten
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Tencent", "modules\oss-management\LINGYUN.Abp.OssManagement.Tencent\LINGYUN.Abp.OssManagement.Tencent.csproj", "{31E60E23-FD98-4D5E-A137-2B3F2968BA09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.IdentityServer.LinkUser", "modules\identityServer\LINGYUN.Abp.IdentityServer.LinkUser\LINGYUN.Abp.IdentityServer.LinkUser.csproj", "{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.LinkUser", "modules\identityServer\LINGYUN.Abp.IdentityServer.LinkUser\LINGYUN.Abp.IdentityServer.LinkUser.csproj", "{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.IdentityServer.QQ", "modules\identityServer\LINGYUN.Abp.IdentityServer.QQ\LINGYUN.Abp.IdentityServer.QQ.csproj", "{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -988,6 +992,14 @@ Global
 		{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1174,6 +1186,8 @@ Global
 		{A4B972EC-9F0B-4405-9965-766FABC9B07E} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
 		{31E60E23-FD98-4D5E-A137-2B3F2968BA09} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{25378F9D-2A66-4568-AAC6-E9282ACA3DD3} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
+		{A34CCD3F-28A1-4BAD-A995-EB8720CE4105} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
+		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

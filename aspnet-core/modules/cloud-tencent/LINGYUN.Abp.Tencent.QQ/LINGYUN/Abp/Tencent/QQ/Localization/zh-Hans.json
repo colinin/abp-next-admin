@@ -1,0 +1,13 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:TenantCloud.QQConnect": "QQ互联",
+    "Description:TenantCloud.QQConnect": "接入QQ互联开放平台",
+    "DisplayName:QQConnect.AppId": "应用的唯一标识",
+    "Description:QQConnect.AppId": "接入QQ登录所必须的应用标识, 在QQ互联管理中心申请.",
+    "DisplayName:QQConnect.AppKey": "AppId对应的密钥",
+    "Description:QQConnect.AppKey": "访问用户资源时用来验证应用的合法性, 在QQ互联管理中心申请.",
+    "DisplayName:QQConnect.IsMobile": "是否移动端样式",
+    "Description:QQConnect.IsMobile": "用于展示的样式, 默认展示为PC下的样式."
+  }
+}

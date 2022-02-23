@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.SettingManagement;
-using LINGYUN.Abp.Sms.Tencent.Settings;
 using LINGYUN.Abp.Tencent.Localization;
+using LINGYUN.Abp.Tencent.QQ.Settings;
 using LINGYUN.Abp.Tencent.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -116,22 +116,48 @@ public class TenantCloudSettingAppService : ApplicationService, ITenantCloudSett
                 L["DisplayName:TenantCloud.SmsSetting"], L["Description:TenantCloud.SmsSetting"]);
 
             smsSetting.AddDetail(
-                SettingDefinitionManager.Get(TencentCloudSmsSettingNames.AppId),
+                SettingDefinitionManager.Get(TencentCloudSettingNames.Sms.AppId),
                 StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(TencentCloudSmsSettingNames.AppId, providerName, providerKey),
+                await SettingManager.GetOrNullAsync(TencentCloudSettingNames.Sms.AppId, providerName, providerKey),
                 ValueType.String,
                 providerName);
             smsSetting.AddDetail(
-                SettingDefinitionManager.Get(TencentCloudSmsSettingNames.DefaultTemplateId),
+                SettingDefinitionManager.Get(TencentCloudSettingNames.Sms.DefaultTemplateId),
                 StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultTemplateId, providerName, providerKey),
+                await SettingManager.GetOrNullAsync(TencentCloudSettingNames.Sms.DefaultTemplateId, providerName, providerKey),
                 ValueType.String,
                 providerName);
             smsSetting.AddDetail(
-                SettingDefinitionManager.Get(TencentCloudSmsSettingNames.DefaultSignName),
+                SettingDefinitionManager.Get(TencentCloudSettingNames.Sms.DefaultSignName),
                 StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(TencentCloudSmsSettingNames.DefaultSignName, providerName, providerKey),
+                await SettingManager.GetOrNullAsync(TencentCloudSettingNames.Sms.DefaultSignName, providerName, providerKey),
                 ValueType.String,
+                providerName);
+
+            #endregion
+
+            #region QQ互联
+
+            var qqSetting = settingGroup.AddSetting(
+                L["DisplayName:TenantCloud.QQConnect"], L["Description:TenantCloud.QQConnect"]);
+
+            qqSetting.AddDetail(
+                SettingDefinitionManager.Get(TencentQQSettingNames.QQConnect.AppId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            qqSetting.AddDetail(
+                SettingDefinitionManager.Get(TencentQQSettingNames.QQConnect.AppKey),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppKey, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            qqSetting.AddDetail(
+                SettingDefinitionManager.Get(TencentQQSettingNames.QQConnect.IsMobile),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentQQSettingNames.QQConnect.IsMobile, providerName, providerKey),
+                ValueType.Boolean,
                 providerName);
 
             #endregion

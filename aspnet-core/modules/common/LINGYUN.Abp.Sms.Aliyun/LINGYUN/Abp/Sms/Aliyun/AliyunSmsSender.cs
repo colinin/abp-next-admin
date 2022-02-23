@@ -2,10 +2,9 @@
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
 using LINGYUN.Abp.Aliyun;
-using LINGYUN.Abp.Sms.Aliyun.Settings;
+using LINGYUN.Abp.Aliyun.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,13 +38,13 @@ namespace LINGYUN.Abp.Sms.Aliyun
 
         public virtual async Task SendAsync(SmsMessage smsMessage)
         {
-            var domain = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain);
-            var action = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName);
-            var version = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.Version);
+            var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Domain);
+            var action = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.ActionName);
+            var version = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Version);
 
-            Check.NotNullOrWhiteSpace(domain, AliyunSmsSettingNames.Sms.Domain);
-            Check.NotNullOrWhiteSpace(action, AliyunSmsSettingNames.Sms.ActionName);
-            Check.NotNullOrWhiteSpace(version, AliyunSmsSettingNames.Sms.Version);
+            Check.NotNullOrWhiteSpace(domain, AliyunSettingNames.Sms.Domain);
+            Check.NotNullOrWhiteSpace(action, AliyunSettingNames.Sms.ActionName);
+            Check.NotNullOrWhiteSpace(version, AliyunSettingNames.Sms.Version);
 
             CommonRequest request = new CommonRequest
             {
@@ -68,7 +67,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
                 var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsResponse>(responseContent);
                 if (!aliyunResponse.IsSuccess())
                 {
-                    if (await SettingProvider.IsTrueAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient))
+                    if (await SettingProvider.IsTrueAsync(AliyunSettingNames.Sms.VisableErrorToClient))
                     {
                         throw new UserFriendlyException(aliyunResponse.Code, aliyunResponse.Message);
                     }
@@ -94,7 +93,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
             }
             else
             {
-                var defaultTemplateCode = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultTemplateCode);
+                var defaultTemplateCode = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.DefaultTemplateCode);
                 Check.NotNullOrWhiteSpace(defaultTemplateCode, "TemplateCode");
                 request.AddQueryParameters("TemplateCode", defaultTemplateCode);
             }
@@ -109,7 +108,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
             }
             else
             {
-                var defaultSignName = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultSignName);
+                var defaultSignName = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.DefaultSignName);
                 Check.NotNullOrWhiteSpace(defaultSignName, "SignName");
                 request.AddQueryParameters("SignName", defaultSignName);
             }
@@ -119,11 +118,11 @@ namespace LINGYUN.Abp.Sms.Aliyun
         {
             if (smsMessage.PhoneNumber.IsNullOrWhiteSpace())
             {
-                var defaultPhoneNumber = await SettingProvider.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultPhoneNumber);
+                var defaultPhoneNumber = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.DefaultPhoneNumber);
                 // check phone number length...
                 Check.NotNullOrWhiteSpace(
                     defaultPhoneNumber,
-                    AliyunSmsSettingNames.Sms.DefaultPhoneNumber, 
+                    AliyunSettingNames.Sms.DefaultPhoneNumber, 
                     maxLength: 11, minLength: 11);
                 request.AddQueryParameters("PhoneNumbers", defaultPhoneNumber);
             }

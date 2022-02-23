@@ -5,6 +5,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
+using LINGYUN.Abp.IdentityServer.QQ;
 using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MultiTenancy.DbFinder;
@@ -52,6 +53,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityServerSmsValidatorModule),
     typeof(AbpIdentityServerWeChatModule),
+    typeof(AbpIdentityServerQQModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

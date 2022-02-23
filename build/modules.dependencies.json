@@ -24,7 +24,10 @@
           "LINGYUN.Abp.RealTime.dll",
           "LINGYUN.Abp.Notifications.dll",
           "LINGYUN.Platform.Application.Contracts.dll",
-          "LINGYUN.Platform.Domain.Shared.dll"
+          "LINGYUN.Platform.Domain.Shared.dll",
+          "LINGYUN.Abp.Tencent.dll",
+          "LINGYUN.Abp.Tencent.QQ.dll",
+          "LINGYUN.Abp.Tencent.SettingManagement.dll"
         ]
       },
       {
