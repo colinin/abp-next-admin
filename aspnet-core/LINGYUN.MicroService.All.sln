@@ -382,9 +382,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.LinkUser", "modules\identityServer\LINGYUN.Abp.IdentityServer.LinkUser\LINGYUN.Abp.IdentityServer.LinkUser.csproj", "{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.IdentityServer.QQ", "modules\identityServer\LINGYUN.Abp.IdentityServer.QQ\LINGYUN.Abp.IdentityServer.QQ.csproj", "{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.QQ", "modules\identityServer\LINGYUN.Abp.IdentityServer.QQ\LINGYUN.Abp.IdentityServer.QQ.csproj", "{A34CCD3F-28A1-4BAD-A995-EB8720CE4105}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
