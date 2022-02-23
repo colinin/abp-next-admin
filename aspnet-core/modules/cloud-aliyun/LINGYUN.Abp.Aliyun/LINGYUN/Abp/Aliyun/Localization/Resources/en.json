@@ -20,6 +20,22 @@
     "DisplayName:DurationSeconds": "Duration Seconds,in seconds",
     "Description:DurationSeconds": "Duration Seconds,in seconds",
     "DisplayName:Policy": "Policy",
-    "Description:Policy": "Policy"
+    "Description:Policy": "Policy",
+    "DisplayName:Aliyun.Sms": "Sms",
+    "Description:Aliyun.Sms": "Sms",
+    "DisplayName:ActionName": "Action Name",
+    "Description:ActionName": "Action Name",
+    "DisplayName:DefaultSignName": "Default Sign Name",
+    "Description:DefaultSignName": "Default Sign Name",
+    "DisplayName:DefaultTemplateCode": "Default Template Code",
+    "Description:DefaultTemplateCode": "Default Template Code",
+    "DisplayName:DefaultPhoneNumber": "Default Phone Number",
+    "Description:DefaultPhoneNumber": "Default Phone Number",
+    "DisplayName:Domain": "Domain",
+    "Description:Domain": "Domain",
+    "DisplayName:Version": "Version",
+    "Description:Version": "Version",
+    "DisplayName:VisableErrorToClient": "Visable Error To Client",
+    "Description:VisableErrorToClient": "Visable Error To Client"
   }
 }

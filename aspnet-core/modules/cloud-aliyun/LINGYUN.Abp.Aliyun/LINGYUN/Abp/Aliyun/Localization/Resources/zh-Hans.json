@@ -20,6 +20,22 @@
     "DisplayName:DurationSeconds": "过期时间,单位为秒。",
     "Description:DurationSeconds": "过期时间最小值为900秒,默认3600秒",
     "DisplayName:Policy": "权限策略",
-    "Description:Policy": "生成STS Token时可以指定一个额外的权限策略，以进一步限制STS Token的权限"
+    "Description:Policy": "生成STS Token时可以指定一个额外的权限策略，以进一步限制STS Token的权限",
+    "DisplayName:Aliyun.Sms": "短信服务",
+    "Description:Aliyun.Sms": "阿里云短信服务",
+    "DisplayName:ActionName": "发送短信方法",
+    "Description:ActionName": "发送短信方法名称,详情见阿里云Sms服务",
+    "DisplayName:DefaultSignName": "默认短信签名",
+    "Description:DefaultSignName": "当用户未指定短信签名时的默认签名名称",
+    "DisplayName:DefaultTemplateCode": "默认短信模板号",
+    "Description:DefaultTemplateCode": "当用户未指定短信签名时的默认短信模板号",
+    "DisplayName:DefaultPhoneNumber": "默认接收短信手机号",
+    "Description:DefaultPhoneNumber": "当用户未指定短信接收方时的默认接收手机号码",
+    "DisplayName:Domain": "阿里云sms服务域名",
+    "Description:Domain": "阿里云sms服务域名",
+    "DisplayName:Version": "阿里云sms服务版本号",
+    "Description:Version": "阿里云sms服务版本号",
+    "DisplayName:VisableErrorToClient": "发送错误到客户端",
+    "Description:VisableErrorToClient": "当短信服务发送出现错误时是否发送错误详情到客户端"
   }
 }

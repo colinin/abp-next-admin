@@ -2,59 +2,57 @@
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
-namespace LINGYUN.Abp.Sms.Tencent.Settings
+namespace LINGYUN.Abp.Tencent.QQ.Settings
 {
-    public class TencentCloudSmsSettingProvider : SettingDefinitionProvider
+    public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
     {
         public override void Define(ISettingDefinitionContext context)
         {
-            context.Add(CreateAliyunSettings());
+            context.Add(GetQQConnectSettings());
         }
 
-        private SettingDefinition[] CreateAliyunSettings()
+        private SettingDefinition[] GetQQConnectSettings()
         {
             return new SettingDefinition[]
             {
                 new SettingDefinition(
-                    TencentCloudSmsSettingNames.AppId,
-                    displayName: L("DisplayName:AppId"),
-                    description: L("Description:AppId"),
+                    TencentQQSettingNames.QQConnect.AppId, "",
+                    L("DisplayName:QQConnect.AppId"),
+                    L("Description:QQConnect.AppId"),
                     isVisibleToClients: false,
-                    isEncrypted: true
-                )
+                    isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
-                    TencentCloudSmsSettingNames.DefaultSignName,
-                    displayName: L("DisplayName:DefaultSignName"),
-                    description: L("Description:DefaultSignName"),
+                    TencentQQSettingNames.QQConnect.AppKey, "",
+                    L("DisplayName:QQConnect.AppKey"),
+                    L("Description:QQConnect.AppKey"),
                     isVisibleToClients: false,
-                    isEncrypted: true
-                )
+                    isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
-                    TencentCloudSmsSettingNames.DefaultTemplateId,
-                    displayName: L("DisplayName:DefaultTemplateId"),
-                    description: L("Description:DefaultTemplateId"),
+                    TencentQQSettingNames.QQConnect.IsMobile,
+                    "false",
+                    L("DisplayName:QQConnect.IsMobile"),
+                    L("Description:QQConnect.IsMobile"),
                     isVisibleToClients: false,
-                    isEncrypted: true
-                )
+                    isEncrypted: false)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
             };
         }
 
-        private ILocalizableString L(string name)
+        protected ILocalizableString L(string name)
         {
             return LocalizableString.Create<TencentCloudResource>(name);
         }

@@ -8,10 +8,11 @@ namespace LINGYUN.Abp.Aliyun.Settings
     {
         public override void Define(ISettingDefinitionContext context)
         {
-            context.Add(CreateAliyunSettings());
+            context.Add(GetAuthorizationSettings());
+            context.Add(GetSmsSettings());
         }
 
-        private SettingDefinition[] CreateAliyunSettings()
+        private SettingDefinition[] GetAuthorizationSettings()
         {
             return new SettingDefinition[]
             {
@@ -113,6 +114,95 @@ namespace LINGYUN.Abp.Aliyun.Settings
             };
         }
 
+        private SettingDefinition[] GetSmsSettings()
+        {
+            return new SettingDefinition[]
+            {
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.ActionName,
+                    defaultValue: "SendSms",
+                    displayName: L("DisplayName:ActionName"),
+                    description: L("Description:ActionName"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.DefaultSignName,
+                    displayName: L("DisplayName:DefaultSignName"),
+                    description: L("Description:DefaultSignName"),
+                    isVisibleToClients: false,
+                    isEncrypted: true
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.DefaultTemplateCode,
+                    displayName: L("DisplayName:DefaultTemplateCode"),
+                    description: L("Description:DefaultTemplateCode"),
+                    isVisibleToClients: false,
+                    isEncrypted: true
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.DefaultPhoneNumber,
+                    displayName: L("DisplayName:DefaultPhoneNumber"),
+                    description: L("Description:DefaultPhoneNumber"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.Domain,
+                    defaultValue: "dysmsapi.aliyuncs.com",
+                    displayName: L("DisplayName:Domain"),
+                    description: L("Description:Domain"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.Version,
+                    defaultValue: "2017-05-25",
+                    displayName: L("DisplayName:Version"),
+                    description: L("Description:Version"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
+                    AliyunSettingNames.Sms.VisableErrorToClient,
+                    defaultValue: false.ToString(),
+                    displayName: L("DisplayName:VisableErrorToClient"),
+                    description: L("Description:VisableErrorToClient"),
+                    isVisibleToClients: false
+                )
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName)
+            };
+        }
         private ILocalizableString L(string name)
         {
             return LocalizableString.Create<AliyunResource>(name);

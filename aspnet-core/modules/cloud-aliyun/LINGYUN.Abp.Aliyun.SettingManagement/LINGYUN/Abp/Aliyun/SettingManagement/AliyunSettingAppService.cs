@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.Aliyun.Localization;
 using LINGYUN.Abp.Aliyun.Settings;
 using LINGYUN.Abp.SettingManagement;
-using LINGYUN.Abp.Sms.Aliyun.Settings;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
@@ -106,45 +105,45 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
 
                 var smsSetting = aliyunSettingGroup.AddSetting(L["DisplayName:Aliyun.Sms"], L["Description:Aliyun.Sms"]);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.Domain),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.Domain),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.Domain, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.Domain, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.Version),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.Version),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.Version, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.Version, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.ActionName),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.ActionName),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.ActionName, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.ActionName, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultPhoneNumber),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.DefaultPhoneNumber),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultPhoneNumber, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.DefaultPhoneNumber, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultSignName),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.DefaultSignName),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultSignName, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.DefaultSignName, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.DefaultTemplateCode),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.DefaultTemplateCode),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.DefaultTemplateCode, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.DefaultTemplateCode, providerName, providerKey),
                    ValueType.String,
                     providerName);
                 smsSetting.AddDetail(
-                   SettingDefinitionManager.Get(AliyunSmsSettingNames.Sms.VisableErrorToClient),
+                   SettingDefinitionManager.Get(AliyunSettingNames.Sms.VisableErrorToClient),
                    StringLocalizerFactory,
-                   await SettingManager.GetOrNullAsync(AliyunSmsSettingNames.Sms.VisableErrorToClient, providerName, providerKey),
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.Sms.VisableErrorToClient, providerName, providerKey),
                    ValueType.Boolean,
                     providerName);
 

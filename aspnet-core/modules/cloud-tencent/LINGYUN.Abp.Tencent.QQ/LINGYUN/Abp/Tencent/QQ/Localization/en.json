@@ -1,0 +1,13 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:TenantCloud.QQConnect": "QQ Connect",
+    "Description:TenantCloud.QQConnect": "Access QQ Internet open platform",
+    "DisplayName:QQConnect.AppId": "AppId",
+    "Description:QQConnect.AppId": "The application identification necessary to access QQ login can be applied at QQ Interconnection Management Center.",
+    "DisplayName:QQConnect.AppKey": "AppKey",
+    "Description:QQConnect.AppKey": "When accessing user resources, it is used to verify the validity of the application and apply for it in QQ Interconnection Management Center.",
+    "DisplayName:QQConnect.IsMobile": "Whether to move the style",
+    "Description:QQConnect.IsMobile": "The style used for display is displayed as the style under PC by default."
+  }
+}
