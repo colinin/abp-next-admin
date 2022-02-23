@@ -10,4 +10,6 @@ del .\services\LY.MicroService.identityServer.HttpApi.Host\Logs /Q
 del .\services\LY.MicroService.LocalizationManagement.HttpApi.Host\Logs /Q
 del .\services\LY.MicroService.PlatformManagement.HttpApi.Host\Logs /Q
 del .\services\LY.MicroService.RealtimeMessage.HttpApi.Host\Logs /Q
+del .\services\LY.MicroService.TaskManagement.HttpApi.Host\Logs /Q
+del .\services\LY.MicroService.WorkflowManagement.HttpApi.Host\Logs /Q
 
