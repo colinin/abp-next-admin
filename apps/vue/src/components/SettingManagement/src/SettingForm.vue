@@ -21,7 +21,7 @@
                     :detail="detail"
                     :change="detail.valueType === 2 ? handleCheckChange : handleValueChange"
                   />
-                  <FormItem v-else :label="detail.displayName">
+                  <FormItem v-else :label="detail.displayName" :extra="detail.description">
                     <!-- <Input type="text" v-model="detail.value" /> -->
                     <Password
                       v-if="detail.valueType === 0 && detail.isEncrypted"
@@ -42,6 +42,13 @@
                       :placeholder="detail.description"
                       type="number"
                       @input="handleValueChange(detail)"
+                    />
+                    <DatePicker
+                      v-if="detail.valueType === 3"
+                      :value="detail.value ? moment(detail.value, 'YYYY-MM-DD') : ''"
+                      :placeholder="detail.description"
+                      style="width: 100%;"
+                      @change="handleDateChange($event, detail)"
                     />
                     <Select
                       v-if="detail.valueType === 5"
@@ -91,12 +98,13 @@
 </template>
 
 <script lang="ts">
+  import moment from 'moment';
   import { computed, defineComponent, ref, toRaw } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col } from 'ant-design-vue';
+  import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col, DatePicker } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
-
+  import { formatToDate } from '/@/utils/dateUtil';
   import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
 
   const props = {
@@ -119,6 +127,7 @@
       Checkbox,
       Collapse: Collapse,
       CollapsePanel: Collapse.Panel,
+      DatePicker,
       Form: Form,
       FormItem: Form.Item,
       BInput,
@@ -164,6 +173,11 @@
         handleValueChange(setting);
       }
 
+      function handleDateChange(e, setting) {
+        setting.value = moment.isMoment(e) ? formatToDate(e) : '';
+        handleValueChange(setting);
+      }
+
       function handleValueChange(setting) {
         const index = updateSetting.value.settings.findIndex((s) => s.name === setting.name);
         if (index >= 0) {
@@ -191,12 +205,14 @@
 
       return {
         L,
+        moment,
         saving,
         activeTabKey,
         updateSetting,
         sumbitButtonTitle,
         expandedCollapseKeys,
         handleCheckChange,
+        handleDateChange,
         handleValueChange,
         handleSubmit,
       };
