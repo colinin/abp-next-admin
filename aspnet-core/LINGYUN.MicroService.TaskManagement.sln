@@ -40,9 +40,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.ExceptionHandling", "modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj", "{8507BBFA-FE56-4426-BBFA-C92906CB8407}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TaskManagement.HttpApi.Client", "modules\task-management\LINGYUN.Abp.TaskManagement.HttpApi.Client\LINGYUN.Abp.TaskManagement.HttpApi.Client.csproj", "{56C759D1-6FE6-4111-A2DB-CD65DCE82061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TaskManagement.HttpApi.Client", "modules\task-management\LINGYUN.Abp.TaskManagement.HttpApi.Client\LINGYUN.Abp.TaskManagement.HttpApi.Client.csproj", "{56C759D1-6FE6-4111-A2DB-CD65DCE82061}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.TaskManagement", "modules\task-management\LINGYUN.Abp.BackgroundTasks.TaskManagement\LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj", "{7937785C-0D28-46B3-A7E7-0B592821A1F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.TaskManagement", "modules\task-management\LINGYUN.Abp.BackgroundTasks.TaskManagement\LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj", "{7937785C-0D28-46B3-A7E7-0B592821A1F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
