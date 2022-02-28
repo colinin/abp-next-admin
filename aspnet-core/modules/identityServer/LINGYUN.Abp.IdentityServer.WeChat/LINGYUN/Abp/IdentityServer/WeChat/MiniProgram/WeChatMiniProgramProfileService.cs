@@ -46,6 +46,12 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.MiniProgram
             }
         }
 
+        [UnitOfWork]
+        public override Task<bool> IsUserActiveAsync(IdentityUser user)
+        {
+            return Task.FromResult(user.IsActive);
+        }
+
         protected virtual void TryAddWeChatClaim(ProfileDataRequestContext context, string weChatClaimType)
         {
             if (context.RequestedClaimTypes.Any(rc => rc.Contains(weChatClaimType)))
