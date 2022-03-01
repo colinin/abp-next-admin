@@ -256,6 +256,13 @@ export const usePermissionStore = defineStore({
         if (menu.children) {
           r.children = this.filterDynamicRoutes(menu.children);
         }
+        // 修改用户首页
+        if (menu.startup) {
+          const userStore = useUserStore();
+          const userInfo = userStore.getUserInfo;
+          userInfo.homePath = menu.path;
+          userStore.setUserInfo(userInfo);
+        }
         routeList.push(r);
       });
 
