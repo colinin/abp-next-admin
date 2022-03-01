@@ -85,6 +85,7 @@
         key: 'id',
         title: 'displayName',
         children: 'children',
+        value: 'id',
       };
       const optionsRef = ref<
         {
