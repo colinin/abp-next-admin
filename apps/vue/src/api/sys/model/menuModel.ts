@@ -11,6 +11,7 @@ export interface RouteItem {
   children?: RouteItem[];
   fullPath?: string;
   props?: any;
+  startup: boolean;
 }
 
 /**

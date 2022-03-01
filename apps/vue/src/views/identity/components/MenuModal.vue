@@ -13,6 +13,14 @@
         <FormItem :label="L('DisplayName:UIFramework')">
           <Select v-model:value="frameworkRef" :options="optionsRef" @select="handleSelect" />
         </FormItem>
+        <FormItem :label="L('Menu:SetStartup')">
+          <TreeSelect
+            :replace-fields="replaceFields"
+            :tree-data="menuTreeRef"
+            :allow-clear="true"
+            v-model:value="startupMenuRef"
+            />
+        </FormItem>
         <FormItem :label="L('DisplayName:Menus')">
           <BasicTree
             :checkable="true"
@@ -30,7 +38,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref, watch } from 'vue';
-  import { Card, Form, Select } from 'ant-design-vue';
+  import { Card, Form, Select, TreeSelect } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
@@ -47,6 +55,7 @@
       Form,
       FormItem: Form.Item,
       Select,
+      TreeSelect,
     },
     props: {
       loading: {
@@ -63,11 +72,12 @@
         }),
       },
     },
-    emits: ['change', 'register'],
+    emits: ['change', 'register', 'change:startup'],
     setup(props, { emit }) {
       const { L } = useLocalization('AppPlatform');
       const identityRef = ref('');
       const frameworkRef = ref('');
+      const startupMenuRef = ref('');
       const menuTreeRef = ref<any[]>([]);
       const defaultCheckedRef = ref<any[]>([]);
       const checkedRef = ref<string[]>([]);
@@ -75,6 +85,7 @@
         key: 'id',
         title: 'displayName',
         children: 'children',
+        value: 'id',
       };
       const optionsRef = ref<
         {
@@ -87,6 +98,7 @@
         identityRef.value = record.identity;
         optionsRef.value = [];
         frameworkRef.value = '';
+        startupMenuRef.value = '';
         checkedRef.value = [];
         defaultCheckedRef.value = [];
         menuTreeRef.value = [];
@@ -110,6 +122,10 @@
         props.getMenuApi(unref(identityRef), value).then((res) => {
           checkedRef.value = res.items.map((item) => item.id);
           defaultCheckedRef.value = checkedRef.value;
+          const startupMenu = res.items.filter((item) => item.startup);
+          if (startupMenu && startupMenu.length > 0) {
+            startupMenuRef.value = startupMenu[0].id;
+          }
         });
       }
 
@@ -133,6 +149,9 @@
 
       function handleSubmit() {
         emit('change', unref(identityRef), unref(checkedRef));
+        if (unref(startupMenuRef)) {
+          emit('change:startup', unref(identityRef), unref(startupMenuRef));
+        }
       }
 
       return {
@@ -141,6 +160,7 @@
         defaultCheckedRef,
         replaceFields,
         frameworkRef,
+        startupMenuRef,
         optionsRef,
         registerModal,
         handleSelect,

@@ -20,6 +20,8 @@ namespace LINGYUN.Platform.Menus
         protected DataItemMappingOptions DataItemMapping { get; }
         protected MenuManager MenuManager { get; }
         protected IMenuRepository MenuRepository { get; }
+        protected IUserMenuRepository UserMenuRepository { get; }
+        protected IRoleMenuRepository RoleMenuRepository { get; }
         protected IDataRepository DataRepository { get; }
         protected ILayoutRepository LayoutRepository { get; }
 
@@ -28,12 +30,16 @@ namespace LINGYUN.Platform.Menus
             IMenuRepository menuRepository,
             IDataRepository dataRepository,
             ILayoutRepository layoutRepository,
+            IUserMenuRepository userMenuRepository,
+            IRoleMenuRepository roleMenuRepository,
             IOptions<DataItemMappingOptions> options)
         {
             MenuManager = menuManager;
             MenuRepository = menuRepository;
             DataRepository = dataRepository;
             LayoutRepository = layoutRepository;
+            UserMenuRepository = userMenuRepository;
+            RoleMenuRepository = roleMenuRepository;
             DataItemMapping = options.Value;
         }
 
@@ -44,8 +50,28 @@ namespace LINGYUN.Platform.Menus
                 CurrentUser.Roles,
                 input.Framework);
 
-            return new ListResultDto<MenuDto>(
-                ObjectMapper.Map<List<Menu>, List<MenuDto>>(myMenus));
+            var menus = ObjectMapper.Map<List<Menu>, List<MenuDto>>(myMenus);
+
+            var startupMenu = await UserMenuRepository.GetStartupMenuAsync(
+                CurrentUser.GetId());
+
+            if (startupMenu == null && CurrentUser.Roles.Any())
+            {
+                startupMenu = await RoleMenuRepository.GetStartupMenuAsync(CurrentUser.Roles);
+            }
+
+            if (startupMenu != null)
+            {
+                var findMenu = menus.FirstOrDefault(x => x.Id.Equals(startupMenu.Id));
+
+                if (findMenu != null)
+                {
+                    findMenu.Startup = true;
+                }
+            }
+            
+
+            return new ListResultDto<MenuDto>(menus);
         }
 
         [Authorize(PlatformPermissions.Menu.Default)]
@@ -211,14 +237,38 @@ namespace LINGYUN.Platform.Menus
         {
             var menus = await MenuRepository.GetUserMenusAsync(input.UserId, input.Roles, input.Framework);
 
-            return new ListResultDto<MenuDto>(
-               ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
+            var menuDtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus);
+
+            var startupMenu = await UserMenuRepository.GetStartupMenuAsync(input.UserId);
+
+            if (startupMenu == null)
+            {
+                startupMenu = await RoleMenuRepository.GetStartupMenuAsync(input.Roles);
+            }
+
+            if (startupMenu != null)
+            {
+                var findMenu = menuDtos.FirstOrDefault(x => x.Id.Equals(startupMenu.Id));
+
+                if (findMenu != null)
+                {
+                    findMenu.Startup = true;
+                }
+            }
+
+            return new ListResultDto<MenuDto>(menuDtos);
         }
 
         [Authorize(PlatformPermissions.Menu.ManageUsers)]
         public virtual async Task SetUserMenusAsync(UserMenuInput input)
         {
             await MenuManager.SetUserMenusAsync(input.UserId, input.MenuIds);
+        }
+
+        [Authorize(PlatformPermissions.Menu.ManageUsers)]
+        public async virtual Task SetUserStartupAsync(Guid id, UserMenuStartupInput input)
+        {
+            await MenuManager.SetUserStartupMenuAsync(input.UserId, id);
         }
 
         [Authorize(PlatformPermissions.Menu.ManageRoles)]
@@ -228,12 +278,31 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.ManageRoles)]
+        public async virtual Task SetRoleStartupAsync(Guid id, RoleMenuStartupInput input)
+        {
+            await MenuManager.SetRoleStartupMenuAsync(input.RoleName, id);
+        }
+
+        [Authorize(PlatformPermissions.Menu.ManageRoles)]
         public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
         {
             var menus = await MenuRepository.GetRoleMenusAsync(new string[] { input.Role }, input.Framework);
 
-            return new ListResultDto<MenuDto>(
-               ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
+            var menuDtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus);
+
+            var startupMenu = await RoleMenuRepository.GetStartupMenuAsync(new string[] { input.Role });
+
+            if (startupMenu != null)
+            {
+                var findMenu = menuDtos.FirstOrDefault(x => x.Id.Equals(startupMenu.Id));
+
+                if (findMenu != null)
+                {
+                    findMenu.Startup = true;
+                }
+            }
+
+            return new ListResultDto<MenuDto>(menuDtos);
         }
     }
 }

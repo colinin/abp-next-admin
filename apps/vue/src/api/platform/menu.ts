@@ -17,9 +17,11 @@ enum Api {
   GetList = '/api/platform/menus',
   GetAll = '/api/platform/menus/all',
   GetUserMenus = '/api/platform/menus/by-user/{userId}/{framework}',
-  SetUserMenus = 'api/platform/menus/by-user',
+  SetUserMenus = '/api/platform/menus/by-user',
+  SetUserStartup = '/api/platform/menus/startup/{id}/by-user',
   GetRoleMenus = '/api/platform/menus/by-role/{role}/{framework}',
   SetRoleMenus = '/api/platform/menus/by-role',
+  SetRoleStartup = '/api/platform/menus/startup/{id}/by-role',
   GetMyMenus = '/api/platform/menus/by-current-user',
   Create = '/api/platform/menus',
   Delete = '/api/platform/menus/{id}',
@@ -85,9 +87,27 @@ export const setUserMenu = (input: UserMenu) => {
   });
 };
 
+export const setUserStartupMenu = (userId: string, menuId: string) => {
+  return defHttp.put<void>({
+    url: format(Api.SetUserStartup, { id: menuId }),
+    data: {
+      userId: userId,
+    },
+  });
+};
+
 export const setRoleMenu = (input: RoleMenu) => {
   return defHttp.put<void>({
     url: Api.SetRoleMenus,
     data: input,
+  });
+};
+
+export const setRoleStartupMenu = (roleName: string, menuId: string) => {
+  return defHttp.put<void>({
+    url: format(Api.SetRoleStartup, { id: menuId }),
+    data: {
+      roleName: roleName,
+    },
   });
 };

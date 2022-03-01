@@ -46,7 +46,8 @@ export class Menu extends Route {
   component!: string;
   framework = '';
   parentId?: string;
-  isPublic!: boolean;
+  isPublic = false;
+  startup = false;
   children = new Array<Menu>();
 }
 
