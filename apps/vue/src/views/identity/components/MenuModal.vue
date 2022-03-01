@@ -38,7 +38,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref, watch } from 'vue';
-  import { Card, Form, Select } from 'ant-design-vue';
+  import { Card, Form, Select, TreeSelect } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
@@ -55,6 +55,7 @@
       Form,
       FormItem: Form.Item,
       Select,
+      TreeSelect,
     },
     props: {
       loading: {
