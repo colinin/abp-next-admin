@@ -15,6 +15,8 @@ namespace LINGYUN.Platform.Menus
 
         public virtual Guid UserId { get; protected set; }
 
+        public virtual bool Startup { get; set; }
+
         protected UserMenu() { }
 
         public UserMenu(

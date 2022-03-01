@@ -41,7 +41,7 @@
             },
             {
               auth: 'Platform.Menu.ManageRoles',
-              label: PL('Menu:Manage'),
+              label: L('Menu:Manage'),
               onClick: handleSetMenu.bind(null, record),
             },
           ]"
@@ -56,6 +56,7 @@
       :loading="loadMenuRef"
       :get-menu-api="getListByRole"
       @change="handleChangeMenu"
+      @change:startup="handleChangeStartupMenu"
     />
   </div>
 </template>
@@ -72,7 +73,7 @@
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useRoleTable } from '../hooks/useRoleTable';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
-  import { getListByRole, setRoleMenu } from '/@/api/platform/menu';
+  import { getListByRole, setRoleMenu, setRoleStartupMenu } from '/@/api/platform/menu';
 
   export default defineComponent({
     name: 'RoleTable',
@@ -85,8 +86,7 @@
       PermissionModal,
     },
     setup() {
-      const { L } = useLocalization('AbpIdentity');
-      const { L: PL } = useLocalization('AppPlatform');
+      const { L } = useLocalization('AbpIdentity', 'AppPlatform');
       const loadMenuRef = ref(false);
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
@@ -114,33 +114,38 @@
           });
       }
 
+      function handleChangeStartupMenu(roleName, meunId) {
+        setRoleStartupMenu(roleName, meunId);
+      }
+
+      function handleAddNew() {
+        openModal(true, {}, true);
+      }
+
+      function handleEdit(record) {
+        openModal(true, record, true);
+      }
+
       return {
         L,
-        PL,
         loadMenuRef,
         hasPermission,
         registerTable,
         reloadTable,
         registerModal,
-        openModal,
         registerClaimModal,
         openClaimModal,
         registerPermissionModal,
         showPermissionModal,
         registerMenuModal,
+        handleAddNew,
+        handleEdit,
         handleSetMenu,
         handleDelete,
         handleChangeMenu,
+        handleChangeStartupMenu,
         getListByRole,
       };
-    },
-    methods: {
-      handleAddNew() {
-        this.openModal(true, {}, true);
-      },
-      handleEdit(record) {
-        this.openModal(true, record, true);
-      },
     },
   });
 </script>

@@ -33,6 +33,7 @@
     "DisplayName:Layout": "布局",
     "DisplayName:Basic": "基础信息",
     "DisplayName:DataDictionary": "数据字典",
+    "DisplayName:RoleName": "角色名称",
     "Layout:AddNew": "添加新布局",
     "Layout:Edit": "编辑布局",
     "Layout:EditByName": "编辑布局 - {0}",

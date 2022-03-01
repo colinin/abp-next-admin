@@ -126,6 +126,27 @@ namespace LINGYUN.Platform.Menus
             return false;
         }
 
+        public async virtual Task SetUserStartupMenuAsync(Guid userId, Guid menuId)
+        {
+            using (var unitOfWork = UnitOfWorkManager.Begin())
+            {
+                var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId);
+
+                foreach (var menu in userMenus)
+                {
+                    menu.Startup = false;
+                    if (menu.MenuId.Equals(menuId))
+                    {
+                        menu.Startup = true;
+                    }
+                }
+
+                await UserMenuRepository.UpdateManyAsync(userMenus);
+
+                await unitOfWork.SaveChangesAsync();
+            }
+        }
+
         public virtual async Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds)
         {
             using (var unitOfWork = UnitOfWorkManager.Begin())
@@ -145,8 +166,29 @@ namespace LINGYUN.Platform.Menus
                 if (adds.Any())
                 {
                     var addInMenus = adds.Select(menuId => new UserMenu(GuidGenerator.Create(), menuId, userId, CurrentTenant.Id));
-                    await UserMenuRepository.InsertAsync(addInMenus);
+                    await UserMenuRepository.InsertManyAsync(addInMenus);
                 }
+
+                await unitOfWork.SaveChangesAsync();
+            }
+        }
+
+        public async virtual Task SetRoleStartupMenuAsync(string roleName, Guid menuId)
+        {
+            using (var unitOfWork = UnitOfWorkManager.Begin())
+            {
+                var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName);
+
+                foreach (var menu in roleMenus)
+                {
+                    menu.Startup = false;
+                    if (menu.MenuId.Equals(menuId))
+                    {
+                        menu.Startup = true;
+                    }
+                }
+
+                await RoleMenuRepository.UpdateManyAsync(roleMenus);
 
                 await unitOfWork.SaveChangesAsync();
             }
@@ -171,7 +213,7 @@ namespace LINGYUN.Platform.Menus
                 if (adds.Any())
                 {
                     var addInMenus = adds.Select(menuId => new RoleMenu(GuidGenerator.Create(), menuId, roleName, CurrentTenant.Id));
-                    await RoleMenuRepository.InsertAsync(addInMenus);
+                    await RoleMenuRepository.InsertManyAsync(addInMenus);
                 }
 
                 await unitOfWork.SaveChangesAsync();

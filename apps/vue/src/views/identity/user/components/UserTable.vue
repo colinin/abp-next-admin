@@ -89,6 +89,7 @@
       :loading="loadMenuRef"
       :get-menu-api="getListByUser"
       @change="handleChangeMenu"
+      @change:startup="handleChangeStartupMenu"
     />
   </div>
 </template>
@@ -110,7 +111,7 @@
   import { usePassword } from '../hooks/usePassword';
   import { useLock } from '../hooks/useLock';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
-  import { getListByUser, setUserMenu } from '/@/api/platform/menu';
+  import { getListByUser, setUserMenu, setUserStartupMenu } from '/@/api/platform/menu';
 
   export default defineComponent({
     name: 'UserTable',
@@ -156,6 +157,24 @@
           });
       }
 
+      function handleAddNew() {
+        openModal(true, {}, true);
+      }
+
+      function handleEdit(record) {
+        openModal(true, record, true);
+      }
+
+      function handleUnlock(record) {
+        handleUnLock(record.id).then(() => {
+          reloadTable();
+        });
+      }
+
+      function handleChangeStartupMenu(userId, meunId) {
+        setUserStartupMenu(userId, meunId);
+      }
+
       return {
         L,
         loadMenuRef,
@@ -176,23 +195,14 @@
         showLockModal,
         handleUnLock,
         registerMenuModal,
+        handleAddNew,
+        handleEdit,
+        handleUnlock,
         handleSetMenu,
         handleChangeMenu,
+        handleChangeStartupMenu,
         getListByUser,
       };
-    },
-    methods: {
-      handleAddNew() {
-        this.openModal(true, {}, true);
-      },
-      handleEdit(record) {
-        this.openModal(true, record, true);
-      },
-      handleUnlock(record) {
-        this.handleUnLock(record.id).then(() => {
-          this.reloadTable();
-        });
-      },
     },
   });
 </script>

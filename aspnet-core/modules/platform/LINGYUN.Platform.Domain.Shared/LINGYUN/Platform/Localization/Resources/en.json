@@ -33,6 +33,7 @@
     "DisplayName:Layout": "Layout",
     "DisplayName:Basic": "Basic",
     "DisplayName:DataDictionary": "Data Dictionary",
+    "DisplayName:RoleName": "Role Name",
     "Layout:AddNew": "Add New",
     "Layout:Edit": "Edit",
     "Layout:EditByName": "Edit Layout - {0}",

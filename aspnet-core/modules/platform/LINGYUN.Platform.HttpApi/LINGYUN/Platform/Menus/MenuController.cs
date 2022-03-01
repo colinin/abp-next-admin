@@ -78,6 +78,13 @@ namespace LINGYUN.Platform.Menus
             await MenuAppService.SetUserMenusAsync(input);
         }
 
+        [HttpPut]
+        [Route("startup/{id}/by-user")]
+        public async virtual Task SetUserStartupAsync(Guid id, UserMenuStartupInput input)
+        {
+            await MenuAppService.SetUserStartupAsync(id, input);
+        }
+
         [HttpGet]
         [Route("by-user")]
         public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
@@ -105,6 +112,13 @@ namespace LINGYUN.Platform.Menus
         public virtual async Task SetRoleMenusAsync(RoleMenuInput input)
         {
             await MenuAppService.SetRoleMenusAsync(input);
+        }
+
+        [HttpPut]
+        [Route("startup/{id}/by-role")]
+        public async virtual Task SetRoleStartupAsync(Guid id, RoleMenuStartupInput input)
+        {
+            await MenuAppService.SetRoleStartupAsync(id, input);
         }
 
         [HttpGet]

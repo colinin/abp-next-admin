@@ -24,8 +24,8 @@ namespace LINGYUN.Platform.Menus
             Guid userId,
             CancellationToken cancellationToken = default);
 
-        Task InsertAsync(
-            IEnumerable<UserMenu> userMenus,
+        Task<Menu> GetStartupMenuAsync(
+            Guid userId,
             CancellationToken cancellationToken = default);
     }
 }

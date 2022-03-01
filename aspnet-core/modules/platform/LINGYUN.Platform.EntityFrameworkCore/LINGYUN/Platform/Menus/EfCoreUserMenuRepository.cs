@@ -44,10 +44,22 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task InsertAsync(IEnumerable<UserMenu> userMenus, CancellationToken cancellationToken = default)
+        public virtual async Task<Menu> GetStartupMenuAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default)
         {
-            var dbSet = await GetDbSetAsync();
-            await dbSet.AddRangeAsync(userMenus, GetCancellationToken(cancellationToken));
+            var dbContext = await GetDbContextAsync();
+            var userMenuQuery = dbContext.Set<UserMenu>()
+                .Where(x => x.UserId.Equals(userId))
+                .Where(x => x.Startup);
+
+            return await
+                (from userMenu in userMenuQuery
+                 join menu in dbContext.Set<Menu>()
+                      on userMenu.MenuId equals menu.Id
+                 select menu)
+                 .OrderByDescending(x => x.CreationTime)
+                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

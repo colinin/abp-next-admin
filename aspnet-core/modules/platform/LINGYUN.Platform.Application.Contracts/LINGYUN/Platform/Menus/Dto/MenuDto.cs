@@ -28,5 +28,6 @@ namespace LINGYUN.Platform.Menus
         public Guid LayoutId { get; set; }
 
         public bool IsPublic { get; set; }
+        public bool Startup { get; set; }
     }
 }

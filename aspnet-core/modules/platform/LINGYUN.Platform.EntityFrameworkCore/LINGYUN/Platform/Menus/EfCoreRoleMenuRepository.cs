@@ -24,11 +24,6 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task InsertAsync(IEnumerable<RoleMenu> roleMenus, CancellationToken cancellationToken = default)
-        {
-            await (await GetDbSetAsync()).AddRangeAsync(roleMenus, GetCancellationToken(cancellationToken));
-        }
-
         public virtual async Task<bool> RoleHasInMenuAsync(
             string roleName, 
             string menuName, 
@@ -43,6 +38,24 @@ namespace LINGYUN.Platform.Menus
                  select roleMenu)
                  .AnyAsync(x => x.RoleName == roleName, 
                     GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<Menu> GetStartupMenuAsync(
+            IEnumerable<string> roleNames,
+            CancellationToken cancellationToken = default)
+        {
+            var dbContext = await GetDbContextAsync();
+            var roleMenuQuery = dbContext.Set<RoleMenu>()
+                .Where(x => roleNames.Contains(x.RoleName))
+                .Where(x => x.Startup);
+
+            return await
+                (from roleMenu in roleMenuQuery
+                 join menu in dbContext.Set<Menu>()
+                      on roleMenu.MenuId equals menu.Id
+                 select menu)
+                 .OrderByDescending(x => x.CreationTime)
+                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
     }
 }
