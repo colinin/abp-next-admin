@@ -44,6 +44,7 @@
     "Menu:EditByName": "编辑菜单 - {0}",
     "Menu:Delete": "删除菜单",
     "Menu:Manage": "管理菜单",
+    "Menu:SetStartup": "设置起始页",
     "Data:AddNew": "添加新字典",
     "Data:AddChildren": "添加下级字典",
     "Data:Edit": "编辑字典",
