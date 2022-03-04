@@ -1,6 +1,17 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Permission:TencentCloud": "腾讯云服务",
+    "Permission:TencentCloud.Settings": "配置腾讯云",
+    "Features:TencentCloud": "腾讯云服务",
+    "Features:TencentSms": "腾讯云短信",
+    "Features:TencentSmsEnable": "启用云短信",
+    "Features:TencentSmsEnable.Desc": "启用以支持腾讯云短信能力.",
+    "Features:TencentBlobStoring": "腾讯云存储",
+    "Features:TencentBlobStoringEnable": "启用云存储",
+    "Features:TencentBlobStoringEnable.Desc": "启用以支持腾讯云对象存储能力.",
+    "Features:TencentBlobStoringMaximumStreamSize": "最大存储流大小",
+    "Features:TencentBlobStoringMaximumStreamSize.Desc": "单次上传文件流大小限制,0或低于0不限制,单位(MB).",
     "DisplayName:TenantCloud": "腾讯云服务",
     "DisplayName:TenantCloud.BasicSetting": "基础配置",
     "Description:TenantCloud.BasicSetting": "腾讯云基础信息配置",

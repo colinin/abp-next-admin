@@ -10,14 +10,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINYUN\Abp\Tencent\Localization\Resources\*.json" />
+		<None Remove="LINGYUN\Abp\Tencent\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINYUN\Abp\Tencent\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Tencent\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />

@@ -1,6 +1,9 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Features:TencentQQ": "QQ互联",
+    "Features:TencentQQEnable": "启用QQ互联",
+    "Features:TencentQQEnable.Desc": "启用以支持QQ互联快速登录.",
     "DisplayName:TenantCloud.QQConnect": "QQ互联",
     "Description:TenantCloud.QQConnect": "接入QQ互联开放平台",
     "DisplayName:QQConnect.AppId": "应用的唯一标识",

@@ -1,9 +1,8 @@
 ﻿using LINGYUN.Abp.Tencent.Localization;
-using LINGYUN.Abp.Tencent.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
-namespace LINYUN.Abp.Tencent.Settings;
+namespace LINGYUN.Abp.Tencent.Settings;
 
 public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
 {
