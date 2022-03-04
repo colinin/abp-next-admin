@@ -1,0 +1,6 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TencentCloud:10101": "上传的文件大小不能超出腾讯云存储限制 {Size}!"
+  }
+}

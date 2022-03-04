@@ -1,6 +1,9 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Features:TencentQQ": "QQ Connect",
+    "Features:TencentQQEnable": "Enable QQ Connect",
+    "Features:TencentQQEnable.Desc": "Enable to support QQ interconnection fast login.",
     "DisplayName:TenantCloud.QQConnect": "QQ Connect",
     "Description:TenantCloud.QQConnect": "Access QQ Internet open platform",
     "DisplayName:QQConnect.AppId": "AppId",

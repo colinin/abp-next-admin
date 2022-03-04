@@ -1,6 +1,17 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Permission:TencentCloud": "Tencent Cloud",
+    "Permission:TencentCloud.Settings": "Settings",
+    "Features:TencentCloud": "Tencent Cloud",
+    "Features:TencentSms": "Sms",
+    "Features:TencentSmsEnable": "Enable",
+    "Features:TencentSmsEnable.Desc": "Enabled to support Tencent cloud SMS capabilities.",
+    "Features:TencentBlobStoring": "Blob Storing",
+    "Features:TencentBlobStoringEnable": "Enable",
+    "Features:TencentBlobStoringEnable.Desc": "Enable to support Tencent cloud object storage capability.",
+    "Features:TencentBlobStoringMaximumStreamSize": "Maximum Stream Size",
+    "Features:TencentBlobStoringMaximumStreamSize.Desc": "Size(MB) limit for a single uploaded file stream,0 or less.",
     "DisplayName:TenantCloud": "Tenant Cloud",
     "DisplayName:TenantCloud.BasicSetting": "Basic Setting",
     "Description:TenantCloud.BasicSetting": "Tencent cloud basic information configuration",

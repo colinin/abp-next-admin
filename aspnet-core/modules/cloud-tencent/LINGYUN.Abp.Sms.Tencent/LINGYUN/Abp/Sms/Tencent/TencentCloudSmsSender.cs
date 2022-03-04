@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Tencent;
+using LINGYUN.Abp.Tencent.Features;
 using LINGYUN.Abp.Tencent.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -10,6 +11,7 @@ using TencentCloud.Sms.V20210111;
 using TencentCloud.Sms.V20210111.Models;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Json;
 using Volo.Abp.Settings;
 using Volo.Abp.Sms;
@@ -39,6 +41,7 @@ namespace LINGYUN.Abp.Sms.Tencent
             Logger = NullLogger<TencentCloudSmsSender>.Instance;
         }
 
+        [RequiresFeature(TencentCloudFeatures.Sms.Enable)]
         public virtual async Task SendAsync(SmsMessage smsMessage)
         {
             var appId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Sms.AppId);

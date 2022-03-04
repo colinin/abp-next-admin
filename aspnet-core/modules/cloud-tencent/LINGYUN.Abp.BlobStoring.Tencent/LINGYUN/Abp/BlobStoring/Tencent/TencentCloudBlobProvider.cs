@@ -2,24 +2,31 @@
 using COSXML.Common;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
+using LINGYUN.Abp.Tencent.Features;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.BlobStoring.Tencent;
 
+[RequiresFeature(TencentCloudFeatures.BlobStoring.Enable)]
 public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
 {
+    protected IFeatureChecker FeatureChecker { get; }
     protected ICosClientFactory CosClientFactory { get; }
     protected ITencentBlobNameCalculator TencentBlobNameCalculator { get; }
 
     public TencentCloudBlobProvider(
+        IFeatureChecker featureChecker,
         ICosClientFactory cosClientFactory,
         ITencentBlobNameCalculator tencentBlobNameCalculator)
     {
+        FeatureChecker = featureChecker;
         CosClientFactory = cosClientFactory;
         TencentBlobNameCalculator = tencentBlobNameCalculator;
     }
@@ -68,6 +75,16 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)
     {
+        var maxStreamSizeString = await FeatureChecker.GetOrNullAsync(TencentCloudFeatures.BlobStoring.MaximumStreamSize);
+        if (!"0".Equals(maxStreamSizeString) ||
+            (int.TryParse(maxStreamSizeString, out var maxStreamSize)
+            && (maxStreamSize <= 0
+            || maxStreamSize < args.BlobStream.Length / 1024 / 1024)))
+        {
+            throw new BusinessException("TencentCloud:10101")
+                .WithData("Size", maxStreamSizeString);
+        }
+
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetTencentConfiguration();
