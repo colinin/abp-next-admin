@@ -81,7 +81,8 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
             && (maxStreamSize <= 0
             || maxStreamSize < args.BlobStream.Length / 1024 / 1024)))
         {
-            throw new BusinessException("TencentCloud:10101");
+            throw new BusinessException("TencentCloud:10101")
+                .WithData("Size", maxStreamSizeString);
         }
 
         var ossClient = await GetOssClientAsync(args);

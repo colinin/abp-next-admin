@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TencentCloud:10101": "The Size of the uploaded file cannot exceed Tencent cloud storage limit {Size}!"
+  }
+}
