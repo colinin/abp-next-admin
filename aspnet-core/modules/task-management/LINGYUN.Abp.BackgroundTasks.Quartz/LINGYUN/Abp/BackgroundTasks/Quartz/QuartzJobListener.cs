@@ -61,10 +61,6 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 {
                     context.Put(nameof(JobInfo.TriggerCount), triggerCount + simpleTrigger.TimesTriggered);
                 }
-                if (context.MergedJobDataMap.TryGetValue(nameof(JobInfo.MaxCount), out var maxCount))
-                {
-                    context.Put(nameof(JobInfo.MaxCount), maxCount);
-                }
             }
 
             using var scope = ServiceScopeFactory.CreateScope();
