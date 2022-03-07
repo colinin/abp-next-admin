@@ -66,19 +66,6 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
             job.TriggerCount = jobInfo.TriggerCount;
             job.TryCount = jobInfo.TryCount;
             job.IsAbandoned = jobInfo.IsAbandoned;
-            foreach (var arg in jobInfo.Args)
-            {
-                if (!job.Args.ContainsKey(arg.Key))
-                {
-                    job.Args[arg.Key] = arg.Value;
-                    continue;
-                }
-                if (job.Args.TryGetValue(arg.Key, out var value) &&
-                    !Equals(value, arg.Value))
-                {
-                    job.Args[arg.Key] = arg.Value;
-                }
-            }
         }
         else
         {

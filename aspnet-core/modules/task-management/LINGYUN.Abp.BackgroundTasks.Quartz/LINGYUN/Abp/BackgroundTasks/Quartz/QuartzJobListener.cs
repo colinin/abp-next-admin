@@ -36,7 +36,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         var jobType = context.JobDetail.JobType;
         if (jobType.IsGenericType)
         {
-            jobType = jobType.GetGenericTypeDefinition();
+            jobType = jobType.GetGenericArguments()[0];
         }
         Logger.LogInformation($"The task {jobType.Name} could not be performed...");
 
@@ -51,6 +51,16 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             if (jobId.IsNullOrWhiteSpace())
             {
                 return;
+            }
+
+            if (context.Trigger is ISimpleTrigger simpleTrigger)
+            {
+                // 增量数据写入临时数据
+                if (context.MergedJobDataMap.TryGetValue(nameof(JobInfo.TriggerCount), out var count) &&
+                    int.TryParse(count?.ToString(), out var triggerCount))
+                {
+                    context.Put(nameof(JobInfo.TriggerCount), triggerCount + simpleTrigger.TimesTriggered);
+                }
             }
 
             using var scope = ServiceScopeFactory.CreateScope();

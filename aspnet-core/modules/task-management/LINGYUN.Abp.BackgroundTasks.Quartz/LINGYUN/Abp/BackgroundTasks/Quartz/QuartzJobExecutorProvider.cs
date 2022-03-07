@@ -53,11 +53,10 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
         jobBuilder.UsingJobData(nameof(JobInfo.Name), job.Name);
         jobBuilder.UsingJobData(nameof(JobInfo.Type), job.Type);
         jobBuilder.UsingJobData(nameof(JobInfo.Group), job.Group);
+        // 计算增量需要
+        jobBuilder.UsingJobData(nameof(JobInfo.TriggerCount), job.TriggerCount);
         // 独占任务需要
         jobBuilder.UsingJobData(nameof(JobInfo.LockTimeOut), job.LockTimeOut);
-        // 加入触发次数, 某些场景需要使用增量
-        jobBuilder.UsingJobData(nameof(JobInfo.TriggerCount), job.TriggerCount);
-        jobBuilder.UsingJobData(nameof(JobInfo.TryCount), job.TryCount);
         // 传递的作业参数
         jobBuilder.UsingJobData(new JobDataMap(job.Args));
         if (job.TenantId.HasValue)
