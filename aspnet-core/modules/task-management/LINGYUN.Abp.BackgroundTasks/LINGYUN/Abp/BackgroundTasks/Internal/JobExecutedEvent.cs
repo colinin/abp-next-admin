@@ -24,7 +24,6 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 job.NextRunTime = context.EventData.NextRunTime;
                 job.Result = context.EventData.Result ?? "OK";
                 job.Status = JobStatus.Running;
-                job.Args[nameof(JobInfo.TriggerCount)] = job.TriggerCount;
 
                 // 一次性任务执行一次后标记为已完成
                 if (job.JobType == JobType.Once)
@@ -36,7 +35,6 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 if (context.EventData.Exception != null)
                 {
                     job.TryCount += 1;
-                    job.Args[nameof(JobInfo.TryCount)] = job.TryCount;
                     job.IsAbandoned = false;
                     job.Result = GetExceptionMessage(context.EventData.Exception);
 
@@ -70,7 +68,6 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                 {
                     // 成功一次重置重试次数
                     job.TryCount = 0;
-                    job.Args[nameof(JobInfo.TryCount)] = job.TryCount;
 
                     // 所有任务达到上限则标记已完成
                     if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)

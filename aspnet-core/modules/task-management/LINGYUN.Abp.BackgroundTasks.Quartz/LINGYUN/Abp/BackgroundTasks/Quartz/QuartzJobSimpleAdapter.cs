@@ -24,7 +24,9 @@ public class QuartzJobSimpleAdapter<TJobRunnable> : IJob
         var jobContext = new JobRunnableContext(
             typeof(TJobRunnable),
             scope.ServiceProvider,
-            context.MergedJobDataMap.ToImmutableDictionary());
+            context.MergedJobDataMap.ToImmutableDictionary(),
+            getCache: (key) => context.Get(key),
+            setCache: context.Put);
 
         await jobExecuter.ExecuteAsync(jobContext);
 

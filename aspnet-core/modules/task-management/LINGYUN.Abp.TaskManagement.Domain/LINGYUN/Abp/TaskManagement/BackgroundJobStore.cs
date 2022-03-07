@@ -66,20 +66,6 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 backgroundJobInfo.TryCount = jobInfo.TryCount;
                 backgroundJobInfo.IsAbandoned = jobInfo.IsAbandoned;
 
-                foreach (var arg in jobInfo.Args)
-                {
-                    if (!backgroundJobInfo.Args.ContainsKey(arg.Key))
-                    {
-                        backgroundJobInfo.Args[arg.Key] = arg.Value;
-                        continue;
-                    }
-                    if (backgroundJobInfo.Args.TryGetValue(arg.Key, out var value) &&
-                        !Equals(value, arg.Value))
-                    {
-                        backgroundJobInfo.Args[arg.Key] = arg.Value;
-                    }
-                }
-
                 await JobInfoRepository.UpdateAsync(backgroundJobInfo);
             }
             else
