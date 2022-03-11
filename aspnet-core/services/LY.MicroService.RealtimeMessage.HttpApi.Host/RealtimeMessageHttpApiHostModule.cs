@@ -13,10 +13,10 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +34,6 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.RealtimeMessage
 {
@@ -49,7 +48,7 @@ namespace LY.MicroService.RealtimeMessage
         typeof(AbpIdentityWeChatModule),
         typeof(AbpMessageServiceEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpSaasEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
@@ -65,7 +64,6 @@ namespace LY.MicroService.RealtimeMessage
         typeof(AbpNotificationsWeChatMiniProgramModule),
         typeof(AbpNotificationsExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpLocalizationCultureMapModule),

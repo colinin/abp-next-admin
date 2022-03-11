@@ -43,7 +43,6 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
@@ -68,8 +67,8 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.Application\LINGYUN.Abp.SettingManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.HttpApi\LINGYUN.Abp.SettingManagement.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy.DbFinder\LINGYUN.Abp.MultiTenancy.DbFinder.csproj" />
-		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.TenantManagement.Application\LINGYUN.Abp.TenantManagement.Application.csproj" />
-		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.TenantManagement.HttpApi\LINGYUN.Abp.TenantManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.Application\LINGYUN.Abp.Saas.Application.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.HttpApi\LINGYUN.Abp.Saas.HttpApi.csproj" />
 	</ItemGroup>
 </Project>

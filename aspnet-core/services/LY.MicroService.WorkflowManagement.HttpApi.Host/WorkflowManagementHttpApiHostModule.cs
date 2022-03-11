@@ -3,7 +3,7 @@ using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WorkflowCore.Components;
@@ -33,7 +33,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.WorkflowManagement;
 
@@ -57,11 +56,10 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),

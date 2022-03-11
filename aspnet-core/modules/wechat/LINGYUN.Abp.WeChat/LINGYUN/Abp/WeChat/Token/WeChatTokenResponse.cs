@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.WeChat.Token
         {
             if(ErrorCode != 0)
             {
-                throw new AbpException(ErrorMessage);
+                throw new AbpWeChatException(ErrorCode.ToString(), ErrorMessage);
             }
             return new WeChatToken(AccessToken, ExpiresIn);
         }

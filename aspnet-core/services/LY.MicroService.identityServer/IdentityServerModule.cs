@@ -8,8 +8,8 @@ using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.QQ;
 using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
@@ -28,12 +28,12 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -58,13 +58,12 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule)
     )]
@@ -100,6 +99,8 @@ public partial class IdentityServerModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        GlobalFeatureManager.Instance.Modules.MultiTenancy().EnableAll();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

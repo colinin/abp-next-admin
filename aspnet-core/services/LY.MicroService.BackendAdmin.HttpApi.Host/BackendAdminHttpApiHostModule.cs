@@ -8,13 +8,12 @@ using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
-using LINGYUN.Abp.TenantManagement;
+using LINGYUN.Abp.Saas;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +35,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 
 namespace LY.MicroService.BackendAdmin;
 
@@ -56,12 +55,12 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpFeatureManagementClientModule),
     typeof(AbpAuditingApplicationModule),
     typeof(AbpAuditingHttpApiModule),
-    typeof(AbpTenantManagementApplicationModule),
-    typeof(AbpTenantManagementHttpApiModule),
+    typeof(AbpSaasApplicationModule),
+    typeof(AbpSaasHttpApiModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
     typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementDomainIdentityServerModule),
@@ -73,7 +72,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule),
-    typeof(AbpDbFinderMultiTenancyModule),
+    //typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
@@ -107,6 +106,8 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        context.Services.AddAlwaysAllowAuthorization();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

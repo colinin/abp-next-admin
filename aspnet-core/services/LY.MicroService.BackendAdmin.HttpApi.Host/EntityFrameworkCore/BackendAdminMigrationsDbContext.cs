@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 
 namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ public class BackendAdminMigrationsDbContext : AbpDbContext<BackendAdminMigratio
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ConfigureFeatureManagement();
-        modelBuilder.ConfigureTenantManagement();
+        modelBuilder.ConfigureSaas();
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
     }

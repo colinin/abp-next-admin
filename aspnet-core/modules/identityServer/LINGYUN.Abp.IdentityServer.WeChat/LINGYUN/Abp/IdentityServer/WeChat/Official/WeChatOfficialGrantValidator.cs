@@ -28,8 +28,6 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
 
         protected AbpWeChatOfficialOptionsFactory WeChatOfficialOptionsFactory { get; }
 
-        protected IStringLocalizer<WeChatResource> WeChatLocalizer { get; }
-
         protected IFeatureChecker FeatureChecker => ServiceProvider.LazyGetRequiredService<IFeatureChecker>();
 
         public WeChatOfficialGrantValidator(
@@ -42,9 +40,16 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer,
             IStringLocalizer<WeChatResource> wechatLocalizer,
             AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory)
-            : base(eventService, weChatOpenIdFinder, userManager, userRepository, identitySecurityLogManager, identityLocalizer, identityServerLocalizer)
+            : base(
+                  eventService,
+                  weChatOpenIdFinder, 
+                  userManager,
+                  userRepository, 
+                  identitySecurityLogManager,
+                  wechatLocalizer,
+                  identityLocalizer, 
+                  identityServerLocalizer)
         {
-            WeChatLocalizer = wechatLocalizer;
             WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
 
@@ -54,8 +59,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat.Official
             {
                 context.Result = new GrantValidationResult(
                     TokenRequestErrors.InvalidGrant,
-                    IdentityServerLocalizer["AuthorizationDisabledMessage",
-                    WeChatLocalizer["Features:WeChat.Official.EnableAuthorization"]]);
+                    WeChatLocalizer["OfficialAuthorizationDisabledMessage"]);
                 return false;
             }
             return true;

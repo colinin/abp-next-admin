@@ -6,12 +6,12 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
@@ -35,7 +35,6 @@ using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.PlatformManagement;
 
@@ -58,7 +57,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
@@ -70,7 +69,6 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpFeaturesValidationRedisModule),
     // typeof(AbpFeaturesClientModule),// 当需要客户端特性限制时取消注释此模块
     // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
-    typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),

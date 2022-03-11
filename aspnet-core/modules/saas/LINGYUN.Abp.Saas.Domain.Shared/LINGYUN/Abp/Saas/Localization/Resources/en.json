@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "LINGYUN.Edition:010001": "Cannot create versions with more than one name {DisplayName}!"
+  }
+}

@@ -1,0 +1,6 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "LINGYUN.Edition:010001": "无法创建具有多个名称为 {DisplayName} 的版本!"
+  }
+}
