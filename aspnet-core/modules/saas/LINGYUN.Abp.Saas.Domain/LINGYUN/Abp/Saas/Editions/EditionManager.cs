@@ -38,7 +38,7 @@ public class EditionManager : DomainService
         var edition = await EditionRepository.FindByDisplayNameAsync(displayName);
         if (edition != null && edition.Id != expectedId)
         {
-            throw new BusinessException("LINGYUN.Edition:010001")
+            throw new BusinessException(AbpSaasErrorCodes.DuplicateEditionDisplayName)
                 .WithData(nameof(Edition.DisplayName), displayName);
         }
     }

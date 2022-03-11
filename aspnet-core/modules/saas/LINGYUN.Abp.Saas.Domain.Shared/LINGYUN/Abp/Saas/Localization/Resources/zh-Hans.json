@@ -1,6 +1,34 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "LINGYUN.Edition:010001": "无法创建具有多个名称为 {DisplayName} 的版本!"
+    "Saas:010001": "已经存在名为 {DisplayName} 的版本!",
+    "Saas:020001": "已经存在名为 {Name} 的租户!",
+    "Volo.AbpIo.MultiTenancy:010001": "租户不可用或受限制!",
+    "Volo.AbpIo.MultiTenancy:010002": "租户不可用!",
+    "LINGYUN.Abp.MultiTenancy.Editions:010001": "版本不可用或受限制!",
+    "Menu:Saas": "Saas",
+    "Editions": "版本",
+    "NewEdition": "新版本",
+    "EditionName": "版本名称",
+    "DisplayName:EditionName": "版本名称",
+    "EditionDeletionConfirmationMessage": "版本 '{0}' 将被删除. 你确定吗?",
+    "Tenants": "租户",
+    "NewTenant": "新租户",
+    "TenantName": "租户名称",
+    "DisplayName:TenantName": "租户名称",
+    "TenantDeletionConfirmationMessage": "租户 '{0}' 将被删除. 你确定吗?",
+    "ConnectionStrings": "连接字符串",
+    "DisplayName:DefaultConnectionString": "默认连接字符串",
+    "DisplayName:UseSharedDatabase": "使用共享数据库",
+    "ManageHostFeatures": "管理Host特性",
+    "Permission:EditionManagement": "版本管理",
+    "Permission:TenantManagement": "租户管理",
+    "Permission:Create": "创建",
+    "Permission:Edit": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:ManageConnectionStrings": "管理连接字符串",
+    "Permission:ManageFeatures": "管理功能",
+    "DisplayName:AdminEmailAddress": "管理员电子邮件地址",
+    "DisplayName:AdminPassword": "管理员密码"
   }
 }

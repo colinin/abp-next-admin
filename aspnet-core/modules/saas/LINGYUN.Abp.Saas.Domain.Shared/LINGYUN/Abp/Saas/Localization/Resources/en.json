@@ -1,6 +1,34 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "LINGYUN.Edition:010001": "Cannot create versions with more than one name {DisplayName}!"
+    "Saas:010001": "Unable to create duplicate editions {DisplayName}!",
+    "Saas:020001": "Unable to create duplicate tenants {Name}!",
+    "Volo.AbpIo.MultiTenancy:010001": "The tenant is unavailable or restricted!",
+    "Volo.AbpIo.MultiTenancy:010002": "Tenant unavailable!",
+    "LINGYUN.Abp.MultiTenancy.Editions:010001": "Version unavailable or restricted!",
+    "Menu:Saas": "Saas",
+    "Editions": "Editions",
+    "NewEdition": "New edition",
+    "EditionName": "Edition name",
+    "DisplayName:EditionName": "Edition name",
+    "EditionDeletionConfirmationMessage": "Edition '{0}' will be deleted. Do you confirm that?",
+    "Tenants": "Tenants",
+    "NewTenant": "New tenant",
+    "TenantName": "Tenant name",
+    "DisplayName:TenantName": "Tenant name",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' will be deleted. Do you confirm that?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Default Connection String",
+    "DisplayName:UseSharedDatabase": "Use the Shared Database",
+    "ManageHostFeatures": "Manage Host features",
+    "Permission:EditionManagement": "Edition management",
+    "Permission:TenantManagement": "Tenant management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ManageConnectionStrings": "Manage connection strings",
+    "Permission:ManageFeatures": "Manage features",
+    "DisplayName:AdminEmailAddress": "Admin Email Address",
+    "DisplayName:AdminPassword": "Admin Password"
   }
 }
