@@ -20,6 +20,17 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
     {
     }
 
+    public async virtual Task<bool> CheckUsedByTenantAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var tenantDbSet = dbContext.Set<Tenant>();
+
+        return await tenantDbSet
+            .AnyAsync(x => x.EditionId == id, GetCancellationToken(cancellationToken));
+    }
+
     public async virtual Task<Edition> FindByDisplayNameAsync(
         string displayName,
         CancellationToken cancellationToken = default)

@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Saas:010001": "Unable to create duplicate editions {DisplayName}!",
+    "Saas:010002": "Tried to delete the edition in use: {DisplayName}!",
     "Saas:020001": "Unable to create duplicate tenants {Name}!",
     "Volo.AbpIo.MultiTenancy:010001": "The tenant is unavailable or restricted!",
     "Volo.AbpIo.MultiTenancy:010002": "Tenant unavailable!",

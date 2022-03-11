@@ -12,10 +12,19 @@ public class EditionManager : DomainService
     public EditionManager(IEditionRepository editionRepository)
     {
         EditionRepository = editionRepository;
-
     }
 
-    public virtual async Task<Edition> CreateAsync(string displayName)
+    public async virtual Task DeleteAsync(Edition edition)
+    {
+        if (await EditionRepository.CheckUsedByTenantAsync(edition.Id))
+        {
+            throw new BusinessException(AbpSaasErrorCodes.DeleteUsedEdition)
+               .WithData(nameof(Edition.DisplayName), edition.DisplayName);
+        }
+        await EditionRepository.DeleteAsync(edition);
+    }
+
+    public async virtual Task<Edition> CreateAsync(string displayName)
     {
         Check.NotNull(displayName, nameof(displayName));
 

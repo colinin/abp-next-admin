@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.MultiTenancy;
-using LINGYUN.Abp.Saas.Editions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -16,19 +15,16 @@ namespace LINGYUN.Abp.Saas.Tenants;
 public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 {
     protected IDistributedEventBus EventBus { get; }
-    protected IEditionRepository EditionRepository { get; }
     protected ITenantRepository TenantRepository { get; }
     protected ITenantManager TenantManager { get; }
 
     public TenantAppService(
         ITenantRepository tenantRepository,
-        IEditionRepository editionRepository,
         ITenantManager tenantManager,
         IDistributedEventBus eventBus)
     {
         EventBus = eventBus;
         TenantRepository = tenantRepository;
-        EditionRepository = editionRepository;
         TenantManager = tenantManager;
     }
 
@@ -40,15 +36,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
             throw new UserFriendlyException(L["TenantNotFoundById", id]);
         }
 
-        var tenantDto = ObjectMapper.Map<Tenant, TenantDto>(tenant);
-        if (tenant.EditionId.HasValue)
-        {
-            var edition = await EditionRepository.GetAsync(tenant.EditionId.Value);
-            tenantDto.EditionId = edition.Id;
-            tenantDto.EditionName = edition.DisplayName;
-        }
-
-        return tenantDto;
+        return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
     public virtual async Task<TenantDto> GetAsync(string name)
@@ -58,15 +46,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         {
             throw new UserFriendlyException(L["TenantNotFoundByName", name]);
         }
-        var tenantDto = ObjectMapper.Map<Tenant, TenantDto>(tenant);
-        if (tenant.EditionId.HasValue)
-        {
-            var edition = await EditionRepository.GetAsync(tenant.EditionId.Value);
-            tenantDto.EditionId = edition.Id;
-            tenantDto.EditionName = edition.DisplayName;
-        }
-
-        return tenantDto;
+        return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
     public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(TenantGetListInput input)
@@ -123,7 +103,11 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     {
         var tenant = await TenantRepository.GetAsync(id, false);
 
-        await TenantManager.ChangeNameAsync(tenant, input.Name);
+        if (!string.Equals(tenant.Name, input.Name))
+        {
+            await TenantManager.ChangeNameAsync(tenant, input.Name);
+        }
+
         tenant.IsActive = input.IsActive;
         tenant.EditionId = input.EditionId;
         input.MapExtraPropertiesTo(tenant);

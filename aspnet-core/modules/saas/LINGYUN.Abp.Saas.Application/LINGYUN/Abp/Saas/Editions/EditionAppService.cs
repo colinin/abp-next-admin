@@ -37,12 +37,9 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
     [Authorize(AbpSaasPermissions.Editions.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var edition = await EditionRepository.FindAsync(id);
-        if (edition == null)
-        {
-            return;
-        }
-        await EditionRepository.DeleteAsync(edition);
+        var edition = await EditionRepository.GetAsync(id);
+
+        await EditionManager.DeleteAsync(edition);
     }
 
     public async virtual Task<EditionDto> GetAsync(Guid id)
@@ -73,7 +70,11 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
     {
         var edition = await EditionRepository.GetAsync(id, false);
 
-        await EditionManager.ChangeDisplayNameAsync(edition, input.DisplayName);
+        if (!string.Equals(edition.DisplayName, input.DisplayName))
+        {
+            await EditionManager.ChangeDisplayNameAsync(edition, input.DisplayName);
+        }
+
         input.MapExtraPropertiesTo(edition);
 
         await EditionRepository.UpdateAsync(edition);

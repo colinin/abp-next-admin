@@ -2,6 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "Saas:010001": "已经存在名为 {DisplayName} 的版本!",
+    "Saas:010002": "试图删除正在使用的版本: {DisplayName}!",
     "Saas:020001": "已经存在名为 {Name} 的租户!",
     "Volo.AbpIo.MultiTenancy:010001": "租户不可用或受限制!",
     "Volo.AbpIo.MultiTenancy:010002": "租户不可用!",

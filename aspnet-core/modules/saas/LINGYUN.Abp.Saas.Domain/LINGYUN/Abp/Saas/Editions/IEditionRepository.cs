@@ -8,6 +8,10 @@ namespace LINGYUN.Abp.Saas.Editions;
 
 public interface IEditionRepository : IBasicRepository<Edition, Guid>
 {
+    Task<bool> CheckUsedByTenantAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
     Task<Edition> FindByDisplayNameAsync(
         string displayName,
         CancellationToken cancellationToken = default);
