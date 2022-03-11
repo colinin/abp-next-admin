@@ -4,6 +4,7 @@
     "Saas:010001": "已经存在名为 {DisplayName} 的版本!",
     "Saas:010002": "试图删除正在使用的版本: {DisplayName}!",
     "Saas:020001": "已经存在名为 {Name} 的租户!",
+    "Saas:020002": "无法连接的数据库字符串!",
     "Volo.AbpIo.MultiTenancy:010001": "租户不可用或受限制!",
     "Volo.AbpIo.MultiTenancy:010002": "租户不可用!",
     "Menu:Saas": "Saas",
@@ -20,6 +21,8 @@
     "ConnectionStrings": "连接字符串",
     "DisplayName:DefaultConnectionString": "默认连接字符串",
     "DisplayName:UseSharedDatabase": "使用共享数据库",
+    "DisplayName:Name": "名称",
+    "DisplayName:Value": "值",
     "ManageHostFeatures": "管理Host特性",
     "Permission:EditionManagement": "版本管理",
     "Permission:TenantManagement": "租户管理",
@@ -29,6 +32,8 @@
     "Permission:ManageConnectionStrings": "管理连接字符串",
     "Permission:ManageFeatures": "管理功能",
     "DisplayName:AdminEmailAddress": "管理员电子邮件地址",
-    "DisplayName:AdminPassword": "管理员密码"
+    "DisplayName:AdminPassword": "管理员密码",
+    "TenantNotFoundById": "租户: {0} 不存在!",
+    "TenantNotFoundByName": "租户: {0} 不存在!"
   }
 }

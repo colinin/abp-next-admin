@@ -4,6 +4,7 @@
     "Saas:010001": "Unable to create duplicate editions {DisplayName}!",
     "Saas:010002": "Tried to delete the edition in use: {DisplayName}!",
     "Saas:020001": "Unable to create duplicate tenants {Name}!",
+    "Saas:020002": "The database string that cannot be connected!",
     "Volo.AbpIo.MultiTenancy:010001": "The tenant is unavailable or restricted!",
     "Volo.AbpIo.MultiTenancy:010002": "Tenant unavailable!",
     "Menu:Saas": "Saas",
@@ -20,6 +21,8 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Default Connection String",
     "DisplayName:UseSharedDatabase": "Use the Shared Database",
+    "DisplayName:Name": "Name",
+    "DisplayName:Value": "Value",
     "ManageHostFeatures": "Manage Host features",
     "Permission:EditionManagement": "Edition management",
     "Permission:TenantManagement": "Tenant management",
@@ -29,6 +32,8 @@
     "Permission:ManageConnectionStrings": "Manage connection strings",
     "Permission:ManageFeatures": "Manage features",
     "DisplayName:AdminEmailAddress": "Admin Email Address",
-    "DisplayName:AdminPassword": "Admin Password"
+    "DisplayName:AdminPassword": "Admin Password",
+    "TenantNotFoundById": "Tenant: {0} not found!",
+    "TenantNotFoundByName": "Tenant: {0} not found!"
   }
 }
