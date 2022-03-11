@@ -29,8 +29,6 @@ public class AbpSaasDomainSharedModule : AbpModule
             options.MapCodeNamespace(AbpSaasErrorCodes.Namespace, typeof(AbpSaasResource));
             // 见租户管理模块
             options.MapCodeNamespace("Volo.AbpIo.MultiTenancy", typeof(AbpSaasResource));
-            // 版本模块引用
-            options.MapCodeNamespace("LINGYUN.Abp.MultiTenancy.Editions", typeof(AbpSaasResource));
         });
     }
 }

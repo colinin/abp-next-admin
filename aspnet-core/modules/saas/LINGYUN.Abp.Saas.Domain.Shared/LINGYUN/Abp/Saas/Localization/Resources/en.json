@@ -5,7 +5,6 @@
     "Saas:020001": "Unable to create duplicate tenants {Name}!",
     "Volo.AbpIo.MultiTenancy:010001": "The tenant is unavailable or restricted!",
     "Volo.AbpIo.MultiTenancy:010002": "Tenant unavailable!",
-    "LINGYUN.Abp.MultiTenancy.Editions:010001": "Version unavailable or restricted!",
     "Menu:Saas": "Saas",
     "Editions": "Editions",
     "NewEdition": "New edition",

@@ -5,7 +5,6 @@
     "Saas:020001": "已经存在名为 {Name} 的租户!",
     "Volo.AbpIo.MultiTenancy:010001": "租户不可用或受限制!",
     "Volo.AbpIo.MultiTenancy:010002": "租户不可用!",
-    "LINGYUN.Abp.MultiTenancy.Editions:010001": "版本不可用或受限制!",
     "Menu:Saas": "Saas",
     "Editions": "版本",
     "NewEdition": "新版本",
