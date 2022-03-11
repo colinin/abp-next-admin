@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Data;
 
 namespace LINGYUN.Abp.Saas.Editions;
 
@@ -74,7 +75,7 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
         {
             await EditionManager.ChangeDisplayNameAsync(edition, input.DisplayName);
         }
-
+        edition.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(edition);
 
         await EditionRepository.UpdateAsync(edition);

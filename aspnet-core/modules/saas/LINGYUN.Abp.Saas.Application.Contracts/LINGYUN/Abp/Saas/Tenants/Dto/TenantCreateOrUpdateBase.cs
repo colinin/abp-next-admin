@@ -15,4 +15,8 @@ public abstract class TenantCreateOrUpdateBase : ExtensibleObject
     public bool IsActive { get; set; } = true;
 
     public Guid? EditionId { get; set; }
+
+    public DateTime? EnableTime { get; set; }
+
+    public DateTime? DisableTime { get; set; }
 }

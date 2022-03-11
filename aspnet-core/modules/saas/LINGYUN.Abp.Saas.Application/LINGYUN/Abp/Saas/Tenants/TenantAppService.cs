@@ -8,6 +8,8 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Data;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
@@ -71,6 +73,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         var tenant = await TenantManager.CreateAsync(input.Name);
         tenant.IsActive = input.IsActive;
         tenant.EditionId = input.EditionId;
+        tenant.SetEnableTime(input.EnableTime);
+        tenant.SetDisableTime(input.DisableTime);
         input.MapExtraPropertiesTo(tenant);
 
         if (!input.UseSharedDatabase && !input.DefaultConnectionString.IsNullOrWhiteSpace())
@@ -110,6 +114,9 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
         tenant.IsActive = input.IsActive;
         tenant.EditionId = input.EditionId;
+        tenant.SetEnableTime(input.EnableTime);
+        tenant.SetDisableTime(input.DisableTime);
+        tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(tenant);
         await TenantRepository.UpdateAsync(tenant);
 
