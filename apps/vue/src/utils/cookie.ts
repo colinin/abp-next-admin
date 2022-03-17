@@ -13,8 +13,5 @@ export function set(c_name, value, expiredays) {
 }
 
 export function del(name) {
-  const exp = new Date();
-  exp.setTime(exp.getTime() - 1);
-  const cval = get(name);
-  if (cval != null) document.cookie = name + '=' + cval + ';expires=' + exp.toUTCString();
+  set(name, 'a', -1);
 }
