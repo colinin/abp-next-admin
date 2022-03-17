@@ -27,6 +27,7 @@
     "DisplayName:EnableTime": "Enable Time",
     "DisplayName:DisableTime": "Disable Time",
     "ManageHostFeatures": "Manage Host features",
+    "Permission:Saas": "Saas",
     "Permission:EditionManagement": "Edition management",
     "Permission:TenantManagement": "Tenant management",
     "Permission:Create": "Create",

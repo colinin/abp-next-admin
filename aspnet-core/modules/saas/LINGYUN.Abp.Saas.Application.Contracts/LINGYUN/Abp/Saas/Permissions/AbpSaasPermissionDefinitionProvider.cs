@@ -11,13 +11,13 @@ public class AbpSaasPermissionDefinitionProvider : PermissionDefinitionProvider
     {
         var saasGroup = context.AddGroup(AbpSaasPermissions.GroupName, L("Permission:Saas"));
 
-        var editionsPermission = saasGroup.AddPermission(AbpSaasPermissions.Editions.Default, L("Permission:Editions"), multiTenancySide: MultiTenancySides.Host);
+        var editionsPermission = saasGroup.AddPermission(AbpSaasPermissions.Editions.Default, L("Permission:EditionManagement"), multiTenancySide: MultiTenancySides.Host);
         editionsPermission.AddChild(AbpSaasPermissions.Editions.Create, L("Permission:Create"), multiTenancySide: MultiTenancySides.Host);
         editionsPermission.AddChild(AbpSaasPermissions.Editions.Update, L("Permission:Edit"), multiTenancySide: MultiTenancySides.Host);
         editionsPermission.AddChild(AbpSaasPermissions.Editions.Delete, L("Permission:Delete"), multiTenancySide: MultiTenancySides.Host);
         editionsPermission.AddChild(AbpSaasPermissions.Editions.ManageFeatures, L("Permission:ManageFeatures"), multiTenancySide: MultiTenancySides.Host);
 
-        var tenantsPermission = saasGroup.AddPermission(AbpSaasPermissions.Tenants.Default, L("Permission:Tenants"), multiTenancySide: MultiTenancySides.Host);
+        var tenantsPermission = saasGroup.AddPermission(AbpSaasPermissions.Tenants.Default, L("Permission:TenantManagement"), multiTenancySide: MultiTenancySides.Host);
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.Create, L("Permission:Create"), multiTenancySide: MultiTenancySides.Host);
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.Update, L("Permission:Edit"), multiTenancySide: MultiTenancySides.Host);
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.Delete, L("Permission:Delete"), multiTenancySide: MultiTenancySides.Host);
