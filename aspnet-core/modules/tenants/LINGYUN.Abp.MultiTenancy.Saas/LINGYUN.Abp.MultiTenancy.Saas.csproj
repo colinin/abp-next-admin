@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\saas\LINGYUN.Abp.Saas.HttpApi.Client\LINGYUN.Abp.Saas.HttpApi.Client.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
 	</ItemGroup>
 

@@ -28,6 +28,11 @@ public class TenantCacheItemInvalidator :
                 eventData.Entity.Id,
                 eventData.Entity.Name),
             considerUow: true);
+
+        await Cache.RemoveAsync(
+            EditionCacheItem.CalculateCacheKey(
+                eventData.Entity.Id),
+            considerUow: true);
     }
 
     public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
@@ -36,6 +41,11 @@ public class TenantCacheItemInvalidator :
             TenantCacheItem.CalculateCacheKey(
                 eventData.Entity.Id,
                 eventData.Entity.Name),
+            considerUow: true);
+
+        await Cache.RemoveAsync(
+            EditionCacheItem.CalculateCacheKey(
+                eventData.Entity.Id),
             considerUow: true);
     }
 
