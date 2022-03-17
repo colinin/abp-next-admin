@@ -6,7 +6,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +22,6 @@ using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.LocalizationManagement
 {
@@ -36,14 +35,13 @@ namespace LY.MicroService.LocalizationManagement
         typeof(AbpLocalizationManagementHttpApiModule),
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpSaasEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
-        typeof(AbpDbFinderMultiTenancyModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpLocalizationCultureMapModule),
@@ -56,6 +54,7 @@ namespace LY.MicroService.LocalizationManagement
             var configuration = context.Services.GetConfiguration();
 
             PreConfigureApp();
+            PreConfigureFeature();
             PreConfigureCAP(configuration);
         }
 

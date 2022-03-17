@@ -1,7 +1,8 @@
-﻿using LINGYUN.Abp.ExceptionHandling;
+﻿using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
-using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.WorkflowCore.Components;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,18 +20,28 @@ using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Uow;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using LINGYUN.Abp.WorkflowCore.Components;
 
 namespace LY.MicroService.WorkflowManagement;
 
 public partial class WorkflowManagementHttpApiHostModule
 {
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    private void PreConfigureFeature()
+    {
+        OneTimeRunner.Run(() =>
+        {
+            GlobalFeatureManager.Instance.Modules.Editions().EnableAll();
+        });
+    }
+
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "WorkflowManagement";

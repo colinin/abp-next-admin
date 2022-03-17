@@ -4,7 +4,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MultiTenancy.DbFinder;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
@@ -22,7 +22,6 @@ using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -40,7 +39,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
     typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
@@ -49,7 +48,6 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule),
-    typeof(AbpDbFinderMultiTenancyModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
@@ -62,6 +60,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         PreConfigureApp();
+        PreConfigureFeature();
         PreConfigureCAP(configuration);
         PreConfigureIdentity();
     }

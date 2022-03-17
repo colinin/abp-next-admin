@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Saas.Application.Contracts\LINGYUN.Abp.Saas.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Saas.Domain\LINGYUN.Abp.Saas.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

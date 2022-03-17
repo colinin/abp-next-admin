@@ -2,6 +2,7 @@
 using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.MultiTenancy;
+using LINGYUN.Abp.Saas.Tenants;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
 namespace LY.MicroService.TaskManagement.EventBus.Handlers
@@ -29,18 +29,21 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected IDbSchemaMigrator DbSchemaMigrator { get; }
         protected AbpBackgroundTasksOptions Options { get; }
+        protected IJobStore JobStore { get; }
         protected IJobScheduler JobScheduler { get; }
         public TenantSynchronizer(
             ICurrentTenant currentTenant,
             IUnitOfWorkManager unitOfWorkManager,
             IDbSchemaMigrator dbSchemaMigrator,
             IOptions<AbpBackgroundTasksOptions> options,
+            IJobStore jobStore,
             IJobScheduler jobScheduler,
             ILogger<TenantSynchronizer> logger)
         {
             CurrentTenant = currentTenant;
             UnitOfWorkManager = unitOfWorkManager;
             DbSchemaMigrator = dbSchemaMigrator;
+            JobStore = jobStore;
             JobScheduler = jobScheduler;
             Options = options.Value;
 
@@ -51,9 +54,11 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             // 租户删除时移除轮询作业
             var pollingJob = BuildPollingJobInfo(eventData.Entity.Id, eventData.Entity.Name);
+            await JobStore.StoreAsync(pollingJob);
             await JobScheduler.RemoveAsync(pollingJob);
 
             var cleaningJob = BuildCleaningJobInfo(eventData.Entity.Id, eventData.Entity.Name);
+            await JobStore.StoreAsync(cleaningJob);
             await JobScheduler.RemoveAsync(cleaningJob);
         }
 

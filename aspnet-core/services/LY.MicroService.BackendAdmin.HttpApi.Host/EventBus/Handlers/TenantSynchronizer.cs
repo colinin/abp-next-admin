@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.MultiTenancy;
+using LINGYUN.Abp.Saas.Tenants;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,6 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
 namespace LY.MicroService.BackendAdmin.EventBus.Handlers;

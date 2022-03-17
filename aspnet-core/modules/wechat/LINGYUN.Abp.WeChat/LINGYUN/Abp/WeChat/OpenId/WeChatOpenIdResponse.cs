@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using Volo.Abp;
 
 namespace LINGYUN.Abp.WeChat.OpenId
 {
@@ -36,14 +35,15 @@ namespace LINGYUN.Abp.WeChat.OpenId
         {
             get
             {
-                switch (ErrorCode)
+                return ErrorCode switch
                 {
-                    case "-1": return "系统繁忙，此时请开发者稍候再试";
-                    case "0": return string.Empty;
-                    case "40029": return "code 无效";
-                    case "45011": return "频率限制，每个用户每分钟100次";
-                    default: return $"未定义的异常代码:{ErrorCode},请重试";
+                    "-1" => "系统繁忙，此时请开发者稍候再试",
+                    "0" => string.Empty,
+                    "40029" => "code 无效",
+                    "45011" => "频率限制，每个用户每分钟100次",
+                    _ => $"未定义的异常代码:{ErrorCode},请重试",
                 };
+                ;
             }
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.WeChat.OpenId
         {
             if(IsError)
             {
-                throw new AbpException(ErrorMessage);
+                throw new AbpWeChatException(ErrorCode, ErrorMessage);
             }
             return new WeChatOpenId(OpenId, SessionKey, UnionId);
         }

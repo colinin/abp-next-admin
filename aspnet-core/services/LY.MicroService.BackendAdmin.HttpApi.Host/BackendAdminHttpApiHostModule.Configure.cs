@@ -22,12 +22,14 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LY.MicroService.BackendAdmin;
@@ -35,6 +37,17 @@ namespace LY.MicroService.BackendAdmin;
 public partial class BackendAdminHttpApiHostModule
 {
     protected const string DefaultCorsPolicyName = "Default";
+
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    private void PreConfigureFeature()
+    {
+        OneTimeRunner.Run(() =>
+        {
+            GlobalFeatureManager.Instance.Modules.Editions().EnableAll();
+        });
+    }
+
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "Backend-Admin";

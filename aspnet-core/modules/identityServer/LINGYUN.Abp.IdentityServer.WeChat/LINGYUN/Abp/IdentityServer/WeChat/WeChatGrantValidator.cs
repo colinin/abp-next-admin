@@ -4,6 +4,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using LINGYUN.Abp.WeChat;
+using LINGYUN.Abp.WeChat.Localization;
 using LINGYUN.Abp.WeChat.OpenId;
 using LINGYUN.Abp.WeChat.Security.Claims;
 using LINGYUN.Abp.WeChat.Settings;
@@ -44,6 +45,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
         protected IIdentityUserRepository UserRepository { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected UserManager<IdentityUser> UserManager { get; }
+        protected IStringLocalizer<WeChatResource> WeChatLocalizer { get; }
         protected IStringLocalizer<IdentityResource> IdentityLocalizer { get; }
         protected IStringLocalizer<AbpIdentityServerResource> IdentityServerLocalizer { get; }
 
@@ -53,6 +55,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             UserManager<IdentityUser> userManager,
             IIdentityUserRepository userRepository,
             IdentitySecurityLogManager identitySecurityLogManager,
+            IStringLocalizer<WeChatResource> wechatLocalizer,
             IStringLocalizer<IdentityResource> identityLocalizer,
             IStringLocalizer<AbpIdentityServerResource> identityServerLocalizer)
         {
@@ -61,6 +64,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             UserRepository = userRepository;
             IdentitySecurityLogManager = identitySecurityLogManager;
             WeChatOpenIdFinder = weChatOpenIdFinder;
+            WeChatLocalizer = wechatLocalizer;
             IdentityLocalizer = identityLocalizer;
             IdentityServerLocalizer = identityServerLocalizer;
 
@@ -94,7 +98,16 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
                 return;
             }
 
-            var wechatOpenId = await FindOpenIdAsync(wechatCode);
+            WeChatOpenId wechatOpenId;
+            try
+            {
+                wechatOpenId = await FindOpenIdAsync(wechatCode);
+            }
+            catch(AbpWeChatException e)
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, e.Message);
+                return;
+            }
             var currentUser = await UserManager.FindByLoginAsync(LoginProvider, wechatOpenId.OpenId);
             if (currentUser == null)
             {

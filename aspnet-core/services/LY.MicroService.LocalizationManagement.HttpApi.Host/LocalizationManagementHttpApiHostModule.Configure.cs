@@ -20,10 +20,12 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
 
@@ -32,6 +34,16 @@ namespace LY.MicroService.LocalizationManagement;
 public partial class LocalizationManagementHttpApiHostModule
 {
     protected const string DefaultCorsPolicyName = "Default";
+
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    private void PreConfigureFeature()
+    {
+        OneTimeRunner.Run(() =>
+        {
+            GlobalFeatureManager.Instance.Modules.Editions().EnableAll();
+        });
+    }
 
     private void PreConfigureApp()
     {

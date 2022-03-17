@@ -1,6 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "MiniProgramAuthorizationDisabledMessage": "Applet authorization is not enabled for the application",
+    "OfficialAuthorizationDisabledMessage": "Official authorization is not enabled for the application",
     "SelfRegistrationDisabledMessage": "Self-registration is disabled for this application. Please contact the application administrator to register a new user.",
     "InvalidGrant:GrantTypeInvalid": "The type of authorization that is not allowed!",
     "InvalidGrant:WeChatTokenInvalid": "WeChat authentication failed!",

@@ -28,10 +28,12 @@ using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 using HangfireDashboardOptions = Hangfire.DashboardOptions;
@@ -41,6 +43,17 @@ namespace LY.MicroService.RealtimeMessage;
 public partial class RealtimeMessageHttpApiHostModule
 {
     protected static string[] PrefixTokenQueryStrings = new [] { "/signalr-hubs", "/hangfire" };
+
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
+    private void PreConfigureFeature()
+    {
+        OneTimeRunner.Run(() =>
+        {
+            GlobalFeatureManager.Instance.Modules.Editions().EnableAll();
+        });
+    }
+
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = "MessageService";
