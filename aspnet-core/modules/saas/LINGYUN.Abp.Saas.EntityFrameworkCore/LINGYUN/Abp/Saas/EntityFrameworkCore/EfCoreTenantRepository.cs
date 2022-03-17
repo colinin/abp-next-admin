@@ -30,14 +30,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         {
             var editionDbSet = dbContext.Set<Edition>();
             var queryable = from tenant in tenantDbSet
-                            join edition in editionDbSet
-                                on tenant.EditionId equals edition.Id
+                            join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
+                            from e in eg.DefaultIfEmpty()
                             where tenant.Id.Equals(id)
                             orderby tenant.Id
                             select new
                             {
                                 Tenant = tenant,
-                                Edition = edition,
+                                Edition = e,
                             };
             var result = await queryable
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -68,14 +68,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         {
             var editionDbSet = dbContext.Set<Edition>();
             var queryable = from tenant in tenantDbSet
-                    join edition in editionDbSet
-                        on tenant.EditionId equals edition.Id
+                    join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
+                    from e in eg.DefaultIfEmpty()
                     where tenant.Name.Equals(name)
                     orderby tenant.Id
                     select new
                     {
                         Tenant = tenant,
-                        Edition = edition,
+                        Edition = e,
                     };
             var result = await queryable
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -102,14 +102,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         {
             var editionDbSet = DbContext.Set<Edition>();
             var queryable = from tenant in tenantDbSet
-                            join edition in editionDbSet
-                                on tenant.EditionId equals edition.Id
+                            join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
+                            from e in eg.DefaultIfEmpty()
                             where tenant.Name.Equals(name)
                             orderby tenant.Id
                             select new
                             {
                                 Tenant = tenant,
-                                Edition = edition,
+                                Edition = e,
                             };
             var result = queryable
                 .FirstOrDefault();
@@ -136,14 +136,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         {
             var editionDbSet = DbContext.Set<Edition>();
             var queryable = from tenant in tenantDbSet
-                            join edition in editionDbSet
-                                on tenant.EditionId equals edition.Id
+                            join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
+                            from e in eg.DefaultIfEmpty()
                             where tenant.Id.Equals(id)
                             orderby tenant.Id
                             select new
                             {
                                 Tenant = tenant,
-                                Edition = edition,
+                                Edition = e,
                             };
             var result = queryable
                 .FirstOrDefault();
