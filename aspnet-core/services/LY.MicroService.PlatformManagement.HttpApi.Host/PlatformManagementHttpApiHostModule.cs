@@ -81,6 +81,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         PreConfigureApp();
+        PreConfigureFeature();
         PreConfigureCAP(configuration);
     }
 

@@ -28,7 +28,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Modularity;
@@ -77,6 +76,7 @@ public partial class IdentityServerModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
         PreConfigureApp();
+        PreConfigureFeature();
         PreConfigureCAP(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
@@ -99,8 +99,6 @@ public partial class IdentityServerModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-        GlobalFeatureManager.Instance.Modules.MultiTenancy().EnableAll();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

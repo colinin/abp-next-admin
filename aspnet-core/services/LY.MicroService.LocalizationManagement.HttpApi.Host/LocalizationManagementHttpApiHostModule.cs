@@ -54,6 +54,7 @@ namespace LY.MicroService.LocalizationManagement
             var configuration = context.Services.GetConfiguration();
 
             PreConfigureApp();
+            PreConfigureFeature();
             PreConfigureCAP(configuration);
         }
 

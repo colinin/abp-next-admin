@@ -60,6 +60,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         PreConfigureApp();
+        PreConfigureFeature();
         PreConfigureCAP(configuration);
         PreConfigureIdentity();
     }

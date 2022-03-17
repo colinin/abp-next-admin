@@ -6,9 +6,9 @@ namespace LINGYUN.Abp.MultiTenancy.Editions.GlobalFeatures;
 [GlobalFeatureName(Name)]
 public class EditionsFeature : GlobalFeature
 {
-    public const string Name = "Abp.MultiTenancy.Editions";
+    public const string Name = "Abp.Editions";
 
-    internal EditionsFeature([NotNull] GlobalMultiTenancyFeatures module)
+    internal EditionsFeature([NotNull] GlobalEditionsFeatures module)
         : base(module)
     {
     }

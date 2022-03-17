@@ -72,6 +72,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigureApp();
+        PreConfigureFeature();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

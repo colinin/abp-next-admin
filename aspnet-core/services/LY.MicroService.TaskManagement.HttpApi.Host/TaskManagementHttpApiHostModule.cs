@@ -70,6 +70,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         PreConfigureApp();
+        PreConfigureFeature();
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
     }

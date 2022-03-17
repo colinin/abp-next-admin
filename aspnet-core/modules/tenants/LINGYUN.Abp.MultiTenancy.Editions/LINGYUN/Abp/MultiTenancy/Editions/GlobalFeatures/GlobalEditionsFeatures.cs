@@ -3,13 +3,13 @@ using Volo.Abp.GlobalFeatures;
 
 namespace LINGYUN.Abp.MultiTenancy.Editions.GlobalFeatures;
 
-public class GlobalMultiTenancyFeatures : GlobalModuleFeatures
+public class GlobalEditionsFeatures : GlobalModuleFeatures
 {
-    public const string ModuleName = "Abp.MultiTenancy";
+    public const string ModuleName = "Abp.Editions";
 
     public EditionsFeature Editions => GetFeature<EditionsFeature>();
 
-    public GlobalMultiTenancyFeatures([NotNull] GlobalFeatureManager featureManager)
+    public GlobalEditionsFeatures([NotNull] GlobalFeatureManager featureManager)
         : base(featureManager)
     {
         AddFeature(new EditionsFeature(this));

@@ -78,6 +78,7 @@ namespace LY.MicroService.RealtimeMessage
             var configuration = context.Services.GetConfiguration();
 
             PreConfigureApp();
+            PreConfigureFeature();
             PreCongifureHangfire();
             PreConfigureCAP(configuration);
         }
