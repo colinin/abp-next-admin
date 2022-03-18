@@ -25,13 +25,14 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         field: 'type',
         component: 'Input',
         label: L('DisplayName:Type'),
-        colProps: { span: 12 },
+        colProps: { span: 6 },
       },
       {
         field: 'status',
         component: 'Select',
         label: L('DisplayName:Status'),
         colProps: { span: 6 },
+        defaultValue: JobStatus.Running,
         componentProps: {
           options: [
             { label: JobStatusMap[JobStatus.None], value: JobStatus.None },
@@ -39,6 +40,19 @@ export function getSearchFormSchemas(): Partial<FormProps> {
             { label: JobStatusMap[JobStatus.Completed], value: JobStatus.Completed },
             { label: JobStatusMap[JobStatus.Paused], value: JobStatus.Paused },
             { label: JobStatusMap[JobStatus.Stopped], value: JobStatus.Stopped },
+          ],
+        },
+      },
+      {
+        field: 'jobType',
+        component: 'Select',
+        label: L('DisplayName:JobType'),
+        colProps: { span: 6 },
+        componentProps: {
+          options: [
+            { label: JobTypeMap[JobType.Once], value: JobType.Once },
+            { label: JobTypeMap[JobType.Period], value: JobType.Period },
+            { label: JobTypeMap[JobType.Persistent], value: JobType.Persistent },
           ],
         },
       },
@@ -65,15 +79,17 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'jobType',
+        field: 'priority',
         component: 'Select',
-        label: L('DisplayName:JobType'),
+        label: L('DisplayName:Priority'),
         colProps: { span: 6 },
         componentProps: {
           options: [
-            { label: JobTypeMap[JobType.Once], value: JobType.Once },
-            { label: JobTypeMap[JobType.Period], value: JobType.Period },
-            { label: JobTypeMap[JobType.Persistent], value: JobType.Persistent },
+            { label: JobPriorityMap[JobPriority.Low], value: JobPriority.Low },
+            { label: JobPriorityMap[JobPriority.BelowNormal], value: JobPriority.BelowNormal },
+            { label: JobPriorityMap[JobPriority.Normal], value: JobPriority.Normal },
+            { label: JobPriorityMap[JobPriority.AboveNormal], value: JobPriority.AboveNormal },
+            { label: JobPriorityMap[JobPriority.High], value: JobPriority.High },
           ],
         },
       },
@@ -100,19 +116,11 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'priority',
-        component: 'Select',
-        label: L('DisplayName:Priority'),
-        colProps: { span: 6 },
-        componentProps: {
-          options: [
-            { label: JobPriorityMap[JobPriority.Low], value: JobPriority.Low },
-            { label: JobPriorityMap[JobPriority.BelowNormal], value: JobPriority.BelowNormal },
-            { label: JobPriorityMap[JobPriority.Normal], value: JobPriority.Normal },
-            { label: JobPriorityMap[JobPriority.AboveNormal], value: JobPriority.AboveNormal },
-            { label: JobPriorityMap[JobPriority.High], value: JobPriority.High },
-          ],
-        },
+        field: 'isAbandoned',
+        component: 'Checkbox',
+        label: L('DisplayName:IsAbandoned'),
+        colProps: { span: 4 },
+        renderComponentContent: L('DisplayName:IsAbandoned'),
       },
       {
         field: 'beginCreationTime',
@@ -137,17 +145,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'isAbandoned',
-        component: 'Checkbox',
-        label: L('DisplayName:IsAbandoned'),
-        colProps: { span: 4 },
-        renderComponentContent: L('DisplayName:IsAbandoned'),
-      },
-      {
         field: 'filter',
         component: 'Input',
         label: L('Search'),
-        colProps: { span: 20 },
+        colProps: { span: 24 },
       },
     ],
   };
