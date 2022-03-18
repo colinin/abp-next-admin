@@ -12,8 +12,4 @@
 		<PackageReference Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\LINGYUN.Abp.TenantManagement.Application.Contracts\LINGYUN.Abp.TenantManagement.Application.Contracts.csproj" />
-	</ItemGroup>
-
 </Project>
