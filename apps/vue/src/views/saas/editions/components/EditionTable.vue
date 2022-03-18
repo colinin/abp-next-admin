@@ -62,7 +62,7 @@
   const { registerModal: registerFeatureModal, handleManageFeature } = useFeatureModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
-    title: L('Tenants'),
+    title: L('Editions'),
     columns: getDataColumns(),
     api: getList,
     beforeFetch: formatPagedRequest,

@@ -1,5 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
+import { getList as getEditions } from '/@/api/saas/editions';
 
 const { L } = useLocalization('AbpSaas');
 
@@ -47,6 +48,22 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('DisplayName:TenantName'),
       colProps: { span: 24 },
       required: true,
+    },
+    {
+      field: 'editionId',
+      component: 'ApiSelect',
+      label: L('DisplayName:EditionName'),
+      colProps: { span: 24 },
+      componentProps: {
+        api: getEditions,
+        params: {
+          skipCount: 0,
+          maxResultCount: 100,
+        },
+        resultField: 'items',
+        labelField: 'displayName',
+        valueField: 'id',
+      },
     },
     {
       field: 'enableTime',
