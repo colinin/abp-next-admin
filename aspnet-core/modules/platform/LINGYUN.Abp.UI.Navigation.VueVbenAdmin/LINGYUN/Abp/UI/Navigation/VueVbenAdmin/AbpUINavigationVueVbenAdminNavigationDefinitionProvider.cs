@@ -212,6 +212,14 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   component: "/saas/tenant/index",
                   description: "租户管理",
                   multiTenancySides: MultiTenancySides.Host));
+            saas.AddItem(
+              new ApplicationMenu(
+                  name: "Editions",
+                  displayName: "版本管理",
+                  url: "/saas/editions",
+                  component: "/saas/editions/index",
+                  description: "版本管理",
+                  multiTenancySides: MultiTenancySides.Host));
 
             return new NavigationDefinition(saas);
         }

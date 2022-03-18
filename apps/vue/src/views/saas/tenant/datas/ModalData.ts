@@ -24,6 +24,14 @@ export function getModalFormSchemas(): FormSchema[] {
       component: 'Input',
       label: 'id',
       show: false,
+      dynamicDisabled: true,
+    },
+    {
+      field: 'concurrencyStamp',
+      component: 'Input',
+      label: 'concurrencyStamp',
+      show: false,
+      dynamicDisabled: true,
     },
     {
       field: 'isActive',
