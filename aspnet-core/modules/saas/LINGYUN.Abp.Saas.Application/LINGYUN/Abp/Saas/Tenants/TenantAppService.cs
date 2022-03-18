@@ -32,7 +32,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
     public virtual async Task<TenantDto> GetAsync(Guid id)
     {
-        var tenant = await TenantRepository.FindAsync(id, false);
+        var tenant = await TenantRepository.FindAsync(id);
         if (tenant == null)
         {
             throw new UserFriendlyException(L["TenantNotFoundById", id]);
@@ -43,7 +43,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
     public virtual async Task<TenantDto> GetAsync(string name)
     {
-        var tenant = await TenantRepository.FindByNameAsync(name, false);
+        var tenant = await TenantRepository.FindByNameAsync(name);
         if (tenant == null)
         {
             throw new UserFriendlyException(L["TenantNotFoundByName", name]);
@@ -107,7 +107,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     [Authorize(AbpSaasPermissions.Tenants.Update)]
     public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
     {
-        var tenant = await TenantRepository.GetAsync(id, false);
+        var tenant = await TenantRepository.GetAsync(id);
 
         if (!string.Equals(tenant.Name, input.Name))
         {
