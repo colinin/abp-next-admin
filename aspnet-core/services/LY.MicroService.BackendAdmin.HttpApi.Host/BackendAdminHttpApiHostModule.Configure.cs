@@ -2,6 +2,7 @@
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +23,8 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
@@ -84,6 +87,15 @@ public partial class BackendAdminHttpApiHostModule
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseMySQL();
+        });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = AbpSaasPermissions.Editions.ManageFeatures;
+            options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = AbpSaasPermissions.Tenants.ManageFeatures;
         });
     }
 

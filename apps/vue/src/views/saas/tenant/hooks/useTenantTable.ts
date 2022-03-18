@@ -14,7 +14,7 @@ interface UseTenantTable {
 }
 
 export function useTenantTable({ tableElRef }: UseTenantTable) {
-  const { L } = useLocalization('AbpTenantManagement');
+  const { L } = useLocalization('AbpSaas');
   const [registerTable, {}] = useTable({
     rowKey: 'id',
     title: L('Tenants'),

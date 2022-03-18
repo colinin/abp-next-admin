@@ -1,9 +1,10 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
-public class TenantDto : ExtensibleFullAuditedEntityDto<Guid>
+public class TenantDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string Name { get; set; }
 
@@ -16,4 +17,5 @@ public class TenantDto : ExtensibleFullAuditedEntityDto<Guid>
     public DateTime? EnableTime { get; set; }
 
     public DateTime? DisableTime { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

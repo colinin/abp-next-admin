@@ -10,7 +10,7 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <a-button
-          v-if="hasPermission('AbpTenantManagement.Tenants.Create')"
+          v-if="hasPermission('AbpSaas.Tenants.ManageConnectionStrings')"
           type="primary"
           @click="handleAddNew"
           >{{ L('ConnectionStrings:AddNew') }}</a-button
@@ -20,7 +20,7 @@
         <TableAction
           :actions="[
             {
-              auth: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
+              auth: 'AbpSaas.Tenants.ManageConnectionStrings',
               color: 'error',
               label: L('Delete'),
               icon: 'ant-design:delete-outlined',
@@ -55,7 +55,7 @@
   export default defineComponent({
     components: { BasicForm, BasicModal, BasicTable, TableAction },
     setup() {
-      const { L } = useLocalization('AbpTenantManagement');
+      const { L } = useLocalization('AbpSaas');
       const tenantIdRef = ref('');
       const connectionsRef = ref<any[]>([]);
       const { hasPermission } = usePermission();

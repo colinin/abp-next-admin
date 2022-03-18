@@ -19,6 +19,7 @@
     "DisplayName:TenantName": "Tenant name",
     "TenantDeletionConfirmationMessage": "Tenant '{0}' will be deleted. Do you confirm that?",
     "ConnectionStrings": "Connection Strings",
+    "ConnectionStrings:AddNew": "New Connection",
     "DisplayName:DefaultConnectionString": "Default Connection String",
     "DisplayName:UseSharedDatabase": "Use the Shared Database",
     "DisplayName:Name": "Name",

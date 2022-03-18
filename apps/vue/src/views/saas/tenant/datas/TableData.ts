@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 
-const { L } = useLocalization('AbpTenantManagement');
+const { L } = useLocalization('AbpSaas');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -14,6 +14,13 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('DisplayName:TenantName'),
       dataIndex: 'name',
+      align: 'left',
+      width: 200,
+      sorter: true,
+    },
+    {
+      title: L('DisplayName:EditionName'),
+      dataIndex: 'editionName',
       align: 'left',
       width: 'auto',
       sorter: true,

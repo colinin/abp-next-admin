@@ -99,6 +99,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
             await EventBus.PublishAsync(createEventData);
         });
 
+        await CurrentUnitOfWork.SaveChangesAsync();
+
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
@@ -120,6 +122,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         input.MapExtraPropertiesTo(tenant);
         await TenantRepository.UpdateAsync(tenant);
 
+        await CurrentUnitOfWork.SaveChangesAsync();
+
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
@@ -132,6 +136,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
             return;
         }
         await TenantRepository.DeleteAsync(tenant);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
@@ -177,6 +183,10 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         }
         tenant.SetConnectionString(input.Name, input.Value);
 
+        await TenantRepository.UpdateAsync(tenant);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
+
         return new TenantConnectionStringDto
         {
             Name = input.Name,
@@ -204,5 +214,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         });
 
         await TenantRepository.UpdateAsync(tenant);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 }

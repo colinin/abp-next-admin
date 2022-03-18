@@ -12,14 +12,14 @@ import { format } from '/@/utils/strings';
 
 /** 与 multi-tenancy中不同,此为管理tenant api */
 enum Api {
-  Create = '/api/tenant-management/tenants',
-  DeleteById = '/api/tenant-management/tenants/{id}',
-  GetById = '/api/tenant-management/tenants/{id}',
-  GetList = '/api/tenant-management/tenants',
-  Update = '/api/tenant-management/tenants/{id}',
-  GetConnectionStrings = '/api/tenant-management/tenants/{id}/connection-string',
-  SetConnectionString = '/api/tenant-management/tenants/{id}/connection-string',
-  DeleteConnectionString = '/api/tenant-management/tenants/{id}/connection-string/{name}',
+  Create = '/api/saas/tenants',
+  DeleteById = '/api/saas/tenants/{id}',
+  GetById = '/api/saas/tenants/{id}',
+  GetList = '/api/saas/tenants',
+  Update = '/api/saas/tenants/{id}',
+  GetConnectionStrings = '/api/saas/tenants/{id}/connection-string',
+  SetConnectionString = '/api/saas/tenants/{id}/connection-string',
+  DeleteConnectionString = '/api/saas/tenants/{id}/connection-string/{name}',
 }
 
 export const getById = (id: string) => {
