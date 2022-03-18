@@ -9,6 +9,11 @@ import {
 export interface Tenant extends AuditedEntityDto {
   id: string;
   name: string;
+  editionId?: string;
+  editionName?: string;
+  isActive: boolean;
+  enableTime?: Date;
+  disableTime?: Date;
 }
 
 export interface TenantConnectionString {
@@ -20,10 +25,18 @@ export interface CreateTenant {
   name: string;
   adminEmailAddress: string;
   adminPassword: string;
+  editionId?: string;
+  isActive: boolean;
+  enableTime?: Date;
+  disableTime?: Date;
 }
 
 export interface UpdateTenant {
   name: string;
+  editionId?: string;
+  isActive: boolean;
+  enableTime?: Date;
+  disableTime?: Date;
 }
 
 export interface GetTenantPagedRequest extends PagedAndSortedResultRequestDto {

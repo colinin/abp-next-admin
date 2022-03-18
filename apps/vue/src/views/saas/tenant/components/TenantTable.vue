@@ -3,7 +3,7 @@
     <BasicTable ref="tableElRef" @register="registerTable">
       <template #toolbar>
         <a-button
-          v-if="hasPermission('AbpTenantManagement.Tenants.Create')"
+          v-if="hasPermission('AbpSaas.Tenants.Create')"
           type="primary"
           @click="handleAddNew"
           >{{ L('NewTenant') }}</a-button
@@ -19,13 +19,13 @@
         <TableAction
           :actions="[
             {
-              auth: 'AbpTenantManagement.Tenants.Update',
+              auth: 'AbpSaas.Tenants.Update',
               label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'AbpTenantManagement.Tenants.Delete',
+              auth: 'AbpSaas.Tenants.Delete',
               color: 'error',
               label: L('Delete'),
               icon: 'ant-design:delete-outlined',
@@ -34,12 +34,12 @@
           ]"
           :dropDownActions="[
             {
-              auth: 'FeatureManagement.ManageHostFeatures',
+              auth: 'AbpSaas.Tenants.ManageFeatures',
               label: L('ManageFeatures'),
               onClick: handleManageTenantFeature.bind(null, record),
             },
             {
-              auth: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
+              auth: 'AbpSaas.Tenants.ManageConnectionStrings',
               label: L('ConnectionStrings'),
               onClick: openConnectModal.bind(null, true, record),
             },
@@ -70,7 +70,7 @@
     name: 'TenantTable',
     components: { BasicTable, FeatureModal, TableAction, TenantModal, TenantConnectionModal },
     setup() {
-      const { L } = useLocalization('AbpTenantManagement', 'AbpFeatureManagement');
+      const { L } = useLocalization('AbpSaas', 'AbpFeatureManagement');
       const { hasPermission } = usePermission();
       const tableElRef = ref<Nullable<TableActionType>>(null);
       const [registerConnectModal, { openModal: openConnectModal }] = useModal();

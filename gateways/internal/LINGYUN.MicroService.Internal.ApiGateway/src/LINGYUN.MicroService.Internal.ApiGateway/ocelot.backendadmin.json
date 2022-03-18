@@ -1,6 +1,6 @@
 {
   "Routes": [
-    // ¿ò¼Ü¶Ëµã
+    // ï¿½ï¿½Ü¶Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/application-configuration",
       "DownstreamScheme": "http",
@@ -26,7 +26,7 @@
       },
       "Key": "backend-admin-configuration"
     },
-    // ¿ò¼Ü¶¯Ì¬API¶Ëµã
+    // ï¿½ï¿½Ü¶ï¿½Ì¬APIï¿½Ëµï¿½
     {
       "DownstreamPathTemplate": "/api/abp/api-definition",
       "DownstreamScheme": "http",
@@ -52,7 +52,7 @@
       },
       "Key": "backend-admin-api-definition"
     },
-    // ×â»§
+    // ï¿½â»§
     {
       "DownstreamPathTemplate": "/api/abp/multi-tenancy/{everything}",
       "DownstreamScheme": "http",
@@ -77,9 +77,9 @@
         "UseTracing": true
       }
     },
-    // ×â»§¹ÜÀí
+    // ï¿½â»§ï¿½ï¿½ï¿½ï¿½
     {
-      "DownstreamPathTemplate": "/api/tenant-management/{everything}",
+      "DownstreamPathTemplate": "/api/saas/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -87,7 +87,7 @@
           "Port": 30010
         }
       ],
-      "UpstreamPathTemplate": "/api/tenant-management/{everything}",
+      "UpstreamPathTemplate": "/api/saas/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
@@ -108,7 +108,7 @@
         "UseTracing": true
       }
     },
-    // È¨ÏÞ¹ÜÀí
+    // È¨ï¿½Þ¹ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/permission-management/{everything}",
       "DownstreamScheme": "http",
@@ -139,7 +139,7 @@
         "UseTracing": true
       }
     },
-    // ×â»§ÉèÖÃ
+    // ï¿½â»§ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/settings/by-current-tenant",
       "DownstreamScheme": "http",
@@ -171,7 +171,7 @@
       },
       "Key": "setting-current-tenant"
     },
-    // È«¾ÖÉèÖÃ
+    // È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/settings/by-global",
       "DownstreamScheme": "http",
@@ -203,7 +203,7 @@
       },
       "Key": "setting-global"
     },
-    // Î¢ÐÅ×â»§ÉèÖÃ
+    // Î¢ï¿½ï¿½ï¿½â»§ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/wechat/by-current-tenant",
       "DownstreamScheme": "http",
@@ -235,7 +235,7 @@
       },
       "Key": "wechat-setting-current-tenant"
     },
-    // Î¢ÐÅÈ«¾ÖÉèÖÃ
+    // Î¢ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/wechat/by-global",
       "DownstreamScheme": "http",
@@ -267,7 +267,7 @@
       },
       "Key": "wechat-setting-global"
     },
-    // °¢ÀïÔÆ×â»§ÉèÖÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â»§ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/aliyun/by-current-tenant",
       "DownstreamScheme": "http",
@@ -299,7 +299,7 @@
       },
       "Key": "aliyun-setting-current-tenant"
     },
-    // °¢ÀïÔÆÈ«¾ÖÉèÖÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/aliyun/by-global",
       "DownstreamScheme": "http",
@@ -331,7 +331,7 @@
       },
       "Key": "aliyun-setting-global"
     },
-    // ÉèÖÃ¹ÜÀí
+    // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/setting-management/{everything}",
       "DownstreamScheme": "http",
@@ -362,7 +362,7 @@
         "UseTracing": true
       }
     },
-    // ÌØÐÔ¹ÜÀí
+    // ï¿½ï¿½ï¿½Ô¹ï¿½ï¿½ï¿½
     {
       "DownstreamPathTemplate": "/api/feature-management/{everything}",
       "DownstreamScheme": "http",
@@ -393,7 +393,7 @@
         "UseTracing": true
       }
     },
-    // Éó¼ÆÈÕÖ¾
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
     {
       "DownstreamPathTemplate": "/api/auditing/{everything}",
       "DownstreamScheme": "http",
@@ -424,7 +424,7 @@
         "UseTracing": true
       }
     },
-    // API ÎÄµµ
+    // API ï¿½Äµï¿½
     {
       "DownstreamPathTemplate": "/swagger/v1/swagger.json",
       "DownstreamScheme": "http",

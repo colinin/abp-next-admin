@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { L } = useLocalization('AbpTenantManagement');
+const { L } = useLocalization('AbpSaas');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -26,11 +26,42 @@ export function getModalFormSchemas(): FormSchema[] {
       show: false,
     },
     {
+      field: 'isActive',
+      component: 'Checkbox',
+      label: L('DisplayName:IsActive'),
+      labelWidth: 50,
+      colProps: { span: 24 },
+      defaultValue: true,
+    },
+    {
       field: 'name',
       component: 'Input',
       label: L('DisplayName:TenantName'),
       colProps: { span: 24 },
       required: true,
+    },
+    {
+      field: 'enableTime',
+      component: 'DatePicker',
+      label: L('DisplayName:EnableTime'),
+      colProps: { span: 24 },
+      defaultValue: new Date(),
+      componentProps: {
+        style: {
+          width: '100%',
+        },
+      },
+    },
+    {
+      field: 'disableTime',
+      component: 'DatePicker',
+      label: L('DisplayName:DisableTime'),
+      colProps: { span: 24 },
+      componentProps: {
+        style: {
+          width: '100%',
+        },
+      },
     },
     {
       field: 'adminEmailAddress',

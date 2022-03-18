@@ -103,7 +103,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/tenant-management/{everything}",
+      "DownstreamPathTemplate": "/api/saas/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -111,7 +111,7 @@
           "Port": 30010
         }
       ],
-      "UpstreamPathTemplate": "/api/tenant-management/{everything}",
+      "UpstreamPathTemplate": "/api/saas/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",

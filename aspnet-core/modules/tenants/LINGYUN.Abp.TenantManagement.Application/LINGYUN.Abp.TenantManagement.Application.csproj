@@ -14,7 +14,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.TenantManagement.Application.Contracts\LINGYUN.Abp.TenantManagement.Application.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

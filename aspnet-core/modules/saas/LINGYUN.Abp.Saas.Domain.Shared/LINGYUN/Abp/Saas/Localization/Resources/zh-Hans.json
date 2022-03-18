@@ -19,6 +19,7 @@
     "DisplayName:TenantName": "租户名称",
     "TenantDeletionConfirmationMessage": "租户 '{0}' 将被删除. 你确定吗?",
     "ConnectionStrings": "连接字符串",
+    "ConnectionStrings:AddNew": "添加新连接",
     "DisplayName:DefaultConnectionString": "默认连接字符串",
     "DisplayName:UseSharedDatabase": "使用共享数据库",
     "DisplayName:Name": "名称",

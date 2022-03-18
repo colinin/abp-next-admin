@@ -27,7 +27,7 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { L } = useLocalization('AbpTenantManagement');
+      const { L } = useLocalization('AbpSaas');
       const loading = ref(false);
       const tenantIdRef = ref('');
       const [registerModal, { closeModal }] = useModalInner((data) => {
@@ -46,9 +46,7 @@
           loading.value = true;
 
           const api = input.id
-            ? update(input.id, {
-                name: input.name,
-              })
+            ? update(input.id, input)
             : create(input);
 
           api
