@@ -49,10 +49,20 @@ namespace LINGYUN.Abp.Cli.Commands
         {
             Logger.LogInformation("Execute dotnet command...");
 
+            var dbm = createArgs.DatabaseManagementSystem switch
+            {
+                DatabaseManagementSystem.SQLite => "Sqlite",
+                DatabaseManagementSystem.Oracle => "Oracle",
+                DatabaseManagementSystem.OracleDevart => "OracleDevart",
+                DatabaseManagementSystem.PostgreSQL => "PostgreSql",
+                DatabaseManagementSystem.SQLServer => "SqlServer",
+                _ => "MySQL",
+            };
             var commandBuilder = new StringBuilder("dotnet new");
             commandBuilder.AppendFormat(" {0}", createArgs.TemplateName);
             commandBuilder.AppendFormat(" -n {0}", createArgs.SolutionName.ProjectName);
             commandBuilder.AppendFormat(" -o {0}", createArgs.OutputFolder);
+            commandBuilder.AppendFormat(" --DatabaseManagement {0}", dbm);
 
             var cmdError = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), out bool isSuccessful);
             if (!isSuccessful)
@@ -82,8 +92,7 @@ namespace LINGYUN.Abp.Cli.Commands
                 createArgs.PackageName,
                 createArgs.SolutionName.CompanyName,
                 createArgs.SolutionName.ProjectName,
-                createArgs.ConnectionString,
-                createArgs.DatabaseManagementSystem);
+                createArgs.ConnectionString);
 
             Logger.LogInformation("Rewrite application url.");
             await TryReplaceApplicationUrlWithProjectFile(
@@ -100,8 +109,7 @@ namespace LINGYUN.Abp.Cli.Commands
             await TryReplacePackageAndCompanyNameWithProjectFolder(
                 projectFiles,
                 createArgs.PackageName,
-                createArgs.SolutionName.CompanyName,
-                createArgs.DatabaseManagementSystem);
+                createArgs.SolutionName.CompanyName);
 
             Logger.LogInformation($"'{createArgs.SolutionName.ProjectName}' has been successfully created to '{createArgs.OutputFolder}'");
         }
@@ -179,8 +187,7 @@ namespace LINGYUN.Abp.Cli.Commands
             string packageName,
             string companyName,
             string projectName,
-            string connectionString = null,
-            DatabaseManagementSystem database = DatabaseManagementSystem.NotSpecified)
+            string connectionString = null)
         {
             var canReplaceFiles = projectFiles.Where(f => !f.IsFolder && f.Name.Contains("appsettings"));
             foreach (var projectFile in canReplaceFiles)
@@ -191,25 +198,6 @@ namespace LINGYUN.Abp.Cli.Commands
                 var defaultConnectionString = $"Server=127.0.0.1;Database={projectName};User Id=root;Password=123456";
                 connectionString ??= defaultConnectionString;
                 await ReplaceFileTextAsync(projectFile, defaultConnectionString, connectionString);
-
-                switch (database)
-                {
-                    case DatabaseManagementSystem.SQLServer:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "SqlServer");
-                        break;
-                    case DatabaseManagementSystem.SQLite:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Sqlite");
-                        break;
-                    case DatabaseManagementSystem.Oracle:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Oracle");
-                        break;
-                    case DatabaseManagementSystem.OracleDevart:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Oracle.Devart");
-                        break;
-                    case DatabaseManagementSystem.PostgreSQL:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "PostgreSql");
-                        break;
-                }
             }
         }
 
@@ -224,44 +212,13 @@ namespace LINGYUN.Abp.Cli.Commands
             {
                 await ReplaceFileTextAsync(projectFile, "PackageName", packageName);
                 await ReplaceFileTextAsync(projectFile, "CompanyName", companyName);
-
-                if (database != DatabaseManagementSystem.NotSpecified &&
-                    database != DatabaseManagementSystem.MySQL &&
-                    projectFile.Name.EndsWith("MigrationsDbContextFactory.cs"))
-                {
-                    await ReplaceFileTextAsync(
-                        projectFile,
-                        // 非 MySql 替换一下这一句
-                        "connectionString, ServerVersion.AutoDetect(connectionString)",
-                        "connectionString");
-                }
-                // DB 驱动
-                switch (database)
-                {
-                    case DatabaseManagementSystem.SQLServer:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "SqlServer");
-                        break;
-                    case DatabaseManagementSystem.SQLite:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Sqlite");
-                        break;
-                    case DatabaseManagementSystem.Oracle:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Oracle");
-                        break;
-                    case DatabaseManagementSystem.OracleDevart:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "Oracle.Devart");
-                        break;
-                    case DatabaseManagementSystem.PostgreSQL:
-                        await ReplaceFileTextAsync(projectFile, "MySQL", "PostgreSql");
-                        break;
-                }
             }
         }
 
         protected virtual Task TryReplacePackageAndCompanyNameWithProjectFolder(
             List<FindFile> projectFiles,
             string packageName,
-            string companyName,
-            DatabaseManagementSystem database = DatabaseManagementSystem.NotSpecified)
+            string companyName)
         {
             var canReplaceFiles = projectFiles
                 .OrderByDescending(f => f.Depth)
@@ -269,24 +226,6 @@ namespace LINGYUN.Abp.Cli.Commands
             foreach (var projectFile in canReplaceFiles)
             {
                 var replaceFileName = projectFile.Name.Replace("PackageName", packageName).Replace("CompanyName", companyName);
-                switch (database)
-                {
-                    case DatabaseManagementSystem.SQLServer:
-                        replaceFileName = replaceFileName.Replace("MySQL", "SqlServer", StringComparison.InvariantCultureIgnoreCase);
-                        break;
-                    case DatabaseManagementSystem.SQLite:
-                        replaceFileName = replaceFileName.Replace("MySQL", "Sqlite", StringComparison.InvariantCultureIgnoreCase);
-                        break;
-                    case DatabaseManagementSystem.Oracle:
-                        replaceFileName = replaceFileName.Replace("MySQL", "Oracle", StringComparison.InvariantCultureIgnoreCase);
-                        break;
-                    case DatabaseManagementSystem.OracleDevart:
-                        replaceFileName = replaceFileName.Replace("MySQL", "Oracle.Devart", StringComparison.InvariantCultureIgnoreCase);
-                        break;
-                    case DatabaseManagementSystem.PostgreSQL:
-                        replaceFileName = replaceFileName.Replace("MySQL", "PostgreSQL", StringComparison.InvariantCultureIgnoreCase);
-                        break;
-                }
 
                 if (File.Exists(projectFile.Name))
                 {

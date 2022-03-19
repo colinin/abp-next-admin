@@ -11,13 +11,13 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 ### 1、Install cli
 
 ```shell
-  dotnet tool install --global LINGYUN.Abp.Cli --version 5.1.1
+  dotnet tool install --global LINGYUN.Abp.Cli --version 5.1.4
 ```
 
 ### 2、Install .NET Template
 
 ```shell
-  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.1.1
+  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.1.4
 ```
 
 ### 3、Use cli create new project
@@ -42,6 +42,10 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
   start http://127.0.0.1:5000/
 
 ```
+
+### Feedback
+
+* The author is not a freelancer and does not have much time to maintain the project. If there is a problem, please contact **colin.in@foxmail.com** by email  
 
 ## Screenshots
 
