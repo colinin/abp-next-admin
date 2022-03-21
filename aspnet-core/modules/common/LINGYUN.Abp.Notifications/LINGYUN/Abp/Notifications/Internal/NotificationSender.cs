@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -30,16 +31,22 @@ namespace LINGYUN.Abp.Notifications
         /// Reference to <see cref="IDistributedIdGenerator"/>.
         /// </summary>
         protected IDistributedIdGenerator DistributedIdGenerator { get; }
+        /// <summary>
+        /// Reference to <see cref="IUnitOfWorkManager"/>.
+        /// </summary>
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
         protected AbpNotificationOptions Options { get; }
         public NotificationSender(
            IDistributedEventBus distributedEventBus,
            IDistributedIdGenerator distributedIdGenerator,
+           IUnitOfWorkManager unitOfWorkManager,
            IOptions<AbpNotificationOptions> options)
         {
             Options = options.Value;
             DistributedEventBus = distributedEventBus;
             DistributedIdGenerator = distributedIdGenerator;
+            UnitOfWorkManager = unitOfWorkManager;
             Logger = NullLogger<NotificationSender>.Instance;
         }
 
@@ -88,7 +95,17 @@ namespace LINGYUN.Abp.Notifications
                 Severity = severity
             };
 
-            await DistributedEventBus.PublishAsync(eto);
+            if (UnitOfWorkManager.Current != null)
+            {
+                UnitOfWorkManager.Current.OnCompleted(async () =>
+                {
+                    await DistributedEventBus.PublishAsync(eto);
+                });
+            }
+            else
+            {
+                await DistributedEventBus.PublishAsync(eto);
+            }
 
             return eto.Id.ToString();
         }
