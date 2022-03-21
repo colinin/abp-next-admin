@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using DotNetCore.CAP;
+using Hangfire;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
@@ -125,6 +126,8 @@ namespace LY.MicroService.RealtimeMessage
             app.UseMapRequestLocalization();
             // 授权
             app.UseAuthorization();
+            // Cap Dashboard
+            app.UseCapDashboard();
             // Swagger
             app.UseSwagger();
             // Swagger可视化界面

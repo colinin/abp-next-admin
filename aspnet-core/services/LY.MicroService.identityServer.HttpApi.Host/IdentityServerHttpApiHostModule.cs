@@ -1,3 +1,4 @@
+using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
@@ -106,6 +107,8 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         app.UseMapRequestLocalization();
         // 授权
         app.UseAuthorization();
+        // Cap Dashboard
+        app.UseCapDashboard();
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面
