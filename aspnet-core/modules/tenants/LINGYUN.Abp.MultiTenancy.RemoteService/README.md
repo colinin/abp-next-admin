@@ -31,13 +31,13 @@ Install-Package Volo.Abp.Http.Client.IdentityModel
 {
   "RemoteServices": {
     "AbpTenantManagement": {
-      "BaseUrl": "http://localhost:30000/",
+      "BaseUrl": "http://127.0.0.1:30000/",
       "IdentityClient": "InternalServiceClient"
     }
   },
   "IdentityClients": {
     "InternalServiceClient": {
-      "Authority": "http://localhost:44385",
+      "Authority": "http://127.0.0.1:44385",
       "RequireHttps": false,
       "GrantType": "client_credentials",
       "ClientId": "tenant-finder-client",

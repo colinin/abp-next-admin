@@ -171,8 +171,8 @@ namespace LINGYUN.Abp.Cli.Commands
             var launchFile = projectFiles.FirstOrDefault(f => f.Name.EndsWith("launchSettings.json"));
             if (launchFile != null)
             {
-                string applicationUrl = $"http://localhost:{port}";
-                await ReplaceFileTextAsync(launchFile, "http://localhost:5000", applicationUrl);
+                string applicationUrl = $"http://127.0.0.1:{port}";
+                await ReplaceFileTextAsync(launchFile, "http://127.0.0.1:5000", applicationUrl);
             }
 
             var daprScriptFile = projectFiles.FirstOrDefault(f => f.Name.EndsWith("dapr.sh"));
