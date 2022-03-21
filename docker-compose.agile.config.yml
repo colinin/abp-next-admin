@@ -6,7 +6,7 @@ services:
     environment:
       - adminConsole=true
       - db:provider=mysql
-      - db:conn=Server=localhost;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+      - db:conn=Server=127.0.0.1;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
     ports:
       - "5000:5000"
     volumes:
