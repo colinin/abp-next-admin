@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.WorkflowCore.DistributedLock
 
         public virtual async Task<bool> AcquireLock(string Id, CancellationToken cancellationToken)
         {
-            var handle = await _distributedLock.TryAcquireAsync(Id, _lockTimeout, cancellationToken);
+            var handle = await _distributedLock.TryAcquireAsync(Id, cancellationToken: cancellationToken);
             if (handle == null)
             {
                 return false;
@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.WorkflowCore.DistributedLock
 
             var cacheItem = new LockCacheItem(Id, handle);
             // 预留一点时间
-            _lockCache.Set(Id, cacheItem, TimeSpan.FromMinutes(1.5d));
+            _lockCache.Set(Id, cacheItem, _lockTimeout.Add(TimeSpan.FromMinutes(0.5d)));
 
             return true;
         }

@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
@@ -129,6 +130,7 @@ public partial class IdentityServerModule : AbpModule
         app.UseMapRequestLocalization();
         app.UseIdentityServer();
         app.UseAuthorization();
+        app.UseCapDashboard();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

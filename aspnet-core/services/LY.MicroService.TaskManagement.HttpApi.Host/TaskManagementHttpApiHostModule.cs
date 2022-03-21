@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AuditLogging.Elasticsearch;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -15,7 +16,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Globalization;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -108,8 +108,9 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
-        app.UseAbpRequestLocalization(options => options.SetDefaultCulture(CultureInfo.CurrentCulture.Name));
+        app.UseAbpRequestLocalization();
         app.UseAuthorization();
+        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
