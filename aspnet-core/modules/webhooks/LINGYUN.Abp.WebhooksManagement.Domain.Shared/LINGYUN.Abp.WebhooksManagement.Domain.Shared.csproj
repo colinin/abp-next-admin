@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\WebhooksManagement\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\WebhooksManagement\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Features:WebhooksManagement": "WebhooksManagement",
+    "Permission:WebhooksManagement": "WebhooksManagement",
+    "Permission:ManageSettings": "Manage Settings"
+  }
+}

@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Features:WebhooksManagement": "WebhooksManagement",
+    "Permission:WebhooksManagement": "WebhooksManagement",
+    "Permission:ManageSettings": "管理设置"
+  }
+}

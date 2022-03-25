@@ -1,0 +1,1 @@
+﻿dapr run --app-id WebhooksManagement --app-port 57264 -H 63751 -- dotnet run --no-build

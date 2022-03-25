@@ -1,20 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
-	  <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
-	  <TypeScriptSourceMap>False</TypeScriptSourceMap>
-	</PropertyGroup>
-
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
-	  <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
-	  <TypeScriptSourceMap>False</TypeScriptSourceMap>
-	</PropertyGroup>
-
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>LY.MicroService.TaskManagement</RootNamespace>
+		<RootNamespace>LY..WebhooksManagement</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,13 +10,30 @@
 		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageReference Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.EventBus.CAP" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.ExceptionHandling.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
-		<PackageReference Include="Quartz.Serialization.Json" Version="$(QuartzNETPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="$(OpenTelemetryExtensionsHostingPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryExporterZipkinPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryInstrumentationAspNetCorePackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryInstrumentationHttpPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
@@ -45,8 +50,6 @@
 		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
-		<!-- 某些定时作业可能需要用到 Microsoft.Data.SqlClient, 直接引用需要面临运行时配置问题, 加入项目依赖让编译器来处理 -->
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
@@ -54,20 +57,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application\LINGYUN.Abp.TaskManagement.Application.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.HttpApi\LINGYUN.Abp.TaskManagement.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
-		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
-		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
-		<ProjectReference Include="..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.Application\LY..WebhooksManagement.Application.csproj" />
+	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.EntityFrameworkCore\LY..WebhooksManagement.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.HttpApi\LY..WebhooksManagement.HttpApi.csproj" />
+	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.SettingManagement\LY..WebhooksManagement.SettingManagement.csproj" />
 	</ItemGroup>
 
 </Project>
