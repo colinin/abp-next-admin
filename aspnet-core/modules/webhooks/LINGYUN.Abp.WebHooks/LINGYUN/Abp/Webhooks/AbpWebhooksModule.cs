@@ -17,9 +17,21 @@ namespace LINGYUN.Abp.Webhooks;
 [DependsOn(typeof(AbpHttpClientModule))]
 public class AbpWebhooksModule : AbpModule
 {
+    internal const string WebhooksClient = "Abp.Webhooks.HttpClient";
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         AutoAddDefinitionProviders(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var options = context.Services.ExecutePreConfiguredActions<AbpWebhooksOptions>();
+
+        context.Services.AddHttpClient(WebhooksClient, client =>
+        {
+            client.Timeout = options.TimeoutDuration;
+        });
     }
 
     private static void AutoAddDefinitionProviders(IServiceCollection services)

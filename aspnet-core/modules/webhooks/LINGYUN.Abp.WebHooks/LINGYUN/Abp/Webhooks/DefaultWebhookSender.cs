@@ -15,15 +15,18 @@ namespace LINGYUN.Abp.Webhooks
 
         private readonly AbpWebhooksOptions _options;
         private readonly IWebhookManager _webhookManager;
+        private readonly IHttpClientFactory _httpClientFactory;
         
         private const string FailedRequestDefaultContent = "Webhook Send Request Failed";
 
         public DefaultWebhookSender(
             IOptions<AbpWebhooksOptions> options, 
-            IWebhookManager webhookManager)
+            IWebhookManager webhookManager,
+            IHttpClientFactory httpClientFactory)
         {
             _options = options.Value;
             _webhookManager = webhookManager;
+            _httpClientFactory = httpClientFactory;
 
             Logger = NullLogger<DefaultWebhookSender>.Instance;
         }
@@ -116,19 +119,15 @@ namespace LINGYUN.Abp.Webhooks
 
         protected virtual async Task<(bool isSucceed, HttpStatusCode statusCode, string content)> SendHttpRequest(HttpRequestMessage request)
         {
-            using (var client = new HttpClient
-            {
-                Timeout = _options.TimeoutDuration
-            })
-            {
-                var response = await client.SendAsync(request);
+            var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
 
-                var isSucceed = response.IsSuccessStatusCode;
-                var statusCode = response.StatusCode;
-                var content = await response.Content.ReadAsStringAsync();
+            var response = await client.SendAsync(request);
 
-                return (isSucceed, statusCode, content);
-            }
+            var isSucceed = response.IsSuccessStatusCode;
+            var statusCode = response.StatusCode;
+            var content = await response.Content.ReadAsStringAsync();
+
+            return (isSucceed, statusCode, content);
         }
     }
 }
