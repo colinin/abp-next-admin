@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />

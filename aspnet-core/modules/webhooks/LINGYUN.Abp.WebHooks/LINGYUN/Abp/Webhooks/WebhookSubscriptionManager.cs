@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Webhooks
 {
-    public class WebhookSubscriptionManager : IWebhookSubscriptionManager
+    public class WebhookSubscriptionManager : IWebhookSubscriptionManager, ITransientDependency
     {
         public IWebhookSubscriptionsStore WebhookSubscriptionsStore { get; set; }
 

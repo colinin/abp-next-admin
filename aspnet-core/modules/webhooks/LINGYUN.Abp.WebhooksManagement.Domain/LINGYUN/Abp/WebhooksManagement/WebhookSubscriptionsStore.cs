@@ -36,7 +36,9 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
         {
             var queryable = await SubscriptionRepository.GetQueryableAsync();
 
-            var subscriptions = await AsyncExecuter.ToListAsync(queryable.Where(x => x.TenantId == tenantId));
+            queryable = queryable.Where(x => x.TenantId == tenantId);
+
+            var subscriptions = await AsyncExecuter.ToListAsync(queryable);
 
             return subscriptions.Select(subscription => subscription.ToWebhookSubscriptionInfo()).ToList();
         }
@@ -49,11 +51,12 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
         {
             var queryable = await SubscriptionRepository.GetQueryableAsync();
 
-            var subscriptions = await AsyncExecuter.ToListAsync(
-                queryable.Where(x => 
+            queryable = queryable.Where(x =>
                     x.TenantId == tenantId &&
                     x.IsActive &&
-                    x.Webhooks.Contains("\"" + webhookName + "\"")));
+                    x.Webhooks.Contains("\"" + webhookName + "\""));
+
+            var subscriptions = await AsyncExecuter.ToListAsync(queryable);
 
             return subscriptions.Select(subscription => subscription.ToWebhookSubscriptionInfo()).ToList();
         }
@@ -79,11 +82,12 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
         {
             var queryable = await SubscriptionRepository.GetQueryableAsync();
 
-            var subscriptions = await AsyncExecuter.ToListAsync(
-                queryable.Where(x =>
+            queryable = queryable.Where(x =>
                     x.IsActive &&
                     tenantIds.Contains(x.TenantId) &&
-                    x.Webhooks.Contains("\"" + webhookName + "\"")));
+                    x.Webhooks.Contains("\"" + webhookName + "\""));
+
+            var subscriptions = await AsyncExecuter.ToListAsync(queryable);
 
             return subscriptions.Select(subscription => subscription.ToWebhookSubscriptionInfo()).ToList();
         }
@@ -124,11 +128,12 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
         {
             var queryable = await SubscriptionRepository.GetQueryableAsync();
 
-            return await AsyncExecuter.AnyAsync(
-                queryable.Where(x =>
+            queryable = queryable.Where(x =>
                     x.TenantId == tenantId &&
                     x.IsActive &&
-                    x.Webhooks.Contains("\"" + webhookName + "\"")));
+                    x.Webhooks.Contains("\"" + webhookName + "\""));
+
+            return await AsyncExecuter.AnyAsync(queryable);
         }
     }
 

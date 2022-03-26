@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Webhooks
 {
-    public class DefaultWebhookPublisher : IWebhookPublisher
+    public class DefaultWebhookPublisher : IWebhookPublisher, ITransientDependency
     {
         public IWebhookEventStore WebhookEventStore { get; set; }
 
@@ -128,13 +129,14 @@ namespace LINGYUN.Abp.Webhooks
         {
             var webhookInfo = new WebhookEvent
             {
-                Id = _guidGenerator.Create(),
                 WebhookName = webhookName,
                 Data = JsonConvert.SerializeObject(data),
                 TenantId = tenantId
             };
 
-            await WebhookEventStore.InsertAndGetIdAsync(webhookInfo);
+            var webhookId = await WebhookEventStore.InsertAndGetIdAsync(webhookInfo);
+            webhookInfo.Id = webhookId;
+
             return webhookInfo;
         }
     }

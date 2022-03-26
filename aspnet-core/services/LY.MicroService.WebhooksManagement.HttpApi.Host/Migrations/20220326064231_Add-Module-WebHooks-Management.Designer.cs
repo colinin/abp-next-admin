@@ -12,7 +12,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.WebhooksManagement.Migrations
 {
     [DbContext(typeof(WebhooksManagementMigrationsDbContext))]
-    [Migration("20220326052244_Add-Module-WebHooks-Management")]
+    [Migration("20220326064231_Add-Module-WebHooks-Management")]
     partial class AddModuleWebHooksManagement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,8 +97,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WebhookEventId")
-                        .IsUnique();
+                    b.HasIndex("WebhookEventId");
 
                     b.ToTable("AbpWebhooksSendAttempts", (string)null);
                 });

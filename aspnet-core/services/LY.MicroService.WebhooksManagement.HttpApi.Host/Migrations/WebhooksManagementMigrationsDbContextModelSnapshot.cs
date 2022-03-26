@@ -95,8 +95,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WebhookEventId")
-                        .IsUnique();
+                    b.HasIndex("WebhookEventId");
 
                     b.ToTable("AbpWebhooksSendAttempts", (string)null);
                 });

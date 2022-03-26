@@ -29,40 +29,32 @@ public class DefaultWebhookManager : WebhookManager, ITransientDependency
         WebhookSendAttemptRepository = webhookSendAttemptRepository;
     }
 
+    [UnitOfWork]
     public async override Task<Guid> InsertAndGetIdWebhookSendAttemptAsync(WebhookSenderArgs webhookSenderArgs)
     {
-        using (var uow = UnitOfWorkManager.Begin())
+        using (CurrentTenant.Change(webhookSenderArgs.TenantId))
         {
-            using (CurrentTenant.Change(webhookSenderArgs.TenantId))
-            {
-                var record = new WebhookSendRecord(
-                    GuidGenerator.Create(),
-                    webhookSenderArgs.WebhookEventId,
-                    webhookSenderArgs.WebhookSubscriptionId,
-                    webhookSenderArgs.TenantId);
+            var record = new WebhookSendRecord(
+                GuidGenerator.Create(),
+                webhookSenderArgs.WebhookEventId,
+                webhookSenderArgs.WebhookSubscriptionId,
+                webhookSenderArgs.TenantId);
 
-                await WebhookSendAttemptRepository.InsertAsync(record);
+            await WebhookSendAttemptRepository.InsertAsync(record);
 
-                await uow.SaveChangesAsync();
-
-                return record.Id;
-            }
+            return record.Id;
         }
     }
 
+    [UnitOfWork]
     public async override Task StoreResponseOnWebhookSendAttemptAsync(Guid webhookSendAttemptId, Guid? tenantId, HttpStatusCode? statusCode, string content)
     {
-        using (var uow = UnitOfWorkManager.Begin())
+        using (CurrentTenant.Change(tenantId))
         {
-            using (CurrentTenant.Change(tenantId))
-            {
-                var record = await WebhookSendAttemptRepository.GetAsync(webhookSendAttemptId);
-                record.SetResponse(content, statusCode);
+            var record = await WebhookSendAttemptRepository.GetAsync(webhookSendAttemptId);
+            record.SetResponse(content, statusCode);
 
-                await WebhookSendAttemptRepository.UpdateAsync(record);
-
-                await uow.SaveChangesAsync();
-            }
+            await WebhookSendAttemptRepository.UpdateAsync(record);
         }
     }
 }

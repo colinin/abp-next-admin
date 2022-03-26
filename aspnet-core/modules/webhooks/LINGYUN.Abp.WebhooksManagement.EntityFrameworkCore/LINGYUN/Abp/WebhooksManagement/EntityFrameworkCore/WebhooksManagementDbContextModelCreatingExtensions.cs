@@ -48,6 +48,9 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
              .WithOne()
              .HasForeignKey<WebhookSendRecord>(fk => fk.WebhookEventId)
              .HasPrincipalKey<WebhookEventRecord>(pk => pk.Id );
+
+            b.HasIndex(p => p.WebhookEventId)
+             .IsUnique(false);
         });
 
         builder.Entity<WebhookSubscription>(b =>

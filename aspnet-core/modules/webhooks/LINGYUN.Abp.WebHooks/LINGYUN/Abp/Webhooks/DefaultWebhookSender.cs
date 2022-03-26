@@ -5,10 +5,11 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Webhooks
 {
-    public class DefaultWebhookSender : IWebhookSender
+    public class DefaultWebhookSender : IWebhookSender, ITransientDependency
     {
         public ILogger<DefaultWebhookSender> Logger { protected get; set; }
 

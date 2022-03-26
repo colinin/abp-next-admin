@@ -85,8 +85,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpWebhooksSendAttempts_WebhookEventId",
                 table: "AbpWebhooksSendAttempts",
-                column: "WebhookEventId",
-                unique: true);
+                column: "WebhookEventId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
