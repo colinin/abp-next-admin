@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WebhooksManagement;
@@ -11,4 +13,5 @@ public interface IWebhookSubscriptionAppService :
         WebhookSubscriptionCreateInput,
         WebhookSubscriptionUpdateInput>
 {
+    Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync();
 }

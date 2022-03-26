@@ -23,13 +23,18 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>
         string headers,
         Guid? tenantId = null) : base(id)
     {
-        Secret = Check.NotNullOrWhiteSpace(secret, nameof(secret), WebhookSubscriptionConsts.MaxSecretLength);
+        SetSecret(secret);
         SetWebhookUri(webhookUri);
         SetWebhooks(webhooks);
         SetHeaders(headers);
         TenantId = tenantId;
 
         IsActive = true;
+    }
+
+    public void SetSecret(string secret)
+    {
+        Secret = Check.NotNullOrWhiteSpace(secret, nameof(secret), WebhookSubscriptionConsts.MaxSecretLength);
     }
 
     public void SetWebhookUri(string webhookUri)

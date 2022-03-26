@@ -1,8 +1,10 @@
-﻿using LINGYUN.Abp.WebhooksManagement.Authorization;
+﻿using LINGYUN.Abp.Webhooks;
+using LINGYUN.Abp.WebhooksManagement.Authorization;
 using LINGYUN.Abp.WebhooksManagement.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -13,11 +15,14 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [Authorize(WebhooksManagementPermissions.WebhookSubscription.Default)]
 public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, IWebhookSubscriptionAppService
 {
+    protected IWebhookDefinitionManager WebhookDefinitionManager { get; }
     protected IWebhookSubscriptionRepository SubscriptionRepository { get; }
 
     public WebhookSubscriptionAppService(
+        IWebhookDefinitionManager webhookDefinitionManager,
         IWebhookSubscriptionRepository subscriptionRepository)
     {
+        WebhookDefinitionManager = webhookDefinitionManager;
         SubscriptionRepository = subscriptionRepository;
     }
 
@@ -85,15 +90,38 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             await CheckSubscribedAsync(input);
         }
 
+        subscription.SetSecret(input.Secret);
         subscription.SetWebhookUri(input.WebhookUri);
         subscription.SetWebhooks(input.ToSubscribedWebhooksString());
         subscription.SetHeaders(input.ToWebhookHeadersString());
+        subscription.IsActive = input.IsActive;
 
         await SubscriptionRepository.UpdateAsync(subscription);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return subscription.ToWebhookSubscriptionDto();
+    }
+
+    public async virtual Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync()
+    {
+        var webhooks = WebhookDefinitionManager.GetAll();
+        var definitions = new List<WebhooksAvailableDto>();
+
+        foreach (var webhookDefinition in webhooks)
+        {
+            if (await WebhookDefinitionManager.IsAvailableAsync(CurrentTenant.Id, webhookDefinition.Name))
+            {
+                definitions.Add(new WebhooksAvailableDto
+                {
+                    Name = webhookDefinition.Name,
+                    Description = webhookDefinition.Description?.Localize(StringLocalizerFactory),
+                    DisplayName = webhookDefinition.DisplayName?.Localize(StringLocalizerFactory)
+                });
+            }
+        }
+
+        return new ListResultDto<WebhooksAvailableDto>(definitions.OrderBy(d => d.Name).ToList());
     }
 
     protected async virtual Task CheckSubscribedAsync(WebhookSubscriptionCreateOrUpdateInput input)

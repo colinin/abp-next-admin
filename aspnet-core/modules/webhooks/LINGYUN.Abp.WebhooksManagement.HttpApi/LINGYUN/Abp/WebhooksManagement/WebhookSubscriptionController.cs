@@ -56,4 +56,11 @@ public class WebhookSubscriptionController : WebhooksManagementControllerBase, I
     {
         return SubscriptionAppService.UpdateAsync(id, input);
     }
+
+    [HttpGet]
+    [Route("availables")]
+    public Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync()
+    {
+        return SubscriptionAppService.GetAllAvailableWebhooksAsync();
+    }
 }
