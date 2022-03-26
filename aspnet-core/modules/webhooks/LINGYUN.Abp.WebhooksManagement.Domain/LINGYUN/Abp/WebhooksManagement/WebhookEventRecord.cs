@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -23,8 +24,8 @@ public class WebhookEventRecord : Entity<Guid>, IMultiTenant, IHasCreationTime, 
         string data,
         Guid? tenantId = null) : base(id)
     {
-        WebhookName = webhookName;
-        Data = data;
+        WebhookName = Check.NotNullOrWhiteSpace(webhookName, nameof(webhookName), WebhookEventRecordConsts.MaxWebhookNameLength);
+        Data = Check.Length(data, nameof(data), WebhookEventRecordConsts.MaxDataLength);
         TenantId = tenantId;
     }
 }

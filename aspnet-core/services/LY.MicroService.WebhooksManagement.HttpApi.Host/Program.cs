@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
 
-namespace LY..WebhooksManagement;
+namespace LY.MicroService.WebhooksManagement;
 
 public class Program
 {

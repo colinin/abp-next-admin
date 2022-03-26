@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Webhooks
 {
@@ -13,21 +13,17 @@ namespace LINGYUN.Abp.Webhooks
         private const string SignatureHeaderKey = "sha256";
         private const string SignatureHeaderValueTemplate = SignatureHeaderKey + "={0}";
         private const string SignatureHeaderName = "abp-webhook-signature";
-
-        protected IJsonSerializer JsonSerializer { get; }
         protected IWebhookSendAttemptStore WebhookSendAttemptStore { get; }
 
         protected WebhookManager(
-            IJsonSerializer jsonSerializer,
             IWebhookSendAttemptStore webhookSendAttemptStore)
         {
-            JsonSerializer = jsonSerializer;
             WebhookSendAttemptStore = webhookSendAttemptStore;
         }
 
         public virtual async Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs)
         {
-            var data = JsonSerializer.Serialize(webhookSenderArgs.Data);
+            var data = JsonConvert.SerializeObject(webhookSenderArgs.Data);
 
             var attemptNumber = await WebhookSendAttemptStore.GetSendAttemptCountAsync(
                 webhookSenderArgs.TenantId,
@@ -72,7 +68,7 @@ namespace LINGYUN.Abp.Webhooks
 
             var payload = await GetWebhookPayloadAsync(webhookSenderArgs);
 
-            var serializedBody = JsonSerializer.Serialize(payload);
+            var serializedBody = JsonConvert.SerializeObject(payload);
 
             return serializedBody;
         }

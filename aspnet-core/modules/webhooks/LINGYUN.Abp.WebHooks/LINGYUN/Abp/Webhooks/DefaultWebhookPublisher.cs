@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
-using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Webhooks
@@ -15,7 +15,6 @@ namespace LINGYUN.Abp.Webhooks
 
         private readonly ICurrentTenant _currentTenant;
         private readonly IGuidGenerator _guidGenerator;
-        private readonly IJsonSerializer _jsonSerializer;
         private readonly IBackgroundJobManager _backgroundJobManager;
         private readonly IWebhookSubscriptionManager _webhookSubscriptionManager;
 
@@ -23,12 +22,10 @@ namespace LINGYUN.Abp.Webhooks
             IWebhookSubscriptionManager webhookSubscriptionManager,
             ICurrentTenant currentTenant,
             IGuidGenerator guidGenerator,
-            IJsonSerializer jsonSerializer,
             IBackgroundJobManager backgroundJobManager)
         {
             _currentTenant = currentTenant;
             _guidGenerator = guidGenerator;
-            _jsonSerializer = jsonSerializer;
             _backgroundJobManager = backgroundJobManager;
             _webhookSubscriptionManager = webhookSubscriptionManager;
 
@@ -114,7 +111,7 @@ namespace LINGYUN.Abp.Webhooks
             {
                 Id = _guidGenerator.Create(),
                 WebhookName = webhookName,
-                Data = _jsonSerializer.Serialize(data),
+                Data = JsonConvert.SerializeObject(data),
                 TenantId = tenantId
             };
 

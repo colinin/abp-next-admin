@@ -1,6 +1,6 @@
-﻿using LY..WebhooksManagement.EntityFrameworkCore;
-using LINGYUN.Abp.Data.DbMigrator;
+﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.MultiTenancy;
+using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace LY..WebhooksManagement.EventBus.Handlers;
+namespace LY.MicroService.WebhooksManagement.EventBus.Handlers;
 
 public class TenantSynchronizer :
         IDistributedEventHandler<CreateEventData>,
@@ -49,7 +49,7 @@ public class TenantSynchronizer :
         {
             using (CurrentTenant.Change(eventData.Id, eventData.Name))
             {
-                Logger.LogInformation("Migrating the new tenant database with LY..WebhooksManagement...");
+                Logger.LogInformation("Migrating the new tenant database with WebhooksManagement...");
                 // 迁移租户数据
                 await DbSchemaMigrator.MigrateAsync<WebhooksManagementDbContext>(
                     (connectionString, builder) =>
@@ -58,7 +58,7 @@ public class TenantSynchronizer :
 
                         return new WebhooksManagementDbContext(builder.Options);
                     });
-                Logger.LogInformation("Migrated the new tenant database with LY..WebhooksManagement...");
+                Logger.LogInformation("Migrated the new tenant database with WebhooksManagement...");
 
                 await DataSeeder.SeedAsync(new DataSeedContext(eventData.Id));
 

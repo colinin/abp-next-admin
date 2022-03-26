@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using LY..WebhooksManagement.DataSeeder;
+using LY.MicroService.WebhooksManagement.DataSeeder;
 
-namespace LY..WebhooksManagement;
+namespace LY.MicroService.WebhooksManagement;
 
 public partial class WebhooksManagementHttpApiHostModule
 {

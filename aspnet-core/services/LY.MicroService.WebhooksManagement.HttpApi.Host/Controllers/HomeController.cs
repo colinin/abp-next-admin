@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace LY..WebhooksManagement.Controllers;
+namespace LY.MicroService.WebhooksManagement.Controllers;
 
 public class HomeController : AbpController
 {

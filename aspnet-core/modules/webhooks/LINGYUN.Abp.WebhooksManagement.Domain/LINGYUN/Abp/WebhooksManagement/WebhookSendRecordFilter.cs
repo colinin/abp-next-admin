@@ -11,8 +11,6 @@ public class WebhookSendRecordFilter
 
     public Guid? SubscriptionId { get; set; }
 
-    public string Response { get; set; }
-
     public HttpStatusCode? ResponseStatusCode { get; set; }
 
     public DateTime? BeginCreationTime { get; set; }

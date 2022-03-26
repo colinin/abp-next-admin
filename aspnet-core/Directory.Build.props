@@ -12,6 +12,11 @@
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.7.28</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
+		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
+		<OpenTelemetryExporterZipkinPackageVersion>1.2.0-rc1</OpenTelemetryExporterZipkinPackageVersion>
+		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
+		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
+		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
 		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>

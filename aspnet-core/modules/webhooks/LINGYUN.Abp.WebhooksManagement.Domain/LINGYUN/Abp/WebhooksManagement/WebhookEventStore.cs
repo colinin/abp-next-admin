@@ -11,20 +11,17 @@ public class WebhookEventStore : DomainService, IWebhookEventStore
 {
     protected IObjectMapper<WebhooksManagementDomainModule> ObjectMapper => LazyServiceProvider.LazyGetRequiredService<IObjectMapper<WebhooksManagementDomainModule>>();
 
-    protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IWebhookEventRecordRepository WebhookEventRepository { get; }
 
     public WebhookEventStore(
-        IUnitOfWorkManager unitOfWorkManager,
         IWebhookEventRecordRepository webhookEventRepository)
     {
-        UnitOfWorkManager = unitOfWorkManager;
         WebhookEventRepository = webhookEventRepository;
     }
 
+    [UnitOfWork]
     public async virtual Task<WebhookEvent> GetAsync(Guid? tenantId, Guid id)
     {
-        using var uow = UnitOfWorkManager.Begin();
         using (CurrentTenant.Change(tenantId))
         {
             var record = await WebhookEventRepository.GetAsync(id);
@@ -33,9 +30,9 @@ public class WebhookEventStore : DomainService, IWebhookEventStore
         }
     }
 
+    [UnitOfWork]
     public async virtual Task<Guid> InsertAndGetIdAsync(WebhookEvent webhookEvent)
     {
-        using var uow = UnitOfWorkManager.Begin();
         using (CurrentTenant.Change(webhookEvent.TenantId))
         {
             var record = new WebhookEventRecord(
@@ -48,8 +45,6 @@ public class WebhookEventStore : DomainService, IWebhookEventStore
             };
 
             await WebhookEventRepository.InsertAsync(record);
-
-            await uow.SaveChangesAsync();
 
             return record.Id;
         }

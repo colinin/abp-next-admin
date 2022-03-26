@@ -8,9 +8,9 @@ public class WebhooksManagementModuleExtensionConfiguration : ModuleExtensionCon
     public WebhooksManagementModuleExtensionConfiguration ConfigureWebhooksManagement(
         Action<EntityExtensionConfiguration> configureAction)
     {
-        return this.ConfigureEntity(
-            WebhooksManagementModuleExtensionConsts.EntityNames.Entity,
-            configureAction
-        );
+        return this
+            .ConfigureEntity(WebhooksManagementModuleExtensionConsts.EntityNames.WebhookEvent, configureAction)
+            .ConfigureEntity(WebhooksManagementModuleExtensionConsts.EntityNames.WebhookSendAttempt, configureAction)
+            .ConfigureEntity(WebhooksManagementModuleExtensionConsts.EntityNames.WebhookSubscription, configureAction);
     }
 }

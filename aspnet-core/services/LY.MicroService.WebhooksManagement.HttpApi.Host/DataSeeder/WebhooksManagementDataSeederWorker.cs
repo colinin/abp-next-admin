@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 
-namespace LY..WebhooksManagement.DataSeeder;
+namespace LY.MicroService.WebhooksManagement.DataSeeder;
 
 public class WebhooksManagementDataSeederWorker : BackgroundService
 {

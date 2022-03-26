@@ -17,5 +17,6 @@ public interface IWebhookSendRecordRepository : IRepository<WebhookSendRecord, G
         string sorting = nameof(WebhookSendRecord.CreationTime),
         int maxResultCount = 10,
         int skipCount = 10,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default);
 }

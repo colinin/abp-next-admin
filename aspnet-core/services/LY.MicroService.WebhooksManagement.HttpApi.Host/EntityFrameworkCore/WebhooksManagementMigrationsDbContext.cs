@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace LY..WebhooksManagement.EntityFrameworkCore;
+namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 
 public class WebhooksManagementMigrationsDbContext : AbpDbContext<WebhooksManagementMigrationsDbContext>
 {

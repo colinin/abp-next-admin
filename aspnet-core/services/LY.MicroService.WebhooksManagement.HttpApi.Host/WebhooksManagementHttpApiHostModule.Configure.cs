@@ -31,7 +31,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LY..WebhooksManagement;
+namespace LY.MicroService.WebhooksManagement;
 
 public partial class WebhooksManagementHttpApiHostModule
 {
@@ -53,7 +53,7 @@ public partial class WebhooksManagementHttpApiHostModule
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
             // 以开放端口区别
-            options.SnowflakeIdOptions.WorkerId = 5000;
+            options.SnowflakeIdOptions.WorkerId = 30045;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
@@ -160,7 +160,7 @@ public partial class WebhooksManagementHttpApiHostModule
     {
         Configure<AbpAuditingOptions>(options =>
         {
-            options.ApplicationName = "WebhooksManagement";
+            options.ApplicationName = ApplicationName;
             // 是否启用实体变更记录
             var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
             if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
@@ -196,7 +196,7 @@ public partial class WebhooksManagementHttpApiHostModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<WebhooksManagementHttpApiHostModule>("LY..WebhooksManagement");
+            options.FileSets.AddEmbedded<WebhooksManagementHttpApiHostModule>("LY.MicroService.WebhooksManagement");
         });
     }
 

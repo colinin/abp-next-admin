@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -6,12 +7,12 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using LY..WebhooksManagement.EntityFrameworkCore;
-using LY..WebhooksManagement.SettingManagement;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -27,7 +28,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 
-namespace LY.WebhooksManagement;
+namespace LY.MicroService.WebhooksManagement;
 
 [DependsOn(
     typeof(AbpSerilogEnrichersApplicationModule),
@@ -37,7 +38,6 @@ namespace LY.WebhooksManagement;
     typeof(WebhooksManagementApplicationModule),
     typeof(WebhooksManagementHttpApiModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
-    typeof(WebhooksManagementSettingManagementModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
@@ -101,6 +101,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();
         app.UseAuthorization();
+        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {

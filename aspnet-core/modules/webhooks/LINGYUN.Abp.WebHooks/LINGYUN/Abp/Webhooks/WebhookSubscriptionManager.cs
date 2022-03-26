@@ -93,11 +93,7 @@ namespace LINGYUN.Abp.Webhooks
                 }
                 else
                 {
-                    var subscription = await WebhookSubscriptionsStore.GetAsync(webhookSubscription.Id);
-                    subscription.WebhookUri = webhookSubscription.WebhookUri;
-                    subscription.Webhooks = webhookSubscription.Webhooks;
-                    subscription.Headers = webhookSubscription.Headers;
-                    await WebhookSubscriptionsStore.UpdateAsync(subscription);
+                    await WebhookSubscriptionsStore.UpdateAsync(webhookSubscription);
                 }
 
                 await uow.SaveChangesAsync();

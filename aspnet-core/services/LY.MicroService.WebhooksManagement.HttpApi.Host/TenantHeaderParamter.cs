@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using Volo.Abp.MultiTenancy;
 
-namespace LY..WebhooksManagement;
+namespace LY.MicroService.WebhooksManagement;
 
 public class TenantHeaderParamter : IOperationFilter
 {

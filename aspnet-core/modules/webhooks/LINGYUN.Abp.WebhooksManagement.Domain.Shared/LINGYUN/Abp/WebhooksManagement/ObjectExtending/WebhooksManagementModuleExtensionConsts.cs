@@ -6,6 +6,8 @@ public static class WebhooksManagementModuleExtensionConsts
 
     public static class EntityNames
     {
-        public const string Entity = "Entity";
+        public const string WebhookEvent = "WebhookEvent";
+        public const string WebhookSendAttempt = "WebhookSendAttempt";
+        public const string WebhookSubscription = "WebhookSubscription";
     }
 }

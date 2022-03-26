@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace LY..WebhooksManagement.EntityFrameworkCore;
+namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 
 public class WebhooksManagementMigrationsDbContextFactory : IDesignTimeDbContextFactory<WebhooksManagementMigrationsDbContext>
 {

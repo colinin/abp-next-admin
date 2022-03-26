@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>LY..WebhooksManagement</RootNamespace>
+		<RootNamespace>LY.MicroService.WebhooksManagement</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -57,10 +57,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.Application\LY..WebhooksManagement.Application.csproj" />
-	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.EntityFrameworkCore\LY..WebhooksManagement.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.HttpApi\LY..WebhooksManagement.HttpApi.csproj" />
-	  <ProjectReference Include="..\..\src\LY..WebhooksManagement.SettingManagement\LY..WebhooksManagement.SettingManagement.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
 	</ItemGroup>
 
 </Project>

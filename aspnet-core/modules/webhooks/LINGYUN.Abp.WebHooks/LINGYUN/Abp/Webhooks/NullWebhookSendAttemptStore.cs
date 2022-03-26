@@ -33,10 +33,10 @@ namespace LINGYUN.Abp.Webhooks
             return default;
         }
 
-        public Task<IReadOnlyCollection<WebhookSendAttempt>> GetAllSendAttemptsBySubscriptionAsPagedListAsync(Guid? tenantId, Guid subscriptionId, int maxResultCount,
+        public Task<(int TotalCount, IReadOnlyCollection<WebhookSendAttempt> Webhooks)> GetAllSendAttemptsBySubscriptionAsPagedListAsync(Guid? tenantId, Guid subscriptionId, int maxResultCount,
             int skipCount)
         {
-            return Task.FromResult(new List<WebhookSendAttempt>() as IReadOnlyCollection<WebhookSendAttempt>);
+            return Task.FromResult(ValueTuple.Create(0, new List<WebhookSendAttempt>() as IReadOnlyCollection<WebhookSendAttempt>));
         }
 
         public Task<List<WebhookSendAttempt>> GetAllSendAttemptsByWebhookEventIdAsync(Guid? tenantId, Guid webhookEventId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -44,7 +45,7 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
         string response,
         HttpStatusCode? statusCode = null)
     {
-        Response = response;
+        Response = Check.Length(response, nameof(response), WebhookSendRecordConsts.MaxResponseLength);
         ResponseStatusCode = statusCode;
     }
 }

@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
@@ -19,11 +18,10 @@ public class DefaultWebhookManager : WebhookManager, ITransientDependency
     public DefaultWebhookManager(
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
-        IJsonSerializer jsonSerializer, 
         IWebhookSendAttemptStore webhookSendAttemptStore,
         IUnitOfWorkManager unitOfWorkManager,
         IWebhookSendRecordRepository webhookSendAttemptRepository) 
-        : base(jsonSerializer, webhookSendAttemptStore)
+        : base(webhookSendAttemptStore)
     {
         CurrentTenant = currentTenant;
         GuidGenerator = guidGenerator;

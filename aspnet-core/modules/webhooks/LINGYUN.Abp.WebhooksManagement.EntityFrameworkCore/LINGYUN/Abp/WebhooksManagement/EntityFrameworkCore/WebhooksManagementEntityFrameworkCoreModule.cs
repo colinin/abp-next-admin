@@ -13,6 +13,10 @@ public class WebhooksManagementEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<WebhooksManagementDbContext>(options =>
         {
+            options.AddRepository<WebhookSendRecord, EfCoreWebhookSendRecordRepository>();
+            options.AddRepository<WebhookEventRecord, EfCoreWebhookEventRecordRepository>();
+            options.AddRepository<WebhookSubscription, EfCoreWebhookSubscriptionRepository>();
+
             options.AddDefaultRepositories<IWebhooksManagementDbContext>();
         });
     }
