@@ -5,6 +5,7 @@
     "Permission:WebhooksManagement": "Webhooks",
     "Permission:ManageSettings": "Manage Settings",
     "DisplayName:CheckConnect": "Check Connect",
-    "Description:CheckConnect": "When a third-party service is connected, it is used to check whether the communication is normal."
+    "Description:CheckConnect": "When a third-party service is connected, it is used to check whether the communication is normal.",
+    "Webhooks:010001": "Payload address {WebhookUri} has been mounted event {Webhooks}!"
   }
 }

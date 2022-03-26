@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.Webhooks;
 [DependsOn(typeof(AbpHttpClientModule))]
 public class AbpWebhooksModule : AbpModule
 {
-    internal const string WebhooksClient = "Abp.Webhooks.HttpClient";
+    internal const string WebhooksClient = "__Abp_Webhooks_HttpClient";
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

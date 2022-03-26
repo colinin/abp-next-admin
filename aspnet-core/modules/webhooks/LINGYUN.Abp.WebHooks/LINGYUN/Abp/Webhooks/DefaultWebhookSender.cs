@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -13,18 +12,15 @@ namespace LINGYUN.Abp.Webhooks
     {
         public ILogger<DefaultWebhookSender> Logger { protected get; set; }
 
-        private readonly AbpWebhooksOptions _options;
         private readonly IWebhookManager _webhookManager;
         private readonly IHttpClientFactory _httpClientFactory;
         
         private const string FailedRequestDefaultContent = "Webhook Send Request Failed";
 
         public DefaultWebhookSender(
-            IOptions<AbpWebhooksOptions> options, 
             IWebhookManager webhookManager,
             IHttpClientFactory httpClientFactory)
         {
-            _options = options.Value;
             _webhookManager = webhookManager;
             _httpClientFactory = httpClientFactory;
 
