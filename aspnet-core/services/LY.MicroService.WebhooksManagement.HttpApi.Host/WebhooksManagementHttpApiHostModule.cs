@@ -85,6 +85,8 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        // context.Services.AddAlwaysAllowAuthorization();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
