@@ -11,6 +11,11 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
         var group = context.AddGroup(WebhooksManagementPermissions.GroupName, L("Permission:WebhooksManagement"));
 
         group.AddPermission(
+            WebhooksManagementPermissions.Publish,
+            L("Permission:Publish"))
+            .WithProviders(ClientPermissionValueProvider.ProviderName);
+
+        group.AddPermission(
             WebhooksManagementPermissions.ManageSettings,
             L("Permission:ManageSettings"));
     }

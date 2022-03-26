@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.WebhooksManagement.Domain.Shared\LINGYUN.Abp.WebhooksManagement.Domain.Shared.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.WebHooks\LINGYUN.Abp.WebHooks.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj" />
 	</ItemGroup>
 
 </Project>

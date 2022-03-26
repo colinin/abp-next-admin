@@ -33,28 +33,45 @@ namespace LINGYUN.Abp.Webhooks
         }
         
         #region Async Publish Methods
-        public virtual async Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
+
+        public virtual async Task PublishAsync(
+            string webhookName,
+            object data, 
+            bool sendExactSameData = false, 
+            WebhookHeader headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGrantedAsync(_currentTenant.Id, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(string webhookName, object data, Guid? tenantId,
-            bool sendExactSameData = false, WebhookHeader headers = null)
+        public virtual async Task PublishAsync(
+            string webhookName,
+            object data,
+            Guid? tenantId,
+            bool sendExactSameData = false, 
+            WebhookHeader headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGrantedAsync(tenantId, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(Guid?[] tenantIds, string webhookName, object data,
-            bool sendExactSameData = false, WebhookHeader headers = null)
+        public virtual async Task PublishAsync(
+            Guid?[] tenantIds, 
+            string webhookName,
+            object data,
+            bool sendExactSameData = false, 
+            WebhookHeader headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(tenantIds, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        private async Task PublishAsync(string webhookName, object data, List<WebhookSubscriptionInfo> webhookSubscriptions,
-            bool sendExactSameData = false, WebhookHeader headers = null)
+        protected virtual async Task PublishAsync(
+            string webhookName, 
+            object data, 
+            List<WebhookSubscriptionInfo> webhookSubscriptions,
+            bool sendExactSameData = false, 
+            WebhookHeader headers = null)
         {
             if (webhookSubscriptions.IsNullOrEmpty())
             {
@@ -104,7 +121,9 @@ namespace LINGYUN.Abp.Webhooks
         
         #endregion
 
-        protected virtual async Task<WebhookEvent> SaveAndGetWebhookAsync(Guid? tenantId, string webhookName,
+        protected virtual async Task<WebhookEvent> SaveAndGetWebhookAsync(
+            Guid? tenantId,
+            string webhookName,
             object data)
         {
             var webhookInfo = new WebhookEvent
