@@ -15,18 +15,15 @@ namespace LINGYUN.Abp.Webhooks
         public IWebhookEventStore WebhookEventStore { get; set; }
 
         private readonly ICurrentTenant _currentTenant;
-        private readonly IGuidGenerator _guidGenerator;
         private readonly IBackgroundJobManager _backgroundJobManager;
         private readonly IWebhookSubscriptionManager _webhookSubscriptionManager;
 
         public DefaultWebhookPublisher(
             IWebhookSubscriptionManager webhookSubscriptionManager,
             ICurrentTenant currentTenant,
-            IGuidGenerator guidGenerator,
             IBackgroundJobManager backgroundJobManager)
         {
             _currentTenant = currentTenant;
-            _guidGenerator = guidGenerator;
             _backgroundJobManager = backgroundJobManager;
             _webhookSubscriptionManager = webhookSubscriptionManager;
 
@@ -103,7 +100,7 @@ namespace LINGYUN.Abp.Webhooks
                             }
                         }
                     }
-                    
+
                     await _backgroundJobManager.EnqueueAsync(new WebhookSenderArgs
                     {
                         TenantId = webhookSubscription.TenantId,

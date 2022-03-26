@@ -12,6 +12,16 @@ namespace LINGYUN.Abp.Webhooks
         public string Name { get; }
 
         /// <summary>
+        /// Tries to send webhook only one time without checking to send attempt count
+        /// </summary>
+        public bool TryOnce { get; set; }
+
+        /// <summary>
+        /// Defined maximum number of sending times
+        /// </summary>
+        public int MaxSendAttemptCount { get; set; }
+
+        /// <summary>
         /// Display name of the webhook.
         /// Optional.
         /// </summary>
