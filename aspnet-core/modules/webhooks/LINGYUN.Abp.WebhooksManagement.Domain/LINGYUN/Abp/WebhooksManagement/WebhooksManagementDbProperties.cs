@@ -2,7 +2,7 @@
 
 public static class WebhooksManagementDbProperties
 {
-    public static string DbTablePrefix { get; set; } = "WebhooksManagement_";
+    public static string DbTablePrefix { get; set; } = "AbpWebhooks";
 
     public static string DbSchema { get; set; } = null;
 

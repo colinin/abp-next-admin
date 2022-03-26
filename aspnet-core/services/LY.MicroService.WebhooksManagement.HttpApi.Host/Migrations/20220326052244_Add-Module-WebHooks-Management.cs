@@ -13,7 +13,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "WebhooksManagement_WebhookEvents",
+                name: "AbpWebhooksEvents",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -28,12 +28,12 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WebhooksManagement_WebhookEvents", x => x.Id);
+                    table.PrimaryKey("PK_AbpWebhooksEvents", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "WebhooksManagement_WebhookSubscriptions",
+                name: "AbpWebhooksSubscriptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -52,12 +52,12 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WebhooksManagement_WebhookSubscriptions", x => x.Id);
+                    table.PrimaryKey("PK_AbpWebhooksSubscriptions", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "WebhooksManagement_WebhookSendAttempts",
+                name: "AbpWebhooksSendAttempts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -72,19 +72,19 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WebhooksManagement_WebhookSendAttempts", x => x.Id);
+                    table.PrimaryKey("PK_AbpWebhooksSendAttempts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WebhooksManagement_WebhookSendAttempts_WebhooksManagement_We~",
+                        name: "FK_AbpWebhooksSendAttempts_AbpWebhooksEvents_WebhookEventId",
                         column: x => x.WebhookEventId,
-                        principalTable: "WebhooksManagement_WebhookEvents",
+                        principalTable: "AbpWebhooksEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WebhooksManagement_WebhookSendAttempts_WebhookEventId",
-                table: "WebhooksManagement_WebhookSendAttempts",
+                name: "IX_AbpWebhooksSendAttempts_WebhookEventId",
+                table: "AbpWebhooksSendAttempts",
                 column: "WebhookEventId",
                 unique: true);
         }
@@ -92,13 +92,13 @@ namespace LY.MicroService.WebhooksManagement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "WebhooksManagement_WebhookSendAttempts");
+                name: "AbpWebhooksSendAttempts");
 
             migrationBuilder.DropTable(
-                name: "WebhooksManagement_WebhookSubscriptions");
+                name: "AbpWebhooksSubscriptions");
 
             migrationBuilder.DropTable(
-                name: "WebhooksManagement_WebhookEvents");
+                name: "AbpWebhooksEvents");
         }
     }
 }

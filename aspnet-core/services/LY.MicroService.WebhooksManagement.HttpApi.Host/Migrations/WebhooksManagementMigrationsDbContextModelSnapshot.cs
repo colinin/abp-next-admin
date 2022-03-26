@@ -58,7 +58,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WebhooksManagement_WebhookEvents", (string)null);
+                    b.ToTable("AbpWebhooksEvents", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
@@ -98,7 +98,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                     b.HasIndex("WebhookEventId")
                         .IsUnique();
 
-                    b.ToTable("WebhooksManagement_WebhookSendAttempts", (string)null);
+                    b.ToTable("AbpWebhooksSendAttempts", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSubscription", b =>
@@ -145,7 +145,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WebhooksManagement_WebhookSubscriptions", (string)null);
+                    b.ToTable("AbpWebhooksSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>

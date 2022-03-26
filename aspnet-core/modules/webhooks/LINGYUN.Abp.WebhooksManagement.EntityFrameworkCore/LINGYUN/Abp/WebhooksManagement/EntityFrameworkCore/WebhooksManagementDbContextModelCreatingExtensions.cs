@@ -21,7 +21,7 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
 
         builder.Entity<WebhookEventRecord>(b =>
         {
-            b.ToTable(options.TablePrefix + "WebhookEvents", options.Schema);
+            b.ToTable(options.TablePrefix + "Events", options.Schema);
 
             b.Property(p => p.WebhookName)
              .IsRequired()
@@ -36,7 +36,7 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
 
         builder.Entity<WebhookSendRecord>(b =>
         {
-            b.ToTable(options.TablePrefix + "WebhookSendAttempts", options.Schema);
+            b.ToTable(options.TablePrefix + "SendAttempts", options.Schema);
 
             b.Property(p => p.Response)
              .HasColumnName(nameof(WebhookSendRecord.Response))
@@ -52,7 +52,7 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
 
         builder.Entity<WebhookSubscription>(b =>
         {
-            b.ToTable(options.TablePrefix + "WebhookSubscriptions", options.Schema);
+            b.ToTable(options.TablePrefix + "Subscriptions", options.Schema);
 
             b.Property(p => p.WebhookUri)
              .IsRequired()

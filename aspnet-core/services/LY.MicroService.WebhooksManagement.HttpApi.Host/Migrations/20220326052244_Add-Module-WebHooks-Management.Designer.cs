@@ -12,7 +12,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.WebhooksManagement.Migrations
 {
     [DbContext(typeof(WebhooksManagementMigrationsDbContext))]
-    [Migration("20220326030345_Add-Module-WebHooks-Management")]
+    [Migration("20220326052244_Add-Module-WebHooks-Management")]
     partial class AddModuleWebHooksManagement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WebhooksManagement_WebhookEvents", (string)null);
+                    b.ToTable("AbpWebhooksEvents", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
@@ -100,7 +100,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
                     b.HasIndex("WebhookEventId")
                         .IsUnique();
 
-                    b.ToTable("WebhooksManagement_WebhookSendAttempts", (string)null);
+                    b.ToTable("AbpWebhooksSendAttempts", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSubscription", b =>
@@ -147,7 +147,7 @@ namespace LY.MicroService.WebhooksManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WebhooksManagement_WebhookSubscriptions", (string)null);
+                    b.ToTable("AbpWebhooksSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
