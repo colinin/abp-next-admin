@@ -4,16 +4,16 @@ using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.Tencent.SettingManagement;
 
-public class TenantCloudSettingPermissionDefinitionProvider : PermissionDefinitionProvider
+public class TencentCloudSettingPermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)
     {
         var wechatGroup = context.AddGroup(
-            TenantCloudSettingPermissionNames.GroupName,
+            TencentCloudSettingPermissionNames.GroupName,
             L("Permission:TencentCloud"));
 
         wechatGroup.AddPermission(
-            TenantCloudSettingPermissionNames.Settings, L("Permission:TencentCloud.Settings"));
+            TencentCloudSettingPermissionNames.Settings, L("Permission:TencentCloud.Settings"));
     }
 
     protected LocalizableString L(string name)

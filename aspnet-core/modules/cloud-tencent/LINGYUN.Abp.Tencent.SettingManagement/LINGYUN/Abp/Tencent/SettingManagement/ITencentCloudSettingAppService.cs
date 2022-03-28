@@ -2,6 +2,6 @@
 
 namespace LINGYUN.Abp.Tencent.SettingManagement;
 
-public interface ITenantCloudSettingAppService : IReadonlySettingAppService
+public interface ITencentCloudSettingAppService : IReadonlySettingAppService
 {
 }

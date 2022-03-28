@@ -202,26 +202,6 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
             );
         }
 
-        //ApiGateway
-        var apigatewayClientId = configurationSection["AuthApiGateway:ClientId"];
-        if (!apigatewayClientId.IsNullOrWhiteSpace())
-        {
-            var apigatewayPermissions = new string[8]
-            {
-                    "ApiGateway.Global", "ApiGateway.Global.Export",
-                    "ApiGateway.Route", "ApiGateway.Route.Export",
-                    "ApiGateway.DynamicRoute", "ApiGateway.DynamicRoute.Export",
-                    "ApiGateway.AggregateRoute", "ApiGateway.AggregateRoute.Export",
-            };
-            await CreateClientAsync(
-                apigatewayClientId,
-                commonScopes.Union(new[] { "lingyun-abp-application" }),
-                new[] { "client_credentials" },
-                commonSecret,
-                permissions: apigatewayPermissions
-            );
-        }
-
         // InternalService 内部服务间通讯客户端,必要的话需要在前端指定它拥有所有权限,当前项目仅预置用户查询权限
         var internalServiceClientId = configurationSection["InternalService:ClientId"];
         if (!internalServiceClientId.IsNullOrWhiteSpace())
