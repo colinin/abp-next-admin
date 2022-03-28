@@ -11,7 +11,7 @@ using Volo.Abp.BackgroundJobs;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Default)]
-public class WebhooksSendRecordAppService : WebhooksManagementAppServiceBase, IWebhooksSendRecordAppService
+public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWebhookSendRecordAppService
 {
     protected IBackgroundJobManager BackgroundJobManager => LazyServiceProvider.LazyGetRequiredService<IBackgroundJobManager>();
     protected IWebhookEventRecordRepository EventRepository => LazyServiceProvider.LazyGetRequiredService<IWebhookEventRecordRepository>();
@@ -20,7 +20,7 @@ public class WebhooksSendRecordAppService : WebhooksManagementAppServiceBase, IW
 
     protected IWebhookSendRecordRepository RecordRepository { get; }
 
-    public WebhooksSendRecordAppService(
+    public WebhookSendRecordAppService(
         IWebhookSendRecordRepository recordRepository)
     {
         RecordRepository = recordRepository;

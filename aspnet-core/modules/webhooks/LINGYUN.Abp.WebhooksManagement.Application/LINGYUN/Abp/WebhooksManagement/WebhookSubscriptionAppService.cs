@@ -13,12 +13,12 @@ using Volo.Abp.Application.Dtos;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Authorize(WebhooksManagementPermissions.WebhookSubscription.Default)]
-public class WebhooksSubscriptionAppService : WebhooksManagementAppServiceBase, IWebhooksSubscriptionAppService
+public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, IWebhookSubscriptionAppService
 {
     protected IWebhookDefinitionManager WebhookDefinitionManager { get; }
     protected IWebhookSubscriptionRepository SubscriptionRepository { get; }
 
-    public WebhooksSubscriptionAppService(
+    public WebhookSubscriptionAppService(
         IWebhookDefinitionManager webhookDefinitionManager,
         IWebhookSubscriptionRepository subscriptionRepository)
     {
@@ -103,16 +103,16 @@ public class WebhooksSubscriptionAppService : WebhooksManagementAppServiceBase, 
         return subscription.ToWebhookSubscriptionDto();
     }
 
-    public async virtual Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync()
+    public async virtual Task<ListResultDto<WebhookAvailableDto>> GetAllAvailableWebhooksAsync()
     {
         var webhooks = WebhookDefinitionManager.GetAll();
-        var definitions = new List<WebhooksAvailableDto>();
+        var definitions = new List<WebhookAvailableDto>();
 
         foreach (var webhookDefinition in webhooks)
         {
             if (await WebhookDefinitionManager.IsAvailableAsync(CurrentTenant.Id, webhookDefinition.Name))
             {
-                definitions.Add(new WebhooksAvailableDto
+                definitions.Add(new WebhookAvailableDto
                 {
                     Name = webhookDefinition.Name,
                     Description = webhookDefinition.Description?.Localize(StringLocalizerFactory),
@@ -121,7 +121,7 @@ public class WebhooksSubscriptionAppService : WebhooksManagementAppServiceBase, 
             }
         }
 
-        return new ListResultDto<WebhooksAvailableDto>(definitions.OrderBy(d => d.Name).ToList());
+        return new ListResultDto<WebhookAvailableDto>(definitions.OrderBy(d => d.Name).ToList());
     }
 
     protected async virtual Task CheckSubscribedAsync(WebhookSubscriptionCreateOrUpdateInput input)

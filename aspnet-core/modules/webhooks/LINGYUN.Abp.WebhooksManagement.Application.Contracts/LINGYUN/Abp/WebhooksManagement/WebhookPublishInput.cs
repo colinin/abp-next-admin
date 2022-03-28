@@ -5,7 +5,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public class WebhooksPublishInput
+public class WebhookPublishInput
 {
     [Required]
     [DynamicStringLength(typeof(WebhookEventRecordConsts), nameof(WebhookEventRecordConsts.MaxWebhookNameLength))]

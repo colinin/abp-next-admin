@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Authorize(WebhooksManagementPermissions.Publish)]
-public class WebhooksPublishAppService : WebhooksManagementAppServiceBase, IWebhooksPublishAppService
+public class WebhookPublishAppService : WebhooksManagementAppServiceBase, IWebhookPublishAppService
 {
     protected IWebhookPublisher InnerPublisher { get; }
 
-    public WebhooksPublishAppService(IWebhookPublisher innerPublisher)
+    public WebhookPublishAppService(IWebhookPublisher innerPublisher)
     {
         InnerPublisher = innerPublisher;
     }
 
-    public async virtual Task PublishAsync(WebhooksPublishInput input)
+    public async virtual Task PublishAsync(WebhookPublishInput input)
     {
         var webhookHeader = new WebhookHeader
         {

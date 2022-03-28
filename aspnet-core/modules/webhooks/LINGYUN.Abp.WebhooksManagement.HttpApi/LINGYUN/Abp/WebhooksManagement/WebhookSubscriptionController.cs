@@ -12,11 +12,11 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [Area(WebhooksManagementRemoteServiceConsts.ModuleName)]
 [Authorize(WebhooksManagementPermissions.WebhookSubscription.Default)]
 [Route("api/webhooks/subscriptions")]
-public class WebhooksSubscriptionController : WebhooksManagementControllerBase, IWebhooksSubscriptionAppService
+public class WebhookSubscriptionController : WebhooksManagementControllerBase, IWebhookSubscriptionAppService
 {
-    protected IWebhooksSubscriptionAppService SubscriptionAppService { get; }
+    protected IWebhookSubscriptionAppService SubscriptionAppService { get; }
 
-    public WebhooksSubscriptionController(IWebhooksSubscriptionAppService subscriptionAppService)
+    public WebhookSubscriptionController(IWebhookSubscriptionAppService subscriptionAppService)
     {
         SubscriptionAppService = subscriptionAppService;
     }
@@ -59,7 +59,7 @@ public class WebhooksSubscriptionController : WebhooksManagementControllerBase, 
 
     [HttpGet]
     [Route("availables")]
-    public Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync()
+    public Task<ListResultDto<WebhookAvailableDto>> GetAllAvailableWebhooksAsync()
     {
         return SubscriptionAppService.GetAllAvailableWebhooksAsync();
     }

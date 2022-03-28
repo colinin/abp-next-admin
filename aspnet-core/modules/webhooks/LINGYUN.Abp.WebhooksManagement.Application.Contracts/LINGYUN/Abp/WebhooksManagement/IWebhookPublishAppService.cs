@@ -3,7 +3,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public interface IWebhooksPublishAppService : IApplicationService
+public interface IWebhookPublishAppService : IApplicationService
 {
-    Task PublishAsync(WebhooksPublishInput input);
+    Task PublishAsync(WebhookPublishInput input);
 }

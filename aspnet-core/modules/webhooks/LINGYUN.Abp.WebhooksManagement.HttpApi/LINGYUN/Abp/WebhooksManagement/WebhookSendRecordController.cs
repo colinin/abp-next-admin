@@ -12,11 +12,11 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [Area(WebhooksManagementRemoteServiceConsts.ModuleName)]
 [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Default)]
 [Route("api/webhooks/send-attempts")]
-public class WebhooksSendRecordController : WebhooksManagementControllerBase, IWebhooksSendRecordAppService
+public class WebhookSendRecordController : WebhooksManagementControllerBase, IWebhookSendRecordAppService
 {
-    protected IWebhooksSendRecordAppService SendRecordAppService { get; }
+    protected IWebhookSendRecordAppService SendRecordAppService { get; }
 
-    public WebhooksSendRecordController(IWebhooksSendRecordAppService sendRecordAppService)
+    public WebhookSendRecordController(IWebhookSendRecordAppService sendRecordAppService)
     {
         SendRecordAppService = sendRecordAppService;
     }

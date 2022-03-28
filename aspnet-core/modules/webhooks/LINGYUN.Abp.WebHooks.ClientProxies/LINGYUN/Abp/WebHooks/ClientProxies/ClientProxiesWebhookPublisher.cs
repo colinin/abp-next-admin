@@ -11,17 +11,17 @@ namespace LINGYUN.Abp.Webhooks.ClientProxies;
 [Dependency(ReplaceServices = true)]
 public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDependency
 {
-    protected IWebhooksPublishAppService PublishAppService { get; }
+    protected IWebhookPublishAppService PublishAppService { get; }
 
     public ClientProxiesWebhookPublisher(
-        IWebhooksPublishAppService publishAppService)
+        IWebhookPublishAppService publishAppService)
     {
         PublishAppService = publishAppService;
     }
 
     public async virtual Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
     {
-        var input = new WebhooksPublishInput
+        var input = new WebhookPublishInput
         {
             WebhookName = webhookName,
             Data = JsonConvert.SerializeObject(data),
@@ -41,7 +41,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
 
     public async virtual Task PublishAsync(string webhookName, object data, Guid? tenantId, bool sendExactSameData = false, WebhookHeader headers = null)
     {
-        var input = new WebhooksPublishInput
+        var input = new WebhookPublishInput
         {
             WebhookName = webhookName,
             Data = JsonConvert.SerializeObject(data),
@@ -65,7 +65,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
 
     public async virtual Task PublishAsync(Guid?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
     {
-        var input = new WebhooksPublishInput
+        var input = new WebhookPublishInput
         {
             WebhookName = webhookName,
             Data = JsonConvert.SerializeObject(data),
@@ -84,7 +84,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
         await PublishAsync(input);
     }
 
-    protected virtual async Task PublishAsync(WebhooksPublishInput input)
+    protected virtual async Task PublishAsync(WebhookPublishInput input)
     {
         await PublishAppService.PublishAsync(input);
     }

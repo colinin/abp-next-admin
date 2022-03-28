@@ -10,17 +10,17 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [Area(WebhooksManagementRemoteServiceConsts.ModuleName)]
 [Authorize(WebhooksManagementPermissions.Publish)]
 [Route("api/webhooks/publish")]
-public class WebhooksPublishController : WebhooksManagementControllerBase, IWebhooksPublishAppService
+public class WebhookPublishController : WebhooksManagementControllerBase, IWebhookPublishAppService
 {
-    protected IWebhooksPublishAppService PublishAppService { get; }
+    protected IWebhookPublishAppService PublishAppService { get; }
 
-    public WebhooksPublishController(IWebhooksPublishAppService publishAppService)
+    public WebhookPublishController(IWebhookPublishAppService publishAppService)
     {
         PublishAppService = publishAppService;
     }
 
     [HttpPost]
-    public virtual Task PublishAsync(WebhooksPublishInput input)
+    public virtual Task PublishAsync(WebhookPublishInput input)
     {
         return PublishAppService.PublishAsync(input);
     }

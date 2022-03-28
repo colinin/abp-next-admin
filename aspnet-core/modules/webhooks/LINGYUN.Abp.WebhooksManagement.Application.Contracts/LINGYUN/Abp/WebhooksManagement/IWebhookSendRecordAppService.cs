@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public interface IWebhooksSendRecordAppService : IApplicationService
+public interface IWebhookSendRecordAppService : IApplicationService
 {
     Task<WebhookSendRecordDto> GetAsync(Guid id);
 

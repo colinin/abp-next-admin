@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public interface IWebhooksSubscriptionAppService :
+public interface IWebhookSubscriptionAppService :
     ICrudAppService<
         WebhookSubscriptionDto,
         Guid,
@@ -13,5 +13,5 @@ public interface IWebhooksSubscriptionAppService :
         WebhookSubscriptionCreateInput,
         WebhookSubscriptionUpdateInput>
 {
-    Task<ListResultDto<WebhooksAvailableDto>> GetAllAvailableWebhooksAsync();
+    Task<ListResultDto<WebhookAvailableDto>> GetAllAvailableWebhooksAsync();
 }
