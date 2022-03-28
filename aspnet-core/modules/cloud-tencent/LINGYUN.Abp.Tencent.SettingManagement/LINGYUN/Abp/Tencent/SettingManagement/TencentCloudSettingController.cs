@@ -9,11 +9,11 @@ namespace LINGYUN.Abp.Tencent.SettingManagement;
 [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
 [Area("settingManagement")]
 [Route("api/setting-management/tencent-cloud")]
-public class TenantCloudSettingController : AbpControllerBase, ITenantCloudSettingAppService
+public class TencentCloudSettingController : AbpControllerBase, ITencentCloudSettingAppService
 {
-    protected ITenantCloudSettingAppService Service { get; }
+    protected ITencentCloudSettingAppService Service { get; }
 
-    public TenantCloudSettingController(ITenantCloudSettingAppService service)
+    public TencentCloudSettingController(ITencentCloudSettingAppService service)
     {
         Service = service;
     }

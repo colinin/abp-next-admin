@@ -13,13 +13,13 @@ using ValueType = LINGYUN.Abp.SettingManagement.ValueType;
 
 namespace LINGYUN.Abp.Tencent.SettingManagement;
 
-public class TenantCloudSettingAppService : ApplicationService, ITenantCloudSettingAppService
+public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSettingAppService
 {
     protected ISettingManager SettingManager { get; }
     protected IPermissionChecker PermissionChecker { get; }
     protected ISettingDefinitionManager SettingDefinitionManager { get; }
 
-    public TenantCloudSettingAppService(
+    public TencentCloudSettingAppService(
         ISettingManager settingManager,
         IPermissionChecker permissionChecker,
         ISettingDefinitionManager settingDefinitionManager)
@@ -46,7 +46,7 @@ public class TenantCloudSettingAppService : ApplicationService, ITenantCloudSett
         var settingGroups = new SettingGroupResult();
 
         // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
-        if (await PermissionChecker.IsGrantedAsync(TenantCloudSettingPermissionNames.Settings))
+        if (await PermissionChecker.IsGrantedAsync(TencentCloudSettingPermissionNames.Settings))
         {
             var settingGroup = new SettingGroupDto(L["DisplayName:TenantCloud"], L["DisplayName:TenantCloud"]);
 
