@@ -1,0 +1,19 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Features:WebhooksManagement": "Webhooks",
+    "Permission:WebhooksManagement": "Webhooks",
+    "Permission:Subscriptions": "Subscriptions",
+    "Permission:SendAttempts": "Attempts",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
+    "Permission:Resend": "Resend",
+    "Permission:Publish": "Publish",
+    "Permission:ManageSettings": "Manage Settings",
+    "Webhooks:010001": "Payload address {WebhookUri} has been mounted event {Webhooks}!",
+    "Webhooks:Tests": "Tests",
+    "Webhooks:CheckConnect": "Check Connect",
+    "Webhooks:CheckConnectDesc": "When a third-party service is connected, it is used to check whether the communication is normal."
+  }
+}

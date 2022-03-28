@@ -1,0 +1,18 @@
+{
+  "culture": "en",
+  "texts": {
+    "Webhooks:Saas": "Saas",
+    "Webhooks:CreateEdition": "Create Edition",
+    "Webhooks:CreateEditionDesc": "A new Edition has been created",
+    "Webhooks:UpdateEdition": "Update Edition",
+    "Webhooks:UpdateEditionDesc": "A Edition has changed",
+    "Webhooks:DeleteEdition": "Delete Edition",
+    "Webhooks:DeleteEditionDesc": "Deleted Edition",
+    "Webhooks:CreateTenant": "Create Tenant",
+    "Webhooks:CreateTenantDesc": "A new Tenant has been created",
+    "Webhooks:UpdateTenant": "Update Tenant",
+    "Webhooks:UpdateTenantDesc": "A Tenant has been changed",
+    "Webhooks:DeleteTenant": "Delete Tenant",
+    "Webhooks:DeleteTenantDesc": "Deleted Tenant"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Webhooks:Saas": "Saas",
+    "Webhooks:CreateEdition": "创建版本",
+    "Webhooks:CreateEditionDesc": "一个新版本已创建",
+    "Webhooks:UpdateEdition": "编辑版本",
+    "Webhooks:UpdateEditionDesc": "一个版本属性已变更",
+    "Webhooks:DeleteEdition": "删除版本",
+    "Webhooks:DeleteEditionDesc": "已删除版本",
+    "Webhooks:CreateTenant": "创建租户",
+    "Webhooks:CreateTenantDesc": "一个新租户已创建",
+    "Webhooks:UpdateTenant": "编辑租户",
+    "Webhooks:UpdateTenantDesc": "一个租户属性已变更",
+    "Webhooks:DeleteTenant": "删除租户",
+    "Webhooks:DeleteTenantDesc": "已删除租户"
+  }
+}

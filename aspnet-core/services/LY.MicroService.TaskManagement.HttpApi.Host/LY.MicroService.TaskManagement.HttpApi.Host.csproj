@@ -45,6 +45,8 @@
 		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<!-- 某些定时作业可能需要用到 Microsoft.Data.SqlClient, 直接引用需要面临运行时配置问题, 加入项目依赖让编译器来处理 -->
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />

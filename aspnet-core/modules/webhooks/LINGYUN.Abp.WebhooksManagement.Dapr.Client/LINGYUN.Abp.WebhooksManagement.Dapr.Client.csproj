@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WebhooksManagement.Application.Contracts\LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

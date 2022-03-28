@@ -1,0 +1,20 @@
+{
+  "culture": "en",
+  "texts": {
+    "Webhooks:Identity": "Identity",
+    "Webhooks:CreateRole": "Create Role",
+    "Webhooks:CreateRoleDesc": "A new role has been created",
+    "Webhooks:UpdateRole": "Update Role",
+    "Webhooks:UpdateRoleDesc": "A role has changed",
+    "Webhooks:DeleteRole": "Delete Role",
+    "Webhooks:DeleteRoleDesc": "Deleted Role",
+    "Webhooks:ChangeRoleName": "Change Role Name",
+    "Webhooks:ChangeRoleNameDesc": "The name of a role was changed",
+    "Webhooks:CreateUser": "Create User",
+    "Webhooks:CreateUserDesc": "A new user has been created",
+    "Webhooks:UpdateUser": "Update User",
+    "Webhooks:UpdateUserDesc": "A user has been changed",
+    "Webhooks:DeleteUser": "Delete User",
+    "Webhooks:DeleteUserDesc": "Deleted User"
+  }
+}

@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>LY.MicroService.WebhooksManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.EventBus.CAP" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.ExceptionHandling.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="$(OpenTelemetryExtensionsHostingPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryExporterZipkinPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryInstrumentationAspNetCorePackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryInstrumentationHttpPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion)" />
+		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="$(SerilogEnrichersProcessPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="$(SerilogEnrichersThreadPackageVersion)" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="$(SerilogSinksElasticsearchPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
+	</ItemGroup>
+
+</Project>

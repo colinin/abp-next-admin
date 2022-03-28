@@ -1,0 +1,20 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Webhooks:Identity": "身份认证",
+    "Webhooks:CreateRole": "创建角色",
+    "Webhooks:CreateRoleDesc": "一个新角色已创建",
+    "Webhooks:UpdateRole": "编辑角色",
+    "Webhooks:UpdateRoleDesc": "一个角色属性已变更",
+    "Webhooks:DeleteRole": "删除角色",
+    "Webhooks:DeleteRoleDesc": "已删除角色",
+    "Webhooks:ChangeRoleName": "改变角色名称",
+    "Webhooks:ChangeRoleNameDesc": "一个角色的名称被更改",
+    "Webhooks:CreateUser": "创建用户",
+    "Webhooks:CreateUserDesc": "一个新用户已创建",
+    "Webhooks:UpdateUser": "编辑用户",
+    "Webhooks:UpdateUserDesc": "一个用户属性已变更",
+    "Webhooks:DeleteUser": "删除用户",
+    "Webhooks:DeleteUserDesc": "已删除用户"
+  }
+}
