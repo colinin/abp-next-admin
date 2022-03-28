@@ -1,0 +1,118 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9BEC7A37-AECA-4096-B4B3-57A2172C1296}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{8052BB2D-93A3-4C1D-9B4C-7080DCDF5B36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{FB7A9794-06D2-42CF-939E-4626497B97BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks", "modules\webhooks\LINGYUN.Abp.WebHooks\LINGYUN.Abp.Webhooks.csproj", "{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Domain.Shared", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Domain.Shared\LINGYUN.Abp.WebhooksManagement.Domain.Shared.csproj", "{B3953343-4067-4F12-8F2C-900761934E89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Domain", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Domain\LINGYUN.Abp.WebhooksManagement.Domain.csproj", "{416F0E1F-3B52-421C-8E94-1DC9E4EE5949}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Application.Contracts", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application.Contracts\LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj", "{453C29F1-E52E-4DFE-A91A-5DE47611874D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Application", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj", "{3B356F97-5D0D-4306-A7C1-56696D581641}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj", "{75ED12F9-3884-453E-8EDE-481949BF177A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.HttpApi", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj", "{0155C501-026B-4F58-A2BB-02518BBF1BB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.HttpApi.Client", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi.Client\LINGYUN.Abp.WebhooksManagement.HttpApi.Client.csproj", "{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Dapr.Client", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Dapr.Client\LINGYUN.Abp.WebhooksManagement.Dapr.Client.csproj", "{983F568C-3477-4B13-B3FC-95CE23BB2208}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.HttpApi.Host", "services\LY.MicroService.WebhooksManagement.HttpApi.Host\LY.MicroService.WebhooksManagement.HttpApi.Host.csproj", "{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.ClientProxies", "modules\webhooks\LINGYUN.Abp.WebHooks.ClientProxies\LINGYUN.Abp.Webhooks.ClientProxies.csproj", "{F4966BE6-CC96-4C23-9363-3BE4103F02E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Webhooks.Identity", "modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj", "{93BB030A-EA01-4F08-BD41-0800D838162C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Webhooks.Saas", "modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj", "{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3953343-4067-4F12-8F2C-900761934E89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3953343-4067-4F12-8F2C-900761934E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3953343-4067-4F12-8F2C-900761934E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3953343-4067-4F12-8F2C-900761934E89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416F0E1F-3B52-421C-8E94-1DC9E4EE5949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416F0E1F-3B52-421C-8E94-1DC9E4EE5949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416F0E1F-3B52-421C-8E94-1DC9E4EE5949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416F0E1F-3B52-421C-8E94-1DC9E4EE5949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{453C29F1-E52E-4DFE-A91A-5DE47611874D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{453C29F1-E52E-4DFE-A91A-5DE47611874D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{453C29F1-E52E-4DFE-A91A-5DE47611874D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{453C29F1-E52E-4DFE-A91A-5DE47611874D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B356F97-5D0D-4306-A7C1-56696D581641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B356F97-5D0D-4306-A7C1-56696D581641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B356F97-5D0D-4306-A7C1-56696D581641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B356F97-5D0D-4306-A7C1-56696D581641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75ED12F9-3884-453E-8EDE-481949BF177A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75ED12F9-3884-453E-8EDE-481949BF177A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75ED12F9-3884-453E-8EDE-481949BF177A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75ED12F9-3884-453E-8EDE-481949BF177A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0155C501-026B-4F58-A2BB-02518BBF1BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0155C501-026B-4F58-A2BB-02518BBF1BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0155C501-026B-4F58-A2BB-02518BBF1BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0155C501-026B-4F58-A2BB-02518BBF1BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{983F568C-3477-4B13-B3FC-95CE23BB2208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{983F568C-3477-4B13-B3FC-95CE23BB2208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{983F568C-3477-4B13-B3FC-95CE23BB2208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{983F568C-3477-4B13-B3FC-95CE23BB2208}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4966BE6-CC96-4C23-9363-3BE4103F02E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4966BE6-CC96-4C23-9363-3BE4103F02E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4966BE6-CC96-4C23-9363-3BE4103F02E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4966BE6-CC96-4C23-9363-3BE4103F02E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93BB030A-EA01-4F08-BD41-0800D838162C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93BB030A-EA01-4F08-BD41-0800D838162C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93BB030A-EA01-4F08-BD41-0800D838162C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93BB030A-EA01-4F08-BD41-0800D838162C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+		{B3953343-4067-4F12-8F2C-900761934E89} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{416F0E1F-3B52-421C-8E94-1DC9E4EE5949} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{453C29F1-E52E-4DFE-A91A-5DE47611874D} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{3B356F97-5D0D-4306-A7C1-56696D581641} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{75ED12F9-3884-453E-8EDE-481949BF177A} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{0155C501-026B-4F58-A2BB-02518BBF1BB5} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{7E5850A0-4CC8-4AB5-8988-067B9B1A00EA} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{983F568C-3477-4B13-B3FC-95CE23BB2208} = {9BEC7A37-AECA-4096-B4B3-57A2172C1296}
+		{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC} = {8052BB2D-93A3-4C1D-9B4C-7080DCDF5B36}
+		{F4966BE6-CC96-4C23-9363-3BE4103F02E8} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+		{93BB030A-EA01-4F08-BD41-0800D838162C} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80ED12A5-C899-459F-A181-ADCC9D680DE5}
+	EndGlobalSection
+EndGlobal
