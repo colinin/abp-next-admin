@@ -2,6 +2,7 @@
 
 namespace LINGYUN.Abp.Webhooks.Identity;
 
+[Serializable]
 public class OrganizationUnitWto
 {
     public Guid Id { get; set; }
