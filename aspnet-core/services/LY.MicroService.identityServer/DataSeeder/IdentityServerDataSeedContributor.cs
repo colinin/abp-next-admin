@@ -190,12 +190,21 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
             );
         }
 
-        //Console Test Client
-        var consoleClientId = configurationSection["AuthVueAdmin:ClientId"];
-        if (!consoleClientId.IsNullOrWhiteSpace())
+        var vueClientId = configurationSection["AuthVueAdmin:ClientId"];
+        if (!vueClientId.IsNullOrWhiteSpace())
         {
             await CreateClientAsync(
-                consoleClientId,
+                vueClientId,
+                commonScopes.Union(new[] { "lingyun-abp-application" }),
+                new[] { "password", "client_credentials" },
+                commonSecret
+            );
+        }
+        var vueOldClientId = configurationSection["AuthOldVueAdmin:ClientId"];
+        if (!vueOldClientId.IsNullOrWhiteSpace())
+        {
+            await CreateClientAsync(
+                vueOldClientId,
                 commonScopes.Union(new[] { "lingyun-abp-application" }),
                 new[] { "password", "client_credentials" },
                 commonSecret
