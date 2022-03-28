@@ -57,6 +57,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
 	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />
 	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />

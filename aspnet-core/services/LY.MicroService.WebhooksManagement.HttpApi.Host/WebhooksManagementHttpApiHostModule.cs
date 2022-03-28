@@ -7,6 +7,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Webhooks.Identity;
 using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(WebhooksManagementApplicationModule),
     typeof(WebhooksManagementHttpApiModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
+    typeof(AbpWebhooksIdentityModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),

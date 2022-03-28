@@ -2,5 +2,5 @@
 
 public static class WebhooksNames
 {
-    public const string CheckConnect = "Abp.Webhooks.CheckConnect";
+    public const string CheckConnect = "abp.webhooks.check_connect";
 }
