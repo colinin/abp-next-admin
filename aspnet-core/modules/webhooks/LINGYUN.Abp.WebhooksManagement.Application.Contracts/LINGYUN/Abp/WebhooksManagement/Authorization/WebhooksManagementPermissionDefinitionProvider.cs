@@ -9,7 +9,10 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var group = context.AddGroup(WebhooksManagementPermissions.GroupName, L("Permission:WebhooksManagement"));
+        var group = context.AddGroup(
+            WebhooksManagementPermissions.GroupName, 
+            L("Permission:WebhooksManagement"), 
+            MultiTenancySides.Host);
 
         var subscription = group.AddPermission(
             WebhooksManagementPermissions.WebhookSubscription.Default,
@@ -35,13 +38,11 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
         var sendAttempts = group.AddPermission(
             WebhooksManagementPermissions.WebhooksSendAttempts.Default,
             L("Permission:SendAttempts"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
         sendAttempts.AddChild(
             WebhooksManagementPermissions.WebhooksSendAttempts.Resend,
             L("Permission:Resend"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
 
         group.AddPermission(
             WebhooksManagementPermissions.Publish,
@@ -50,7 +51,8 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
 
         group.AddPermission(
             WebhooksManagementPermissions.ManageSettings,
-            L("Permission:ManageSettings"));
+            L("Permission:ManageSettings"),
+            MultiTenancySides.Host);
     }
 
     private static LocalizableString L(string name)

@@ -81,12 +81,12 @@ public partial class WebhooksManagementHttpApiHostModule
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {
-            //options.UseMySQL();
-            options.Configure(cfg =>
-            {
-                cfg.UseMySQL();
-                cfg.DbContextOptions.EnableSensitiveDataLogging();
-            });
+            options.UseMySQL();
+            //options.Configure(cfg =>
+            //{
+            //    cfg.UseMySQL();
+            //    cfg.DbContextOptions.EnableSensitiveDataLogging();
+            //});
         });
     }
 
