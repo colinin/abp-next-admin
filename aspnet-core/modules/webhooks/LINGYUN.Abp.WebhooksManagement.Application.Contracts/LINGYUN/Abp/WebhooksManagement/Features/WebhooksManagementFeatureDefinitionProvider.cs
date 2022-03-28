@@ -8,7 +8,7 @@ public class WebhooksManagementFeatureDefinitionProvider : FeatureDefinitionProv
 {
     public override void Define(IFeatureDefinitionContext context)
     {
-        var group = context.AddGroup(WebhooksManagementFeatureNames.GroupName, L("Features:WebhooksManagement"));
+        //var group = context.AddGroup(WebhooksManagementFeatureNames.GroupName, L("Features:WebhooksManagement"));
     }
 
     private static ILocalizableString L(string name)
