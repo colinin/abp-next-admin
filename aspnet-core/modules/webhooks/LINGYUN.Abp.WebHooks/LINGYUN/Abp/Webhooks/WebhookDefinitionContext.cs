@@ -7,48 +7,49 @@ namespace LINGYUN.Abp.Webhooks
 {
     public class WebhookDefinitionContext : IWebhookDefinitionContext
     {
-        protected Dictionary<string, WebhookDefinition> Webhooks { get; }
+        protected Dictionary<string, WebhookGroupDefinition> Groups { get; }
 
-        public WebhookDefinitionContext(Dictionary<string, WebhookDefinition> webhooks)
+        public WebhookDefinitionContext(Dictionary<string, WebhookGroupDefinition> webhooks)
         {
-            Webhooks = webhooks;
+            Groups = webhooks;
         }
 
-        public void Add(params WebhookDefinition[] definitions)
-        {
-            if (definitions.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            foreach (var definition in definitions)
-            {
-                Webhooks[definition.Name] = definition;
-            }
-        }
-
-        public WebhookDefinition GetOrNull([NotNull] string name)
+        public WebhookGroupDefinition AddGroup(
+            [NotNull] string name,
+            ILocalizableString displayName = null)
         {
             Check.NotNull(name, nameof(name));
 
-            if (!Webhooks.ContainsKey(name))
+            if (Groups.ContainsKey(name))
+            {
+                throw new AbpException($"There is already an existing webhook group with name: {name}");
+            }
+
+            return Groups[name] = new WebhookGroupDefinition(name, displayName);
+        }
+
+        public WebhookGroupDefinition GetGroupOrNull([NotNull] string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            if (!Groups.ContainsKey(name))
             {
                 return null;
             }
 
-            return Webhooks[name];
+            return Groups[name];
         }
 
-        public void Remove(string name)
+        public void RemoveGroup(string name)
         {
             Check.NotNull(name, nameof(name));
 
-            if (!Webhooks.ContainsKey(name))
+            if (!Groups.ContainsKey(name))
             {
-                throw new AbpException($"Undefined notification webhook: '{name}'.");
+                throw new AbpException($"Undefined notification webhook group: '{name}'.");
             }
 
-            Webhooks.Remove(name);
+            Groups.Remove(name);
         }
     }
 }

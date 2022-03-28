@@ -2,7 +2,7 @@
 
 public static class IdentityWebhookNames
 {
-    public const string GroupName = "abp.identity";
+    public const string GroupName = "abp.webhooks.identity";
     public static class IdentityRole
     {
         public const string Prefix = GroupName + ".roles";

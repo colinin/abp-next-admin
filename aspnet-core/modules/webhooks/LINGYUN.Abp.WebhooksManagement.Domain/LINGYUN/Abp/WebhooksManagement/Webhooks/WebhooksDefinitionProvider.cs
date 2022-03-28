@@ -8,11 +8,15 @@ public class WebhooksDefinitionProvider : WebhookDefinitionProvider
 {
     public override void Define(IWebhookDefinitionContext context)
     {
-        context.Add(
+        var testsGroup = context.AddGroup(
+            WebhooksNames.GroupName,
+            L("Webhooks:Tests"));
+
+        testsGroup.AddWebhooks(
             new WebhookDefinition(
                 WebhooksNames.CheckConnect,
-                L("DisplayName:CheckConnect"),
-                L("Description:CheckConnect")));
+                L("Webhooks:CheckConnect"),
+                L("Webhooks:CheckConnectDesc")));
     }
 
     private static ILocalizableString L(string name)

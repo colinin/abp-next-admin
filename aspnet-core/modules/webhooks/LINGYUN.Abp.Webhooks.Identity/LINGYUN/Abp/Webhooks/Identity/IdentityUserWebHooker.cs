@@ -6,7 +6,7 @@ using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Webhooks.Identity;
 
-public class IdentityUserWebHooker :
+public class IdentityUserWebhooker :
     IDistributedEventHandler<EntityCreatedEto<UserEto>>,
     IDistributedEventHandler<EntityUpdatedEto<UserEto>>,
     IDistributedEventHandler<EntityDeletedEto<UserEto>>,
@@ -14,7 +14,7 @@ public class IdentityUserWebHooker :
 {
     private readonly IWebhookPublisher _webhookPublisher;
 
-    public IdentityUserWebHooker(
+    public IdentityUserWebhooker(
         IWebhookPublisher webhookPublisher)
     {
         _webhookPublisher = webhookPublisher;

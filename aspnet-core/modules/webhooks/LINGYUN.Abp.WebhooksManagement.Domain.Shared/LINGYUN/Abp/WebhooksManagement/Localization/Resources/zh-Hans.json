@@ -11,8 +11,9 @@
     "Permission:Resend": "重新发送",
     "Permission:Publish": "发布事件",
     "Permission:ManageSettings": "管理设置",
-    "DisplayName:CheckConnect": "检查连接",
-    "Description:CheckConnect": "第三方服务接入时,用于检查是否通讯正常.",
-    "Webhooks:010001": "载荷地址 {WebhookUri} 已经挂载事件 {Webhooks}!"
+    "Webhooks:010001": "载荷地址 {WebhookUri} 已经挂载事件 {Webhooks}!",
+    "Webhooks:Tests": "测试",
+    "Webhooks:CheckConnect": "检查连接",
+    "Webhooks:CheckConnectDesc": "第三方服务接入时,用于检查是否通讯正常."
   }
 }

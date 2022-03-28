@@ -7,8 +7,12 @@ public class IdentityWebhookDefinitionProvider : WebhookDefinitionProvider
 {
     public override void Define(IWebhookDefinitionContext context)
     {
-        context.Add(CreateIdentityRoleWebhooks());
-        context.Add(CreateIdentityUserWebhooks());
+        var identityGroup = context.AddGroup(
+            IdentityWebhookNames.GroupName,
+            L("Webhooks:Identity"));
+
+        identityGroup.AddWebhooks(CreateIdentityRoleWebhooks());
+        identityGroup.AddWebhooks(CreateIdentityUserWebhooks());
     }
 
     protected virtual WebhookDefinition[] CreateIdentityRoleWebhooks()

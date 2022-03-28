@@ -6,15 +6,16 @@ using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Webhooks.Identity;
 
-public class IdentityRoleWebHooker :
+public class IdentityRoleWebhooker :
     IDistributedEventHandler<EntityCreatedEto<IdentityRoleEto>>,
     IDistributedEventHandler<EntityUpdatedEto<IdentityRoleEto>>,
+    IDistributedEventHandler<EntityDeletedEto<IdentityRoleEto>>,
     IDistributedEventHandler<IdentityRoleNameChangedEto>,
     ITransientDependency
 {
     private readonly IWebhookPublisher _webhookPublisher;
 
-    public IdentityRoleWebHooker(
+    public IdentityRoleWebhooker(
         IWebhookPublisher webhookPublisher)
     {
         _webhookPublisher = webhookPublisher;

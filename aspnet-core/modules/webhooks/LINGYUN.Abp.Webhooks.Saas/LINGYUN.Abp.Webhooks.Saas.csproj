@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\Webhooks\Saas\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Webhooks\Saas\Localization\Resources\en.json" />
+	  <None Remove="LINGYUN\Abp\Webhooks\Saas\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj" />
+		<ProjectReference Include="..\..\saas\LINGYUN.Abp.Saas.Domain.Shared\LINGYUN.Abp.Saas.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

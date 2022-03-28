@@ -103,25 +103,36 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         return subscription.ToWebhookSubscriptionDto();
     }
 
-    public async virtual Task<ListResultDto<WebhookAvailableDto>> GetAllAvailableWebhooksAsync()
+    public async virtual Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync()
     {
-        var webhooks = WebhookDefinitionManager.GetAll();
-        var definitions = new List<WebhookAvailableDto>();
+        var groups = WebhookDefinitionManager.GetGroups();
+        var definitions = new List<WebhookAvailableGroupDto>();
 
-        foreach (var webhookDefinition in webhooks)
+        foreach (var groupDefinition in groups)
         {
-            if (await WebhookDefinitionManager.IsAvailableAsync(CurrentTenant.Id, webhookDefinition.Name))
+            var group = new WebhookAvailableGroupDto
             {
-                definitions.Add(new WebhookAvailableDto
+                Name = groupDefinition.Name,
+                DisplayName = groupDefinition.DisplayName?.Localize(StringLocalizerFactory),
+            };
+
+            foreach (var webhookDefinition in groupDefinition.Webhooks.OrderBy(d => d.Name))
+            {
+                if (await WebhookDefinitionManager.IsAvailableAsync(CurrentTenant.Id, webhookDefinition.Name))
                 {
-                    Name = webhookDefinition.Name,
-                    Description = webhookDefinition.Description?.Localize(StringLocalizerFactory),
-                    DisplayName = webhookDefinition.DisplayName?.Localize(StringLocalizerFactory)
-                });
+                    group.Webhooks.Add(new WebhookAvailableDto
+                    {
+                        Name = webhookDefinition.Name,
+                        Description = webhookDefinition.Description?.Localize(StringLocalizerFactory),
+                        DisplayName = webhookDefinition.DisplayName?.Localize(StringLocalizerFactory)
+                    });
+                }
             }
+
+            definitions.Add(group);
         }
 
-        return new ListResultDto<WebhookAvailableDto>(definitions.OrderBy(d => d.Name).ToList());
+        return new ListResultDto<WebhookAvailableGroupDto>(definitions.OrderBy(d => d.Name).ToList());
     }
 
     protected async virtual Task CheckSubscribedAsync(WebhookSubscriptionCreateOrUpdateInput input)

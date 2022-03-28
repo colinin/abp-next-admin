@@ -24,6 +24,12 @@ namespace LINGYUN.Abp.Webhooks
         IReadOnlyList<WebhookDefinition> GetAll();
 
         /// <summary>
+        /// Gets all webhook group definitions.
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<WebhookGroupDefinition> GetGroups();
+
+        /// <summary>
         /// Checks if given webhook name is available for given tenant.
         /// </summary>
         Task<bool> IsAvailableAsync(Guid? tenantId, string name);

@@ -13,5 +13,5 @@ public interface IWebhookSubscriptionAppService :
         WebhookSubscriptionCreateInput,
         WebhookSubscriptionUpdateInput>
 {
-    Task<ListResultDto<WebhookAvailableDto>> GetAllAvailableWebhooksAsync();
+    Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync();
 }

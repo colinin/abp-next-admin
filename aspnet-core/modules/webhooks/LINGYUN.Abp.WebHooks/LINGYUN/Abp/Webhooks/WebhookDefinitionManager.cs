@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
@@ -13,6 +14,9 @@ namespace LINGYUN.Abp.Webhooks
 {
     internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonDependency
     {
+        protected IDictionary<string, WebhookGroupDefinition> WebhookGroupDefinitions => _lazyWebhookGroupDefinitions.Value;
+        private readonly Lazy<Dictionary<string, WebhookGroupDefinition>> _lazyWebhookGroupDefinitions;
+
         protected IDictionary<string, WebhookDefinition> WebhookDefinitions => _lazyWebhookDefinitions.Value;
         private readonly Lazy<Dictionary<string, WebhookDefinition>> _lazyWebhookDefinitions;
 
@@ -26,6 +30,7 @@ namespace LINGYUN.Abp.Webhooks
             _serviceProvider = serviceProvider;
             _options = options.Value;
 
+            _lazyWebhookGroupDefinitions = new Lazy<Dictionary<string, WebhookGroupDefinition>>(CreateWebhookGroupDefinitions);
             _lazyWebhookDefinitions = new Lazy<Dictionary<string, WebhookDefinition>>(CreateWebhookDefinitions);
         }
 
@@ -52,6 +57,11 @@ namespace LINGYUN.Abp.Webhooks
         public IReadOnlyList<WebhookDefinition> GetAll()
         {
             return WebhookDefinitions.Values.ToImmutableList();
+        }
+
+        public IReadOnlyList<WebhookGroupDefinition> GetGroups()
+        {
+            return WebhookGroupDefinitions.Values.ToImmutableList();
         }
 
         public async Task<bool> IsAvailableAsync(Guid? tenantId, string name)
@@ -89,6 +99,26 @@ namespace LINGYUN.Abp.Webhooks
         protected virtual Dictionary<string, WebhookDefinition> CreateWebhookDefinitions()
         {
             var definitions = new Dictionary<string, WebhookDefinition>();
+
+            foreach (var groupDefinition in WebhookGroupDefinitions.Values)
+            {
+                foreach (var webhook in groupDefinition.Webhooks)
+                {
+                    if (definitions.ContainsKey(webhook.Name))
+                    {
+                        throw new AbpException("Duplicate webhook name: " + webhook.Name);
+                    }
+
+                    definitions[webhook.Name] = webhook;
+                }
+            }
+
+            return definitions;
+        }
+
+        protected virtual Dictionary<string, WebhookGroupDefinition> CreateWebhookGroupDefinitions()
+        {
+            var definitions = new Dictionary<string, WebhookGroupDefinition>();
 
             using (var scope = _serviceProvider.CreateScope())
             {

@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Webhooks:Identity": "身份认证",
     "Webhooks:CreateRole": "创建角色",
     "Webhooks:CreateRoleDesc": "一个新角色已创建",
     "Webhooks:UpdateRole": "编辑角色",

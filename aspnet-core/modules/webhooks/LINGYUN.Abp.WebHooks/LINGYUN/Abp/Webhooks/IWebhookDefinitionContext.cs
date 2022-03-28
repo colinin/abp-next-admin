@@ -1,22 +1,16 @@
-﻿namespace LINGYUN.Abp.Webhooks
+﻿using JetBrains.Annotations;
+using Volo.Abp.Localization;
+
+namespace LINGYUN.Abp.Webhooks
 {
     public interface IWebhookDefinitionContext
     {
-        /// <summary>
-        /// Adds the specified webhook definition. Throws exception if it is already added
-        /// </summary>
-        void Add(params WebhookDefinition[] definitions);
+        WebhookGroupDefinition AddGroup(
+            [NotNull] string name,
+            ILocalizableString displayName = null);
 
-        /// <summary>
-        /// Gets a webhook definition by name.
-        /// Returns null if there is no webhook definition with given name.
-        /// </summary>
-        WebhookDefinition GetOrNull(string name);
+        WebhookGroupDefinition GetGroupOrNull(string name);
 
-        /// <summary>
-        /// Remove webhook with given name
-        /// </summary>
-        /// <param name="name">webhook definition name</param>
-        void Remove(string name);
+        void RemoveGroup(string name);
     }
 }

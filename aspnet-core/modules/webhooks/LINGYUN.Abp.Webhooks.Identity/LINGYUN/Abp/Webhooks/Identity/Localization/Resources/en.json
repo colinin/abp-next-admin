@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
+    "Webhooks:Identity": "Identity",
     "Webhooks:CreateRole": "Create Role",
     "Webhooks:CreateRoleDesc": "A new role has been created",
     "Webhooks:UpdateRole": "Update Role",
