@@ -12,11 +12,11 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [Area(WebhooksManagementRemoteServiceConsts.ModuleName)]
 [Authorize(WebhooksManagementPermissions.WebhookSubscription.Default)]
 [Route("api/webhooks/subscriptions")]
-public class WebhookSubscriptionController : WebhooksManagementControllerBase, IWebhookSubscriptionAppService
+public class WebhooksSubscriptionController : WebhooksManagementControllerBase, IWebhooksSubscriptionAppService
 {
-    protected IWebhookSubscriptionAppService SubscriptionAppService { get; }
+    protected IWebhooksSubscriptionAppService SubscriptionAppService { get; }
 
-    public WebhookSubscriptionController(IWebhookSubscriptionAppService subscriptionAppService)
+    public WebhooksSubscriptionController(IWebhooksSubscriptionAppService subscriptionAppService)
     {
         SubscriptionAppService = subscriptionAppService;
     }

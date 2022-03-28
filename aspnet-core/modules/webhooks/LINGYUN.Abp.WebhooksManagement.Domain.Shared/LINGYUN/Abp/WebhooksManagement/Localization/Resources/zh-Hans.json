@@ -3,6 +3,13 @@
   "texts": {
     "Features:WebhooksManagement": "Webhooks",
     "Permission:WebhooksManagement": "Webhooks",
+    "Permission:Subscriptions": "管理订阅",
+    "Permission:SendAttempts": "管理发送",
+    "Permission:Create": "创建",
+    "Permission:Update": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:Resend": "重新发送",
+    "Permission:Publish": "发布事件",
     "Permission:ManageSettings": "管理设置",
     "DisplayName:CheckConnect": "检查连接",
     "Description:CheckConnect": "第三方服务接入时,用于检查是否通讯正常.",

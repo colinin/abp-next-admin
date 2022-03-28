@@ -3,6 +3,13 @@
   "texts": {
     "Features:WebhooksManagement": "Webhooks",
     "Permission:WebhooksManagement": "Webhooks",
+    "Permission:Subscriptions": "Subscriptions",
+    "Permission:SendAttempts": "Attempts",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
+    "Permission:Resend": "Resend",
+    "Permission:Publish": "Publish",
     "Permission:ManageSettings": "Manage Settings",
     "DisplayName:CheckConnect": "Check Connect",
     "Description:CheckConnect": "When a third-party service is connected, it is used to check whether the communication is normal.",

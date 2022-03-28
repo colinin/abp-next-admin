@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public interface IWebhookSubscriptionAppService :
+public interface IWebhooksSubscriptionAppService :
     ICrudAppService<
         WebhookSubscriptionDto,
         Guid,

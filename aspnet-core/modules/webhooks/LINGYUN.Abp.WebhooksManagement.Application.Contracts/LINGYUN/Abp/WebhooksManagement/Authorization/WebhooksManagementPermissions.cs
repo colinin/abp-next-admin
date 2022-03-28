@@ -18,4 +18,10 @@ public static class WebhooksManagementPermissions
         public const string Update = Default + ".Update";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class WebhooksSendAttempts
+    {
+        public const string Default = GroupName + ".SendAttempts";
+        public const string Resend = Default + ".Resend";
+    }
 }

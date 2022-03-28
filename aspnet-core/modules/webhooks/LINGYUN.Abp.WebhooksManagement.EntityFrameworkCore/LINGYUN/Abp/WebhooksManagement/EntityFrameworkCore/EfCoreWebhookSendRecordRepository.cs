@@ -43,6 +43,11 @@ public class EfCoreWebhookSendRecordRepository :
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public async override Task<IQueryable<WebhookSendRecord>> WithDetailsAsync()
+    {
+        return (await base.WithDetailsAsync()).IncludeDetails();
+    }
+
     protected virtual IQueryable<WebhookSendRecord> ApplyFilter(
         IQueryable<WebhookSendRecord> queryable,
         WebhookSendRecordFilter filter)

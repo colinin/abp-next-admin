@@ -13,12 +13,12 @@ using Volo.Abp.Application.Dtos;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Authorize(WebhooksManagementPermissions.WebhookSubscription.Default)]
-public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, IWebhookSubscriptionAppService
+public class WebhooksSubscriptionAppService : WebhooksManagementAppServiceBase, IWebhooksSubscriptionAppService
 {
     protected IWebhookDefinitionManager WebhookDefinitionManager { get; }
     protected IWebhookSubscriptionRepository SubscriptionRepository { get; }
 
-    public WebhookSubscriptionAppService(
+    public WebhooksSubscriptionAppService(
         IWebhookDefinitionManager webhookDefinitionManager,
         IWebhookSubscriptionRepository subscriptionRepository)
     {

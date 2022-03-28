@@ -32,6 +32,17 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
             MultiTenancySides.Host)
             .WithProviders(ClientPermissionValueProvider.ProviderName);
 
+        var sendAttempts = group.AddPermission(
+            WebhooksManagementPermissions.WebhooksSendAttempts.Default,
+            L("Permission:SendAttempts"),
+            MultiTenancySides.Host)
+            .WithProviders(ClientPermissionValueProvider.ProviderName);
+        sendAttempts.AddChild(
+            WebhooksManagementPermissions.WebhooksSendAttempts.Resend,
+            L("Permission:Resend"),
+            MultiTenancySides.Host)
+            .WithProviders(ClientPermissionValueProvider.ProviderName);
+
         group.AddPermission(
             WebhooksManagementPermissions.Publish,
             L("Permission:Publish"))
