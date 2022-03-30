@@ -12,7 +12,7 @@ public class DefaultJobLockProvider : IJobLockProvider, ISingletonDependency
 {
     private readonly ConcurrentDictionary<string, JobLock> _localSyncObjects = new();
 
-    public virtual Task<bool> TryLockAsync(string jobKey, int lockSeconds, CancellationToken cancellationToken = default)
+    public virtual Task<bool> TryLockAsync(string jobKey, int lockSeconds)
     {
         Check.NotNullOrWhiteSpace(jobKey, nameof(jobKey));
         if (_localSyncObjects.TryGetValue(jobKey, out var jobLock))
@@ -34,7 +34,7 @@ public class DefaultJobLockProvider : IJobLockProvider, ISingletonDependency
         return Task.FromResult(_localSyncObjects.TryAdd(jobKey, jobLock));
     }
 
-    public Task<bool> TryReleaseAsync(string jobKey, CancellationToken cancellationToken = default)
+    public Task<bool> TryReleaseAsync(string jobKey)
     {
         Check.NotNullOrWhiteSpace(jobKey, nameof(jobKey));
 

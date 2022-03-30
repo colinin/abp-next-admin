@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -21,9 +20,9 @@ public class JobLockProvider : IJobLockProvider, ISingletonDependency
         DistributedLock = distributedLock;
     }
 
-    public virtual async Task<bool> TryLockAsync(string jobKey, int lockSeconds, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> TryLockAsync(string jobKey, int lockSeconds)
     {
-        var handle = await DistributedLock.TryAcquireAsync(jobKey, cancellationToken: cancellationToken);
+        var handle = await DistributedLock.TryAcquireAsync(jobKey);
         if (handle != null)
         {
             await LockCache.GetOrCreateAsync(jobKey, (entry) =>
@@ -46,7 +45,7 @@ public class JobLockProvider : IJobLockProvider, ISingletonDependency
         return false;
     }
 
-    public virtual async Task<bool> TryReleaseAsync(string jobKey, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> TryReleaseAsync(string jobKey)
     {
         if (LockCache.TryGetValue<IAbpDistributedLockHandle>(jobKey, out var handle))
         {

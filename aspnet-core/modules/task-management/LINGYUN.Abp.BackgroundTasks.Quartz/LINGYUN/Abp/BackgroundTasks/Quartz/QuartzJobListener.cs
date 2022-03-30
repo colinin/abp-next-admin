@@ -38,7 +38,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         {
             jobType = jobType.GetGenericArguments()[0];
         }
-        Logger.LogInformation($"The task {jobType.Name} could not be performed...");
+        Logger.LogWarning($"The task {jobType.Name} could not be performed...");
 
         return Task.FromResult(-1);
     }

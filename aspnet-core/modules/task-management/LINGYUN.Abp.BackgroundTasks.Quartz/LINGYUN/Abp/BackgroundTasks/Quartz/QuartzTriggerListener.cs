@@ -27,10 +27,10 @@ public class QuartzTriggerListener : TriggerListenerSupport, ISingletonDependenc
     {
         context.MergedJobDataMap.TryGetValue(nameof(JobInfo.Id), out var jobId);
         context.MergedJobDataMap.TryGetValue(nameof(JobInfo.LockTimeOut), out var lockTime);
-        if (jobId != null && lockTime != null && lockTime is int time && time > 0)
+        if (jobId != null && lockTime != null && int.TryParse(lockTime.ToString(), out var time) && time > 0)
         {
-            
-            return !await JobLockProvider.TryLockAsync(NormalizeKey(context, jobId), time, cancellationToken);
+            // 传递令牌将清除本次锁, 那并无意义
+            return !await JobLockProvider.TryLockAsync(NormalizeKey(context, jobId), time);
         }
         
         return false;
@@ -45,7 +45,7 @@ public class QuartzTriggerListener : TriggerListenerSupport, ISingletonDependenc
         if (context.MergedJobDataMap.TryGetValue(nameof(JobInfo.Id), out var jobId) &&
             context.MergedJobDataMap.ContainsKey(nameof(JobInfo.LockTimeOut)))
         {
-            await JobLockProvider.TryReleaseAsync(NormalizeKey(context, jobId), cancellationToken);
+            await JobLockProvider.TryReleaseAsync(NormalizeKey(context, jobId));
         }
     }
 

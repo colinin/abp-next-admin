@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -10,10 +9,8 @@ public interface IJobLockProvider
 {
     Task<bool> TryLockAsync(
         string jobKey,
-        int lockSeconds,
-        CancellationToken cancellationToken = default);
+        int lockSeconds);
 
     Task<bool> TryReleaseAsync(
-        string jobKey, 
-        CancellationToken cancellationToken = default);
+        string jobKey);
 }
