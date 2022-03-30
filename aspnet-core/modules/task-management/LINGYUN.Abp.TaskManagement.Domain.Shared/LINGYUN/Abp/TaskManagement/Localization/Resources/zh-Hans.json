@@ -67,6 +67,7 @@
     "DisplayName:Normal": "正常",
     "DisplayName:AboveNormal": "高于正常",
     "DisplayName:High": "高",
+    "DisplayName:Source": "来源",
     "DisplayName:User": "用户",
     "DisplayName:System": "系统内置",
     "BackgroundJobs": "作业列表",

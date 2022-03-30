@@ -67,6 +67,7 @@
     "DisplayName:Normal": "Normal",
     "DisplayName:AboveNormal": "Above Normal",
     "DisplayName:High": "High",
+    "DisplayName:Source": "Source",
     "DisplayName:User": "User",
     "DisplayName:System": "System",
     "BackgroundJobs": "Jobs",
