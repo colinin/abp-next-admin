@@ -79,6 +79,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                     jobInfo.BeginTime,
                     jobInfo.EndTime,
                     jobInfo.Priority,
+                    jobInfo.Source,
                     jobInfo.MaxCount,
                     jobInfo.MaxTryCount)
                 {

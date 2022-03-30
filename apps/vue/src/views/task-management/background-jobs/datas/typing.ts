@@ -1,4 +1,4 @@
-import { JobStatus, JobType, JobPriority } from '/@/api/task-management/model/backgroundJobInfoModel';
+import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/model/backgroundJobInfoModel';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 
 const { L } = useLocalization('TaskManagement');
@@ -40,4 +40,10 @@ export const JobPriorityColor = {
   [JobPriority.Normal]: 'blue',
   [JobPriority.AboveNormal]: 'orange',
   [JobPriority.High]: 'red',
+}
+
+export const JobSourceMap = {
+  [JobSource.None]: L('DisplayName:None'),
+  [JobSource.User]: L('DisplayName:User'),
+  [JobSource.System]: L('DisplayName:System'),
 }

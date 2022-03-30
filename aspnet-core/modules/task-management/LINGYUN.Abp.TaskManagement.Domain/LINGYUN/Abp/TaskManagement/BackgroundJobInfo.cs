@@ -73,6 +73,10 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// </summary>
     public virtual string Cron { get; protected set; }
     /// <summary>
+    /// 作业来源
+    /// </summary>
+    public virtual JobSource Source { get; protected set; }
+    /// <summary>
     /// 任务优先级
     /// </summary>
     public virtual JobPriority Priority { get; protected set; }
@@ -115,6 +119,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         DateTime beginTime,
         DateTime? endTime = null,
         JobPriority priority = JobPriority.Normal,
+        JobSource source = JobSource.None,
         int maxCount = 0,
         int maxTryCount = 50,
         Guid? tenantId = null) : base(id)
@@ -123,6 +128,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         Group = Check.NotNullOrWhiteSpace(group, nameof(group), BackgroundJobInfoConsts.MaxGroupLength);
         Type = Check.NotNullOrWhiteSpace(type, nameof(type), BackgroundJobInfoConsts.MaxTypeLength);
         Priority = priority;
+        Source = source;
         BeginTime = beginTime;
         EndTime = endTime;
 

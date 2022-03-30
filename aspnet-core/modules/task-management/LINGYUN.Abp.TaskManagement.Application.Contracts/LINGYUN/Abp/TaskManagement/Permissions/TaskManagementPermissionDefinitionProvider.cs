@@ -39,6 +39,9 @@ public class TaskManagementPermissionDefinitionProvider : PermissionDefinitionPr
         backgroundJobs.AddChild(
             TaskManagementPermissions.BackgroundJobs.Stop,
             L("Permissions:StopJob"));
+        backgroundJobs.AddChild(
+            TaskManagementPermissions.BackgroundJobs.ManageSystemJobs,
+            L("Permissions:ManageSystemJobs"));
 
         var backgroundJobLogs = group.AddPermission(
             TaskManagementPermissions.BackgroundJobLogs.Default,

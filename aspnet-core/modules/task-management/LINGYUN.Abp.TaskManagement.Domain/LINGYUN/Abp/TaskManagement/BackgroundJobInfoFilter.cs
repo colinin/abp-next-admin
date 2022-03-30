@@ -64,4 +64,8 @@ public class BackgroundJobInfoFilter
     /// 优先级
     /// </summary>
     public JobPriority? Priority { get; set; }
+    /// <summary>
+    /// 作业来源
+    /// </summary>
+    public JobSource? Source { get; set; }
 }

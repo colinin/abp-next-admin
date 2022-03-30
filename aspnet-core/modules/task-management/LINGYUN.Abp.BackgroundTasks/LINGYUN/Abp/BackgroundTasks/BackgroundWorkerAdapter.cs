@@ -74,6 +74,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
             Name = workerType.FullName,
             Group = "BackgroundWorkers",
             Priority = JobPriority.Normal,
+            Source = JobSource.System,
             BeginTime = Clock.Now,
             Args = jobArgs,
             Description = "From the framework background workers",

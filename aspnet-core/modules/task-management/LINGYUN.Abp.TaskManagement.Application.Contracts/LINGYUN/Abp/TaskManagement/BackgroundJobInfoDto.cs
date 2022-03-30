@@ -97,6 +97,10 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConc
     /// </summary>
     public JobPriority Priority { get; set; }
     /// <summary>
+    /// 作业来源
+    /// </summary>
+    public JobSource Source { get; set; }
+    /// <summary>
     /// 任务独占超时时长（秒）
     /// 0或更小不生效
     /// </summary>

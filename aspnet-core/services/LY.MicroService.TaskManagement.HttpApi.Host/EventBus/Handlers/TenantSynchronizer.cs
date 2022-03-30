@@ -116,6 +116,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
                 Cron = Options.JobFetchCronExpression,
                 JobType = JobType.Period,
                 Priority = JobPriority.High,
+                Source = JobSource.System,
                 LockTimeOut = Options.JobFetchLockTimeOut,
                 TenantId = tenantId,
                 Type = typeof(BackgroundPollingJob).AssemblyQualifiedName,
@@ -137,6 +138,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
                 Cron = Options.JobCleanCronExpression,
                 JobType = JobType.Period,
                 Priority = JobPriority.High,
+                Source = JobSource.System,
                 TenantId = tenantId,
                 Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
             };

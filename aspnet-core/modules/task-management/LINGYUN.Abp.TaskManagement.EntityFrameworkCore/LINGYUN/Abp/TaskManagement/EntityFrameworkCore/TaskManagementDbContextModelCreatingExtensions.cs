@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using Microsoft.EntityFrameworkCore;
 using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -50,6 +51,10 @@ public static class TaskManagementDbContextModelCreatingExtensions
                 .HasColumnName(nameof(BackgroundJobInfo.Args))
                 .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
                 .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
+
+            b.Property(p => p.Source)
+                .HasColumnName(nameof(BackgroundJobInfo.Source))
+                .HasDefaultValue(JobSource.None);
 
             b.ConfigureByConvention();
 
