@@ -15,6 +15,12 @@ export enum JobType {
   Persistent,
 }
 
+export enum JobSource {
+  None = -1,
+  User = 0,
+  System = 10,
+}
+
 export enum JobPriority {
   Low = 5,
   BelowNormal = 10,
@@ -44,6 +50,7 @@ export interface BackgroundJobInfo extends ExtensibleAuditedEntity<string>, IHas
   isAbandoned: boolean;
   interval: number;
   priority: JobPriority;
+  source: JobSource;
   lockTimeOut: number;
 }
 
@@ -86,4 +93,5 @@ export interface BackgroundJobInfoGetListInput extends PagedAndSortedResultReque
   isAbandoned?: boolean;
   jobType?: JobType;
   priority?: JobPriority;
+  source?: JobSource;
 }

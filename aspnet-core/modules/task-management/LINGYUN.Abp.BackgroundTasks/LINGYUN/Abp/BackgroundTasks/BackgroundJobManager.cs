@@ -65,6 +65,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
             Name = jobId.ToString(),
             Group = "BackgroundJobs",
             Priority = ConverForm(priority),
+            Source = JobSource.System,
             BeginTime = DateTime.Now,
             Args = jobArgs,
             Description = "From the framework background jobs",

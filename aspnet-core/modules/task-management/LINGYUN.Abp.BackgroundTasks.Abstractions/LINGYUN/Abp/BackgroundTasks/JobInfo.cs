@@ -30,9 +30,13 @@ public class JobInfo
     /// </summary>
     public string Result { get; set; }
     /// <summary>
+    /// 作业来源
+    /// </summary>
+    public JobSource Source { get; set; } = JobSource.None;
+    /// <summary>
     /// 任务参数
     /// </summary>
-    public IDictionary<string, object> Args { get; set; }
+    public IDictionary<string, object> Args { get; set; } = new Dictionary<string, object>();
     /// <summary>
     /// 任务状态
     /// </summary>

@@ -63,6 +63,7 @@ public class EfCoreBackgroundJobInfoRepository :
                 JobType = x.JobType,
                 Status = x.Status,
                 Priority = x.Priority,
+                Source = x.Source,
                 LastRunTime = x.LastRunTime,
                 LockTimeOut = x.LockTimeOut,
                 Result = x.Result,
@@ -103,43 +104,13 @@ public class EfCoreBackgroundJobInfoRepository :
 
     public virtual async Task<int> GetCountAsync(BackgroundJobInfoFilter filter, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(filter.Type))
-            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(filter.Group))
-            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
-                x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
-            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
-            .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
-            .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
-            .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
-            .WhereIf(filter.BeginLastRunTime.HasValue, x => filter.BeginLastRunTime.Value.CompareTo(x.LastRunTime) <= 0)
-            .WhereIf(filter.EndLastRunTime.HasValue, x => filter.EndLastRunTime.Value.CompareTo(x.LastRunTime) >= 0)
-            .WhereIf(filter.BeginTime.HasValue, x => x.BeginTime.CompareTo(x.BeginTime) >= 0)
-            .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
-            .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
-            .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0)
+        return await ApplyFilter(await GetDbSetAsync(), filter)
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoFilter filter, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(filter.Type))
-            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(filter.Group))
-            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
-                x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
-            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
-            .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
-            .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
-            .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
-            .WhereIf(filter.BeginLastRunTime.HasValue, x => filter.BeginLastRunTime.Value.CompareTo(x.LastRunTime) <= 0)
-            .WhereIf(filter.EndLastRunTime.HasValue, x => filter.EndLastRunTime.Value.CompareTo(x.LastRunTime) >= 0)
-            .WhereIf(filter.BeginTime.HasValue, x => x.BeginTime.CompareTo(x.BeginTime) >= 0)
-            .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
-            .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
-            .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0)
+        return await ApplyFilter(await GetDbSetAsync(), filter)
             .OrderBy(sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC")
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -160,5 +131,28 @@ public class EfCoreBackgroundJobInfoRepository :
             .Take(maxResultCount)
             .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    protected virtual IQueryable<BackgroundJobInfo> ApplyFilter(
+        IQueryable<BackgroundJobInfo> queryable,
+        BackgroundJobInfoFilter filter)
+    {
+        return queryable
+            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(filter.Type))
+            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(filter.Group))
+            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
+            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
+                x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
+            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
+            .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
+            .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
+            .WhereIf(filter.Source.HasValue, x => x.Source == filter.Source.Value)
+            .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
+            .WhereIf(filter.BeginLastRunTime.HasValue, x => filter.BeginLastRunTime.Value.CompareTo(x.LastRunTime) <= 0)
+            .WhereIf(filter.EndLastRunTime.HasValue, x => filter.EndLastRunTime.Value.CompareTo(x.LastRunTime) >= 0)
+            .WhereIf(filter.BeginTime.HasValue, x => x.BeginTime.CompareTo(x.BeginTime) >= 0)
+            .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
+            .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
+            .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0);
     }
 }

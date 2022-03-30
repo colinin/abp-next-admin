@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,6 +44,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             input.BeginTime,
             input.EndTime,
             input.Priority,
+            JobSource.User,
             input.MaxCount,
             input.MaxTryCount,
             CurrentTenant.Id);
@@ -65,6 +65,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     public virtual async Task DeleteAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await CheckIfChangeSystemJob(backgroundJobInfo);
 
         await BackgroundJobManager.DeleteAsync(backgroundJobInfo);
     }
@@ -92,6 +94,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             Group = input.Group,
             Name = input.Name,
             Priority = input.Priority,
+            Source = input.Source,
             Status = input.Status,
             Type = input.Type
         };
@@ -108,6 +111,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
+        await CheckIfChangeSystemJob(backgroundJobInfo);
+
         await BackgroundJobManager.PauseAsync(backgroundJobInfo);
     }
 
@@ -115,6 +120,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     public virtual async Task ResumeAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await CheckIfChangeSystemJob(backgroundJobInfo);
 
         await BackgroundJobManager.ResumeAsync(backgroundJobInfo);
     }
@@ -124,6 +131,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
+        await CheckIfChangeSystemJob(backgroundJobInfo);
+
         await BackgroundJobManager.TriggerAsync(backgroundJobInfo);
     }
 
@@ -131,6 +140,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     public virtual async Task StopAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await CheckIfChangeSystemJob(backgroundJobInfo);
 
         await BackgroundJobManager.StopAsync(backgroundJobInfo);
     }
@@ -140,6 +151,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
+        await CheckIfChangeSystemJob(backgroundJobInfo);
+
         await BackgroundJobManager.QueueAsync(backgroundJobInfo);
     }
 
@@ -147,6 +160,8 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     public virtual async Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
+
+        await CheckIfChangeSystemJob(backgroundJobInfo);
 
         var resetJob = backgroundJobInfo.JobType == input.JobType;
 
@@ -168,6 +183,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         }
         var jobs = await GetListAsync(input);
 
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
+
         await BackgroundJobManager.BulkDeleteAsync(jobs);
     }
 
@@ -179,6 +199,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             return;
         }
         var jobs = await GetListAsync(input);
+
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
 
         await BackgroundJobManager.BulkStopAsync(jobs);
     }
@@ -192,6 +217,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         }
         var jobs = await GetListAsync(input);
 
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
+
         await BackgroundJobManager.BulkQueueAsync(jobs);
     }
 
@@ -203,6 +233,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             return;
         }
         var jobs = await GetListAsync(input);
+
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
 
         await BackgroundJobManager.BulkTriggerAsync(jobs);
     }
@@ -216,6 +251,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         }
         var jobs = await GetListAsync(input);
 
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
+
         await BackgroundJobManager.BulkResumeAsync(jobs);
     }
 
@@ -227,6 +267,11 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             return;
         }
         var jobs = await GetListAsync(input);
+
+        if (jobs.Any(job => job.Source == JobSource.System))
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
+        }
 
         await BackgroundJobManager.BulkPauseAsync(jobs);
     }
@@ -260,6 +305,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             case JobType.Period:
                 backgroundJobInfo.SetPeriodJob(input.Cron);
                 break;
+        }
+    }
+
+    protected async virtual Task CheckIfChangeSystemJob(BackgroundJobInfo backgroundJobInfo)
+    {
+        if (backgroundJobInfo.Source == JobSource.System)
+        {
+            await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
         }
     }
 }

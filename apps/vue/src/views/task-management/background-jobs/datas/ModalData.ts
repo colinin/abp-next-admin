@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { JobStatus, JobType, JobPriority } from '/@/api/task-management/model/backgroundJobInfoModel';
-import { JobStatusMap, JobTypeMap, JobPriorityMap } from './typing';
+import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/model/backgroundJobInfoModel';
+import { JobStatusMap, JobTypeMap, JobPriorityMap, JobSourceMap } from './typing';
 
 const { L } = useLocalization('TaskManagement', 'AbpUi');
 
@@ -57,10 +57,24 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
+        field: 'source',
+        component: 'Select',
+        label: L('DisplayName:Source'),
+        colProps: { span: 6 },
+        defaultValue: JobSource.User,
+        componentProps: {
+          options: [
+            { label: JobSourceMap[JobSource.None], value: JobSource.None },
+            { label: JobSourceMap[JobSource.User], value: JobSource.User },
+            { label: JobSourceMap[JobSource.System], value: JobSource.System },
+          ],
+        },
+      },
+      {
         field: 'beginTime',
         component: 'DatePicker',
         label: L('DisplayName:BeginTime'),
-        colProps: { span: 9 },
+        colProps: { span: 6 },
         componentProps: {
           style: {
             width: '100%',
@@ -71,7 +85,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         field: 'endTime',
         component: 'DatePicker',
         label: L('DisplayName:EndTime'),
-        colProps: { span: 9 },
+        colProps: { span: 6 },
         componentProps: {
           style: {
             width: '100%',

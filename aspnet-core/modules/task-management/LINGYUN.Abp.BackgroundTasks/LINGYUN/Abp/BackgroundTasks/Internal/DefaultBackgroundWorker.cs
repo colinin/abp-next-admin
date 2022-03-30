@@ -62,6 +62,7 @@ internal class DefaultBackgroundWorker : BackgroundService
             Cron = _options.JobFetchCronExpression,
             JobType = JobType.Period,
             Priority = JobPriority.High,
+            Source = JobSource.System,
             LockTimeOut = _options.JobFetchLockTimeOut,
             Type = typeof(BackgroundPollingJob).AssemblyQualifiedName,
         };
@@ -82,6 +83,7 @@ internal class DefaultBackgroundWorker : BackgroundService
             Cron = _options.JobCleanCronExpression,
             JobType = JobType.Period,
             Priority = JobPriority.High,
+            Source = JobSource.System,
             Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
         };
     }
