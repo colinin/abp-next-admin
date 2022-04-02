@@ -74,7 +74,7 @@
       onMounted(_fetchProfile);
 
       function _fetchProfile() {
-        getProfile().then((profile) => {
+        return getProfile().then((profile) => {
           setFieldsValue(profile);
         });
       }
@@ -85,7 +85,9 @@
             .then((res) => {
               const path = encodeURIComponent(res.data.path.substring(0, res.data.path.length - 1));
               changeAvatar({ avatarUrl: `${path}/${res.data.name}` }).then(() => {
-                resolve(res as unknown as void);
+                _fetchProfile().then(() => {
+                  resolve({} as unknown as void);
+                }).catch((err) => reject(err));
               }).catch((err) => reject(err));
             })
             .catch((err) => reject(err));
@@ -105,6 +107,7 @@
           updateProfile(getFieldsValue() as UpdateMyProfile)
             .then(() => {
               createMessage.success(L('PersonalSettingsSaved'));
+              _fetchProfile();
             })
             .finally(() => {
               confirmButton.loading = false;

@@ -13,6 +13,7 @@ import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { AxiosRequestConfig } from 'axios';
 import { RequestOptions, UploadFileParams } from '/#/axios';
+import { ContentTypeEnum } from '/@/enums/httpEnum';
 
 const { t } = useI18n();
 
@@ -63,19 +64,35 @@ export class abpRequest {
     action: string;
     data?: any;
     params?: any;
-  }) {
+  }, requestOptions?: RequestOptions) {
     const abpStore = useAbpStoreWithOut();
     const module = this.getModule(options.service, abpStore.apidefinition.modules);
     const controller = this.getController(options.controller, module.controllers);
     const action = this.getAction(options.action, controller.actions);
     const apiVersion = this.getApiVersionInfo(action);
     const url = UrlBuilder.generateUrlWithParameters(action, options.params, apiVersion);
+    let requestData = options.data;
+    const headers = {};
+
+    const formDataParams = action.parameters
+      .filter(p => [`${ParameterBindingSources.form}`, `${ParameterBindingSources.formFile}`].includes(p.bindingSourceId!));
+    if (requestData && formDataParams.length > 0) {
+      headers['Content-Type'] = ContentTypeEnum.FORM_DATA;
+      const formData = new window.FormData();
+      formDataParams.forEach(param => {
+        if (requestData[param.name]) {
+          formData.append(param.name, requestData[param.name]);
+        }
+      })
+      requestData = formData
+    }
 
     return defHttp.request<TResult>({
       url: url,
       method: action?.httpMethod,
-      data: options.data,
-    });
+      data: requestData,
+      headers: headers,
+    }, requestOptions);
   }
 
   private getModule(remoteService: string, modules: { [key: string]: ModuleApiDescriptionModel }) {

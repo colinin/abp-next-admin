@@ -14,6 +14,7 @@ import { format } from '/@/utils/strings';
 import { AxiosResponse } from 'axios';
 import { isFunction } from '/@/utils/is';
 import { UploadFileParams } from '/#/axios';
+import { deepMerge } from '/@/utils';
 
 enum Api {
   CreateObject = '/api/oss-management/objects',
@@ -162,10 +163,19 @@ export const getContainers = (input: GetOssContainerPagedRequest) => {
   });
 };
 
-export const createObject = (input: OssObjectCreate) => {
-  return defAbpHttp.post<OssObject>({
-    url: Api.CreateObject,
-    data: input,
+export const createObject = (input: OssObjectCreate, file?: Blob) => {
+  return defAbpHttp.request<OssObject>({
+    service: 'AbpOssManagement',
+    controller: 'OssObject',
+    action: 'CreateAsync',
+    data: {
+      Bucket: input.bucket,
+      Path: input.path,
+      FileName: input.object,
+      Overwrite: input.overwrite,
+      ExpirationTime: input.expirationTime,
+      File: file,
+    },
   });
 };
 

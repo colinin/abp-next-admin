@@ -10,6 +10,7 @@ export enum ParameterBindingSources {
   body = 'Body',
   path = 'Path',
   form = 'Form',
+  formFile = 'FormFile',
   header = 'Header',
   custom = 'Custom',
   services = 'Services',

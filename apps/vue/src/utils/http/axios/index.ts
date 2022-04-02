@@ -95,7 +95,7 @@ const transform: AxiosTransform = {
         if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) {
           config.data = data;
           config.params = params;
-        } else {
+        } else if (Reflect.has(config, 'headers') && config.headers && config.headers['Content-Type'] !== ContentTypeEnum.FORM_DATA) { // 防止form-data类型数据被清除
           // 非GET请求如果没有提供data，则将params视为data
           config.data = params;
           config.params = undefined;
