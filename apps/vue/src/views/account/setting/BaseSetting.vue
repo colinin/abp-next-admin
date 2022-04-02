@@ -68,7 +68,6 @@
       });
       const avatar = computed(() => {
         const { avatar } = userStore.getUserInfo;
-        console.log(avatar)
         return avatar ?? headerImg;
       });
 
