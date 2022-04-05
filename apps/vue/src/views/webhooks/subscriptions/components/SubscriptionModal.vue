@@ -9,9 +9,10 @@
   >
     <Form
       ref="formElRef"
-      label-align="left"
+      :colon="true"
+      label-align="right"
       layout="horizontal"
-      :label-col="{ span: 6 }"
+      :label-col="{ span: 4 }"
       :wrapper-col="{ span: 18 }"
       :model="modelRef"
       :rules="modelRules"

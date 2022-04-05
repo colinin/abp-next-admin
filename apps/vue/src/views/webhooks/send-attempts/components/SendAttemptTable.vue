@@ -26,8 +26,7 @@
             {
               auth: 'AbpWebhooks.SendAttempts.Resend',
               label: L('Resend'),
-              ifShow: [JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
-              onClick: handlePause.bind(null, record),
+              onClick: handleResend.bind(null, record),
             },
           ]"
         />
@@ -38,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Switch, Tag } from 'ant-design-vue';
+  import { Tag } from 'ant-design-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useModal } from '/@/components/Modal';
@@ -47,11 +46,11 @@
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { httpStatusCodeMap, getHttpStatusColor } from '../../typing';
-  import { getList } from '/@/api/webhooks/send-attempts';
+  import { getList, deleteById, resend } from '/@/api/webhooks/send-attempts';
   import SendAttemptModal from './SendAttemptModal.vue';
 
-  const { createConfirm } = useMessage();
-  const { L } = useLocalization('WebhooksManagement');
+  const { createConfirm, createMessage } = useMessage();
+  const { L } = useLocalization('WebhooksManagement', 'AbpUi');
   const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
@@ -90,8 +89,15 @@
       onOk: () => {
         deleteById(record.id).then(() => {
           reload();
+          createMessage.success(L('Successful'));
         });
       },
+    });
+  }
+
+  function handleResend(record) {
+    resend(record.id).then(() => {
+      createMessage.success(L('Successful'));
     });
   }
 </script>
