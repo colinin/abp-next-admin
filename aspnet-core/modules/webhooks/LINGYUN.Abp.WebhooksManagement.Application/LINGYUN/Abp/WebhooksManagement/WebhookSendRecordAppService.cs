@@ -78,6 +78,7 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
             Data = sendEvent.Data,
             Headers = subscription.GetWebhookHeaders(),
             Secret = subscription.Secret,
+            TryOnce = true,
         });
     }
 }
