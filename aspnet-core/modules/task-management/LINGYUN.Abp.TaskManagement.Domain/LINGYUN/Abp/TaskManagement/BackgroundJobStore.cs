@@ -85,7 +85,9 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                     jobInfo.Priority,
                     jobInfo.Source,
                     jobInfo.MaxCount,
-                    jobInfo.MaxTryCount)
+                    jobInfo.MaxTryCount,
+                    jobInfo.NodeName,
+                    jobInfo.TenantId)
                 {
                     IsEnabled = true,
                     TriggerCount = jobInfo.TriggerCount,
