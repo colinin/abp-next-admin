@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 
@@ -33,4 +34,8 @@ public class BackgroundJobInfoCreateDto : BackgroundJobInfoCreateOrUpdateDto
     /// 结束时间
     /// </summary>
     public DateTime? EndTime { get; set; }
+    /// <summary>
+    /// 作业来源
+    /// </summary>
+    public JobSource Source { get; set; } = JobSource.User;
 }

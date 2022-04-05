@@ -83,7 +83,17 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 };
-                menuMeta.AddIfNotContains(menu.ExtraProperties);
+                foreach (var prop in menu.ExtraProperties)
+                {
+                    if (menuMeta.ContainsKey(prop.Key))
+                    {
+                        menuMeta[prop.Key] = prop.Value;
+                    }
+                    else
+                    {
+                        menuMeta.Add(prop.Key, prop.Value);
+                    }
+                }
 
                 var seedMenu = await SeedMenuAsync(
                     layout:         layout,
@@ -126,7 +136,17 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 };
-                menuMeta.AddIfNotContains(item.ExtraProperties);
+                foreach (var prop in menu.ExtraProperties)
+                {
+                    if (menuMeta.ContainsKey(prop.Key))
+                    {
+                        menuMeta[prop.Key] = prop.Value;
+                    }
+                    else
+                    {
+                        menuMeta.Add(prop.Key, prop.Value);
+                    }
+                }
 
                 var seedMenu = await SeedMenuAsync(
                     layout: layout,

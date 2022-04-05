@@ -16,6 +16,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             context.Add(GetLocalization());
             context.Add(GetOssManagement());
             context.Add(GetTaskManagement());
+            context.Add(GetWebhooksManagement());
         }
 
         private static NavigationDefinition GetDashboard()
@@ -394,9 +395,38 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   displayName: "任务详情",
                   url: "/task-management/background-jobs/:id",
                   component: "/task-management/background-jobs/components/BackgroundJobInfoDetail",
-                  description: "任务详情"));
+                  description: "任务详情")
+              .SetProperty("hideMenu", "true")
+              .SetProperty("hideTab", "true"));
 
             return new NavigationDefinition(task);
+        }
+
+        private static NavigationDefinition GetWebhooksManagement()
+        {
+            var webhooks = new ApplicationMenu(
+                name: "WebHooks",
+                displayName: "WebHooks",
+                url: "/webhooks",
+                component: "",
+                description: "WebHooks",
+                icon: "ic:outline-webhook");
+            webhooks.AddItem(
+              new ApplicationMenu(
+                  name: "Subscriptions",
+                  displayName: "管理订阅",
+                  url: "/webhooks/subscriptions",
+                  component: "/webhooks/subscriptions/index",
+                  description: "管理订阅"));
+            webhooks.AddItem(
+              new ApplicationMenu(
+                  name: "SendAttempts",
+                  displayName: "管理记录",
+                  url: "/webhooks/send-attempts",
+                  component: "/webhooks/send-attempts/index",
+                  description: "管理记录"));
+
+            return new NavigationDefinition(webhooks);
         }
     }
 }

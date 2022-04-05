@@ -2,7 +2,6 @@
 node_modules
 /dist
 vue.config.js
-.env.production
 task
 obj
 bin

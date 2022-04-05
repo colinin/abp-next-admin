@@ -8,6 +8,8 @@ public class WebhookSendRecordGetListInput : PagedAndSortedResultRequestDto
 {
     public string Filter { get; set; }
 
+    public Guid? TenantId { get; set; }
+
     public Guid? WebhookEventId { get; set; }
 
     public Guid? SubscriptionId { get; set; }

@@ -43,7 +43,9 @@ namespace LINGYUN.MicroService.Internal.ApiGateway.Ocelot.Configuration.Reposito
                 "ocelot.localization.json",
                 "ocelot.messages.json",
                 "ocelot.platform.json",
-                "ocelot.aggregate.json"
+                "ocelot.aggregate.json",
+                "ocelot.task.json",
+                "ocelot.webhook.json"
             };
         }
 

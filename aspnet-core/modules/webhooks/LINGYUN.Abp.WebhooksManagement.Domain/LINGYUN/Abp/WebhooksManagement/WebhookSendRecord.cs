@@ -3,11 +3,10 @@ using System.Net;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificationTime, IMultiTenant
+public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificationTime
 {
     public virtual Guid? TenantId { get; protected set; }
 

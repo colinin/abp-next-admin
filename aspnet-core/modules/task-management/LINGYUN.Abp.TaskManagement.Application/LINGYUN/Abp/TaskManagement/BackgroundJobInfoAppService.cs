@@ -44,7 +44,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             input.BeginTime,
             input.EndTime,
             input.Priority,
-            JobSource.User,
+            input.Source,
             input.MaxCount,
             input.MaxTryCount,
             CurrentTenant.Id);

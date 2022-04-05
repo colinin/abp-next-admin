@@ -22,6 +22,7 @@ public static class WebhooksManagementPermissions
     public static class WebhooksSendAttempts
     {
         public const string Default = GroupName + ".SendAttempts";
+        public const string Delete = Default + ".Delete";
         public const string Resend = Default + ".Resend";
     }
 }
