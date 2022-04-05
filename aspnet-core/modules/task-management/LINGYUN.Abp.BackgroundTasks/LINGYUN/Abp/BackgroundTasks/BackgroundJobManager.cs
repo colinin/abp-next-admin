@@ -20,6 +20,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
     protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    protected AbpBackgroundTasksOptions TasksOptions { get; }
     protected AbpBackgroundJobOptions Options { get; }
     public BackgroundJobManager(
         IClock clock,
@@ -28,7 +29,8 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
         IJsonSerializer jsonSerializer,
-        IOptions<AbpBackgroundJobOptions> options)
+        IOptions<AbpBackgroundJobOptions> options,
+        IOptions<AbpBackgroundTasksOptions> taskOptions)
     {
         Clock = clock;
         JobStore = jobStore;
@@ -37,6 +39,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         GuidGenerator = guidGenerator;
         JsonSerializer = jsonSerializer;
         Options = options.Value;
+        TasksOptions = taskOptions.Value;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(
@@ -74,6 +77,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
             CreationTime = Clock.Now,
             // 确保不会被轮询入队
             Status = JobStatus.None,
+            NodeName = TasksOptions.NodeName,
             Type = typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName,
         };
 

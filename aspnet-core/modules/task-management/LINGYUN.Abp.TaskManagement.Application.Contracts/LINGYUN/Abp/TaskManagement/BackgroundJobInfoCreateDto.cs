@@ -25,6 +25,9 @@ public class BackgroundJobInfoCreateDto : BackgroundJobInfoCreateOrUpdateDto
     [Required]
     [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxTypeLength))] 
     public string Type { get; set; }
+
+    [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxNodeNameLength))]
+    public string NodeName { get; set; }
     /// <summary>
     /// 开始时间
     /// </summary>

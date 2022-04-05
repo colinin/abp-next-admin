@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.TaskManagement;
+using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -8,12 +9,15 @@ namespace LINGYUN.Abp.BackgroundTasks.TaskManagement;
 
 public class TaskManagementJobPublisher : IJobPublisher, ITransientDependency
 {
+    protected AbpBackgroundTasksOptions Options { get; }
     protected IBackgroundJobInfoAppService BackgroundJobAppService { get; }
 
     public TaskManagementJobPublisher(
-        IBackgroundJobInfoAppService backgroundJobAppService)
+        IBackgroundJobInfoAppService backgroundJobAppService,
+        IOptions<AbpBackgroundTasksOptions> options)
     {
         BackgroundJobAppService = backgroundJobAppService;
+        Options = options.Value;
     }
 
     public async virtual Task<bool> PublishAsync(JobInfo job, CancellationToken cancellationToken = default)
@@ -34,7 +38,9 @@ public class TaskManagementJobPublisher : IJobPublisher, ITransientDependency
             LockTimeOut = job.LockTimeOut,
             IsEnabled = true,
             Name = job.Name,
+            Source = job.Source,
             Priority = job.Priority,
+            NodeName = Options.NodeName,
         };
 
         await BackgroundJobAppService.CreateAsync(input);

@@ -109,6 +109,10 @@ public class JobInfo
     /// 0或更小不生效
     /// </summary>
     public int LockTimeOut { get; set; }
+    /// <summary>
+    /// 指定运行节点
+    /// </summary>
+    public string NodeName { get; set; }
 
     public int GetCanBeTriggered()
     {

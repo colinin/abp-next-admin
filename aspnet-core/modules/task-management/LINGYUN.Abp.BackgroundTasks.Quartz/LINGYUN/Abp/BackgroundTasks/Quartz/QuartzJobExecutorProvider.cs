@@ -47,6 +47,8 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
         var jobBuilder = JobBuilder.Create(jobType)
                 .WithIdentity(KeyBuilder.CreateJobKey(job))
                 .WithDescription(job.Description);
+        // 多节点任务需要
+        jobBuilder.UsingJobData(nameof(JobInfo.NodeName), job.NodeName);
         // 查询任务需要
         jobBuilder.UsingJobData(nameof(JobInfo.Id), job.Id);
         // 有些场景需要

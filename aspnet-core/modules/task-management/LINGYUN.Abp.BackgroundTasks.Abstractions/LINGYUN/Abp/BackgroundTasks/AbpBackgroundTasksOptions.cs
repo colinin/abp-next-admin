@@ -70,6 +70,10 @@ public class AbpBackgroundTasksOptions
     /// 轮询任务也属于一个后台任务, 需要对每一次轮询加锁，防止重复任务入库
     /// </remarks>
     public int JobFetchLockTimeOut { get; set; }
+    /// <summary>
+    /// 指定运行节点
+    /// </summary>
+    public string NodeName { get; set; }
     public AbpBackgroundTasksOptions()
     {
         JobFetchEnabled = true;

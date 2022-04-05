@@ -1,12 +1,15 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
+using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Webhooks.Identity;
 using LINGYUN.Abp.Webhooks.Saas;
 using LINGYUN.Abp.WebhooksManagement;
@@ -42,6 +45,9 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(AbpWebhooksIdentityModule),
     typeof(AbpWebhooksSaasModule),
+    typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksExceptionHandlingModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
@@ -68,6 +74,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         PreConfigureApp();
         PreConfigureFeature();
         PreConfigureCAP(configuration);
+        PreConfigureQuartz(configuration);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -79,6 +86,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureJsonSerializer();
+        ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureCaching(configuration);
@@ -89,7 +97,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
         context.Services.AddAlwaysAllowAuthorization();
     }
 

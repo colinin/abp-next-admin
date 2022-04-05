@@ -9,9 +9,7 @@ using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Webhooks;
 
-//[DependsOn(typeof(AbpBackgroundJobsAbstractionsModule))]
-// 防止未引用实现无法发布到后台作业
-[DependsOn(typeof(AbpBackgroundJobsModule))]
+[DependsOn(typeof(AbpBackgroundJobsAbstractionsModule))]
 [DependsOn(typeof(AbpFeaturesModule))]
 [DependsOn(typeof(AbpGuidsModule))]
 [DependsOn(typeof(AbpHttpClientModule))]

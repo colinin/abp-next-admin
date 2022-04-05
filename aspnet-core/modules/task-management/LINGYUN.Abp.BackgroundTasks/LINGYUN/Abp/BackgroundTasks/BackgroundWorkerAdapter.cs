@@ -4,18 +4,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
-using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
 public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroundWorkerRunnable
     where TWorker : IBackgroundWorker
 {
-    protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
-    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
-
     private readonly MethodInfo _doWorkAsyncMethod;
     private readonly MethodInfo _doWorkMethod;
 
@@ -70,12 +65,10 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
         return new JobInfo
         {
             Id = workerType.FullName,
-            TenantId = CurrentTenant.Id,
             Name = workerType.FullName,
             Group = "BackgroundWorkers",
             Priority = JobPriority.Normal,
             Source = JobSource.System,
-            BeginTime = Clock.Now,
             Args = jobArgs,
             Description = "From the framework background workers",
             JobType = JobType.Persistent,
@@ -83,7 +76,6 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
             MaxCount = 0,
             // TODO: 可配置
             MaxTryCount = 10,
-            CreationTime = Clock.Now,
             // 确保不会被轮询入队
             Status = JobStatus.None,
             Type = typeof(BackgroundWorkerAdapter<TWorker>).AssemblyQualifiedName,

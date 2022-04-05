@@ -64,6 +64,7 @@ internal class DefaultBackgroundWorker : BackgroundService
             Priority = JobPriority.High,
             Source = JobSource.System,
             LockTimeOut = _options.JobFetchLockTimeOut,
+            NodeName = _options.NodeName,
             Type = typeof(BackgroundPollingJob).AssemblyQualifiedName,
         };
     }
@@ -84,6 +85,7 @@ internal class DefaultBackgroundWorker : BackgroundService
             JobType = JobType.Period,
             Priority = JobPriority.High,
             Source = JobSource.System,
+            NodeName = _options.NodeName,
             Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
         };
     }
