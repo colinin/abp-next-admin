@@ -8,6 +8,7 @@ namespace LINGYUN.Abp.BackgroundTasks;
 [Dependency(TryRegister = true)]
 public class NullJobScheduler : IJobScheduler, ISingletonDependency
 {
+    public static readonly IJobScheduler Instance = new NullJobScheduler();
     public Task<bool> ExistsAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(false);

@@ -53,6 +53,7 @@ public class EfCoreWebhookSendRecordRepository :
         WebhookSendRecordFilter filter)
     {
         return queryable
+            .WhereIf(filter.TenantId.HasValue, x => x.TenantId == filter.TenantId)
             .WhereIf(filter.WebhookEventId.HasValue, x => x.WebhookEventId == filter.WebhookEventId)
             .WhereIf(filter.SubscriptionId.HasValue, x => x.WebhookSubscriptionId == filter.SubscriptionId)
             .WhereIf(filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == filter.ResponseStatusCode)

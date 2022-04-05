@@ -23,13 +23,21 @@ public class WebhookSendRecordController : WebhooksManagementControllerBase, IWe
 
     [HttpGet]
     [Route("{id}")]
-    public Task<WebhookSendRecordDto> GetAsync(Guid id)
+    public virtual Task<WebhookSendRecordDto> GetAsync(Guid id)
     {
         return SendRecordAppService.GetAsync(id);
     }
 
+    [HttpDelete]
+    [Route("{id}")]
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Delete)]
+    public virtual Task DeleteAsync(Guid id)
+    {
+        return SendRecordAppService.DeleteAsync(id);
+    }
+
     [HttpGet]
-    public Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
+    public virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
     {
         return SendRecordAppService.GetListAsync(input);
     }
@@ -37,7 +45,7 @@ public class WebhookSendRecordController : WebhooksManagementControllerBase, IWe
     [HttpPost]
     [Route("{id}/resend")]
     [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Resend)]
-    public Task ResendAsync(Guid id)
+    public virtual Task ResendAsync(Guid id)
     {
         return SendRecordAppService.ResendAsync(id);
     }

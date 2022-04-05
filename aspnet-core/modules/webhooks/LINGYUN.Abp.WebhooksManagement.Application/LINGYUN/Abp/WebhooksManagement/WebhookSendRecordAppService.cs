@@ -33,10 +33,19 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         return ObjectMapper.Map<WebhookSendRecord, WebhookSendRecordDto>(sendRecord);
     }
 
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Delete)]
+    public async virtual Task DeleteAsync(Guid id)
+    {
+        var sendRecord = await RecordRepository.GetAsync(id);
+
+        await RecordRepository.DeleteAsync(sendRecord);
+    }
+
     public async virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
     {
         var filter = new WebhookSendRecordFilter
         {
+            TenantId = input.TenantId,
             SubscriptionId = input.SubscriptionId,
             ResponseStatusCode = input.ResponseStatusCode,
             BeginCreationTime = input.BeginCreationTime,

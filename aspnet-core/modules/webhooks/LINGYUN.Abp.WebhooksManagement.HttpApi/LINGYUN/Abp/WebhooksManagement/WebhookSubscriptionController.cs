@@ -23,7 +23,7 @@ public class WebhookSubscriptionController : WebhooksManagementControllerBase, I
 
     [HttpPost]
     [Authorize(WebhooksManagementPermissions.WebhookSubscription.Create)]
-    public Task<WebhookSubscriptionDto> CreateAsync(WebhookSubscriptionCreateInput input)
+    public virtual Task<WebhookSubscriptionDto> CreateAsync(WebhookSubscriptionCreateInput input)
     {
         return SubscriptionAppService.CreateAsync(input);
     }
@@ -31,20 +31,20 @@ public class WebhookSubscriptionController : WebhooksManagementControllerBase, I
     [HttpDelete]
     [Route("{id}")]
     [Authorize(WebhooksManagementPermissions.WebhookSubscription.Delete)]
-    public Task DeleteAsync(Guid id)
+    public virtual Task DeleteAsync(Guid id)
     {
         return SubscriptionAppService.DeleteAsync(id);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public Task<WebhookSubscriptionDto> GetAsync(Guid id)
+    public virtual Task<WebhookSubscriptionDto> GetAsync(Guid id)
     {
         return SubscriptionAppService.GetAsync(id);
     }
 
     [HttpGet]
-    public Task<PagedResultDto<WebhookSubscriptionDto>> GetListAsync(WebhookSubscriptionGetListInput input)
+    public virtual Task<PagedResultDto<WebhookSubscriptionDto>> GetListAsync(WebhookSubscriptionGetListInput input)
     {
         return SubscriptionAppService.GetListAsync(input);
     }
@@ -52,14 +52,14 @@ public class WebhookSubscriptionController : WebhooksManagementControllerBase, I
     [HttpPut]
     [Route("{id}")]
     [Authorize(WebhooksManagementPermissions.WebhookSubscription.Update)]
-    public Task<WebhookSubscriptionDto> UpdateAsync(Guid id, WebhookSubscriptionUpdateInput input)
+    public virtual Task<WebhookSubscriptionDto> UpdateAsync(Guid id, WebhookSubscriptionUpdateInput input)
     {
         return SubscriptionAppService.UpdateAsync(id, input);
     }
 
     [HttpGet]
     [Route("availables")]
-    public Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync()
+    public virtual Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync()
     {
         return SubscriptionAppService.GetAllAvailableWebhooksAsync();
     }

@@ -17,27 +17,27 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
         var subscription = group.AddPermission(
             WebhooksManagementPermissions.WebhookSubscription.Default,
             L("Permission:Subscriptions"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
         subscription.AddChild(
             WebhooksManagementPermissions.WebhookSubscription.Create,
             L("Permission:Create"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
         subscription.AddChild(
             WebhooksManagementPermissions.WebhookSubscription.Update,
             L("Permission:Update"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
         subscription.AddChild(
             WebhooksManagementPermissions.WebhookSubscription.Delete,
             L("Permission:Delete"),
-            MultiTenancySides.Host)
-            .WithProviders(ClientPermissionValueProvider.ProviderName);
+            MultiTenancySides.Host);
 
         var sendAttempts = group.AddPermission(
             WebhooksManagementPermissions.WebhooksSendAttempts.Default,
             L("Permission:SendAttempts"),
+            MultiTenancySides.Host);
+        sendAttempts.AddChild(
+            WebhooksManagementPermissions.WebhooksSendAttempts.Delete,
+            L("Permission:Delete"),
             MultiTenancySides.Host);
         sendAttempts.AddChild(
             WebhooksManagementPermissions.WebhooksSendAttempts.Resend,
@@ -46,7 +46,8 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
 
         group.AddPermission(
             WebhooksManagementPermissions.Publish,
-            L("Permission:Publish"))
+            L("Permission:Publish"),
+            MultiTenancySides.Host)
             .WithProviders(ClientPermissionValueProvider.ProviderName);
 
         group.AddPermission(

@@ -2,11 +2,10 @@
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
-public class WebhookEventRecord : Entity<Guid>, IMultiTenant, IHasCreationTime, IHasDeletionTime
+public class WebhookEventRecord : Entity<Guid>, IHasCreationTime, IHasDeletionTime
 {
     public virtual Guid? TenantId { get; protected set; }
     public virtual string WebhookName { get; protected set; }
