@@ -9,8 +9,8 @@
     <Form
       ref="formElRef"
       :colon="true"
-      label-align="left"
-      :label-col="{ span: 6 }"
+      label-align="right"
+      :label-col="{ span: 4 }"
       :wrapper-col="{ span: 18 }"
       :model="modelRef"
     >
@@ -43,7 +43,7 @@
         </TabPane>
 
         <TabPane v-if="subscriptionRef.id" key="subscription" :tab="L('Subscriptions')">
-          <FormItem :label="L('DisplayName:SubscriptionId')">
+          <FormItem :label="L('DisplayName:WebhookSubscriptionId')">
             <Input readonly :value="modelRef.webhookSubscriptionId" />
           </FormItem>
           <FormItem :label="L('DisplayName:IsActive')">
