@@ -84,6 +84,18 @@ services:
     networks:
       - framework
 
+  webhook-api:
+    build:
+      context: ./aspnet-core/services/Publish/webhooks
+    volumes:
+      - /var/opt/abp/logs/webhooks:/app/Logs
+      - /var/opt/abp/data/webhooks/Modules:/app/Modules
+    depends_on:
+      - sts-server
+    restart: always
+    networks:
+      - framework
+
   internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway
