@@ -12,4 +12,4 @@ EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 
-ENTRYPOINT ["dotnet", "LY..WebhooksManagement.HttpApi.Host.dll"]
+ENTRYPOINT ["dotnet", "LY.MicroService.WebhooksManagement.HttpApi.Host.dll"]
