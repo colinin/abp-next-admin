@@ -34,6 +34,7 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryInstrumentationAspNetCorePackageVersion)" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryInstrumentationHttpPackageVersion)" />
 		<PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion)" />
+		<PackageReference Include="Quartz.Serialization.Json" Version="$(QuartzNETPackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
@@ -57,11 +58,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj" />
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

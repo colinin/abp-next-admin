@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -15,8 +16,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Quartz;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
@@ -28,6 +31,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -76,6 +80,34 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
+    private void PreConfigureQuartz(IConfiguration configuration)
+    {
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            // 如果使用持久化存储, 则配置quartz持久层
+            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
+            {
+                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
+                if (settings != null)
+                {
+                    foreach (var setting in settings)
+                    {
+                        options.Properties[setting.Key] = setting.Value;
+                    }
+                }
+
+                options.Configurator += (config) =>
+                {
+                    config.UsePersistentStore(store =>
+                    {
+                        store.UseProperties = false;
+                        store.UseJsonSerializer();
+                    });
+                };
+            }
+        });
+    }
+
     private void ConfigureDbContext()
     {
         // 配置Ef
@@ -87,6 +119,14 @@ public partial class WebhooksManagementHttpApiHostModule
             //    cfg.UseMySQL();
             //    cfg.DbContextOptions.EnableSensitiveDataLogging();
             //});
+        });
+    }
+
+    private void ConfigureBackgroundTasks()
+    {
+        Configure<AbpBackgroundTasksOptions>(options =>
+        {
+            options.NodeName = ApplicationName;
         });
     }
 

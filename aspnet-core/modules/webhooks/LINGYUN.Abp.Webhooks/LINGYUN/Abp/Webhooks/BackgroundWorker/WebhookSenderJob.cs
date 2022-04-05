@@ -11,7 +11,6 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
     public class WebhookSenderJob : AsyncBackgroundJob<WebhookSenderArgs>, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IWebhookDefinitionManager _webhookDefinitionManager;
         private readonly IWebhookSubscriptionManager _webhookSubscriptionManager;
         private readonly IWebhookSendAttemptStore _webhookSendAttemptStore;
         private readonly IWebhookSender _webhookSender;
@@ -20,14 +19,12 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
 
         public WebhookSenderJob(
             IUnitOfWorkManager unitOfWorkManager,
-            IWebhookDefinitionManager webhookDefinitionManager,
             IWebhookSubscriptionManager webhookSubscriptionManager,
             IWebhookSendAttemptStore webhookSendAttemptStore,
             IWebhookSender webhookSender,
             IOptions<AbpWebhooksOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
-            _webhookDefinitionManager = webhookDefinitionManager;
             _webhookSubscriptionManager = webhookSubscriptionManager;
             _webhookSendAttemptStore = webhookSendAttemptStore;
             _webhookSender = webhookSender;
@@ -36,13 +33,11 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
 
         public override async Task ExecuteAsync(WebhookSenderArgs args)
         {
-            var webhookDefinition = _webhookDefinitionManager.Get(args.WebhookName);
-
-            if (webhookDefinition.TryOnce)
+            if (args.TryOnce)
             {
                 try
                 {
-                    await SendWebhook(args, webhookDefinition);
+                    await SendWebhook(args);
                 }
                 catch (Exception e)
                 {
@@ -52,11 +47,11 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
             }
             else
             {
-                await SendWebhook(args, webhookDefinition);
+                await SendWebhook(args);
             }
         }
 
-        private async Task SendWebhook(WebhookSenderArgs args, WebhookDefinition webhookDefinition)
+        private async Task SendWebhook(WebhookSenderArgs args)
         {
             if (args.WebhookEventId == default)
             {
@@ -68,7 +63,7 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
                 return;
             }
 
-            if (!webhookDefinition.TryOnce)
+            if (!args.TryOnce)
             {
                 var sendAttemptCount = await _webhookSendAttemptStore.GetSendAttemptCountAsync(
                     args.TenantId,
@@ -76,8 +71,7 @@ namespace LINGYUN.Abp.Webhooks.BackgroundWorker
                     args.WebhookSubscriptionId
                 );
 
-                if ((webhookDefinition.MaxSendAttemptCount > 0 && sendAttemptCount > webhookDefinition.MaxSendAttemptCount) ||
-                    sendAttemptCount > _options.MaxSendAttemptCount)
+                if (sendAttemptCount > _options.MaxSendAttemptCount)
                 {
                     return;
                 }

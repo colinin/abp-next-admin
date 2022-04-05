@@ -1,9 +1,9 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -19,28 +19,32 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
 
+    protected AbpBackgroundTasksOptions Options { get; }
+
     public BackgroundJobStore(
         IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IBackgroundJobInfoRepository jobInfoRepository,
-        IBackgroundJobLogRepository jobLogRepository)
+        IBackgroundJobLogRepository jobLogRepository,
+        IOptions<AbpBackgroundTasksOptions> options)
     {
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
         JobInfoRepository = jobInfoRepository;
         JobLogRepository = jobLogRepository;
+        Options = options.Value;
     }
 
     public async virtual Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
-        var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(cancellationToken);
+        var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(Options.NodeName, cancellationToken);
 
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
     public async virtual Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
-        var jobInfos = await JobInfoRepository.GetWaitingListAsync(maxResultCount, cancellationToken);
+        var jobInfos = await JobInfoRepository.GetWaitingListAsync(Options.NodeName, maxResultCount, cancellationToken);
 
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
@@ -142,9 +146,10 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         CancellationToken cancellationToken = default)
     {
         var jobs = await JobInfoRepository.GetExpiredJobsAsync(
-               maxResultCount,
-               jobExpiratime,
-               cancellationToken);
+            Options.NodeName,
+            maxResultCount,
+            jobExpiratime,
+            cancellationToken);
 
         await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
     }

@@ -107,7 +107,10 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// 连续失败且不会再次执行
     /// </summary>
     public virtual bool IsAbandoned { get; set; }
-
+    /// <summary>
+    /// 指定作业运行节点
+    /// </summary>
+    public virtual string NodeName { get; protected set; }
     protected BackgroundJobInfo() { }
 
     public BackgroundJobInfo(
@@ -122,6 +125,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         JobSource source = JobSource.None,
         int maxCount = 0,
         int maxTryCount = 50,
+        string nodeName = null,
         Guid? tenantId = null) : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
@@ -134,6 +138,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
 
         MaxCount = maxCount;
         MaxTryCount = maxTryCount;
+        NodeName = Check.Length(nodeName, nameof(nodeName), BackgroundJobInfoConsts.MaxNodeNameLength);
         TenantId = tenantId;
 
         Status = JobStatus.Running;

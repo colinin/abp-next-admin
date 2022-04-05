@@ -47,6 +47,11 @@ namespace LINGYUN.Abp.Webhooks
         public IDictionary<string, string> Headers { get; set; }
 
         /// <summary>
+        /// Tries to send webhook only one time without checking to send attempt count
+        /// </summary>
+        public bool TryOnce { get; set; }
+
+        /// <summary>
         /// True: It sends the exact same data as the parameter to clients.
         /// <para>
         /// False: It sends data in <see cref="WebhookPayload"/>. It is recommended way.

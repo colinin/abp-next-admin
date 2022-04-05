@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +14,18 @@ namespace LINGYUN.Abp.TaskManagement;
 [Authorize(TaskManagementPermissions.BackgroundJobs.Default)]
 public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBackgroundJobInfoAppService
 {
+    protected AbpBackgroundTasksOptions Options { get; }
     protected BackgroundJobManager BackgroundJobManager { get; }
     protected IBackgroundJobInfoRepository BackgroundJobInfoRepository { get; }
 
     public BackgroundJobInfoAppService(
         BackgroundJobManager backgroundJobManager,
-        IBackgroundJobInfoRepository backgroundJobInfoRepository)
+        IBackgroundJobInfoRepository backgroundJobInfoRepository,
+        IOptions<AbpBackgroundTasksOptions> options)
     {
         BackgroundJobManager = backgroundJobManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
+        Options = options.Value;
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Create)]
@@ -47,16 +51,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
             input.Source,
             input.MaxCount,
             input.MaxTryCount,
+            input.NodeName ?? Options.NodeName,
             CurrentTenant.Id);
 
         UpdateByInput(backgroundJobInfo, input);
 
-        await BackgroundJobInfoRepository.InsertAsync(backgroundJobInfo, autoSave: true);
+        await BackgroundJobManager.CreateAsync(backgroundJobInfo);
 
-        if (backgroundJobInfo.IsEnabled && backgroundJobInfo.JobType == JobType.Period)
-        {
-            await BackgroundJobManager.QueueAsync(backgroundJobInfo);
-        }
+        await CurrentUnitOfWork.SaveChangesAsync();
 
         return ObjectMapper.Map<BackgroundJobInfo, BackgroundJobInfoDto>(backgroundJobInfo);
     }

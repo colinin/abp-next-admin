@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Volo.Abp;
+using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
@@ -34,12 +33,6 @@ public class BackgroundJobManager : DomainService
         if (jobInfo.IsEnabled && jobInfo.JobType == JobType.Period)
         {
             var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-            if (await JobScheduler.ExistsAsync(job))
-            {
-                throw new BusinessException(TaskManagementErrorCodes.JobNameAlreadyExists)
-                    .WithData("Group", job.Group)
-                    .WithData("Name", job.Name);
-            }
             UnitOfWorkManager.Current.OnCompleted(async () =>
             {
                 await JobScheduler.QueueAsync(job);
