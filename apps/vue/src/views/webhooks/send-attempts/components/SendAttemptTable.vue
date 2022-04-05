@@ -52,7 +52,7 @@
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization('WebhooksManagement', 'AbpUi');
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload }] = useTable({
+  const [registerTable, { reload, setLoading }] = useTable({
     rowKey: 'id',
     title: L('SendAttempts'),
     columns: getDataColumns(),
@@ -96,8 +96,11 @@
   }
 
   function handleResend(record) {
+    setLoading(true);
     resend(record.id).then(() => {
       createMessage.success(L('Successful'));
+    }).finally(() => {
+      setLoading(false);
     });
   }
 </script>
