@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{8052BB2D-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{FB7A9794-06D2-42CF-939E-4626497B97BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks", "modules\webhooks\LINGYUN.Abp.WebHooks\LINGYUN.Abp.Webhooks.csproj", "{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks", "modules\webhooks\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj", "{7DFE9385-2FFD-45CE-97B0-8FF4E967F19E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagement.Domain.Shared", "modules\webhooks\LINGYUN.Abp.WebhooksManagement.Domain.Shared\LINGYUN.Abp.WebhooksManagement.Domain.Shared.csproj", "{B3953343-4067-4F12-8F2C-900761934E89}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebhooksManagem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.HttpApi.Host", "services\LY.MicroService.WebhooksManagement.HttpApi.Host\LY.MicroService.WebhooksManagement.HttpApi.Host.csproj", "{7C790142-61E7-4C7E-8E8B-3D5EBF71E8BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.ClientProxies", "modules\webhooks\LINGYUN.Abp.WebHooks.ClientProxies\LINGYUN.Abp.Webhooks.ClientProxies.csproj", "{F4966BE6-CC96-4C23-9363-3BE4103F02E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.ClientProxies", "modules\webhooks\LINGYUN.Abp.Webhooks.ClientProxies\LINGYUN.Abp.Webhooks.ClientProxies.csproj", "{F4966BE6-CC96-4C23-9363-3BE4103F02E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Identity", "modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj", "{93BB030A-EA01-4F08-BD41-0800D838162C}"
 EndProject
