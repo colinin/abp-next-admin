@@ -57,7 +57,7 @@ export const get = (id: string) => {
 export const getList = (input: GetClientPagedRequest) => {
   return defAbpHttp.get<ClientPagedResult>({
     url: Api.GetList,
-    data: input,
+    params: input,
   });
 };
 

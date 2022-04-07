@@ -14,7 +14,6 @@ import { format } from '/@/utils/strings';
 import { AxiosResponse } from 'axios';
 import { isFunction } from '/@/utils/is';
 import { UploadFileParams } from '/#/axios';
-import { deepMerge } from '/@/utils';
 
 enum Api {
   CreateObject = '/api/oss-management/objects',
@@ -84,6 +83,11 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
         });
       }
       if (progress === totalSize) {
+        if (!res.data) {
+          res.data = {
+            url: format('/api/files/static/{bucket}/p/{path}/{name}', { bucket:  params.data?.bucket, path: params.data?.path, name: fileName }),
+          };
+        }
         resolve(res);
       }
     }
@@ -194,7 +198,7 @@ export const deleteObject = (input: GetOssObjectRequest) => {
 export const bulkDeleteObject = (input: OssObjectBulkDelete) => {
   return defAbpHttp.post<void>({
     url: Api.BulkDeleteObject,
-    params: input,
+    data: input,
   });
 }
 

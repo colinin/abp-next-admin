@@ -44,6 +44,6 @@ export const get = (id: string) => {
 export const getList = (input: GetApiScopePagedRequest) => {
   return defAbpHttp.get<ApiScopePagedResult>({
     url: Api.GetList,
-    data: input,
+    params: input,
   });
 };
