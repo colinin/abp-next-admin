@@ -44,6 +44,6 @@ export const get = (id: string) => {
 export const getList = (input: GetIdentityResourcePagedRequest) => {
   return defAbpHttp.get<IdentityResourcePagedResult>({
     url: Api.GetList,
-    data: input,
+    params: input,
   });
 };

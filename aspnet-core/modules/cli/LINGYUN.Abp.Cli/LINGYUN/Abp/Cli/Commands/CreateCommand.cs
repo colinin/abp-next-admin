@@ -198,7 +198,7 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("Examples:");
             sb.AppendLine("");
             sb.AppendLine("  labp create Acme.BookStore");
-            sb.AppendLine("  labp create Acme.BookStore -p Com");
+            sb.AppendLine("  labp create Acme.BookStore -pk Com");
             sb.AppendLine("  labp create Acme.BookStore -d mongodb");
             sb.AppendLine("  labp create Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  labp create Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
