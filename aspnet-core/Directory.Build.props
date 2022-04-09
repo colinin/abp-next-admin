@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<VoloAbpPackageVersion>5.2.0</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>5.2.0</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.6.0</DaprPackageVersion>
+		<DaprPackageVersion>1.7.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.1</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>6.0.0</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
