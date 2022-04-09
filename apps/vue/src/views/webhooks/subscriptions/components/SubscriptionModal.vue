@@ -36,13 +36,21 @@
         <InputPassword v-model:value="modelRef.secret" autocomplete="off" />
       </FormItem>
       <FormItem name="webhooks" :label="L('DisplayName:Webhooks')">
-        <Select v-model:value="modelRef.webhooks" mode="multiple">
-          <SelectGroup v-for="group in webhooksGroupRef" :key="group.name"  :label="group.displayName">
+        <Select v-model:value="modelRef.webhooks" mode="multiple" :filterOption="optionFilter">
+          <SelectGroup v-for="group in webhooksGroupRef" :key="group.name" :label="group.displayName">
             <SelectOption
               v-for="option in group.webhooks"
               :key="option.name"
               :value="option.name"
-            >{{ option.displayName }}</SelectOption>
+              :displayName="option.displayName"
+            >
+              <Tooltip placement="right">
+                <template #title>
+                  {{ option.description }}
+                </template>
+                {{ option.displayName }}
+              </Tooltip>
+            </SelectOption>
           </SelectGroup>
         </Select>
       </FormItem>
@@ -62,6 +70,7 @@
     Checkbox,
     Form,
     Select,
+    Tooltip,
     Input,
     InputPassword
   } from 'ant-design-vue';
@@ -179,6 +188,16 @@
         changeOkLoading(false);
       });
     });
+  }
+
+  function optionFilter(onputValue: string, option: any) {
+    if (option.displayName) {
+      return option.displayName.includes(onputValue);
+    }
+    if (option.label) {
+      return option.label.includes(onputValue);
+    }
+    return true;
   }
 
   function getDefaultModel() : WebhookSubscription {
