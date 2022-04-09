@@ -122,10 +122,19 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                     .StartAt(Clock.Now.AddSeconds(job.Interval))
                     .EndAt(job.EndTime)
                     .ForJob(KeyBuilder.CreateJobKey(job))
-                    .WithPriority((int)job.Priority)
-                    .WithSimpleSchedule(x =>
-                        x.WithIntervalInSeconds(job.Interval)
-                         .WithRepeatCount(maxCount));
+                    .WithPriority((int)job.Priority);
+
+                // Quartz约定. 重复间隔不能为0
+                // fix throw Quartz.SchedulerException: Repeat Interval cannot be zero.
+                var scheduleBuilder = SimpleScheduleBuilder.Create();
+                scheduleBuilder.WithRepeatCount(maxCount);
+                if (job.Interval > 0)
+                {
+                    scheduleBuilder.WithIntervalInSeconds(job.Interval);
+                }
+
+                triggerBuilder.WithSchedule(scheduleBuilder);
+
                 break;
         }
 
