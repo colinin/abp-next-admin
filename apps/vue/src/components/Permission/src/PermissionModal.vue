@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="title"
+    :title="getIdentity"
     :width="800"
     :min-height="600"
     @ok="handleSubmit"
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
   import { message } from 'ant-design-vue';
   import { Card, Checkbox, Col, Divider, Row, Tabs } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -70,6 +70,7 @@
     providerName: 'G',
     providerKey: '',
     readonly: false,
+    identity: '',
   };
 
   export default defineComponent({
@@ -107,6 +108,12 @@
       const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
         model.value = val;
       });
+      const getIdentity = computed(() => {
+        if (model.value.identity) {
+          return `${L('Permissions')} - ${model.value.identity}`;
+        }
+        return title.value;
+      })
 
       function handleVisibleChange(visible: boolean) {
         if (!visible) {
@@ -130,6 +137,7 @@
         L,
         activeKey,
         title,
+        getIdentity,
         permissionTab,
         permissionTree,
         permissionGrantKeys,

@@ -58,7 +58,7 @@
             {
               auth: 'AbpIdentity.Users.ManagePermissions',
               label: L('Permissions'),
-              onClick: showPermissionModal.bind(null, record.id),
+              onClick: showPermissionModal.bind(null, record.id, record.userName),
             },
             {
               auth: 'AbpIdentity.Users.ManageClaims',

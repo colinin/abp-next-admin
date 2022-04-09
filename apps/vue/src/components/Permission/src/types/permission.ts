@@ -2,6 +2,7 @@ export interface PermissionProps {
   providerName: string;
   providerKey?: string;
   readonly: boolean;
+  identity?: string;
 }
 
 export interface PermissionTree {
