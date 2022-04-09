@@ -88,7 +88,6 @@
     Tabs,
     Tag,
     Input,
-    Textarea,
     InputPassword
   } from 'ant-design-vue';
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
