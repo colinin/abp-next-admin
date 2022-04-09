@@ -61,11 +61,10 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
              .IsRequired()
              .HasColumnName(nameof(WebhookSubscription.WebhookUri))
              .HasMaxLength(WebhookSubscriptionConsts.MaxWebhookUriLength);
+
             b.Property(p => p.Secret)
-             .IsRequired()
              .HasColumnName(nameof(WebhookSubscription.Secret))
              .HasMaxLength(WebhookSubscriptionConsts.MaxSecretLength);
-
             b.Property(p => p.Webhooks)
              .HasColumnName(nameof(WebhookSubscription.Webhooks))
              .HasMaxLength(WebhookSubscriptionConsts.MaxWebhooksLength);

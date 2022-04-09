@@ -34,10 +34,13 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         var subscription = new WebhookSubscription(
             GuidGenerator.Create(),
             input.WebhookUri,
-            input.Secret,
             JsonConvert.SerializeObject(input.Webhooks),
             JsonConvert.SerializeObject(input.Headers),
-            CurrentTenant.Id);
+            input.Secret,
+            CurrentTenant.Id)
+        {
+            IsActive = input.IsActive,
+        };
 
         await SubscriptionRepository.InsertAsync(subscription);
 

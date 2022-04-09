@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 
 namespace System;
 
@@ -8,6 +9,12 @@ internal static class AbpStringCryptographyExtensions
     {
         var data = planText.GetBytes();
         using var hmacsha256 = new HMACSHA256(salt);
-        return BitConverter.ToString(hmacsha256.ComputeHash(data));
+        var retVal = hmacsha256.ComputeHash(data);
+        var sb = new StringBuilder();
+        for (var i = 0; i < retVal.Length; i++)
+        {
+            sb.Append(retVal[i].ToString("x2"));
+        }
+        return sb.ToString();
     }
 }
