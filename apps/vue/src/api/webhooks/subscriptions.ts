@@ -59,7 +59,9 @@ export const getList = (input: WebhookSubscriptionGetListInput) => {
     service: remoteServiceName,
     controller: controllerName,
     action: 'GetListAsync',
-    params: input,
+    params: {
+      input: input,
+    },
   });
 };
 

@@ -32,7 +32,9 @@ export const getList = (input: WebhookSendAttemptGetListInput) => {
     service: remoteServiceName,
     controller: controllerName,
     action: 'GetListAsync',
-    params: input,
+    params: {
+      input: input,
+    },
   });
 };
 
