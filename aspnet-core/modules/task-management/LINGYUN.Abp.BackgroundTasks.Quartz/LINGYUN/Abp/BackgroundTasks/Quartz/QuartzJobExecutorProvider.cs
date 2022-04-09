@@ -132,6 +132,10 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                 {
                     scheduleBuilder.WithIntervalInSeconds(job.Interval);
                 }
+                else
+                {
+                    scheduleBuilder.WithIntervalInSeconds(1);
+                }
 
                 triggerBuilder.WithSchedule(scheduleBuilder);
 
