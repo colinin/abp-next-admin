@@ -20,7 +20,6 @@ public abstract class WebhookSubscriptionCreateOrUpdateInput
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxWebhookUriLength))]
     public string WebhookUri { get; set; }
 
-    [Required]
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxSecretLength))]
     public string Secret { get; set; }
 

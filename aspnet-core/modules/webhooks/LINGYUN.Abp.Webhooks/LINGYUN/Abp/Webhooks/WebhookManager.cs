@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Webhooks
 
         public virtual async Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs)
         {
-            var data = JsonConvert.SerializeObject(webhookSenderArgs.Data);
+            var data = JsonConvert.DeserializeObject(webhookSenderArgs.Data);
 
             var attemptNumber = await WebhookSendAttemptStore.GetSendAttemptCountAsync(
                 webhookSenderArgs.TenantId,

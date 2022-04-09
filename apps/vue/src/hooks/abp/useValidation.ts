@@ -151,7 +151,7 @@ export function useValidation() {
       : L(notNameEnum, field.length);
 
     function checkLength(value: string | any[]) {
-      return checkMaximum ? value.length > field.length : value.length < field.length;
+      return checkMaximum ? field.length > value.length : value.length > field.length;
     }
 
     return {

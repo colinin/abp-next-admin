@@ -17,6 +17,9 @@
       :model="modelRef"
       :rules="modelRules"
     >
+      <FormItem name="isActive" :label="L('DisplayName:IsActive')">
+        <Checkbox v-model:checked="modelRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
+      </FormItem>
       <FormItem name="tenantId" :label="L('DisplayName:TenantId')">
         <Select v-model:value="modelRef.tenantId">
           <SelectOption
@@ -26,14 +29,11 @@
           >{{ tenant.name }}</SelectOption>
         </Select>
       </FormItem>
-      <FormItem name="isActive" :label="L('DisplayName:IsActive')">
-        <Checkbox v-model:checked="modelRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
-      </FormItem>
       <FormItem name="webhookUri" required :label="L('DisplayName:WebhookUri')">
         <Input v-model:value="modelRef.webhookUri" autocomplete="off" />
       </FormItem>
-      <FormItem name="secret" required :label="L('DisplayName:Secret')">
-        <Input v-model:value="modelRef.secret" autocomplete="off" />
+      <FormItem name="secret" :label="L('DisplayName:Secret')">
+        <InputPassword v-model:value="modelRef.secret" autocomplete="off" />
       </FormItem>
       <FormItem name="webhooks" :label="L('DisplayName:Webhooks')">
         <Select v-model:value="modelRef.webhooks" mode="multiple">
@@ -63,7 +63,9 @@
     Form,
     Select,
     Input,
+    InputPassword
   } from 'ant-design-vue';
+  import { isString } from '/@/utils/is';
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { Tenant } from '/@/api/saas/model/tenantModel';
@@ -103,15 +105,26 @@
     return L('Subscriptions:Edit');
   });
   const modelRules = reactive({
-    webhookUri: ruleCreator.fieldRequired({
-      name: 'WebhookUri',
-      resourceName: 'WebhooksManagement',
-      prefix: 'DisplayName',
-    }),
-    secret: ruleCreator.fieldRequired({
+    webhookUri: [
+      ...ruleCreator.fieldRequired({
+        name: 'WebhookUri',
+        resourceName: 'WebhooksManagement',
+        prefix: 'DisplayName',
+      }),
+      ...ruleCreator.fieldMustBeStringWithMaximumLength({
+        name: 'WebhookUri',
+        resourceName: 'WebhooksManagement',
+        prefix: 'DisplayName',
+        length: 255,
+        type: 'string',
+      })
+    ],
+    secret: ruleCreator.fieldMustBeStringWithMaximumLength({
       name: 'Secret',
       resourceName: 'WebhooksManagement',
       prefix: 'DisplayName',
+      length: 128,
+      type: 'string',
     }),
   });
 
@@ -151,6 +164,9 @@
     formEl?.validate().then(() => {
       changeOkLoading(true);
       const model = unref(modelRef);
+      if (isString(model.headers)) {
+        model.headers = JSON.parse(model.headers)
+      }
       const api = isEditModal.value
         ? update(model.id, Object.assign(model))
         : create(Object.assign(model));

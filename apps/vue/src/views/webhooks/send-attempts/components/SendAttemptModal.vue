@@ -16,6 +16,9 @@
     >
       <Tabs v-model:activeKey="activeKey">
         <TabPane key="basic" :tab="L('BasicInfo')">
+          <FormItem :label="L('DisplayName:TenantId')">
+            <Input readonly :value="modelRef.tenantId" />
+          </FormItem>
           <FormItem :label="L('DisplayName:CreationTime')">
             <Input readonly :value="getDateTime(modelRef.creationTime)" />
           </FormItem>
@@ -23,11 +26,14 @@
             <Tag v-if="modelRef.responseStatusCode" :color="getHttpStatusColor(modelRef.responseStatusCode)">{{ httpStatusCodeMap[modelRef.responseStatusCode] }}</Tag>
           </FormItem>
           <FormItem :label="L('DisplayName:Response')">
-            <CodeEditor readonly style="height: 300px;" :mode="MODE.HTML" v-model:value="modelRef.response" />
+            <Textarea readonly v-model:value="modelRef.response" :auto-size="{ minRows: 10 }" />
           </FormItem>
         </TabPane>
 
         <TabPane v-if="modelRef.webhookEvent" key="event" :tab="L('WebhookEvent')">
+          <FormItem :label="L('DisplayName:TenantId')">
+            <Input readonly :value="modelRef.webhookEvent.tenantId" />
+          </FormItem>
           <FormItem :label="L('DisplayName:WebhookEventId')">
             <Input readonly :value="modelRef.webhookEventId" />
           </FormItem>
@@ -43,17 +49,20 @@
         </TabPane>
 
         <TabPane v-if="subscriptionRef.id" key="subscription" :tab="L('Subscriptions')">
-          <FormItem :label="L('DisplayName:WebhookSubscriptionId')">
-            <Input readonly :value="modelRef.webhookSubscriptionId" />
-          </FormItem>
           <FormItem :label="L('DisplayName:IsActive')">
             <Checkbox disabled v-model:checked="subscriptionRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
+          </FormItem>
+          <FormItem :label="L('DisplayName:TenantId')">
+            <Input readonly :value="subscriptionRef.tenantId" />
+          </FormItem>
+          <FormItem :label="L('DisplayName:WebhookSubscriptionId')">
+            <Input readonly :value="modelRef.webhookSubscriptionId" />
           </FormItem>
           <FormItem :label="L('DisplayName:WebhookUri')">
             <Input readonly :value="subscriptionRef.webhookUri" />
           </FormItem>
           <FormItem :label="L('DisplayName:Secret')">
-            <Input readonly :value="subscriptionRef.secret" />
+            <InputPassword readonly :value="subscriptionRef.secret" />
           </FormItem>
           <FormItem :label="L('DisplayName:CreationTime')">
             <Input readonly :value="getDateTime(subscriptionRef.creationTime)" />
@@ -79,6 +88,8 @@
     Tabs,
     Tag,
     Input,
+    Textarea,
+    InputPassword
   } from 'ant-design-vue';
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';

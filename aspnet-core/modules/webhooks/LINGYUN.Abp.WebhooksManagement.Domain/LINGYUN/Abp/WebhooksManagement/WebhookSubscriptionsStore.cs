@@ -112,9 +112,9 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
             var subscription = new WebhookSubscription(
                   webhookSubscription.Id,
                   webhookSubscription.WebhookUri,
-                  webhookSubscription.Secret,
                   JsonConvert.SerializeObject(webhookSubscription.Webhooks),
                   JsonConvert.SerializeObject(webhookSubscription.Headers),
+                  webhookSubscription.Secret,
                   webhookSubscription.TenantId);
 
             await SubscriptionRepository.InsertAsync(subscription);
