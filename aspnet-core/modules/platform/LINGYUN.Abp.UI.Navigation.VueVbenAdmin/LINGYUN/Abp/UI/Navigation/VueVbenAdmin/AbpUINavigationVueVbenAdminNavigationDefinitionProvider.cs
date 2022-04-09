@@ -418,16 +418,16 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   displayName: "管理订阅",
                   url: "/webhooks/subscriptions",
                   component: "/webhooks/subscriptions/index",
-                  description: "管理订阅"),
-                multiTenancySides: MultiTenancySides.Host);
+                  description: "管理订阅",
+                  multiTenancySides: MultiTenancySides.Host));
             webhooks.AddItem(
               new ApplicationMenu(
                   name: "SendAttempts",
                   displayName: "管理记录",
                   url: "/webhooks/send-attempts",
                   component: "/webhooks/send-attempts/index",
-                  description: "管理记录"),
-                multiTenancySides: MultiTenancySides.Host);
+                  description: "管理记录",
+                  multiTenancySides: MultiTenancySides.Host));
 
             return new NavigationDefinition(webhooks);
         }
