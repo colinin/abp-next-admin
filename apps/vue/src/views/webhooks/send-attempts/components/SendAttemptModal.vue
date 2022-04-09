@@ -26,7 +26,7 @@
             <Tag v-if="modelRef.responseStatusCode" :color="getHttpStatusColor(modelRef.responseStatusCode)">{{ httpStatusCodeMap[modelRef.responseStatusCode] }}</Tag>
           </FormItem>
           <FormItem :label="L('DisplayName:Response')">
-            <Textarea readonly v-model:value="modelRef.response" :auto-size="{ minRows: 10 }" />
+            <TextArea readonly v-model:value="modelRef.response" :auto-size="{ minRows: 10 }" />
           </FormItem>
         </TabPane>
 
