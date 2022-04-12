@@ -80,6 +80,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 {
                     { "title", menu.DisplayName },
                     { "icon", menu.Icon ?? "" },
+                    { "orderNo", menu.Order },
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 };
@@ -133,6 +134,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 {
                     { "title", item.DisplayName },
                     { "icon", item.Icon ?? "" },
+                    { "orderNo", item.Order },
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 };
