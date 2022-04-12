@@ -136,7 +136,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     { "hideTab", false },
                     { "ignoreAuth", false },
                 };
-                foreach (var prop in menu.ExtraProperties)
+                foreach (var prop in item.ExtraProperties)
                 {
                     if (menuMeta.ContainsKey(prop.Key))
                     {
@@ -395,6 +395,46 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 "false",
                 ValueType.Boolean,
                 "是否固定标签页",
+                isStatic: true);
+            data.AddItem(
+                GuidGenerator,
+                "requiredFeatures",
+                "必要的功能",
+                "",
+                ValueType.String,
+                "多个功能间用英文 , 分隔",
+                isStatic: true);
+            data.AddItem(
+                GuidGenerator,
+                "dynamicLevel",
+                "可打开Tab页数",
+                "",
+                ValueType.Numeic,
+                "动态路由可打开Tab页数",
+                isStatic: true);
+            data.AddItem(
+                GuidGenerator,
+                "hidePathForChildren",
+                "忽略本级path",
+                "",
+                ValueType.Boolean,
+                "是否在子级菜单的完整path中忽略本级path。2.5.3以上版本有效",
+                isStatic: true);
+            data.AddItem(
+                GuidGenerator,
+                "orderNo",
+                "菜单排序",
+                "",
+                ValueType.Numeic,
+                "菜单排序，只对第一级有效",
+                isStatic: true);
+            data.AddItem(
+                GuidGenerator,
+                "realPath",
+                "实际Path",
+                "",
+                ValueType.String,
+                "动态路由的实际Path, 即去除路由的动态部分;",
                 isStatic: true);
             data.AddItem(
                 GuidGenerator,
