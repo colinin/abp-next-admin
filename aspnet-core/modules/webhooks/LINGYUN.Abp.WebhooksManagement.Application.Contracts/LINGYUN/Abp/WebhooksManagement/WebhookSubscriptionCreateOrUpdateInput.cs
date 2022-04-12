@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 
@@ -24,6 +25,8 @@ public abstract class WebhookSubscriptionCreateOrUpdateInput
     public string Secret { get; set; }
 
     public bool IsActive { get; set; }
+
+    public Guid? TenantId { get; set; }
 
     public List<string> Webhooks { get; set; } = new List<string>();
 

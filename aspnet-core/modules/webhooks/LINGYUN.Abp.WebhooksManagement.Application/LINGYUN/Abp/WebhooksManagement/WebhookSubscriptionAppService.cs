@@ -37,7 +37,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             JsonConvert.SerializeObject(input.Webhooks),
             JsonConvert.SerializeObject(input.Headers),
             input.Secret,
-            CurrentTenant.Id)
+            input.TenantId ?? CurrentTenant.Id)
         {
             IsActive = input.IsActive,
         };
@@ -97,6 +97,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         subscription.SetWebhookUri(input.WebhookUri);
         subscription.SetWebhooks(input.ToSubscribedWebhooksString());
         subscription.SetHeaders(input.ToWebhookHeadersString());
+        subscription.SetTenantId(input.TenantId);
         subscription.IsActive = input.IsActive;
 
         await SubscriptionRepository.UpdateAsync(subscription);
@@ -142,7 +143,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
     {
         foreach (var webhookName in input.Webhooks)
         {
-            if (await SubscriptionRepository.IsSubscribedAsync(CurrentTenant.Id, input.WebhookUri, webhookName))
+            if (await SubscriptionRepository.IsSubscribedAsync(input.TenantId ?? CurrentTenant.Id, input.WebhookUri, webhookName))
             {
                 throw new BusinessException(WebhooksManagementErrorCodes.WebhookSubscription.DuplicateSubscribed)
                     .WithData(nameof(WebhookSubscription.WebhookUri), input.WebhookUri)

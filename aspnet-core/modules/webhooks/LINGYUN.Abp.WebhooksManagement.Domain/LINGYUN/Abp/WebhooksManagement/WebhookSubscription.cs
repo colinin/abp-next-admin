@@ -32,6 +32,11 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>
         IsActive = true;
     }
 
+    public void SetTenantId(Guid? tenantId = null)
+    {
+        TenantId = tenantId;
+    }
+
     public void SetSecret(string secret)
     {
         Secret = Check.Length(secret, nameof(secret), WebhookSubscriptionConsts.MaxSecretLength);
