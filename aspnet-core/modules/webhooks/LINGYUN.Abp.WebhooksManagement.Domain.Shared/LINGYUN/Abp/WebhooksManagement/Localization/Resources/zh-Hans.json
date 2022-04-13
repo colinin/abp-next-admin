@@ -46,6 +46,8 @@
     "DisplayName:Secret": "密钥",
     "DisplayName:IsActive": "是否启用",
     "DisplayName:Webhooks": "事件列表",
-    "DisplayName:Headers": "发送标头"
+    "DisplayName:Headers": "发送标头",
+    "DisplayName:RequestHeaders": "请求标头",
+    "DisplayName:ResponseHeaders": "响应标头"
   }
 }

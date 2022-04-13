@@ -1,9 +1,11 @@
 ﻿using LINGYUN.Abp.Webhooks;
 using LINGYUN.Abp.WebhooksManagement.Authorization;
+using LINGYUN.Abp.WebhooksManagement.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BackgroundJobs;
@@ -30,7 +32,7 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
     {
         var sendRecord = await RecordRepository.GetAsync(id);
 
-        return ObjectMapper.Map<WebhookSendRecord, WebhookSendRecordDto>(sendRecord);
+        return sendRecord.ToWebhookSendRecordDto();
     }
 
     [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Delete)]
@@ -58,7 +60,7 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
             input.Sorting, input.MaxResultCount, input.SkipCount);
 
         return new PagedResultDto<WebhookSendRecordDto>(totalCount,
-            ObjectMapper.Map<List<WebhookSendRecord>, List<WebhookSendRecordDto>>(sendRecords));
+            sendRecords.Select(sendRecord => sendRecord.ToWebhookSendRecordDto()).ToList());
     }
 
     [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Resend)]

@@ -19,11 +19,20 @@
           <FormItem :label="L('DisplayName:TenantId')">
             <Input readonly :value="getTenant" />
           </FormItem>
+          <FormItem :label="L('DisplayName:SendExactSameData')">
+            <Checkbox disabled v-model:checked="modelRef.sendExactSameData">{{ L('DisplayName:SendExactSameData') }}</Checkbox>
+          </FormItem>
           <FormItem :label="L('DisplayName:CreationTime')">
             <Input readonly :value="getDateTime(modelRef.creationTime)" />
           </FormItem>
+          <FormItem :label="L('DisplayName:RequestHeaders')">
+            <CodeEditor readonly style="height: 300px;" :mode="MODE.JSON" v-model:value="modelRef.requestHeaders" />
+          </FormItem>
           <FormItem :label="L('DisplayName:ResponseStatusCode')">
             <Tag v-if="modelRef.responseStatusCode" :color="getHttpStatusColor(modelRef.responseStatusCode)">{{ httpStatusCodeMap[modelRef.responseStatusCode] }}</Tag>
+          </FormItem>
+          <FormItem :label="L('DisplayName:ResponseHeaders')">
+            <CodeEditor readonly style="height: 300px;" :mode="MODE.JSON" v-model:value="modelRef.responseHeaders" />
           </FormItem>
           <FormItem :label="L('DisplayName:Response')">
             <TextArea readonly v-model:value="modelRef.response" :auto-size="{ minRows: 10 }" />

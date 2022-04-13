@@ -46,6 +46,8 @@
     "DisplayName:Secret": "Secret",
     "DisplayName:IsActive": "Is Active",
     "DisplayName:Webhooks": "Webhooks",
-    "DisplayName:Headers": "Headers"
+    "DisplayName:Headers": "Headers",
+    "DisplayName:RequestHeaders": "Request Headers",
+    "DisplayName:ResponseHeaders": "Response Headers"
   }
 }

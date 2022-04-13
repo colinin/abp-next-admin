@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Volo.Abp.Application.Dtos;
 
@@ -19,6 +20,12 @@ public class WebhookSendRecordDto : EntityDto<Guid>
     public DateTime CreationTime { get; set; }
 
     public DateTime? LastModificationTime { get; set; }
+
+    public bool SendExactSameData { get; set; }
+
+    public IDictionary<string, string> RequestHeaders { get; set; } = new Dictionary<string, string>();
+
+    public IDictionary<string, string> ResponseHeaders { get; set; } = new Dictionary<string, string>();
 
     public WebhookEventRecordDto WebhookEvent { get; set; } = new WebhookEventRecordDto();
 }
