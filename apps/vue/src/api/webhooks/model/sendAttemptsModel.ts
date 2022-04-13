@@ -17,6 +17,9 @@ export interface WebhookSendAttempt {
   responseStatusCode?: HttpStatusCode;
   creationTime: Date;
   lastModificationTime?: Date;
+  sendExactSameData: boolean;
+  requestHeaders: Record<string, string>;
+  responseHeaders: Record<string, string>;
   webhookEvent: WebhookEvent;
 }
 
