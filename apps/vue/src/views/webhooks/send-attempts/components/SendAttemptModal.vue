@@ -17,7 +17,7 @@
       <Tabs v-model:activeKey="activeKey">
         <TabPane key="basic" :tab="L('BasicInfo')">
           <FormItem :label="L('DisplayName:TenantId')">
-            <Input readonly :value="modelRef.tenantId" />
+            <Input readonly :value="getTenant" />
           </FormItem>
           <FormItem :label="L('DisplayName:CreationTime')">
             <Input readonly :value="getDateTime(modelRef.creationTime)" />
@@ -32,7 +32,7 @@
 
         <TabPane v-if="modelRef.webhookEvent" key="event" :tab="L('WebhookEvent')">
           <FormItem :label="L('DisplayName:TenantId')">
-            <Input readonly :value="modelRef.webhookEvent.tenantId" />
+            <Input readonly :value="getTenant" />
           </FormItem>
           <FormItem :label="L('DisplayName:WebhookEventId')">
             <Input readonly :value="modelRef.webhookEventId" />
@@ -53,7 +53,7 @@
             <Checkbox disabled v-model:checked="subscriptionRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
           </FormItem>
           <FormItem :label="L('DisplayName:TenantId')">
-            <Input readonly :value="subscriptionRef.tenantId" />
+            <Input readonly :value="getTenant" />
           </FormItem>
           <FormItem :label="L('DisplayName:WebhookSubscriptionId')">
             <Input readonly :value="modelRef.webhookSubscriptionId" />
@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import {
     Checkbox,
@@ -92,6 +92,7 @@
   } from 'ant-design-vue';
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { findTenantById } from '/@/api/multi-tenancy/tenants';
   import { getById } from '/@/api/webhooks/send-attempts';
   import { getById as getSubscription } from '/@/api/webhooks/subscriptions';
   import { WebhookSendAttempt } from '/@/api/webhooks/model/sendAttemptsModel';
@@ -106,6 +107,7 @@
   const { L } = useLocalization('WebhooksManagement');
   const formElRef = ref<any>();
   const activeKey = ref('basic');
+  const tenantName = ref('');
   const modelRef = ref<WebhookSendAttempt>(getDefaultModel());
   const subscriptionRef = ref<WebhookSubscription>(getDefaultSubscription());
   const [registerModal] = useModalInner((model) => {
@@ -122,6 +124,22 @@
       return webhooks.reduce((hook, p) => hook + p + '\n', '');
     }
   })
+  const getTenant = computed(() => {
+    return tenantName.value ?? modelRef.value.tenantId;
+  })
+
+  watch(
+    () => modelRef.value.tenantId,
+    (sentTenant) => {
+      if (sentTenant) {
+        findTenantById(sentTenant).then((res) => {
+          if (res.success) {
+            tenantName.value = res.name;
+          }
+        });
+      }
+    }
+  )
 
   function fetchModel(id: string) {
     if (!id) {
