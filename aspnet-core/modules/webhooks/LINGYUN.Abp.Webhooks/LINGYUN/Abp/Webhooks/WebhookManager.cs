@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -75,6 +76,12 @@ namespace LINGYUN.Abp.Webhooks
 
         public abstract Task<Guid> InsertAndGetIdWebhookSendAttemptAsync(WebhookSenderArgs webhookSenderArgs);
 
-        public abstract Task StoreResponseOnWebhookSendAttemptAsync(Guid webhookSendAttemptId, Guid? tenantId, HttpStatusCode? statusCode, string content);
+        public abstract Task StoreResponseOnWebhookSendAttemptAsync(
+            Guid webhookSendAttemptId, 
+            Guid? tenantId, 
+            HttpStatusCode? statusCode, 
+            string content,
+            IDictionary<string, string> requestHeaders = null,
+            IDictionary<string, string> responseHeaders = null);
     }
 }

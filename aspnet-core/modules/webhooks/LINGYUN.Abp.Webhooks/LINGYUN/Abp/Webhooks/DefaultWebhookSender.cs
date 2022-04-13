@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -52,13 +55,17 @@ namespace LINGYUN.Abp.Webhooks
             var isSucceed = false;
             HttpStatusCode? statusCode = null;
             var content = FailedRequestDefaultContent;
+            var reqHeaders = GetHeaders(request.Headers);
+            IDictionary<string, string> resHeaders = null;
 
             try
             {
                 var response = await SendHttpRequest(request);
-                isSucceed = response.isSucceed;
-                statusCode = response.statusCode;
-                content = response.content;
+
+                isSucceed = response.IsSuccessStatusCode;
+                statusCode = response.StatusCode;
+                resHeaders = GetHeaders(response.Headers);
+                content = await response.Content.ReadAsStringAsync();
             }
             catch (TaskCanceledException)
             {
@@ -75,7 +82,13 @@ namespace LINGYUN.Abp.Webhooks
             }
             finally
             {
-                await _webhookManager.StoreResponseOnWebhookSendAttemptAsync(webhookSendAttemptId, webhookSenderArgs.TenantId, statusCode, content);
+                await _webhookManager.StoreResponseOnWebhookSendAttemptAsync(
+                    webhookSendAttemptId, 
+                    webhookSenderArgs.TenantId, 
+                    statusCode,
+                    content,
+                    reqHeaders,
+                    resHeaders);
             }
 
             if (!isSucceed)
@@ -113,17 +126,26 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        protected virtual async Task<(bool isSucceed, HttpStatusCode statusCode, string content)> SendHttpRequest(HttpRequestMessage request)
+        protected virtual async Task<HttpResponseMessage> SendHttpRequest(HttpRequestMessage request)
         {
             var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
 
-            var response = await client.SendAsync(request);
+            return await client.SendAsync(request);
+        }
 
-            var isSucceed = response.IsSuccessStatusCode;
-            var statusCode = response.StatusCode;
-            var content = await response.Content.ReadAsStringAsync();
+        private IDictionary<string, string> GetHeaders(HttpHeaders headers)
+        {
+            var res = new Dictionary<string, string>();
 
-            return (isSucceed, statusCode, content);
+            if (headers != null && headers.Any())
+            {
+                foreach (var header in headers)
+                {
+                    res.Add(header.Key, header.Value.JoinAsString(";"));
+                }
+            }
+           
+            return res;
         }
     }
 }

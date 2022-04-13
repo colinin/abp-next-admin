@@ -41,6 +41,12 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
             b.Property(p => p.Response)
              .HasColumnName(nameof(WebhookSendRecord.Response))
              .HasMaxLength(WebhookSendRecordConsts.MaxResponseLength);
+            b.Property(p => p.RequestHeaders)
+             .HasColumnName(nameof(WebhookSendRecord.RequestHeaders))
+             .HasMaxLength(WebhookSendRecordConsts.MaxHeadersLength);
+            b.Property(p => p.ResponseHeaders)
+             .HasColumnName(nameof(WebhookSendRecord.ResponseHeaders))
+             .HasMaxLength(WebhookSendRecordConsts.MaxHeadersLength);
 
             b.ConfigureByConvention();
 
