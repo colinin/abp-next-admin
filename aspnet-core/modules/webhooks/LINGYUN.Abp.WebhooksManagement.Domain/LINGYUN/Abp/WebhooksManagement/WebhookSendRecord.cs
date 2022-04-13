@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Volo.Abp;
 using Volo.Abp.Auditing;
@@ -17,6 +18,10 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
     public virtual string Response { get; protected set; }
 
     public virtual HttpStatusCode? ResponseStatusCode { get; set; }
+
+    public virtual string RequestHeaders { get; protected set; }
+
+    public virtual string ResponseHeaders { get; protected set; }
 
     public virtual DateTime CreationTime { get; set; }
 
@@ -42,9 +47,16 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
 
     public void SetResponse(
         string response,
-        HttpStatusCode? statusCode = null)
+        HttpStatusCode? statusCode = null,
+        string responseHeaders = null)
     {
         Response = Check.Length(response, nameof(response), WebhookSendRecordConsts.MaxResponseLength);
         ResponseStatusCode = statusCode;
+        ResponseHeaders = Check.Length(responseHeaders, nameof(responseHeaders), WebhookSendRecordConsts.MaxHeadersLength);
+    }
+
+    public void SetRequestHeaders(string requestHeaders = null)
+    {
+        RequestHeaders = Check.Length(requestHeaders, nameof(requestHeaders), WebhookSendRecordConsts.MaxHeadersLength);
     }
 }

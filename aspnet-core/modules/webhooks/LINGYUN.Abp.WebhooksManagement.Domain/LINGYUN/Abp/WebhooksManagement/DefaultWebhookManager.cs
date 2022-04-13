@@ -1,5 +1,7 @@
 ﻿using LINGYUN.Abp.Webhooks;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -47,12 +49,31 @@ public class DefaultWebhookManager : WebhookManager, ITransientDependency
     }
 
     [UnitOfWork]
-    public async override Task StoreResponseOnWebhookSendAttemptAsync(Guid webhookSendAttemptId, Guid? tenantId, HttpStatusCode? statusCode, string content)
+    public async override Task StoreResponseOnWebhookSendAttemptAsync(
+        Guid webhookSendAttemptId,
+        Guid? tenantId,
+        HttpStatusCode? statusCode, 
+        string content,
+        IDictionary<string, string> requestHeaders = null,
+        IDictionary<string, string> responseHeaders = null)
     {
         using (CurrentTenant.Change(tenantId))
         {
+            var reqHeaders = "{}";
+            var resHeaders = "{}";
+            if (requestHeaders != null)
+            {
+                reqHeaders = JsonConvert.SerializeObject(requestHeaders);
+            }
+            if (responseHeaders != null)
+            {
+                resHeaders = JsonConvert.SerializeObject(responseHeaders);
+            }
+
             var record = await WebhookSendAttemptRepository.GetAsync(webhookSendAttemptId);
-            record.SetResponse(content, statusCode);
+            record.SetResponse(content, statusCode, resHeaders);
+            // 加入标头信息，便于维护人员调试
+            record.SetRequestHeaders(reqHeaders);
 
             await WebhookSendAttemptRepository.UpdateAsync(record);
         }
