@@ -68,17 +68,20 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         var sendEvent = await EventRepository.GetAsync(sendRecord.WebhookEventId);
         var subscription = await SubscriptionRepository.GetAsync(sendRecord.WebhookSubscriptionId);
 
-        await BackgroundJobManager.EnqueueAsync(new WebhookSenderArgs
+        using (CurrentTenant.Change(sendRecord.TenantId))
         {
-            TenantId = CurrentTenant.Id,
-            WebhookSubscriptionId = sendRecord.WebhookSubscriptionId,
-            WebhookEventId = sendRecord.WebhookEventId,
-            WebhookName = sendEvent.WebhookName,
-            WebhookUri = subscription.WebhookUri,
-            Data = sendEvent.Data,
-            Headers = subscription.GetWebhookHeaders(),
-            Secret = subscription.Secret,
-            TryOnce = true,
-        });
+            await BackgroundJobManager.EnqueueAsync(new WebhookSenderArgs
+            {
+                TenantId = CurrentTenant.Id,
+                WebhookSubscriptionId = sendRecord.WebhookSubscriptionId,
+                WebhookEventId = sendRecord.WebhookEventId,
+                WebhookName = sendEvent.WebhookName,
+                WebhookUri = subscription.WebhookUri,
+                Data = sendEvent.Data,
+                Headers = subscription.GetWebhookHeaders(),
+                Secret = subscription.Secret,
+                TryOnce = true,
+            });
+        }
     }
 }

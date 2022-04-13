@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Emailing;
 using Volo.Abp.TextTemplating;
-using Volo.Abp.Json;
-using System.Collections.Generic;
-using System;
-using Newtonsoft.Json;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
@@ -55,10 +54,9 @@ public class SendEmailJob : IJobRunnable
             context.TryGetString(PropertyCulture, out var culture);
             if (context.TryGetString(PropertyContext, out var globalCtx))
             {
-                var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
                 try
                 {
-                    globalContext = jsonSerializer.Deserialize<Dictionary<string, object>>(globalCtx);
+                    globalContext = JsonConvert.DeserializeObject<Dictionary<string, object>>(globalCtx);
                 }
                 catch { }
             }

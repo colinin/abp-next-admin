@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +13,6 @@ using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 
@@ -102,8 +102,7 @@ public class ServiceInvocationJob : IJobRunnable
         var invokeParameters = new Dictionary<string, object>();
         if (context.TryGetString(PropertyData, out var data))
         {
-            var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
-            invokeParameters = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
+            invokeParameters = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
         }
 
         // 构造服务代理上下文
@@ -196,8 +195,7 @@ public class ServiceInvocationJob : IJobRunnable
         var invokeParameters = new Dictionary<string, object>();
         if (context.TryGetString(PropertyData, out var data))
         {
-            var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
-            invokeParameters = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
+            invokeParameters = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
         }
 
         // 构造服务代理上下文

@@ -2,10 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
-using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -35,8 +34,9 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
         object args = null;
         if (context.TryGetString(nameof(TArgs), out var argsJson))
         {
-            var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
-            args = jsonSerializer.Deserialize<TArgs>(argsJson);
+            //var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
+            //args = jsonSerializer.Deserialize<TArgs>(argsJson);
+            args = JsonConvert.DeserializeObject<TArgs>(argsJson);
         }
 
         var jobType = Options.GetJob(typeof(TArgs)).JobType;

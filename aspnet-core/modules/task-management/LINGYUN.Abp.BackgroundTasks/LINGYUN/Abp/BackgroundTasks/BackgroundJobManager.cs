@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
@@ -19,7 +19,6 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
     protected IJobPublisher JobPublisher { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
-    protected IJsonSerializer JsonSerializer { get; }
     protected AbpBackgroundTasksOptions TasksOptions { get; }
     protected AbpBackgroundJobOptions Options { get; }
     public BackgroundJobManager(
@@ -28,7 +27,6 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         IJobPublisher jobPublisher,
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
-        IJsonSerializer jsonSerializer,
         IOptions<AbpBackgroundJobOptions> options,
         IOptions<AbpBackgroundTasksOptions> taskOptions)
     {
@@ -37,7 +35,6 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         JobPublisher = jobPublisher;
         CurrentTenant = currentTenant;
         GuidGenerator = guidGenerator;
-        JsonSerializer = jsonSerializer;
         Options = options.Value;
         TasksOptions = taskOptions.Value;
     }
@@ -56,7 +53,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         var jobId = GuidGenerator.Create();
         var jobArgs = new Dictionary<string, object>
         {
-            { nameof(TArgs), JsonSerializer.Serialize(args) },
+            { nameof(TArgs), JsonConvert.SerializeObject(args) },
             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
             { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
             { "JobName", jobConfiguration.JobName },
