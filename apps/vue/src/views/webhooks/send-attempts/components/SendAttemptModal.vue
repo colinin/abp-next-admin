@@ -182,6 +182,9 @@
       responseStatusCode: undefined,
       creationTime: new Date(),
       lastModificationTime: undefined,
+      requestHeaders: {},
+      responseHeaders: {},
+      sendExactSameData: false,
     }
   }
 
