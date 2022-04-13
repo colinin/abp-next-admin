@@ -40,7 +40,10 @@ public class DefaultWebhookManager : WebhookManager, ITransientDependency
                 GuidGenerator.Create(),
                 webhookSenderArgs.WebhookEventId,
                 webhookSenderArgs.WebhookSubscriptionId,
-                webhookSenderArgs.TenantId);
+                webhookSenderArgs.TenantId)
+            {
+                SendExactSameData = webhookSenderArgs.SendExactSameData
+            };
 
             await WebhookSendAttemptRepository.InsertAsync(record);
 

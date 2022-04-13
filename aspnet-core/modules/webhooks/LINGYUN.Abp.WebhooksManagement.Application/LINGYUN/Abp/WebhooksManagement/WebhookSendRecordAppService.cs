@@ -1,7 +1,7 @@
 ﻿using LINGYUN.Abp.Webhooks;
 using LINGYUN.Abp.WebhooksManagement.Authorization;
-using LINGYUN.Abp.WebhooksManagement.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -68,6 +68,12 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         var sendEvent = await EventRepository.GetAsync(sendRecord.WebhookEventId);
         var subscription = await SubscriptionRepository.GetAsync(sendRecord.WebhookSubscriptionId);
 
+        var headersToSend = new Dictionary<string, string>();
+        if (!sendRecord.RequestHeaders.IsNullOrWhiteSpace())
+        {
+            headersToSend = JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.RequestHeaders);
+        }
+
         using (CurrentTenant.Change(sendRecord.TenantId))
         {
             await BackgroundJobManager.EnqueueAsync(new WebhookSenderArgs
@@ -78,9 +84,10 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
                 WebhookName = sendEvent.WebhookName,
                 WebhookUri = subscription.WebhookUri,
                 Data = sendEvent.Data,
-                Headers = subscription.GetWebhookHeaders(),
+                Headers = headersToSend,
                 Secret = subscription.Secret,
                 TryOnce = true,
+                SendExactSameData = sendRecord.SendExactSameData
             });
         }
     }
