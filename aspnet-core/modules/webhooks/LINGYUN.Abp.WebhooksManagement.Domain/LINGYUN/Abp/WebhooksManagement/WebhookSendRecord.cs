@@ -23,6 +23,8 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
 
     public virtual string ResponseHeaders { get; protected set; }
 
+    public virtual bool SendExactSameData { get; set; }
+
     public virtual DateTime CreationTime { get; set; }
 
     public virtual DateTime? LastModificationTime { get; set; }

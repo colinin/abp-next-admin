@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Http;
 
 namespace LINGYUN.Abp.Webhooks
 {
@@ -52,12 +53,15 @@ namespace LINGYUN.Abp.Webhooks
                 throw new ArgumentNullException(nameof(serializedBody));
             }
 
-            request.Content = new StringContent(serializedBody, Encoding.UTF8, "application/json");
+            request.Content = new StringContent(serializedBody, Encoding.UTF8, MimeTypes.Application.Json);
 
-            var secretBytes = Encoding.UTF8.GetBytes(secret);
-            var headerValue = string.Format(CultureInfo.InvariantCulture, SignatureHeaderValueTemplate, serializedBody.Sha256(secretBytes));
+            if (!secret.IsNullOrWhiteSpace())
+            {
+                var secretBytes = Encoding.UTF8.GetBytes(secret);
+                var headerValue = string.Format(CultureInfo.InvariantCulture, SignatureHeaderValueTemplate, serializedBody.Sha256(secretBytes));
 
-            request.Headers.Add(SignatureHeaderName, headerValue);
+                request.Headers.Add(SignatureHeaderName, headerValue);
+            }
         }
 
         public virtual async Task<string> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs)
