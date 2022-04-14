@@ -8,5 +8,6 @@ public class TaskManagementDomainMapperProfile : Profile
     public TaskManagementDomainMapperProfile()
     {
         CreateMap<BackgroundJobInfo, JobInfo>();
+        CreateMap<BackgroundJobInfo, BackgroundJobEto>();
     }
 }

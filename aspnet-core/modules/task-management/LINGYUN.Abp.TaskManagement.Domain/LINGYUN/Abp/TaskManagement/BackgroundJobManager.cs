@@ -1,27 +1,26 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.BackgroundTasks.EventBus;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.ObjectMapping;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.TaskManagement;
 
 public class BackgroundJobManager : DomainService
 {
-    protected IObjectMapper ObjectMapper { get; }
-    protected IJobScheduler JobScheduler { get; }
+    protected IDistributedEventBus EventBus { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IBackgroundJobInfoRepository BackgroundJobInfoRepository { get; }
 
     public BackgroundJobManager(
-        IObjectMapper objectMapper,
-        IJobScheduler jobScheduler,
+        IDistributedEventBus eventBus,
         IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository backgroundJobInfoRepository)
     {
-        ObjectMapper = objectMapper;
-        JobScheduler = jobScheduler;
+        EventBus = eventBus;
         UnitOfWorkManager = unitOfWorkManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
     }
@@ -29,15 +28,6 @@ public class BackgroundJobManager : DomainService
     public virtual async Task<BackgroundJobInfo> CreateAsync(BackgroundJobInfo jobInfo)
     {
         await BackgroundJobInfoRepository.InsertAsync(jobInfo);
-
-        if (jobInfo.IsEnabled && jobInfo.JobType == JobType.Period)
-        {
-            var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-            UnitOfWorkManager.Current.OnCompleted(async () =>
-            {
-                await JobScheduler.QueueAsync(job);
-            });
-        }
 
         return jobInfo;
     }
@@ -50,8 +40,13 @@ public class BackgroundJobManager : DomainService
         {
             UnitOfWorkManager.Current.OnCompleted(async () =>
             {
-                var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-                await JobScheduler.RemoveAsync(job);
+                await EventBus.PublishAsync(
+                    new JobStopEventData
+                    {
+                        IdList = new List<string> { jobInfo.Id },
+                        TenantId = jobInfo.TenantId,
+                        NodeName = jobInfo.NodeName
+                    });
             });
         }
 
@@ -59,7 +54,13 @@ public class BackgroundJobManager : DomainService
         {
             UnitOfWorkManager.Current.OnCompleted(async () =>
             {
-                await QueueAsync(jobInfo);
+                await EventBus.PublishAsync(
+                    new JobStartEventData
+                    {
+                        IdList = new List<string> { jobInfo.Id },
+                        TenantId = jobInfo.TenantId,
+                        NodeName = jobInfo.NodeName
+                    });
             });
         }
 
@@ -69,107 +70,185 @@ public class BackgroundJobManager : DomainService
     public virtual async Task DeleteAsync(BackgroundJobInfo jobInfo)
     {
         await BackgroundJobInfoRepository.DeleteAsync(jobInfo);
-
-        UnitOfWorkManager.Current.OnCompleted(async () =>
-        {
-            var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-            await JobScheduler.RemoveAsync(job);
-        });
     }
 
     public virtual async Task BulkDeleteAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
-        foreach (var jobInfo in jobInfos)
-        {
-            await DeleteAsync(jobInfo);
-        }
+        await BackgroundJobInfoRepository.DeleteManyAsync(jobInfos);
     }
 
     public virtual async Task QueueAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        await JobScheduler.QueueAsync(job);
+        await EventBus.PublishAsync(
+            new JobStartEventData
+            {
+                IdList = new List<string> { jobInfo.Id },
+                TenantId = jobInfo.TenantId,
+                NodeName = jobInfo.NodeName
+            });
     }
 
     public virtual async Task BulkQueueAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
-        var jobs = ObjectMapper.Map<IEnumerable<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
-        await JobScheduler.QueuesAsync(jobs);
+        if (jobInfos.Any())
+        {
+            await EventBus.PublishAsync(
+                new JobStartEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
+        }
     }
 
     public virtual async Task TriggerAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        job.JobType = JobType.Once;
-        // 延迟两秒触发
-        job.Interval = 2;
-
-        await JobScheduler.TriggerAsync(job);
+        await EventBus.PublishAsync(
+            new JobTriggerEventData
+            {
+                IdList = new List<string> { jobInfo.Id },
+                TenantId = jobInfo.TenantId,
+                NodeName = jobInfo.NodeName
+            });
     }
 
     public virtual async Task BulkTriggerAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
-        foreach (var jobInfo in jobInfos)
+        if (jobInfos.Any())
         {
-            await TriggerAsync(jobInfo);
+            await EventBus.PublishAsync(
+                new JobTriggerEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
         }
     }
 
     public virtual async Task PauseAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        await JobScheduler.PauseAsync(job);
-
         jobInfo.SetStatus(JobStatus.Paused);
         jobInfo.SetNextRunTime(null);
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobPauseEventData
+                {
+                    IdList = new List<string> { jobInfo.Id },
+                    TenantId = jobInfo.TenantId,
+                    NodeName = jobInfo.NodeName
+                });
+        });
     }
 
     public virtual async Task BulkPauseAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {
-            await PauseAsync(jobInfo);
+            jobInfo.SetStatus(JobStatus.Paused);
+            jobInfo.SetNextRunTime(null);
         }
+
+        await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobPauseEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
+        });
     }
 
     public virtual async Task ResumeAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        await JobScheduler.ResumeAsync(job);
-
         jobInfo.SetStatus(JobStatus.Running);
         jobInfo.IsAbandoned = false;
         jobInfo.IsEnabled = true;
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobResumeEventData
+                {
+                    IdList = new List<string> { jobInfo.Id },
+                    TenantId = jobInfo.TenantId,
+                    NodeName = jobInfo.NodeName
+                });
+        });
     }
 
     public virtual async Task BulkResumeAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {
-            await ResumeAsync(jobInfo);
+            jobInfo.SetStatus(JobStatus.Running);
+            jobInfo.IsAbandoned = false;
+            jobInfo.IsEnabled = true;
         }
+
+        await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobResumeEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
+        });
     }
 
     public virtual async Task StopAsync(BackgroundJobInfo jobInfo)
     {
-        var job = ObjectMapper.Map<BackgroundJobInfo, JobInfo>(jobInfo);
-        await JobScheduler.RemoveAsync(job);
-
         jobInfo.SetStatus(JobStatus.Stopped);
         jobInfo.SetNextRunTime(null);
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobStopEventData
+                {
+                    IdList = new List<string> { jobInfo.Id },
+                    TenantId = jobInfo.TenantId,
+                    NodeName = jobInfo.NodeName
+                });
+        });
     }
 
     public virtual async Task BulkStopAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {
-            await StopAsync(jobInfo);
+            jobInfo.SetStatus(JobStatus.Stopped);
+            jobInfo.SetNextRunTime(null);
         }
+
+        await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobStopEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
+        });
     }
 }
