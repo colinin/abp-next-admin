@@ -5,8 +5,8 @@ WORKDIR /app
 COPY . /app
 
 ## Beijing time, self replacement
-env tz=asia/shanghai
-run ln -snf /usr/share/zoneinfo/$tz /etc/localtime && echo '$tz' > /etc/timezone
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
 
 EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
