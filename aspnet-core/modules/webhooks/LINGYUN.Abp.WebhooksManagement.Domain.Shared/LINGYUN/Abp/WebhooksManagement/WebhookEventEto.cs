@@ -1,10 +1,11 @@
 ﻿using System;
-using Volo.Abp.MultiTenancy;
+using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Serializable]
-public class WebhookEventEto : IMultiTenant
+[EventName("abp.webhooks.event")]
+public class WebhookEventEto
 {
     public Guid Id { get; set; }
     public Guid? TenantId { get; set; }

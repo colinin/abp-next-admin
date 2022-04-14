@@ -1,9 +1,11 @@
 ﻿using System;
+using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [Serializable]
+[EventName("abp.webhooks.send-attempt")]
 public class WebhookSendAttemptEto : IMultiTenant
 {
     public Guid Id { get; set; }
