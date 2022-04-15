@@ -14,6 +14,7 @@ namespace LINGYUN.Abp.Auditing
             CreateMap<AuditLogAction, AuditLogActionDto>()
                 .MapExtraProperties();
             CreateMap<EntityPropertyChange, EntityPropertyChangeDto>();
+            CreateMap<EntityChangeWithUsername, EntityChangeWithUsernameDto>();
             CreateMap<EntityChange, EntityChangeDto>()
                 .MapExtraProperties();
             CreateMap<AuditLog, AuditLogDto>()
