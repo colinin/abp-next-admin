@@ -254,7 +254,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             }
             if (!url.IsNullOrWhiteSpace())
             {
-                querys.Add((log) => log.Match((q) => q.Field(GetField(nameof(AuditLog.Url))).Query(url)));
+                querys.Add((log) => log.Wildcard((q) => q.Field(GetField(nameof(AuditLog.Url))).Value($"*{url}*")));
             }
             if (userId.HasValue)
             {

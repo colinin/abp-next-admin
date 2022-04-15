@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.Elasticsearch
         /// 默认：false
         /// </summary>
         public bool FieldCamelCase { get; set; }
+        public bool DisableDirectStreaming { get; set; }
         public string NodeUris { get; set; }
         public int ConnectionLimit { get; set; }
         public string UserName { get; set; }
@@ -60,6 +61,8 @@ namespace LINGYUN.Abp.Elasticsearch
             {
                 configuration.BasicAuthentication(UserName, Password);
             }
+
+            configuration.DisableDirectStreaming(DisableDirectStreaming);
 
             return configuration;
         }
