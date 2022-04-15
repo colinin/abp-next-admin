@@ -32,6 +32,7 @@ namespace LINGYUN.Abp.Identity
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.Delete, L("Permission:Delete"));
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageRoles, L("Permission:ManageRoles"));
                 origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManageUsers, L("Permission:ManageUsers"));
+                origanizationUnitPermission.AddChild(IdentityPermissions.OrganizationUnits.ManagePermissions, L("Permission:ChangePermissions"));
 
                 // 2020-10-23 修复Bug 租户用户也必须能查询自定义的声明, 管理权限只能为主机
                 var identityClaimType = identityGroup.AddPermission(IdentityPermissions.IdentityClaimType.Default, L("Permission:IdentityClaimTypeManagement"));

@@ -2,6 +2,7 @@
 using Hangfire;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundJobs.Hangfire;
 using LINGYUN.Abp.BackgroundWorkers.Hangfire;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -55,6 +56,7 @@ namespace LY.MicroService.RealtimeMessage
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAuthorizationOrganizationUnitsModule),
         typeof(AbpHangfireMySqlStorageModule),
         typeof(AbpBackgroundJobsHangfireModule),
         typeof(AbpBackgroundWorkersHangfireModule),
