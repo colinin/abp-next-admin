@@ -19,6 +19,11 @@ namespace LINGYUN.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
 
+        Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            IEnumerable<string> roleNames,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
+
         Task<List<IdentityRole>> GetRolesInOrganizationUnitAsync(
             Guid organizationUnitId,
             CancellationToken cancellationToken = default

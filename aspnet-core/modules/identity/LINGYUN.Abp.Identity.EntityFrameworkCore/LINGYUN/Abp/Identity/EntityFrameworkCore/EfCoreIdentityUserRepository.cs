@@ -79,8 +79,29 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
         )
         {
             var dbContext = await GetDbContextAsync();
+            //var userUoDbSet = dbContext.Set<IdentityUserOrganizationUnit>();
+            //var roleUoDbSet = dbContext.Set<OrganizationUnitRole>();
+            //var userRoleDbSet = dbContext.Set<IdentityUserRole>();
+
+            //var userUo = from usrUo in userUoDbSet
+            //             join usr in dbContext.Users on usrUo.UserId equals usr.Id
+            //             join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails)
+            //                on usrUo.OrganizationUnitId equals ou.Id
+            //             where usr.Id == id
+            //             select ou;
+
+            //var roleUo = from urol in userRoleDbSet
+            //             join rol in dbContext.Roles on urol.RoleId equals rol.Id
+            //             join rolUo in roleUoDbSet on rol.Id equals rolUo.RoleId
+            //             join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails)
+            //                on rolUo.OrganizationUnitId equals ou.Id
+            //             where urol.UserId == id
+            //             select ou;
+
             var query = from userOU in dbContext.Set<IdentityUserOrganizationUnit>()
-                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOU.OrganizationUnitId equals ou.Id
+                        join ro in dbContext.Set<IdentityUserRole>() on userOU.UserId equals ro.UserId
+                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails)
+                            on userOU.OrganizationUnitId equals ou.Id
                         where userOU.UserId == id
                         select ou;
 

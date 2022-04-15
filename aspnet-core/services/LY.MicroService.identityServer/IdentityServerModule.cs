@@ -4,12 +4,12 @@ using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.QQ;
 using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.PermissionManagement.Identity;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -33,6 +33,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.IdentityServer;
@@ -54,6 +55,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpIdentityServerSmsValidatorModule),
     typeof(AbpIdentityServerWeChatModule),
     typeof(AbpIdentityServerQQModule),
+    typeof(AbpIdentityOrganizaztionUnitsModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

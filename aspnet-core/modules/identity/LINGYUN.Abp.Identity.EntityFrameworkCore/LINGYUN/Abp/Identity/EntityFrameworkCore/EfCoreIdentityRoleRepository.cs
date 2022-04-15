@@ -44,6 +44,21 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            IEnumerable<string> roleNames,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var dbContext = await GetDbContextAsync();
+            var query = from roleOU in dbContext.Set<OrganizationUnitRole>()
+                        join role in dbContext.Roles on roleOU.RoleId equals role.Id
+                        join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on roleOU.OrganizationUnitId equals ou.Id
+                        where roleNames.Contains(role.Name)
+                        select ou;
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<IdentityRole>> GetRolesInOrganizationsListAsync(
             List<Guid> organizationUnitIds, 
             CancellationToken cancellationToken = default)

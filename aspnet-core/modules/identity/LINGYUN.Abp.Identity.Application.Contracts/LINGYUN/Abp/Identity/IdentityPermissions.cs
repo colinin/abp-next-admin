@@ -24,6 +24,7 @@ namespace LINGYUN.Abp.Identity
             public const string Delete = Default + ".Delete";
             public const string ManageUsers = Default + ".ManageUsers";
             public const string ManageRoles = Default + ".ManageRoles";
+            public const string ManagePermissions = Default + ".ManagePermissions";
         }
 
         public static class IdentityClaimType
