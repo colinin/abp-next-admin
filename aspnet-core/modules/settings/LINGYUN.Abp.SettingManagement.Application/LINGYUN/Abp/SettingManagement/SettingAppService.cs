@@ -349,6 +349,7 @@ namespace LINGYUN.Abp.SettingManagement
             #region 邮件设置
 
             var emailSettingGroup = new SettingGroupDto(L["DisplayName:Emailing"], L["Description:Emailing"]);
+
             var defaultMailSetting = emailSettingGroup.AddSetting(L["DisplayName:Emailing.Default"], L["Description:Emailing.Default"]);
             defaultMailSetting.AddDetail(
                 SettingDefinitionManager.Get(EmailSettingNames.DefaultFromAddress),
@@ -363,49 +364,53 @@ namespace LINGYUN.Abp.SettingManagement
                 ValueType.String,
                 providerName);
 
-            var smtpSetting = emailSettingGroup.AddSetting(L["DisplayName:Emailing.Smtp"], L["Description:Emailing.Smtp"]);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.EnableSsl),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.EnableSsl, providerName, providerKey),
-                ValueType.Boolean,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.UseDefaultCredentials),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UseDefaultCredentials, providerName, providerKey),
-                ValueType.Boolean,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.Domain),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Domain, providerName, providerKey),
-                ValueType.String,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.Host),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Host, providerName, providerKey),
-                ValueType.String,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.Port),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Port, providerName, providerKey),
-                ValueType.Number,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.UserName),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UserName, providerName, providerKey),
-                ValueType.String,
-                providerName);
-            smtpSetting.AddDetail(
-                SettingDefinitionManager.Get(EmailSettingNames.Smtp.Password),
-                StringLocalizerFactory,
-                await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Password, providerName, providerKey),
-                ValueType.String,
-                providerName);
+            // 防止邮件设置泄露
+            if (await AuthorizationService.IsGrantedAsync(AbpSettingManagementPermissions.Settings.Manager))
+            {
+                var smtpSetting = emailSettingGroup.AddSetting(L["DisplayName:Emailing.Smtp"], L["Description:Emailing.Smtp"]);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.EnableSsl),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.EnableSsl, providerName, providerKey),
+                    ValueType.Boolean,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.UseDefaultCredentials),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UseDefaultCredentials, providerName, providerKey),
+                    ValueType.Boolean,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.Domain),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Domain, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.Host),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Host, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.Port),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Port, providerName, providerKey),
+                    ValueType.Number,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.UserName),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UserName, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+                smtpSetting.AddDetail(
+                    SettingDefinitionManager.Get(EmailSettingNames.Smtp.Password),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Password, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+            }
 
             settingGroups.AddGroup(emailSettingGroup);
 
