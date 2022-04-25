@@ -16,6 +16,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
 {
     protected IObjectMapper ObjectMapper { get; }
     protected ICurrentTenant CurrentTenant { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
 
@@ -24,12 +25,14 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     public BackgroundJobStore(
         IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository jobInfoRepository,
         IBackgroundJobLogRepository jobLogRepository,
         IOptions<AbpBackgroundTasksOptions> options)
     {
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
+        UnitOfWorkManager = unitOfWorkManager;
         JobInfoRepository = jobInfoRepository;
         JobLogRepository = jobLogRepository;
         Options = options.Value;
@@ -54,9 +57,9 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return await JobInfoRepository.FindJobAsync(jobId);
     }
 
-    [UnitOfWork]
     public async virtual Task StoreAsync(JobInfo jobInfo)
     {
+        using var unitOfWork = UnitOfWorkManager.Begin();
         using (CurrentTenant.Change(jobInfo.TenantId))
         {
             var backgroundJobInfo = await JobInfoRepository.FindAsync(jobInfo.Id);
@@ -115,12 +118,13 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
 
                 await JobInfoRepository.InsertAsync(backgroundJobInfo);
             }
+            await unitOfWork.SaveChangesAsync();
         }
     }
 
-    [UnitOfWork]
     public async virtual Task StoreLogAsync(JobEventData eventData)
     {
+        using var unitOfWork = UnitOfWorkManager.Begin();
         using (CurrentTenant.Change(eventData.TenantId))
         {
             var jogLog = new BackgroundJobLog(
@@ -138,15 +142,17 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 eventData.Exception);
 
             await JobLogRepository.InsertAsync(jogLog);
+
+            await unitOfWork.SaveChangesAsync();
         }
     }
 
-    [UnitOfWork]
     public async virtual Task CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
     {
+        using var unitOfWork = UnitOfWorkManager.Begin();
         var jobs = await JobInfoRepository.GetExpiredJobsAsync(
             Options.NodeName,
             maxResultCount,
@@ -154,6 +160,8 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             cancellationToken);
 
         await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
+
+        await unitOfWork.SaveChangesAsync();
     }
 
     protected virtual Exception GetSourceException(Exception exception)
