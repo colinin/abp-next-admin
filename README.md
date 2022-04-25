@@ -13,13 +13,13 @@
 ### 1、安装dotnet工具
 
 ```shell
-  dotnet tool install --global LINGYUN.Abp.Cli --version 5.2.0
+  dotnet tool install --global LINGYUN.Abp.Cli --version 5.2.1
 ```
 
 ### 2、安装.NET模板
 
 ```shell
-  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.2.0
+  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.2.1
 ```
 
 ### 3、使用cli创建一个项目
@@ -78,6 +78,8 @@
 [abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
 [EasyAbp/Cap](https://github.com/EasyAbp/Abp.EventBus.CAP) (EasyAbp)
+
+[DotNetCore/CAP](https://github.com/dotnetcore/CAP) (CAP)
 
 前端项目
 

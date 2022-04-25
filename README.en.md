@@ -11,13 +11,13 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 ### 1、Install cli
 
 ```shell
-  dotnet tool install --global LINGYUN.Abp.Cli --version 5.2.0
+  dotnet tool install --global LINGYUN.Abp.Cli --version 5.2.1
 ```
 
 ### 2、Install .NET Template
 
 ```shell
-  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.2.0
+  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.2.1
 ```
 
 ### 3、Use cli create new project
@@ -74,6 +74,8 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 [abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
 [EasyAbp/Cap](https://github.com/EasyAbp/Abp.EventBus.CAP) (EasyAbp)
+
+[DotNetCore/CAP](https://github.com/dotnetcore/CAP) (CAP)
 
 Javascript version:
 

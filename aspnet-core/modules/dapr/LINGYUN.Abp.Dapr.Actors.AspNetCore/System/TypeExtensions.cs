@@ -83,7 +83,7 @@ namespace System
                     nameof(actorType));
             }
 
-            var actorTypeInfo = ActorTypeInformation.Get(actorType);
+            var actorTypeInfo = ActorTypeInformation.Get(actorType, null);
 
             var remoteServiceAttr = actorType.GetRemoteServiceAttribute();
             if (remoteServiceAttr != null && 
