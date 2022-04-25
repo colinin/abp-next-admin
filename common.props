@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>5.2.0</Version>
+    <Version>5.2.1</Version>
     <Authors>LINGYUN</Authors>
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
-    <PackageProjectUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/colinin/abp-vue-admin-element-typescript/</RepositoryUrl>
+    <RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
