@@ -113,8 +113,11 @@ public class JobInfo
     /// 指定运行节点
     /// </summary>
     public string NodeName { get; set; }
-
-    public int GetCanBeTriggered()
+    /// <summary>
+    /// 计算作业可触发次数
+    /// </summary>
+    /// <returns></returns>
+    public int CalcCanBeTriggered()
     {
         // 无限次
         var maxCount = -1;
@@ -143,6 +146,12 @@ public class JobInfo
             if (maxCount < 0)
             {
                 maxCount = 0;
+            }
+
+            if (maxCount > 0)
+            {
+                // 触发重试时，失败间隔时间调整
+                Interval = 60;
             }
         }
 

@@ -53,6 +53,15 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                         {
                             job.Priority = JobPriority.Low;
                         }
+
+                        // 等待时间调整
+                        if (job.Interval <= 0)
+                        {
+                            job.Interval = 50;
+                        }
+
+                        var retryInterval = job.Interval * 1.5;
+                        job.Interval = Convert.ToInt32(retryInterval);
                     }
 
                     // 当未设置最大重试次数时不会标记停止

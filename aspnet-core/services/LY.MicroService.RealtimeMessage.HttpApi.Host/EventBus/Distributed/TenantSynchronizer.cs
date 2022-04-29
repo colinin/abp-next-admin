@@ -80,20 +80,21 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     TenantNotificationNames.NewTenantRegistered);
 
             var notificationData = new NotificationData();
+            notificationData.TrySetData("name", eventData.Name);
             notificationData.WriteLocalizedData(
                 new LocalizableStringInfo(
                     LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                     "NewTenantRegisteredNotificationTitle",
                     new Dictionary<object, object>
                     {
-                            { "User", eventData.Name }
+                        { "Name", eventData.Name },
                     }),
                 new LocalizableStringInfo(
                     LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                     "NewTenantRegisteredNotificationMessage",
                     new Dictionary<object, object>
                     {
-                            { "User", eventData.Name}
+                        { "Name", eventData.Name}
                     }),
                 DateTime.Now, eventData.AdminEmailAddress);
 

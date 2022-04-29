@@ -82,7 +82,7 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
                     Logger.LogWarning($"The task: {job.Group} - {job.Name} periodic task Cron expression was invalid and the task trigger could not be created.");
                     return null;
                 }
-                if (job.GetCanBeTriggered() == 0)
+                if (job.CalcCanBeTriggered() == 0)
                 {
                     Logger.LogWarning($"The task: {job.Group} - {job.Name} reached trigger peak and the task trigger could not be created.");
                     return null;
@@ -102,7 +102,7 @@ public class QuartzJobExecutorProvider : IQuartzJobExecutorProvider, ISingletonD
             case JobType.Once:
             case JobType.Persistent:
             default:
-                var maxCount = job.GetCanBeTriggered();
+                var maxCount = job.CalcCanBeTriggered();
                 if (maxCount == 0)
                 {
                     Logger.LogWarning($"The task: {job.Group} - {job.Name} reached trigger peak and the task trigger could not be created.");

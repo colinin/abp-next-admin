@@ -23,7 +23,10 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 lifetime: NotificationLifetime.OnlyOne,
                 allowSubscriptionToClients: false
                 )
-                .WithProviders();
+                .WithProviders(
+                    NotificationProviderNames.SignalR,
+                    NotificationProviderNames.Emailing)
+                .WithProperty("Template", "NewTenantRegisterd");
 
             var usersGroup = context.AddGroup(
                 UserNotificationNames.GroupName,
@@ -35,7 +38,11 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 L("Notifications:WelcomeToApplication"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.OnlyOne,
-                allowSubscriptionToClients: true);
+                allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR,
+                    NotificationProviderNames.Emailing)
+                .WithProperty("Template", "WelcomeToApplication");
 
             var imGroup = context.AddGroup(
                 MessageServiceNotificationNames.IM.GroupName,
@@ -46,35 +53,45 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 L("Notifications:FriendValidation"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
-                allowSubscriptionToClients: true);
+                allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR);
             imGroup.AddNotification(
                 MessageServiceNotificationNames.IM.NewFriend,
                 L("Notifications:NewFriend"),
                 L("Notifications:NewFriend"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
-                allowSubscriptionToClients: true);
+                allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR);
             imGroup.AddNotification(
                 MessageServiceNotificationNames.IM.JoinGroup,
                 L("Notifications:JoinGroup"),
                 L("Notifications:JoinGroup"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
-                allowSubscriptionToClients: true);
+                allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR);
             imGroup.AddNotification(
                 MessageServiceNotificationNames.IM.ExitGroup,
                 L("Notifications:ExitGroup"),
                 L("Notifications:ExitGroup"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
-                allowSubscriptionToClients: true);
+                allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR);
             imGroup.AddNotification(
                MessageServiceNotificationNames.IM.DissolveGroup,
                L("Notifications:DissolveGroup"),
                L("Notifications:DissolveGroup"),
                notificationType: NotificationType.System,
                lifetime: NotificationLifetime.Persistent,
-               allowSubscriptionToClients: true);
+               allowSubscriptionToClients: true)
+                .WithProviders(
+                    NotificationProviderNames.SignalR);
         }
 
         protected LocalizableString L(string name)

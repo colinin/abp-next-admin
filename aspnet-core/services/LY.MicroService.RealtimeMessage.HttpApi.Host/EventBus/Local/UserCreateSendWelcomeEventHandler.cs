@@ -42,6 +42,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus
             //    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
             //    DateTime.Now, eventData.Entity.UserName);
 
+            userWelcomeNotifictionData.TrySetData("user", eventData.Entity.UserName);
             userWelcomeNotifictionData
                 .WriteLocalizedData(
                     new LocalizableStringInfo(
