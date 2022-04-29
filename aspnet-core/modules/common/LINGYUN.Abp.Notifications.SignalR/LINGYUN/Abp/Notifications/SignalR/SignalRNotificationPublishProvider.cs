@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Notifications.SignalR
 {
     public class SignalRNotificationPublishProvider : NotificationPublishProvider
     {
-        public const string ProviderName = "SignalR";
+        public const string ProviderName = NotificationProviderNames.SignalR;
         public override string Name => ProviderName;
 
         private readonly IHubContext<NotificationsHub> _hubContext;

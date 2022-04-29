@@ -25,7 +25,10 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
 
             NotificationData notificationData = new NotificationData();
             // 写入通知数据
-            //TODO：集成TextTemplate完成格式化的推送
+            notificationData.TrySetData("header", "An application exception has occurred");
+            notificationData.TrySetData("footer", $"Copyright to LY Colin © {DateTime.Now.Year}");
+            notificationData.TrySetData("loglevel", context.LogLevel.ToString());
+            notificationData.TrySetData("stacktrace", context.Exception.ToString());
             notificationData.WriteStandardData(
                 context.Exception.GetType().FullName, 
                 context.Exception.Message,

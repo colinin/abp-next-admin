@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
     /// </summary>
     public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishProvider
     {
-        public const string ProviderName = "WeChat.MiniProgram";
+        public const string ProviderName = NotificationProviderNames.WechatMiniProgram;
         public override string Name => ProviderName;
         protected ISubscribeMessager SubscribeMessager { get; }
         protected AbpNotificationsWeChatMiniProgramOptions Options { get; }

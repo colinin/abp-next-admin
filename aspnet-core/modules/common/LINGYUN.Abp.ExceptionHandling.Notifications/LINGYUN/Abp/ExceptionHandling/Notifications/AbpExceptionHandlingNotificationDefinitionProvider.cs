@@ -20,8 +20,13 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
                 allowSubscriptionToClients: false)
-                // TODO: 全局常量
-                .WithProviders("SignalR");
+                // 指定通知提供程序
+                .WithProviders(
+                    NotificationProviderNames.SignalR,
+                    NotificationProviderNames.Emailing)
+                // 特定的通知提供程序属性
+                // 此处为邮件通知定义的模板名称
+                .WithProperty("Template", "ExceptionNotifier");
         }
 
         protected LocalizableString L(string name)

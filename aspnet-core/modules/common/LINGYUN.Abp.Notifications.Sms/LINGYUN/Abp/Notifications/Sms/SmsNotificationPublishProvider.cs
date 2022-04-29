@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Notifications.Sms
 {
     public class SmsNotificationPublishProvider : NotificationPublishProvider
     {
-        public const string ProviderName = "Sms";
+        public const string ProviderName = NotificationProviderNames.Sms;
 
         private IUserPhoneFinder _userPhoneFinder;
         protected IUserPhoneFinder UserPhoneFinder => LazyGetRequiredService(ref _userPhoneFinder);

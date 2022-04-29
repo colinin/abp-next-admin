@@ -50,6 +50,12 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public List<string> Providers { get; }
 
+        /// <summary>
+        /// 额外属性
+        /// </summary>
+        [NotNull]
+        public Dictionary<string, object> Properties { get; }
+
         public NotificationDefinition(
            string name,
            ILocalizableString displayName = null,
@@ -66,6 +72,7 @@ namespace LINGYUN.Abp.Notifications
             AllowSubscriptionToClients = allowSubscriptionToClients;
 
             Providers = new List<string>();
+            Properties = new Dictionary<string, object>();
         }
 
         public virtual NotificationDefinition WithProviders(params string[] providers)
@@ -75,6 +82,12 @@ namespace LINGYUN.Abp.Notifications
                 Providers.AddRange(providers);
             }
 
+            return this;
+        }
+
+        public virtual NotificationDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
             return this;
         }
 
