@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
@@ -315,6 +316,21 @@ public partial class RealtimeMessageHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Token.IsNullOrWhiteSpace())
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            if (!accessToken.IsNullOrEmpty())
+                            {
+                                context.Token = accessToken;
+                            }
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         if (!isDevelopment)
