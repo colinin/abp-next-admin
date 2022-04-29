@@ -19,7 +19,9 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
                 description: L("Notifications:ExceptionNotifier"),
                 notificationType: NotificationType.System,
                 lifetime: NotificationLifetime.Persistent,
-                allowSubscriptionToClients: false);
+                allowSubscriptionToClients: false)
+                // TODO: 全局常量
+                .WithProviders("SignalR");
         }
 
         protected LocalizableString L(string name)

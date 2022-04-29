@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Notifications;
+using LY.MicroService.RealtimeMessage.BackgroundJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -120,6 +121,12 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
                 var providers = Enumerable
                      .Reverse(NotificationPublishProviderManager.Providers);
+
+                // 过滤用户指定提供者
+                if (notification.Providers.Any())
+                {
+                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
+                }
 
                 await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
             }

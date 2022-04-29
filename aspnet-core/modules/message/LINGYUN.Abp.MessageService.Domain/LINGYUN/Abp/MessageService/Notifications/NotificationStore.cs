@@ -92,7 +92,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                await _notificationRepository.DeleteExpritionAsync(batchCount, cancellationToken);
+                var notitications = await _notificationRepository.GetExpritionAsync(batchCount, cancellationToken);
+
+                await _notificationRepository.DeleteManyAsync(notitications);
 
                 await unitOfWork.CompleteAsync(cancellationToken);
             }
