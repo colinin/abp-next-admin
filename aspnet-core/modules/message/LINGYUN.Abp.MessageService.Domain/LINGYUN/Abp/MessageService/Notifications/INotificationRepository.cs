@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -10,7 +11,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             long notificationId,
             CancellationToken cancellationToken = default);
 
-        Task DeleteExpritionAsync(
+        Task<List<Notification>> GetExpritionAsync(
             int batchCount,
             CancellationToken cancellationToken = default);
     }

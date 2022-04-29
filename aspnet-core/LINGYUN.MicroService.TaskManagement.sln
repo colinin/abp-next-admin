@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TaskManagement.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.TaskManagement", "modules\task-management\LINGYUN.Abp.BackgroundTasks.TaskManagement\LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj", "{7937785C-0D28-46B3-A7E7-0B592821A1F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.EventBus", "modules\task-management\LINGYUN.Abp.BackgroundTasks.EventBus\LINGYUN.Abp.BackgroundTasks.EventBus.csproj", "{D17DEF79-635B-478D-89D7-32EAE616869A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.EventBus", "modules\task-management\LINGYUN.Abp.BackgroundTasks.EventBus\LINGYUN.Abp.BackgroundTasks.EventBus.csproj", "{D17DEF79-635B-478D-89D7-32EAE616869A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

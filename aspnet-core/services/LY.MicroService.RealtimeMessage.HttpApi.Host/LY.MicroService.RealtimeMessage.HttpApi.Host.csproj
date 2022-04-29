@@ -19,6 +19,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Quartz.Serialization.Json" Version="$(QuartzNETPackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
@@ -43,16 +44,15 @@
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\modules\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.BackgroundWorkers.Hangfire\LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj" />
-		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />

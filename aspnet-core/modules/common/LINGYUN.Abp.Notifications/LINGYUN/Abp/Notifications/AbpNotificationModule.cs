@@ -1,17 +1,12 @@
 ﻿using LINGYUN.Abp.IdGenerator;
-using LINGYUN.Abp.Notifications.Internal;
 using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
-using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -28,25 +23,6 @@ namespace LINGYUN.Abp.Notifications
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             AutoAddDefinitionProviders(context.Services);
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
-        }
-
-        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
-        {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpNotificationCleanupOptions>>().Value;
-            if (options.IsEnabled)
-            {
-                await context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .AddAsync(
-                        context.ServiceProvider
-                            .GetRequiredService<NotificationCleanupBackgroundWorker>()
-                    );
-            }
         }
 
         private void AutoAddDefinitionProviders(IServiceCollection services)

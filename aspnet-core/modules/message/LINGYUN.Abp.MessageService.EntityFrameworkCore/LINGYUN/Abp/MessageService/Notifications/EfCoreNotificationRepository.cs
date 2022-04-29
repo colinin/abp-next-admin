@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,20 +20,14 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
         }
 
-        public async Task DeleteExpritionAsync(
+        public async Task<List<Notification>> GetExpritionAsync(
             int batchCount,
             CancellationToken cancellationToken = default)
         {
-            var dbSet = await GetDbSetAsync();
-            var batchDeleteNoticeWithIds = await dbSet
-                .Where(x => x.ExpirationTime <= DateTime.Now)
+            return await (await GetDbSetAsync())
+                .Where(x => x.ExpirationTime.Value.CompareTo(DateTime.Now) <= 0)
                 .Take(batchCount)
-                .Select(x => new Notification(x.Id))
-                .AsNoTracking()
-                .ToArrayAsync(GetCancellationToken(cancellationToken));
-
-            dbSet.AttachRange(batchDeleteNoticeWithIds);
-            dbSet.RemoveRange(batchDeleteNoticeWithIds);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<Notification> GetByIdAsync(

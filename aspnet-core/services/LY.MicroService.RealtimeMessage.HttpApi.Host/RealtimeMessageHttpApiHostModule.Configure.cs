@@ -1,30 +1,26 @@
 ﻿using DotNetCore.CAP;
-using Hangfire;
-using Hangfire.Dashboard;
+using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
-using LINGYUN.Abp.Hangfire.Dashboard.Authorization;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MessageService.Localization;
-using LINGYUN.Abp.MessageService.Permissions;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LY.MicroService.RealtimeMessage.BackgroundJobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
@@ -33,16 +29,15 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
-using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
-using HangfireDashboardOptions = Hangfire.DashboardOptions;
 
 namespace LY.MicroService.RealtimeMessage;
 
 public partial class RealtimeMessageHttpApiHostModule
 {
-    protected static string[] PrefixTokenQueryStrings = new [] { "/signalr-hubs", "/hangfire" };
+    protected const string ApplicationName = "MessageService";
 
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -56,7 +51,7 @@ public partial class RealtimeMessageHttpApiHostModule
 
     private void PreConfigureApp()
     {
-        AbpSerilogEnrichersConsts.ApplicationName = "MessageService";
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
@@ -84,16 +79,41 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
-    private void PreCongifureHangfire()
+    private void PreConfigureQuartz(IConfiguration configuration)
     {
-        PreConfigure<HangfireDashboardOptions>(options =>
+        PreConfigure<AbpQuartzOptions>(options =>
         {
-            options.AsyncAuthorization = new IDashboardAsyncAuthorizationFilter[]
+            // 如果使用持久化存储, 则配置quartz持久层
+            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
             {
-                    new DashboardAuthorizationFilter(
-                        MessageServicePermissions.Hangfire.Dashboard,
-                        MessageServicePermissions.Hangfire.ManageQueue)
-            };
+                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
+                if (settings != null)
+                {
+                    foreach (var setting in settings)
+                    {
+                        options.Properties[setting.Key] = setting.Value;
+                    }
+                }
+
+                options.Configurator += (config) =>
+                {
+                    config.UsePersistentStore(store =>
+                    {
+                        store.UseProperties = false;
+                        store.UseJsonSerializer();
+                    });
+                };
+            }
+        });
+    }
+
+    private void ConfigureBackgroundTasks()
+    {
+        Configure<AbpBackgroundTasksOptions>(options =>
+        {
+            options.NodeName = ApplicationName;
+
+            options.AddProvider<NotificationCleanupJob>("NotificationCleanupJob");
         });
     }
 
@@ -139,14 +159,9 @@ public partial class RealtimeMessageHttpApiHostModule
 
     private void ConfigureAuditing(IConfiguration configuration)
     {
-        Configure<AbpAspNetCoreAuditingOptions>(options =>
-        {
-            options.IgnoredUrls.AddIfNotContains("/hangfire");
-        });
-
         Configure<AbpAuditingOptions>(options =>
         {
-            options.ApplicationName = "MessageService";
+            options.ApplicationName = ApplicationName;
             // 是否启用实体变更记录
             var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
             if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
@@ -300,42 +315,6 @@ public partial class RealtimeMessageHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            PrefixTokenQueryStrings.Any(prefix => path.StartsWithSegments(prefix)))
-                        {
-                            // 解决仪表板自定义授权问题
-                            context.Token = accessToken;
-
-                            var clock = context.HttpContext.RequestServices.GetRequiredService<IClock>();
-                            var protectedProvider = context.HttpContext.RequestServices.GetRequiredService<IDataProtectionProvider>();
-                            var protector = protectedProvider.CreateProtector("_hangfire_tk");
-                            var tokenCookies = protector.Protect(accessToken);
-                            context.HttpContext.Response.Cookies.Append(
-                                "_hangfire_tk",
-                                tokenCookies,
-                                new CookieOptions
-                                {
-                                    Expires = clock.Now.AddMinutes(10)
-                                });
-                        }
-
-                        if (context.Token.IsNullOrWhiteSpace() &&
-                            context.Request.Cookies.TryGetValue("_hangfire_tk", out var protectedToken))
-                        {
-                            var protectedProvider = context.HttpContext.RequestServices.GetRequiredService<IDataProtectionProvider>();
-                            var protector = protectedProvider.CreateProtector("_hangfire_tk");
-                            context.Token = protector.Unprotect(protectedToken);
-                        }
-
-                        return Task.CompletedTask;
-                    },
-                };
             });
 
         if (!isDevelopment)
@@ -346,10 +325,5 @@ public partial class RealtimeMessageHttpApiHostModule
                 .SetApplicationName("LINGYUN.Abp.Application")
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
-    }
-
-    private void ConfigureHangfireServer(IServiceCollection services)
-    {
-        services.AddHangfireServer();
     }
 }
