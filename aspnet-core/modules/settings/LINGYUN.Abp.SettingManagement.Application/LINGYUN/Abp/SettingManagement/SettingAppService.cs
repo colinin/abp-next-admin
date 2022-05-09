@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -48,6 +49,11 @@ namespace LINGYUN.Abp.SettingManagement
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
         public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
         {
+            if (CurrentTenant.IsAvailable)
+            {
+                throw new UserFriendlyException(L["TenantCannotChangeGlobalSetting"]);
+            }
+
             // 增加特性检查
             await CheckFeatureAsync();
 
