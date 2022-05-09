@@ -40,6 +40,7 @@
     "DisplayName:FileManagement": "文件管理",
     "Description:FileManagement": "文件管理",
     "DisplayName:FileManagement.FileSystem": "文件系统",
-    "Description:FileManagement.FileSystem": "文件系统"
+    "Description:FileManagement.FileSystem": "文件系统",
+    "TenantCannotChangeGlobalSetting": "租户不能变更公共配置"
   }
 }

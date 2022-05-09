@@ -40,6 +40,7 @@
     "DisplayName:FileManagement": "File Management",
     "Description:FileManagement": "File Management",
     "DisplayName:FileManagement.FileSystem": "File System",
-    "Description:FileManagement.FileSystem": "File System"
+    "Description:FileManagement.FileSystem": "File System",
+    "TenantCannotChangeGlobalSetting": "Tenant cannot change the global settings"
   }
 }
