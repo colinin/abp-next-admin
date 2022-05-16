@@ -54,12 +54,12 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             // 租户删除时移除轮询作业
             var pollingJob = BuildPollingJobInfo(eventData.Entity.Id, eventData.Entity.Name);
-            await JobStore.StoreAsync(pollingJob);
             await JobScheduler.RemoveAsync(pollingJob);
+            await JobStore.RemoveAsync(pollingJob.Id);
 
             var cleaningJob = BuildCleaningJobInfo(eventData.Entity.Id, eventData.Entity.Name);
-            await JobStore.StoreAsync(cleaningJob);
             await JobScheduler.RemoveAsync(cleaningJob);
+            await JobStore.RemoveAsync(cleaningJob.Id);
         }
 
         public async Task HandleEventAsync(CreateEventData eventData)
@@ -73,9 +73,11 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         private async Task QueueBackgroundJobAsync(CreateEventData eventData)
         {
             var pollingJob = BuildPollingJobInfo(eventData.Id, eventData.Name);
+            await JobStore.StoreAsync(pollingJob);
             await JobScheduler.QueueAsync(pollingJob);
 
             var cleaningJob = BuildCleaningJobInfo(eventData.Id, eventData.Name);
+            await JobStore.StoreAsync(cleaningJob);
             await JobScheduler.QueueAsync(cleaningJob);
         }
 
@@ -105,7 +107,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             return new JobInfo
             {
-                Id = tenantId.ToString(),
+                Id = tenantId.ToString() + "_Polling",
                 Name = nameof(BackgroundPollingJob),
                 Group = "Polling",
                 Description = "Polling tasks to be executed",
@@ -127,7 +129,7 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
         {
             return new JobInfo
             {
-                Id = tenantId.ToString(),
+                Id = tenantId.ToString() + "_Cleaning",
                 Name = nameof(BackgroundCleaningJob),
                 Group = "Cleaning",
                 Description = "Cleaning tasks to be executed",

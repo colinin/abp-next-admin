@@ -122,6 +122,14 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         }
     }
 
+    public async virtual Task RemoveAsync(string jobId)
+    {
+        using var unitOfWork = UnitOfWorkManager.Begin();
+        await JobInfoRepository.DeleteAsync(jobId);
+
+        await unitOfWork.SaveChangesAsync();
+    }
+
     public async virtual Task StoreLogAsync(JobEventData eventData)
     {
         using var unitOfWork = UnitOfWorkManager.Begin();
