@@ -74,6 +74,15 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.CompletedTask;
     }
 
+    public async Task RemoveAsync(string jobId)
+    {
+        var job = await FindAsync(jobId);
+        if (job != null)
+        {
+            _memoryJobStore.Remove(job);
+        }
+    }
+
     public Task StoreLogAsync(JobEventData eventData)
     {
         return Task.CompletedTask;

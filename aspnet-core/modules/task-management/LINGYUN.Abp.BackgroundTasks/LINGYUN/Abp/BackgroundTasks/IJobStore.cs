@@ -20,6 +20,8 @@ public interface IJobStore
 
     Task StoreLogAsync(JobEventData eventData);
 
+    Task RemoveAsync(string jobId);
+
     Task CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
