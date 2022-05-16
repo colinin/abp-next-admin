@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using LINGYUN.Abp.BackgroundTasks.ExceptionHandling.Templates;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -49,15 +50,17 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
             exceptionTo is string to)
         {
             var template = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate)?.ToString() ?? "";
-            var content = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyBody)?.ToString() ?? "";
             var subject = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject)?.ToString() ?? "From job execute exception";
             var from = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom)?.ToString() ?? "";
             var errorMessage = eventData.Exception.GetBaseException().Message;
 
             if (template.IsNullOrWhiteSpace())
             {
-                await EmailSender.SendAsync(from, to, subject, content, false);
-                return;
+                // var message = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyBody)?.ToString() ?? "";
+                // await EmailSender.SendAsync(from, to, subject, message, false);
+                // return;
+                // 默认使用内置模板发送错误
+                template = JobExceptionHandlingTemplates.JobExceptionNotifier;
             }
 
             var footer = eventData.Args.GetOrDefault("footer")?.ToString() ?? $"Copyright to LY Colin © {eventData.RunTime.Year}";
@@ -88,7 +91,7 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
 
             var culture = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
 
-            content = await TemplateRenderer.RenderAsync(
+            var content = await TemplateRenderer.RenderAsync(
                 templateName: template,
                 model: model,
                 cultureName: culture,
