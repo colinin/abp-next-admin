@@ -14,7 +14,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
-
+using Volo.Abp.Uow;
 using IdentityResource = Volo.Abp.Identity.Localization.IdentityResource;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 using IIdentityUserRepository = LINGYUN.Abp.Identity.IIdentityUserRepository;
@@ -27,6 +27,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
         protected IEventService EventService { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected UserManager<IdentityUser> UserManager { get; }
+        protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected IStringLocalizer<IdentityResource> IdentityLocalizer { get; }
         protected IStringLocalizer<AbpIdentityServerResource> IdentityServerLocalizer { get; }
@@ -51,6 +52,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
 
         public string GrantType => SmsValidatorConsts.SmsValidatorGrantTypeName;
 
+        [UnitOfWork]
         public async Task ValidateAsync(ExtensionGrantValidationContext context)
         {
             var raw = context.Request.Raw;

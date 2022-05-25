@@ -9,6 +9,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.IdentityServer.LinkUser;
@@ -51,6 +52,7 @@ public class LinkUserGrantValidator : IExtensionGrantValidator
         Localizer = localizer;
     }
 
+    [UnitOfWork]
     public virtual async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var accessToken = context.Request.Raw["access_token"];
