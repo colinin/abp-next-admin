@@ -27,7 +27,6 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
         protected IEventService EventService { get; }
         protected IIdentityUserRepository UserRepository { get; }
         protected UserManager<IdentityUser> UserManager { get; }
-        protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected IStringLocalizer<IdentityResource> IdentityLocalizer { get; }
         protected IStringLocalizer<AbpIdentityServerResource> IdentityServerLocalizer { get; }
