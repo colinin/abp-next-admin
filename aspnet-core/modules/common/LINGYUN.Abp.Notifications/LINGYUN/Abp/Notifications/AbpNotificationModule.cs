@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -40,6 +41,11 @@ namespace LINGYUN.Abp.Notifications
                 options.Resources
                     .Add<NotificationsResource>("en")
                     .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
+            });
+
+            Configure<AbpSystemTextJsonSerializerOptions>(options =>
+            {
+                options.UnsupportedTypes.Add<NotificationInfo>();
             });
         }
 

@@ -4,7 +4,7 @@ import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { format } from '/@/utils/strings';
 
 interface IStringLocalizer {
-  L(key: string, ...args: any[]): string;
+  L(key: string, args?: Recordable | any[] | undefined): string;
 }
 
 export function useLocalization(resourceName: string, ...mergeResources: string[]) {
@@ -18,7 +18,7 @@ export function useLocalization(resourceName: string, ...mergeResources: string[
     return resource;
   });
 
-  function L(key: string, ...args: any[]) {
+  function L(key: string, args?: Recordable | any[] | undefined) {
     if (!key) return '';
     if (!getResource.value) return key;
     if (!Reflect.has(getResource.value, key)) return key;

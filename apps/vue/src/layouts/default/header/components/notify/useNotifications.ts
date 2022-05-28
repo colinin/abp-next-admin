@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted, ref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { notification } from 'ant-design-vue';
 import { getList } from '/@/api/messages/notifications';
 import {
   NotificationInfo,
@@ -11,6 +11,7 @@ import { TabItem, ListItem } from './data';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { NotifyEventEnum } from '/@/enums/imEnum';
 import { useSignalR } from '/@/hooks/web/useSignalR';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import errorAvatar from '/@/assets/icons/64x64/color-error.png';
 import warningAvatar from '/@/assets/icons/64x64/color-warning.png';
 import infoAvatar from '/@/assets/icons/64x64/color-info.png';
@@ -19,7 +20,6 @@ import successAvatar from '/@/assets/icons/64x64/color-success.png';
 import emitter from '/@/utils/eventBus';
 
 export function useNotifications() {
-  const { t } = useI18n();
   const notifierRef = ref<TabItem>({
     key: '1',
     name: '通知',
@@ -31,7 +31,7 @@ export function useNotifications() {
 
   onMounted(() => {
     emitter.on(NotifyEventEnum.NOTIFICATIONS_READ, readNotifer);
-    signalR.on('get-notification', onNotifyReceived);
+    signalR.on('get-notification', (data) => onNotifyReceived(data, true));
     signalR.onStart(refreshNotifer);
     signalR.start();
   });
@@ -41,26 +41,28 @@ export function useNotifications() {
     signalR.stop();
   });
 
-  function onNotifyReceived(notificationInfo: NotificationInfo) {
+  function onNotifyReceived(notificationInfo: NotificationInfo, notifer?: boolean) {
     const { data } = notificationInfo;
     if (!data.extraProperties) {
       return;
     }
     if (data.extraProperties.L === true) {
-      data.extraProperties.title = t(
-        data.extraProperties.title.ResourceName + '.' + data.extraProperties.title.Name,
-        data.extraProperties.message.Values as Recordable,
+      const { L } = useLocalization(
+        data.extraProperties.title.ResourceName,
+        data.extraProperties.message.ResourceName,
+        data.extraProperties.description?.ResourceName ?? "AbpUi");
+      data.extraProperties.title = L(
+        data.extraProperties.title.Name,
+        data.extraProperties.title.Values,
       );
-      data.extraProperties.message = t(
-        data.extraProperties.message.ResourceName + '.' + data.extraProperties.message.Name,
-        data.extraProperties.message.Values as Recordable,
+      data.extraProperties.message = L(
+        data.extraProperties.message.Name,
+        data.extraProperties.message.Values,
       );
       if (data.extraProperties.description) {
-        data.extraProperties.description = t(
-          data.extraProperties.description.ResourceName +
-            '.' +
-            data.extraProperties.description.Name,
-          data.extraProperties.message.Values as Recordable,
+        data.extraProperties.description = L(
+          data.extraProperties.description.Name,
+          data.extraProperties.description.Values,
         );
       }
     }
@@ -78,18 +80,42 @@ export function useNotifications() {
       case NotificationSeverity.Fatal:
         notifier.color = 'red';
         notifier.avatar = errorAvatar;
+        if (notifer) {
+          notification['error']({
+            message: notifier.title,
+            description: notifier.description,
+          });
+        }
         break;
       case NotificationSeverity.Warn:
         notifier.color = 'gold';
         notifier.avatar = warningAvatar;
+        if (notifer) {
+          notification['warning']({
+            message: notifier.title,
+            description: notifier.description,
+          });
+        }
         break;
       case NotificationSeverity.Info:
         notifier.color = 'gold';
         notifier.avatar = infoAvatar;
+        if (notifer) {
+          notification['info']({
+            message: notifier.title,
+            description: notifier.description,
+          });
+        }
         break;
       case NotificationSeverity.Success:
         notifier.color = 'green';
         notifier.avatar = successAvatar;
+        if (notifer) {
+          notification['success']({
+            message: notifier.title,
+            description: notifier.description,
+          });
+        }
         break;
     }
     emitter.emit(NotifyEventEnum.NOTIFICATIONS_RECEVIED, notificationInfo);
