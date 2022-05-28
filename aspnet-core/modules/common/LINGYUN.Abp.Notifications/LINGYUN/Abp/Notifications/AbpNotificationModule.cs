@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IdGenerator;
+using LINGYUN.Abp.Notifications.Localization;
 using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -6,7 +7,9 @@ using System.Collections.Generic;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Json;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Notifications
 {
@@ -16,13 +19,28 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpIdGeneratorModule),
         typeof(AbpJsonModule),
+        typeof(AbpLocalizationModule),
         typeof(AbpRealTimeModule))]
     public class AbpNotificationModule : AbpModule
     {
-
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             AutoAddDefinitionProviders(context.Services);
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpNotificationModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<NotificationsResource>("en")
+                    .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
+            });
         }
 
         private void AutoAddDefinitionProviders(IServiceCollection services)
