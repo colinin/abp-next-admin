@@ -145,19 +145,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         {
             // 检查是够已订阅消息
             Logger.LogDebug($"Gets a list of user subscriptions {notificationInfo.Name}");
-            List<NotificationSubscriptionInfo> userSubscriptions;
-            if (users == null)
-            {
-                // 获取用户订阅列表
-                userSubscriptions = await NotificationSubscriptionManager
-                    .GetUserSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name);
-            }
-            else
-            {
-                // 过滤未订阅的用户
-                userSubscriptions = await NotificationSubscriptionManager
+
+            // 获取用户订阅列表
+            var userSubscriptions = await NotificationSubscriptionManager
                     .GetUsersSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name, users);
-            }
 
             users = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
 

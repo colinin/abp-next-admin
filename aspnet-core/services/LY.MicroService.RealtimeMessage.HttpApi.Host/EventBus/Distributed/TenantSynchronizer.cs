@@ -70,44 +70,51 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
         private async Task SendNotificationAsync(CreateEventData eventData)
         {
-            var tenantAdminUserIdentifier = new UserIdentifier(eventData.AdminUserId, eventData.AdminEmailAddress);
+            try
+            {
+                var tenantAdminUserIdentifier = new UserIdentifier(eventData.AdminUserId, eventData.AdminEmailAddress);
 
-            // 租户管理员订阅事件
-            await NotificationSubscriptionManager
-                .SubscribeAsync(
-                    eventData.Id,
-                    tenantAdminUserIdentifier,
-                    TenantNotificationNames.NewTenantRegistered);
+                // 租户管理员订阅事件
+                await NotificationSubscriptionManager
+                    .SubscribeAsync(
+                        eventData.Id,
+                        tenantAdminUserIdentifier,
+                        TenantNotificationNames.NewTenantRegistered);
 
-            var notificationData = new NotificationData();
-            notificationData.TrySetData("name", eventData.Name);
-            notificationData.WriteLocalizedData(
-                new LocalizableStringInfo(
-                    LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                    "NewTenantRegisteredNotificationTitle",
-                    new Dictionary<object, object>
-                    {
+                var notificationData = new NotificationData();
+                notificationData.TrySetData("name", eventData.Name);
+                notificationData.WriteLocalizedData(
+                    new LocalizableStringInfo(
+                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
+                        "NewTenantRegisteredNotificationTitle",
+                        new Dictionary<object, object>
+                        {
                         { "Name", eventData.Name },
-                    }),
-                new LocalizableStringInfo(
-                    LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                    "NewTenantRegisteredNotificationMessage",
-                    new Dictionary<object, object>
-                    {
+                        }),
+                    new LocalizableStringInfo(
+                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
+                        "NewTenantRegisteredNotificationMessage",
+                        new Dictionary<object, object>
+                        {
                         { "Name", eventData.Name}
-                    }),
-                DateTime.Now, eventData.AdminEmailAddress);
+                        }),
+                    DateTime.Now, eventData.AdminEmailAddress);
 
-            Logger.LogInformation("publish new tenant notification..");
-            // 发布租户创建通知
-            await NotificationSender
-                .SendNofiterAsync(
-                    TenantNotificationNames.NewTenantRegistered,
-                    notificationData,
-                    tenantAdminUserIdentifier,
-                    eventData.Id,
-                    NotificationSeverity.Success);
-            Logger.LogInformation("tenant administrator subscribes to new tenant events..");
+                Logger.LogInformation("publish new tenant notification..");
+                // 发布租户创建通知
+                await NotificationSender
+                    .SendNofiterAsync(
+                        TenantNotificationNames.NewTenantRegistered,
+                        notificationData,
+                        tenantAdminUserIdentifier,
+                        eventData.Id,
+                        NotificationSeverity.Success);
+                Logger.LogInformation("tenant administrator subscribes to new tenant events..");
+            }
+            catch(Exception ex)
+            {
+                Logger.LogWarning(ex, "Failed to send the tenant initialization notification.");
+            }
         }
     }
 }

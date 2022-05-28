@@ -29,18 +29,9 @@ namespace LY.MicroService.RealtimeMessage.EventBus
         {
             var userIdentifer = new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName);
             // 订阅用户欢迎消息
-            await _notificationSubscriptionManager
-                .SubscribeAsync(
-                    eventData.Entity.TenantId,
-                    userIdentifer,
-                    UserNotificationNames.WelcomeToApplication);
+            await SubscribeInternalNotifers(userIdentifer, eventData.Entity.TenantId);
 
             var userWelcomeNotifictionData = new NotificationData();
-
-            //userWelcomeNotifictionData.WriteStandardData(
-            //    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
-            //    L("WelcomeToApplicationFormUser", eventData.Entity.Name ?? eventData.Entity.UserName),
-            //    DateTime.Now, eventData.Entity.UserName);
 
             userWelcomeNotifictionData.TrySetData("user", eventData.Entity.UserName);
             userWelcomeNotifictionData
@@ -69,6 +60,33 @@ namespace LY.MicroService.RealtimeMessage.EventBus
                     eventData.Entity.TenantId,
                     NotificationSeverity.Info
                 );
+        }
+
+        private async Task SubscribeInternalNotifers(UserIdentifier userIdentifer, Guid? tenantId = null)
+        {
+            // 订阅内置通知
+            await _notificationSubscriptionManager
+                .SubscribeAsync(
+                    tenantId,
+                    userIdentifer,
+                    DefaultNotifications.SystemNotice);
+            await _notificationSubscriptionManager
+                .SubscribeAsync(
+                    tenantId,
+                    userIdentifer,
+                    DefaultNotifications.OnsideNotice);
+            await _notificationSubscriptionManager
+                .SubscribeAsync(
+                    tenantId,
+                    userIdentifer,
+                    DefaultNotifications.ActivityNotice);
+
+            // 订阅用户欢迎消息
+            await _notificationSubscriptionManager
+                .SubscribeAsync(
+                    tenantId,
+                    userIdentifer,
+                    UserNotificationNames.WelcomeToApplication);
         }
     }
 }

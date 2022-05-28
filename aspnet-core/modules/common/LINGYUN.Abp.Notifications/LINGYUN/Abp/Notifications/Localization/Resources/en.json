@@ -1,0 +1,12 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Notifications:Internal": "Internal",
+    "Notifications:OnsideNotice": "Onside",
+    "Notifications:OnsideNoticeDesc": "In-app notification push",
+    "Notifications:ActivityNotice": "Activity",
+    "Notifications:ActivityNoticeDesc": "The administrator delivers an event notification push",
+    "Notifications:SystemNotice": "System",
+    "Notifications:SystemNoticeDesc": "System global notification push"
+  }
+}

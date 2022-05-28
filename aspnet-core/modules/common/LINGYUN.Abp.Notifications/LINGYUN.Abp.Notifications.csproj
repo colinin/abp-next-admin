@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LINGYUN\Abp\Notifications\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LINGYUN\Abp\Notifications\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
     <PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 	<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />

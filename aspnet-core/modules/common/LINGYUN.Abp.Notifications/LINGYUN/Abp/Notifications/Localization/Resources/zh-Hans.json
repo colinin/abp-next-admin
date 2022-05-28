@@ -1,0 +1,12 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notifications:Internal": "内置通知",
+    "Notifications:OnsideNotice": "站内通知",
+    "Notifications:OnsideNoticeDesc": "应用内部通知推送",
+    "Notifications:ActivityNotice": "活动通知",
+    "Notifications:ActivityNoticeDesc": "管理员下发活动通知推送",
+    "Notifications:SystemNotice": "系统通知",
+    "Notifications:SystemNoticeDesc": "系统全局消息推送"
+  }
+}
