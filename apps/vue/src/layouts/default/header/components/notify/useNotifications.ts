@@ -43,35 +43,39 @@ export function useNotifications() {
 
   function onNotifyReceived(notificationInfo: NotificationInfo, notifer?: boolean) {
     const { data } = notificationInfo;
+    let title = data.extraProperties.title;
+    let message = data.extraProperties.message;
+    let description = data.extraProperties.description;
     if (!data.extraProperties) {
       return;
     }
     if (data.extraProperties.L === true) {
+      // TODO: 后端统一序列化格式
       const { L } = useLocalization(
-        data.extraProperties.title.ResourceName,
-        data.extraProperties.message.ResourceName,
-        data.extraProperties.description?.ResourceName ?? "AbpUi");
-      data.extraProperties.title = L(
-        data.extraProperties.title.Name,
-        data.extraProperties.title.Values,
+        data.extraProperties.title.resourceName ?? data.extraProperties.title.ResourceName,
+        data.extraProperties.message.resourceName ?? data.extraProperties.message.ResourceName,
+        data.extraProperties.description?.resourceName ?? data.extraProperties.description?.ResourceName ?? "AbpUi");
+      title = L(
+        data.extraProperties.title.name ?? data.extraProperties.title.Name,
+        data.extraProperties.title.values ?? data.extraProperties.title.Values,
       );
-      data.extraProperties.message = L(
-        data.extraProperties.message.Name,
-        data.extraProperties.message.Values,
+      message = L(
+        data.extraProperties.message.name ?? data.extraProperties.message.Name,
+        data.extraProperties.message.values ?? data.extraProperties.message.Values,
       );
-      if (data.extraProperties.description) {
-        data.extraProperties.description = L(
-          data.extraProperties.description.Name,
-          data.extraProperties.description.Values,
+      if (description) {
+        description = L(
+          data.extraProperties.description.name ?? data.extraProperties.description.Name,
+          data.extraProperties.description.values ?? data.extraProperties.description.Values,
         );
       }
     }
     const notifier: ListItem = {
       id: notificationInfo.id,
       avatar: data.extraProperties.avatar,
-      title: data.extraProperties.title,
-      description: data.extraProperties.message,
-      extra: data.extraProperties.description,
+      title: title,
+      description: message,
+      extra: description,
       datetime: formatToDateTime(notificationInfo.creationTime, 'YYYY-MM-DD HH:mm:ss'),
       type: String(notificationInfo.type),
     };
