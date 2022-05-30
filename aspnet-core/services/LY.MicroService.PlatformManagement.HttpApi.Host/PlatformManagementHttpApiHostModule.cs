@@ -20,6 +20,7 @@ using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
+using LINGYUN.Platform.Theme.VueVbenAdmin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +48,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpUINavigationVueVbenAdminModule),
+    typeof(PlatformThemeVueVbenAdminModule),
     // typeof(AbpOssManagementAliyunModule),
     typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
     typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
