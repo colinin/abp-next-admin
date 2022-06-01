@@ -8,7 +8,7 @@ namespace LINGYUN.Platform.Theme.VueVbenAdmin;
 
 [Controller]
 [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
-[Route("api/theme/vue-vben-admin")]
+[Route("api/platform/theme/vue-vben-admin")]
 public class ThemeSettingController : AbpControllerBase, IThemeSettingAppService
 {
     protected IThemeSettingAppService ThemeSettingAppService { get; }
