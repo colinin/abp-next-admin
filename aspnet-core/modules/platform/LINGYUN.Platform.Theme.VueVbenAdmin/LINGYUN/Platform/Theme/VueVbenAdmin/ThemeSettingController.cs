@@ -27,6 +27,7 @@ public class ThemeSettingController : AbpControllerBase, IThemeSettingAppService
 
     [HttpPut]
     [Authorize]
+    [Route("change")]
     public Task ChangeAsync(ThemeSettingDto input)
     {
         return ThemeSettingAppService.ChangeAsync(input);

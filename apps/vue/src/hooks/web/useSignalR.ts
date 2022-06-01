@@ -4,6 +4,7 @@ import {
   HubConnectionBuilder,
   HubConnectionState,
   IHttpConnectionOptions,
+  LogLevel,
 } from '@microsoft/signalr';
 import { useUserStoreWithOut } from '/@/store/modules/user';
 
@@ -45,7 +46,9 @@ export function useSignalR({
       httpOptions.accessTokenFactory = () =>
         token.startsWith('Bearer ') ? token.substring(7) : token;
     }
-    var connectionBuilder = new HubConnectionBuilder().withUrl(serverUrl, httpOptions);
+    var connectionBuilder = new HubConnectionBuilder()
+      .withUrl(serverUrl, httpOptions)
+      .configureLogging(LogLevel.Warning);
     if (automaticReconnect) {
       connectionBuilder.withAutomaticReconnect({
         nextRetryDelayInMilliseconds: () => nextRetryDelayInMilliseconds,

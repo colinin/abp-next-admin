@@ -56,6 +56,7 @@ export default {
 
     copyBtn: 'Copy',
     clearBtn: 'Clear cache and to the login page',
+    syncBtn: 'Synchronize to my configuration',
 
     drawerTitle: 'Configuration',
 
