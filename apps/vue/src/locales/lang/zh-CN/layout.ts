@@ -56,6 +56,7 @@ export default {
 
     copyBtn: '拷贝',
     clearBtn: '清空缓存并返回登录页',
+    syncBtn: '同步到个人配置',
 
     drawerTitle: '项目配置',
 

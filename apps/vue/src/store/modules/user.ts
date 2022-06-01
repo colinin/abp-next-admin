@@ -7,6 +7,7 @@ import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, LoginByPhoneParams } from '/@/api/sys/model/userModel';
 import { useAbpStoreWithOut } from './abp';
+import { useAppStoreWithOut } from './app';
 
 import { loginApi, loginPhoneApi, getUserInfo } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -142,6 +143,13 @@ export const useUserStore = defineStore({
       // get user info
       await this.getUserInfoAction();
 
+      try {
+        const appStore = useAppStoreWithOut();
+        await appStore.initlizeTheme();
+      } catch(error) {
+        console.warn('Failed to synchronize the user theme.');
+      }
+
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -162,6 +170,7 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<GetUserInfoModel> {
       const abpStore = useAbpStoreWithOut();
       await abpStore.initlizeAbpApplication();
+      
       const userInfo = await getUserInfo();
       const currentUser = abpStore.getApplication.currentUser;
 

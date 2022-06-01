@@ -17,6 +17,8 @@ import { darkMode } from '/@/settings/designSetting';
 import { resetRouter } from '/@/router';
 import { deepMerge } from '/@/utils';
 
+import { getTheme } from '/@/api/sys/theme';
+
 interface AppState {
   darkMode?: ThemeEnum;
   // Page loading status
@@ -98,6 +100,12 @@ export const useAppStore = defineStore({
         this.setPageLoading(loading);
         clearTimeout(timeId);
       }
+    },
+    async initlizeTheme() {
+      const theme = await getTheme();
+      this.setDarkMode(theme.darkMode === ThemeEnum.DARK ? ThemeEnum.DARK : ThemeEnum.LIGHT);
+      this.setProjectConfig(theme.projectConfig);
+      this.setBeforeMiniInfo(theme.beforeMiniInfo);
     },
   },
 });

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Platform.Domain\LINGYUN.Platform.Domain.csproj" />
+		<ProjectReference Include="..\LINGYUN.Platform.Settings.VueVbenAdmin\LINGYUN.Platform.Settings.VueVbenAdmin.csproj" />
+	</ItemGroup>
+
+</Project>
