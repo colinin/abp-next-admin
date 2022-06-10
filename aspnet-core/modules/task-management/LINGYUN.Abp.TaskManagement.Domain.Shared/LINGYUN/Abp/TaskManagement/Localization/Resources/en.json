@@ -83,6 +83,7 @@
     "BackgroundJobs:Start": "Start Jobs",
     "BackgroundJobs:Stop": "Stop Jobs",
     "BackgroundJobs:Delete": "Delete",
+    "BackgroundJobs:Copy": "Copy Jobs",
     "BasicInfo": "Basic",
     "Paramters": "Paramters",
     "MultipleSelectJobsWillBeDeletedMessage": "Multiple jobs selected will be deleted!"

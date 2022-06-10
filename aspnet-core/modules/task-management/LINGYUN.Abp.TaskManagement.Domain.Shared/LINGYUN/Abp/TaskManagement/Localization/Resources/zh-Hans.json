@@ -83,6 +83,7 @@
     "BackgroundJobs:Start": "启动作业",
     "BackgroundJobs:Stop": "停止作业",
     "BackgroundJobs:Delete": "删除",
+    "BackgroundJobs:Copy": "复制作业",
     "BasicInfo": "基本信息",
     "Paramters": "参数列表",
     "MultipleSelectJobsWillBeDeletedMessage": "选择的多个作业将被删除!"
