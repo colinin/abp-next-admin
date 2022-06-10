@@ -121,7 +121,7 @@
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, BasicColumn, TableAction, useTable } from '/@/components/Table';
   import { getById, create, update } from '/@/api/task-management/backgroundJobInfo';
-  import { JobType, JobPriority, BackgroundJobInfo } from '/@/api/task-management/model/backgroundJobInfoModel';
+  import { JobType, JobPriority, JobSource, BackgroundJobInfo } from '/@/api/task-management/model/backgroundJobInfoModel';
   import { JobTypeMap, JobPriorityMap } from '../datas/typing';
 
   const FormItem = Form.Item;
@@ -132,6 +132,7 @@
   const { L } = useLocalization('TaskManagement');
   const { ruleCreator } = useValidation();
   const { createMessage } = useMessage();
+  const copyJob = ref(false);
   const formElRef = ref<any>();
   const activeKey = ref('basic');
   const modelRef = ref<BackgroundJobInfo>({
@@ -139,12 +140,14 @@
     isEnabled: true,
     priority: JobPriority.Normal,
     jobType: JobType.Once,
+    source: JobSource.User,
     maxCount: 0,
     maxTryCount: 0,
     args: {},
   } as BackgroundJobInfo);
   const [registerModal, { closeModal, changeOkLoading }] = useModalInner((model) => {
     activeKey.value = 'basic';
+    copyJob.value = model.copy ?? false;
     fetchModel(model.id);
   });
   const [registerParamModal, { openModal: openParamModal, closeModal: closeParamModal }] = useModal();
@@ -280,6 +283,11 @@
       return;
     }
     getById(id).then((res) => {
+      if (copyJob.value) {
+        res.id = '';
+        res.name = '';
+        res.source = JobSource.User;
+      }
       modelRef.value = res;
     });
   }
@@ -291,6 +299,7 @@
         isEnabled: true,
         priority: JobPriority.Normal,
         jobType: JobType.Once,
+        source: JobSource.User,
         maxCount: 0,
         maxTryCount: 0,
         args: {},

@@ -78,6 +78,11 @@
               ifShow: [JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(record.status),
               onClick: handleTrigger.bind(null, record),
             },
+            {
+              auth: 'TaskManagement.BackgroundJobs.Create',
+              label: L('BackgroundJobs:Copy'),
+              onClick: handleCopy.bind(null, record),
+            },
           ]"
         />
       </template>
@@ -206,5 +211,9 @@
         });
       },
     });
+  }
+
+  function handleCopy(record) {
+    openModal(true, { id: record.id, copy: true });
   }
 </script>
