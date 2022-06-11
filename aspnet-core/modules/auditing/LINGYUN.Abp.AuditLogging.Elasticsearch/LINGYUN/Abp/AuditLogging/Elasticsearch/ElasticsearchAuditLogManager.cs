@@ -213,13 +213,20 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             var auditLog = await _converter.ConvertAsync(auditLogInfo);
 
-            var response = await client.IndexAsync(
-                auditLog,
-                (x) => x.Index(CreateIndex())
-                        .Id(auditLog.Id),
-                cancellationToken);
+            //var response = await client.IndexAsync(
+            //    auditLog,
+            //    (x) => x.Index(CreateIndex())
+            //            .Id(auditLog.Id),
+            //    cancellationToken);
 
-            return response.Id;
+            // 使用 Bulk 命令传输可能存在参数庞大的日志结构
+            var response = await client.BulkAsync(
+                dsl => dsl.Index(CreateIndex())
+                          .Create<AuditLog>(ct => 
+                            ct.Id(auditLog.Id)
+                              .Document(auditLog)));
+
+            return response.Items?.FirstOrDefault()?.Id;
         }
 
         protected virtual List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>> BuildQueryDescriptor(

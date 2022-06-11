@@ -90,7 +90,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                                         (s) => s.Term(
                                             (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)),
                                         (s) => s.Term(
-                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId()))))),
+                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())))))
+                           .Size(1),
                     cancellationToken);
             }
             else
@@ -117,7 +118,8 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                                 (q) => q.Bool(
                                     (b) => b.Must(
                                         (s) => s.Term(
-                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id))))),
+                                            (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)))))
+                           .Size(1),
                     cancellationToken);
             }
 
