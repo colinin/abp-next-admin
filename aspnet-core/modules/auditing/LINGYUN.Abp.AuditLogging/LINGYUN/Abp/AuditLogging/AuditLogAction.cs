@@ -41,7 +41,8 @@ namespace LINGYUN.Abp.AuditLogging
             ExtraProperties = new ExtraPropertyDictionary(actionInfo.ExtraProperties);
             ServiceName = actionInfo.ServiceName;
             MethodName = actionInfo.MethodName;
-            Parameters = actionInfo.Parameters.Length > 2000 ? "" : actionInfo.Parameters;
+            Parameters = actionInfo.Parameters;
+            // Parameters = actionInfo.Parameters.Length > 2000 ? "" : actionInfo.Parameters;
         }
     }
 }
