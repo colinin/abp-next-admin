@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>5.2.2</Version>
+    <Version>5.3.0</Version>
     <Authors>LINGYUN</Authors>
     <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
     <PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>

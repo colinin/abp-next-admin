@@ -244,5 +244,26 @@ namespace LINGYUN.Abp.EventBus.CAP
                     },
                     CancellationTokenProvider.FallbackToProvider());
         }
+
+        public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+        {
+            var outgoingEventArray = outgoingEvents.ToArray();
+
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                await CapPublisher
+                    .PublishAsync(
+                        outgoingEvent.EventName,
+                        outgoingEvent.EventData,
+                        new Dictionary<string, string>
+                        {
+                            { AbpCAPHeaders.MessageId, outgoingEvent.Id.ToString() },
+                            { AbpCAPHeaders.UserId, CurrentUser.Id?.ToString() ?? "" },
+                            { AbpCAPHeaders.ClientId, CurrentClient.Id ?? "" },
+                            { AbpCAPHeaders.TenantId, CurrentTenant.Id?.ToString() ?? "" },
+                        },
+                        CancellationTokenProvider.FallbackToProvider());
+            }
+        }
     }
 }
