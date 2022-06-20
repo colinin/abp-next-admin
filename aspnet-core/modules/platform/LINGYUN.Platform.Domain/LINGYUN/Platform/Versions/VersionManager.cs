@@ -101,7 +101,7 @@ namespace LINGYUN.Platform.Versions
         public virtual async Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data)
         {
             // 计算指纹
-            var sha256 = new SHA256Managed();
+            var sha256 = SHA256.Create();
             var checkHash = sha256.ComputeHash(data);
             var sha256Hash = BitConverter.ToString(checkHash).Replace("-", string.Empty);
 
