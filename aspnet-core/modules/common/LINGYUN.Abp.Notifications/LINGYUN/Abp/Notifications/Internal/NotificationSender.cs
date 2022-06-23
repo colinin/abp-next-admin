@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.IdGenerator;
-using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -50,25 +49,7 @@ namespace LINGYUN.Abp.Notifications
             Logger = NullLogger<NotificationSender>.Instance;
         }
 
-        public async Task<string> SendNofiterAsync(
-            string name, 
-            NotificationData data, 
-            UserIdentifier user = null,
-            Guid? tenantId = null, 
-            NotificationSeverity severity = NotificationSeverity.Info)
-        {
-            if (user == null)
-            {
-                return await PublishNofiterAsync(name, data, null, tenantId, severity);
-                
-            }
-            else
-            {
-                return await  PublishNofiterAsync(name, data, new List<UserIdentifier> { user }, tenantId, severity);
-            }
-        }
-
-        public async Task<string> SendNofitersAsync(
+        public async virtual Task<string> SendNofiterAsync(
             string name, 
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,
@@ -78,14 +59,24 @@ namespace LINGYUN.Abp.Notifications
             return await PublishNofiterAsync(name, data, users, tenantId, severity);
         }
 
-        protected async Task<string> PublishNofiterAsync(
-            string name, 
-            NotificationData data,
+        public async virtual Task<string> SendNofiterAsync(
+            string name,
+            NotificationTemplate template,
+            IEnumerable<UserIdentifier> users = null, 
+            Guid? tenantId = null, 
+            NotificationSeverity severity = NotificationSeverity.Info)
+        {
+            return await PublishNofiterAsync(name, template, users, tenantId, severity);
+        }
+
+        protected async virtual Task<string> PublishNofiterAsync<TData>(
+            string name,
+            TData data,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null,
             NotificationSeverity severity = NotificationSeverity.Info)
         {
-            var eto = new NotificationEto<NotificationData>(data)
+            var eto = new NotificationEto<TData>(data)
             {
                 Id = DistributedIdGenerator.Create(),
                 TenantId = tenantId,

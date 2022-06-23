@@ -49,7 +49,6 @@ namespace LINGYUN.Abp.Notifications
         /// 通知提供者
         /// </summary>
         public List<string> Providers { get; }
-
         /// <summary>
         /// 额外属性
         /// </summary>

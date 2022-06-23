@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Sms;
@@ -40,6 +41,7 @@ namespace LINGYUN.Abp.Notifications.Sms
             // TODO: 后期增强功能,增加短信模板、通知模板功能
             message.Properties.Add("TemplateCode", templateCode);
             message.Properties.Add("SignName", notification.Data.TryGetData("SignName"));
+            message.Properties.AddIfNotContains(notification.Data.ExtraProperties);
 
             await SmsSender.SendAsync(message);
         }

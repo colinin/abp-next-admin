@@ -59,6 +59,14 @@
     "DisplayName:SmsVerifyCode": "短信验证码",
     "DisplayName:EmailVerifyCode": "邮件验证码",
     "DisplayName:WeChatCode": "微信登录凭证",
-    "SendRepeatSmsVerifyCode": "手机验证码不能在 {0} 分钟内重复发送!"
+    "SendRepeatSmsVerifyCode": "手机验证码不能在 {0} 分钟内重复发送!",
+    "LockTime": "锁定时间",
+    "LockType": "锁定类型",
+    "Confirmed": "已确认",
+    "UnConfirmed": "未确认",
+    "UnActived": "未启用",
+    "LockoutEnd": "锁定截止期",
+    "Public": "公用",
+    "Static": "内置"
   }
 }

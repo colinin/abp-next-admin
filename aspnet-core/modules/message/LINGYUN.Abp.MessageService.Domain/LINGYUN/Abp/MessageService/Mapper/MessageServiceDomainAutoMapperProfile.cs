@@ -17,12 +17,13 @@ namespace LINGYUN.Abp.MessageService.Mapper
     {
         public MessageServiceDomainAutoMapperProfile()
         {
-            CreateMap<Notification, NotificationInfo>()
-                .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId))
-                .ForMember(dto => dto.Name, map => map.MapFrom(src => src.NotificationName))
+            CreateMap<UserNotificationInfo, NotificationInfo>()
+                .ForMember(dto => dto.Id, map => map.MapFrom(src => src.Id.ToString()))
+                .ForMember(dto => dto.Name, map => map.MapFrom(src => src.Name))
                 .ForMember(dto => dto.Lifetime, map => map.Ignore())
                 .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
                 .ForMember(dto => dto.Severity, map => map.MapFrom(src => src.Severity))
+                .ForMember(dto => dto.CreationTime, map => map.MapFrom(src => src.CreationTime))
                 .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
                 {
                     var dataType = Type.GetType(src.NotificationTypeName);
@@ -34,9 +35,6 @@ namespace LINGYUN.Abp.MessageService.Mapper
                     }
                     return new NotificationData();
                 }));
-
-            //CreateMap<Notification, NotificationInfo>()
-            //    .ConvertUsing<NotificationTypeConverter>();
 
             CreateMap<UserSubscribe, NotificationSubscriptionInfo>();
 

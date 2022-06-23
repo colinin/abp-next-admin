@@ -121,5 +121,12 @@ namespace LINGYUN.Abp.Notifications
             long notificationId, 
             NotificationReadState readState,
             CancellationToken cancellationToken = default);
+
+        Task ChangeUserNotificationsReadStateAsync(
+            Guid? tenantId,
+            Guid userId,
+            IEnumerable<long> notificationIds,
+            NotificationReadState readState,
+            CancellationToken cancellationToken = default);
     }
 }

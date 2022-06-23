@@ -9,10 +9,22 @@ namespace LINGYUN.Abp.Notifications
     [Dependency(TryRegister = true)]
     public class NullNotificationStore : INotificationStore, ISingletonDependency
     {
+        public readonly static INotificationStore Instance = new NullNotificationStore();
+
         public Task ChangeUserNotificationReadStateAsync(
             Guid? tenantId, 
             Guid userId, 
             long notificationId, 
+            NotificationReadState readState,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task ChangeUserNotificationsReadStateAsync(
+            Guid? tenantId,
+            Guid userId,
+            IEnumerable<long> notificationIds,
             NotificationReadState readState,
             CancellationToken cancellationToken = default)
         {

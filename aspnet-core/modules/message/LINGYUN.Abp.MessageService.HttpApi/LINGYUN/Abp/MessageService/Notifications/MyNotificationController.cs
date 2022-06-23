@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Notifications;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -19,29 +18,36 @@ namespace LINGYUN.Abp.MessageService.Notifications
             MyNotificationAppService = myNotificationAppService;
         }
 
+        [HttpPut]
+        [Route("mark-read-state")]
+        public async virtual Task MarkReadStateAsync(NotificationMarkReadStateInput input)
+        {
+            await MyNotificationAppService.MarkReadStateAsync(input);
+        }
+
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(long id)
+        public async virtual Task DeleteAsync(long id)
         {
             await MyNotificationAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("assignables")]
-        public virtual async Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
+        public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
         {
             return await MyNotificationAppService.GetAssignableNotifiersAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<NotificationInfo> GetAsync(long id)
+        public async virtual Task<UserNotificationDto> GetAsync(long id)
         {
             return await MyNotificationAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<NotificationInfo>> GetListAsync(UserNotificationGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserNotificationDto>> GetListAsync(UserNotificationGetByPagedDto input)
         {
             return await MyNotificationAppService.GetListAsync(input);
         }

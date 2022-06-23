@@ -14,16 +14,17 @@ namespace LINGYUN.Abp.MessageService.Notifications
             long notificationId,
             CancellationToken cancellationToken = default);
 
-        Task InsertUserNotificationsAsync(
-            IEnumerable<UserNotification> userNotifications,
-            CancellationToken cancellationToken = default);
-
-        Task<UserNotification> GetByIdAsync(
+        Task<UserNotificationInfo> GetByIdAsync(
             Guid userId,
             long notificationId,
             CancellationToken cancellationToken = default);
 
-        Task<List<Notification>> GetNotificationsAsync(
+        Task<List<UserNotification>> GetListAsync(
+            Guid userId,
+            IEnumerable<long> notificationIds,
+            CancellationToken cancellationToken = default);
+
+        Task<List<UserNotificationInfo>> GetNotificationsAsync(
             Guid userId, 
             NotificationReadState? readState = null, 
             int maxResultCount = 10,
@@ -35,7 +36,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationReadState? readState = null,
             CancellationToken cancellationToken = default);
 
-        Task<List<Notification>> GetListAsync(
+        Task<List<UserNotificationInfo>> GetListAsync(
             Guid userId, 
             string filter = "", 
             string sorting = nameof(Notification.CreationTime),

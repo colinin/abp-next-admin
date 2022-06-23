@@ -14,28 +14,28 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         /// <param name="name">名称</param>
         /// <param name="data">数据</param>
-        /// <param name="userId">用户,为空标识发给所有订阅用户</param>
+        /// <param name="users">用户列表,为空标识发给所有订阅用户</param>
         /// <param name="tenantId">租户</param>
         /// <param name="severity">严重级别</param>
         /// <returns>通知标识</returns>
         Task<string> SendNofiterAsync(
             string name,
             NotificationData data,
-            UserIdentifier user = null,
+            IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null,
             NotificationSeverity severity = NotificationSeverity.Info);
         /// <summary>
-        /// 发送通知
+        /// 发送模板通知
         /// </summary>
         /// <param name="name">名称</param>
-        /// <param name="data">数据</param>
+        /// <param name="template">模板对象</param>
         /// <param name="users">用户列表,为空标识发给所有订阅用户</param>
         /// <param name="tenantId">租户</param>
         /// <param name="severity">严重级别</param>
-        /// <returns>通知标识</returns>
-        Task<string> SendNofitersAsync(
+        /// <returns></returns>
+        Task<string> SendNofiterAsync(
             string name,
-            NotificationData data,
+            NotificationTemplate template,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null,
             NotificationSeverity severity = NotificationSeverity.Info);

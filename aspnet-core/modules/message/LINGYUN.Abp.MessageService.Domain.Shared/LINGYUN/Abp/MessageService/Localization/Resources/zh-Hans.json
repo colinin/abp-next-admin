@@ -18,6 +18,18 @@
     "LINGYUN.Abp.Message:03404": "发送消息失败: 用户不存在或已注销账号!",
     "LINGYUN.Abp.Message:03410": "用户拒绝添加好友",
     "LINGYUN.Abp.Message:03411": "对方已是您的好友或已发送验证请求,不能重复操作!",
+    "MarkSelectedAsRead": "标记选中已读",
+    "MarkAs": "标记为",
+    "Read": "已读",
+    "UnRead": "未读",
+    "Notifications": "通知列表",
+    "Notifications:Title": "标题",
+    "Notifications:Content": "内容",
+    "Notifications:Type": "类型",
+    "Notifications:SendTime": "发送时间",
+    "Notifications:System": "系统",
+    "Notifications:Application": "平台",
+    "Notifications:User": "用户",
     "Notifications:MultiTenancy": "租户通知",
     "Notifications:Users": "用户通知",
     "Notifications:NewTenantRegisterd": "租户创建通知",
@@ -33,5 +45,6 @@
     "AddNewFriendBySearchId": "通过账号搜索添加",
     "WelcomeToApplicationFormUser": "用户:{User} 欢迎您的加入!",
     "Messages:NewFriend": "我已经添加您为好友,让我们一起聊天吧!"
+
   }
 }

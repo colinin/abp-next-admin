@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -12,6 +13,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.TextTemplating;
 using Volo.Abp.Uow;
 
 namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
@@ -23,7 +25,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
     /// 作用在于SignalR客户端只会与一台服务器建立连接,
     /// 只有启用了SignlR服务端的才能真正将消息发布到客户端
     /// </remarks>
-    public class NotificationEventHandler : IDistributedEventHandler<NotificationEto<NotificationData>>, ITransientDependency
+    public class NotificationEventHandler :
+        IDistributedEventHandler<NotificationEto<NotificationData>>,
+        IDistributedEventHandler<NotificationEto<NotificationTemplate>>,
+        ITransientDependency
     {
         /// <summary>
         /// Reference to <see cref="ILogger<DefaultNotificationDispatcher>"/>.
@@ -46,9 +51,17 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         protected IBackgroundJobManager BackgroundJobManager { get; }
         /// <summary>
+        /// Reference to <see cref="ITemplateRenderer"/>.
+        /// </summary>
+        protected ITemplateRenderer TemplateRenderer { get; }
+        /// <summary>
         /// Reference to <see cref="INotificationStore"/>.
         /// </summary>
         protected INotificationStore NotificationStore { get; }
+        /// <summary>
+        /// Reference to <see cref="IStringLocalizerFactory"/>.
+        /// </summary>
+        protected IStringLocalizerFactory StringLocalizerFactory { get; }
         /// <summary>
         /// Reference to <see cref="INotificationDefinitionManager"/>.
         /// </summary>
@@ -68,7 +81,9 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         public NotificationEventHandler(
             ICurrentTenant currentTenant,
             IJsonSerializer jsonSerializer,
+            ITemplateRenderer templateRenderer,
             IBackgroundJobManager backgroundJobManager,
+            IStringLocalizerFactory stringLocalizerFactory,
             IOptions<AbpNotificationOptions> options,
             INotificationStore notificationStore,
             INotificationDefinitionManager notificationDefinitionManager,
@@ -78,7 +93,9 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             Options = options.Value;
             CurrentTenant = currentTenant;
             JsonSerializer = jsonSerializer;
+            TemplateRenderer = templateRenderer;
             BackgroundJobManager = backgroundJobManager;
+            StringLocalizerFactory = stringLocalizerFactory;
             NotificationStore = notificationStore;
             NotificationDefinitionManager = notificationDefinitionManager;
             NotificationSubscriptionManager = notificationSubscriptionManager;
@@ -88,7 +105,65 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         }
 
         [UnitOfWork]
-        public virtual async Task HandleEventAsync(NotificationEto<NotificationData> eventData)
+        public async virtual Task HandleEventAsync(NotificationEto<NotificationTemplate> eventData)
+        {
+            using (CurrentTenant.Change(eventData.TenantId))
+            {
+                var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
+                if (notification == null)
+                {
+                    return;
+                }
+
+                var notificationInfo = new NotificationInfo
+                {
+                    Name = notification.Name,
+                    CreationTime = eventData.CreationTime,
+                    Severity = eventData.Severity,
+                    Lifetime = notification.NotificationLifetime,
+                    TenantId = eventData.TenantId,
+                    Type = notification.NotificationType
+                };
+                notificationInfo.SetId(eventData.Id);
+
+                var title = eventData.Data.Title;
+                if (title.IsNullOrWhiteSpace())
+                {
+                    title = notification.DisplayName.Localize(StringLocalizerFactory);
+                }
+                var message = await TemplateRenderer.RenderAsync(
+                    templateName: eventData.Data.Name,
+                    cultureName: eventData.Data.Culture,
+                    globalContext: eventData.Data.ExtraProperties);
+
+                var notificationData = new NotificationData();
+                notificationData.WriteStandardData(
+                    title: title,
+                    message: message, 
+                    createTime: eventData.CreationTime,
+                    formUser: eventData.Data.FormUser);
+
+                notificationInfo.Data = notificationData;
+
+                Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
+
+                // 持久化通知
+                await NotificationStore.InsertNotificationAsync(notificationInfo);
+
+                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
+
+                // 过滤用户指定提供者
+                if (notification.Providers.Any())
+                {
+                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
+                }
+
+                await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
+            }
+        }
+
+        [UnitOfWork]
+        public async virtual Task HandleEventAsync(NotificationEto<NotificationData> eventData)
         {
             using (CurrentTenant.Change(eventData.TenantId))
             {
@@ -119,8 +194,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 // 持久化通知
                 await NotificationStore.InsertNotificationAsync(notificationInfo);
 
-                var providers = Enumerable
-                     .Reverse(NotificationPublishProviderManager.Providers);
+                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
 
                 // 过滤用户指定提供者
                 if (notification.Providers.Any())
@@ -196,7 +270,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
                 var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrDefault(notificationInfo.Name, provider.Name);
+                        .GetMapItemOrDefault(provider.Name, notificationInfo.Name);
                 if (notifacationDataMapping != null)
                 {
                     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
