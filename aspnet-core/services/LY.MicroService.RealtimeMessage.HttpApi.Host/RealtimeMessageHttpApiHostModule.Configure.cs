@@ -333,6 +333,11 @@ public partial class RealtimeMessageHttpApiHostModule
                 };
             });
 
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
+
         if (!isDevelopment)
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);

@@ -26,23 +26,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
             await NotificationAppService.SendAsync(input);
         }
 
-        [HttpPost]
-        [Route("templates")]
-        public async virtual Task<NotificationTemplateDto> SetTemplateAsync(NotificationTemplateSetInput input)
-        {
-            return await NotificationAppService.SetTemplateAsync(input);
-        }
-
         [HttpGet]
-        [Route("templates/{Name}")]
-        [Route("templates/{Culture}/{Name}")]
-        public async virtual Task<NotificationTemplateDto> GetTemplateAsync(NotificationTemplateGetInput input)
-        {
-            return await NotificationAppService.GetTemplateAsync(input);
-        }
-
-        [HttpGet]
-        [Route("templates")]
+        [Route("assignable-templates")]
         public async virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
         {
             return await NotificationAppService.GetAssignableTemplatesAsync();

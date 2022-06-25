@@ -14,15 +14,16 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.Common;
 using LINGYUN.Abp.Notifications.Emailing;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
-using LINGYUN.Abp.Notifications.TextTemplating;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,17 +60,18 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpBackgroundWorkersModule),
     typeof(AbpIMSignalRModule),
+    typeof(AbpNotificationsCommonModule),
     typeof(AbpNotificationsSmsModule),
     typeof(AbpNotificationsEmailingModule),
     typeof(AbpNotificationsSignalRModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsExceptionHandlingModule),
-    typeof(AbpNotificationsTextTemplatingModule),
     typeof(AbpTextTemplatingScribanModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpCachingStackExchangeRedisModule),
@@ -109,8 +111,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-        context.Services.AddAlwaysAllowAuthorization();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

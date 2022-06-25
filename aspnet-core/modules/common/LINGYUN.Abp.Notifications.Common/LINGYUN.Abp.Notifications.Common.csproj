@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\ExceptionNotifier\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\layout.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\NewTenantRegisterd\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\WelcomeToApplication\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Localization\Common\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\ExceptionNotifier\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\layout.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\NewTenantRegisterd\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\WelcomeToApplication\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Localization\Common\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+	</ItemGroup>
+
+</Project>

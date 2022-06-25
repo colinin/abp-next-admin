@@ -25,9 +25,9 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
             var notificationSender = context.ServiceProvider.GetRequiredService<INotificationSender>();
             // 发送错误模板消息
             await notificationSender.SendNofiterAsync(
-                AbpExceptionHandlingNotificationNames.NotificationName,
+                NotificationsCommonNotificationNames.ExceptionHandling,
                 new NotificationTemplate(
-                    AbpExceptionHandlingNotificationNames.NotificationName,
+                    NotificationsCommonNotificationNames.ExceptionHandling,
                     formUser: "System",
                     data: new Dictionary<string, object>
                     {

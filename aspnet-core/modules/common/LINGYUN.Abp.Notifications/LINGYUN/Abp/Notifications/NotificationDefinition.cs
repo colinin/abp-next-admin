@@ -106,6 +106,23 @@ namespace LINGYUN.Abp.Notifications
             return this;
         }
 
+        public virtual NotificationDefinition WithTemplate(Action<TemplateDefinition> setup)
+        {
+            if (Template != null)
+            {
+                setup(Template);
+            }
+            else
+            {
+                var template = new TemplateDefinition(Name);
+                setup(template);
+
+                Template = template;
+            }
+
+            return this;
+        }
+
         public virtual NotificationDefinition WithProperty(string key, object value)
         {
             Properties[key] = value;

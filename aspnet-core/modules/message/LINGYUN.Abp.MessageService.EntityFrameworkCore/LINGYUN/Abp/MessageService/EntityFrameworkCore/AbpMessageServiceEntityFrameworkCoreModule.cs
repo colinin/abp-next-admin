@@ -18,7 +18,6 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
             context.Services.AddAbpDbContext<MessageServiceDbContext>(options =>
             {
                 options.AddRepository<Notification, EfCoreNotificationRepository>();
-                options.AddRepository<NotificationTemplate, EfCoreNotificationTemplateRepository>();
 
                 options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
                 options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();

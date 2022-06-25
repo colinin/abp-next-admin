@@ -17,64 +17,15 @@ namespace LINGYUN.Abp.MessageService.Notifications
         protected ITemplateContentProvider TemplateContentProvider { get; }
         protected INotificationSender NotificationSender { get; }
         protected INotificationDefinitionManager NotificationDefinitionManager { get; }
-        protected INotificationTemplateRepository NotificationTemplateRepository { get; }
 
         public NotificationAppService(
             INotificationSender notificationSender,
             ITemplateContentProvider templateContentProvider,
-            INotificationDefinitionManager notificationDefinitionManager,
-            INotificationTemplateRepository notificationTemplateRepository)
+            INotificationDefinitionManager notificationDefinitionManager)
         {
             NotificationSender = notificationSender;
             TemplateContentProvider = templateContentProvider;
             NotificationDefinitionManager = notificationDefinitionManager;
-            NotificationTemplateRepository = notificationTemplateRepository;
-        }
-
-        public async virtual Task<NotificationTemplateDto> SetTemplateAsync(NotificationTemplateSetInput input)
-        {
-            var notification = GetNotificationDefinition(input.Name);
-
-            var template = await NotificationTemplateRepository.GetByNameAsync(input.Name, input.Culture);
-            if (template == null)
-            {
-                template = new NotificationTemplate(
-                    GuidGenerator.Create(),
-                    notification.Name,
-                    notification.DisplayName.Localize(StringLocalizerFactory),
-                    input.Content,
-                    input.Culture,
-                    notification.Description?.Localize(StringLocalizerFactory));
-
-                template = await NotificationTemplateRepository.InsertAsync(template);
-            }
-            else
-            {
-                template.SetContent(input.Content);
-
-                await NotificationTemplateRepository.UpdateAsync(template);
-            }
-
-            await CurrentUnitOfWork.SaveChangesAsync();
-
-            return ObjectMapper.Map<NotificationTemplate, NotificationTemplateDto>(template);
-        }
-
-        public async virtual Task<NotificationTemplateDto> GetTemplateAsync(NotificationTemplateGetInput input)
-        {
-            var notification = GetNotificationDefinition(input.Name);
-
-            var culture = input.Culture ?? CultureInfo.CurrentCulture.Name;
-            var content = await TemplateContentProvider.GetContentOrNullAsync(notification.Name, culture);
-
-            return new NotificationTemplateDto
-            {
-                Culture = culture,
-                Content = content,
-                Name = notification.Name,
-                Title = notification.DisplayName.Localize(StringLocalizerFactory),
-                Description = notification.Description?.Localize(StringLocalizerFactory),
-            };
         }
 
         public virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
@@ -110,7 +61,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             await NotificationSender
                 .SendNofiterAsync(
                     name: input.Name,
-                    template: new Abp.Notifications.NotificationTemplate(
+                    template: new NotificationTemplate(
                         notification.Name,
                         culture: input.Culture ?? CultureInfo.CurrentCulture.Name,
                         formUser: CurrentUser.Name ?? CurrentUser.UserName,

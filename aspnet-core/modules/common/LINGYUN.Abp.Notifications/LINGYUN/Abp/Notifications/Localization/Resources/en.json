@@ -1,12 +1,24 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Notifications": "Notifications",
+    "Notifications:Title": "Title",
+    "Notifications:Content": "Content",
+    "Notifications:Type": "Type",
+    "Notifications:SendTime": "SendTime",
+    "Notifications:System": "System",
+    "Notifications:Application": "Platform",
+    "Notifications:User": "User",
     "Notifications:Internal": "Internal",
     "Notifications:OnsideNotice": "Onside",
     "Notifications:OnsideNoticeDesc": "In-app notification push",
     "Notifications:ActivityNotice": "Activity",
     "Notifications:ActivityNoticeDesc": "The administrator delivers an event notification push",
     "Notifications:SystemNotice": "System",
-    "Notifications:SystemNoticeDesc": "System global notification push"
+    "Notifications:SystemNoticeDesc": "System global notification push",
+    "MarkSelectedAsRead": "Mark selected as read",
+    "MarkAs": "Mark as",
+    "Read": "Read",
+    "UnRead": "Un Read"
   }
 }
