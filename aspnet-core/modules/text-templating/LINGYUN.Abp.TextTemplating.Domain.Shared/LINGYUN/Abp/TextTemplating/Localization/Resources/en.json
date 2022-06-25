@@ -5,6 +5,11 @@
     "Permission:TextTemplates": "Text Templates",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
-    "Permission:Delete": "Delete"
+    "Permission:Delete": "Delete",
+    "TextTemplates": "Text Templates",
+    "DisplayName:Name": "Name",
+    "DisplayName:Culture": "Culture",
+    "DisplayName:Content": "Content",
+    "DisplayName:DisplayName": "DisplayName"
   }
 }
