@@ -59,6 +59,14 @@
     "DisplayName:SmsVerifyCode": "SMS verification code",
     "DisplayName:EmailVerifyCode": "Mail verification code",
     "DisplayName:WeChatCode": "Wechat login code",
-    "SendRepeatSmsVerifyCode": "Phone verification code cannot be sent repeatedly within {0} minutes!"
+    "SendRepeatSmsVerifyCode": "Phone verification code cannot be sent repeatedly within {0} minutes!",
+    "LockTime": "Lock Time",
+    "LockType": "Lock Type",
+    "Confirmed": "Confirmed",
+    "UnConfirmed": "UnConfirmed",
+    "UnActived": "UnActived",
+    "LockoutEnd": "Lockout End",
+    "Public": "Public",
+    "Static": "Static"
   }
 }

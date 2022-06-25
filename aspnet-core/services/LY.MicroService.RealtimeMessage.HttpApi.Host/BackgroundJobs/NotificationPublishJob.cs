@@ -11,35 +11,35 @@ namespace LY.MicroService.RealtimeMessage.BackgroundJobs;
 public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobArgs>, ITransientDependency
 {
     protected AbpNotificationOptions Options { get; }
-    protected INotificationStore Store { get; }
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public NotificationPublishJob(
         IOptions<AbpNotificationOptions> options,
-        INotificationStore store,
-        IServiceProvider serviceProvider)
+        IServiceScopeFactory serviceScopeFactory)
     {
-        Store = store;
         Options = options.Value;
-        ServiceProvider = serviceProvider;
+        ServiceScopeFactory = serviceScopeFactory;
     }
 
     public override async Task ExecuteAsync(NotificationPublishJobArgs args)
     {
         var providerType = Type.GetType(args.ProviderType);
-
-        if (ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)
+        using (var scope = ServiceScopeFactory.CreateScope())
         {
-            var notification = await Store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
-            notification.Data = NotificationDataConverter.Convert(notification.Data);
-
-            var notifacationDataMapping = Options.NotificationDataMappings
-                    .GetMapItemOrDefault(notification.Name, publishProvider.Name);
-            if (notifacationDataMapping != null)
+            if (scope.ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)
             {
-                notification.Data = notifacationDataMapping.MappingFunc(notification.Data);
+                var store = scope.ServiceProvider.GetRequiredService<INotificationStore>();
+                var notification = await store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
+                notification.Data = NotificationDataConverter.Convert(notification.Data);
+
+                var notifacationDataMapping = Options.NotificationDataMappings
+                        .GetMapItemOrDefault(notification.Name, publishProvider.Name);
+                if (notifacationDataMapping != null)
+                {
+                    notification.Data = notifacationDataMapping.MappingFunc(notification.Data);
+                }
+                await publishProvider.PublishAsync(notification, args.UserIdentifiers);
             }
-            await publishProvider.PublishAsync(notification, args.UserIdentifiers);
         }
     }
 }

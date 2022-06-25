@@ -404,9 +404,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Organi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\common\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{88502844-D83C-4541-96AC-A8291E261F63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Platform.Theme.VueVbenAdmin", "modules\platform\LINGYUN.Platform.Theme.VueVbenAdmin\LINGYUN.Platform.Theme.VueVbenAdmin.csproj", "{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Theme.VueVbenAdmin", "modules\platform\LINGYUN.Platform.Theme.VueVbenAdmin\LINGYUN.Platform.Theme.VueVbenAdmin.csproj", "{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Platform.Settings.VueVbenAdmin", "modules\platform\LINGYUN.Platform.Settings.VueVbenAdmin\LINGYUN.Platform.Settings.VueVbenAdmin.csproj", "{8DF55DAB-4C1D-46F7-9324-0050F47B3BED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Settings.VueVbenAdmin", "modules\platform\LINGYUN.Platform.Settings.VueVbenAdmin\LINGYUN.Platform.Settings.VueVbenAdmin.csproj", "{8DF55DAB-4C1D-46F7-9324-0050F47B3BED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.TextTemplating", "modules\common\LINGYUN.Abp.Notifications.TextTemplating\LINGYUN.Abp.Notifications.TextTemplating.csproj", "{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1054,6 +1056,10 @@ Global
 		{8DF55DAB-4C1D-46F7-9324-0050F47B3BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DF55DAB-4C1D-46F7-9324-0050F47B3BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DF55DAB-4C1D-46F7-9324-0050F47B3BED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1253,6 +1259,7 @@ Global
 		{88502844-D83C-4541-96AC-A8291E261F63} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{67DC7FA0-506A-4977-95F6-BC739B2BC4BA} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{8DF55DAB-4C1D-46F7-9324-0050F47B3BED} = {F4923692-D343-4318-AECA-96F580B1A563}
+		{06FF5EFA-DEDA-4E12-A482-8FCE4077F68A} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

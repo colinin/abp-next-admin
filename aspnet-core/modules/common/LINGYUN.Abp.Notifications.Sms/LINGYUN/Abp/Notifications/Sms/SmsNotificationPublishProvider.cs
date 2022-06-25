@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,18 +10,14 @@ namespace LINGYUN.Abp.Notifications.Sms
     {
         public const string ProviderName = NotificationProviderNames.Sms;
 
-        private IUserPhoneFinder _userPhoneFinder;
-        protected IUserPhoneFinder UserPhoneFinder => LazyGetRequiredService(ref _userPhoneFinder);
-
+        protected IUserPhoneFinder UserPhoneFinder => ServiceProvider.LazyGetRequiredService<IUserPhoneFinder>();
         protected ISmsNotificationSender Sender { get; }
 
         protected AbpNotificationsSmsOptions Options { get; }
 
         public SmsNotificationPublishProvider(
-            IServiceProvider serviceProvider,
             ISmsNotificationSender sender,
             IOptions<AbpNotificationsSmsOptions> options) 
-            : base(serviceProvider)
         {
             Sender = sender;
             Options = options.Value;

@@ -58,14 +58,26 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationReadState readState,
             CancellationToken cancellationToken = default)
         {
+            await ChangeUserNotificationsReadStateAsync(
+                tenantId, userId, new long[] { notificationId }, readState, cancellationToken);
+        }
+
+        public async virtual Task ChangeUserNotificationsReadStateAsync(
+            Guid? tenantId,
+            Guid userId,
+            IEnumerable<long> notificationIds,
+            NotificationReadState readState,
+            CancellationToken cancellationToken = default)
+        {
             using (var unitOfWork = _unitOfWorkManager.Begin())
             using (_currentTenant.Change(tenantId))
             {
-                var notification = await _userNotificationRepository.GetByIdAsync(userId, notificationId);
-                if (notification != null)
+                var notifications = await _userNotificationRepository.GetListAsync(userId, notificationIds);
+                if (notifications.Any())
                 {
-                    notification.ChangeReadState(readState);
-                    await _userNotificationRepository.UpdateAsync(notification);
+                    notifications.ForEach(notification => notification.ChangeReadState(readState));
+
+                    await _userNotificationRepository.UpdateManyAsync(notifications);
 
                     await unitOfWork.CompleteAsync();
                 }
@@ -221,7 +233,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 var notifications = await _userNotificationRepository
                     .GetNotificationsAsync(userId, readState, maxResultCount, cancellationToken);
 
-                return _objectMapper.Map<List<Notification>, List<NotificationInfo>>(notifications);
+                return _objectMapper.Map<List<UserNotificationInfo>, List<NotificationInfo>>(notifications);
             }
         }
 
@@ -254,7 +266,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 var notifications = await _userNotificationRepository
                     .GetListAsync(userId, filter, sorting, readState, skipCount, maxResultCount, cancellationToken);
 
-                return _objectMapper.Map<List<Notification>, List<NotificationInfo>>(notifications);
+                return _objectMapper.Map<List<UserNotificationInfo>, List<NotificationInfo>>(notifications);
             }
         }
 
@@ -426,8 +438,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                         userNofitications.Add(userNofitication);
                     }
                 }
-                await _userNotificationRepository
-                    .InsertUserNotificationsAsync(userNofitications, cancellationToken);
+                await _userNotificationRepository.InsertManyAsync(userNofitications, cancellationToken: cancellationToken);
 
                 await unitOfWork.CompleteAsync(cancellationToken);
             }

@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
             await notificationSender.SendNofiterAsync(
                 AbpExceptionHandlingNotificationNames.NotificationName, 
                 notificationData, 
-                null,
+                user: null,
                 CurrentTenant.Id, 
                 NotificationSeverity.Error);
         }

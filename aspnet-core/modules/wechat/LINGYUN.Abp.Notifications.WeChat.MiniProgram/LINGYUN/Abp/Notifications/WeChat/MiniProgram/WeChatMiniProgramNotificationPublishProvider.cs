@@ -19,10 +19,8 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         protected ISubscribeMessager SubscribeMessager { get; }
         protected AbpNotificationsWeChatMiniProgramOptions Options { get; }
         public WeChatMiniProgramNotificationPublishProvider(
-            IServiceProvider serviceProvider,
             ISubscribeMessager subscribeMessager,
             IOptions<AbpNotificationsWeChatMiniProgramOptions> options)
-            : base(serviceProvider)
         {
             Options = options.Value;
             SubscribeMessager = subscribeMessager;

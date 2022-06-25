@@ -28,13 +28,11 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
     protected INotificationDefinitionManager NotificationDefinitionManager { get; }
 
     public EmailingNotificationPublishProvider(
-        IServiceProvider serviceProvider,
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer,
         IStringLocalizerFactory localizerFactory,
         IIdentityUserRepository userRepository,
         INotificationDefinitionManager notificationDefinitionManager)
-        : base(serviceProvider)
     {
         EmailSender = emailSender;
         TemplateRenderer = templateRenderer;

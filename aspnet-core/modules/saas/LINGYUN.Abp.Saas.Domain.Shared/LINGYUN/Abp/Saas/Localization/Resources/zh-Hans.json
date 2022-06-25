@@ -39,6 +39,7 @@
     "DisplayName:AdminEmailAddress": "管理员电子邮件地址",
     "DisplayName:AdminPassword": "管理员密码",
     "TenantNotFoundById": "租户: {0} 不存在!",
-    "TenantNotFoundByName": "租户: {0} 不存在!"
+    "TenantNotFoundByName": "租户: {0} 不存在!",
+    "UnActived": "未启用"
   }
 }

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.AutoMapper;
+using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.MessageService
 {
@@ -7,6 +8,12 @@ namespace LINGYUN.Abp.MessageService
         typeof(AbpMessageServiceDomainModule))]
     public class AbpMessageServiceApplicationModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpMessageServiceApplicationAutoMapperProfile>(validate: true);
+            });
+        }
     }
 }

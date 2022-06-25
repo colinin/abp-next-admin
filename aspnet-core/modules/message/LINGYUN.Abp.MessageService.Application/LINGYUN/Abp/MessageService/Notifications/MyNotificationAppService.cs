@@ -15,19 +15,23 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         protected INotificationStore NotificationStore { get; }
 
+        protected IUserNotificationRepository UserNotificationRepository { get; }
+
         protected INotificationDefinitionManager NotificationDefinitionManager { get; }
 
         public MyNotificationAppService(
             INotificationStore notificationStore,
             INotificationSender notificationSender,
+            IUserNotificationRepository userNotificationRepository,
             INotificationDefinitionManager notificationDefinitionManager)
         {
             NotificationStore = notificationStore;
             NotificationSender = notificationSender;
+            UserNotificationRepository = userNotificationRepository;
             NotificationDefinitionManager = notificationDefinitionManager;
         }
 
-        public virtual async Task SendNofiterAsync(NotificationSendDto input)
+        public async virtual Task SendNofiterAsync(NotificationSendDto input)
         {
             UserIdentifier user = null;
             if (input.ToUserId.HasValue)
@@ -43,7 +47,16 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     input.Severity);
         }
 
-        public virtual async Task DeleteAsync(long id)
+        public async virtual Task MarkReadStateAsync(NotificationMarkReadStateInput input)
+        {
+            await NotificationStore.ChangeUserNotificationsReadStateAsync(
+                CurrentTenant.Id,
+                CurrentUser.GetId(),
+                input.IdList,
+                input.State);
+        }
+
+        public async virtual Task DeleteAsync(long id)
         {
             await NotificationStore
                 .DeleteUserNotificationAsync(
@@ -94,28 +107,29 @@ namespace LINGYUN.Abp.MessageService.Notifications
             return Task.FromResult(new ListResultDto<NotificationGroupDto>(groups));
         }
 
-        public virtual async Task<NotificationInfo> GetAsync(long id)
+        public async virtual Task<UserNotificationDto> GetAsync(long id)
         {
-            return await NotificationStore
-                .GetNotificationOrNullAsync(CurrentTenant.Id, id);
+            var notification = await UserNotificationRepository.GetByIdAsync(CurrentUser.GetId(), id);
+
+            return ObjectMapper.Map<UserNotificationInfo, UserNotificationDto>(notification);
         }
 
-        public virtual async Task<PagedResultDto<NotificationInfo>> GetListAsync(UserNotificationGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserNotificationDto>> GetListAsync(UserNotificationGetByPagedDto input)
         {
-            var notificationCount = await NotificationStore
-                .GetUserNotificationsCountAsync(
-                    CurrentTenant.Id, 
+            var totalCount = await UserNotificationRepository
+                .GetCountAsync(
                     CurrentUser.GetId(),
                     input.Filter,
                     input.ReadState);
 
-            var notifications = await NotificationStore
-                .GetUserNotificationsAsync(
-                    CurrentTenant.Id, CurrentUser.GetId(),
+            var notifications = await UserNotificationRepository
+                .GetListAsync(
+                    CurrentUser.GetId(),
                     input.Filter, input.Sorting,
                     input.ReadState, input.SkipCount, input.MaxResultCount);
 
-            return new PagedResultDto<NotificationInfo>(notificationCount, notifications);
+            return new PagedResultDto<UserNotificationDto>(totalCount,
+                ObjectMapper.Map<List<UserNotificationInfo>, List<UserNotificationDto>>(notifications));
         }
     }
 }

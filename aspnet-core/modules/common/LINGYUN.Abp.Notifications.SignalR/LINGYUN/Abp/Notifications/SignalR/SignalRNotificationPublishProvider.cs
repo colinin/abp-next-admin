@@ -19,16 +19,17 @@ namespace LINGYUN.Abp.Notifications.SignalR
 
         private readonly AbpNotificationsSignalROptions _options;
         public SignalRNotificationPublishProvider(
-           IHubContext<NotificationsHub> hubContext,
-           IOptions<AbpNotificationsSignalROptions> options,
-           IServiceProvider serviceProvider)
-            : base(serviceProvider)
+            IHubContext<NotificationsHub> hubContext,
+            IOptions<AbpNotificationsSignalROptions> options)
         {
             _options = options.Value;
             _hubContext = hubContext;
         }
 
-        protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
+        protected async override Task PublishAsync(
+            NotificationInfo notification, 
+            IEnumerable<UserIdentifier> identifiers, 
+            CancellationToken cancellationToken = default)
         {
             if (identifiers?.Count() == 0)
             {
