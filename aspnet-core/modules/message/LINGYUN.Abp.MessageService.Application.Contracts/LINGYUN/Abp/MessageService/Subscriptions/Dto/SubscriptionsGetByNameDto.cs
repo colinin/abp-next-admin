@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Notifications;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.MessageService.Subscriptions
@@ -7,6 +8,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
     {
         [Required]
         [StringLength(NotificationConsts.MaxNameLength)]
+        [DisplayName("Notifications:Name")]
         public string Name { get; set; }
     }
 }

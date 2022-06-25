@@ -5,6 +5,11 @@
     "Permission:TextTemplates": "文本模板",
     "Permission:Create": "新增",
     "Permission:Edit": "修改",
-    "Permission:Delete": "删除"
+    "Permission:Delete": "删除",
+    "TextTemplates": "文本模板",
+    "DisplayName:Name": "名称",
+    "DisplayName:Culture": "区域",
+    "DisplayName:Content": "内容",
+    "DisplayName:DisplayName": "显示名称"
   }
 }
