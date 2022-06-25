@@ -410,21 +410,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Settings.V
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "text-templating", "text-templating", "{ABD89F39-62D9-439E-8662-BE4F36BFA04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Domain.Shared", "modules\text-templating\LINGYUN.Abp.TextTemplating.Domain.Shared\LINGYUN.Abp.TextTemplating.Domain.Shared.csproj", "{D4B4800F-6238-4EA9-A9BB-298D668C26C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Domain.Shared", "modules\text-templating\LINGYUN.Abp.TextTemplating.Domain.Shared\LINGYUN.Abp.TextTemplating.Domain.Shared.csproj", "{D4B4800F-6238-4EA9-A9BB-298D668C26C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Domain", "modules\text-templating\LINGYUN.Abp.TextTemplating.Domain\LINGYUN.Abp.TextTemplating.Domain.csproj", "{F9AC4123-7987-47D3-85D6-CD13928F3683}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Domain", "modules\text-templating\LINGYUN.Abp.TextTemplating.Domain\LINGYUN.Abp.TextTemplating.Domain.csproj", "{F9AC4123-7987-47D3-85D6-CD13928F3683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Application.Contracts", "modules\text-templating\LINGYUN.Abp.TextTemplating.Application.Contracts\LINGYUN.Abp.TextTemplating.Application.Contracts.csproj", "{22BDDF5C-F911-4978-B83F-981F3652BF45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Application.Contracts", "modules\text-templating\LINGYUN.Abp.TextTemplating.Application.Contracts\LINGYUN.Abp.TextTemplating.Application.Contracts.csproj", "{22BDDF5C-F911-4978-B83F-981F3652BF45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Application", "modules\text-templating\LINGYUN.Abp.TextTemplating.Application\LINGYUN.Abp.TextTemplating.Application.csproj", "{0C824BB4-81FC-4B28-B7B1-07B2B2BB70A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Application", "modules\text-templating\LINGYUN.Abp.TextTemplating.Application\LINGYUN.Abp.TextTemplating.Application.csproj", "{0C824BB4-81FC-4B28-B7B1-07B2B2BB70A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.HttpApi", "modules\text-templating\LINGYUN.Abp.TextTemplating.HttpApi\LINGYUN.Abp.TextTemplating.HttpApi.csproj", "{4711320B-F98D-4CB0-BFEB-B9685B6CBCB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.HttpApi", "modules\text-templating\LINGYUN.Abp.TextTemplating.HttpApi\LINGYUN.Abp.TextTemplating.HttpApi.csproj", "{4711320B-F98D-4CB0-BFEB-B9685B6CBCB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.EntityFrameworkCore", "modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj", "{130F8ED1-A64F-48DE-BF43-18EAD19CAF63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.EntityFrameworkCore", "modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj", "{130F8ED1-A64F-48DE-BF43-18EAD19CAF63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.HttpApi.Client", "modules\text-templating\LINGYUN.Abp.TextTemplating.HttpApi.Client\LINGYUN.Abp.TextTemplating.HttpApi.Client.csproj", "{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.HttpApi.Client", "modules\text-templating\LINGYUN.Abp.TextTemplating.HttpApi.Client\LINGYUN.Abp.TextTemplating.HttpApi.Client.csproj", "{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

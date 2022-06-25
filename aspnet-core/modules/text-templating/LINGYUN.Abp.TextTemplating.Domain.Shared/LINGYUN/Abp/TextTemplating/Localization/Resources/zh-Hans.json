@@ -1,5 +1,10 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Permission:TextTemplating": "模板管理",
+    "Permission:TextTemplates": "文本模板",
+    "Permission:Create": "新增",
+    "Permission:Edit": "修改",
+    "Permission:Delete": "删除"
   }
 }

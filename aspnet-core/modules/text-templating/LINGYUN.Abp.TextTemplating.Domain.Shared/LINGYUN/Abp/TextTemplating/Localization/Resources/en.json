@@ -1,5 +1,10 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Permission:TextTemplating": "Templating",
+    "Permission:TextTemplates": "Text Templates",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete"
   }
 }
