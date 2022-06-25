@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.MessageService.Notifications
@@ -10,7 +11,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
         [StringLength(NotificationConsts.MaxNameLength)]
         public string Name { get; set; }
 
-        public NotificationData Data { get; set; } = new NotificationData();
+        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+
+        public string Culture { get; set; }
 
         public Guid? ToUserId { get; set; }
 

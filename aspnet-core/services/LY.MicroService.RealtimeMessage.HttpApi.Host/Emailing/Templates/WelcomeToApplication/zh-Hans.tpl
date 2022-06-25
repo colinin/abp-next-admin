@@ -1,1 +1,1 @@
-﻿<h3>{{user}}, Welcome to my application!</h3>
+﻿<h3>{{model.name}}, 欢迎您的加入!</h3>

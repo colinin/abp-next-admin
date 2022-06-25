@@ -81,34 +81,22 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                         tenantAdminUserIdentifier,
                         TenantNotificationNames.NewTenantRegistered);
 
-                var notificationData = new NotificationData();
-                notificationData.TrySetData("name", eventData.Name);
-                notificationData.WriteLocalizedData(
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "NewTenantRegisteredNotificationTitle",
-                        new Dictionary<object, object>
-                        {
-                        { "Name", eventData.Name },
-                        }),
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "NewTenantRegisteredNotificationMessage",
-                        new Dictionary<object, object>
-                        {
-                        { "Name", eventData.Name}
-                        }),
-                    DateTime.Now, eventData.AdminEmailAddress);
-
                 Logger.LogInformation("publish new tenant notification..");
-                // 发布租户创建通知
-                await NotificationSender
-                    .SendNofiterAsync(
+                await NotificationSender.SendNofiterAsync(
+                    TenantNotificationNames.NewTenantRegistered,
+                    new NotificationTemplate(
                         TenantNotificationNames.NewTenantRegistered,
-                        notificationData,
-                        tenantAdminUserIdentifier,
-                        eventData.Id,
-                        NotificationSeverity.Success);
+                        formUser: eventData.AdminEmailAddress,
+                        data: new Dictionary<string, object>
+                        {
+                            { "name", eventData.Name },
+                            { "email", eventData.AdminEmailAddress },
+                            { "id", eventData.Id },
+                        }),
+                    tenantAdminUserIdentifier,
+                    eventData.Id,
+                    NotificationSeverity.Success);
+
                 Logger.LogInformation("tenant administrator subscribes to new tenant events..");
             }
             catch(Exception ex)

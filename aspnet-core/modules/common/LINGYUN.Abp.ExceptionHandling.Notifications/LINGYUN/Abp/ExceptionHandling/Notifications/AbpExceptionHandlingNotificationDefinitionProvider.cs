@@ -24,9 +24,8 @@ namespace LINGYUN.Abp.ExceptionHandling.Notifications
                 .WithProviders(
                     NotificationProviderNames.SignalR,
                     NotificationProviderNames.Emailing)
-                // 特定的通知提供程序属性
-                // 此处为邮件通知定义的模板名称
-                .WithProperty("Template", "ExceptionNotifier");
+                // 设定为模板通知
+                .WithTemplate(typeof(ExceptionHandlingResource));
         }
 
         protected LocalizableString L(string name)

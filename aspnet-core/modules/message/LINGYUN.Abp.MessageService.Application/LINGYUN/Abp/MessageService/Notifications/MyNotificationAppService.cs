@@ -31,22 +31,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationDefinitionManager = notificationDefinitionManager;
         }
 
-        public async virtual Task SendNofiterAsync(NotificationSendDto input)
-        {
-            UserIdentifier user = null;
-            if (input.ToUserId.HasValue)
-            {
-                user = new UserIdentifier(input.ToUserId.Value, input.ToUserName);
-            }
-            await NotificationSender
-                .SendNofiterAsync(
-                    input.Name,
-                    input.Data,
-                    user,
-                    CurrentTenant.Id,
-                    input.Severity);
-        }
-
         public async virtual Task MarkReadStateAsync(NotificationMarkReadStateInput input)
         {
             await NotificationStore.ChangeUserNotificationsReadStateAsync(

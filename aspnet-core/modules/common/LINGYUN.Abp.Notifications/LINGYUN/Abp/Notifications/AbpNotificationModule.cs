@@ -10,6 +10,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.TextTemplating;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Notifications
@@ -21,7 +22,8 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpIdGeneratorModule),
         typeof(AbpJsonModule),
         typeof(AbpLocalizationModule),
-        typeof(AbpRealTimeModule))]
+        typeof(AbpRealTimeModule),
+        typeof(AbpTextTemplatingCoreModule))]
     public class AbpNotificationModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -47,6 +49,12 @@ namespace LINGYUN.Abp.Notifications
             {
                 options.UnsupportedTypes.Add<NotificationInfo>();
             });
+
+            var preActions = context.Services.GetPreConfigureActions<AbpNotificationOptions>();
+            Configure<AbpNotificationOptions>(options =>
+            {
+                preActions.Configure(options);
+            });
         }
 
         private void AutoAddDefinitionProviders(IServiceCollection services)
@@ -61,10 +69,8 @@ namespace LINGYUN.Abp.Notifications
                 }
             });
 
-            var preActions = services.GetPreConfigureActions<AbpNotificationOptions>();
             Configure<AbpNotificationOptions>(options =>
             {
-                preActions.Configure(options);
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }

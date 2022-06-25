@@ -34,6 +34,23 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.HasIndex(p => new { p.TenantId, p.NotificationName });
             });
 
+            builder.Entity<NotificationTemplate>(b =>
+            {
+                b.ToTable(options.TablePrefix + "NotificationTemplates", options.Schema);
+
+                b.Property(p => p.Name).HasMaxLength(NotificationTemplateConsts.MaxNameLength).IsRequired();
+                b.Property(p => p.Title).HasMaxLength(NotificationTemplateConsts.MaxTitleLength).IsRequired();
+                b.Property(p => p.Content).HasMaxLength(NotificationTemplateConsts.MaxContentLength).IsRequired();
+                b.Property(p => p.Culture).HasMaxLength(NotificationTemplateConsts.MaxCultureLength).IsRequired();
+
+                b.Property(p => p.Description).HasMaxLength(NotificationTemplateConsts.MaxDescriptionLength);
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.TenantId, p.Name })
+                 .HasDatabaseName("IX_Tenant_Notification_Template_Name");
+            });
+
             builder.Entity<UserNotification>(b =>
             {
                 b.ToTable(options.TablePrefix + "UserNotifications", options.Schema);

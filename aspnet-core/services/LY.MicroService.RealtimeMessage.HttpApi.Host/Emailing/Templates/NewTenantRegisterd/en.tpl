@@ -1,1 +1,1 @@
-﻿<h3>A new tenant {{name}} has been created.</h3>
+﻿<h3>A new tenant {{model.name}} has been created.</h3>

@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .WithProviders(
                     NotificationProviderNames.SignalR,
                     NotificationProviderNames.Emailing)
-                .WithProperty("Template", "NewTenantRegisterd");
+                .WithTemplate(typeof(MessageServiceResource));
 
             var usersGroup = context.AddGroup(
                 UserNotificationNames.GroupName,
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .WithProviders(
                     NotificationProviderNames.SignalR,
                     NotificationProviderNames.Emailing)
-                .WithProperty("Template", "WelcomeToApplication");
+                .WithTemplate(typeof(MessageServiceResource));
 
             var imGroup = context.AddGroup(
                 MessageServiceNotificationNames.IM.GroupName,

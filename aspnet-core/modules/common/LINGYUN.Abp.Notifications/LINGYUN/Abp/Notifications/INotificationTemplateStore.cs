@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.Notifications;
 
 public interface INotificationTemplateStore
 {
-    Task<string> GetOrNullAsync(string templateName, string culture = null, CancellationToken cancellationToken = default);
+    Task<string> GetContentOrNullAsync(string templateName, string culture = null, CancellationToken cancellationToken = default);
 }

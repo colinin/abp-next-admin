@@ -14,7 +14,6 @@ namespace LINGYUN.Abp.Notifications;
 public class NotificationTemplate : IHasExtraProperties
 {
     public string Name { get; set; }
-    public string Title { get; set; }
     public string Culture { get; set; }
     public string FormUser { get; set; }
     public object this[string key] 
@@ -27,16 +26,17 @@ public class NotificationTemplate : IHasExtraProperties
         }
     }
     public ExtraPropertyDictionary ExtraProperties { get; set; }
+
+    public NotificationTemplate() { }
+
     public NotificationTemplate(
         string name,
-        string title,
         string culture = null,
         string formUser = null,
         IDictionary<string, object> data = null)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name));
 
-        Title = title;
         Culture = culture;
         FormUser = formUser;
 

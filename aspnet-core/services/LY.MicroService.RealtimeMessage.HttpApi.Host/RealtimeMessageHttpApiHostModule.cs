@@ -17,6 +17,7 @@ using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Emailing;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
+using LINGYUN.Abp.Notifications.TextTemplating;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -36,6 +37,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TextTemplating.Scriban;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -67,6 +69,8 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsSignalRModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpNotificationsTextTemplatingModule),
+    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -105,6 +109,8 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        context.Services.AddAlwaysAllowAuthorization();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

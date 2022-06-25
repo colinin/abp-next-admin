@@ -9,7 +9,7 @@ public class NullNotificationTemplateStore : INotificationTemplateStore, ISingle
 {
     public readonly static INotificationTemplateStore Instance = new NullNotificationTemplateStore();
 
-    public Task<string> GetOrNullAsync(string templateName, string culture = null, CancellationToken cancellationToken = default)
+    public Task<string> GetContentOrNullAsync(string templateName, string culture = null, CancellationToken cancellationToken = default)
     {
         return Task.FromResult<string>(null);
     }

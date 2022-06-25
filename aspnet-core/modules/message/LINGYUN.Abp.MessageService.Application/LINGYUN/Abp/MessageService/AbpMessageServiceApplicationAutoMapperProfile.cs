@@ -23,6 +23,8 @@ namespace LINGYUN.Abp.MessageService
                     }
                     return new NotificationData();
                 }));
+
+            CreateMap<Notifications.NotificationTemplate, NotificationTemplateDto>();
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Localization;
+using Volo.Abp.TextTemplating;
 
 /*
  * 2020-10-29 重构通知
@@ -50,6 +51,10 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public List<string> Providers { get; }
         /// <summary>
+        /// 通知模板
+        /// </summary>
+        public TemplateDefinition Template { get; private set; }
+        /// <summary>
         /// 额外属性
         /// </summary>
         [NotNull]
@@ -80,6 +85,23 @@ namespace LINGYUN.Abp.Notifications
             {
                 Providers.AddRange(providers);
             }
+
+            return this;
+        }
+
+        public virtual NotificationDefinition WithTemplate(
+            Type localizationResource = null, 
+            bool isLayout = false, 
+            string layout = null, 
+            string defaultCultureName = null)
+        {
+            Template = new TemplateDefinition(
+                Name,
+                localizationResource,
+                DisplayName,
+                isLayout,
+                layout,
+                defaultCultureName);
 
             return this;
         }

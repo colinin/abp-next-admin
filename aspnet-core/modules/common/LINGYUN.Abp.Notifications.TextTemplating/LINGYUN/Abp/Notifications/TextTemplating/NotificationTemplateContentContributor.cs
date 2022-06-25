@@ -9,8 +9,15 @@ public class NotificationTemplateContentContributor : ITemplateContentContributo
 {
     public async virtual Task<string> GetOrNullAsync(TemplateContentContributorContext context)
     {
+        var notificationDefinitionManager = context.ServiceProvider.GetRequiredService<INotificationDefinitionManager>();
+        var notification = notificationDefinitionManager.GetOrNull(context.TemplateDefinition.Name);
+        if (notification == null)
+        {
+            return null;
+        }
+
         var store = context.ServiceProvider.GetRequiredService<INotificationTemplateStore>();
 
-        return await store.GetOrNullAsync(context.TemplateDefinition.Name, context.Culture);
+        return await store.GetContentOrNullAsync(context.TemplateDefinition.Name, context.Culture);
     }
 }

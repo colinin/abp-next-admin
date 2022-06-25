@@ -118,23 +118,28 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 var notificationInfo = new NotificationInfo
                 {
                     Name = notification.Name,
-                    CreationTime = eventData.CreationTime,
-                    Severity = eventData.Severity,
-                    Lifetime = notification.NotificationLifetime,
                     TenantId = eventData.TenantId,
-                    Type = notification.NotificationType
+                    Severity = eventData.Severity,
+                    Type = notification.NotificationType,
+                    CreationTime = eventData.CreationTime,
+                    Lifetime = notification.NotificationLifetime,
                 };
                 notificationInfo.SetId(eventData.Id);
 
-                var title = eventData.Data.Title;
-                if (title.IsNullOrWhiteSpace())
-                {
-                    title = notification.DisplayName.Localize(StringLocalizerFactory);
-                }
+                var title = notification.DisplayName.Localize(StringLocalizerFactory);
+
                 var message = await TemplateRenderer.RenderAsync(
                     templateName: eventData.Data.Name,
+                    model: eventData.Data.ExtraProperties,
                     cultureName: eventData.Data.Culture,
-                    globalContext: eventData.Data.ExtraProperties);
+                    globalContext: new Dictionary<string, object>
+                    {
+                        { "notification", notification.Name },
+                        { "formUser", eventData.Data.FormUser },
+                        { "notificationId", eventData.Id },
+                        { "title", title.ToString() },
+                        { "creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                    });
 
                 var notificationData = new NotificationData();
                 notificationData.WriteStandardData(
@@ -142,6 +147,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     message: message, 
                     createTime: eventData.CreationTime,
                     formUser: eventData.Data.FormUser);
+                notificationData.ExtraProperties.AddIfNotContains(eventData.Data.ExtraProperties);
 
                 notificationInfo.Data = notificationData;
 

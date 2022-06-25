@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.RealtimeMessage.Migrations
 {
     [DbContext(typeof(RealtimeMessageMigrationsDbContext))]
-    partial class RealtimeMessageMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220624035652_Add-Entity-Notification-Template")]
+    partial class AddEntityNotificationTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
