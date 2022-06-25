@@ -1,0 +1,11 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notifications:MultiTenancy": "租户通知",
+    "Notifications:Users": "用户通知",
+    "Notifications:NewTenantRegisterd": "租户创建通知",
+    "Notifications:WelcomeToApplication": "用户欢迎通知",
+    "Notifications:Primitives": "标准通知",
+    "Notifications:ExceptionNotifier": "异常通知推送"
+  }
+}

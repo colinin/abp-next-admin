@@ -1,13 +1,10 @@
-﻿using LINGYUN.Abp.MessageService.Localization;
-using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.RealTime.Localization;
+﻿using LINGYUN.Abp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.Localization;
 using Volo.Abp.Users;
 
 namespace LY.MicroService.RealtimeMessage.EventBus
@@ -31,35 +28,18 @@ namespace LY.MicroService.RealtimeMessage.EventBus
             // 订阅用户欢迎消息
             await SubscribeInternalNotifers(userIdentifer, eventData.Entity.TenantId);
 
-            var userWelcomeNotifictionData = new NotificationData();
-
-            userWelcomeNotifictionData.TrySetData("user", eventData.Entity.UserName);
-            userWelcomeNotifictionData
-                .WriteLocalizedData(
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "WelcomeToApplicationFormUser",
-                        new Dictionary<object, object>
-                        {
-                            { "User", eventData.Entity.UserName }
-                        }),
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "WelcomeToApplicationFormUser",
-                        new Dictionary<object, object>
-                        {
-                            { "User", eventData.Entity.UserName }
-                        }),
-                    DateTime.Now, eventData.Entity.UserName);
-
-            await _notificationSender
-                .SendNofiterAsync(
+            await _notificationSender.SendNofiterAsync(
                     UserNotificationNames.WelcomeToApplication,
-                    userWelcomeNotifictionData,
+                    new NotificationTemplate(
+                        UserNotificationNames.WelcomeToApplication,
+                        formUser: eventData.Entity.UserName,
+                        data: new Dictionary<string, object>
+                        {
+                            { "name", eventData.Entity.UserName },
+                        }),
                     userIdentifer,
-                    eventData.Entity.TenantId,
-                    NotificationSeverity.Info
-                );
+                    eventData.Entity.Id,
+                    NotificationSeverity.Info);
         }
 
         private async Task SubscribeInternalNotifers(UserIdentifier userIdentifer, Guid? tenantId = null)

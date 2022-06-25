@@ -1,8 +1,6 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Notifications;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MessageService.Notifications
 {
@@ -10,40 +8,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
     {
         public override void Define(INotificationDefinitionContext context)
         {
-            var tenantsGroup = context.AddGroup(
-                TenantNotificationNames.GroupName,
-                L("Notifications:MultiTenancy"),
-                false);
-
-            tenantsGroup.AddNotification(
-                TenantNotificationNames.NewTenantRegistered,
-                L("Notifications:NewTenantRegisterd"),
-                L("Notifications:NewTenantRegisterd"),
-                notificationType: NotificationType.System,
-                lifetime: NotificationLifetime.OnlyOne,
-                allowSubscriptionToClients: false
-                )
-                .WithProviders(
-                    NotificationProviderNames.SignalR,
-                    NotificationProviderNames.Emailing)
-                .WithProperty("Template", "NewTenantRegisterd");
-
-            var usersGroup = context.AddGroup(
-                UserNotificationNames.GroupName,
-                L("Notifications:Users"));
-
-            usersGroup.AddNotification(
-                UserNotificationNames.WelcomeToApplication,
-                L("Notifications:WelcomeToApplication"),
-                L("Notifications:WelcomeToApplication"),
-                notificationType: NotificationType.System,
-                lifetime: NotificationLifetime.OnlyOne,
-                allowSubscriptionToClients: true)
-                .WithProviders(
-                    NotificationProviderNames.SignalR,
-                    NotificationProviderNames.Emailing)
-                .WithProperty("Template", "WelcomeToApplication");
-
             var imGroup = context.AddGroup(
                 MessageServiceNotificationNames.IM.GroupName,
                 L("Notifications:IM"));

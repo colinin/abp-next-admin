@@ -22,7 +22,6 @@
           "LINGYUN.Abp.IM.dll",
           "LINGYUN.Abp.MessageService.Domain.Shared.dll",
           "LINGYUN.Abp.RealTime.dll",
-          "LINGYUN.Abp.Notifications.dll",
           "LINGYUN.Platform.Application.Contracts.dll",
           "LINGYUN.Platform.Domain.Shared.dll",
           "LINGYUN.Abp.Tencent.dll",
@@ -63,7 +62,9 @@
           "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll",
           "LINGYUN.Abp.BackgroundTasks.Abstractions.dll",
           "LINGYUN.Abp.TaskManagement.Application.Contracts.dll",
-          "LINGYUN.Abp.TaskManagement.Domain.Shared.dll"
+          "LINGYUN.Abp.TaskManagement.Domain.Shared.dll",
+          "LINGYUN.Abp.Notifications.Common.dll",
+          "LINGYUN.Abp.Notifications.dll"
         ]
       }
     ]

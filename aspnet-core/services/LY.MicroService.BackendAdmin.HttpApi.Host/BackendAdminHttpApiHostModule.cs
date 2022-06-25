@@ -17,6 +17,8 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.TextTemplating;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +61,8 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpAuditingHttpApiModule),
     typeof(AbpSaasApplicationModule),
     typeof(AbpSaasHttpApiModule),
+    typeof(AbpTextTemplatingApplicationModule),
+    typeof(AbpTextTemplatingHttpApiModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
     typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
@@ -70,6 +74,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),

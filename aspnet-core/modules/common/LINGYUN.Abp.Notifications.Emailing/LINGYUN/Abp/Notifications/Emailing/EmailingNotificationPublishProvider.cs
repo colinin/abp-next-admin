@@ -1,12 +1,15 @@
 ﻿using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Emailing;
+using Volo.Abp.Localization;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications.Emailing;
@@ -17,28 +20,26 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
 
     public override string Name => ProviderName;
 
-    protected IEmailSender EmailSender { get; }
+    protected AbpLocalizationOptions LocalizationOptions { get; }
 
-    protected ITemplateRenderer TemplateRenderer { get; }
+    protected IEmailSender EmailSender { get; }
 
     protected IStringLocalizerFactory LocalizerFactory { get; }
 
     protected IIdentityUserRepository UserRepository { get; }
-
-    protected INotificationDefinitionManager NotificationDefinitionManager { get; }
 
     public EmailingNotificationPublishProvider(
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer,
         IStringLocalizerFactory localizerFactory,
         IIdentityUserRepository userRepository,
-        INotificationDefinitionManager notificationDefinitionManager)
+        IOptions<AbpLocalizationOptions> localizationOptions)
     {
         EmailSender = emailSender;
-        TemplateRenderer = templateRenderer;
         LocalizerFactory = localizerFactory;
         UserRepository = userRepository;
-        NotificationDefinitionManager = notificationDefinitionManager;
+
+        LocalizationOptions = localizationOptions.Value;
     }
 
     protected async override Task PublishAsync(
@@ -56,20 +57,30 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
             return;
         }
 
-        var notificationDefinition = NotificationDefinitionManager.Get(notification.Name);
-        var notificationDisplayName = notificationDefinition.DisplayName.Localize(LocalizerFactory).Value;
-
-        notificationDefinition.Properties.TryGetValue("Template", out var template);
-        if (template == null)
+        if (!notification.Data.NeedLocalizer())
         {
-            Logger.LogWarning("The email template is not specified, so the email notification cannot be sent!");
-            return;
+            var title = notification.Data.TryGetData("title").ToString();
+            var message = notification.Data.TryGetData("message").ToString();
+
+            await EmailSender.SendAsync(emailAddress, title, message);
         }
+        else
+        {
+            var titleInfo = notification.Data.TryGetData("title").As<LocalizableStringInfo>();
+            var titleResource = GetResource(titleInfo.ResourceName);
+            var title = LocalizerFactory.Create(titleResource.ResourceType)[titleInfo.Name, titleInfo.Values].Value;
 
-        var content = await TemplateRenderer.RenderAsync(
-                template.ToString(),
-                globalContext: notification.Data.ExtraProperties);
+            var messageInfo = notification.Data.TryGetData("message").As<LocalizableStringInfo>();
+            var messageResource = GetResource(messageInfo.ResourceName);
+            var message = LocalizerFactory.Create(messageResource.ResourceType)[messageInfo.Name, messageInfo.Values].Value;
 
-        await EmailSender.SendAsync(emailAddress, notificationDisplayName, content);
+            await EmailSender.SendAsync(emailAddress, title, message);
+        }
+    }
+
+    private LocalizationResource GetResource(string resourceName)
+    {
+        return LocalizationOptions.Resources.Values
+            .First(x => x.ResourceName.Equals(resourceName));
     }
 }

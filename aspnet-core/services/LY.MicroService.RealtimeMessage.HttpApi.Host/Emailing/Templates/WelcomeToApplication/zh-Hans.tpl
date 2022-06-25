@@ -1,1 +1,0 @@
-﻿<h3>{{user}}, Welcome to my application!</h3>

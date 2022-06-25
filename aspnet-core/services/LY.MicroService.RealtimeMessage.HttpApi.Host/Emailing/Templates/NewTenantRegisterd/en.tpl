@@ -1,1 +1,0 @@
-﻿<h3>A new tenant {{name}} has been created.</h3>

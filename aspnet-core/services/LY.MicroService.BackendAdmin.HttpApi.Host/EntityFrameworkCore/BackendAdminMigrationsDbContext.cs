@@ -4,6 +4,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 
 namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
@@ -23,5 +24,6 @@ public class BackendAdminMigrationsDbContext : AbpDbContext<BackendAdminMigratio
         modelBuilder.ConfigureSaas();
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
+        modelBuilder.ConfigureTextTemplating();
     }
 }
