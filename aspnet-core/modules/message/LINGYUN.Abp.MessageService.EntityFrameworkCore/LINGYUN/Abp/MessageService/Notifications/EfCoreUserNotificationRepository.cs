@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             var notifilerQuery = from un in userNotifilerQuery
                                  join n in dbContext.Set<Notification>()
                                          on un.NotificationId equals n.NotificationId
-                                 where n.Id.Equals(notificationId)
+                                 where n.NotificationId.Equals(notificationId)
                                  select new UserNotificationInfo
                                  {
                                      Id = n.NotificationId,
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Where(x => x.UserId.Equals(userId) && notificationIds.Contains(x.Id))
+                .Where(x => x.UserId.Equals(userId) && notificationIds.Contains(x.NotificationId))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 

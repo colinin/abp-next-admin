@@ -17,7 +17,7 @@ public class NotificationsCommonTemplateProvider : TemplateDefinitionProvider
                 name: "EmailNotifierLayout",
                 defaultCultureName: "en",
                 isLayout: true)
-                .WithVirtualFilePath( "/LINGYUN/Abp/Notifications/Emailing/Templates/layout.tpl", isInlineLocalized: true)
+                .WithVirtualFilePath( "/LINGYUN/Abp/Notifications/Templates/layout.tpl", isInlineLocalized: true)
         };
     }
 }
