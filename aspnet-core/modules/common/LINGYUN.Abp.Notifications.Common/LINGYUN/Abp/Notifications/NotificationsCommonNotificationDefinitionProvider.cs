@@ -22,14 +22,12 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
             lifetime: NotificationLifetime.Persistent,
             allowSubscriptionToClients: false)
             // 指定通知提供程序
-            .WithProviders(
-                NotificationProviderNames.SignalR,
-                NotificationProviderNames.Emailing)
+            .WithProviders(NotificationProviderNames.Emailing)
             // 设定为模板通知
             .WithTemplate(typeof(NotificationsResource), layout: "EmailNotifierLayout")
             .WithTemplate(template =>
             {
-                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Emailing/Templates/ExceptionNotifier", isInlineLocalized: false);
+                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Templates/ExceptionNotifier", isInlineLocalized: false);
             });
 
         var tenantsGroup = context.AddGroup(
@@ -48,10 +46,10 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
             .WithProviders(
                 NotificationProviderNames.SignalR,
                 NotificationProviderNames.Emailing)
-            .WithTemplate(typeof(NotificationsResource), layout: "EmailNotifierLayout")
+            .WithTemplate(typeof(NotificationsResource))
             .WithTemplate(template =>
             {
-                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Emailing/Templates/NewTenantRegisterd", isInlineLocalized: false);
+                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Templates/NewTenantRegisterd", isInlineLocalized: false);
             });
 
         var usersGroup = context.AddGroup(
@@ -68,10 +66,10 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
             .WithProviders(
                 NotificationProviderNames.SignalR,
                 NotificationProviderNames.Emailing)
-            .WithTemplate(typeof(NotificationsResource), layout: "EmailNotifierLayout")
+            .WithTemplate(typeof(NotificationsResource))
             .WithTemplate(template =>
             {
-                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Emailing/Templates/WelcomeToApplication", isInlineLocalized: false);
+                template.WithVirtualFilePath("/LINGYUN/Abp/Notifications/Templates/WelcomeToApplication", isInlineLocalized: false);
             });
     }
 

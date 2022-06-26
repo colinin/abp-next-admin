@@ -9,18 +9,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\ExceptionNotifier\*.tpl" />
-	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\layout.tpl" />
-	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\NewTenantRegisterd\*.tpl" />
-	  <None Remove="LINGYUN\Abp\Notifications\Emailing\Templates\WelcomeToApplication\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Templates\ExceptionNotifier\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Templates\layout.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Templates\NewTenantRegisterd\*.tpl" />
+	  <None Remove="LINGYUN\Abp\Notifications\Templates\WelcomeToApplication\*.tpl" />
 	  <None Remove="LINGYUN\Abp\Notifications\Localization\Common\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\ExceptionNotifier\*.tpl" />
-	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\layout.tpl" />
-	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\NewTenantRegisterd\*.tpl" />
-	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Emailing\Templates\WelcomeToApplication\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Templates\ExceptionNotifier\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Templates\layout.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Templates\NewTenantRegisterd\*.tpl" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Templates\WelcomeToApplication\*.tpl" />
 	  <EmbeddedResource Include="LINGYUN\Abp\Notifications\Localization\Common\*.json" />
 	</ItemGroup>
 
