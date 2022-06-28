@@ -72,7 +72,9 @@ public class TextTemplateAppService : AbpTextTemplatingAppServiceBase, ITextTemp
         var templateDefinitions = TemplateDefinitionManager.GetAll();
         var filterTemplates = templateDefinitions
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
-                x.Name.Contains(input.Filter) || x.Layout.Contains(input.Filter));
+                x.Name.Contains(input.Filter) || x.Layout.Contains(input.Filter))
+            .Skip(input.SkipCount)
+            .Take(input.MaxResultCount);
 
         foreach (var templateDefinition in filterTemplates)
         {
