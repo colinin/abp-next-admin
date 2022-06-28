@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -26,97 +28,130 @@ public class TextTemplateAppService : AbpTextTemplatingAppServiceBase, ITextTemp
         TemplateDefinitionManager = templateDefinitionManager;
     }
 
-    public async virtual Task<TextTemplateDto> GetAsync(TextTemplateGetInput input)
+    public virtual Task<TextTemplateDefinitionDto> GetAsync(string name)
     {
+        var templateDefinition = GetTemplateDefinition(name);
 
+        var layout = templateDefinition.Layout;
+        if (!layout.IsNullOrWhiteSpace())
+        {
+            var layoutDefinition = GetTemplateDefinition(templateDefinition.Layout);
+            layout = layoutDefinition.DisplayName.Localize(StringLocalizerFactory);
+        }
+
+        var result = new TextTemplateDefinitionDto
+        {
+            DefaultCultureName = templateDefinition.DefaultCultureName,
+            IsInlineLocalized = templateDefinition.IsInlineLocalized,
+            IsLayout = templateDefinition.IsLayout,
+            Layout = layout,
+            Name = templateDefinition.Name,
+            DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
+        };
+
+        return Task.FromResult(result);
+    }
+
+    public async virtual Task<TextTemplateContentDto> GetContentAsync(TextTemplateContentGetInput input)
+    {
         var templateDefinition = GetTemplateDefinition(input.Name);
 
-        var culture = input.Culture ?? CultureInfo.CurrentCulture.Name ?? templateDefinition.DefaultCultureName;
+        var content = await TemplateContentProvider.GetContentOrNullAsync(templateDefinition.Name, input.Culture);
 
-        using (CultureHelper.Use(culture, culture))
+        return new TextTemplateContentDto
         {
-            var content = await TemplateContentProvider.GetContentOrNullAsync(templateDefinition.Name, culture);
+            Name = templateDefinition.Name,
+            Culture = input.Culture,
+            Content = content,
+        };
+    }
 
-            return new TextTemplateDto
+    public virtual Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
+    {
+        var templates = new List<TextTemplateDefinitionDto>();
+        var templateDefinitions = TemplateDefinitionManager.GetAll();
+        var filterTemplates = templateDefinitions
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
+                x.Name.Contains(input.Filter) || x.Layout.Contains(input.Filter));
+
+        foreach (var templateDefinition in filterTemplates)
+        {
+            var layout = templateDefinition.Layout;
+            if (!layout.IsNullOrWhiteSpace())
             {
-                Culture = culture,
-                Content = content,
+                var layoutDefinition = GetTemplateDefinition(templateDefinition.Layout);
+                layout = layoutDefinition.DisplayName.Localize(StringLocalizerFactory);
+            }
+
+            var result = new TextTemplateDefinitionDto
+            {
+                DefaultCultureName = templateDefinition.DefaultCultureName,
+                IsInlineLocalized = templateDefinition.IsInlineLocalized,
+                IsLayout = templateDefinition.IsLayout,
+                Layout = layout,
                 Name = templateDefinition.Name,
                 DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
             };
-        }
-    }
 
-    public Task<ListResultDto<TextTemplateDto>> GetListAsync()
-    {
-        var templates = new List<TextTemplateDto>();
-        var templateDefinitions = TemplateDefinitionManager.GetAll();
-
-        foreach (var templateDefinition in templateDefinitions)
-        {
-            templates.Add(
-                new TextTemplateDto
-                {
-                    Name = templateDefinition.Name,
-                    Culture = CultureInfo.CurrentCulture.Name ?? templateDefinition.DefaultCultureName,
-                    DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
-                });
+            templates.Add(result);
         }
 
-        return Task.FromResult(new ListResultDto<TextTemplateDto>(templates));
+        return Task.FromResult(new PagedResultDto<TextTemplateDefinitionDto>(templateDefinitions.Count, templates));
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplate.Delete)]
-    public async virtual Task ResetDefaultAsync(TextTemplateGetInput input)
+    public async virtual Task RestoreToDefaultAsync(TextTemplateRestoreInput input)
     {
         var templateDefinition = GetTemplateDefinition(input.Name);
 
-        var culture = input.Culture ?? CultureInfo.CurrentCulture.Name ?? templateDefinition.DefaultCultureName;
+        var templates = await TextTemplateRepository
+            .GetListAsync(x => x.Name.Equals(templateDefinition.Name) && x.Culture.Equals(input.Culture));
 
-        using (CultureHelper.Use(culture, culture))
-        {
-            var template = await TextTemplateRepository.FindByNameAsync(
-                templateDefinition.Name,
-                culture);
-            if (template != null)
-            {
-                await TextTemplateRepository.DeleteAsync(template);
-            }
-        }
+        await TextTemplateRepository.DeleteManyAsync(templates);
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplate.Update)]
-    public async virtual Task<TextTemplateDto> UpdateAsync(TextTemplateUpdateInput input)
+    public async virtual Task<TextTemplateDefinitionDto> UpdateAsync(TextTemplateUpdateInput input)
     {
         var templateDefinition = GetTemplateDefinition(input.Name);
 
-        var culture = input.Culture ?? CultureInfo.CurrentCulture.Name ?? templateDefinition.DefaultCultureName;
-
-        using (CultureHelper.Use(culture, culture))
+        var template = await TextTemplateRepository.FindByNameAsync(input.Name, input.Culture);
+        if (template == null)
         {
-            var template = await TextTemplateRepository.FindByNameAsync(input.Name, culture);
-            if (template == null)
-            {
-                template = new TextTemplate(
-                    GuidGenerator.Create(),
-                    templateDefinition.Name,
-                    templateDefinition.DisplayName.Localize(StringLocalizerFactory),
-                    input.Content,
-                    culture);
+            template = new TextTemplate(
+                GuidGenerator.Create(),
+                templateDefinition.Name,
+                templateDefinition.DisplayName.Localize(StringLocalizerFactory),
+                input.Content,
+                input.Culture);
 
-                template = await TextTemplateRepository.InsertAsync(template);
-            }
-            else
-            {
-                template.SetContent(input.Content);
-
-                await TextTemplateRepository.UpdateAsync(template);
-            }
-
-            await CurrentUnitOfWork.SaveChangesAsync();
-
-            return ObjectMapper.Map<TextTemplate, TextTemplateDto>(template);
+            await TextTemplateRepository.InsertAsync(template);
         }
+        else
+        {
+            template.SetContent(input.Content);
+
+            await TextTemplateRepository.UpdateAsync(template);
+        }
+
+        await CurrentUnitOfWork.SaveChangesAsync();
+
+        var layout = templateDefinition.Layout;
+        if (!layout.IsNullOrWhiteSpace())
+        {
+            var layoutDefinition = GetTemplateDefinition(templateDefinition.Layout);
+            layout = layoutDefinition.DisplayName.Localize(StringLocalizerFactory);
+        }
+
+        return new TextTemplateDefinitionDto
+        {
+            DefaultCultureName = templateDefinition.DefaultCultureName,
+            IsInlineLocalized = templateDefinition.IsInlineLocalized,
+            IsLayout = templateDefinition.IsLayout,
+            Layout = layout,
+            Name = templateDefinition.Name,
+            DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
+        };
     }
 
     protected virtual TemplateDefinition GetTemplateDefinition(string name)

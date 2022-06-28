@@ -1,6 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "EmailNotifierLayout": "Email Notifier Layout",
     "Notifications:MultiTenancy": "Multi Tenancy",
     "Notifications:Users": "Users",
     "Notifications:NewTenantRegisterd": "Tenant creation notification",

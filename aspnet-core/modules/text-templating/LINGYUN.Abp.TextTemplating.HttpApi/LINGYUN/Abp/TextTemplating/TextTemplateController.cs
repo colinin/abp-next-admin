@@ -22,31 +22,37 @@ public class TextTemplateController : AbpTextTemplatingControllerBase, ITextTemp
     }
 
     [HttpGet]
-    [Route("{Name}")]
-    [Route("{Culture}/{Name}")]
-    public Task<TextTemplateDto> GetAsync(TextTemplateGetInput input)
+    [Route("{name}")]
+    public virtual Task<TextTemplateDefinitionDto> GetAsync(string name)
     {
-        return TextTemplateAppService.GetAsync(input);
+        return TextTemplateAppService.GetAsync(name);
     }
 
     [HttpGet]
-    public Task<ListResultDto<TextTemplateDto>> GetListAsync()
+    [Route("content/{Name}")]
+    [Route("content/{Culture}/{Name}")]
+    public virtual Task<TextTemplateContentDto> GetContentAsync(TextTemplateContentGetInput input)
     {
-        return TextTemplateAppService.GetListAsync();
+        return TextTemplateAppService.GetContentAsync(input);
     }
 
-    [HttpDelete]
-    [Route("{Name}")]
-    [Route("{Culture}/{Name}")]
-    [Authorize(AbpTextTemplatingPermissions.TextTemplate.Delete)]
-    public Task ResetDefaultAsync(TextTemplateGetInput input)
+    [HttpGet]
+    public virtual Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
     {
-        return TextTemplateAppService.ResetDefaultAsync(input);
+        return TextTemplateAppService.GetListAsync(input);
+    }
+
+    [HttpPut]
+    [Route("restore-to-default")]
+    [Authorize(AbpTextTemplatingPermissions.TextTemplate.Delete)]
+    public virtual Task RestoreToDefaultAsync(TextTemplateRestoreInput input)
+    {
+        return TextTemplateAppService.RestoreToDefaultAsync(input);
     }
 
     [HttpPost]
     [Authorize(AbpTextTemplatingPermissions.TextTemplate.Update)]
-    public Task<TextTemplateDto> UpdateAsync(TextTemplateUpdateInput input)
+    public virtual Task<TextTemplateDefinitionDto> UpdateAsync(TextTemplateUpdateInput input)
     {
         return TextTemplateAppService.UpdateAsync(input);
     }

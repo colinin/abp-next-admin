@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace LINGYUN.Abp.TextTemplating;
 
-public interface ITextTemplateRepository : IBasicRepository<TextTemplate, Guid>
+public interface ITextTemplateRepository : IRepository<TextTemplate, Guid>
 {
     Task<TextTemplate> FindByNameAsync(string name, string culture = null, CancellationToken cancellationToken = default);
 }

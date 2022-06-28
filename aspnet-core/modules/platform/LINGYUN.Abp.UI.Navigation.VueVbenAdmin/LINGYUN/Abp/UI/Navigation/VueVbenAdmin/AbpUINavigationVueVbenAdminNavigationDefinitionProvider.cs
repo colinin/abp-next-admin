@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             context.Add(GetOssManagement());
             context.Add(GetTaskManagement());
             context.Add(GetWebhooksManagement());
+            context.Add(GetMessages());
         }
 
         private static NavigationDefinition GetDashboard()
@@ -430,6 +431,26 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   multiTenancySides: MultiTenancySides.Host));
 
             return new NavigationDefinition(webhooks);
+        }
+
+        private static NavigationDefinition GetMessages()
+        {
+            var messages = new ApplicationMenu(
+                name: "Messages",
+                displayName: "消息管理",
+                url: "/messages",
+                component: "",
+                description: "消息管理",
+                icon: "ant-design:message-outlined");
+            messages.AddItem(
+              new ApplicationMenu(
+                  name: "Notifications",
+                  displayName: "通知管理",
+                  url: "/messages/notifications",
+                  component: "/messages/notifications/index.vue",
+                  description: "通知管理"));
+
+            return new NavigationDefinition(messages);
         }
     }
 }

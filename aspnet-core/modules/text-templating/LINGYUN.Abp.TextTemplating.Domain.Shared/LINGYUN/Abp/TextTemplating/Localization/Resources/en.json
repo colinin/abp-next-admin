@@ -10,6 +10,26 @@
     "DisplayName:Name": "Name",
     "DisplayName:Culture": "Culture",
     "DisplayName:Content": "Content",
-    "DisplayName:DisplayName": "DisplayName"
+    "DisplayName:DisplayName": "DisplayName",
+    "DisplayName:IsInlineLocalized": "Is Inline Localized",
+    "DisplayName:IsLayout": "Is Layout",
+    "DisplayName:DefaultCultureName": "Default Culture",
+    "Contents": "Contents",
+    "Layout": "Layout",
+    "LocalizationResource": "Localization Resource",
+    "SeeContents": "See Contents",
+    "EditContents": "Edit Contents",
+    "BaseCultureName": "Reference Culture Name",
+    "TargetCultureName": "Target Culture Name",
+    "BaseContent": "Reference Content",
+    "TargetContent": "Target Content",
+    "SaveContent": "Save Content",
+    "TemplateContent": "Template Content",
+    "RestoreToDefault": "Restore To Default",
+    "RestoreToDefaultMessage": "Are you sure? This action converts the content to the default value.",
+    "TemplateContentUpdated": "The template content has been updated",
+    "TemplateContentRestoredToDefault": "The template content is restored to the default value.",
+    "CustomizePerCulture": "Customize per culture",
+    "InlineContentDescription": "This template uses inline localization. You can use the <b>L<\/b> function to localize a text, like <b>{{L \"Hello\"}}<\/b>. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button. <br /> To get more information about syntax and other details, please check the <a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">Text Templates documentation<\/a>.."
   }
 }

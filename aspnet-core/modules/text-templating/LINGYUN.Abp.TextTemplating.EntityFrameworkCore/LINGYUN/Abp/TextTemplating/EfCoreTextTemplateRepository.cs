@@ -24,8 +24,7 @@ public class EfCoreTextTemplateRepository :
     public async virtual Task<TextTemplate> FindByNameAsync(string name, string culture = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .Where(x => x.Name.Equals(name))
-            .WhereIf(!culture.IsNullOrWhiteSpace(), x => x.Culture.Equals(culture))
+            .Where(x => x.Name.Equals(name) && x.Culture.Equals(culture))
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 }

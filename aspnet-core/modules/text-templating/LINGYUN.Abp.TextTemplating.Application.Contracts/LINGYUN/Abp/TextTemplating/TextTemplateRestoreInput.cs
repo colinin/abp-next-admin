@@ -3,7 +3,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.TextTemplating;
 
-public class TextTemplateUpdateInput
+public class TextTemplateRestoreInput
 {
     [Required]
     [DynamicStringLength(typeof(TextTemplateConsts), nameof(TextTemplateConsts.MaxNameLength))]
@@ -11,8 +11,4 @@ public class TextTemplateUpdateInput
 
     [DynamicStringLength(typeof(TextTemplateConsts), nameof(TextTemplateConsts.MaxCultureLength))]
     public string Culture { get; set; }
-
-    [Required]
-    [DynamicStringLength(typeof(TextTemplateConsts), nameof(TextTemplateConsts.MaxContentLength))]
-    public string Content { get; set; }
 }
