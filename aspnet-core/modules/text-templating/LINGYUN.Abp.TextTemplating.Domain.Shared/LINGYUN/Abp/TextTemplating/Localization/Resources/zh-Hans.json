@@ -10,6 +10,26 @@
     "DisplayName:Name": "名称",
     "DisplayName:Culture": "区域",
     "DisplayName:Content": "内容",
-    "DisplayName:DisplayName": "显示名称"
+    "DisplayName:DisplayName": "显示名称",
+    "DisplayName:IsInlineLocalized": "内联本地化",
+    "DisplayName:IsLayout": "是否为布局页",
+    "DisplayName:DefaultCultureName": "默认文化名称",
+    "Contents": "内容",
+    "Layout": "布局页",
+    "LocalizationResource": "本地化资源",
+    "SeeContents": "查看内容",
+    "EditContents": "编辑内容",
+    "BaseCultureName": "参考文化名称",
+    "TargetCultureName": "目标文化名称",
+    "BaseContent": "参考内容",
+    "TargetContent": "目标内容",
+    "SaveContent": "保存内容",
+    "TemplateContent": "模板内容",
+    "RestoreToDefault": "还原为默认",
+    "RestoreToDefaultMessage": "你确定吗? 此操作会将内容转换为默认值.",
+    "TemplateContentUpdated": "模板内容已更新",
+    "TemplateContentRestoredToDefault": "模板内容恢复为默认值.",
+    "CustomizePerCulture": "根据文化定制",
+    "InlineContentDescription": "该模板使用内联本地化. 你可以使用<b>L</b>函数对文本进行本地化,例如 <b>{{L \"Hello\"}}</b>如果你仍想为区域性定义一个全新的模板,请使用\"根据文化定制\"按钮. <br />请检查<a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">文本模板文档</a>获取更多信息."
   }
 }

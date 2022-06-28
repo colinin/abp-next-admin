@@ -18,13 +18,13 @@ public class TextTemplate : AuditedEntity<Guid>, IMultiTenant
         string name,
         string displayName,
         string content,
-        string culture)
+        string culture = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TextTemplateConsts.MaxNameLength);
         DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), TextTemplateConsts.MaxDisplayNameLength);
         Content = Check.NotNullOrWhiteSpace(content, nameof(content), TextTemplateConsts.MaxContentLength);
-        Culture = Check.NotNullOrWhiteSpace(culture, nameof(culture), TextTemplateConsts.MaxCultureLength);
+        Culture = Check.Length(culture, nameof(culture), TextTemplateConsts.MaxCultureLength);
     }
 
     public void SetContent(string content)

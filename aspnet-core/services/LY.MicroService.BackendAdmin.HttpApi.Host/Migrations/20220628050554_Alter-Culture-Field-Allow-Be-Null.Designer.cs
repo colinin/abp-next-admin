@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.BackendAdmin.Migrations
 {
     [DbContext(typeof(BackendAdminMigrationsDbContext))]
-    partial class BackendAdminHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220628050554_Alter-Culture-Field-Allow-Be-Null")]
+    partial class AlterCultureFieldAllowBeNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

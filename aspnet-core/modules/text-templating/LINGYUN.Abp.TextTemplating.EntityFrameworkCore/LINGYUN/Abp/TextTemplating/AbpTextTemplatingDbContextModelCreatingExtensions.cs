@@ -25,11 +25,10 @@ public static class AbpTextTemplatingDbContextModelCreatingExtensions
                 .HasColumnName(nameof(TextTemplate.DisplayName))
                 .HasMaxLength(TextTemplateConsts.MaxDisplayNameLength)
                 .IsRequired();
+
             b.Property(t => t.Culture)
                 .HasColumnName(nameof(TextTemplate.Culture))
-                .HasMaxLength(TextTemplateConsts.MaxCultureLength)
-                .IsRequired();
-
+                .HasMaxLength(TextTemplateConsts.MaxCultureLength);
             b.Property(t => t.Content)
                 .HasColumnName(nameof(TextTemplate.Content))
                 .HasMaxLength(TextTemplateConsts.MaxContentLength);

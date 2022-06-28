@@ -1,6 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "EmailNotifierLayout": "邮件通知模板",
     "Notifications:MultiTenancy": "租户通知",
     "Notifications:Users": "用户通知",
     "Notifications:NewTenantRegisterd": "租户创建通知",

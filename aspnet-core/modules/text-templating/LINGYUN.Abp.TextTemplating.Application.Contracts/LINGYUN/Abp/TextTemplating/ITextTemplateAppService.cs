@@ -6,11 +6,13 @@ namespace LINGYUN.Abp.TextTemplating;
 
 public interface ITextTemplateAppService : IApplicationService
 {
-    Task<TextTemplateDto> GetAsync(TextTemplateGetInput input);
+    Task<TextTemplateDefinitionDto> GetAsync(string name);
 
-    Task ResetDefaultAsync(TextTemplateGetInput input);
+    Task<TextTemplateContentDto> GetContentAsync(TextTemplateContentGetInput input);
 
-    Task<TextTemplateDto> UpdateAsync(TextTemplateUpdateInput input);
+    Task RestoreToDefaultAsync(TextTemplateRestoreInput input);
 
-    Task<ListResultDto<TextTemplateDto>> GetListAsync();
+    Task<TextTemplateDefinitionDto> UpdateAsync(TextTemplateUpdateInput input);
+
+    Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input);
 }

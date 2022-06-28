@@ -6,6 +6,5 @@ public class AbpTextTemplatingApplicationAutoMapperProfile : Profile
 {
     public AbpTextTemplatingApplicationAutoMapperProfile()
     {
-        CreateMap<TextTemplate, TextTemplateDto>();
     }
 }
