@@ -1,6 +1,4 @@
-﻿using LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore;
-using LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LY.MicroService.WorkflowManagement.EntityFrameworkCore;
@@ -17,7 +15,7 @@ public class WorkflowManagementMigrationsDbContext : AbpDbContext<WorkflowManage
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ConfigureWorkflow();
-        modelBuilder.ConfigureWorkflowManagement();
+       // modelBuilder.ConfigureWorkflow();
+        //modelBuilder.ConfigureWorkflowManagement();
     }
 }

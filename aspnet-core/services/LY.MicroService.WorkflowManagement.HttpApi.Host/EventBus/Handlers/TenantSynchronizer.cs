@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore;
-using LINGYUN.Abp.Data.DbMigrator;
+﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -51,13 +50,13 @@ public class TenantSynchronizer :
             {
                 Logger.LogInformation("Migrating the new tenant database with WorkflowManagement...");
                 // 迁移租户数据
-                await DbSchemaMigrator.MigrateAsync<WorkflowManagementDbContext>(
-                    (connectionString, builder) =>
-                    {
-                        builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                //await DbSchemaMigrator.MigrateAsync<WorkflowManagementDbContext>(
+                //    (connectionString, builder) =>
+                //    {
+                //        builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-                        return new WorkflowManagementDbContext(builder.Options);
-                    });
+                //        return new WorkflowManagementDbContext(builder.Options);
+                //    });
                 Logger.LogInformation("Migrated the new tenant database with WorkflowManagement...");
 
                 await DataSeeder.SeedAsync(new DataSeedContext(eventData.Id));

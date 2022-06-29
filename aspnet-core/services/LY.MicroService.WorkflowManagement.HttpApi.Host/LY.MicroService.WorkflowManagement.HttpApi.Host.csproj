@@ -7,6 +7,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="Elsa.Activities.Http" Version="2.8.2" />
+		<PackageReference Include="Elsa.Activities.Temporal.Quartz" Version="2.8.2" />
+		<PackageReference Include="Elsa.Persistence.EntityFramework.MySql" Version="2.8.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,7 +29,6 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EventBus.RabbitMQ" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
@@ -44,15 +46,8 @@
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.Components\LINGYUN.Abp.WorkflowCore.Components.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.DistributedLock\LINGYUN.Abp.WorkflowCore.DistributedLock.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.Elasticsearch\LINGYUN.Abp.WorkflowCore.Elasticsearch.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.LifeCycleEvent\LINGYUN.Abp.WorkflowCore.LifeCycleEvent.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore\LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowCore.RabbitMQ\LINGYUN.Abp.WorkflowCore.RabbitMQ.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowManagement.Application\LINGYUN.Abp.WorkflowManagement.Application.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore\LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.WorkflowManagement.HttpApi\LINGYUN.Abp.WorkflowManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.Workflow.Elsa.Server\LINGYUN.Abp.Workflow.Elsa.Server.csproj" />
+		<ProjectReference Include="..\..\modules\workflow\LINGYUN.Abp.Workflow.Elsa\LINGYUN.Abp.Workflow.Elsa.csproj" />
 	</ItemGroup>
 
 </Project>
