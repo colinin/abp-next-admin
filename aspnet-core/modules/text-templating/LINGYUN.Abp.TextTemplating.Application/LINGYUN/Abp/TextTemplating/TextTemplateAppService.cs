@@ -110,6 +110,8 @@ public class TextTemplateAppService : AbpTextTemplatingAppServiceBase, ITextTemp
             .GetListAsync(x => x.Name.Equals(templateDefinition.Name) && x.Culture.Equals(input.Culture));
 
         await TextTemplateRepository.DeleteManyAsync(templates);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplate.Update)]

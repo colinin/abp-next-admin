@@ -6,13 +6,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.WorkflowCore.Components;
-using LINGYUN.Abp.WorkflowCore.DistributedLock;
-using LINGYUN.Abp.WorkflowCore.LifeCycleEvent;
-using LINGYUN.Abp.WorkflowCore.Persistence.EntityFrameworkCore;
-using LINGYUN.Abp.WorkflowCore.RabbitMQ;
-using LINGYUN.Abp.WorkflowManagement;
-using LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Workflow.Elsa;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +19,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
@@ -40,16 +33,17 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpEventBusRabbitMqModule),
     typeof(AbpBlobStoringOssManagementModule),
-    typeof(WorkflowManagementApplicationModule),
-    typeof(WorkflowManagementHttpApiModule),
-    typeof(WorkflowManagementEntityFrameworkCoreModule),
-    typeof(AbpWorkflowCoreComponentsModule),
-    typeof(AbpWorkflowCoreDistributedLockModule),
-    typeof(AbpWorkflowCoreLifeCycleEventModule),
-    typeof(AbpWorkflowCoreRabbitMQModule),
-    typeof(AbpWorkflowCorePersistenceEntityFrameworkCoreModule),
+    typeof(AbpWorkflowElsaModule),
+    typeof(AbpWorkflowElsaServerModule),
+    //typeof(WorkflowManagementApplicationModule),
+    //typeof(WorkflowManagementHttpApiModule),
+    //typeof(WorkflowManagementEntityFrameworkCoreModule),
+    //typeof(AbpWorkflowCoreComponentsModule),
+    //typeof(AbpWorkflowCoreDistributedLockModule),
+    //typeof(AbpWorkflowCoreLifeCycleEventModule),
+    //typeof(AbpWorkflowCoreRabbitMQModule),
+    //typeof(AbpWorkflowCorePersistenceEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
@@ -70,8 +64,11 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
         PreConfigureApp();
         PreConfigureFeature();
+        PreConfigureElsa(configuration);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,12 +1,16 @@
-﻿using LINGYUN.Abp.BlobStoring.OssManagement;
+﻿using Elsa;
+using Elsa.Options;
+using Elsa.Persistence.EntityFramework.Core.Extensions;
+using Elsa.Persistence.EntityFramework.MySql;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
-using LINGYUN.Abp.WorkflowCore.Components;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +51,19 @@ public partial class WorkflowManagementHttpApiHostModule
         AbpSerilogEnrichersConsts.ApplicationName = "WorkflowManagement";
     }
 
+    private void PreConfigureElsa(IConfiguration configuration)
+    {
+        PreConfigure<ElsaOptionsBuilder>(builder =>
+        {
+            // TODO: 取消注释持久化
+            //var connectionString = configuration.GetConnectionString("Workflow");
+            //builder.UseEntityFrameworkPersistence(ef =>
+            //    ef.UseMySql(connectionString));
+            builder.AddQuartzTemporalActivities()
+                .AddJavaScriptActivities();
+        });
+    }
+
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)
     {
         var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
@@ -59,7 +76,14 @@ public partial class WorkflowManagementHttpApiHostModule
         Configure<AbpBlobStoringOptions>(options =>
         {
             preActions.Configure(options);
-            options.Containers.Configure<WorkflowContainer>((containerConfiguration) =>
+            //options.Containers.Configure<WorkflowContainer>((containerConfiguration) =>
+            //{
+            //    containerConfiguration.UseOssManagement(config =>
+            //    {
+            //        config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket] ?? "workflow";
+            //    });
+            //});
+            options.Containers.ConfigureAll((_, containerConfiguration) =>
             {
                 containerConfiguration.UseOssManagement(config =>
                 {
