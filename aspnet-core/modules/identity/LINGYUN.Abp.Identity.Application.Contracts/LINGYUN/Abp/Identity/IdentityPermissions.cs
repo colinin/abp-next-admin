@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.Identity
 
         public static class Users
         {
+            public const string ResetPassword = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ResetPassword";
             public const string ManageClaims = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ManageClaims";
             public const string ManageOrganizationUnits = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ManageOrganizationUnits";
         }

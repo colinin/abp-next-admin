@@ -44,8 +44,7 @@ namespace LINGYUN.Abp.Identity
         /// <param name="id"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        /// TODO: 移除api，改为重置用户密码
-        // Task ChangePasswordAsync(Guid id, ChangePasswordInput input);
+        Task ChangePasswordAsync(Guid id, IdentityUserSetPasswordInput input);
         /// <summary>
         /// 锁定
         /// </summary>

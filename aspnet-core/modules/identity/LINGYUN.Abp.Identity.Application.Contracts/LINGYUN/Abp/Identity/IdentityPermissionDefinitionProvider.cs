@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.Identity
                 var userPermission = identityGroup.GetPermissionOrNull(Volo.Abp.Identity.IdentityPermissions.Users.Default);
                 if (userPermission != null)
                 {
+                    userPermission.AddChild(IdentityPermissions.Users.ResetPassword, L("Permission:ResetPassword"));
                     userPermission.AddChild(IdentityPermissions.Users.ManageClaims, L("Permission:ManageClaims"));
                     userPermission.AddChild(IdentityPermissions.Users.ManageOrganizationUnits, L("Permission:ManageOrganizationUnits"));
                 }
