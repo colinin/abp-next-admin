@@ -78,6 +78,12 @@ namespace LINGYUN.Abp.Identity
 
         #endregion
 
+        [HttpPut]
+        [Route("change-password")]
+        public async virtual Task ChangePasswordAsync(Guid id, IdentityUserSetPasswordInput input)
+        {
+            await UserAppService.ChangePasswordAsync(id, input);
+        }
 
         [HttpPut]
         [Route("change-two-factor")]

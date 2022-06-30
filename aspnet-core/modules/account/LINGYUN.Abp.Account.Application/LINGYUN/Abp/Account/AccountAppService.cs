@@ -6,13 +6,16 @@ using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.OpenId;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Caching;
+using Volo.Abp.Clients;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
@@ -26,6 +29,7 @@ namespace LINGYUN.Abp.Account
         protected IIdentityUserRepository UserRepository { get; }
         protected IUserSecurityCodeSender SecurityCodeSender { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
         protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
 
@@ -35,7 +39,8 @@ namespace LINGYUN.Abp.Account
             IIdentityUserRepository userRepository,
             IUserSecurityCodeSender securityCodeSender,
             IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache,
-            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory)
+            AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
+            IdentitySecurityLogManager identitySecurityLogManager)
         {
             TotpService = totpService;
             UserRepository = userRepository;
@@ -43,6 +48,7 @@ namespace LINGYUN.Abp.Account
             SecurityCodeSender = securityCodeSender;
             SecurityTokenCache = securityTokenCache;
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
+            IdentitySecurityLogManager = identitySecurityLogManager;
         }
 
         public virtual async Task RegisterAsync(WeChatRegisterDto input)
@@ -81,6 +87,15 @@ namespace LINGYUN.Abp.Account
 
             var userLogin = new UserLoginInfo(AbpWeChatMiniProgramConsts.ProviderName, wehchatOpenId.OpenId, AbpWeChatGlobalConsts.DisplayName);
             (await UserManager.AddLoginAsync(user, userLogin)).CheckErrors();
+
+            await IdentitySecurityLogManager.SaveAsync(
+                new IdentitySecurityLogContext
+                {
+                    Action = "WeChatRegister",
+                    ClientId = await FindClientIdAsync(),
+                    Identity = "Account",
+                    UserName = user.UserName
+                });
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }
@@ -154,6 +169,15 @@ namespace LINGYUN.Abp.Account
                     (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
                     await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
+
+                    await IdentitySecurityLogManager.SaveAsync(
+                        new IdentitySecurityLogContext
+                        {
+                            Action = "PhoneNumberRegister",
+                            ClientId = await FindClientIdAsync(),
+                            Identity = "Account",
+                            UserName = user.UserName
+                        });
 
                     await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -231,6 +255,15 @@ namespace LINGYUN.Abp.Account
             // 移除缓存项
             await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
 
+            await IdentitySecurityLogManager.SaveAsync(
+                new IdentitySecurityLogContext
+                {
+                    Action = "ResetPassword",
+                    ClientId = await FindClientIdAsync(),
+                    Identity = "Account",
+                    UserName = user.UserName
+                });
+
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
@@ -288,6 +321,13 @@ namespace LINGYUN.Abp.Account
             {
                 throw new UserFriendlyException(L["DuplicatePhoneNumber"]);
             }
+        }
+
+        protected virtual Task<string> FindClientIdAsync()
+        {
+            var client = LazyServiceProvider.LazyGetRequiredService<ICurrentClient>();
+
+            return Task.FromResult(client.Id);
         }
 
         private void ThowIfInvalidEmailAddress(string inputEmail)

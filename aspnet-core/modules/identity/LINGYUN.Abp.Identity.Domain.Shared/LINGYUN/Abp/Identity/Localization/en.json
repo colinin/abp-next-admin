@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Permission:OrganizationUnitManagement": "Organization unit management",
+    "Permission:ResetPassword": "Reset Password",
     "Permission:ManageRoles": "Management roles",
     "Permission:ManageUsers": "Management users",
     "Permission:ManageClaims": "Management claims",

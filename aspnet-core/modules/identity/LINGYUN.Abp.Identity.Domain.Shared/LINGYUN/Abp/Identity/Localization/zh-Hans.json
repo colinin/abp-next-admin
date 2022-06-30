@@ -2,6 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "Permission:OrganizationUnitManagement": "组织机构管理",
+    "Permission:ResetPassword": "重置密码",
     "Permission:ManageRoles": "管理角色",
     "Permission:ManageUsers": "管理用户",
     "Permission:ManageClaims": "管理声明",

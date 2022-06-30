@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -106,6 +105,18 @@ namespace LINGYUN.Abp.Identity
         }
 
         #endregion
+
+        [Authorize(IdentityPermissions.Users.ResetPassword)]
+        public async virtual Task ChangePasswordAsync(Guid id, IdentityUserSetPasswordInput input)
+        {
+            var user = await GetUserAsync(id);
+
+            var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+
+            (await UserManager.ResetPasswordAsync(user, token, input.Password)).CheckErrors();
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
         public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, TwoFactorEnabledDto input)
