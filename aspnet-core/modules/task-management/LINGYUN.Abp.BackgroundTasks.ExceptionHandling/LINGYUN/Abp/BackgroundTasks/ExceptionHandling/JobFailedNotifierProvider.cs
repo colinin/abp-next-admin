@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling.Templates;
-using LINGYUN.Abp.BackgroundTasks.Jobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
@@ -12,7 +11,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
-using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 
@@ -20,6 +18,32 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
 {
     public const string Prefix = "exception.";
     public const string JobGroup = "ExceptionNotifier";
+
+    public const string PropertyFrom = "from";
+    /// <summary>
+    /// 接收者
+    /// </summary>
+    public const string PropertyTo = "to";
+    /// <summary>
+    /// 必须，邮件主体
+    /// </summary>
+    public const string PropertySubject = "subject";
+    /// <summary>
+    /// 消息内容, 文本消息时必须
+    /// </summary>
+    public const string PropertyBody = "body";
+    /// <summary>
+    /// 发送模板消息
+    /// </summary>
+    public const string PropertyTemplate = "template";
+    /// <summary>
+    /// 可选, 模板消息中的上下文参数
+    /// </summary>
+    public const string PropertyContext = "context";
+    /// <summary>
+    /// 可选, 模板消息中的区域性
+    /// </summary>
+    public const string PropertyCulture = "culture";
 
     public ILogger<JobFailedNotifierProvider> Logger { protected get; set; }
 
@@ -45,13 +69,13 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
             Logger.LogWarning($"There is a problem executing the job, reason: {eventData.Exception.Message}");
             return;
         }
-        var notifyKey = Prefix + SendEmailJob.PropertyTo;
+        var notifyKey = Prefix + PropertyTo;
         if (eventData.Args.TryGetValue(notifyKey, out var exceptionTo) &&
             exceptionTo is string to)
         {
-            var template = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyTemplate)?.ToString() ?? "";
-            var subject = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertySubject)?.ToString() ?? "From job execute exception";
-            var from = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyFrom)?.ToString() ?? "";
+            var template = eventData.Args.GetOrDefault(Prefix + PropertyTemplate)?.ToString() ?? "";
+            var subject = eventData.Args.GetOrDefault(Prefix + PropertySubject)?.ToString() ?? "From job execute exception";
+            var from = eventData.Args.GetOrDefault(Prefix + PropertyFrom)?.ToString() ?? "";
             var errorMessage = eventData.Exception.GetBaseException().Message;
 
             if (template.IsNullOrWhiteSpace())
@@ -78,7 +102,7 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
             };
 
             var globalContext = new Dictionary<string, object>();
-            if (eventData.Args.TryGetValue(Prefix + SendEmailJob.PropertyContext, out var ctx) &&
+            if (eventData.Args.TryGetValue(Prefix + PropertyContext, out var ctx) &&
                 ctx is string ctxStr && !ctxStr.IsNullOrWhiteSpace())
             {
                 try
@@ -89,7 +113,7 @@ public class JobFailedNotifierProvider : IJobFailedNotifierProvider, ITransientD
             }
             globalContext.AddIfNotContains(eventData.Args);
 
-            var culture = eventData.Args.GetOrDefault(Prefix + SendEmailJob.PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
+            var culture = eventData.Args.GetOrDefault(Prefix + PropertyCulture)?.ToString() ?? CultureInfo.CurrentCulture.Name;
 
             var content = await TemplateRenderer.RenderAsync(
                 templateName: template,
