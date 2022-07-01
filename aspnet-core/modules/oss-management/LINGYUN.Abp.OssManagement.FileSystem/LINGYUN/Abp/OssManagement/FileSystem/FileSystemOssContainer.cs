@@ -459,10 +459,14 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 .Select(ConvertFileSystem)
                 .ToArray();
 
-            // 计算下一页起始标记文件/目录名称
-            var nextMarkerIndex = fileSystemNames.FindIndex(x => x.EndsWith(fileSystems[fileSystems.Length - 1].Name));
-            string nextMarker = "";
-            if (nextMarkerIndex >=0 && nextMarkerIndex + 1 < fileSystemNames.Length)
+            var nextMarkerIndex = -1;
+            if (fileSystems.Length > 0)
+            {
+                // 计算下一页起始标记文件/目录名称
+                nextMarkerIndex = fileSystemNames.FindIndex(x => x.EndsWith(fileSystems[^1].Name));
+            }
+            var nextMarker = "";
+            if (nextMarkerIndex >= 0 && nextMarkerIndex + 1 < fileSystemNames.Length)
             {
                 nextMarker = fileSystemNames[nextMarkerIndex + 1];
                 nextMarker = File.Exists(nextMarker)

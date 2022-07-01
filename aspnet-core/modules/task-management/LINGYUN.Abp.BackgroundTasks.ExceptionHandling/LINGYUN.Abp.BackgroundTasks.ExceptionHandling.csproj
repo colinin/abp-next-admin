@@ -20,10 +20,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks\LINGYUN.Abp.BackgroundTasks.csproj" />
 	</ItemGroup>
 
