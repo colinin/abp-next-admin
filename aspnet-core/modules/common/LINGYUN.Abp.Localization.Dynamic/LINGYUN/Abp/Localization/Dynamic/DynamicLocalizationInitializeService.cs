@@ -23,21 +23,22 @@ namespace LINGYUN.Abp.Localization.Dynamic
             LocalizationOptions = localizationOptions.Value;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
+                var resourceTexts = await Store.GetAllLocalizationDictionaryAsync(stoppingToken);
+
                 foreach (var resource in LocalizationOptions.Resources)
                 {
                     foreach (var contributor in resource.Value.Contributors)
                     {
                         if (contributor.GetType().IsAssignableFrom(typeof(DynamicLocalizationResourceContributor)))
                         {
-                            var resourceLocalizationDic = await Store
-                                .GetLocalizationDictionaryAsync(
-                                    resource.Value.ResourceName,
-                                    stoppingToken);
-                            DynamicOptions.AddOrUpdate(resource.Value.ResourceName, resourceLocalizationDic);
+                            if (resourceTexts.TryGetValue(resource.Value.ResourceName, out var resourceLocalizationDic))
+                            {
+                                DynamicOptions.AddOrUpdate(resource.Value.ResourceName, resourceLocalizationDic);
+                            }
                         }
                     }
                 }

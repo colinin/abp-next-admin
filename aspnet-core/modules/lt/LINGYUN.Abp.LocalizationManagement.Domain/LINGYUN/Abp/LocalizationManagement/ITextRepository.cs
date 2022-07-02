@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             );
 
         Task<List<Text>> GetListAsync(
-            string resourceName,
+            string resourceName = null,
             CancellationToken cancellationToken = default);
 
         Task<List<Text>> GetListAsync(

@@ -12,6 +12,11 @@ namespace LINGYUN.Abp.Localization.Dynamic
         {
         }
 
+        public Task<Dictionary<string, Dictionary<string, ILocalizationDictionary>>> GetAllLocalizationDictionaryAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(new Dictionary<string, Dictionary<string, ILocalizationDictionary>>());
+        }
+
         public Task<List<LanguageInfo>> GetLanguageListAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new List<LanguageInfo>());

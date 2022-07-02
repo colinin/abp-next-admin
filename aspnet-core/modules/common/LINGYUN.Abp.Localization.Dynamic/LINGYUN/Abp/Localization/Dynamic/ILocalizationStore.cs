@@ -32,5 +32,11 @@ namespace LINGYUN.Abp.Localization.Dynamic
         Task<Dictionary<string, ILocalizationDictionary>> GetLocalizationDictionaryAsync(
             string resourceName,
             CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 获取所有资源本地化字典
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Dictionary<string, Dictionary<string, ILocalizationDictionary>>> GetAllLocalizationDictionaryAsync(CancellationToken cancellationToken = default);
     }
 }
