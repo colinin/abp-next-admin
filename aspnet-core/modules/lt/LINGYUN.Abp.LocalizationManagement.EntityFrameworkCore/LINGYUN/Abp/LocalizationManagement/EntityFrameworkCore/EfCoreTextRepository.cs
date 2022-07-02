@@ -48,17 +48,24 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         }
 
         public virtual async Task<List<Text>> GetListAsync(
-            string resourceName, 
+            string resourceName = null, 
             CancellationToken cancellationToken = default)
         {
             var languages = (await GetDbContextAsync()).Set<Language>();
+            var resources = (IQueryable<Resource>)(await GetDbContextAsync()).Set<Resource>();
+            if (!resourceName.IsNullOrWhiteSpace())
+            {
+                resources = resources.Where(x => x.Name.Equals(resourceName));
+            }
+
             var texts = await GetDbSetAsync();
 
             return await (from txts in texts
+                   join r in resources
+                       on txts.ResourceName equals r.Name
                    join lg in languages
                        on txts.CultureName equals lg.CultureName
-                   where txts.ResourceName.Equals(resourceName) &&
-                       lg.Enable
+                   where r.Enable && lg.Enable
                    select txts)
                  .ToListAsync(GetCancellationToken(cancellationToken));
         }
