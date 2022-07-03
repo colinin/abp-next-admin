@@ -111,9 +111,21 @@ namespace LINGYUN.Abp.Identity
         {
             var user = await GetUserAsync(id);
 
-            var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+            if (user.IsExternal)
+            {
+                throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
+            }
 
-            (await UserManager.ResetPasswordAsync(user, token, input.Password)).CheckErrors();
+            if (user.PasswordHash == null)
+            {
+                (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
+            }
+            else
+            {
+                var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+
+                (await UserManager.ResetPasswordAsync(user, token, input.Password)).CheckErrors();
+            }
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }

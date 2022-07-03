@@ -205,11 +205,17 @@ namespace LINGYUN.Abp.Account
              *               验证通过后,再利用 UserManager.GeneratePasswordResetTokenAsync 接口来生成真正的用于重置密码的Token
             */
 
+            // 传递 isConfirmed 用户必须是已确认过手机号的
+            var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
+            // 外部认证用户不允许修改密码
+            if (user.IsExternal)
+            {
+                throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
+            }
+
             var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
-            // 传递 isConfirmed 用户必须是已确认过手机号的
-            var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
             // 能查询到缓存就是重复发送
             if (securityTokenCacheItem != null)
             {
@@ -242,6 +248,11 @@ namespace LINGYUN.Abp.Account
             await IdentityOptions.SetAsync();
             // 传递 isConfirmed 用户必须是已确认过手机号的
             var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
+            // 外部认证用户不允许修改密码
+            if (user.IsExternal)
+            {
+                throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
+            }
             // 验证二次认证码
             if (!await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, input.Code))
             {
