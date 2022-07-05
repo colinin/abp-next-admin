@@ -56,20 +56,24 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
             if (input.ResourceName.IsNullOrWhiteSpace())
             {
-                foreach (var resource in _localizationOptions.Resources)
+                var filterResources = _localizationOptions.Resources
+                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter));
+
+                foreach (var resource in filterResources)
                 {
-                    result.AddRange(GetTextDifferences(resource.Value, input.CultureName, input.TargetCultureName, input.OnlyNull));
+                    result.AddRange(GetTextDifferences(resource.Value, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
                 }
             }
             else
             {
                 var resource = _localizationOptions.Resources
                     .Where(l => l.Value.ResourceName.Equals(input.ResourceName))
+                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter))
                     .Select(l => l.Value)
                     .FirstOrDefault();
                 if (resource != null)
                 {
-                    result.AddRange(GetTextDifferences(resource, input.CultureName, input.TargetCultureName, input.OnlyNull));
+                    result.AddRange(GetTextDifferences(resource, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
                 }
             }
 
@@ -80,6 +84,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             LocalizationResource resource,
             string cultureName,
             string targetCultureName,
+            string filter = null,
             bool? onlyNull = null)
         {
             var result = new List<TextDifferenceDto>();
@@ -90,7 +95,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
             using (CultureHelper.Use(cultureName))
             {
-                localizedStrings = localizer.GetAllStrings(true);
+                localizedStrings = localizer.GetAllStrings(true)
+                    .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter));
             }
 
             if (Equals(cultureName, targetCultureName))
@@ -101,7 +107,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             {
                 using (CultureHelper.Use(targetCultureName))
                 {
-                    targetLocalizedStrings = localizer.GetAllStrings(true);
+                    targetLocalizedStrings = localizer.GetAllStrings(true)
+                        .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter));
                 }
             }
 
