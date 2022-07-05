@@ -6,16 +6,17 @@
     "Texts": "Texts",
     "DisplayName:Key": "Key",
     "DisplayName:Value": "Value",
-    "Description:Name": "Name",
-    "Description:CultureName": "Culture Name",
-    "Description:ResourceName": "Resource Name",
-    "Description:TargetCultureName": "Target Culture",
-    "Description:TargetValue": "Target Value",
-    "Description:OnlyNull": "Only Null",
-    "Description:Filter": "Filter",
-    "Description:UiCultureName": "Ui Culture Name",
-    "Description:DisplayName": "Display Name",
-    "Description:FlagIcon": "Flag Icon",
-    "Description:Description": "Description"
+    "DisplayName:Name": "Name",
+    "DisplayName:CultureName": "Culture Name",
+    "DisplayName:ResourceName": "Resource Name",
+    "DisplayName:TargetCultureName": "Target Culture",
+    "DisplayName:TargetValue": "Target Value",
+    "DisplayName:Any": "Any",
+    "DisplayName:OnlyNull": "Only Null",
+    "DisplayName:Filter": "Filter",
+    "DisplayName:UiCultureName": "Ui Culture Name",
+    "DisplayName:DisplayName": "Display Name",
+    "DisplayName:FlagIcon": "Flag Icon",
+    "DisplayName:Description": "Description"
   }
 }
