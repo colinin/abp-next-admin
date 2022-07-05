@@ -3,7 +3,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
-    public class CreateTextInput : CreateOrUpdateTextInput
+    public class SetTextInput
     {
         [Required]
         [DynamicStringLength(typeof(ResourceConsts), nameof(ResourceConsts.MaxNameLength))]
@@ -16,5 +16,8 @@ namespace LINGYUN.Abp.LocalizationManagement
         [Required]
         [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxCultureNameLength))]
         public string CultureName { get; set; }
+
+        [DynamicStringLength(typeof(TextConsts), nameof(TextConsts.MaxValueLength))]
+        public string Value { get; set; }
     }
 }

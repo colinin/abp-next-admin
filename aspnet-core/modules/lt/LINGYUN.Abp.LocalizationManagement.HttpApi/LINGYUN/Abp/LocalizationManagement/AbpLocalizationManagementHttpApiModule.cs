@@ -1,15 +1,16 @@
-﻿using LINGYUN.Abp.LocalizationManagement.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+using LINGYUN.Abp.LocalizationManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Validation.Localization;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMvcLocalizationModule),
         typeof(AbpLocalizationManagementApplicationContractsModule))]
     public class AbpLocalizationManagementHttpApiModule : AbpModule
     {
@@ -35,7 +36,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             {
                 options.Resources
                     .Get<LocalizationManagementResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource));
+                    .AddBaseTypes(typeof(AbpValidationResource), typeof(AbpLocalizationResource));
             });
         }
     }

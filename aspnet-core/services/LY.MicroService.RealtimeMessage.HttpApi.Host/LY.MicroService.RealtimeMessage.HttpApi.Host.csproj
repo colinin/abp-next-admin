@@ -53,6 +53,7 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />

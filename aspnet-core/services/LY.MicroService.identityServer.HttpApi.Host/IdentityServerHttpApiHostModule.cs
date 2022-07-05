@@ -1,5 +1,6 @@
 using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.EventBus.CAP;
@@ -32,6 +33,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
     typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
     typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),

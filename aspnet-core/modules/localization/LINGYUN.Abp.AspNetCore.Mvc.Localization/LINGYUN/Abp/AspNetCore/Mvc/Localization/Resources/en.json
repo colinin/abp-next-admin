@@ -1,0 +1,21 @@
+{
+  "culture": "en",
+  "texts": {
+    "Languages": "Languages",
+    "Resources": "Resources",
+    "Texts": "Texts",
+    "DisplayName:Key": "Key",
+    "DisplayName:Value": "Value",
+    "Description:Name": "Name",
+    "Description:CultureName": "Culture Name",
+    "Description:ResourceName": "Resource Name",
+    "Description:TargetCultureName": "Target Culture",
+    "Description:TargetValue": "Target Value",
+    "Description:OnlyNull": "Only Null",
+    "Description:Filter": "Filter",
+    "Description:UiCultureName": "Ui Culture Name",
+    "Description:DisplayName": "Display Name",
+    "Description:FlagIcon": "Flag Icon",
+    "Description:Description": "Description"
+  }
+}

@@ -9,10 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
-	</ItemGroup>
-
-	<ItemGroup>
+	  <ProjectReference Include="..\..\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />
 	</ItemGroup>
 

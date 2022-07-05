@@ -1,8 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
-
-namespace LINGYUN.Abp.LocalizationManagement
+﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
-    public class TextDto : EntityDto<int>
+    public class TextDto
     {
         public string Key { get; set; }
         public string Value { get; set; }

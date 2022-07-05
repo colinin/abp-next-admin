@@ -1,7 +1,9 @@
-﻿using LINGYUN.Abp.AuditLogging.Elasticsearch;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -49,6 +51,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -58,6 +61,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
+    typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule

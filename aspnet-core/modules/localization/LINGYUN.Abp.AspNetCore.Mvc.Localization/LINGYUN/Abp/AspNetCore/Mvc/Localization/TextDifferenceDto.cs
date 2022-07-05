@@ -1,8 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
-
-namespace LINGYUN.Abp.LocalizationManagement
+﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
-    public class TextDifferenceDto : EntityDto<int>
+    public class TextDifferenceDto
     {
         public string CultureName { get; set; }
         public string Key { get; set; }

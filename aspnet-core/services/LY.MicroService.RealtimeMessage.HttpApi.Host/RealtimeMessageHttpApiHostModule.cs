@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
@@ -48,6 +49,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpMessageServiceApplicationModule),
     typeof(AbpMessageServiceHttpApiModule),
     typeof(AbpIdentityWeChatModule),

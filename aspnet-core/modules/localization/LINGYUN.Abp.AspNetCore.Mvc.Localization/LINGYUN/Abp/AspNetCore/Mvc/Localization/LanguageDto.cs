@@ -1,11 +1,7 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
-
-namespace LINGYUN.Abp.LocalizationManagement
+﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
-    public class LanguageDto : AuditedEntityDto<Guid>
+    public class LanguageDto
     {
-        public bool Enable { get; set; }
         public string CultureName { get; set; }
         public string UiCultureName { get; set; }
         public string DisplayName { get; set; }

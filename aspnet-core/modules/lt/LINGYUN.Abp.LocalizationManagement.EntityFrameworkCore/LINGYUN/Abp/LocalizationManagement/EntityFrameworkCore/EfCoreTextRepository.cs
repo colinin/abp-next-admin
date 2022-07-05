@@ -48,36 +48,32 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         }
 
         public virtual async Task<List<Text>> GetListAsync(
-            string resourceName = null, 
+            string resourceName = null,
+            string cultureName = null,
             CancellationToken cancellationToken = default)
         {
-            var languages = (await GetDbContextAsync()).Set<Language>();
-            var resources = (IQueryable<Resource>)(await GetDbContextAsync()).Set<Resource>();
-            if (!resourceName.IsNullOrWhiteSpace())
-            {
-                resources = resources.Where(x => x.Name.Equals(resourceName));
-            }
+            //var languages = (await GetDbContextAsync()).Set<Language>();
+            //var resources = (IQueryable<Resource>)(await GetDbContextAsync()).Set<Resource>();
+            //if (!resourceName.IsNullOrWhiteSpace())
+            //{
+            //    resources = resources.Where(x => x.Name.Equals(resourceName));
+            //}
 
-            var texts = await GetDbSetAsync();
+            //var texts = await GetDbSetAsync();
 
-            return await (from txts in texts
-                   join r in resources
-                       on txts.ResourceName equals r.Name
-                   join lg in languages
-                       on txts.CultureName equals lg.CultureName
-                   where r.Enable && lg.Enable
-                   select txts)
-                 .ToListAsync(GetCancellationToken(cancellationToken));
-        }
+            //return await (from txts in texts
+            //       join r in resources
+            //           on txts.ResourceName equals r.Name
+            //       join lg in languages
+            //           on txts.CultureName equals lg.CultureName
+            //       where r.Enable && lg.Enable
+            //       select txts)
+            //     .ToListAsync(GetCancellationToken(cancellationToken));
 
-        public virtual async Task<List<Text>> GetListAsync(
-            string resourceName,
-            string cultureName, 
-            CancellationToken cancellationToken = default)
-        {
             return await (await GetDbSetAsync())
-                 .Where(x => x.ResourceName.Equals(resourceName) && x.CultureName.Equals(cultureName))
-                 .ToListAsync(GetCancellationToken(cancellationToken));
+                .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
+                .WhereIf(!cultureName.IsNullOrWhiteSpace(), x => x.CultureName.Equals(cultureName))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<TextDifference>> GetDifferencePagedListAsync(

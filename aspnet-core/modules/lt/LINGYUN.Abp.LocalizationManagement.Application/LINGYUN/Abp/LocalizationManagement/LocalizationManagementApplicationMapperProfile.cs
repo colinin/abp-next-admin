@@ -6,10 +6,6 @@ namespace LINGYUN.Abp.LocalizationManagement
     {
         public LocalizationManagementApplicationMapperProfile()
         {
-            CreateMap<Language, LanguageDto>();
-            CreateMap<Resource, ResourceDto>();
-            CreateMap<Text, TextDto>();
-            CreateMap<TextDifference, TextDifferenceDto>();
         }
     }
 }

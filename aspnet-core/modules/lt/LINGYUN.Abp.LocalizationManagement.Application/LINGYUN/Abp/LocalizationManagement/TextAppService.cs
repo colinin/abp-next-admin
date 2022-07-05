@@ -1,73 +1,55 @@
 ﻿using LINGYUN.Abp.LocalizationManagement.Permissions;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
-    public class TextAppService :
-        CrudAppService<
-            Text,
-            TextDto,
-            TextDifferenceDto,
-            int,
-            GetTextsInput,
-            CreateTextInput,
-            UpdateTextInput>,
-        ITextAppService
+    [Authorize(LocalizationManagementPermissions.Text.Default)]
+    public class TextAppService : LocalizationAppServiceBase, ITextAppService
     {
         private readonly ITextRepository _textRepository;
-        public TextAppService(ITextRepository repository) : base(repository)
+        public TextAppService(ITextRepository repository)
         {
             _textRepository = repository;
-
-            GetPolicyName = LocalizationManagementPermissions.Text.Default;
-            GetListPolicyName = LocalizationManagementPermissions.Text.Default;
-            CreatePolicyName = LocalizationManagementPermissions.Text.Create;
-            UpdatePolicyName = LocalizationManagementPermissions.Text.Update;
-            DeletePolicyName = LocalizationManagementPermissions.Text.Delete;
         }
 
-        public virtual async Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input)
+        public async virtual Task SetTextAsync(SetTextInput input)
         {
-            await CheckGetPolicyAsync();
+            var text = await _textRepository.GetByCultureKeyAsync(input.ResourceName, input.CultureName, input.Key);
+            if (text == null)
+            {
+                await AuthorizationService.CheckAsync(LocalizationManagementPermissions.Text.Create);
 
-            var text = await _textRepository.GetByCultureKeyAsync(
-                input.ResourceName, input.CultureName, input.Key);
+                text = new Text(
+                    input.ResourceName,
+                    input.CultureName,
+                    input.Key,
+                    input.Value);
 
-            return await MapToGetOutputDtoAsync(text);
+                await _textRepository.InsertAsync(text);
+            }
+            else
+            {
+                await AuthorizationService.CheckAsync(LocalizationManagementPermissions.Text.Update);
+
+                text.SetValue(input.Value);
+
+                await _textRepository.UpdateAsync(text);
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public override async Task<PagedResultDto<TextDifferenceDto>> GetListAsync(GetTextsInput input)
+        [Authorize(LocalizationManagementPermissions.Text.Delete)]
+        public async virtual Task RestoreToDefaultAsync(RestoreDefaultTextInput input)
         {
-            await CheckGetListPolicyAsync();
+            var text = await _textRepository.GetByCultureKeyAsync(input.ResourceName, input.CultureName, input.Key);
+            if (text != null)
+            {
+                await _textRepository.DeleteAsync(text);
 
-            var count = await _textRepository.GetDifferenceCountAsync(
-                input.CultureName, input.TargetCultureName,
-                input.ResourceName, input.OnlyNull, input.Filter);
-
-            var texts = await _textRepository.GetDifferencePagedListAsync(
-                input.CultureName, input.TargetCultureName,
-                input.ResourceName, input.OnlyNull, input.Filter,
-                input.Sorting, input.SkipCount, input.MaxResultCount);
-
-            return new PagedResultDto<TextDifferenceDto>(count, 
-                ObjectMapper.Map<List<TextDifference>, List<TextDifferenceDto>>(texts));
-        }
-
-        protected override Text MapToEntity(CreateTextInput createInput)
-        {
-            return new Text(
-                createInput.ResourceName,
-                createInput.CultureName,
-                createInput.Key,
-                createInput.Value);
-        }
-
-        protected override void MapToEntity(UpdateTextInput updateInput, Text entity)
-        {
-            entity.SetValue(updateInput.Value);
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
         }
     }
 }

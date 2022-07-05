@@ -48,6 +48,7 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
+		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
