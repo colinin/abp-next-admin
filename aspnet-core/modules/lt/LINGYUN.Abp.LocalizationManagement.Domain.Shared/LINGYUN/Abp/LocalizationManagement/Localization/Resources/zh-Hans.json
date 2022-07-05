@@ -2,7 +2,6 @@
   "culture": "zh-Hans",
   "texts": {
     "Delete": "删除",
-    "DisplayName:Any": "所有",
     "DisplayName:CreationTime": "创建时间",
     "DisplayName:LastModificationTime": "变更时间",
     "DisplayName:SaveAndNext": "保存并下一步",
