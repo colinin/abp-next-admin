@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.LocalizationManagement
                 return dictionaries;
             }
 
-            var texts = await TextRepository.GetListAsync(resourceName, cancellationToken);
+            var texts = await TextRepository.GetListAsync(resourceName, null, cancellationToken);
 
             foreach (var textGroup in texts.GroupBy(x => x.CultureName))
             {

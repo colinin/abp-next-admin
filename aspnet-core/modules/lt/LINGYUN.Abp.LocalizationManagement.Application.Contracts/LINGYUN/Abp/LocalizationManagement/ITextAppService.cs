@@ -3,15 +3,10 @@ using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
-    public interface ITextAppService : 
-        ICrudAppService<
-            TextDto,
-            TextDifferenceDto,
-            int,
-            GetTextsInput,
-            CreateTextInput,
-            UpdateTextInput>
+    public interface ITextAppService : IApplicationService
     {
-        Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input);
+        Task SetTextAsync(SetTextInput input);
+
+        Task RestoreToDefaultAsync(RestoreDefaultTextInput input);
     }
 }

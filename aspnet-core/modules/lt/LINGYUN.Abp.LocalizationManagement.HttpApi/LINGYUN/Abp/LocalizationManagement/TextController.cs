@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.LocalizationManagement
@@ -18,44 +17,17 @@ namespace LINGYUN.Abp.LocalizationManagement
             _service = service;
         }
 
-        [HttpPost]
-        public virtual async Task<TextDto> CreateAsync(CreateTextInput input)
+        [HttpPut]
+        public virtual Task SetTextAsync(SetTextInput input)
         {
-            return await _service.CreateAsync(input);
+            return _service.SetTextAsync(input);
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public virtual async Task DeleteAsync(int id)
+        [Route("restore-to-default")]
+        public virtual Task RestoreToDefaultAsync(RestoreDefaultTextInput input)
         {
-            await _service.DeleteAsync(id);
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        public virtual async Task<TextDto> GetAsync(int id)
-        {
-            return await _service.GetAsync(id);
-        }
-
-        [HttpGet]
-        [Route("by-culture-key")]
-        public virtual async Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input)
-        {
-            return await _service.GetByCultureKeyAsync(input);
-        }
-
-        [HttpGet]
-        public virtual async Task<PagedResultDto<TextDifferenceDto>> GetListAsync(GetTextsInput input)
-        {
-            return await _service.GetListAsync(input);
-        }
-
-        [HttpPut]
-        [Route("{id}")]
-        public virtual async Task<TextDto> UpdateAsync(int id, UpdateTextInput input)
-        {
-            return await _service.UpdateAsync(id, input);
+            return _service.RestoreToDefaultAsync(input);
         }
     }
 }

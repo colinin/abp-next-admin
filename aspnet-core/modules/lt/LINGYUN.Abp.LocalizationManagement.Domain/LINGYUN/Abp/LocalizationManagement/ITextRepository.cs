@@ -16,30 +16,7 @@ namespace LINGYUN.Abp.LocalizationManagement
 
         Task<List<Text>> GetListAsync(
             string resourceName = null,
-            CancellationToken cancellationToken = default);
-
-        Task<List<Text>> GetListAsync(
-            string resourceName,
-            string cultureName,
-            CancellationToken cancellationToken = default);
-
-        Task<int> GetDifferenceCountAsync(
-            string cultureName,
-            string targetCultureName,
-            string resourceName = null,
-            bool? onlyNull = null,
-            string filter = null,
-            CancellationToken cancellationToken = default);
-
-        Task<List<TextDifference>> GetDifferencePagedListAsync(
-            string cultureName,
-            string targetCultureName,
-            string resourceName = null,
-            bool? onlyNull = null,
-            string filter = null,
-            string sorting = nameof(Text.Key),
-            int skipCount = 1,
-            int maxResultCount = 10,
+            string cultureName = null,
             CancellationToken cancellationToken = default);
     }
 }
