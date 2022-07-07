@@ -1,5 +1,8 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "JobAction:Failed": "失败",
+    "JobAction:Successed": "成功",
+    "JobAction:Completed": "完成"
   }
 }
