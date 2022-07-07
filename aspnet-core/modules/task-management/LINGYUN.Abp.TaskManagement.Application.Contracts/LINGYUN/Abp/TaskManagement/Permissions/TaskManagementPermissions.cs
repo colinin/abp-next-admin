@@ -20,6 +20,10 @@ public static class TaskManagementPermissions
         /// 通常内置作业是由程序运行中产生，需要控制用户行为
         /// </summary>
         public const string ManageSystemJobs = Default + ".ManageSystemJobs";
+        /// <summary>
+        /// 管理作业行为
+        /// </summary>
+        public const string ManageActions = Default + ".ManageActions";
     }
 
     public static class BackgroundJobLogs

@@ -8,6 +8,7 @@ using Volo.Abp.MultiTenancy;
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
 [DisableAuditing]
+[DisableJobAction]
 public class BackgroundPollingJob : IJobRunnable
 {
     public virtual async Task ExecuteAsync(JobRunnableContext context)

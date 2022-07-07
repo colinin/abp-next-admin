@@ -1,12 +1,13 @@
-﻿using LINGYUN.Abp.BackgroundTasks.Localization;
+﻿using LINGYUN.Abp.BackgroundTasks.Activities;
+using LINGYUN.Abp.BackgroundTasks.Localization;
+using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Emailing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 
-[DependsOn(typeof(AbpBackgroundTasksModule))]
+[DependsOn(typeof(AbpBackgroundTasksActivitiesModule))]
 [DependsOn(typeof(AbpEmailingModule))]
 public class AbpBackgroundTasksExceptionHandlingModule : AbpModule
 {

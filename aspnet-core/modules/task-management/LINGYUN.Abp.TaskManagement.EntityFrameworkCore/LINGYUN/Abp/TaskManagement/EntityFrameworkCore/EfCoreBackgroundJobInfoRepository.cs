@@ -76,7 +76,6 @@ public class EfCoreBackgroundJobInfoRepository :
     }
 
     public virtual async Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
-        string nodeName,
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
@@ -84,7 +83,6 @@ public class EfCoreBackgroundJobInfoRepository :
         var expiratime = Clock.Now - jobExpiratime;
 
         return await (await GetDbSetAsync())
-            .Where(x => x.NodeName == nodeName)
             .Where(x => x.Status == JobStatus.Completed &&
                 DateTime.Compare(x.LastRunTime.Value, expiratime) <= 0)
             .OrderBy(x => x.CreationTime)
@@ -93,13 +91,11 @@ public class EfCoreBackgroundJobInfoRepository :
     }
 
     public virtual async Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(
-        string nodeName, 
         CancellationToken cancellationToken = default)
     {
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
         return await (await GetDbSetAsync())
-            .Where(x => x.NodeName == nodeName)
             .Where(x => x.IsEnabled && !x.IsAbandoned)
             .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
             .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
@@ -123,7 +119,6 @@ public class EfCoreBackgroundJobInfoRepository :
     }
 
     public virtual async Task<List<BackgroundJobInfo>> GetWaitingListAsync(
-        string nodeName, 
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {
@@ -131,7 +126,6 @@ public class EfCoreBackgroundJobInfoRepository :
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
         return await (await GetDbSetAsync())
-            .Where(x => x.NodeName == nodeName)
             .Where(x => x.IsEnabled && !x.IsAbandoned)
             .Where(x => x.JobType != JobType.Period && status.Contains(x.Status))
             .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))

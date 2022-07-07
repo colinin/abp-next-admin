@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Activities\LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.EventBus\LINGYUN.Abp.BackgroundTasks.EventBus.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks\LINGYUN.Abp.BackgroundTasks.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.TaskManagement.Domain.Shared\LINGYUN.Abp.TaskManagement.Domain.Shared.csproj" />

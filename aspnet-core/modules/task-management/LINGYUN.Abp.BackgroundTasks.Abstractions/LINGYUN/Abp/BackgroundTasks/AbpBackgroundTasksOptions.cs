@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Volo.Abp.Collections;
 
 namespace LINGYUN.Abp.BackgroundTasks;
@@ -19,10 +18,13 @@ public class AbpBackgroundTasksOptions
     /// <remarks>
     /// 用户实现的作业可以添加在集合中
     /// </remarks>
-    public IDictionary<string, Type> JobProviders { get; }
+    public ITypeList<IJobDefinitionProvider> DefinitionProviders { get; }
     /// <summary>
     /// 启用清理任务
     /// </summary>
+    /// <remarks>
+    /// 主节点启用
+    /// </remarks>
     public bool JobCleanEnabled { get; set; }
     /// <summary>
     /// 任务过期时间
@@ -48,6 +50,9 @@ public class AbpBackgroundTasksOptions
     /// <summary>
     /// 启用轮询任务
     /// </summary>
+    /// <remarks>
+    /// 主节点启用
+    /// </remarks>
     public bool JobFetchEnabled { get; set; }
     /// <summary>
     /// 每次轮询任务批次大小
@@ -76,23 +81,17 @@ public class AbpBackgroundTasksOptions
     public string NodeName { get; set; }
     public AbpBackgroundTasksOptions()
     {
-        JobFetchEnabled = true;
+        JobFetchEnabled = false;
         MaxJobFetchCount = 1000;
         JobFetchLockTimeOut = 120;
         JobFetchCronExpression = "0/30 * * * * ? ";
 
-        JobCleanEnabled = true;
+        JobCleanEnabled = false;
         MaxJobCleanCount = 1000;
         JobExpiratime = TimeSpan.FromDays(15d);
         JobCleanCronExpression = "0 0/10 * * * ? *";
 
         JobMonitors = new TypeList<IJobEvent>();
-        JobProviders = new Dictionary<string, Type>();
-    }
-
-    public void AddProvider<TJobRunnable>(string name)
-        where TJobRunnable : IJobRunnable
-    {
-        JobProviders[name] = typeof(TJobRunnable);
+        DefinitionProviders = new TypeList<IJobDefinitionProvider>();
     }
 }

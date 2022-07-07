@@ -4,6 +4,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
@@ -17,6 +18,7 @@ using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Common;
 using LINGYUN.Abp.Notifications.Emailing;
+using LINGYUN.Abp.Notifications.Jobs;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
@@ -54,6 +56,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpMessageServiceHttpApiModule),
     typeof(AbpIdentityWeChatModule),
     typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
@@ -68,6 +71,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpBackgroundWorkersModule),
     typeof(AbpIMSignalRModule),
+    typeof(AbpNotificationsJobsModule),
     typeof(AbpNotificationsCommonModule),
     typeof(AbpNotificationsSmsModule),
     typeof(AbpNotificationsEmailingModule),

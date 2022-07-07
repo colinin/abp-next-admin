@@ -20,6 +20,23 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class ServiceInvocationJob : IJobRunnable
 {
+    #region Definition Paramters
+
+    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
+        new List<JobDefinitionParamter>
+        {
+            new JobDefinitionParamter(PropertyService, LocalizableStatic.Create("Http:Service"), required: true),
+            new JobDefinitionParamter(PropertyMethod, LocalizableStatic.Create("Http:Method"), required: true),
+
+            new JobDefinitionParamter(PropertyData, LocalizableStatic.Create("Http:Data")),
+            new JobDefinitionParamter(PropertyCulture, LocalizableStatic.Create("Http:Culture")),
+            new JobDefinitionParamter(PropertyTenant, LocalizableStatic.Create("Http:Tenant")),
+            new JobDefinitionParamter(PropertyProvider, LocalizableStatic.Create("Http:Provider"), LocalizableStatic.Create("Http:ProviderDesc")),
+            new JobDefinitionParamter(PropertyAppId, LocalizableStatic.Create("Http:AppId"), LocalizableStatic.Create("Http:AppIdDesc")),
+        };
+
+    #endregion
+
     // 必须, 接口类型
     public const string PropertyService = "service";
     // 必须, 接口方法名称

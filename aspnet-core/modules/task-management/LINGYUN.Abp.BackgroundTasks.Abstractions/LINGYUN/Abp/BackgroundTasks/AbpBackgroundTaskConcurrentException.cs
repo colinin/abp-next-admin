@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.BackgroundTasks;
 public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
 {
     /// <summary>
-    /// Creates a new <see cref="AbpBackgroundTaskConcurrentException"/> object.
+    /// Creates a new <see cref="Task"/> object.
     /// </summary>
     /// <param name="innerException">Inner exception</param>
     public AbpBackgroundTaskConcurrentException(Type jobType)
@@ -17,7 +17,7 @@ public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
     }
 
     /// <summary>
-    /// Creates a new <see cref="AbpBackgroundTaskConcurrentException"/> object.
+    /// Creates a new <see cref="Task"/> object.
     /// </summary>
     /// <param name="jobType">Execute job type</param>
     /// <param name="innerException">Inner exception</param>
@@ -30,7 +30,7 @@ public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
     }
 
     /// <summary>
-    /// Creates a new <see cref="AbpBackgroundTaskConcurrentException"/> object.
+    /// Creates a new <see cref="Task"/> object.
     /// </summary>
     /// <param name="jobType">Execute job type</param>
     /// <param name="message">Exception message</param>

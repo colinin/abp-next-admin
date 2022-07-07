@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -24,7 +23,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
 
     [HttpPost]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Create)]
-    public Task<BackgroundJobInfoDto> CreateAsync(BackgroundJobInfoCreateDto input)
+    public virtual Task<BackgroundJobInfoDto> CreateAsync(BackgroundJobInfoCreateDto input)
     {
         return BackgroundJobInfoAppService.CreateAsync(input);
     }
@@ -32,20 +31,20 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpDelete]
     [Route("{id}")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Delete)]
-    public Task DeleteAsync(string id)
+    public virtual Task DeleteAsync(string id)
     {
         return BackgroundJobInfoAppService.DeleteAsync(id);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public Task<BackgroundJobInfoDto> GetAsync(string id)
+    public virtual Task<BackgroundJobInfoDto> GetAsync(string id)
     {
         return BackgroundJobInfoAppService.GetAsync(id);
     }
 
     [HttpGet]
-    public Task<PagedResultDto<BackgroundJobInfoDto>> GetListAsync(BackgroundJobInfoGetListInput input)
+    public virtual Task<PagedResultDto<BackgroundJobInfoDto>> GetListAsync(BackgroundJobInfoGetListInput input)
     {
         return BackgroundJobInfoAppService.GetListAsync(input);
     }
@@ -53,7 +52,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}/pause")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
-    public Task PauseAsync(string id)
+    public virtual Task PauseAsync(string id)
     {
         return BackgroundJobInfoAppService.PauseAsync(id);
     }
@@ -61,7 +60,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}/resume")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
-    public Task ResumeAsync(string id)
+    public virtual Task ResumeAsync(string id)
     {
         return BackgroundJobInfoAppService.ResumeAsync(id);
     }
@@ -69,7 +68,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}/trigger")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
-    public Task TriggerAsync(string id)
+    public virtual Task TriggerAsync(string id)
     {
         return BackgroundJobInfoAppService.TriggerAsync(id);
     }
@@ -77,7 +76,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}/stop")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
-    public Task StopAsync(string id)
+    public virtual Task StopAsync(string id)
     {
         return BackgroundJobInfoAppService.StopAsync(id);
     }
@@ -85,7 +84,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
-    public Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
+    public virtual Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
     {
         return BackgroundJobInfoAppService.UpdateAsync(id, input);
     }
@@ -93,7 +92,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("{id}/start")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
-    public Task StartAsync(string id)
+    public virtual Task StartAsync(string id)
     {
         return BackgroundJobInfoAppService.StartAsync(id);
     }
@@ -101,7 +100,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("bulk-stop")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
-    public Task BulkStopAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkStopAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkStopAsync(input);
     }
@@ -109,7 +108,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("bulk-start")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
-    public Task BulkStartAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkStartAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkStartAsync(input);
     }
@@ -117,7 +116,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("bulk-trigger")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
-    public Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkTriggerAsync(input);
     }
@@ -125,7 +124,7 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("bulk-resume")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
-    public Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkResumeAsync(input);
     }
@@ -133,15 +132,22 @@ public class BackgroundJobInfoController : TaskManagementController, IBackground
     [HttpPut]
     [Route("bulk-pause")]
     [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
-    public Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkPauseAsync(input);
     }
 
     [HttpPut]
     [Route("bulk-delete")]
-    public Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkDeleteAsync(input);
+    }
+
+    [HttpGet]
+    [Route("definitions")]
+    public virtual Task<ListResultDto<BackgroundJobDefinitionDto>> GetDefinitionsAsync()
+    {
+        return BackgroundJobInfoAppService.GetDefinitionsAsync();
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.TaskManagement;
@@ -33,4 +33,6 @@ public interface IBackgroundJobInfoAppService :
     Task BulkResumeAsync(BackgroundJobInfoBatchInput input);
 
     Task BulkPauseAsync(BackgroundJobInfoBatchInput input);
+
+    Task<ListResultDto<BackgroundJobDefinitionDto>> GetDefinitionsAsync();
 }

@@ -94,7 +94,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
                 {
                     if (_doWorkAsyncMethod != null)
                     {
-                        await(Task) _doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext });
+                        await(Task)_doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext });
                     }
 
                     break;

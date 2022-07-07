@@ -7,6 +7,19 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class SendSmsJob : IJobRunnable
 {
+    #region Definition Paramters
+
+    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
+        new List<JobDefinitionParamter>
+        {
+            new JobDefinitionParamter(PropertyPhoneNumber, LocalizableStatic.Create("Sms:PhoneNumber"), required: true),
+            new JobDefinitionParamter(PropertyMessage, LocalizableStatic.Create("Sms:Message"), required: true),
+
+            new JobDefinitionParamter(PropertyProperties, LocalizableStatic.Create("Sms:Properties")),
+        };
+
+    #endregion
+
     public const string PropertyPhoneNumber = "phoneNumber";
     public const string PropertyMessage = "message";
     public const string PropertyProperties = "properties";

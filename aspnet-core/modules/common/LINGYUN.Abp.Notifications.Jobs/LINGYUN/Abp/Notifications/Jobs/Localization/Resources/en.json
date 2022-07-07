@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "NotificationCleanupJob": "Notification Cleanup Job",
+    "Notification:BatchCount": "Batch Count"
+  }
+}

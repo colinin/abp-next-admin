@@ -16,18 +16,18 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
     protected IJobStore JobStore { get; }
     protected IScheduler Scheduler { get; }
     protected IQuartzKeyBuilder KeyBuilder { get; }
-    protected IQuartzJobExecutorProvider QuartzJobExecutor { get; }
+    protected IQuartzJobCreator QuartzJobCreator { get; }
 
     public QuartzJobScheduler(
         IJobStore jobStore,
         IScheduler scheduler,
         IQuartzKeyBuilder keyBuilder,
-        IQuartzJobExecutorProvider quartzJobExecutor)
+        IQuartzJobCreator quartzJobCreator)
     {
         JobStore = jobStore;
         Scheduler = scheduler;
         KeyBuilder = keyBuilder;
-        QuartzJobExecutor = quartzJobExecutor;
+        QuartzJobCreator = quartzJobCreator;
     }
 
     public virtual async Task<bool> ExistsAsync(JobInfo job, CancellationToken cancellationToken = default)
@@ -61,13 +61,13 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
             return false;
         }
 
-        var jobDetail = QuartzJobExecutor.CreateJob(job);
+        var jobDetail = QuartzJobCreator.CreateJob(job);
         if (jobDetail == null)
         {
             return false;
         }
 
-        var jobTrigger = QuartzJobExecutor.CreateTrigger(job);
+        var jobTrigger = QuartzJobCreator.CreateTrigger(job);
         if (jobTrigger == null)
         {
             return false;
@@ -83,13 +83,13 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         var jobDictionary = new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>();
         foreach (var job in jobs)
         {
-            var jobDetail = QuartzJobExecutor.CreateJob(job);
+            var jobDetail = QuartzJobCreator.CreateJob(job);
             if (jobDetail == null)
             {
                 continue;
             }
 
-            var jobTrigger = QuartzJobExecutor.CreateTrigger(job);
+            var jobTrigger = QuartzJobCreator.CreateTrigger(job);
             if (jobTrigger == null)
             {
                 continue;
