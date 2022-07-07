@@ -12,6 +12,7 @@
     "Permissions:StartJob": "Start Job",
     "Permissions:StopJob": "Stop Job",
     "Permissions:ManageSystemJobs": "Manage System Jobs",
+    "Permissions:ManageActions": "Manage Job Actions",
     "Permissions:BackgroundJobLogs": "BackgroundJobs Logs",
     "Permissions:DeleteJobLogs": "Delete Job Logs",
     "TaskManagement:01000": "A job named {Name} already exists in the Group {Group}!",

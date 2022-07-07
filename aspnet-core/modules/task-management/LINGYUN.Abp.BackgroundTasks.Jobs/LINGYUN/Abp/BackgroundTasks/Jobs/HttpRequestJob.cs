@@ -8,12 +8,34 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class HttpRequestJob : HttpRequestJobBase, IJobRunnable
 {
+    #region Definition Paramters
+
+    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
+        new List<JobDefinitionParamter>
+        {
+            new JobDefinitionParamter(
+                PropertyUrl, 
+                LocalizableStatic.Create("Http:Url"), 
+                required: true),
+            new JobDefinitionParamter(
+                PropertyMethod, 
+                LocalizableStatic.Create("Http:Method"), 
+                LocalizableStatic.Create("Http:MethodDesc"), 
+                required: true),
+
+            new JobDefinitionParamter(PropertyData, LocalizableStatic.Create("Http:Data")),
+            new JobDefinitionParamter(PropertyContentType, LocalizableStatic.Create("Http:ContentType")),
+            new JobDefinitionParamter(PropertyHeaders, LocalizableStatic.Create("Http:Headers")),
+            new JobDefinitionParamter(PropertyCulture, LocalizableStatic.Create("Http:Culture")),
+        };
+
+    #endregion
+
     public const string PropertyUrl = "url";
     public const string PropertyMethod = "method";
     public const string PropertyData = "data";
     public const string PropertyContentType = "contentType";
     public const string PropertyHeaders = "headers";
-    public const string PropertyToken = "token";
 
     public virtual async Task ExecuteAsync(JobRunnableContext context)
     {

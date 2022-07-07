@@ -16,20 +16,54 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
 {
     protected AbpBackgroundTasksOptions Options { get; }
     protected BackgroundJobManager BackgroundJobManager { get; }
+    protected IJobDefinitionManager JobDefinitionManager { get; }
     protected IBackgroundJobInfoRepository BackgroundJobInfoRepository { get; }
 
     public BackgroundJobInfoAppService(
         BackgroundJobManager backgroundJobManager,
+        IJobDefinitionManager jobDefinitionManager,
         IBackgroundJobInfoRepository backgroundJobInfoRepository,
         IOptions<AbpBackgroundTasksOptions> options)
     {
         BackgroundJobManager = backgroundJobManager;
+        JobDefinitionManager = jobDefinitionManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
         Options = options.Value;
     }
 
+    public virtual Task<ListResultDto<BackgroundJobDefinitionDto>> GetDefinitionsAsync()
+    {
+        var jobs = new List<BackgroundJobDefinitionDto>();
+
+        foreach (var jobDefinition in JobDefinitionManager.GetAll())
+        {
+            var job = new BackgroundJobDefinitionDto
+            {
+                Name = jobDefinition.Name,
+                DisplayName = jobDefinition.DisplayName.Localize(StringLocalizerFactory),
+                Description = jobDefinition.Description?.Localize(StringLocalizerFactory),
+            };
+
+            foreach (var jobParamter in jobDefinition.Paramters)
+            {
+                job.Paramters.Add(
+                    new BackgroundJobParamterDto
+                    {
+                        Name = jobParamter.Name,
+                        Required = jobParamter.Required,
+                        DisplayName = jobParamter.DisplayName.Localize(StringLocalizerFactory),
+                        Description = jobParamter.Description?.Localize(StringLocalizerFactory),
+                    });
+            }
+
+            jobs.Add(job);
+        }
+
+        return Task.FromResult(new ListResultDto<BackgroundJobDefinitionDto>(jobs));
+    }
+
     [Authorize(TaskManagementPermissions.BackgroundJobs.Create)]
-    public virtual async Task<BackgroundJobInfoDto> CreateAsync(BackgroundJobInfoCreateDto input)
+    public async virtual Task<BackgroundJobInfoDto> CreateAsync(BackgroundJobInfoCreateDto input)
     {
         if (await BackgroundJobInfoRepository.CheckNameAsync(input.Group, input.Name))
         {
@@ -64,7 +98,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Delete)]
-    public virtual async Task DeleteAsync(string id)
+    public async virtual Task DeleteAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -73,14 +107,14 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         await BackgroundJobManager.DeleteAsync(backgroundJobInfo);
     }
 
-    public virtual async Task<BackgroundJobInfoDto> GetAsync(string id)
+    public async virtual Task<BackgroundJobInfoDto> GetAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
         return ObjectMapper.Map<BackgroundJobInfo, BackgroundJobInfoDto>(backgroundJobInfo);
     }
 
-    public virtual async Task<PagedResultDto<BackgroundJobInfoDto>> GetListAsync(BackgroundJobInfoGetListInput input)
+    public async virtual Task<PagedResultDto<BackgroundJobInfoDto>> GetListAsync(BackgroundJobInfoGetListInput input)
     {
         var filter = new BackgroundJobInfoFilter
         {
@@ -109,7 +143,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
-    public virtual async Task PauseAsync(string id)
+    public async virtual Task PauseAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -119,7 +153,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
-    public virtual async Task ResumeAsync(string id)
+    public async virtual Task ResumeAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -129,7 +163,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
-    public virtual async Task TriggerAsync(string id)
+    public async virtual Task TriggerAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -139,7 +173,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
-    public virtual async Task StopAsync(string id)
+    public async virtual Task StopAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -149,7 +183,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
-    public virtual async Task StartAsync(string id)
+    public async virtual Task StartAsync(string id)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -159,7 +193,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Update)]
-    public virtual async Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
+    public async virtual Task<BackgroundJobInfoDto> UpdateAsync(string id, BackgroundJobInfoUpdateDto input)
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
@@ -177,7 +211,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Delete)]
-    public virtual async Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -194,7 +228,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Stop)]
-    public virtual async Task BulkStopAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkStopAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -211,7 +245,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Start)]
-    public virtual async Task BulkStartAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkStartAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -228,7 +262,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Trigger)]
-    public virtual async Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkTriggerAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -245,7 +279,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Resume)]
-    public virtual async Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkResumeAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -262,7 +296,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
     }
 
     [Authorize(TaskManagementPermissions.BackgroundJobs.Pause)]
-    public virtual async Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
+    public async virtual Task BulkPauseAsync(BackgroundJobInfoBatchInput input)
     {
         if (!input.JobIds.Any())
         {
@@ -278,7 +312,7 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         await BackgroundJobManager.BulkPauseAsync(jobs);
     }
 
-    protected virtual async Task<IEnumerable<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoBatchInput input)
+    protected async virtual Task<IEnumerable<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoBatchInput input)
     {
         var quaryble = await BackgroundJobInfoRepository.GetQueryableAsync();
         quaryble = quaryble.Where(x => input.JobIds.Contains(x.Id));

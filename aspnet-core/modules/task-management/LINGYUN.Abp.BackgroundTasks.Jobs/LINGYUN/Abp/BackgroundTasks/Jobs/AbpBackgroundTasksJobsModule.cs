@@ -1,10 +1,13 @@
-﻿using LINGYUN.Abp.Dapr.Client;
+﻿using LINGYUN.Abp.BackgroundTasks.Localization;
+using LINGYUN.Abp.Dapr.Client;
 using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Emailing;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Sms;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
@@ -12,6 +15,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 [DependsOn(typeof(AbpSmsModule))]
 [DependsOn(typeof(AbpHttpClientModule))]
 [DependsOn(typeof(AbpDaprClientModule))]
+[DependsOn(typeof(AbpBackgroundTasksAbstractionsModule))]
 public class AbpBackgroundTasksJobsModule : AbpModule
 {
     protected const string DontWrapResultField = "_AbpDontWrapResult";
@@ -33,14 +37,16 @@ public class AbpBackgroundTasksJobsModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpBackgroundTasksOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.AddProvider<ConsoleJob>(DefaultJobNames.ConsoleJob);
-            options.AddProvider<SendEmailJob>(DefaultJobNames.SendEmailJob);
-            options.AddProvider<SendSmsJob>(DefaultJobNames.SendSmsJob);
-            options.AddProvider<SleepJob>(DefaultJobNames.SleepJob);
-            options.AddProvider<ServiceInvocationJob>(DefaultJobNames.ServiceInvocationJob);
-            options.AddProvider<HttpRequestJob>(DefaultJobNames.HttpRequestJob);
+            options.FileSets.AddEmbedded<AbpBackgroundTasksJobsModule>();
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<BackgroundTasksResource>()
+                .AddVirtualJson("/LINGYUN/Abp/BackgroundTasks/Jobs/Localization/Resources");
         });
 
         Configure<AbpDaprClientProxyOptions>(options =>

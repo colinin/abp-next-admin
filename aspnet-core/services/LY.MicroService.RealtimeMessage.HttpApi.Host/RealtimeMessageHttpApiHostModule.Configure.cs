@@ -113,8 +113,6 @@ public partial class RealtimeMessageHttpApiHostModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
-
-            options.AddProvider<NotificationCleanupJob>("NotificationCleanupJob");
         });
     }
 

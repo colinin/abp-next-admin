@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "NotificationCleanupJob": "清理过期通知作业",
+    "Notification:BatchCount": "批次数量"
+  }
+}

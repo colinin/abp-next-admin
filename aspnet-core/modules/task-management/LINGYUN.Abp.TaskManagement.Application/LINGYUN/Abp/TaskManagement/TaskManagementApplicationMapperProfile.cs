@@ -8,5 +8,6 @@ public class TaskManagementApplicationMapperProfile : Profile
     {
         CreateMap<BackgroundJobInfo, BackgroundJobInfoDto>();
         CreateMap<BackgroundJobLog, BackgroundJobLogDto>();
+        CreateMap<BackgroundJobAction, BackgroundJobActionDto>();
     }
 }

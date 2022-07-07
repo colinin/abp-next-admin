@@ -27,13 +27,11 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// <summary>
     /// 获取过期任务列表
     /// </summary>
-    /// <param name="nodeName"></param>
     /// <param name="maxResultCount"></param>
     /// <param name="jobExpiratime"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
-        string nodeName,
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default);
@@ -41,20 +39,16 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// 获取所有周期性任务
     /// 指定了Cron表达式的任务需要作为持续性任务交给任务引擎
     /// </summary>
-    /// <param name="nodeName"></param>
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(
-        string nodeName,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取等待入队的任务列表
     /// </summary>
-    /// <param name="nodeName"></param>
     /// <param name="maxResultCount"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetWaitingListAsync(
-        string nodeName,
         int maxResultCount,
         CancellationToken cancellationToken = default);
     /// <summary>

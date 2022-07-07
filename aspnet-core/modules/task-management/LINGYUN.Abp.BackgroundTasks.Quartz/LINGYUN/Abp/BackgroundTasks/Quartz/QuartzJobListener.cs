@@ -33,12 +33,14 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
 
     public override Task JobExecutionVetoed(IJobExecutionContext context, CancellationToken cancellationToken = default)
     {
-        var jobType = context.JobDetail.JobType;
-        if (jobType.IsGenericType)
+        var jobName = context.MergedJobDataMap.Get(nameof(JobInfo.Name))?.ToString();
+        if (jobName.IsNullOrWhiteSpace())
         {
-            jobType = jobType.GetGenericArguments()[0];
+            var jobType = context.JobDetail.JobType;
+            jobName = !jobType.IsGenericType ? jobType.Name : jobType.GetGenericArguments()[0].Name;
         }
-        Logger.LogWarning($"The task {jobType.Name} could not be performed...");
+        
+        Logger.LogWarning($"The task {jobName} could not be performed...");
 
         return Task.FromResult(-1);
     }

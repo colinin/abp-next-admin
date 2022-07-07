@@ -1,5 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "JobAction:Failed": "Failed",
+    "JobAction:Successed": "Successed",
+    "JobAction:Completed": "Completed"
   }
 }

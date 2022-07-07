@@ -91,5 +91,28 @@ public static class TaskManagementDbContextModelCreatingExtensions
 
             b.HasIndex(p => new { p.JobGroup, p.JobName });
         });
+
+        builder.Entity<BackgroundJobAction>(b =>
+        {
+            b.ToTable(options.TablePrefix + "BackgroundJobActions", options.Schema);
+
+            b.Property(p => p.JobId)
+                .HasColumnName(nameof(BackgroundJobAction.JobId))
+                .HasMaxLength(BackgroundJobActionConsts.MaxJobIdLength)
+                .IsRequired(true);
+            b.Property(p => p.Name)
+                .HasColumnName(nameof(BackgroundJobAction.Name))
+                .HasMaxLength(BackgroundJobActionConsts.MaxNameLength)
+                .IsRequired(true);
+
+            b.Property(p => p.Paramters)
+                .HasColumnName(nameof(BackgroundJobAction.Paramters))
+                .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+                .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
+
+            b.ConfigureByConvention();
+
+            b.HasIndex(p => p.Name);
+        });
     }
 }

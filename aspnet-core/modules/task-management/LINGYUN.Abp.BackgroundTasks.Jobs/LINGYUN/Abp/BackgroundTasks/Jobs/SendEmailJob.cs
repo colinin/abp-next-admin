@@ -9,6 +9,25 @@ namespace LINGYUN.Abp.BackgroundTasks.Jobs;
 
 public class SendEmailJob : IJobRunnable
 {
+
+    #region Definition Paramters
+
+    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
+        new List<JobDefinitionParamter>
+        {
+            new JobDefinitionParamter(PropertyTo, LocalizableStatic.Create("Emailing:To"), required: true),
+            new JobDefinitionParamter(PropertySubject, LocalizableStatic.Create("Emailing:Subject"), required: true),
+
+            new JobDefinitionParamter(PropertyFrom, LocalizableStatic.Create("Emailing:From")),
+            new JobDefinitionParamter(PropertyBody, LocalizableStatic.Create("Emailing:Body")),
+            new JobDefinitionParamter(PropertyTemplate, LocalizableStatic.Create("Emailing:Template")),
+            new JobDefinitionParamter(PropertyModel, LocalizableStatic.Create("Emailing:Model")),
+            new JobDefinitionParamter(PropertyContext, LocalizableStatic.Create("Emailing:Context")),
+            new JobDefinitionParamter(PropertyCulture, LocalizableStatic.Create("Emailing:Culture")),
+        };
+
+    #endregion
+
     public const string PropertyFrom = "from";
     /// <summary>
     /// 接收者

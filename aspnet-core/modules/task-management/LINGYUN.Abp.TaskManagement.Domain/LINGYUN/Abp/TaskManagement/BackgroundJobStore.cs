@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -20,34 +19,30 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
 
-    protected AbpBackgroundTasksOptions Options { get; }
-
     public BackgroundJobStore(
         IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository jobInfoRepository,
-        IBackgroundJobLogRepository jobLogRepository,
-        IOptions<AbpBackgroundTasksOptions> options)
+        IBackgroundJobLogRepository jobLogRepository)
     {
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
         UnitOfWorkManager = unitOfWorkManager;
         JobInfoRepository = jobInfoRepository;
         JobLogRepository = jobLogRepository;
-        Options = options.Value;
     }
 
     public async virtual Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
-        var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(Options.NodeName, cancellationToken);
+        var jobInfos = await JobInfoRepository.GetAllPeriodTasksAsync(cancellationToken);
 
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
     public async virtual Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
-        var jobInfos = await JobInfoRepository.GetWaitingListAsync(Options.NodeName, maxResultCount, cancellationToken);
+        var jobInfos = await JobInfoRepository.GetWaitingListAsync(maxResultCount, cancellationToken);
 
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
@@ -162,7 +157,6 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     {
         using var unitOfWork = UnitOfWorkManager.Begin();
         var jobs = await JobInfoRepository.GetExpiredJobsAsync(
-            Options.NodeName,
             maxResultCount,
             jobExpiratime,
             cancellationToken);

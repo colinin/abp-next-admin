@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -52,6 +53,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
@@ -89,6 +91,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureJsonSerializer();
+        ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureCaching(configuration);
@@ -97,9 +100,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-        // 开发取消权限检查
-        // context.Services.AddAlwaysAllowAuthorization();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

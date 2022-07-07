@@ -14,6 +14,7 @@ public class TaskManagementEntityFrameworkCoreModule : AbpModule
         {
             options.AddRepository<BackgroundJobInfo, EfCoreBackgroundJobInfoRepository>();
             options.AddRepository<BackgroundJobLog, EfCoreBackgroundJobLogRepository>();
+            options.AddRepository<BackgroundJobAction, EfCoreBackgroundJobActionRepository>();
         });
     }
 }

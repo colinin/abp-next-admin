@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -100,6 +101,15 @@ public partial class TaskManagementHttpApiHostModule
                     });
                 };
             }
+        });
+    }
+
+    private void ConfigureBackgroundTasks()
+    {
+        Configure<AbpBackgroundTasksOptions>(options =>
+        {
+            options.JobCleanEnabled = true;
+            options.JobFetchEnabled = true;
         });
     }
 
@@ -286,6 +296,11 @@ public partial class TaskManagementHttpApiHostModule
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
             });
+
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {
