@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -17,7 +19,11 @@ public abstract class JobEventBase<TEvent> : IJobEvent
     {
         try
         {
-            await OnJobAfterExecutedAsync(context);
+            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+            using (currentTenant.Change(context.EventData.TenantId))
+            {
+                await OnJobAfterExecutedAsync(context);
+            }
         }
         catch (Exception ex)
         {
@@ -29,7 +35,11 @@ public abstract class JobEventBase<TEvent> : IJobEvent
     {
         try
         {
-            await OnJobBeforeExecutedAsync(context);
+            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+            using (currentTenant.Change(context.EventData.TenantId))
+            {
+                await OnJobBeforeExecutedAsync(context);
+            }
         }
         catch (Exception ex)
         {
