@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
@@ -21,11 +20,6 @@ public class JobLogEvent : JobEventBase<JobLogEvent>, ITransientDependency
             return;
         }
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
-        var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
-
-        using (currentTenant.Change(context.EventData.TenantId))
-        {
-            await store.StoreLogAsync(context.EventData);
-        }
+        await store.StoreLogAsync(context.EventData);
     }
 }
