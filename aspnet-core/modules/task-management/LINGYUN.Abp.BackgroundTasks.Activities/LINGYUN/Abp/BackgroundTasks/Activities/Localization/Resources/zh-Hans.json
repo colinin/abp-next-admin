@@ -1,5 +1,8 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Job:Actions": "执行后操作",
+    "Job:AddAction": "增加作业步骤",
+    "Job:DeleteAction": "移除作业步骤"
   }
 }
