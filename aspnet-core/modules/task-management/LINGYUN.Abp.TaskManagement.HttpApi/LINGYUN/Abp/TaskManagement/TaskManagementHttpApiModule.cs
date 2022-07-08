@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.TaskManagement.Localization;
+﻿using LINGYUN.Abp.BackgroundTasks.Localization;
+using LINGYUN.Abp.TaskManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -33,7 +34,7 @@ public class TaskManagementHttpApiModule : AbpModule
         {
             options.Resources
                 .Get<TaskManagementResource>()
-                .AddBaseTypes(typeof(AbpValidationResource));
+                .AddBaseTypes(typeof(AbpValidationResource), typeof(BackgroundTasksResource));
         });
     }
 }
