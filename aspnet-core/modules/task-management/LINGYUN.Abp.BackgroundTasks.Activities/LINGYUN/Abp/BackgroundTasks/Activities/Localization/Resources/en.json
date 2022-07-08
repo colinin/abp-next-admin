@@ -1,5 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Job:Actions": "Actions",
+    "Job:AddAction": "Add Action",
+    "Job:DeleteAction": "Delete Action"
   }
 }

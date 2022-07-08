@@ -22,14 +22,14 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
     public const string Name = "JobExecutedFailedProvider";
     public readonly static IList<JobActionParamter> Paramters = new List<JobActionParamter>
     {
-        new JobActionParamter(PropertyTo, L("DisplayName:PropertyTo"), L("Description:PropertyTo"), true),
+        new JobActionParamter(PropertyTo, L("DisplayName:To"), L("Description:To"), true),
 
-        new JobActionParamter(PropertySubject, L("DisplayName:PropertySubject"), L("Description:PropertySubject")),
-        new JobActionParamter(PropertyFrom, L("DisplayName:PropertyFrom"), L("Description:PropertyFrom")),
-        new JobActionParamter(PropertyBody, L("DisplayName:PropertyBody"), L("Description:PropertyBody")),
-        new JobActionParamter(PropertyTemplate, L("DisplayName:PropertyTemplate"), L("Description:PropertyTemplate")),
-        new JobActionParamter(PropertyContext, L("DisplayName:PropertyContext"), L("Description:PropertyContext")),
-        new JobActionParamter(PropertyCulture, L("DisplayName:PropertyCulture"), L("Description:PropertyCulture")),
+        new JobActionParamter(PropertySubject, L("DisplayName:Subject"), L("Description:PropertySubject")),
+        new JobActionParamter(PropertyFrom, L("DisplayName:From"), L("Description:From")),
+        new JobActionParamter(PropertyBody, L("DisplayName:Body"), L("Description:Body")),
+        new JobActionParamter(PropertyTemplate, L("DisplayName:Template"), L("Description:Template")),
+        new JobActionParamter(PropertyContext, L("DisplayName:Context"), L("Description:Context")),
+        new JobActionParamter(PropertyCulture, L("DisplayName:Culture"), L("Description:Culture")),
     };
 
     public const string JobGroup = "ExceptionNotifier";
