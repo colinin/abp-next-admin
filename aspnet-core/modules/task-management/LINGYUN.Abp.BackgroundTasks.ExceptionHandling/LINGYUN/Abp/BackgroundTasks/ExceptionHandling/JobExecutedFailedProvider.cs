@@ -32,34 +32,33 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
         new JobActionParamter(PropertyCulture, L("DisplayName:PropertyCulture"), L("Description:PropertyCulture")),
     };
 
-    public const string Prefix = "exception.";
     public const string JobGroup = "ExceptionNotifier";
 
-    public const string PropertyFrom = Prefix + "from";
+    public const string PropertyFrom = "from";
     /// <summary>
     /// 接收者
     /// </summary>
-    public const string PropertyTo = Prefix + "to";
+    public const string PropertyTo = "to";
     /// <summary>
     /// 必须，邮件主体
     /// </summary>
-    public const string PropertySubject = Prefix + "subject";
+    public const string PropertySubject = "subject";
     /// <summary>
     /// 消息内容, 文本消息时必须
     /// </summary>
-    public const string PropertyBody = Prefix + "body";
+    public const string PropertyBody = "body";
     /// <summary>
     /// 发送模板消息
     /// </summary>
-    public const string PropertyTemplate = Prefix + "template";
+    public const string PropertyTemplate = "template";
     /// <summary>
     /// 可选, 模板消息中的上下文参数
     /// </summary>
-    public const string PropertyContext = Prefix + "context";
+    public const string PropertyContext = "context";
     /// <summary>
     /// 可选, 模板消息中的区域性
     /// </summary>
-    public const string PropertyCulture = Prefix + "culture";
+    public const string PropertyCulture = "culture";
 
     public ILogger<JobExecutedFailedProvider> Logger { protected get; set; }
 
