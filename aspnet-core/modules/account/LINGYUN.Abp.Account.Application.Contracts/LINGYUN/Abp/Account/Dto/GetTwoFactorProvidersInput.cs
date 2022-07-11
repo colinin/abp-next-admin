@@ -1,10 +1,10 @@
-﻿using Volo.Abp.Identity;
-using Volo.Abp.Validation;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.Account;
 
 public class GetTwoFactorProvidersInput
 {
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-    public string UserName { get; set; }
+    [Required]
+    public Guid UserId{ get; set; }
 }
