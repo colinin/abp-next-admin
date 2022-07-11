@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Account.Localization;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -179,6 +180,7 @@ public partial class IdentityServerModule
 
             options.Resources
                 .Get<AccountResource>()
+                .AddBaseTypes(typeof(AbpAccountResource))
                 .AddVirtualJson("/Localization/Resources");
         });
 

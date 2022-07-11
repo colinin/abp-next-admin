@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Emailing\Templates\MailSecurityVerify.tpl" />
 		<EmbeddedResource Include="Localization\Resources\*.json" />
 	</ItemGroup>
 
@@ -46,6 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Domain.Shared\LINGYUN.Abp.Account.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\modules\authorization\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />

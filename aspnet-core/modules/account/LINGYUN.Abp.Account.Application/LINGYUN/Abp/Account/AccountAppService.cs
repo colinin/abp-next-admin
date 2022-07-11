@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Identity;
+﻿using LINGYUN.Abp.Account.Emailing;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Settings;
 using LINGYUN.Abp.WeChat;
@@ -10,10 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Clients;
 using Volo.Abp.Identity;
@@ -302,6 +305,40 @@ namespace LINGYUN.Abp.Account
                     {
                         AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(interval)
                     });
+        }
+
+        public async virtual Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
+        {
+            var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailVerifySender>();
+
+            var user = await UserManager.FindByEmailAsync(input.EmailAddress);
+
+            if (user == null)
+            {
+                throw new UserFriendlyException(L["UserNotRegisterd"]);
+            }
+            if (!user.EmailConfirmed)
+            {
+                throw new UserFriendlyException(L["UserEmailNotConfirmed"]);
+            }
+
+            var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+
+            await sender.SendMailLoginVerifyCodeAsync(code, user.UserName, user.Email);
+        }
+
+        public async virtual Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input)
+        {
+            var user = await UserManager.FindByNameAsync(input.UserName);
+
+            if (user == null)
+            {
+                throw new UserFriendlyException(L["UserNotRegisterd"]);
+            }
+
+            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(user);
+            return new ListResultDto<NameValue>(
+                userFactors.Select(key => new NameValue(L[$"TwoFactor:{key}"].Value, key)).ToList());
         }
 
         protected virtual async Task<IdentityUser> GetUserByPhoneNumberAsync(string phoneNumber, bool isConfirmed = true)

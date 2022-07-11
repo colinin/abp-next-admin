@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Account.Localization;
+﻿using LINGYUN.Abp.Account.Localization;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.Localization;
 using Volo.Abp.TextTemplating;
@@ -12,10 +12,11 @@ public class AccountEmailTemplateDefinitionProvider : TemplateDefinitionProvider
         context.Add(
             new TemplateDefinition(
                 AccountEmailTemplates.MailSecurityVerifyLink,
-                displayName: LocalizableString.Create<AccountResource>($"TextTemplate:{AccountEmailTemplates.MailSecurityVerifyLink}"),
+                displayName: LocalizableString.Create<AbpAccountResource>(
+                    $"TextTemplate:{AccountEmailTemplates.MailSecurityVerifyLink}"),
                 layout: StandardEmailTemplates.Layout,
-                localizationResource: typeof(AccountResource)
-            ).WithVirtualFilePath("/Emailing/Templates/MailSecurityVerify.tpl", true)
+                localizationResource: typeof(AbpAccountResource)
+            ).WithVirtualFilePath("/LINGYUN/Abp/Account/Emailing/Templates/MailSecurityVerify.tpl", true)
         );
     }
 }
