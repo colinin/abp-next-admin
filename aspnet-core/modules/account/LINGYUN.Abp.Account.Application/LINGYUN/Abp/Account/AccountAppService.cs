@@ -147,7 +147,7 @@ namespace LINGYUN.Abp.Account
             if (securityTokenCacheItem == null)
             {
                 // 验证码过期
-                throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
+                throw new UserFriendlyException(L["InvalidVerifyCode"]);
             }
 
             // 验证码是否有效
@@ -188,7 +188,7 @@ namespace LINGYUN.Abp.Account
                 }
             }
             // 验证码无效
-            throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
+            throw new UserFriendlyException(L["InvalidVerifyCode"]);
         }
 
         public virtual async Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
@@ -246,7 +246,7 @@ namespace LINGYUN.Abp.Account
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             if (securityTokenCacheItem == null)
             {
-                throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
+                throw new UserFriendlyException(L["InvalidVerifyCode"]);
             }
             await IdentityOptions.SetAsync();
             // 传递 isConfirmed 用户必须是已确认过手机号的
@@ -260,7 +260,7 @@ namespace LINGYUN.Abp.Account
             if (!await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, input.Code))
             {
                 // 验证码无效
-                throw new UserFriendlyException(L["InvalidSmsVerifyCode"]);
+                throw new UserFriendlyException(L["InvalidVerifyCode"]);
             }
             // 生成真正的重置密码Token
             var resetPwdToken = await UserManager.GeneratePasswordResetTokenAsync(user);
