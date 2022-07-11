@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.Account
@@ -47,6 +48,13 @@ namespace LINGYUN.Abp.Account
         }
 
         [HttpPost]
+        [Route("email/send-signin-code")]
+        public async virtual Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
+        {
+            await AccountAppService.SendEmailSigninCodeAsync(input);
+        }
+
+        [HttpPost]
         [Route("phone/send-register-code")]
         public async virtual Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
         {
@@ -58,6 +66,13 @@ namespace LINGYUN.Abp.Account
         public async virtual Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
         {
             await AccountAppService.SendPhoneResetPasswordCodeAsync(input);
+        }
+
+        [HttpGet]
+        [Route("two-factor-providers")]
+        public async virtual Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input)
+        {
+            return await AccountAppService.GetTwoFactorProvidersAsync(input);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Account
 {
+    [Authorize]
     public class MyClaimAppService : AccountApplicationServiceBase, IMyClaimAppService
     {
         public MyClaimAppService()

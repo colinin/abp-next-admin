@@ -18,7 +18,12 @@
                     <abp-input asp-for="Input.RememberBrowser" label="@L["RememberBrowser"].Value" />
                 </abp-column>
             </abp-row>
-            <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["VerifyAuthenticatorCode"]</abp-button>
+            <div class="d-grid gap-2">
+                <abp-button type="submit" button-type="Primary" class="mt-2 mb-3">@L["VerifyAuthenticatorCode"]</abp-button>
+            </div>
+            <a asp-page="./SendCode" asp-all-route-data="@(new Dictionary<string, string> {{"returnUrl", Model.ReturnUrl}, {"returnUrlHash", Model.ReturnUrlHash}})">
+                <i class="fa fa-long-arrow-left"></i> @L["SendVerifyCode"]
+            </a>
         </form>
     </div>
 </div>

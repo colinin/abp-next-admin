@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Account.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Account
@@ -22,6 +24,16 @@ namespace LINGYUN.Abp.Account
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountHttpApiModule).Assembly);
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AccountResource>()
+                    .AddBaseTypes(typeof(AbpAccountResource));
             });
         }
     }

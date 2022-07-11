@@ -1,4 +1,4 @@
-using LY.MicroService.IdentityServer.Emailing;
+using LINGYUN.Abp.Account.Emailing;
 using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -91,12 +91,11 @@ namespace LY.MicroService.IdentityServer.Pages.Account
 
             if (Input.SelectedProvider == "Email")
             {
-                var appName = "MVC"; // TODO: 跟随Abp框架的意思变动
                 await AccountEmailVerifySender
-                    .SendMailLoginVerifyLinkAsync(
-                        user, code, appName,
-                        Input.SelectedProvider, 
-                        RememberMe, ReturnUrl, ReturnUrlHash);
+                    .SendMailLoginVerifyCodeAsync(
+                        code,
+                        user.UserName,
+                        user.Email);
             }
             else if (Input.SelectedProvider == "Phone")
             {

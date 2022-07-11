@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -44,6 +45,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebIdentityServerModule),
     typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountDomainSharedModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),

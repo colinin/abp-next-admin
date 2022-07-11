@@ -1,11 +1,13 @@
-﻿using Volo.Abp.Account.Localization;
+﻿using LINGYUN.Abp.Account.Localization;
+using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Account
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(
+        typeof(AbpEmailingModule))]
     public class AbpAccountDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -18,7 +20,7 @@ namespace LINGYUN.Abp.Account
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AccountResource>("zh-Hans")
+                    .Add<AbpAccountResource>("en")
                     .AddVirtualJson("/LINGYUN/Abp/Account/Localization/Resources");
             });
         }

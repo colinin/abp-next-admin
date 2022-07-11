@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.Account
@@ -36,10 +38,22 @@ namespace LINGYUN.Abp.Account
         /// <returns></returns>
         Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input);
         /// <summary>
+        /// 发送邮件登录验证码
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input);
+        /// <summary>
         /// 发送手机重置密码验证码短信
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input);
+        /// <summary>
+        /// 获取用户二次认证提供者列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input);
     }
 }
