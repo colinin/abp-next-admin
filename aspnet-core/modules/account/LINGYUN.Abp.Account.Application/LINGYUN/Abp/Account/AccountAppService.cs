@@ -329,12 +329,7 @@ namespace LINGYUN.Abp.Account
 
         public async virtual Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input)
         {
-            var user = await UserManager.FindByNameAsync(input.UserName);
-
-            if (user == null)
-            {
-                throw new UserFriendlyException(L["UserNotRegisterd"]);
-            }
+            var user = await UserManager.GetByIdAsync(input.UserId);
 
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(user);
             return new ListResultDto<NameValue>(
