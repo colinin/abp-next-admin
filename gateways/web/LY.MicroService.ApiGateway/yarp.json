@@ -1,0 +1,130 @@
+﻿{
+  "ReverseProxy": {
+    "Routes": {
+      "Account": {
+        "ClusterId": "accountCluster",
+        "Match": {
+          "Path": "/api/account/{**everything}"
+        }
+      },
+      "Identity": {
+        "ClusterId": "identityCluster",
+        "Match": {
+          "Path": "/api/identity/{**everything}"
+        }
+      },
+      "IdentityServer": {
+        "ClusterId": "identityServerCluster",
+        "Match": {
+          "Path": "/api/identity-server/{**everything}"
+        }
+      },
+      "BackendAdmin": {
+        "ClusterId": "backendAdminCluster",
+        "Match": {
+          "Path": "/api/abp/{**everything}"
+        }
+      },
+      "feature-management-route": {
+        "ClusterId": "feature-management-cluster",
+        "Match": {
+          "Path": "/api/feature-management/{**everything}"
+        }
+      },
+      "permission-management-route": {
+        "ClusterId": "permission-management-cluster",
+        "Match": {
+          "Path": "/api/permission-management/{**everything}"
+        }
+      },
+      "setting-management-route": {
+        "ClusterId": "setting-management-cluster",
+        "Match": {
+          "Path": "/api/setting-management/{**everything}"
+        }
+      },
+      "localization-management-route": {
+        "ClusterId": "localization-management-cluster",
+        "Match": {
+          "Path": "/api/localization/{**everything}"
+        }
+      },
+      "im-route": {
+        "ClusterId": "im-cluster",
+        "Match": {
+          "Path": "/api/im/{**everything}"
+        }
+      },
+      "Catalog Service": {
+        "ClusterId": "catalogCluster",
+        "Match": {
+          "Path": "/api/catalog/{**everything}"
+        }
+      },
+      "Ordering Service": {
+        "ClusterId": "orderingCluster",
+        "Match": {
+          "Path": "/api/ordering/{**everything}"
+        }
+      }
+    },
+    "Clusters": {
+      "accountCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://10.21.15.28:44385"
+          }
+        }
+      },
+      "identityCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://10.21.15.28:30015"
+          }
+        }
+      },
+      "backendAdminCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://10.21.15.28:30010"
+          }
+        }
+      },
+      "feature-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://localhost:44353"
+          }
+        }
+      },
+      "permission-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://localhost:44353"
+          }
+        }
+      },
+      "setting-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://localhost:44353"
+          }
+        }
+      },
+      "catalogCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://localhost:44354"
+          }
+        }
+      },
+      "orderingCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://localhost:44356"
+          }
+        }
+      }
+    }
+  }
+}
