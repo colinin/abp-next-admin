@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.MessageService.Subscriptions;
 using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         private readonly IUserSubscribeRepository _userSubscribeRepository;
 
+        private readonly AbpNotificationOptions _options;
+
         public NotificationStore(
             IClock clock,
             IObjectMapper objectMapper,
@@ -39,7 +42,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
             IUnitOfWorkManager unitOfWorkManager,
             INotificationRepository notificationRepository,
             IUserSubscribeRepository userSubscribeRepository,
-            IUserNotificationRepository userNotificationRepository
+            IUserNotificationRepository userNotificationRepository,
+            IOptions<AbpNotificationOptions> options
             )
         {
             _clock = clock;
@@ -49,6 +53,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
             _notificationRepository = notificationRepository;
             _userSubscribeRepository = userSubscribeRepository;
             _userNotificationRepository = userNotificationRepository;
+
+            _options = options.Value;
         }
 
         public virtual async Task ChangeUserNotificationReadStateAsync(
@@ -336,7 +342,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     CreationTime = _clock.Now,
                     Type = notification.Type,
                     // TODO: 通知过期时间应该可以配置
-                    ExpirationTime = _clock.Now.AddDays(60)
+                    ExpirationTime = _clock.Now.Add(_options.ExpirationTime)
                 };
 
                 await _notificationRepository.InsertAsync(notify, cancellationToken: cancellationToken);

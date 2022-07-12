@@ -25,7 +25,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Where(x => x.ExpirationTime.Value.CompareTo(DateTime.Now) <= 0)
+                .Where(x => x.ExpirationTime < DateTime.Now)
+                .OrderBy(x => x.ExpirationTime)
                 .Take(batchCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
