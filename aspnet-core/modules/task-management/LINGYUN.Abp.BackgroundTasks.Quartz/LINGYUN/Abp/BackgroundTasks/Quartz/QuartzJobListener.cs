@@ -57,12 +57,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
 
             if (context.Trigger is ISimpleTrigger simpleTrigger)
             {
-                // 增量数据写入临时数据
-                if (context.MergedJobDataMap.TryGetValue(nameof(JobInfo.TriggerCount), out var count) &&
-                    int.TryParse(count?.ToString(), out var triggerCount))
-                {
-                    context.Put(nameof(JobInfo.TriggerCount), triggerCount + simpleTrigger.TimesTriggered);
-                }
+                // 增量数据写入临时数据, 仅对长期作业有效, 一次性作业永远为1
+                context.Put(nameof(JobInfo.TriggerCount), simpleTrigger.TimesTriggered);
             }
 
             using var scope = ServiceScopeFactory.CreateScope();
@@ -75,6 +71,9 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             {
                 Result = context.Result?.ToString()
             };
+
+            context.TryGetMultiTenantId(out var tenantId);
+            jobEventData.TenantId = tenantId;
 
             var eventContext = new JobEventContext(
                 scope.ServiceProvider,
