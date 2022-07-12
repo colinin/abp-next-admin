@@ -55,10 +55,6 @@ public static class TaskManagementDbContextModelCreatingExtensions
                 .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
                 .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
 
-            b.Property(p => p.Source)
-                .HasColumnName(nameof(BackgroundJobInfo.Source))
-                .HasDefaultValue(JobSource.None);
-
             b.ConfigureByConvention();
 
             b.HasIndex(p => new { p.Name, p.Group });
