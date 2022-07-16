@@ -9,11 +9,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+	  <None Remove="LINGYUN\Abp\Account\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LINGYUN.Abp.Account.Domain.Shared\LINGYUN.Abp.Account.Domain.Shared.csproj" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Account\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

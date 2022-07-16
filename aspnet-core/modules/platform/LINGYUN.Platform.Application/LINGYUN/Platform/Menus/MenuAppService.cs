@@ -211,6 +211,7 @@ namespace LINGYUN.Platform.Menus
                 menu.Component = input.Component;
             }
 
+            menu.ParentId = input.ParentId;
             menu.IsPublic = input.IsPublic;
 
             await MenuManager.UpdateAsync(menu);

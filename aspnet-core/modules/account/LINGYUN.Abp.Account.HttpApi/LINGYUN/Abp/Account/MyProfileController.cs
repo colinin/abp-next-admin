@@ -47,5 +47,19 @@ namespace LINGYUN.Abp.Account
         {
             await MyProfileAppService.ChangePhoneNumberAsync(input);
         }
+
+        [HttpPut]
+        [Route("send-email-confirm-link")]
+        public async virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
+        {
+            await MyProfileAppService.SendEmailConfirmLinkAsync(input);
+        }
+
+        [HttpPut]
+        [Route("confirm-email")]
+        public async virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
+        {
+            await MyProfileAppService.ConfirmEmailAsync(input);
+        }
     }
 }

@@ -10,11 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Emailing\Templates\EmailConfirmed.tpl" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="Emailing\Templates\EmailConfirmed.tpl" />
 		<EmbeddedResource Include="Localization\Resources\*.json" />
 	</ItemGroup>
 

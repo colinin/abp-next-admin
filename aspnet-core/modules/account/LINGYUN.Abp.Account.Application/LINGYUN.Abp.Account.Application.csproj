@@ -18,6 +18,11 @@
     <ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\..\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
+    <ProjectReference Include="..\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LINGYUN\Abp\Account\Emailing\" />
   </ItemGroup>
 
 </Project>

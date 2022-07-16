@@ -1,0 +1,30 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "UserNotRegisterd": "The user account is not registered!",
+    "UserEmailNotConfirmed": "The user's email address is not confirmed!",
+    "SendRepeatSmsVerifyCode": "Phone verification code cannot be sent repeatedly within {0} minutes!",
+    "SendRepeatEmailVerifyCode": "Email verification code cannot be sent repeatedly within {0} minutes!",
+    "DuplicatePhoneNumber": "The phone number already exists!",
+    "PhoneNumberNotRegisterd": "The registered mobile phone number is not registered!",
+    "InvalidVerifyCode": "The verification code is invalid or expired!",
+    "RequiredEmailAddress": "Email address required",
+    "InvalidPhoneNumber": "Invalid phone number",
+    "DuplicateWeChat": "The wechat has been registered!",
+    "DisplayName:SmsVerifyCode": "SMS verification code",
+    "DisplayName:EmailVerifyCode": "Mail verification code",
+    "DisplayName:WeChatCode": "Wechat login code",
+    "TwoFactor": "Two factor authentication",
+    "TwoFactor:Email": "Email",
+    "TwoFactor:Phone": "Phone",
+    "TwoFactor:Authenticator": "Authenticator",
+    "SelectedProvider": "Select validation mode",
+    "SendVerifyCode": "Send verification code",
+    "ReSendVerifyCode": "Resend the verification code",
+    "VerifyCode": "Verification code",
+    "VerifyAuthenticatorCode": "Authentication code",
+    "RememberBrowser": "Remember me in the browser",
+    "TwoFactorAuthenticationInvaidUser": "Authentication failed. Your session is invalid. Please re login try again!",
+    "InvaidGenerateTwoFactorToken": "Verification code generation failed. Please contact your administrator!"
+  }
+}

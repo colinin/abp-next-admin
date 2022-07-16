@@ -1,0 +1,16 @@
+﻿@page
+@inject IHtmlLocalizer<AccountResource> L
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model LY.MicroService.IdentityServer.Pages.Account.SendEmailConfirmModel
+@inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["EmailConfirm"]</h4>
+        <form method="post">
+            <abp-input asp-for="Email" readonly="true" />
+            <a abp-button="Secondary" asp-page="./Login">@L["Cancel"]</a>
+            <abp-button type="submit" button-type="Primary" text="@L["ClickToValidation"].Value"/>
+        </form>
+    </div>
+</div>

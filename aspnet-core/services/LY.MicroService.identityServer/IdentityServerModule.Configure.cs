@@ -1,5 +1,4 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Account.Localization;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -180,7 +179,6 @@ public partial class IdentityServerModule
 
             options.Resources
                 .Get<AccountResource>()
-                .AddBaseTypes(typeof(AbpAccountResource))
                 .AddVirtualJson("/Localization/Resources");
         });
 
@@ -209,8 +207,10 @@ public partial class IdentityServerModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            // 邮件登录地址
+            options.Applications["VUE"].RootUrl = configuration["App:VueUrl"];
+
             options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
+            options.Applications["MVC"].Urls["EmailConfirm"] = "Account/EmailConfirm";
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

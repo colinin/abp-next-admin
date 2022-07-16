@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Account\Emailing\Templates\*.tpl" />
+		<None Remove="LINGYUN\Abp\Account\Templates\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\Account\Emailing\Templates\*.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\Account\Templates\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>
