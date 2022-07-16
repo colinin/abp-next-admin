@@ -23,7 +23,7 @@
             /// </summary>
             public const string SmsResetPassword = UserPrefix + ".SmsResetPassword";
             /// <summary>
-            /// 验证码重复间隔时间
+            /// 短信验证码重复间隔时间
             /// </summary>
             public const string SmsRepetInterval = UserPrefix + ".SmsRepetInterval";
         }

@@ -56,6 +56,7 @@
         "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
         "depPath": "/../aspnet-core/LocalNuget/netstandard2.0/",
         "dependencies": [
+          "LINGYUN.Abp.Account.Templates.dll",
           "LINGYUN.Abp.Features.LimitValidation.dll",
           "LINGYUN.Abp.Features.LimitValidation.Redis.dll",
           "LINGYUN.Abp.WorkflowManagement.Application.Contracts.dll",

@@ -22,5 +22,9 @@
         /// 你不能修改你的邮件绑定信息
         /// </summary>
         public const string UsersCanNotChangeEmailAddress = "Volo.Abp.Identity:020009";
+        /// <summary>
+        /// 重复确认的邮件地址
+        /// </summary>
+        public const string DuplicateConfirmEmailAddress = "Volo.Abp.Identity:020010";
     }
 }

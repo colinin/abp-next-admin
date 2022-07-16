@@ -30,18 +30,18 @@ namespace LINGYUN.Abp.Account
     {
         protected ITotpService TotpService { get; }
         protected IIdentityUserRepository UserRepository { get; }
-        protected IUserSecurityCodeSender SecurityCodeSender { get; }
+        protected IAccountSmsSecurityCodeSender SecurityCodeSender { get; }
         protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
-        protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
+        protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
 
         public AccountAppService(
             ITotpService totpService,
             IWeChatOpenIdFinder weChatOpenIdFinder,
             IIdentityUserRepository userRepository,
-            IUserSecurityCodeSender securityCodeSender,
-            IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache,
+            IAccountSmsSecurityCodeSender securityCodeSender,
+            IDistributedCache<SecurityTokenCacheItem> securityTokenCache,
             AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
             IdentitySecurityLogManager identitySecurityLogManager)
         {
@@ -108,7 +108,7 @@ namespace LINGYUN.Abp.Account
             await CheckSelfRegistrationAsync();
             await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
 
@@ -123,9 +123,9 @@ namespace LINGYUN.Abp.Account
             var securityToken = GuidGenerator.Create().ToString("N");
 
             var code = TotpService.GenerateCode(Encoding.Unicode.GetBytes(securityToken), securityTokenCacheKey);
-            securityTokenCacheItem = new SmsSecurityTokenCacheItem(code.ToString(), securityToken);
+            securityTokenCacheItem = new SecurityTokenCacheItem(code.ToString(), securityToken);
 
-            await SecurityCodeSender.SendPhoneConfirmedCodeAsync(
+            await SecurityCodeSender.SendSmsCodeAsync(
                 input.PhoneNumber, securityTokenCacheItem.Token, template);
 
             await SecurityTokenCache
@@ -142,7 +142,7 @@ namespace LINGYUN.Abp.Account
             await IdentityOptions.SetAsync();
             await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             if (securityTokenCacheItem == null)
             {
@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.Account
                 throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
             }
 
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
             // 能查询到缓存就是重复发送
@@ -229,9 +229,9 @@ namespace LINGYUN.Abp.Account
             // 生成二次认证码
             var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
             // 发送短信验证码
-            await SecurityCodeSender.SendPhoneConfirmedCodeAsync(input.PhoneNumber, code, template);
+            await SecurityCodeSender.SendSmsCodeAsync(input.PhoneNumber, code, template);
             // 缓存这个手机号的记录,防重复
-            securityTokenCacheItem = new SmsSecurityTokenCacheItem(code, user.SecurityStamp);
+            securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
             await SecurityTokenCache
                 .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                     new DistributedCacheEntryOptions
@@ -242,7 +242,7 @@ namespace LINGYUN.Abp.Account
 
         public virtual async Task ResetPasswordAsync(PhoneResetPasswordDto input)
         {
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             if (securityTokenCacheItem == null)
             {
@@ -283,7 +283,7 @@ namespace LINGYUN.Abp.Account
 
         public virtual async Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
         {
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.PhoneNumber, "SmsVerifyCode");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
             if (securityTokenCacheItem != null)
@@ -296,9 +296,9 @@ namespace LINGYUN.Abp.Account
             var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsUserSignin);
 
             // 发送登录验证码短信
-            await SecurityCodeSender.SendPhoneConfirmedCodeAsync(input.PhoneNumber, code, template);
+            await SecurityCodeSender.SendSmsCodeAsync(input.PhoneNumber, code, template);
             // 缓存登录验证码状态,防止同一手机号重复发送
-            securityTokenCacheItem = new SmsSecurityTokenCacheItem(code, user.SecurityStamp);
+            securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
             await SecurityTokenCache
                 .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                     new DistributedCacheEntryOptions

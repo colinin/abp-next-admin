@@ -31,5 +31,17 @@ namespace LINGYUN.Abp.Account
         /// 需二次认证,主要是为了无法用到重定向页面修改相关信息的地方（点名微信小程序）
         /// </remarks>
         Task ChangePhoneNumberAsync(ChangePhoneNumberInput input);
+        /// <summary>
+        /// 发送确认邮件验证码
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input);
+        /// <summary>
+        /// 确认邮件地址
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task ConfirmEmailAsync(ConfirmEmailInput input);
     }
 }

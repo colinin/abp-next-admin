@@ -1,12 +1,15 @@
-﻿using LINGYUN.Abp.Identity;
+﻿using LINGYUN.Abp.Account.Emailing;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Caching;
+using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Account
@@ -14,17 +17,20 @@ namespace LINGYUN.Abp.Account
     [Authorize]
     public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppService
     {
-        protected IDistributedCache<SmsSecurityTokenCacheItem> SecurityTokenCache { get; }
-        protected IUserSecurityCodeSender SecurityCodeSender { get; }
+        protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
+        protected IAccountSmsSecurityCodeSender SecurityCodeSender { get; }
         protected Identity.IIdentityUserRepository UserRepository { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
 
         public MyProfileAppService(
             Identity.IIdentityUserRepository userRepository,
-            IUserSecurityCodeSender securityCodeSender,
-            IDistributedCache<SmsSecurityTokenCacheItem> securityTokenCache)
+            IAccountSmsSecurityCodeSender securityCodeSender,
+            IdentitySecurityLogManager identitySecurityLogManager,
+            IDistributedCache<SecurityTokenCacheItem> securityTokenCache)
         {
             UserRepository = userRepository;
             SecurityCodeSender = securityCodeSender;
+            IdentitySecurityLogManager = identitySecurityLogManager;
             SecurityTokenCache = securityTokenCache;
 
             LocalizationResource = typeof(AccountResource);
@@ -57,7 +63,7 @@ namespace LINGYUN.Abp.Account
 
         public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
         {
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
             var interval = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, 1);
             if (securityTokenCacheItem != null)
@@ -75,9 +81,9 @@ namespace LINGYUN.Abp.Account
             var template = await SettingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed);
             var token = await UserManager.GenerateChangePhoneNumberTokenAsync(user, input.NewPhoneNumber);
             // 发送验证码
-            await SecurityCodeSender.SendPhoneConfirmedCodeAsync(input.NewPhoneNumber, token, template);
+            await SecurityCodeSender.SendSmsCodeAsync(input.NewPhoneNumber, token, template);
 
-            securityTokenCacheItem = new SmsSecurityTokenCacheItem(token, user.ConcurrencyStamp);
+            securityTokenCacheItem = new SecurityTokenCacheItem(token, user.ConcurrencyStamp);
             await SecurityTokenCache
                 .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                     new DistributedCacheEntryOptions
@@ -99,8 +105,48 @@ namespace LINGYUN.Abp.Account
 
             await CurrentUnitOfWork.SaveChangesAsync();
 
-            var securityTokenCacheKey = SmsSecurityTokenCacheItem.CalculateCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
+            var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
+        }
+
+        public async virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
+        {
+            var user = await UserManager.FindByEmailAsync(input.Email);
+
+            if (user == null)
+            {
+                throw new UserFriendlyException(L["Volo.Account:InvalidEmailAddress", input.Email]);
+            }
+
+            if (user.EmailConfirmed)
+            {
+                throw new BusinessException(Identity.IdentityErrorCodes.DuplicateConfirmEmailAddress);
+            }
+
+            var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailConfirmSender>();
+
+            await sender.SendEmailConfirmLinkAsync(
+                user,
+                token,
+                input.AppName,
+                input.ReturnUrl,
+                input.ReturnUrlHash);
+        }
+
+        public async virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
+        {
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(input.UserId);
+
+            (await UserManager.ConfirmEmailAsync(user, input.ConfirmToken)).CheckErrors();
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = "ConfirmEmail"
+            });
         }
     }
 }

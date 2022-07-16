@@ -98,9 +98,9 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
             {
                 Title = subject,
                 Id = context.Event.EventData.Key,
-                Group = context.Action.Paramters.GetOrDefault(nameof(JobInfo.Group)) ?? context.Event.EventData.Group,
-                Name = context.Action.Paramters.GetOrDefault(nameof(JobInfo.Name)) ?? context.Event.EventData.Name,
-                Type = context.Action.Paramters.GetOrDefault(nameof(JobInfo.Type)) ?? context.Event.EventData.Type.Name,
+                Group = context.Event.EventData.Args.GetOrDefault(nameof(JobInfo.Group)) ?? context.Event.EventData.Group,
+                Name = context.Event.EventData.Args.GetOrDefault(nameof(JobInfo.Name)) ?? context.Event.EventData.Name,
+                Type = context.Event.EventData.Args.GetOrDefault(nameof(JobInfo.Type)) ?? context.Event.EventData.Type.Name,
                 Triggertime = context.Event.EventData.RunTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Message = errorMessage,
                 Tenantname = context.Action.Paramters.GetOrDefault(nameof(IMultiTenant.TenantId)),
