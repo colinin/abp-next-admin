@@ -58,6 +58,7 @@
     "Description:Abp.Identity.User.SmsPhoneNumberConfirmed": "用户确认手机号验证码模板",
     "DisplayName:Abp.Identity.User.SmsRepetInterval": "短信验证码重复发送间隔时间(min)",
     "Description:Abp.Identity.User.SmsRepetInterval": "短信验证码验证码重复发送的最小时间差,单位为分",
+    "DisplayName:NewPhoneNumber": "新手机号码",
     "DisplayName:SmsVerifyCode": "短信验证码",
     "DisplayName:EmailVerifyCode": "邮件验证码",
     "DisplayName:WeChatCode": "微信登录凭证",
