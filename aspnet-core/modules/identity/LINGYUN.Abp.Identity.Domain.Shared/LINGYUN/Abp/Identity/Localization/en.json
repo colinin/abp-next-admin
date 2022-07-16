@@ -58,6 +58,7 @@
     "Description:Abp.Identity.User.SmsPhoneNumberConfirmed": "The user confirms the mobile phone verification code template",
     "DisplayName:Abp.Identity.User.SmsRepetInterval": "SMS verification code validity(min)",
     "Description:Abp.Identity.User.SmsRepetInterval": "The valid time for the user to send SMS verification code, unit m, default 3min",
+    "DisplayName:NewPhoneNumber": "New Phone Number",
     "DisplayName:SmsVerifyCode": "SMS verification code",
     "DisplayName:EmailVerifyCode": "Mail verification code",
     "DisplayName:WeChatCode": "Wechat login code",

@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.Account
             await MyProfileAppService.ChangeTwoFactorEnabledAsync(input);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("send-phone-number-change-code")]
         public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
         {
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.Account
             await MyProfileAppService.ChangePhoneNumberAsync(input);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("send-email-confirm-link")]
         public async virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
         {
