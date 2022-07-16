@@ -81,6 +81,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigurePermissionManagement();
+        ConfigureUrls(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);

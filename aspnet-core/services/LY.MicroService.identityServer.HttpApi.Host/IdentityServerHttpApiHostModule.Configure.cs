@@ -31,6 +31,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LY.MicroService.IdentityServer;
@@ -157,6 +158,15 @@ public partial class IdentityServerHttpApiHostModule
                 .EntityHistorySelectors
                 .AddAllEntities();
             }
+        });
+    }
+
+    private void ConfigureUrls(IConfiguration configuration)
+    {
+        Configure<AppUrlOptions>(options =>
+        {
+            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            options.Applications["VUE"].RootUrl = configuration["App:VueUrl"];
         });
     }
 
