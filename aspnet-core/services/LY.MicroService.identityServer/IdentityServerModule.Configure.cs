@@ -207,7 +207,7 @@ public partial class IdentityServerModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["VUE"].RootUrl = configuration["App:VueUrl"];
+            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
 
             options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
             options.Applications["MVC"].Urls["EmailConfirm"] = "Account/EmailConfirm";

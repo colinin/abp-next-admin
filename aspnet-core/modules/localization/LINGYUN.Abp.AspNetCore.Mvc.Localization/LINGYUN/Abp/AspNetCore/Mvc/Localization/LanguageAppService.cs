@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                     UiCultureName = l.UiCultureName,
                     DisplayName = l.DisplayName,
                     FlagIcon = l.FlagIcon
-                }).ToList());
+                }).OrderBy(l => l.CultureName).ToList());
         }
     }
 }

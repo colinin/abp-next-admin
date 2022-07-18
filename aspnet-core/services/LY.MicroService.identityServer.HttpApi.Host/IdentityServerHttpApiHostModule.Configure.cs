@@ -166,7 +166,7 @@ public partial class IdentityServerHttpApiHostModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["VUE"].RootUrl = configuration["App:VueUrl"];
+            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
         });
     }
 
