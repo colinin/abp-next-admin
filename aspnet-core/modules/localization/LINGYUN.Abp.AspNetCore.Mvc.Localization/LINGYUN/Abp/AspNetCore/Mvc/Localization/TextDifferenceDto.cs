@@ -8,5 +8,10 @@
         public string ResourceName { get; set; }
         public string TargetCultureName { get; set; }
         public string TargetValue { get; set; }
+
+        public int CompareTo(TextDifferenceDto other)
+        {
+            return other.ResourceName.CompareTo(ResourceName) ^ other.Key.CompareTo(Key);
+        }
     }
 }

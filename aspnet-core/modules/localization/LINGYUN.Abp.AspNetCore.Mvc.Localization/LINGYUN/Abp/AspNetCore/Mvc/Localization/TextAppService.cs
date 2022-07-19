@@ -36,7 +36,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
             using (CultureHelper.Use(input.CultureName))
             {
-                localizedStrings = localizer.GetAllStrings(true);
+                localizedStrings = localizer.GetAllStrings(true)
+                    .OrderBy(l => l.Name);
 
                 var result = new TextDto
                 {
@@ -57,7 +58,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             if (input.ResourceName.IsNullOrWhiteSpace())
             {
                 var filterResources = _localizationOptions.Resources
-                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter));
+                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter))
+                    .OrderBy(r => r.Value.ResourceName);
 
                 foreach (var resource in filterResources)
                 {
@@ -96,7 +98,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             using (CultureHelper.Use(cultureName))
             {
                 localizedStrings = localizer.GetAllStrings(true)
-                    .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter));
+                    .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
+                    .OrderBy(l => l.Name);
             }
 
             if (Equals(cultureName, targetCultureName))
@@ -108,7 +111,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                 using (CultureHelper.Use(targetCultureName))
                 {
                     targetLocalizedStrings = localizer.GetAllStrings(true)
-                        .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter));
+                        .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
+                        .OrderBy(l => l.Name);
                 }
             }
 

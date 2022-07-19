@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                 Name = x.Value.ResourceName,
                 DisplayName = x.Value.ResourceName,
                 Description = x.Value.ResourceName,
-            });
+            }).OrderBy(l => l.Name);
 
             return Task.FromResult(new ListResultDto<ResourceDto>(resources.ToList()));
         }
