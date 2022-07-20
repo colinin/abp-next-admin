@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
+		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
+	</ItemGroup>
+
+</Project>

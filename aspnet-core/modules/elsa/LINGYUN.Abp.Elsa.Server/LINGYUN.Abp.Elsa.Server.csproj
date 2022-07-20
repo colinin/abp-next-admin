@@ -9,11 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elsa.Server.Api" Version="2.8.2" />
+		<PackageReference Include="Elsa.Server.Api" Version="$(ElsaPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LINGYUN.Abp.Workflow.Elsa\LINGYUN.Abp.Workflow.Elsa.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
+	</ItemGroup>
 
 </Project>
