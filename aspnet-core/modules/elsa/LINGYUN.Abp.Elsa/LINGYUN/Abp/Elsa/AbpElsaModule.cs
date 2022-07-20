@@ -1,15 +1,26 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Elsa;
+using Elsa.Services;
+using LINGYUN.Abp.Elsa.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using Volo.Abp.Features;
+using Volo.Abp.Json;
 using Volo.Abp.Json.Newtonsoft;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using ElsaOptionsBuilder = Elsa.Options.ElsaOptionsBuilder;
 
-namespace LINGYUN.Abp.Workflow.Elsa;
+namespace LINGYUN.Abp.Elsa;
 
-public class AbpWorkflowElsaModule : AbpModule
+[DependsOn(
+    typeof(AbpFeaturesModule),
+    typeof(AbpThreadingModule),
+    typeof(AbpJsonModule))]
+public class AbpElsaModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -19,6 +30,7 @@ public class AbpWorkflowElsaModule : AbpModule
         {
             options.AddCustomTenantAccessor<AbpTenantAccessor>();
             options.AddConsoleActivities();
+            options.AddJavaScriptActivities();
             options.UseJsonSerializer((provider) =>
             {
                 var jsonOptions = provider.GetRequiredService<IOptions<AbpNewtonsoftJsonSerializerOptions>>();
@@ -32,6 +44,13 @@ public class AbpWorkflowElsaModule : AbpModule
             });
 
             builder.Configure(options);
+        });
+
+        context.Services.AddSingleton<IIdGenerator, AbpElsaIdGenerator>();
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources.Add<ElsaResource>();
         });
     }
 }

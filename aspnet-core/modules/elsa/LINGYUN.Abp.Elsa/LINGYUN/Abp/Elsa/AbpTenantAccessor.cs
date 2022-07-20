@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.Workflow.Elsa;
+namespace LINGYUN.Abp.Elsa;
 
 public class AbpTenantAccessor : ITenantAccessor
 {

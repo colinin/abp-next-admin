@@ -8,7 +8,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Workflow.Elsa;
+using LINGYUN.Abp.Elsa;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,8 +36,8 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringOssManagementModule),
-    typeof(AbpWorkflowElsaModule),
-    typeof(AbpWorkflowElsaServerModule),
+    typeof(AbpElsaModule),
+    typeof(AbpElsaServerModule),
     //typeof(WorkflowManagementApplicationModule),
     //typeof(WorkflowManagementHttpApiModule),
     //typeof(WorkflowManagementEntityFrameworkCoreModule),
@@ -72,7 +72,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
 
         PreConfigureApp();
         PreConfigureFeature();
-        PreConfigureElsa(configuration);
+        PreConfigureElsa(context.Services, configuration);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -81,6 +81,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
+        ConfigureEndpoints();
         ConfigureLocalization();
         ConfigureJsonSerializer();
         ConfigureExceptionHandling();
@@ -94,8 +95,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
-        // 开发取消权限检查
-        // context.Services.AddAlwaysAllowAuthorization();
+        context.Services.AddRazorPages();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -104,6 +104,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var env = context.GetEnvironment();
 
         app.UseStaticFiles();
+        app.UseHttpActivities();
         app.UseCorrelationId();
         app.UseRouting();
         app.UseCors();

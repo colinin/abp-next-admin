@@ -1,7 +1,6 @@
 ﻿using Elsa;
+using Elsa.Activities.UserTask.Extensions;
 using Elsa.Options;
-using Elsa.Persistence.EntityFramework.Core.Extensions;
-using Elsa.Persistence.EntityFramework.MySql;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -10,7 +9,9 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -52,8 +53,10 @@ public partial class WorkflowManagementHttpApiHostModule
         AbpSerilogEnrichersConsts.ApplicationName = "WorkflowManagement";
     }
 
-    private void PreConfigureElsa(IConfiguration configuration)
+    private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
     {
+        var elsaSection = configuration.GetSection("Elsa");
+
         PreConfigure<ElsaOptionsBuilder>(builder =>
         {
             // TODO: 取消注释持久化
@@ -61,7 +64,34 @@ public partial class WorkflowManagementHttpApiHostModule
             //builder.UseEntityFrameworkPersistence(ef =>
             //    ef.UseMySql(connectionString));
             builder.AddQuartzTemporalActivities()
-                .AddJavaScriptActivities();
+                .AddEmailActivities()
+                .AddUserTaskActivities()
+                .AddHttpActivities(elsaSection.GetSection("Server").Bind)
+                .AddWorkflowsFrom<WorkflowManagementHttpApiHostModule>();
+                //.AddWorkflowSettings()
+                //.AddWebhooks(options =>
+                //{
+                //    options.UseEntityFrameworkPersistence(db =>
+                //    {
+                //        db.UseMySql(configuration.GetConnectionString("Workflow"));
+                //    });
+                //})
+                //.UseEntityFrameworkPersistence(db =>
+                //{
+                //    db.UseMySql(configuration.GetConnectionString("Workflow"));
+                //});
+        });
+    }
+
+    private void ConfigureEndpoints()
+    {
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(
+                (context) =>
+                {
+                    context.Endpoints.MapFallbackToPage("/_Host");
+                });
         });
     }
 
@@ -271,6 +301,11 @@ public partial class WorkflowManagementHttpApiHostModule
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
             });
+
+        if (isDevelopment)
+        {
+            services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {

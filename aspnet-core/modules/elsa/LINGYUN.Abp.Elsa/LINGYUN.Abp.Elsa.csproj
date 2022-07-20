@@ -10,10 +10,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Elsa" Version="2.8.2" />
+		<PackageReference Include="Elsa" Version="$(ElsaPackageVersion)" />
 	</ItemGroup>
 
 </Project>
