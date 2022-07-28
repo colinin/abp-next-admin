@@ -51,11 +51,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflow-core", "workflow-c
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elsa", "elsa", "{F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa", "modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj", "{17EA5194-BBE8-4CE1-B6F9-DF6829622F38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa", "modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj", "{17EA5194-BBE8-4CE1-B6F9-DF6829622F38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Server", "modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj", "{88AA0D46-597E-4969-8382-A3F8054B9409}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Server", "modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj", "{88AA0D46-597E-4969-8382-A3F8054B9409}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFramework.Core", "modules\elsa\LINGYUN.Abp.Elsa.EntityFramework.Core\LINGYUN.Abp.Elsa.EntityFramework.Core.csproj", "{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.EntityFramework.Core", "modules\elsa\LINGYUN.Abp.Elsa.EntityFramework.Core\LINGYUN.Abp.Elsa.EntityFramework.Core.csproj", "{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Activities.BlobStoring", "modules\elsa\LINGYUN.Abp.Elsa.Activities.BlobStoring\LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj", "{81CB5141-4FC5-413A-A516-CD65F40465C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,14 @@ Global
 		{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81CB5141-4FC5-413A-A516-CD65F40465C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CB5141-4FC5-413A-A516-CD65F40465C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CB5141-4FC5-413A-A516-CD65F40465C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CB5141-4FC5-413A-A516-CD65F40465C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00CB6328-83F0-4C50-9561-2C61AFC03CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00CB6328-83F0-4C50-9561-2C61AFC03CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00CB6328-83F0-4C50-9561-2C61AFC03CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00CB6328-83F0-4C50-9561-2C61AFC03CA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,6 +181,8 @@ Global
 		{17EA5194-BBE8-4CE1-B6F9-DF6829622F38} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
 		{88AA0D46-597E-4969-8382-A3F8054B9409} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
 		{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
+		{81CB5141-4FC5-413A-A516-CD65F40465C0} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
+		{00CB6328-83F0-4C50-9561-2C61AFC03CA1} = {2F51B296-58EB-4D54-9921-5A07E6E4B7BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

@@ -68,7 +68,7 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
         if (providerName == UserPermissionValueProvider.ProviderName)
         {
             var userId = Guid.Parse(providerKey);
-            var organizationUnits = await IdentityUserRepository.GetOrganizationUnitsAsync(userId);
+            var organizationUnits = await IdentityUserRepository.GetOrganizationUnitsAsync(id: userId);
 
             foreach (var organizationUnit in organizationUnits)
             {
