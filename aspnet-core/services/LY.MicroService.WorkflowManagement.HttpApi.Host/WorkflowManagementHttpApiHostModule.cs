@@ -27,6 +27,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
+using LINGYUN.Abp.Elsa.Activities.BlobStoring;
+using Elsa;
 
 namespace LY.MicroService.WorkflowManagement;
 
@@ -38,14 +40,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpBlobStoringOssManagementModule),
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
-    //typeof(WorkflowManagementApplicationModule),
-    //typeof(WorkflowManagementHttpApiModule),
-    //typeof(WorkflowManagementEntityFrameworkCoreModule),
-    //typeof(AbpWorkflowCoreComponentsModule),
-    //typeof(AbpWorkflowCoreDistributedLockModule),
-    //typeof(AbpWorkflowCoreLifeCycleEventModule),
-    //typeof(AbpWorkflowCoreRabbitMQModule),
-    //typeof(AbpWorkflowCorePersistenceEntityFrameworkCoreModule),
+    typeof(AbpElsaActivitiesBlobStoringModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
@@ -90,6 +85,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
@@ -107,7 +103,8 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseHttpActivities();
         app.UseCorrelationId();
         app.UseRouting();
-        app.UseCors();
+        app.UseCors(DefaultCorsPolicyName);
+        app.UseElsaFeatures();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();

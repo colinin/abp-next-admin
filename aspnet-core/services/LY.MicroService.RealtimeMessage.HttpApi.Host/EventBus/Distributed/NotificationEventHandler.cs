@@ -134,11 +134,11 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     cultureName: eventData.Data.Culture,
                     globalContext: new Dictionary<string, object>
                     {
-                        { "notification", notification.Name },
-                        { "formUser", eventData.Data.FormUser },
-                        { "notificationId", eventData.Id },
-                        { "title", title.ToString() },
-                        { "creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                        { "$notification", notification.Name },
+                        { "$formUser", eventData.Data.FormUser },
+                        { "$notificationId", eventData.Id },
+                        { "$title", title.ToString() },
+                        { "$creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
                     });
 
                 var notificationData = new NotificationData();

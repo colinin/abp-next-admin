@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Notifications
@@ -18,6 +19,10 @@ namespace LINGYUN.Abp.Notifications
     /// </summary>
     public class NotificationSender : INotificationSender, ITransientDependency
     {
+        /// <summary>
+        /// Reference to <see cref="IClock"/>.
+        /// </summary>
+        protected IClock Clock { get; }
         /// <summary>
         /// Reference to <see cref="ILogger<NotificationSender>"/>.
         /// </summary>
@@ -37,11 +42,13 @@ namespace LINGYUN.Abp.Notifications
 
         protected AbpNotificationOptions Options { get; }
         public NotificationSender(
-           IDistributedEventBus distributedEventBus,
-           IDistributedIdGenerator distributedIdGenerator,
-           IUnitOfWorkManager unitOfWorkManager,
-           IOptions<AbpNotificationOptions> options)
+            IClock clock,
+            IDistributedEventBus distributedEventBus,
+            IDistributedIdGenerator distributedIdGenerator,
+            IUnitOfWorkManager unitOfWorkManager,
+            IOptions<AbpNotificationOptions> options)
         {
+            Clock = clock;
             Options = options.Value;
             DistributedEventBus = distributedEventBus;
             DistributedIdGenerator = distributedIdGenerator;
@@ -82,7 +89,7 @@ namespace LINGYUN.Abp.Notifications
                 TenantId = tenantId,
                 Users = users?.ToList(),
                 Name = name,
-                CreationTime = DateTime.Now,
+                CreationTime = Clock.Now,
                 Severity = severity
             };
 

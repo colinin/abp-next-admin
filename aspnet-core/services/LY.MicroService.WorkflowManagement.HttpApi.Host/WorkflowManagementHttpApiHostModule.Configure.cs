@@ -1,6 +1,6 @@
 ﻿using Elsa;
-using Elsa.Activities.UserTask.Extensions;
 using Elsa.Options;
+using Elsa.Rebus.RabbitMq;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -10,6 +10,7 @@ using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +20,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -38,6 +41,8 @@ namespace LY.MicroService.WorkflowManagement;
 
 public partial class WorkflowManagementHttpApiHostModule
 {
+    private const string DefaultCorsPolicyName = "Default";
+    private const string ApplicationName = "WorkflowManagement";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -50,37 +55,46 @@ public partial class WorkflowManagementHttpApiHostModule
 
     private void PreConfigureApp()
     {
-        AbpSerilogEnrichersConsts.ApplicationName = "WorkflowManagement";
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
     }
 
     private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
     {
         var elsaSection = configuration.GetSection("Elsa");
+        var startups = new[]
+            {
+                typeof(Elsa.Activities.Console.Startup),
+                typeof(Elsa.Activities.Http.Startup),
+                typeof(Elsa.Activities.UserTask.Startup),
+                typeof(Elsa.Activities.Temporal.Quartz.Startup),
+                typeof(Elsa.Activities.Email.Startup),
+                typeof(Elsa.Persistence.EntityFramework.MySql.Startup),
+                typeof(Elsa.Scripting.JavaScript.Startup),
+                typeof(Elsa.Activities.Webhooks.Startup),
+                typeof(Elsa.Webhooks.Persistence.EntityFramework.MySql.Startup),
+                typeof(Elsa.WorkflowSettings.Persistence.EntityFramework.MySql.Startup),
+                typeof(LINGYUN.Abp.Elsa.Activities.BlobStoring.Startup),
+            };
 
-        PreConfigure<ElsaOptionsBuilder>(builder =>
+        PreConfigure<ElsaOptionsBuilder>(elsa =>
         {
-            // TODO: 取消注释持久化
-            //var connectionString = configuration.GetConnectionString("Workflow");
-            //builder.UseEntityFrameworkPersistence(ef =>
-            //    ef.UseMySql(connectionString));
-            builder.AddQuartzTemporalActivities()
-                .AddEmailActivities()
-                .AddUserTaskActivities()
-                .AddHttpActivities(elsaSection.GetSection("Server").Bind)
-                .AddWorkflowsFrom<WorkflowManagementHttpApiHostModule>();
-                //.AddWorkflowSettings()
-                //.AddWebhooks(options =>
-                //{
-                //    options.UseEntityFrameworkPersistence(db =>
-                //    {
-                //        db.UseMySql(configuration.GetConnectionString("Workflow"));
-                //    });
-                //})
-                //.UseEntityFrameworkPersistence(db =>
-                //{
-                //    db.UseMySql(configuration.GetConnectionString("Workflow"));
-                //});
+            elsa
+                .AddActivitiesFrom<WorkflowManagementHttpApiHostModule>()
+                .AddWorkflowsFrom<WorkflowManagementHttpApiHostModule>()
+                .AddFeatures(startups, configuration)
+                .ConfigureWorkflowChannels(options => elsaSection.GetSection("WorkflowChannels").Bind(options))
+                .UseRabbitMq(elsaSection["Rebus:RabbitMQ:Connection"]);
+
+            elsa.DistributedLockingOptionsBuilder
+                .UseProviderFactory(sp => name =>
+                {
+                    var provider = sp.GetRequiredService<IDistributedLockProvider>();
+
+                    return provider.CreateLock(name);
+                });
         });
+
+        services.AddNotificationHandlersFrom<WorkflowManagementHttpApiHostModule>();
     }
 
     private void ConfigureEndpoints()
@@ -174,7 +188,7 @@ public partial class WorkflowManagementHttpApiHostModule
     {
         Configure<AbpAuditingOptions>(options =>
         {
-            options.ApplicationName = "WorkflowManagement";
+            options.ApplicationName = ApplicationName;
             // 是否启用实体变更记录
             var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
             if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
@@ -294,6 +308,12 @@ public partial class WorkflowManagementHttpApiHostModule
 
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
+        Configure<AbpAntiForgeryOptions>(options =>
+        {
+            options.AutoValidate = false;
+            //options.AutoValidateFilter = (type) => !type.Namespace.Contains("elsa", StringComparison.CurrentCultureIgnoreCase);
+        });
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -315,5 +335,28 @@ public partial class WorkflowManagementHttpApiHostModule
                 .SetApplicationName("LINGYUN.Abp.Application")
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
+    }
+
+    private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
     }
 }

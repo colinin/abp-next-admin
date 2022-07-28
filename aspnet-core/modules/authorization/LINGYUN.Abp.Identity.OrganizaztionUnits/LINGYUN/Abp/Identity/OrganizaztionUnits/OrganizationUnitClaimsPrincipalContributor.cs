@@ -34,7 +34,7 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
             return;
         }
 
-        var userOus = await _identityUserRepository.GetOrganizationUnitsAsync(userId.Value);
+        var userOus = await _identityUserRepository.GetOrganizationUnitsAsync(id: userId.Value);
 
         foreach (var userOu in userOus)
         {
