@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         /// <summary>
         /// 消息来源
         /// </summary>
-        public virtual MessageSourceTye Source { get; protected set; }
+        public virtual MessageSourceType Source { get; protected set; }
         /// <summary>
         /// 发送状态
         /// </summary>
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             string sendUserName,
             string content,
             MessageType type = MessageType.Text,
-            MessageSourceTye source = MessageSourceTye.User,
+            MessageSourceType source = MessageSourceType.User,
             Guid? tenantId = null)
         {
             MessageId = id;

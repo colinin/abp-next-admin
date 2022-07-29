@@ -15,12 +15,13 @@ public class AbpTenantAccessor : ITenantAccessor
         _currentTenant = currentTenant;
     }
 
-    public Task<string> GetTenantIdAsync(CancellationToken cancellationToken = default)
+    public Task<string?> GetTenantIdAsync(CancellationToken cancellationToken = default)
     {
+        string? tenantId = null;
         if (_currentTenant.IsAvailable)
         {
-            return Task.FromResult(_currentTenant.GetId().ToString());
+            tenantId = _currentTenant.GetId().ToString();
         }
-        return Task.FromResult("");
+        return Task.FromResult(tenantId);
     }
 }

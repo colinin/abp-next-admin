@@ -341,7 +341,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                     FormUserName = GetValue<string>(reader, 3),
                     Object = GetValue<string>(reader, 4),
                     AvatarUrl = GetValue<string>(reader, 5),
-                    Source = (MessageSourceTye)GetValue<int>(reader, 6),
+                    Source = (MessageSourceType)GetValue<int>(reader, 6),
                     MessageId = GetValue<string>(reader, 7),
                     MessageType = (MessageType)GetValue<int>(reader, 8),
                     TenantId = GetValue<Guid?>(reader, 9),

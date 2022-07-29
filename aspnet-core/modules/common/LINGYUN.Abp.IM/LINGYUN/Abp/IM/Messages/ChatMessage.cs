@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.IM.Messages
         /// </summary>
         public MessageType MessageType { get; set; } = MessageType.Text;
 
-        public MessageSourceTye Source { get; set; } = MessageSourceTye.User;
+        public MessageSourceType Source { get; set; } = MessageSourceType.User;
 
         public ExtraPropertyDictionary ExtraProperties { get; set; }
 
@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.IM.Messages
             IClock clock,
             bool isAnonymous = false,
             MessageType type = MessageType.Text,
-            MessageSourceTye souce = MessageSourceTye.User,
+            MessageSourceType souce = MessageSourceType.User,
             Guid? tenantId = null)
         {
             return new ChatMessage
@@ -111,7 +111,7 @@ namespace LINGYUN.Abp.IM.Messages
                 IsAnonymous = false,
                 MessageType = type,
                 TenantId = tenantId,
-                Source = MessageSourceTye.System,
+                Source = MessageSourceType.System,
             }
             .SetProperty("L", false);
         }
@@ -145,7 +145,7 @@ namespace LINGYUN.Abp.IM.Messages
                 IsAnonymous = false,
                 MessageType = type,
                 TenantId = tenantId,
-                Source = MessageSourceTye.System,
+                Source = MessageSourceType.System,
             }
             .SetProperty("L", true)
             .SetProperty(nameof(ChatMessage.Content).ToPascalCase(), content);
@@ -169,7 +169,7 @@ namespace LINGYUN.Abp.IM.Messages
                 IsAnonymous = false,
                 MessageType = type,
                 TenantId = tenantId,
-                Source = MessageSourceTye.System,
+                Source = MessageSourceType.System,
             }
             .SetProperty("L", false);
         }
@@ -202,7 +202,7 @@ namespace LINGYUN.Abp.IM.Messages
                 IsAnonymous = false,
                 MessageType = type,
                 TenantId = tenantId,
-                Source = MessageSourceTye.System,
+                Source = MessageSourceType.System,
             }
             .SetProperty("L", true)
             .SetProperty(nameof(ChatMessage.Content).ToPascalCase(), content);
@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.IM.Messages
             IClock clock,
             bool isAnonymous = false,
             MessageType type = MessageType.Text,
-            MessageSourceTye souce = MessageSourceTye.User,
+            MessageSourceType souce = MessageSourceType.User,
             Guid? tenantId = null)
         {
             return new ChatMessage

@@ -2,7 +2,6 @@
 using Elsa.ActivityResults;
 using Elsa.Attributes;
 using Elsa.Expressions;
-using Elsa.Services;
 using Elsa.Services.Models;
 using System;
 using System.Threading.Tasks;
@@ -13,10 +12,8 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
 [Action(Category = "Blob",
         Description = "Save a blob.",
         Outcomes = new[] { OutcomeNames.Done })]
-public class WriteBlob : Activity
+public class WriteBlob : BlobActivity
 {
-    private readonly IBlobContainer<AbpElsaBlobContainer> _container;
-
     [ActivityInput(Hint = "Path of the blob.")]
     public string? Path { get; set; }
 
@@ -26,14 +23,14 @@ public class WriteBlob : Activity
     [ActivityInput(Hint = "The bytes to write.", SupportedSyntaxes = new[] { SyntaxNames.JavaScript }, DefaultSyntax = SyntaxNames.JavaScript)]
     public byte[]? Bytes { get; set; }
 
-    public WriteBlob(IBlobContainer<AbpElsaBlobContainer> container)
+    public WriteBlob(IBlobContainer<ElsaBlobContainer> blobContainer)
+        : base(blobContainer)
     {
-        _container = container;
     }
 
     protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
     {
-        await _container.SaveAsync(Path, Bytes, Overwrite, context.CancellationToken);
+        await BlobContainer.SaveAsync(Path, Bytes, Overwrite, context.CancellationToken);
 
         return Done();
     }

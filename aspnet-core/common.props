@@ -3,7 +3,7 @@
     <LangVersion>latest</LangVersion>
     <Version>5.3.2</Version>
     <Authors>colin</Authors>
-    <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CS0436;CS8618</NoWarn>
     <PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>

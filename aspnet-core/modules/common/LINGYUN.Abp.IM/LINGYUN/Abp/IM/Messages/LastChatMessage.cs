@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.IM.Messages
         /// </summary>
         public MessageType MessageType { get; set; }
 
-        public MessageSourceTye Source { get; set; }
+        public MessageSourceType Source { get; set; }
         public ExtraPropertyDictionary ExtraProperties { get; set; }
         public LastChatMessage()
         {
