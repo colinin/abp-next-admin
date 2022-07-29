@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             Guid receiveUserId,
             string content,
             MessageType type = MessageType.Text,
-            MessageSourceTye source = MessageSourceTye.User,
+            MessageSourceType source = MessageSourceType.User,
             Guid? tenantId = null)
             : base(id, sendUserId, sendUserName, content, type, source, tenantId)
         {

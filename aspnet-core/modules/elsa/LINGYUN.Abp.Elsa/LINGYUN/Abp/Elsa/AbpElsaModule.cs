@@ -46,7 +46,8 @@ public class AbpElsaModule : AbpModule
             builder.Configure(options);
         });
 
-        context.Services.AddSingleton<IIdGenerator, AbpElsaIdGenerator>();
+        context.Services.Replace<IIdGenerator, AbpElsaIdGenerator>(ServiceLifetime.Singleton);
+        context.Services.Replace<IWorkflowRunner, AbpWorkflowRunner>(ServiceLifetime.Scoped);
 
         Configure<AbpLocalizationOptions>(options =>
         {
