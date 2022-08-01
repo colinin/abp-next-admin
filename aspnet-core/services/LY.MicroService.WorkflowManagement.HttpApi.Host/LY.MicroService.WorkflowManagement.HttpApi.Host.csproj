@@ -46,10 +46,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.BlobStoring\LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.IM\LINGYUN.Abp.Elsa.Activities.IM.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Notifications\LINGYUN.Abp.Elsa.Activities.Notifications.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Sms\LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />

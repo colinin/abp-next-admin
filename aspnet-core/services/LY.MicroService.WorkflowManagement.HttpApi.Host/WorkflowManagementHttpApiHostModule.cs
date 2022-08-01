@@ -1,14 +1,16 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using Elsa;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Elsa;
+using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Elsa;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +29,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
-using LINGYUN.Abp.Elsa.Activities.BlobStoring;
-using Elsa;
 
 namespace LY.MicroService.WorkflowManagement;
 
@@ -40,7 +40,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpBlobStoringOssManagementModule),
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
-    typeof(AbpElsaActivitiesBlobStoringModule),
+    typeof(AbpElsaActivitiesModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
