@@ -1,4 +1,5 @@
-﻿using Elsa.ActivityResults;
+﻿using Elsa;
+using Elsa.ActivityResults;
 using Elsa.Attributes;
 using Elsa.Services;
 using Elsa.Services.Models;
@@ -9,7 +10,10 @@ using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Elsa.Activities.IM;
 
-[Action(Category = "Message", Description = "Send an message.")]
+[Action(
+    Category = "Message",
+    Description = "Send an message.",
+    Outcomes = new[] { OutcomeNames.Done })]
 public class SendMessage : Activity
 {
     private readonly IClock _clock;
@@ -61,7 +65,7 @@ public class SendMessage : Activity
                 _clock,
                 false,
                 MessageType.Text,
-                MessageSourceTye.User,
+                MessageSourceType.User,
                 tenantId);
         }
         else if (To.HasValue)
@@ -74,7 +78,7 @@ public class SendMessage : Activity
                _clock,
                false,
                MessageType.Text,
-               MessageSourceTye.User,
+               MessageSourceType.User,
                tenantId);
         }
 
