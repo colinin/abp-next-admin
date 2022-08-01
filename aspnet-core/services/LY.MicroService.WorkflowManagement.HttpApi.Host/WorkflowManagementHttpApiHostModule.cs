@@ -100,7 +100,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var env = context.GetEnvironment();
 
         app.UseStaticFiles();
-        app.UseHttpActivities();
         app.UseCorrelationId();
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);

@@ -75,6 +75,7 @@ public partial class WorkflowManagementHttpApiHostModule
                 typeof(Elsa.WorkflowSettings.Persistence.EntityFramework.MySql.Startup),
                 typeof(LINGYUN.Abp.Elsa.Activities.BlobStoring.Startup),
                 typeof(LINGYUN.Abp.Elsa.Activities.Notifications.Startup),
+                typeof(LINGYUN.Abp.Elsa.Activities.Sms.Startup),
                 typeof(LINGYUN.Abp.Elsa.Activities.IM.Startup),
             };
 

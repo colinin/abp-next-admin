@@ -1,4 +1,5 @@
-﻿using Elsa.ActivityResults;
+﻿using Elsa;
+using Elsa.ActivityResults;
 using Elsa.Attributes;
 using Elsa.Design;
 using Elsa.Expressions;
@@ -13,7 +14,10 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Elsa.Activities.Notifications;
 
-[Action(Category = "Notification", Description = "Send an notification.")]
+[Action(
+    Category = "Notification", 
+    Description = "Send an notification.",
+    Outcomes = new[] { OutcomeNames.Done })]
 public class SendNotification : Activity
 {
     private readonly INotificationSender _notificationSender;
