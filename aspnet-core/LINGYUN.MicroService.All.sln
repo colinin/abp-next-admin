@@ -428,7 +428,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{995DB1CE-A2FC-4468-A521-4207FD587EC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Account.Templates", "modules\account\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj", "{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.Templates", "modules\account\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj", "{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caching", "caching", "{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Domain", "modules\caching\LINGYUN.Abp.CachingManagement.Domain\LINGYUN.Abp.CachingManagement.Domain.csproj", "{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.CachingManagement.StackExchangeRedis", "modules\caching\LINGYUN.Abp.CachingManagement.StackExchangeRedis\LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj", "{920867B4-4740-4074-9B49-14002B272A63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.CachingManagement.Application.Contracts", "modules\caching\LINGYUN.Abp.CachingManagement.Application.Contracts\LINGYUN.Abp.CachingManagement.Application.Contracts.csproj", "{3D422738-B111-4DEE-82E1-C3A90F1133B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.CachingManagement.Application", "modules\caching\LINGYUN.Abp.CachingManagement.Application\LINGYUN.Abp.CachingManagement.Application.csproj", "{08CC528E-98D7-41D9-957D-9F9064645788}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.CachingManagement.HttpApi", "modules\caching\LINGYUN.Abp.CachingManagement.HttpApi\LINGYUN.Abp.CachingManagement.HttpApi.csproj", "{B507D18B-770E-4581-854B-15579AC7074F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1116,6 +1128,26 @@ Global
 		{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{920867B4-4740-4074-9B49-14002B272A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920867B4-4740-4074-9B49-14002B272A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920867B4-4740-4074-9B49-14002B272A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920867B4-4740-4074-9B49-14002B272A63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D422738-B111-4DEE-82E1-C3A90F1133B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D422738-B111-4DEE-82E1-C3A90F1133B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D422738-B111-4DEE-82E1-C3A90F1133B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D422738-B111-4DEE-82E1-C3A90F1133B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08CC528E-98D7-41D9-957D-9F9064645788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08CC528E-98D7-41D9-957D-9F9064645788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08CC528E-98D7-41D9-957D-9F9064645788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08CC528E-98D7-41D9-957D-9F9064645788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B507D18B-770E-4581-854B-15579AC7074F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B507D18B-770E-4581-854B-15579AC7074F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B507D18B-770E-4581-854B-15579AC7074F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B507D18B-770E-4581-854B-15579AC7074F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1326,6 +1358,12 @@ Global
 		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{995DB1CE-A2FC-4468-A521-4207FD587EC5} = {90E88EAC-4291-4406-8D88-EFDF61B11292}
 		{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154} = {9E72FEB9-A626-4312-892B-CDD043879758}
+		{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
+		{920867B4-4740-4074-9B49-14002B272A63} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
+		{3D422738-B111-4DEE-82E1-C3A90F1133B1} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
+		{08CC528E-98D7-41D9-957D-9F9064645788} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
+		{B507D18B-770E-4581-854B-15579AC7074F} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

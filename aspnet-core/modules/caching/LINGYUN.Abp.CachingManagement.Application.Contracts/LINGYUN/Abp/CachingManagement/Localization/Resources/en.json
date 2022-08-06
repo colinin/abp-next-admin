@@ -1,0 +1,21 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:CachingManagement": "Caching Management",
+    "Permission:Caches": "Manager Cache",
+    "Permission:Refresh": "Refresh",
+    "Permission:Delete": "Delete",
+    "Caches": "Caches",
+    "DisplayName:Marker": "Marker",
+    "DisplayName:NextMarker": "Next Marker",
+    "DisplayName:Type": "Type",
+    "DisplayName:Size": "Size",
+    "DisplayName:Ttl": "Ttl",
+    "DisplayName:Values": "Values",
+    "DisplayName:Key": "Key",
+    "DisplayName:Keys": "Keys",
+    "DisplayName:AbsoluteExpiration": "Absolute Expiration",
+    "DisplayName:SlidingExpiration": "Sliding Expiration",
+    "Abp.CachingManagement:01001": "A cache of Type {Type} does not support viewing key values."
+  }
+}
