@@ -1,0 +1,21 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:CachingManagement": "缓存管理",
+    "Permission:Caches": "管理缓存",
+    "Permission:Refresh": "刷新",
+    "Permission:Delete": "删除",
+    "Caches": "缓存列表",
+    "DisplayName:Marker": "标记",
+    "DisplayName:NextMarker": "下一个标记",
+    "DisplayName:Type": "类型",
+    "DisplayName:Size": "大小",
+    "DisplayName:Ttl": "存活时间",
+    "DisplayName:Values": "缓存值",
+    "DisplayName:Key": "缓存键",
+    "DisplayName:Keys": "键列表",
+    "DisplayName:AbsoluteExpiration": "绝对过期时间",
+    "DisplayName:SlidingExpiration": "滑动过期时间",
+    "Abp.CachingManagement:01001": "类型为 {Type} 的缓存暂不支持查看键值."
+  }
+}

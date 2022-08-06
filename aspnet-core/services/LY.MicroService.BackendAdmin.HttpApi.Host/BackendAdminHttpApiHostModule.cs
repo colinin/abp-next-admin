@@ -3,6 +3,8 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.CachingManagement;
+using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -24,6 +26,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -65,6 +68,9 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpSaasHttpApiModule),
     typeof(AbpTextTemplatingApplicationModule),
     typeof(AbpTextTemplatingHttpApiModule),
+    typeof(AbpCachingManagementApplicationModule),
+    typeof(AbpCachingManagementHttpApiModule),
+    typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
     typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
