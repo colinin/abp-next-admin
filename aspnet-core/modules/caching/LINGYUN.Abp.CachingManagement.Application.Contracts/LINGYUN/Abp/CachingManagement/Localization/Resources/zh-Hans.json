@@ -6,6 +6,7 @@
     "Permission:Refresh": "刷新",
     "Permission:Delete": "删除",
     "Caches": "缓存列表",
+    "CacheInfo": "缓存详情",
     "DisplayName:Marker": "标记",
     "DisplayName:NextMarker": "下一个标记",
     "DisplayName:Type": "类型",

@@ -6,6 +6,7 @@
     "Permission:Refresh": "Refresh",
     "Permission:Delete": "Delete",
     "Caches": "Caches",
+    "CacheInfo": "Cache Info",
     "DisplayName:Marker": "Marker",
     "DisplayName:NextMarker": "Next Marker",
     "DisplayName:Type": "Type",

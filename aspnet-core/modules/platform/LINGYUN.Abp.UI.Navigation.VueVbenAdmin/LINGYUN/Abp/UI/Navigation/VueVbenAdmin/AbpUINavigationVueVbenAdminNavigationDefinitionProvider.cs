@@ -18,6 +18,7 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
             context.Add(GetTaskManagement());
             context.Add(GetWebhooksManagement());
             context.Add(GetMessages());
+            context.Add(GetTextTemplating());
         }
 
         private static NavigationDefinition GetDashboard()
@@ -192,6 +193,14 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     multiTenancySides: MultiTenancySides.Host)
                 // TODO: 注意在部署完毕之后手动修改此菜单iframe地址
                 .SetProperty("frameSrc", "http://127.0.0.1:30000/swagger/index.html"));
+
+            manage.AddItem(
+                new ApplicationMenu(
+                    name: "Caches",
+                    displayName: "缓存管理",
+                    url: "/manage/cache",
+                    component: "/caching-management/cache/index",
+                    description: "缓存管理"));
 
             return new NavigationDefinition(manage);
         }
@@ -447,10 +456,32 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   name: "Notifications",
                   displayName: "通知管理",
                   url: "/messages/notifications",
-                  component: "/messages/notifications/index.vue",
+                  component: "/messages/notifications/index",
                   description: "通知管理"));
 
             return new NavigationDefinition(messages);
+        }
+
+        private static NavigationDefinition GetTextTemplating()
+        {
+            var textTemplating = new ApplicationMenu(
+                name: "Templates",
+                displayName: "模板管理",
+                url: "/text-templating",
+                component: "",
+                description: "模板管理",
+                icon: "eos-icons:templates-outlined",
+                multiTenancySides: MultiTenancySides.Host);
+            textTemplating.AddItem(
+              new ApplicationMenu(
+                  name: "TextTemplates",
+                  displayName: "文本模板",
+                  url: "/text-templating/text-templates",
+                  component: "/text-templating/templates/index",
+                  description: "文本模板",
+                  multiTenancySides: MultiTenancySides.Host));
+
+            return new NavigationDefinition(textTemplating);
         }
     }
 }

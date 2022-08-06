@@ -23,6 +23,59 @@
   },
   "Routes": [
     {
+      "DownstreamPathTemplate": "/.well-known/openid-configuration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 44385
+        }
+      ],
+      "UpstreamPathTemplate": "/.well-known/openid-configuration",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/connect/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 44385
+        }
+      ],
+      "UpstreamPathTemplate": "/connect/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/abp/application-configuration",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -103,7 +156,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/saas/{everything}",
+      "DownstreamPathTemplate": "/api/tenant-management/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -111,7 +164,7 @@
           "Port": 30010
         }
       ],
-      "UpstreamPathTemplate": "/api/saas/{everything}",
+      "UpstreamPathTemplate": "/api/tenant-management/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
@@ -126,7 +179,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -161,7 +214,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -193,7 +246,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -204,6 +257,39 @@
         "UseTracing": true
       },
       "Key": "setting-current-tenant"
+    },
+    {
+      "DownstreamPathTemplate": "/api/setting-management/settings/by-current-user",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/by-current-user/app",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "setting-current-user"
     },
     {
       "DownstreamPathTemplate": "/api/setting-management/settings/by-global",
@@ -226,7 +312,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -259,7 +345,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -292,7 +378,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -303,6 +389,72 @@
         "UseTracing": true
       },
       "Key": "wechat-setting-global"
+    },
+    {
+      "DownstreamPathTemplate": "/api/setting-management/tencent-cloud/by-current-tenant",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/tencent-cloud/by-current-tenant",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "tencent-cloud-setting-current-tenant"
+    },
+    {
+      "DownstreamPathTemplate": "/api/setting-management/tencent-cloud/by-global",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/tencent-cloud/by-global",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "tencent-cloud-setting-global"
     },
     {
       "DownstreamPathTemplate": "/api/setting-management/aliyun/by-current-tenant",
@@ -325,7 +477,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -358,7 +510,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -371,7 +523,7 @@
       "Key": "aliyun-setting-global"
     },
     {
-      "DownstreamPathTemplate": "/api/setting-management/{everything}",
+      "DownstreamPathTemplate": "/api/setting-management/settings/change-global",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -379,13 +531,8 @@
           "Port": 30010
         }
       ],
-      "UpstreamPathTemplate": "/api/setting-management/{everything}",
-      "UpstreamHttpMethod": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/change-global",
+      "UpstreamHttpMethod": [ "PUT" ],
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
       },
@@ -394,7 +541,67 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/setting-management/settings/change-current-tenant",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/change-current-tenant",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/setting-management/settings/change-current-user",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/change-current-user",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -429,7 +636,42 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/saas/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/saas/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -464,7 +706,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -496,7 +738,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -585,7 +827,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -620,7 +862,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -655,7 +897,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -687,7 +929,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -707,7 +949,7 @@
           "Port": 30030
         }
       ],
-      "UpstreamPathTemplate": "/api/abp/localization-management/application-configuration",
+      "UpstreamPathTemplate": "/api/abp/localization/application-configuration",
       "UpstreamHttpMethod": [
         "GET"
       ],
@@ -734,7 +976,7 @@
           "Port": 30030
         }
       ],
-      "UpstreamPathTemplate": "/api/abp/localization-management/api-definition",
+      "UpstreamPathTemplate": "/api/abp/localization/api-definition",
       "UpstreamHttpMethod": [
         "GET"
       ],
@@ -773,7 +1015,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -808,7 +1050,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -840,7 +1082,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -929,7 +1171,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -961,7 +1203,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -996,7 +1238,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1032,7 +1274,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1064,7 +1306,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1098,7 +1340,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1130,7 +1372,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1165,7 +1407,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1197,7 +1439,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1286,7 +1528,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1321,7 +1563,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1356,7 +1598,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1391,92 +1633,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/abp/application-configuration",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30040
-        }
-      ],
-      "UpstreamPathTemplate": "/api/abp/task/application-configuration",
-      "UpstreamHttpMethod": [ "GET" ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {},
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      },
-      "Key": "task-configuration"
-    },
-    {
-      "DownstreamPathTemplate": "/api/abp/api-definition",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30040
-        }
-      ],
-      "UpstreamPathTemplate": "/api/abp/task/api-definition",
-      "UpstreamHttpMethod": [ "GET" ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {},
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      },
-      "Key": "task-api-definition"
-    },
-    {
-      "DownstreamPathTemplate": "/api/task-management/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30040
-        }
-      ],
-      "UpstreamPathTemplate": "/api/task-management/{everything}",
-      "UpstreamHttpMethod": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1508,7 +1665,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1541,7 +1698,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1574,7 +1731,7 @@
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 5
+        "Limit": 100
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
@@ -1660,6 +1817,405 @@
       "RouteIsCaseSensitive": false
     },
     {
+      "DownstreamPathTemplate": "/api/abp/application-configuration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/application-configuration",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-configuration"
+    },
+    {
+      "DownstreamPathTemplate": "/api/abp/api-definition",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/abp/task/api-definition",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "task-api-definition"
+    },
+    {
+      "DownstreamPathTemplate": "/api/task-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30040
+        }
+      ],
+      "UpstreamPathTemplate": "/api/task-management/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },    {
+      "DownstreamPathTemplate": "/api/manufacture/settings/by-current-user",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33330
+        }
+      ],
+      "Key": "manufacture-setting-current-user",
+      "UpstreamPathTemplate": "/api/manufacture/settings/by-current-user/app",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Priority": 99
+    },
+    {
+      "DownstreamPathTemplate": "/api/manufacture/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33330
+        }
+      ],
+      "UpstreamPathTemplate": "/api/manufacture/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "UpstreamHeaderTransform": {
+        "X-Forwarded-For": "{RemoteIpAddress}"
+      },
+      "DownstreamHeaderTransform": {
+        "X-Forwarded-For": "{RemoteIpAddress}"
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/certificate/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33339
+        }
+      ],
+      "UpstreamPathTemplate": "/api/certificate/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ufsoft/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33320
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ufsoft/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/marketing/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33335
+        }
+      ],
+      "UpstreamPathTemplate": "/api/marketing/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/product-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33333
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product-management/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/stock-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33334
+        }
+      ],
+      "UpstreamPathTemplate": "/api/stock-management/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/micro-mall/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "10.21.15.13",
+          "Port": 52178
+        }
+      ],
+      "UpstreamPathTemplate": "/api/micro-mall/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/invoice-management/settings/by-current-tenant",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/invoice/by-current-tenant",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "invoice-setting-current-tenant"
+    },
+    {
+      "DownstreamPathTemplate": "/api/invoice-management/settings/by-global",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/invoice/by-global",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 100
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Key": "invoice-setting-global"
+    },
+    {
+      "DownstreamPathTemplate": "/api/invoice-management/invoices-reports/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33341
+        }
+      ],
+      "UpstreamPathTemplate": "/api/invoice-management/invoices-reports/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 120000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      },
+      "Prioirty": 10
+    },
+    {
+      "DownstreamPathTemplate": "/api/invoice-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 33341
+        }
+      ],
+      "UpstreamPathTemplate": "/api/invoice-management/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/abp/api-definition",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1687,38 +2243,6 @@
       "Key": "webhook-api-definition"
     },
     {
-      "DownstreamPathTemplate": "/swagger/v1/swagger.json",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30045
-        }
-      ],
-      "UpstreamPathTemplate": "/webhooks/v1/swagger.json",
-      "UpstreamHttpMethod": [
-        "GET"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 5
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/webhooks/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1732,17 +2256,59 @@
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
       },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 5
-      },
+      "RateLimitOptions": {},
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 10,
         "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/text-templating/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/text-templating/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
+      },
+      "HttpHandlerOptions": {
+        "UseTracing": true
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/caching-management/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 30010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/caching-management/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RateLimitOptions": {},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 10,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 30000
       },
       "HttpHandlerOptions": {
         "UseTracing": true
@@ -1780,8 +2346,10 @@
       "RouteKeys": [
         "setting-global",
         "wechat-setting-global",
+        "tencent-cloud-setting-global",
         "aliyun-setting-global",
-        "oss-management-setting-global"
+        "oss-management-setting-global",
+        "invoice-setting-global"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-global",
       "Aggregator": "AbpResponseMergeAggregator",
@@ -1791,10 +2359,21 @@
       "RouteKeys": [
         "setting-current-tenant",
         "wechat-setting-current-tenant",
+        "tencent-cloud-setting-current-tenant",
         "aliyun-setting-current-tenant",
-        "oss-management-setting-current-tenant"
+        "oss-management-setting-current-tenant",
+        "invoice-setting-current-tenant"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-current-tenant",
+      "Aggregator": "AbpResponseMergeAggregator",
+      "Priority": 99
+    },
+    {
+      "RouteKeys": [
+        "setting-current-user",
+        "manufacture-setting-current-user"
+      ],
+      "UpstreamPathTemplate": "/api/setting-management/settings/by-current-user",
       "Aggregator": "AbpResponseMergeAggregator",
       "Priority": 99
     },
