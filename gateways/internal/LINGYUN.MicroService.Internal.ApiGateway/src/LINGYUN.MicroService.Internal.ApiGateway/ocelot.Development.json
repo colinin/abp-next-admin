@@ -2034,8 +2034,7 @@
         "wechat-setting-global",
         "tencent-cloud-setting-global",
         "aliyun-setting-global",
-        "oss-management-setting-global",
-        "invoice-setting-global"
+        "oss-management-setting-global"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-global",
       "Aggregator": "AbpResponseMergeAggregator",
@@ -2047,8 +2046,7 @@
         "wechat-setting-current-tenant",
         "tencent-cloud-setting-current-tenant",
         "aliyun-setting-current-tenant",
-        "oss-management-setting-current-tenant",
-        "invoice-setting-current-tenant"
+        "oss-management-setting-current-tenant"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-current-tenant",
       "Aggregator": "AbpResponseMergeAggregator",
@@ -2056,8 +2054,7 @@
     },
     {
       "RouteKeys": [
-        "setting-current-user",
-        "manufacture-setting-current-user"
+        "setting-current-user"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-current-user",
       "Aggregator": "AbpResponseMergeAggregator",
