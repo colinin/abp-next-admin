@@ -12,16 +12,19 @@ namespace LINGYUN.Abp.DistributedLocking.Dapr;
 [Dependency(ReplaceServices = true)]
 public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
 {
+    protected ILockOwnerFinder LockOwnerFinder { get; }
     protected IDaprClientFactory DaprClientFactory { get; }
     protected AbpDistributedLockingDaprOptions Options { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
     public DaprAbpDistributedLock(
+        ILockOwnerFinder lockOwnerFinder,
         IDaprClientFactory daprClientFactory,
         ICancellationTokenProvider cancellationTokenProvider,
         IOptions<AbpDistributedLockingDaprOptions> options)
     {
         Options = options.Value;
+        LockOwnerFinder = lockOwnerFinder;
         DaprClientFactory = daprClientFactory;
         CancellationTokenProvider = cancellationTokenProvider;
     }
@@ -33,15 +36,21 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
             timeout = Options.DefaultTimeout;
         }
         var client = DaprClientFactory.CreateClient();
+        var lockOwner = await LockOwnerFinder.FindAsync();
 
-        var res = await client.Lock(Options.StoreName, name, Options.ResourceId, (int)timeout.TotalSeconds, cancellationToken);
+        var res = await client.Lock(
+            Options.StoreName, 
+            name,
+            lockOwner, 
+            (int)timeout.TotalSeconds,
+            GetCancellationToken(cancellationToken));
 
         if (res == null || !res.Success)
         {
             return null;
         }
 
-        return new DaprAbpDistributedLockHandle(Options.StoreName, name, Options.ResourceId, client);
+        return new DaprAbpDistributedLockHandle(Options.StoreName, name, lockOwner, client);
     }
 
     protected virtual CancellationToken GetCancellationToken(CancellationToken cancellationToken = default)
