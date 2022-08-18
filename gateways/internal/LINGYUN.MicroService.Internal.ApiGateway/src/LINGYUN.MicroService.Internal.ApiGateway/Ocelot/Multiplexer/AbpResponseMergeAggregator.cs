@@ -89,6 +89,16 @@ namespace Ocelot.Multiplexer
                     responseObject.Merge(contentObject, mergeSetting);
                 }
             }
+
+            if (responseObject == null)
+            {
+                return new DownstreamResponse(
+                    null,
+                    HttpStatusCode.NotFound,
+                    new List<KeyValuePair<string, IEnumerable<string>>>(),
+                    "Not Found");
+            }
+
             var stringContent = new StringContent(responseObject.ToString())
             {
                 Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
