@@ -10,7 +10,6 @@ using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -126,10 +125,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var clientBuilder = services.AddDaprClient(remoteServiceConfigurationName, (IServiceProvider provider, DaprClientBuilder builder) =>
             {
-                // TODO: 是否有必要? 使用框架的序列化配置
-                var jsonOptions = provider.GetRequiredService<IOptions<AbpSystemTextJsonSerializerOptions>>().Value;
-                builder.UseJsonSerializationOptions(jsonOptions.JsonSerializerOptions);
-
                 var options = provider.GetRequiredService<IOptions<AbpRemoteServiceOptions>>().Value;
                 builder.UseHttpEndpoint(
                     options.RemoteServices

@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Dapr.Client" Version="$(DaprPackageVersion)" />
 	</ItemGroup>
 
