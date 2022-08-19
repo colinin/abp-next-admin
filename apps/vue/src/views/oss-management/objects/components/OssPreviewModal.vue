@@ -35,8 +35,10 @@
       watch(
         () => unref(objects),
         (objs) => {
-          previewImages.value = objs.map(x => {
-            return generateOssUrl(unref(bucket), x.path, x.name) + "?access_token=" + userStore.getToken;
+          previewImages.value = objs.map((x) => {
+            return (
+              generateOssUrl(unref(bucket), x.path, x.name) + '?access_token=' + userStore.getToken
+            );
           });
         },
       );

@@ -5,6 +5,7 @@ import {
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '../../model/baseModel';
+import { IdentityClaim } from './claimModel';
 
 /** 用户对象接口 */
 export interface IUser {
@@ -27,6 +28,10 @@ export interface IUser {
 export interface ChangePassword {
   currentPassword?: string;
   newPassword: string;
+}
+
+export interface SetPassword {
+  password: string;
 }
 
 /** 用户对象 */
@@ -96,18 +101,7 @@ export class GetUserPagedRequest extends PagedAndSortedResultRequestDto {
 
 export class UserPagedResult extends PagedResultDto<User> {}
 
-export class UserClaimBase {
-  claimType = '';
-  claimValue = '';
-}
-
-export class CreateUserClaim extends UserClaimBase {}
-
-export class UpdateUserClaim extends UserClaimBase {
-  newClaimValue!: string;
-}
-
-export class UserClaim extends UserClaimBase {
+export class UserClaim extends IdentityClaim {
   id!: string;
 }
 

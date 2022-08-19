@@ -8,6 +8,7 @@
       ref="formRef"
       colon
       labelAlign="left"
+      layout="vertical"
     >
       <FormItem>
         <MultiTenancyBox />
@@ -58,7 +59,7 @@
   import { StrengthMeter } from '/@/components/StrengthMeter';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
-  import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useLoginState, useFormRules, useFormValid, useFormFieldsValid, LoginStateEnum } from './useLogin';
   import { resetPassword, sendPhoneResetPasswordCode } from '/@/api/account/accounts';
 
   const FormItem = Form.Item;
@@ -76,17 +77,22 @@
 
   const { getFormRules } = useFormRules(formData);
   const { validForm } = useFormValid(formRef);
+  const { validFormFields } = useFormFieldsValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.RESET_PASSWORD);
 
   function handleSendCode() {
-    return sendPhoneResetPasswordCode(formData.phoneNumber)
-      .then(() => {
-        return Promise.resolve(true);
-      })
-      .catch(() => {
-        return Promise.reject(false);
-      });
+    return validFormFields(['phoneNumber']).then((data) => {
+      return sendPhoneResetPasswordCode(data.phoneNumber)
+        .then(() => {
+          return Promise.resolve(true);
+        })
+        .catch(() => {
+          return Promise.reject(false);
+        });
+    }).catch(() => {
+      return Promise.reject(false);
+    })
   }
 
   async function handleReset() {

@@ -15,8 +15,8 @@ enum Api {
   Create = '/api/identity/organization-units',
   Delete = '/api/identity/organization-units/{id}',
   Update = '/api/identity/organization-units/{id}',
-  GetById = '/api/identity/organization-units​/{id}',
-  GetList = '/api​/identity​/organization-units​',
+  GetById = '/api/identity/organization-units/{id}',
+  GetList = '/api/identity/organization-units',
   GetAllList = '/api/identity/organization-units/all',
   GetUnaddedMemberList = '/api/identity/organization-units/{id}/unadded-users',
   GetMemberList = '/api/identity/organization-units/{id}/users',
@@ -46,6 +46,12 @@ export const deleteById = (id: string) => {
     url: format(Api.Delete, { id: id }),
   });
 };
+
+export const get = (id: string) => {
+  return defAbpHttp.get<OrganizationUnit>({
+    url: format(Api.GetById, { id: id }),
+  });
+}
 
 export const getList = (input: GetOrganizationUnitPagedRequest) => {
   return defAbpHttp.get<OrganizationUnitPagedResult>({

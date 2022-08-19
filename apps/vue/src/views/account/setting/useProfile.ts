@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { FormSchema } from '/@/components/Form/index';
 import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { useSettings } from '/@/hooks/abp/useSettings';
@@ -5,6 +6,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getTwoFactorEnabled } from '/@/api/account/profiles';
 import { getAssignableNotifiers } from '/@/api/messages/notifications';
 import { getAll as getMySubscribes } from '/@/api/messages/subscribes';
+import { MyProfile } from '/@/api/account/model/profilesModel';
 
 export interface ListItem {
   key: string;
@@ -20,12 +22,29 @@ export interface ListItem {
   };
   avatar?: string;
   color?: string;
+  enabled?: boolean;
+  loading?: boolean;
 }
 
-export function useProfile() {
+interface UseProfile {
+  profile: Nullable<MyProfile> | undefined,
+}
+
+export function useProfile({ profile }: UseProfile) {
   const { settingProvider } = useSettings();
   const { L } = useLocalization('AbpAccount');
   const { localizer: IdentityLocalizer } = useLocalization('AbpIdentity');
+  const isExternalUser = computed(() => {
+    if (!profile) {
+      return false;
+    }
+    return profile.isExternal;
+  });
+  const getCurrentUser = computed(() => {
+    const abpStore = useAbpStoreWithOut();
+    const { currentUser } = abpStore.getApplication;
+    return currentUser;
+  });
   // tab的list
   function getSettingList() {
     return [
@@ -66,16 +85,6 @@ export function useProfile() {
         required: true,
       },
       {
-        field: 'email',
-        component: 'Input',
-        label: L('DisplayName:Email'),
-        dynamicDisabled: () => {
-          return !settingProvider.isTrue('Abp.Identity.User.IsEmailUpdateEnabled');
-        },
-        colProps: { span: 18 },
-        required: true,
-      },
-      {
         field: 'surname',
         component: 'Input',
         label: L('DisplayName:Surname'),
@@ -86,6 +95,16 @@ export function useProfile() {
         component: 'Input',
         label: L('DisplayName:Name'),
         colProps: { span: 18 },
+      },
+      {
+        field: 'email',
+        component: 'Input',
+        label: L('DisplayName:Email'),
+        dynamicDisabled: () => {
+          return !settingProvider.isTrue('Abp.Identity.User.IsEmailUpdateEnabled');
+        },
+        colProps: { span: 18 },
+        required: true,
       },
       {
         field: 'phoneNumber',
@@ -111,9 +130,11 @@ export function useProfile() {
 
   // 安全设置 list
   async function getSecureSettingList() {
-    const abpStore = useAbpStoreWithOut();
-    const phoneNumber = abpStore.getApplication.currentUser.phoneNumber ?? '';
-    const phoneNumberConfirmed = abpStore.getApplication.currentUser.phoneNumberVerified;
+    const currentUser = getCurrentUser.value;
+    const phoneNumber = currentUser.phoneNumber ?? '';
+    const phoneNumberConfirmed = currentUser.phoneNumberVerified;
+    const email = currentUser.email ?? '';
+    const emailVerified = currentUser.emailVerified;
     const twoFactorEnabled = await getTwoFactorEnabled();
     return [
       {
@@ -121,6 +142,7 @@ export function useProfile() {
         title: L('DisplayName:Password'),
         description: L('ResetMyPassword'),
         extra: L('Edit'),
+        enable: !isExternalUser.value,
       },
       {
         key: 'phoneNumber',
@@ -131,6 +153,17 @@ export function useProfile() {
           color: phoneNumberConfirmed ? 'green' : 'warning',
         },
         extra: L('Edit'),
+      },
+      {
+        key: 'email',
+        title: L('DisplayName:Email'),
+        description: email,
+        tag: {
+          title: emailVerified ? L('Confirmed') : L('NotConfirmed'),
+          color: emailVerified ? 'green' : 'warning',
+        },
+        extra: L('ClickToValidation'),
+        enabled: !emailVerified,
       },
       {
         key: 'twofactor',
@@ -153,10 +186,11 @@ export function useProfile() {
     const groupResult = await getAssignableNotifiers();
     const mySubResult = await getMySubscribes();
     const mySubNotifies = mySubResult.items.map((x) => x.name);
-    const notifies: ListItem[] = [];
+    const notifies: {[key: string]: ListItem[] } = {};
     groupResult.items.forEach((group) => {
+      notifies[group.displayName] = [];
       group.notifications.forEach((notifier) => {
-        notifies.push({
+        notifies[group.displayName].push({
           key: notifier.name,
           title: notifier.displayName,
           description: notifier.description,

@@ -16,7 +16,6 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { useLocaleStoreWithOut } from '/@/store/modules/locale';
-import { Persistent } from '../../cache/persistent';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -38,14 +37,14 @@ const transform: AxiosTransform = {
     }
 
     const { data } = res;
-    
+
     // 对包装结果处理
     if (res.headers['_abpwrapresult'] === 'true') {
       if (!data) {
         // return '[HTTP] Request has no return value';
         throw new Error(t('sys.api.apiRequestFailed'));
       }
-        
+
       const { code, result, message, details } = data;
       const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.CODE;
       if (hasSuccess) {
@@ -55,12 +54,12 @@ const transform: AxiosTransform = {
       const title = details ? message : t('sys.api.errorTip');
       const content = details ? details : message;
       if (options.errorMessageMode === 'modal') {
-          createErrorModal({ title: title, content: content });
-        } else if (options.errorMessageMode === 'message') {
-          createMessage.error(content);
-        }
-    
-        throw new Error(content || t('sys.api.apiRequestFailed'));
+        createErrorModal({ title: title, content: content });
+      } else if (options.errorMessageMode === 'message') {
+        createMessage.error(content);
+      }
+
+      throw new Error(content || t('sys.api.apiRequestFailed'));
     }
 
     return data;
@@ -92,10 +91,15 @@ const transform: AxiosTransform = {
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
-        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) {
+        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0 || config.data instanceof FormData) {
           config.data = data;
           config.params = params;
-        } else if (Reflect.has(config, 'headers') && config.headers && config.headers['Content-Type'] !== ContentTypeEnum.FORM_DATA) { // 防止form-data类型数据被清除
+        } else if (
+          Reflect.has(config, 'headers') &&
+          config.headers &&
+          config.headers['Content-Type'] !== ContentTypeEnum.FORM_DATA
+        ) {
+          // 防止form-data类型数据被清除
           // 非GET请求如果没有提供data，则将params视为data
           config.data = params;
           config.params = undefined;
@@ -131,10 +135,6 @@ const transform: AxiosTransform = {
     config.headers = config.headers ?? {};
     const localeStore = useLocaleStoreWithOut();
     config.headers['Accept-Language'] = localeStore.getLocale;
-    const tenant = Persistent.getTenant();
-    if (tenant && tenant.id) {
-      config.headers[globSetting.multiTenantKey] = tenant.id;
-    }
     return config;
   },
 
@@ -148,12 +148,12 @@ const transform: AxiosTransform = {
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: (error: any) => {
+  responseInterceptorsCatch: (_, error: any) => {
     // const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
-    checkResponse(error.response);
-    return Promise.reject(error);
+    const resMessage = checkResponse(error.response);
+    return Promise.reject(resMessage ?? error);
   },
 };
 
@@ -202,6 +202,11 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           ignoreCancelToken: true,
           // 是否携带token
           withToken: true,
+          retryRequest: {
+            isOpenRetry: true,
+            count: 5,
+            waitTime: 100,
+          },
         },
       },
       opt || {},

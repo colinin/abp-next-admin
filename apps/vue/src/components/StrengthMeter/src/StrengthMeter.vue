@@ -4,7 +4,6 @@
       v-if="showInput"
       v-bind="$attrs"
       allowClear
-      autocomplete="off"
       :value="innerValueRef"
       @change="handleChange"
       :disabled="disabled"

@@ -33,6 +33,7 @@
     fetchEdition();
   });
   const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
+    layout: 'vertical',
     schemas: getModalFormSchemas(),
     showActionButtonGroup: false,
   });
@@ -59,12 +60,14 @@
     validate().then((input) => {
       changeOkLoading(true);
       const api = input.id ? update(input.id, input) : create(input);
-      api.then((edition) => {
-        emits('change', edition);
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      api
+        .then((edition) => {
+          emits('change', edition);
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

@@ -1,13 +1,14 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { getAll as getLanguages } from '/@/api/localization/languages';
-import { getAll as getResources } from '/@/api/localization/resources';
+import { getList as getLanguages } from '/@/api/localization/languages';
+import { getList as getResources } from '/@/api/localization/resources';
 
-const { L } = useLocalization('LocalizationManagement', 'AbpUi');
+const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
 
-export function getSearchFormSchemas(): Partial<FormProps> {
+export function getSearchFormSchemas(submitFunc?: () => Promise<void>): Partial<FormProps> {
   return {
     labelWidth: 100,
+    submitFunc: submitFunc,
     schemas: [
       {
         field: 'cultureName',

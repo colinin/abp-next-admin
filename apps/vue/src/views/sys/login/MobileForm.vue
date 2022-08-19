@@ -8,6 +8,7 @@
       ref="formRef"
       colon
       labelAlign="left"
+      layout="vertical"
     >
       <FormItem>
         <MultiTenancyBox />
@@ -41,14 +42,13 @@
     </Form>
   </template>
 </template>
-
 <script lang="ts" setup>
   import { reactive, ref, computed, unref } from 'vue';
   import { Form, Input, Button } from 'ant-design-vue';
   import { CountdownInput } from '/@/components/CountDown';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useLoginState, useFormRules, useFormValid, useFormFieldsValid, LoginStateEnum } from './useLogin';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
   import { sendPhoneSignCode } from '/@/api/account/accounts';
   import { useUserStore } from '/@/store/modules/user';
@@ -71,18 +71,23 @@
   });
 
   const { validForm } = useFormValid(formRef);
+  const { validFormFields } = useFormFieldsValid(formRef);
   const { getFormRules } = useFormRules();
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE);
 
   function handleSendCode() {
-    return sendPhoneSignCode(formData.phoneNumber)
-      .then(() => {
-        return Promise.resolve(true);
-      })
-      .catch(() => {
-        return Promise.reject(false);
-      });
+    return validFormFields(['phoneNumber']).then((data) => {
+      return sendPhoneSignCode(data.phoneNumber)
+        .then(() => {
+          return Promise.resolve(true);
+        })
+        .catch(() => {
+          return Promise.reject(false);
+        });
+    }).catch(() => {
+      return Promise.reject(false);
+    });
   }
 
   async function handleLogin() {

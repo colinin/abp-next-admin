@@ -1,8 +1,12 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation } from '/@/hooks/abp/useValidation';
+import { usePasswordValidator } from '/@/hooks/security/usePasswordValidator';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { getList as getEditions } from '/@/api/saas/editions';
 
 const { L } = useLocalization('AbpSaas');
+const { ruleCreator } = useValidation();
+const { validate } = usePasswordValidator();
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -37,10 +41,11 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'isActive',
       component: 'Checkbox',
-      label: L('DisplayName:IsActive'),
+      label: '',
       labelWidth: 50,
       colProps: { span: 24 },
       defaultValue: true,
+      renderComponentContent: L('DisplayName:IsActive'),
     },
     {
       field: 'name',
@@ -100,13 +105,22 @@ export function getModalFormSchemas(): FormSchema[] {
     },
     {
       field: 'adminPassword',
-      component: 'InputPassword',
+      component: 'StrengthMeter',
       label: L('DisplayName:AdminPassword'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
         return values.id ? false : true;
       },
+      rules: [
+        ...ruleCreator.defineValidator({
+          trigger: 'blur',
+          required: true,
+          validator: (_, value: any) => {
+            return validate(value);
+          },
+        }),
+      ],
     },
     {
       field: 'useSharedDatabase',

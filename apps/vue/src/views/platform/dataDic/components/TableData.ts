@@ -48,7 +48,6 @@ export function getDataColumns(): BasicColumn[] {
       title: L('DisplayName:AllowBeNull'),
       dataIndex: 'allowBeNull',
       width: 100,
-      slots: { customRender: 'allow' },
     },
   ];
 }

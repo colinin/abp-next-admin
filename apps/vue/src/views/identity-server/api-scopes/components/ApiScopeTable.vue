@@ -1,39 +1,41 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #required="{ record }">
-        <Switch :checked="record.required" disabled />
-      </template>
-      <template #enabled="{ record }">
-        <Switch :checked="record.enabled" disabled />
-      </template>
-      <template #emphasize="{ record }">
-        <Switch :checked="record.emphasize" disabled />
-      </template>
-      <template #discovery="{ record }">
-        <Switch :checked="record.showInDiscoveryDocument" disabled />
-      </template>
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('AddNew') }}</Button>
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpIdentityServer.ApiScopes.Update',
-              icon: 'ant-design:edit-outlined',
-              label: L('ApiScopes:Edit'),
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentityServer.ApiScopes.Delete',
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('ApiScopes:Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'required'">
+          <Switch :checked="record.required" readonly />
+        </template>
+        <template v-else-if="column.key === 'enabled'">
+          <Switch :checked="record.enabled" readonly />
+        </template>
+        <template v-else-if="column.key === 'emphasize'">
+          <Switch :checked="record.emphasize" readonly />
+        </template>
+        <template v-else-if="column.key === 'showInDiscoveryDocument'">
+          <Switch :checked="record.showInDiscoveryDocument" readonly />
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpIdentityServer.ApiScopes.Update',
+                icon: 'ant-design:edit-outlined',
+                label: L('ApiScopes:Edit'),
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentityServer.ApiScopes.Delete',
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('ApiScopes:Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <ApiScopeModal @register="registerModal" @change="handleChange" />
@@ -78,7 +80,6 @@
           width: 200,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

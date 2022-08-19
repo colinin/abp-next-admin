@@ -1,7 +1,11 @@
 <template>
   <BasicModal @register="registerModal" :width="800" :height="400" :title="L('Logging')">
     <Form :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }" layout="horizontal" :model="modelRef">
-      <Tabs v-model:activeKey="activeKey">
+      <Tabs
+        v-model:activeKey="activeKey"
+        :style="tabsStyle.style"
+        :tabBarStyle="tabsStyle.tabBarStyle"
+      >
         <TabPane key="basic" :tab="L('Operation')">
           <FormItem :label="L('TimeStamp')">
             <span>{{ formatDateVal(modelRef.timeStamp) }}</span>
@@ -99,6 +103,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Collapse, Form, Tabs, Tag, Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -133,11 +138,13 @@
       const formatDateVal = computed(() => {
         return (dateVal) => formatToDateTime(dateVal, 'YYYY-MM-DD HH:mm:ss');
       });
+      const tabsStyle = useTabsStyle();
 
       return {
         L,
         modelRef,
         activeKey,
+        tabsStyle,
         registerModal,
         formatDateVal,
         LogLevelColor,

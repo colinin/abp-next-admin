@@ -6,21 +6,20 @@ import {
   RolePagedResult,
   UpdateRole,
   CreateRole,
-  CreateRoleClaim,
   RoleClaimListResult,
-  UpdateRoleClaim,
   RoleClaim,
 } from './model/roleModel';
 import { format } from '/@/utils/strings';
+import { CreateIdentityClaim, UpdateIdentityClaim } from './model/claimModel';
 
 enum Api {
   RemoteService = 'AbpIdentity',
   Controller = 'IdentityRole',
   Create = '/api/identity/roles',
   CreateClaim = '/api/identity/roles/{id}/claims',
-  DeleteClaim = '',
+  DeleteClaim = '/api/identity/roles/{id}/claims',
   Update = '/api/identity/roles/{id}',
-  UpdateClaim = '',
+  UpdateClaim = '/api/identity/roles/{id}/claims',
   GetById = '/api/identity/roles/{id}',
   GetAllList = '/api/identity/roles/all',
   GetClaimList = '/api/identity/roles/{id}/claims',
@@ -36,7 +35,7 @@ export const create = (input: CreateRole) => {
   });
 };
 
-export const createClaim = (id: string, input: CreateRoleClaim) => {
+export const createClaim = (id: string, input: CreateIdentityClaim) => {
   return defAbpHttp.post<void>({
     url: format(Api.CreateClaim, { id: id }),
     data: input,
@@ -50,9 +49,9 @@ export const update = (id: string, input: UpdateRole) => {
   });
 };
 
-export const updateClaim = (id: string, input: UpdateRoleClaim) => {
+export const updateClaim = (id: string, input: UpdateIdentityClaim) => {
   return defAbpHttp.put<void>({
-    url: format(Api.CreateClaim, { id: id }),
+    url: format(Api.UpdateClaim, { id: id }),
     data: input,
   });
 };

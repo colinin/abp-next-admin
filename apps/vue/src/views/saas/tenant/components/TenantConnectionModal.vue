@@ -16,18 +16,20 @@
           >{{ L('ConnectionStrings:AddNew') }}</a-button
         >
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpSaas.Tenants.ManageConnectionStrings',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpSaas.Tenants.ManageConnectionStrings',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <BasicModal @register="registerEditModal" :title="L('ConnectionStrings')" @ok="handleSubmit">
@@ -83,7 +85,6 @@
           width: 120,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

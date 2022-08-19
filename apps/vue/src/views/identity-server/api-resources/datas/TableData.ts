@@ -39,7 +39,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'enabled' },
     },
     {
       title: L('ShowInDiscoveryDocument'),
@@ -47,7 +46,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'discovery' },
     },
     {
       title: L('AllowedAccessTokenSigningAlgorithms'),

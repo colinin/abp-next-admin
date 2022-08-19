@@ -3,6 +3,7 @@ import {
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '../../model/baseModel';
+import { IdentityClaim } from './claimModel';
 
 export class RoleBase {
   name!: string;
@@ -38,23 +39,7 @@ export class ChangeRoleOrganizationUnitDto {
   organizationUnitIds: string[] = [];
 }
 
-export class RoleClaimBase {
-  claimType = '';
-  claimValue = '';
-}
-
-export class DeleteRoleClaim {
-  claimType = '';
-  claimValue = '';
-}
-
-export class CreateRoleClaim extends RoleClaimBase {}
-
-export class UpdateRoleClaim extends RoleClaimBase {
-  newClaimValue!: string;
-}
-
-export class RoleClaim extends RoleClaimBase {
+export class RoleClaim extends IdentityClaim {
   id!: string;
 }
 

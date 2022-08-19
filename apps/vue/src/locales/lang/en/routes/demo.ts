@@ -92,6 +92,7 @@ export default {
     breadcrumb: 'Breadcrumbs',
     breadcrumbFlat: 'Flat Mode',
     breadcrumbFlatDetail: 'Flat mode details',
+    requestDemo: 'Retry request demo',
 
     breadcrumbChildren: 'Level mode',
     breadcrumbChildrenDetail: 'Level mode detail',
@@ -110,6 +111,7 @@ export default {
     dynamicForm: 'Dynamic',
     customerForm: 'Custom',
     appendForm: 'Append',
+    tabsForm: 'TabsForm',
   },
   iframe: {
     frame: 'External',
@@ -195,5 +197,6 @@ export default {
     editCellTable: 'Editable cell',
     editRowTable: 'Editable row',
     authColumn: 'Auth column',
+    resizeParentHeightTable: 'resizeParentHeightTable',
   },
 };

@@ -57,7 +57,6 @@ export function useMemberTable({ getProps }: UseMemberTable) {
       width: 170,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

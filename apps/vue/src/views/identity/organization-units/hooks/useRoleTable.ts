@@ -36,7 +36,6 @@ export function useRoleTable({ getProps }: UseRoleTable) {
       width: 220,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

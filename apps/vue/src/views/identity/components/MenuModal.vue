@@ -15,18 +15,23 @@
         </FormItem>
         <FormItem :label="L('Menu:SetStartup')">
           <TreeSelect
-            :replace-fields="replaceFields"
             :tree-data="menuTreeRef"
+            :field-names="{
+              label: 'displayName',
+              children: 'children',
+              value: 'id',
+            }"
             :allow-clear="true"
             v-model:value="startupMenuRef"
-            />
+          />
         </FormItem>
         <FormItem :label="L('DisplayName:Menus')">
           <BasicTree
             :checkable="true"
             :check-strictly="true"
+            :clickRowToExpand="true"
             :tree-data="menuTreeRef"
-            :replace-fields="replaceFields"
+            :field-names="replaceFields"
             :checked-keys="defaultCheckedRef"
             @check="handleCheck"
           />
@@ -122,9 +127,9 @@
         props.getMenuApi(unref(identityRef), value).then((res) => {
           checkedRef.value = res.items.map((item) => item.id);
           defaultCheckedRef.value = checkedRef.value;
-          const startupMenu = res.items.filter((item) => item.startup);
-          if (startupMenu && startupMenu.length > 0) {
-            startupMenuRef.value = startupMenu[0].id;
+          const startupMenu = res.items.find((item) => item.startup);
+          if (startupMenu) {
+            startupMenuRef.value = startupMenu.id;
           }
         });
       }

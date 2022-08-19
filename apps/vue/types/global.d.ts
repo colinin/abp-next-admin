@@ -33,6 +33,8 @@ declare global {
 
   declare type NameValue = NameValue<string>;
 
+  declare type Dictionary<TKey = any, KValue = any> = { [key: TKey]: KValue };
+
   export type Writable<T> = {
     -readonly [P in keyof T]: T[P];
   };

@@ -5,7 +5,7 @@
     :title="L('SetPassword')"
     @ok="handleSubmit"
   >
-    <BasicForm @register="registerForm" />
+    <BasicForm ref="formElRef" @register="registerForm" />
   </BasicModal>
 </template>
 
@@ -13,7 +13,7 @@
   import { defineComponent, ref, unref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicForm, useForm } from '/@/components/Form';
+  import { BasicForm, useForm, FormActionType } from '/@/components/Form';
   import { usePassword } from '../hooks/usePassword';
   import { changePassword } from '/@/api/identity/user';
 
@@ -23,7 +23,8 @@
     setup() {
       const { L } = useLocalization('AbpIdentity');
       const userIdRef = ref('');
-      const { formSchemas } = usePassword();
+      const formElRef = ref<Nullable<FormActionType>>(null);
+      const { formSchemas } = usePassword(formElRef);
       const [registerModal, { closeModal }] = useModalInner((val) => {
         userIdRef.value = val;
       });
@@ -35,29 +36,30 @@
         },
       });
 
+      function handleSubmit() {
+        const userId = unref(userIdRef);
+        if (userId) {
+          validate().then((res) => {
+            changePassword(userId, {
+              password: res.password,
+            }).then(() => {
+              closeModal();
+            });
+          });
+        }
+      }
+
       return {
         L,
+        formElRef,
         registerModal,
         closeModal,
         registerForm,
         getFieldsValue,
         validate,
         userIdRef,
+        handleSubmit,
       };
-    },
-    methods: {
-      handleSubmit() {
-        const userId = unref(this.userIdRef);
-        if (userId) {
-          this.validate().then((res) => {
-            changePassword(userId, {
-              newPassword: res.password,
-            }).then(() => {
-              this.closeModal();
-            });
-          });
-        }
-      },
     },
   });
 </script>

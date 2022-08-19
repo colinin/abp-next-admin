@@ -6,17 +6,17 @@
  * @example format('Hello, {0}!', ['World'])
  * @example format('Hello, {name}!', {name: 'World'})
  */
-export function format(formatted: string, args: any) {
-  if (typeof args === 'object') {
-    Object.keys(args).forEach((key) => {
-      const regexp = new RegExp('\\{' + key + '\\}', 'gi');
-      formatted = formatted.replace(regexp, args[key]);
-    });
-  } else {
+export function format(formatted: string, args: object | any[]) {
+  if (Array.isArray(args)) {
     for (let i = 0; i < args.length; i++) {
       const regexp = new RegExp('\\{' + i + '\\}', 'gi');
       formatted = formatted.replace(regexp, args[i]);
     }
+  } else if (typeof args === 'object') {
+    Object.keys(args).forEach((key) => {
+      const regexp = new RegExp('\\{' + key + '\\}', 'gi');
+      formatted = formatted.replace(regexp, args[key]);
+    });
   }
   return formatted;
 }
@@ -36,4 +36,10 @@ export function tryToJson(str: string | undefined) {
   } catch {
     return str;
   }
+}
+
+export function getUnique(val: string) {
+  const arr = val.split('');
+  const newArr = [...new Set(arr)];
+  return newArr.join('');
 }

@@ -9,36 +9,40 @@
           >{{ L('IdentityClaim:New') }}</a-button
         >
       </template>
-      <template #types="{ record }">
-        <span>{{ valueTypeMap[record.valueType] }}</span>
-      </template>
-      <template #required="{ record }">
-        <Switch :checked="record.required" disabled />
-      </template>
-      <template #static="{ record }">
-        <Switch :checked="record.isStatic" disabled />
-      </template>
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              auth: 'AbpIdentity.IdentityClaimTypes.Update',
-              label: L('Edit'),
-              icon: 'ant-design:edit-outlined',
-              ifShow: !record.isStatic,
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentity.IdentityClaimTypes.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              ifShow: !record.isStatic,
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'valueType'">
+          <span>{{ valueTypeMap[record.valueType] }}</span>
+        </template>
+        <template v-else-if="column.key === 'required'">
+          <CheckOutlined v-if="record.required" class="enable" />
+          <CloseOutlined v-else class="disable" />
+        </template>
+        <template v-else-if="column.key === 'isStatic'">
+          <CheckOutlined v-if="record.isStatic" class="enable" />
+          <CloseOutlined v-else class="disable" />
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'AbpIdentity.IdentityClaimTypes.Update',
+                label: L('Edit'),
+                icon: 'ant-design:edit-outlined',
+                ifShow: !record.isStatic,
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentity.IdentityClaimTypes.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                ifShow: !record.isStatic,
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <ClaimModal @register="registerModal" @change="reloadTable" />
@@ -47,7 +51,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { Switch } from 'ant-design-vue';
+  import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
@@ -60,7 +64,8 @@
     components: {
       BasicTable,
       ClaimModal,
-      Switch,
+      CheckOutlined,
+      CloseOutlined,
       TableAction,
     },
     setup() {

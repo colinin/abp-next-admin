@@ -3,7 +3,9 @@
 // input
 .ant-input {
   &-number {
+    width: 100% !important;
     min-width: 110px;
+    max-width: 100%;
   }
 }
 
@@ -20,5 +22,19 @@
 
   textarea.ant-input {
     padding: 4px;
+  }
+}
+
+.anticon {
+  &.anticon-check {
+    &.enable {
+      color: @check-out-color;
+    }
+  }
+
+  &.anticon-close {
+    &.disable {
+      color: @close-out-color;
+    }
   }
 }

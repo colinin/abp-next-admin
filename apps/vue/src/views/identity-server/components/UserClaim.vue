@@ -4,16 +4,13 @@
     :targetKeys="targetClaims"
     :titles="[L('Assigned'), L('Available')]"
     :render="(item) => item.title"
-    :list-style="{
-      width: '293px',
-      height: '338px',
-    }"
+    :list-style="getListStyle"
     @change="handleChange"
   />
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { computed, defineComponent, onMounted, ref } from 'vue';
   import { Transfer } from 'ant-design-vue';
   import { getActivedList } from '/@/api/identity/claim';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -23,9 +20,10 @@
     components: { Transfer },
     props: {
       targetClaims: { type: [Array] as PropType<string[]>, required: true, default: () => [] },
+      listStyle: { type: Object, required: false },
     },
     emits: ['change'],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
       const { L } = useLocalization('AbpIdentityServer');
       const userClaims = ref<
         {
@@ -33,6 +31,15 @@
           title: string;
         }[]
       >([]);
+      const defaultListStyle = {
+        width: '48%',
+        height: '500px',
+        minHeight: '500px',
+      };
+
+      const getListStyle = computed(() => {
+        return {...defaultListStyle, ...props.listStyle}
+      });
 
       onMounted(() => {
         getActivedList().then((res) => {
@@ -51,6 +58,7 @@
 
       return {
         L,
+        getListStyle,
         userClaims,
         handleChange,
       };

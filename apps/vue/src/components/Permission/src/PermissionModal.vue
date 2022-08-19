@@ -1,15 +1,17 @@
 <template>
   <BasicModal
+    ref="modalRef"
     v-bind="$attrs"
     @register="registerModal"
     :title="getIdentity"
     :width="800"
     :min-height="600"
+    :mask-closable="false"
     @ok="handleSubmit"
     @visible-change="handleVisibleChange"
   >
-    <Row>
-      <Col :span="24">
+    <Row ref="rowRef">
+      <Col :span="24" ref="preColRef">
         <Checkbox
           :checked="permissionTreeCheckState.checked"
           :indeterminate="permissionTreeCheckState.indeterminate"
@@ -36,14 +38,15 @@
               <BasicTree
                 :checkable="true"
                 :checkStrictly="true"
+                :clickRowToExpand="true"
                 :disabled="permissionTreeDisabled"
                 :treeData="permission.children"
-                :replaceFields="{
+                :fieldNames="{
                   key: 'name',
                   title: 'displayName',
                   children: 'children',
                 }"
-                :checkedKeys="permissionGrantKeys(permission)"
+                :value="permissionGrantKeys(permission)"
                 @check="
                   (selectKeys, event) => handlePermissionGranted(permission, selectKeys, event)
                 "
@@ -113,7 +116,7 @@
           return `${L('Permissions')} - ${model.value.identity}`;
         }
         return title.value;
-      })
+      });
 
       function handleVisibleChange(visible: boolean) {
         if (!visible) {

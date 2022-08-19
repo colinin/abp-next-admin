@@ -1,7 +1,6 @@
-import { PagedAndSortedResultRequestDto, PagedResultDto } from '/@/api/model/baseModel';
+import { ListResultDto } from '/@/api/model/baseModel';
 
 export interface Text {
-  id?: number;
   key: boolean;
   value: string;
   cultureName: string;
@@ -9,7 +8,6 @@ export interface Text {
 }
 
 export interface TextDifference {
-  id: number;
   key: boolean;
   value: string;
   cultureName: string;
@@ -18,19 +16,14 @@ export interface TextDifference {
   targetValue: string;
 }
 
-export interface TextCreateOrUpdate {
-  value: string;
-}
-
-export interface TextCreate extends TextCreateOrUpdate {
+export interface SetTextInput {
   key: boolean;
+  value: string;
   cultureName: string;
   resourceName: string;
 }
 
-export type TextUpdate = TextCreateOrUpdate;
-
-export class TextPagedResult extends PagedResultDto<TextDifference> {}
+export class TextListResult extends ListResultDto<TextDifference> {}
 
 export interface GetTextByKey {
   key: boolean;
@@ -38,7 +31,7 @@ export interface GetTextByKey {
   resourceName: string;
 }
 
-export class GetTextPagedRequest extends PagedAndSortedResultRequestDto {
+export class GetTextRequest {
   filter = '';
   cultureName = '';
   targetCultureName = '';

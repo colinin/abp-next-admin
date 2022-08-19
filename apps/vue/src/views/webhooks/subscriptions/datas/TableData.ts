@@ -16,7 +16,7 @@ export function getDataColumns(): BasicColumn[] {
       title: L('DisplayName:TenantId'),
       dataIndex: 'tenantId',
       align: 'left',
-      width: 150,
+      width: 300,
       sorter: true,
       fixed: 'left',
     },
@@ -27,19 +27,13 @@ export function getDataColumns(): BasicColumn[] {
       width: 300,
       sorter: true,
       fixed: 'left',
-      slots: {
-        customRender: 'name',
-      }
     },
     {
       title: L('DisplayName:IsActive'),
       dataIndex: 'isActive',
-      align: 'left',
+      align: 'center',
       width: 180,
       sorter: true,
-      slots: {
-        customRender: 'active',
-      }
     },
     {
       title: L('DisplayName:CreationTime'),
@@ -57,9 +51,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: {
-        customRender: 'webhooks',
-      },
     },
   ];
 }

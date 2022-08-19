@@ -1,108 +1,119 @@
 <template>
-  <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
-    <Row type="flex">
-      <Col :span="24">
-        <Tabs v-model:activeKey="activeTabKey" :tab-position="tabPosition">
-          <TabPane
-            v-for="(group, tabIndex) in settingGroups"
-            :key="tabIndex"
-            :tab="group.displayName"
-          >
-            <Collapse :defaultActiveKey="expandedCollapseKeys(group)">
-              <CollapsePanel
-                v-for="setting in group.settings"
-                :key="setting.displayName"
-                :header="setting.displayName"
-              >
-                <template v-for="detail in setting.details" :key="detail.name">
-                  <slot
-                    v-if="detail.slot"
-                    :name="detail.slot"
-                    :detail="detail"
-                    :change="detail.valueType === 2 ? handleCheckChange : handleValueChange"
+  <Card :title="L('Settings')">
+    <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+      <Tabs
+        v-model:activeKey="activeTabKey"
+        :tab-position="tabPosition"
+        :style="tabsStyle.style"
+        :tabBarStyle="tabsStyle.tabBarStyle"
+      >
+        <TabPane
+          v-for="(group, tabIndex) in settingGroups"
+          :key="tabIndex"
+          :tab="group.displayName"
+        >
+          <Collapse :defaultActiveKey="expandedCollapseKeys(group)">
+            <CollapsePanel
+              v-for="setting in group.settings"
+              :key="setting.displayName"
+              :header="setting.displayName"
+            >
+              <template v-for="detail in setting.details" :key="detail.name">
+                <slot
+                  v-if="detail.slot"
+                  :name="detail.slot"
+                  :detail="detail"
+                  :change="detail.valueType === 2 ? handleCheckChange : handleValueChange"
+                />
+                <FormItem v-else :label="detail.displayName" :extra="detail.description">
+                  <!-- <Input type="text" v-model="detail.value" /> -->
+                  <Password
+                    v-if="detail.valueType === 0 && detail.isEncrypted"
+                    v-model:value="detail.value"
+                    :placeholder="detail.description"
+                    @input="handleValueChange(detail)"
                   />
-                  <FormItem v-else :label="detail.displayName" :extra="detail.description">
-                    <!-- <Input type="text" v-model="detail.value" /> -->
-                    <Password
-                      v-if="detail.valueType === 0 && detail.isEncrypted"
-                      v-model:value="detail.value"
-                      :placeholder="detail.description"
-                      @input="handleValueChange(detail)"
-                    />
-                    <BInput
-                      v-if="detail.valueType === 0 && !detail.isEncrypted"
-                      v-model:value="detail.value"
-                      :placeholder="detail.description"
-                      type="text"
-                      @input="handleValueChange(detail)"
-                    />
-                    <BInput
-                      v-if="detail.valueType === 1"
-                      v-model:value="detail.value"
-                      :placeholder="detail.description"
-                      type="number"
-                      @input="handleValueChange(detail)"
-                    />
-                    <DatePicker
-                      v-if="detail.valueType === 3"
-                      :value="detail.value ? moment(detail.value, 'YYYY-MM-DD') : ''"
-                      :placeholder="detail.description"
-                      style="width: 100%;"
-                      @change="handleDateChange($event, detail)"
-                    />
-                    <Select
-                      v-if="detail.valueType === 5"
-                      v-model:value="detail.value"
-                      @change="handleValueChange(detail)"
+                  <BInput
+                    v-if="detail.valueType === 0 && !detail.isEncrypted"
+                    v-model:value="detail.value"
+                    :placeholder="detail.description"
+                    type="text"
+                    @input="handleValueChange(detail)"
+                  />
+                  <BInput
+                    v-if="detail.valueType === 1"
+                    v-model:value="detail.value"
+                    :placeholder="detail.description"
+                    type="number"
+                    @input="handleValueChange(detail)"
+                  />
+                  <DatePicker
+                    v-if="detail.valueType === 3"
+                    :value="detail.value ? dayjs(detail.value, 'YYYY-MM-DD') : ''"
+                    :placeholder="detail.description"
+                    style="width: 100%"
+                    @change="handleDateChange($event, detail)"
+                  />
+                  <Select
+                    v-if="detail.valueType === 5"
+                    v-model:value="detail.value"
+                    @change="handleValueChange(detail)"
+                  >
+                    <SelectOption
+                      v-for="option in detail.options"
+                      :key="option.value"
+                      :disabled="option.value === detail.value"
                     >
-                      <SelectOption
-                        v-for="option in detail.options"
-                        :key="option.value"
-                        :disabled="option.value === detail.value"
-                      >
-                        {{ option.name }}
-                      </SelectOption>
-                    </Select>
-                    <Checkbox
-                      v-if="detail.valueType === 2"
-                      :checked="detail.value === 'true'"
-                      @change="handleCheckChange(detail)"
-                    >
-                      {{ detail.displayName }}
-                    </Checkbox>
-                  </FormItem>
-                </template>
-              </CollapsePanel>
-            </Collapse>
-          </TabPane>
-        </Tabs>
-      </Col>
-    </Row>
-    <Row type="flex">
-      <Col :span="12" :offset="12">
-        <FormItem style="margin-top: 20px">
-          <a-button
-            v-if="updateSetting.settings.length > 0"
-            type="primary"
-            style="width: 150px"
-            postIcon="ant-design:setting-outlined"
-            :loading="saving"
-            @click="handleSubmit"
-          >
-            {{ sumbitButtonTitle }}
-          </a-button>
-        </FormItem>
-      </Col>
-    </Row>
-  </Form>
+                      {{ option.name }}
+                    </SelectOption>
+                  </Select>
+                  <Checkbox
+                    v-if="detail.valueType === 2"
+                    :checked="detail.value === 'true'"
+                    @change="handleCheckChange(detail)"
+                  >
+                    {{ detail.displayName }}
+                  </Checkbox>
+                </FormItem>
+              </template>
+            </CollapsePanel>
+          </Collapse>
+        </TabPane>
+      </Tabs>
+      <FormItem style="margin-top: 20px">
+        <a-button
+          v-if="updateSetting.settings.length > 0"
+          type="primary"
+          style="width: 150px"
+          postIcon="ant-design:setting-outlined"
+          :loading="saving"
+          @click="handleSubmit"
+        >
+          {{ sumbitButtonTitle }}
+        </a-button>
+      </FormItem>
+    </Form>
+  </Card>
 </template>
 
 <script lang="ts">
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import { computed, defineComponent, ref, toRaw } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col, DatePicker } from 'ant-design-vue';
+  import {
+    Card,
+    Checkbox,
+    Tabs,
+    Collapse,
+    Form,
+    Input,
+    Select,
+    Row,
+    Col,
+    DatePicker,
+  } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { formatToDate } from '/@/utils/dateUtil';
   import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
@@ -117,13 +128,14 @@
       required: true,
     },
     tabPosition: {
-      type: String,
-      defaultValue: 'top',
+      type: String as PropType<'left' | 'right' | 'top' | 'bottom'>,
+      default: 'top',
     },
   } as const; // 对于存在必输项的props see: https://blog.csdn.net/q535999731/article/details/109578885
 
   export default defineComponent({
     components: {
+      Card,
       Checkbox,
       Collapse: Collapse,
       CollapsePanel: Collapse.Panel,
@@ -149,6 +161,12 @@
       const { createMessage } = useMessage();
       const { success } = createMessage;
 
+      const tabsStyle = useTabsStyle(
+        props.tabPosition,
+        {}, 
+        {
+          top: props.tabPosition === 'top' ? '80px' : '0'
+        });
       const sumbitButtonTitle = computed(() => {
         if (saving.value) {
           return L('Save');
@@ -174,7 +192,7 @@
       }
 
       function handleDateChange(e, setting) {
-        setting.value = moment.isMoment(e) ? formatToDate(e) : '';
+        setting.value = dayjs.isDayjs(e) ? formatToDate(e) : '';
         handleValueChange(setting);
       }
 
@@ -205,8 +223,9 @@
 
       return {
         L,
-        moment,
+        dayjs,
         saving,
+        tabsStyle,
         activeTabKey,
         updateSetting,
         sumbitButtonTitle,

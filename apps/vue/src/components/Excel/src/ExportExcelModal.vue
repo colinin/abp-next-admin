@@ -6,6 +6,7 @@
     @register="registerModal"
   >
     <BasicForm
+      layout="vertical"
       :labelWidth="100"
       :schemas="schemas"
       :showActionButtonGroup="false"
@@ -28,6 +29,7 @@
       field: 'filename',
       component: 'Input',
       label: t('component.excel.fileName'),
+      colProps: { span: 24 },
       rules: [{ required: true }],
     },
     {
@@ -35,6 +37,7 @@
       component: 'Select',
       label: t('component.excel.fileType'),
       defaultValue: 'xlsx',
+      colProps: { span: 24 },
       rules: [{ required: true }],
       componentProps: {
         options: [

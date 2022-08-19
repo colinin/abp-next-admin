@@ -1,17 +1,15 @@
 <script lang="tsx">
   import type { PropType, Ref } from 'vue';
-  import type { FormActionType, FormProps } from '../types/form';
-  import type { FormSchema } from '../types/form';
-  import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
+  import { computed, defineComponent, toRefs, unref } from 'vue';
+  import type { FormActionType, FormProps, FormSchema, Rule } from '../types/form';
   import type { TableActionType } from '/@/components/Table';
-  import { defineComponent, computed, unref, toRefs } from 'vue';
-  import { Form, Col, Divider } from 'ant-design-vue';
+  import { Col, Divider, Form } from 'ant-design-vue';
   import { componentMap } from '../componentMap';
   import { BasicHelp } from '/@/components/Basic';
   import { isBoolean, isFunction, isNull } from '/@/utils/is';
   import { getSlot } from '/@/utils/helper/tsxHelper';
   import { createPlaceholderMessage, setComponentRuleType } from '../helper';
-  import { upperFirst, cloneDeep } from 'lodash-es';
+  import { cloneDeep, upperFirst } from 'lodash-es';
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -128,7 +126,7 @@
         return { isShow, isIfShow };
       }
 
-      function handleRules(): ValidationRule[] {
+      function handleRules(): Rule[] {
         const {
           rules: defRules = [],
           component,
@@ -139,10 +137,10 @@
         } = props.schema;
 
         if (isFunction(dynamicRules)) {
-          return dynamicRules(unref(getValues)) as ValidationRule[];
+          return dynamicRules(unref(getValues)) as Rule[];
         }
 
-        let rules: ValidationRule[] = cloneDeep(defRules) as ValidationRule[];
+        let rules: Rule[] = cloneDeep(defRules) as Rule[];
         const { rulesMessageJoinLabel: globalRulesMessageJoinLabel } = props.formProps;
 
         const joinLabel = Reflect.has(props.schema, 'rulesMessageJoinLabel')
@@ -178,8 +176,21 @@
 
         const getRequired = isFunction(required) ? required(unref(getValues)) : required;
 
-        if ((!rules || rules.length === 0) && getRequired) {
-          rules = [{ required: getRequired, validator }];
+        /*
+         * 1、若设置了required属性，又没有其他的rules，就创建一个验证规则；
+         * 2、若设置了required属性，又存在其他的rules，则只rules中不存在required属性时，才添加验证required的规则
+         *     也就是说rules中的required，优先级大于required
+         */
+        if (getRequired) {
+          if (!rules || rules.length === 0) {
+            rules = [{ required: getRequired, validator }];
+          } else {
+            const requiredIndex: number = rules.findIndex((rule) => Reflect.has(rule, 'required'));
+
+            if (requiredIndex === -1) {
+              rules.push({ required: getRequired, validator });
+            }
+          }
         }
 
         const requiredRuleIndex: number = rules.findIndex(

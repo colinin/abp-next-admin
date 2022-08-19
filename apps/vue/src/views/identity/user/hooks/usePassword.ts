@@ -1,12 +1,18 @@
-import { createVNode } from 'vue';
+import type { Ref } from 'vue';
+
+import { createVNode, unref } from 'vue';
 import { Button } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { FormSchema } from '/@/components/Form';
+import { FormSchema, FormActionType } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
+import { useValidation } from '/@/hooks/abp/useValidation';
 import { useRandomPassword } from '/@/hooks/security/useRandomPassword';
+import { usePasswordValidator } from '/@/hooks/security/usePasswordValidator';
 
-export function usePassword() {
+export function usePassword(formElRef: Ref<Nullable<FormActionType>>) {
   const { L } = useLocalization('AbpIdentity');
+  const { ruleCreator } = useValidation();
+  const { validate } = usePasswordValidator();
   const formSchemas: FormSchema[] = [
     {
       field: 'password',
@@ -14,6 +20,24 @@ export function usePassword() {
       label: L('Password'),
       colProps: { span: 24 },
       required: true,
+      rules: [
+        ...ruleCreator.fieldRequired({
+          name: 'UserName',
+          resourceName: 'AbpIdentity',
+          prefix: 'DisplayName',
+        }),
+        ...ruleCreator.defineValidator({
+          trigger: 'change',
+          validator: (_, value: any) => {
+            if (!value) {
+              return Promise.resolve();
+            }
+            return validate(value)
+              .then(() => Promise.resolve())
+              .catch((error) => Promise.reject(error));
+          },
+        }),
+      ],
       componentProps: ({ formModel }) => {
         return {
           allowClear: false,
@@ -25,6 +49,8 @@ export function usePassword() {
             () => 'Random',
           ),
           onSearch: () => {
+            const formEl = unref(formElRef);
+            formEl?.clearValidate();
             formModel.password = generatePassword();
           },
         };

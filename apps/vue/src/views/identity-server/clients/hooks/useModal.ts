@@ -66,6 +66,7 @@ export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
         identityProviderRestrictions: [],
         properties: [],
         claims: [],
+        allowedGrantTypes: [],
       }) as Client;
       if (id) {
         get(id).then((res) => {

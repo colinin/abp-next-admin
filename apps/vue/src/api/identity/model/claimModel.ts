@@ -45,3 +45,19 @@ export class GetIdentityClaimTypePagedRequest extends PagedAndSortedResultReques
 export class IdentityClaimTypeListResult extends ListResultDto<IdentityClaimType> {}
 
 export class IdentityClaimTypePagedResult extends PagedResultDto<IdentityClaimType> {}
+
+export class IdentityClaim {
+  claimType = '';
+  claimValue = '';
+}
+
+export class DeleteIdentityClaim {
+  claimType = '';
+  claimValue = '';
+}
+
+export class CreateIdentityClaim extends IdentityClaim {}
+
+export class UpdateIdentityClaim extends IdentityClaim {
+  newClaimValue!: string;
+}

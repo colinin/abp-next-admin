@@ -38,6 +38,8 @@ export interface RouteMeta {
   // Hide submenu
   hideChildrenInMenu?: boolean;
 
+  hidePathForChildren?: boolean;
+
   // Carrying parameters
   carryParam?: boolean;
 

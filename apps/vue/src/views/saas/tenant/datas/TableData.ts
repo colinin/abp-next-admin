@@ -19,6 +19,13 @@ export function getDataColumns(): BasicColumn[] {
       sorter: true,
     },
     {
+      title: L('DisplayName:IsActive'),
+      dataIndex: 'isActive',
+      align: 'center',
+      width: 180,
+      sorter: true,
+    },
+    {
       title: L('DisplayName:EditionName'),
       dataIndex: 'editionName',
       align: 'left',

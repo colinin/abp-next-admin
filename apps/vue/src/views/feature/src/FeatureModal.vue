@@ -17,11 +17,11 @@
               v-if="feature.valueType !== null"
               :label="feature.displayName"
               :name="['groups', gi, 'features', fi, 'value']"
-              :rules="validator(feature.valueType.validator)"
+              :rules="validator(feature.displayName, feature.valueType.validator)"
               :extra="feature.description"
             >
               <Checkbox
-                v-if="feature.valueType.name === 'ToggleStringValueType'"
+                v-if="feature.valueType.name === 'ToggleStringValueType' && feature.valueType.validator.name === 'BOOLEAN'"
                 v-model:checked="feature.value"
                 >{{ feature.displayName }}</Checkbox
               >

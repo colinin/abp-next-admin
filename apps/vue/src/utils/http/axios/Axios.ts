@@ -80,11 +80,8 @@ export class VAxios {
     // Request interceptor configuration processing
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
-      const {
-        // @ts-ignore
-        headers: { ignoreCancelToken },
-      } = config;
-
+      // @ts-ignore
+      const { ignoreCancelToken } = config.requestOptions;
       const ignoreCancel =
         ignoreCancelToken !== undefined
           ? ignoreCancelToken
@@ -114,7 +111,10 @@ export class VAxios {
     // Response result interceptor error capture
     responseInterceptorsCatch &&
       isFunction(responseInterceptorsCatch) &&
-      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
+      this.axiosInstance.interceptors.response.use(undefined, (error) => {
+        // @ts-ignore
+        return responseInterceptorsCatch(this.axiosInstance, error);
+      });
   }
 
   /**
@@ -144,7 +144,7 @@ export class VAxios {
       });
     }
 
-    return this.axiosInstance.request<T, AxiosResponse<any>>({
+    return this.axiosInstance.request<T>({
       ...config,
       method: 'POST',
       data: formData,

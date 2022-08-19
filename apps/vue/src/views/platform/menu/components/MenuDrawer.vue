@@ -42,18 +42,20 @@
     emits: ['change', 'register'],
     setup(props) {
       const menu = ref<Menu>({} as Menu);
+      const framework = ref<string  | undefined>('');
       const formElRef = ref<Nullable<FormActionType>>(null);
-      const { formTitle, getFormSchemas, handleFormSubmit, warpParentRootMenu } =
+      const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } =
         useMenuFormContext({
           menuModel: menu,
           formElRef: formElRef,
+          framework: framework,
         });
 
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (dataVal) => {
         setDrawerProps({ confirmLoading: false });
         menu.value = dataVal;
-
-        await warpParentRootMenu(props.framework);
+        framework.value = props.framework;
+        fetchLayoutResource(dataVal.layoutId);
       });
 
       return {

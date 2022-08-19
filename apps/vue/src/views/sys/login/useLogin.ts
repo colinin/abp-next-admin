@@ -1,6 +1,7 @@
-import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
 import { ref, computed, unref, Ref } from 'vue';
 import { useValidation } from '/@/hooks/abp/useValidation';
+import { usePasswordValidator } from '/@/hooks/security/usePasswordValidator';
+import { Rule } from '/@/components/Form';
 
 export enum LoginStateEnum {
   LOGIN,
@@ -11,6 +12,7 @@ export enum LoginStateEnum {
   MOBILE_REGISTER,
   WECHAT,
   SSO,
+  TwoFactor,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);
@@ -40,8 +42,20 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
   return { validForm };
 }
 
+export function useFormFieldsValid<T extends Object = any>(formRef: Ref<any>) {
+  async function validFormFields(fields?: string[]) {
+    const form = unref(formRef);
+    if (!form) return;
+    const data = await form.validateFields(fields);
+    return data as T;
+  }
+
+  return { validFormFields };
+}
+
 export function useFormRules(formData?: Recordable) {
   const { ruleCreator } = useValidation();
+  const { validate } = usePasswordValidator();
 
   const getUserNameFormRule = computed(() =>
     ruleCreator.fieldRequired({
@@ -50,23 +64,54 @@ export function useFormRules(formData?: Recordable) {
       prefix: 'DisplayName',
     }),
   );
-  const getPasswordFormRule = computed(() =>
+  const getPasswordFormRule = computed(() => 
     ruleCreator.fieldRequired({
       name: 'Password',
       resourceName: 'AbpAccount',
       prefix: 'DisplayName',
-    }),
+    })
   );
-  const getEmailFormRule = computed(() =>
-    ruleCreator.fieldRequired({ name: 'Email', resourceName: 'AbpAccount', prefix: 'DisplayName' }),
+  const getRegPasswordFormRule = computed(() =>
+    ruleCreator.defineValidator({
+      trigger: 'change',
+      validator: (_, value: any) => {
+        if (!value) {
+          return Promise.resolve();
+        }
+        return validate(value)
+          .then(() => Promise.resolve())
+          .catch((error) => Promise.reject(error));
+      },
+    })
   );
-  const getMobileFormRule = computed(() =>
-    ruleCreator.fieldRequired({
-      name: 'PhoneNumber',
-      resourceName: 'AbpAccount',
-      prefix: 'DisplayName',
-    }),
-  );
+  const getEmailFormRule = computed(() => {
+    return [
+      ...ruleCreator.fieldRequired({
+        name: 'Email',
+        resourceName: 'AbpAccount',
+        prefix: 'DisplayName',
+      }),
+      ...ruleCreator.fieldDoNotValidEmailAddress({
+        name: 'Email',
+        resourceName: 'AbpAccount',
+        prefix: 'DisplayName',
+      }),
+    ];
+  });
+  const getMobileFormRule = computed(() => {
+    return [
+      ...ruleCreator.fieldRequired({
+        name: 'PhoneNumber',
+        resourceName: 'AbpAccount',
+        prefix: 'DisplayName',
+      }),
+      ...ruleCreator.fieldDoNotValidPhoneNumber({
+        name: 'PhoneNumber',
+        resourceName: 'AbpAccount',
+        prefix: 'DisplayName',
+      }),
+    ];
+  });
   const getMobileCodeFormRule = computed(() =>
     ruleCreator.fieldRequired({
       name: 'SmsVerifyCode',
@@ -92,9 +137,10 @@ export function useFormRules(formData?: Recordable) {
   //   return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
   // };
 
-  const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
+  const getFormRules = computed((): { [k: string]: Rule | Rule[] } => {
     const userNameFormRule = unref(getUserNameFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
+    const regPasswordFormRule = unref(getRegPasswordFormRule);
     const emailFormRule = unref(getEmailFormRule);
     const mobileFormRule = unref(getMobileFormRule);
     const mobileCodeFormRule = unref(getMobileCodeFormRule);
@@ -109,7 +155,7 @@ export function useFormRules(formData?: Recordable) {
       case LoginStateEnum.REGISTER:
         return {
           userName: userNameFormRule,
-          password: passwordFormRule,
+          password: [...passwordFormRule, ...regPasswordFormRule],
           emailAddress: emailFormRule,
           // policy: [{ validator: validatePolicy, trigger: 'change' }],
         };
@@ -119,7 +165,7 @@ export function useFormRules(formData?: Recordable) {
         const mobileCodeRule = unref(getMobileCodeFormRule);
         return {
           userName: userNameFormRule,
-          password: passwordFormRule,
+          password: [...passwordFormRule, ...regPasswordFormRule],
           phoneNumber: mobileFormRule,
           code: mobileCodeRule,
         };
@@ -128,8 +174,8 @@ export function useFormRules(formData?: Recordable) {
       case LoginStateEnum.RESET_PASSWORD:
         return {
           ...mobileRule,
-          newPassword: passwordFormRule,
-          newPasswordConfirm: validateConfirmPasswordRule(formData?.newPassword),
+          newPassword: [...passwordFormRule, ...regPasswordFormRule],
+          newPasswordConfirm: [...validateConfirmPasswordRule(formData?.newPassword), ...regPasswordFormRule],
         };
 
       // mobile form rules

@@ -80,6 +80,7 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
 }
 
 export const withInstall = <T>(component: T, alias?: string) => {
+  if (!component) return;
   const comp = component as any;
   comp.install = (app: App) => {
     app.component(comp.name || comp.displayName, component);

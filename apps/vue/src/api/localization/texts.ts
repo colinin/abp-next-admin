@@ -1,27 +1,17 @@
 import { defAbpHttp } from '/@/utils/http/abp';
 import {
   Text,
-  TextCreate,
-  TextUpdate,
+  SetTextInput,
   GetTextByKey,
-  GetTextPagedRequest,
-  TextPagedResult,
+  GetTextRequest,
+  TextListResult,
 } from './model/textsModel';
-import { format } from '/@/utils/strings';
 
 enum Api {
-  Create = '/api/localization/texts',
-  DeleteById = '/api/localization/texts/{id}',
-  GetById = '/api/localization/texts/{id}',
-  GetList = '/api/localization/texts',
-  GetByCulture = '/api/localization/texts/by-culture-key',
+  SetText = '/api/localization/texts',
+  GetList = '/api/abp/localization/texts',
+  GetByCulture = '/api/abp/localization/texts/by-culture-key',
 }
-
-export const get = (id: number) => {
-  return defAbpHttp.get<Text>({
-    url: format(Api.GetById, { id: id }),
-  });
-};
 
 export const getByCulture = (input: GetTextByKey) => {
   return defAbpHttp.get<Text>({
@@ -30,28 +20,15 @@ export const getByCulture = (input: GetTextByKey) => {
   });
 };
 
-export const create = (input: TextCreate) => {
-  return defAbpHttp.post<Text>({
-    url: Api.Create,
-    data: input,
-  });
-};
-
-export const deleteById = (id: string) => {
-  return defAbpHttp.delete<void>({
-    url: format(Api.GetById, { id: id }),
-  });
-};
-
-export const update = (id: number, input: TextUpdate) => {
+export const setText = (input: SetTextInput) => {
   return defAbpHttp.put<Text>({
-    url: format(Api.GetById, { id: id }),
+    url: Api.SetText,
     data: input,
   });
 };
 
-export const getList = (input: GetTextPagedRequest) => {
-  return defAbpHttp.get<TextPagedResult>({
+export const getList = (input: GetTextRequest) => {
+  return defAbpHttp.get<TextListResult>({
     url: Api.GetList,
     params: input,
   });

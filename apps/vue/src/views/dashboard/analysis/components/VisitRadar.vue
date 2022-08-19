@@ -7,7 +7,6 @@
   import { Ref, ref, watch } from 'vue';
   import { Card } from 'ant-design-vue';
   import { useECharts } from '/@/hooks/web/useECharts';
-
   const props = defineProps({
     loading: Boolean,
     width: {
@@ -19,7 +18,6 @@
       default: '300px',
     },
   });
-
   const chartRef = ref<HTMLDivElement | null>(null);
   const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
   watch(
@@ -39,28 +37,22 @@
           splitNumber: 8,
           indicator: [
             {
-              text: '电脑',
-              max: 100,
+              name: '电脑',
             },
             {
-              text: '充电器',
-              max: 100,
+              name: '充电器',
             },
             {
-              text: '耳机',
-              max: 100,
+              name: '耳机',
             },
             {
-              text: '手机',
-              max: 100,
+              name: '手机',
             },
             {
-              text: 'Ipad',
-              max: 100,
+              name: 'Ipad',
             },
             {
-              text: '耳机',
-              max: 100,
+              name: '耳机',
             },
           ],
         },

@@ -5,6 +5,7 @@ import {
   ChangePassword,
   ChangePhoneNumber,
   TwoFactorEnabled,
+  SendEmailConfirmCode,
 } from './model/profilesModel';
 
 enum Api {
@@ -15,6 +16,7 @@ enum Api {
   ChangePhoneNumber = '/api/account/my-profile/change-phone-number',
   GetTwoFactorEnabled = '/api/account/my-profile/two-factor',
   ChangeTwoFactorEnabled = '/api/account/my-profile/change-two-factor',
+  SendEmailConfirmLink = '/api/account/my-profile/send-email-confirm-link',
 }
 
 export const get = () => {
@@ -37,8 +39,15 @@ export const changePassword = (input: ChangePassword) => {
   });
 };
 
+export const sendEmailConfirmLink = (input: SendEmailConfirmCode) => {
+  return defAbpHttp.post<void>({
+    url: Api.SendEmailConfirmLink,
+    data: input,
+  });
+};
+
 export const sendChangePhoneNumberCode = (phoneNumber: string) => {
-  return defAbpHttp.put<void>({
+  return defAbpHttp.post<void>({
     url: Api.SendChangePhoneNumberCode,
     data: {
       newPhoneNumber: phoneNumber,

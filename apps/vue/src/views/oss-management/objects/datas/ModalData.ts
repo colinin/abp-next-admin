@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {

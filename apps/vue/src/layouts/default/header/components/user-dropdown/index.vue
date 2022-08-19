@@ -41,12 +41,14 @@
 <script lang="ts">
   // components
   import { Dropdown, Menu } from 'ant-design-vue';
+  import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
 
   import { defineComponent, computed } from 'vue';
 
   import { DOC_URL } from '/@/settings/siteSetting';
 
   import { useUserStore } from '/@/store/modules/user';
+  import { useAbpStoreWithOut } from '/@/store/modules/abp';
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -79,10 +81,20 @@
       const go = useGo();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
+      const abpStore = useAbpStoreWithOut();
 
       const getUserInfo = computed(() => {
-        const { realName = '', avatar, desc } = userStore.getUserInfo || {};
-        return { realName, avatar: avatar || headerImg, desc };
+        const { currentTenant } = abpStore.getApplication;
+        const { avatar, desc, realName, username } = userStore.getUserInfo || {};
+        let userName = realName ?? username;
+        if (currentTenant.name) {
+          userName = `${currentTenant.name}/${userName}`
+        }
+        return {
+          realName: userName,
+          avatar: avatar || headerImg,
+          desc
+        };
       });
 
       const [register, { openModal }] = useModal();
@@ -101,8 +113,8 @@
         openWindow(DOC_URL);
       }
 
-      function handleMenuClick(e: { key: MenuEvent }) {
-        switch (e.key) {
+      function handleMenuClick(e: MenuInfo) {
+        switch (e.key as MenuEvent) {
           case 'logout':
             handleLoginOut();
             break;

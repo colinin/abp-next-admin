@@ -1,7 +1,5 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form/index';
-import { Data } from '/@/api/platform/model/dataModel';
-import { DataItem } from '/@/api/platform/model/dataItemModel';
 
 import { valueTypeOptions } from './BasicType';
 
@@ -12,14 +10,13 @@ const { L } = useLocalization('AppPlatform');
  * @param data 数据字典
  * @returns 返回表单定义
  */
-export function getDateFormSchemas(data?: Data): FormSchema[] {
+export function getDateFormSchemas(): FormSchema[] {
   return [
     {
       field: 'id',
       component: 'Input',
       label: 'id',
       colProps: { span: 24 },
-      defaultValue: data?.id,
       show: false,
     },
     {
@@ -27,8 +24,8 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
       component: 'Input',
       label: 'parentId',
       colProps: { span: 24 },
-      defaultValue: data?.parentId,
       show: false,
+      defaultValue: undefined,
     },
     {
       field: 'name',
@@ -36,7 +33,6 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
       label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
-      defaultValue: data?.name,
     },
     {
       field: 'displayName',
@@ -44,14 +40,12 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
       label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
-      defaultValue: data?.displayName,
     },
     {
       field: 'description',
       component: 'InputTextArea',
       label: L('DisplayName:Description'),
       colProps: { span: 24 },
-      defaultValue: data?.description,
     },
   ];
 }
@@ -61,14 +55,22 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
  * @param dataItem 数据字典项目
  * @returns 返回表单定义
  */
-export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
+export function getDataItemFormSchemas(): FormSchema[] {
   return [
     {
       field: 'id',
       component: 'Input',
       label: 'id',
       colProps: { span: 24 },
-      defaultValue: dataItem?.id,
+      defaultValue: undefined,
+      show: false,
+    },
+    {
+      field: 'dataId',
+      component: 'Input',
+      label: 'dataId',
+      colProps: { span: 24 },
+      defaultValue: undefined,
       show: false,
     },
     {
@@ -77,8 +79,9 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
       label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
-      defaultValue: dataItem?.name,
-      dynamicDisabled: dataItem?.id !== undefined,
+      dynamicDisabled: ({ model }) => {
+        return model.id ? true : false;
+      },
     },
     {
       field: 'displayName',
@@ -86,7 +89,6 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
       label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
-      defaultValue: dataItem?.displayName,
     },
     {
       field: 'valueType',
@@ -94,7 +96,6 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
       label: L('DisplayName:ValueType'),
       colProps: { span: 24 },
       required: true,
-      defaultValue: dataItem?.valueType,
       componentProps: {
         options: valueTypeOptions,
       },
@@ -104,7 +105,6 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
       component: 'Input',
       label: L('DisplayName:DefaultValue'),
       colProps: { span: 24 },
-      defaultValue: dataItem?.defaultValue,
       // dynamicRules: ({ values }) => {
       //   return [
       //     {
@@ -117,15 +117,14 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
       field: 'allowBeNull',
       component: 'Checkbox',
       label: L('DisplayName:AllowBeNull'),
+      defaultValue: true,
       colProps: { span: 24 },
-      defaultValue: dataItem?.allowBeNull,
     },
     {
       field: 'description',
       component: 'InputTextArea',
       label: L('DisplayName:Description'),
       colProps: { span: 24 },
-      defaultValue: dataItem?.description,
     },
   ];
 }

@@ -29,7 +29,7 @@
 </template>
 <script lang="ts">
   import { Button, Row, Col } from 'ant-design-vue';
-  import { computed, defineComponent, onMounted, reactive } from 'vue';
+  import { computed, defineComponent, reactive, watch } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { CollapseContainer } from '/@/components/Container';
   import { CropperAvatar } from '/@/components/Cropper';
@@ -38,8 +38,8 @@
   import { useUserStore } from '/@/store/modules/user';
   import { upload } from '/@/api/oss-management/private';
   import { changeAvatar } from '/@/api/account/claims';
-  import { get as getProfile, update as updateProfile } from '/@/api/account/profiles';
-  import { UpdateMyProfile } from '/@/api/account/model/profilesModel';
+  import { update as updateProfile } from '/@/api/account/profiles';
+  import { MyProfile, UpdateMyProfile } from '/@/api/account/model/profilesModel';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useProfile } from './useProfile';
 
@@ -52,9 +52,15 @@
       ACol: Col,
       CropperAvatar,
     },
-    setup() {
+    emits: ['profile-change'],
+    props: {
+      profile: {
+        type: Object as PropType<MyProfile>,
+      }
+    },
+    setup(props, { emit }) {
       const { createMessage } = useMessage();
-      const { getBaseSetschemas } = useProfile();
+      const { getBaseSetschemas } = useProfile({ profile: props.profile });
       const userStore = useUserStore();
       const { L } = useLocalization('AbpAccount');
       const [register, { getFieldsValue, setFieldsValue, validate }] = useForm({
@@ -71,24 +77,29 @@
         return avatar ?? headerImg;
       });
 
-      onMounted(_fetchProfile);
-
-      function _fetchProfile() {
-        return getProfile().then((profile) => {
-          setFieldsValue(profile);
-        });
-      }
+      watch(
+        () => props.profile,
+        (profile) => {
+          if (profile) {
+            setFieldsValue(profile);
+          }
+        },
+        {
+          immediate: true,
+        },
+      )
 
       function handleUploadAvatar(params: { file: Blob; name: string; filename: string }) {
         return new Promise<void>((resolve, reject) => {
           upload(params.file, 'avatar', params.filename)
             .then((res) => {
               const path = encodeURIComponent(res.data.path.substring(0, res.data.path.length - 1));
-              changeAvatar({ avatarUrl: `${path}/${res.data.name}` }).then(() => {
-                _fetchProfile().then(() => {
+              changeAvatar({ avatarUrl: `${path}/${res.data.name}` })
+                .then(() => {
+                  emit('profile-change');
                   resolve({} as unknown as void);
-                }).catch((err) => reject(err));
-              }).catch((err) => reject(err));
+                })
+                .catch((err) => reject(err));
             })
             .catch((err) => reject(err));
         });
@@ -107,7 +118,7 @@
           updateProfile(getFieldsValue() as UpdateMyProfile)
             .then(() => {
               createMessage.success(L('PersonalSettingsSaved'));
-              _fetchProfile();
+              emit('profile-change');
             })
             .finally(() => {
               confirmButton.loading = false;

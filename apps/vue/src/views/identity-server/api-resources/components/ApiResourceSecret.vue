@@ -11,24 +11,25 @@
         width: 100,
         title: L('Actions'),
         dataIndex: 'action',
-        slots: { customRender: 'action' },
       }"
     >
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('Secret:New') }}</Button>
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpIdentityServer.ApiResources.Delete',
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('Resource:Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpIdentityServer.ApiResources.Delete',
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('Resource:Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <BasicModal v-bind="$attrs" @register="registerModal" @ok="handleSubmit" :title="title">

@@ -15,6 +15,8 @@ export default {
   redo: '刷新',
   back: '返回',
 
+  export: '导出',
+
   light: '亮色主题',
   dark: '黑暗主题',
 };

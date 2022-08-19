@@ -28,3 +28,10 @@ export interface ChangePhoneNumber {
 export interface TwoFactorEnabled {
   enabled: boolean;
 }
+
+export interface SendEmailConfirmCode {
+  email: string;
+  appName: string;
+  returnUrl?: string;
+  returnUrlHash?: string;
+}

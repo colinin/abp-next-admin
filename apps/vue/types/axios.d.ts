@@ -30,6 +30,14 @@ export interface Result<T = any> {
   message: string;
   details?: string;
   result: T;
+  // 请求重试机制
+  retryRequest?: RetryRequest;
+}
+
+export interface RetryRequest {
+  isOpenRetry: boolean;
+  count: number;
+  waitTime: number;
 }
 
 // multipart/form-data: upload file

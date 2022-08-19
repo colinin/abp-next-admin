@@ -1,35 +1,39 @@
 <template>
   <div class="content">
     <BasicTable @register="registerTable">
-      <template #code="{ record }">
-        <Tag :color="getHttpStatusColor(record.responseStatusCode)">{{ httpStatusCodeMap[record.responseStatusCode] }}</Tag>
-      </template>
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              auth: 'AbpWebhooks.SendAttempts',
-              label: L('Edit'),
-              icon: 'ant-design:edit-outlined',
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpWebhooks.SendAttempts.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-          :dropDownActions="[
-            {
-              auth: 'AbpWebhooks.SendAttempts.Resend',
-              label: L('Resend'),
-              onClick: handleResend.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'responseStatusCode'">
+          <Tag :color="getHttpStatusColor(record.responseStatusCode)">{{
+            httpStatusCodeMap[record.responseStatusCode]
+          }}</Tag>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'AbpWebhooks.SendAttempts',
+                label: L('Edit'),
+                icon: 'ant-design:edit-outlined',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpWebhooks.SendAttempts.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+            :dropDownActions="[
+              {
+                auth: 'AbpWebhooks.SendAttempts.Resend',
+                label: L('Resend'),
+                onClick: handleResend.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <SendAttemptModal @register="registerModal" />
@@ -50,7 +54,7 @@
   import SendAttemptModal from './SendAttemptModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
-  const { L } = useLocalization('WebhooksManagement', 'AbpUi');
+  const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload, setLoading }] = useTable({
     rowKey: 'id',
@@ -72,7 +76,6 @@
       width: 220,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 
@@ -97,10 +100,12 @@
 
   function handleResend(record) {
     setLoading(true);
-    resend(record.id).then(() => {
-      createMessage.success(L('Successful'));
-    }).finally(() => {
-      setLoading(false);
-    });
+    resend(record.id)
+      .then(() => {
+        createMessage.success(L('Successful'));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 </script>

@@ -40,4 +40,5 @@ export class FindTenantResult {
   name = '';
   tenantId = '';
   success = '';
+  isActive = false;
 }

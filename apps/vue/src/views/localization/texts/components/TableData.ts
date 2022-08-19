@@ -6,38 +6,44 @@ const { L } = useLocalization('LocalizationManagement');
 export function getDataColumns(): BasicColumn[] {
   return [
     {
-      title: 'id',
-      dataIndex: 'id',
-      width: 1,
-      ifShow: false,
-    },
-    {
       title: L('DisplayName:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 260,
-      sorter: true,
+      resizable: true,
+      sorter: (last, next) => {
+        return last.key.localeCompare(next.key);
+      },
     },
     {
       title: L('DisplayName:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,
-      sorter: true,
+      resizable: true,
+      sorter: (last, next) => {
+        return last.value?.localeCompare(next.value) ?? -1;
+      },
     },
     {
       title: L('DisplayName:TargetValue'),
       dataIndex: 'targetValue',
       align: 'left',
       width: 200,
-      sorter: true,
+      resizable: true,
+      sorter: (last, next) => {
+        return last.targetValue?.localeCompare(next.targetValue) ?? -1;
+      },
     },
     {
       title: L('DisplayName:ResourceName'),
       dataIndex: 'resourceName',
       align: 'left',
       width: 200,
-      sorter: true,
+      resizable: true,
+      sorter: (last, next) => {
+        return last.resourceName.localeCompare(next.resourceName);
+      },
     },
   ];
 }

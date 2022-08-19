@@ -26,6 +26,6 @@
   onMounted(() => {
     getCurrentUserSettings().then((res) => {
       group.value = res.items;
-    })
+    });
   });
 </script>

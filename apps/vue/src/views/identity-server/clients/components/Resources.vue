@@ -4,16 +4,13 @@
     :targetKeys="targetResources"
     :titles="[L('Assigned'), L('Available')]"
     :render="(item) => item.title"
-    :list-style="{
-      width: '465px',
-      height: '438px',
-    }"
+    :list-style="getListStyle"
     @change="handleChange"
   />
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import { Transfer } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
 
@@ -27,10 +24,21 @@
         default: () => [],
       },
       targetResources: { type: [Array] as PropType<string[]>, required: true, default: () => [] },
+      listStyle: { type: Object, required: false },
     },
     emits: ['change'],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
       const { L } = useLocalization('AbpIdentityServer');
+
+      const defaultListStyle = {
+        width: '48%',
+        height: '500px',
+        minHeight: '500px',
+      };
+
+      const getListStyle = computed(() => {
+        return {...defaultListStyle, ...props.listStyle}
+      });
 
       function handleChange(targetKeys, direction, moveKeys) {
         emit('change', targetKeys, direction, moveKeys);
@@ -38,6 +46,7 @@
 
       return {
         L,
+        getListStyle,
         handleChange,
       };
     },

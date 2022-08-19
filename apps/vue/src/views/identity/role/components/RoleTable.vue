@@ -9,48 +9,62 @@
           >{{ L('NewRole') }}</a-button
         >
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              auth: 'AbpIdentity.Roles.Update',
-              label: L('Edit'),
-              icon: 'ant-design:edit-outlined',
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentity.Roles.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              ifShow: !record.isStatic,
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-          :dropDownActions="[
-            {
-              auth: 'AbpIdentity.Roles.ManagePermissions',
-              label: L('Permissions'),
-              onClick: showPermissionModal.bind(null, record.name),
-            },
-            {
-              auth: 'AbpIdentity.Users.ManageClaims',
-              label: L('Claim'),
-              onClick: openClaimModal.bind(null, true, record, true),
-            },
-            {
-              auth: 'Platform.Menu.ManageRoles',
-              label: L('Menu:Manage'),
-              onClick: handleSetMenu.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'name'">
+          <Tag v-if="record.isStatic" style="margin-right: 5px" color="#8baac4">{{ L('Static') }}</Tag>
+          <Tag v-if="record.isDefault" style="margin-right: 5px" color="#108ee9">{{ L('DisplayName:IsDefault') }}</Tag>
+          <Tag v-if="record.isPublic" style="margin-right: 5px" color="#87d068">{{ L('Public') }}</Tag>
+          <span>{{ record.name }}</span>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'AbpIdentity.Roles.Update',
+                label: L('Edit'),
+                icon: 'ant-design:edit-outlined',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentity.Roles.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                ifShow: !record.isStatic,
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+            :dropDownActions="[
+              {
+                auth: 'AbpIdentity.Roles.ManagePermissions',
+                label: L('Permissions'),
+                onClick: showPermissionModal.bind(null, record.name),
+              },
+              {
+                auth: 'AbpIdentity.Users.ManageClaims',
+                label: L('Claim'),
+                onClick: handleShowClaims.bind(null, record),
+              },
+              {
+                auth: 'Platform.Menu.ManageRoles',
+                label: L('Menu:Manage'),
+                onClick: handleSetMenu.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <RoleModal @register="registerModal" @change="reloadTable" />
     <PermissionModal @register="registerPermissionModal" />
-    <ClaimModal @register="registerClaimModal" />
+    <ClaimModal
+      @register="registerClaimModal"
+      :fetch-api="getRoleClaims"
+      :create-api="createClaim"
+      :update-api="updateClaim"
+      :delete-api="deleteClaim"
+    />
     <MenuModal
       @register="registerMenuModal"
       :loading="loadMenuRef"
@@ -63,17 +77,19 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
+  import { Tag } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
-  import RoleModal from './RoleModal.vue';
-  import ClaimModal from './ClaimModal.vue';
-  import MenuModal from '../../components/MenuModal.vue';
   import { PermissionModal } from '/@/components/Permission';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useRoleTable } from '../hooks/useRoleTable';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
   import { getListByRole, setRoleMenu, setRoleStartupMenu } from '/@/api/platform/menu';
+  import { getClaimList as getRoleClaims, createClaim, updateClaim, deleteClaim } from '/@/api/identity/role';
+  import RoleModal from './RoleModal.vue';
+  import MenuModal from '../../components/MenuModal.vue';
+  import ClaimModal from '../../components/ClaimModal.vue';
 
   export default defineComponent({
     name: 'RoleTable',
@@ -82,11 +98,12 @@
       ClaimModal,
       MenuModal,
       RoleModal,
+      Tag,
       TableAction,
       PermissionModal,
     },
     setup() {
-      const { L } = useLocalization('AbpIdentity', 'AppPlatform');
+      const { L } = useLocalization(['AbpIdentity', 'AppPlatform']);
       const loadMenuRef = ref(false);
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
@@ -126,6 +143,10 @@
         openModal(true, record, true);
       }
 
+      function handleShowClaims(record) {
+        openClaimModal(true, { id: record.id });
+      }
+
       return {
         L,
         loadMenuRef,
@@ -134,7 +155,7 @@
         reloadTable,
         registerModal,
         registerClaimModal,
-        openClaimModal,
+        handleShowClaims,
         registerPermissionModal,
         showPermissionModal,
         registerMenuModal,
@@ -145,6 +166,10 @@
         handleChangeMenu,
         handleChangeStartupMenu,
         getListByRole,
+        getRoleClaims,
+        createClaim,
+        updateClaim,
+        deleteClaim,
       };
     },
   });

@@ -3,10 +3,11 @@ import {
   BackgroundJobInfo,
   BackgroundJobInfoCreate,
   BackgroundJobInfoUpdate,
+  BackgroundJobDefinition,
   BackgroundJobInfoGetListInput,
 } from './model/backgroundJobInfoModel';
 import { format } from '/@/utils/strings';
-import { PagedResultDto } from '../model/baseModel';
+import { ListResultDto, PagedResultDto } from '../model/baseModel';
 
 enum Api {
   GetById = '/api/task-management/background-jobs/{id}',
@@ -25,6 +26,7 @@ enum Api {
   BulkStart = '/api/task-management/background-jobs/bulk-start',
   BulkStop = '/api/task-management/background-jobs/bulk-stop',
   BulkDelete = '/api/task-management/background-jobs/bulk-delete',
+  GetDefinitions = '/api/task-management/background-jobs/definitions',
 }
 
 export const getById = (id: string) => {
@@ -39,6 +41,12 @@ export const getList = (input: BackgroundJobInfoGetListInput) => {
     params: input,
   });
 };
+
+export const getDefinitions = () => {
+  return defAbpHttp.get<ListResultDto<BackgroundJobDefinition>>({
+    url: Api.GetDefinitions,
+  });
+}; 
 
 export const create = (input: BackgroundJobInfoCreate) => {
   return defAbpHttp.post<BackgroundJobInfo>({

@@ -8,6 +8,7 @@
       :rules="getFormRules"
       colon
       labelAlign="left"
+      layout="vertical"
     >
       <FormItem>
         <MultiTenancyBox />
@@ -60,7 +61,7 @@
   const ACol = Col;
   const ARow = Row;
   const FormItem = Form.Item;
-  const { L } = useLocalization('AbpAccount');
+  const { L } = useLocalization(['AbpAccount', 'AbpIdentity']);
   const { handleBackLogin, getLoginState, setLoginState } = useLoginState();
   const glob = useGlobSetting();
 
@@ -71,7 +72,6 @@
     userName: '',
     password: '',
     emailAddress: '',
-    appName: glob.shortName,
   });
 
   const { getFormRules } = useFormRules();
@@ -82,7 +82,10 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    register(data).then(() => {
+    register({
+      ...data,
+      appName: glob.shortName,
+    }).then(() => {
       formRef.value.resetFields();
       setLoginState(LoginStateEnum.LOGIN);
     });

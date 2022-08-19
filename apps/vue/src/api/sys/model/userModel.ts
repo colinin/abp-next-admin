@@ -4,6 +4,8 @@
 export interface LoginParams {
   username: string;
   password: string;
+  twoFactorProvider?: string;
+  twoFactorCode?: string;
 }
 
 export interface LoginByPhoneParams {

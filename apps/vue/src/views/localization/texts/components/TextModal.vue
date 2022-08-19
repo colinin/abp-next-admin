@@ -12,22 +12,21 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, unref, watch } from 'vue';
+  import { computed, defineComponent, ref, unref, nextTick } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { message } from 'ant-design-vue';
   import { BasicForm, FormSchema, FormActionType, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { Text } from '/@/api/localization/model/textsModel';
-  import { get, getByCulture, create, update } from '/@/api/localization/texts';
-  import { getAll as getLanguages } from '/@/api/localization/languages';
-  import { getAll as getResources } from '/@/api/localization/resources';
+  import { getByCulture, setText } from '/@/api/localization/texts';
+  import { getList as getLanguages } from '/@/api/localization/languages';
+  import { getList as getResources } from '/@/api/localization/resources';
   export default defineComponent({
     name: 'TextModal',
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { L } = useLocalization('LocalizationManagement', 'AbpUi');
-      const idRef = ref<number | undefined>(undefined);
+      const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
       const modelRef = ref<Nullable<Text>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
       const formSchemas: FormSchema[] = [
@@ -36,7 +35,7 @@
           component: 'Input',
           label: 'id',
           colProps: { span: 24 },
-          ifShow: false,
+          show: false,
         },
         {
           field: 'cultureName',
@@ -62,7 +61,6 @@
                     modelRef.value = res;
                   } else {
                     modelRef.value = {
-                      id: undefined,
                       value: '',
                       key: model!.key,
                       cultureName: key,
@@ -98,6 +96,9 @@
           label: L('DisplayName:Key'),
           colProps: { span: 24 },
           required: true,
+          dynamicDisabled: ({ values }) => {
+            return values.id ? true : false;
+          },
         },
         {
           field: 'value',
@@ -105,9 +106,13 @@
           label: L('DisplayName:Value'),
           colProps: { span: 24 },
           required: true,
+          componentProps: {
+            rows: 5,
+            showCount: true,
+          },
         },
       ];
-      const [registerForm] = useForm({
+      const [registerForm, { resetFields, setFieldsValue }] = useForm({
         colon: true,
         labelWidth: 120,
         schemas: formSchemas,
@@ -117,48 +122,33 @@
         },
       });
       const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
-        idRef.value = val.id;
+        modelRef.value = val;
+        nextTick(() => {
+          resetFields();
+          setFieldsValue(val);
+        });
       });
       const formTitle = computed(() => {
-        const id = unref(modelRef)?.id;
-        if (id && id > 0) {
+        const key = unref(modelRef)?.key;
+        if (key) {
           return L('EditByName', [unref(modelRef)?.key] as Recordable);
         }
         return L('Text:AddNew');
       });
 
-      watch(
-        () => unref(idRef),
-        (id) => {
-          const formEl = unref(formElRef);
-          formEl?.resetFields();
-          if (id) {
-            get(id).then((res) => {
-              modelRef.value = res;
-              formEl?.setFieldsValue(res);
-            });
-          } else {
-            modelRef.value = null;
-          }
-        },
-      );
-
       function handleSubmit() {
         const formEl = unref(formElRef);
         formEl?.validate().then((input) => {
           changeOkLoading(true);
-          const model = unref(modelRef);
-          const api = model?.id ? update(model!.id, input) : create(input);
-          api
-            .then(() => {
-              emit('change');
-              message.success(L('Successful'));
-              formEl?.resetFields();
-              closeModal();
-            })
-            .finally(() => {
-              changeOkLoading(false);
-            });
+          setText(input).then(() => {
+            emit('change');
+            message.success(L('Successful'));
+            formEl?.resetFields();
+            closeModal();
+          })
+          .finally(() => {
+            changeOkLoading(false);
+          });
         });
       }
 

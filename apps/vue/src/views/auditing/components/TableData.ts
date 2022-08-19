@@ -16,16 +16,15 @@ export function getDataColumns(): BasicColumn[] {
       title: L('RequestUrl'),
       dataIndex: 'url',
       align: 'left',
+      key: 'url',
       width: 500,
       sorter: true,
-      slots: {
-        customRender: 'request',
-      },
     },
     {
       title: L('UserName'),
       dataIndex: 'userName',
       align: 'left',
+      key: 'userName',
       width: 120,
       sorter: true,
     },

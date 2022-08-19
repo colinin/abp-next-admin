@@ -1,24 +1,19 @@
 <template>
   <Card :title="title" size="small">
     <template #extra>
-      <a-button type="primary" @click="handleNewData(null)">{{ L('Data:AddNew') }}</a-button>
+      <a-button type="primary" @click="openDataModal(true, {})">{{ L('Data:AddNew') }}</a-button>
     </template>
 
     <BasicTree
       :tree-data="treeData"
-      :replace-fields="replaceFields"
+      :field-names="replaceFields"
       defaultExpandLevel="1"
       :before-right-click="getContentMenus"
       @select="handleNodeChange"
     />
-    <BasicModalForm
-      @register="registerDataModal"
-      :save-changes="handleSaveChanges"
-      :form-items="formItems"
-      :title="formTitle"
-    />
 
-    <DataItemModal @register="registerItemModal" :data-id="getDataId" />
+    <DataModal @register="registerDataModal" @change="onLoadAllDataDic" />
+    <DataItemModal @register="registerItemModal" @change="(dataId) => handleNodeChange([dataId])" />
   </Card>
 </template>
 
@@ -28,14 +23,12 @@
 
   import { Modal, Card } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
-  import { BasicModalForm } from '/@/components/ModalForm';
   import { BasicTree, ContextMenuItem } from '/@/components/Tree/index';
   import { listToTree } from '/@/utils/helper/treeHelper';
 
-  import { getAll, get, update, create, remove } from '/@/api/platform/dataDic';
+  import { getAll, remove } from '/@/api/platform/dataDic';
   import { Data } from '/@/api/platform/model/dataModel';
-  import { getDateFormSchemas } from './ModalData';
-
+  import DataModal from './DataModal.vue';
   import DataItemModal from './DataItemModal.vue';
 
   export default defineComponent({
@@ -43,24 +36,21 @@
     components: {
       Card,
       BasicTree,
-      BasicModalForm,
+      DataModal,
       DataItemModal,
     },
     emits: ['change', 'append-item'],
     setup(_, { emit }) {
-      const { L } = useLocalization('AppPlatform');
+      const { L } = useLocalization(['AppPlatform', 'AbpUi']);
       const title = L('DisplayName:DataDictionary');
-      const treeData = ref<Data[]>();
+      const treeData = ref<Data[]>([]);
       const replaceFields = ref({
         title: 'displayName',
         key: 'id',
+        value: 'id',
       });
-      const [registerDataModal, { openModal: openDataModal, closeModal: closeDataModal }] =
-        useModal();
       const [registerItemModal, { openModal: openItemModal }] = useModal();
-      const formItems = getDateFormSchemas();
-      const formTitle = ref('');
-      const getDataId = ref('');
+      const [registerDataModal, { openModal: openDataModal }] = useModal();
 
       onMounted(onLoadAllDataDic);
 
@@ -69,25 +59,21 @@
           {
             label: L('Data:Edit'),
             handler: () => {
-              get(node.eventKey).then((res) => {
-                formTitle.value = L('Data:Edit');
-                openDataModal(true, res, true);
-              });
+              openDataModal(true, { id: node.eventKey });
             },
             icon: 'ant-design:edit-outlined',
           },
           {
             label: L('Data:AddNew'),
             handler: () => {
-              handleNewData(node.eventKey);
+              openDataModal(true, { parentId: node.eventKey });
             },
             icon: 'ant-design:plus-outlined',
           },
           {
             label: L('Data:AppendItem'),
             handler: () => {
-              getDataId.value = node.eventKey;
-              openItemModal(true, {}, true);
+              openItemModal(true, { dataId: node.eventKey }, true);
             },
             icon: 'ant-design:plus-square-outlined',
           },
@@ -95,8 +81,8 @@
             label: L('Data:Delete'),
             handler: () => {
               Modal.warning({
-                title: L('AbpUi.AreYouSure'),
-                content: L('AbpUi.ItemWillBeDeletedMessage'),
+                title: L('AreYouSure'),
+                content: L('ItemWillBeDeletedMessage'),
                 okCancel: true,
                 onOk: () => {
                   remove(node.eventKey).then(() => {
@@ -109,7 +95,7 @@
           },
         ];
       }
-      
+
       function onLoadAllDataDic() {
         getAll().then((res) => {
           treeData.value = listToTree(res.items, {
@@ -124,52 +110,18 @@
         }
       }
 
-      function handleNewData(parentId: string | null) {
-        formTitle.value = L('Data:AddNew');
-        openDataModal(
-          true,
-          {
-            parentId: parentId,
-          } as Data,
-          true,
-        );
-      }
-      
-      function handleSaveChanges(val) {
-        const api: Promise<Data> = val.id
-          ? update(val.id, {
-              name: val.name,
-              displayName: val.displayName,
-              description: val.description,
-            })
-          : create({
-              name: val.name,
-              displayName: val.displayName,
-              description: val.description,
-              parentId: val.parentId,
-            });
-        return api.then(() => {
-          onLoadAllDataDic();
-        });
-      }
-
       return {
         L,
-        formItems,
-        formTitle,
         title,
-        getDataId,
         treeData,
         replaceFields,
         registerDataModal,
         openDataModal,
-        closeDataModal,
         registerItemModal,
         openItemModal,
         getContentMenus,
-        handleNewData,
         handleNodeChange,
-        handleSaveChanges,
+        onLoadAllDataDic,
       };
     },
   });

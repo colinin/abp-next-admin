@@ -15,6 +15,8 @@ export default {
   redo: 'Refresh',
   back: 'Back',
 
+  export: 'Export',
+
   light: 'Light',
   dark: 'Dark',
 };

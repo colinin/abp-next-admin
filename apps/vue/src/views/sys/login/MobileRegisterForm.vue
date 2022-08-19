@@ -8,6 +8,7 @@
       :rules="getFormRules"
       colon
       labelAlign="left"
+      layout="vertical"
     >
       <FormItem>
         <MultiTenancyBox />
@@ -56,7 +57,7 @@
   import { CountdownInput } from '/@/components/CountDown';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useLoginState, useFormRules, useFormValid, useFormFieldsValid, LoginStateEnum } from './useLogin';
   import { registerByPhone, sendPhoneRegisterCode } from '/@/api/account/accounts';
 
   const ACol = Col;
@@ -77,17 +78,22 @@
 
   const { getFormRules } = useFormRules();
   const { validForm } = useFormValid(formRef);
+  const { validFormFields } = useFormFieldsValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE_REGISTER);
 
   function handleSendCode() {
-    return sendPhoneRegisterCode(formData.phoneNumber)
-      .then(() => {
-        return Promise.resolve(true);
-      })
-      .catch(() => {
-        return Promise.reject(false);
-      });
+    return validFormFields(['phoneNumber']).then((data) => {
+      return sendPhoneRegisterCode(data.phoneNumber)
+        .then(() => {
+          return Promise.resolve(true);
+        })
+        .catch(() => {
+          return Promise.reject(false);
+        });
+    }).catch(() => {
+      return Promise.reject(false);
+    });
   }
 
   async function handleRegister() {

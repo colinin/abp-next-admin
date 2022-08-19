@@ -168,11 +168,15 @@ export const useUserStore = defineStore({
       return this.userInfo;
     },
     async getUserInfoAction(): Promise<GetUserInfoModel> {
-      const abpStore = useAbpStoreWithOut();
-      await abpStore.initlizeAbpApplication();
-      
       const userInfo = await getUserInfo();
-      const currentUser = abpStore.getApplication.currentUser;
+
+      const abpStore = useAbpStoreWithOut();
+      let currentUser = abpStore.getApplication.currentUser;
+      //  避免多次请求接口
+      if (userInfo.sub !== currentUser.id) {
+        await abpStore.initlizeAbpApplication();
+        currentUser = abpStore.getApplication.currentUser;
+      }
 
       const outgoingUserInfo: { [key: string]: any } = {
         // 从 currentuser 接口获取

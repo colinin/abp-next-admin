@@ -28,6 +28,8 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     grant_type: 'password',
     username: params.username,
     password: params.password,
+    TwoFactorProvider: params.twoFactorProvider,
+    TwoFactorCode: params.twoFactorCode,
   };
   return defHttp.post<LoginResultModel>(
     {

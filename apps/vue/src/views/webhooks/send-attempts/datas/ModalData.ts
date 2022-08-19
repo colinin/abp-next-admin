@@ -4,7 +4,7 @@ import { getList as getTenants } from '/@/api/saas/tenant';
 import { getList as getSubscriptions } from '/@/api/webhooks/subscriptions';
 import { httpStatusOptions } from '../../typing';
 
-const { L } = useLocalization('WebhooksManagement', 'AbpUi');
+const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
