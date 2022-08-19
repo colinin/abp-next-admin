@@ -261,7 +261,7 @@ export const usePermissionStore = defineStore({
           const userStore = useUserStore();
           const userInfo = userStore.getUserInfo;
           userInfo.homePath = menu.path;
-          userStore.setUserInfo(userInfo);
+          // userStore.setUserInfo(userInfo);
         }
         routeList.push(r);
       });

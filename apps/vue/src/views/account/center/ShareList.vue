@@ -1,23 +1,25 @@
 <template>
   <BasicTable @register="registerTable">
-    <template #action="{ record }">
-      <TableAction
-        :stop-button-propagation="true"
-        :actions="[
-          {
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <TableAction
+          :stop-button-propagation="true"
+          :actions="[
+            {
               label: L('CopyLink'),
               icon: 'ant-design:copy-outlined',
               onClick: handleCopyLink.bind(null, record),
             },
-          {
-            color: 'error',
-            label: L('Delete'),
-            icon: 'ant-design:delete-outlined',
-            ifShow: deleteEnabled,
-            onClick: handleDelete.bind(null, record),
-          },
-        ]"
-      />
+            {
+              color: 'error',
+              label: L('Delete'),
+              icon: 'ant-design:delete-outlined',
+              ifShow: deleteEnabled,
+              onClick: handleDelete.bind(null, record),
+            },
+          ]"
+        />
+      </template>
     </template>
   </BasicTable>
 </template>
@@ -45,7 +47,7 @@
   });
   const emit = defineEmits(['delete:file:share']);
 
-  const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
   const [registerTable, { setTableData }] = useTable({
     rowKey: 'url',
@@ -67,7 +69,6 @@
       width: 180,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 
@@ -82,10 +83,10 @@
   }
 
   function handleCopyLink(record) {
-    let url = window.location.origin
-    url += '/api/files/share/' + record.url
+    let url = window.location.origin;
+    url += '/api/files/share/' + record.url;
     if (copyTextToClipboard(url)) {
-      createMessage.success(L('Successful'))
+      createMessage.success(L('Successful'));
     }
   }
 

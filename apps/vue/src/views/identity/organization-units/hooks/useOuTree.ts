@@ -1,41 +1,22 @@
 import { computed, onMounted, ref } from 'vue';
-import { cloneDeep } from 'lodash-es';
 import { Modal } from 'ant-design-vue';
+import { useMessage } from '/@/hooks/web/useMessage';
+import { usePermission } from '/@/hooks/web/usePermission';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { FormSchema } from '/@/components/Form';
-import { create, deleteById, getAll, move, update } from '/@/api/identity/organization-units';
+import { deleteById, get, getAll, move } from '/@/api/identity/organization-units';
 import { listToTree } from '/@/utils/helper/treeHelper';
-import { useModal } from '/@/components/Modal';
+import { ReturnMethods } from '/@/components/Modal';
 
-export function useOuTree({ emit }: { emit: EmitType }) {
-  const { L } = useLocalization('AbpIdentity');
-  const organizationUnitTree = ref([]);
-
-  const formSchemas: FormSchema[] = [
-    {
-      field: 'id',
-      component: 'Input',
-      label: 'id',
-      colProps: { span: 24 },
-      ifShow: false,
-    },
-    {
-      field: 'parentId',
-      component: 'Input',
-      label: 'parentId',
-      colProps: { span: 24 },
-      ifShow: false,
-    },
-    {
-      field: 'displayName',
-      component: 'Input',
-      label: L('OrganizationUnit:DisplayName'),
-      colProps: { span: 24 },
-      required: true,
-    },
-  ];
-
-  const [registerModal, { openModal }] = useModal();
+export function useOuTree({ emit, modalMethods, permissionModalMethods }:
+  {
+    emit: EmitType,
+    modalMethods: ReturnMethods,
+    permissionModalMethods: ReturnMethods,
+  }) {
+  const { createMessage } = useMessage();
+  const { L } = useLocalization(['AbpIdentity']);
+  const { hasPermission } = usePermission();
+  const ouTree = ref<any[]>([]);
 
   const getContentMenus = computed(() => {
     return (node: any) => {
@@ -43,15 +24,14 @@ export function useOuTree({ emit }: { emit: EmitType }) {
         {
           label: L('Edit'),
           handler: () => {
-            openModal(true, cloneDeep(node.$attrs), true);
+            modalMethods.openModal(true, {  id: node.dataRef.id });
           },
           icon: 'ant-design:edit-outlined',
         },
         {
           label: L('OrganizationUnit:AddChildren'),
           handler: () => {
-            handleAddNew(node.$attrs.id);
-            // openModal(true, { parentId: node.$attrs.id }, true);
+            handleAddNew(node.dataRef.id);
           },
           icon: 'ant-design:plus-outlined',
         },
@@ -60,32 +40,50 @@ export function useOuTree({ emit }: { emit: EmitType }) {
           handler: () => {
             Modal.warning({
               title: L('AreYouSure'),
-              content: L('OrganizationUnit:WillDelete', [node.$attrs.displayName] as Recordable),
+              content: L('ItemWillBeDeletedMessage'),
               okCancel: true,
               onOk: () => {
-                deleteById(node.$attrs.id).then(() => {
-                  loadTree();
+                deleteById(node.dataRef.id).then(() => {
+                  createMessage.success(L('SuccessfullyDeleted'));
+                  loadOuTree();
                 });
               },
             });
           },
           icon: 'ant-design:delete-outlined',
         },
+        {
+          label: L('Permissions'),
+          handler: () => {
+            get(node.dataRef.id).then((ou) => {
+              const props = {
+                providerName: 'O',
+                providerKey: ou.id,
+                identity: ou.displayName,
+              };
+              permissionModalMethods.openModal(true, props);
+            });
+          },
+          icon: 'icon-park-outline:permissions',
+          disabled: !hasPermission('AbpIdentity.OrganizationUnits.ManagePermissions'),
+        },
       ];
     };
   });
 
-  function loadTree() {
+  function loadOuTree() {
     getAll().then((res) => {
-      organizationUnitTree.value = listToTree(res.items, {
+      const tree = listToTree(res.items, {
         id: 'id',
         pid: 'parentId',
+        children: 'children',
       });
+      ouTree.value = tree;
     });
   }
 
   function handleAddNew(parentId?: string) {
-    openModal(true, { parentId: parentId }, true);
+    modalMethods.openModal(true, { parentId: parentId });
   }
 
   function handleSelect(selectedKeys) {
@@ -97,29 +95,18 @@ export function useOuTree({ emit }: { emit: EmitType }) {
       opt.dropPosition === -1
         ? move(opt.dragNode.eventKey) // parent
         : move(opt.dragNode.eventKey, opt.node.eventKey); // children
-    api.then(() => loadTree());
-  }
-
-  function handleSubmit(val) {
-    const api = val.id
-      ? update(val.id, {
-          displayName: val.displayName,
-        })
-      : create(val);
-    return api.then(() => loadTree());
+    api.then(() => loadOuTree());
   }
 
   onMounted(() => {
-    loadTree();
+    loadOuTree();
   });
   return {
-    organizationUnitTree,
+    loadOuTree,
+    ouTree,
     getContentMenus,
-    registerModal,
-    formSchemas,
     handleDrop,
     handleAddNew,
     handleSelect,
-    handleSubmit,
   };
 }

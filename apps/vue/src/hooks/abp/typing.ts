@@ -1,6 +1,8 @@
+import { RuleType } from 'ant-design-vue/lib/form/interface';
+
 interface IRule {
-  type?: string;
-  trigger?: string;
+  type?: RuleType | 'array';
+  trigger?: 'blur' | 'change' | ['change', 'blur'];
 }
 
 export interface IField extends IRule {
@@ -8,13 +10,13 @@ export interface IField extends IRule {
   name?: string;
   /** 字段前缀
    * @description 用于本地化字段名称
-   * @example DisplayName 参与本地化字段结果 => L('ResourceName.DisplayName:Field')
+   * @example DisplayName => L('ResourceName.DisplayName:Field')
    */
   prefix?: string;
   /** 连接符
    * @description 用于本地化字段名称时的连接字符
-   * @example . 参与本地化字段结果 => L('ResourceName.DisplayName.Field')
-   * @example : 参与本地化字段结果 => L('ResourceName.DisplayName:Field')
+   * @example . => L('ResourceName.DisplayName.Field')
+   * @example : => L('ResourceName.DisplayName:Field')
    */
   connector?: string;
   /** 本地化资源 */
@@ -67,4 +69,9 @@ export interface IFieldContains extends IField {
 export interface IFieldValidator extends IFieldRequired {
   /** 值是否有效验证器 */
   validator: (value: any) => boolean;
+}
+
+export interface IDefineFieldValidator extends IFieldRequired {
+  message?: string;
+  validator: (rule: any, value: any, callback: any, source?: any, options?: any) => Promise<void> | void;
 }

@@ -28,7 +28,12 @@
             <ListItem :key="item.id">
               <ListItemMeta :description="item.message">
                 <template #avatar>
-                  <Icon v-if="!item.exception" :size="40" icon="grommet-icons:status-good" color="seagreen" />
+                  <Icon
+                    v-if="!item.exception"
+                    :size="40"
+                    icon="grommet-icons:status-good"
+                    color="seagreen"
+                  />
                   <Icon v-else :size="40" icon="grommet-icons:status-warning" color="orangered" />
                 </template>
                 <template #title>
@@ -72,7 +77,7 @@
   const logListElRef = ref<any>();
   const jobInfo = ref<BackgroundJobInfo>();
   const jobLogs = ref<BackgroundJobLog[]>([]);
-  
+
   const [registerDescription] = useDescription({
     bordered: true,
     column: 3,
@@ -101,12 +106,14 @@
       sorting: '',
       skipCount: request.skipCount,
       maxResultCount: request.maxResultCount,
-    }).then((res) => {
-      jobLogs.value = res.items;
-      maxLogCount.value = res.totalCount;
-    }).finally(() => {
-      fetchingLog.value = false;
-    });
+    })
+      .then((res) => {
+        jobLogs.value = res.items;
+        maxLogCount.value = res.totalCount;
+      })
+      .finally(() => {
+        fetchingLog.value = false;
+      });
   }
 
   function handleSizeChange(current: number, size: number) {

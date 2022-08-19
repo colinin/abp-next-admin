@@ -85,22 +85,22 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         colProps: { span: 6 },
       },
       {
-        field: 'requestId',
-        component: 'Input',
-        label: L('RequestId'),
-        colProps: { span: 8 },
-      },
-      {
         field: 'requestPath',
         component: 'Input',
         label: L('RequestPath'),
-        colProps: { span: 8 },
+        colProps: { span: 12 },
+      },
+      {
+        field: 'requestId',
+        component: 'Input',
+        label: L('RequestId'),
+        colProps: { span: 6 },
       },
       {
         field: 'correlationId',
         component: 'Input',
         label: L('CorrelationId'),
-        colProps: { span: 8 },
+        colProps: { span: 6 },
       },
     ],
   };

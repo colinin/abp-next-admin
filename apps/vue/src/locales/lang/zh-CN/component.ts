@@ -64,6 +64,7 @@ export default {
     settingColumnShow: '列展示',
     settingIndexColumnShow: '序号列',
     settingSelectColumnShow: '勾选列',
+    settingDragColumnShow: '拖拽列',
     settingFixedLeft: '固定到左侧',
     settingFixedRight: '固定到右侧',
     settingFullScreen: '全屏',
@@ -130,8 +131,5 @@ export default {
 
     dragText: '请按住滑块拖动',
     successText: '验证通过',
-  },
-  permission: {
-    successful: '操作成功!',
   },
 };

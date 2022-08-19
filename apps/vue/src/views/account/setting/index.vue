@@ -4,7 +4,7 @@
       <Tabs tab-position="left" :tabBarStyle="tabBarStyle">
         <template v-for="item in getSettingList()" :key="item.key">
           <TabPane :tab="item.name">
-            <component :is="item.component" />
+            <component :is="item.component" :profile="profileRef" @profile-change="initUserInfo" />
           </TabPane>
         </template>
       </Tabs>
@@ -13,10 +13,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref, onMounted } from 'vue';
   import { Tabs } from 'ant-design-vue';
   import { ScrollContainer } from '/@/components/Container/index';
   import { getSettingList } from './data';
+  import { get as getProfile } from '/@/api/account/profiles';
+  import { MyProfile } from '/@/api/account/model/profilesModel';
+  import { useAbpStoreWithOut } from '/@/store/modules/abp';
   import BaseSetting from './BaseSetting.vue';
   import SecureSetting from './SecureSetting.vue';
   import AccountBind from './AccountBind.vue';
@@ -32,8 +35,24 @@
       MsgNotify,
     },
     setup() {
+      const profileRef = ref<MyProfile>();
+      onMounted(fetchProfile);
+
+      async function fetchProfile() {
+        const profile = await getProfile();
+        profileRef.value = profile;
+      }
+
+      async function initUserInfo() {
+        const abpStore = useAbpStoreWithOut();
+        await abpStore.initlizeAbpApplication();
+        await fetchProfile();
+      }
+      
       return {
         prefixCls: 'account-setting',
+        profileRef,
+        initUserInfo,
         getSettingList,
         tabBarStyle: {
           width: '220px',

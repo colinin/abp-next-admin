@@ -1,8 +1,7 @@
-import type { RouteMeta } from '/@/router/types';
+import type { RouteMeta } from 'vue-router';
 export interface RouteItem {
   path: string;
   component: any;
-  components?: any;
   meta: RouteMeta;
   name?: string;
   alias?: string | string[];

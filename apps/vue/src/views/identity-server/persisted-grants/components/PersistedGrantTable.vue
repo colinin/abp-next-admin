@@ -1,24 +1,26 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              color: 'success',
-              icon: 'ant-design:search-outlined',
-              label: L('Edit'),
-              onClick: handleShow.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentityServer.Grants.Delete',
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('Grants:Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'actions'">
+          <TableAction
+            :actions="[
+              {
+                color: 'success',
+                icon: 'ant-design:search-outlined',
+                label: L('Edit'),
+                onClick: handleShow.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentityServer.Grants.Delete',
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('Grants:Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <PersistedGrantModal @register="registerModal" />
@@ -62,8 +64,7 @@
         actionColumn: {
           width: 160,
           title: L('Actions'),
-          dataIndex: 'action',
-          slots: { customRender: 'action' },
+          dataIndex: 'actions',
         },
       });
 

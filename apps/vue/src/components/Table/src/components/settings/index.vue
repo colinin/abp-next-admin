@@ -1,5 +1,6 @@
 <template>
   <div class="table-settings">
+    <TableExport v-if="getSetting.export" />
     <RedoSetting v-if="getSetting.redo" :getPopupContainer="getTableContainer" />
     <SizeSetting v-if="getSetting.size" :getPopupContainer="getTableContainer" />
     <ColumnSetting
@@ -18,6 +19,7 @@
   import SizeSetting from './SizeSetting.vue';
   import RedoSetting from './RedoSetting.vue';
   import FullScreenSetting from './FullScreenSetting.vue';
+  import TableExport from './TableExport.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useTableContext } from '../../hooks/useTableContext';
 
@@ -28,6 +30,7 @@
       SizeSetting,
       RedoSetting,
       FullScreenSetting,
+      TableExport,
     },
     props: {
       setting: {
@@ -46,6 +49,7 @@
           size: true,
           setting: true,
           fullScreen: false,
+          export: false,
           ...props.setting,
         };
       });

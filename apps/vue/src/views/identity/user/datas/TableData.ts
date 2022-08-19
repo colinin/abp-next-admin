@@ -1,5 +1,6 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { formatToDateTime } from '/@/utils/dateUtil';
 
 const { L } = useLocalization('AbpIdentity');
 
@@ -43,8 +44,18 @@ export function getDataColumns(): BasicColumn[] {
       title: L('PhoneNumber'),
       dataIndex: 'phoneNumber',
       align: 'left',
-      width: 'auto',
+      width: 180,
       sorter: true,
+    },
+    {
+      title: L('LockoutEnd'),
+      dataIndex: 'lockoutEnd',
+      align: 'left',
+      width: 180,
+      sorter: true,
+      format: (text) => {
+        return text ? formatToDateTime(text) : '';
+      },
     },
   ];
 }
@@ -62,14 +73,18 @@ export function getClaimColumns(): BasicColumn[] {
       dataIndex: 'claimType',
       align: 'left',
       width: 150,
-      sortOrder: true,
+      sorter: (last, next) => {
+        return last.claimType.localeCompare(next.claimType);
+      },
     },
     {
       title: L('DisplayName:ClaimValue'),
       dataIndex: 'claimValue',
       align: 'left',
       width: 'auto',
-      sortOrder: true,
+      sorter: (last, next) => {
+        return last.claimValue.localeCompare(next.claimValue);
+      },
     },
   ];
 }

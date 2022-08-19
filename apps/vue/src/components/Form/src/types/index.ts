@@ -91,6 +91,7 @@ export type ComponentType =
   | 'Select'
   | 'ApiSelect'
   | 'TreeSelect'
+  | 'ApiTree'
   | 'ApiTreeSelect'
   | 'ApiRadioGroup'
   | 'RadioButtonGroup'
@@ -112,4 +113,5 @@ export type ComponentType =
   | 'Render'
   | 'Slider'
   | 'Rate'
-  | 'Divider';
+  | 'Divider'
+  | 'ApiTransfer';

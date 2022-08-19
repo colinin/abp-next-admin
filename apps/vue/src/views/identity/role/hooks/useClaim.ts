@@ -82,7 +82,6 @@ export function useClaim({ roleIdRef }: UseClaim) {
       width: 160,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

@@ -1,5 +1,5 @@
-import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
 import type { ComponentType } from './types/index';
+import type { Rule } from './types/form';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { dateUtil } from '/@/utils/dateUtil';
 import { isNumber, isObject } from '/@/utils/is';
@@ -36,7 +36,7 @@ function genType() {
 }
 
 export function setComponentRuleType(
-  rule: ValidationRule,
+  rule: Rule,
   component: ComponentType,
   valueFormat: string,
 ) {
@@ -70,3 +70,5 @@ export function handleInputNumberValue(component?: ComponentType, val?: any) {
  * 时间字段
  */
 export const dateItemType = genType();
+
+export const defaultValueComponents = ['Input', 'InputPassword', 'InputSearch', 'InputTextArea'];

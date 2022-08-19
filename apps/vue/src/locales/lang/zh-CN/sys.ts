@@ -64,6 +64,7 @@ export default {
     qrSignInFormTitle: '二维码登录',
     signUpFormTitle: '注册',
     forgetFormTitle: '重置密码',
+    twoFactorFormTitle: '二次认证',
 
     signInTitle: '开箱即用的中后台管理系统',
     signInDesc: '输入您的个人详细信息开始使用！',

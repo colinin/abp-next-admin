@@ -8,6 +8,7 @@
     v-show="getShow"
     colon
     labelAlign="left"
+    layout="vertical"
     @keypress.enter="handleLogin"
   >
     <FormItem>
@@ -99,6 +100,7 @@
       />
     </div>
   </Form>
+  <TwoFactorModal @register="registerTwoFactorModal" />
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
@@ -107,8 +109,10 @@
   import { MobileOutlined, WechatOutlined, UserOutlined } from '@ant-design/icons-vue';
   import { SvgIcon } from '/@/components/Icon';
   import { Input as BInput } from '/@/components/Input';
+  import { useModal } from '/@/components/Modal';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
+  import TwoFactorModal from './TwoFactorModal.vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -118,6 +122,7 @@
   import { useOidc } from './useOidc';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useSettings } from '/@/hooks/abp/useSettings';
+  
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
@@ -131,6 +136,7 @@
   const userStore = useUserStore();
   const { login } = useOidc();
 
+  const [registerTwoFactorModal, { openModal: openTwoFactorModal }] = useModal();
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
 
@@ -152,24 +158,29 @@
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
-    try {
-      loading.value = true;
-      const userInfo = await userStore.login({
-        password: data.password,
-        username: data.userName,
-        mode: 'none', //不要默认的错误提示
+    loading.value = true;
+    userStore.login({
+      password: data.password,
+      username: data.userName,
+      mode: 'none', //不要默认的错误提示
+    }).then((userInfo) => {
+      notification.success({
+        message: t('sys.login.loginSuccessTitle'),
+        description: `${t('sys.login.loginSuccessDesc')}: ${
+          userInfo?.realName ?? userInfo?.username
+        }`,
+        duration: 3,
       });
-      if (userInfo) {
-        notification.success({
-          message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${
-            userInfo.realName ?? userInfo.username
-          }`,
-          duration: 3,
+    }).catch((error) => {
+      if (error.userId && error.twoFactorToken) {
+        openTwoFactorModal(true, {
+          userId: error.userId,
+          userName: data.userName,
+          password: data.password,
         });
       }
-    } finally {
+    }).finally(() => {
       loading.value = false;
-    }
+    });
   }
 </script>

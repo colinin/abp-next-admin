@@ -11,38 +11,40 @@
         <input ref="btnRef" style="display: none" />
         <a-button type="primary" @click="handleSelect">{{ L('Upload:SelectFile') }}</a-button>
       </template>
-      <template #size="{ record }">
-        <span>{{ fileSize(record.size) }}</span>
-      </template>
-      <template #status="{ record }">
-        <Tag v-if="record.completed" color="green">{{ L('Upload:Completed') }}</Tag>
-        <Tooltip v-else-if="record.error" :title="record.errorMsg">
-          <Tag color="red">{{ L('Upload:Error') }}</Tag>
-        </Tooltip>
-        <Tag v-else-if="record.paused" color="orange">{{ L('Upload:Pause') }}</Tag>
-        <span v-else>{{ record.progress }} {{ averageSpeed(record.averageSpeed) }}</span>
-      </template>
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              ifShow: !record.completed,
-              color: 'warning',
-              label: '',
-              icon: record.paused ? 'ant-design:caret-right-outlined' : 'ant-design:pause-outlined',
-              onClick: record.paused
-                ? handleResume.bind(null, record)
-                : handlePause.bind(null, record),
-            },
-            {
-              color: 'error',
-              label: '',
-              icon: 'ant-design:delete-outlined',
-              onClick: handleCancel.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'size'">
+          <span>{{ fileSize(record.size) }}</span>
+        </template>
+        <template v-else-if="column.key === 'status'">
+          <Tag v-if="record.completed" color="green">{{ L('Upload:Completed') }}</Tag>
+          <Tooltip v-else-if="record.error" :title="record.errorMsg">
+            <Tag color="red">{{ L('Upload:Error') }}</Tag>
+          </Tooltip>
+          <Tag v-else-if="record.paused" color="orange">{{ L('Upload:Pause') }}</Tag>
+          <span v-else>{{ record.progress }} {{ averageSpeed(record.averageSpeed) }}</span>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                ifShow: !record.completed,
+                color: 'warning',
+                label: '',
+                icon: record.paused ? 'ant-design:caret-right-outlined' : 'ant-design:pause-outlined',
+                onClick: record.paused
+                  ? handleResume.bind(null, record)
+                  : handlePause.bind(null, record),
+              },
+              {
+                color: 'error',
+                label: '',
+                icon: 'ant-design:delete-outlined',
+                onClick: handleCancel.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
   </BasicModal>
@@ -63,7 +65,7 @@
     components: { BasicModal, BasicTable, TableAction, Tag, Tooltip },
     setup() {
       let uploader: any = null;
-      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
       const bucket = ref('');
       const path = ref('');
       const btnRef = ref<any>();
@@ -94,9 +96,6 @@
             align: 'left',
             width: 100,
             sorter: true,
-            slots: {
-              customRender: 'size',
-            },
           },
           {
             title: L('DisplayName:Status'),
@@ -104,9 +103,6 @@
             align: 'left',
             width: 'auto',
             sorter: true,
-            slots: {
-              customRender: 'status',
-            },
           },
         ],
         dataSource: fileList,
@@ -122,7 +118,6 @@
           width: 120,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

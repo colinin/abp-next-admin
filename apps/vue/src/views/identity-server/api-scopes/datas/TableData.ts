@@ -38,7 +38,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'required' },
     },
     {
       title: L('Enabled'),
@@ -46,7 +45,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'enabled' },
     },
     {
       title: L('Emphasize'),
@@ -54,7 +52,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'emphasize' },
     },
     {
       title: L('ShowInDiscoveryDocument'),
@@ -62,7 +59,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'discovery' },
     },
   ];
 }

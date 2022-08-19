@@ -7,7 +7,7 @@
       layout="horizontal"
       :model="modelRef"
     >
-      <Tabs v-model:activeKey="activeKey">
+      <Tabs v-model:activeKey="activeKey" :style="tabsStyle.style" :tabBarStyle="tabsStyle.tabBarStyle">
         <TabPane key="basic" :tab="L('Operation')">
           <FormItem labelAlign="left" :label="L('HttpStatusCode')">
             <Tag :color="httpStatusCodeColor(modelRef.httpStatusCode)">
@@ -148,6 +148,7 @@
 <script lang="ts">
   import { computed, defineComponent, ref, watch, unref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { Collapse, Form, Tabs, Tag } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, BasicColumn } from '/@/components/Table';
@@ -175,6 +176,7 @@
       const { L } = useLocalization('AbpAuditLogging');
       const activeKey = ref('basic');
       const auditLogIdRef = ref('');
+      const tabsStyle = useTabsStyle();
       const modelRef = ref<AuditLog>({} as AuditLog);
       const [registerModal] = useModalInner((model) => {
         auditLogIdRef.value = model.id;
@@ -242,6 +244,7 @@
         columns,
         modelRef,
         activeKey,
+        tabsStyle,
         entityChangeType,
         entityChangeTypeColor,
         httpMethodColor,

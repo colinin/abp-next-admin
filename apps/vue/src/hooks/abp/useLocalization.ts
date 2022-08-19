@@ -7,14 +7,26 @@ interface IStringLocalizer {
   L(key: string, args?: Recordable | any[] | undefined): string;
 }
 
-export function useLocalization(resourceName: string, ...mergeResources: string[]) {
+export function useLocalization(resourceNames?: string | string[]) {
   const getResource = computed(() => {
     const abpStore = useAbpStoreWithOut();
     const { values } = abpStore.getApplication.localization;
-    let resource: { [key: string]: string } = values[resourceName];
-    mergeResources.forEach((name) => {
-      resource = merge(resource, values[name]);
-    });
+
+    let resource: { [key: string]: string }  = {};
+    if (resourceNames) {
+      if (Array.isArray(resourceNames)) {
+        resourceNames.forEach((name) => {
+          resource = merge(resource, values[name]);
+        });
+      } else {
+        resource = merge(resource, values[resourceNames]);
+      }
+    } else {
+      Object.keys(values).forEach((rs) => {
+        resource = merge(resource, values[rs]);
+      });
+    }
+
     return resource;
   });
 

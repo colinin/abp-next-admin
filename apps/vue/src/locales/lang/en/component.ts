@@ -62,6 +62,7 @@ export default {
     settingColumnShow: 'Column display',
     settingIndexColumnShow: 'Index Column',
     settingSelectColumnShow: 'Selection Column',
+    settingDragColumnShow: 'Drag Column',
     settingFixedLeft: 'Fixed Left',
     settingFixedRight: 'Fixed Right',
     settingFullScreen: 'Full Screen',
@@ -125,8 +126,5 @@ export default {
     redoTip: 'Click the picture to refresh',
     dragText: 'Hold down the slider and drag',
     successText: 'Verified',
-  },
-  permission: {
-    successful: 'successful!',
   },
 };

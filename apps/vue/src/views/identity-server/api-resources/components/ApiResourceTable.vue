@@ -1,33 +1,35 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #enabled="{ record }">
-        <Switch :checked="record.enabled" disabled />
-      </template>
-      <template #discovery="{ record }">
-        <Switch :checked="record.showInDiscoveryDocument" disabled />
-      </template>
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('AddNew') }}</Button>
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpIdentityServer.ApiResources.Update',
-              icon: 'ant-design:edit-outlined',
-              label: L('Resource:Edit'),
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentityServer.ApiResources.Delete',
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('Resource:Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'enabled'">
+          <Switch :checked="record.enabled" readonly />
+        </template>
+        <template v-if="column.key === 'showInDiscoveryDocument'">
+          <Switch :checked="record.showInDiscoveryDocument" readonly />
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpIdentityServer.ApiResources.Update',
+                icon: 'ant-design:edit-outlined',
+                label: L('Resource:Edit'),
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentityServer.ApiResources.Delete',
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('Resource:Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <ApiResourceModal @register="registerModal" @change="handleChange" />
@@ -72,7 +74,6 @@
           width: 200,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

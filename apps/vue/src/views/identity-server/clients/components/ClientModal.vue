@@ -16,7 +16,12 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
+      <Tabs
+        v-model:activeKey="tabActivedKey"
+        :style="tabsStyle.style"
+        :tabBarStyle="tabsStyle.tabBarStyle"
+        @change="handleChangeTab"
+      >
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="L('Basics')">
           <FormItem name="enabled" :label="L('Enabled')">
@@ -271,6 +276,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form, Input, InputNumber, Select } from 'ant-design-vue';
@@ -341,6 +347,7 @@
         formElRef,
         tabActivedKey,
       });
+      const tabsStyle = useTabsStyle();
 
       function handleClickAdvancedMenu(e) {
         tabActivedKey.value = 'advanced';
@@ -374,6 +381,7 @@
         formElRef,
         formRules,
         formTitle,
+        tabsStyle,
         tabActivedKey,
         registerModal,
         modelRef,

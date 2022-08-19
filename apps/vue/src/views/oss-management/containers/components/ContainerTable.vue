@@ -9,19 +9,21 @@
           >{{ L('Containers:Create') }}</a-button
         >
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              auth: 'AbpOssManagement.Container.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'AbpOssManagement.Container.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <BasicModal
@@ -58,7 +60,7 @@
       TableAction,
     },
     setup() {
-      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
       const { hasPermission } = usePermission();
       const [registerModal, { openModal, closeModal }] = useModal();
       const [registerForm, { validate, resetFields }] = useForm({
@@ -95,7 +97,6 @@
           width: 120,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

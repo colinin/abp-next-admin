@@ -5,7 +5,7 @@
       {{ t('layout.setting.copyBtn') }}
     </a-button>
 
-    <a-button color="primary" block @click="handleSyncSetting" :loading="syncLoading"  class="my-1">
+    <a-button color="primary" block @click="handleSyncSetting" :loading="syncLoading" class="my-1">
       <CloudSyncOutlined class="mr-2" />
       {{ t('layout.setting.syncBtn') }}
     </a-button>
@@ -96,11 +96,13 @@
         };
 
         syncLoading.value = true;
-        changeTheme(themeSetting).then(() => {
-          createMessage.success(t('layout.setting.operatingTitle'));
-        }).finally(() => {
-          syncLoading.value = false;
-        });
+        changeTheme(themeSetting)
+          .then(() => {
+            createMessage.success(t('layout.setting.operatingTitle'));
+          })
+          .finally(() => {
+            syncLoading.value = false;
+          });
       }
 
       return {

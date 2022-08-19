@@ -1,32 +1,34 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #action="{ record }">
-        <TableAction
-          :stop-button-propagation="true"
-          :actions="[
-            {
-              auth: 'AbpOssManagement.OssObject.Download',
-              ifShow: !record.isFolder,
-              label: L('Objects:Download'),
-              icon: 'ant-design:download-outlined',
-              onClick: handleDownload.bind(null, record),
-            },
-            {
-              label: L('Share'),
-              icon: 'ant-design:share-alt-outlined',
-              ifShow: shareEnabled,
-              onClick: handleShare.bind(null, record),
-            },
-            {
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              ifShow: deleteEnabled,
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'AbpOssManagement.OssObject.Download',
+                ifShow: !record.isFolder,
+                label: L('Objects:Download'),
+                icon: 'ant-design:download-outlined',
+                onClick: handleDownload.bind(null, record),
+              },
+              {
+                label: L('Share'),
+                icon: 'ant-design:share-alt-outlined',
+                ifShow: shareEnabled,
+                onClick: handleShare.bind(null, record),
+              },
+              {
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                ifShow: deleteEnabled,
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <BasicModal @register="registerShareModal" :title="L('Share')" @ok="handleShareFile">
@@ -47,10 +49,9 @@
   import { ListResultDto } from '/@/api/model/baseModel';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
 
-  import { getList as getPrivates } from '/@/api/oss-management/private';
+  import { getList as getPrivates, share } from '/@/api/oss-management/private';
   import { getList as getPublices } from '/@/api/oss-management/public';
-  import { share } from '/@/api/oss-management/private';
-  import { generateOssUrl } from '/@/api/oss-management/oss';
+  import { generateOssUrl, deleteObject } from '/@/api/oss-management/oss';
 
   const props = defineProps({
     selectGroup: {
@@ -71,9 +72,9 @@
   });
   const emit = defineEmits(['delete:file:private', 'delete:file:public', 'append:folder']);
 
-  const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
-  const [registerTable, { setTableData }] = useTable({
+  const [registerTable, { setTableData, deleteTableDataRecord }] = useTable({
     rowKey: 'name',
     columns: getDataColumns(),
     title: L('FileList'),
@@ -93,7 +94,6 @@
       width: 240,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 
@@ -102,11 +102,14 @@
   });
   const bucket = computed(() => {
     switch (props.selectGroup) {
-      case 'private': return 'users';
-      case 'public': return 'public';
-      default: return '';
+      case 'private':
+        return 'users';
+      case 'public':
+        return 'public';
+      default:
+        return '';
     }
-  })
+  });
 
   const [registershareForm, { validate, setFieldsValue, resetFields }] = useForm({
     labelAlign: 'left',
@@ -147,8 +150,15 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        props.selectGroup === 'private' && emit('delete:file:private', record);
-        props.selectGroup === 'public' && emit('delete:file:public', record);
+        deleteObject({
+          bucket: bucket.value,
+          path: record.path,
+          object: record.name,
+        }).then(() => {
+          deleteTableDataRecord(record.name);
+          props.selectGroup === 'private' && emit('delete:file:private', record);
+          props.selectGroup === 'public' && emit('delete:file:public', record);
+        });
       },
     });
   }

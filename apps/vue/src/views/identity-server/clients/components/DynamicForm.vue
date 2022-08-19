@@ -3,17 +3,19 @@
     <BasicTitle class="title">{{ title }}</BasicTitle>
     <BasicForm @register="registerForm" @submit="handleSubmit" />
     <BasicTable @register="registerTable">
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
   </div>
@@ -95,7 +97,6 @@
           width: 200,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

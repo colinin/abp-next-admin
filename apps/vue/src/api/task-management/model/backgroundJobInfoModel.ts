@@ -29,6 +29,20 @@ export enum JobPriority {
   High = 25
 }
 
+export interface BackgroundJobParamter {
+  name: string;
+  required: boolean;
+  DisplayName: string;
+  Description?: string;
+}
+
+export interface BackgroundJobDefinition {
+  name: string;
+  displayName: string;
+  description?: string;
+  paramters: BackgroundJobParamter[];
+}
+
 export interface BackgroundJobInfo extends ExtensibleAuditedEntity<string>, IHasConcurrencyStamp {
   isEnabled: boolean;
   name: string;

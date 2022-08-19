@@ -3,7 +3,7 @@ import { FormProps } from '/@/components/Form';
 import { getList } from '/@/api/saas/tenant';
 import { getAllAvailableWebhooks } from '/@/api/webhooks/subscriptions';
 
-const { L } = useLocalization('WebhooksManagement', 'AbpUi');
+const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
 
 function getAllAvailables(): Promise<any> {
   return getAllAvailableWebhooks().then((res) => {

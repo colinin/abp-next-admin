@@ -49,17 +49,20 @@ export type RegisterFn = (formInstance: FormActionType) => void;
 export type UseFormReturnType = [RegisterFn, FormActionType];
 
 export interface FormProps {
+  name?: string;
   layout?: 'vertical' | 'inline' | 'horizontal';
   // Form value
   model?: Recordable;
   // The width of all items in the entire form
   labelWidth?: number | string;
-  //alignment
+  // alignment
   labelAlign?: 'left' | 'right';
-  //Row configuration for the entire form
+  // Row configuration for the entire form
   rowProps?: RowProps;
   // Submit form on reset
   submitOnReset?: boolean;
+  // Submit form on form changing
+  submitOnChange?: boolean;
   // Col configuration for the entire form
   labelCol?: Partial<ColEx>;
   // Col configuration for the entire form
@@ -121,6 +124,11 @@ export interface FormProps {
   transformDateFunc?: (date: any) => string;
   colon?: boolean;
 }
+
+export interface TabFormProps extends FormProps {
+  tab: string;
+}
+
 export interface FormSchema {
   // Field name
   field: string;
@@ -203,9 +211,11 @@ export interface FormSchema {
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
 }
+
 export interface TabFormSchema extends FormSchema {
   tab: string;
 }
+
 export interface HelpComponentProps {
   maxWidth: string;
   // Whether to display the serial number

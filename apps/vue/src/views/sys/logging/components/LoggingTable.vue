@@ -1,20 +1,22 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #level="{ record }">
-        <Tag :color="LogLevelColor[record.level]">{{ LogLevelLabel[record.level] }}</Tag>
-      </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              color: 'success',
-              label: L('ShowLogDialog'),
-              icon: 'ant-design:search-outlined',
-              onClick: handleShow.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'level'">
+          <Tag :color="LogLevelColor[record.level]">{{ LogLevelLabel[record.level] }}</Tag>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                color: 'success',
+                label: L('ShowLogDialog'),
+                icon: 'ant-design:search-outlined',
+                onClick: handleShow.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <LoggingModal @register="registerModal" />
@@ -52,15 +54,14 @@
         showTableSetting: true,
         bordered: true,
         showIndexColumn: false,
-        canResize: false,
+        canResize: true,
         immediate: true,
         formConfig: getSearchFormSchemas(),
-        scroll: { x: true },
+        scroll: { x: 'max-content', y: '100%' },
         actionColumn: {
           width: 180,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 

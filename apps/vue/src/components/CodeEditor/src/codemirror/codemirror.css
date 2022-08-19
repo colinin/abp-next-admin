@@ -39,7 +39,7 @@
 .CodeMirror-gutters {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 5 !important;
   z-index: 3;
   min-height: 100%;
   white-space: nowrap;
@@ -49,11 +49,11 @@
 
 .CodeMirror-linenumber {
   min-width: 20px;
-  padding: 0 3px 0 5px;
+  padding: 1 8px 0 5px;
   color: var(--comment);
-  text-align: right;
+  text-align: left !important;
   white-space: nowrap;
-  opacity: 60%;
+  opacity: 0.6;
 }
 
 .CodeMirror-guttermarker {
@@ -90,7 +90,7 @@
   display: inline-block;
   font-size: 0.8em;
   content: '>';
-  opacity: 80%;
+  opacity: 0.8;
   transform: rotate(90deg);
   transition: transform 0.2s;
 }

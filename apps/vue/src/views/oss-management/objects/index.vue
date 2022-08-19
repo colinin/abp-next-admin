@@ -1,15 +1,15 @@
 <template>
-  <OssTable />
+  <OssManagePage />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
 
-  import OssTable from './components/OssTable.vue';
+  import OssManagePage from './components/OssManagePage.vue';
   export default defineComponent({
     name: 'Oss',
     components: {
-      OssTable,
+      OssManagePage,
     },
     setup() {},
   });

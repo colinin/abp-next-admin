@@ -52,9 +52,9 @@ export function useNotifications() {
     if (data.extraProperties.L === true) {
       // TODO: 后端统一序列化格式
       const { L } = useLocalization(
-        data.extraProperties.title.resourceName ?? data.extraProperties.title.ResourceName,
+        [data.extraProperties.title.resourceName ?? data.extraProperties.title.ResourceName,
         data.extraProperties.message.resourceName ?? data.extraProperties.message.ResourceName,
-        data.extraProperties.description?.resourceName ?? data.extraProperties.description?.ResourceName ?? "AbpUi");
+        data.extraProperties.description?.resourceName ?? data.extraProperties.description?.ResourceName ?? "AbpUi"]);
       title = L(
         data.extraProperties.title.name ?? data.extraProperties.title.Name,
         data.extraProperties.title.values ?? data.extraProperties.title.Values,

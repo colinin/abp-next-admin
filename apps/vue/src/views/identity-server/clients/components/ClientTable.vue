@@ -1,42 +1,44 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #enabled="{ record }">
-        <Switch :checked="record.enabled" disabled />
-      </template>
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('AddNew') }}</Button>
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpIdentityServer.Clients.Update',
-              icon: 'ant-design:edit-outlined',
-              label: L('Edit'),
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentityServer.Clients.Delete',
-              color: 'error',
-              icon: 'ant-design:delete-outlined',
-              label: L('Delete'),
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-          :dropDownActions="[
-            {
-              auth: 'AbpIdentityServer.Clients.ManagePermissions',
-              label: L('Permissions'),
-              onClick: handlePermission.bind(null, record),
-            },
-            {
-              auth: 'AbpIdentityServer.Clients.Clone',
-              label: L('Client:Clone'),
-              onClick: handleClone.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'enabled'">
+          <Switch :checked="record.enabled" readonly />
+        </template>
+        <template v-else-if="column.key === 'actions'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpIdentityServer.Clients.Update',
+                icon: 'ant-design:edit-outlined',
+                label: L('Edit'),
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentityServer.Clients.Delete',
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                label: L('Delete'),
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+            :dropDownActions="[
+              {
+                auth: 'AbpIdentityServer.Clients.ManagePermissions',
+                label: L('Permissions'),
+                onClick: handlePermission.bind(null, record),
+              },
+              {
+                auth: 'AbpIdentityServer.Clients.Clone',
+                label: L('Client:Clone'),
+                onClick: handleClone.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <ClientModal @register="registerModal" @change="handleChange" />
@@ -94,8 +96,7 @@
         actionColumn: {
           width: 200,
           title: L('Actions'),
-          dataIndex: 'action',
-          slots: { customRender: 'action' },
+          dataIndex: 'actions',
         },
       });
 

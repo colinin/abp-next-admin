@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineProps } from 'vue';
   import VueJsonPretty from 'vue-json-pretty';
   import 'vue-json-pretty/lib/styles.css';
 

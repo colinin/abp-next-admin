@@ -20,6 +20,7 @@
       [LoginStateEnum.MOBILE_REGISTER]: t('sys.login.signUpFormTitle'),
       [LoginStateEnum.MOBILE]: t('sys.login.mobileSignInFormTitle'),
       [LoginStateEnum.QR_CODE]: t('sys.login.qrSignInFormTitle'),
+      [LoginStateEnum.TwoFactor]: t('sys.login.twoFactorFormTitle'),
     };
     return titleObj[unref(getLoginState)];
   });

@@ -9,7 +9,7 @@
     :closeFunc="handleCloseFunc"
     :maskClosable="false"
     :keyboard="false"
-    wrapClassName="upload-modal"
+    class="upload-modal"
     :okButtonProps="getOkButtonProps"
     :cancelButtonProps="{ disabled: isUploadingRef }"
   >
@@ -31,6 +31,7 @@
         :accept="getStringAccept"
         :multiple="multiple"
         :before-upload="beforeUpload"
+        :show-upload-list="false"
         class="upload-modal-toolbar__btn"
       >
         <a-button type="primary">
@@ -54,7 +55,7 @@
   import { basicProps } from './props';
   import { createTableColumns, createActionColumn } from './data';
   // utils
-  import { checkFileType, checkImgType, getBase64WithFile } from './helper';
+  import { checkImgType, getBase64WithFile } from './helper';
   import { buildUUID } from '/@/utils/uuid';
   import { isFunction } from '/@/utils/is';
   import { warn } from '/@/utils/log';
@@ -84,13 +85,15 @@
       const { t } = useI18n();
       const [register, { closeModal }] = useModalInner();
 
-      const { getAccept, getStringAccept, getHelpText } = useUploadType({
+      const { getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
         helpTextRef: helpText,
         maxNumberRef: maxNumber,
         maxSizeRef: maxSize,
       });
+
       const { createMessage } = useMessage();
+
       const getIsSelectFile = computed(() => {
         return (
           fileListRef.value.length > 0 &&
@@ -119,16 +122,9 @@
       function beforeUpload(file: File) {
         const { size, name } = file;
         const { maxSize } = props;
-        const accept = unref(getAccept);
         // 设置最大值，则判断
-        console.log(file.size);
         if (maxSize && file.size / 1024 / 1024 >= maxSize) {
           createMessage.error(t('component.upload.maxSizeMultiple', [maxSize]));
-          return false;
-        }
-        // 设置类型,则判断
-        if (accept.length > 0 && !checkFileType(file, accept)) {
-          createMessage.error!(t('component.upload.acceptUpload', [accept.join(',')]));
           return false;
         }
         const commonItem = {
@@ -232,9 +228,11 @@
           throw e;
         }
       }
+
       //   点击保存
       function handleOk() {
         const { maxNumber } = props;
+
         if (fileListRef.value.length > maxNumber) {
           return createMessage.warning(t('component.upload.maxNumber', [maxNumber]));
         }

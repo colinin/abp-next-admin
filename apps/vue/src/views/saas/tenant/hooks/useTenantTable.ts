@@ -35,7 +35,6 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
       width: 200,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

@@ -35,7 +35,6 @@ export function useClaimTable() {
       width: 180,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

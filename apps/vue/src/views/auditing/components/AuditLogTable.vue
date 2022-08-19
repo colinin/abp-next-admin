@@ -1,32 +1,34 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #request="{ record }">
-        <Tag :color="httpStatusCodeColor(record.httpStatusCode)">{{ record.httpStatusCode }}</Tag>
-        <Tag style="margin-left: 5px" :color="httpMethodColor(record.httpMethod)">{{
-          record.httpMethod
-        }}</Tag>
-        <span style="margin-left: 5px">{{ record.url }}</span>
-      </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpAuditing.AuditLog',
-              color: 'success',
-              label: L('ShowLogDialog'),
-              icon: 'ant-design:search-outlined',
-              onClick: handleShow.bind(null, record),
-            },
-            {
-              auth: 'AbpAuditing.AuditLog.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'url'">
+          <Tag :color="httpStatusCodeColor(record.httpStatusCode)">{{ record.httpStatusCode }}</Tag>
+          <Tag style="margin-left: 5px" :color="httpMethodColor(record.httpMethod)">{{
+            record.httpMethod
+          }}</Tag>
+          <span style="margin-left: 5px">{{ record.url }}</span>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpAuditing.AuditLog',
+                color: 'success',
+                label: L('ShowLogDialog'),
+                icon: 'ant-design:search-outlined',
+                onClick: handleShow.bind(null, record),
+              },
+              {
+                auth: 'AbpAuditing.AuditLog.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <AuditLogModal @register="registerModal" />
@@ -66,12 +68,11 @@
         canResize: false,
         immediate: true,
         formConfig: getSearchFormSchemas(),
-        scroll: { x: true },
+        scroll: { x: 'max-content', y: '100%' },
         actionColumn: {
           width: 180,
           title: L('Actions'),
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
       const [registerModal, { openModal }] = useModal();

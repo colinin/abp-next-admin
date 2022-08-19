@@ -1,14 +1,18 @@
 import { defAbpHttp } from '/@/utils/http/abp';
 import { Register, PhoneRegister, PhoneResetPassword } from './model/accountsModel';
 import { User } from '/@/api/identity/model/userModel';
+import { ListResultDto } from '../model/baseModel';
+import { format } from '/@/utils/strings';
 
 enum Api {
   Register = '/api/account/register',
   RegisterByPhone = '/api/account/phone/register',
   ResetPassword = '/api/account/phone/reset-password',
+  SendEmailSignCode = '/api/account/email/send-signin-code',
   SendPhoneSignCode = '/api/account/phone/send-signin-code',
   SendPhoneRegisterCode = '/api/account/phone/send-register-code',
   SendPhoneResetPasswordCode = '/api/account/phone/send-password-reset-code',
+  GetTwoFactorProviders = '/api/account/two-factor-providers?userId={userId}',
 }
 
 export const register = (input: Register) => {
@@ -41,6 +45,15 @@ export const sendPhoneSignCode = (phoneNumber: string) => {
   });
 };
 
+export const sendEmailSignCode = (emailAddress: string) => {
+  return defAbpHttp.post<void>({
+    url: Api.SendEmailSignCode,
+    data: {
+      emailAddress: emailAddress,
+    },
+  });
+};
+
 export const sendPhoneRegisterCode = (phoneNumber: string) => {
   return defAbpHttp.post<void>({
     url: Api.SendPhoneRegisterCode,
@@ -58,3 +71,9 @@ export const sendPhoneResetPasswordCode = (phoneNumber: string) => {
     },
   });
 };
+
+export const getTwoFactorProviders = (userId: string) => {
+  return defAbpHttp.get<ListResultDto<NameValue<String>>>({
+    url: format(Api.GetTwoFactorProviders, { userId: userId }),
+  });
+}

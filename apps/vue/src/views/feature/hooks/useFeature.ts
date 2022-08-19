@@ -71,13 +71,14 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
     return groups;
   }
 
-  function validator(validator: Validator) {
+  function validator(field: string, validator: Validator) {
     const featureRules: { [key: string]: any }[] = new Array<{ [key: string]: any }>();
     if (validator.properties) {
       switch (validator.name) {
         case 'NUMERIC':
           featureRules.push(
             ...ruleCreator.fieldMustBeetWeen({
+              name: field,
               start: Number(validator.properties.MinValue),
               end: Number(validator.properties.MaxValue),
               trigger: 'change',
@@ -91,12 +92,14 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
           ) {
             featureRules.push(
               ...ruleCreator.fieldRequired({
+                name: field,
                 trigger: 'blur',
               }),
             );
           }
           featureRules.push(
             ...ruleCreator.fieldMustBeStringWithMinimumLengthAndMaximumLength({
+              name: field,
               minimum: Number(validator.properties.MinValue),
               maximum: Number(validator.properties.MaxValue),
               trigger: 'blur',

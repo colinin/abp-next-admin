@@ -54,7 +54,7 @@
     },
     setup() {
       const { hasPermission } = usePermission();
-      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
       const folderTreeRef = ref<{ [key: string]: TreeDataItem }>({
         private: {
           key: 'private',

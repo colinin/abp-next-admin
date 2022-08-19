@@ -1,14 +1,15 @@
 <template>
-  <BackgroundJobInfoTable />
+  <JobTable />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
 
-  import BackgroundJobInfoTable from './components/BackgroundJobInfoTable.vue';
+  import JobTable from './components/JobTable.vue';
   export default defineComponent({
+    name: 'BackgroundJobs',
     components: {
-      BackgroundJobInfoTable,
+      JobTable,
     },
     setup() {},
   });

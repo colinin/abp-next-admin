@@ -3,16 +3,15 @@ import {
   User,
   UserClaimListResult,
   CreateUser,
-  CreateUserClaim,
-  ChangePassword,
+  SetPassword,
   UpdateUser,
   GetUserPagedRequest,
   UserPagedResult,
-  UpdateUserClaim,
   UserClaim,
 } from './model/userModel';
 import { RoleListResult } from './model/roleModel';
 import { format } from '/@/utils/strings';
+import { CreateIdentityClaim, UpdateIdentityClaim } from './model/claimModel';
 
 enum Api {
   Create = '/api/identity/users',
@@ -40,14 +39,14 @@ export const create = (input: CreateUser) => {
   });
 };
 
-export const createClaim = (id: string, input: CreateUserClaim) => {
+export const createClaim = (id: string, input: CreateIdentityClaim) => {
   return defAbpHttp.post<void>({
     url: format(Api.CreateClaim, { id: id }),
     data: input,
   });
 };
 
-export const changePassword = (id: string, input: ChangePassword) => {
+export const changePassword = (id: string, input: SetPassword) => {
   return defAbpHttp.put<void>({
     url: Api.ChangePassword,
     data: input,
@@ -116,7 +115,7 @@ export const update = (id: string, input: UpdateUser) => {
   });
 };
 
-export const updateClaim = (id: string, input: UpdateUserClaim) => {
+export const updateClaim = (id: string, input: UpdateIdentityClaim) => {
   return defAbpHttp.put<void>({
     url: format(Api.CreateClaim, { id: id }),
     data: input,

@@ -38,7 +38,9 @@
             <Checkbox v-model:checked="userRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
           </FormItem>
           <FormItem :label="L('DisplayName:LockoutEnabled')">
-            <Checkbox v-model:checked="userRef.lockoutEnabled">{{ L('DisplayName:LockoutEnabled') }}</Checkbox>
+            <Checkbox v-model:checked="userRef.lockoutEnabled">{{
+              L('DisplayName:LockoutEnabled')
+            }}</Checkbox>
           </FormItem>
         </TabPane>
         <TabPane key="role" :tab="L('Roles')">
@@ -84,7 +86,7 @@
     },
     emits: ['register', 'change'],
     setup(_, { emit }) {
-      const { L } = useLocalization('AbpIdentity', 'AbpIdentityServer');
+      const { L } = useLocalization(['AbpIdentity', 'AbpIdentityServer']);
       const activedTab = ref('info');
       const userRef = ref<Recordable>({});
       const formElRef = ref<Nullable<FormActionType>>(null);

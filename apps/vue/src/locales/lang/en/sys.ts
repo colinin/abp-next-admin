@@ -54,7 +54,7 @@ export default {
     noDataTitle: 'No data on the current page.',
     networkErrorTitle: 'Network Error',
     networkErrorSubTitle:
-      'Sorry，Your network connection has been disconnected, please check your network!',
+      'Sorry, Your network connection has been disconnected, please check your network!',
   },
   lock: {
     unlock: 'Click to unlock',
@@ -70,6 +70,7 @@ export default {
     signInFormTitle: 'Sign in',
     signUpFormTitle: 'Sign up',
     forgetFormTitle: 'Reset password',
+    twoFactorFormTitle: 'Two factor',
 
     signInTitle: 'Backstage management system',
     signInDesc: 'Enter your personal details and get started!',

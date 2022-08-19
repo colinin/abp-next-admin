@@ -17,9 +17,10 @@ import { Menu, UpdateMenu, CreateMenu } from '/@/api/platform/model/menuModel';
 interface UseMenuFormContext {
   menuModel: Ref<Menu>;
   formElRef: Ref<Nullable<FormActionType>>;
+  framework: Ref<string | undefined>,
 }
 
-export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext) {
+export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuFormContext) {
   const { L } = useLocalization('AppPlatform');
 
   function getMetaFormSchemas(meta: DataItem[]): TabFormSchema[] {
@@ -115,16 +116,16 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         colProps: { span: 24 },
         required: true,
         componentProps: {
-          api: () => getAllLayout(),
+          api: getAllLayout,
           resultField: 'items',
           labelField: 'displayName',
           valueField: 'id',
           onChange(val) {
-            appendMenuMetaItem(val);
+            fetchLayoutResource(val);
           },
           onOptionsChange() {
             const menu = unref(menuModel);
-            appendMenuMetaItem(menu.layoutId);
+            fetchLayoutResource(menu.layoutId);
           },
         },
       },
@@ -143,8 +144,8 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         component: 'TreeSelect',
         colProps: { span: 24 },
         componentProps: {
-          replaceFields: {
-            title: 'displayName',
+          fieldNames: {
+            label: 'displayName',
             key: 'id',
             value: 'id',
           },
@@ -212,22 +213,37 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
     return L('Menu:AddNew');
   });
 
-  async function appendMenuMetaItem(layoutId: string) {
+  function removeAllMetaSchemas() {
+    const tabKey = L('DisplayName:Meta');
+    const formEl = unref(formElRef);
+    const schemas = unref(getFormSchemas);
+    const metaSchemas= schemas.filter((x) => x.tab === tabKey);
+    metaSchemas.forEach((x) => {
+      formEl?.removeSchemaByFiled(x.field);
+      const index = schemas.findIndex((s) => s.field === x.field);
+      if (index) {
+        schemas.splice(index, 1);
+      }
+    });
+  }
+
+  function removeAllParentMenus() {
+    const formEl = unref(formElRef);
+    formEl?.updateSchema({
+      field: 'parentId',
+      componentProps: { treeData: [] },
+    });
+  }
+
+  async function fetchLayoutResource(layoutId?: string) {
+    removeAllMetaSchemas();
     if (layoutId) {
+      await warpParentRootMenu(layoutId);
       const formEl = unref(formElRef);
       const layout = await getLayout(layoutId);
       const { items } = await getData(layout.dataId);
       const metaSchemas = getMetaFormSchemas(items);
-
       const schemas = unref(getFormSchemas);
-      const oldMetaSchemas = schemas.filter((x) => x.tab === '元数据');
-      oldMetaSchemas.forEach((x) => {
-        formEl?.removeSchemaByFiled(x.field);
-        const index = schemas.findIndex((s) => s.field === x.field);
-        if (index) {
-          schemas.splice(index, 1);
-        }
-      });
       metaSchemas.forEach((x) => {
         schemas.push(x);
         formEl?.appendSchemaByField(x, '');
@@ -236,12 +252,14 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
     }
   }
 
-  async function warpParentRootMenu(framework?: string) {
+  async function warpParentRootMenu(layoutId?: string) {
+    removeAllParentMenus();
     const formEl = unref(formElRef);
     const { items } = await getAllMenu({
       filter: '',
       sorting: 'name',
-      framework: framework ?? '',
+      framework: framework.value ?? '',
+      layoutId: layoutId,
     });
     const treeData = listToTree(items, { id: 'id', pid: 'parentId' });
     const menu = unref(menuModel);
@@ -277,6 +295,6 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
     formTitle,
     getFormSchemas,
     handleFormSubmit,
-    warpParentRootMenu,
+    fetchLayoutResource,
   };
 }

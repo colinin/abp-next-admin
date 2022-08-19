@@ -14,10 +14,9 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('Enabled'),
       dataIndex: 'enabled',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
-      slots: { customRender: 'enabled' },
     },
     {
       title: L('Client:Id'),

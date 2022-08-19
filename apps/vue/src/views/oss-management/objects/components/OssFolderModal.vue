@@ -24,7 +24,7 @@
     components: { BasicModal, BasicForm },
     emits: ['register', 'change'],
     setup(_, { emit }) {
-      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
+      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
       const bucket = ref('');
       const path = ref('');
       const [registerForm, { validate, resetFields }] = useForm({

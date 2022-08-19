@@ -11,11 +11,12 @@ import { ParameterBindingSources, UrlBuilder } from '/@/utils/helper/abpApiHelpe
 import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
-import { AxiosRequestConfig } from 'axios';
+import { useMessage } from '/@/hooks/web/useMessage';
+import { AxiosRequestConfig, Method } from 'axios';
 import { RequestOptions, UploadFileParams } from '/#/axios';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
 
-const { t } = useI18n();
+const { createMessage } = useMessage();
 
 export class abpRequest {
   pagedRequest<TResult>(options: {
@@ -65,31 +66,44 @@ export class abpRequest {
     data?: any;
     params?: any;
   }, requestOptions?: RequestOptions) {
-    const abpStore = useAbpStoreWithOut();
-    const module = this.getModule(options.service, abpStore.apidefinition.modules);
-    const controller = this.getController(options.controller, module.controllers);
-    const action = this.getAction(options.action, controller.actions);
-    const apiVersion = this.getApiVersionInfo(action);
-    const url = UrlBuilder.generateUrlWithParameters(action, options.params, apiVersion);
+    let url;
     let requestData = options.data;
+    let method: Method = 'GET';
     const headers = {};
 
-    const formDataParams = action.parameters
-      .filter(p => [`${ParameterBindingSources.form}`, `${ParameterBindingSources.formFile}`].includes(p.bindingSourceId!));
-    if (requestData && formDataParams.length > 0) {
-      headers['Content-Type'] = ContentTypeEnum.FORM_DATA;
-      const formData = new window.FormData();
-      formDataParams.forEach(param => {
-        if (requestData[param.name]) {
-          formData.append(param.name, requestData[param.name]);
-        }
-      })
-      requestData = formData
+    try {
+      const abpStore = useAbpStoreWithOut();
+      const module = this.getModule(options.service, abpStore.apidefinition.modules);
+      const controller = this.getController(options.controller, module.controllers);
+      const action = this.getAction(options.action, controller.actions);
+      method = action.httpMethod;
+
+      const apiVersion = this.getApiVersionInfo(action);
+      url = UrlBuilder.generateUrlWithParameters(action, options.params, apiVersion);
+
+      const formDataParams = action.parameters
+        .filter(p => [`${ParameterBindingSources.form}`, `${ParameterBindingSources.formFile}`].includes(p.bindingSourceId!));
+      
+        if (requestData && formDataParams.length > 0) {
+        headers['Content-Type'] = ContentTypeEnum.FORM_DATA;
+        const formData = new window.FormData();
+        formDataParams.forEach(param => {
+          if (requestData[param.name]) {
+            formData.append(param.name, requestData[param.name]);
+          }
+        })
+        requestData = formData
+      }
+    } catch (error) {
+      const { t } = useI18n();
+      createMessage.error(t('sys.api.errMsg404'));
+      // throw error;
+      return Promise.reject(error);
     }
 
     return defHttp.request<TResult>({
       url: url,
-      method: action?.httpMethod,
+      method: method,
       data: requestData,
       headers: headers,
     }, requestOptions);
@@ -104,7 +118,7 @@ export class abpRequest {
       }
     });
     if (index < 0) {
-      throw new Error(t('sys.abp.remoteServiceNotFound', { name: remoteService }));
+      throw new Error(`Remote Service ${remoteService} Not Found`);
     }
     return modules[moduleKeys[index]];
   }
@@ -121,7 +135,7 @@ export class abpRequest {
       }
     });
     if (index < 0) {
-      throw new Error(t('sys.abp.controllerNotFound', { name: controllerName }));
+      throw new Error(`Controller ${controllerName} Not Found`);
     }
     return controllers[controllerKeys[index]];
   }
@@ -135,7 +149,7 @@ export class abpRequest {
       }
     });
     if (index < 0) {
-      throw new Error(t('sys.abp.actionNotFound', { name: actionName }));
+      throw new Error(`Action ${actionName} Not Found`);
     }
     return actions[actionKeys[index]];
   }

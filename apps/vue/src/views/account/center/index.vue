@@ -14,7 +14,11 @@
       </a-col>
     </a-row>
     <div :class="`${prefixCls}-bottom`">
-      <Tabs tab-position="top" v-model:activeKey="activeTabKey">
+      <Tabs
+        v-model:activeKey="activeTabKey"
+        :style="tabsStyle.style"
+        :tabBarStyle="tabsStyle.tabBarStyle"
+      >
         <template v-for="item in components" :key="item.key">
           <TabPane :tab="item.name">
             <component :is="item.component" />
@@ -33,6 +37,7 @@
   import headerImg from '/@/assets/images/header.jpg';
   import { useUserStore } from '/@/store/modules/user';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import Cloud from './Cloud.vue';
   import Setting from './Setting.vue';
   export default defineComponent({
@@ -50,7 +55,7 @@
     setup() {
       const userStore = useUserStore();
       const activeTabKey = ref('cloud');
-      const { L } = useLocalization('AbpOssManagement', 'AbpSettingManagement');
+      const { L } = useLocalization(['AbpOssManagement', 'AbpSettingManagement']);
       const components = [
         {
           key: 'cloud',
@@ -63,9 +68,17 @@
           component: 'setting',
         },
       ];
+      const tabsStyle = useTabsStyle(
+        'top',
+        {},
+        {
+          top: '80px',
+        }
+      );
       const userInfo = computed(() => userStore.getUserInfo);
       return {
         activeTabKey,
+        tabsStyle,
         prefixCls: 'account-center',
         userInfo,
         headerImg,

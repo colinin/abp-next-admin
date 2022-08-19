@@ -29,9 +29,10 @@
   import { List, Tag } from 'ant-design-vue';
   import { defineComponent } from 'vue';
   import { CollapseContainer } from '/@/components/Container/index';
-  import Icon from '/@/components/Icon/index';
   import { useProfile } from './useProfile';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { MyProfile } from '/@/api/account/model/profilesModel';
+  import Icon from '/@/components/Icon/index';
 
   export default defineComponent({
     components: {
@@ -42,9 +43,14 @@
       Icon,
       Tag,
     },
-    setup() {
+    props: {
+      profile: {
+        type: Object as PropType<MyProfile>,
+      }
+    },
+    setup(props) {
       const { L } = useLocalization('AbpAccount');
-      const { getAccountBindList } = useProfile();
+      const { getAccountBindList } = useProfile({ profile: props.profile });
       return {
         L,
         list: getAccountBindList(),

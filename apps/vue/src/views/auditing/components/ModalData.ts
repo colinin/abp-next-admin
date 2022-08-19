@@ -84,14 +84,14 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         field: 'url',
         component: 'Input',
         label: L('RequestUrl'),
-        colProps: { span: 6 },
+        colProps: { span: 12 },
       },
       {
         field: 'minExecutionDuration',
         component: 'InputNumber',
         label: L('MinExecutionDuration'),
         labelWidth: 180,
-        colProps: { span: 9 },
+        colProps: { span: 6 },
         componentProps: {
           style: {
             width: '100%',
@@ -103,7 +103,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         component: 'InputNumber',
         label: L('MaxExecutionDuration'),
         labelWidth: 180,
-        colProps: { span: 9 },
+        colProps: { span: 6 },
         componentProps: {
           style: {
             width: '100%',

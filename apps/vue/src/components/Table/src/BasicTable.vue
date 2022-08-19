@@ -1,6 +1,7 @@
 <template>
   <div ref="wrapRef" :class="getWrapperClass">
     <BasicForm
+      ref="formRef"
       submitOnReset
       v-bind="getFormProps"
       v-if="getBindValues.useSearchForm"
@@ -20,14 +21,20 @@
       :rowClassName="getRowClassName"
       v-show="getEmptyDataIsShowTable"
       @change="handleTableChange"
+      @resizeColumn="handleResizeColumn"
     >
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
-
-      <template #[`header-${column.dataIndex}`] v-for="column in columns" :key="column.dataIndex">
+      <template #headerCell="{ column }">
         <HeaderCell :column="column" />
       </template>
+      <template #bodyCell="data">
+        <slot name="bodyCell" v-bind="data || {}"></slot>
+      </template>
+      <!--      <template #[`header-${column.dataIndex}`] v-for="(column, index) in columns" :key="index">-->
+      <!--        <HeaderCell :column="column" />-->
+      <!--      </template>-->
     </Table>
   </div>
 </template>
@@ -39,11 +46,10 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect } from 'vue';
+  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
-  import expandIcon from './components/ExpandIcon';
   import HeaderCell from './components/HeaderCell.vue';
   import { InnerHandlers } from './types/table';
 
@@ -53,6 +59,7 @@
   import { useLoading } from './hooks/useLoading';
   import { useRowSelection } from './hooks/useRowSelection';
   import { useTableScroll } from './hooks/useTableScroll';
+  import { useTableScrollTo } from './hooks/useScrollTo';
   import { useCustomRow } from './hooks/useCustomRow';
   import { useTableStyle } from './hooks/useTableStyle';
   import { useTableHeader } from './hooks/useTableHeader';
@@ -64,7 +71,7 @@
 
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
-  import { isFunction } from '/@/utils/is';
+  import { isFunction, isNumber } from '/@/utils/is';
   import { warn } from '/@/utils/log';
 
   export default defineComponent({
@@ -97,6 +104,7 @@
       const tableData = ref<Recordable[]>([]);
 
       const wrapRef = ref(null);
+      const formRef = ref(null);
       const innerPropsRef = ref<Partial<BasicTableProps>>();
 
       const { prefixCls } = useDesign('basic-table');
@@ -185,7 +193,11 @@
         getColumnsRef,
         getRowSelectionRef,
         getDataSourceRef,
+        wrapRef,
+        formRef,
       );
+
+      const { scrollTo } = useTableScrollTo(tableElRef, getDataSourceRef);
 
       const { customRow } = useCustomRow(getProps, {
         setSelectedRowKeys,
@@ -197,7 +209,11 @@
 
       const { getRowClassName } = useTableStyle(getProps, prefixCls);
 
-      const { getExpandOption, expandAll, collapseAll } = useTableExpand(getProps, tableData, emit);
+      const { getExpandOption, expandAll, expandRows, collapseAll } = useTableExpand(
+        getProps,
+        tableData,
+        emit,
+      );
 
       const handlers: InnerHandlers = {
         onColumnsChange: (data: ColumnChangeParam[]) => {
@@ -222,10 +238,8 @@
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
         let propsData: Recordable = {
-          // ...(dataSource.length === 0 ? { getPopupContainer: () => document.body } : {}),
           ...attrs,
           customRow,
-          expandIcon: slots.expandIcon ? null : expandIcon(),
           ...unref(getProps),
           ...unref(getHeaderProps),
           scroll: unref(getScrollRef),
@@ -233,7 +247,7 @@
           tableLayout: 'fixed',
           rowSelection: unref(getRowSelectionRef),
           rowKey: unref(getRowKey),
-          columns: toRaw(unref(getViewColumns)),
+          columns: reactive(unref(getViewColumns)),
           pagination: toRaw(unref(getPaginationInfo)),
           dataSource,
           footer: unref(getFooterProps),
@@ -300,7 +314,9 @@
         getShowPagination,
         setCacheColumnsByField,
         expandAll,
+        expandRows,
         collapseAll,
+        scrollTo,
         getSize: () => {
           return unref(getBindValues).size as SizeType;
         },
@@ -311,7 +327,14 @@
 
       emit('register', tableAction, formActions);
 
+      function handleResizeColumn(w, col) {
+        if (isNumber(col.width)) {
+          col.width = w;
+        }
+      }
+
       return {
+        formRef,
         tableElRef,
         getBindValues,
         getLoading,
@@ -328,6 +351,7 @@
         getFormSlotKeys,
         getWrapperClass,
         columns: getViewColumns,
+        handleResizeColumn,
       };
     },
   });
@@ -346,6 +370,7 @@
 
   .@{prefix-cls} {
     max-width: 100%;
+    height: 100%;
 
     &-row__striped {
       td {
@@ -386,6 +411,10 @@
     .ant-table {
       width: 100%;
       overflow-x: hidden;
+
+      // .ant-table-body {
+      //   overflow: auto !important; // 注释解决列头宽度不一致问题
+      // }
 
       &-title {
         display: flex;

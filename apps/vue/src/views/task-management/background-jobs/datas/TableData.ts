@@ -27,9 +27,6 @@ export function getDataColumns(): BasicColumn[] {
       width: 300,
       sorter: true,
       fixed: 'left',
-      slots: {
-        customRender: 'name',
-      }
     },
     {
       title: L('DisplayName:Description'),
@@ -54,9 +51,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 100,
       sorter: true,
-      slots: {
-        customRender: 'status',
-      }
     },
     {
       title: L('DisplayName:Result'),
@@ -91,9 +85,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 150,
       sorter: true,
-      slots: {
-        customRender: 'type',
-      }
     },
     {
       title: L('DisplayName:Priority'),
@@ -101,9 +92,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 150,
       sorter: true,
-      slots: {
-        customRender: 'priority',
-      }
     },
     {
       title: L('DisplayName:Cron'),

@@ -5,7 +5,7 @@
         v-if="hasPermission('AbpIdentity.OrganizationUnits.Create')"
         type="primary"
         pre-icon="ant-design:plus-outlined"
-        @click="handleAddNew"
+        @click="handleAddNew()"
       >
         {{ L('OrganizationUnit:AddRoot') }}
       </a-button>
@@ -14,8 +14,8 @@
       ref="treeElRef"
       :draggable="true"
       :click-row-to-expand="false"
-      :tree-data="organizationUnitTree"
-      :replace-fields="{
+      :tree-data="ouTree"
+      :field-names="{
         title: 'displayName',
         key: 'id',
       }"
@@ -24,12 +24,8 @@
       @select="handleSelect"
       @drop="handleDrop"
     />
-    <BasicModalForm
-      @register="registerModal"
-      :form-items="formSchemas"
-      :title="L('OrganizationUnit')"
-      :save-changes="handleSubmit"
-    />
+    <OrganizationUnitModal @register="registerModal" @change="loadOuTree" />
+    <PermissionModal @register="registerPermissionModal" />
   </Card>
 </template>
 
@@ -39,38 +35,40 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTree } from '/@/components/Tree';
-  import { BasicModalForm } from '/@/components/ModalForm';
+  import { useModal } from '/@/components/Modal';
   import { useOuTree } from '../hooks/useOuTree';
+  import { PermissionModal } from '/@/components/Permission';
+  import OrganizationUnitModal from './OrganizationUnitModal.vue';
 
   export default defineComponent({
     name: 'OrganizationUnitTree',
-    components: { BasicModalForm, BasicTree, Card },
+    components: { BasicTree, Card, OrganizationUnitModal, PermissionModal },
     emits: ['change', 'select'],
     setup(_props, { emit }) {
       const { L } = useLocalization('AbpIdentity');
+      const [registerModal, modalMethods] = useModal();
+      const [registerPermissionModal, permissionModalMethods] = useModal();
       const {
-        formSchemas,
-        registerModal,
-        organizationUnitTree,
+        ouTree,
         getContentMenus,
         handleDrop,
         handleAddNew,
         handleSelect,
-        handleSubmit,
-      } = useOuTree({ emit });
+        loadOuTree,
+      } = useOuTree({ emit, modalMethods, permissionModalMethods });
       const { hasPermission } = usePermission();
 
       return {
         L,
-        formSchemas,
+        ouTree,
+        loadOuTree,
         registerModal,
-        organizationUnitTree,
         getContentMenus,
         hasPermission,
         handleDrop,
         handleAddNew,
         handleSelect,
-        handleSubmit,
+        registerPermissionModal,
       };
     },
   });

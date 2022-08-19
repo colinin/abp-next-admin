@@ -1,13 +1,10 @@
 import {
-  AuditedEntityDto,
   ListResultDto,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '/@/api/model/baseModel';
 
-export interface Resource extends AuditedEntityDto {
-  id: string;
-  enable: boolean;
+export interface Resource {
   name: string;
   displayName: string;
   description: string;

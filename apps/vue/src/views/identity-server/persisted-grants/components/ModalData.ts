@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { Input } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { CodeEditor } from '/@/components/CodeEditor';
+import { JsonPreview } from '/@/components/CodeEditor';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
@@ -145,9 +145,8 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:Data'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(CodeEditor, {
-          value: model[field],
-          readonly: true,
+        return h(JsonPreview, {
+          data: model[field] ? JSON.parse(model[field]) : {},
         });
       },
     },

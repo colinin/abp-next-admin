@@ -3,7 +3,7 @@ import { FormProps } from '/@/components/Form';
 import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/model/backgroundJobInfoModel';
 import { JobStatusMap, JobTypeMap, JobPriorityMap, JobSourceMap } from './typing';
 
-const { L } = useLocalization('TaskManagement', 'AbpUi');
+const { L } = useLocalization(['TaskManagement', 'AbpUi']);
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {

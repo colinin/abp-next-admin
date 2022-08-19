@@ -24,9 +24,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 150,
       sorter: true,
-      slots: {
-        customRender: 'types',
-      },
     },
     {
       title: L('IdentityClaim:Regex'),
@@ -38,28 +35,22 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('IdentityClaim:Required'),
       dataIndex: 'required',
-      align: 'left',
+      align: 'center',
       width: 150,
       sorter: true,
-      slots: {
-        customRender: 'required',
-      },
     },
     {
       title: L('IdentityClaim:IsStatic'),
       dataIndex: 'isStatic',
-      align: 'left',
+      align: 'center',
       width: 150,
       sorter: true,
-      slots: {
-        customRender: 'static',
-      },
     },
     {
       title: L('IdentityClaim:Description'),
       dataIndex: 'description',
       align: 'left',
-      width: 'auto',
+      width: 300,
       sorter: true,
     },
   ];

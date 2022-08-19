@@ -2,20 +2,20 @@
   <BasicModal
     v-bind="$attrs"
     @register="register"
-    :title="title()"
+    :title="title"
     @ok="handleSubmit"
-    @visible-change="handleVisible"
   >
-    <BasicForm @register="registerForm" :model="data" />
+    <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, nextTick } from 'vue';
 
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-  import { Data } from '/@/api/platform/model/dataModel';
+  import { get, create, update } from '/@/api/platform/dataDic';
   import { getDateFormSchemas } from './ModalData';
 
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -26,12 +26,14 @@
       BasicForm,
       BasicModal,
     },
-    setup() {
-      const data = ref<Data>();
+    emits: ['register', 'change'],
+    setup(_, { emit }) {
+      const { createMessage } = useMessage();
       const { L } = useLocalization('AppPlatform');
-      const schemas = getDateFormSchemas(data.value);
+      const schemas = getDateFormSchemas();
+      const title = ref('');
 
-      const [registerForm, { validate, getFieldsValue, resetFields }] = useForm({
+      const [registerForm, { validate, setFieldsValue, resetFields }] = useForm({
         labelWidth: 120,
         schemas,
         showActionButtonGroup: false,
@@ -39,47 +41,46 @@
           span: 24,
         },
       });
-      const [register, { setModalProps }] = useModalInner((dataVal) => {
-        console.log(dataVal);
-        data.value = dataVal;
+
+      const [register, { changeLoading, closeModal }] = useModalInner((dataVal) => {
+        nextTick(() => {
+          fetchData(dataVal.id);
+        });
       });
+
+      function fetchData(id?: string) {
+        resetFields();
+        if (!id) {
+          title.value = L('Data:AddNew');
+        } else {
+          get(id).then((data) => {
+            setFieldsValue(data);
+            title.value = L('Data:Edit');
+          });
+        }
+      }
+
+      function handleSubmit() {
+        validate().then((input) => {
+          changeLoading(true);
+          const api = input.id ? update(input.id, input) : create(input);
+          api.then((data) => {
+            createMessage.success(L('Successful'));
+            closeModal();
+            emit('change', data);
+          }).finally(() => {
+            changeLoading(false);
+          });
+        });
+      }
 
       return {
         L,
+        title,
         registerForm,
         register,
-        data,
-        setModalProps,
-        validate,
-        resetFields,
-        getFieldsValue,
+        handleSubmit,
       };
-    },
-    computed: {
-      title() {
-        return () => {
-          if (this.data && this.data.id) {
-            return this.L('Data:Edit');
-          }
-          return this.L('Data:AddNew');
-        };
-      },
-    },
-    methods: {
-      handleSubmit() {
-        this.validate().then(() => {
-          console.log(this.getFieldsValue());
-          this.setModalProps({ loading: true, confirmLoading: true });
-          setTimeout(() => {
-            this.setModalProps({ loading: false, confirmLoading: false });
-          }, 2000);
-        });
-      },
-      handleVisible(visible: Boolean) {
-        if (!visible) {
-          this.resetFields();
-        }
-      },
     },
   });
 </script>

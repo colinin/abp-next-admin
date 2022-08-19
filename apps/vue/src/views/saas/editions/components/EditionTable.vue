@@ -9,31 +9,33 @@
           >{{ L('NewEdition') }}</a-button
         >
       </template>
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              auth: 'AbpSaas.Editions.Update',
-              label: L('Edit'),
-              icon: 'ant-design:edit-outlined',
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              auth: 'AbpSaas.Editions.Delete',
-              color: 'error',
-              label: L('Delete'),
-              icon: 'ant-design:delete-outlined',
-              onClick: handleDelete.bind(null, record),
-            },
-          ]"
-          :dropDownActions="[
-            {
-              auth: 'AbpSaas.Editions.ManageFeatures',
-              label: L('ManageFeatures'),
-              onClick: handleManageFeature.bind(null, record),
-            },
-          ]"
-        />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                auth: 'AbpSaas.Editions.Update',
+                label: L('Edit'),
+                icon: 'ant-design:edit-outlined',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'AbpSaas.Editions.Delete',
+                color: 'error',
+                label: L('Delete'),
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+            :dropDownActions="[
+              {
+                auth: 'AbpSaas.Editions.ManageFeatures',
+                label: L('ManageFeatures'),
+                onClick: handleManageFeature.bind(null, record),
+              },
+            ]"
+          />
+        </template>
       </template>
     </BasicTable>
     <EditionModal @register="registerModal" @change="reload" />
@@ -55,7 +57,7 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import EditionModal from './EditionModal.vue';
 
-  const { L } = useLocalization('AbpSaas', 'AbpFeatureManagement');
+  const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement']);
   const { createConfirm } = useMessage();
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
@@ -80,7 +82,6 @@
       width: 200,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

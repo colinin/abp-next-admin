@@ -28,7 +28,6 @@ export function useRoleTable() {
       width: 220,
       title: L('Actions'),
       dataIndex: 'action',
-      slots: { customRender: 'action' },
     },
   });
 

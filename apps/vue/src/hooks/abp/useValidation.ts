@@ -1,4 +1,3 @@
-import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
 import {
   IField,
   IFieldBeetWeen,
@@ -8,10 +7,13 @@ import {
   IFieldMatch,
   IFieldRegular,
   IFieldValidator,
+  IDefineFieldValidator,
 } from './typing';
 
 import { useLocalization } from './useLocalization';
 import { isEmail, isPhone } from '/@/utils/is';
+import { Rule } from '/@/components/Form';
+import { RuleType } from 'ant-design-vue/lib/form/interface';
 
 export enum ValidationEnum {
   DoNotMatch = "'{0}' and '{1}' do not match.",
@@ -47,36 +49,38 @@ export enum ValidationEnum {
 
 /** 规则创建器 */
 interface IRuleCreator {
+  /** 自定义验证器 */
+  defineValidator(field: IDefineFieldValidator): Rule[];
   /** input 与 value 是否匹配 */
-  doNotMatch(field: IFieldMatch): ValidationRule[];
+  doNotMatch(field: IFieldMatch): Rule[];
   /** 字段是无效值 */
-  fieldInvalid(field: IFieldValidator): ValidationRule[];
+  fieldInvalid(field: IFieldValidator): Rule[];
   /** 验证未通过 */
-  fieldIsNotValid(field: IFieldValidator): ValidationRule[];
+  fieldIsNotValid(field: IFieldValidator): Rule[];
   /** 字段{0}必须是最大长度为'{1}'的字符串或数组 */
-  fieldMustBeStringOrArrayWithMaximumLength(field: IFieldLength): ValidationRule[];
+  fieldMustBeStringOrArrayWithMaximumLength(field: IFieldLength): Rule[];
   /** 字段{0}必须是最小长度为'{1}'的字符串或数组 */
-  fieldMustBeStringOrArrayWithMinimumLength(field: IFieldLength): ValidationRule[];
+  fieldMustBeStringOrArrayWithMinimumLength(field: IFieldLength): Rule[];
   /** 字段{0}必须是最大长度为{1}的字符串 */
-  fieldMustBeStringWithMaximumLength(field: IFieldLength): ValidationRule[];
+  fieldMustBeStringWithMaximumLength(field: IFieldLength): Rule[];
   /** 字段{0}必须是最小长度为{2}并且最大长度{1}的字符串 */
-  fieldMustBeStringWithMinimumLengthAndMaximumLength(field: IFieldRange): ValidationRule[];
+  fieldMustBeStringWithMinimumLengthAndMaximumLength(field: IFieldRange): Rule[];
   /** 字段{0}值必须在{1}和{2}范围内 */
-  fieldMustBeetWeen(field: IFieldBeetWeen): ValidationRule[];
+  fieldMustBeetWeen(field: IFieldBeetWeen): Rule[];
   /** 字段{0}与正则表达式不匹配 */
-  fieldMustMatchRegularExpression(field: IFieldRegular): ValidationRule[];
+  fieldMustMatchRegularExpression(field: IFieldRegular): Rule[];
   /** 字段{0}不是有效的信用卡号码 */
-  fieldDoNotValidCreditCardNumber(field: IField): ValidationRule[];
+  fieldDoNotValidCreditCardNumber(field: IField): Rule[];
   /** 字段{0}不是有效的邮箱地址 */
-  fieldDoNotValidEmailAddress(field: IField): ValidationRule[];
+  fieldDoNotValidEmailAddress(field: IField): Rule[];
   /** 字段{0}不是有效的完全限定的http,https或ftp URL. */
-  fieldDoNotValidFullyQualifiedUrl(field: IField): ValidationRule[];
+  fieldDoNotValidFullyQualifiedUrl(field: IField): Rule[];
   /** 字段{0}不是有效的手机号码 */
-  fieldDoNotValidPhoneNumber(field: IField): ValidationRule[];
+  fieldDoNotValidPhoneNumber(field: IField): Rule[];
   /** 字段{0}不可为空 */
-  fieldRequired(field: IField): ValidationRule[];
+  fieldRequired(field: IField): Rule[];
   /** {0}字段只允许以下扩展名的文件: {1} */
-  fieldOnlyAcceptsFilesExtensions(field: IFieldContains): ValidationRule[];
+  fieldOnlyAcceptsFilesExtensions(field: IFieldContains): Rule[];
 }
 
 export function useValidation() {
@@ -102,14 +106,14 @@ export function useValidation() {
 
   function _createRule(options: {
     message?: string;
-    type?: string;
+    type?: RuleType | 'array';
     required?: boolean;
     len?: number;
     min?: number;
     max?: number;
-    trigger?: string;
-    validator?: (rule: any, value: any, callback: any, source?: any, options?: any) => any;
-  }): ValidationRule[] {
+    trigger?: 'blur' | 'change' | ['change', 'blur'];
+    validator?: (rule: any, value: any, callback: any, source?: any, options?: any) => Promise<void> | void;
+  }): Rule[] {
     return [
       {
         message: options.message,
@@ -129,8 +133,8 @@ export function useValidation() {
     useNameEnum: string,
     notNameEnum: string,
     required?: boolean,
-  ): ValidationRule {
-    const message = field.name ? L(useNameEnum, _getFieldName(field)) : L(notNameEnum);
+  ): Rule {
+    const message = field.name ? L(useNameEnum, [_getFieldName(field)]) : L(notNameEnum);
     return {
       required: required,
       message: message,
@@ -145,10 +149,10 @@ export function useValidation() {
     useNameEnum: string,
     notNameEnum: string,
     required?: boolean,
-  ): ValidationRule {
+  ): Rule {
     const message = field.name
-      ? L(useNameEnum, _getFieldName(field), field.length)
-      : L(notNameEnum, field.length);
+      ? L(useNameEnum, [_getFieldName(field), field.length])
+      : L(notNameEnum, [field.length]);
 
     function checkLength(value: string | any[]) {
       return checkMaximum ? field.length > value.length : value.length > field.length;
@@ -173,10 +177,10 @@ export function useValidation() {
     useNameEnum: string,
     notNameEnum: string,
     required?: boolean,
-  ): ValidationRule {
+  ): Rule {
     const message = field.name
-      ? L(useNameEnum, _getFieldName(field), field.minimum, field.maximum)
-      : L(notNameEnum, field.minimum, field.maximum);
+      ? L(useNameEnum, [_getFieldName(field), field.minimum, field.maximum])
+      : L(notNameEnum, [field.minimum, field.maximum]);
     return {
       required: required,
       message: message,
@@ -191,10 +195,10 @@ export function useValidation() {
     };
   }
 
-  function _createBeetWeenValidator(field: IFieldBeetWeen): ValidationRule {
+  function _createBeetWeenValidator(field: IFieldBeetWeen): Rule {
     const message = field.name
-      ? L(ValidationEnum.FieldMustBeetWeen, _getFieldName(field), field.start, field.end)
-      : L(ValidationEnum.ThisFieldMustBeBetween, field.start, field.end);
+      ? L(ValidationEnum.FieldMustBeetWeen, [_getFieldName(field), field.start, field.end])
+      : L(ValidationEnum.ThisFieldMustBeBetween, [field.start, field.end]);
     return {
       message: message,
       trigger: field.trigger,
@@ -215,10 +219,10 @@ export function useValidation() {
   function _createRegularExpressionValidator(
     field: IFieldRegular,
     required?: boolean,
-  ): ValidationRule {
+  ): Rule {
     const message = field.name
-      ? L(ValidationEnum.FieldMustMatchRegularExpression, _getFieldName(field), field.expression)
-      : L(ValidationEnum.ThisFieldMustMatchTheRegularExpression, field.expression);
+      ? L(ValidationEnum.FieldMustMatchRegularExpression, [_getFieldName(field), field.expression])
+      : L(ValidationEnum.ThisFieldMustMatchTheRegularExpression, [field.expression]);
     return {
       required: required,
       message: message,
@@ -228,9 +232,9 @@ export function useValidation() {
     };
   }
 
-  function _createEmailValidator(field: IField, required?: boolean): ValidationRule {
+  function _createEmailValidator(field: IField, required?: boolean): Rule {
     const message = field.name
-      ? L(ValidationEnum.FieldDoNotValidEmailAddress, _getFieldName(field))
+      ? L(ValidationEnum.FieldDoNotValidEmailAddress, [_getFieldName(field)])
       : L(ValidationEnum.ThisFieldIsNotAValidEmailAddress);
     return {
       required: required,
@@ -246,9 +250,9 @@ export function useValidation() {
     };
   }
 
-  function _createPhoneValidator(field: IField, required?: boolean): ValidationRule {
+  function _createPhoneValidator(field: IField, required?: boolean): Rule {
     const message = field.name
-      ? L(ValidationEnum.FieldDoNotValidPhoneNumber, _getFieldName(field))
+      ? L(ValidationEnum.FieldDoNotValidPhoneNumber, [_getFieldName(field)])
       : L(ValidationEnum.ThisFieldIsNotAValidPhoneNumber);
     return {
       required: required,
@@ -265,11 +269,14 @@ export function useValidation() {
   }
 
   const ruleCreator: IRuleCreator = {
+    defineValidator(field: IDefineFieldValidator) {
+      return _createRule(field);
+    },
     doNotMatch(field: IFieldMatch) {
       const message = L(
         ValidationEnum.DoNotMatch,
-        __getFieldName(field.name, field.resourceName, field.prefix),
-        __getFieldName(field.matchField, field.resourceName, field.prefix),
+        [__getFieldName(field.name, field.resourceName, field.prefix),
+        __getFieldName(field.matchField, field.resourceName, field.prefix)],
       );
       return _createRule({
         required: field.required,
@@ -286,7 +293,7 @@ export function useValidation() {
     },
     fieldInvalid(field: IFieldValidator) {
       const message = field.name
-        ? L(ValidationEnum.FieldInvalid, _getFieldName(field))
+        ? L(ValidationEnum.FieldInvalid, [_getFieldName(field)])
         : L(ValidationEnum.ThisFieldIsInvalid);
       return _createRule({
         required: field.required,
@@ -303,7 +310,7 @@ export function useValidation() {
     },
     fieldIsNotValid(field: IFieldValidator) {
       const message = field.name
-        ? L(ValidationEnum.FieldIsNotValid, _getFieldName(field))
+        ? L(ValidationEnum.FieldIsNotValid, [_getFieldName(field)])
         : L(ValidationEnum.ThisFieldIsNotValid);
       return _createRule({
         required: field.required,
@@ -366,7 +373,7 @@ export function useValidation() {
     fieldDoNotValidCreditCardNumber(field: IField) {
       if (field.name) {
         return _createRule({
-          message: L(ValidationEnum.FieldDoNotValidCreditCardNumber, _getFieldName(field)),
+          message: L(ValidationEnum.FieldDoNotValidCreditCardNumber, [_getFieldName(field)]),
           type: field.type,
           trigger: field.trigger,
         });
@@ -383,7 +390,7 @@ export function useValidation() {
     fieldDoNotValidFullyQualifiedUrl(field: IField) {
       if (field.name) {
         return _createRule({
-          message: L(ValidationEnum.FieldDoNotValidFullyQualifiedUrl, _getFieldName(field)),
+          message: L(ValidationEnum.FieldDoNotValidFullyQualifiedUrl, [_getFieldName(field)]),
           type: field.type,
           trigger: field.trigger,
         });
@@ -409,8 +416,8 @@ export function useValidation() {
     },
     fieldOnlyAcceptsFilesExtensions(field: IFieldContains) {
       const message = field.name
-        ? L(ValidationEnum.FieldOnlyAcceptsFilesExtensions, _getFieldName(field), field.value)
-        : L(ValidationEnum.ThisFieldMustMatchTheRegularExpression, field.value);
+        ? L(ValidationEnum.FieldOnlyAcceptsFilesExtensions, [_getFieldName(field), field.value])
+        : L(ValidationEnum.ThisFieldMustMatchTheRegularExpression, [field.value]);
       return _createRule({
         message: message,
         type: field.type,

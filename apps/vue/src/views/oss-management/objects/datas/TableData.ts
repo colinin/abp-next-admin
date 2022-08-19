@@ -15,9 +15,6 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 300,
       sorter: true,
-      slots: {
-        customRender: 'enable',
-      },
     },
     {
       title: L('DisplayName:FileType'),

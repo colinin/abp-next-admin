@@ -35,34 +35,30 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('Required'),
       dataIndex: 'required',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
-      slots: { customRender: 'required' },
     },
     {
       title: L('Enabled'),
       dataIndex: 'enabled',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
-      slots: { customRender: 'enabled' },
     },
     {
       title: L('Emphasize'),
       dataIndex: 'emphasize',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
-      slots: { customRender: 'emphasize' },
     },
     {
       title: L('ShowInDiscoveryDocument'),
       dataIndex: 'showInDiscoveryDocument',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
-      slots: { customRender: 'discovery' },
     },
   ];
 }

@@ -10,19 +10,21 @@
         {{ L('OrganizationUnit:AddMember') }}
       </a-button>
     </template>
-    <template #action="{ record }">
-      <TableAction
-        :stop-button-propagation="true"
-        :actions="[
-          {
-            auth: 'AbpIdentity.OrganizationUnits.ManageUsers',
-            color: 'error',
-            label: L('Delete'),
-            icon: 'ant-design:delete-outlined',
-            onClick: handleDelete.bind(null, record),
-          },
-        ]"
-      />
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <TableAction
+          :stop-button-propagation="true"
+          :actions="[
+            {
+              auth: 'AbpIdentity.OrganizationUnits.ManageUsers',
+              color: 'error',
+              label: L('Delete'),
+              icon: 'ant-design:delete-outlined',
+              onClick: handleDelete.bind(null, record),
+            },
+          ]"
+        />
+      </template>
     </template>
   </BasicTable>
   <MemberModal @register="registerModal" :ou-id="ouId" @change="handleChange" />
