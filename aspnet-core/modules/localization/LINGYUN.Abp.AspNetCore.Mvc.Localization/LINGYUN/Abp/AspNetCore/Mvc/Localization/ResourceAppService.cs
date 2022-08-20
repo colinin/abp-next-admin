@@ -21,12 +21,16 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
         public virtual Task<ListResultDto<ResourceDto>> GetListAsync()
         {
-            var resources = _localizationOptions.Resources.Select(x => new ResourceDto
-            {
-                Name = x.Value.ResourceName,
-                DisplayName = x.Value.ResourceName,
-                Description = x.Value.ResourceName,
-            }).OrderBy(l => l.Name);
+            var resources = _localizationOptions
+                .Resources
+                .Select(x => new ResourceDto
+                {
+                    Name = x.Value.ResourceName,
+                    DisplayName = x.Value.ResourceName,
+                    Description = x.Value.ResourceName,
+                })
+                .OrderBy(l => l.Name)
+                .DistinctBy(l => l.Name);
 
             return Task.FromResult(new ListResultDto<ResourceDto>(resources.ToList()));
         }
