@@ -1,5 +1,4 @@
 import { computed, onMounted, ref } from 'vue';
-import { Modal } from 'ant-design-vue';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { usePermission } from '/@/hooks/web/usePermission';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -13,7 +12,7 @@ export function useOuTree({ emit, modalMethods, permissionModalMethods }:
     modalMethods: ReturnMethods,
     permissionModalMethods: ReturnMethods,
   }) {
-  const { createMessage } = useMessage();
+  const { createMessage, createConfirm } = useMessage();
   const { L } = useLocalization(['AbpIdentity']);
   const { hasPermission } = usePermission();
   const ouTree = ref<any[]>([]);
@@ -38,7 +37,8 @@ export function useOuTree({ emit, modalMethods, permissionModalMethods }:
         {
           label: L('Delete'),
           handler: () => {
-            Modal.warning({
+            createConfirm({
+              iconType: 'warning',
               title: L('AreYouSure'),
               content: L('ItemWillBeDeletedMessage'),
               okCancel: true,

@@ -75,8 +75,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
@@ -91,86 +91,45 @@
   import MenuModal from '../../components/MenuModal.vue';
   import ClaimModal from '../../components/ClaimModal.vue';
 
-  export default defineComponent({
-    name: 'RoleTable',
-    components: {
-      BasicTable,
-      ClaimModal,
-      MenuModal,
-      RoleModal,
-      Tag,
-      TableAction,
-      PermissionModal,
-    },
-    setup() {
-      const { L } = useLocalization(['AbpIdentity', 'AppPlatform']);
-      const loadMenuRef = ref(false);
-      const { hasPermission } = usePermission();
-      const [registerModal, { openModal }] = useModal();
-      const [registerClaimModal, { openModal: openClaimModal }] = useModal();
-      const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
-        useModal();
-      const { registerTable, reloadTable, handleDelete } = useRoleTable();
-      const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
+  const { L } = useLocalization(['AbpIdentity', 'AppPlatform']);
+  const loadMenuRef = ref(false);
+  const { hasPermission } = usePermission();
+  const [registerModal, { openModal }] = useModal();
+  const [registerClaimModal, { openModal: openClaimModal }] = useModal();
+  const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
+    useModal();
+  const { registerTable, reloadTable, handleDelete } = useRoleTable();
+  const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
 
-      function handleSetMenu(record) {
-        openMenuModal(true, { identity: record.name }, true);
-      }
+  function handleSetMenu(record) {
+    openMenuModal(true, { identity: record.name }, true);
+  }
 
-      function handleChangeMenu(roleName, menuIds) {
-        loadMenuRef.value = true;
-        setRoleMenu({
-          roleName: roleName,
-          menuIds: menuIds,
-        })
-          .then(() => {
-            closeMenuModal();
-          })
-          .finally(() => {
-            loadMenuRef.value = false;
-          });
-      }
+  function handleChangeMenu(roleName, menuIds) {
+    loadMenuRef.value = true;
+    setRoleMenu({
+      roleName: roleName,
+      menuIds: menuIds,
+    }).then(() => {
+      closeMenuModal();
+    }).finally(() => {
+      loadMenuRef.value = false;
+    });
+  }
 
-      function handleChangeStartupMenu(roleName, meunId) {
-        setRoleStartupMenu(roleName, meunId);
-      }
+  function handleChangeStartupMenu(roleName, meunId) {
+    setRoleStartupMenu(roleName, meunId);
+  }
 
-      function handleAddNew() {
-        openModal(true, {}, true);
-      }
+  function handleAddNew() {
+    openModal(true, {}, true);
+  }
 
-      function handleEdit(record) {
-        openModal(true, record, true);
-      }
+  function handleEdit(record) {
+    openModal(true, record, true);
+  }
 
-      function handleShowClaims(record) {
-        openClaimModal(true, { id: record.id });
-      }
-
-      return {
-        L,
-        loadMenuRef,
-        hasPermission,
-        registerTable,
-        reloadTable,
-        registerModal,
-        registerClaimModal,
-        handleShowClaims,
-        registerPermissionModal,
-        showPermissionModal,
-        registerMenuModal,
-        handleAddNew,
-        handleEdit,
-        handleSetMenu,
-        handleDelete,
-        handleChangeMenu,
-        handleChangeStartupMenu,
-        getListByRole,
-        getRoleClaims,
-        createClaim,
-        updateClaim,
-        deleteClaim,
-      };
-    },
-  });
+  function handleShowClaims(record) {
+    openClaimModal(true, { id: record.id });
+  }
 </script>

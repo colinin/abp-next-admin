@@ -10,7 +10,7 @@
     :title="t('sys.login.twoFactorFormTitle')"
   >
     <component
-      :is="dom[componentRef]"
+      :is="componentsRef[componentRef]"
       :user-info="userInfoRef"
       :provider="twoFactorProvider"
       @send-code="handleSendCode"
@@ -30,7 +30,7 @@
   const twoFactorProvider = ref('');
   const userInfoRef = ref<Recordable>({});
   const componentRef = ref('TwoFactorSwitch');
-  const dom = shallowRef({
+  const componentsRef = shallowRef({
     'TwoFactorSwitch': TwoFactorSwitch,
     'TwoFactorCode': TwoFactorCode,
   });

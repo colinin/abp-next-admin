@@ -4,35 +4,25 @@
       <ChatSider @switch="handleSwitchComp" :defaultKey="switchComp" />
     </div>
     <div class="im-main">
-      <component v-if="switchComp !== ''" :is="switchComp" />
+      <component v-if="switchComp !== ''" :is="componentsRef[switchComp]" />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref, shallowRef } from 'vue';
   import ChatSider from './ChatSider.vue';
   import ChatMessage from './ChatMessage.vue';
 
-  export default defineComponent({
-    name: 'ChatContainer',
-    components: {
-      ChatSider,
-      ChatMessage,
-    },
-    setup() {
-      const switchComp = ref('chat-message');
-
-      function handleSwitchComp(key: string) {
-        switchComp.value = key;
-      }
-
-      return {
-        switchComp,
-        handleSwitchComp,
-      };
-    },
+  const componentsRef = shallowRef({
+    'ChatMessage': ChatMessage,
   });
+
+  const switchComp = ref('ChatMessage');
+
+  function handleSwitchComp(key: string) {
+    switchComp.value = key;
+  }
 </script>
 
 <style lang="less" scoped>

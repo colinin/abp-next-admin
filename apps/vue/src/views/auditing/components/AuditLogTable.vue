@@ -35,75 +35,62 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import { Modal, Tag } from 'ant-design-vue';
+<script lang="ts" setup>
+  import { Tag } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
   import { useModal } from '/@/components/Modal';
-  import AuditLogModal from './AuditLogModal.vue';
   import { useAuditLog } from '../hooks/useAuditLog';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { deleteById, getList } from '/@/api/auditing/auditLog';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
+  import AuditLogModal from './AuditLogModal.vue';
 
-  export default defineComponent({
-    name: 'AuditLogTable',
-    components: { AuditLogModal, BasicTable, Tag, TableAction },
-    setup() {
-      const { L } = useLocalization('AbpAuditLogging');
-      const [registerTable, { reload }] = useTable({
-        rowKey: 'id',
-        title: L('AuditLog'),
-        columns: getDataColumns(),
-        api: getList,
-        beforeFetch: formatPagedRequest,
-        pagination: true,
-        striped: false,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
-        immediate: true,
-        formConfig: getSearchFormSchemas(),
-        scroll: { x: 'max-content', y: '100%' },
-        actionColumn: {
-          width: 180,
-          title: L('Actions'),
-          dataIndex: 'action',
-        },
-      });
-      const [registerModal, { openModal }] = useModal();
-      const { httpMethodColor, httpStatusCodeColor } = useAuditLog();
-
-      function handleShow(record) {
-        openModal(true, record, true);
-      }
-
-      function handleDelete(record) {
-        Modal.warning({
-          title: L('AreYouSure'),
-          content: L('ItemWillBeDeletedMessage'),
-          okCancel: true,
-          onOk: () => {
-            deleteById(record.id).then(() => {
-              reload();
-            });
-          },
-        });
-      }
-
-      return {
-        L,
-        httpMethodColor,
-        httpStatusCodeColor,
-        registerTable,
-        registerModal,
-        handleShow,
-        handleDelete,
-      };
+  const { createMessage, createConfirm } = useMessage();
+  const { L } = useLocalization('AbpAuditLogging');
+  const [registerTable, { reload }] = useTable({
+    rowKey: 'id',
+    title: L('AuditLog'),
+    columns: getDataColumns(),
+    api: getList,
+    beforeFetch: formatPagedRequest,
+    pagination: true,
+    striped: false,
+    useSearchForm: true,
+    showTableSetting: true,
+    bordered: true,
+    showIndexColumn: false,
+    canResize: false,
+    immediate: true,
+    formConfig: getSearchFormSchemas(),
+    scroll: { x: 'max-content', y: '100%' },
+    actionColumn: {
+      width: 180,
+      title: L('Actions'),
+      dataIndex: 'action',
     },
   });
+  const [registerModal, { openModal }] = useModal();
+  const { httpMethodColor, httpStatusCodeColor } = useAuditLog();
+
+  function handleShow(record) {
+    openModal(true, record, true);
+  }
+
+  function handleDelete(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessage'),
+      okCancel: true,
+      onOk: () => {
+        deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          reload();
+        });
+      },
+    });
+  }
 </script>

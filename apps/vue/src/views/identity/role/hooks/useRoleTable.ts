@@ -1,13 +1,14 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useTable } from '/@/components/Table';
 import { deleteById, getList } from '/@/api/identity/role';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';
-import { Modal } from 'ant-design-vue';
 
 export function useRoleTable() {
   const { L } = useLocalization('AbpIdentity');
+  const { createMessage, createConfirm } = useMessage();
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
     title: L('Roles'),
@@ -32,12 +33,14 @@ export function useRoleTable() {
   });
 
   function handleDelete(role) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessageWithFormat', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteById(role.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
           reloadTable();
         });
       },

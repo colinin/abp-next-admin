@@ -18,41 +18,21 @@
   </Row>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Card, Row, Col, Tabs } from 'ant-design-vue';
   import OrganizationUnitTree from './OrganizationUnitTree.vue';
   import MemberTable from './MemberTable.vue';
   import RoleTable from './RoleTable.vue';
 
-  export default defineComponent({
-    name: 'OrganizationUnitPage',
-    components: {
-      OrganizationUnitTree,
-      Card,
-      Col,
-      MemberTable,
-      Row,
-      RoleTable,
-      Tabs,
-      TabPane: Tabs.TabPane,
-    },
-    setup() {
-      const { L } = useLocalization('AbpIdentity');
-      const activeKey = ref('members');
-      const ouIdRef = ref('');
+  const TabPane = Tabs.TabPane;
 
-      function handleSelect(key) {
-        ouIdRef.value = key;
-      }
+  const { L } = useLocalization('AbpIdentity');
+  const activeKey = ref('members');
+  const ouIdRef = ref('');
 
-      return {
-        L,
-        activeKey,
-        ouIdRef,
-        handleSelect,
-      };
-    },
-  });
+  function handleSelect(key) {
+    ouIdRef.value = key;
+  }
 </script>

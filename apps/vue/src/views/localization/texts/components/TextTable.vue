@@ -29,10 +29,8 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import { cloneDeep } from 'lodash-es';
-  import { defineComponent } from 'vue';
-  import { Switch } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
@@ -42,74 +40,52 @@
   import { getSearchFormSchemas } from './ModalData';
   import TextModal from './TextModal.vue';
 
-  export default defineComponent({
-    name: 'TextTable',
-    components: {
-      BasicTable,
-      Switch,
-      TableAction,
-      TextModal,
-    },
-    setup() {
-      const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
-      const { hasPermission } = usePermission();
-      const [registerModal, { openModal }] = useModal();
-      const [registerTable, { setTableData, setPagination, getForm }] = useTable({
-        rowKey: 'id',
-        title: L('Texts'),
-        columns: getDataColumns(),
-        pagination: true,
-        striped: false,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
-        immediate: false,
-        formConfig: getSearchFormSchemas(fetchTexts),
-        actionColumn: {
-          width: 120,
-          title: L('Actions'),
-          dataIndex: 'action',
-        },
-      });
-
-      function fetchTexts() {
-        setPagination({
-          current: 1,
-        });
-        const form = getForm();
-        return form.validate().then((input) => {
-          const request = cloneDeep(input);
-          request.onlyNull = input.onlyNull === 1;
-          return getList(request).then((res) => {
-            return setTableData(res.items);
-          });
-        })
-      }
-
-      function handleChange() {
-        fetchTexts();
-      }
-
-      function handleAddNew() {
-        openModal(true, { id: null });
-      }
-
-      function handleEdit(record) {
-        openModal(true, {...{ id: 1 }, ...record});
-      }
-
-      return {
-        L,
-        hasPermission,
-        registerTable,
-        registerModal,
-        openModal,
-        handleChange,
-        handleAddNew,
-        handleEdit,
-      };
+  const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
+  const { hasPermission } = usePermission();
+  const [registerModal, { openModal }] = useModal();
+  const [registerTable, { setTableData, setPagination, getForm }] = useTable({
+    rowKey: 'key',
+    title: L('Texts'),
+    columns: getDataColumns(),
+    pagination: true,
+    striped: false,
+    useSearchForm: true,
+    showTableSetting: true,
+    bordered: true,
+    showIndexColumn: false,
+    canResize: false,
+    immediate: false,
+    formConfig: getSearchFormSchemas(fetchTexts),
+    actionColumn: {
+      width: 120,
+      title: L('Actions'),
+      dataIndex: 'action',
     },
   });
+
+  function fetchTexts() {
+    setPagination({
+      current: 1,
+    });
+    const form = getForm();
+    return form.validate().then((input) => {
+      const request = cloneDeep(input);
+      request.onlyNull = input.onlyNull === 1;
+      return getList(request).then((res) => {
+        return setTableData(res.items);
+      });
+    })
+  }
+
+  function handleChange() {
+    fetchTexts();
+  }
+
+  function handleAddNew() {
+    openModal(true, { id: null });
+  }
+
+  function handleEdit(record) {
+    openModal(true, {...{ id: 1 }, ...record});
+  }
 </script>

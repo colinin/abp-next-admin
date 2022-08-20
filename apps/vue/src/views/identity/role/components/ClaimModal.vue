@@ -42,50 +42,33 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { useClaim } from '../hooks/useClaim';
 
-  export default defineComponent({
-    name: 'RoleClaimModal',
-    components: { BasicModal, BasicTable, BasicModalForm, TableAction },
-    setup() {
-      const { L } = useLocalization('AbpIdentity');
-      const roleIdRef = ref('');
-      const [registerModal] = useModalInner((val) => {
-        roleIdRef.value = val.id;
-      });
-      const {
-        formSchemas,
-        registerClaimForm,
-        openClaimForm,
-        registerTable,
-        handleDelete,
-        handleSaveChanges,
-      } = useClaim({ roleIdRef });
-
-      return {
-        L,
-        formSchemas,
-        registerModal,
-        registerTable,
-        registerClaimForm,
-        openClaimForm,
-        handleDelete,
-        handleSaveChanges,
-      };
-    },
-    methods: {
-      handleAddNew() {
-        this.openClaimForm({});
-      },
-      handleEdit(record) {
-        this.openClaimForm(record);
-      },
-    },
+  const { L } = useLocalization('AbpIdentity');
+  const roleIdRef = ref('');
+  const [registerModal] = useModalInner((val) => {
+    roleIdRef.value = val.id;
   });
+  const {
+    formSchemas,
+    registerClaimForm,
+    openClaimForm,
+    registerTable,
+    handleDelete,
+    handleSaveChanges,
+  } = useClaim({ roleIdRef });
+
+  function handleAddNew() {
+    openClaimForm({});
+  }
+
+  function handleEdit(record) {
+    openClaimForm(record);
+  }
 </script>

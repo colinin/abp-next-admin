@@ -18,6 +18,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, unref, nextTick } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -25,6 +26,7 @@
   import { getById, create, update } from '/@/api/saas/editions';
 
   const emits = defineEmits(['change', 'register']);
+  const { createMessage } = useMessage();
   const { L } = useLocalization('AbpSaas');
   const loading = ref(false);
   const editionIdRef = ref('');
@@ -60,14 +62,13 @@
     validate().then((input) => {
       changeOkLoading(true);
       const api = input.id ? update(input.id, input) : create(input);
-      api
-        .then((edition) => {
-          emits('change', edition);
-          closeModal();
-        })
-        .finally(() => {
-          changeOkLoading(false);
-        });
+      api.then((edition) => {
+        createMessage.success(L('Successful'));
+        emits('change', edition);
+        closeModal();
+      }).finally(() => {
+        changeOkLoading(false);
+      });
     });
   }
 </script>

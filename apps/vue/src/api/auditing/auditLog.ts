@@ -12,9 +12,7 @@ export const deleteById = (id: string) => {
     controller: Api.Controller,
     action: 'DeleteAsync',
     params: {
-      input: {
-        id: id,
-      },
+      id: id,
     },
   });
 };

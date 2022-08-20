@@ -25,7 +25,7 @@
           layout="vertical"
           :colon="true"
           :model="actionForm.model"
-          :schemas="actionForm.schemas "
+          :schemas="actionForm.schemas"
           :action-col-options="{
             span: 24,
           }"

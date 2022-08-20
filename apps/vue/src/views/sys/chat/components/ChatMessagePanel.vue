@@ -60,11 +60,11 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, unref, nextTick, onMounted, onUnmounted } from 'vue';
+<script lang="ts" setup>
+  import { computed, ref, unref, nextTick, onMounted, onUnmounted } from 'vue';
   import { Avatar, Button, Input } from 'ant-design-vue';
   import { Icon } from '/@/components/Icon';
-  import { Loading, useLoading } from '/@/components/Loading';
+  import { useLoading } from '/@/components/Loading';
   import { SizeEnum } from '/@/enums/sizeEnum';
   import emitter from '/@/utils/eventBus';
   import { ChatEventEnum } from '/@/enums/imEnum';
@@ -73,235 +73,204 @@
   import { useContentHeight } from '/@/hooks/web/useContentHeight';
   import { useContextMenu } from '/@/hooks/web/useContextMenu';
   import { useExtraPropTranslation } from '/@/hooks/web/useExtraPropTranslation';
-
   import { useUserStoreWithOut } from '/@/store/modules/user';
   import undefinedAvatar from '/@/assets/icons/64x64/color-user.png';
-
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-
   import {
     ChatMessage,
     ChatMessagePagedResult,
     MessageSourceTye,
   } from '/@/api/messages/model/messagesModel';
 
-  export default defineComponent({
-    name: 'ChatMessagePanel',
-    props: {
-      /** 新消息事件名称 */
-      eventName: {
-        type: String,
-        required: false,
-      },
-      currentChat: {
-        type: Object as PropType<Recordable>,
-        required: true,
-      },
-      fetchApi: {
-        type: Function as PropType<(input) => Promise<ChatMessagePagedResult>>,
-        required: true,
-      },
-      fetchParams: {
-        type: Object as PropType<Recordable>,
-        required: true,
-        default: {},
-      },
-      contentFullHeight: {
-        type: Boolean,
-        default: true,
-      },
+  const TextArea = Input.TextArea;
+
+  const emits = defineEmits(['send']);
+  const props = defineProps({
+    /** 新消息事件名称 */
+    eventName: {
+      type: String,
+      required: false,
     },
-    components: {
-      Avatar,
-      Button,
-      Icon,
-      Loading,
-      TextArea: Input.TextArea,
+    currentChat: {
+      type: Object as PropType<Recordable>,
+      required: true,
     },
-    emits: ['send'],
-    setup(props, { emit }) {
-      let fetchFlag = true;
-      const requestRef = ref<any>({
-        skipCount: 1,
-        maxResultCount: 25,
-        sorting: 'messageId desc',
-      });
-      const { tryLocalize } = useExtraPropTranslation();
-      const sendMsgRef = ref('');
-      const loadingRef = ref<any>(null);
-      const chatBoxRef = ref<any>(null);
-      const chatMsgRef = ref<any>(null);
-      const chatSendRef = ref<any>(null);
-      const messages = ref<ChatMessage[]>([]);
-      const currentUser = computed(() => {
-        const userStore = useUserStoreWithOut();
-        return userStore.getUserInfo;
-      });
-      const getIsContentFullHeight = computed(() => {
-        return props.contentFullHeight;
-      });
-
-      const [openWrapLoading, closeWrapLoading] = useLoading({
-        target: chatMsgRef,
-        props: {
-          size: SizeEnum.SMALL,
-          tip: '加载中...',
-          absolute: true,
-        },
-      });
-
-      const { prefixCls } = useDesign('im-chat-panel');
-      const { getDarkMode } = useRootSetting();
-      const getClass = computed(() => {
-        return [prefixCls, `${prefixCls}--${unref(getDarkMode)}`];
-      });
-
-      const { contentHeight } = useContentHeight(
-        getIsContentFullHeight,
-        chatBoxRef,
-        [chatSendRef],
-        [chatMsgRef],
-      );
-
-      const chatMsgStyle = computed(() => {
-        const height = `${unref(contentHeight)}px`;
-        return {
-          minHeight: height,
-          height: height,
-        };
-      });
-
-      const getContent = computed(() => {
-        return (message: ChatMessage) => {
-          // return message.content
-          return tryLocalize('content', message, message.content);
-        };
-      });
-
-      onMounted(() => {
-        props.eventName && emitter.on(props.eventName, _newMessageReceived);
-        emitter.on(ChatEventEnum.USER_MESSAGE_RECALL, _recallMessage);
-        _fetchChatMessage();
-      });
-
-      onUnmounted(() => {
-        props.eventName && emitter.off(props.eventName, _newMessageReceived);
-        emitter.off(ChatEventEnum.USER_MESSAGE_RECALL, _recallMessage);
-      });
-
-      function handleScroll(e) {
-        if (e.target.scrollHeight > e.target.clientHeight && e.target.scrollTop === 0) {
-          _fetchChatMessage();
-          if (e.target.scrollTop === 0) {
-            // 预留空间保持刷新
-            nextTick(() => {
-              const chatMsgEl = unref(chatMsgRef);
-              chatMsgEl.scrollTop = 10;
-            });
-          }
-        }
-      }
-
-      function handleSendMessage() {
-        emit('send', sendMsgRef.value);
-        sendMsgRef.value = '';
-      }
-
-      const [createContextMenu] = useContextMenu();
-      function handleContext(e: MouseEvent, message) {
-        createContextMenu({
-          event: e,
-          items: [
-            {
-              label: '撤回',
-              handler: () => {
-                emitter.emit(ChatEventEnum.USER_MESSAGE_RECALL, message);
-              },
-            },
-          ],
-        });
-      }
-
-      function _fetchChatMessage() {
-        if (!fetchFlag) {
-          return;
-        }
-        fetchFlag = false;
-        openWrapLoading();
-        const request = {
-          ...requestRef.value,
-          ...props.fetchParams,
-        };
-        formatPagedRequest(request);
-        props
-          .fetchApi(request)
-          .then((res) => {
-            messages.value.unshift(
-              ...res.items.sort((a, b) => {
-                return a.messageId < b.messageId ? -1 : 0;
-              }),
-            );
-            fetchFlag = res.items.length === requestRef.value.maxResultCount;
-            requestRef.value.skipCount === 1 && _scrollBottom();
-            requestRef.value.skipCount += 1;
-          })
-          .catch(() => {
-            fetchFlag = true;
-          })
-          .finally(() => {
-            closeWrapLoading();
-          });
-      }
-
-      function _recallMessage(chatMessage: ChatMessage) {
-        console.log('recall', chatMessage);
-        if (chatMessage.source === MessageSourceTye.System) {
-          const index = messages.value.findIndex(
-            (m) => m.messageId === chatMessage.extraProperties.MessageId,
-          );
-          if (index >= 0) {
-            messages.value.splice(index, 1);
-          }
-          messages.value.push(chatMessage);
-        }
-      }
-
-      function _newMessageReceived(chatMessage: ChatMessage) {
-        messages.value.push(chatMessage);
-        _scrollBottom();
-        if (chatMessage.messageId) {
-          emitter.emit(ChatEventEnum.USER_MESSAGE_READ, chatMessage);
-        }
-      }
-
-      function _scrollBottom() {
-        nextTick(() => {
-          const chatMsgEl = unref(chatMsgRef);
-          chatMsgEl.scrollTop = chatMsgEl.scrollHeight;
-        });
-      }
-
-      return {
-        getClass,
-        messages,
-        chatBoxRef,
-        sendMsgRef,
-        chatMsgRef,
-        loadingRef,
-        currentUser,
-        chatSendRef,
-        chatMsgStyle,
-        getContent,
-        undefinedAvatar,
-        formatToDateTime,
-        handleContext,
-        handleScroll,
-        handleSendMessage,
-        MessageSourceTye,
-      };
+    fetchApi: {
+      type: Function as PropType<(input) => Promise<ChatMessagePagedResult>>,
+      required: true,
+    },
+    fetchParams: {
+      type: Object as PropType<Recordable>,
+      required: true,
+      default: {},
+    },
+    contentFullHeight: {
+      type: Boolean,
+      default: true,
     },
   });
+
+  let fetchFlag = true;
+  const requestRef = ref<any>({
+    skipCount: 1,
+    maxResultCount: 25,
+    sorting: 'messageId desc',
+  });
+  const { tryLocalize } = useExtraPropTranslation();
+  const sendMsgRef = ref('');
+  const loadingRef = ref<any>(null);
+  const chatBoxRef = ref<any>(null);
+  const chatMsgRef = ref<any>(null);
+  const chatSendRef = ref<any>(null);
+  const messages = ref<ChatMessage[]>([]);
+  const currentUser = computed(() => {
+    const userStore = useUserStoreWithOut();
+    return userStore.getUserInfo;
+  });
+  const getIsContentFullHeight = computed(() => {
+    return props.contentFullHeight;
+  });
+
+  const [openWrapLoading, closeWrapLoading] = useLoading({
+    target: chatMsgRef,
+    props: {
+      size: SizeEnum.SMALL,
+      tip: '加载中...',
+      absolute: true,
+    },
+  });
+
+  const { prefixCls } = useDesign('im-chat-panel');
+  const { getDarkMode } = useRootSetting();
+  const getClass = computed(() => {
+    return [prefixCls, `${prefixCls}--${unref(getDarkMode)}`];
+  });
+
+  const { contentHeight } = useContentHeight(
+    getIsContentFullHeight,
+    chatBoxRef,
+    [chatSendRef],
+    [chatMsgRef],
+  );
+
+  const chatMsgStyle = computed(() => {
+    const height = `${unref(contentHeight)}px`;
+    return {
+      minHeight: height,
+      height: height,
+    };
+  });
+
+  const getContent = computed(() => {
+    return (message: ChatMessage) => {
+      // return message.content
+      return tryLocalize('content', message, message.content);
+    };
+  });
+
+  onMounted(() => {
+    props.eventName && emitter.on(props.eventName, _newMessageReceived);
+    emitter.on(ChatEventEnum.USER_MESSAGE_RECALL, _recallMessage);
+    _fetchChatMessage();
+  });
+
+  onUnmounted(() => {
+    props.eventName && emitter.off(props.eventName, _newMessageReceived);
+    emitter.off(ChatEventEnum.USER_MESSAGE_RECALL, _recallMessage);
+  });
+
+  function handleScroll(e) {
+    if (e.target.scrollHeight > e.target.clientHeight && e.target.scrollTop === 0) {
+      _fetchChatMessage();
+      if (e.target.scrollTop === 0) {
+        // 预留空间保持刷新
+        nextTick(() => {
+          const chatMsgEl = unref(chatMsgRef);
+          chatMsgEl.scrollTop = 10;
+        });
+      }
+    }
+  }
+
+  function handleSendMessage() {
+    emits('send', sendMsgRef.value);
+    sendMsgRef.value = '';
+  }
+
+  const [createContextMenu] = useContextMenu();
+  function handleContext(e: MouseEvent, message) {
+    createContextMenu({
+      event: e,
+      items: [
+        {
+          label: '撤回',
+          handler: () => {
+            emitter.emit(ChatEventEnum.USER_MESSAGE_RECALL, message);
+          },
+        },
+      ],
+    });
+  }
+
+  function _fetchChatMessage() {
+    if (!fetchFlag) {
+      return;
+    }
+    fetchFlag = false;
+    openWrapLoading();
+    const request = {
+      ...requestRef.value,
+      ...props.fetchParams,
+    };
+    formatPagedRequest(request);
+    props
+      .fetchApi(request)
+      .then((res) => {
+        messages.value.unshift(
+          ...res.items.sort((a, b) => {
+            return a.messageId < b.messageId ? -1 : 0;
+          }),
+        );
+        fetchFlag = res.items.length === requestRef.value.maxResultCount;
+        requestRef.value.skipCount === 1 && _scrollBottom();
+        requestRef.value.skipCount += 1;
+      })
+      .catch(() => {
+        fetchFlag = true;
+      })
+      .finally(() => {
+        closeWrapLoading();
+      });
+  }
+
+  function _recallMessage(chatMessage: ChatMessage) {
+    console.log('recall', chatMessage);
+    if (chatMessage.source === MessageSourceTye.System) {
+      const index = messages.value.findIndex(
+        (m) => m.messageId === chatMessage.extraProperties.MessageId,
+      );
+      if (index >= 0) {
+        messages.value.splice(index, 1);
+      }
+      messages.value.push(chatMessage);
+    }
+  }
+
+  function _newMessageReceived(chatMessage: ChatMessage) {
+    messages.value.push(chatMessage);
+    _scrollBottom();
+    if (chatMessage.messageId) {
+      emitter.emit(ChatEventEnum.USER_MESSAGE_READ, chatMessage);
+    }
+  }
+
+  function _scrollBottom() {
+    nextTick(() => {
+      const chatMsgEl = unref(chatMsgRef);
+      chatMsgEl.scrollTop = chatMsgEl.scrollHeight;
+    });
+  }
 </script>
 
 <style lang="less" scoped>

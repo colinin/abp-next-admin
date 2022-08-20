@@ -62,72 +62,49 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { message, Checkbox, Input, Form, Tabs, Transfer } from 'ant-design-vue';
+  import { Checkbox, Input, Form, Tabs, Transfer } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useUserForm } from '../hooks/useUserForm';
 
-  export default defineComponent({
-    name: 'UserModal',
-    components: {
-      BasicModal,
-      Checkbox,
-      Form,
-      FormItem: Form.Item,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      BInput,
-      InputPassword: Input.Password,
-      Transfer,
-    },
-    emits: ['register', 'change'],
-    setup(_, { emit }) {
-      const { L } = useLocalization(['AbpIdentity', 'AbpIdentityServer']);
-      const activedTab = ref('info');
-      const userRef = ref<Recordable>({});
-      const formElRef = ref<Nullable<FormActionType>>(null);
-      const { handleSubmit, getUser, userTitle, formRules, roleDataSource, handleRoleChange } =
-        useUserForm({
-          userRef,
-          formElRef,
-        });
-      const [registerModal, { closeModal, changeOkLoading }] = useModalInner(async (val) => {
-        activedTab.value = 'info';
-        getUser(val.id);
-      });
+  const FormItem = Form.Item;
+  const TabPane = Tabs.TabPane;
+  const InputPassword = Input.Password;
 
-      function handleOk() {
-        changeOkLoading(true);
-        handleSubmit()
-          .then((res) => {
-            message.success(L('Successful'));
-            closeModal();
-            emit('change', res);
-          })
-          .finally(() => {
-            changeOkLoading(false);
-          });
-      }
+  const emits = defineEmits(['register', 'change']);
 
-      return {
-        L,
-        activedTab,
-        userRef,
-        formElRef,
-        formRules,
-        roleDataSource,
-        handleRoleChange,
-        userTitle,
-        handleOk,
-        registerModal,
-        closeModal,
-      };
-    },
+  const { createMessage } = useMessage();
+  const { L } = useLocalization(['AbpIdentity', 'AbpIdentityServer']);
+  const activedTab = ref('info');
+  const userRef = ref<Recordable>({});
+  const formElRef = ref<Nullable<FormActionType>>(null);
+  const { handleSubmit, getUser, userTitle, formRules, roleDataSource, handleRoleChange } =
+    useUserForm({
+      userRef,
+      formElRef,
+    });
+  const [registerModal, { closeModal, changeOkLoading }] = useModalInner(async (val) => {
+    activedTab.value = 'info';
+    getUser(val.id);
   });
+
+  function handleOk() {
+    changeOkLoading(true);
+    handleSubmit()
+      .then((res) => {
+        createMessage.success(L('Successful'));
+        closeModal();
+        emits('change', res);
+      })
+      .finally(() => {
+        changeOkLoading(false);
+      });
+  }
 </script>
 
 <style scoped>

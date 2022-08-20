@@ -1,14 +1,15 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useTable } from '/@/components/Table';
 import { deleteById, getList } from '/@/api/identity/claim';
 import { ValueType } from '/@/api/identity/model/claimModel';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';
-import { Modal } from 'ant-design-vue';
 
 export function useClaimTable() {
   const { L } = useLocalization('AbpIdentity');
+  const { createMessage, createConfirm } = useMessage();
   const valueTypeMap = {
     [ValueType.String]: 'String',
     [ValueType.Int]: 'Int',
@@ -39,12 +40,14 @@ export function useClaimTable() {
   });
 
   function handleDelete(role) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
-      content: L('ItemWillBeDeletedMessageWithFormat', [role.name] as Recordable),
+      content: L('ItemWillBeDeletedMessageWithFormat', [role.name]),
       okCancel: true,
       onOk: () => {
         deleteById(role.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
           reloadTable();
         });
       },

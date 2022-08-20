@@ -1,6 +1,7 @@
 <template>
   <BasicModal @register="registerModal" :width="800" :height="400" :title="L('AuditLog')">
     <Form
+      ref="formElRef"
       :colon="false"
       :labelCol="{ span: 6 }"
       :wrapperCol="{ span: 18 }"
@@ -145,8 +146,8 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, watch, unref } from 'vue';
+<script lang="ts" setup>
+  import { computed, nextTick, ref, unref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { Collapse, Form, Tabs, Tag } from 'ant-design-vue';
@@ -158,101 +159,74 @@
   import { AuditLog } from '/@/api/auditing/model/auditLogModel';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { tryToJson } from '/@/utils/strings';
-  export default defineComponent({
-    name: 'AuditLogModal',
-    components: {
-      BasicModal,
-      BasicTable,
-      CodeEditor,
-      Collapse,
-      CollapsePanel: Collapse.Panel,
-      Form,
-      FormItem: Form.Item,
-      Tag,
-      Tabs,
-      TabPane: Tabs.TabPane,
-    },
-    setup() {
-      const { L } = useLocalization('AbpAuditLogging');
-      const activeKey = ref('basic');
-      const auditLogIdRef = ref('');
-      const tabsStyle = useTabsStyle();
-      const modelRef = ref<AuditLog>({} as AuditLog);
-      const [registerModal] = useModalInner((model) => {
-        auditLogIdRef.value = model.id;
-        activeKey.value = 'basic';
-      });
-      const columns: BasicColumn[] = [
-        {
-          title: 'id',
-          dataIndex: 'id',
-          width: 1,
-          ifShow: false,
-        },
-        {
-          title: L('PropertyName'),
-          dataIndex: 'propertyName',
-          align: 'left',
-          width: 120,
-          sorter: true,
-        },
-        {
-          title: L('NewValue'),
-          dataIndex: 'newValue',
-          align: 'left',
-          width: 200,
-          sorter: true,
-        },
-        {
-          title: L('OriginalValue'),
-          dataIndex: 'originalValue',
-          align: 'left',
-          width: 200,
-          sorter: true,
-        },
-        {
-          title: L('PropertyTypeFullName'),
-          dataIndex: 'propertyTypeFullName',
-          align: 'left',
-          width: 300,
-          sorter: true,
-        },
-      ];
-      const { entityChangeTypeColor, entityChangeType, httpMethodColor, httpStatusCodeColor } =
-        useAuditLog();
-      const formatJsonVal = computed(() => {
-        return (jsonString: string) => tryToJson(jsonString);
-      });
-      const formatDateVal = computed(() => {
-        return (dateVal) => formatToDateTime(dateVal, 'YYYY-MM-DD HH:mm:ss');
-      });
 
-      watch(
-        () => unref(auditLogIdRef),
-        (id) => {
-          if (id) {
-            getById(id).then((res) => {
-              modelRef.value = res;
-            });
-          }
-        },
-      );
+  const CollapsePanel = Collapse.Panel;
+  const FormItem = Form.Item;
+  const TabPane = Tabs.TabPane;
 
-      return {
-        L,
-        MODE,
-        columns,
-        modelRef,
-        activeKey,
-        tabsStyle,
-        entityChangeType,
-        entityChangeTypeColor,
-        httpMethodColor,
-        httpStatusCodeColor,
-        registerModal,
-        formatJsonVal,
-        formatDateVal,
-      };
-    },
+  const { L } = useLocalization('AbpAuditLogging');
+  const formElRef = ref<any>();
+  const activeKey = ref('basic');
+  const tabsStyle = useTabsStyle();
+  const modelRef = ref<AuditLog>({} as AuditLog);
+  const [registerModal] = useModalInner((model) => {
+    activeKey.value = 'basic';
+    nextTick(() => {
+      fetchAuditLog(model.id);
+    });
   });
+  const columns: BasicColumn[] = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      width: 1,
+      ifShow: false,
+    },
+    {
+      title: L('PropertyName'),
+      dataIndex: 'propertyName',
+      align: 'left',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: L('NewValue'),
+      dataIndex: 'newValue',
+      align: 'left',
+      width: 200,
+      sorter: true,
+    },
+    {
+      title: L('OriginalValue'),
+      dataIndex: 'originalValue',
+      align: 'left',
+      width: 200,
+      sorter: true,
+    },
+    {
+      title: L('PropertyTypeFullName'),
+      dataIndex: 'propertyTypeFullName',
+      align: 'left',
+      width: 300,
+      sorter: true,
+    },
+  ];
+  const { entityChangeTypeColor, entityChangeType, httpMethodColor, httpStatusCodeColor } =
+    useAuditLog();
+  const formatJsonVal = computed(() => {
+    return (jsonString: string) => tryToJson(jsonString);
+  });
+  const formatDateVal = computed(() => {
+    return (dateVal) => formatToDateTime(dateVal, 'YYYY-MM-DD HH:mm:ss');
+  });
+
+  function fetchAuditLog(id?: string) {
+    const formEl = unref(formElRef);
+    formEl?.resetFields();
+    if (id) {
+      getById(id).then((res) => {
+        modelRef.value = res;
+      });
+    }
+  }
 </script>

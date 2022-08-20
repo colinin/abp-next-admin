@@ -1,4 +1,4 @@
-import { h } from 'vue';
+import { createVNode } from 'vue';
 import { Input } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { JsonPreview } from '/@/components/CodeEditor';
@@ -35,7 +35,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:Key'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field],
           readonly: true,
           placeholder: '',
@@ -48,7 +48,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:Type'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field],
           readonly: true,
           placeholder: '',
@@ -61,7 +61,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:SubjectId'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field],
           readonly: true,
           placeholder: '',
@@ -74,7 +74,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:SessionId'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field],
           readonly: true,
           placeholder: '',
@@ -87,7 +87,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Description'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field],
           readonly: true,
           placeholder: '',
@@ -100,7 +100,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('CreationTime'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field]
             ? formatToDateTime(model[field], 'YYYY-MM-DD HH:mm:ss')
             : model[field],
@@ -115,7 +115,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Expiration'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field]
             ? formatToDateTime(model[field], 'YYYY-MM-DD HH:mm:ss')
             : model[field],
@@ -130,7 +130,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:ConsumedTime'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(Input, {
+        return createVNode(Input, {
           value: model[field]
             ? formatToDateTime(model[field], 'YYYY-MM-DD HH:mm:ss')
             : model[field],
@@ -145,7 +145,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('Grants:Data'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
-        return h(JsonPreview, {
+        return createVNode(JsonPreview!, {
           data: model[field] ? JSON.parse(model[field]) : {},
         });
       },

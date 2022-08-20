@@ -58,7 +58,7 @@
   import EditionModal from './EditionModal.vue';
 
   const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement']);
-  const { createConfirm } = useMessage();
+  const { createConfirm, createMessage } = useMessage();
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
   const { registerModal: registerFeatureModal, handleManageFeature } = useFeatureModal();
@@ -101,6 +101,7 @@
       okCancel: true,
       onOk: () => {
         deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });
       },

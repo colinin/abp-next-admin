@@ -55,12 +55,12 @@
     </BasicTable>
     <FeatureModal @register="registerFeatureModal" />
     <TenantModal @register="registerModal" @change="handleReload" />
-    <TenantConnectionModal @register="registerConnectModal" />
+    <ConnectionTableModal @register="registerConnectModal" />
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
@@ -69,50 +69,19 @@
   import { useTenantTable } from '../hooks/useTenantTable';
   import { useTenantModal } from '../hooks/useTenantModal';
   import { useFeatureModal } from '../hooks/useFeatureModal';
-  import TenantModal from './TenantModal.vue';
-  import TenantConnectionModal from './TenantConnectionModal.vue';
   import { FeatureModal } from '../../../feature';
+  import TenantModal from './TenantModal.vue';
+  import ConnectionTableModal from './ConnectionTableModal.vue';
 
-  export default defineComponent({
-    name: 'TenantTable',
-    components: {
-      BasicTable,
-      CheckOutlined,
-      CloseOutlined,
-      FeatureModal,
-      TableAction,
-      TenantModal,
-      TenantConnectionModal
-    },
-    setup() {
-      const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement']);
-      const { hasPermission } = usePermission();
-      const tableElRef = ref<Nullable<TableActionType>>(null);
-      const [registerConnectModal, { openModal: openConnectModal }] = useModal();
-      const { registerModal, handleAddNew, handleEdit } = useTenantModal();
-      const { registerTable, handleDelete, handleReload } = useTenantTable({ tableElRef });
-      const {
-        registerModal: registerFeatureModal,
-        handleManageHostFeature,
-        handleManageTenantFeature,
-      } = useFeatureModal();
-
-      return {
-        L,
-        tableElRef,
-        hasPermission,
-        registerModal,
-        registerConnectModal,
-        openConnectModal,
-        registerTable,
-        handleAddNew,
-        handleEdit,
-        handleDelete,
-        handleReload,
-        registerFeatureModal,
-        handleManageHostFeature,
-        handleManageTenantFeature,
-      };
-    },
-  });
+  const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement']);
+  const { hasPermission } = usePermission();
+  const tableElRef = ref<Nullable<TableActionType>>(null);
+  const [registerConnectModal, { openModal: openConnectModal }] = useModal();
+  const { registerModal, handleAddNew, handleEdit } = useTenantModal();
+  const { registerTable, handleDelete, handleReload } = useTenantTable({ tableElRef });
+  const {
+    registerModal: registerFeatureModal,
+    handleManageHostFeature,
+    handleManageTenantFeature,
+  } = useFeatureModal();
 </script>

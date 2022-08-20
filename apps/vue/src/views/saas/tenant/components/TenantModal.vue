@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     v-bind="$attrs"
-    :title="modalTitle"
+    :title="title"
     :loading="loading"
     :showOkBtn="!loading"
     :showCancelBtn="!loading"
@@ -16,69 +16,54 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, unref, watch } from 'vue';
+<script lang="ts" setup>
+  import { nextTick, ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from '../datas//ModalData';
   import { getById, create, update } from '/@/api/saas/tenant';
-  export default defineComponent({
-    components: { BasicForm, BasicModal },
-    emits: ['change', 'register'],
-    setup(_props, { emit }) {
-      const { L } = useLocalization('AbpSaas');
-      const loading = ref(false);
-      const tenantIdRef = ref('');
-      const [registerModal, { closeModal }] = useModalInner((data) => {
-        tenantIdRef.value = data.id;
-      });
-      const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
-        layout: 'vertical',
-        schemas: getModalFormSchemas(),
-        showActionButtonGroup: false,
-      });
-      const modalTitle = computed(() => {
-        return unref(tenantIdRef) ? L('Edit') : L('NewTenant');
-      });
 
-      function handleSubmit() {
-        validate().then((input) => {
-          loading.value = true;
+  const emits = defineEmits(['change', 'register']);
 
-          const api = input.id ? update(input.id, input) : create(input);
-
-          api
-            .then(() => {
-              emit('change');
-              closeModal();
-            })
-            .finally(() => {
-              loading.value = false;
-            });
-        });
-      }
-
-      watch(
-        () => unref(tenantIdRef),
-        (id) => {
-          if (id) {
-            getById(id).then((res) => {
-              setFieldsValue(res);
-            });
-          } else {
-            resetFields();
-          }
-        },
-      );
-
-      return {
-        loading,
-        modalTitle,
-        registerModal,
-        handleSubmit,
-        registerForm,
-      };
-    },
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpSaas');
+  const loading = ref(false);
+  const title = ref('');
+  const [registerModal, { closeModal }] = useModalInner((data) => {
+    nextTick(() => {
+      fetchTenant(data.id);
+    });
   });
+  const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
+    layout: 'vertical',
+    schemas: getModalFormSchemas(),
+    showActionButtonGroup: false,
+  });
+
+  function fetchTenant(id?: string) {
+    title.value = L('Edit');
+    resetFields();
+    if (id) {
+      getById(id).then((res) => {
+        setFieldsValue(res);
+        title.value = L('NewTenant');
+      });
+    }
+  }
+
+  function handleSubmit() {
+    validate().then((input) => {
+      loading.value = true;
+      const api = input.id ? update(input.id, input) : create(input);
+      api.then(() => {
+        createMessage.success(L('Successful'));
+        emits('change');
+        closeModal();
+      }).finally(() => {
+        loading.value = false;
+      });
+    });
+  }
 </script>

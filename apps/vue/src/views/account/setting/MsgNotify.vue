@@ -30,56 +30,47 @@
     </template>
   </Collapse>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
   import { Card, List, Switch, Collapse } from 'ant-design-vue';
-  import { defineComponent, ref, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { ListItem, useProfile } from './useProfile';
+  import { ListItem as ProfileItem, useProfile } from './useProfile';
   import { subscribe, unSubscribe } from '/@/api/messages/subscribes';
   import { MyProfile } from '/@/api/account/model/profilesModel';
-  export default defineComponent({
-    components: {
-      Card,
-      Collapse,
-      CollapsePanel: Collapse.Panel,
-      List,
-      ListItem: List.Item,
-      ListItemMeta: List.Item.Meta,
-      Switch,
-    },
-    props: {
-      profile: {
-        type: Object as PropType<MyProfile>,
-      }
-    },
-    setup(props) {
-      const { L } = useLocalization('AbpAccount');
-      const notifyGroup = ref<{[key: string]: ListItem[]}>({});
-      const { getMsgNotifyList } = useProfile({ profile: props.profile });
 
-      function _fetchNotifies() {
-        getMsgNotifyList().then((res) => {
-          notifyGroup.value = res;
-        });
-      }
+  const CollapsePanel = Collapse.Panel;
+  const ListItem = List.Item;
+  const ListItemMeta = List.Item.Meta;
 
-      onMounted(_fetchNotifies);
-
-      function handleChange(item: ListItem, checked) {
-        item.loading = true;
-        const api = checked ? subscribe(item.key) : unSubscribe(item.key);
-        api.finally(() => {
-          item.loading = false;
-        });
-      }
-
-      return {
-        L,
-        notifyGroup,
-        handleChange,
-      };
-    },
+  const props = defineProps({
+    profile: {
+      type: Object as PropType<MyProfile>,
+    }
   });
+
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpAccount');
+  const notifyGroup = ref<{[key: string]: ProfileItem[]}>({});
+  const { getMsgNotifyList } = useProfile({ profile: props.profile });
+
+  function _fetchNotifies() {
+    getMsgNotifyList().then((res) => {
+      notifyGroup.value = res;
+    });
+  }
+
+  onMounted(_fetchNotifies);
+
+  function handleChange(item: ProfileItem, checked) {
+    item.loading = true;
+    const api = checked ? subscribe(item.key) : unSubscribe(item.key);
+    api.then(() => {
+      createMessage.success(L('Successful'));
+    }).finally(() => {
+      item.loading = false;
+    });
+  }
 </script>
 <style lang="less" scoped>
   .extra {

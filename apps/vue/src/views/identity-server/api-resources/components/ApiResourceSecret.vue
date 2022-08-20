@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       rowKey="type"
-      :columns="columns"
+      :columns="getSecretColumns()"
       :dataSource="secrets"
       :pagination="false"
       :showTableSetting="true"
@@ -38,8 +38,9 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Button } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
@@ -49,60 +50,40 @@
   import { getSecretColumns } from '../datas/TableData';
   import { getSecretFormSchemas } from '../datas/ModalData';
 
-  export default defineComponent({
-    name: 'ApiResourceSecret',
-    components: {
-      BasicForm,
-      BasicModal,
-      BasicTable,
-      Button,
-      TableAction,
-    },
-    props: {
-      secrets: {
-        type: [Array] as PropType<ApiResourceSecret[]>,
-        required: true,
-        default: () => [],
-      },
-    },
-    emits: ['register', 'secrets-new', 'secrets-delete'],
-    setup(_, { emit }) {
-      const { L } = useLocalization('AbpIdentityServer');
-      const title = ref('');
-      const [registerForm, { validate, resetFields }] = useForm({
-        labelWidth: 120,
-        showActionButtonGroup: false,
-        schemas: getSecretFormSchemas(),
-      });
-      const [registerModal, { openModal, closeModal }] = useModal();
-
-      function handleAddNew() {
-        title.value = L('Secret:New');
-        openModal(true);
-      }
-
-      function handleDelete(record) {
-        emit('secrets-delete', record);
-      }
-
-      function handleSubmit() {
-        validate().then((input) => {
-          emit('secrets-new', input);
-          resetFields();
-          closeModal();
-        });
-      }
-
-      return {
-        L,
-        title,
-        handleAddNew,
-        handleDelete,
-        handleSubmit,
-        columns: getSecretColumns(),
-        registerForm,
-        registerModal,
-      };
+  const emits = defineEmits(['register', 'secrets-new', 'secrets-delete']);
+  defineProps({
+    secrets: {
+      type: [Array] as PropType<ApiResourceSecret[]>,
+      required: true,
+      default: () => [],
     },
   });
+
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpIdentityServer');
+  const title = ref('');
+  const [registerForm, { validate, resetFields }] = useForm({
+    labelWidth: 120,
+    showActionButtonGroup: false,
+    schemas: getSecretFormSchemas(),
+  });
+  const [registerModal, { openModal, closeModal }] = useModal();
+
+  function handleAddNew() {
+    title.value = L('Secret:New');
+    openModal(true);
+  }
+
+  function handleDelete(record) {
+    emits('secrets-delete', record);
+  }
+
+  function handleSubmit() {
+    validate().then((input) => {
+      createMessage.success(L('Successful'));
+      emits('secrets-new', input);
+      resetFields();
+      closeModal();
+    });
+  }
 </script>

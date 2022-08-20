@@ -1,16 +1,14 @@
 import type { Ref } from 'vue';
 import type { TabFormSchema, FormActionType } from '/@/components/Form/src/types/form';
 
-import { unref, computed, watch, h } from 'vue';
+import { unref, computed, watch, createVNode } from 'vue';
 import { Checkbox } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { cloneDeep } from 'lodash-es';
-
 import { get as getLayout, getAll as getAllLayout } from '/@/api/platform/layout';
 import { get as getData } from '/@/api/platform/dataDic';
 import { getAll as getAllMenu, create, update } from '/@/api/platform/menu';
 import { DataItem, ValueType } from '/@/api/platform/model/dataItemModel';
-
 import { listToTree } from '/@/utils/helper/treeHelper';
 import { Menu, UpdateMenu, CreateMenu } from '/@/api/platform/model/menuModel';
 
@@ -47,7 +45,7 @@ export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuF
             if (model[field]) {
               checked = model[field] === 'true';
             }
-            return h(Checkbox, {
+            return createVNode(Checkbox, {
               checked: checked,
               value: item.displayName,
               onChange: (e: ChangeEvent) => {

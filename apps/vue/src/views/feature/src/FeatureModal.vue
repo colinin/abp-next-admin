@@ -31,7 +31,7 @@
                   style="width: 100%"
                   v-model:value="feature.value"
                 />
-                <Input v-else v-model:value="feature.value" />
+                <BInput v-else v-model:value="feature.value" />
               </div>
               <Select
                 v-else-if="feature.valueType.name === 'SelectionStringValueType'"
@@ -52,60 +52,38 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { computed, ref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Form, InputNumber, Select, Tabs } from 'ant-design-vue';
   import { Input } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useFeature } from '../hooks/useFeature';
-  export default defineComponent({
-    components: {
-      BasicModal,
-      Checkbox,
-      Form,
-      FormItem: Form.Item,
-      Input,
-      InputNumber,
-      Select,
-      Option: Select.Option,
-      Tabs,
-      TabPane: Tabs.TabPane,
-    },
-    setup() {
-      const { L } = useLocalization('AbpFeatureManagement');
-      // TODO: 当有多个选项的时候是否有性能相关影响?
-      const localizer = computed(() => {
-        return (resourceName: string, key: string) => {
-          const { L: RL } = useLocalization(resourceName);
-          return RL(key);
-        };
-      });
-      const formRel = ref(null);
-      const providerName = ref('');
-      const providerKey = ref(null);
-      const [registerModal, modalMethods] = useModalInner((data) => {
-        providerName.value = data.providerName;
-        providerKey.value = data.providerKey;
-      });
-      const { featureGroup, featureGroupKey, validator, handleSubmit, onGroupChange } = useFeature({
-        providerName,
-        providerKey,
-        formRel,
-        modalMethods,
-      });
 
-      return {
-        L,
-        localizer,
-        formRel,
-        registerModal,
-        featureGroup,
-        featureGroupKey,
-        validator,
-        handleSubmit,
-        onGroupChange,
-      };
-    },
+  const FormItem = Form.Item;
+  const Option = Select.Option;
+  const TabPane = Tabs.TabPane;
+  const BInput = Input!;
+
+  const { L } = useLocalization('AbpFeatureManagement');
+  // TODO: 当有多个选项的时候是否有性能相关影响?
+  const localizer = computed(() => {
+    return (resourceName: string, key: string) => {
+      const { L: RL } = useLocalization(resourceName);
+      return RL(key);
+    };
+  });
+  const formRel = ref(null);
+  const providerName = ref('');
+  const providerKey = ref(null);
+  const [registerModal, modalMethods] = useModalInner((data) => {
+    providerName.value = data.providerName;
+    providerKey.value = data.providerKey;
+  });
+  const { featureGroup, featureGroupKey, validator, handleSubmit, onGroupChange } = useFeature({
+    providerName,
+    providerKey,
+    formRel,
+    modalMethods,
   });
 </script>

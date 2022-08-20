@@ -18,8 +18,9 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, unref } from 'vue';
+<script lang="ts" setup>
+  import { computed, ref, unref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -27,99 +28,86 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { addRoles, getUnaddedRoleList } from '/@/api/identity/organization-units';
 
-  export default defineComponent({
-    name: 'RoleModal',
-    components: { BasicModal, BasicTable, InputSearch: Input.Search },
-    props: {
-      ouId: { type: String },
-    },
-    emits: ['change', 'register'],
-    setup(props, { emit }) {
-      const { L } = useLocalization('AbpIdentity');
-      const loading = ref(false);
-      const filter = ref('');
-      const tableRef = ref<Nullable<TableActionType>>(null);
-      const [registerModal, { closeModal }] = useModalInner();
-      const dataColumns: BasicColumn[] = [
-        {
-          title: 'id',
-          dataIndex: 'id',
-          width: 1,
-          ifShow: false,
-        },
-        {
-          title: L('RoleName'),
-          dataIndex: 'name',
-          align: 'left',
-          width: 'auto',
-          sorter: true,
-        },
-      ];
-      const requestApi = computed(() => {
-        return (request) => {
-          request.id = unref(props).ouId;
-          request.filter = unref(filter);
-          formatPagedRequest(request);
-        };
-      });
-      const [registerTable] = useTable({
-        rowKey: 'id',
-        columns: dataColumns,
-        api: getUnaddedRoleList,
-        beforeFetch: requestApi,
-        pagination: true,
-        striped: false,
-        useSearchForm: false,
-        showTableSetting: false,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
-        immediate: true,
-        rowSelection: { type: 'checkbox' },
-      });
+  const InputSearch = Input.Search;
 
-      function handleSearch() {
-        const tableEl = unref(tableRef);
-        tableEl?.reload();
-        tableEl?.clearSelectedRowKeys();
-      }
-
-      function handleVisibleChange(visible) {
-        if (visible) {
-          handleSearch();
-        }
-      }
-
-      function handleSubmit() {
-        const tableEl = unref(tableRef);
-        const selectRows = tableEl?.getSelectRows();
-        if (selectRows) {
-          loading.value = true;
-          addRoles(
-            props.ouId!,
-            selectRows.map((x) => x.id),
-          )
-            .then(() => {
-              emit('change');
-              closeModal();
-            })
-            .finally(() => {
-              loading.value = false;
-            });
-        }
-      }
-
-      return {
-        L,
-        filter,
-        loading,
-        tableRef,
-        registerModal,
-        registerTable,
-        handleVisibleChange,
-        handleSearch,
-        handleSubmit,
-      };
-    },
+  const emits = defineEmits(['change', 'register']);
+  const props = defineProps({
+    ouId: { type: String },
   });
+
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpIdentity');
+  const loading = ref(false);
+  const filter = ref('');
+  const tableRef = ref<Nullable<TableActionType>>(null);
+  const [registerModal, { closeModal }] = useModalInner();
+  const dataColumns: BasicColumn[] = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      width: 1,
+      ifShow: false,
+    },
+    {
+      title: L('RoleName'),
+      dataIndex: 'name',
+      align: 'left',
+      width: 'auto',
+      sorter: true,
+    },
+  ];
+  const requestApi = computed(() => {
+    return (request) => {
+      request.id = unref(props).ouId;
+      request.filter = unref(filter);
+      formatPagedRequest(request);
+    };
+  });
+  const [registerTable] = useTable({
+    rowKey: 'id',
+    columns: dataColumns,
+    api: getUnaddedRoleList,
+    beforeFetch: requestApi,
+    pagination: true,
+    striped: false,
+    useSearchForm: false,
+    showTableSetting: false,
+    bordered: true,
+    showIndexColumn: false,
+    canResize: false,
+    immediate: true,
+    rowSelection: { type: 'checkbox' },
+  });
+
+  function handleSearch() {
+    const tableEl = unref(tableRef);
+    tableEl?.reload();
+    tableEl?.clearSelectedRowKeys();
+  }
+
+  function handleVisibleChange(visible) {
+    if (visible) {
+      handleSearch();
+    }
+  }
+
+  function handleSubmit() {
+    const tableEl = unref(tableRef);
+    const selectRows = tableEl?.getSelectRows();
+    if (selectRows) {
+      loading.value = true;
+      addRoles(
+        props.ouId!,
+        selectRows.map((x) => x.id),
+      )
+        .then(() => {
+          createMessage.success(L('Successful'));
+          emits('change');
+          closeModal();
+        })
+        .finally(() => {
+          loading.value = false;
+        });
+    }
+  }
 </script>

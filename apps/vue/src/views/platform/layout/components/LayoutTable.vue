@@ -26,15 +26,13 @@
         </template>
       </template>
     </BasicTable>
-    <LayoutModal @change="reloadTable" @register="registerLayoutModal" :layout-id="layoutId" />
+    <LayoutModal @change="reload" @register="registerLayoutModal" />
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-
+<script lang="ts" setup>
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { Modal } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getDataColumns } from './TableData';
@@ -42,64 +40,49 @@
   import { getList, deleteById } from '/@/api/platform/layout';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import LayoutModal from './LayoutModal.vue';
-  export default defineComponent({
-    name: 'LayoutTable',
-    components: {
-      BasicTable,
-      TableAction,
-      LayoutModal,
-    },
-    setup() {
-      const { L } = useLocalization(['AppPlatform', 'AbpUi']);
-      const layoutId = ref('');
-      const [registerTable, { reload: reloadTable }] = useTable({
-        rowKey: 'id',
-        title: L('DisplayName:Layout'),
-        columns: getDataColumns(),
-        api: getList,
-        beforeFetch: formatPagedRequest,
-        bordered: true,
-        canResize: true,
-        showTableSetting: true,
-        useSearchForm: true,
-        formConfig: getSearchFormSchemas(),
-        rowSelection: { type: 'checkbox' },
-        actionColumn: {
-          width: 160,
-          title: L('Actions'),
-          dataIndex: 'action',
-        },
-      });
-      const [registerLayoutModal, { openModal: openLayoutModal }] = useModal();
 
-      return {
-        L,
-        layoutId,
-        reloadTable,
-        registerTable,
-        openLayoutModal,
-        registerLayoutModal,
-      };
-    },
-    methods: {
-      handleAddNew() {
-        this.openLayoutModal(true, {}, true);
-      },
-      handleEdit(record: Recordable) {
-        this.openLayoutModal(true, record, true);
-      },
-      handleDelete(record: Recordable) {
-        Modal.warning({
-          title: this.L('AreYouSure'),
-          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
-          okCancel: true,
-          onOk: () => {
-            deleteById(record.id).then(() => {
-              this.reloadTable();
-            });
-          },
-        });
-      },
+  const { createMessage, createConfirm } = useMessage();
+  const { L } = useLocalization(['AppPlatform', 'AbpUi']);
+  const [registerTable, { reload }] = useTable({
+    rowKey: 'id',
+    title: L('DisplayName:Layout'),
+    columns: getDataColumns(),
+    api: getList,
+    beforeFetch: formatPagedRequest,
+    bordered: true,
+    canResize: true,
+    showTableSetting: true,
+    useSearchForm: true,
+    formConfig: getSearchFormSchemas(),
+    rowSelection: { type: 'checkbox' },
+    actionColumn: {
+      width: 160,
+      title: L('Actions'),
+      dataIndex: 'action',
     },
   });
+  const [registerLayoutModal, { openModal: openLayoutModal }] = useModal();
+
+  function handleAddNew() {
+    openLayoutModal(true, {});
+  }
+
+  function handleEdit(record: Recordable) {
+    openLayoutModal(true, record);
+  }
+
+  function handleDelete(record: Recordable) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [record.displayName]),
+      okCancel: true,
+      onOk: () => {
+        deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          reload();
+        });
+      },
+    });
+  }
 </script>
