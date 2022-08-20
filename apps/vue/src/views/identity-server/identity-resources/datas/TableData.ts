@@ -12,6 +12,20 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
+      title: L('Enabled'),
+      dataIndex: 'enabled',
+      align: 'center',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: L('Required'),
+      dataIndex: 'required',
+      align: 'center',
+      width: 150,
+      sorter: true,
+    },
+    {
       title: L('Name'),
       dataIndex: 'name',
       align: 'left',
@@ -30,20 +44,6 @@ export function getDataColumns(): BasicColumn[] {
       dataIndex: 'description',
       align: 'left',
       width: 180,
-      sorter: true,
-    },
-    {
-      title: L('Required'),
-      dataIndex: 'required',
-      align: 'center',
-      width: 200,
-      sorter: true,
-    },
-    {
-      title: L('Enabled'),
-      dataIndex: 'enabled',
-      align: 'center',
-      width: 200,
       sorter: true,
     },
     {

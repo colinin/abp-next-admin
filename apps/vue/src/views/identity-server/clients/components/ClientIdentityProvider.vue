@@ -16,67 +16,53 @@
   />
 </template>
 
-<script lang="ts">
-  import { defineComponent, toRefs } from 'vue';
+<script lang="ts" setup>
+  import { toRefs } from 'vue';
   import { Checkbox, Form } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
-  import DynamicForm from './DynamicForm.vue';
   import { useIdentityProvider } from '../hooks/useIdentityProvider';
   import { Client } from '/@/api/identity-server/model/clientsModel';
+  import DynamicForm from './DynamicForm.vue';
 
-  export default defineComponent({
-    name: 'ClientIdentityProvider',
-    components: { Checkbox, DynamicForm, FormItem: Form.Item },
-    props: {
-      modelRef: {
-        type: Object as PropType<Client>,
-        required: true,
-      },
-    },
-    setup(props) {
-      const { L } = useLocalization('AbpIdentityServer');
-      const schemas: FormSchema[] = [
-        {
-          field: 'provider',
-          component: 'Input',
-          label: L('Client:IdentityProviderRestrictions'),
-          colProps: { span: 24 },
-          required: true,
-        },
-      ];
-      const columns: BasicColumn[] = [
-        {
-          dataIndex: 'provider',
-          title: L('Client:IdentityProviderRestrictions'),
-          align: 'left',
-          width: 'auto',
-          sorter: true,
-        },
-      ];
-      const { handleIdpChange, handleCheckedChange } = useIdentityProvider({
-        modelRef: toRefs(props).modelRef,
-      });
+  const FormItem = Form.Item;
 
-      function handleAddNew(record) {
-        console.log(record);
-        handleIdpChange('add', record);
-      }
-
-      function handleDelete(record) {
-        console.log(record);
-        handleIdpChange('delete', record);
-      }
-
-      return {
-        L,
-        schemas,
-        columns,
-        handleAddNew,
-        handleDelete,
-        handleCheckedChange,
-      };
+  const props = defineProps({
+    modelRef: {
+      type: Object as PropType<Client>,
+      required: true,
     },
   });
+
+  const { L } = useLocalization('AbpIdentityServer');
+  const schemas: FormSchema[] = [
+    {
+      field: 'provider',
+      component: 'Input',
+      label: L('Client:IdentityProviderRestrictions'),
+      colProps: { span: 24 },
+      required: true,
+    },
+  ];
+  const columns: BasicColumn[] = [
+    {
+      dataIndex: 'provider',
+      title: L('Client:IdentityProviderRestrictions'),
+      align: 'left',
+      width: 'auto',
+      sorter: true,
+    },
+  ];
+  const { handleIdpChange, handleCheckedChange } = useIdentityProvider({
+    modelRef: toRefs(props).modelRef,
+  });
+
+  function handleAddNew(record) {
+    handleIdpChange('add', record);
+  }
+
+  function handleDelete(record) {
+    handleIdpChange('delete', record);
+  }
 </script>

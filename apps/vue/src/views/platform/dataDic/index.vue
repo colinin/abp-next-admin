@@ -10,34 +10,20 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  export default {
+    name: 'DataDictionary',
+  };
+</script>
 
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { Row, Col } from 'ant-design-vue';
   import DataTree from './components/DataTree.vue';
   import DataItemTable from './components/DataItemTable.vue';
-  import { Row, Col } from 'ant-design-vue';
 
-  export default defineComponent({
-    name: 'DataDictionary',
-    components: {
-      DataTree,
-      DataItemTable,
-      Row,
-      Col,
-    },
-    setup() {
-      const { t } = useI18n();
-      const dataId = ref('');
+  const dataId = ref('');
 
-      return {
-        t,
-        dataId,
-      };
-    },
-    methods: {
-      handleDataChange(id: string) {
-        this.dataId = id;
-      },
-    },
-  });
+  function handleDataChange(id: string) {
+    dataId.value = id;
+  }
 </script>

@@ -160,10 +160,15 @@ export function getConnectionFormSchemas(): FormSchema[] {
     },
     {
       field: 'value',
-      component: 'Input',
+      component: 'InputTextArea',
       label: L('DisplayName:Value'),
       colProps: { span: 24 },
       required: true,
+      componentProps: {
+        autoSize: {
+          minRows: 3,
+        },
+      },
     },
   ];
 }

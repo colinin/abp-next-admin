@@ -106,8 +106,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { Tag } from 'ant-design-vue';
@@ -126,105 +126,56 @@
   import MenuModal from '../../components/MenuModal.vue';
   import ClaimModal from '../../components/ClaimModal.vue';
 
-  export default defineComponent({
-    name: 'UserTable',
-    components: {
-      BasicTable,
-      ClaimModal,
-      PermissionModal,
-      TableAction,
-      Tag,
-      UserModal,
-      PasswordModal,
-      LockModal,
-      MenuModal,
-    },
-    setup(_props, { emit }) {
-      const { L } = useLocalization(['AbpIdentity', 'AppPlatform']);
-      const loadMenuRef = ref(false);
-      const nullFormElRef = ref(null);
-      const { hasPermission } = usePermission();
-      const [registerModal, { openModal }] = useModal();
-      const { lockEnable, registerTable, reloadTable, handleDelete } = useUserTable();
-      const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit });
-      const { registerPasswordModal, showPasswordModal } = usePassword(nullFormElRef);
-      const [registerClaimModal, { openModal: openClaimModal }] = useModal();
-      const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
-        useModal();
-      const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
+  const emits = defineEmits(['change']);
 
-      function handleSetMenu(record) {
-        openMenuModal(true, { identity: record.id }, true);
-      }
+  const { L } = useLocalization(['AbpIdentity', 'AppPlatform']);
+  const loadMenuRef = ref(false);
+  const nullFormElRef = ref(null);
+  const { hasPermission } = usePermission();
+  const [registerModal, { openModal }] = useModal();
+  const { lockEnable, registerTable, reloadTable, handleDelete } = useUserTable();
+  const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit: emits });
+  const { registerPasswordModal, showPasswordModal } = usePassword(nullFormElRef);
+  const [registerClaimModal, { openModal: openClaimModal }] = useModal();
+  const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
+    useModal();
+  const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
 
-      function handleChangeMenu(userId, menuIds) {
-        loadMenuRef.value = true;
-        setUserMenu({
-          userId: userId,
-          menuIds: menuIds,
-        })
-          .then(() => {
-            closeMenuModal();
-          })
-          .finally(() => {
-            loadMenuRef.value = false;
-          });
-      }
+  function handleSetMenu(record) {
+    openMenuModal(true, { identity: record.id }, true);
+  }
 
-      function handleAddNew() {
-        openModal(true, {}, true);
-      }
+  function handleChangeMenu(userId, menuIds) {
+    loadMenuRef.value = true;
+    setUserMenu({
+      userId: userId,
+      menuIds: menuIds,
+    }) .then(() => {
+      closeMenuModal();
+    }) .finally(() => {
+      loadMenuRef.value = false;
+    });
+  }
 
-      function handleEdit(record) {
-        openModal(true, record, true);
-      }
+  function handleAddNew() {
+    openModal(true, {}, true);
+  }
 
-      function handleUnlock(record) {
-        handleUnLock(record.id).then(() => {
-          reloadTable();
-        });
-      }
+  function handleEdit(record) {
+    openModal(true, record, true);
+  }
 
-      function handleChangeStartupMenu(userId, meunId) {
-        setUserStartupMenu(userId, meunId);
-      }
+  function handleUnlock(record) {
+    handleUnLock(record.id).then(() => {
+      reloadTable();
+    });
+  }
 
-      function handleShowClaims(record) {
-        openClaimModal(true, { id: record.id });
-      }
+  function handleChangeStartupMenu(userId, meunId) {
+    setUserStartupMenu(userId, meunId);
+  }
 
-      return {
-        L,
-        loadMenuRef,
-        hasPermission,
-        lockEnable,
-        registerTable,
-        reloadTable,
-        registerModal,
-        openModal,
-        registerPermissionModal,
-        showPermissionModal,
-        registerPasswordModal,
-        showPasswordModal,
-        registerClaimModal,
-        handleShowClaims,
-        handleDelete,
-        registerLockModal,
-        showLockModal,
-        handleUnLock,
-        registerMenuModal,
-        handleAddNew,
-        handleEdit,
-        handleUnlock,
-        handleSetMenu,
-        handleChangeMenu,
-        handleChangeStartupMenu,
-        getListByUser,
-        getUserClaims,
-        createClaim,
-        updateClaim,
-        deleteClaim,
-      };
-    },
-  });
+  function handleShowClaims(record) {
+    openClaimModal(true, { id: record.id });
+  }
 </script>

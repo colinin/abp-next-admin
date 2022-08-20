@@ -9,8 +9,8 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, unref, watch } from 'vue';
+<script lang="ts" setup>
+  import { computed, ref, unref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { ImagePreview } from '/@/components/Preview';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -18,36 +18,17 @@
   import { generateOssUrl } from '/@/api/oss-management/oss';
   import { useUserStoreWithOut } from '/@/store/modules/user';
 
-  export default defineComponent({
-    name: 'OssPreviewModal',
-    components: { BasicModal, ImagePreview },
-    setup() {
-      const { L } = useLocalization('AbpOssManagement');
-      const bucket = ref('');
-      const objects = ref<OssObject[]>([]);
-      const previewImages = ref<any[]>([]);
-      const [registerModal] = useModalInner((data) => {
-        bucket.value = data.bucket;
-        objects.value = data.objects;
-      });
-      const userStore = useUserStoreWithOut();
-
-      watch(
-        () => unref(objects),
-        (objs) => {
-          previewImages.value = objs.map((x) => {
-            return (
-              generateOssUrl(unref(bucket), x.path, x.name) + '?access_token=' + userStore.getToken
-            );
-          });
-        },
-      );
-
-      return {
-        L,
-        previewImages,
-        registerModal,
-      };
-    },
+  const { L } = useLocalization('AbpOssManagement');
+  const bucket = ref('');
+  const objects = ref<OssObject[]>([]);
+  const [registerModal] = useModalInner((data) => {
+    bucket.value = data.bucket;
+    objects.value = data.objects;
+  });
+  const previewImages = computed(() => {
+    const userStore = useUserStoreWithOut();
+    return objects.value.map((obj) => {
+      return generateOssUrl(unref(bucket), obj.path, obj.name) + '?access_token=' + userStore.getToken;
+    });
   });
 </script>

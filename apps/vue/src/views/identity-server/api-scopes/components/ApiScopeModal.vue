@@ -13,8 +13,8 @@
       ref="formElRef"
       :model="modelRef"
       :rules="formRules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
     >
       <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
         <!-- Api 资源基本信息 -->
@@ -65,7 +65,7 @@
             </Dropdown>
           </template>
           <component
-            :is="advancedComponent"
+            :is="componentsRef[advancedComponent]"
             :properties="modelRef.properties"
             @props-new="handleNewProperty"
             @props-delete="handleDeleteProperty"
@@ -76,8 +76,9 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref, shallowRef } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form } from 'ant-design-vue';
@@ -88,86 +89,54 @@
   import { useProperty } from '../hooks/useProperty';
   import UserClaim from '../../components/UserClaim.vue';
   import Properties from '../../components/Properties.vue';
-  export default defineComponent({
-    name: 'ApiScopeModal',
-    components: {
-      UserClaim,
-      Properties,
-      BasicModal,
-      DownOutlined,
-      Form,
-      FormItem: Form.Item,
-      Dropdown,
-      Menu,
-      MenuItem: Menu.Item,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      Input,
-      Checkbox,
-    },
-    emits: ['change', 'register'],
-    setup(_, { emit }) {
-      const { L } = useLocalization('AbpIdentityServer');
-      const formElRef = ref<any>(null);
-      const modelIdRef = ref('');
-      const tabActivedKey = ref('basic');
-      const advancedComponent = ref('properties');
-      const [registerModal, { changeOkLoading }] = useModalInner((val) => {
-        modelIdRef.value = val.id;
-      });
-      const {
-        isEdit,
-        modelRef,
-        formRules,
-        formTitle,
-        handleChangeTab,
-        handleVisibleModal,
-        handleSubmit,
-      } = useModal({
-        modelIdRef,
-        formElRef,
-        tabActivedKey,
-      });
-      const { handleNewProperty, handleDeleteProperty } = useProperty({ modelRef });
-      const { targetClaims, handleClaimChange } = useClaim({ modelRef });
 
-      function handleClickMenu(e) {
-        tabActivedKey.value = 'advanced';
-        advancedComponent.value = e.key;
-      }
+  const FormItem = Form.Item;
+  const MenuItem = Menu.Item;
+  const TabPane = Tabs.TabPane;
 
-      function handleOk() {
-        changeOkLoading(true);
-        handleSubmit()
-          .then(() => {
-            emit('change');
-          })
-          .finally(() => {
-            changeOkLoading(false);
-          });
-      }
-
-      return {
-        L,
-        isEdit,
-        formElRef,
-        formRules,
-        formTitle,
-        tabActivedKey,
-        registerModal,
-        modelRef,
-        advancedComponent,
-        labelCol: { span: 6 },
-        wrapperCol: { span: 18 },
-        handleClickMenu,
-        handleNewProperty,
-        handleDeleteProperty,
-        handleChangeTab,
-        handleVisibleModal,
-        handleOk,
-        targetClaims,
-        handleClaimChange,
-      };
-    },
+  const componentsRef = shallowRef({
+    'properties': Properties,
   });
+
+  const emits = defineEmits(['change', 'register']);
+
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpIdentityServer');
+  const formElRef = ref<any>(null);
+  const modelIdRef = ref('');
+  const tabActivedKey = ref('basic');
+  const advancedComponent = ref('properties');
+  const [registerModal, { changeOkLoading }] = useModalInner((val) => {
+    modelIdRef.value = val.id;
+  });
+  const {
+    isEdit,
+    modelRef,
+    formRules,
+    formTitle,
+    handleChangeTab,
+    handleVisibleModal,
+    handleSubmit,
+  } = useModal({
+    modelIdRef,
+    formElRef,
+    tabActivedKey,
+  });
+  const { handleNewProperty, handleDeleteProperty } = useProperty({ modelRef });
+  const { targetClaims, handleClaimChange } = useClaim({ modelRef });
+
+  function handleClickMenu(e) {
+    tabActivedKey.value = 'advanced';
+    advancedComponent.value = e.key;
+  }
+
+  function handleOk() {
+    changeOkLoading(true);
+    handleSubmit() .then(() => {
+      createMessage.success(L('Successful'));
+      emits('change');
+    }) .finally(() => {
+      changeOkLoading(false);
+    });
+  }
 </script>

@@ -1,18 +1,18 @@
 <template>
   <div :class="prefixCls">
-    <a-row :class="`${prefixCls}-top`">
-      <a-col :span="9" :class="`${prefixCls}-col`">
-        <a-row>
-          <a-col :span="8">
+    <Row :class="`${prefixCls}-top`">
+      <Col :span="9" :class="`${prefixCls}-col`">
+        <Row>
+          <Col :span="8">
             <div :class="`${prefixCls}-top__avatar`">
               <img width="70" :src="userInfo.avatar ?? headerImg" />
               <span>{{ userInfo.realName ?? userInfo.username }}</span>
               <div>{{ userInfo.description }}</div>
             </div>
-          </a-col>
-        </a-row>
-      </a-col>
-    </a-row>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
     <div :class="`${prefixCls}-bottom`">
       <Tabs
         v-model:activeKey="activeTabKey"
@@ -21,7 +21,7 @@
       >
         <template v-for="item in components" :key="item.key">
           <TabPane :tab="item.name">
-            <component :is="item.component" />
+            <component :is="componentsRef[item.component]" />
           </TabPane>
         </template>
       </Tabs>
@@ -29,63 +29,47 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { Tag, Tabs, Row, Col } from 'ant-design-vue';
-  import { defineComponent, computed, ref } from 'vue';
-  import { CollapseContainer } from '/@/components/Container/index';
-  import Icon from '/@/components/Icon/index';
+<script lang="ts" setup>
+  import { Tabs, Row, Col } from 'ant-design-vue';
+  import { computed, ref, shallowRef } from 'vue';
   import headerImg from '/@/assets/images/header.jpg';
   import { useUserStore } from '/@/store/modules/user';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import Cloud from './Cloud.vue';
   import Setting from './Setting.vue';
-  export default defineComponent({
-    components: {
-      Cloud,
-      CollapseContainer,
-      Icon,
-      Tag,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      Setting,
-      [Row.name]: Row,
-      [Col.name]: Col,
-    },
-    setup() {
-      const userStore = useUserStore();
-      const activeTabKey = ref('cloud');
-      const { L } = useLocalization(['AbpOssManagement', 'AbpSettingManagement']);
-      const components = [
-        {
-          key: 'cloud',
-          name: L('MyCloud'),
-          component: 'cloud',
-        },
-        {
-          key: 'setting',
-          name: L('DisplayName:UserSetting'),
-          component: 'setting',
-        },
-      ];
-      const tabsStyle = useTabsStyle(
-        'top',
-        {},
-        {
-          top: '80px',
-        }
-      );
-      const userInfo = computed(() => userStore.getUserInfo);
-      return {
-        activeTabKey,
-        tabsStyle,
-        prefixCls: 'account-center',
-        userInfo,
-        headerImg,
-        components,
-      };
-    },
+
+  const TabPane = Tabs.TabPane;
+  
+  const componentsRef = shallowRef({
+    'Cloud': Cloud,
+    'Setting': Setting,
   });
+
+  const prefixCls = 'account-center';
+  const userStore = useUserStore();
+  const activeTabKey = ref('Cloud');
+  const { L } = useLocalization(['AbpOssManagement', 'AbpSettingManagement']);
+  const components = [
+    {
+      key: 'Cloud',
+      name: L('MyCloud'),
+      component: 'Cloud',
+    },
+    {
+      key: 'Setting',
+      name: L('DisplayName:UserSetting'),
+      component: 'Setting',
+    },
+  ];
+  const tabsStyle = useTabsStyle(
+    'top',
+    {},
+    {
+      top: '80px',
+    }
+  );
+  const userInfo = computed(() => userStore.getUserInfo);
 </script>
 <style lang="less" scoped>
   .account-center {

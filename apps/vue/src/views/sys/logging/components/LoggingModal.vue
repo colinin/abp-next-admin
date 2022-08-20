@@ -101,8 +101,8 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { computed, ref } from 'vue';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Collapse, Form, Tabs, Tag, Input } from 'ant-design-vue';
@@ -111,45 +111,24 @@
   import { LogLevelColor, LogLevelLabel } from '../datas/typing';
   import { Log } from '/@/api/logging/model/loggingModel';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  export default defineComponent({
-    name: 'LoggingModal',
-    components: {
-      BasicModal,
-      Collapse,
-      CollapsePanel: Collapse.Panel,
-      Form,
-      FormItem: Form.Item,
-      Tag,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      TextArea: Input.TextArea,
-    },
-    setup() {
-      const { L } = useLocalization('AbpAuditLogging');
-      const activeKey = ref('basic');
-      const modelRef = ref<Log>({} as Log);
-      const [registerModal] = useModalInner((model) => {
-        activeKey.value = 'basic';
-        modelRef.value = {} as Log;
-        get(model.fields.id).then((res) => {
-          modelRef.value = res;
-        });
-      });
-      const formatDateVal = computed(() => {
-        return (dateVal) => formatToDateTime(dateVal, 'YYYY-MM-DD HH:mm:ss');
-      });
-      const tabsStyle = useTabsStyle();
 
-      return {
-        L,
-        modelRef,
-        activeKey,
-        tabsStyle,
-        registerModal,
-        formatDateVal,
-        LogLevelColor,
-        LogLevelLabel,
-      };
-    },
+  const CollapsePanel = Collapse.Panel;
+  const FormItem = Form.Item;
+  const TabPane = Tabs.TabPane;
+  const TextArea = Input.TextArea;
+
+  const { L } = useLocalization('AbpAuditLogging');
+  const activeKey = ref('basic');
+  const modelRef = ref<Log>({} as Log);
+  const [registerModal] = useModalInner((model) => {
+    activeKey.value = 'basic';
+    modelRef.value = {} as Log;
+    get(model.fields.id).then((res) => {
+      modelRef.value = res;
+    });
   });
+  const formatDateVal = computed(() => {
+    return (dateVal) => formatToDateTime(dateVal, 'YYYY-MM-DD HH:mm:ss');
+  });
+  const tabsStyle = useTabsStyle();
 </script>

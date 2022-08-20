@@ -155,6 +155,7 @@
           path: record.path,
           object: record.name,
         }).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
           deleteTableDataRecord(record.name);
           props.selectGroup === 'private' && emit('delete:file:private', record);
           props.selectGroup === 'public' && emit('delete:file:public', record);

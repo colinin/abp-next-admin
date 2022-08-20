@@ -1,7 +1,6 @@
 import type { Ref } from 'vue';
-
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { Modal } from 'ant-design-vue';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
 import { getActivedList } from '/@/api/identity/claim';
@@ -16,6 +15,7 @@ interface UseClaim {
 // TODO: 与UserClaim重复 需要分离组件
 export function useClaim({ roleIdRef }: UseClaim) {
   const { L } = useLocalization('AbpIdentity');
+  const { createMessage, createConfirm } = useMessage();
   const formSchemas: FormSchema[] = [
     {
       field: 'id',
@@ -102,14 +102,17 @@ export function useClaim({ roleIdRef }: UseClaim) {
   }
 
   function handleDelete(claim) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
       okCancel: true,
       onOk: () => {
-        deleteClaim(unref(roleIdRef), claim).then(() => {
-          reloadTable();
-        });
+        deleteClaim(unref(roleIdRef), claim)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            reloadTable();
+          });
       },
     });
   }

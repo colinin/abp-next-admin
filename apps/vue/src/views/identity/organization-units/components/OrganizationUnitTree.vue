@@ -29,8 +29,7 @@
   </Card>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+<script lang="ts" setup>
   import { Card } from 'ant-design-vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -40,36 +39,18 @@
   import { PermissionModal } from '/@/components/Permission';
   import OrganizationUnitModal from './OrganizationUnitModal.vue';
 
-  export default defineComponent({
-    name: 'OrganizationUnitTree',
-    components: { BasicTree, Card, OrganizationUnitModal, PermissionModal },
-    emits: ['change', 'select'],
-    setup(_props, { emit }) {
-      const { L } = useLocalization('AbpIdentity');
-      const [registerModal, modalMethods] = useModal();
-      const [registerPermissionModal, permissionModalMethods] = useModal();
-      const {
-        ouTree,
-        getContentMenus,
-        handleDrop,
-        handleAddNew,
-        handleSelect,
-        loadOuTree,
-      } = useOuTree({ emit, modalMethods, permissionModalMethods });
-      const { hasPermission } = usePermission();
+  const emits = defineEmits(['change', 'select']);
 
-      return {
-        L,
-        ouTree,
-        loadOuTree,
-        registerModal,
-        getContentMenus,
-        hasPermission,
-        handleDrop,
-        handleAddNew,
-        handleSelect,
-        registerPermissionModal,
-      };
-    },
-  });
+  const { L } = useLocalization('AbpIdentity');
+  const [registerModal, modalMethods] = useModal();
+  const [registerPermissionModal, permissionModalMethods] = useModal();
+  const {
+    ouTree,
+    getContentMenus,
+    handleDrop,
+    handleAddNew,
+    handleSelect,
+    loadOuTree,
+  } = useOuTree({ emit: emits, modalMethods, permissionModalMethods });
+  const { hasPermission } = usePermission();
 </script>

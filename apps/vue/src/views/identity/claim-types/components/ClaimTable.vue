@@ -49,8 +49,7 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+<script lang="ts" setup>
   import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
@@ -59,39 +58,16 @@
   import { useClaimTable } from '../hooks/useClaimTable';
   import ClaimModal from './ClaimModal.vue';
 
-  export default defineComponent({
-    name: 'ClaimTable',
-    components: {
-      BasicTable,
-      ClaimModal,
-      CheckOutlined,
-      CloseOutlined,
-      TableAction,
-    },
-    setup() {
-      const { L } = useLocalization('AbpIdentity');
-      const { hasPermission } = usePermission();
-      const [registerModal, { openModal }] = useModal();
-      const { valueTypeMap, registerTable, reloadTable, handleDelete } = useClaimTable();
+  const { L } = useLocalization('AbpIdentity');
+  const { hasPermission } = usePermission();
+  const [registerModal, { openModal }] = useModal();
+  const { valueTypeMap, registerTable, reloadTable, handleDelete } = useClaimTable();
 
-      return {
-        L,
-        hasPermission,
-        valueTypeMap,
-        registerTable,
-        reloadTable,
-        registerModal,
-        openModal,
-        handleDelete,
-      };
-    },
-    methods: {
-      handleAddNew() {
-        this.openModal(true, {}, true);
-      },
-      handleEdit(record) {
-        this.openModal(true, record, true);
-      },
-    },
-  });
+  function handleAddNew() {
+    openModal(true, {});
+  }
+
+  function handleEdit(record) {
+    openModal(true, record);
+  }
 </script>

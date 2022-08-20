@@ -106,14 +106,12 @@ export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
           const api = user.id
             ? update(user.id, cloneDeep(user) as UpdateUser)
             : create(cloneDeep(user) as CreateUser);
-          api
-            .then((res) => {
-              userRef.value = {};
-              resolve(res);
-            })
-            .catch((error) => {
-              reject(error);
-            });
+          api.then((res) => {
+            userRef.value = {};
+            resolve(res);
+          }).catch((error) => {
+            reject(error);
+          });
         })
         .catch((error) => {
           reject(error);

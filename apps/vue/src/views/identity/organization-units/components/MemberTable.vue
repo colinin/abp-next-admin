@@ -30,8 +30,8 @@
   <MemberModal @register="registerModal" :ou-id="ouId" @change="handleChange" />
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, unref } from 'vue';
+<script lang="ts" setup>
+  import { computed, unref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicTable, TableAction } from '/@/components/Table';
@@ -40,44 +40,29 @@
   import { useModal } from '/@/components/Modal';
   import MemberModal from './MemberModal.vue';
 
-  export default defineComponent({
-    name: 'MemberTable',
-    components: { BasicTable, MemberModal, TableAction },
-    props: {
-      ouId: { type: String },
-    },
-    setup(props) {
-      const { L } = useLocalization('AbpIdentity');
-      const { hasPermission } = usePermission();
-      const getProps = computed(() => {
-        return { ...props } as MemberProps;
-      });
-      const addMemberEnabled = computed(() => {
-        if (!unref(getProps).ouId) {
-          return false;
-        }
-        return hasPermission('AbpIdentity.OrganizationUnits.ManageUsers');
-      });
-      const { registerTable, reloadMembers, handleDelete } = useMemberTable({ getProps });
-      const [registerModal, { openModal }] = useModal();
-
-      function handleAddNew() {
-        openModal();
-      }
-
-      function handleChange() {
-        reloadMembers();
-      }
-
-      return {
-        L,
-        addMemberEnabled,
-        registerTable,
-        handleChange,
-        handleDelete,
-        registerModal,
-        handleAddNew,
-      };
-    },
+  const props = defineProps({
+    ouId: { type: String },
   });
+
+  const { L } = useLocalization('AbpIdentity');
+  const { hasPermission } = usePermission();
+  const getProps = computed(() => {
+    return { ...props } as MemberProps;
+  });
+  const addMemberEnabled = computed(() => {
+    if (!unref(getProps).ouId) {
+      return false;
+    }
+    return hasPermission('AbpIdentity.OrganizationUnits.ManageUsers');
+  });
+  const { registerTable, reloadMembers, handleDelete } = useMemberTable({ getProps });
+  const [registerModal, { openModal }] = useModal();
+
+  function handleAddNew() {
+    openModal();
+  }
+
+  function handleChange() {
+    reloadMembers();
+  }
 </script>

@@ -7,7 +7,7 @@
             <BasicTitle>
               <template #default>
                 <div class="search">
-                  <Input :placeholder="t('AbpIdentity.Search')">
+                  <Input :placeholder="L('Search')">
                     <template #prefix>
                       <SearchOutlined />
                     </template>
@@ -80,9 +80,9 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, unref, onMounted, onUnmounted } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+<script lang="ts" setup>
+  import { computed, ref, unref, onMounted, onUnmounted } from 'vue';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Avatar, Button, Input } from 'ant-design-vue';
   import { PlusOutlined, SearchOutlined } from '@ant-design/icons-vue';
   import { useModal } from '/@/components/Modal';
@@ -111,118 +111,85 @@
     sendTime: Date;
   }
 
-  export default defineComponent({
-    name: 'ChatMessage',
-    components: {
-      Avatar,
-      BasicTitle,
-      Button,
-      ChatSearchModal,
-      ChatMessagePanel,
-      Input,
-      PageWrapper,
-      PlusOutlined,
-      SearchOutlined,
-    },
-    setup() {
-      const { t } = useI18n();
-      const chatItems = ref<Chat[]>([]);
-      const swicthToChat = ref<Chat>();
-      const selectedChats = ref<string[]>();
-      const [registerModal, { openModal }] = useModal();
+  const { L } = useLocalization(['AbpMessageService', 'AbpIdentity']);
+  const chatItems = ref<Chat[]>([]);
+  const swicthToChat = ref<Chat>();
+  const selectedChats = ref<string[]>();
+  const [registerModal, { openModal }] = useModal();
 
-      const { prefixCls } = useDesign('im-chat-container');
-      const { getDarkMode } = useRootSetting();
-      const getClass = computed(() => {
-        return [prefixCls, `${prefixCls}--${unref(getDarkMode)}`];
-      });
-      const getChatClass = computed(() => {
-        return (chat: Chat) => {
-          return selectedChats.value?.includes(chat.id) ? 'info selected' : 'info';
-        };
-      });
-
-      onMounted(() => {
-        emitter.on(ChatEventEnum.USER_MESSAGE_NEW, _newMessageReceived);
-        emitter.on(ChatEventEnum.USER_MESSAGE_GROUP_NEW, _newMessageReceived);
-        emitter.on(ChatEventEnum.USER_MESSAGE_RECALL, _newMessageReceived);
-        getLastMessages({
-          sorting: '',
-          maxResultCount: 25,
-        }).then((res) => {
-          chatItems.value = res.items.map((x) => {
-            return {
-              id: x.messageId,
-              name: x.object,
-              avatar: x.avatar,
-              content: x.content,
-              groupId: x.groupId,
-              sendTime: x.sendTime,
-              formUserId: x.formUserId,
-              formUserName: x.formUserName,
-            };
-          });
-        });
-      });
-
-      onUnmounted(() => {
-        emitter.off(ChatEventEnum.USER_MESSAGE_NEW, _newMessageReceived);
-        emitter.off(ChatEventEnum.USER_MESSAGE_GROUP_NEW, _newMessageReceived);
-        emitter.off(ChatEventEnum.USER_MESSAGE_RECALL, _newMessageReceived);
-      });
-
-      function handleClickChat(chat: Chat) {
-        swicthToChat.value = chat;
-        selectedChats.value = [chat.id];
-      }
-
-      function handleAddFriend() {
-        openModal(true);
-      }
-
-      function handleSendMessage(content: string) {
-        const data = {
-          content: content,
-          type: MessageType.Text,
-        };
-        if (swicthToChat.value?.groupId) {
-          data['groupId'] = swicthToChat.value.groupId;
-        } else {
-          data['receivedUserId'] = swicthToChat.value?.formUserId;
-        }
-        emitter.emit(ChatEventEnum.USER_SEND_MESSAGE, data);
-      }
-
-      function _newMessageReceived(message: ChatMessage) {
-        const msgIndex = isNullOrWhiteSpace(message.groupId)
-          ? chatItems.value.findIndex(
-              (m) => m.formUserId === message.formUserId || m.formUserId === message.toUserId,
-            )
-          : chatItems.value.findIndex((m) => m.groupId === message.groupId);
-        if (msgIndex >= 0) {
-          chatItems.value[msgIndex].content = message.content;
-          chatItems.value[msgIndex].formUserName = message.formUserName;
-        }
-      }
-
-      return {
-        t,
-        getClass,
-        getChatClass,
-        chatItems,
-        swicthToChat,
-        registerModal,
-        handleClickChat,
-        handleAddFriend,
-        formatToDateTime,
-        ChatEventEnum,
-        getChatMessages,
-        getGroupMessages,
-        handleSendMessage,
-        undefinedAvatar,
-      };
-    },
+  const { prefixCls } = useDesign('im-chat-container');
+  const { getDarkMode } = useRootSetting();
+  const getClass = computed(() => {
+    return [prefixCls, `${prefixCls}--${unref(getDarkMode)}`];
   });
+  const getChatClass = computed(() => {
+    return (chat: Chat) => {
+      return selectedChats.value?.includes(chat.id) ? 'info selected' : 'info';
+    };
+  });
+
+  onMounted(() => {
+    emitter.on(ChatEventEnum.USER_MESSAGE_NEW, _newMessageReceived);
+    emitter.on(ChatEventEnum.USER_MESSAGE_GROUP_NEW, _newMessageReceived);
+    emitter.on(ChatEventEnum.USER_MESSAGE_RECALL, _newMessageReceived);
+    getLastMessages({
+      sorting: '',
+      maxResultCount: 25,
+    }).then((res) => {
+      chatItems.value = res.items.map((x) => {
+        return {
+          id: x.messageId,
+          name: x.object,
+          avatar: x.avatar,
+          content: x.content,
+          groupId: x.groupId,
+          sendTime: x.sendTime,
+          formUserId: x.formUserId,
+          formUserName: x.formUserName,
+        };
+      });
+    });
+  });
+
+  onUnmounted(() => {
+    emitter.off(ChatEventEnum.USER_MESSAGE_NEW, _newMessageReceived);
+    emitter.off(ChatEventEnum.USER_MESSAGE_GROUP_NEW, _newMessageReceived);
+    emitter.off(ChatEventEnum.USER_MESSAGE_RECALL, _newMessageReceived);
+  });
+
+  function handleClickChat(chat: Chat) {
+    swicthToChat.value = chat;
+    selectedChats.value = [chat.id];
+  }
+
+  function handleAddFriend() {
+    openModal(true);
+  }
+
+  function handleSendMessage(content: string) {
+    const data = {
+      content: content,
+      type: MessageType.Text,
+    };
+    if (swicthToChat.value?.groupId) {
+      data['groupId'] = swicthToChat.value.groupId;
+    } else {
+      data['receivedUserId'] = swicthToChat.value?.formUserId;
+    }
+    emitter.emit(ChatEventEnum.USER_SEND_MESSAGE, data);
+  }
+
+  function _newMessageReceived(message: ChatMessage) {
+    const msgIndex = isNullOrWhiteSpace(message.groupId)
+      ? chatItems.value.findIndex(
+          (m) => m.formUserId === message.formUserId || m.formUserId === message.toUserId,
+        )
+      : chatItems.value.findIndex((m) => m.groupId === message.groupId);
+    if (msgIndex >= 0) {
+      chatItems.value[msgIndex].content = message.content;
+      chatItems.value[msgIndex].formUserName = message.formUserName;
+    }
+  }
 </script>
 
 <style lang="less" scoped>

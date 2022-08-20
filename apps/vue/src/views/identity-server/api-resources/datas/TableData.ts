@@ -36,14 +36,14 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('Resource:Enabled'),
       dataIndex: 'enabled',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
     },
     {
       title: L('ShowInDiscoveryDocument'),
       dataIndex: 'showInDiscoveryDocument',
-      align: 'left',
+      align: 'center',
       width: 200,
       sorter: true,
     },

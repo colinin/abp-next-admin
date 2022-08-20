@@ -173,7 +173,7 @@
           path: props.path,
           objects: getSelectRowKeys(),
         }).then(() => {
-          createMessage.success(L('Successful'));
+          createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });
       },
@@ -199,7 +199,7 @@
           path: props.path,
           object: record.name,
         }).then(() => {
-          createMessage.success(L('Successful'));
+          createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });
       },

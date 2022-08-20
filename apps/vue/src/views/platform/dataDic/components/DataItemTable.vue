@@ -31,119 +31,99 @@
   <DataItemModal @register="registerModal" @change="fetchItems" />
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref, createVNode, watch } from 'vue';
-
+<script lang="ts" setup>
+  import { computed, ref, createVNode, watch } from 'vue';
   import { getDataColumns } from './TableData';
-  import DataItemModal from './DataItemModal.vue';
-  import { Modal, Switch } from 'ant-design-vue';
+  import { Switch } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
-
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-
   import { DataItem } from '/@/api/platform/model/dataItemModel';
   import { get, removeItem } from '/@/api/platform/dataDic';
+  import DataItemModal from './DataItemModal.vue';
 
-  const props = {
-    dataId: { type: String, retuired: true },
-  } as const;
-
-  export default defineComponent({
-    name: 'DataItemTable',
-    components: {
-      BasicTable,
-      TableAction,
-      DataItemModal,
-      Switch,
-    },
-    props,
-    emits: ['reload'],
-    setup(props, { emit }) {
-      const { L } = useLocalization(['AppPlatform', 'AbpUi']);
-      const dataItems = ref<DataItem[]>([]);
-      const [registerTable] = useTable({
-        rowKey: 'id',
-        title: L('Data:Items'),
-        columns: getDataColumns(),
-        dataSource: dataItems,
-        bordered: true,
-        canResize: true,
-        showTableSetting: true,
-        rowSelection: { type: 'checkbox' },
-        actionColumn: {
-          width: 160,
-          title: L('Actions'),
-          dataIndex: 'action',
-        },
-      });
-      const [registerModal, { openModal }] = useModal();
-
-      const isEnableNew = computed(() => {
-        if (props.dataId && props.dataId !== '') {
-          return true;
-        }
-        return false;
-      });
-
-      watch(
-        () => props.dataId,
-        (dataId) => {
-          dataItems.value = [];
-          if (dataId) {
-            fetchItems(dataId);
-          }
-        },
-        {
-          immediate: true,
-        },
-      )
-
-      function fetchItems(dataId: string) {
-        get(dataId).then((res) => {
-          dataItems.value = res.items;
-        });
-      }
-
-      function handleAppendItem() {
-        openModal(true, { dataId: props.dataId });
-      }
-
-      function handleEdit(record) {
-        openModal(true, { dataId: props.dataId, ...record });
-      }
-
-      function handleDelete(record: Recordable) {
-        Modal.confirm({
-          title: L('AreYouSure'),
-          icon: createVNode(ExclamationCircleOutlined),
-          content: createVNode(
-            'div',
-            { style: 'color:red;' },
-            L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
-          ),
-          onOk: () => {
-            removeItem(props.dataId!, record.name).then(() => {
-              emit('reload');
-              fetchItems(props.dataId!);
-            });
-          },
-        });
-      }
-
-      return {
-        L,
-        isEnableNew,
-        registerTable,
-        dataItems,
-        registerModal,
-        openModal,
-        fetchItems,
-        handleAppendItem,
-        handleEdit,
-        handleDelete,
-      };
+  const emits = defineEmits(['reload']);
+  const props = defineProps({
+    dataId: {
+      type: String,
+      retuired: true,
     },
   });
+
+  const { createMessage, createConfirm } = useMessage();
+  const { L } = useLocalization(['AppPlatform', 'AbpUi']);
+  const dataItems = ref<DataItem[]>([]);
+  const [registerTable] = useTable({
+    rowKey: 'id',
+    title: L('Data:Items'),
+    columns: getDataColumns(),
+    dataSource: dataItems,
+    bordered: true,
+    canResize: true,
+    showTableSetting: true,
+    rowSelection: { type: 'checkbox' },
+    actionColumn: {
+      width: 160,
+      title: L('Actions'),
+      dataIndex: 'action',
+    },
+  });
+  const [registerModal, { openModal }] = useModal();
+
+  const isEnableNew = computed(() => {
+    if (props.dataId && props.dataId !== '') {
+      return true;
+    }
+    return false;
+  });
+
+  watch(
+    () => props.dataId,
+    (dataId) => {
+      dataItems.value = [];
+      if (dataId) {
+        fetchItems(dataId);
+      }
+    },
+    {
+      immediate: true,
+    },
+  )
+
+  function fetchItems(dataId: string) {
+    get(dataId).then((res) => {
+      dataItems.value = res.items;
+    });
+  }
+
+  function handleAppendItem() {
+    openModal(true, { dataId: props.dataId });
+  }
+
+  function handleEdit(record) {
+    openModal(true, { dataId: props.dataId, ...record });
+  }
+
+  function handleDelete(record: Recordable) {
+    createConfirm({
+      iconType: 'error',
+      title: L('AreYouSure'),
+      icon: createVNode(ExclamationCircleOutlined),
+      content: createVNode(
+        'div',
+        { style: 'color:red;' },
+        L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
+      ),
+      onOk: () => {
+        removeItem(props.dataId!, record.name)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            emits('reload');
+            fetchItems(props.dataId!);
+          });
+      },
+    });
+  }
 </script>

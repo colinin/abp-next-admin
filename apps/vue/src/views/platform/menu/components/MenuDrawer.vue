@@ -22,58 +22,45 @@
   </BasicDrawer>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-
+<script lang="ts" setup>
+  import { nextTick, ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { TabForm, FormActionType } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-
   import { basicProps } from './props';
   import { Menu } from '/@/api/platform/model/menuModel';
   import { useMenuFormContext } from '../hooks/useMenuFormContext';
 
-  export default defineComponent({
-    name: 'MenuDrawer',
-    components: {
-      BasicDrawer,
-      TabForm,
-    },
-    props: basicProps,
-    emits: ['change', 'register'],
-    setup(props) {
-      const menu = ref<Menu>({} as Menu);
-      const framework = ref<string  | undefined>('');
-      const formElRef = ref<Nullable<FormActionType>>(null);
-      const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } =
-        useMenuFormContext({
-          menuModel: menu,
-          formElRef: formElRef,
-          framework: framework,
-        });
+  const emits = defineEmits(['change', 'register']);
+  const props = defineProps(basicProps);
 
-      const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (dataVal) => {
-        setDrawerProps({ confirmLoading: false });
-        menu.value = dataVal;
-        framework.value = props.framework;
-        fetchLayoutResource(dataVal.layoutId);
-      });
+  const { createMessage } = useMessage();
+  const { L } = useLocalization(['AppPlatform', 'AbpUi']);
+  const menu = ref<Menu>({} as Menu);
+  const framework = ref<string  | undefined>('');
+  const formElRef = ref<Nullable<FormActionType>>(null);
+  const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } =
+    useMenuFormContext({
+      menuModel: menu,
+      formElRef: formElRef,
+      framework: framework,
+    });
 
-      return {
-        formTitle,
-        formElRef,
-        handleFormSubmit,
-        getFormSchemas,
-        registerDrawer,
-        closeDrawer,
-      };
-    },
-    methods: {
-      handleSubmit() {
-        this.handleFormSubmit()?.then(() => {
-          this.closeDrawer();
-          this.$emit('change');
-        });
-      },
-    },
+  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner((dataVal) => {
+    menu.value = dataVal;
+    framework.value = props.framework;
+    nextTick(() => {
+      setDrawerProps({ confirmLoading: false });
+      fetchLayoutResource(dataVal.layoutId);
+    });
   });
+
+  function handleSubmit() {
+    handleFormSubmit()?.then(() => {
+      createMessage.success(L('Successful'));
+      closeDrawer();
+      emits('change');
+    });
+  }
 </script>

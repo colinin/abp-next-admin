@@ -7,6 +7,7 @@
   import OrganizationUnitPage from './components/OrganizationUnitPage.vue';
 
   export default defineComponent({
+    name: 'OrganizationUnits',
     components: { OrganizationUnitPage },
   });
 </script>

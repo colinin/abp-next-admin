@@ -1,7 +1,7 @@
 import { ComputedRef } from 'vue';
-import { Modal } from 'ant-design-vue';
 import { ref, unref, watch } from 'vue';
 import { useTable } from '/@/components/Table';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getDataColumns } from '../../role/datas/TableData';
 import { Role } from '/@/api/identity/model/roleModel';
@@ -15,6 +15,7 @@ interface UseRoleTable {
 
 export function useRoleTable({ getProps }: UseRoleTable) {
   const { L } = useLocalization('AbpIdentity');
+  const { createMessage, createConfirm } = useMessage();
   const dataSource = ref([] as Role[]);
   const [registerTable] = useTable({
     rowKey: 'id',
@@ -40,12 +41,17 @@ export function useRoleTable({ getProps }: UseRoleTable) {
   });
 
   function handleDelete(role) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('OrganizationUnit:AreYouSureRemoveRole', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
-        removeOrganizationUnit(role.id, unref(getProps).ouId).then(() => reloadRoles());
+        removeOrganizationUnit(role.id, unref(getProps).ouId)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            reloadRoles();
+          });
       },
     });
   }

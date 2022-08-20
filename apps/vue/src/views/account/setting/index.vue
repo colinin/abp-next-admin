@@ -1,10 +1,10 @@
 <template>
   <ScrollContainer>
-    <div ref="wrapperRef" :class="prefixCls">
-      <Tabs tab-position="left" :tabBarStyle="tabBarStyle">
+    <div ref="wrapperRef" class="account-setting">
+      <Tabs tab-position="left" :tabBarStyle="{ width: '220px' }">
         <template v-for="item in getSettingList()" :key="item.key">
           <TabPane :tab="item.name">
-            <component :is="item.component" :profile="profileRef" @profile-change="initUserInfo" />
+            <component :is="componentsRef[item.component]" :profile="profileRef" @profile-change="initUserInfo" />
           </TabPane>
         </template>
       </Tabs>
@@ -12,8 +12,8 @@
   </ScrollContainer>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue';
+<script lang="ts" setup>
+  import { ref, shallowRef, onMounted } from 'vue';
   import { Tabs } from 'ant-design-vue';
   import { ScrollContainer } from '/@/components/Container/index';
   import { getSettingList } from './data';
@@ -24,42 +24,29 @@
   import SecureSetting from './SecureSetting.vue';
   import AccountBind from './AccountBind.vue';
   import MsgNotify from './MsgNotify.vue';
-  export default defineComponent({
-    components: {
-      ScrollContainer,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      BaseSetting,
-      SecureSetting,
-      AccountBind,
-      MsgNotify,
-    },
-    setup() {
-      const profileRef = ref<MyProfile>();
-      onMounted(fetchProfile);
 
-      async function fetchProfile() {
-        const profile = await getProfile();
-        profileRef.value = profile;
-      }
+  const TabPane = Tabs.TabPane;
 
-      async function initUserInfo() {
-        const abpStore = useAbpStoreWithOut();
-        await abpStore.initlizeAbpApplication();
-        await fetchProfile();
-      }
-      
-      return {
-        prefixCls: 'account-setting',
-        profileRef,
-        initUserInfo,
-        getSettingList,
-        tabBarStyle: {
-          width: '220px',
-        },
-      };
-    },
+  const componentsRef = shallowRef({
+    'BaseSetting': BaseSetting,
+    'SecureSetting': SecureSetting,
+    'AccountBind': AccountBind,
+    'MsgNotify': MsgNotify,
   });
+  
+  const profileRef = ref<MyProfile>();
+  onMounted(fetchProfile);
+
+  async function fetchProfile() {
+    const profile = await getProfile();
+    profileRef.value = profile;
+  }
+
+  async function initUserInfo() {
+    const abpStore = useAbpStoreWithOut();
+    await abpStore.initlizeAbpApplication();
+    await fetchProfile();
+  }
 </script>
 <style lang="less">
   .account-setting {

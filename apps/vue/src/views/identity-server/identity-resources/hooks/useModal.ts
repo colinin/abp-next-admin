@@ -1,8 +1,8 @@
 import type { Ref } from 'vue';
 
 import { computed, ref, reactive, unref, watch } from 'vue';
-import { message } from 'ant-design-vue';
 import { cloneDeep } from 'lodash-es';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
@@ -16,6 +16,7 @@ interface UseModal {
 }
 
 export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
+  const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
   const { ruleCreator } = useValidation();
   const modelRef = ref<IdentityResource>({} as IdentityResource);
@@ -69,25 +70,20 @@ export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
   function handleSubmit() {
     return new Promise<any>((resolve, reject) => {
       const formEl = unref(formElRef);
-      formEl
-        .validate()
-        .then(() => {
-          const input = cloneDeep(unref(modelRef));
-          const api = isEdit.value
-            ? update(input.id, Object.assign(input))
-            : create(Object.assign(input));
-          api
-            .then((res) => {
-              message.success(L('Successful'));
-              resolve(res);
-            })
-            .catch((error) => {
-              reject(error);
-            });
-        })
-        .catch((error) => {
+      formEl.validate().then(() => {
+        const input = cloneDeep(unref(modelRef));
+        const api = isEdit.value
+          ? update(input.id, Object.assign(input))
+          : create(Object.assign(input));
+        api.then((res) => {
+          createMessage.success(L('Successful'));
+          resolve(res);
+        }).catch((error) => {
           reject(error);
         });
+      }).catch((error) => {
+        reject(error);
+      });
     });
   }
 

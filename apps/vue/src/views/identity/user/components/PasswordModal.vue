@@ -9,57 +9,42 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
+<script lang="ts" setup>
+  import { ref, unref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm, FormActionType } from '/@/components/Form';
   import { usePassword } from '../hooks/usePassword';
   import { changePassword } from '/@/api/identity/user';
 
-  export default defineComponent({
-    name: 'PasswordModal',
-    components: { BasicModal, BasicForm },
-    setup() {
-      const { L } = useLocalization('AbpIdentity');
-      const userIdRef = ref('');
-      const formElRef = ref<Nullable<FormActionType>>(null);
-      const { formSchemas } = usePassword(formElRef);
-      const [registerModal, { closeModal }] = useModalInner((val) => {
-        userIdRef.value = val;
-      });
-      const [registerForm, { getFieldsValue, validate }] = useForm({
-        schemas: formSchemas,
-        showActionButtonGroup: false,
-        actionColOptions: {
-          span: 24,
-        },
-      });
-
-      function handleSubmit() {
-        const userId = unref(userIdRef);
-        if (userId) {
-          validate().then((res) => {
-            changePassword(userId, {
-              password: res.password,
-            }).then(() => {
-              closeModal();
-            });
-          });
-        }
-      }
-
-      return {
-        L,
-        formElRef,
-        registerModal,
-        closeModal,
-        registerForm,
-        getFieldsValue,
-        validate,
-        userIdRef,
-        handleSubmit,
-      };
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpIdentity');
+  const userIdRef = ref('');
+  const formElRef = ref<Nullable<FormActionType>>(null);
+  const { formSchemas } = usePassword(formElRef);
+  const [registerModal, { closeModal }] = useModalInner((val) => {
+    userIdRef.value = val;
+  });
+  const [registerForm, { validate }] = useForm({
+    schemas: formSchemas,
+    showActionButtonGroup: false,
+    actionColOptions: {
+      span: 24,
     },
   });
+
+  function handleSubmit() {
+    const userId = unref(userIdRef);
+    if (userId) {
+      validate().then((res) => {
+        changePassword(userId, {
+          password: res.password,
+        }).then(() => {
+          createMessage.success(L('Successful'));
+          closeModal();
+        });
+      });
+    }
+  }
 </script>

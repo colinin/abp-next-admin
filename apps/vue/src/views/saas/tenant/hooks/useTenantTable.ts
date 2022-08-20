@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { unref } from 'vue';
-import { Modal } from 'ant-design-vue';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { TableActionType, useTable } from '/@/components/Table';
 import { getDataColumns } from '../datas/TableData';
@@ -14,6 +14,7 @@ interface UseTenantTable {
 }
 
 export function useTenantTable({ tableElRef }: UseTenantTable) {
+  const { createMessage, createConfirm } = useMessage();
   const { L } = useLocalization('AbpSaas');
   const [registerTable, {}] = useTable({
     rowKey: 'id',
@@ -39,14 +40,15 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
   });
 
   function handleDelete(record) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
-      content: L('ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+      content: L('ItemWillBeDeletedMessageWithFormat', [record.name]),
       okCancel: true,
       onOk: () => {
         deleteById(record.id).then(() => {
-          const tableEl = unref(tableElRef);
-          tableEl?.reload();
+          createMessage.success(L('SuccessfullyDeleted'));
+          handleReload();
         });
       },
     });

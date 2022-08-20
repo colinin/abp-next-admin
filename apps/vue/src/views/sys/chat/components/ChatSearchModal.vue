@@ -63,11 +63,11 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { Avatar, Button, Input, List, Tabs, message } from 'ant-design-vue';
-  import { TeamOutlined } from '@ant-design/icons-vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { Avatar, Button, Input, List, Tabs } from 'ant-design-vue';
   import { BasicModal } from '/@/components/Modal';
   import { search as searchGroup } from '/@/api/messages/groups';
   import { Group } from '/@/api/messages/model/groupModel';
@@ -76,71 +76,50 @@
   import { IUserData } from '/@/api/identity/model/userLookupModel';
   import userAvatar from '/@/assets/icons/64x64/color-user.png';
 
-  export default defineComponent({
-    name: 'ChatSearchModal',
-    components: {
-      Avatar,
-      BasicModal,
-      Button,
-      InputSearch: Input.Search,
-      List,
-      ListItem: List.Item,
-      ListItemMeta: List.Item.Meta,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      TeamOutlined,
-    },
-    setup() {
-      const { t } = useI18n();
-      const users = ref<IUserData[]>([]);
-      const groups = ref<Group[]>([]);
+  const InputSearch = Input.Search;
+  const ListItem = List.Item;
+  const ListItemMeta = List.Item.Meta;
+  const TabPane = Tabs.TabPane;
 
-      function handleSearchFriend(value: string) {
-        searchUser({
-          filter: value,
-          sorting: '',
-          skipCount: 0,
-          maxResultCount: 25,
-        }).then((res) => {
-          users.value = res.items;
-        });
-      }
+  const { createMessage } = useMessage();
+  const { L } = useLocalization(['AbpMessageService', 'AbpUi']);
+  const users = ref<IUserData[]>([]);
+  const groups = ref<Group[]>([]);
 
-      function handleAddNewFriend(user: IUserData) {
-        addFriend({
-          remarkName: user.userName,
-          friendId: user.id,
-        }).then(() => {
-          message.success(t('AbpUi.Successful'));
-        });
-      }
+  function handleSearchFriend(value: string) {
+    searchUser({
+      filter: value,
+      sorting: '',
+      skipCount: 0,
+      maxResultCount: 25,
+    }).then((res) => {
+      users.value = res.items;
+    });
+  }
 
-      function handleSearchGroup(value: string) {
-        searchGroup({
-          filter: value,
-          sorting: '',
-          skipCount: 0,
-          maxResultCount: 25,
-        }).then((res) => {
-          groups.value = res.items;
-        });
-      }
+  function handleAddNewFriend(user: IUserData) {
+    addFriend({
+      remarkName: user.userName,
+      friendId: user.id,
+    }).then(() => {
+      createMessage.success(L('Successful'));
+    });
+  }
 
-      function handleJoinGroup(group: Group) {
-        console.log(group);
-      }
+  function handleSearchGroup(value: string) {
+    searchGroup({
+      filter: value,
+      sorting: '',
+      skipCount: 0,
+      maxResultCount: 25,
+    }).then((res) => {
+      groups.value = res.items;
+    });
+  }
 
-      return {
-        users,
-        groups,
-        userAvatar,
-        handleSearchFriend,
-        handleSearchGroup,
-        handleAddNewFriend,
-        handleJoinGroup,
-      };
-    },
-  });
+  function handleJoinGroup(group: Group) {
+    console.log(group);
+  }
 </script>
 
 <style lang="less" scoped>

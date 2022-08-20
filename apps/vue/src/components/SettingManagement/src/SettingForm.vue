@@ -81,7 +81,7 @@
         </TabPane>
       </Tabs>
       <FormItem style="margin-top: 20px">
-        <a-button
+        <Button
           v-if="updateSetting.settings.length > 0"
           type="primary"
           style="width: 150px"
@@ -90,19 +90,20 @@
           @click="handleSubmit"
         >
           {{ sumbitButtonTitle }}
-        </a-button>
+        </Button>
       </FormItem>
     </Form>
   </Card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
   import dayjs from 'dayjs';
-  import { computed, defineComponent, ref, toRaw } from 'vue';
+  import { computed, ref, toRaw } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import {
+    Button,
     Card,
     Checkbox,
     Tabs,
@@ -110,15 +111,20 @@
     Form,
     Input,
     Select,
-    Row,
-    Col,
     DatePicker,
   } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { formatToDate } from '/@/utils/dateUtil';
   import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
 
-  const props = {
+  const CollapsePanel = Collapse.Panel;
+  const FormItem = Form.Item;
+  const SelectOption = Select.Option;
+  const TabPane = Tabs.TabPane;
+  const Password = Input.Password;
+
+  const emits = defineEmits(['change']);
+  const props = defineProps({
     settingGroups: {
       type: Array as PropType<Array<SettingGroup>>,
       required: true,
@@ -131,110 +137,72 @@
       type: String as PropType<'left' | 'right' | 'top' | 'bottom'>,
       default: 'top',
     },
-  } as const; // 对于存在必输项的props see: https://blog.csdn.net/q535999731/article/details/109578885
-
-  export default defineComponent({
-    components: {
-      Card,
-      Checkbox,
-      Collapse: Collapse,
-      CollapsePanel: Collapse.Panel,
-      DatePicker,
-      Form: Form,
-      FormItem: Form.Item,
-      BInput,
-      Select,
-      SelectOption: Select.Option,
-      Tabs: Tabs,
-      TabPane: Tabs.TabPane,
-      Password: Input.Password,
-      Row,
-      Col,
-    },
-    props,
-    emits: ['change'],
-    setup(props, { emit }) {
-      const { L } = useLocalization('AbpSettingManagement');
-      const activeTabKey = ref(0);
-      const saving = ref(false);
-      const updateSetting = ref(new SettingsUpdate());
-      const { createMessage } = useMessage();
-      const { success } = createMessage;
-
-      const tabsStyle = useTabsStyle(
-        props.tabPosition,
-        {}, 
-        {
-          top: props.tabPosition === 'top' ? '80px' : '0'
-        });
-      const sumbitButtonTitle = computed(() => {
-        if (saving.value) {
-          return L('Save');
-        }
-        return L('Save');
-      });
-      const expandedCollapseKeys = computed(() => {
-        return (group) => {
-          const keys = group.settings.map((s) => {
-            return s.displayName;
-          });
-          return keys;
-        };
-      });
-
-      function handleCheckChange(setting) {
-        if (setting.value === 'true') {
-          setting.value = 'false';
-        } else {
-          setting.value = 'true';
-        }
-        handleValueChange(setting);
-      }
-
-      function handleDateChange(e, setting) {
-        setting.value = dayjs.isDayjs(e) ? formatToDate(e) : '';
-        handleValueChange(setting);
-      }
-
-      function handleValueChange(setting) {
-        const index = updateSetting.value.settings.findIndex((s) => s.name === setting.name);
-        if (index >= 0) {
-          updateSetting.value.settings[index].value = setting.value;
-        } else {
-          updateSetting.value.settings.push({
-            name: setting.name,
-            value: setting.value,
-          });
-        }
-      }
-
-      function handleSubmit() {
-        saving.value = true;
-        props
-          .saveApi(toRaw(updateSetting.value))
-          .then(() => {
-            success(L('SuccessfullySaved'));
-            emit('change', toRaw(updateSetting.value));
-          })
-          .finally(() => {
-            saving.value = false;
-          });
-      }
-
-      return {
-        L,
-        dayjs,
-        saving,
-        tabsStyle,
-        activeTabKey,
-        updateSetting,
-        sumbitButtonTitle,
-        expandedCollapseKeys,
-        handleCheckChange,
-        handleDateChange,
-        handleValueChange,
-        handleSubmit,
-      };
-    },
   });
+
+  const { L } = useLocalization('AbpSettingManagement');
+  const activeTabKey = ref(0);
+  const saving = ref(false);
+  const updateSetting = ref(new SettingsUpdate());
+  const { createMessage } = useMessage();
+  const { success } = createMessage;
+
+  const tabsStyle = useTabsStyle(
+    props.tabPosition,
+    {}, 
+    {
+      top: props.tabPosition === 'top' ? '80px' : '0'
+    });
+  const sumbitButtonTitle = computed(() => {
+    if (saving.value) {
+      return L('Save');
+    }
+    return L('Save');
+  });
+  const expandedCollapseKeys = computed(() => {
+    return (group) => {
+      const keys = group.settings.map((s) => {
+        return s.displayName;
+      });
+      return keys;
+    };
+  });
+
+  function handleCheckChange(setting) {
+    if (setting.value === 'true') {
+      setting.value = 'false';
+    } else {
+      setting.value = 'true';
+    }
+    handleValueChange(setting);
+  }
+
+  function handleDateChange(e, setting) {
+    setting.value = dayjs.isDayjs(e) ? formatToDate(e) : '';
+    handleValueChange(setting);
+  }
+
+  function handleValueChange(setting) {
+    const index = updateSetting.value.settings.findIndex((s) => s.name === setting.name);
+    if (index >= 0) {
+      updateSetting.value.settings[index].value = setting.value;
+    } else {
+      updateSetting.value.settings.push({
+        name: setting.name,
+        value: setting.value,
+      });
+    }
+  }
+
+  function handleSubmit() {
+    saving.value = true;
+    props
+      .saveApi(toRaw(updateSetting.value))
+      .then(() => {
+        success(L('SuccessfullySaved'));
+        emits('change', toRaw(updateSetting.value));
+      })
+      .finally(() => {
+        saving.value = false;
+      });
+  }
 </script>

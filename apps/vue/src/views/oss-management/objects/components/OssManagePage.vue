@@ -27,65 +27,42 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue';
+<script lang="ts" setup>
+  import { ref, onMounted } from 'vue';
   import { Card, Select } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { usePermission } from '/@/hooks/web/usePermission';
   import { getContainers } from '/@/api/oss-management/oss';
   import { OssContainer } from '/@/api/oss-management/model/ossModel';
   import FolderTree from './FolderTree.vue';
   import FileList from './FileList.vue';
 
-  export default defineComponent({
-    name: 'OssTable',
-    components: {
-      Card,
-      CardGrid: Card.Grid,
-      CardMeta: Card.Meta,
-      Select,
-      Option: Select.Option,
-      FolderTree,
-      FileList,
-    },
-    setup() {
-      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
-      const { hasPermission } = usePermission();
-      const currentPath = ref('');
-      const currentBucket = ref('');
-      const bucketList = ref<OssContainer[]>([]);
+  const CardGrid = Card.Grid;
+  const CardMeta = Card.Meta;
 
-      onMounted(fetchBuckets);
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
+  const currentPath = ref('');
+  const currentBucket = ref('');
+  const bucketList = ref<OssContainer[]>([]);
 
-      function fetchBuckets() {
-        getContainers({
-          prefix: '',
-          marker: '',
-          sorting: '',
-          skipCount: 0,
-          maxResultCount: 1000,
-        }).then((res) => {
-          bucketList.value = res.containers;
-        });
-      }
+  onMounted(fetchBuckets);
 
-      function handleBucketChange(bucket) {
-        currentBucket.value = bucket;
-      }
+  function fetchBuckets() {
+    getContainers({
+      prefix: '',
+      marker: '',
+      sorting: '',
+      skipCount: 0,
+      maxResultCount: 1000,
+    }).then((res) => {
+      bucketList.value = res.containers;
+    });
+  }
 
-      function handlePathChange(path) {
-        currentPath.value = path;
-      }
+  function handleBucketChange(bucket) {
+    currentBucket.value = bucket;
+  }
 
-      return {
-        L,
-        bucketList,
-        currentBucket,
-        currentPath,
-        handleBucketChange,
-        handlePathChange,
-        hasPermission,
-      };
-    },
-  });
+  function handlePathChange(path) {
+    currentPath.value = path;
+  }
 </script>

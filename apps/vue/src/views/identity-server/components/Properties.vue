@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       rowKey="key"
-      :columns="columns"
+      :columns="getDataColumns()"
       :dataSource="properties"
       :pagination="false"
       :showTableSetting="true"
@@ -38,8 +38,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
   import { Button } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal } from '/@/components/Modal';
@@ -49,60 +49,38 @@
   import { getDataColumns } from './TableData';
   import { getFormSchemas } from './ModalData';
 
-  export default defineComponent({
-    name: 'Properties',
-    components: {
-      BasicForm,
-      BasicModal,
-      BasicTable,
-      Button,
-      TableAction,
-    },
-    props: {
-      properties: {
-        type: [Array] as PropType<Property[]>,
-        required: true,
-        default: () => [],
-      },
-    },
-    emits: ['new', 'props-new', 'props-delete'],
-    setup(_, { emit }) {
-      const { L } = useLocalization('AbpIdentityServer');
-      const title = ref('');
-      const [registerForm, { validate, resetFields }] = useForm({
-        labelWidth: 120,
-        showActionButtonGroup: false,
-        schemas: getFormSchemas(),
-      });
-      const [registerModal, { openModal, closeModal }] = useModal();
-
-      function handleAddNew() {
-        title.value = L('Propertites:New');
-        openModal(true);
-      }
-
-      function handleDelete(record) {
-        emit('props-delete', record);
-      }
-
-      function handleSubmit() {
-        validate().then((input) => {
-          emit('props-new', input);
-          resetFields();
-          closeModal();
-        });
-      }
-
-      return {
-        L,
-        title,
-        handleAddNew,
-        handleDelete,
-        handleSubmit,
-        columns: getDataColumns(),
-        registerForm,
-        registerModal,
-      };
+  const emits = defineEmits(['new', 'props-new', 'props-delete']);
+  defineProps({
+    properties: {
+      type: [Array] as PropType<Property[]>,
+      required: true,
+      default: () => [],
     },
   });
+
+  const { L } = useLocalization('AbpIdentityServer');
+  const title = ref('');
+  const [registerForm, { validate, resetFields }] = useForm({
+    labelWidth: 120,
+    showActionButtonGroup: false,
+    schemas: getFormSchemas(),
+  });
+  const [registerModal, { openModal, closeModal }] = useModal();
+
+  function handleAddNew() {
+    title.value = L('Propertites:New');
+    openModal(true);
+  }
+
+  function handleDelete(record) {
+    emits('props-delete', record);
+  }
+
+  function handleSubmit() {
+    validate().then((input) => {
+      emits('props-new', input);
+      resetFields();
+      closeModal();
+    });
+  }
 </script>

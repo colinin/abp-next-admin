@@ -69,7 +69,7 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('DisplayName:Values'),
       colProps: { span: 24 },
       render: ({ values }) => {
-        return createVNode(JsonPreview, {
+        return createVNode(JsonPreview!, {
           data: values.values,
         });
       },

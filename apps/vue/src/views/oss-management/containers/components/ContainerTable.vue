@@ -38,9 +38,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import { Modal, message } from 'ant-design-vue';
+<script lang="ts" setup>
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicModal, useModal } from '/@/components/Modal';
@@ -51,95 +50,74 @@
   import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
 
-  export default defineComponent({
-    name: 'ContainerTable',
-    components: {
-      BasicForm,
-      BasicModal,
-      BasicTable,
-      TableAction,
-    },
-    setup() {
-      const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
-      const { hasPermission } = usePermission();
-      const [registerModal, { openModal, closeModal }] = useModal();
-      const [registerForm, { validate, resetFields }] = useForm({
-        labelWidth: 120,
-        schemas: getModalFormSchemas(),
-        showActionButtonGroup: false,
-        actionColOptions: {
-          span: 24,
-        },
-      });
-      const [registerTable, { reload }] = useTable({
-        rowKey: 'name',
-        title: L('Containers'),
-        columns: getDataColumns(),
-        api: getContainers,
-        fetchSetting: {
-          pageField: 'skipCount',
-          sizeField: 'maxResultCount',
-          listField: 'containers',
-          totalField: 'maxKeys',
-        },
-        beforeFetch: formatPagedRequest,
-        pagination: true,
-        striped: false,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
-        immediate: true,
-        rowSelection: { type: 'checkbox' },
-        formConfig: getSearchFormSchemas(),
-        actionColumn: {
-          width: 120,
-          title: L('Actions'),
-          dataIndex: 'action',
-        },
-      });
-
-      function handleAddNew() {
-        resetFields();
-        openModal(true, {});
-      }
-
-      function handleDelete(record) {
-        Modal.warning({
-          title: L('AreYouSure'),
-          content: L('ItemWillBeDeletedMessage'),
-          okCancel: true,
-          onOk: () => {
-            deleteContainer(record.name).then(() => {
-              message.success(L('Successful'));
-              reload();
-            });
-          },
-        });
-      }
-
-      function handleSubmit() {
-        validate().then((input) => {
-          createContainer(input.name).then(() => {
-            message.success(L('Successful'));
-            closeModal();
-            reload();
-          });
-        });
-      }
-
-      return {
-        L,
-        hasPermission,
-        registerTable,
-        registerForm,
-        registerModal,
-        openModal,
-        handleAddNew,
-        handleDelete,
-        handleSubmit,
-      };
+  const { createMessage, createConfirm } = useMessage();
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
+  const { hasPermission } = usePermission();
+  const [registerModal, { openModal, closeModal }] = useModal();
+  const [registerForm, { validate, resetFields }] = useForm({
+    labelWidth: 120,
+    schemas: getModalFormSchemas(),
+    showActionButtonGroup: false,
+    actionColOptions: {
+      span: 24,
     },
   });
+  const [registerTable, { reload }] = useTable({
+    rowKey: 'name',
+    title: L('Containers'),
+    columns: getDataColumns(),
+    api: getContainers,
+    fetchSetting: {
+      pageField: 'skipCount',
+      sizeField: 'maxResultCount',
+      listField: 'containers',
+      totalField: 'maxKeys',
+    },
+    beforeFetch: formatPagedRequest,
+    pagination: true,
+    striped: false,
+    useSearchForm: true,
+    showTableSetting: true,
+    bordered: true,
+    showIndexColumn: false,
+    canResize: false,
+    immediate: true,
+    rowSelection: { type: 'checkbox' },
+    formConfig: getSearchFormSchemas(),
+    actionColumn: {
+      width: 120,
+      title: L('Actions'),
+      dataIndex: 'action',
+    },
+  });
+
+  function handleAddNew() {
+    resetFields();
+    openModal(true, {});
+  }
+
+  function handleDelete(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessage'),
+      okCancel: true,
+      onOk: () => {
+        deleteContainer(record.name).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          reload();
+        });
+      },
+    });
+  }
+
+  function handleSubmit() {
+    validate().then((input) => {
+      createContainer(input.name).then(() => {
+        createMessage.success(L('Successful'));
+        closeModal();
+        reload();
+      });
+    });
+  }
 </script>

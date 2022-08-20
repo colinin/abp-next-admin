@@ -1,6 +1,6 @@
-import { ComputedRef } from 'vue';
-import { Modal } from 'ant-design-vue';
+import type { ComputedRef } from 'vue';
 import { watch, ref, unref } from 'vue';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn, useTable } from '/@/components/Table';
 import { User } from '/@/api/identity/model/userModel';
@@ -14,6 +14,7 @@ interface UseMemberTable {
 
 export function useMemberTable({ getProps }: UseMemberTable) {
   const { L } = useLocalization('AbpIdentity');
+  const { createMessage, createConfirm } = useMessage();
   const dataSource = ref([] as User[]);
   const dataColumns: BasicColumn[] = [
     {
@@ -61,12 +62,17 @@ export function useMemberTable({ getProps }: UseMemberTable) {
   });
 
   function handleDelete(user) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('OrganizationUnit:AreYouSureRemoveUser', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
-        removeOrganizationUnit(user.id, unref(getProps).ouId).then(() => reloadMembers());
+        removeOrganizationUnit(user.id, unref(getProps).ouId)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            reloadMembers();
+          });
       },
     });
   }

@@ -34,8 +34,8 @@
   </Menu>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent } from 'vue';
+<script lang="ts" setup>
+  import { computed } from 'vue';
   import { useUserStoreWithOut } from '/@/store/modules/user';
   import { Avatar, Menu, MenuItem } from 'ant-design-vue';
   import {
@@ -45,46 +45,27 @@
     NotificationOutlined,
   } from '@ant-design/icons-vue';
 
-  export default defineComponent({
-    name: 'ChatSider',
-    components: {
-      Avatar,
-      Menu,
-      MenuItem,
-      MailOutlined,
-      UserSwitchOutlined,
-      UsergroupAddOutlined,
-      NotificationOutlined,
+  const emits = defineEmits(['switch']);
+  const props = defineProps({
+    theme: {
+      type: String as PropType<'dark' | 'light'>,
+      default: 'dark',
     },
-    props: {
-      theme: {
-        type: String as PropType<'dark' | 'light'>,
-        default: 'dark',
-      },
-      defaultKey: {
-        type: String,
-        default: 'chat-message',
-      },
-    },
-    emits: ['switch'],
-    setup(props, { emit }) {
-      const avatar = computed(() => {
-        const userStore = useUserStoreWithOut();
-        return userStore.getUserInfo.avatar;
-      });
-      const openKeys = computed(() => {
-        return [...props.defaultKey];
-      });
-
-      function handleClickMenu({ key }) {
-        emit('switch', key);
-      }
-
-      return {
-        avatar,
-        openKeys,
-        handleClickMenu,
-      };
+    defaultKey: {
+      type: String,
+      default: 'chat-message',
     },
   });
+
+  const avatar = computed(() => {
+    const userStore = useUserStoreWithOut();
+    return userStore.getUserInfo.avatar;
+  });
+  const openKeys = computed(() => {
+    return [...props.defaultKey];
+  });
+
+  function handleClickMenu({ key }) {
+    emits('switch', key);
+  }
 </script>

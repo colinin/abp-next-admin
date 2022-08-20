@@ -13,8 +13,8 @@
       ref="formElRef"
       :model="modelRef"
       :rules="formRules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
     >
       <Tabs
         v-model:activeKey="tabActivedKey"
@@ -74,18 +74,18 @@
               </span>
               <template #overlay>
                 <Menu @click="handleClickUrlsMenu">
-                  <MenuItem key="client-callback">{{ L('Client:CallbackUrl') }}</MenuItem>
-                  <MenuItem key="client-cors-origins">{{
+                  <MenuItem key="ClientCallback">{{ L('Client:CallbackUrl') }}</MenuItem>
+                  <MenuItem key="ClientCorsOrigins">{{
                     L('Client:AllowedCorsOrigins')
                   }}</MenuItem>
-                  <MenuItem key="client-logout-redirect-uris">{{
+                  <MenuItem key="ClientLogoutRedirectUris">{{
                     L('Client:PostLogoutRedirectUri')
                   }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
           </template>
-          <component :is="urlsComponent" :modelRef="modelRef" />
+          <component :is="componentsRef[urlsComponent]" :modelRef="modelRef" />
         </TabPane>
 
         <!-- 资源 -->
@@ -98,13 +98,13 @@
               </span>
               <template #overlay>
                 <Menu @click="handleClickResourcesMenu">
-                  <MenuItem key="client-api-resource">{{ L('Resource:Api') }}</MenuItem>
-                  <MenuItem key="client-identity-resource">{{ L('Resource:Identity') }}</MenuItem>
+                  <MenuItem key="ClientApiResource">{{ L('Resource:Api') }}</MenuItem>
+                  <MenuItem key="ClientIdentityResource">{{ L('Resource:Identity') }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
           </template>
-          <component :is="resourcesComponent" :modelRef="modelRef" />
+          <component :is="componentsRef[resourcesComponent]" :modelRef="modelRef" />
         </TabPane>
 
         <!-- 认证/注销 -->
@@ -256,27 +256,28 @@
               </span>
               <template #overlay>
                 <Menu @click="handleClickAdvancedMenu">
-                  <MenuItem key="client-secret">{{ L('Secret') }}</MenuItem>
-                  <MenuItem key="client-claim">{{ L('Claims') }}</MenuItem>
-                  <MenuItem key="client-properties">{{ L('Propertites') }}</MenuItem>
-                  <MenuItem key="client-grant-type">{{ L('Client:AllowedGrantTypes') }}</MenuItem>
-                  <MenuItem key="client-identity-provider">{{
+                  <MenuItem key="ClientSecret">{{ L('Secret') }}</MenuItem>
+                  <MenuItem key="ClientClaim">{{ L('Claims') }}</MenuItem>
+                  <MenuItem key="ClientProperties">{{ L('Propertites') }}</MenuItem>
+                  <MenuItem key="ClientGrantType">{{ L('Client:AllowedGrantTypes') }}</MenuItem>
+                  <MenuItem key="ClientIdentityProvider">{{
                     L('Client:IdentityProviderRestrictions')
                   }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
           </template>
-          <component :is="advancedComponent" :modelRef="modelRef" />
+          <component :is="componentsRef[advancedComponent]" :modelRef="modelRef" />
         </TabPane>
       </Tabs>
     </Form>
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+  import { ref, shallowRef } from 'vue';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form, Input, InputNumber, Select } from 'ant-design-vue';
@@ -293,112 +294,78 @@
   import ClientProperties from './ClientProperties.vue';
   import ClientGrantType from './ClientGrantType.vue';
   import ClientIdentityProvider from './ClientIdentityProvider.vue';
-  export default defineComponent({
-    name: 'ClientModal',
-    components: {
-      ClientCallback,
-      ClientCorsOrigins,
-      ClientLogoutRedirectUris,
-      ClientApiResource,
-      ClientIdentityResource,
-      ClientSecret,
-      ClientClaim,
-      ClientProperties,
-      ClientGrantType,
-      ClientIdentityProvider,
-      BasicModal,
-      DownOutlined,
-      Form,
-      FormItem: Form.Item,
-      Dropdown,
-      Menu,
-      MenuItem: Menu.Item,
-      Tabs,
-      TabPane: Tabs.TabPane,
-      BInput,
-      InputNumber,
-      TextArea: Input.TextArea,
-      Checkbox,
-      Select,
-      Option: Select.Option,
-    },
-    emits: ['change', 'register'],
-    setup(_, { emit }) {
-      const { L } = useLocalization('AbpIdentityServer');
-      const formElRef = ref<any>(null);
-      const modelIdRef = ref('');
-      const tabActivedKey = ref('basic');
-      const advancedComponent = ref('client-secret');
-      const urlsComponent = ref('client-callback');
-      const resourcesComponent = ref('client-api-resource');
-      const [registerModal, { changeOkLoading }] = useModalInner((val) => {
-        modelIdRef.value = val.id;
-      });
-      const {
-        isEdit,
-        modelRef,
-        formRules,
-        formTitle,
-        handleChangeTab,
-        handleVisibleModal,
-        handleSubmit,
-      } = useModal({
-        modelIdRef,
-        formElRef,
-        tabActivedKey,
-      });
-      const tabsStyle = useTabsStyle();
 
-      function handleClickAdvancedMenu(e) {
-        tabActivedKey.value = 'advanced';
-        advancedComponent.value = e.key;
-      }
+  const FormItem = Form.Item;
+  const MenuItem = Menu.Item;
+  const TabPane = Tabs.TabPane;
+  const TextArea = Input.TextArea;
+  const Option = Select.Option;
 
-      function handleClickUrlsMenu(e) {
-        tabActivedKey.value = 'urls';
-        urlsComponent.value = e.key;
-      }
-
-      function handleClickResourcesMenu(e) {
-        tabActivedKey.value = 'resources';
-        resourcesComponent.value = e.key;
-      }
-
-      function handleOk() {
-        changeOkLoading(true);
-        handleSubmit()
-          .then(() => {
-            emit('change');
-          })
-          .finally(() => {
-            changeOkLoading(false);
-          });
-      }
-
-      return {
-        L,
-        isEdit,
-        formElRef,
-        formRules,
-        formTitle,
-        tabsStyle,
-        tabActivedKey,
-        registerModal,
-        modelRef,
-        labelCol: { span: 6 },
-        wrapperCol: { span: 18 },
-        advancedComponent,
-        urlsComponent,
-        resourcesComponent,
-        handleClickUrlsMenu,
-        handleClickResourcesMenu,
-        handleClickAdvancedMenu,
-        handleChangeTab,
-        handleVisibleModal,
-        handleOk,
-      };
-    },
+  const componentsRef = shallowRef({
+    'ClientCallback': ClientCallback,
+    'ClientCorsOrigins': ClientCorsOrigins,
+    'ClientLogoutRedirectUris': ClientLogoutRedirectUris,
+    'ClientApiResource': ClientApiResource,
+    'ClientIdentityResource': ClientIdentityResource,
+    'ClientSecret': ClientSecret,
+    'ClientClaim': ClientClaim,
+    'ClientProperties': ClientProperties,
+    'ClientGrantType': ClientGrantType,
+    'ClientIdentityProvider': ClientIdentityProvider,
   });
+
+  const emits = defineEmits(['change', 'register']);
+
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpIdentityServer');
+  const formElRef = ref<any>(null);
+  const modelIdRef = ref('');
+  const tabActivedKey = ref('basic');
+  const advancedComponent = ref('ClientSecret');
+  const urlsComponent = ref('ClientCallback');
+  const resourcesComponent = ref('ClientApiResource');
+  const [registerModal, { changeOkLoading }] = useModalInner((val) => {
+    modelIdRef.value = val.id;
+  });
+  const {
+    isEdit,
+    modelRef,
+    formRules,
+    formTitle,
+    handleChangeTab,
+    handleVisibleModal,
+    handleSubmit,
+  } = useModal({
+    modelIdRef,
+    formElRef,
+    tabActivedKey,
+  });
+  const tabsStyle = useTabsStyle();
+
+  function handleClickAdvancedMenu(e) {
+    tabActivedKey.value = 'advanced';
+    advancedComponent.value = e.key;
+  }
+
+  function handleClickUrlsMenu(e) {
+    tabActivedKey.value = 'urls';
+    urlsComponent.value = e.key;
+  }
+
+  function handleClickResourcesMenu(e) {
+    tabActivedKey.value = 'resources';
+    resourcesComponent.value = e.key;
+  }
+
+  function handleOk() {
+    changeOkLoading(true);
+    handleSubmit().then(() => {
+      createMessage.success(L('Successful'));
+      emits('change');
+    }).finally(() => {
+      changeOkLoading(false);
+    });
+  }
 </script>
 
 <style lang="less" scoped>

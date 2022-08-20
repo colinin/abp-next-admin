@@ -151,7 +151,7 @@
       onOk: () => {
         if (isFunction(props.deleteApi)) {
           props.deleteApi(identityRef.value, claim).then(() => {
-            createMessage.success(L('Successful'));
+            createMessage.success(L('SuccessfullyDeleted'));
             reload();
           });
         }

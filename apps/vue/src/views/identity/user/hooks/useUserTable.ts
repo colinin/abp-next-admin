@@ -1,13 +1,14 @@
 import { computed } from 'vue';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useTable } from '/@/components/Table';
 import { deleteById, getList } from '/@/api/identity/user';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';
-import { Modal } from 'ant-design-vue';
 
 export function useUserTable() {
+  const { createMessage, createConfirm } = useMessage();
   const { L } = useLocalization('AbpIdentity');
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
@@ -51,14 +52,17 @@ export function useUserTable() {
   });
 
   function handleDelete(user) {
-    Modal.warning({
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessageWithFormat', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
-        deleteById(user.id).then(() => {
-          reloadTable();
-        });
+        deleteById(user.id)
+          .then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+            reloadTable();
+          });
       },
     });
   }

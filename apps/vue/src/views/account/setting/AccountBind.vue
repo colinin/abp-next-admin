@@ -1,7 +1,7 @@
 <template>
   <CollapseContainer :title="L('Binding')" :canExpan="false">
     <List>
-      <template v-for="item in list" :key="item.key">
+      <template v-for="item in getAccountBindList()" :key="item.key">
         <ListItem>
           <ListItemMeta>
             <template #avatar>
@@ -25,38 +25,25 @@
     </List>
   </CollapseContainer>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
   import { List, Tag } from 'ant-design-vue';
-  import { defineComponent } from 'vue';
   import { CollapseContainer } from '/@/components/Container/index';
   import { useProfile } from './useProfile';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { MyProfile } from '/@/api/account/model/profilesModel';
   import Icon from '/@/components/Icon/index';
 
-  export default defineComponent({
-    components: {
-      CollapseContainer,
-      List,
-      ListItem: List.Item,
-      ListItemMeta: List.Item.Meta,
-      Icon,
-      Tag,
-    },
-    props: {
-      profile: {
-        type: Object as PropType<MyProfile>,
-      }
-    },
-    setup(props) {
-      const { L } = useLocalization('AbpAccount');
-      const { getAccountBindList } = useProfile({ profile: props.profile });
-      return {
-        L,
-        list: getAccountBindList(),
-      };
-    },
+  const ListItem = List.Item;
+  const ListItemMeta = List.Item.Meta;
+
+  const props = defineProps({
+    profile: {
+      type: Object as PropType<MyProfile>,
+    }
   });
+
+  const { L } = useLocalization('AbpAccount');
+  const { getAccountBindList } = useProfile({ profile: props.profile });
 </script>
 <style lang="less" scoped>
   .avatar {

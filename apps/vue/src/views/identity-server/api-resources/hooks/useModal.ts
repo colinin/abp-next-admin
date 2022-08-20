@@ -1,8 +1,8 @@
 import type { Ref } from 'vue';
 
 import { computed, ref, reactive, unref, watch } from 'vue';
-import { message } from 'ant-design-vue';
 import { cloneDeep } from 'lodash-es';
+import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
@@ -16,6 +16,7 @@ interface UseModal {
 }
 
 export function useModal({ resourceIdRef, formElRef, tabActivedKey }: UseModal) {
+  const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
   const { ruleCreator } = useValidation();
   const resourceRef = ref<ApiResource>({} as ApiResource);
@@ -80,14 +81,12 @@ export function useModal({ resourceIdRef, formElRef, tabActivedKey }: UseModal) 
           const api = isEdit.value
             ? update(input.id, Object.assign(input))
             : create(Object.assign(input));
-          api
-            .then((res) => {
-              message.success(L('Successful'));
-              resolve(res);
-            })
-            .catch((error) => {
-              reject(error);
-            });
+          api.then((res) => {
+            createMessage.success(L('Successful'));
+            resolve(res);
+          }).catch((error) => {
+            reject(error);
+          });
         })
         .catch((error) => {
           reject(error);

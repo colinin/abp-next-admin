@@ -6,7 +6,6 @@ import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
 import {
   TOKEN_KEY,
-  ABP_TENANT_KEY,
   USER_INFO_KEY,
   ROLES_KEY,
   LOCK_INFO_KEY,
@@ -21,7 +20,6 @@ import { pick, omit } from 'lodash-es';
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined;
-  [ABP_TENANT_KEY]: string;
   [USER_INFO_KEY]: UserInfo;
   [ROLES_KEY]: string[];
   [LOCK_INFO_KEY]: LockInfo;
@@ -51,13 +49,6 @@ function initPersistentMemory() {
 }
 
 export class Persistent {
-  static setTenant(value: any) {
-    ls.set(ABP_TENANT_KEY, value);
-  }
-
-  static getTenant() {
-    return ls.get(ABP_TENANT_KEY);
-  }
 
   static getLocal<T>(key: LocalKeys) {
     return localMemory.get(key)?.value as Nullable<T>;
