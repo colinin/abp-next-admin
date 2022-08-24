@@ -59,15 +59,17 @@
   </BasicModal>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
-  import { message } from 'ant-design-vue';
+<script lang="ts" setup>
+  import { computed, ref } from 'vue';
   import { Card, Checkbox, Col, Divider, Row, Tabs } from 'ant-design-vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
   import { usePermissions } from './hooks/usePermissions';
   import { PermissionProps } from './types/permission';
+
+  const TabPane = Tabs.TabPane;
 
   const defaultProps: PermissionProps = {
     providerName: 'G',
@@ -76,84 +78,50 @@
     identity: '',
   };
 
-  export default defineComponent({
-    name: 'PermissionModal',
-    components: {
-      BasicModal,
-      BasicTree,
-      Card,
-      Checkbox,
-      Divider,
-      Col,
-      Row,
-      Tabs,
-      TabPane: Tabs.TabPane,
-    },
-    setup() {
-      const { L } = useLocalization('AbpPermissionManagement');
-      const activeKey = ref('');
-      const model = ref<PermissionProps>(defaultProps);
-      const {
-        title,
-        permissionTree,
-        permissionTab,
-        permissionGrantKeys,
-        permissionTabCheckState,
-        permissionTreeCheckState,
-        permissionTreeDisabled,
-        handlePermissionGranted,
-        handleSavePermission,
-        handleGrantAllPermission,
-        handleGrantPermissions,
-      } = usePermissions({
-        getPropsRef: model,
-      });
-      const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
-        model.value = val;
-      });
-      const getIdentity = computed(() => {
-        if (model.value.identity) {
-          return `${L('Permissions')} - ${model.value.identity}`;
-        }
-        return title.value;
-      });
-
-      function handleVisibleChange(visible: boolean) {
-        if (!visible) {
-          model.value.providerKey = '';
-        }
-      }
-
-      function handleSubmit() {
-        changeOkLoading(true);
-        handleSavePermission()
-          .then(() => {
-            message.success(L('Successful'));
-            closeModal();
-          })
-          .finally(() => {
-            changeOkLoading(false);
-          });
-      }
-
-      return {
-        L,
-        activeKey,
-        title,
-        getIdentity,
-        permissionTab,
-        permissionTree,
-        permissionGrantKeys,
-        permissionTabCheckState,
-        permissionTreeCheckState,
-        permissionTreeDisabled,
-        handlePermissionGranted,
-        handleGrantAllPermission,
-        handleGrantPermissions,
-        registerModal,
-        handleSubmit,
-        handleVisibleChange,
-      };
-    },
+  const { createMessage } = useMessage();
+  const { L } = useLocalization('AbpPermissionManagement');
+  const activeKey = ref('');
+  const model = ref<PermissionProps>(defaultProps);
+  const {
+    title,
+    permissionTree,
+    permissionTab,
+    permissionGrantKeys,
+    permissionTabCheckState,
+    permissionTreeCheckState,
+    permissionTreeDisabled,
+    handlePermissionGranted,
+    handleSavePermission,
+    handleGrantAllPermission,
+    handleGrantPermissions,
+  } = usePermissions({
+    getPropsRef: model,
   });
+  const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
+    model.value = val;
+  });
+  const getIdentity = computed(() => {
+    if (model.value.identity) {
+      return `${L('Permissions')} - ${model.value.identity}`;
+    }
+    return title.value;
+  });
+
+  function handleVisibleChange(visible: boolean) {
+    if (!visible) {
+      model.value.providerKey = '';
+    }
+  }
+
+  function handleSubmit() {
+    changeOkLoading(true);
+    handleSavePermission()
+      .then(() => {
+        createMessage.success(L('Successful'));
+        closeModal();
+      })
+      .finally(() => {
+        changeOkLoading(false);
+      });
+  }
 </script>

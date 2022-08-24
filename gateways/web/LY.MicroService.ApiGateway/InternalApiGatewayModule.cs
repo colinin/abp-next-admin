@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,8 @@ namespace LY.MicroService.ApiGateway;
     typeof(AbpAutofacModule),
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreSerilogModule)
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreMvcWrapperModule)
 )]
 public class InternalApiGatewayModule : AbpModule
 {
@@ -31,6 +33,18 @@ public class InternalApiGatewayModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        Configure<InternalApiGatewayOptions>(options =>
+        {
+            options.Aggregator.ConfigurationUrl.ClientName = "_Abp_Application_Configuration";
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30010"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30015"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30020"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30025"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30030"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30035"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30040"));
+        });
 
         context.Services.AddAbpSwaggerGenWithOAuth(
             authority: configuration["AuthServer:Authority"],
@@ -128,7 +142,7 @@ public class InternalApiGatewayModule : AbpModule
         app.UseRewriter(new RewriteOptions().AddRedirect("^(|\\|\\s+)$", "/swagger"));
 
         app.UseRouting();
-        app.UseEndpoints(endpoints =>
+        app.UseConfiguredEndpoints(endpoints =>
         {
             endpoints.MapReverseProxy(options =>
                 options.UseLoadBalancing());

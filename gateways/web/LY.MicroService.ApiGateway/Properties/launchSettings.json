@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "PackageName.CompanyName.ProjectName.HttpApi.Host": {
+    "LY.MicroService.ApiGateway": {
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
@@ -16,13 +16,6 @@
       },
       "applicationUrl": "http://localhost:5000",
       "dotnetRunMessages": "true"
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": false,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
     }
   }
 }
