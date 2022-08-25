@@ -21,9 +21,12 @@ namespace LINGYUN.Abp.Tests.Features
         {
             var feature = FeatureDefinitionManager.Get(name);
 
-            var featureFunc = FakeFeatureOptions.FeatureMaps[name];
+            if (FakeFeatureOptions.FeatureMaps.TryGetValue(name, out var featureFunc))
+            {
+                return Task.FromResult(featureFunc(feature));
+            }
 
-            return Task.FromResult(featureFunc(feature));
+            return Task.FromResult(feature.DefaultValue);
         }
     }
 }
