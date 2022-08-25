@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.PushPlus.Message;
+﻿using LINGYUN.Abp.PushPlus.Channel;
+using LINGYUN.Abp.PushPlus.Message;
 using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -50,16 +51,19 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
         {
             topic = topicDefine;
         }
+        var channel = notificationDefine?.GetChannelOrDefault(PushPlusChannelType.Email)
+             ?? PushPlusChannelType.Email;
 
         if (!notification.Data.NeedLocalizer())
         {
             var title = notification.Data.TryGetData("title").ToString();
             var message = notification.Data.TryGetData("message").ToString();
 
-            await PushPlusMessageSender.SendAsync(
+            await PushPlusMessageSender.SendWithChannelAsync(
                 title,
                 message,
                 topic,
+                channelType: channel,
                 cancellationToken: cancellationToken);
         }
         else
@@ -72,10 +76,11 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
             var messageResource = GetResource(messageInfo.ResourceName);
             var message = LocalizerFactory.Create(messageResource.ResourceType)[messageInfo.Name, messageInfo.Values].Value;
 
-            await PushPlusMessageSender.SendAsync(
+            await PushPlusMessageSender.SendWithChannelAsync(
                 title,
                 message,
                 topic,
+                channelType: channel,
                 cancellationToken: cancellationToken);
         }
     }
