@@ -1,0 +1,17 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Settings:Security.AppToken": "应用的身份标志",
+    "Settings:Security.AppTokenDesc": "拥有APP_TOKEN，就可以给对应的应用的用户发送消息, 请严格保密.",
+    "Features:WxPusher": "WxPusher微信推送服务",
+    "Features:WxPusherEnable": "启用WxPusher",
+    "Features:WxPusherEnableDesc": "启用以使应用拥有WxPusher的能力.",
+    "Features:Message": "WxPusher微信消息推送",
+    "Features:MessageEnable": "启用WxPusher微信消息推送",
+    "Features:MessageEnableDesc": "启用以使应用将拥有通过WxPusher推送到微信的能力.",
+    "Features:Message.SendLimit": "微信消息推送量",
+    "Features:Message.SendLimitDesc": "设置以限制微信消息推送量.",
+    "Features:Message.SendLimitInterval": "微信消息限制周期",
+    "Features:Message.SendLimitIntervalDesc": "设置微信消息限制周期(时间刻度: 天).单个微信用户(uid),每天最多接收500条消息,请合理安排发送频率."
+  }
+}

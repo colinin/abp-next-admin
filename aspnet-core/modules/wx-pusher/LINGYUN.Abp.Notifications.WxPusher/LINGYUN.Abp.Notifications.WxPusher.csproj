@@ -10,7 +10,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj" />
 	</ItemGroup>
 
 </Project>
