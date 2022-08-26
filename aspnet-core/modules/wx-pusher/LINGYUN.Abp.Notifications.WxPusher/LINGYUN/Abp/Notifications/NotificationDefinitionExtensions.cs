@@ -7,7 +7,7 @@ public static class NotificationDefinitionExtensions
 {
     private const string Prefix = "wx-pusher:";
     private const string ContentTypeKey = Prefix + "contentType";
-    private const string TopicKey = Prefix + "contentType";
+    private const string TopicKey = Prefix + "topic";
     /// <summary>
     /// 设定消息内容类型
     /// </summary>
