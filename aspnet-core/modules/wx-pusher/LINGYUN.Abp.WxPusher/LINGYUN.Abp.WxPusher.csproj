@@ -9,13 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\WxPusher\Localization\Resources\en.json" />
-	  <None Remove="LINGYUN\Abp\WxPusher\Localization\Resources\zh-Hans.json" />
+	  <None Remove="LINGYUN\Abp\WxPusher\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="LINGYUN\Abp\WxPusher\Localization\Resources\en.json" />
-	  <EmbeddedResource Include="LINGYUN\Abp\WxPusher\Localization\Resources\zh-Hans.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\WxPusher\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

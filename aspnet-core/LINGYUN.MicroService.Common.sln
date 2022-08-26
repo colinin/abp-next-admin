@@ -252,13 +252,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wx-pusher", "wx-pusher", "{7862CE70-76EF-4228-A703-C2E2A9704D14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WxPusher", "modules\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{1A072FF5-1A7E-4F78-B145-1AB873AEB8FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher", "modules\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{1A072FF5-1A7E-4F78-B145-1AB873AEB8FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WxPusher.Tests", "tests\LINGYUN.Abp.WxPusher.Tests\LINGYUN.Abp.WxPusher.Tests.csproj", "{88412E3D-21C8-4FF1-8EB3-84CB74094336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.Tests", "tests\LINGYUN.Abp.WxPusher.Tests\LINGYUN.Abp.WxPusher.Tests.csproj", "{88412E3D-21C8-4FF1-8EB3-84CB74094336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{F65A8835-C50F-43B0-B54C-196A92E9539F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{F65A8835-C50F-43B0-B54C-196A92E9539F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{30FA01ED-921A-4E7D-9E83-6719538FB866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{30FA01ED-921A-4E7D-9E83-6719538FB866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WxPusher.SettingManagement", "modules\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj", "{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.PushPlus.SettingManagement", "modules\pushplus\LINGYUN.Abp.PushPlus.SettingManagement\LINGYUN.Abp.PushPlus.SettingManagement.csproj", "{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -666,6 +670,14 @@ Global
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -795,6 +807,8 @@ Global
 		{88412E3D-21C8-4FF1-8EB3-84CB74094336} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{F65A8835-C50F-43B0-B54C-196A92E9539F} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
 		{30FA01ED-921A-4E7D-9E83-6719538FB866} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
+		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
+		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839} = {0F5A2591-CE08-4184-A5F3-89F6FB3B2B10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}
