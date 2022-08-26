@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.PushPlus.Channel.Webhook;
+using LINGYUN.Abp.PushPlus.Localization;
 using LINGYUN.Abp.PushPlus.Message;
 using LINGYUN.Abp.PushPlus.Setting;
 using LINGYUN.Abp.PushPlus.Token;
@@ -9,8 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.PushPlus;
 
@@ -48,6 +51,18 @@ public class AbpPushPlusModule : AbpModule
 
             options.UnsupportedTypes.TryAdd<PushPlusResponse<PushPlusUserLimitTime>>();
             options.UnsupportedTypes.TryAdd<PushPlusResponse<PushPlusUserProfile>>();
+        });
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpPushPlusModule>();
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<PushPlusResource>()
+                .AddVirtualJson("/LINGYUN/Abp/PushPlus/Localization/Resources");
         });
     }
 }
