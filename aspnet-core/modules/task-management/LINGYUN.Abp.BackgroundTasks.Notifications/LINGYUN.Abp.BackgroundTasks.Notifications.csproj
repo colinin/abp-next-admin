@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\BackgroundTasks\Notifications\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\BackgroundTasks\Notifications\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\BackgroundTasks\Notifications\Templates\JobExecutedNotification.tpl" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\BackgroundTasks\Notifications\Templates\JobExecutedNotification.tpl" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Activities\LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
+	</ItemGroup>
+
+</Project>

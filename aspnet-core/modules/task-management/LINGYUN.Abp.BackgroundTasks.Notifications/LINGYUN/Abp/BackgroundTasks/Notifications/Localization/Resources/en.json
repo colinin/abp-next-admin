@@ -1,0 +1,22 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Notifications:BackgroundTasks": "Background job Notification",
+    "Notifications:JobExecuteSucceeded": "Job Success Notification",
+    "Notifications:JobExecuteSucceededDesc": "After the background job is successfully executed, the notification is pushed.",
+    "Notifications:JobExecuteFailed": "Job Failure Notification",
+    "Notifications:JobExecuteFailedDesc": "Notification push after the execution of a background job failed.",
+    "Notifications:JobExecuteCompleted": "Job Completed Notification",
+    "Notifications:JobExecuteCompletedDesc": "After the background job is complated, the notification is pushed.",
+    "DisplayName:PushProvider": "Push Service Provider",
+    "Description:PushProvider": "If a push program is specified, the application will select it to push messages. The optional list is :SignalR(real-time notification), Sms(Sms notification), Emailing(email notification), wecht.miniprogram (WeChat MiniProgram), WxPusher(WxPusher WeChat push service), PushPlus (PushPlus multi-platform push service).",
+    "DisplayName:Template": "Template",
+    "Description:Template": "If the template content needs to be specified.",
+    "DisplayName:Context": "Context",
+    "Description:Context": "Specified when formatting template content.",
+    "DisplayName:Content": "Content",
+    "Description:Content": "If you specify the content, a plain text message is sent.",
+    "DisplayName:Culture": "Culture",
+    "Description:Culture": "Need to localize the message content specification"
+  }
+}

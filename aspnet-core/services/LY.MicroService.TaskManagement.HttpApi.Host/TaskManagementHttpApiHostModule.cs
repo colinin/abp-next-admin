@@ -5,6 +5,7 @@ using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
+using LINGYUN.Abp.BackgroundTasks.Notifications;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
@@ -55,6 +56,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
+    typeof(AbpBackgroundTasksNotificationsModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),

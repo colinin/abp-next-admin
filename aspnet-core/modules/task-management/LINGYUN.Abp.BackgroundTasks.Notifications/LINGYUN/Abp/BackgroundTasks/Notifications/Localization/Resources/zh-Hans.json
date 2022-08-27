@@ -1,0 +1,22 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notifications:BackgroundTasks": "后台作业通知",
+    "Notifications:JobExecuteSucceeded": "作业成功通知",
+    "Notifications:JobExecuteSucceededDesc": "后台作业执行成功后通知推送.",
+    "Notifications:JobExecuteFailed": "作业失败通知",
+    "Notifications:JobExecuteFailedDesc": "后台作业执行失败后通知推送.",
+    "Notifications:JobExecuteCompleted": "作业完成通知",
+    "Notifications:JobExecuteCompletedDesc": "后台作业执行完成后通知推送.",
+    "DisplayName:PushProvider": "推送程序",
+    "Description:PushProvider": "如果指定推送程序,应用将选择它进行消息推送,可选列表:SignalR(实时通知)、Sms(短信通知)、Emailing(邮件通知)、WeChat.MiniProgram(微信小程序)、WxPusher(WxPusher微信推送服务)、PushPlus(PushPlus多平台推送服务)",
+    "DisplayName:Template": "模板名称",
+    "Description:Template": "如果指定模板名称,将发送格式化模板消息.",
+    "DisplayName:Context": "上下文参数",
+    "Description:Context": "格式化模板内容时指定参数.",
+    "DisplayName:Content": "内容",
+    "Description:Content": "如果指定内容,将发送普通文本消息.",
+    "DisplayName:Culture": "文化名称",
+    "Description:Culture": "需要本地化内容指定."
+  }
+}
