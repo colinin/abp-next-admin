@@ -61,9 +61,10 @@ namespace LINGYUN.Abp.Notifications
             NotificationData data,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null, 
-            NotificationSeverity severity = NotificationSeverity.Info)
+            NotificationSeverity severity = NotificationSeverity.Info,
+            IEnumerable<string> useProviders = null)
         {
-            return await PublishNofiterAsync(name, data, users, tenantId, severity);
+            return await PublishNofiterAsync(name, data, users, tenantId, severity, useProviders);
         }
 
         public async virtual Task<string> SendNofiterAsync(
@@ -71,9 +72,10 @@ namespace LINGYUN.Abp.Notifications
             NotificationTemplate template,
             IEnumerable<UserIdentifier> users = null, 
             Guid? tenantId = null, 
-            NotificationSeverity severity = NotificationSeverity.Info)
+            NotificationSeverity severity = NotificationSeverity.Info,
+            IEnumerable<string> useProviders = null)
         {
-            return await PublishNofiterAsync(name, template, users, tenantId, severity);
+            return await PublishNofiterAsync(name, template, users, tenantId, severity, useProviders);
         }
 
         protected async virtual Task<string> PublishNofiterAsync<TData>(
@@ -81,16 +83,18 @@ namespace LINGYUN.Abp.Notifications
             TData data,
             IEnumerable<UserIdentifier> users = null,
             Guid? tenantId = null,
-            NotificationSeverity severity = NotificationSeverity.Info)
+            NotificationSeverity severity = NotificationSeverity.Info,
+            IEnumerable<string> useProviders = null)
         {
             var eto = new NotificationEto<TData>(data)
             {
                 Id = DistributedIdGenerator.Create(),
                 TenantId = tenantId,
-                Users = users?.ToList(),
+                Users = users?.ToList() ?? new List<UserIdentifier>(),
                 Name = name,
                 CreationTime = Clock.Now,
-                Severity = severity
+                Severity = severity,
+                UseProviders = useProviders?.ToList() ?? new List<string>()
             };
 
             if (UnitOfWorkManager.Current != null)

@@ -159,7 +159,11 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
 
                 // 过滤用户指定提供者
-                if (notification.Providers.Any())
+                if (eventData.UseProviders.Any())
+                {
+                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
+                }
+                else if (notification.Providers.Any())
                 {
                     providers = providers.Where(p => notification.Providers.Contains(p.Name));
                 }
@@ -203,7 +207,11 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
 
                 // 过滤用户指定提供者
-                if (notification.Providers.Any())
+                if (eventData.UseProviders.Any())
+                {
+                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
+                }
+                else if (notification.Providers.Any())
                 {
                     providers = providers.Where(p => notification.Providers.Contains(p.Name));
                 }

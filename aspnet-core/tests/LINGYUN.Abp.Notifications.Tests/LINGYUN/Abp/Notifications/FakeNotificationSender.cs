@@ -60,7 +60,8 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         NotificationData data, 
         IEnumerable<UserIdentifier> users = null,
         Guid? tenantId = null, 
-        NotificationSeverity severity = NotificationSeverity.Info)
+        NotificationSeverity severity = NotificationSeverity.Info,
+        IEnumerable<string> useProviders = null)
     {
         var notification = NotificationDefinitionManager.GetOrNull(name);
         if (notification == null)
@@ -88,7 +89,11 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
 
         var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
 
-        if (notification.Providers.Any())
+        if (useProviders?.Any() == true)
+        {
+            providers = providers.Where(p => useProviders.Contains(p.Name));
+        }
+        else if (notification.Providers.Any())
         {
             providers = providers.Where(p => notification.Providers.Contains(p.Name));
         }
@@ -106,7 +111,8 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         NotificationTemplate template, 
         IEnumerable<UserIdentifier> users = null,
         Guid? tenantId = null, 
-        NotificationSeverity severity = NotificationSeverity.Info)
+        NotificationSeverity severity = NotificationSeverity.Info,
+        IEnumerable<string> useProviders = null)
     {
         var notification = NotificationDefinitionManager.GetOrNull(name);
         if (notification == null)
@@ -149,7 +155,11 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
 
         // 过滤用户指定提供者
-        if (notification.Providers.Any())
+        if (useProviders?.Any() == true)
+        {
+            providers = providers.Where(p => useProviders.Contains(p.Name));
+        }
+        else if (notification.Providers.Any())
         {
             providers = providers.Where(p => notification.Providers.Contains(p.Name));
         }
