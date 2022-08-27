@@ -9,7 +9,7 @@
     "Notifications:JobExecuteCompleted": "作业完成通知",
     "Notifications:JobExecuteCompletedDesc": "后台作业执行完成后通知推送.",
     "DisplayName:PushProvider": "推送程序",
-    "Description:PushProvider": "如果指定推送程序,应用将选择它进行消息推送,可选列表:SignalR(实时通知)、Sms(短信通知)、Emailing(邮件通知)、WeChat.MiniProgram(微信小程序)、WxPusher(WxPusher微信推送服务)、PushPlus(PushPlus多平台推送服务)",
+    "Description:PushProvider": "如果指定推送程序,应用将选择它进行消息推送,多个提供者用;分隔,可选列表:SignalR(实时通知)、Sms(短信通知)、Emailing(邮件通知)、WeChat.MiniProgram(微信小程序)、WxPusher(WxPusher微信推送服务)、PushPlus(PushPlus多平台推送服务)",
     "DisplayName:Template": "模板名称",
     "Description:Template": "如果指定模板名称,将发送格式化模板消息.",
     "DisplayName:Context": "上下文参数",

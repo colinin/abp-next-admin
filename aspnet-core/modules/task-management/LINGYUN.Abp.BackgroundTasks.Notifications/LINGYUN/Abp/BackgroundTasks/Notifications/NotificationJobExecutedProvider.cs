@@ -63,6 +63,7 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
         [NotNull] string title,
         NotificationSeverity severity = NotificationSeverity.Info)
     {
+        var useProvider = context.Action.Paramters.GetOrDefault(PropertyPushProvider)?.ToString() ?? "";
         var content = context.Action.Paramters.GetOrDefault(PropertyContent)?.ToString() ?? "";
         var templateName = context.Action.Paramters.GetOrDefault(PropertyUseTemplate)?.ToString()
             ?? BackgroundTasksNotificationNames.JobExecuteSucceeded;
@@ -72,6 +73,7 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
             var errorMessage = context.Event.EventData.Exception?.GetBaseException().Message;
             var model = new
             {
+                Color = GetTitleColor(severity),
                 Error = context.Event.EventData.Exception != null,
                 Errormessage = errorMessage,
                 Title = title,
@@ -98,7 +100,21 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
             BackgroundTasksNotificationNames.JobExecuteSucceeded,
             notificationData,
             tenantId: CurrentTenant.Id,
-            severity: severity);
+            severity: severity,
+            useProviders: useProvider.Split(';'));
+    }
+
+    protected string GetTitleColor(NotificationSeverity severity = NotificationSeverity.Info)
+    {
+        return severity switch
+        {
+            NotificationSeverity.Success => "#3CB371",
+            NotificationSeverity.Warn => "#FF4500",
+            NotificationSeverity.Error => "red",
+            NotificationSeverity.Info => "#708090",
+            NotificationSeverity.Fatal => "red",
+            _ => "#708090"
+        };
     }
 
     private static ILocalizableString L(string name)
