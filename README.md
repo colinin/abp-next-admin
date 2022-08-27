@@ -13,13 +13,13 @@
 ### 1、安装dotnet工具
 
 ```shell
-  dotnet tool install --global LINGYUN.Abp.Cli --version 5.2.1
+  dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
 ### 2、安装.NET模板
 
 ```shell
-  dotnet new --install LINGYUN.Abp.MicroService.Templates::5.2.1
+  dotnet new --install LINGYUN.Abp.MicroService.Templates
 ```
 
 ### 3、使用cli创建一个项目
