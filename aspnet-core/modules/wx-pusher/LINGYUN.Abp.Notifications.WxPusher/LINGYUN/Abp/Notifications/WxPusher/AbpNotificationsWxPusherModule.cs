@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Notifications.WxPusher;
 [DependsOn(
     typeof(AbpNotificationModule),
     typeof(AbpWxPusherModule))]
-public class AbpNotificationsPushPlusModule : AbpModule
+public class AbpNotificationsWxPusherModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

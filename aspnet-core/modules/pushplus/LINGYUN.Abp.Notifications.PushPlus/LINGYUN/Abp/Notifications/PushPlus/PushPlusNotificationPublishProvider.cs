@@ -1,13 +1,16 @@
 ﻿using LINGYUN.Abp.PushPlus.Channel;
+using LINGYUN.Abp.PushPlus.Features;
 using LINGYUN.Abp.PushPlus.Message;
 using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Features;
 using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.Notifications.PushPlus;
@@ -18,6 +21,8 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
 
     public override string Name => ProviderName;
 
+    protected IFeatureChecker FeatureChecker { get; }
+
     protected IPushPlusMessageSender PushPlusMessageSender { get; }
 
     protected IStringLocalizerFactory LocalizerFactory { get; }
@@ -27,15 +32,30 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
     protected INotificationDefinitionManager NotificationDefinitionManager { get; }
 
     public PushPlusNotificationPublishProvider(
+        IFeatureChecker featureChecker,
         IPushPlusMessageSender pushPlusMessageSender, 
         IStringLocalizerFactory localizerFactory, 
         IOptions<AbpLocalizationOptions> localizationOptions, 
         INotificationDefinitionManager notificationDefinitionManager)
     {
+        FeatureChecker = featureChecker;
         PushPlusMessageSender = pushPlusMessageSender;
         LocalizerFactory = localizerFactory;
         LocalizationOptions = localizationOptions.Value;
         NotificationDefinitionManager = notificationDefinitionManager;
+    }
+
+    protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
+    {
+        if (!await FeatureChecker.IsEnabledAsync(PushPlusFeatureNames.Message.Enable))
+        {
+            Logger.LogWarning(
+                "{0} cannot push messages because the feature {0} is not enabled",
+                Name,
+                PushPlusFeatureNames.Message.Enable);
+            return false;
+        }
+        return true;
     }
 
     protected async override Task PublishAsync(
@@ -53,6 +73,10 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
         }
         var channel = notificationDefine?.GetChannelOrDefault(PushPlusChannelType.Email)
              ?? PushPlusChannelType.Email;
+        var template = notificationDefine?.GetTemplateOrDefault(PushPlusMessageTemplate.Text)
+             ?? PushPlusMessageTemplate.Text;
+        var webhook = notification.Data.GetWebhookOrNull() ?? "";
+        var callbackUrl = notification.Data.GetCallbackUrlOrNull() ?? "";
 
         if (!notification.Data.NeedLocalizer())
         {
@@ -64,6 +88,9 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
                 message,
                 topic,
                 channelType: channel,
+                template: template,
+                webhook: webhook,
+                callbackUrl: callbackUrl,
                 cancellationToken: cancellationToken);
         }
         else
@@ -81,6 +108,9 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
                 message,
                 topic,
                 channelType: channel,
+                template: template,
+                webhook: webhook,
+                callbackUrl: callbackUrl,
                 cancellationToken: cancellationToken);
         }
     }

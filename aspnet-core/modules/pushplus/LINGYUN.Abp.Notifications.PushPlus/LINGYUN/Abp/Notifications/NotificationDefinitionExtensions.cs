@@ -1,9 +1,44 @@
 ﻿using LINGYUN.Abp.PushPlus.Channel;
+using LINGYUN.Abp.PushPlus.Message;
 using System;
 
 namespace LINGYUN.Abp.Notifications;
 public static class NotificationDefinitionExtensions
 {
+    private const string Prefix = "push-plus:";
+    private const string TemplateKey = Prefix + "template";
+    private const string ChannelTypeKey = Prefix + "channel";
+    private const string TopicKey = Prefix + "topic";
+    /// <summary>
+    /// 设定消息模板
+    /// </summary>
+    /// <param name="notification"></param>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    public static NotificationDefinition WithTemplate(
+        this NotificationDefinition notification,
+        PushPlusMessageTemplate template = PushPlusMessageTemplate.Text)
+    {
+        return notification.WithProperty(TemplateKey, template);
+    }
+    /// <summary>
+    /// 获取消息模板
+    /// </summary>
+    /// <param name="notification"></param>
+    /// <param name="defaultTemplate"></param>
+    /// <returns></returns>
+    public static PushPlusMessageTemplate GetTemplateOrDefault(
+        this NotificationDefinition notification,
+        PushPlusMessageTemplate defaultTemplate = PushPlusMessageTemplate.Text)
+    {
+        if (notification.Properties.TryGetValue(TemplateKey, out var defineTemplate) == true &&
+            defineTemplate is PushPlusMessageTemplate template)
+        {
+            return template;
+        }
+
+        return defaultTemplate;
+    }
     /// <summary>
     /// 设定消息发送通道
     /// </summary>
@@ -14,7 +49,7 @@ public static class NotificationDefinitionExtensions
         this NotificationDefinition notification,
         PushPlusChannelType channelType)
     {
-        return notification.WithProperty("channel", channelType);
+        return notification.WithProperty(ChannelTypeKey, channelType);
     }
     /// <summary>
     /// 获取消息发送通道
@@ -26,7 +61,7 @@ public static class NotificationDefinitionExtensions
         this NotificationDefinition notification,
         PushPlusChannelType defaultChannelType = PushPlusChannelType.WeChat)
     {
-        if (notification.Properties.TryGetValue("channel", out var defineChannelType) == true &&
+        if (notification.Properties.TryGetValue(ChannelTypeKey, out var defineChannelType) == true &&
             defineChannelType is PushPlusChannelType channelType)
         {
             return channelType;
@@ -47,7 +82,7 @@ public static class NotificationDefinitionExtensions
         this NotificationDefinition notification,
         string topic)
     {
-        return notification.WithProperty("topic", topic);
+        return notification.WithProperty(TopicKey, topic);
     }
     /// <summary>
     /// 获取消息群发群组编码
@@ -59,7 +94,7 @@ public static class NotificationDefinitionExtensions
     public static string GetTopicOrNull(
         this NotificationDefinition notification)
     {
-        if (notification.Properties.TryGetValue("topic", out var topicDefine) == true)
+        if (notification.Properties.TryGetValue(TopicKey, out var topicDefine) == true)
         {
             return topicDefine.ToString();
         }

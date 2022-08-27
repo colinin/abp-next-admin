@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.EventBus;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -23,6 +24,7 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpJsonModule),
         typeof(AbpLocalizationModule),
         typeof(AbpRealTimeModule),
+        typeof(AbpEventBusModule),
         typeof(AbpTextTemplatingCoreModule))]
     public class AbpNotificationModule : AbpModule
     {

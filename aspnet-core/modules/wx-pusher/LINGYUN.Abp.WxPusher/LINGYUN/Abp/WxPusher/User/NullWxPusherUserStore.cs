@@ -19,4 +19,11 @@ public sealed class NullWxPusherUserStore : IWxPusherUserStore
     {
         return Task.FromResult(new List<int>());
     }
+
+    public Task<List<string>> GetBindUidsAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(new List<string>());
+    }
 }

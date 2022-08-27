@@ -16,4 +16,13 @@ public interface IWxPusherUserStore
     Task<List<int>> GetSubscribeTopicsAsync(
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default);
+    /// <summary>
+    /// 获取绑定用户uid列表
+    /// </summary>
+    /// <param name="userIds"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<string>> GetBindUidsAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default);
 }

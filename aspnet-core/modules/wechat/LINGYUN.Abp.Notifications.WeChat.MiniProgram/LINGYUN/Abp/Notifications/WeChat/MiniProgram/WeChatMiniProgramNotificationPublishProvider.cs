@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.WeChat.MiniProgram.Messages;
+﻿using LINGYUN.Abp.WeChat.MiniProgram.Features;
+using LINGYUN.Abp.WeChat.MiniProgram.Messages;
 using LINGYUN.Abp.WeChat.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
 {
@@ -16,14 +18,30 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
     {
         public const string ProviderName = NotificationProviderNames.WechatMiniProgram;
         public override string Name => ProviderName;
+        protected IFeatureChecker FeatureChecker { get; }
         protected ISubscribeMessager SubscribeMessager { get; }
         protected AbpNotificationsWeChatMiniProgramOptions Options { get; }
         public WeChatMiniProgramNotificationPublishProvider(
+            IFeatureChecker featureChecker,
             ISubscribeMessager subscribeMessager,
             IOptions<AbpNotificationsWeChatMiniProgramOptions> options)
         {
             Options = options.Value;
+            FeatureChecker = featureChecker;
             SubscribeMessager = subscribeMessager;
+        }
+
+        protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
+        {
+            if (!await FeatureChecker.IsEnabledAsync(WeChatMiniProgramFeatures.Messages.Enable))
+            {
+                Logger.LogWarning(
+                    "{0} cannot push messages because the feature {0} is not enabled",
+                    Name,
+                    WeChatMiniProgramFeatures.Messages.Enable);
+                return false;
+            }
+            return true;
         }
 
         protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)

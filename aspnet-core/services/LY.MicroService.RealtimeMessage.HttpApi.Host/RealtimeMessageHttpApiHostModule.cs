@@ -42,6 +42,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TextTemplating.Scriban;
+using LINGYUN.Abp.Notifications.PushPlus;
+using LINGYUN.Abp.Notifications.WxPusher;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -76,6 +78,8 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsSmsModule),
     typeof(AbpNotificationsEmailingModule),
     typeof(AbpNotificationsSignalRModule),
+    typeof(AbpNotificationsWxPusherModule),
+    typeof(AbpNotificationsPushPlusModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsExceptionHandlingModule),
     typeof(AbpTextTemplatingScribanModule),
