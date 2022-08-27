@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WxPusher.Tests\LINGYUN.Abp.WxPusher.Tests.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Notifications.Tests\LINGYUN.Abp.Notifications.Tests.csproj" />
+	</ItemGroup>
+
+</Project>

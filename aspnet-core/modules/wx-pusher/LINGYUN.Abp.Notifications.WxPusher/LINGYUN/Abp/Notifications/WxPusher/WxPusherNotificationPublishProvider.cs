@@ -1,13 +1,16 @@
 ﻿using LINGYUN.Abp.RealTime.Localization;
+using LINGYUN.Abp.WxPusher.Features;
 using LINGYUN.Abp.WxPusher.Messages;
 using LINGYUN.Abp.WxPusher.User;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Features;
 using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.Notifications.WxPusher;
@@ -17,6 +20,8 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
     public const string ProviderName = "WxPusher";
 
     public override string Name => ProviderName;
+
+    protected IFeatureChecker FeatureChecker { get; }
 
     protected IWxPusherUserStore WxPusherUserStore { get; }
 
@@ -29,12 +34,14 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
     protected INotificationDefinitionManager NotificationDefinitionManager { get; }
 
     public WxPusherNotificationPublishProvider(
+        IFeatureChecker featureChecker,
         IWxPusherUserStore wxPusherUserStore,
         IWxPusherMessageSender wxPusherMessageSender, 
         IStringLocalizerFactory localizerFactory, 
         IOptions<AbpLocalizationOptions> localizationOptions, 
         INotificationDefinitionManager notificationDefinitionManager)
     {
+        FeatureChecker = featureChecker;
         WxPusherUserStore = wxPusherUserStore;
         WxPusherMessageSender = wxPusherMessageSender;
         LocalizerFactory = localizerFactory;
@@ -42,17 +49,31 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
         NotificationDefinitionManager = notificationDefinitionManager;
     }
 
+    protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
+    {
+        if (!await FeatureChecker.IsEnabledAsync(WxPusherFeatureNames.Message.Enable))
+        {
+            Logger.LogWarning(
+                "{0} cannot push messages because the feature {1} is not enabled",
+                Name,
+                WxPusherFeatureNames.Message.Enable);
+            return false;
+        }
+        return true;
+    }
+
     protected async override Task PublishAsync(
         NotificationInfo notification, 
         IEnumerable<UserIdentifier> identifiers, 
         CancellationToken cancellationToken = default)
     {
-        var topics = await WxPusherUserStore
-            .GetSubscribeTopicsAsync(
-                identifiers.Select(x => x.UserId),
-                cancellationToken);
+        var subscribeUserIds = identifiers.Select(x => x.UserId);
+
+        var topics = await WxPusherUserStore.GetSubscribeTopicsAsync(subscribeUserIds, cancellationToken);
+        var uids = await WxPusherUserStore.GetBindUidsAsync(subscribeUserIds, cancellationToken);
 
         var notificationDefine = NotificationDefinitionManager.GetOrNull(notification.Name);
+        var url = notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
         var topicDefine = notificationDefine?.GetTopics();
         if (topicDefine.Any())
         {
@@ -71,6 +92,8 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
                 summary: title,
                 contentType: contentType,
                 topicIds: topics,
+                uids: uids,
+                url: url,
                 cancellationToken: cancellationToken);
         }
         else
@@ -88,6 +111,8 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
                 summary: title,
                 contentType: contentType,
                 topicIds: topics,
+                uids: uids,
+                url: url,
                 cancellationToken: cancellationToken);
         }
     }

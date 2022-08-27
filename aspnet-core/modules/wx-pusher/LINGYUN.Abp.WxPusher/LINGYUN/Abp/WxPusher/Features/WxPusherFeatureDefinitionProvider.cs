@@ -14,7 +14,7 @@ public class WxPusherFeatureDefinitionProvider : FeatureDefinitionProvider
               displayName: L("Features:WxPusher"));
         group.AddFeature(
             name: WxPusherFeatureNames.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:WxPusherEnable"),
             description: L("Features:WxPusherEnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
@@ -26,7 +26,7 @@ public class WxPusherFeatureDefinitionProvider : FeatureDefinitionProvider
 
         message.CreateChild(
             name: WxPusherFeatureNames.Message.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:MessageEnable"),
             description: L("Features:MessageEnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));

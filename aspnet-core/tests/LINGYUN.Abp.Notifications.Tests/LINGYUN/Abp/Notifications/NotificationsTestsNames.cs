@@ -2,7 +2,7 @@
 {
     public static class NotificationsTestsNames
     {
-        public const string GroupName = "Abp.Notifications";
+        public const string GroupName = "Abp.NotificationTests";
 
         public const string Test1 = GroupName + ".Test1";
 

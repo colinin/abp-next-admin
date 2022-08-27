@@ -8,6 +8,7 @@ public static class NotificationDefinitionExtensions
     private const string Prefix = "wx-pusher:";
     private const string ContentTypeKey = Prefix + "contentType";
     private const string TopicKey = Prefix + "topic";
+    private const string UrlKey = Prefix + "url";
     /// <summary>
     /// 设定消息内容类型
     /// </summary>
@@ -70,5 +71,33 @@ public static class NotificationDefinitionExtensions
         }
 
         return new List<int>();
+    }
+    /// <summary>
+    /// 用户点击标题跳转页面
+    /// </summary>
+    /// <param name="notification">群组编码</param>
+    /// <param name="url"></param>
+    /// <returns>
+    /// <see cref="NotificationDefinition"/>
+    /// </returns>
+    public static NotificationDefinition WithUrl(
+        this NotificationDefinition notification,
+        string url)
+    {
+        return notification.WithProperty(UrlKey, url);
+    }
+    /// <summary>
+    /// 获取标题跳转页面
+    /// </summary>
+    /// <param name="notification"></param>
+    public static string GetUrlOrNull(
+        this NotificationDefinition notification)
+    {
+        if (notification.Properties.TryGetValue(UrlKey, out var urlDefine))
+        {
+            return urlDefine.ToString();
+        }
+
+        return null;
     }
 }

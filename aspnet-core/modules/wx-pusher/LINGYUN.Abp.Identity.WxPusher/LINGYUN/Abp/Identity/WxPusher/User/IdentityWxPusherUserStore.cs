@@ -30,17 +30,40 @@ public class IdentityWxPusherUserStore : IWxPusherUserStore
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
-            var userUidClaim = user?.Claims
-                .Where(c => c.ClaimType.Equals(AbpWxPusherClaimTypes.Uid))
+            var userTopicClaim = user?.Claims
+                .Where(c => c.ClaimType.Equals(AbpWxPusherClaimTypes.Topic))
                 .FirstOrDefault();
 
-            if (userUidClaim != null &&
-                int.TryParse(userUidClaim.ClaimValue, out var topic))
+            if (userTopicClaim != null &&
+                int.TryParse(userTopicClaim.ClaimValue, out var topic))
             {
                 topics.Add(topic);
             }
         }
 
         return topics.Distinct().ToList();
+    }
+
+    public async virtual Task<List<string>> GetBindUidsAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default)
+    {
+        var uids = new List<string>();
+
+        foreach (var userId in userIds)
+        {
+            var user = await UserManager.FindByIdAsync(userId.ToString());
+
+            var userUidClaim = user?.Claims
+                .Where(c => c.ClaimType.Equals(AbpWxPusherClaimTypes.Uid))
+                .FirstOrDefault();
+
+            if (userUidClaim != null)
+            {
+                uids.Add(userUidClaim.ClaimValue);
+            }
+        }
+
+        return uids.Distinct().ToList();
     }
 }

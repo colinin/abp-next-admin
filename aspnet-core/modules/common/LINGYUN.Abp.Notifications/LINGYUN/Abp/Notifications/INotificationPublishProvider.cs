@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications
@@ -18,6 +19,8 @@ namespace LINGYUN.Abp.Notifications
         /// <param name="notification">通知信息</param>
         /// <param name="identifiers">接收用户列表</param>
         /// <returns></returns>
-        Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers);
+        Task PublishAsync(
+            NotificationInfo notification, 
+            IEnumerable<UserIdentifier> identifiers);
     }
 }

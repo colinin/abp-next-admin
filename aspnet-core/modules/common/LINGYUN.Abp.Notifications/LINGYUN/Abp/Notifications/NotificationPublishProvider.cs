@@ -22,9 +22,27 @@ namespace LINGYUN.Abp.Notifications
 
         public ICancellationTokenProvider CancellationTokenProvider => ServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-        public async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers)
+        public async Task PublishAsync(
+            NotificationInfo notification,
+            IEnumerable<UserIdentifier> identifiers)
         {
-            await PublishAsync(notification, identifiers, CancellationTokenProvider.Token);
+            if (await CanPublishAsync(notification))
+            {
+                await PublishAsync(
+                    notification, 
+                    identifiers, 
+                    GetCancellationToken());
+            }
+        }
+        protected virtual Task<bool> CanPublishAsync(
+            NotificationInfo notification, 
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(true);
+        }
+        protected virtual CancellationToken GetCancellationToken(CancellationToken cancellationToken = default)
+        {
+            return CancellationTokenProvider.FallbackToProvider(cancellationToken);
         }
         /// <summary>
         /// 重写实现通知发布

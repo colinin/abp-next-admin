@@ -1,6 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "DisplayName:WxPusher": "WxPusher",
+    "Description:WxPusher": "WxPusher",
     "Settings:Security.AppToken": "App Token",
     "Settings:Security.AppTokenDesc": "If you have APP_TOKEN, you can send messages to users of the corresponding application. Keep it confidential.",
     "Features:WxPusher": "WxPusher Wechat push service",
@@ -12,6 +14,7 @@
     "Features:Message.SendLimit": "Amount of wechat message push",
     "Features:Message.SendLimitDesc": "Set to limit the amount of wechat message push.",
     "Features:Message.SendLimitInterval": "Wechat message limit interval",
-    "Features:Message.SendLimitIntervalDesc": "Set the wechat message limit period (time scale: days). A single wechat user (UID) can receive a maximum of 500 messages per day. Please arrange the sending frequency reasonably."
+    "Features:Message.SendLimitIntervalDesc": "Set the wechat message limit period (time scale: days). A single wechat user (UID) can receive a maximum of 500 messages per day. Please arrange the sending frequency reasonably.",
+    "Security": "Security"
   }
 }

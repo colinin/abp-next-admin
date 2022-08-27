@@ -14,7 +14,7 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
 
         group.AddFeature(
             name: PushPlusFeatureNames.Message.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:MessageEnable"),
             description: L("Features:MessageEnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
@@ -35,7 +35,7 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
             description: L("Features:Channel.WeChat"));
         weChatChannel.CreateChild(
             name: PushPlusFeatureNames.Channel.WeChat.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:Channel.WeChat.Enable"),
             description: L("Features:Channel.WeChat.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
@@ -62,7 +62,7 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
             description: L("Features:Channel.WeWork"));
         weWorkChannel.CreateChild(
             name: PushPlusFeatureNames.Channel.WeWork.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:Channel.WeWork.Enable"),
             description: L("Features:Channel.WeWork.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
@@ -89,7 +89,7 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
             description: L("Features:Channel.Webhook"));
         webhookChannel.CreateChild(
             name: PushPlusFeatureNames.Channel.Webhook.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:Channel.Webhook.Enable"),
             description: L("Features:Channel.Webhook.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
@@ -116,7 +116,7 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
             description: L("Features:Channel.Email"));
         emailChannel.CreateChild(
             name: PushPlusFeatureNames.Channel.Email.Enable,
-            defaultValue: "true",
+            defaultValue: "false",
             displayName: L("Features:Channel.Email.Enable"),
             description: L("Features:Channel.Email.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
