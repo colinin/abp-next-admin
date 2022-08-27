@@ -103,7 +103,7 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
                 Type = context.Event.EventData.Args.GetOrDefault(nameof(JobInfo.Type)) ?? context.Event.EventData.Type.Name,
                 Triggertime = context.Event.EventData.RunTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Message = errorMessage,
-                Tenantname = context.Action.Paramters.GetOrDefault(nameof(IMultiTenant.TenantId)),
+                Tenantname = context.Event.EventData.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
                 Footer = footer,
             };
 
