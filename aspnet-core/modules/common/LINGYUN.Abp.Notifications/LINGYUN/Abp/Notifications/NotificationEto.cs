@@ -40,6 +40,14 @@ namespace LINGYUN.Abp.Notifications
         /// 如果未指定用户列表,应该在事件订阅程序中过滤所有订阅此通知的用户
         /// </remarks>
         public List<UserIdentifier> Users { get; set; } = new List<UserIdentifier>();
+        /// <summary>
+        /// 用户指定通知提供程序列表
+        /// </summary>
+        /// <remarks>
+        /// 注:<br/>
+        /// 如果指定了通知提供程序,将只使用特定的提供程序发布通知
+        /// </remarks>
+        public List<string> UseProviders { get; set; } = new List<string>();
         public NotificationEto() : base()
         {
         }
