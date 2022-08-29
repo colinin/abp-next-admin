@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Notifications
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<NotificationsResource>("en")
+                    .Get<NotificationsResource>()
                     .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
             });
 
