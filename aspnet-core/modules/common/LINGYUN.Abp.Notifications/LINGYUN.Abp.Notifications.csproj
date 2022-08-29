@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
 	</ItemGroup>
 

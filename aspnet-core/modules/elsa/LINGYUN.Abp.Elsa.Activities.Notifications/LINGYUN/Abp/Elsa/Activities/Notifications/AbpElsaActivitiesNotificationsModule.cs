@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.Elsa.Activities.Notifications;
 
 [DependsOn(
     typeof(AbpElsaModule),
-    typeof(AbpNotificationModule))]
+    typeof(AbpNotificationsModule))]
 public class AbpElsaActivitiesNotificationsModule : AbpModule
 {
 }

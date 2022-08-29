@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             // 自定义数据处理方法
-            Configure<AbpNotificationOptions>(options =>
+            Configure<AbpNotificationsPublishOptions>(options =>
             {
                 // 这条通知返回标准化的通知
                 options.NotificationDataMappings

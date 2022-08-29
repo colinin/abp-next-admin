@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
 
         private readonly IUserSubscribeRepository _userSubscribeRepository;
 
-        private readonly AbpNotificationOptions _options;
+        private readonly AbpNotificationsPublishOptions _options;
 
         public NotificationStore(
             IClock clock,
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             INotificationRepository notificationRepository,
             IUserSubscribeRepository userSubscribeRepository,
             IUserNotificationRepository userNotificationRepository,
-            IOptions<AbpNotificationOptions> options
+            IOptions<AbpNotificationsPublishOptions> options
             )
         {
             _clock = clock;

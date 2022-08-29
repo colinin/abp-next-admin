@@ -17,7 +17,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
 {
     public ILogger<FakeNotificationSender> Logger { get; set; }
 
-    protected AbpNotificationOptions Options { get; }
+    protected AbpNotificationsPublishOptions Options { get; }
 
     protected IJsonSerializer JsonSerializer { get; }
 
@@ -37,7 +37,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         IJsonSerializer jsonSerializer,
         ITemplateRenderer templateRenderer,
         IStringLocalizerFactory stringLocalizerFactory,
-        IOptions<AbpNotificationOptions> options,
+        IOptions<AbpNotificationsPublishOptions> options,
         INotificationStore notificationStore,
         INotificationDefinitionManager notificationDefinitionManager,
         INotificationSubscriptionManager notificationSubscriptionManager,

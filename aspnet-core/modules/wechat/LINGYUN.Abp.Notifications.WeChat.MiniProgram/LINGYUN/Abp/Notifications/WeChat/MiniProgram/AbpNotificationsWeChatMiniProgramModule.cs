@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
 {
     [DependsOn(
         typeof(AbpWeChatMiniProgramModule), 
-        typeof(AbpNotificationModule))]
+        typeof(AbpNotificationsModule))]
     public class AbpNotificationsWeChatMiniProgramModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
                 preActions.Configure(options);
             });
 
-            Configure<AbpNotificationOptions>(options =>
+            Configure<AbpNotificationsPublishOptions>(options =>
             {
                 options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
 

@@ -6,7 +6,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.Notifications.Common;
 
 [DependsOn(
-    typeof(AbpNotificationModule))]
+    typeof(AbpNotificationsModule))]
 public class AbpNotificationsCommonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

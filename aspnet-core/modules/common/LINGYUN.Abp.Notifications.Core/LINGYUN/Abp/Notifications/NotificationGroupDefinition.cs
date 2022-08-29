@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Volo.Abp;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Notifications
 {

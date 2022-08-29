@@ -73,9 +73,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM", "modules\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj", "{8BE6BA3E-048E-4FC7-81DD-7FCD29AE2126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Activities.Emailing", "modules\elsa\LINGYUN.Abp.Elsa.Activities.Emailing\LINGYUN.Abp.Elsa.Activities.Emailing.csproj", "{9E213E6F-77CB-4068-93EB-465C47FDA8FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities.Emailing", "modules\elsa\LINGYUN.Abp.Elsa.Activities.Emailing\LINGYUN.Abp.Elsa.Activities.Emailing.csproj", "{9E213E6F-77CB-4068-93EB-465C47FDA8FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Activities", "modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj", "{EEE9DF30-1901-4070-8E03-A8D8A0E10E34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities", "modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj", "{EEE9DF30-1901-4070-8E03-A8D8A0E10E34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,6 +201,10 @@ Global
 		{EEE9DF30-1901-4070-8E03-A8D8A0E10E34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE9DF30-1901-4070-8E03-A8D8A0E10E34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE9DF30-1901-4070-8E03-A8D8A0E10E34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,6 +242,7 @@ Global
 		{8BE6BA3E-048E-4FC7-81DD-7FCD29AE2126} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 		{9E213E6F-77CB-4068-93EB-465C47FDA8FA} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
 		{EEE9DF30-1901-4070-8E03-A8D8A0E10E34} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
+		{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

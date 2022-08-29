@@ -1,9 +1,6 @@
 ﻿using LINGYUN.Abp.IdGenerator;
 using LINGYUN.Abp.Notifications.Localization;
 using LINGYUN.Abp.RealTime;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
@@ -18,6 +15,7 @@ namespace LINGYUN.Abp.Notifications
 {
     // TODO: 需要重命名 AbpNotificationsModule
     [DependsOn(
+        typeof(AbpNotificationsCoreModule),
         typeof(AbpBackgroundWorkersModule),
         typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpIdGeneratorModule),
@@ -26,18 +24,13 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpRealTimeModule),
         typeof(AbpEventBusModule),
         typeof(AbpTextTemplatingCoreModule))]
-    public class AbpNotificationModule : AbpModule
+    public class AbpNotificationsModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            AutoAddDefinitionProviders(context.Services);
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpNotificationModule>();
+                options.FileSets.AddEmbedded<AbpNotificationsModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -50,30 +43,6 @@ namespace LINGYUN.Abp.Notifications
             Configure<AbpSystemTextJsonSerializerOptions>(options =>
             {
                 options.UnsupportedTypes.Add<NotificationInfo>();
-            });
-
-            var preActions = context.Services.GetPreConfigureActions<AbpNotificationOptions>();
-            Configure<AbpNotificationOptions>(options =>
-            {
-                preActions.Configure(options);
-            });
-        }
-
-        private void AutoAddDefinitionProviders(IServiceCollection services)
-        {
-            var definitionProviders = new List<Type>();
-
-            services.OnRegistred(context =>
-            {
-                if (typeof(INotificationDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionProviders.Add(context.ImplementationType);
-                }
-            });
-
-            Configure<AbpNotificationOptions>(options =>
-            {
-                options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }
     }

@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Notifications
 {

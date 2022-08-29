@@ -4,13 +4,13 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.Notifications.PushPlus;
 
 [DependsOn(
-    typeof(AbpNotificationModule),
+    typeof(AbpNotificationsModule),
     typeof(AbpPushPlusModule))]
 public class AbpNotificationsPushPlusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpNotificationOptions>(options =>
+        Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<PushPlusNotificationPublishProvider>();
         });

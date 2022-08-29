@@ -6,7 +6,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Notifications.Jobs;
 
-[DependsOn(typeof(AbpNotificationModule))]
+[DependsOn(typeof(AbpNotificationsModule))]
 [DependsOn(typeof(AbpBackgroundTasksAbstractionsModule))]
 public class AbpNotificationsJobsModule : AbpModule
 {

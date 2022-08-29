@@ -17,14 +17,14 @@ namespace LINGYUN.Abp.Notifications
         public void GetGroups_Test()
         {
             var groups = NotificationDefinitionManager.GetGroups();
-            groups.Count.ShouldBe(1);
+            groups.Count.ShouldBe(2);
         }
 
         [Fact]
         public void GetAll_Test()
         {
             var notifications = NotificationDefinitionManager.GetAll();
-            notifications.Count.ShouldBe(3);
+            notifications.Count.ShouldBe(6);
         }
 
         [Fact]

@@ -10,11 +10,11 @@ namespace LY.MicroService.RealtimeMessage.BackgroundJobs;
 
 public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobArgs>, ITransientDependency
 {
-    protected AbpNotificationOptions Options { get; }
+    protected AbpNotificationsPublishOptions Options { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public NotificationPublishJob(
-        IOptions<AbpNotificationOptions> options,
+        IOptions<AbpNotificationsPublishOptions> options,
         IServiceScopeFactory serviceScopeFactory)
     {
         Options = options.Value;

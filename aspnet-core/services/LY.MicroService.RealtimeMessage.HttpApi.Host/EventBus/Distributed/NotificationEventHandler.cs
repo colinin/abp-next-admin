@@ -35,9 +35,9 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         public ILogger<NotificationEventHandler> Logger { get; set; }
         /// <summary>
-        /// Reference to <see cref="AbpNotificationOptions"/>.
+        /// Reference to <see cref="AbpNotificationsPublishOptions"/>.
         /// </summary>
-        protected AbpNotificationOptions Options { get; }
+        protected AbpNotificationsPublishOptions Options { get; }
         /// <summary>
         /// Reference to <see cref="ICurrentTenant"/>.
         /// </summary>
@@ -84,7 +84,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             ITemplateRenderer templateRenderer,
             IBackgroundJobManager backgroundJobManager,
             IStringLocalizerFactory stringLocalizerFactory,
-            IOptions<AbpNotificationOptions> options,
+            IOptions<AbpNotificationsPublishOptions> options,
             INotificationStore notificationStore,
             INotificationDefinitionManager notificationDefinitionManager,
             INotificationSubscriptionManager notificationSubscriptionManager,
