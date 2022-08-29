@@ -1,13 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Notifications.Localization;
+using LINGYUN.Abp.RealTime;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using Volo.Abp.EventBus.Abstractions;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications;
 
 [DependsOn(
-    typeof(AbpTextTemplatingCoreModule))]
+    typeof(AbpTextTemplatingCoreModule),
+    typeof(AbpRealTimeModule),
+    typeof(AbpEventBusAbstractionsModule))]
 public class AbpNotificationsCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -17,6 +23,11 @@ public class AbpNotificationsCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources.Add<NotificationsResource>();
+        });
+
         var preActions = context.Services.GetPreConfigureActions<AbpNotificationsOptions>();
         Configure<AbpNotificationsOptions>(options =>
         {
