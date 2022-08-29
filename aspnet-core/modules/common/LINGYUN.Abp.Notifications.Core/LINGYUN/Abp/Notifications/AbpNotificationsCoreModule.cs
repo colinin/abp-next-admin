@@ -13,6 +13,7 @@ namespace LINGYUN.Abp.Notifications;
 [DependsOn(
     typeof(AbpTextTemplatingCoreModule),
     typeof(AbpRealTimeModule),
+    typeof(AbpLocalizationModule),
     typeof(AbpEventBusAbstractionsModule))]
 public class AbpNotificationsCoreModule : AbpModule
 {
