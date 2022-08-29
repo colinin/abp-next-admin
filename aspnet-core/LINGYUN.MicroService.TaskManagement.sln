@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extend-jobs", "extend-jobs"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\common\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{17D7ED0F-E789-4637-9B06-57DF693C6E1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Notifications", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj", "{1978B64C-B2F5-4F68-9E5C-B45F948E7155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Notifications", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj", "{1978B64C-B2F5-4F68-9E5C-B45F948E7155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{18918B94-BB48-48F3-874D-B91B0252440A}"
 EndProject
@@ -67,6 +67,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "modules\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{2FA23894-E598-4896-A336-3E7C682699D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "modules\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{DD51A1AE-830F-4909-A729-7EBC398B17AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,6 +168,10 @@ Global
 		{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{09F7171C-6DA1-4466-AB4A-DC92E93368EC} = {18918B94-BB48-48F3-874D-B91B0252440A}
 		{2FA23894-E598-4896-A336-3E7C682699D9} = {FA5E30C9-05E3-4E35-AEDD-7DC5534E3A01}
 		{194DAB61-BC3C-4003-BFF0-C87763E7B8B0} = {FA5E30C9-05E3-4E35-AEDD-7DC5534E3A01}
+		{DD51A1AE-830F-4909-A729-7EBC398B17AD} = {18918B94-BB48-48F3-874D-B91B0252440A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

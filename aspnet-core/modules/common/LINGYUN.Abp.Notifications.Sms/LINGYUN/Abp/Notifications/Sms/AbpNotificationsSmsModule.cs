@@ -5,7 +5,7 @@ using Volo.Abp.Sms;
 namespace LINGYUN.Abp.Notifications.Sms
 {
     [DependsOn(
-        typeof(AbpNotificationModule),
+        typeof(AbpNotificationsModule),
         typeof(AbpSmsModule))]
     public class AbpNotificationsSmsModule : AbpModule
     {
@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.Notifications.Sms
                 preSmsActions.Configure(options);
             });
 
-            Configure<AbpNotificationOptions>(options =>
+            Configure<AbpNotificationsPublishOptions>(options =>
             {
                 options.PublishProviders.Add<SmsNotificationPublishProvider>();
 

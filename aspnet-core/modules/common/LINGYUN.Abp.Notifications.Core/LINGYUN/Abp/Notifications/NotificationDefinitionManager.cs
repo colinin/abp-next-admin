@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.Notifications
 {
     public class NotificationDefinitionManager : INotificationDefinitionManager, ISingletonDependency
     {
-        protected AbpNotificationOptions Options { get; }
+        protected AbpNotificationsOptions Options { get; }
 
         protected IDictionary<string, NotificationGroupDefinition> NotificationGroupDefinitions => _lazyNotificationGroupDefinitions.Value;
         private readonly Lazy<Dictionary<string, NotificationGroupDefinition>> _lazyNotificationGroupDefinitions;
@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Notifications
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public NotificationDefinitionManager(
-            IOptions<AbpNotificationOptions> options,
+            IOptions<AbpNotificationsOptions> options,
             IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;

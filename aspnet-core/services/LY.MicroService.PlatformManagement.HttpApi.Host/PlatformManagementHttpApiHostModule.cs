@@ -70,7 +70,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
-    typeof(AbpNotificationModule),
+    typeof(AbpNotificationsModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpFeaturesValidationRedisModule),

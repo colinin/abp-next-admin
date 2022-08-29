@@ -11,23 +11,19 @@ namespace LINGYUN.Abp.Notifications
     {
         public List<INotificationPublishProvider> Providers => _lazyProviders.Value;
 
-        protected AbpNotificationOptions Options { get; }
-
         private readonly Lazy<List<INotificationPublishProvider>> _lazyProviders;
 
         public NotificationPublishProviderManager(
             IServiceProvider serviceProvider,
-            IOptions<AbpNotificationOptions> options)
+            IOptions<AbpNotificationsPublishOptions> options)
         {
-            Options = options.Value;
-
             _lazyProviders = new Lazy<List<INotificationPublishProvider>>(
-                () => Options
-                    .PublishProviders
-                    .Select(type => serviceProvider.GetRequiredService(type) as INotificationPublishProvider)
-                    .ToList(),
-                true
-            );
+                 () => options.Value
+                     .PublishProviders
+                     .Select(type => serviceProvider.GetRequiredService(type) as INotificationPublishProvider)
+                     .ToList(),
+                 true
+             );
         }
     }
 }

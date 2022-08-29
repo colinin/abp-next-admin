@@ -5,14 +5,14 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.Notifications.Emailing;
 
 [DependsOn(
-    typeof(AbpNotificationModule),
+    typeof(AbpNotificationsModule),
     typeof(AbpEmailingModule),
     typeof(AbpIdentityDomainModule))]
 public class AbpNotificationsEmailingModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpNotificationOptions>(options =>
+        Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<EmailingNotificationPublishProvider>();
             options.NotificationDataMappings

@@ -40,13 +40,13 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        protected AbpNotificationOptions Options { get; }
+        protected AbpNotificationsPublishOptions Options { get; }
         public NotificationSender(
             IClock clock,
             IDistributedEventBus distributedEventBus,
             IDistributedIdGenerator distributedIdGenerator,
             IUnitOfWorkManager unitOfWorkManager,
-            IOptions<AbpNotificationOptions> options)
+            IOptions<AbpNotificationsPublishOptions> options)
         {
             Clock = clock;
             Options = options.Value;

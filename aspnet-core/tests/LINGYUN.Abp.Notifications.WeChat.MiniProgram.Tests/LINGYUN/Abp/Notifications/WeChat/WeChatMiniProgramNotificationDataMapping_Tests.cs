@@ -8,11 +8,11 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
     public class WeChatMiniProgramNotificationDataMapping_Tests : AbpNotificationsWeChatMiniProgramTestsBase
     {
         private readonly NotificationData _notificationData;
-        protected AbpNotificationOptions NotificationOptions { get; }
+        protected AbpNotificationsPublishOptions NotificationsPublishOptions { get; }
         protected AbpNotificationsWeChatMiniProgramOptions NotificationWeChatMiniProgramOptions { get; }
         public WeChatMiniProgramNotificationDataMapping_Tests()
         {
-            NotificationOptions = GetRequiredService<IOptions<AbpNotificationOptions>>().Value;
+            NotificationsPublishOptions = GetRequiredService<IOptions<AbpNotificationsPublishOptions>>().Value;
             NotificationWeChatMiniProgramOptions = GetRequiredService<IOptions<AbpNotificationsWeChatMiniProgramOptions>>().Value;
 
             _notificationData = new NotificationData();
@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         [Fact]
         public void Mapping_WeChatMiniProgram_Notification_Data_Test()
         {
-            var mappingOpenIdItem = NotificationOptions
+            var mappingOpenIdItem = NotificationsPublishOptions
                 .NotificationDataMappings
                 .GetMapItemOrDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName, NotificationsTestsNames.Test1);
 
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         [Fact]
         public void Mapping_Standard_Notification_Data_Test()
         {
-            var mappingStandardItem = NotificationOptions
+            var mappingStandardItem = NotificationsPublishOptions
                 .NotificationDataMappings
                 .GetMapItemOrDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName, NotificationsTestsNames.Test2);
 
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         [Fact]
         public void Mapping_Origin_Notification_Data_Test()
         {
-            var mappingOriginItem = NotificationOptions
+            var mappingOriginItem = NotificationsPublishOptions
                 .NotificationDataMappings
                 .GetMapItemOrDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName, NotificationsTestsNames.Test3);
 

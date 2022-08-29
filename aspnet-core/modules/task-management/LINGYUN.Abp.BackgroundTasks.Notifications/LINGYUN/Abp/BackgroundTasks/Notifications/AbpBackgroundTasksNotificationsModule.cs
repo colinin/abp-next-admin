@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Notifications;
 
 [DependsOn(
     typeof(AbpBackgroundTasksActivitiesModule),
-    typeof(AbpNotificationModule))]
+    typeof(AbpNotificationsModule))]
 public class AbpBackgroundTasksNotificationsModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
