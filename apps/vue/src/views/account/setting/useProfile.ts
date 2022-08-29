@@ -1,12 +1,12 @@
 import { computed } from 'vue';
 import { FormSchema } from '/@/components/Form/index';
-import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { useSettings } from '/@/hooks/abp/useSettings';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getTwoFactorEnabled } from '/@/api/account/profiles';
 import { getAssignableNotifiers } from '/@/api/messages/notifications';
 import { getAll as getMySubscribes } from '/@/api/messages/subscribes';
 import { MyProfile } from '/@/api/account/model/profilesModel';
+import { getUserInfo } from '/@/api/sys/user';
 
 export interface ListItem {
   key: string;
@@ -39,11 +39,6 @@ export function useProfile({ profile }: UseProfile) {
       return false;
     }
     return profile.isExternal;
-  });
-  const getCurrentUser = computed(() => {
-    const abpStore = useAbpStoreWithOut();
-    const { currentUser } = abpStore.getApplication;
-    return currentUser;
   });
   // tab的list
   function getSettingList() {
@@ -130,11 +125,11 @@ export function useProfile({ profile }: UseProfile) {
 
   // 安全设置 list
   async function getSecureSettingList() {
-    const currentUser = getCurrentUser.value;
-    const phoneNumber = currentUser.phoneNumber ?? '';
-    const phoneNumberConfirmed = currentUser.phoneNumberVerified;
-    const email = currentUser.email ?? '';
-    const emailVerified = currentUser.emailVerified;
+    const currentUserInfo = await getUserInfo();
+    const phoneNumber = currentUserInfo['phone_number'] ?? '';
+    const phoneNumberConfirmed = currentUserInfo['phone_number_verified'] === 'True';
+    const email = currentUserInfo['email'] ?? '';
+    const emailVerified = currentUserInfo['email_verified'] === 'True';
     const twoFactorEnabled = await getTwoFactorEnabled();
     return [
       {
