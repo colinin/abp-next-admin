@@ -2,5 +2,6 @@ export default {
   login: 'Login',
   errorLogList: 'Error Log',
   accountSetting: 'Account Setting',
-  accountCenter: 'Account Center'
+  accountCenter: 'Account Center',
+  accountSecurityLogs: 'Security Logs'
 };

@@ -21,6 +21,11 @@
           :text="t('AbpAccount.PersonalSettings')"
           icon="ant-design:setting-outlined"
         />
+        <MenuItem
+          key="security-logs"
+          :text="t('AbpAuditLogging.SecurityLog')"
+          icon="ant-design:security-scan-outlined"
+        />
         <MenuDivider />
         <MenuItem
           v-if="getUseLockPage"
@@ -37,6 +42,7 @@
     </template>
   </Dropdown>
   <LockAction @register="register" />
+  <SecurityLogsModal @register="registerSecurityLogsModal" />
 </template>
 <script lang="ts">
   // components
@@ -61,7 +67,7 @@
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'setting' | 'center';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'setting' | 'center' | 'security-logs';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -71,6 +77,7 @@
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
+      SecurityLogsModal: createAsyncComponent(() => import('/@/views/account/security-logs/index.vue')),
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -98,6 +105,7 @@
       });
 
       const [register, { openModal }] = useModal();
+      const [registerSecurityLogsModal, { openModal: openSecurityLogsModal }] = useModal();
 
       function handleLock() {
         openModal(true);
@@ -130,6 +138,9 @@
           case 'center':
             go('/account/center');
             break;
+          case 'security-logs':
+            openSecurityLogsModal(true, {});
+            break;
         }
       }
 
@@ -141,6 +152,7 @@
         getShowDoc,
         register,
         getUseLockPage,
+        registerSecurityLogsModal,
       };
     },
   });
