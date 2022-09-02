@@ -6,6 +6,7 @@ using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -44,14 +45,28 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         {
             await base.OnConnectedAsync();
 
-            await SendUserOnlineStateAsync();
+            try
+            {
+                await SendUserOnlineStateAsync();
+            }
+            catch(Exception ex)
+            {
+                Logger.LogWarning("An error occurred in the OnConnected method:{message}", ex.Message);
+            }
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             await base.OnDisconnectedAsync(exception);
 
-            await SendUserOnlineStateAsync(false);
+            try
+            {
+                await SendUserOnlineStateAsync(false);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("An error occurred in the OnDisconnected method:{message}", ex.Message);
+            }
         }
 
         protected virtual async Task SendUserOnlineStateAsync(bool isOnlined = true)
@@ -164,7 +179,14 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         [HubMethodName("read")]
         public virtual async Task ReadAsync(ChatMessage chatMessage)
         {
-            await Processor?.ReadAsync(chatMessage);
+            try
+            {
+                await Processor?.ReadAsync(chatMessage);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("An error occurred in the Read method:{message}", ex.Message);
+            }
         }
 
         protected virtual async Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
