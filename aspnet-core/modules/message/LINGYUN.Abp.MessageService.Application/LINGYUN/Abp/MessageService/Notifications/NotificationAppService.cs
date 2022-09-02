@@ -28,10 +28,55 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationDefinitionManager = notificationDefinitionManager;
         }
 
-        public virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
+        public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
+        {
+            var groups = new List<NotificationGroupDto>();
+            var defineGroups = await NotificationDefinitionManager.GetGroupsAsync();
+
+            foreach (var group in defineGroups)
+            {
+                if (!group.AllowSubscriptionToClients)
+                {
+                    continue;
+
+                }
+                var notificationGroup = new NotificationGroupDto
+                {
+                    Name = group.Name,
+                    DisplayName = group.DisplayName.Localize(StringLocalizerFactory)
+                };
+
+                foreach (var notification in group.Notifications)
+                {
+                    if (!notification.AllowSubscriptionToClients)
+                    {
+                        continue;
+                    }
+
+                    var notificationChildren = new NotificationDto
+                    {
+                        Name = notification.Name,
+                        DisplayName = notification.DisplayName.Localize(StringLocalizerFactory),
+                        Description = notification.Description?.Localize(StringLocalizerFactory) ?? notification.Name,
+                        Lifetime = notification.NotificationLifetime,
+                        Type = notification.NotificationType
+                    };
+
+                    notificationGroup.Notifications.Add(notificationChildren);
+                }
+
+                groups.Add(notificationGroup);
+            }
+
+            return new ListResultDto<NotificationGroupDto>(groups);
+        }
+
+        public async virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
         {
             var templates = new List<NotificationTemplateDto>();
-            var notifications = NotificationDefinitionManager.GetAll().Where(n => n.Template != null);
+            var notifications = (await NotificationDefinitionManager
+                .GetNotificationsAsync())
+                .Where(n => n.Template != null);
 
             foreach (var notification in notifications)
             {
@@ -45,12 +90,12 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     });
             }
 
-            return Task.FromResult(new ListResultDto<NotificationTemplateDto>(templates));
+            return new ListResultDto<NotificationTemplateDto>(templates);
         }
 
         public async virtual Task SendAsync(NotificationSendDto input)
         {
-            var notification = GetNotificationDefinition(input.Name);
+            var notification = await GetNotificationDefinition(input.Name);
 
             UserIdentifier user = null;
             if (input.ToUserId.HasValue)
@@ -71,9 +116,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     input.Severity);
         }
 
-        protected virtual NotificationDefinition GetNotificationDefinition(string name)
+        protected async virtual Task<NotificationDefinition> GetNotificationDefinition(string name)
         {
-            var notification = NotificationDefinitionManager.GetOrNull(name);
+            var notification = await NotificationDefinitionManager.GetOrNullAsync(name);
             if (notification == null || notification.Template == null)
             {
                 throw new BusinessException(

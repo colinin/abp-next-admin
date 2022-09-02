@@ -109,7 +109,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         {
             using (CurrentTenant.Change(eventData.TenantId))
             {
-                var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
+                var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
                 if (notification == null)
                 {
                     return;
@@ -177,8 +177,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         {
             using (CurrentTenant.Change(eventData.TenantId))
             {
-                // 如果上面过滤了应用程序,这里可以使用Get方法,否则,最好使用GetOrNull加以判断
-                var notification = NotificationDefinitionManager.GetOrNull(eventData.Name);
+                var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
                 if (notification == null)
                 {
                     return;

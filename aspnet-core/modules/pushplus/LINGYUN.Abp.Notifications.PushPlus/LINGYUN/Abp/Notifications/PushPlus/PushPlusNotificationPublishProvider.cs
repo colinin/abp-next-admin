@@ -65,7 +65,7 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
     {
         var topic = "";
 
-        var notificationDefine = NotificationDefinitionManager.GetOrNull(notification.Name);
+        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
         var topicDefine = notificationDefine?.GetTopicOrNull();
         if (!topicDefine.IsNullOrWhiteSpace())
         {

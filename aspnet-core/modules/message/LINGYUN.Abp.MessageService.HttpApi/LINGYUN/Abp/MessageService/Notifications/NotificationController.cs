@@ -27,6 +27,13 @@ namespace LINGYUN.Abp.MessageService.Notifications
         }
 
         [HttpGet]
+        [Route("assignables")]
+        public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
+        {
+            return await NotificationAppService.GetAssignableNotifiersAsync();
+        }
+
+        [HttpGet]
         [Route("assignable-templates")]
         public async virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
         {

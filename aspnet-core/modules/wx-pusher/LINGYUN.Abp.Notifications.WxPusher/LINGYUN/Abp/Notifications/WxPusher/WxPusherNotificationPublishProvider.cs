@@ -72,7 +72,7 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
         var topics = await WxPusherUserStore.GetSubscribeTopicsAsync(subscribeUserIds, cancellationToken);
         var uids = await WxPusherUserStore.GetBindUidsAsync(subscribeUserIds, cancellationToken);
 
-        var notificationDefine = NotificationDefinitionManager.GetOrNull(notification.Name);
+        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
         var url = notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
         var topicDefine = notificationDefine?.GetTopics();
         if (topicDefine.Any())
