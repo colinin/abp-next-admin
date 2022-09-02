@@ -214,6 +214,9 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.Name)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxNameLength)
                  .IsRequired();
+                b.Property(p => p.GroupName)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
+                 .IsRequired();
 
                 b.Property(p => p.DisplayName)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxDisplayNameLength);

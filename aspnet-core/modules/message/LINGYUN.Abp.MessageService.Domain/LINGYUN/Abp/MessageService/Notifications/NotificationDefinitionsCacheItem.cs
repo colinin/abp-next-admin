@@ -33,6 +33,7 @@ public class NotificationDefinitionsCacheItem
 public class NotificationDefinitionCacheItem
 {
     public string Name { get; set; }
+    public string GroupName { get; set; }
     public string DisplayName { get; set; }
     public string Description { get; set; }
     public NotificationLifetime Lifetime { get; set; }
@@ -48,6 +49,7 @@ public class NotificationDefinitionCacheItem
 
     public NotificationDefinitionCacheItem(
         string name, 
+        string groupName,
         string displayName = null, 
         string description = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
@@ -56,6 +58,7 @@ public class NotificationDefinitionCacheItem
         bool allowSubscriptionToClients  = false)
     {
         Name = name;
+        GroupName = groupName;
         DisplayName = displayName;
         Description = description;
         Lifetime = lifetime;
