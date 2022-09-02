@@ -20,8 +20,8 @@ namespace LINGYUN.Abp.MessageService.Notifications;
 
 public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinitionCache, ISingletonDependency
 {
-    private readonly static ConcurrentDictionary<string, NotificationDefinitionGroupsCacheItem> _dynamicNotificationGroupL1Cache;
-    private readonly static ConcurrentDictionary<string, NotificationDefinitionsCacheItem> _dynamicNotificationsL1Cache;
+    private readonly static ConcurrentDictionary<string, NotificationGroupDefinition> _dynamicNotificationGroupL1Cache;
+    private readonly static ConcurrentDictionary<string, NotificationDefinition> _dynamicNotificationsL1Cache;
 
     private readonly static SemaphoreSlim _l2CacheSyncLock;
     protected IMemoryCache DynamicNotificationL2Cache { get; }
@@ -39,8 +39,8 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
     static DynamicNotificationDefinitionCache()
     {
         _l2CacheSyncLock = new SemaphoreSlim(1, 1);
-        _dynamicNotificationsL1Cache = new ConcurrentDictionary<string, NotificationDefinitionsCacheItem>();
-        _dynamicNotificationGroupL1Cache = new ConcurrentDictionary<string, NotificationDefinitionGroupsCacheItem>();
+        _dynamicNotificationsL1Cache = new ConcurrentDictionary<string, NotificationDefinition>();
+        _dynamicNotificationGroupL1Cache = new ConcurrentDictionary<string, NotificationGroupDefinition>();
     }
 
     public DynamicNotificationDefinitionCache(
@@ -65,39 +65,76 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
     {
         var cacheKey = NotificationDefinitionGroupsCacheItem.CalculateCacheKey(CultureInfo.CurrentCulture.Name);
 
-        if (!_dynamicNotificationGroupL1Cache.TryGetValue(cacheKey, out var cacheItem))
+        if (!_dynamicNotificationGroupL1Cache.Any())
         {
-            cacheItem = await GetGroupsFormL2CacheAsync(cacheKey);
+            var l2GroupCache = await GetGroupsFormL2CacheAsync(cacheKey);
+            var notifications = await GetNotificationsFormL2CacheAsync(
+                NotificationDefinitionsCacheItem.CalculateCacheKey(CultureInfo.CurrentCulture.Name));
+
+            foreach (var group in l2GroupCache.Groups)
+            {
+                var groupGroup = NotificationGroupDefinition
+                    .Create(group.Name, new FixedLocalizableString(group.DisplayName), group.AllowSubscriptionToClients);
+                var notificationsInThisGroup = notifications.Notifications
+                    .Where(p => p.GroupName == groupGroup.Name);
+
+                foreach (var notification in notificationsInThisGroup)
+                {
+                    var notificationDefine = groupGroup.AddNotification(
+                        notification.Name,
+                        new FixedLocalizableString(notification.DisplayName),
+                        new FixedLocalizableString(notification.Description),
+                        notification.NotificationType,
+                        notification.Lifetime,
+                        notification.AllowSubscriptionToClients);
+
+                    notificationDefine.Properties.AddIfNotContains(notification.Properties);
+                }
+
+                _dynamicNotificationGroupL1Cache.TryAdd(group.Name, groupGroup);
+            }
+
+            //NotificationGroupDefinition
+            //    .Create(g.Name, new FixedLocalizableString(g.DisplayName), g.AllowSubscriptionToClients)
         }
 
-        return cacheItem.Groups
-            .Select(g => NotificationGroupDefinition
-                .Create(g.Name, new FixedLocalizableString(g.DisplayName), g.AllowSubscriptionToClients))
-            .ToImmutableList();
+        return _dynamicNotificationGroupL1Cache.Values.ToImmutableList();
     }
 
     public async virtual Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
     {
         var cacheKey = NotificationDefinitionsCacheItem.CalculateCacheKey(CultureInfo.CurrentCulture.Name);
 
-        if (!_dynamicNotificationsL1Cache.TryGetValue(cacheKey, out var cacheItem))
+        if (!_dynamicNotificationsL1Cache.Any())
         {
-            cacheItem = await GetNotificationsFormL2CacheAsync(cacheKey);
+            var l2cache = await GetNotificationsFormL2CacheAsync(cacheKey);
+
+            foreach (var notification in l2cache.Notifications)
+            {
+                var notificationDefinition = new NotificationDefinition(
+                    notification.Name,
+                    new FixedLocalizableString(notification.DisplayName),
+                    new FixedLocalizableString(notification.Description),
+                    notification.NotificationType,
+                    notification.Lifetime,
+                    notification.AllowSubscriptionToClients);
+
+                notificationDefinition.WithProviders(notification.Providers.ToArray());
+                notificationDefinition.Properties.AddIfNotContains(notification.Properties);
+
+                _dynamicNotificationsL1Cache.TryAdd(notification.Name, notificationDefinition);
+            }
         }
 
-        return cacheItem.Notifications
-            .Select(n => new NotificationDefinition(
-                n.Name, 
-                new FixedLocalizableString(n.DisplayName), 
-                new FixedLocalizableString(n.Description),
-                n.NotificationType,
-                n.Lifetime,
-                n.AllowSubscriptionToClients))
-            .ToImmutableList();
+        return _dynamicNotificationsL1Cache.Values.ToImmutableList();
     }
 
     public async virtual Task<NotificationDefinition> GetOrNullAsync(string name)
     {
+        if (_dynamicNotificationsL1Cache.Any())
+        {
+            return _dynamicNotificationsL1Cache.GetOrDefault(name);
+        }
         var notifications = await GetNotificationsAsync();
 
         return notifications.FirstOrDefault(n => n.Name.Equals(name));
@@ -246,6 +283,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
 
                 var recordCache = new NotificationDefinitionCacheItem(
                     record.Name,
+                    record.GroupName,
                     displayName,
                     description,
                     record.NotificationLifetime,

@@ -15,6 +15,10 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// </summary>
     public virtual string Name { get; set; }
     /// <summary>
+    /// 分组名称
+    /// </summary>
+    public virtual string GroupName { get; set; }
+    /// <summary>
     /// 显示名称
     /// </summary>
     /// <remarks>
@@ -76,6 +80,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     public NotificationDefinitionRecord(
         Guid id,
         string name,
+        string groupName,
         string displayName = null,
         string description = null,
         string resourceName = null,
@@ -85,6 +90,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), NotificationDefinitionRecordConsts.MaxNameLength);
+        GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), NotificationDefinitionGroupRecordConsts.MaxNameLength);
         DisplayName = Check.Length(displayName, nameof(displayName), NotificationDefinitionRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), NotificationDefinitionRecordConsts.MaxDescriptionLength);
         NotificationLifetime = lifetime;
