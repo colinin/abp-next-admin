@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             var userSubscribes = await (await GetDbSetAsync())
                 .Distinct()
                 .Where(x => x.NotificationName.Equals(notificationName))
-                .WhereIf(userIds != null, x => userIds.Contains(x.UserId))
+                .WhereIf(userIds?.Any() == true, x => userIds.Contains(x.UserId))
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
