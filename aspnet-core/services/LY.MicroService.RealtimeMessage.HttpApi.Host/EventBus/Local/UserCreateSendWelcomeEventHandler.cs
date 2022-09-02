@@ -38,7 +38,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus
                             { "name", eventData.Entity.UserName },
                         }),
                     userIdentifer,
-                    eventData.Entity.Id,
+                    eventData.Entity.TenantId,
                     NotificationSeverity.Info);
         }
 
