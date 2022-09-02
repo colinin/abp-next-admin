@@ -207,21 +207,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             using (_currentTenant.Change(tenantId))
             {
-                var userSubscriptions = new List<UserSubscribe>();
-
-                if (identifiers == null)
-                {
-                    userSubscriptions = await _userSubscribeRepository
-                        .GetUserSubscribesAsync(notificationName, null, cancellationToken);
-                }
-                else
-                {
-                    userSubscriptions = await _userSubscribeRepository
-                        .GetUserSubscribesAsync(
-                            notificationName,
-                            identifiers.Select(ids => ids.UserId),
-                            cancellationToken);
-                }
+                var userIds = identifiers?.Select(ids => ids.UserId);
+                var userSubscriptions = await _userSubscribeRepository
+                    .GetUserSubscribesAsync(notificationName, userIds, cancellationToken);
 
                 return _objectMapper.Map<List<UserSubscribe>, List<NotificationSubscriptionInfo>>(userSubscriptions);
             }
