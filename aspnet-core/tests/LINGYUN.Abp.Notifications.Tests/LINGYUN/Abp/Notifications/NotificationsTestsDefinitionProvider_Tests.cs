@@ -1,4 +1,5 @@
 ﻿using Shouldly;
+using System.Threading.Tasks;
 using Volo.Abp.Localization;
 using Xunit;
 
@@ -14,32 +15,32 @@ namespace LINGYUN.Abp.Notifications
         }
 
         [Fact]
-        public void GetGroups_Test()
+        public async Task GetGroups_Test()
         {
-            var groups = NotificationDefinitionManager.GetGroups();
+            var groups = await NotificationDefinitionManager.GetGroupsAsync();
             groups.Count.ShouldBe(2);
         }
 
         [Fact]
-        public void GetAll_Test()
+        public async Task GetNotifications_Test()
         {
-            var notifications = NotificationDefinitionManager.GetAll();
+            var notifications = await NotificationDefinitionManager.GetNotificationsAsync();
             notifications.Count.ShouldBe(6);
         }
 
         [Fact]
-        public void GetOrNull_Test()
+        public async Task GetOrNull_Test()
         {
-            NotificationDefinitionManager.GetOrNull(NotificationsTestsNames.Test2).ShouldNotBeNull();
-            NotificationDefinitionManager.GetOrNull(NotificationsTestsNames.Test3).ShouldNotBeNull();
-            NotificationDefinitionManager.GetOrNull("NullOfNotification").ShouldBeNull();
+            (await NotificationDefinitionManager.GetOrNullAsync(NotificationsTestsNames.Test2)).ShouldNotBeNull();
+            (await NotificationDefinitionManager.GetOrNullAsync(NotificationsTestsNames.Test3)).ShouldNotBeNull();
+            (await NotificationDefinitionManager.GetOrNullAsync("NullOfNotification")).ShouldBeNull();
         }
 
         [Theory]
         [InlineData(NotificationsTestsNames.Test1)]
-        public void Get_Test(string name)
+        public async Task Get_Test(string name)
         {
-            var notification = NotificationDefinitionManager.Get(name);
+            var notification = await NotificationDefinitionManager.GetAsync(name);
             notification.Name.ShouldBe(name);
             notification.DisplayName.ShouldBeOfType<FixedLocalizableString>();
             notification.Description.ShouldBeNull();

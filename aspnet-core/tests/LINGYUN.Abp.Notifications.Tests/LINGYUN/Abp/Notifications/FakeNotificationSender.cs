@@ -63,7 +63,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         NotificationSeverity severity = NotificationSeverity.Info,
         IEnumerable<string> useProviders = null)
     {
-        var notification = NotificationDefinitionManager.GetOrNull(name);
+        var notification = await NotificationDefinitionManager.GetOrNullAsync(name);
         if (notification == null)
         {
             return "";
@@ -114,7 +114,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         NotificationSeverity severity = NotificationSeverity.Info,
         IEnumerable<string> useProviders = null)
     {
-        var notification = NotificationDefinitionManager.GetOrNull(name);
+        var notification = await NotificationDefinitionManager.GetOrNullAsync(name);
         if (notification == null)
         {
             return "";
