@@ -1320,7 +1320,7 @@
       "Key": "my-subscribes"
     },
     {
-      "DownstreamPathTemplate": "/api/my-notifilers/assignables",
+      "DownstreamPathTemplate": "/api/notifilers/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1328,9 +1328,10 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-notifilers/assignables",
+      "UpstreamPathTemplate": "/api/notifilers/{everything}",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
@@ -1349,9 +1350,7 @@
       },
       "HttpHandlerOptions": {
         "UseTracing": true
-      },
-      "Priority": 99,
-      "Key": "assignables-notifilers"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/my-notifilers",
@@ -2062,7 +2061,6 @@
     },
     {
       "RouteKeys": [
-        "assignables-notifilers",
         "my-subscribes"
       ],
       "UpstreamPathTemplate": "/api/my-subscribes/assignables-notifilers",

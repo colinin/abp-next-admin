@@ -10,12 +10,15 @@ import { format } from '/@/utils/strings';
 enum Api {
   GetById = '/api/my-notifilers/{id}',
   GetList = '/api/my-notifilers',
-  GetAssignableNotifiers = '/api/my-notifilers/assignables',
+  GetAssignableNotifiers = '/api/notifilers/assignables',
   Read = '/api/my-notifilers/{id}/read',
   MarkReadState = '/api/my-notifilers/mark-read-state',
 }
 
-export const markReadState = (ids: string[], state: NotificationReadState = NotificationReadState.Read) => {
+export const markReadState = (
+  ids: string[],
+  state: NotificationReadState = NotificationReadState.Read,
+) => {
   return defHttp.put<void>({
     url: Api.MarkReadState,
     data: {
