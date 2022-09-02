@@ -464,7 +464,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{ECC8B9A9-9E92-4493-984D-2E350A49189D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\common\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{3E9D07D8-963C-4A61-B720-BD47593BE752}"
 EndProject

@@ -1,111 +1,70 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Notifications
 {
-    public class NotificationDefinitionManager : INotificationDefinitionManager, ISingletonDependency
+    public class NotificationDefinitionManager : INotificationDefinitionManager, ITransientDependency
     {
-        protected AbpNotificationsOptions Options { get; }
-
-        protected IDictionary<string, NotificationGroupDefinition> NotificationGroupDefinitions => _lazyNotificationGroupDefinitions.Value;
-        private readonly Lazy<Dictionary<string, NotificationGroupDefinition>> _lazyNotificationGroupDefinitions;
-
-        protected IDictionary<string, NotificationDefinition> NotificationDefinitions => _lazyNotificationDefinitions.Value;
-        private readonly Lazy<Dictionary<string, NotificationDefinition>> _lazyNotificationDefinitions;
-
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IStaticNotificationDefinitionStore _staticStore;
+        private readonly IDynamicNotificationDefinitionStore _dynamicStore;
 
         public NotificationDefinitionManager(
-            IOptions<AbpNotificationsOptions> options,
-            IServiceScopeFactory serviceScopeFactory)
+            IStaticNotificationDefinitionStore staticStore,
+            IDynamicNotificationDefinitionStore dynamicStore)
         {
-            _serviceScopeFactory = serviceScopeFactory;
-            Options = options.Value;
-
-            _lazyNotificationDefinitions = new Lazy<Dictionary<string, NotificationDefinition>>(
-                    CreateNotificationDefinitions,
-                    isThreadSafe: true
-                );
-
-            _lazyNotificationGroupDefinitions = new Lazy<Dictionary<string, NotificationGroupDefinition>>(
-                CreateNotificationGroupDefinitions,
-                isThreadSafe: true
-            );
+            _staticStore = staticStore;
+            _dynamicStore = dynamicStore;
         }
 
-        public virtual NotificationDefinition Get(string name)
+        public virtual async Task<NotificationDefinition> GetAsync(string name)
         {
-            Check.NotNull(name, nameof(name));
-
-            var feature = GetOrNull(name);
-
-            if (feature == null)
+            var notification = await GetOrNullAsync(name);
+            if (notification == null)
             {
                 throw new AbpException("Undefined notification: " + name);
             }
 
-            return feature;
+            return notification;
         }
 
-        public virtual IReadOnlyList<NotificationDefinition> GetAll()
+        public virtual async Task<NotificationDefinition> GetOrNullAsync(string name)
         {
-            return NotificationDefinitions.Values.ToImmutableList();
+            Check.NotNull(name, nameof(name));
+
+            return await _staticStore.GetOrNullAsync(name) ??
+                   await _dynamicStore.GetOrNullAsync(name);
         }
 
-        public virtual NotificationDefinition GetOrNull(string name)
+        public virtual async Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
         {
-            return NotificationDefinitions.GetOrDefault(name);
+            var staticNotifications = await _staticStore.GetNotificationsAsync();
+            var staticNotificationNames = staticNotifications
+                .Select(p => p.Name)
+                .ToImmutableHashSet();
+
+            var dynamicNotifications = await _dynamicStore.GetNotificationsAsync();
+
+            return staticNotifications
+                .Concat(dynamicNotifications.Where(d => !staticNotificationNames.Contains(d.Name)))
+                .ToImmutableList();
         }
 
-        public IReadOnlyList<NotificationGroupDefinition> GetGroups()
+        public async Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
         {
-            return NotificationGroupDefinitions.Values.ToImmutableList();
-        }
+            var staticGroups = await _staticStore.GetGroupsAsync();
+            var staticGroupNames = staticGroups
+                .Select(p => p.Name)
+                .ToImmutableHashSet();
 
-        protected virtual Dictionary<string, NotificationDefinition> CreateNotificationDefinitions()
-        {
-            var notifications = new Dictionary<string, NotificationDefinition>();
+            var dynamicGroups = await _dynamicStore.GetGroupsAsync();
 
-            foreach (var groupDefinition in NotificationGroupDefinitions.Values)
-            {
-                foreach (var notification in groupDefinition.Notifications)
-                {
-                    if (notifications.ContainsKey(notification.Name))
-                    {
-                        throw new AbpException("Duplicate notification name: " + notification.Name);
-                    }
-
-                    notifications[notification.Name] = notification;
-                }
-            }
-
-            return notifications;
-        }
-
-        protected virtual Dictionary<string, NotificationGroupDefinition> CreateNotificationGroupDefinitions()
-        {
-            var context = new NotificationDefinitionContext();
-
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var providers = Options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as INotificationDefinitionProvider)
-                    .ToList();
-
-                foreach (var provider in providers)
-                {
-                    provider.Define(context);
-                }
-            }
-
-            return context.Groups;
+            return staticGroups
+                .Concat(dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name)))
+                .ToImmutableList();
         }
     }
 }

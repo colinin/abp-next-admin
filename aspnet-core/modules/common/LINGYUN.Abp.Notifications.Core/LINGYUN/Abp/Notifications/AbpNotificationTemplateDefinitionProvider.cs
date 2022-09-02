@@ -14,8 +14,10 @@ public class AbpNotificationTemplateDefinitionProvider : TemplateDefinitionProvi
 
     public override void Define(ITemplateDefinitionContext context)
     {
-        var notifications = _notificationDefinitionManager.GetAll().Where(n => n.Template != null);
-        foreach (var notification in notifications)
+        var notifications = _notificationDefinitionManager
+            .GetNotificationsAsync().GetAwaiter().GetResult();
+
+        foreach (var notification in notifications.Where(n => n.Template != null))
         {
             context.Add(notification.Template);
         }

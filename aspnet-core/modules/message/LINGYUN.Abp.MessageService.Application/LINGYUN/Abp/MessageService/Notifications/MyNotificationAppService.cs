@@ -49,48 +49,6 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     id);
         }
 
-        public virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
-        {
-            var groups = new List<NotificationGroupDto>();
-
-            foreach (var group in NotificationDefinitionManager.GetGroups())
-            {
-                if (!group.AllowSubscriptionToClients)
-                {
-                    continue;
-
-                }
-                var notificationGroup = new NotificationGroupDto
-                {
-                    Name = group.Name,
-                    DisplayName = group.DisplayName.Localize(StringLocalizerFactory)
-                };
-
-                foreach (var notification in group.Notifications)
-                {
-                    if (!notification.AllowSubscriptionToClients)
-                    {
-                        continue;
-                    }
-
-                    var notificationChildren = new NotificationDto
-                    {
-                        Name = notification.Name,
-                        DisplayName = notification.DisplayName.Localize(StringLocalizerFactory),
-                        Description = notification.Description.Localize(StringLocalizerFactory),
-                        Lifetime = notification.NotificationLifetime,
-                        Type = notification.NotificationType
-                    };
-
-                    notificationGroup.Notifications.Add(notificationChildren);
-                }
-
-                groups.Add(notificationGroup);
-            }
-
-            return Task.FromResult(new ListResultDto<NotificationGroupDto>(groups));
-        }
-
         public async virtual Task<UserNotificationDto> GetAsync(long id)
         {
             var notification = await UserNotificationRepository.GetByIdAsync(CurrentUser.GetId(), id);

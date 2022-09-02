@@ -1,17 +1,18 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications
 {
     public interface INotificationDefinitionManager
     {
         [NotNull]
-        NotificationDefinition Get([NotNull] string name);
+        Task<NotificationDefinition> GetAsync([NotNull] string name);
 
-        IReadOnlyList<NotificationDefinition> GetAll();
+        Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync();
 
-        NotificationDefinition GetOrNull(string name);
+        Task<NotificationDefinition> GetOrNullAsync(string name);
 
-        IReadOnlyList<NotificationGroupDefinition> GetGroups();
+        Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync();
     }
 }

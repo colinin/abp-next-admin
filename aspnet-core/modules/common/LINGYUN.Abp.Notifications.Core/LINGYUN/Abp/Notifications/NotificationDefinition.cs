@@ -83,7 +83,7 @@ namespace LINGYUN.Abp.Notifications
         {
             if (!providers.IsNullOrEmpty())
             {
-                Providers.AddRange(providers);
+                Providers.AddIfNotContains(providers);
             }
 
             return this;

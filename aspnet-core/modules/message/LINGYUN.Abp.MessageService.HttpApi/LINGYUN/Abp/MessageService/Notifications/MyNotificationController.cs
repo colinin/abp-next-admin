@@ -31,13 +31,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
             await MyNotificationAppService.DeleteAsync(id);
         }
-
-        [HttpGet]
-        [Route("assignables")]
-        public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
-        {
-            return await MyNotificationAppService.GetAssignableNotifiersAsync();
-        }
+        
 
         [HttpGet]
         [Route("{id}")]

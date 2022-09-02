@@ -186,6 +186,48 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
 
                 b.HasIndex(p => new { p.TenantId, p.GroupId, p.UserId });
             });
+
+            builder.Entity<NotificationDefinitionGroupRecord>(b =>
+            {
+                b.ToTable(options.TablePrefix + "NotificationDefinitionGroups", options.Schema);
+
+                b.Property(p => p.Name)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
+                 .IsRequired();
+
+                b.Property(p => p.DisplayName)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDisplayNameLength);
+                b.Property(p => p.Description)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDescriptionLength);
+                b.Property(p => p.ResourceName)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxResourceNameLength);
+                b.Property(p => p.Localization)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxLocalizationLength);
+
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<NotificationDefinitionRecord>(b =>
+            {
+                b.ToTable(options.TablePrefix + "NotificationDefinitions", options.Schema);
+
+                b.Property(p => p.Name)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxNameLength)
+                 .IsRequired();
+
+                b.Property(p => p.DisplayName)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxDisplayNameLength);
+                b.Property(p => p.Description)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxDescriptionLength);
+                b.Property(p => p.ResourceName)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxResourceNameLength);
+                b.Property(p => p.Localization)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxLocalizationLength);
+                b.Property(p => p.Providers)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
+
+                b.ConfigureByConvention();
+            });
         }
     }
 }

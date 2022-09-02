@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.MessageService.Notifications
@@ -14,7 +13,5 @@ namespace LINGYUN.Abp.MessageService.Notifications
         IDeleteAppService<long>
     {
         Task MarkReadStateAsync(NotificationMarkReadStateInput input);
-
-        Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync();
     }
 }
