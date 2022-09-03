@@ -60,7 +60,7 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
             UserNotificationNames.WelcomeToApplication,
             L("Notifications:WelcomeToApplication"),
             L("Notifications:WelcomeToApplication"),
-            notificationType: NotificationType.System,
+            notificationType: NotificationType.Application,
             lifetime: NotificationLifetime.OnlyOne,
             allowSubscriptionToClients: true)
             .WithProviders(

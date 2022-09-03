@@ -13,6 +13,10 @@ namespace LINGYUN.Abp.MessageService.Notifications
         [DisplayName("Notifications:Name")]
         public string Name { get; set; }
 
+        [StringLength(NotificationConsts.MaxNameLength)]
+        [DisplayName("Notifications:TemplateName")]
+        public string TemplateName { get; set; }
+
         [DisplayName("Notifications:Data")]
         public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 

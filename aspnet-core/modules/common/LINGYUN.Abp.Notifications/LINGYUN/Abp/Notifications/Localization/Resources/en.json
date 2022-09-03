@@ -7,6 +7,7 @@
     "Notifications:Type": "Type",
     "Notifications:SendTime": "SendTime",
     "Notifications:Name": "Name",
+    "Notifications:TemplateName": "Template Name",
     "Notifications:Description": "Description",
     "Notifications:Culture": "Culture",
     "Notifications:Data": "Data",

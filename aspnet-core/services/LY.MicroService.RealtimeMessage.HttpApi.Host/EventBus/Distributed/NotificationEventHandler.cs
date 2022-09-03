@@ -122,6 +122,8 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
             if (notification.NotificationType == NotificationType.System)
             {
+                await SendToTenantAsync(null, notification, eventData);
+
                 var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
 
                 foreach (var activeTenant in allActiveTenants)
@@ -210,6 +212,8 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
             if (notification.NotificationType == NotificationType.System)
             {
+                await SendToTenantAsync(null, notification, eventData);
+
                 var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
 
                 foreach (var activeTenant in allActiveTenants)

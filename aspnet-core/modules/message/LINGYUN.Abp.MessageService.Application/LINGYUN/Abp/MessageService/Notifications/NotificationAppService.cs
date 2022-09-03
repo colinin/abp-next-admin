@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -103,31 +104,49 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 user = new UserIdentifier(input.ToUserId.Value, input.ToUserName);
             }
 
-            await NotificationSender
-                .SendNofiterAsync(
-                    name: input.Name,
-                    template: new NotificationTemplate(
-                        notification.Name,
-                        culture: input.Culture ?? CultureInfo.CurrentCulture.Name,
-                        formUser: CurrentUser.Name ?? CurrentUser.UserName,
-                        data: input.Data),
-                    user: user,
-                    CurrentTenant.Id,
-                    input.Severity);
+            if (!input.TemplateName.IsNullOrWhiteSpace())
+            {
+                if (notification.Template == null)
+                {
+                    throw new BusinessException(
+                        MessageServiceErrorCodes.NotificationTemplateNotFound,
+                        $"The notification template {input.TemplateName} does not exist!")
+                        .WithData("Name", input.TemplateName);
+                }
+                var notificationTemplate = new NotificationTemplate(
+                    notification.Name,
+                    culture: input.Culture ?? CultureInfo.CurrentCulture.Name,
+                    formUser: CurrentUser.Name ?? CurrentUser.UserName,
+                    data: input.Data);
+
+                await NotificationSender
+                    .SendNofiterAsync(
+                        name: input.Name,
+                        template: notificationTemplate,
+                        user: user,
+                        tenantId: CurrentTenant.Id,
+                        severity: input.Severity);
+            }
+            else
+            {
+                var notificationData = new NotificationData();
+                notificationData.ExtraProperties.AddIfNotContains(input.Data);
+
+                notificationData = NotificationData.ToStandardData(notificationData);
+
+                await NotificationSender
+                    .SendNofiterAsync(
+                        name: input.Name,
+                        data: notificationData,
+                        user: user,
+                        tenantId: CurrentTenant.Id,
+                        severity: input.Severity);
+            }
         }
 
         protected async virtual Task<NotificationDefinition> GetNotificationDefinition(string name)
         {
-            var notification = await NotificationDefinitionManager.GetOrNullAsync(name);
-            if (notification == null || notification.Template == null)
-            {
-                throw new BusinessException(
-                    MessageServiceErrorCodes.NotificationTemplateNotFound,
-                    $"The notification template {name} does not exist!")
-                    .WithData("Name", name);
-            }
-
-            return notification;
+            return await NotificationDefinitionManager.GetAsync(name);
         }
     }
 }

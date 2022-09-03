@@ -7,6 +7,7 @@
     "Notifications:Type": "类型",
     "Notifications:SendTime": "发送时间",
     "Notifications:Name": "名称",
+    "Notifications:TemplateName": "模板名称",
     "Notifications:Description": "描述",
     "Notifications:Culture": "区域",
     "Notifications:Data": "数据",
