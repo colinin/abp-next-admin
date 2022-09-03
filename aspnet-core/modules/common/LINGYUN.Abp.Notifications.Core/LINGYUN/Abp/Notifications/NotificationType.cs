@@ -6,15 +6,15 @@
     public enum NotificationType
     {
         /// <summary>
-        /// 应用（对应租户）
+        /// 应用（仅对当前租户）
         /// </summary>
         Application = 0,
         /// <summary>
-        /// 系统（对应宿主）
+        /// 系统通知（全局发布）
         /// </summary>
         System = 10,
         /// <summary>
-        /// 用户（对应用户）
+        /// 用户（对应用户,受租户控制）
         /// </summary>
         User = 20
     }
