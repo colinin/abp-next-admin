@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
+using LY.MicroService.RealtimeMessage.MultiTenancy;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -43,6 +44,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         protected ICurrentTenant CurrentTenant { get; }
         /// <summary>
+        /// Reference to <see cref="ITenantConfigurationCache"/>.
+        /// </summary>
+        protected ITenantConfigurationCache TenantConfigurationCache { get; }
+        /// <summary>
         /// Reference to <see cref="IJsonSerializer"/>.
         /// </summary>
         protected IJsonSerializer JsonSerializer { get; }
@@ -80,6 +85,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         public NotificationEventHandler(
             ICurrentTenant currentTenant,
+            ITenantConfigurationCache tenantConfigurationCache,
             IJsonSerializer jsonSerializer,
             ITemplateRenderer templateRenderer,
             IBackgroundJobManager backgroundJobManager,
@@ -91,6 +97,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
             Options = options.Value;
+            TenantConfigurationCache = tenantConfigurationCache;
             CurrentTenant = currentTenant;
             JsonSerializer = jsonSerializer;
             TemplateRenderer = templateRenderer;
@@ -107,18 +114,38 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         [UnitOfWork]
         public async virtual Task HandleEventAsync(NotificationEto<NotificationTemplate> eventData)
         {
-            using (CurrentTenant.Change(eventData.TenantId))
+            var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
+            if (notification == null)
             {
-                var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
-                if (notification == null)
-                {
-                    return;
-                }
+                return;
+            }
 
+            if (notification.NotificationType == NotificationType.System)
+            {
+                var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                foreach (var activeTenant in allActiveTenants)
+                {
+                    await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                }
+            }
+            else
+            {
+                await SendToTenantAsync(eventData.TenantId, notification, eventData);
+            }
+        }
+
+        protected async virtual Task SendToTenantAsync(
+            Guid? tenantId, 
+            NotificationDefinition notification,
+            NotificationEto<NotificationTemplate> eventData)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
                 var notificationInfo = new NotificationInfo
                 {
                     Name = notification.Name,
-                    TenantId = eventData.TenantId,
+                    TenantId = tenantId,
                     Severity = eventData.Severity,
                     Type = notification.NotificationType,
                     CreationTime = eventData.CreationTime,
@@ -144,7 +171,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 var notificationData = new NotificationData();
                 notificationData.WriteStandardData(
                     title: title,
-                    message: message, 
+                    message: message,
                     createTime: eventData.CreationTime,
                     formUser: eventData.Data.FormUser);
                 notificationData.ExtraProperties.AddIfNotContains(eventData.Data.ExtraProperties);
@@ -175,14 +202,34 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         [UnitOfWork]
         public async virtual Task HandleEventAsync(NotificationEto<NotificationData> eventData)
         {
-            using (CurrentTenant.Change(eventData.TenantId))
+            var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
+            if (notification == null)
             {
-                var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
-                if (notification == null)
-                {
-                    return;
-                }
+                return;
+            }
 
+            if (notification.NotificationType == NotificationType.System)
+            {
+                var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                foreach (var activeTenant in allActiveTenants)
+                {
+                    await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                }
+            }
+            else
+            {
+                await SendToTenantAsync(eventData.TenantId, notification, eventData);
+            }
+        }
+
+        protected async virtual Task SendToTenantAsync(
+            Guid? tenantId,
+            NotificationDefinition notification,
+            NotificationEto<NotificationData> eventData)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
                 var notificationInfo = new NotificationInfo
                 {
                     Name = notification.Name,
@@ -190,7 +237,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     Data = eventData.Data,
                     Severity = eventData.Severity,
                     Lifetime = notification.NotificationLifetime,
-                    TenantId = eventData.TenantId,
+                    TenantId = tenantId,
                     Type = notification.NotificationType
                 };
                 notificationInfo.SetId(eventData.Id);
