@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 MessageServiceNotificationNames.IM.FriendValidation,
                 L("Notifications:FriendValidation"),
                 L("Notifications:FriendValidation"),
-                notificationType: NotificationType.System,
+                notificationType: NotificationType.Application,
                 lifetime: NotificationLifetime.Persistent,
                 allowSubscriptionToClients: true)
                 .WithProviders(
@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 MessageServiceNotificationNames.IM.NewFriend,
                 L("Notifications:NewFriend"),
                 L("Notifications:NewFriend"),
-                notificationType: NotificationType.System,
+                notificationType: NotificationType.Application,
                 lifetime: NotificationLifetime.Persistent,
                 allowSubscriptionToClients: true)
                 .WithProviders(
@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 MessageServiceNotificationNames.IM.JoinGroup,
                 L("Notifications:JoinGroup"),
                 L("Notifications:JoinGroup"),
-                notificationType: NotificationType.System,
+                notificationType: NotificationType.Application,
                 lifetime: NotificationLifetime.Persistent,
                 allowSubscriptionToClients: true)
                 .WithProviders(
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 MessageServiceNotificationNames.IM.ExitGroup,
                 L("Notifications:ExitGroup"),
                 L("Notifications:ExitGroup"),
-                notificationType: NotificationType.System,
+                notificationType: NotificationType.Application,
                 lifetime: NotificationLifetime.Persistent,
                 allowSubscriptionToClients: true)
                 .WithProviders(
@@ -51,7 +51,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                MessageServiceNotificationNames.IM.DissolveGroup,
                L("Notifications:DissolveGroup"),
                L("Notifications:DissolveGroup"),
-               notificationType: NotificationType.System,
+               notificationType: NotificationType.Application,
                lifetime: NotificationLifetime.Persistent,
                allowSubscriptionToClients: true)
                 .WithProviders(
