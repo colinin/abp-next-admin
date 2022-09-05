@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LINGYUN.Abp.Dapr.Client.ClientProxying;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;

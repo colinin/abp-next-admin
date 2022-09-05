@@ -152,7 +152,7 @@ public class InvokeClass
 
 ## 配置项说明
     
-* AbpDaprRemoteServiceOptions.RemoteServices 配置Dapr.AppId
+* AbpRemoteServiceOptions.RemoteServices 配置Dapr.AppId
 
 ```json
 

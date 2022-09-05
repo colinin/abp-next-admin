@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LINGYUN.Abp.Dapr.Client.DynamicProxying;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
+namespace LINGYUN.Abp.Dapr.Client.ClientProxying
 {
     public class AbpDaprClientProxyOptions
     {

@@ -1,23 +1,27 @@
 ﻿using LINGYUN.Abp.Dapr.ServiceInvocation;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace LINGYUN.Abp.Dapr.Client.Tests
 {
-    public class TestAppServiceTests : AbpDaptClientTestBase
+    public class TestAppServiceStaticProxyTests : AbpDaptClientTestBase
     {
         private readonly ITestAppService _service;
 
-        public TestAppServiceTests()
+        public TestAppServiceStaticProxyTests()
         {
             _service = GetRequiredService<ITestAppService>();
         }
 
         protected override void BeforeAddApplication(IServiceCollection services)
         {
-            services.AddDaprClientProxies(
+            services.AddStaticDaprClientProxies(
                 typeof(AbpDaprTestModule).Assembly,
                 "TestDapr");
         }

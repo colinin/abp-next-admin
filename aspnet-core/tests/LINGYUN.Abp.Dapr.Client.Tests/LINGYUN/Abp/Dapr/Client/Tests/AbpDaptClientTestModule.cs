@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using LINGYUN.Abp.Dapr.Client.Wrapper;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Dapr.Client.Tests
 {
@@ -23,13 +24,11 @@ namespace LINGYUN.Abp.Dapr.Client.Tests
                         EnvironmentName = "Testing",
                         BasePath = Directory.GetCurrentDirectory()
                     }));
-        }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddDaprClientProxies(
-                typeof(AbpDaprTestModule).Assembly,
-                "TestDapr");
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpDaptClientTestModule>();
+            });
         }
     }
 }

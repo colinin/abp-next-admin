@@ -19,6 +19,10 @@ namespace LINGYUN.Abp.Cli.Commands
 {
     public class CreateCommand : IConsoleCommand, ITransientDependency
     {
+        public const string Name = "create";
+
+        protected string CommandName => Name;
+
         public class FindFile
         {
             public string Path { get; }

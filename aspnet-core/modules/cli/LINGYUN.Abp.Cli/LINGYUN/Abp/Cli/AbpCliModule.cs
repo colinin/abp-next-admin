@@ -16,8 +16,9 @@ namespace LINGYUN.Abp.Cli
             Configure<AbpCliOptions>(options =>
             {
                 options.Commands.Clear();
-                options.Commands["help"] = typeof(HelpCommand);
-                options.Commands["create"] = typeof(CreateCommand);
+                options.Commands[HelpCommand.Name] = typeof(HelpCommand);
+                options.Commands[CreateCommand.Name] = typeof(CreateCommand);
+                options.Commands[GenerateProxyCommand.Name] = typeof(GenerateProxyCommand);
             });
         }
     }

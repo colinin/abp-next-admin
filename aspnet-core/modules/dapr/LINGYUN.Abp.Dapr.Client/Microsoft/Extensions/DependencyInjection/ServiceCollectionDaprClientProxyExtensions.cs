@@ -2,6 +2,7 @@
 using Dapr.Client;
 using JetBrains.Annotations;
 using LINGYUN.Abp.Dapr.Client;
+using LINGYUN.Abp.Dapr.Client.ClientProxying;
 using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using Microsoft.Extensions.Options;
 using System;
@@ -14,11 +15,37 @@ using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionDynamicDaprClientProxyExtensions
+    public static class ServiceCollectionDaprClientProxyExtensions
     {
         private static readonly ProxyGenerator ProxyGeneratorInstance = new ProxyGenerator();
 
-        #region Add DaprClient Proxies
+        #region Add Static DaprClient Proxies
+
+        public static IServiceCollection AddStaticDaprClientProxies(
+            [NotNull] this IServiceCollection services,
+            [NotNull] Assembly assembly,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName)
+        {
+            Check.NotNull(services, nameof(assembly));
+
+            var serviceTypes = assembly.GetTypes().Where(IsSuitableForClientProxying).ToArray();
+
+            foreach (var serviceType in serviceTypes)
+            {
+                AddDaprClientFactory(services, remoteServiceConfigurationName);
+
+                services.Configure<AbpDaprClientProxyOptions>(options =>
+                {
+                    options.DaprClientProxies[serviceType] = new DynamicDaprClientProxyConfig(serviceType, remoteServiceConfigurationName);
+                });
+            }
+
+            return services;
+        }
+
+        #endregion
+
+        #region Add Dynamic DaprClient Proxies
 
         public static IServiceCollection AddDaprClientProxies(
             [NotNull] this IServiceCollection services,
@@ -28,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             Check.NotNull(services, nameof(assembly));
 
-            var serviceTypes = assembly.GetTypes().Where(IsSuitableForDynamicActorProxying).ToArray();
+            var serviceTypes = assembly.GetTypes().Where(IsSuitableForClientProxying).ToArray();
 
             foreach (var serviceType in serviceTypes)
             {
@@ -153,7 +180,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static bool IsSuitableForDynamicActorProxying(Type type)
+        private static bool IsSuitableForClientProxying(Type type)
         {
             //TODO: Add option to change type filter
 
