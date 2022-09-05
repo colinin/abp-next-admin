@@ -31,27 +31,23 @@
         </template>
       </template>
     </BasicTable>
-    <BasicModal @register="registerShareModal" :title="L('Share')" @ok="handleShareFile">
-      <BasicForm @register="registershareForm" />
-    </BasicModal>
+    <FileShareModal @register="registerShareModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, watchEffect, nextTick } from 'vue';
+  import { computed, watchEffect } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { BasicForm, useForm } from '/@/components/Form';
-  import { BasicModal, useModal } from '/@/components/Modal';
-
-  import { getDataColumns, getShareModalSchemas } from './data';
+  import { useModal } from '/@/components/Modal';
+  import { getDataColumns } from './data';
   import { ListResultDto } from '/@/api/model/baseModel';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
-
-  import { getList as getPrivates, share } from '/@/api/oss-management/private';
+  import { getList as getPrivates } from '/@/api/oss-management/private';
   import { getList as getPublices } from '/@/api/oss-management/public';
   import { generateOssUrl, deleteObject } from '/@/api/oss-management/oss';
+  import FileShareModal from './FileShareModal.vue';
 
   const props = defineProps({
     selectGroup: {
@@ -111,13 +107,7 @@
     }
   });
 
-  const [registershareForm, { validate, setFieldsValue, resetFields }] = useForm({
-    labelAlign: 'left',
-    labelWidth: 120,
-    showActionButtonGroup: false,
-    schemas: getShareModalSchemas(),
-  });
-  const [registerShareModal, { openModal, closeModal }] = useModal();
+  const [registerShareModal, { openModal }] = useModal();
 
   watchEffect(() => {
     props.selectGroup === 'private' && _fetchFileList(getPrivates);
@@ -150,7 +140,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        deleteObject({
+        return deleteObject({
           bucket: bucket.value,
           path: record.path,
           object: record.name,
@@ -165,19 +155,6 @@
   }
 
   function handleShare(record) {
-    openModal(true);
-    nextTick(() => {
-      setFieldsValue(record);
-    });
-  }
-
-  function handleShareFile() {
-    validate().then((input) => {
-      share(input).then(() => {
-        createMessage.success(L('Successful'));
-        resetFields();
-        closeModal();
-      });
-    });
+    openModal(true, record);
   }
 </script>

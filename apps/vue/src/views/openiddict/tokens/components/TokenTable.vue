@@ -74,14 +74,9 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return new Promise((resolve, reject) => {
-          deleteById(record.id).then(() => {
-            createMessage.success(L('Successful'));
-            reload();
-            return resolve(record.id);
-          }).catch((error) => {
-            return reject(error);
-          });
+        return deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          reload();
         });
       },
     });

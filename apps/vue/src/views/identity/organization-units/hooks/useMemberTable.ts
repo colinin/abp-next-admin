@@ -68,7 +68,7 @@ export function useMemberTable({ getProps }: UseMemberTable) {
       content: L('OrganizationUnit:AreYouSureRemoveUser', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
-        removeOrganizationUnit(user.id, unref(getProps).ouId)
+        return removeOrganizationUnit(user.id, unref(getProps).ouId)
           .then(() => {
             createMessage.success(L('SuccessfullyDeleted'));
             reloadMembers();

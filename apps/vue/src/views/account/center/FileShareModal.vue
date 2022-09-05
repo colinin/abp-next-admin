@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="L('ConnectionStrings')"
+    :title="L('Share')"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm" />
@@ -10,26 +10,22 @@
 
 <script lang="ts" setup>
   import { nextTick } from 'vue';
-  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { setConnectionString } from '/@/api/saas/tenant';
-  import { getConnectionFormSchemas } from '../datas//ModalData';
+  import { getShareModalSchemas } from './data';
+  import { share } from '/@/api/oss-management/private';
 
-  const emits = defineEmits(['change', 'register']);
-
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const { createMessage } = useMessage();
-  const { L } = useLocalization(['AbpSaas']);
-
-  const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-    colon: true,
+  const [registerForm, { validate, resetFields, setFieldsValue }] = useForm({
+    labelAlign: 'left',
     labelWidth: 120,
-    layout: 'horizontal',
-    schemas: getConnectionFormSchemas(),
     showActionButtonGroup: false,
+    schemas: getShareModalSchemas(),
   });
-  const [registerModal, { closeModal, changeOkLoading }] = useModalInner((data) => {
+  const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
     nextTick(() => {
       resetFields();
       setFieldsValue(data);
@@ -39,11 +35,12 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      setConnectionString(input.id, input).then(() => {
+      share(input).then(() => {
         createMessage.success(L('Successful'));
         closeModal();
-        emits('change');
-      }).finally(() => changeOkLoading(false));
+      }).finally(() => {
+        changeOkLoading(false);
+      });
     });
   }
 </script>

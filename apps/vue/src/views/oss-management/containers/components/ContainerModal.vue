@@ -1,7 +1,9 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="L('ConnectionStrings')"
+    :title="L('Containers')"
+    :width="466"
+    :min-height="66"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm" />
@@ -12,38 +14,39 @@
   import { nextTick } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { setConnectionString } from '/@/api/saas/tenant';
-  import { getConnectionFormSchemas } from '../datas//ModalData';
+  import { BasicForm, useForm } from '/@/components/Form';
+  import { createContainer } from '/@/api/oss-management/oss';
+  import { getModalFormSchemas } from './ModalData';
 
   const emits = defineEmits(['change', 'register']);
 
   const { createMessage } = useMessage();
-  const { L } = useLocalization(['AbpSaas']);
-
-  const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-    colon: true,
+  const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
+  const [registerForm, { validate, resetFields }] = useForm({
     labelWidth: 120,
-    layout: 'horizontal',
-    schemas: getConnectionFormSchemas(),
+    schemas: getModalFormSchemas(),
     showActionButtonGroup: false,
+    actionColOptions: {
+      span: 24,
+    },
   });
-  const [registerModal, { closeModal, changeOkLoading }] = useModalInner((data) => {
+  const [registerModal, { changeOkLoading, closeModal }] = useModalInner(() => {
     nextTick(() => {
       resetFields();
-      setFieldsValue(data);
     });
   });
 
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      setConnectionString(input.id, input).then(() => {
+      createContainer(input.name).then((res) => {
         createMessage.success(L('Successful'));
+        emits('change', res);
         closeModal();
-        emits('change');
-      }).finally(() => changeOkLoading(false));
+      }).finally(() => {
+        changeOkLoading(false);
+      });
     });
   }
 </script>

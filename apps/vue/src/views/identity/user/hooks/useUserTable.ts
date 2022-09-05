@@ -58,7 +58,7 @@ export function useUserTable() {
       content: L('ItemWillBeDeletedMessageWithFormat', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
-        deleteById(user.id)
+        return deleteById(user.id)
           .then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
             reloadTable();

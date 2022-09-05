@@ -97,7 +97,7 @@
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

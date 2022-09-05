@@ -149,12 +149,17 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessageWithFormat', claim.claimType),
       onOk: () => {
-        if (isFunction(props.deleteApi)) {
-          props.deleteApi(identityRef.value, claim).then(() => {
-            createMessage.success(L('SuccessfullyDeleted'));
-            reload();
-          });
-        }
+        return new Promise<void>((resolve, reject) => {
+          if (isFunction(props.deleteApi)) {
+            props.deleteApi(identityRef.value, claim).then(() => {
+              createMessage.success(L('SuccessfullyDeleted'));
+              reload();
+              resolve();
+            }).catch((error) => reject(error));
+          } else {
+            resolve();
+          }
+        });
       },
     });
   }

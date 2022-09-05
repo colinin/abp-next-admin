@@ -47,7 +47,7 @@ export function useRoleTable({ getProps }: UseRoleTable) {
       content: L('OrganizationUnit:AreYouSureRemoveRole', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
-        removeOrganizationUnit(role.id, unref(getProps).ouId)
+        return removeOrganizationUnit(role.id, unref(getProps).ouId)
           .then(() => {
             createMessage.success(L('SuccessfullyDeleted'));
             reloadRoles();

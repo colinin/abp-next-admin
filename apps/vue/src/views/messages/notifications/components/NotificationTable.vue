@@ -170,7 +170,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        deleteById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

@@ -46,7 +46,7 @@ export function useClaimTable() {
       content: L('ItemWillBeDeletedMessageWithFormat', [role.name]),
       okCancel: true,
       onOk: () => {
-        deleteById(role.id).then(() => {
+        return deleteById(role.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reloadTable();
         });

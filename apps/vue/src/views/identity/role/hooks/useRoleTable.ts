@@ -39,7 +39,7 @@ export function useRoleTable() {
       content: L('ItemWillBeDeletedMessageWithFormat', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
-        deleteById(role.id).then(() => {
+        return deleteById(role.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reloadTable();
         });

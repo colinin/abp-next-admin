@@ -23,7 +23,7 @@
   const userIdRef = ref('');
   const formElRef = ref<Nullable<FormActionType>>(null);
   const { formSchemas } = usePassword(formElRef);
-  const [registerModal, { closeModal }] = useModalInner((val) => {
+  const [registerModal, { changeOkLoading, closeModal }] = useModalInner((val) => {
     userIdRef.value = val;
   });
   const [registerForm, { validate }] = useForm({
@@ -38,11 +38,14 @@
     const userId = unref(userIdRef);
     if (userId) {
       validate().then((res) => {
+        changeOkLoading(true);
         changePassword(userId, {
           password: res.password,
         }).then(() => {
           createMessage.success(L('Successful'));
           closeModal();
+        }).finally(() => {
+          changeOkLoading(true);
         });
       });
     }

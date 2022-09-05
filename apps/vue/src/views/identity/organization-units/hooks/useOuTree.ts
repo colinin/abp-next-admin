@@ -43,7 +43,7 @@ export function useOuTree({ emit, modalMethods, permissionModalMethods }:
               content: L('ItemWillBeDeletedMessage'),
               okCancel: true,
               onOk: () => {
-                deleteById(node.dataRef.id).then(() => {
+                return deleteById(node.dataRef.id).then(() => {
                   createMessage.success(L('SuccessfullyDeleted'));
                   loadOuTree();
                 });

@@ -26,15 +26,7 @@
         </template>
       </template>
     </BasicTable>
-    <BasicModal
-      @register="registerModal"
-      :title="L('Containers')"
-      :width="466"
-      :min-height="66"
-      @ok="handleSubmit"
-    >
-      <BasicForm @register="registerForm" />
-    </BasicModal>
+    <ContainerModal @register="registerModal" @change="reload" />
   </div>
 </template>
 
@@ -42,26 +34,18 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { BasicModal, useModal } from '/@/components/Modal';
-  import { BasicForm, useForm } from '/@/components/Form';
+  import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { createContainer, deleteContainer, getContainers } from '/@/api/oss-management/oss';
+  import { deleteContainer, getContainers } from '/@/api/oss-management/oss';
   import { getDataColumns } from './TableData';
-  import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
+  import { getSearchFormSchemas } from './ModalData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
+  import ContainerModal from './ContainerModal.vue';
 
   const { createMessage, createConfirm } = useMessage();
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const { hasPermission } = usePermission();
-  const [registerModal, { openModal, closeModal }] = useModal();
-  const [registerForm, { validate, resetFields }] = useForm({
-    labelWidth: 120,
-    schemas: getModalFormSchemas(),
-    showActionButtonGroup: false,
-    actionColOptions: {
-      span: 24,
-    },
-  });
+  const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'name',
     title: L('Containers'),
@@ -92,7 +76,6 @@
   });
 
   function handleAddNew() {
-    resetFields();
     openModal(true, {});
   }
 
@@ -103,21 +86,11 @@
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteContainer(record.name).then(() => {
+        return deleteContainer(record.name).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });
       },
-    });
-  }
-
-  function handleSubmit() {
-    validate().then((input) => {
-      createContainer(input.name).then(() => {
-        createMessage.success(L('Successful'));
-        closeModal();
-        reload();
-      });
     });
   }
 </script>

@@ -152,6 +152,14 @@ export function getModalFormSchemas(): FormSchema[] {
 export function getConnectionFormSchemas(): FormSchema[] {
   return [
     {
+      field: 'id',
+      component: 'Input',
+      label: 'id',
+      colProps: { span: 24 },
+      show: false,
+      dynamicDisabled: true,
+    },
+    {
       field: 'name',
       component: 'Input',
       label: L('DisplayName:Name'),

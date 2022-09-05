@@ -33,7 +33,7 @@
       span: 24,
     },
   });
-  const [registerModal, { closeModal }] = useModalInner((data) => {
+  const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
     resetFields();
     path.value = data.path;
     bucket.value = data.bucket;
@@ -41,6 +41,7 @@
 
   function handleSubmit() {
     validate().then((input) => {
+      changeOkLoading(true);
       const name = input.name.endsWith('/') ? input.name : input.name + '/';
       createObject({
         bucket: unref(bucket),
@@ -51,6 +52,8 @@
         createMessage.success(L('Successful'));
         closeModal();
         emits('change', name);
+      }).finally(() => {
+        changeOkLoading(false);
       });
     });
   }

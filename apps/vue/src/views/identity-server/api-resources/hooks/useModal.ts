@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 
-import { computed, ref, reactive, unref, watch } from 'vue';
+import { computed, ref, reactive, unref } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -10,12 +10,11 @@ import { get, create, update } from '/@/api/identity-server/apiResources';
 import { ApiResource } from '/@/api/identity-server/model/apiResourcesModel';
 
 interface UseModal {
-  resourceIdRef: Ref<string>;
   formElRef: Ref<any>;
   tabActivedKey: Ref<string>;
 }
 
-export function useModal({ resourceIdRef, formElRef, tabActivedKey }: UseModal) {
+export function useModal({ formElRef, tabActivedKey }: UseModal) {
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
   const { ruleCreator } = useValidation();
@@ -42,24 +41,19 @@ export function useModal({ resourceIdRef, formElRef, tabActivedKey }: UseModal) 
     }),
   });
 
-  watch(
-    () => unref(resourceIdRef),
-    (id) => {
-      unref(formElRef)?.resetFields();
-      if (id) {
-        get(id).then((res) => {
-          resourceRef.value = res;
-        });
-      } else {
-        resourceRef.value = Object.assign({
-          secrets: [],
-          scopes: [],
-          userClaims: [],
-          properties: [],
-        });
-      }
-    },
-  );
+  function fetchResource(resourceId?: string) {
+    resourceRef.value = Object.assign({
+      secrets: [],
+      scopes: [],
+      userClaims: [],
+      properties: [],
+    });
+    if (resourceId) {
+      get(resourceId).then((res) => {
+        resourceRef.value = res;
+      });
+    }
+  }
 
   function handleChangeTab(activeKey) {
     tabActivedKey.value = activeKey;
@@ -102,5 +96,6 @@ export function useModal({ resourceIdRef, formElRef, tabActivedKey }: UseModal) 
     handleChangeTab,
     handleVisibleModal,
     handleSubmit,
+    fetchResource,
   };
 }
