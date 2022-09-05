@@ -14,6 +14,10 @@ namespace LINGYUN.Abp.Cli.Commands
 {
     public class HelpCommand : IConsoleCommand, ITransientDependency
     {
+        public const string Name = "help";
+
+        protected string CommandName => Name;
+
         public ILogger<HelpCommand> Logger { get; set; }
         protected AbpCliOptions AbpCliOptions { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
