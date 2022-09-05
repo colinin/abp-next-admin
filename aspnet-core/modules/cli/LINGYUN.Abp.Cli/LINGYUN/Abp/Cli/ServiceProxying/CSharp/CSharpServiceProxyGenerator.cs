@@ -132,7 +132,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         var appServiceTypeFullName = controllerApiDescription.Interfaces.Last().Type;
         var appServiceTypeName = appServiceTypeFullName.Split('.').Last();
         var clientProxyName = $"{controllerApiDescription.ControllerName}ClientProxy";
-        var clientProvider = args.As<GenerateProxyArgs>().Provider;
+        var clientProvider = GetClientProxyProvider(args.As<GenerateProxyArgs>().Provider);
         var rootNamespace = $"{GetTypeNamespace(controllerApiDescription.Type)}.{folder.Replace('/', '.')}";
         var clientProxyBuilder = new StringBuilder(_clientProxyTemplate);
         clientProxyBuilder.Replace(ClassName, clientProxyName);
@@ -370,6 +370,16 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         usingNamespaceList.Add(rootNamespace);
+    }
+
+    private static string GetClientProxyProvider(string provider)
+    {
+        return provider switch
+        {
+            "dapr" => "DaprClientProxyBase",
+            "http" => "ClientProxyBase",
+            _ => "ClientProxyBase"
+        };
     }
 
     private string NormalizeTypeName(string typeName)
