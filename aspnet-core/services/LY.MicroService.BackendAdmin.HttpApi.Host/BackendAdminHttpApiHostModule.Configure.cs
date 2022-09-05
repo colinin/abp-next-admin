@@ -328,7 +328,7 @@ public partial class BackendAdminHttpApiHostModule
 
         if (isDevelopment)
         {
-            // services.AddAlwaysAllowAuthorization();
+            services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

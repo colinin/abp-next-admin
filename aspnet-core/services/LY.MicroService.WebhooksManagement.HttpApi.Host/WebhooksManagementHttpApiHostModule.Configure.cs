@@ -338,15 +338,5 @@ public partial class WebhooksManagementHttpApiHostModule
             // 取消注释包装结果
             // options.IsEnabled = true;
         });
-
-        Configure<AbpDaprClientProxyOptions>(options =>
-        {
-            // dapr服务间调用发送不需要包装结果的请求头
-            options.ProxyRequestActions.Add(
-                (appId, httpRequestMessage) =>
-                {
-                    httpRequestMessage.Headers.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
-                });
-        });
     }
 }

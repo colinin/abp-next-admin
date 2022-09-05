@@ -1,11 +1,13 @@
 ﻿using Elsa;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -57,6 +59,8 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule

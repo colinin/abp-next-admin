@@ -1,10 +1,12 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -48,6 +50,8 @@ namespace LY.MicroService.LocalizationManagement
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpLocalizationCultureMapModule),
+        typeof(AbpHttpClientWrapperModule),
+        typeof(AbpAspNetCoreMvcWrapperModule),
         typeof(AbpAutofacModule)
         )]
     public partial class LocalizationManagementHttpApiHostModule : AbpModule
