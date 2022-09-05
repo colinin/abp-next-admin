@@ -1,10 +1,11 @@
-﻿using LINGYUN.Abp.Dapr.Client.DynamicProxying;
-using LINGYUN.Abp.Wrapper;
+﻿using LINGYUN.Abp.Wrapper;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Microsoft.Extensions.DependencyInjection;
+using LINGYUN.Abp.Dapr.Client.ClientProxying;
 
 namespace LINGYUN.Abp.Dapr.Client.Wrapper
 {
@@ -14,8 +15,20 @@ namespace LINGYUN.Abp.Dapr.Client.Wrapper
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var wrapperOptions = context.Services.ExecutePreConfiguredActions<AbpWrapperOptions>();
+
             Configure<AbpDaprClientProxyOptions>(options =>
             {
+                options.ProxyRequestActions.Add(
+                    (_, request) =>
+                    {
+                        var wrapperHeader = wrapperOptions.IsEnabled
+                            ? AbpHttpWrapConsts.AbpWrapResult
+                            : AbpHttpWrapConsts.AbpDontWrapResult;
+
+                        request.Headers.TryAddWithoutValidation(wrapperHeader, "true");
+                    });
+
                 options.OnResponse(async (response, serviceProvider) =>
                 {
                     var stringContent = await response.Content.ReadAsStringAsync();

@@ -12,7 +12,6 @@ namespace LINGYUN.Abp.Dapr.ServiceInvocation
     [Route("api/dapr/test")]
     public class TestAppService : AbpController, ITestAppService
     {
-        private static int _inctement;
         private readonly List<NameValue> _cache = new List<NameValue>
                     {
                         new NameValue("name1", "value1"),
@@ -29,11 +28,9 @@ namespace LINGYUN.Abp.Dapr.ServiceInvocation
         }
 
         [HttpPut]
-        public Task<NameValue> UpdateAsync()
+        public Task<NameValue> UpdateAsync(int inctement)
         {
-            Interlocked.Increment(ref _inctement);
-
-            _cache[0].Value = $"value:updated:{_inctement}";
+            _cache[0].Value = $"value:updated:{inctement}";
 
             return Task.FromResult(_cache[0]);
         }

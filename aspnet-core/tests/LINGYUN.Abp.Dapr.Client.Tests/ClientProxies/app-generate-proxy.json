@@ -1,0 +1,114 @@
+{
+  "modules": {
+    "app": {
+      "rootPath": "app",
+      "remoteServiceName": "TestDapr",
+      "controllers": {
+        "LINGYUN.Abp.Dapr.ServiceInvocation.TestAppService": {
+          "controllerName": "Test",
+          "controllerGroupName": "Test",
+          "isRemoteService": true,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Dapr.ServiceInvocation.TestAppService",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Dapr.ServiceInvocation.ITestAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/dapr/test",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Dapr.NameValue>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Dapr.NameValue>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Dapr.ServiceInvocation.ITestAppService"
+            },
+            "UpdateAsyncByInctement": {
+              "uniqueName": "UpdateAsyncByInctement",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/dapr/test",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "inctement",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "inctement",
+                  "name": "inctement",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Dapr.NameValue",
+                "typeSimple": "LINGYUN.Abp.Dapr.NameValue"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Dapr.ServiceInvocation.ITestAppService"
+            },
+            "GetWrapedAsyncByName": {
+              "uniqueName": "GetWrapedAsyncByName",
+              "name": "GetWrapedAsync",
+              "httpMethod": "GET",
+              "url": "api/dapr/test/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Dapr.TestNeedWrapObject",
+                "typeSimple": "LINGYUN.Abp.Dapr.TestNeedWrapObject"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Dapr.ServiceInvocation.ITestAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}
