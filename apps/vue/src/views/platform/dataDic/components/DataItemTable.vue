@@ -117,7 +117,7 @@
         L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
       ),
       onOk: () => {
-        removeItem(props.dataId!, record.name)
+        return removeItem(props.dataId!, record.name)
           .then(() => {
             createMessage.success(L('SuccessfullyDeleted'));
             emits('reload');

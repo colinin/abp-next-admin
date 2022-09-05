@@ -32,23 +32,18 @@
         </template>
       </template>
     </BasicTable>
-    <BasicModal v-bind="$attrs" @register="registerModal" @ok="handleSubmit" :title="title">
-      <BasicForm @register="registerForm" />
-    </BasicModal>
+    <ApiResourceSecretModal @register="registerModal" @change="handleChange" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Button } from 'ant-design-vue';
-  import { BasicForm, useForm } from '/@/components/Form';
-  import { BasicModal, useModal } from '/@/components/Modal';
+  import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { ApiResourceSecret } from '/@/api/identity-server/model/apiResourcesModel';
   import { getSecretColumns } from '../datas/TableData';
-  import { getSecretFormSchemas } from '../datas/ModalData';
+  import ApiResourceSecretModal from './ApiResourceSecretModal.vue';
 
   const emits = defineEmits(['register', 'secrets-new', 'secrets-delete']);
   defineProps({
@@ -59,31 +54,18 @@
     },
   });
 
-  const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
-  const title = ref('');
-  const [registerForm, { validate, resetFields }] = useForm({
-    labelWidth: 120,
-    showActionButtonGroup: false,
-    schemas: getSecretFormSchemas(),
-  });
-  const [registerModal, { openModal, closeModal }] = useModal();
+  const [registerModal, { openModal }] = useModal();
 
   function handleAddNew() {
-    title.value = L('Secret:New');
-    openModal(true);
+    openModal(true, {});
   }
 
   function handleDelete(record) {
     emits('secrets-delete', record);
   }
 
-  function handleSubmit() {
-    validate().then((input) => {
-      createMessage.success(L('Successful'));
-      emits('secrets-new', input);
-      resetFields();
-      closeModal();
-    });
+  function handleChange(input) {
+    emits('secrets-new', input);
   }
 </script>

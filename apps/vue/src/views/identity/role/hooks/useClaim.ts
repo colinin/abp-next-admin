@@ -108,7 +108,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
       content: L('ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
       okCancel: true,
       onOk: () => {
-        deleteClaim(unref(roleIdRef), claim)
+        return deleteClaim(unref(roleIdRef), claim)
           .then(() => {
             createMessage.success(L('SuccessfullyDeleted'));
             reloadTable();

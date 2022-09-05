@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, shallowRef } from 'vue';
+  import { ref, shallowRef, nextTick } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
@@ -118,22 +118,23 @@
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
   const formElRef = ref<any>(null);
-  const resourceIdRef = ref('');
   const tabActivedKey = ref('basic');
   const advancedComponent = ref('ApiResourceSecret');
   const [registerModal, { changeOkLoading }] = useModalInner((val) => {
-    resourceIdRef.value = val.id;
+    nextTick(() => {
+      fetchResource(val.id);
+    });
   });
   const {
     isEdit,
     resourceRef,
     formRules,
     formTitle,
+    fetchResource,
     handleChangeTab,
     handleVisibleModal,
     handleSubmit,
   } = useModal({
-    resourceIdRef,
     formElRef,
     tabActivedKey,
   });

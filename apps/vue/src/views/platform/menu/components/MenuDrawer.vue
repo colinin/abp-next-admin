@@ -47,7 +47,7 @@
       framework: framework,
     });
 
-  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner((dataVal) => {
+  const [registerDrawer, { setDrawerProps, changeOkLoading, closeDrawer }] = useDrawerInner((dataVal) => {
     menu.value = dataVal;
     framework.value = props.framework;
     nextTick(() => {
@@ -57,10 +57,13 @@
   });
 
   function handleSubmit() {
+    changeOkLoading(true);
     handleFormSubmit()?.then(() => {
       createMessage.success(L('Successful'));
       closeDrawer();
       emits('change');
+    }).finally(() => {
+      changeOkLoading(false);
     });
   }
 </script>

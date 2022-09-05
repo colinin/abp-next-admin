@@ -46,7 +46,7 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
       content: L('ItemWillBeDeletedMessageWithFormat', [record.name]),
       okCancel: true,
       onOk: () => {
-        deleteById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           handleReload();
         });

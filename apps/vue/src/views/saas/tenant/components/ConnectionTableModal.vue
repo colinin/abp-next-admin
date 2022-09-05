@@ -47,6 +47,7 @@
   import { deleteConnectionString, getConnectionStrings } from '/@/api/saas/tenant';
   import ConnectionEditModal from './ConnectionEditModal.vue';
 
+  defineEmits(['register']);
   const { createMessage, createConfirm } = useMessage();
   const { L } = useLocalization(['AbpSaas']);
   const tenantIdRef = ref('');
@@ -85,7 +86,7 @@
       content: L('TenantDeletionConfirmationMessage', [record.name]),
       okCancel: true,
       onOk: () => {
-        deleteConnectionString(unref(tenantIdRef), record.name).then(() => {
+        return deleteConnectionString(unref(tenantIdRef), record.name).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           handleReloadTable();
         });

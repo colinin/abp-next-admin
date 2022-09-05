@@ -168,7 +168,7 @@
       content: L('Objects:WillBeBulkDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        bulkDeleteObject({
+        return bulkDeleteObject({
           bucket: props.bucket,
           path: props.path,
           objects: getSelectRowKeys(),
@@ -194,7 +194,7 @@
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteObject({
+        return deleteObject({
           bucket: props.bucket,
           path: props.path,
           object: record.name,

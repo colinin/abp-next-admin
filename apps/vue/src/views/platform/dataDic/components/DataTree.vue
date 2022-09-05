@@ -78,7 +78,7 @@
             content: L('ItemWillBeDeletedMessage'),
             okCancel: true,
             onOk: () => {
-              remove(node.eventKey).then(() => {
+              return remove(node.eventKey).then(() => {
                 createMessage.success(L('SuccessfullyDeleted'));
                 onLoadAllDataDic();
               });
