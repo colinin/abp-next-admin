@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Localization;
 using LINGYUN.Abp.Dapr.Client;
-using LINGYUN.Abp.Dapr.Client.DynamicProxying;
+using LINGYUN.Abp.Dapr.Client.ClientProxying;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Emailing;
 using Volo.Abp.Http.Client;
