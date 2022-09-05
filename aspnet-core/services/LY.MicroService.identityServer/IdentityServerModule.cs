@@ -1,9 +1,11 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.IdentityServer;
@@ -67,6 +69,8 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpCAPEventBusModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAliyunSmsModule)
     )]
 public partial class IdentityServerModule : AbpModule

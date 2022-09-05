@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
@@ -10,6 +11,7 @@ using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -71,6 +73,8 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAutofacModule)
     )]
 public partial class TaskManagementHttpApiHostModule : AbpModule

@@ -44,6 +44,8 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TextTemplating.Scriban;
 using LINGYUN.Abp.Notifications.PushPlus;
 using LINGYUN.Abp.Notifications.WxPusher;
+using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -87,6 +89,8 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAutofacModule)
     )]
 public partial class RealtimeMessageHttpApiHostModule : AbpModule

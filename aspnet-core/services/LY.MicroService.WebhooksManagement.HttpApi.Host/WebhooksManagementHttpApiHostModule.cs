@@ -35,6 +35,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
+using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Dapr.Client.Wrapper;
 
 namespace LY.MicroService.WebhooksManagement;
 
@@ -67,8 +69,10 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
-    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpSwashbuckleModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpDaprClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WebhooksManagementHttpApiHostModule : AbpModule
