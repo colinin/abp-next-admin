@@ -9,6 +9,7 @@ using LY.MicroService.RealtimeMessage.BackgroundJobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -189,6 +190,28 @@ public partial class RealtimeMessageHttpApiHostModule
             var redisConfig = ConfigurationOptions.Parse(options.Configuration);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
+        });
+    }
+
+    private void PreConfigureSignalR(IConfiguration configuration)
+    {
+        PreConfigure<ISignalRServerBuilder>(builder =>
+        {
+            var redisEnabled = configuration["SignalR:Redis:IsEnabled"];
+            if (redisEnabled.IsNullOrEmpty() || bool.Parse(redisEnabled))
+            {
+                builder.AddStackExchangeRedis(redis =>
+                {
+                    var redisConfiguration = configuration["SignalR:Redis:Configuration"];
+                    if (!redisConfiguration.IsNullOrEmpty())
+                    {
+                        redis.ConnectionFactory = async (writer) =>
+                        {
+                            return await ConnectionMultiplexer.ConnectAsync(redisConfiguration);
+                        };
+                    }
+                });
+            }
         });
     }
 

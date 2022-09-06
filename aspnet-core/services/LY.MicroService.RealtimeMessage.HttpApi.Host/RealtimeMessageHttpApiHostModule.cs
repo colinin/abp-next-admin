@@ -105,6 +105,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         PreConfigureFeature();
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
+        PreConfigureSignalR(configuration);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
