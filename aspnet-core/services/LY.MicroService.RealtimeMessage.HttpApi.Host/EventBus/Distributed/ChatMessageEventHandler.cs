@@ -39,7 +39,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             Logger = NullLogger<ChatMessageEventHandler>.Instance;
         }
 
-        public virtual async Task HandleEventAsync(RealTimeEto<ChatMessage> eventData)
+        public async virtual Task HandleEventAsync(RealTimeEto<ChatMessage> eventData)
         {
             Logger.LogDebug($"Persistent chat message.");
 

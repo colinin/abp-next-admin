@@ -35,11 +35,12 @@ public class TenantConfigurationCache : ITenantConfigurationCache, ITransientDep
             var allActiveTenants = await TenantRepository.GetListAsync();
 
             cacheItem = new TenantConfigurationCacheItem(
-                allActiveTenants.Select(t =>
-                    new TenantConfiguration(t.Id, t.Name)
-                    {
-                        IsActive = t.IsActive,
-                    }).ToList());
+                allActiveTenants
+                .Where(t => t.IsActive)
+                .Select(t => new TenantConfiguration(t.Id, t.Name)
+                {
+                    IsActive = t.IsActive,
+                }).ToList());
 
             await TenantCache.SetAsync(cacheKey, cacheItem);
         }

@@ -137,70 +137,6 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             }
         }
 
-        protected async virtual Task SendToTenantAsync(
-            Guid? tenantId, 
-            NotificationDefinition notification,
-            NotificationEto<NotificationTemplate> eventData)
-        {
-            using (CurrentTenant.Change(tenantId))
-            {
-                var notificationInfo = new NotificationInfo
-                {
-                    Name = notification.Name,
-                    TenantId = tenantId,
-                    Severity = eventData.Severity,
-                    Type = notification.NotificationType,
-                    CreationTime = eventData.CreationTime,
-                    Lifetime = notification.NotificationLifetime,
-                };
-                notificationInfo.SetId(eventData.Id);
-
-                var title = notification.DisplayName.Localize(StringLocalizerFactory);
-
-                var message = await TemplateRenderer.RenderAsync(
-                    templateName: eventData.Data.Name,
-                    model: eventData.Data.ExtraProperties,
-                    cultureName: eventData.Data.Culture,
-                    globalContext: new Dictionary<string, object>
-                    {
-                        { "$notification", notification.Name },
-                        { "$formUser", eventData.Data.FormUser },
-                        { "$notificationId", eventData.Id },
-                        { "$title", title.ToString() },
-                        { "$creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
-                    });
-
-                var notificationData = new NotificationData();
-                notificationData.WriteStandardData(
-                    title: title,
-                    message: message,
-                    createTime: eventData.CreationTime,
-                    formUser: eventData.Data.FormUser);
-                notificationData.ExtraProperties.AddIfNotContains(eventData.Data.ExtraProperties);
-
-                notificationInfo.Data = notificationData;
-
-                Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
-
-                // 持久化通知
-                await NotificationStore.InsertNotificationAsync(notificationInfo);
-
-                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
-
-                // 过滤用户指定提供者
-                if (eventData.UseProviders.Any())
-                {
-                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
-                }
-                else if (notification.Providers.Any())
-                {
-                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
-                }
-
-                await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
-            }
-        }
-
         [UnitOfWork]
         public async virtual Task HandleEventAsync(NotificationEto<NotificationData> eventData)
         {
@@ -230,10 +166,108 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         protected async virtual Task SendToTenantAsync(
             Guid? tenantId,
             NotificationDefinition notification,
+            NotificationEto<NotificationTemplate> eventData)
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
+
+                // 过滤用户指定提供者
+                if (eventData.UseProviders.Any())
+                {
+                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
+                }
+                else if (notification.Providers.Any())
+                {
+                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
+                }
+
+                var notificationInfo = new NotificationInfo
+                {
+                    Name = notification.Name,
+                    TenantId = tenantId,
+                    Severity = eventData.Severity,
+                    Type = notification.NotificationType,
+                    CreationTime = eventData.CreationTime,
+                    Lifetime = notification.NotificationLifetime,
+                };
+                notificationInfo.SetId(eventData.Id);
+
+                var title = notification.DisplayName.Localize(StringLocalizerFactory);
+                var message = "";
+
+                try
+                {
+                    // 由于模板通知受租户影响, 格式化失败的消息将被丢弃.
+                    message = await TemplateRenderer.RenderAsync(
+                        templateName: eventData.Data.Name,
+                        model: eventData.Data.ExtraProperties,
+                        cultureName: eventData.Data.Culture,
+                        globalContext: new Dictionary<string, object>
+                        {
+                            { "$notification", notification.Name },
+                            { "$formUser", eventData.Data.FormUser },
+                            { "$notificationId", eventData.Id },
+                            { "$title", title.ToString() },
+                            { "$creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                        });
+                }
+                catch(Exception ex)
+                {
+                    Logger.LogWarning("Formatting template notification failed, message will be discarded, cause :{message}", ex.Message);
+                    return;
+                }
+
+                var notificationData = new NotificationData();
+                notificationData.WriteStandardData(
+                    title: title,
+                    message: message,
+                    createTime: eventData.CreationTime,
+                    formUser: eventData.Data.FormUser);
+                notificationData.ExtraProperties.AddIfNotContains(eventData.Data.ExtraProperties);
+
+                notificationInfo.Data = notificationData;
+
+                var subscriptionUsers = await GerSubscriptionUsersAsync(
+                    notificationInfo.Name,
+                    eventData.Users,
+                    tenantId);
+
+                await PersistentNotificationAsync(
+                    notificationInfo,
+                    subscriptionUsers,
+                    providers);
+
+                if (subscriptionUsers.Any())
+                {
+                    // 发布通知
+                    foreach (var provider in providers)
+                    {
+                        await PublishToSubscriberAsync(provider, notificationInfo, subscriptionUsers);
+                    }
+                }
+            }
+        }
+
+        protected async virtual Task SendToTenantAsync(
+            Guid? tenantId,
+            NotificationDefinition notification,
             NotificationEto<NotificationData> eventData)
         {
             using (CurrentTenant.Change(tenantId))
             {
+                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
+
+                // 过滤用户指定提供者
+                if (eventData.UseProviders.Any())
+                {
+                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
+                }
+                else if (notification.Providers.Any())
+                {
+                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
+                }
+
                 var notificationInfo = new NotificationInfo
                 {
                     Name = notification.Name,
@@ -249,86 +283,113 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 // TODO: 可以做成一个接口来序列化消息
                 notificationInfo.Data = NotificationDataConverter.Convert(notificationInfo.Data);
 
-                Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
+                // 获取用户订阅
+                var subscriptionUsers = await GerSubscriptionUsersAsync(
+                    notificationInfo.Name,
+                    eventData.Users,
+                    tenantId);
 
+                // 持久化通知
+                await PersistentNotificationAsync(
+                    notificationInfo,
+                    subscriptionUsers,
+                    providers);
+
+                if (subscriptionUsers.Any())
+                {
+                    // 发布订阅通知
+                    foreach (var provider in providers)
+                    {
+                        await PublishToSubscriberAsync(provider, notificationInfo, subscriptionUsers);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 获取用户订阅列表
+        /// </summary>
+        /// <param name="notificationName">通知名称</param>
+        /// <param name="sendToUsers">接收用户列表</param>
+        /// <param name="tenantId">租户标识</param>
+        /// <returns>用户订阅列表</returns>
+        protected async Task<IEnumerable<UserIdentifier>> GerSubscriptionUsersAsync(
+            string notificationName,
+            IEnumerable<UserIdentifier> sendToUsers,
+            Guid? tenantId = null)
+        {
+            try
+            {
+                // 获取用户订阅列表
+                var userSubscriptions = await NotificationSubscriptionManager.GetUsersSubscriptionsAsync(
+                    tenantId,
+                    notificationName,
+                    sendToUsers);
+
+                return userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
+            }
+            catch(Exception ex)
+            {
+                Logger.LogWarning("Failed to get user subscription, message will not be received by the user, reason: {message}", ex.Message);
+            }
+
+            return new List<UserIdentifier>();
+        }
+        /// <summary>
+        /// 持久化通知并返回订阅用户列表
+        /// </summary>
+        /// <param name="notificationInfo">通知实体</param>
+        /// <param name="subscriptionUsers">订阅用户列表</param>
+        /// <param name="sendToProviders">通知发送提供者</param>
+        /// <returns>返回订阅者列表</returns>
+        protected async Task PersistentNotificationAsync(
+            NotificationInfo notificationInfo,
+            IEnumerable<UserIdentifier> subscriptionUsers,
+            IEnumerable<INotificationPublishProvider> sendToProviders)
+        {
+            try
+            {
                 // 持久化通知
                 await NotificationStore.InsertNotificationAsync(notificationInfo);
 
-                var providers = Enumerable.Reverse(NotificationPublishProviderManager.Providers);
-
-                // 过滤用户指定提供者
-                if (eventData.UseProviders.Any())
+                if (!subscriptionUsers.Any())
                 {
-                    providers = providers.Where(p => eventData.UseProviders.Contains(p.Name));
-                }
-                else if (notification.Providers.Any())
-                {
-                    providers = providers.Where(p => notification.Providers.Contains(p.Name));
+                    return;
                 }
 
-                await PublishFromProvidersAsync(providers, eventData.Users, notificationInfo);
-            }
-        }
-
-        /// <summary>
-        /// 指定提供者发布通知
-        /// </summary>
-        /// <param name="providers">提供者列表</param>
-        /// <param name="notificationInfo">通知信息</param>
-        /// <returns></returns>
-        protected async Task PublishFromProvidersAsync(
-            IEnumerable<INotificationPublishProvider> providers,
-            IEnumerable<UserIdentifier> users,
-            NotificationInfo notificationInfo)
-        {
-            // 检查是够已订阅消息
-            Logger.LogDebug($"Gets a list of user subscriptions {notificationInfo.Name}");
-
-            // 获取用户订阅列表
-            var userSubscriptions = await NotificationSubscriptionManager
-                    .GetUsersSubscriptionsAsync(notificationInfo.TenantId, notificationInfo.Name, users);
-
-            users = userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
-
-            if (users.Any())
-            {
                 // 持久化用户通知
-                Logger.LogDebug($"Persistent user notifications {notificationInfo.Name}");
-                await NotificationStore
-                    .InsertUserNotificationsAsync(
-                        notificationInfo,
-                        users.Select(u => u.UserId));
+                await NotificationStore.InsertUserNotificationsAsync(notificationInfo, subscriptionUsers.Select(u => u.UserId));
 
-                // 2020-11-02 fix bug, 多个发送提供者处于同一个工作单元之下,不能把删除用户订阅写入到单个通知提供者完成事件中
-                // 而且为了确保一致性,删除订阅移动到发布通知之前
                 if (notificationInfo.Lifetime == NotificationLifetime.OnlyOne)
                 {
-                    // 一次性通知在发送完成后就取消用户订阅
-                    await NotificationStore
-                        .DeleteUserSubscriptionAsync(
-                            notificationInfo.TenantId,
-                            users,
-                            notificationInfo.Name);
+                    // 一次性通知取消用户订阅
+                    await NotificationStore.DeleteUserSubscriptionAsync(
+                        notificationInfo.TenantId,
+                        subscriptionUsers,
+                        notificationInfo.Name);
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Failed to persistent notification failed, reason: {message}", ex.Message);
 
-                // 发布通知
-                foreach (var provider in providers)
+                foreach (var provider in sendToProviders)
                 {
-                    await PublishAsync(provider, notificationInfo, users);
+                    // 处理持久化失败进入后台队列
+                    await ProcessingFailedToQueueAsync(provider, notificationInfo, subscriptionUsers);
                 }
             }
         }
         /// <summary>
-        /// 发布通知
+        /// 发布订阅者通知
         /// </summary>
         /// <param name="provider">通知发布者</param>
         /// <param name="notificationInfo">通知信息</param>
         /// <param name="subscriptionUserIdentifiers">订阅用户列表</param>
         /// <returns></returns>
-        protected async Task PublishAsync(
+        protected async Task PublishToSubscriberAsync(
             INotificationPublishProvider provider,
             NotificationInfo notificationInfo,
-            IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
+            IEnumerable<UserIdentifier> subscriptionUsers)
         {
             try
             {
@@ -340,7 +401,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
                 }
                 // 发布
-                await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
+                await provider.PublishAsync(notificationInfo, subscriptionUsers);
 
                 Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
             }
@@ -348,17 +409,39 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             {
                 Logger.LogWarning($"Send notification error with provider {provider.Name}");
                 Logger.LogWarning($"Error message:{ex.Message}");
-
-                Logger.LogTrace(ex, $"Send notification error with provider { provider.Name}");
-
-                Logger.LogDebug($"Send notification error, notification {notificationInfo.Name} entry queue");
+                Logger.LogDebug($"Failed to send notification {notificationInfo.Name}. Try to push notification to background job");
+                // 发送失败的消息进入后台队列
+                await ProcessingFailedToQueueAsync(provider, notificationInfo, subscriptionUsers);
+            }
+        }
+        /// <summary>
+        /// 处理失败的消息进入后台队列
+        /// </summary>
+        /// <remarks>
+        /// 注: 如果入队失败,消息将被丢弃.
+        /// </remarks>
+        /// <param name="provider"></param>
+        /// <param name="notificationInfo"></param>
+        /// <param name="subscriptionUsers"></param>
+        /// <returns></returns>
+        protected async Task ProcessingFailedToQueueAsync(
+            INotificationPublishProvider provider,
+            NotificationInfo notificationInfo,
+            IEnumerable<UserIdentifier> subscriptionUsers)
+        {
+            try
+            {
                 // 发送失败的消息进入后台队列
                 await BackgroundJobManager.EnqueueAsync(
                     new NotificationPublishJobArgs(
                         notificationInfo.GetId(),
                         provider.GetType().AssemblyQualifiedName,
-                        subscriptionUserIdentifiers.ToList(),
+                        subscriptionUsers.ToList(),
                         notificationInfo.TenantId));
+            }
+            catch(Exception ex)
+            {
+                Logger.LogWarning("Failed to push to background job, notification will be discarded, error cause: {message}", ex.Message);
             }
         }
     }
