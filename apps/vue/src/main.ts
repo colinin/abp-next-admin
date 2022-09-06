@@ -5,6 +5,7 @@ import 'virtual:windi-utilities.css';
 // Register icon sprite
 import 'virtual:svg-icons-register';
 import App from './App.vue';
+import Antd from 'ant-design-vue';
 import VueCookies from 'vue-cookies'
 import { createApp } from 'vue';
 import { initAppConfigStore, initAbpConfigStore } from '/@/logics/initAppConfig';
@@ -51,6 +52,8 @@ async function bootstrap() {
   // await router.isReady();
 
   app.use(VueCookies);
+
+  app.use(Antd);
 
   app.mount('#app');
 }
