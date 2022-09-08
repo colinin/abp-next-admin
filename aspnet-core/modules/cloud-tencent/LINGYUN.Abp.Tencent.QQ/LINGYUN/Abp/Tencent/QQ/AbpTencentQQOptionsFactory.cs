@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Tencent.QQ
             Options = options;
         }
 
-        public virtual async Task<AbpTencentQQOptions> CreateAsync()
+        public async virtual Task<AbpTencentQQOptions> CreateAsync()
         {
             await Options.SetAsync();
 

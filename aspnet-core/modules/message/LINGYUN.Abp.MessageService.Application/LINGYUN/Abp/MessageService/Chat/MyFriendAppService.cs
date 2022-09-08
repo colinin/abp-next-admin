@@ -26,12 +26,12 @@ namespace LINGYUN.Abp.MessageService.Chat
             LocalizationResource = typeof(MessageServiceResource);
         }
 
-        public virtual async Task<UserFriend> GetAsync(Guid friendId)
+        public async virtual Task<UserFriend> GetAsync(Guid friendId)
         {
             return await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId);
         }
 
-        public virtual async Task CreateAsync(MyFriendCreateDto input)
+        public async virtual Task CreateAsync(MyFriendCreateDto input)
         {
             var friendCard = await UserChatCardRepository.GetMemberAsync(input.FriendId);
 
@@ -41,17 +41,17 @@ namespace LINGYUN.Abp.MessageService.Chat
                 input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
         }
 
-        public virtual async Task AddRequestAsync(MyFriendAddRequestDto input)
+        public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
         {
             await FriendStore.AddRequestAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, input.RemarkName, L["AddNewFriendBySearchId"]);
         }
 
-        public virtual async Task DeleteAsync(MyFriendOperationDto input)
+        public async virtual Task DeleteAsync(MyFriendOperationDto input)
         {
             await FriendStore.RemoveMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId);
         }
 
-        public virtual async Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
+        public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
         {
             var myFriends = await FriendStore
                 .GetListAsync(
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return new ListResultDto<UserFriend>(myFriends);
         }
 
-        public virtual async Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
         {
             var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
 

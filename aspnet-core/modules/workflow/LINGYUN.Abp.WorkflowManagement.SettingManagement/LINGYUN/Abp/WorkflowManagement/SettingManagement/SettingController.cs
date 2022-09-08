@@ -20,27 +20,27 @@ namespace LINGYUN.Abp.WorkflowManagement.SettingManagement
         }
 
         [HttpPut]
-        public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
             await _settingAppService.SetCurrentTenantAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public async virtual Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
         {
             return await _settingAppService.GetAllForCurrentTenantAsync();
         }
 
         [HttpPost]
         [Route("by-global")]
-        public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
+        public async virtual Task SetGlobalAsync(UpdateSettingsDto input)
         {
             await _settingAppService.SetGlobalAsync(input);
         }
 
         [HttpGet]
         [Route("by-global")]
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
+        public async virtual Task<ListResultDto<SettingGroupDto>> GetAllForGlobalAsync()
         {
             return await _settingAppService.GetAllForGlobalAsync();
         }

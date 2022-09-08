@@ -87,7 +87,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
         [InlineData("test-blob-1")]
         [InlineData("test-blob-1.txt")]
         [InlineData("test-folder/test-blob-1")]
-        public virtual async Task Saved_Blobs_Should_Exists(string blobName)
+        public async virtual Task Saved_Blobs_Should_Exists(string blobName)
         {
             await Container.SaveAsync(blobName, "test content".GetBytes());
             (await Container.ExistsAsync(blobName)).ShouldBeTrue();

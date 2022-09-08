@@ -18,7 +18,7 @@ namespace LINGYUN.Platform.Layouts
         {
         }
 
-        public virtual async Task<Layout> FindByNameAsync(
+        public async virtual Task<Layout> FindByNameAsync(
             string name,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -29,7 +29,7 @@ namespace LINGYUN.Platform.Layouts
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             string framework = "",
             string filter = "", 
             CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ namespace LINGYUN.Platform.Layouts
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Layout>> GetPagedListAsync(
+        public async virtual Task<List<Layout>> GetPagedListAsync(
             string framework = "",
             string filter = "",
             string sorting = nameof(Layout.Name),

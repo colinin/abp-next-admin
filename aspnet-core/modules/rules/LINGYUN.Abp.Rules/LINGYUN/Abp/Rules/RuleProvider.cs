@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.Rules
             _serviceProvider = serviceProvider;
         }
 
-        public virtual async Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+        public async virtual Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
         {
             _logger.LogDebug("Starting all typed rules engine.");
 

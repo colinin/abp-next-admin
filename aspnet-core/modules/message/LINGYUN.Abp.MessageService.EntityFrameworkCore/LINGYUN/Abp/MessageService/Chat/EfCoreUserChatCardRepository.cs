@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public virtual async Task<UserChatCard> FindByUserIdAsync(
+        public async virtual Task<UserChatCard> FindByUserIdAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -29,14 +29,14 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> CheckUserIdExistsAsync(Guid userId, CancellationToken cancellationToken = default)
+        public async virtual Task<bool> CheckUserIdExistsAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .AnyAsync(ucc => ucc.UserId == userId,
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<UserCard> GetMemberAsync(Guid findUserId, CancellationToken cancellationToken = default)
+        public async virtual Task<UserCard> GetMemberAsync(Guid findUserId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(ucc => ucc.UserId == findUserId)
@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetMemberCountAsync(
+        public async virtual Task<int> GetMemberCountAsync(
             string findUserName = "",
             int? startAge = null,
             int? endAge = null,
@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                   .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserCard>> GetMembersAsync(
+        public async virtual Task<List<UserCard>> GetMembersAsync(
             string findUserName = "",
             int? startAge = null,
             int? endAge = null,

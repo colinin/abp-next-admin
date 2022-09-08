@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.Identity
         #region OrganizationUnit
 
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
-        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+        public async virtual Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
             var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id);
 
@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
-        public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input)
+        public async virtual Task SetOrganizationUnitsAsync(Guid id, IdentityRoleAddOrRemoveOrganizationUnitDto input)
         {
             var origanizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(id, true);
 
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
-        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        public async virtual Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
         {
             await OrganizationUnitManager.RemoveRoleFromOrganizationUnitAsync(id, ouId);
 
@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.Identity
 
         #region ClaimType
 
-        public virtual async Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
+        public async virtual Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
         {
             var role = await IdentityRoleRepository.GetAsync(id);
 
@@ -76,7 +76,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.ManageClaims)]
-        public virtual async Task AddClaimAsync(Guid id, IdentityRoleClaimCreateDto input)
+        public async virtual Task AddClaimAsync(Guid id, IdentityRoleClaimCreateDto input)
         {
             var role = await IdentityRoleRepository.GetAsync(id);
             var claim = new Claim(input.ClaimType, input.ClaimValue);
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.ManageClaims)]
-        public virtual async Task UpdateClaimAsync(Guid id, IdentityRoleClaimUpdateDto input)
+        public async virtual Task UpdateClaimAsync(Guid id, IdentityRoleClaimUpdateDto input)
         {
             var role = await IdentityRoleRepository.GetAsync(id);
             var oldClaim = role.FindClaim(new Claim(input.ClaimType, input.ClaimValue));
@@ -108,7 +108,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.ManageClaims)]
-        public virtual async Task DeleteClaimAsync(Guid id, IdentityRoleClaimDeleteDto input)
+        public async virtual Task DeleteClaimAsync(Guid id, IdentityRoleClaimDeleteDto input)
         {
             var role = await IdentityRoleRepository.GetAsync(id);
             role.RemoveClaim(new Claim(input.ClaimType, input.ClaimValue));

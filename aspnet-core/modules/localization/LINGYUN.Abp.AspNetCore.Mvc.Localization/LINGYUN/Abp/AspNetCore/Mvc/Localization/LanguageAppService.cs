@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             _languageProvider = languageProvider;
         }
 
-        public virtual async Task<ListResultDto<LanguageDto>> GetListAsync()
+        public async virtual Task<ListResultDto<LanguageDto>> GetListAsync()
         {
             var languages = await _languageProvider.GetLanguagesAsync();
 

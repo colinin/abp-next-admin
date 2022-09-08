@@ -21,14 +21,14 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
 
         [HttpGet]
         [Route("by-current-tenant")]
-        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await WeChatSettingAppService.GetAllForCurrentTenantAsync();
         }
 
         [HttpGet]
         [Route("by-global")]
-        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
+        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await WeChatSettingAppService.GetAllForGlobalAsync();
         }

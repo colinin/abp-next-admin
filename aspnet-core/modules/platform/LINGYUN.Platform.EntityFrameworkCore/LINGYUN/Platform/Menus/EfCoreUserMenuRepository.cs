@@ -18,7 +18,7 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
-        public virtual async Task<bool> UserHasInMenuAsync(
+        public async virtual Task<bool> UserHasInMenuAsync(
             Guid userId, 
             string menuName, 
             CancellationToken cancellationToken = default)
@@ -35,7 +35,7 @@ namespace LINGYUN.Platform.Menus
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserMenu>> GetListByUserIdAsync(
+        public async virtual Task<List<UserMenu>> GetListByUserIdAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -44,7 +44,7 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<Menu> GetStartupMenuAsync(
+        public async virtual Task<Menu> GetStartupMenuAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {

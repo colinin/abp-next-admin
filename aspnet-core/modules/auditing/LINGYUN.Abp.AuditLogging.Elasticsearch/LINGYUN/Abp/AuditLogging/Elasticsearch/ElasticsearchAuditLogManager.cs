@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         }
 
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -85,7 +85,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return response.Count;
         }
 
-        public virtual async Task<List<AuditLog>> GetListAsync(
+        public async virtual Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -157,7 +157,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return response.Documents.ToList();
         }
 
-        public virtual async Task<AuditLog> GetAsync(
+        public async virtual Task<AuditLog> GetAsync(
             Guid id,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -173,7 +173,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return response.Source;
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var client = _clientFactory.Create();
 
@@ -184,7 +184,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
                 cancellationToken);
         }
 
-        public virtual async Task<string> SaveAsync(
+        public async virtual Task<string> SaveAsync(
             AuditLogInfo auditInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -205,7 +205,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             return "";
         }
 
-        protected virtual async Task<string> SaveLogAsync(
+        protected async virtual Task<string> SaveLogAsync(
             AuditLogInfo auditLogInfo,
             CancellationToken cancellationToken = default(CancellationToken))
         {

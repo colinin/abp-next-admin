@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.Notifications
             _dynamicStore = dynamicStore;
         }
 
-        public virtual async Task<NotificationDefinition> GetAsync(string name)
+        public async virtual Task<NotificationDefinition> GetAsync(string name)
         {
             var notification = await GetOrNullAsync(name);
             if (notification == null)
@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.Notifications
             return notification;
         }
 
-        public virtual async Task<NotificationDefinition> GetOrNullAsync(string name)
+        public async virtual Task<NotificationDefinition> GetOrNullAsync(string name)
         {
             Check.NotNull(name, nameof(name));
 
@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.Notifications
                    await _dynamicStore.GetOrNullAsync(name);
         }
 
-        public virtual async Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
+        public async virtual Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
         {
             var staticNotifications = await _staticStore.GetNotificationsAsync();
             var staticNotificationNames = staticNotifications

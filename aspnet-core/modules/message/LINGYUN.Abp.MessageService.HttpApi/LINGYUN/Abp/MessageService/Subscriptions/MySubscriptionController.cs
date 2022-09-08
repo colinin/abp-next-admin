@@ -20,32 +20,32 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
 
         [HttpGet]
         [Route("all")]
-        public virtual async Task<ListResultDto<UserSubscreNotificationDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<UserSubscreNotificationDto>> GetAllListAsync()
         {
             return await _subscriptionAppService.GetAllListAsync();
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<UserSubscreNotificationDto>> GetListAsync(SubscriptionsGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserSubscreNotificationDto>> GetListAsync(SubscriptionsGetByPagedDto input)
         {
             return await _subscriptionAppService.GetListAsync(input);
         }
 
         [HttpGet]
         [Route("is-subscribed/{Name}")]
-        public virtual async Task<UserSubscriptionsResult> IsSubscribedAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task<UserSubscriptionsResult> IsSubscribedAsync(SubscriptionsGetByNameDto input)
         {
             return await _subscriptionAppService.IsSubscribedAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task SubscribeAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task SubscribeAsync(SubscriptionsGetByNameDto input)
         {
             await _subscriptionAppService.SubscribeAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task UnSubscribeAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task UnSubscribeAsync(SubscriptionsGetByNameDto input)
         {
             await _subscriptionAppService.UnSubscribeAsync(input);
         }

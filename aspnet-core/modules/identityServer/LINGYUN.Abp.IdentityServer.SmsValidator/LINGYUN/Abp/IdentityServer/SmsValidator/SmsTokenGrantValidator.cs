@@ -120,7 +120,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
             await SetSuccessResultAsync(context, currentUser);
         }
 
-        protected virtual async Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user)
+        protected async virtual Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user)
         {
             var sub = await UserManager.GetUserIdAsync(user);
 
@@ -142,7 +142,7 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
                 IdentityServerSecurityLogActionConsts.LoginSucceeded);
         }
 
-        protected virtual async Task SaveSecurityLogAsync(
+        protected async virtual Task SaveSecurityLogAsync(
             ExtensionGrantValidationContext context,
             IdentityUser user,
             string action)

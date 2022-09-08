@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             return Task.FromResult(container);
         }
 
-        public virtual async Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+        public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
         {
             var objectPath = !request.Path.IsNullOrWhiteSpace()
                  ? request.Path.EnsureEndsWith('/')
@@ -252,7 +252,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
             return Task.FromResult(container);
         }
 
-        public virtual async Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+        public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
         {
             var objectPath = !request.Path.IsNullOrWhiteSpace()
                  ? request.Path.EnsureEndsWith('/')

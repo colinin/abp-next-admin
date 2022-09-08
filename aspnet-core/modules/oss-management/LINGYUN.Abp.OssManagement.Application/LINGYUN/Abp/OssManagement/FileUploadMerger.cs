@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.UploadLimit,
             AbpOssManagementFeatureNames.OssObject.UploadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<OssObject> MergeAsync(CreateOssObjectInput input)
+        public async virtual Task<OssObject> MergeAsync(CreateOssObjectInput input)
         {
             if (input.File == null || !input.File.ContentLength.HasValue)
             {

@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.WorkflowCore
 
         public bool IsDequeueBlocking => _queueProvider.IsDequeueBlocking;
 
-        public virtual async Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
+        public async virtual Task<string> DequeueWork(QueueType queue, CancellationToken cancellationToken)
         {
             if (_unitOfWorkManager.Current != null && !_unitOfWorkManager.Current.IsCompleted)
             {

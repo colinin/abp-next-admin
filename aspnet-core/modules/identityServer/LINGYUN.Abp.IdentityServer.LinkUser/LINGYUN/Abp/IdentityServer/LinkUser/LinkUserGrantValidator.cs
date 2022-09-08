@@ -53,7 +53,7 @@ public class LinkUserGrantValidator : IExtensionGrantValidator
     }
 
     [UnitOfWork]
-    public virtual async Task ValidateAsync(ExtensionGrantValidationContext context)
+    public async virtual Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var accessToken = context.Request.Raw["access_token"];
         if (accessToken.IsNullOrWhiteSpace())

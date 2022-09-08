@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.IdentityModel
             return accessTokenCacheItem.AccessToken;
         }
 
-        protected virtual async Task<IdentityModelAuthenticationCacheItem> GetCacheItemAsync(IdentityClientConfiguration configuration)
+        protected async virtual Task<IdentityModelAuthenticationCacheItem> GetCacheItemAsync(IdentityClientConfiguration configuration)
         {
             var cacheKey = IdentityModelAuthenticationCacheItem.CalculateCacheKey(configuration.GrantType, configuration.ClientId, configuration.UserName);
             
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.IdentityModel
             return cacheItem;
         }
 
-        protected virtual async Task<TokenResponse> GetAccessTokenResponseAsync(IdentityClientConfiguration configuration)
+        protected async virtual Task<TokenResponse> GetAccessTokenResponseAsync(IdentityClientConfiguration configuration)
         {
             var discoveryResponse = await GetDiscoveryResponse(configuration);
             if (discoveryResponse.IsError)

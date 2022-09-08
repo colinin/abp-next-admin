@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<bool> IsPhoneNumberUedAsync(
+        public async virtual Task<bool> IsPhoneNumberUedAsync(
             string phoneNumber,
             CancellationToken cancellationToken = default)
         {
@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> IsPhoneNumberConfirmedAsync(
+        public async virtual Task<bool> IsPhoneNumberConfirmedAsync(
             string phoneNumber,
             CancellationToken cancellationToken = default)
         {
@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> IsNormalizedEmailConfirmedAsync(
+        public async virtual Task<bool> IsNormalizedEmailConfirmedAsync(
            string normalizedEmail,
            CancellationToken cancellationToken = default)
         {
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<IdentityUser> FindByPhoneNumberAsync(
+        public async virtual Task<IdentityUser> FindByPhoneNumberAsync(
             string phoneNumber,
             bool isConfirmed = true,
             bool includeDetails = false,
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityUser>> GetListByIdListAsync(
+        public async virtual Task<List<IdentityUser>> GetListByIdListAsync(
             List<Guid> userIds,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+        public async virtual Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             Guid id,
             string filter = null,
             bool includeDetails = false,
@@ -111,7 +111,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetUsersInOrganizationUnitCountAsync(
+        public async virtual Task<long> GetUsersInOrganizationUnitCountAsync(
             Guid organizationUnitId,
             string filter = null,
             CancellationToken cancellationToken = default
@@ -130,7 +130,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+        public async virtual Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
             Guid organizationUnitId,
             string filter = null,
             int skipCount = 1,
@@ -152,7 +152,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetUsersInOrganizationsListCountAsync(
+        public async virtual Task<long> GetUsersInOrganizationsListCountAsync(
             List<Guid> organizationUnitIds,
             string filter = null,
             CancellationToken cancellationToken = default
@@ -171,7 +171,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+        public async virtual Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
             List<Guid> organizationUnitIds,
             string filter = null,
             int skipCount = 1,
@@ -193,7 +193,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetUsersInOrganizationUnitWithChildrenCountAsync(
+        public async virtual Task<long> GetUsersInOrganizationUnitWithChildrenCountAsync(
             string code,
             string filter = null,
             CancellationToken cancellationToken = default
@@ -213,7 +213,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+        public async virtual Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
             string code,
             string filter = null,
             int skipCount = 1,

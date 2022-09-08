@@ -48,7 +48,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             // 验证用户登录状态
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();

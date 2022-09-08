@@ -28,7 +28,7 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
         Logger = NullLogger<BackgroundJobAdapter<TArgs>>.Instance;
     }
 
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         using var scope = ServiceScopeFactory.CreateScope();
         object args = null;

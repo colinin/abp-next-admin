@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.Code, Input.RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
@@ -33,7 +33,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             }
             else
             {
-                Alerts.Danger("授权码验证无效!");
+                Alerts.Danger("锟斤拷权锟斤拷锟斤拷证锟斤拷效!");
                 return Page();
             }
         }

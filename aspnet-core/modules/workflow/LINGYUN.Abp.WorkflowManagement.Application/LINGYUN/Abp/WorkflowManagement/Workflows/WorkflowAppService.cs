@@ -28,14 +28,14 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             _workflowRepository = workflowRepository;
         }
 
-        public virtual async Task<WorkflowInstanceDto> GetAsync(string id)
+        public async virtual Task<WorkflowInstanceDto> GetAsync(string id)
         {
             var workflow = await _persistence.GetWorkflowInstance(id);
 
             return ObjectMapper.Map<WorkflowInstance, WorkflowInstanceDto>(workflow);
         }
 
-        public virtual async Task ResumeAsync(string id)
+        public async virtual Task ResumeAsync(string id)
         {
             var result = await _controller.ResumeWorkflow(id);
             if (!result)
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             }
         }
 
-        public virtual async Task<WorkflowInstanceDto> StartAsync(Guid id, WorkflowStartInput input)
+        public async virtual Task<WorkflowInstanceDto> StartAsync(Guid id, WorkflowStartInput input)
         {
             var workflowDef = await _workflowRepository.GetAsync(id);
 
@@ -98,7 +98,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             return ObjectMapper.Map<WorkflowInstance, WorkflowInstanceDto>(result);
         }
 
-        public virtual async Task SuspendAsync(string id)
+        public async virtual Task SuspendAsync(string id)
         {
             var result = await _controller.SuspendWorkflow(id);
             if (!result)
@@ -109,7 +109,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             }
         }
 
-        public virtual async Task TerminateAsync(string id)
+        public async virtual Task TerminateAsync(string id)
         {
             var result = await _controller.TerminateWorkflow(id);
             if (!result)

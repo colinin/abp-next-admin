@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.DataProtection
         }
 
         [Fact]
-        public virtual async Task FakeAsync()
+        public async virtual Task FakeAsync()
         {
 
             var values = new List<FakeProtectionObject>()

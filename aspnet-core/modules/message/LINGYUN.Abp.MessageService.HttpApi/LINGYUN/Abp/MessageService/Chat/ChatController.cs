@@ -20,28 +20,28 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         [HttpGet]
         [Route("group/messages")]
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyGroupMessageAsync(GroupMessageGetByPagedDto input)
+        public async virtual Task<PagedResultDto<ChatMessage>> GetMyGroupMessageAsync(GroupMessageGetByPagedDto input)
         {
             return await _chatAppService.GetMyGroupMessageAsync(input);
         }
 
         [HttpGet]
         [Route("my-messages")]
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
+        public async virtual Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
         {
             return await _chatAppService.GetMyChatMessageAsync(input);
         }
 
         [HttpGet]
         [Route("my-last-messages")]
-        public virtual async Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
+        public async virtual Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
         {
             return await _chatAppService.GetMyLastChatMessageAsync(input);
         }
 
         [HttpPost]
         [Route("send-message")]
-        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
+        public async virtual Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {
             return await _chatAppService.SendMessageAsync(input);
         }

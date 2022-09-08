@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Account
             LocalizationResource = typeof(AccountResource);
         }
 
-        public virtual async Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
+        public async virtual Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
         {
             var user = await GetCurrentUserAsync();
 
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.Account
             };
         }
 
-        public virtual async Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
+        public async virtual Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
         {
             // Removed See: https://github.com/abpframework/abp/pull/7719
             //if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
@@ -61,7 +61,7 @@ namespace LINGYUN.Abp.Account
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
+        public async virtual Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
         {
             var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
             var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.Account
                     });
         }
 
-        public virtual async Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
+        public async virtual Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
         {
             // 是否已有用户使用手机号绑定
             if (await UserRepository.IsPhoneNumberConfirmedAsync(input.NewPhoneNumber))

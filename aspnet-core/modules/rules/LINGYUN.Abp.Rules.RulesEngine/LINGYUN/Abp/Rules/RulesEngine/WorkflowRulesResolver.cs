@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
             }
         }
 
-        public virtual async Task<WorkflowRulesResolveResult> ResolveWorkflowRulesAsync(Type type)
+        public async virtual Task<WorkflowRulesResolveResult> ResolveWorkflowRulesAsync(Type type)
         {
             var result = new WorkflowRulesResolveResult();
 

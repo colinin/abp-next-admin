@@ -26,57 +26,57 @@ namespace LINGYUN.Platform.Versions
             VersionRepository = versionRepository;
         }
 
-        public virtual async Task<bool> ExistsAsync(PlatformType platformType, string version)
+        public async virtual Task<bool> ExistsAsync(PlatformType platformType, string version)
         {
             return await VersionRepository.ExistsAsync(platformType, version);
         }
 
-        public virtual async Task<AppVersion> GetByIdAsync(Guid id)
+        public async virtual Task<AppVersion> GetByIdAsync(Guid id)
         {
             return await VersionRepository.GetAsync(id);
         }
 
-        public virtual async Task<AppVersion> GetByVersionAsync(PlatformType platformType, string version)
+        public async virtual Task<AppVersion> GetByVersionAsync(PlatformType platformType, string version)
         {
             return await VersionRepository.GetByVersionAsync(platformType, version);
         }
 
-        public virtual async Task<long> GetCountAsync(PlatformType platformType, string filter)
+        public async virtual Task<long> GetCountAsync(PlatformType platformType, string filter)
         {
             return await VersionRepository.GetCountAsync(platformType, filter);
         }
 
-        public virtual async Task<List<AppVersion>> GetPagedListAsync(PlatformType platformType, string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10)
+        public async virtual Task<List<AppVersion>> GetPagedListAsync(PlatformType platformType, string filter = "", string soring = nameof(AppVersion.CreationTime), bool includeDetails = true, int skipCount = 1, int maxResultCount = 10)
         {
             return await VersionRepository.GetPagedListAsync(platformType, filter, soring, includeDetails, skipCount, maxResultCount);
         }
 
         [UnitOfWork]
-        public virtual async Task CreateAsync(AppVersion version)
+        public async virtual Task CreateAsync(AppVersion version)
         {
             await VersionRepository.InsertAsync(version);
         }
 
 
         [UnitOfWork]
-        public virtual async Task UpdateAsync(AppVersion version)
+        public async virtual Task UpdateAsync(AppVersion version)
         {
             await VersionRepository.UpdateAsync(version);
         }
 
         [UnitOfWork]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await RemoveAllFileAsync(id);
             await VersionRepository.DeleteAsync(id);
         }
 
-        public virtual async Task<AppVersion> GetLatestAsync(PlatformType platformType)
+        public async virtual Task<AppVersion> GetLatestAsync(PlatformType platformType)
         {
             return await VersionRepository.GetLatestVersionAsync(platformType);
         }
 
-        public virtual async Task<Stream> DownloadFileAsync(PlatformType platformType, string version, string filePath, string fileName, string fileVersion)
+        public async virtual Task<Stream> DownloadFileAsync(PlatformType platformType, string version, string filePath, string fileName, string fileVersion)
         {
             var appVersion = await GetByVersionAsync(platformType, version);
             var versionFile = appVersion.FindFile(filePath, fileName, fileVersion);
@@ -91,14 +91,14 @@ namespace LINGYUN.Platform.Versions
                 VersionFile.NormalizeBlobName(version, versionFile.Name, versionFile.Version, versionFile.Path));
         }
 
-        public virtual async Task<Stream> GetFileAsync(VersionFile versionFile)
+        public async virtual Task<Stream> GetFileAsync(VersionFile versionFile)
         {
             versionFile.Download();
             return await VersionBlobContainer.GetAsync(
                 VersionFile.NormalizeBlobName(versionFile.AppVersion.Version, versionFile.Name, versionFile.Version, versionFile.Path));
         }
 
-        public virtual async Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data)
+        public async virtual Task<string> SaveFileAsync(string version, string filePath, string fileName, string fileVersion, byte[] data)
         {
             // 计算指纹
             var sha256 = SHA256.Create();
@@ -112,7 +112,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [UnitOfWork]
-        public virtual async Task AppendFileAsync(Guid versionId, string fileSha256,
+        public async virtual Task AppendFileAsync(Guid versionId, string fileSha256,
             string fileName, string fileVersion,  
             long fileSize, string filePath = "", 
             FileType fileType = FileType.Stream)
@@ -126,7 +126,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [UnitOfWork]
-        public virtual async Task RemoveFileAsync(Guid versionId, string fileName)
+        public async virtual Task RemoveFileAsync(Guid versionId, string fileName)
         {
             var appVersion = await VersionRepository.GetAsync(versionId);
             var versionFile = appVersion.FindFile(fileName);
@@ -139,7 +139,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [UnitOfWork]
-        public virtual async Task RemoveAllFileAsync(Guid versionId)
+        public async virtual Task RemoveAllFileAsync(Guid versionId)
         {
             var appVersion = await VersionRepository.GetAsync(versionId);
             foreach (var versionFile in appVersion.Files)

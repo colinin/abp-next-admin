@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userGroupStore = userGroupStore;
         }
 
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
+        public async virtual Task<PagedResultDto<ChatMessage>> GetMyChatMessageAsync(UserMessageGetByPagedDto input)
         {
             var chatMessageCount = await _messageStore
                 .GetChatMessageCountAsync(
@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return new PagedResultDto<ChatMessage>(chatMessageCount, chatMessages);
         }
 
-        public virtual async Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
+        public async virtual Task<ListResultDto<LastChatMessage>> GetMyLastChatMessageAsync(GetUserLastMessageDto input)
         {
             var chatMessages = await _messageStore
                 .GetLastChatMessagesAsync(
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return new ListResultDto<LastChatMessage>(chatMessages);
         }
 
-        public virtual async Task<PagedResultDto<ChatMessage>> GetMyGroupMessageAsync(GroupMessageGetByPagedDto input)
+        public async virtual Task<PagedResultDto<ChatMessage>> GetMyGroupMessageAsync(GroupMessageGetByPagedDto input)
         {
             if (!await _userGroupStore.MemberHasInGroupAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId()))
             {
@@ -90,7 +90,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
 
-        public virtual async Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
+        public async virtual Task<ChatMessageSendResultDto> SendMessageAsync(ChatMessage input)
         {
             // TODO：向其他租户发送消息?
             input.TenantId ??= CurrentTenant.Id;

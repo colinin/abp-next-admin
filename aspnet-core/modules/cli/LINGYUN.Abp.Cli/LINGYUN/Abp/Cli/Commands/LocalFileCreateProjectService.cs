@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.Cli.Commands
             Logger = NullLogger<CreateCommand>.Instance;
         }
 
-        public virtual async Task CreateAsync(ProjectCreateArgs createArgs)
+        public async virtual Task CreateAsync(ProjectCreateArgs createArgs)
         {
             Logger.LogInformation("Execute dotnet command...");
 
@@ -128,7 +128,7 @@ namespace LINGYUN.Abp.Cli.Commands
             }
         }
 
-        protected virtual async Task TryReplaceVersionWithProjectFile(
+        protected async virtual Task TryReplaceVersionWithProjectFile(
             List<FindFile> projectFiles,
             string version)
         {
@@ -163,7 +163,7 @@ namespace LINGYUN.Abp.Cli.Commands
             }
         }
 
-        protected virtual async Task TryReplaceApplicationUrlWithProjectFile(
+        protected async virtual Task TryReplaceApplicationUrlWithProjectFile(
             List<FindFile> projectFiles,
             string port = "5000",
             string daprPort = "3500")
@@ -182,7 +182,7 @@ namespace LINGYUN.Abp.Cli.Commands
             }
         }
 
-        protected virtual async Task TryReplaceAppSettingsWithProjectFile(
+        protected async virtual Task TryReplaceAppSettingsWithProjectFile(
             List<FindFile> projectFiles,
             string packageName,
             string companyName,
@@ -201,7 +201,7 @@ namespace LINGYUN.Abp.Cli.Commands
             }
         }
 
-        protected virtual async Task TryReplacePackageAndCompanyNameWithProjectFile(
+        protected async virtual Task TryReplacePackageAndCompanyNameWithProjectFile(
             List<FindFile> projectFiles,
             string packageName,
             string companyName,

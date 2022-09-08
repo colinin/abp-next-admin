@@ -21,17 +21,17 @@ namespace LINGYUN.Abp.LocalizationManagement
             _eventBus = eventBus;
         }
         
-        public virtual async Task HandleEventAsync(EntityCreatedEventData<Text> eventData)
+        public async virtual Task HandleEventAsync(EntityCreatedEventData<Text> eventData)
         {
             await HandleEventAsync(BuildResetEventData(eventData.Entity));
         }
 
-        public virtual async Task HandleEventAsync(EntityUpdatedEventData<Text> eventData)
+        public async virtual Task HandleEventAsync(EntityUpdatedEventData<Text> eventData)
         {
             await HandleEventAsync(BuildResetEventData(eventData.Entity));
         }
 
-        public virtual async Task HandleEventAsync(EntityDeletedEventData<Text> eventData)
+        public async virtual Task HandleEventAsync(EntityDeletedEventData<Text> eventData)
         {
             var data = BuildResetEventData(eventData.Entity);
             data.IsDeleted = true;

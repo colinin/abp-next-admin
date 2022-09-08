@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _settingProvider = settingProvider;
         }
 
-        public virtual async Task ReadAsync(ChatMessage message)
+        public async virtual Task ReadAsync(ChatMessage message)
         {
             if (!message.GroupId.IsNullOrWhiteSpace())
             {
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task ReCallAsync(ChatMessage message)
+        public async virtual Task ReCallAsync(ChatMessage message)
         {
             var expiration = await _settingProvider.GetAsync(
                 MessageServiceSettingNames.Messages.RecallExpirationTime, 2d);

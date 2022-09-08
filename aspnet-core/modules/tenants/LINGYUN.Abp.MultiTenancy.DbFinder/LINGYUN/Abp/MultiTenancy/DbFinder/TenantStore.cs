@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             };
         }
 
-        public virtual async Task<TenantConfiguration> FindAsync(string name)
+        public async virtual Task<TenantConfiguration> FindAsync(string name)
         {
             var tenantCacheItem = await GetCacheItemByNameAsync(name);
 
@@ -85,7 +85,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             };
         }
 
-        public virtual async Task<TenantConfiguration> FindAsync(Guid id)
+        public async virtual Task<TenantConfiguration> FindAsync(Guid id)
         {
             var tenantCacheItem = await GetCacheItemByIdAsync(id);
 
@@ -100,7 +100,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
             };
         }
 
-        protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
+        protected async virtual Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
         {
             using (_currentTenant.Change(null))
             {
@@ -142,7 +142,7 @@ namespace LINGYUN.Abp.MultiTenancy.DbFinder
                 return cacheItem;
             }
         }
-        protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
+        protected async virtual Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
         {
             // 需要切换到最外层以解决查询无效的bug
             using (_currentTenant.Change(null))

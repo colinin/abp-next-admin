@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.IdentityServer
             ClaimTypeRepository = claimTypeRepository;
         }
 
-        public virtual async Task CreateStandardResourcesAsync()
+        public async virtual Task CreateStandardResourcesAsync()
         {
             var wechatClaimTypes = new string[]
             {
@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.IdentityServer
             await AddIdentityResourceIfNotExistsAsync(wechatResource);
         }
 
-        protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
+        protected async virtual Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
         {
             if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
             {
@@ -67,7 +67,7 @@ namespace LINGYUN.Abp.IdentityServer
             );
         }
 
-        protected virtual async Task AddClaimTypeIfNotExistsAsync(string claimType)
+        protected async virtual Task AddClaimTypeIfNotExistsAsync(string claimType)
         {
             if (await ClaimTypeRepository.AnyAsync(claimType))
             {

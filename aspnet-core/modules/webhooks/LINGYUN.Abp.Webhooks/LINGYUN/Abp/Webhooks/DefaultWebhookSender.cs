@@ -126,7 +126,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> SendHttpRequest(HttpRequestMessage request)
+        protected async virtual Task<HttpResponseMessage> SendHttpRequest(HttpRequestMessage request)
         {
             var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
 

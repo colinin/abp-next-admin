@@ -16,7 +16,7 @@ public class TenantCacheItemInvalidator : ILocalEventHandler<EntityChangedEventD
         Cache = cache;
     }
 
-    public virtual async Task HandleEventAsync(EntityChangedEventData<Tenant> eventData)
+    public async virtual Task HandleEventAsync(EntityChangedEventData<Tenant> eventData)
     {
         await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, eventData.Entity.Name), considerUow: true);
         // 同时移除租户版本缓存

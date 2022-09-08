@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             _userChatGroupRepository = userChatGroupRepository;
         }
 
-        public virtual async Task<bool> MemberHasInGroupAsync(
+        public async virtual Task<bool> MemberHasInGroupAsync(
             Guid? tenantId,
             long groupId,
             Guid userId,
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             }
         }
 
-        public virtual async Task AddUserToGroupAsync(
+        public async virtual Task AddUserToGroupAsync(
             Guid? tenantId,
             Guid userId,
             long groupId,

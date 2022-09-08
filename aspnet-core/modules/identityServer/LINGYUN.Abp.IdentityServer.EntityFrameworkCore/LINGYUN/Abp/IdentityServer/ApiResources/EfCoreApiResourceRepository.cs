@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         {
         }
 
-        public virtual async Task<List<string>> GetNamesAsync(CancellationToken cancellationToken = default)
+        public async virtual Task<List<string>> GetNamesAsync(CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Select(x => x.Name)

@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Webhooks
             WebhookSendAttemptStore = webhookSendAttemptStore;
         }
 
-        public virtual async Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs)
+        public async virtual Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs)
         {
             var data = JsonConvert.DeserializeObject(webhookSenderArgs.Data);
 
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        public virtual async Task<string> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs)
+        public async virtual Task<string> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs)
         {
             if (webhookSenderArgs.SendExactSameData)
             {

@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.OssManagement
             _stringLocalizer = stringLocalizer;
         }
 
-        public virtual async Task ValidationAsync(UploadFile input)
+        public async virtual Task ValidationAsync(UploadFile input)
         {
             var validation = await GetByCacheItemAsync();
             if (validation.SizeLimit * 1024 * 1024 < input.TotalSize)
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.OssManagement
             }
         }
 
-        protected virtual async Task<FileValidation> GetByCacheItemAsync()
+        protected async virtual Task<FileValidation> GetByCacheItemAsync()
         {
             var fileValidation = _cache.Get<FileValidation>(FileValidation.CacheKey);
             if (fileValidation == null)
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.OssManagement
             return fileValidation;
         }
 
-        protected virtual async Task<FileValidation> GetBySettingAsync()
+        protected async virtual Task<FileValidation> GetBySettingAsync()
         {
             var fileSizeLimited = await _settingProvider
                 .GetAsync(

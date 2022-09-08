@@ -30,12 +30,12 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         QuartzJobCreator = quartzJobCreator;
     }
 
-    public virtual async Task<bool> ExistsAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> ExistsAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         return await Scheduler.CheckExists(BuildJobKey(job), cancellationToken);
     }
 
-    public virtual async Task PauseAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task PauseAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey, cancellationToken))
@@ -48,12 +48,12 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         }
     }
 
-    public virtual async Task<bool> PublishAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> PublishAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         return await QueueAsync(job, cancellationToken);
     }
 
-    public virtual async Task<bool> QueueAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> QueueAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey, cancellationToken))
@@ -78,7 +78,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         return await Scheduler.CheckExists(jobTrigger.Key, cancellationToken);
     }
 
-    public virtual async Task QueuesAsync(IEnumerable<JobInfo> jobs, CancellationToken cancellationToken = default)
+    public async virtual Task QueuesAsync(IEnumerable<JobInfo> jobs, CancellationToken cancellationToken = default)
     {
         var jobDictionary = new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>();
         foreach (var job in jobs)
@@ -101,7 +101,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         await Scheduler.ScheduleJobs(jobDictionary, true, cancellationToken);
     }
 
-    public virtual async Task<bool> RemoveAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> RemoveAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         var jobKey = BuildJobKey(job);
         if (!await Scheduler.CheckExists(jobKey, cancellationToken))
@@ -119,7 +119,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         return !await Scheduler.CheckExists(jobKey, cancellationToken);
     }
 
-    public virtual async Task ResumeAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task ResumeAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         var jobKey = BuildJobKey(job);
         if (await Scheduler.CheckExists(jobKey, cancellationToken))
@@ -132,7 +132,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         }
     }
 
-    public virtual async Task<bool> ShutdownAsync(CancellationToken cancellationToken = default)
+    public async virtual Task<bool> ShutdownAsync(CancellationToken cancellationToken = default)
     {
         await StopAsync(cancellationToken);
 
@@ -141,7 +141,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         return Scheduler.IsShutdown;
     }
 
-    public virtual async Task<bool> StartAsync(CancellationToken cancellationToken = default)
+    public async virtual Task<bool> StartAsync(CancellationToken cancellationToken = default)
     {
         if (Scheduler.InStandbyMode)
         {
@@ -150,7 +150,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         return Scheduler.InStandbyMode;
     }
 
-    public virtual async Task<bool> StopAsync(CancellationToken cancellationToken = default)
+    public async virtual Task<bool> StopAsync(CancellationToken cancellationToken = default)
     {
         if (!Scheduler.InStandbyMode)
         {
@@ -160,7 +160,7 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         return !Scheduler.InStandbyMode;
     }
 
-    public virtual async Task TriggerAsync(JobInfo job, CancellationToken cancellationToken = default)
+    public async virtual Task TriggerAsync(JobInfo job, CancellationToken cancellationToken = default)
     {
         var jobKey = BuildJobKey(job);
         if (!await Scheduler.CheckExists(jobKey, cancellationToken))

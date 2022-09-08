@@ -71,7 +71,7 @@ namespace LINGYUN.Abp.PermissionManagement.Identity
             return await base.IsGrantedAsync(permissionName, providerName, providerKey);
         }
 
-        protected virtual async Task<string[]> GetUserRolesAsync(Guid userId)
+        protected async virtual Task<string[]> GetUserRolesAsync(Guid userId)
         {
             // 通过工作单元来缓存用户角色,防止多次查询
             if (CurrentUnitOfWork != null)

@@ -37,7 +37,7 @@ public class HttpRequestJob : HttpRequestJobBase, IJobRunnable
     public const string PropertyContentType = "contentType";
     public const string PropertyHeaders = "headers";
 
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         InitJob(context);
 

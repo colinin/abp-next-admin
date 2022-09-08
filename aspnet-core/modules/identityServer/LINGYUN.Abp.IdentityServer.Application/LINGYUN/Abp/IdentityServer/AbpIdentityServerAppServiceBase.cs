@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.IdentityServer
             LocalizationResource = typeof(AbpIdentityServerResource);
         }
 
-        protected virtual async Task<bool> IsGrantAsync(string policy)
+        protected async virtual Task<bool> IsGrantAsync(string policy)
         {
             return await PermissionChecker.IsGrantedAsync(policy);
         }

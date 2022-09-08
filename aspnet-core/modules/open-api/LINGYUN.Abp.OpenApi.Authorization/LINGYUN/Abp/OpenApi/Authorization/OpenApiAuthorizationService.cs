@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             _openApiOptions = options.CurrentValue;
         }
 
-        public virtual async Task<bool> AuthorizeAsync(HttpContext httpContext)
+        public async virtual Task<bool> AuthorizeAsync(HttpContext httpContext)
         {
             if (!_openApiOptions.IsEnabled)
             {
@@ -172,7 +172,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             return true;
         }
 
-        protected virtual async Task Unauthorized(HttpContext context, BusinessException exception)
+        protected async virtual Task Unauthorized(HttpContext context, BusinessException exception)
         {
             var errorInfoConverter = context.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var errorInfo = errorInfoConverter.Convert(exception, options =>

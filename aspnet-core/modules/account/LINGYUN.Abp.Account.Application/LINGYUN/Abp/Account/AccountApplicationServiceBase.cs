@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.Account
             LocalizationResource = typeof(AccountResource);
         }
 
-        protected virtual async Task<IdentityUser> GetCurrentUserAsync()
+        protected async virtual Task<IdentityUser> GetCurrentUserAsync()
         {
             await IdentityOptions.SetAsync();
 

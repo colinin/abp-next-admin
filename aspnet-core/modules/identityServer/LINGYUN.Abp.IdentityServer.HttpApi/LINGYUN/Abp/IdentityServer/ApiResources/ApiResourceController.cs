@@ -21,33 +21,33 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<ApiResourceDto> GetAsync(Guid id)
+        public async virtual Task<ApiResourceDto> GetAsync(Guid id)
         {
             return await ApiResourceAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetByPagedInputDto input)
+        public async virtual Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetByPagedInputDto input)
         {
             return await ApiResourceAppService.GetListAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto input)
+        public async virtual Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto input)
         {
             return await ApiResourceAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
+        public async virtual Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
         {
             return await ApiResourceAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await ApiResourceAppService.DeleteAsync(id);
         }

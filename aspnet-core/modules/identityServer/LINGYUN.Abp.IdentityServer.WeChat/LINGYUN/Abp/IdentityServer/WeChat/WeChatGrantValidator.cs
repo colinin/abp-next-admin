@@ -159,7 +159,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
             return Task.FromResult(true);
         }
 
-        protected virtual async Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user, WeChatOpenId wechatOpenId)
+        protected async virtual Task SetSuccessResultAsync(ExtensionGrantValidationContext context, IdentityUser user, WeChatOpenId wechatOpenId)
         {
             var sub = await UserManager.GetUserIdAsync(user);
 
@@ -182,7 +182,7 @@ namespace LINGYUN.Abp.IdentityServer.WeChat
                 IdentityServerSecurityLogActionConsts.LoginSucceeded);
         }
 
-        protected virtual async Task SaveSecurityLogAsync(
+        protected async virtual Task SaveSecurityLogAsync(
             ExtensionGrantValidationContext context,
             IdentityUser user,
             WeChatOpenId wechatOpenId,

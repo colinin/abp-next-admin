@@ -28,12 +28,12 @@ public class TenantStore : ITenantStore, ITransientDependency
         Cache = cache;
     }
 
-    public virtual async Task<TenantConfiguration> FindAsync(string name)
+    public async virtual Task<TenantConfiguration> FindAsync(string name)
     {
         return (await GetCacheItemAsync(null, name)).Value;
     }
 
-    public virtual async Task<TenantConfiguration> FindAsync(Guid id)
+    public async virtual Task<TenantConfiguration> FindAsync(Guid id)
     {
         return (await GetCacheItemAsync(id, null)).Value;
     }
@@ -50,7 +50,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         return (GetCacheItem(id, null)).Value;
     }
 
-    protected virtual async Task<TenantCacheItem> GetCacheItemAsync(Guid? id, string name)
+    protected async virtual Task<TenantCacheItem> GetCacheItemAsync(Guid? id, string name)
     {
         var cacheKey = CalculateCacheKey(id, name);
 
@@ -81,7 +81,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         throw new AbpException("Both id and name can't be invalid.");
     }
 
-    protected virtual async Task<TenantCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Tenant tenant)
+    protected async virtual Task<TenantCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Tenant tenant)
     {
         var tenantConfiguration = tenant != null ? ObjectMapper.Map<Tenant, TenantConfiguration>(tenant) : null;
         var cacheItem = new TenantCacheItem(tenantConfiguration);

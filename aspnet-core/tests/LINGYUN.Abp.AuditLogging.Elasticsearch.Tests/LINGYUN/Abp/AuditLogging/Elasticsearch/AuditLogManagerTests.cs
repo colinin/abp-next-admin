@@ -76,7 +76,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             logs[0].ApplicationName.ShouldBe("_app_5");
         }
 
-        protected virtual async Task<List<string>> MockcAsync(int count)
+        protected async virtual Task<List<string>> MockcAsync(int count)
         {
             var mock = new AutoMocker();
 

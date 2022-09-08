@@ -110,7 +110,7 @@ namespace LINGYUN.Abp.PermissionManagement
             return result;
         }
 
-        protected virtual async Task<bool> IsGrantedAsync(string permissionName, string providerName, string providerKey)
+        protected async virtual Task<bool> IsGrantedAsync(string permissionName, string providerName, string providerKey)
         {
             return await PermissionStore.IsGrantedAsync(permissionName, providerName, providerKey);
         }

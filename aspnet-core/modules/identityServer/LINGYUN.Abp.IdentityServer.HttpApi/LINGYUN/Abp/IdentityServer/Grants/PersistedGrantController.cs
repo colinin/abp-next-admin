@@ -22,20 +22,20 @@ namespace LINGYUN.Abp.IdentityServer.Grants
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await PersistedGrantAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<PersistedGrantDto> GetAsync(Guid id)
+        public async virtual Task<PersistedGrantDto> GetAsync(Guid id)
         {
             return await PersistedGrantAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<PersistedGrantDto>> GetListAsync(GetPersistedGrantInput input)
+        public async virtual Task<PagedResultDto<PersistedGrantDto>> GetListAsync(GetPersistedGrantInput input)
         {
             return await PersistedGrantAppService.GetListAsync(input);
         }

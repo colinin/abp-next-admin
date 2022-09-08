@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.OssManagement
             return "public";
         }
 
-        protected virtual async Task CheckPublicAccessAsync()
+        protected async virtual Task CheckPublicAccessAsync()
         {
             if (!CurrentUser.IsAuthenticated)
             {

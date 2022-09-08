@@ -20,21 +20,21 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         }
 
         [HttpPost]
-        public virtual async Task<WorkflowDto> CreateAsync(WorkflowDefinitionCreateDto input)
+        public async virtual Task<WorkflowDto> CreateAsync(WorkflowDefinitionCreateDto input)
         {
             return await _service.CreateAsync(input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await _service.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<WorkflowDto> GetAsync(Guid id)
+        public async virtual Task<WorkflowDto> GetAsync(Guid id)
         {
             return await _service.GetAsync(id);
         }

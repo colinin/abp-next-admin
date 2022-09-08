@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.DataProtection.EntityFrameworkCore
 
             await DeleteManyAsync(entities, autoSave, cancellationToken);
         }
-        protected virtual async Task<IQueryable<TEntity>> WithDetailsAsync(ProtectBehavior behavior = ProtectBehavior.All)
+        protected async virtual Task<IQueryable<TEntity>> WithDetailsAsync(ProtectBehavior behavior = ProtectBehavior.All)
         {
             if (typeof(IDataProtection).IsAssignableFrom(typeof(TEntity)))
             {
@@ -131,7 +131,7 @@ namespace LINGYUN.Abp.DataProtection.EntityFrameworkCore
 
             return await base.WithDetailsAsync();
         }
-        protected virtual async Task<IQueryable<TEntity>> WithDetailsAsync(ResourceGrantedResult resourceGranted)
+        protected async virtual Task<IQueryable<TEntity>> WithDetailsAsync(ResourceGrantedResult resourceGranted)
         {
             if (AbpEntityOptions.DefaultWithDetailsFunc == null)
             {
@@ -140,7 +140,7 @@ namespace LINGYUN.Abp.DataProtection.EntityFrameworkCore
 
             return AbpEntityOptions.DefaultWithDetailsFunc(await GetQueryableAsync(resourceGranted));
         }
-        protected virtual async Task<IQueryable<TEntity>> GetQueryableAsync(ProtectBehavior behavior = ProtectBehavior.All)
+        protected async virtual Task<IQueryable<TEntity>> GetQueryableAsync(ProtectBehavior behavior = ProtectBehavior.All)
         {
             if (typeof(IDataProtection).IsAssignableFrom(typeof(TEntity)))
             {
@@ -156,7 +156,7 @@ namespace LINGYUN.Abp.DataProtection.EntityFrameworkCore
 
             return await base.GetQueryableAsync();
         }
-        protected virtual async Task<IQueryable<TEntity>> GetQueryableAsync(ResourceGrantedResult resourceGranted)
+        protected async virtual Task<IQueryable<TEntity>> GetQueryableAsync(ResourceGrantedResult resourceGranted)
         {
             var queryable = await base.GetQueryableAsync();
             if (!resourceGranted.Succeeded)

@@ -29,12 +29,12 @@ namespace LINGYUN.Abp.WorkflowManagement.SettingManagement
             LocalizationResource = typeof(WorkflowManagementResource);
         }
 
-        public virtual async Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
+        public async virtual Task<ListResultDto<SettingGroupDto>> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
-        public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
             // 增加特性检查
             await CheckFeatureAsync();
@@ -50,12 +50,12 @@ namespace LINGYUN.Abp.WorkflowManagement.SettingManagement
             }
         }
 
-        protected virtual async Task CheckFeatureAsync()
+        protected async virtual Task CheckFeatureAsync()
         {
             await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
         }
 
-        protected virtual async Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
+        protected async virtual Task<ListResultDto<SettingGroupDto>> GetAllForProviderAsync(string providerName, string providerKey)
         {
             var settingGroups = new List<SettingGroupDto>();
 

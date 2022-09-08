@@ -21,33 +21,33 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<IdentityResourceDto> GetAsync(Guid id)
+        public async virtual Task<IdentityResourceDto> GetAsync(Guid id)
         {
             return await IdentityResourceAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
         {
             return await IdentityResourceAppService.GetListAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
+        public async virtual Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
         {
             return await IdentityResourceAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
+        public async virtual Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
         {
             return await IdentityResourceAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await IdentityResourceAppService.DeleteAsync(id);
         }

@@ -117,14 +117,14 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         ossClient.PutObject(putRequest);
     }
 
-    protected virtual async Task<CosXml> GetOssClientAsync(BlobProviderArgs args)
+    protected async virtual Task<CosXml> GetOssClientAsync(BlobProviderArgs args)
     {
         var configuration = args.Configuration.GetTencentConfiguration();
         var ossClient = await CosClientFactory.CreateAsync(configuration);
         return ossClient;
     }
 
-    protected virtual async Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string> refererList = null)
+    protected async virtual Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string> refererList = null)
     {
         if (!await BucketExistsAsync(cos, args))
         {

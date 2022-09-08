@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.Identity.WeChat.OpenId
             UserManager = userManager;
         }
 
-        public virtual async Task<string> FindByUserIdAsync(Guid userId, string provider)
+        public async virtual Task<string> FindByUserIdAsync(Guid userId, string provider)
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
             return GetUserOpenIdOrNull(user, provider);
         }
 
-        public virtual async Task<string> FindByUserNameAsync(string userName, string provider)
+        public async virtual Task<string> FindByUserNameAsync(string userName, string provider)
         {
             var user = await UserManager.FindByNameAsync(userName);
 

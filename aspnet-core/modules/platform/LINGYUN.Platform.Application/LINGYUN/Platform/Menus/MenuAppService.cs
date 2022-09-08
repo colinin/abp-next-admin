@@ -43,7 +43,7 @@ namespace LINGYUN.Platform.Menus
             DataItemMapping = options.Value;
         }
 
-        public virtual async Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input)
         {
             var myMenus = await MenuRepository.GetUserMenusAsync(
                 CurrentUser.GetId(), 
@@ -75,7 +75,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Default)]
-        public virtual async Task<MenuDto> GetAsync(Guid id)
+        public async virtual Task<MenuDto> GetAsync(Guid id)
         {
             var menu = await MenuRepository.GetAsync(id);
 
@@ -83,7 +83,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Default)]
-        public virtual async Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
         {
             var menus = await MenuRepository.GetAllAsync(
                 input.Filter, input.Sorting, input.Reverse,
@@ -94,7 +94,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Default)]
-        public virtual async Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
+        public async virtual Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
         {
             var count = await MenuRepository.GetCountAsync(input.Filter, input.Framework, input.ParentId, input.LayoutId);
 
@@ -108,7 +108,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Create)]
-        public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
+        public async virtual Task<MenuDto> CreateAsync(MenuCreateDto input)
         {
             var layout = await LayoutRepository.GetAsync(input.LayoutId);
             var data = await DataRepository.GetAsync(layout.DataId);
@@ -153,7 +153,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Update)]
-        public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
+        public async virtual Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
         {
             var menu = await MenuRepository.GetAsync(id);
 
@@ -221,7 +221,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var childrens = await MenuRepository.GetChildrenAsync(id);
             if (childrens.Any())
@@ -234,7 +234,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.ManageUsers)]
-        public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
         {
             var menus = await MenuRepository.GetUserMenusAsync(input.UserId, input.Roles, input.Framework);
 
@@ -261,7 +261,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.ManageUsers)]
-        public virtual async Task SetUserMenusAsync(UserMenuInput input)
+        public async virtual Task SetUserMenusAsync(UserMenuInput input)
         {
             await MenuManager.SetUserMenusAsync(input.UserId, input.MenuIds);
         }
@@ -273,7 +273,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.ManageRoles)]
-        public virtual async Task SetRoleMenusAsync(RoleMenuInput input)
+        public async virtual Task SetRoleMenusAsync(RoleMenuInput input)
         {
             await MenuManager.SetRoleMenusAsync(input.RoleName, input.MenuIds);
         }
@@ -285,7 +285,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [Authorize(PlatformPermissions.Menu.ManageRoles)]
-        public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
         {
             var menus = await MenuRepository.GetRoleMenusAsync(new string[] { input.Role }, input.Framework);
 

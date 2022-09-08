@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.WorkflowManagement
             _compensateNodeRepository = compensateNodeRepository;
         }
 
-        public virtual async Task RegisterAsync(CancellationToken cancellationToken = default)
+        public async virtual Task RegisterAsync(CancellationToken cancellationToken = default)
         {
             // TODO: 多租户如何注册?
 

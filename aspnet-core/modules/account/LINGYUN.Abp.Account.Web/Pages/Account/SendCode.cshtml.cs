@@ -23,12 +23,12 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                Alerts.Warning("Ë«ÒòËØÈÏÖ¤Ê§°Ü,ÓÃ»§Î´µÇÂ¼!");
+                Alerts.Warning("Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½,ï¿½Ã»ï¿½Î´ï¿½ï¿½Â¼!");
                 return Page();
             }
 
@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             var code = await UserManager.GenerateTwoFactorTokenAsync(user, SendCodeInput.SelectedProvider);
             if (string.IsNullOrWhiteSpace(code))
             {
-                Alerts.Warning("ÑéÖ¤ÂëÉú³ÉÊ§°Ü,ÇëÁªÏµÏµÍ³¹ÜÀíÔ±!");
+                Alerts.Warning("ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ÏµÏµÍ³ï¿½ï¿½ï¿½ï¿½Ô±!");
                 return Page();
             }
 

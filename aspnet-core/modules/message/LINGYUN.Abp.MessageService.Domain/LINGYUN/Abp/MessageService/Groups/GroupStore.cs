@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             _groupRepository = groupRepository;
         }
 
-        public virtual async Task<Group> GetAsync(
+        public async virtual Task<Group> GetAsync(
             Guid? tenantId,
             string groupId,
             CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             }
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             Guid? tenantId,
             string filter = null,
             CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             }
         }
 
-        public virtual async Task<List<Group>> GetListAsync(
+        public async virtual Task<List<Group>> GetListAsync(
             Guid? tenantId,
             string filter = null,
             string sorting = nameof(Group.Name),

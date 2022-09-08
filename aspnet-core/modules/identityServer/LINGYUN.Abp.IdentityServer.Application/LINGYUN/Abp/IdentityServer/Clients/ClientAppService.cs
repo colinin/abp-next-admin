@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Create)]
-        public virtual async Task<ClientDto> CreateAsync(ClientCreateDto clientCreate)
+        public async virtual Task<ClientDto> CreateAsync(ClientCreateDto clientCreate)
         {
             var clientIdExists = await ClientRepository.CheckClientIdExistAsync(clientCreate.ClientId);
             if(clientIdExists)
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var client = await ClientRepository.GetAsync(id);
             await ClientRepository.DeleteAsync(client);
@@ -65,14 +65,14 @@ namespace LINGYUN.Abp.IdentityServer.Clients
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task<ClientDto> GetAsync(Guid id)
+        public async virtual Task<ClientDto> GetAsync(Guid id)
         {
             var client = await ClientRepository.GetAsync(id);
 
             return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
-        public virtual async Task<PagedResultDto<ClientDto>> GetListAsync(ClientGetByPagedDto input)
+        public async virtual Task<PagedResultDto<ClientDto>> GetListAsync(ClientGetByPagedDto input)
         {
             var clients = await ClientRepository.GetListAsync(input.Sorting,
                 input.SkipCount, input.MaxResultCount,
@@ -85,7 +85,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         }
 
         [Authorize(AbpIdentityServerPermissions.Clients.Update)]
-        public virtual async Task<ClientDto> UpdateAsync(Guid id, ClientUpdateDto input)
+        public async virtual Task<ClientDto> UpdateAsync(Guid id, ClientUpdateDto input)
         {
             var client = await ClientRepository.GetAsync(id);
 
@@ -333,7 +333,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// <param name="input"></param>
         /// <returns></returns>
         [Authorize(AbpIdentityServerPermissions.Clients.Clone)]
-        public virtual async Task<ClientDto> CloneAsync(Guid id, ClientCloneDto input)
+        public async virtual Task<ClientDto> CloneAsync(Guid id, ClientCloneDto input)
         {
             var clientIdExists = await ClientRepository.CheckClientIdExistAsync(input.ClientId);
             if (clientIdExists)
@@ -458,7 +458,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 查询可用的Api资源
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
+        public async virtual Task<ListResultDto<string>> GetAssignableApiResourcesAsync()
         {
             var resourceNames = await ApiResourceRepository.GetNamesAsync();
 
@@ -468,7 +468,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 查询可用的身份资源
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
+        public async virtual Task<ListResultDto<string>> GetAssignableIdentityResourcesAsync()
         {
             var resourceNames = await IdentityResourceRepository.GetNamesAsync();
 
@@ -478,7 +478,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
         /// 查询所有不重复的跨域地址
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
+        public async virtual Task<ListResultDto<string>> GetAllDistinctAllowedCorsOriginsAsync()
         {
             var corsOrigins = await ClientRepository.GetAllDistinctAllowedCorsOriginsAsync();
 

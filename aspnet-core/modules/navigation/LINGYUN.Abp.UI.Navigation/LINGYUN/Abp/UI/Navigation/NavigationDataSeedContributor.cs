@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.UI.Navigation
             _lazyContributors = new Lazy<List<INavigationSeedContributor>>(CreateContributors);
         }
 
-        public virtual async Task SeedAsync(DataSeedContext context)
+        public async virtual Task SeedAsync(DataSeedContext context)
         {
             using (_currentTenant.Change(context.TenantId))
             {

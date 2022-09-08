@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Events
 
         [HttpPost]
         [Route("{EventName}/{EventKey}")]
-        public virtual async Task PublishAsync(EventPublishInput input)
+        public async virtual Task PublishAsync(EventPublishInput input)
         {
             await _service.PublishAsync(input);
         }

@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
             SecurityLogManager = securityLogManager;
         }
 
-        public virtual async Task<SecurityLogDto> GetAsync(Guid id)
+        public async virtual Task<SecurityLogDto> GetAsync(Guid id)
         {
             var securityLog = await SecurityLogManager.GetAsync(id, includeDetails: true);
 
             return ObjectMapper.Map<SecurityLog, SecurityLogDto>(securityLog);
         }
 
-        public virtual async Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)
+        public async virtual Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)
         {
             var securityLogCount = await SecurityLogManager
                 .GetCountAsync(input.StartTime, input.EndTime,
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
         }
 
         [Authorize(AuditingPermissionNames.SecurityLog.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await SecurityLogManager.DeleteAsync(id);
         }

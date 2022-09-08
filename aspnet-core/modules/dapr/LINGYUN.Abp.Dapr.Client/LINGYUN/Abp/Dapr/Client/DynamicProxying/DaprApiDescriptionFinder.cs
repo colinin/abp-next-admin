@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public virtual async Task<ActionApiDescriptionModel> FindActionAsync(string service, string appId, Type serviceType, MethodInfo method)
+        public async virtual Task<ActionApiDescriptionModel> FindActionAsync(string service, string appId, Type serviceType, MethodInfo method)
         {
             var apiDescription = await GetApiDescriptionAsync(service, appId);
 
@@ -94,12 +94,12 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             throw new AbpException($"Could not found remote action for method: {method} on the appId: {appId}");
         }
 
-        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string service, string appId)
+        public async virtual Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string service, string appId)
         {
             return await Cache.GetAsync(appId, () => GetApiDescriptionFromServerAsync(service, appId));
         }
 
-        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string service, string appId)
+        protected async virtual Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string service, string appId)
         {
             var client = DaprClientFactory.CreateClient(service);
             var requestMessage = client.CreateInvokeMethodRequest(HttpMethod.Get, appId, "api/abp/api-definition");

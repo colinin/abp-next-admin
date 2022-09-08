@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.WeChat.Crypto
             MiniProgramOptionsFactory = miniProgramOptionsFactory;
         }
 
-        public virtual async Task<UserInfoDto> GetUserInfoAsync(GetUserInfoInput input)
+        public async virtual Task<UserInfoDto> GetUserInfoAsync(GetUserInfoInput input)
         {
             var options = await MiniProgramOptionsFactory.CreateAsync();
             WeChatOpenId weChatOpenId = input.Code.IsNullOrWhiteSpace()

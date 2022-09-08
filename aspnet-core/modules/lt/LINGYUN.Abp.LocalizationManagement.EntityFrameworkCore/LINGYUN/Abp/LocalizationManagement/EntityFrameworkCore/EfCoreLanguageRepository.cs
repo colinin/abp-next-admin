@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<Language> FindByCultureNameAsync(
+        public async virtual Task<Language> FindByCultureNameAsync(
             string cultureName,
             CancellationToken cancellationToken = default)
         {
@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default)
+        public async virtual Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(x => x.Enable)
                 .ToListAsync(GetCancellationToken(cancellationToken));

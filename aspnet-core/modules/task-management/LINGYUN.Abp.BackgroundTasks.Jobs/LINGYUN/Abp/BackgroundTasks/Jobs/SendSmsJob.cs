@@ -24,7 +24,7 @@ public class SendSmsJob : IJobRunnable
     public const string PropertyMessage = "message";
     public const string PropertyProperties = "properties";
 
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         var phoneNumber = context.GetString(PropertyPhoneNumber);
         var message = context.GetString(PropertyMessage);

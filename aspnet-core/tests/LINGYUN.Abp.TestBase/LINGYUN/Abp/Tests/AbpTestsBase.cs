@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.Tests
             return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
         }
 
-        protected virtual async Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
+        protected async virtual Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Tests
             return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
         }
 
-        protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
+        protected async virtual Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
         {
             using (var scope = ServiceProvider.CreateScope())
             {

@@ -26,7 +26,7 @@ public class EfCoreBackgroundJobInfoRepository :
         Clock = clock;
     }
 
-    public virtual async Task<bool> CheckNameAsync(
+    public async virtual Task<bool> CheckNameAsync(
         string group,
         string name,
         CancellationToken cancellationToken = default)
@@ -36,7 +36,7 @@ public class EfCoreBackgroundJobInfoRepository :
                 GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<JobInfo> FindJobAsync(
+    public async virtual Task<JobInfo> FindJobAsync(
         string id,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -75,7 +75,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
+    public async virtual Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
@@ -90,7 +90,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(
+    public async virtual Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(
         CancellationToken cancellationToken = default)
     {
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
@@ -104,13 +104,13 @@ public class EfCoreBackgroundJobInfoRepository :
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<int> GetCountAsync(BackgroundJobInfoFilter filter, CancellationToken cancellationToken = default)
+    public async virtual Task<int> GetCountAsync(BackgroundJobInfoFilter filter, CancellationToken cancellationToken = default)
     {
         return await ApplyFilter(await GetDbSetAsync(), filter)
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoFilter filter, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
+    public async virtual Task<List<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoFilter filter, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
     {
         return await ApplyFilter(await GetDbSetAsync(), filter)
             .OrderBy(sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC")
@@ -118,7 +118,7 @@ public class EfCoreBackgroundJobInfoRepository :
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<BackgroundJobInfo>> GetWaitingListAsync(
+    public async virtual Task<List<BackgroundJobInfo>> GetWaitingListAsync(
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {

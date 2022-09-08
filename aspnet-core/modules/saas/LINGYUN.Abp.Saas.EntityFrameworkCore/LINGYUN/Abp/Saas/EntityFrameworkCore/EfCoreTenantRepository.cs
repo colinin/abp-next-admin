@@ -55,7 +55,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             .FirstOrDefaultAsync(t => t.Id == id, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<Tenant> FindByNameAsync(
+    public async virtual Task<Tenant> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -160,7 +160,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             .FirstOrDefault(t => t.Id == id);
     }
 
-    public virtual async Task<List<Tenant>> GetListAsync(
+    public async virtual Task<List<Tenant>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -203,7 +203,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public async virtual Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
             .WhereIf(

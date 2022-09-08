@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
 
         public bool SupportsScheduledCommands => true;
 
-        public virtual async Task ClearSubscriptionToken(string eventSubscriptionId, string token, CancellationToken cancellationToken = default)
+        public async virtual Task ClearSubscriptionToken(string eventSubscriptionId, string token, CancellationToken cancellationToken = default)
         {
             var id = Guid.Parse(eventSubscriptionId);
 
@@ -72,7 +72,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        public virtual async Task<string> CreateEvent(Event newEvent, CancellationToken cancellationToken = default)
+        public async virtual Task<string> CreateEvent(Event newEvent, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -91,7 +91,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return newEvent.Id;
         }
 
-        public virtual async Task<string> CreateEventSubscription(EventSubscription subscription, CancellationToken cancellationToken = default)
+        public async virtual Task<string> CreateEventSubscription(EventSubscription subscription, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -110,7 +110,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return subscription.Id;
         }
 
-        public virtual async Task<string> CreateNewWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
+        public async virtual Task<string> CreateNewWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -134,7 +134,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             AsyncHelper.RunSync(async () => await _indexInitializer.InitializeAsync());
         }
 
-        public virtual async Task<Event> GetEvent(string id, CancellationToken cancellationToken = default)
+        public async virtual Task<Event> GetEvent(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
 
@@ -150,7 +150,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Source;
         }
 
-        public virtual async Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
+        public async virtual Task<IEnumerable<string>> GetEvents(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -171,7 +171,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents.Select(x => x.Id);
         }
 
-        public virtual async Task<EventSubscription> GetFirstOpenSubscription(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
+        public async virtual Task<EventSubscription> GetFirstOpenSubscription(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -195,7 +195,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents.FirstOrDefault();
         }
 
-        public virtual async Task<IEnumerable<string>> GetRunnableEvents(DateTime asAt, CancellationToken cancellationToken = default)
+        public async virtual Task<IEnumerable<string>> GetRunnableEvents(DateTime asAt, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
             var now = asAt.ToUniversalTime();
@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents.Select(x => x.Id);
         }
 
-        public virtual async Task<IEnumerable<string>> GetRunnableInstances(DateTime asAt, CancellationToken cancellationToken = default)
+        public async virtual Task<IEnumerable<string>> GetRunnableInstances(DateTime asAt, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
             var now = asAt.ToUniversalTime().Ticks;
@@ -237,7 +237,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents.Select(x => x.Id);
         }
 
-        public virtual async Task<EventSubscription> GetSubscription(string eventSubscriptionId, CancellationToken cancellationToken = default)
+        public async virtual Task<EventSubscription> GetSubscription(string eventSubscriptionId, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -253,7 +253,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Source;
         }
 
-        public virtual async Task<IEnumerable<EventSubscription>> GetSubscriptions(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
+        public async virtual Task<IEnumerable<EventSubscription>> GetSubscriptions(string eventName, string eventKey, DateTime asOf, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
             var now = asOf.ToUniversalTime();
@@ -275,7 +275,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents;
         }
 
-        public virtual async Task<WorkflowInstance> GetWorkflowInstance(string Id, CancellationToken cancellationToken = default)
+        public async virtual Task<WorkflowInstance> GetWorkflowInstance(string Id, CancellationToken cancellationToken = default)
         {
             var workflowId = Guid.Parse(Id);
             var client = CreateClient();
@@ -290,7 +290,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Source;
         }
 
-        public virtual async Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(WorkflowStatus? status, string type, DateTime? createdFrom, DateTime? createdTo, int skip, int take)
+        public async virtual Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(WorkflowStatus? status, string type, DateTime? createdFrom, DateTime? createdTo, int skip, int take)
         {
             var client = CreateClient();
 
@@ -325,7 +325,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents;
         }
 
-        public virtual async Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+        public async virtual Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(IEnumerable<string> ids, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
 
@@ -343,7 +343,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return response.Documents;
         }
 
-        public virtual async Task MarkEventProcessed(string id, CancellationToken cancellationToken = default)
+        public async virtual Task MarkEventProcessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
             var indexName = CreateIndex(PersistenceIndexConsts.EventIndex);
@@ -369,7 +369,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        public virtual async Task MarkEventUnprocessed(string id, CancellationToken cancellationToken = default)
+        public async virtual Task MarkEventUnprocessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
             var indexName = CreateIndex(PersistenceIndexConsts.EventIndex);
@@ -395,7 +395,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        public virtual async Task PersistErrors(IEnumerable<ExecutionError> errors, CancellationToken cancellationToken = default)
+        public async virtual Task PersistErrors(IEnumerable<ExecutionError> errors, CancellationToken cancellationToken = default)
         {
             var executionErrors = errors as ExecutionError[] ?? errors.ToArray();
             if (executionErrors.Any())
@@ -411,7 +411,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        public virtual async Task PersistWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
+        public async virtual Task PersistWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
         {
             var workflowId = Guid.Parse(workflow.Id);
             var indexName = CreateIndex(PersistenceIndexConsts.WorkflowInstanceIndex);
@@ -432,7 +432,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
                     ct: cancellationToken);
         }
 
-        public virtual async Task ProcessCommands(DateTimeOffset asOf, Func<ScheduledCommand, Task> action, CancellationToken cancellationToken = default)
+        public async virtual Task ProcessCommands(DateTimeOffset asOf, Func<ScheduledCommand, Task> action, CancellationToken cancellationToken = default)
         {
             var client = CreateClient();
             var indexName = CreateIndex(PersistenceIndexConsts.ScheduledCommandIndex);
@@ -467,7 +467,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        public virtual async Task ScheduleCommand(ScheduledCommand command)
+        public async virtual Task ScheduleCommand(ScheduledCommand command)
         {
             var persistedCommand = new PersistedScheduledCommand(
                 _guidGenerator.Create(),
@@ -484,7 +484,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             CheckResponse(response);
         }
 
-        public virtual async Task<bool> SetSubscriptionToken(string eventSubscriptionId, string token, string workerId, DateTime expiry, CancellationToken cancellationToken = default)
+        public async virtual Task<bool> SetSubscriptionToken(string eventSubscriptionId, string token, string workerId, DateTime expiry, CancellationToken cancellationToken = default)
         {
             var id = Guid.Parse(eventSubscriptionId);
             var indexName = CreateIndex(PersistenceIndexConsts.EventSubscriptionIndex);
@@ -516,7 +516,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             return false;
         }
 
-        public virtual async Task TerminateSubscription(string eventSubscriptionId, CancellationToken cancellationToken = default)
+        public async virtual Task TerminateSubscription(string eventSubscriptionId, CancellationToken cancellationToken = default)
         {
             var id = Guid.Parse(eventSubscriptionId);
 

@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             throw new NotImplementedException();
         }
 
-        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
+        public async virtual Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
         {
             var groupUserCardCount = await _userGroupStore
                 .GetMembersCountAsync(CurrentTenant.Id, input.GroupId);
@@ -40,14 +40,14 @@ namespace LINGYUN.Abp.MessageService.Groups
             return new PagedResultDto<GroupUserCard>(groupUserCardCount, groupUserCards);
         }
 
-        public virtual async Task<ListResultDto<Group>> GetMyGroupsAsync()
+        public async virtual Task<ListResultDto<Group>> GetMyGroupsAsync()
         {
             var myGroups = await _userGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
 
             return new ListResultDto<Group>(myGroups.ToImmutableList());
         }
 
-        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto input)
+        public async virtual Task GroupAcceptUserAsync(GroupAcceptUserDto input)
         {
             var myGroupCard = await _userGroupStore
                 .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .AddUserToGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId, CurrentUser.GetId());
         }
 
-        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto input)
+        public async virtual Task GroupRemoveUserAsync(GroupRemoveUserDto input)
         {
             var myGroupCard = await _userGroupStore
                 .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());

@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userChatSettingRepository = userChatSettingRepository;
         }
 
-        public virtual async Task<bool> IsFriendAsync(
+        public async virtual Task<bool> IsFriendAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task AddMemberAsync(
+        public async virtual Task AddMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task<UserAddFriendResult> AddRequestAsync(
+        public async virtual Task<UserAddFriendResult> AddRequestAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -125,7 +125,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task AddShieldMemberAsync(
+        public async virtual Task AddShieldMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -134,7 +134,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             await ChangeFriendShieldAsync(tenantId, userId, friendId, true, cancellationToken);
         }
 
-        public virtual async Task<List<UserFriend>> GetListAsync(
+        public async virtual Task<List<UserFriend>> GetListAsync(
             Guid? tenantId,
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
@@ -147,7 +147,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             Guid? tenantId,
             Guid userId,
             string filter = "",
@@ -160,7 +160,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<UserFriend>> GetPagedListAsync(
+        public async virtual Task<List<UserFriend>> GetPagedListAsync(
             Guid? tenantId,
             Guid userId,
             string filter = "",
@@ -177,7 +177,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<UserFriend>> GetLastContactListAsync(
+        public async virtual Task<List<UserFriend>> GetLastContactListAsync(
             Guid? tenantId,
             Guid userId,
             int skipCount = 0,
@@ -192,7 +192,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<UserFriend> GetMemberAsync(
+        public async virtual Task<UserFriend> GetMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -206,7 +206,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task RemoveMemberAsync(
+        public async virtual Task RemoveMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -223,7 +223,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task RemoveShieldMemberAsync(
+        public async virtual Task RemoveShieldMemberAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -233,7 +233,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
 
-        protected virtual async Task ChangeFriendShieldAsync(
+        protected async virtual Task ChangeFriendShieldAsync(
             Guid? tenantId,
             Guid userId,
             Guid friendId,
@@ -251,7 +251,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        protected virtual async Task<List<UserFriend>> GetAllFriendByCacheItemAsync(
+        protected async virtual Task<List<UserFriend>> GetAllFriendByCacheItemAsync(
             Guid userId,
             string sorting = nameof(UserFriend.UserId),
             CancellationToken cancellationToken = default

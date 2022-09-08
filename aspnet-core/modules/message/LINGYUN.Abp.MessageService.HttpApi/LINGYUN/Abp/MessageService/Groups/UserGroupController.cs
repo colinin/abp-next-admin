@@ -20,34 +20,34 @@ namespace LINGYUN.Abp.MessageService.Groups
 
         [HttpPost]
         [Route("join")]
-        public virtual async Task ApplyJoinGroupAsync(UserJoinGroupDto input)
+        public async virtual Task ApplyJoinGroupAsync(UserJoinGroupDto input)
         {
             await _service.ApplyJoinGroupAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
+        public async virtual Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
         {
             return await _service.GetGroupUsersAsync(input);
         }
 
         [HttpGet]
         [Route("me")]
-        public virtual async Task<ListResultDto<Group>> GetMyGroupsAsync()
+        public async virtual Task<ListResultDto<Group>> GetMyGroupsAsync()
         {
             return await _service.GetMyGroupsAsync();
         }
 
         [HttpPut]
         [Route("accept")]
-        public virtual async Task GroupAcceptUserAsync(GroupAcceptUserDto input)
+        public async virtual Task GroupAcceptUserAsync(GroupAcceptUserDto input)
         {
             await _service.GroupAcceptUserAsync(input);
         }
 
         [HttpPut]
         [Route("remove")]
-        public virtual async Task GroupRemoveUserAsync(GroupRemoveUserDto input)
+        public async virtual Task GroupRemoveUserAsync(GroupRemoveUserDto input)
         {
             await _service.GroupRemoveUserAsync(input);
         }

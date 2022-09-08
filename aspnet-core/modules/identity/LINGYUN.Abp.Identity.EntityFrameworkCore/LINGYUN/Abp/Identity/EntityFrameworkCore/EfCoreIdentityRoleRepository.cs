@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<List<IdentityRole>> GetListByIdListAsync(
+        public async virtual Task<List<IdentityRole>> GetListByIdListAsync(
             List<Guid> roleIds,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+        public async virtual Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             Guid id, 
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+        public async virtual Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
             IEnumerable<string> roleNames,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityRole>> GetRolesInOrganizationsListAsync(
+        public async virtual Task<List<IdentityRole>> GetRolesInOrganizationsListAsync(
             List<Guid> organizationUnitIds, 
             CancellationToken cancellationToken = default)
         {
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityRole>> GetRolesInOrganizationUnitAsync(
+        public async virtual Task<List<IdentityRole>> GetRolesInOrganizationUnitAsync(
             Guid organizationUnitId, 
             CancellationToken cancellationToken = default)
         {
@@ -81,7 +81,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityRole>> GetRolesInOrganizationUnitWithChildrenAsync(
+        public async virtual Task<List<IdentityRole>> GetRolesInOrganizationUnitWithChildrenAsync(
             string code, 
             CancellationToken cancellationToken = default)
         {

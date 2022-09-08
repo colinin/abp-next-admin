@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             IdentityResourceRepository = identityResourceRepository;
         }
 
-        public virtual async Task<IdentityResourceDto> GetAsync(Guid id)
+        public async virtual Task<IdentityResourceDto> GetAsync(Guid id)
         {
             var identityResource = await IdentityResourceRepository.GetAsync(id);
 
             return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
         }
 
-        public virtual async Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityResourceDto>> GetListAsync(IdentityResourceGetByPagedDto input)
         {
             var identityResources = await IdentityResourceRepository.GetListAsync(input.Sorting,
                 input.SkipCount, input.MaxResultCount,
@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Create)]
-        public virtual async Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
+        public async virtual Task<IdentityResourceDto> CreateAsync(IdentityResourceCreateOrUpdateDto input)
         {
             var identityResourceExists = await IdentityResourceRepository.CheckNameExistAsync(input.Name);
             if (identityResourceExists)
@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Update)]
-        public virtual async Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
+        public async virtual Task<IdentityResourceDto> UpdateAsync(Guid id, IdentityResourceCreateOrUpdateDto input)
         {
             var identityResource = await IdentityResourceRepository.GetAsync(id);
             await UpdateApiResourceByInputAsync(identityResource, input);
@@ -71,12 +71,12 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
         }
 
         [Authorize(AbpIdentityServerPermissions.IdentityResources.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await IdentityResourceRepository.DeleteAsync(id);
         }
 
-        protected virtual async Task UpdateApiResourceByInputAsync(IdentityResource identityResource, IdentityResourceCreateOrUpdateDto input)
+        protected async virtual Task UpdateApiResourceByInputAsync(IdentityResource identityResource, IdentityResourceCreateOrUpdateDto input)
         {
             if (!string.Equals(identityResource.Name, input.Name, StringComparison.InvariantCultureIgnoreCase))
             {

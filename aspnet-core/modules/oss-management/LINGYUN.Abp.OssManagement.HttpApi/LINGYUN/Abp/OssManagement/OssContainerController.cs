@@ -20,34 +20,34 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpPost]
         [Route("{name}")]
-        public virtual async Task<OssContainerDto> CreateAsync(string name)
+        public async virtual Task<OssContainerDto> CreateAsync(string name)
         {
             return await OssContainerAppService.CreateAsync(name);
         }
 
         [HttpDelete]
         [Route("{name}")]
-        public virtual async Task DeleteAsync(string name)
+        public async virtual Task DeleteAsync(string name)
         {
             await OssContainerAppService.DeleteAsync(name);
         }
 
         [HttpGet]
         [Route("{name}")]
-        public virtual async Task<OssContainerDto> GetAsync(string name)
+        public async virtual Task<OssContainerDto> GetAsync(string name)
         {
             return await OssContainerAppService.GetAsync(name);
         }
 
         [HttpGet]
-        public virtual async Task<OssContainersResultDto> GetListAsync(GetOssContainersInput input)
+        public async virtual Task<OssContainersResultDto> GetListAsync(GetOssContainersInput input)
         {
             return await OssContainerAppService.GetListAsync(input);
         }
 
         [HttpGet]
         [Route("objects")]
-        public virtual async Task<OssObjectsResultDto> GetObjectListAsync(GetOssObjectsInput input)
+        public async virtual Task<OssObjectsResultDto> GetObjectListAsync(GetOssObjectsInput input)
         {
             return await OssContainerAppService.GetObjectListAsync(input);
         }

@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.OssManagement
             _ossContainerFactory = ossContainerFactory;
         }
 
-        public virtual async Task SeedAsync(DataSeedContext context)
+        public async virtual Task SeedAsync(DataSeedContext context)
         {
             var ossContainer = _ossContainerFactory.Create();
 

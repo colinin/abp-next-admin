@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
         {
         }
 
-        public virtual async Task<long> GetCountAsync(string subjectId = null, string filter = null, CancellationToken cancellation = default)
+        public async virtual Task<long> GetCountAsync(string subjectId = null, string filter = null, CancellationToken cancellation = default)
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
                 .LongCountAsync(GetCancellationToken(cancellation));
         }
 
-        public virtual async Task<List<PersistedGrant>> GetListAsync(string subjectId = null, string filter = null, string sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
+        public async virtual Task<List<PersistedGrant>> GetListAsync(string subjectId = null, string filter = null, string sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))

@@ -32,7 +32,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.VerifyCode, RememberMe, RememberBrowser);
             if (result.Succeeded)

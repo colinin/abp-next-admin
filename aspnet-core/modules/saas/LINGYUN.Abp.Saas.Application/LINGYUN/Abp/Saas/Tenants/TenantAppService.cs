@@ -30,7 +30,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         TenantManager = tenantManager;
     }
 
-    public virtual async Task<TenantDto> GetAsync(Guid id)
+    public async virtual Task<TenantDto> GetAsync(Guid id)
     {
         var tenant = await TenantRepository.FindAsync(id);
         if (tenant == null)
@@ -41,7 +41,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
-    public virtual async Task<TenantDto> GetAsync(string name)
+    public async virtual Task<TenantDto> GetAsync(string name)
     {
         var tenant = await TenantRepository.FindByNameAsync(name);
         if (tenant == null)
@@ -51,7 +51,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
 
-    public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(TenantGetListInput input)
+    public async virtual Task<PagedResultDto<TenantDto>> GetListAsync(TenantGetListInput input)
     {
         var count = await TenantRepository.GetCountAsync(input.Filter);
         var list = await TenantRepository.GetListAsync(
@@ -68,7 +68,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.Create)]
-    public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
+    public async virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
     {
         var tenant = await TenantManager.CreateAsync(input.Name);
         tenant.IsActive = input.IsActive;
@@ -105,7 +105,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.Update)]
-    public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
+    public async virtual Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
     {
         var tenant = await TenantRepository.GetAsync(id);
 
@@ -128,7 +128,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.Delete)]
-    public virtual async Task DeleteAsync(Guid id)
+    public async virtual Task DeleteAsync(Guid id)
     {
         var tenant = await TenantRepository.FindAsync(id);
         if (tenant == null)
@@ -141,7 +141,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public virtual async Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
+    public async virtual Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
     {
         var tenant = await TenantRepository.GetAsync(id);
 
@@ -155,7 +155,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public virtual async Task<ListResultDto<TenantConnectionStringDto>> GetConnectionStringAsync(Guid id)
+    public async virtual Task<ListResultDto<TenantConnectionStringDto>> GetConnectionStringAsync(Guid id)
     {
         var tenant = await TenantRepository.GetAsync(id);
 
@@ -164,7 +164,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public virtual async Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
+    public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
     {
         var tenant = await TenantRepository.GetAsync(id);
         if (tenant.FindConnectionString(input.Name) == null)
@@ -195,7 +195,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public virtual async Task DeleteConnectionStringAsync(Guid id, string name)
+    public async virtual Task DeleteConnectionStringAsync(Guid id, string name)
     {
         var tenant = await TenantRepository.GetAsync(id);
 

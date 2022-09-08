@@ -18,28 +18,28 @@ namespace LINGYUN.Abp.SettingManagement
 
         [HttpPut]
         [Route("change-current-tenant")]
-        public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
             await _settingAppService.SetCurrentTenantAsync(input);
         }
 
         [HttpPut]
         [Route("change-global")]
-        public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
+        public async virtual Task SetGlobalAsync(UpdateSettingsDto input)
         {
             await _settingAppService.SetGlobalAsync(input);
         }
 
         [HttpGet]
         [Route("by-global")]
-        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
+        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await _settingAppService.GetAllForGlobalAsync();
         }
 
         [HttpGet]
         [Route("by-current-tenant")]
-        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await _settingAppService.GetAllForCurrentTenantAsync();
         }

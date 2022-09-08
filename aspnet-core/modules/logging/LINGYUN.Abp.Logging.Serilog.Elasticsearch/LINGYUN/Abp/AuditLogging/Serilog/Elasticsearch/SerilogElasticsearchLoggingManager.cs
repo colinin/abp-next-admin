@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         /// <param name="id">时间类型或者转换为timestamp都可以查询</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<LogInfo> GetAsync(
+        public async virtual Task<LogInfo> GetAsync(
             string id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -126,7 +126,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             return _objectMapper.Map<SerilogInfo, LogInfo>(response.Documents.FirstOrDefault());
         }
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             Microsoft.Extensions.Logging.LogLevel? level = null,
@@ -189,7 +189,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         /// <param name="includeDetails"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<List<LogInfo>> GetListAsync(
+        public async virtual Task<List<LogInfo>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,

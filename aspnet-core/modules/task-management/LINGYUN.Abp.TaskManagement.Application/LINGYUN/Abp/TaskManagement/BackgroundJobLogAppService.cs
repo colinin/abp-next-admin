@@ -23,14 +23,14 @@ public class BackgroundJobLogAppService : TaskManagementApplicationService, IBac
         return BackgroundJobLogRepository.DeleteAsync(id);
     }
 
-    public virtual async Task<BackgroundJobLogDto> GetAsync(long id)
+    public async virtual Task<BackgroundJobLogDto> GetAsync(long id)
     {
         var backgroundJobLog = await BackgroundJobLogRepository.GetAsync(id);
 
         return ObjectMapper.Map<BackgroundJobLog, BackgroundJobLogDto>(backgroundJobLog);
     }
 
-    public virtual async Task<PagedResultDto<BackgroundJobLogDto>> GetListAsync(BackgroundJobLogGetListInput input)
+    public async virtual Task<PagedResultDto<BackgroundJobLogDto>> GetListAsync(BackgroundJobLogGetListInput input)
     {
         var filter = new BackgroundJobLogFilter
         {

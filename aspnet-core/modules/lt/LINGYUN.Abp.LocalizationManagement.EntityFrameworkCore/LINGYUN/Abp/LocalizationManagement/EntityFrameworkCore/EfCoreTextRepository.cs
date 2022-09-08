@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<Text> GetByCultureKeyAsync(
+        public async virtual Task<Text> GetByCultureKeyAsync(
             string resourceName,
             string cultureName,
             string key,
@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetDifferenceCountAsync(
+        public async virtual Task<int> GetDifferenceCountAsync(
             string cultureName,
             string targetCultureName,
             string resourceName = null,
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Text>> GetListAsync(
+        public async virtual Task<List<Text>> GetListAsync(
             string resourceName = null,
             string cultureName = null,
             CancellationToken cancellationToken = default)
@@ -76,7 +76,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<TextDifference>> GetDifferencePagedListAsync(
+        public async virtual Task<List<TextDifference>> GetDifferencePagedListAsync(
             string cultureName,
             string targetCultureName,
             string resourceName = null,
@@ -98,7 +98,7 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        protected virtual async Task<IQueryable<TextDifference>> BuildTextDifferenceQueryAsync(
+        protected async virtual Task<IQueryable<TextDifference>> BuildTextDifferenceQueryAsync(
             string cultureName,
             string targetCultureName,
             string resourceName = null,

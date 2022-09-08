@@ -21,34 +21,34 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
         }
 
         [HttpPost]
-        public virtual async Task<ApiScopeDto> CreateAsync(ApiScopeCreateDto input)
+        public async virtual Task<ApiScopeDto> CreateAsync(ApiScopeCreateDto input)
         {
             return await ApiScopeAppService.CreateAsync(input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await ApiScopeAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<ApiScopeDto> GetAsync(Guid id)
+        public async virtual Task<ApiScopeDto> GetAsync(Guid id)
         {
             return await ApiScopeAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync(GetApiScopeInput input)
+        public async virtual Task<PagedResultDto<ApiScopeDto>> GetListAsync(GetApiScopeInput input)
         {
             return await ApiScopeAppService.GetListAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateDto input)
+        public async virtual Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateDto input)
         {
             return await ApiScopeAppService.UpdateAsync(id, input);
         }

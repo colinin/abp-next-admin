@@ -84,7 +84,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
         await PublishAsync(input);
     }
 
-    protected virtual async Task PublishAsync(WebhookPublishInput input)
+    protected async virtual Task PublishAsync(WebhookPublishInput input)
     {
         await PublishAppService.PublishAsync(input);
     }

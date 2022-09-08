@@ -90,14 +90,14 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             ossClient.PutObject(bucketName, blobName, args.BlobStream);
         }
 
-        protected virtual async Task<IOss> GetOssClientAsync(BlobProviderArgs args)
+        protected async virtual Task<IOss> GetOssClientAsync(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAliyunConfiguration();
             var ossClient = await OssClientFactory.CreateAsync(configuration);
             return ossClient;
         }
 
-        protected virtual async Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
+        protected async virtual Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
         {
             if (! await BucketExistsAsync(ossClient, args))
             {

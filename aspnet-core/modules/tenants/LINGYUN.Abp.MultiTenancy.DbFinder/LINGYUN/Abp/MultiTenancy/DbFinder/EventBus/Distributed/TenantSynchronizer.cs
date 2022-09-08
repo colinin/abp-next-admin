@@ -46,7 +46,7 @@ public class TenantSynchronizer :
     /// <param name="eventData"></param>
     /// <returns></returns>
     [UnitOfWork]
-    public virtual async Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
+    public async virtual Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
     {
         await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
@@ -60,7 +60,7 @@ public class TenantSynchronizer :
     /// <param name="eventData"></param>
     /// <returns></returns>
     [UnitOfWork]
-    public virtual async Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
+    public async virtual Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
     {
         await UpdateCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
@@ -73,7 +73,7 @@ public class TenantSynchronizer :
     /// </remarks>
     /// <param name="eventData"></param>
     /// <returns></returns>
-    public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
+    public async virtual Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
     {
         await RemoveCacheItemAsync(eventData.Entity.Id, eventData.Entity.Name);
     }
@@ -87,7 +87,7 @@ public class TenantSynchronizer :
     /// <param name="eventData"></param>
     /// <returns></returns>
     [UnitOfWork]
-    public virtual async Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
+    public async virtual Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
     {
         await UpdateCacheItemAsync(eventData.TenantId, eventData.TenantName);
     }
@@ -100,13 +100,13 @@ public class TenantSynchronizer :
     /// </remarks>
     /// <param name="eventData"></param>
     /// <returns></returns>
-    public virtual async Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+    public async virtual Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
     {
         // TODO: 用更新还是用删除?
         await RemoveCacheItemAsync(eventData.TenantId, eventData.TenantName);
     }
 
-    protected virtual async Task UpdateCacheItemAsync(Guid tenantId, string tenantName = null)
+    protected async virtual Task UpdateCacheItemAsync(Guid tenantId, string tenantName = null)
     {
         try
         {
@@ -139,7 +139,7 @@ public class TenantSynchronizer :
         }
     }
 
-    protected virtual async Task RemoveCacheItemAsync(Guid tenantId, string tenantName = null)
+    protected async virtual Task RemoveCacheItemAsync(Guid tenantId, string tenantName = null)
     {
         using (_currentTenant.Change(null))
         {

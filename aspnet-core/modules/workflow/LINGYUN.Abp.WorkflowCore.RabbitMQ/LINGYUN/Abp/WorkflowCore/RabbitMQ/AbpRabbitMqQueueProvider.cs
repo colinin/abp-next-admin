@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.WorkflowCore.RabbitMQ
             await QueueWorkAsync(id, queue);
         }
 
-        protected virtual async Task QueueWorkAsync(string id, QueueType queue)
+        protected async virtual Task QueueWorkAsync(string id, QueueType queue)
         {
             CheckDisposed();
 

@@ -35,7 +35,7 @@ public class AbpTencentQQOptionsManager : AbpDynamicOptionsManager<AbpTencentQQO
         options.IsMobile = cacheItem.IsMobile;
     }
 
-    protected virtual async Task<AbpTencentQQCacheItem> GetCacheItemAsync()
+    protected async virtual Task<AbpTencentQQCacheItem> GetCacheItemAsync()
     {
         var cacheKey = AbpTencentQQCacheItem.CalculateCacheKey(CurrentTenant.Id);
 

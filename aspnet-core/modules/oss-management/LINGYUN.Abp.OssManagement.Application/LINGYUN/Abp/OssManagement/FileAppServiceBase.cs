@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
-        public virtual async Task UploadAsync(UploadFileChunkInput input)
+        public async virtual Task UploadAsync(UploadFileChunkInput input)
         {
             input.Bucket = GetCurrentBucket();
             input.Path = GetCurrentPath(HttpUtility.UrlDecode(input.Path));
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.UploadLimit,
             AbpOssManagementFeatureNames.OssObject.UploadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
+        public async virtual Task<OssObjectDto> UploadAsync(UploadFileInput input)
         {
             if (input.File == null || !input.File.ContentLength.HasValue)
             {
@@ -71,7 +71,7 @@ namespace LINGYUN.Abp.OssManagement
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
         }
 
-        public virtual async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
+        public async virtual Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
         {
             var ossContainer = OssContainerFactory.Create();
             var response = await ossContainer.GetObjectsAsync(
@@ -89,7 +89,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.DownloadLimit,
             AbpOssManagementFeatureNames.OssObject.DownloadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
+        public async virtual Task<IRemoteStreamContent> GetAsync(GetPublicFileInput input)
         {
             var ossObjectRequest = new GetOssObjectRequest(
                 GetCurrentBucket(),
@@ -107,7 +107,7 @@ namespace LINGYUN.Abp.OssManagement
             return new RemoteStreamContent(ossObject.Content);
         }
 
-        public virtual async Task DeleteAsync(GetPublicFileInput input)
+        public async virtual Task DeleteAsync(GetPublicFileInput input)
         {
             var ossContainer = OssContainerFactory.Create();
 

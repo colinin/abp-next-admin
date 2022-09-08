@@ -31,7 +31,7 @@ namespace LINGYUN.Platform.Routes
             RoleMenuRepository = roleMenuRepository;
         }
 
-        public virtual async Task<Layout> SeedLayoutAsync(
+        public async virtual Task<Layout> SeedLayoutAsync(
             string name, 
             string path, 
             string displayName,
@@ -60,7 +60,7 @@ namespace LINGYUN.Platform.Routes
             return layout;
         }
 
-        public virtual async Task<Menu> SeedMenuAsync(
+        public async virtual Task<Menu> SeedMenuAsync(
             Layout layout,
             string name,
             string path, 
@@ -109,7 +109,7 @@ namespace LINGYUN.Platform.Routes
             return menu;
         }
 
-        public virtual async Task SeedRoleMenuAsync(
+        public async virtual Task SeedRoleMenuAsync(
             string roleName,
             Menu menu,
             Guid? tenantId = null,
@@ -128,7 +128,7 @@ namespace LINGYUN.Platform.Routes
             }
         }
 
-        public virtual async Task SeedUserMenuAsync(
+        public async virtual Task SeedUserMenuAsync(
             Guid userId,
             Menu menu,
             Guid? tenantId = null, 

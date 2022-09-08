@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [UnitOfWork]
-        public virtual async Task SeedAsync(IUserData user)
+        public async virtual Task SeedAsync(IUserData user)
         {
             using (CurrentTenant.Change(user.TenantId))
             {

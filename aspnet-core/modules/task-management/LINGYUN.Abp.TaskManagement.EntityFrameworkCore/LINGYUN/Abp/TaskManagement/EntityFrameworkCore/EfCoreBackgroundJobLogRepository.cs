@@ -20,7 +20,7 @@ public class EfCoreBackgroundJobLogRepository :
     {
     }
 
-    public virtual async Task<int> GetCountAsync(
+    public async virtual Task<int> GetCountAsync(
         BackgroundJobLogFilter filter,
         string jobId = null,
         CancellationToken cancellationToken = default)
@@ -38,7 +38,7 @@ public class EfCoreBackgroundJobLogRepository :
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<BackgroundJobLog>> GetListAsync(
+    public async virtual Task<List<BackgroundJobLog>> GetListAsync(
         BackgroundJobLogFilter filter,
         string jobId = null,
         string sorting = nameof(BackgroundJobLog.RunTime),
