@@ -39,6 +39,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Modularity;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TextTemplating.Scriban;
@@ -65,6 +66,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),

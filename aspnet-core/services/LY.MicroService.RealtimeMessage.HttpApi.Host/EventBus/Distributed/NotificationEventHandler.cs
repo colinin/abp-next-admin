@@ -122,13 +122,16 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
             if (notification.NotificationType == NotificationType.System)
             {
-                await SendToTenantAsync(null, notification, eventData);
-
-                var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
-
-                foreach (var activeTenant in allActiveTenants)
+                using (CurrentTenant.Change(null))
                 {
-                    await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                    await SendToTenantAsync(null, notification, eventData);
+
+                    var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                    foreach (var activeTenant in allActiveTenants)
+                    {
+                        await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                    }
                 }
             }
             else
@@ -148,13 +151,16 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
             if (notification.NotificationType == NotificationType.System)
             {
-                await SendToTenantAsync(null, notification, eventData);
-
-                var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
-
-                foreach (var activeTenant in allActiveTenants)
+                using (CurrentTenant.Change(null))
                 {
-                    await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                    await SendToTenantAsync(null, notification, eventData);
+
+                    var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                    foreach (var activeTenant in allActiveTenants)
+                    {
+                        await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                    }
                 }
             }
             else
