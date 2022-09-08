@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LINGYUN.Abp.Webhooks
 {
+    [Serializable]
     public class WebhookHeader
     {
         /// <summary>
@@ -14,5 +16,10 @@ namespace LINGYUN.Abp.Webhooks
         /// That headers will be sent with the webhook.
         /// </summary>
         public IDictionary<string, string> Headers { get; set; }
+
+        public WebhookHeader()
+        {
+            Headers = new Dictionary<string, string>();
+        }
     }
 }

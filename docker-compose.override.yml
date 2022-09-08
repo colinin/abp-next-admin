@@ -96,6 +96,18 @@ services:
     networks:
       - framework
 
+  workflow-api:
+    build:
+      context: ./aspnet-core/services/Publish/workflow
+    volumes:
+      - /var/opt/abp/logs/workflow:/app/Logs
+      - /var/opt/abp/data/workflow/Modules:/app/Modules
+    depends_on:
+      - sts-server
+    restart: always
+    networks:
+      - framework
+
   internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway

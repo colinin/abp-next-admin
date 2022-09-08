@@ -1,11 +1,17 @@
-﻿using Elsa;
+﻿using DotNetCore.CAP;
+using Elsa;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
+using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
+using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
+using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -13,6 +19,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +38,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.TextTemplating.Scriban;
 
 namespace LY.MicroService.WorkflowManagement;
 
@@ -43,21 +51,28 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
+    typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
+    typeof(AbpBackgroundTasksExceptionHandlingModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
+    typeof(AbpCAPEventBusModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
@@ -71,6 +86,8 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
 
         PreConfigureApp();
         PreConfigureFeature();
+        PreConfigureCAP(configuration);
+        PreConfigureQuartz(configuration);
         PreConfigureElsa(context.Services, configuration);
     }
 
@@ -83,6 +100,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureEndpoints();
         ConfigureLocalization();
         ConfigureJsonSerializer();
+        ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureCaching(configuration);
@@ -103,16 +121,18 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseStaticFiles();
+        // 本地化
+        app.UseMapRequestLocalization();
         app.UseCorrelationId();
+        app.UseStaticFiles();
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
         app.UseElsaFeatures();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
-        app.UseAbpRequestLocalization();
         app.UseAuthorization();
+        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {

@@ -37,6 +37,9 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Dapr.Client.Wrapper;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using LINGYUN.Abp.Webhooks;
+using LINGYUN.Abp.Webhooks.EventBus;
 
 namespace LY.MicroService.WebhooksManagement;
 
@@ -50,6 +53,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(AbpWebhooksIdentityModule),
     typeof(AbpWebhooksSaasModule),
+    typeof(AbpWebhooksEventBusModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
@@ -107,6 +111,9 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        // 分布式事件发布者不在这个项目使用, 强制替换
+        context.Services.Replace(ServiceDescriptor.Transient<IWebhookPublisher, DefaultWebhookPublisher>());
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Webhooks
     public interface IWebhookPublisher
     {
         /// <summary>
-        /// Sends webhooks to current tenant subscriptions (<see cref="IAbpSession.TenantId"/>). with given data, (Checks permissions)
+        /// Sends webhooks to current tenant subscriptions (<see cref="Volo.Abp.MultiTenancy.ICurrentTenant.TenantId"/>). with given data, (Checks permissions)
         /// </summary>
         /// <param name="webhookName"><see cref="WebhookDefinition.Name"/></param>
         /// <param name="data">data to send</param>

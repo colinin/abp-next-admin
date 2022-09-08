@@ -47,6 +47,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.EventBus\LINGYUN.Abp.Webhooks.EventBus.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application\LINGYUN.Abp.WebhooksManagement.Application.csproj" />

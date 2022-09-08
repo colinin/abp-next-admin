@@ -25,6 +25,8 @@ namespace LINGYUN.Abp.Webhooks
 
         public List<string> RequiredFeatures { get; set; }
 
+        public Dictionary<string, object> Properties { get; }
+
         public WebhookDefinition(string name, ILocalizableString displayName = null, ILocalizableString description = null)
         {
             if (name.IsNullOrWhiteSpace())
@@ -37,6 +39,7 @@ namespace LINGYUN.Abp.Webhooks
             Description = description;
 
             RequiredFeatures = new List<string>();
+            Properties = new Dictionary<string, object>();
         }
 
         public WebhookDefinition WithFeature(params string[] features)
@@ -48,6 +51,13 @@ namespace LINGYUN.Abp.Webhooks
 
             return this;
         }
+
+        public WebhookDefinition WithProperty(string key, object value)
+        {
+            Properties[key] = value;
+            return this;
+        }
+
 
         public override string ToString()
         {

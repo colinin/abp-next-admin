@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.Webhooks
 {
-    public abstract class WebhookDefinitionProvider : ITransientDependency
+    public abstract class WebhookDefinitionProvider : IWebhookDefinitionProvider, ITransientDependency
     {
         /// <summary>
         /// Used to add/manipulate webhook definitions.

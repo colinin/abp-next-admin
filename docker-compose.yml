@@ -50,6 +50,13 @@ services:
     ports:
       - "30045:80"
 
+  workflow-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "30050:80"
+
   sts-server:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
