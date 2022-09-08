@@ -1,6 +1,8 @@
-﻿using Elsa;
+﻿using DotNetCore.CAP;
+using Elsa;
 using Elsa.Options;
 using Elsa.Rebus.RabbitMq;
+using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -18,8 +20,10 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -34,6 +38,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -42,7 +47,7 @@ namespace LY.MicroService.WorkflowManagement;
 public partial class WorkflowManagementHttpApiHostModule
 {
     private const string DefaultCorsPolicyName = "Default";
-    private const string ApplicationName = "WorkflowManagement";
+    private const string ApplicationName = "Workflow";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -56,6 +61,60 @@ public partial class WorkflowManagementHttpApiHostModule
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
+    }
+
+
+    private void PreConfigureCAP(IConfiguration configuration)
+    {
+        PreConfigure<CapOptions>(options =>
+        {
+            options
+            .UseMySql(mySqlOptions =>
+            {
+                configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+            })
+            .UseRabbitMQ(rabbitMQOptions =>
+            {
+                configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+            })
+            .UseDashboard();
+        });
+    }
+
+    private void PreConfigureQuartz(IConfiguration configuration)
+    {
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            // 如果使用持久化存储, 则配置quartz持久层
+            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
+            {
+                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
+                if (settings != null)
+                {
+                    foreach (var setting in settings)
+                    {
+                        options.Properties[setting.Key] = setting.Value;
+                    }
+                }
+
+                options.Configurator += (config) =>
+                {
+                    config.UsePersistentStore(store =>
+                    {
+                        store.UseProperties = false;
+                        store.UseJsonSerializer();
+                    });
+                };
+            }
+        });
+    }
+
+    private void ConfigureBackgroundTasks()
+    {
+        Configure<AbpBackgroundTasksOptions>(options =>
+        {
+            options.NodeName = ApplicationName;
+        });
     }
 
     private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
@@ -255,7 +314,7 @@ public partial class WorkflowManagementHttpApiHostModule
         services.AddSwaggerGen(
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "WorkflowManagement API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Workflow API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

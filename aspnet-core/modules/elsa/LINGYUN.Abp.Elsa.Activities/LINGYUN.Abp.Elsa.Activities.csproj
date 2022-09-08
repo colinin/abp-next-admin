@@ -19,6 +19,7 @@
 	  <ProjectReference Include="..\LINGYUN.Abp.Elsa.Activities.IM\LINGYUN.Abp.Elsa.Activities.IM.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Elsa.Activities.Notifications\LINGYUN.Abp.Elsa.Activities.Notifications.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Elsa.Activities.Sms\LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
 	</ItemGroup>
 

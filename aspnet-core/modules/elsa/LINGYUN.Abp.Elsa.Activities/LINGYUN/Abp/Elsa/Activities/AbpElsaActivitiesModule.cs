@@ -5,6 +5,7 @@ using LINGYUN.Abp.Elsa.Activities.Emailing;
 using LINGYUN.Abp.Elsa.Activities.IM;
 using LINGYUN.Abp.Elsa.Activities.Notifications;
 using LINGYUN.Abp.Elsa.Activities.Sms;
+using LINGYUN.Abp.Elsa.Activities.Webhooks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
@@ -30,6 +31,7 @@ public class AbpElsaActivitiesModule : AbpModule
             typeof(Notifications.Startup),
             typeof(Sms.Startup),
             typeof(IM.Startup),
+            typeof(Webhooks.Startup),
         };
 
         PreConfigure<ElsaOptionsBuilder>(elsa =>

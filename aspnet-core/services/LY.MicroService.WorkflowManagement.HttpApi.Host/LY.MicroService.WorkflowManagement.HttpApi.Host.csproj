@@ -7,6 +7,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageReference Include="Elsa.Activities.Email" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Activities.Http" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Activities.UserTask" Version="$(ElsaPackageVersion)" />
@@ -22,6 +26,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
+		<PackageReference Include="Quartz.Serialization.Json" Version="$(QuartzNETPackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
@@ -44,6 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\modules\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj" />
@@ -59,6 +66,11 @@
 		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.DistributedLocking\LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

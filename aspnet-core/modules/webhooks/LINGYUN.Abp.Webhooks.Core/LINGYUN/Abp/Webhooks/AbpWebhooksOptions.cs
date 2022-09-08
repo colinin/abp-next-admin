@@ -22,7 +22,7 @@ public class AbpWebhooksOptions
     /// </summary>
     public int MaxConsecutiveFailCountBeforeDeactivateSubscription { get; set; }
 
-    public ITypeList<WebhookDefinitionProvider> DefinitionProviders { get; }
+    public ITypeList<IWebhookDefinitionProvider> DefinitionProviders { get; }
 
     public AbpWebhooksOptions()
     {
@@ -30,6 +30,6 @@ public class AbpWebhooksOptions
         MaxSendAttemptCount = 5;
         MaxConsecutiveFailCountBeforeDeactivateSubscription = MaxSendAttemptCount * 3;
 
-        DefinitionProviders = new TypeList<WebhookDefinitionProvider>();
+        DefinitionProviders = new TypeList<IWebhookDefinitionProvider>();
     }
 }

@@ -6,7 +6,7 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.Webhooks.BackgroundWorker
+namespace LINGYUN.Abp.Webhooks.BackgroundJobs
 {
     public class WebhookSenderJob : AsyncBackgroundJob<WebhookSenderArgs>, ITransientDependency
     {

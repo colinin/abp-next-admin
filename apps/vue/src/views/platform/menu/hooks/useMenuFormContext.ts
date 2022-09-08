@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import type { TabFormSchema, FormActionType } from '/@/components/Form/src/types/form';
+import type { TabFormSchema, TabFormActionType } from '/@/components/Form/src/types/form';
 
 import { unref, computed, watch, createVNode } from 'vue';
 import { Checkbox } from 'ant-design-vue';
@@ -14,7 +14,7 @@ import { Menu, UpdateMenu, CreateMenu } from '/@/api/platform/model/menuModel';
 
 interface UseMenuFormContext {
   menuModel: Ref<Menu>;
-  formElRef: Ref<Nullable<FormActionType>>;
+  formElRef: Ref<Nullable<TabFormActionType>>;
   framework: Ref<string | undefined>,
 }
 
