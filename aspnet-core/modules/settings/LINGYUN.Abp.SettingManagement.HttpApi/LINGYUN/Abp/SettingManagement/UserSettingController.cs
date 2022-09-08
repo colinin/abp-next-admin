@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.SettingManagement
 
         [HttpGet]
         [Route("by-current-user")]
-        public virtual async Task<SettingGroupResult> GetAllForCurrentUserAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentUserAsync()
         {
             return await _service.GetAllForCurrentUserAsync();
         }
 
         [HttpPut]
         [Route("change-current-user")]
-        public virtual async Task SetCurrentUserAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentUserAsync(UpdateSettingsDto input)
         {
             await _service.SetCurrentUserAsync(input);
         }

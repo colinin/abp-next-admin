@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Aliyun
             SettingProvider = settingProvider;
         }
 
-        public virtual async Task<TClient> CreateAsync()
+        public async virtual Task<TClient> CreateAsync()
         {
             var regionId = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.RegionId);
             var accessKey = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.AccessKeyId);
@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.Aliyun
 
         protected abstract TClient GetSecurityTokenClient(string regionId, string accessKeyId, string accessKeySecret, string securityToken);
 
-        protected virtual async Task<AliyunBasicSessionCredentialsCacheItem> GetCacheItemAsync(string accessKeyId, string accessKeySecret, string regionId)
+        protected async virtual Task<AliyunBasicSessionCredentialsCacheItem> GetCacheItemAsync(string accessKeyId, string accessKeySecret, string regionId)
         {
             var cacheItem = await Cache.GetAsync(AliyunBasicSessionCredentialsCacheItem.CacheKey);
             if (cacheItem == null)
@@ -111,7 +111,7 @@ namespace LINGYUN.Abp.Aliyun
             SettingProvider = settingProvider;
         }
 
-        public virtual async Task<TClient> CreateAsync(TConfiguration configuration)
+        public async virtual Task<TClient> CreateAsync(TConfiguration configuration)
         {
             var regionId = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.RegionId);
             var accessKey = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.AccessKeyId);
@@ -135,7 +135,7 @@ namespace LINGYUN.Abp.Aliyun
 
         protected abstract TClient GetSecurityTokenClient(TConfiguration configuration, string regionId, string accessKeyId, string accessKeySecret, string securityToken);
 
-        protected virtual async Task<AliyunBasicSessionCredentialsCacheItem> GetCacheItemAsync(string accessKeyId, string accessKeySecret, string regionId)
+        protected async virtual Task<AliyunBasicSessionCredentialsCacheItem> GetCacheItemAsync(string accessKeyId, string accessKeySecret, string regionId)
         {
             var cacheItem = await Cache.GetAsync(AliyunBasicSessionCredentialsCacheItem.CacheKey);
             if (cacheItem == null)

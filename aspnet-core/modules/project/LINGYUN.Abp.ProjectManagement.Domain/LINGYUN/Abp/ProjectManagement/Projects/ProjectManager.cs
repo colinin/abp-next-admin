@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
             TemplateRepository = templateRepository;
         }
 
-        public virtual async Task<Project> CreateAsync(Project project)
+        public async virtual Task<Project> CreateAsync(Project project)
         {
             if (await ProjectRepository.CheckNameAsync(project.Name))
             {
@@ -40,19 +40,19 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
             return project;
         }
 
-        public virtual async Task<Project> UpdateAsync(Project project)
+        public async virtual Task<Project> UpdateAsync(Project project)
         {
             project = await ProjectRepository.UpdateAsync(project);
 
             return project;
         }
 
-        public virtual async Task DeleteAsync(Project project)
+        public async virtual Task DeleteAsync(Project project)
         {
             await ProjectRepository.DeleteAsync(project);
         }
 
-        public virtual async Task<bool> BuildAsync(Project project)
+        public async virtual Task<bool> BuildAsync(Project project)
         {
             using var unitOfWork = UnitOfWorkManager.Begin();
             try
@@ -128,12 +128,12 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
             return project.Status == BuildStatus.Successed;
         }
 
-        public virtual async Task AddPackagesAsync()
+        public async virtual Task AddPackagesAsync()
         {
 
         }
 
-        public virtual async Task<byte[]> DownloadAsync(Project project)
+        public async virtual Task<byte[]> DownloadAsync(Project project)
         {
             var projectDir = Path.Combine(
                         Directory.GetCurrentDirectory(),

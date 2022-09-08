@@ -21,41 +21,41 @@ namespace LINGYUN.Abp.Identity
         }
 
         [HttpPost]
-        public virtual async Task<IdentityClaimTypeDto> CreateAsync(IdentityClaimTypeCreateDto input)
+        public async virtual Task<IdentityClaimTypeDto> CreateAsync(IdentityClaimTypeCreateDto input)
         {
             return await IdentityClaimTypeAppService.CreateAsync(input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await IdentityClaimTypeAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("actived-list")]
-        public virtual async Task<ListResultDto<IdentityClaimTypeDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<IdentityClaimTypeDto>> GetAllListAsync()
         {
             return await IdentityClaimTypeAppService.GetAllListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<IdentityClaimTypeDto> GetAsync(Guid id)
+        public async virtual Task<IdentityClaimTypeDto> GetAsync(Guid id)
         {
             return await IdentityClaimTypeAppService.GetAsync(id);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<IdentityClaimTypeDto>> GetListAsync(IdentityClaimTypeGetByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityClaimTypeDto>> GetListAsync(IdentityClaimTypeGetByPagedDto input)
         {
             return await IdentityClaimTypeAppService.GetListAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
+        public async virtual Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
         {
             return await IdentityClaimTypeAppService.UpdateAsync(id, input);
         }

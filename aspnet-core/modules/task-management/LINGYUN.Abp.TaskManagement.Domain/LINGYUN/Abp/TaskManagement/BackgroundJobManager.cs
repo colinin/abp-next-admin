@@ -25,14 +25,14 @@ public class BackgroundJobManager : DomainService
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
     }
 
-    public virtual async Task<BackgroundJobInfo> CreateAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task<BackgroundJobInfo> CreateAsync(BackgroundJobInfo jobInfo)
     {
         await BackgroundJobInfoRepository.InsertAsync(jobInfo);
 
         return jobInfo;
     }
 
-    public virtual async Task<BackgroundJobInfo> UpdateAsync(BackgroundJobInfo jobInfo, bool resetJob = false)
+    public async virtual Task<BackgroundJobInfo> UpdateAsync(BackgroundJobInfo jobInfo, bool resetJob = false)
     {
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
 
@@ -67,17 +67,17 @@ public class BackgroundJobManager : DomainService
         return jobInfo;
     }
 
-    public virtual async Task DeleteAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task DeleteAsync(BackgroundJobInfo jobInfo)
     {
         await BackgroundJobInfoRepository.DeleteAsync(jobInfo);
     }
 
-    public virtual async Task BulkDeleteAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkDeleteAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         await BackgroundJobInfoRepository.DeleteManyAsync(jobInfos);
     }
 
-    public virtual async Task QueueAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task QueueAsync(BackgroundJobInfo jobInfo)
     {
         await EventBus.PublishAsync(
             new JobStartEventData
@@ -88,7 +88,7 @@ public class BackgroundJobManager : DomainService
             });
     }
 
-    public virtual async Task BulkQueueAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkQueueAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         if (jobInfos.Any())
         {
@@ -102,7 +102,7 @@ public class BackgroundJobManager : DomainService
         }
     }
 
-    public virtual async Task TriggerAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task TriggerAsync(BackgroundJobInfo jobInfo)
     {
         await EventBus.PublishAsync(
             new JobTriggerEventData
@@ -113,7 +113,7 @@ public class BackgroundJobManager : DomainService
             });
     }
 
-    public virtual async Task BulkTriggerAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkTriggerAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         if (jobInfos.Any())
         {
@@ -127,7 +127,7 @@ public class BackgroundJobManager : DomainService
         }
     }
 
-    public virtual async Task PauseAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task PauseAsync(BackgroundJobInfo jobInfo)
     {
         jobInfo.SetStatus(JobStatus.Paused);
         jobInfo.SetNextRunTime(null);
@@ -146,7 +146,7 @@ public class BackgroundJobManager : DomainService
         });
     }
 
-    public virtual async Task BulkPauseAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkPauseAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {
@@ -168,7 +168,7 @@ public class BackgroundJobManager : DomainService
         });
     }
 
-    public virtual async Task ResumeAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task ResumeAsync(BackgroundJobInfo jobInfo)
     {
         jobInfo.SetStatus(JobStatus.Running);
         jobInfo.IsAbandoned = false;
@@ -188,7 +188,7 @@ public class BackgroundJobManager : DomainService
         });
     }
 
-    public virtual async Task BulkResumeAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkResumeAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {
@@ -211,7 +211,7 @@ public class BackgroundJobManager : DomainService
         });
     }
 
-    public virtual async Task StopAsync(BackgroundJobInfo jobInfo)
+    public async virtual Task StopAsync(BackgroundJobInfo jobInfo)
     {
         jobInfo.SetStatus(JobStatus.Stopped);
         jobInfo.SetNextRunTime(null);
@@ -230,7 +230,7 @@ public class BackgroundJobManager : DomainService
         });
     }
 
-    public virtual async Task BulkStopAsync(IEnumerable<BackgroundJobInfo> jobInfos)
+    public async virtual Task BulkStopAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         foreach (var jobInfo in jobInfos)
         {

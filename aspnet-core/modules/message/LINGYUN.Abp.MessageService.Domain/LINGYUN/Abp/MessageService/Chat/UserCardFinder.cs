@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userChatCardRepository = userChatCardRepository;
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             Guid? tenantId,
             string findUserName = "", 
             int? startAge = null, 
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<UserCard>> GetListAsync(
+        public async virtual Task<List<UserCard>> GetListAsync(
             Guid? tenantId, 
             string findUserName = "", 
             int? startAge = null, 
@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
+        public async virtual Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
         {
             using (_currentTenant.Change(tenantId))
             {

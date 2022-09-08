@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.Dapr.Actors
             await StateManager.TryRemoveStateAsync("test:actors");
         }
 
-        protected virtual async Task<List<NameValue>> GetValuesByStateAsync()
+        protected async virtual Task<List<NameValue>> GetValuesByStateAsync()
         {
             return await StateManager
                 .GetOrAddStateAsync(

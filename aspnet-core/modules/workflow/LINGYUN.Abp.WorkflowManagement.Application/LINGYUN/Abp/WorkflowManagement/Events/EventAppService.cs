@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Events
             _controller = controller;
         }
 
-        public virtual async Task PublishAsync(EventPublishInput input)
+        public async virtual Task PublishAsync(EventPublishInput input)
         {
             await _controller.PublishEvent(input.EventName, input.EventKey, input.EventData, input.EffectiveDate);
         }

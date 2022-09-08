@@ -23,6 +23,7 @@
     "Permission:Menu": "菜单管理",
     "Permission:Create": "新增",
     "Permission:Update": "编辑",
+    "Permission:Move": "移动",
     "Permission:Delete": "删除",
     "Permission:ManageItems": "管理项目",
     "Permission:ManageRoleMenus": "管理角色菜单",

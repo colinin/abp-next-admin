@@ -59,7 +59,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
             }
         }
 
-        protected virtual async Task SendWeChatTemplateMessagAsync(NotificationInfo notification, UserIdentifier identifier, CancellationToken cancellationToken = default)
+        protected async virtual Task SendWeChatTemplateMessagAsync(NotificationInfo notification, UserIdentifier identifier, CancellationToken cancellationToken = default)
         {
             var templateId = GetOrDefaultTemplateId(notification.Data);
             if (templateId.IsNullOrWhiteSpace())

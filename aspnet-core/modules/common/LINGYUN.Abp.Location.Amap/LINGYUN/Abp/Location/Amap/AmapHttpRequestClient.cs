@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.Location.Amap
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public virtual async Task<GecodeLocation> PositiveAsync(AmapPositiveHttpRequestParamter requestParamter)
+        public async virtual Task<GecodeLocation> PositiveAsync(AmapPositiveHttpRequestParamter requestParamter)
         {
             var client = HttpClientFactory.CreateClient(AmapHttpConsts.HttpClientName);
             var requestUrlBuilder = new StringBuilder(128);
@@ -110,7 +110,7 @@ namespace LINGYUN.Abp.Location.Amap
             return postiveLocation;
         }
 
-        public virtual async Task<ReGeocodeLocation> InverseAsync(AmapInverseHttpRequestParamter requestParamter)
+        public async virtual Task<ReGeocodeLocation> InverseAsync(AmapInverseHttpRequestParamter requestParamter)
         {
             if(requestParamter.Locations.Length > 20)
             {

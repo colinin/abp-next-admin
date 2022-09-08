@@ -22,12 +22,12 @@ namespace LINGYUN.Abp.Dapr.ServiceInvocation.ClientProxies;
 [ExposeServices(typeof(ITestAppService), typeof(TestClientProxy))]
 public partial class TestClientProxy : DaprClientProxyBase<ITestAppService>, ITestAppService
 {
-    public virtual async Task<ListResultDto<NameValue>> GetAsync()
+    public async virtual Task<ListResultDto<NameValue>> GetAsync()
     {
         return await RequestAsync<ListResultDto<NameValue>>(nameof(GetAsync));
     }
 
-    public virtual async Task<NameValue> UpdateAsync(int inctement)
+    public async virtual Task<NameValue> UpdateAsync(int inctement)
     {
         return await RequestAsync<NameValue>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
@@ -35,7 +35,7 @@ public partial class TestClientProxy : DaprClientProxyBase<ITestAppService>, ITe
         });
     }
 
-    public virtual async Task<TestNeedWrapObject> GetWrapedAsync(string name)
+    public async virtual Task<TestNeedWrapObject> GetWrapedAsync(string name)
     {
         return await RequestAsync<TestNeedWrapObject>(nameof(GetWrapedAsync), new ClientProxyRequestTypeValue
         {

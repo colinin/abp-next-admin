@@ -18,12 +18,12 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                Alerts.Warning("Ë«ÒòËØÈÏÖ¤Ê§°Ü,ÓÃ»§Î´µÇÂ¼»òÒÑÊ§Ð§!");
+                Alerts.Warning("Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½,ï¿½Ã»ï¿½Î´ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ê§Ð§!");
                 return Page();
             }
 
@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             }
             else
             {
-                Alerts.Danger("ÊÚÈ¨ÂëÑéÖ¤ÎÞÐ§!");
+                Alerts.Danger("ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½Ð§!");
                 return Page();
             }
         }

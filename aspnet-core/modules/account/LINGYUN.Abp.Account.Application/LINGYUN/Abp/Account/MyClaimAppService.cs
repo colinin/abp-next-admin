@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.Account
 
         }
 
-        public virtual async Task ChangeAvatarAsync(ChangeAvatarInput input)
+        public async virtual Task ChangeAvatarAsync(ChangeAvatarInput input)
         {
             var user = await GetCurrentUserAsync();
 

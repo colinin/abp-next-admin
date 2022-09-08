@@ -26,54 +26,54 @@ namespace LINGYUN.Platform.Menus
 
         [HttpGet]
         [Route("by-current-user")]
-        public virtual async Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input)
         {
             return await MenuAppService.GetCurrentUserMenuListAsync(input);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<MenuDto> GetAsync(Guid id)
+        public async virtual Task<MenuDto> GetAsync(Guid id)
         {
             return await MenuAppService.GetAsync(id);
         }
 
         [HttpGet]
         [Route("all")]
-        public virtual async Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
         {
             return await MenuAppService.GetAllAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
+        public async virtual Task<PagedResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
         {
             return await MenuAppService.GetListAsync(input);
         }
 
         [HttpPost]
-        public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
+        public async virtual Task<MenuDto> CreateAsync(MenuCreateDto input)
         {
             return await MenuAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
+        public async virtual Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
         {
             return await MenuAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await MenuAppService.DeleteAsync(id);
         }
 
         [HttpPut]
         [Route("by-user")]
-        public virtual async Task SetUserMenusAsync(UserMenuInput input)
+        public async virtual Task SetUserMenusAsync(UserMenuInput input)
         {
             await MenuAppService.SetUserMenusAsync(input);
         }
@@ -87,14 +87,14 @@ namespace LINGYUN.Platform.Menus
 
         [HttpGet]
         [Route("by-user")]
-        public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetUserMenuListAsync(MenuGetByUserInput input)
         {
             return await MenuAppService.GetUserMenuListAsync(input);
         }
 
         [HttpGet]
         [Route("by-user/{userId}/{framework}")]
-        public virtual async Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, string framework)
+        public async virtual Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, string framework)
         {
             var userRoles = await UserRoleFinder.GetRolesAsync(userId);
 
@@ -109,7 +109,7 @@ namespace LINGYUN.Platform.Menus
 
         [HttpPut]
         [Route("by-role")]
-        public virtual async Task SetRoleMenusAsync(RoleMenuInput input)
+        public async virtual Task SetRoleMenusAsync(RoleMenuInput input)
         {
             await MenuAppService.SetRoleMenusAsync(input);
         }
@@ -123,14 +123,14 @@ namespace LINGYUN.Platform.Menus
 
         [HttpGet]
         [Route("by-role")]
-        public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
+        public async virtual Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(MenuGetByRoleInput input)
         {
             return await MenuAppService.GetRoleMenuListAsync(input);
         }
 
         [HttpGet]
         [Route("by-role/{role}/{framework}")]
-        public virtual async Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(string role, string framework)
+        public async virtual Task<ListResultDto<MenuDto>> GetRoleMenuListAsync(string role, string framework)
         {
             return await MenuAppService.GetRoleMenuListAsync(new MenuGetByRoleInput
             {

@@ -18,13 +18,13 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
-        public virtual async Task<List<RoleMenu>> GetListByRoleNameAsync(string roleName, CancellationToken cancellationToken = default)
+        public async virtual Task<List<RoleMenu>> GetListByRoleNameAsync(string roleName, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(x => x.RoleName.Equals(roleName))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> RoleHasInMenuAsync(
+        public async virtual Task<bool> RoleHasInMenuAsync(
             string roleName, 
             string menuName, 
             CancellationToken cancellationToken = default)
@@ -40,7 +40,7 @@ namespace LINGYUN.Platform.Menus
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<Menu> GetStartupMenuAsync(
+        public async virtual Task<Menu> GetStartupMenuAsync(
             IEnumerable<string> roleNames,
             CancellationToken cancellationToken = default)
         {

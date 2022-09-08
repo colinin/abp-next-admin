@@ -255,7 +255,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     {
         var returnSign = returnTypeName == "void" ? "Task" : $"Task<{returnTypeName}>";
 
-        methodBuilder.AppendLine($"public virtual async {returnSign} {action.Name}(<args>)");
+        methodBuilder.AppendLine($"public async virtual {returnSign} {action.Name}(<args>)");
 
         foreach (var parameter in action.ParametersOnMethod)
         {

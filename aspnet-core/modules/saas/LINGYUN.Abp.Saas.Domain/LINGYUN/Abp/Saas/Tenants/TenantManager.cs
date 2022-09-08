@@ -15,7 +15,7 @@ public class TenantManager : DomainService, ITenantManager
 
     }
 
-    public virtual async Task<Tenant> CreateAsync(string name)
+    public async virtual Task<Tenant> CreateAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -23,7 +23,7 @@ public class TenantManager : DomainService, ITenantManager
         return new Tenant(GuidGenerator.Create(), name);
     }
 
-    public virtual async Task ChangeNameAsync(Tenant tenant, string name)
+    public async virtual Task ChangeNameAsync(Tenant tenant, string name)
     {
         Check.NotNull(tenant, nameof(tenant));
         Check.NotNull(name, nameof(name));
@@ -32,7 +32,7 @@ public class TenantManager : DomainService, ITenantManager
         tenant.SetName(name);
     }
 
-    protected virtual async Task ValidateNameAsync(string name, Guid? expectedId = null)
+    protected async virtual Task ValidateNameAsync(string name, Guid? expectedId = null)
     {
         var tenant = await TenantRepository.FindByNameAsync(name);
         if (tenant != null && tenant.Id != expectedId)

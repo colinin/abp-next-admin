@@ -45,7 +45,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             LocalizationResourceType = typeof(AccountResource);
         }
 
-        public virtual async Task<IActionResult> OnGetAsync()
+        public async virtual Task<IActionResult> OnGetAsync()
         {
             Input = new SendCodeInputModel();
 
@@ -62,7 +62,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             return Page();
         }
 
-        public virtual async Task<IActionResult> OnPostAsync()
+        public async virtual Task<IActionResult> OnPostAsync()
         {
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)

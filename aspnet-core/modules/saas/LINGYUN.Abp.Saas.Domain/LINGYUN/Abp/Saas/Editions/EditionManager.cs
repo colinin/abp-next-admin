@@ -32,7 +32,7 @@ public class EditionManager : DomainService
         return new Edition(GuidGenerator.Create(), displayName);
     }
 
-    public virtual async Task ChangeDisplayNameAsync(Edition edition, string displayName)
+    public async virtual Task ChangeDisplayNameAsync(Edition edition, string displayName)
     {
         Check.NotNull(edition, nameof(edition));
         Check.NotNull(displayName, nameof(displayName));
@@ -42,7 +42,7 @@ public class EditionManager : DomainService
         edition.SetDisplayName(displayName);
     }
 
-    protected virtual async Task ValidateDisplayNameAsync(string displayName, Guid? expectedId = null)
+    protected async virtual Task ValidateDisplayNameAsync(string displayName, Guid? expectedId = null)
     {
         var edition = await EditionRepository.FindByDisplayNameAsync(displayName);
         if (edition != null && edition.Id != expectedId)

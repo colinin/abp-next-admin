@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             _workflowRepository = workflowRepository;
         }
 
-        public virtual async Task PurgeWorkflows(WorkflowStatus status, DateTime olderThan)
+        public async virtual Task PurgeWorkflows(WorkflowStatus status, DateTime olderThan)
         {
             var olderThanUtc = olderThan.ToUniversalTime();
 

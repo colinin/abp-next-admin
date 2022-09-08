@@ -18,7 +18,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [Authorize(PlatformPermissions.AppVersion.FileManager.Create)]
-        public virtual async Task AppendFileAsync(VersionFileCreateDto versionFileCreate)
+        public async virtual Task AppendFileAsync(VersionFileCreateDto versionFileCreate)
         {
             await _versionManager.AppendFileAsync(versionFileCreate.VersionId,
                 versionFileCreate.SHA256, versionFileCreate.FileName, versionFileCreate.FileVersion,
@@ -26,7 +26,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [Authorize(PlatformPermissions.AppVersion.Create)]
-        public virtual async Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
+        public async virtual Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
         {
             if (await _versionManager.ExistsAsync(versionCreate.PlatformType,versionCreate.Version))
             {
@@ -45,7 +45,7 @@ namespace LINGYUN.Platform.Versions
         }
 
         [Authorize(PlatformPermissions.AppVersion.Delete)]
-        public virtual async Task DeleteAsync(VersionDeleteDto versionDelete)
+        public async virtual Task DeleteAsync(VersionDeleteDto versionDelete)
         {
             var version = await _versionManager.GetByVersionAsync(versionDelete.PlatformType, versionDelete.Version);
             if (version != null)
@@ -55,7 +55,7 @@ namespace LINGYUN.Platform.Versions
         }
 
 
-        public virtual async Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
+        public async virtual Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
         {
             var versionCount = await _versionManager.GetCountAsync(versionGetByPaged.PlatformType, versionGetByPaged.Filter);
             var versions = await _versionManager.GetPagedListAsync(versionGetByPaged.PlatformType, versionGetByPaged.Filter,
@@ -67,14 +67,14 @@ namespace LINGYUN.Platform.Versions
         }
 
 
-        public virtual async Task<VersionDto> GetAsync(VersionGetByIdDto versionGetById)
+        public async virtual Task<VersionDto> GetAsync(VersionGetByIdDto versionGetById)
         {
             var version = await _versionManager.GetByIdAsync(versionGetById.Id);
 
             return ObjectMapper.Map<AppVersion, VersionDto>(version);
         }
 
-        public virtual async Task<VersionDto> GetLastestAsync(PlatformType platformType)
+        public async virtual Task<VersionDto> GetLastestAsync(PlatformType platformType)
         {
             var version = await _versionManager.GetLatestAsync(platformType);
 
@@ -82,13 +82,13 @@ namespace LINGYUN.Platform.Versions
         }
 
         [Authorize(PlatformPermissions.AppVersion.FileManager.Delete)]
-        public virtual async Task RemoveAllFileAsync(VersionGetByIdDto versionGetById)
+        public async virtual Task RemoveAllFileAsync(VersionGetByIdDto versionGetById)
         {
             await _versionManager.RemoveAllFileAsync(versionGetById.Id);
         }
 
         [Authorize(PlatformPermissions.AppVersion.FileManager.Delete)]
-        public virtual async Task RemoveFileAsync(VersionFileDeleteDto versionFileDelete)
+        public async virtual Task RemoveFileAsync(VersionFileDeleteDto versionFileDelete)
         {
             await _versionManager.RemoveFileAsync(versionFileDelete.VersionId, versionFileDelete.FileName);
         }

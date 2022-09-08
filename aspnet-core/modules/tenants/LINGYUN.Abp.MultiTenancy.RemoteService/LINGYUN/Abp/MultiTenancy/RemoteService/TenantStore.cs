@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
             };
         }
 
-        public virtual async Task<TenantConfiguration> FindAsync(string name)
+        public async virtual Task<TenantConfiguration> FindAsync(string name)
         {
             var tenantCacheItem = await GetCacheItemByNameAsync(name);
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
             };
         }
 
-        public virtual async Task<TenantConfiguration> FindAsync(Guid id)
+        public async virtual Task<TenantConfiguration> FindAsync(Guid id)
         {
             var tenantCacheItem = await GetCacheItemByIdAsync(id);
             return new TenantConfiguration(tenantCacheItem.Id, tenantCacheItem.Name)
@@ -71,7 +71,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
             };
         }
 
-        protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
+        protected async virtual Task<TenantConfigurationCacheItem> GetCacheItemByIdAsync(Guid id)
         {
             using (_currentTenant.Change(null))
             {
@@ -107,7 +107,7 @@ namespace LINGYUN.Abp.MultiTenancy.RemoteService
                 return cacheItem;
             }
         }
-        protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
+        protected async virtual Task<TenantConfigurationCacheItem> GetCacheItemByNameAsync(string name)
         {
             using (_currentTenant.Change(null))
             {

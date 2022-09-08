@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userChatCardRepository = userChatCardRepository;
         }
 
-        public virtual async Task ChangeAsync(
+        public async virtual Task ChangeAsync(
             Guid? tenantId,
             Guid userId,
             UserOnlineState state,

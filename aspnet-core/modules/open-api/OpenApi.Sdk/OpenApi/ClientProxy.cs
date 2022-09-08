@@ -20,32 +20,32 @@ namespace OpenApi
             _httpClientFactory = httpClientFactory;
         }
 
-        public virtual async Task<ApiResponse<TResult>> DeleteAsync<TResult>(string url, string appKey, string appSecret)
+        public async virtual Task<ApiResponse<TResult>> DeleteAsync<TResult>(string url, string appKey, string appSecret)
         {
             return await RequestAsync<TResult>(url, appKey, appSecret, HttpMethod.Delete);
         }
 
-        public virtual async Task<ApiResponse<TResult>> GetAsync<TResult>(string url, string appKey, string appSecret)
+        public async virtual Task<ApiResponse<TResult>> GetAsync<TResult>(string url, string appKey, string appSecret)
         {
             return await RequestAsync<TResult>(url, appKey, appSecret, HttpMethod.Get);
         }
 
-        public virtual async Task<ApiResponse<TResult>> PostAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request)
+        public async virtual Task<ApiResponse<TResult>> PostAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request)
         {
             return await RequestAsync<TRequest, TResult>(url, appKey, appSecret, request, HttpMethod.Post);
         }
 
-        public virtual async Task<ApiResponse<TResult>> PutAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request)
+        public async virtual Task<ApiResponse<TResult>> PutAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request)
         {
             return await RequestAsync<TRequest, TResult>(url, appKey, appSecret, request, HttpMethod.Put);
         }
 
-        public virtual async Task<ApiResponse<TResult>> RequestAsync<TResult>(string url, string appKey, string appSecret, HttpMethod httpMethod)
+        public async virtual Task<ApiResponse<TResult>> RequestAsync<TResult>(string url, string appKey, string appSecret, HttpMethod httpMethod)
         {
             return await RequestAsync<object, TResult>(url, appKey, appSecret, null, httpMethod);
         }
 
-        public virtual async Task<ApiResponse<TResult>> RequestAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request, HttpMethod httpMethod)
+        public async virtual Task<ApiResponse<TResult>> RequestAsync<TRequest, TResult>(string url, string appKey, string appSecret, TRequest request, HttpMethod httpMethod)
         {
             // 构建请求客户端
             var client = _httpClientFactory.CreateClient("opensdk");
@@ -53,7 +53,7 @@ namespace OpenApi
             return await RequestAsync<TRequest, TResult>(client, url, appKey, appSecret, request, httpMethod);
         }
 
-        public virtual async Task<ApiResponse<TResult>> RequestAsync<TRequest, TResult>(HttpClient client, string url, string appKey, string appSecret, TRequest request, HttpMethod httpMethod)
+        public async virtual Task<ApiResponse<TResult>> RequestAsync<TRequest, TResult>(HttpClient client, string url, string appKey, string appSecret, TRequest request, HttpMethod httpMethod)
         {
             // UTC时间戳
             var timeStamp = GetUtcTimeStampString();

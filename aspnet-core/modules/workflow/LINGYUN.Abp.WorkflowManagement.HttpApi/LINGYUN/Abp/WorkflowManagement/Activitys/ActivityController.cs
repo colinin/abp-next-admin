@@ -18,25 +18,25 @@ namespace LINGYUN.Abp.WorkflowManagement.Activitys
         }
 
         [HttpPost("fail/{token}")]
-        public virtual async Task FailureAsync(ActivityFailureInput input)
+        public async virtual Task FailureAsync(ActivityFailureInput input)
         {
             await _service.FailureAsync(input);
         }
 
         [HttpGet("{ActivityName}")]
-        public virtual async Task<PendingActivityDto> GetAsync(GetPendingActivityInput input)
+        public async virtual Task<PendingActivityDto> GetAsync(GetPendingActivityInput input)
         {
             return await _service.GetAsync(input);
         }
 
         [HttpDelete("{Token}")]
-        public virtual async Task DeleteAsync(ActivityReleaseInput input)
+        public async virtual Task DeleteAsync(ActivityReleaseInput input)
         {
             await _service.DeleteAsync(input);
         }
 
         [HttpPost("success/{Token}")]
-        public virtual async Task SuccessAsync(ActivitySuccessInput input)
+        public async virtual Task SuccessAsync(ActivitySuccessInput input)
         {
             await _service.SuccessAsync(input);
         }

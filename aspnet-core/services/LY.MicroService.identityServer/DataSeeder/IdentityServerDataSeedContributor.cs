@@ -63,7 +63,7 @@ public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransien
     }
 
     [UnitOfWork]
-    public virtual async Task SeedAsync(DataSeedContext context)
+    public async virtual Task SeedAsync(DataSeedContext context)
     {
         using (_currentTenant.Change(context?.TenantId))
         {

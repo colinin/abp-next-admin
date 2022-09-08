@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram
             Options = options;
         }
 
-        public virtual async Task<AbpWeChatMiniProgramOptions> CreateAsync()
+        public async virtual Task<AbpWeChatMiniProgramOptions> CreateAsync()
         {
             await Options.SetAsync();
 

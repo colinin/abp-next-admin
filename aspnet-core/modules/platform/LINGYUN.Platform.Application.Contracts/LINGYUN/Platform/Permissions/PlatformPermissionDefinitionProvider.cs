@@ -22,6 +22,7 @@ namespace LINGYUN.Platform.Permissions
             var dataDictionary = platform.AddPermission(PlatformPermissions.DataDictionary.Default, L("Permission:DataDictionary"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.Create, L("Permission:Create"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.Update, L("Permission:Update"));
+            dataDictionary.AddChild(PlatformPermissions.DataDictionary.Move, L("Permission:Move"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.Delete, L("Permission:Delete"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.ManageItems, L("Permission:ManageItems"));
 

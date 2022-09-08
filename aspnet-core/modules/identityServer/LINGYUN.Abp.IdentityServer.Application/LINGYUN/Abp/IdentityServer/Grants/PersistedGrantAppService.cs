@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
         }
 
         [Authorize(AbpIdentityServerPermissions.Grants.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var persistedGrant = await PersistentGrantRepository.GetAsync(id);
 
@@ -27,14 +27,14 @@ namespace LINGYUN.Abp.IdentityServer.Grants
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task<PersistedGrantDto> GetAsync(Guid id)
+        public async virtual Task<PersistedGrantDto> GetAsync(Guid id)
         {
             var persistedGrant = await PersistentGrantRepository.GetAsync(id);
 
             return ObjectMapper.Map<PersistedGrant, PersistedGrantDto>(persistedGrant);
         }
 
-        public virtual async Task<PagedResultDto<PersistedGrantDto>> GetListAsync(GetPersistedGrantInput input)
+        public async virtual Task<PagedResultDto<PersistedGrantDto>> GetListAsync(GetPersistedGrantInput input)
         {
             var persistenGrantCount = await PersistentGrantRepository
                 .GetCountAsync(

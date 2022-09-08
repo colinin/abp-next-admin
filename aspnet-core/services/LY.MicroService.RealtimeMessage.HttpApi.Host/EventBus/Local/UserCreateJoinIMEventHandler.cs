@@ -27,19 +27,19 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// <param name="eventData"></param>
         /// <returns></returns>
         [UnitOfWork]
-        public virtual async Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
+        public async virtual Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
         {
             await SeedChatDataAsync(eventData.Entity);
 
             await SeedUserSubscriptionNotifiersAsync(eventData.Entity);
         }
 
-        protected virtual async Task SeedChatDataAsync(IUserData user)
+        protected async virtual Task SeedChatDataAsync(IUserData user)
         {
             await _chatDataSeeder.SeedAsync(user);
         }
 
-        protected virtual async Task SeedUserSubscriptionNotifiersAsync(IUserData user)
+        protected async virtual Task SeedUserSubscriptionNotifiersAsync(IUserData user)
         {
             var userIdentifier = new UserIdentifier(user.Id, user.UserName);
 

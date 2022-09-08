@@ -26,13 +26,13 @@ namespace LINGYUN.Abp.AspNetCore
             RequestHeaders = new Dictionary<string, string>();
         }
 
-        protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
+        protected async virtual Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
             var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode, xmlHttpRequest, method);
             return JsonSerializer.Deserialize<T>(strResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
 
-        protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
+        protected async virtual Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
             using (var response = await GetResponseAsync(url, expectedStatusCode, xmlHttpRequest, method))
             {
@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.AspNetCore
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
+        protected async virtual Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK, bool xmlHttpRequest = false, HttpMethod method = null)
         {
             using (var requestMessage = new HttpRequestMessage(method ?? HttpMethod.Get, url))
             {

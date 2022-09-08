@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.OssManagement
             _fileUploadMerger = fileUploadMerger;
         }
 
-        public virtual async Task UploadAsync(UploadFileChunkInput input, CancellationToken cancellationToken = default)
+        public async virtual Task UploadAsync(UploadFileChunkInput input, CancellationToken cancellationToken = default)
         {
             await _fileValidater.ValidationAsync(input);
             // 以上传的文件名创建一个临时目录

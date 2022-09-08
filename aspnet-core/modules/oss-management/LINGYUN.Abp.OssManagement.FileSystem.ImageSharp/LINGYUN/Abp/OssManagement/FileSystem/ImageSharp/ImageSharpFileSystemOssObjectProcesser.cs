@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
             "255216"// jpg
         };
         
-        public virtual async Task ProcessAsync(FileSystemOssObjectContext context)
+        public async virtual Task ProcessAsync(FileSystemOssObjectContext context)
         {
             var copyStream = context.OssObject.Content;
             var bytes = await copyStream.GetAllBytesAsync();

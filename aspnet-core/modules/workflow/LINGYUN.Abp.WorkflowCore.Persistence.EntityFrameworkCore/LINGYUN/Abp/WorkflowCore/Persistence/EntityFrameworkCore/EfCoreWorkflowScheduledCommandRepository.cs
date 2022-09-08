@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
         {
         }
 
-        public virtual async Task<bool> CheckExistsAsync(
+        public async virtual Task<bool> CheckExistsAsync(
             string name,
             string data,
             CancellationToken cancellationToken = default)

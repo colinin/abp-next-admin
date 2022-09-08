@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             }
         }
 
-        protected virtual async Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(IAbpMethodInvocation invocation)
+        protected async virtual Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientProxyOptions.DaprClientProxies.GetOrDefault(typeof(TService)) ??
                                throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {typeof(TService).FullName}.");
@@ -84,12 +84,12 @@ namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
             );
         }
 
-        protected virtual async Task<T> CallRequestAsync<T>(ClientProxyRequestContext context)
+        protected async virtual Task<T> CallRequestAsync<T>(ClientProxyRequestContext context)
         {
             return await InterceptorClientProxy.CallRequestAsync<T>(context);
         }
 
-        protected virtual async Task<object> GetResultAsync(Task task, Type resultType)
+        protected async virtual Task<object> GetResultAsync(Task task, Type resultType)
         {
             await task;
             var resultProperty = typeof(Task<>)

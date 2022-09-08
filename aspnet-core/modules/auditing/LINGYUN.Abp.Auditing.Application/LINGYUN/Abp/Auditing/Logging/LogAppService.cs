@@ -14,14 +14,14 @@ namespace LINGYUN.Abp.Auditing.Logging
             _manager = manager;
         }
 
-        public virtual async Task<LogDto> GetAsync(string id)
+        public async virtual Task<LogDto> GetAsync(string id)
         {
             var log = await _manager.GetAsync(id);
 
             return ObjectMapper.Map<LogInfo, LogDto>(log);
         }
 
-        public virtual async Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)
+        public async virtual Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)
         {
             var count = await _manager.GetCountAsync(
                 input.StartTime, input.EndTime, input.Level,

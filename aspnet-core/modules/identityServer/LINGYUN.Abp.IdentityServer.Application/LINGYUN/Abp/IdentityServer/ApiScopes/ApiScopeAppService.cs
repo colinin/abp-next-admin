@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiScopes.Create)]
-        public virtual async Task<ApiScopeDto> CreateAsync(ApiScopeCreateDto input)
+        public async virtual Task<ApiScopeDto> CreateAsync(ApiScopeCreateDto input)
         {
             if (await ApiScopeRepository.CheckNameExistAsync(input.Name))
             {
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiScopes.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var apiScope = await ApiScopeRepository.GetAsync(id);
 
@@ -56,14 +56,14 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task<ApiScopeDto> GetAsync(Guid id)
+        public async virtual Task<ApiScopeDto> GetAsync(Guid id)
         {
             var apiScope = await ApiScopeRepository.GetAsync(id);
 
             return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
         }
 
-        public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync(GetApiScopeInput input)
+        public async virtual Task<PagedResultDto<ApiScopeDto>> GetListAsync(GetApiScopeInput input)
         {
             var totalCount = await ApiScopeRepository
                 .GetCountAsync(input.Filter);
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiScopes.Update)]
-        public virtual async Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateDto input)
+        public async virtual Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateDto input)
         {
             var apiScope = await ApiScopeRepository.GetAsync(id);
 
@@ -91,7 +91,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
             return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
         }
 
-        protected virtual async Task UpdateApiScopeByInputAsync(ApiScope apiScope, ApiScopeCreateOrUpdateDto input)
+        protected async virtual Task UpdateApiScopeByInputAsync(ApiScope apiScope, ApiScopeCreateOrUpdateDto input)
         {
             if (!string.Equals(apiScope.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
             {

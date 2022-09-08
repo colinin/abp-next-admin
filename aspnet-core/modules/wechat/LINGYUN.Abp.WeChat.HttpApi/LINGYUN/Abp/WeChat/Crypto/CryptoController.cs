@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.WeChat.Crypto
 
         [HttpGet]
         [Route("getUserInfo")]
-        public virtual async Task<UserInfoDto> GetUserInfoAsync(GetUserInfoInput input)
+        public async virtual Task<UserInfoDto> GetUserInfoAsync(GetUserInfoInput input)
         {
             return await _service.GetUserInfoAsync(input);
         }

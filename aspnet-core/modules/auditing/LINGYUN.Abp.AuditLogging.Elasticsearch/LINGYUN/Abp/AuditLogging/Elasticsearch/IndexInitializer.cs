@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             Logger = NullLogger<IndexInitializer>.Instance;
         }
 
-        public virtual async Task InitializeAsync()
+        public async virtual Task InitializeAsync()
         {
             var client = _clientFactory.Create();
             var dateTimeFormat = !_jsonOptions.DefaultDateTimeFormat.IsNullOrWhiteSpace()
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             await InitlizeSecurityLogIndex(client, indexState, dateTimeFormat);
         }
 
-        protected virtual async Task InitlizeAuditLogIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeAuditLogIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("audit-log");
             var indexExists = await client.Indices.ExistsAsync(indexName);
@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             }
         }
 
-        protected virtual async Task InitlizeSecurityLogIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeSecurityLogIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("security-log");
             var indexExists = await client.Indices.ExistsAsync(indexName);

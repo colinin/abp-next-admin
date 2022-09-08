@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<bool> CheckVersionAsync(string name, int version, CancellationToken cancellationToken = default)
+        public async virtual Task<bool> CheckVersionAsync(string name, int version, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .AnyAsync(x => x.Name.Equals(name) && x.Version == version,

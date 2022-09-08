@@ -22,14 +22,14 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             ApiResourceRepository = apiResourceRepository;
         }
 
-        public virtual async Task<ApiResourceDto> GetAsync(Guid id)
+        public async virtual Task<ApiResourceDto> GetAsync(Guid id)
         {
             var apiResource = await ApiResourceRepository.GetAsync(id);
 
             return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
         }
 
-        public virtual async Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetByPagedInputDto input)
+        public async virtual Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetByPagedInputDto input)
         {
             var apiResources = await ApiResourceRepository.GetListAsync(input.Sorting,
                 input.SkipCount, input.MaxResultCount,
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiResources.Create)]
-        public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto input)
+        public async virtual Task<ApiResourceDto> CreateAsync(ApiResourceCreateDto input)
         {
             var apiResourceExists = await ApiResourceRepository.CheckNameExistAsync(input.Name);
             if (apiResourceExists)
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiResources.Update)]
-        public virtual async Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
+        public async virtual Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateDto input)
         {
             var apiResource = await ApiResourceRepository.GetAsync(id);
 
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
         }
 
         [Authorize(AbpIdentityServerPermissions.ApiResources.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var apiResource = await ApiResourceRepository.GetAsync(id);
             await ApiResourceRepository.DeleteAsync(apiResource);
@@ -87,7 +87,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        protected virtual async Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
+        protected async virtual Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
         {
             apiResource.ShowInDiscoveryDocument = input.ShowInDiscoveryDocument;
             apiResource.Enabled = input.Enabled;

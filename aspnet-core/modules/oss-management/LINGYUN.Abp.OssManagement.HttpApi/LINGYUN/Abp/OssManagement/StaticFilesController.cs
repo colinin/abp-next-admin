@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpPost]
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task<OssObjectDto> UploadAsync([FromForm] CreateOssObjectInput input)
+        public async virtual Task<OssObjectDto> UploadAsync([FromForm] CreateOssObjectInput input)
         {
             return await _ossObjectAppService.CreateAsync(input);
         }
@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.OssManagement
         [Route("{Bucket}/{Name}/{Process}")]
         [Route("{Bucket}/p/{Path}/{Name}")]
         [Route("{Bucket}/p/{Path}/{Name}/{Process}")]
-        public virtual async Task<IRemoteStreamContent> GetAsync([FromRoute] GetStaticFileInput input)
+        public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetStaticFileInput input)
         {
             return await _staticFilesAppServic.GetAsync(input);
         }

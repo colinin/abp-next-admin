@@ -27,7 +27,7 @@ namespace LINGYUN.Abp.WeChat.Token
             Logger = NullLogger<WeChatTokenProvider>.Instance;
         }
 
-        public virtual async Task<WeChatToken> GetTokenAsync(
+        public async virtual Task<WeChatToken> GetTokenAsync(
             string appId, 
             string appSecret, 
             CancellationToken cancellationToken = default)
@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.WeChat.Token
             return (await GetCacheItemAsync("WeChatToken", appId, appSecret, cancellationToken)).WeChatToken;
         }
 
-        protected virtual async Task<WeChatTokenCacheItem> GetCacheItemAsync(
+        protected async virtual Task<WeChatTokenCacheItem> GetCacheItemAsync(
             string provider, 
             string appId,
             string appSecret, 

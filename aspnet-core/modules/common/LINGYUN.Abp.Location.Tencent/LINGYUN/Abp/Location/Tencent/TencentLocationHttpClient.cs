@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.Location.Tencent
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public virtual async Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
+        public async virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
         {
             var requestParamters = new Dictionary<string, string>
             {
@@ -77,7 +77,7 @@ namespace LINGYUN.Abp.Location.Tencent
             return location;
         }
 
-        public virtual async Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+        public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
         {
             var requestParamters = new Dictionary<string, string>
             {
@@ -110,7 +110,7 @@ namespace LINGYUN.Abp.Location.Tencent
             return location;
         }
 
-        public virtual async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
+        public async virtual Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
         {
             var requestParamters = new Dictionary<string, string>
             {
@@ -168,7 +168,7 @@ namespace LINGYUN.Abp.Location.Tencent
             return location;
         }
 
-        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url)
+        protected async virtual Task<string> MakeRequestAndGetResultAsync(string url)
         {
             var client = HttpClientFactory.CreateClient(TencentLocationHttpConsts.HttpClientName);
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
@@ -188,7 +188,7 @@ namespace LINGYUN.Abp.Location.Tencent
             return CancellationTokenProvider.Token;
         }
 
-        protected virtual async Task<TResponse> GetTencentMapResponseAsync<TResponse>(string url, string path, IDictionary<string, string> paramters)
+        protected async virtual Task<TResponse> GetTencentMapResponseAsync<TResponse>(string url, string path, IDictionary<string, string> paramters)
             where TResponse : TencentLocationResponse
         {
             var requestUrl = BuildRequestUrl(url, path, paramters);

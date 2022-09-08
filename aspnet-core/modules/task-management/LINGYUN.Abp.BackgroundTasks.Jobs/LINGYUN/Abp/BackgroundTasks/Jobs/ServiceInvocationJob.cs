@@ -55,7 +55,7 @@ public class ServiceInvocationJob : IJobRunnable
     // TODO: support grpc
     private readonly static string[] Providers = new string[] { "http", "dapr" };
 
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         // 获取参数列表
         var type = context.GetString(PropertyService);
@@ -103,7 +103,7 @@ public class ServiceInvocationJob : IJobRunnable
         .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
         .First(m => m.Name == CallRequestMethod && m.IsGenericMethodDefinition);
 
-    protected virtual async Task ExecuteWithHttpProxy(
+    protected async virtual Task ExecuteWithHttpProxy(
         JobRunnableContext context,
         Type serviceType,
         MethodInfo serviceMethod)
@@ -147,7 +147,7 @@ public class ServiceInvocationJob : IJobRunnable
         }
     }
 
-    protected virtual async Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(
+    protected async virtual Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(
         JobRunnableContext context,
         Type serviceType,
         MethodInfo serviceMethod)
@@ -183,7 +183,7 @@ public class ServiceInvocationJob : IJobRunnable
         .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
         .First(m => m.Name == DaprCallRequestMethod && m.IsGenericMethodDefinition);
 
-    protected virtual async Task ExecuteWithDaprProxy(
+    protected async virtual Task ExecuteWithDaprProxy(
         JobRunnableContext context,
         Type serviceType,
         MethodInfo serviceMethod)
@@ -240,7 +240,7 @@ public class ServiceInvocationJob : IJobRunnable
         }
     }
 
-    protected virtual async Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(
+    protected async virtual Task<ActionApiDescriptionModel> GetActionApiDescriptionModel(
         JobRunnableContext context,
         string service,
         string appId,
@@ -258,7 +258,7 @@ public class ServiceInvocationJob : IJobRunnable
 
     #endregion
 
-    protected virtual async Task<object> GetResultAsync(Task task, Type resultType)
+    protected async virtual Task<object> GetResultAsync(Task task, Type resultType)
     {
         await task;
         var resultProperty = typeof(Task<>)

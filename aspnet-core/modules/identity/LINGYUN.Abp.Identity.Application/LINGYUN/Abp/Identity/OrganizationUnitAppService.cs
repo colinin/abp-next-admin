@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Create)]
-        public virtual async Task<OrganizationUnitDto> CreateAsync(OrganizationUnitCreateDto input)
+        public async virtual Task<OrganizationUnitDto> CreateAsync(OrganizationUnitCreateDto input)
         {
             var origanizationUnit = new OrganizationUnit(
                 GuidGenerator.Create(), input.DisplayName, input.ParentId, CurrentTenant.Id)
@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var origanizationUnit = await OrganizationUnitRepository.FindAsync(id);
             if (origanizationUnit == null)
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.Identity
             await OrganizationUnitManager.DeleteAsync(id);
         }
 
-        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetRootAsync()
+        public async virtual Task<ListResultDto<OrganizationUnitDto>> GetRootAsync()
         {
             var rootOriganizationUnits = await OrganizationUnitManager.FindChildrenAsync(null, recursive: false);
 
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.Identity
                 ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(rootOriganizationUnits));
         }
 
-        public virtual async Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input)
+        public async virtual Task<ListResultDto<OrganizationUnitDto>> FindChildrenAsync(OrganizationUnitGetChildrenDto input)
         {
             var origanizationUnitChildren = await OrganizationUnitManager.FindChildrenAsync(input.Id, input.Recursive);
 
@@ -78,21 +78,21 @@ namespace LINGYUN.Abp.Identity
                 ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnitChildren));
         }
 
-        public virtual async Task<OrganizationUnitDto> GetAsync(Guid id)
+        public async virtual Task<OrganizationUnitDto> GetAsync(Guid id)
         {
             var origanizationUnit = await OrganizationUnitRepository.FindAsync(id);
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
         }
 
-        public virtual async Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId)
+        public async virtual Task<OrganizationUnitDto> GetLastChildOrNullAsync(Guid? parentId)
         {
             var origanizationUnitLastChildren = await OrganizationUnitManager.GetLastChildOrNullAsync(parentId);
 
             return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnitLastChildren);
         }
 
-        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync()
         {
             var origanizationUnits = await OrganizationUnitRepository.GetListAsync(false);
 
@@ -100,7 +100,7 @@ namespace LINGYUN.Abp.Identity
                 ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
         }
 
-        public virtual async Task<PagedResultDto<OrganizationUnitDto>> GetListAsync(OrganizationUnitGetByPagedDto input)
+        public async virtual Task<PagedResultDto<OrganizationUnitDto>> GetListAsync(OrganizationUnitGetByPagedDto input)
         {
             var origanizationUnitCount = await OrganizationUnitRepository.GetCountAsync();
             var origanizationUnits = await OrganizationUnitRepository
@@ -111,14 +111,14 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task<ListResultDto<string>> GetRoleNamesAsync(Guid id)
+        public async virtual Task<ListResultDto<string>> GetRoleNamesAsync(Guid id)
         {
             var inOrignizationUnitRoleNames = await UserRepository.GetRoleNamesInOrganizationUnitAsync(id);
             return new ListResultDto<string>(inOrignizationUnitRoleNames);
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetUnaddedRolesAsync(Guid id, OrganizationUnitGetUnaddedRoleByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityRoleDto>> GetUnaddedRolesAsync(Guid id, OrganizationUnitGetUnaddedRoleByPagedDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
@@ -135,7 +135,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(Guid id, PagedAndSortedResultRequestDto input)
+        public async virtual Task<PagedResultDto<IdentityRoleDto>> GetRolesAsync(Guid id, PagedAndSortedResultRequestDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
@@ -153,7 +153,7 @@ namespace LINGYUN.Abp.Identity
 
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUnaddedUsersAsync(Guid id, OrganizationUnitGetUnaddedUserByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityUserDto>> GetUnaddedUsersAsync(Guid id, OrganizationUnitGetUnaddedUserByPagedDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
@@ -169,7 +169,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task<PagedResultDto<IdentityUserDto>> GetUsersAsync(Guid id, GetIdentityUsersInput input)
+        public async virtual Task<PagedResultDto<IdentityUserDto>> GetUsersAsync(Guid id, GetIdentityUsersInput input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
@@ -185,13 +185,13 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Update)]
-        public virtual async Task MoveAsync(Guid id, OrganizationUnitMoveDto input)
+        public async virtual Task MoveAsync(Guid id, OrganizationUnitMoveDto input)
         {
             await OrganizationUnitManager.MoveAsync(id, input.ParentId);
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.Update)]
-        public virtual async Task<OrganizationUnitDto> UpdateAsync(Guid id, OrganizationUnitUpdateDto input)
+        public async virtual Task<OrganizationUnitDto> UpdateAsync(Guid id, OrganizationUnitUpdateDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
             origanizationUnit.DisplayName = input.DisplayName;
@@ -204,7 +204,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageUsers)]
-        public virtual async Task AddUsersAsync(Guid id, OrganizationUnitAddUserDto input)
+        public async virtual Task AddUsersAsync(Guid id, OrganizationUnitAddUserDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
             var users = await UserRepository.GetListByIdListAsync(input.UserIds, includeDetails: true);
@@ -219,7 +219,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
-        public virtual async Task AddRolesAsync(Guid id, OrganizationUnitAddRoleDto input)
+        public async virtual Task AddRolesAsync(Guid id, OrganizationUnitAddRoleDto input)
         {
             var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 

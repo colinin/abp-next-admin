@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.Webhooks
         
         #region Async Publish Methods
 
-        public virtual async Task PublishAsync(
+        public async virtual Task PublishAsync(
             string webhookName,
             object data, 
             bool sendExactSameData = false, 
@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.Webhooks
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(
+        public async virtual Task PublishAsync(
             string webhookName,
             object data,
             Guid? tenantId,
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Webhooks
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(
+        public async virtual Task PublishAsync(
             Guid?[] tenantIds, 
             string webhookName,
             object data,
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.Webhooks
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        protected virtual async Task PublishAsync(
+        protected async virtual Task PublishAsync(
             string webhookName, 
             object data, 
             List<WebhookSubscriptionInfo> webhookSubscriptions,
@@ -119,7 +119,7 @@ namespace LINGYUN.Abp.Webhooks
         
         #endregion
 
-        protected virtual async Task<WebhookEvent> SaveAndGetWebhookAsync(
+        protected async virtual Task<WebhookEvent> SaveAndGetWebhookAsync(
             Guid? tenantId,
             string webhookName,
             object data)

@@ -14,12 +14,12 @@ namespace LINGYUN.Abp.WorkflowManagement.Activitys
             _controller = controller;
         }
 
-        public virtual async Task FailureAsync(ActivityFailureInput input)
+        public async virtual Task FailureAsync(ActivityFailureInput input)
         {
             await _controller.SubmitActivityFailure(input.Token, input.Result);
         }
 
-        public virtual async Task<PendingActivityDto> GetAsync(GetPendingActivityInput input)
+        public async virtual Task<PendingActivityDto> GetAsync(GetPendingActivityInput input)
         {
             var activity = await _controller.GetPendingActivity(
                 input.ActivityName, input.WorkflowId, input.Timeout);
@@ -27,12 +27,12 @@ namespace LINGYUN.Abp.WorkflowManagement.Activitys
             return ObjectMapper.Map<PendingActivity, PendingActivityDto>(activity);
         }
 
-        public virtual async Task DeleteAsync(ActivityReleaseInput input)
+        public async virtual Task DeleteAsync(ActivityReleaseInput input)
         {
             await _controller.ReleaseActivityToken(input.Token);
         }
 
-        public virtual async Task SuccessAsync(ActivitySuccessInput input)
+        public async virtual Task SuccessAsync(ActivitySuccessInput input)
         {
             await _controller.SubmitActivitySuccess(input.Token, input.Result);
         }

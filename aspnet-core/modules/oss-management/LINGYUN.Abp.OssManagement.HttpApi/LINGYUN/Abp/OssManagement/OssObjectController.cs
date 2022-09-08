@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [HttpPost]
-        public virtual async Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
+        public async virtual Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
         {
             return await OssObjectAppService.CreateAsync(input);
         }
@@ -35,33 +35,33 @@ namespace LINGYUN.Abp.OssManagement
         [Route("upload")]
         [DisableAuditing]
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task UploadAsync([FromForm] UploadFileChunkInput input)
+        public async virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
         {
             await FileUploader.UploadAsync(input);
         }
 
         [HttpPost]
         [Route("bulk-delete")]
-        public virtual async Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
+        public async virtual Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
         {
             await OssObjectAppService.BulkDeleteAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(GetOssObjectInput input)
+        public async virtual Task DeleteAsync(GetOssObjectInput input)
         {
             await OssObjectAppService.DeleteAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<OssObjectDto> GetAsync(GetOssObjectInput input)
+        public async virtual Task<OssObjectDto> GetAsync(GetOssObjectInput input)
         {
             return await OssObjectAppService.GetAsync(input);
         }
 
         [HttpGet]
         [Route("download")]
-        public virtual async Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
+        public async virtual Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
         {
             return await OssObjectAppService.GetContentAsync(input);
         }

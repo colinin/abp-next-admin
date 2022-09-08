@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.RulesManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<EntityRuleGroup> GetByNameAsync(
+        public async virtual Task<EntityRuleGroup> GetByNameAsync(
             string name,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.RulesManagement.EntityFrameworkCore
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<EntityRule>> GetRulesAsync(
+        public async virtual Task<List<EntityRule>> GetRulesAsync(
             Guid groupId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.RulesManagement.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             string filter = null, 
             CancellationToken cancellationToken = default)
         {
@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.RulesManagement.EntityFrameworkCore
                    .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<EntityRuleGroup>> GetListByTypeAsync(
+        public async virtual Task<List<EntityRuleGroup>> GetListByTypeAsync(
             string entityFullTypeName,
             string sorting = null,
             bool includeDetails = false, 
@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.RulesManagement.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<EntityRuleGroup>> GetListAsync(
+        public async virtual Task<List<EntityRuleGroup>> GetListAsync(
             string filter = null,
             string sorting = null,
             int skipCount = 1, 

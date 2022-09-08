@@ -29,7 +29,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [UnitOfWork]
-        public virtual async Task<Menu> CreateAsync(
+        public async virtual Task<Menu> CreateAsync(
             Layout layout,
             Guid id,
             string path,
@@ -71,14 +71,14 @@ namespace LINGYUN.Platform.Menus
         }
 
         [UnitOfWork]
-        public virtual async Task UpdateAsync(Menu menu)
+        public async virtual Task UpdateAsync(Menu menu)
         {
             await ValidateMenuAsync(menu);
             await MenuRepository.UpdateAsync(menu);
         }
 
         [UnitOfWork]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var children = await FindChildrenAsync(id, true);
 
@@ -97,7 +97,7 @@ namespace LINGYUN.Platform.Menus
         }
 
         [UnitOfWork]
-        public virtual async Task MoveAsync(Guid id, Guid? parentId)
+        public async virtual Task MoveAsync(Guid id, Guid? parentId)
         {
             var menu = await MenuRepository.GetAsync(id);
             if (menu.ParentId == parentId)
@@ -120,7 +120,7 @@ namespace LINGYUN.Platform.Menus
             }
         }
 
-        public virtual async Task<bool> UserHasInMenuAsync(Guid userId, string menuName)
+        public async virtual Task<bool> UserHasInMenuAsync(Guid userId, string menuName)
         {
             var menu = await MenuRepository.FindByNameAsync(menuName);
             return false;
@@ -147,7 +147,7 @@ namespace LINGYUN.Platform.Menus
             }
         }
 
-        public virtual async Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds)
+        public async virtual Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds)
         {
             using (var unitOfWork = UnitOfWorkManager.Begin())
             {
@@ -194,7 +194,7 @@ namespace LINGYUN.Platform.Menus
             }
         }
 
-        public virtual async Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds)
+        public async virtual Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds)
         {
             using (var unitOfWork = UnitOfWorkManager.Begin())
             {
@@ -220,7 +220,7 @@ namespace LINGYUN.Platform.Menus
             }
         }
 
-        public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
+        public async virtual Task<string> GetNextChildCodeAsync(Guid? parentId)
         {
             var lastChild = await GetLastChildOrNullAsync(parentId);
             if (lastChild != null)
@@ -238,7 +238,7 @@ namespace LINGYUN.Platform.Menus
             );
         }
 
-        public virtual async Task<Menu> GetLastChildOrNullAsync(Guid? parentId)
+        public async virtual Task<Menu> GetLastChildOrNullAsync(Guid? parentId)
         {
             var children = await MenuRepository.GetChildrenAsync(parentId);
             return children.OrderBy(c => c.Code).LastOrDefault();
@@ -261,13 +261,13 @@ namespace LINGYUN.Platform.Menus
             return await MenuRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
         }
 
-        public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
+        public async virtual Task<string> GetCodeOrDefaultAsync(Guid id)
         {
             var menu = await MenuRepository.GetAsync(id);
             return menu?.Code;
         }
 
-        protected virtual async Task ValidateMenuAsync(Menu menu)
+        protected async virtual Task ValidateMenuAsync(Menu menu)
         {
             var siblings = (await FindChildrenAsync(menu.ParentId))
                 .Where(x => x.Id != menu.Id)

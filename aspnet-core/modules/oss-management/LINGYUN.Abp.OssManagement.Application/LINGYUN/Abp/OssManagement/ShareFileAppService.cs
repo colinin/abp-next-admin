@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.OssManagement
             _ossContainerFactory = ossContainerFactory;
         }
 
-        public virtual async Task<GetFileShareDto> GetAsync(string url)
+        public async virtual Task<GetFileShareDto> GetAsync(string url)
         {
             var cacheKey = FileShareCacheItem.CalculateCacheKey(url);
             var cacheItem = await _shareCache.GetAsync(cacheKey);
@@ -88,7 +88,7 @@ namespace LINGYUN.Abp.OssManagement
             return new GetFileShareDto(ossObject.Name, ossObject.Content);
         }
 
-        protected virtual async Task RefreshUserShareAsync(FileShareCacheItem shareCacheItem)
+        protected async virtual Task RefreshUserShareAsync(FileShareCacheItem shareCacheItem)
         {
             // 清除当前用户共享缓存
             var myShareCacheKey = MyFileShareCacheItem.CalculateCacheKey(shareCacheItem.UserId);

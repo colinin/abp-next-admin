@@ -59,7 +59,7 @@ public class SendEmailJob : IJobRunnable
     /// </summary>
     public const string PropertyCulture = "culture";
 
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         context.TryGetString(PropertyFrom, out var from);
         var to = context.GetString(PropertyTo);

@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public virtual async Task<GroupMessage> GetGroupMessageAsync(
+        public async virtual Task<GroupMessage> GetGroupMessageAsync(
             long id,
             CancellationToken cancellationToken = default)
         {
@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<GroupMessage>> GetGroupMessagesAsync(
+        public async virtual Task<List<GroupMessage>> GetGroupMessagesAsync(
             long groupId,
             MessageType? type = null,
             string filter = "",
@@ -63,7 +63,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return groupMessages;
         }
 
-        public virtual async Task<long> GetGroupMessagesCountAsync(
+        public async virtual Task<long> GetGroupMessagesCountAsync(
             long groupId,
             MessageType? type = null,
             string filter = "",
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return groupMessagesCount;
         }
 
-        public virtual async Task<List<GroupMessage>> GetUserGroupMessagesAsync(
+        public async virtual Task<List<GroupMessage>> GetUserGroupMessagesAsync(
             Guid sendUserId,
             long groupId,
             MessageType? type = null,
@@ -102,7 +102,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return groupMessages;
         }
 
-        public virtual async Task<long> GetUserGroupMessagesCountAsync(
+        public async virtual Task<long> GetUserGroupMessagesCountAsync(
             Guid sendUserId,
             long groupId,
             MessageType? type = null,
@@ -117,7 +117,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return groupMessagesCount;
         }
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             long groupId,
             MessageType? type = null,
             string filter = "",
@@ -130,7 +130,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             Guid sendUserId,
             Guid receiveUserId,
             MessageType? type = null,
@@ -145,7 +145,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<UserMessage> GetUserMessageAsync(
+        public async virtual Task<UserMessage> GetUserMessageAsync(
             long id,
             CancellationToken cancellationToken = default)
         {
@@ -155,7 +155,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<LastChatMessage>> GetLastMessagesAsync(
+        public async virtual Task<List<LastChatMessage>> GetLastMessagesAsync(
             Guid userId,
             MessageState? state = null,
             string sorting = nameof(LastChatMessage.SendTime),
@@ -429,7 +429,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 
         }
 
-        public virtual async Task<List<UserMessage>> GetUserMessagesAsync(
+        public async virtual Task<List<UserMessage>> GetUserMessagesAsync(
             Guid sendUserId,
             Guid receiveUserId,
             MessageType? type = null,
@@ -453,7 +453,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return userMessages;
         }
 
-        public virtual async Task<long> GetUserMessagesCountAsync(
+        public async virtual Task<long> GetUserMessagesCountAsync(
             Guid sendUserId,
             Guid receiveUserId,
             MessageType? type = null,
@@ -471,7 +471,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             return userMessagesCount;
         }
 
-        public virtual async Task InsertGroupMessageAsync(
+        public async virtual Task InsertGroupMessageAsync(
             GroupMessage groupMessage,
             CancellationToken cancellationToken = default)
         {
@@ -479,14 +479,14 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .AddAsync(groupMessage, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task UpdateGroupMessageAsync(
+        public async virtual Task UpdateGroupMessageAsync(
             GroupMessage groupMessage,
             CancellationToken cancellationToken = default)
         {
             (await GetDbContextAsync()).Set<GroupMessage>().Update(groupMessage);
         }
 
-        public virtual async Task InsertUserMessageAsync(
+        public async virtual Task InsertUserMessageAsync(
             UserMessage userMessage,
             CancellationToken cancellationToken = default)
         {
@@ -494,7 +494,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .AddAsync(userMessage, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task UpdateUserMessageAsync(
+        public async virtual Task UpdateUserMessageAsync(
             UserMessage userMessage,
             CancellationToken cancellationToken = default)
         {

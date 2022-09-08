@@ -16,14 +16,14 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<bool> ExistsAsync(
+        public async virtual Task<bool> ExistsAsync(
             string name, 
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).AnyAsync(x => x.Name.Equals(name));
         }
 
-        public virtual async Task<Resource> FindByNameAsync(
+        public async virtual Task<Resource> FindByNameAsync(
             string name, 
             CancellationToken cancellationToken = default)
         {

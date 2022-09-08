@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize(AbpOssManagementPermissions.Container.Create)]
-        public virtual async Task<OssContainerDto> CreateAsync(string name)
+        public async virtual Task<OssContainerDto> CreateAsync(string name)
         {
             var oss = CreateOssContainer();
             var container = await oss.CreateAsync(name);
@@ -25,14 +25,14 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize(AbpOssManagementPermissions.Container.Delete)]
-        public virtual async Task DeleteAsync(string name)
+        public async virtual Task DeleteAsync(string name)
         {
             var oss = CreateOssContainer();
 
             await oss.DeleteAsync(name);
         }
 
-        public virtual async Task<OssContainerDto> GetAsync(string name)
+        public async virtual Task<OssContainerDto> GetAsync(string name)
         {
             var oss = CreateOssContainer();
             var container = await oss.GetAsync(name);
@@ -40,7 +40,7 @@ namespace LINGYUN.Abp.OssManagement
             return ObjectMapper.Map<OssContainer, OssContainerDto>(container);
         }
 
-        public virtual async Task<OssContainersResultDto> GetListAsync(GetOssContainersInput input)
+        public async virtual Task<OssContainersResultDto> GetListAsync(GetOssContainersInput input)
         {
             var oss = CreateOssContainer();
 
@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.OssManagement
             return ObjectMapper.Map<GetOssContainersResponse, OssContainersResultDto>(containerResponse);
         }
 
-        public virtual async Task<OssObjectsResultDto> GetObjectListAsync(GetOssObjectsInput input)
+        public async virtual Task<OssObjectsResultDto> GetObjectListAsync(GetOssObjectsInput input)
         {
             var oss = CreateOssContainer();
 

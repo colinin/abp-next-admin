@@ -23,7 +23,7 @@ namespace LINGYUN.Platform.Datas
             DataRepository = dataRepository;
         }
 
-        public virtual async Task<Data> SeedAsync(
+        public async virtual Task<Data> SeedAsync(
             string name,
             string code,
             string displayName,

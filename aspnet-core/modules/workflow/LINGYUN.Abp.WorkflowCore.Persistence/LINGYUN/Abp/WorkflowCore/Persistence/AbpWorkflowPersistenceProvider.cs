@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             Logger = NullLogger<AbpWorkflowPersistenceProvider>.Instance;
         }
 
-        public virtual async Task ClearSubscriptionToken(
+        public async virtual Task ClearSubscriptionToken(
             string eventSubscriptionId, 
             string token, 
             CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             await _subscriptionRepository.UpdateAsync(existingEntity, cancellationToken: cancellationToken);
         }
 
-        public virtual async Task<string> CreateEvent(
+        public async virtual Task<string> CreateEvent(
             Event newEvent, 
             CancellationToken cancellationToken = default)
         {
@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return newEvent.Id;
         }
 
-        public virtual async Task<string> CreateEventSubscription(
+        public async virtual Task<string> CreateEventSubscription(
             EventSubscription subscription,
             CancellationToken cancellationToken = default)
         {
@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return subscription.Id;
         }
 
-        public virtual async Task<string> CreateNewWorkflow(
+        public async virtual Task<string> CreateNewWorkflow(
             WorkflowInstance workflow, 
             CancellationToken cancellationToken = default)
         {
@@ -113,7 +113,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             // TODO:
         }
 
-        public virtual async Task<Event> GetEvent(string id, CancellationToken cancellationToken = default)
+        public async virtual Task<Event> GetEvent(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
 
@@ -122,7 +122,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflowEvent.ToEvent();
         }
 
-        public virtual async Task<IEnumerable<string>> GetEvents(
+        public async virtual Task<IEnumerable<string>> GetEvents(
             string eventName, 
             string eventKey, 
             DateTime asOf, 
@@ -138,7 +138,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflowEventIds.Select(e => e.ToString());
         }
 
-        public virtual async Task<EventSubscription> GetFirstOpenSubscription(
+        public async virtual Task<EventSubscription> GetFirstOpenSubscription(
             string eventName, 
             string eventKey, 
             DateTime asOf, 
@@ -152,7 +152,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflowEventSubscription?.ToEventSubscription();
         }
 
-        public virtual async Task<IEnumerable<string>> GetRunnableEvents(
+        public async virtual Task<IEnumerable<string>> GetRunnableEvents(
             DateTime asAt, 
             CancellationToken cancellationToken = default)
         {
@@ -169,7 +169,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflowEventIdList.Select(e => e.ToString());
         }
 
-        public virtual async Task<IEnumerable<string>> GetRunnableInstances(
+        public async virtual Task<IEnumerable<string>> GetRunnableInstances(
             DateTime asAt, 
             CancellationToken cancellationToken = default)
         {
@@ -184,7 +184,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflowIdList.Select(e => e.ToString());
         }
 
-        public virtual async Task<EventSubscription> GetSubscription(
+        public async virtual Task<EventSubscription> GetSubscription(
             string eventSubscriptionId, 
             CancellationToken cancellationToken = default)
         {
@@ -194,7 +194,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return subscription?.ToEventSubscription();
         }
 
-        public virtual async Task<IEnumerable<EventSubscription>> GetSubscriptions(
+        public async virtual Task<IEnumerable<EventSubscription>> GetSubscriptions(
             string eventName, 
             string eventKey, 
             DateTime asOf, 
@@ -209,7 +209,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return eventSubscriptions.Select(x => x.ToEventSubscription());
         }
 
-        public virtual async Task<WorkflowInstance> GetWorkflowInstance(
+        public async virtual Task<WorkflowInstance> GetWorkflowInstance(
             string Id, 
             CancellationToken cancellationToken = default)
         {
@@ -222,7 +222,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflow?.ToWorkflowInstance();
         }
 
-        public virtual async Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(
+        public async virtual Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(
             WorkflowStatus? status, 
             string type, 
             DateTime? createdFrom, 
@@ -235,7 +235,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflows.Select(x => x.ToWorkflowInstance());
         }
 
-        public virtual async Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(
+        public async virtual Task<IEnumerable<WorkflowInstance>> GetWorkflowInstances(
             IEnumerable<string> ids,
             CancellationToken cancellationToken = default)
         {
@@ -249,7 +249,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return workflows.Select(x => x.ToWorkflowInstance());
         }
 
-        public virtual async Task MarkEventProcessed(string id, CancellationToken cancellationToken = default)
+        public async virtual Task MarkEventProcessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
             var workflowEvent = await _workflowEventRepository.GetAsync(eventId, cancellationToken: cancellationToken);
@@ -259,7 +259,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             await _workflowEventRepository.UpdateAsync(workflowEvent, cancellationToken: cancellationToken);
         }
 
-        public virtual async Task MarkEventUnprocessed(string id, CancellationToken cancellationToken = default)
+        public async virtual Task MarkEventUnprocessed(string id, CancellationToken cancellationToken = default)
         {
             var eventId = Guid.Parse(id);
             var workflowEvent = await _workflowEventRepository.GetAsync(eventId, cancellationToken: cancellationToken);
@@ -269,7 +269,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             await _workflowEventRepository.UpdateAsync(workflowEvent, cancellationToken: cancellationToken);
         }
 
-        public virtual async Task PersistErrors(IEnumerable<ExecutionError> errors, CancellationToken cancellationToken = default)
+        public async virtual Task PersistErrors(IEnumerable<ExecutionError> errors, CancellationToken cancellationToken = default)
         {
             if (errors.Any())
             {
@@ -279,7 +279,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             }
         }
 
-        public virtual async Task PersistWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
+        public async virtual Task PersistWorkflow(WorkflowInstance workflow, CancellationToken cancellationToken = default)
         {
             if (!Guid.TryParse(workflow.Id, out Guid workflowId))
             {
@@ -301,7 +301,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             }
         }
 
-        public virtual async Task ProcessCommands(
+        public async virtual Task ProcessCommands(
             DateTimeOffset asOf, 
             Func<ScheduledCommand, Task> action, 
             CancellationToken cancellationToken = default)
@@ -327,7 +327,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             }
         }
 
-        public virtual async Task ScheduleCommand(ScheduledCommand command)
+        public async virtual Task ScheduleCommand(ScheduledCommand command)
         {
             if (!await _scheduledCommandRepository.CheckExistsAsync(command.CommandName, command.Data))
             {
@@ -337,7 +337,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             }
         }
 
-        public virtual async Task<bool> SetSubscriptionToken(
+        public async virtual Task<bool> SetSubscriptionToken(
             string eventSubscriptionId, 
             string token,
             string workerId,
@@ -355,7 +355,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
             return true;
         }
 
-        public virtual async Task TerminateSubscription(
+        public async virtual Task TerminateSubscription(
             string eventSubscriptionId, 
             CancellationToken cancellationToken = default)
         {

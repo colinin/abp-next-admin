@@ -20,14 +20,14 @@ namespace LINGYUN.Abp.MessageService.Groups
 
         [HttpGet]
         [Route("{groupId}")]
-        public virtual async Task<Group> GetAsync(string groupId)
+        public async virtual Task<Group> GetAsync(string groupId)
         {
             return await _service.GetAsync(groupId);
         }
 
         [HttpGet]
         [Route("search")]
-        public virtual async Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
+        public async virtual Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
         {
             return await _service.SearchAsync(input);
         }

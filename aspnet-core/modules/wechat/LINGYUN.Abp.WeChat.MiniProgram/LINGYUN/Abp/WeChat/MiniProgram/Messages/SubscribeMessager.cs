@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             WeChatMiniProgramFeatures.Messages.SendLimitInterval,
             LimitPolicy.Month,
             WeChatMiniProgramFeatures.Messages.DefaultSendLimit)]
-        public virtual async Task SendAsync(
+        public async virtual Task SendAsync(
             Guid toUser,
             string templateId,
             string page = "",
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             WeChatMiniProgramFeatures.Messages.SendLimitInterval,
             LimitPolicy.Month,
             WeChatMiniProgramFeatures.Messages.DefaultSendLimit)]
-        public virtual async Task SendAsync(SubscribeMessage message, CancellationToken cancellationToken = default)
+        public async virtual Task SendAsync(SubscribeMessage message, CancellationToken cancellationToken = default)
         {
             var options = await MiniProgramOptionsFactory.CreateAsync();
 
@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Messages
             }
         }
 
-        protected virtual async Task<string> MakeRequestAndGetResultAsync(string url, SubscribeMessage message, CancellationToken cancellationToken = default)
+        protected async virtual Task<string> MakeRequestAndGetResultAsync(string url, SubscribeMessage message, CancellationToken cancellationToken = default)
         {
             var client = HttpClientFactory.CreateClient(AbpWeChatMiniProgramConsts.HttpClient);
             var sendDataContent = JsonConvert.SerializeObject(message);

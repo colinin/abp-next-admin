@@ -35,7 +35,7 @@ namespace Microsoft.AspNetCore.Identity
                 : await base.ValidateAsync(manager, user);
         }
 
-        protected virtual async Task ValidatePhoneNumberAsync(UserManager<IdentityUser> manager, IdentityUser user, ICollection<IdentityError> errors)
+        protected async virtual Task ValidatePhoneNumberAsync(UserManager<IdentityUser> manager, IdentityUser user, ICollection<IdentityError> errors)
         {
             var phoneNumber = await manager.GetPhoneNumberAsync(user);
             if (phoneNumber.IsNullOrWhiteSpace())

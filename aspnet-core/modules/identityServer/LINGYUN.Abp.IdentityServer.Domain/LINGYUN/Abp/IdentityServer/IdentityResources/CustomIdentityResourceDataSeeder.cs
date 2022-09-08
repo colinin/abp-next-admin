@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             Options = options.Value;
         }
 
-        public virtual async Task CreateCustomResourcesAsync()
+        public async virtual Task CreateCustomResourcesAsync()
         {
             foreach (var resource in Options.Resources)
             {
@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             }
         }
 
-        protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
+        protected async virtual Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
         {
             if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
             {
@@ -54,7 +54,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
             );
         }
 
-        protected virtual async Task AddClaimTypeIfNotExistsAsync(string claimType)
+        protected async virtual Task AddClaimTypeIfNotExistsAsync(string claimType)
         {
             if (await ClaimTypeRepository.AnyAsync(claimType))
             {

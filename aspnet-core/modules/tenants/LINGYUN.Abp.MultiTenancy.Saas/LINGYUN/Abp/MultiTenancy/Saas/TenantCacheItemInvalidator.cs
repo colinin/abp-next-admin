@@ -21,7 +21,7 @@ public class TenantCacheItemInvalidator :
         Cache = cache;
     }
 
-    public virtual async Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
+    public async virtual Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
     {
         await Cache.RemoveAsync(
             TenantCacheItem.CalculateCacheKey(
@@ -35,7 +35,7 @@ public class TenantCacheItemInvalidator :
             considerUow: true);
     }
 
-    public virtual async Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
+    public async virtual Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
     {
         await Cache.RemoveAsync(
             TenantCacheItem.CalculateCacheKey(
@@ -49,7 +49,7 @@ public class TenantCacheItemInvalidator :
             considerUow: true);
     }
 
-    public virtual async Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
+    public async virtual Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
     {
         await Cache.RemoveAsync(
                     TenantCacheItem.CalculateCacheKey(
@@ -58,7 +58,7 @@ public class TenantCacheItemInvalidator :
                     considerUow: true);
     }
 
-    public virtual async Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+    public async virtual Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
     {
         await Cache.RemoveAsync(
             TenantCacheItem.CalculateCacheKey(

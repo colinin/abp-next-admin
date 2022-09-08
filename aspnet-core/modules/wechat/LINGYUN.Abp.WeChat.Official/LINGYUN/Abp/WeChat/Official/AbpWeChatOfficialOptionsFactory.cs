@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.WeChat.Official
             Options = options;
         }
 
-        public virtual async Task<AbpWeChatOfficialOptions> CreateAsync()
+        public async virtual Task<AbpWeChatOfficialOptions> CreateAsync()
         {
             await Options.SetAsync();
 

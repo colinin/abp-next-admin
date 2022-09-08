@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.MessageService.Groups
         {
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default)
         {
@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<ChatGroup>> GetListAsync(
+        public async virtual Task<List<ChatGroup>> GetListAsync(
             string filter = null,
             string sorting = nameof(ChatGroup.Name),
             int skipCount = 0,
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<ChatGroup> FindByIdAsync(
+        public async virtual Task<ChatGroup> FindByIdAsync(
             long id,
             CancellationToken cancellationToken = default)
         {
@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserGroupCard>> GetGroupAdminAsync(
+        public async virtual Task<List<UserGroupCard>> GetGroupAdminAsync(
             long id,
             CancellationToken cancellationToken = default)
         {
@@ -71,7 +71,7 @@ namespace LINGYUN.Abp.MessageService.Groups
             return groupAdmins;
         }
 
-        public virtual async Task<bool> UserHasBlackedAsync(
+        public async virtual Task<bool> UserHasBlackedAsync(
             long id,
             Guid formUserId,
             CancellationToken cancellationToken = default)

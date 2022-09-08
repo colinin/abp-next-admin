@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.TenantManagement
             TenantManager = tenantManager;
         }
 
-        public virtual async Task<TenantDto> GetAsync(Guid id)
+        public async virtual Task<TenantDto> GetAsync(Guid id)
         {
             var tenant = await TenantRepository.FindAsync(id, false);
             if(tenant == null)
@@ -38,7 +38,7 @@ namespace LINGYUN.Abp.TenantManagement
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
-        public virtual async Task<TenantDto> GetAsync(string name)
+        public async virtual Task<TenantDto> GetAsync(string name)
         {
             var tenant = await TenantRepository.FindByNameAsync(name, false);
             if (tenant == null)
@@ -48,7 +48,7 @@ namespace LINGYUN.Abp.TenantManagement
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
-        public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(TenantGetByPagedInputDto input)
+        public async virtual Task<PagedResultDto<TenantDto>> GetListAsync(TenantGetByPagedInputDto input)
         {
             var count = await TenantRepository.GetCountAsync(input.Filter);
             var list = await TenantRepository.GetListAsync(
@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Create)]
-        public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
+        public async virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
             var tenant = await TenantManager.CreateAsync(input.Name);
             input.MapExtraPropertiesTo(tenant);
@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Update)]
-        public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
+        public async virtual Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             var tenant = await TenantRepository.GetAsync(id, false);
 
@@ -108,7 +108,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var tenant = await TenantRepository.FindAsync(id);
             if (tenant == null)
@@ -119,7 +119,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
+        public async virtual Task<TenantConnectionStringDto> GetConnectionStringAsync(Guid id, string name)
         {
             var tenant = await TenantRepository.GetAsync(id);
 
@@ -133,7 +133,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task<ListResultDto<TenantConnectionStringDto>> GetConnectionStringAsync(Guid id)
+        public async virtual Task<ListResultDto<TenantConnectionStringDto>> GetConnectionStringAsync(Guid id)
         {
             var tenant = await TenantRepository.GetAsync(id);
 
@@ -142,7 +142,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate)
+        public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdateDto tenantConnectionStringCreateOrUpdate)
         {
             var tenant = await TenantRepository.GetAsync(id);
             if (tenant.FindConnectionString(tenantConnectionStringCreateOrUpdate.Name) == null)
@@ -169,7 +169,7 @@ namespace LINGYUN.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public virtual async Task DeleteConnectionStringAsync(Guid id, string name)
+        public async virtual Task DeleteConnectionStringAsync(Guid id, string name)
         {
             var tenant = await TenantRepository.GetAsync(id);
 

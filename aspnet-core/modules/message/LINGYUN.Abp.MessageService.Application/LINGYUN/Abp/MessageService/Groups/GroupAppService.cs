@@ -16,12 +16,12 @@ namespace LINGYUN.Abp.MessageService.Groups
             _groupStore = groupStore;
         }
 
-        public virtual async Task<Group> GetAsync(string groupId)
+        public async virtual Task<Group> GetAsync(string groupId)
         {
             return await _groupStore.GetAsync(CurrentTenant.Id, groupId);
         }
 
-        public virtual async Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
+        public async virtual Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
         {
             var count = await _groupStore.GetCountAsync(
                 CurrentTenant.Id,

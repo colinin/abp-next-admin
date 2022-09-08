@@ -42,7 +42,7 @@ public class TenantSynchronizer :
     /// </summary>
     /// <param name="eventData"></param>
     /// <returns></returns>
-    public virtual async Task HandleEventAsync(CreateEventData eventData)
+    public async virtual Task HandleEventAsync(CreateEventData eventData)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {

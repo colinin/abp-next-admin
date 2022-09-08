@@ -72,7 +72,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
 
         protected abstract string GetRuleName(Type type);
 
-        protected virtual async Task<WorkflowRules[]> GetFileSystemRulesAsync(Type type, CancellationToken cancellationToken = default)
+        protected async virtual Task<WorkflowRules[]> GetFileSystemRulesAsync(Type type, CancellationToken cancellationToken = default)
         {
             var ruleId = GetRuleId(type);
             var ruleFile = GetRuleName(type);

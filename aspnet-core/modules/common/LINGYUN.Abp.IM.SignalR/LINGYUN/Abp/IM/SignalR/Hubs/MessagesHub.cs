@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             }
         }
 
-        protected virtual async Task SendUserOnlineStateAsync(bool isOnlined = true)
+        protected async virtual Task SendUserOnlineStateAsync(bool isOnlined = true)
         {
             var methodName = isOnlined ? Options.UserOnlineMethod : Options.UserOfflineMethod;
 
@@ -99,13 +99,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         /// <param name="chatMessage"></param>
         /// <returns></returns>
         [HubMethodName("send")]
-        public virtual async Task<string> SendMessageAsync(ChatMessage chatMessage)
+        public async virtual Task<string> SendMessageAsync(ChatMessage chatMessage)
         {
             return await SendMessageAsync(Options.GetChatMessageMethod, chatMessage, true);
         }
 
         [HubMethodName("recall")]
-        public virtual async Task ReCallAsync(ChatMessage chatMessage)
+        public async virtual Task ReCallAsync(ChatMessage chatMessage)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
         }
 
         [HubMethodName("read")]
-        public virtual async Task ReadAsync(ChatMessage chatMessage)
+        public async virtual Task ReadAsync(ChatMessage chatMessage)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             }
         }
 
-        protected virtual async Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
+        protected async virtual Task<string> SendMessageAsync(string methodName, ChatMessage chatMessage, bool callbackException = false)
         {
             // 持久化
             try
@@ -248,13 +248,13 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             return "";
         }
 
-        protected virtual async Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
+        protected async virtual Task SendMessageToGroupAsync(string methodName, ChatMessage chatMessage)
         {
             var signalRClient = Clients.Group(chatMessage.GroupId);
             await signalRClient.SendAsync(methodName, chatMessage);
         }
 
-        protected virtual async Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
+        protected async virtual Task SendMessageToUserAsync(string methodName, ChatMessage chatMessage)
         {
             var onlineClients = Clients.User(chatMessage.ToUserId.GetValueOrDefault().ToString());
             await onlineClients.SendAsync(methodName, chatMessage);

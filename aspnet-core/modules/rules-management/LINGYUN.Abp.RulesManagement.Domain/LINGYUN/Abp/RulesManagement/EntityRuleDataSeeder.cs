@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.RulesManagement
             Repository = repository;
         }
 
-        public virtual async Task SeedAsync(EntityRuleInGroup group)
+        public async virtual Task SeedAsync(EntityRuleInGroup group)
         {
             var findGroup = await Repository.GetByNameAsync(group.Name);
             if (findGroup != null)

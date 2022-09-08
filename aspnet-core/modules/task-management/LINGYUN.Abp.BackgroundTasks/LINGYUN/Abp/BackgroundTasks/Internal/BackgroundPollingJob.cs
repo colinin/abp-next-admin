@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Internal;
 [DisableJobAction]
 public class BackgroundPollingJob : IJobRunnable
 {
-    public virtual async Task ExecuteAsync(JobRunnableContext context)
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundTasksOptions>>().Value;
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();

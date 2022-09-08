@@ -21,41 +21,41 @@ namespace LINGYUN.Platform.Layouts
         }
 
         [HttpPost]
-        public virtual async Task<LayoutDto> CreateAsync(LayoutCreateDto input)
+        public async virtual Task<LayoutDto> CreateAsync(LayoutCreateDto input)
         {
             return await LayoutAppService.CreateAsync(input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             await LayoutAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public virtual async Task<LayoutDto> GetAsync(Guid id)
+        public async virtual Task<LayoutDto> GetAsync(Guid id)
         {
             return await LayoutAppService.GetAsync(id);
         }
 
         [HttpGet]
         [Route("all")]
-        public virtual async Task<ListResultDto<LayoutDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<LayoutDto>> GetAllListAsync()
         {
             return await LayoutAppService.GetAllListAsync();
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
+        public async virtual Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
         {
             return await LayoutAppService.GetListAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<LayoutDto> UpdateAsync(Guid id, LayoutUpdateDto input)
+        public async virtual Task<LayoutDto> UpdateAsync(Guid id, LayoutUpdateDto input)
         {
             return await LayoutAppService.UpdateAsync(id, input);
         }

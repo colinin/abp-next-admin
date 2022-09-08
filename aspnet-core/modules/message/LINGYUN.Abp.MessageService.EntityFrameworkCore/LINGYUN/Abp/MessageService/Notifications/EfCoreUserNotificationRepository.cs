@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         {
         }
 
-        public virtual async Task<bool> AnyAsync(
+        public async virtual Task<bool> AnyAsync(
             Guid userId,
             long notificationId,
             CancellationToken cancellationToken = default)
@@ -32,7 +32,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<UserNotificationInfo> GetByIdAsync(
+        public async virtual Task<UserNotificationInfo> GetByIdAsync(
             Guid userId,
             long notificationId,
             CancellationToken cancellationToken = default)
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserNotificationInfo>> GetNotificationsAsync(
+        public async virtual Task<List<UserNotificationInfo>> GetNotificationsAsync(
             Guid userId,
             NotificationReadState? readState = null,
             int maxResultCount = 10,
@@ -108,7 +108,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             Guid userId,
             string filter = "",
             NotificationReadState? readState = null,
@@ -133,7 +133,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserNotificationInfo>> GetListAsync(
+        public async virtual Task<List<UserNotificationInfo>> GetListAsync(
             Guid userId,
             string filter = "",
             string sorting = nameof(Notification.CreationTime),

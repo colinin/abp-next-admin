@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.MessageService.Groups
         {
         }
 
-        public virtual async Task<GroupUserCard> GetMemberAsync(
+        public async virtual Task<GroupUserCard> GetMemberAsync(
             long groupId,
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<GroupUserCard>> GetMembersAsync(
+        public async virtual Task<List<GroupUserCard>> GetMembersAsync(
             long groupId,
             string sorting = nameof(UserChatCard.UserId),
             int skipCount = 0,
@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetMembersCountAsync(
+        public async virtual Task<int> GetMembersCountAsync(
             long groupId,
             CancellationToken cancellationToken = default)
         {
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> MemberHasInGroupAsync(
+        public async virtual Task<bool> MemberHasInGroupAsync(
             long groupId,
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -125,7 +125,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Group>> GetMemberGroupsAsync(
+        public async virtual Task<List<Group>> GetMemberGroupsAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -159,7 +159,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task RemoveMemberFormGroupAsync(
+        public async virtual Task RemoveMemberFormGroupAsync(
             long groupId,
             Guid userId,
             CancellationToken cancellationToken = default)

@@ -25,21 +25,21 @@ namespace LINGYUN.Abp.OssManagement
 
 
         [HttpPost]
-        public virtual async Task<OssObjectDto> UploadAsync([FromForm] UploadFileInput input)
+        public async virtual Task<OssObjectDto> UploadAsync([FromForm] UploadFileInput input)
         {
             return await _publicFileAppService.UploadAsync(input);
         }
 
         [HttpPost]
         [Route("upload")]
-        public virtual async Task UploadAsync([FromForm] UploadFileChunkInput input)
+        public async virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
         {
             await _publicFileAppService.UploadAsync(input);
         }
 
         [HttpGet]
         [Route("search")]
-        public virtual async Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
+        public async virtual Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input)
         {
             return await _publicFileAppService.GetListAsync(input);
         }
@@ -50,13 +50,13 @@ namespace LINGYUN.Abp.OssManagement
         [Route("{Name}/{Process}")]
         [Route("p/{Path}/{Name}")]
         [Route("p/{Path}/{Name}/{Process}")]
-        public virtual async Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
+        public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
         {
             return await _publicFileAppService.GetAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(GetPublicFileInput input)
+        public async virtual Task DeleteAsync(GetPublicFileInput input)
         {
             await _publicFileAppService.DeleteAsync(input);
         }

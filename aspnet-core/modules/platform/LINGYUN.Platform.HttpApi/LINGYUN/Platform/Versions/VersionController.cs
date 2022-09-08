@@ -35,7 +35,7 @@ namespace LINGYUN.Platform.Versions
         [HttpPost]
         [Route("file/append")]
         [RequestSizeLimit(200_000_000)]
-        public virtual async Task AppendFileAsync([FromQuery] VersionFileCreateDto versionFileCreate)
+        public async virtual Task AppendFileAsync([FromQuery] VersionFileCreateDto versionFileCreate)
         {
             // 检查文件大小
             var fileSizeLimited = await SettingProvider
@@ -125,47 +125,47 @@ namespace LINGYUN.Platform.Versions
         }
 
         [HttpPost]
-        public virtual async Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
+        public async virtual Task<VersionDto> CreateAsync(VersionCreateDto versionCreate)
         {
             return await _versionAppService.CreateAsync(versionCreate);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(VersionDeleteDto versionDelete)
+        public async virtual Task DeleteAsync(VersionDeleteDto versionDelete)
         {
             await _versionAppService.DeleteAsync(versionDelete);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
+        public async virtual Task<PagedResultDto<VersionDto>> GetAsync(VersionGetByPagedDto versionGetByPaged)
         {
             return await _versionAppService.GetAsync(versionGetByPaged);
         }
 
         [HttpGet]
         [Route("{Id}")]
-        public virtual async Task<VersionDto> GetAsync(VersionGetByIdDto versionGetById)
+        public async virtual Task<VersionDto> GetAsync(VersionGetByIdDto versionGetById)
         {
             return await _versionAppService.GetAsync(versionGetById);
         }
 
         [HttpGet]
         [Route("lastest")]
-        public virtual async Task<VersionDto> GetLastestAsync([Required] PlatformType platformType)
+        public async virtual Task<VersionDto> GetLastestAsync([Required] PlatformType platformType)
         {
             return await _versionAppService.GetLastestAsync(platformType);
         }
 
         [HttpDelete]
         [Route("file/clean")]
-        public virtual async Task RemoveAllFileAsync(VersionGetByIdDto versionGetById)
+        public async virtual Task RemoveAllFileAsync(VersionGetByIdDto versionGetById)
         {
             await _versionAppService.RemoveAllFileAsync(versionGetById);
         }
 
         [HttpDelete]
         [Route("file/remove")]
-        public virtual async Task RemoveFileAsync(VersionFileDeleteDto versionFileDelete)
+        public async virtual Task RemoveFileAsync(VersionFileDeleteDto versionFileDelete)
         {
             await _versionAppService.RemoveFileAsync(versionFileDelete);
         }
@@ -173,7 +173,7 @@ namespace LINGYUN.Platform.Versions
         [HttpGet]
         [Route("file/download")]
         [Authorize(PlatformPermissions.AppVersion.FileManager.Download)]
-        public virtual async Task DownloadFileAsync(VersionFileGetDto versionFileGet)
+        public async virtual Task DownloadFileAsync(VersionFileGetDto versionFileGet)
         {
             // 分块模式下载文件
 

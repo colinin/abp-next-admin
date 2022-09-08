@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             NotificationSubscriptionManager = notificationSubscriptionManager;
         }
 
-        public virtual async Task<PagedResultDto<UserSubscreNotificationDto>> GetListAsync(SubscriptionsGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserSubscreNotificationDto>> GetListAsync(SubscriptionsGetByPagedDto input)
         {
             var userSubscribedCount = await UserSubscribeRepository.GetCountAsync(CurrentUser.GetId());
 
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 userSubscribes.Select(us => new UserSubscreNotificationDto { Name = us.NotificationName }).ToList());
         }
 
-        public virtual async Task<ListResultDto<UserSubscreNotificationDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<UserSubscreNotificationDto>> GetAllListAsync()
         {
             var userSubscribes = await NotificationSubscriptionManager
                 .GetUserSubscriptionsAsync(
@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 userSubscribes.Select(msn => new UserSubscreNotificationDto { Name = msn.NotificationName }).ToList());
         }
 
-        public virtual async Task<UserSubscriptionsResult> IsSubscribedAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task<UserSubscriptionsResult> IsSubscribedAsync(SubscriptionsGetByNameDto input)
         {
             var isSubscribed = await NotificationSubscriptionManager
                 .IsSubscribedAsync(CurrentTenant.Id, CurrentUser.GetId(), input.Name);
@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 : UserSubscriptionsResult.UnSubscribed();
         }
 
-        public virtual async Task SubscribeAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task SubscribeAsync(SubscriptionsGetByNameDto input)
         {
             await NotificationSubscriptionManager
                 .SubscribeAsync(
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                     input.Name);
         }
 
-        public virtual async Task UnSubscribeAsync(SubscriptionsGetByNameDto input)
+        public async virtual Task UnSubscribeAsync(SubscriptionsGetByNameDto input)
         {
             await NotificationSubscriptionManager
                 .UnsubscribeAsync(

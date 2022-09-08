@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-        public virtual async Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
+        public async virtual Task<OssObjectDto> CreateAsync(CreateOssObjectInput input)
         {
             // 内容为空时建立目录
             if (input.File == null || !input.File.ContentLength.HasValue)
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize(AbpOssManagementPermissions.OssObject.Delete)]
-        public virtual async Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
+        public async virtual Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
         {
             var oss = CreateOssContainer();
 
@@ -54,14 +54,14 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize(AbpOssManagementPermissions.OssObject.Delete)]
-        public virtual async Task DeleteAsync(GetOssObjectInput input)
+        public async virtual Task DeleteAsync(GetOssObjectInput input)
         {
             var oss = CreateOssContainer();
 
             await oss.DeleteObjectAsync(input.Bucket, input.Object, input.Path);
         }
 
-        public virtual async Task<OssObjectDto> GetAsync(GetOssObjectInput input)
+        public async virtual Task<OssObjectDto> GetAsync(GetOssObjectInput input)
         {
             var oss = CreateOssContainer();
 
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.OssManagement
             return ObjectMapper.Map<OssObject, OssObjectDto>(ossObject);
         }
 
-        public virtual async Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
+        public async virtual Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
         {
             var oss = CreateOssContainer();
 

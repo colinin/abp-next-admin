@@ -27,7 +27,7 @@ public abstract class HttpRequestJobBase
         CurrentTenant = context.GetRequiredService<ICurrentTenant>();
     }
 
-    protected virtual async Task<T> RequestAsync<T>(
+    protected async virtual Task<T> RequestAsync<T>(
        JobRunnableContext context,
        HttpMethod httpMethod,
        string requestUrl,
@@ -72,7 +72,7 @@ public abstract class HttpRequestJobBase
         return Deserialize<T>(stringContent);
     }
 
-    protected virtual async Task<HttpResponseMessage> RequestAsync(
+    protected async virtual Task<HttpResponseMessage> RequestAsync(
         JobRunnableContext context,
         HttpMethod httpMethod,
         string requestUrl,
@@ -147,7 +147,7 @@ public abstract class HttpRequestJobBase
         requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.CurrentCulture.Name));
     }
 
-    protected virtual async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
+    protected async virtual Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
     {
         if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
         {

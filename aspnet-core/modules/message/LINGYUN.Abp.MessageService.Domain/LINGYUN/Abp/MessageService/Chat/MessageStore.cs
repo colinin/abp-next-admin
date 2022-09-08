@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             _userChatSettingRepository = userChatSettingRepository;
         }
 
-        public virtual async Task StoreMessageAsync(
+        public async virtual Task StoreMessageAsync(
             ChatMessage chatMessage,
             CancellationToken cancellationToken = default)
         {
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<ChatMessage>> GetGroupMessageAsync(
+        public async virtual Task<List<ChatMessage>> GetGroupMessageAsync(
             Guid? tenantId,
             long groupId,
             MessageType? type = null,
@@ -97,7 +97,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<ChatMessage>> GetChatMessageAsync(
+        public async virtual Task<List<ChatMessage>> GetChatMessageAsync(
             Guid? tenantId,
             Guid sendUserId,
             Guid receiveUserId,
@@ -127,7 +127,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<List<LastChatMessage>> GetLastChatMessagesAsync(
+        public async virtual Task<List<LastChatMessage>> GetLastChatMessagesAsync(
             Guid? tenantId,
             Guid userId,
             MessageState? state = null,
@@ -148,7 +148,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<long> GetGroupMessageCountAsync(
+        public async virtual Task<long> GetGroupMessageCountAsync(
             Guid? tenantId,
             long groupId,
             MessageType? type = null,
@@ -161,7 +161,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        public virtual async Task<long> GetChatMessageCountAsync(
+        public async virtual Task<long> GetChatMessageCountAsync(
             Guid? tenantId,
             Guid sendUserId,
             Guid receiveUserId,
@@ -175,7 +175,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             }
         }
 
-        protected virtual async Task StoreUserMessageAsync(
+        protected async virtual Task StoreUserMessageAsync(
             ChatMessage chatMessage,
             CancellationToken cancellationToken = default)
         {
@@ -236,7 +236,7 @@ namespace LINGYUN.Abp.MessageService.Chat
             await _messageRepository.InsertUserMessageAsync(message, cancellationToken);
         }
 
-        protected virtual async Task StoreGroupMessageAsync(
+        protected async virtual Task StoreGroupMessageAsync(
             ChatMessage chatMessage,
             long groupId,
             CancellationToken cancellationToken = default)

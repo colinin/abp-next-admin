@@ -22,7 +22,7 @@ namespace LINGYUN.Platform.Datas
         }
 
         [Authorize(PlatformPermissions.DataDictionary.Create)]
-        public virtual async Task<DataDto> CreateAsync(DataCreateDto input)
+        public async virtual Task<DataDto> CreateAsync(DataCreateDto input)
         {
             var data = await DataRepository.FindByNameAsync(input.Name);
             if (data != null)
@@ -63,7 +63,7 @@ namespace LINGYUN.Platform.Datas
         }
 
         [Authorize(PlatformPermissions.DataDictionary.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var data = await DataRepository.GetAsync(id);
 
@@ -76,21 +76,21 @@ namespace LINGYUN.Platform.Datas
             await DataRepository.DeleteAsync(data);
         }
 
-        public virtual async Task<DataDto> GetAsync(string name)
+        public async virtual Task<DataDto> GetAsync(string name)
         {
             var data = await DataRepository.FindByNameAsync(name);
 
             return ObjectMapper.Map<Data, DataDto>(data);
         }
 
-        public virtual async Task<DataDto> GetAsync(Guid id)
+        public async virtual Task<DataDto> GetAsync(Guid id)
         {
             var data = await DataRepository.GetAsync(id);
 
             return ObjectMapper.Map<Data, DataDto>(data);
         }
 
-        public virtual async Task<ListResultDto<DataDto>> GetAllAsync()
+        public async virtual Task<ListResultDto<DataDto>> GetAllAsync()
         {
             var datas = await DataRepository.GetListAsync(includeDetails: false);
 
@@ -98,7 +98,7 @@ namespace LINGYUN.Platform.Datas
                 ObjectMapper.Map<List<Data>, List<DataDto>>(datas));
         }
 
-        public virtual async Task<PagedResultDto<DataDto>> GetListAsync(GetDataListInput input)
+        public async virtual Task<PagedResultDto<DataDto>> GetListAsync(GetDataListInput input)
         {
             var count = await DataRepository.GetCountAsync(input.Filter);
 
@@ -110,8 +110,21 @@ namespace LINGYUN.Platform.Datas
                 ObjectMapper.Map<List<Data>, List<DataDto>>(datas));
         }
 
+        [Authorize(PlatformPermissions.DataDictionary.Move)]
+        public async virtual Task<DataDto> MoveAsync(Guid id, DataMoveDto input)
+        {
+            var data = await DataRepository.GetAsync(id);
+
+            data.ParentId = input.ParentId;
+
+            data = await DataRepository.UpdateAsync(data);
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<Data, DataDto>(data);
+        }
+
         [Authorize(PlatformPermissions.DataDictionary.Update)]
-        public virtual async Task<DataDto> UpdateAsync(Guid id, DataUpdateDto input)
+        public async virtual Task<DataDto> UpdateAsync(Guid id, DataUpdateDto input)
         {
             var data = await DataRepository.GetAsync(id);
 
@@ -135,7 +148,7 @@ namespace LINGYUN.Platform.Datas
         }
 
         [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
-        public virtual async Task UpdateItemAsync(Guid id, string name, DataItemUpdateDto input)
+        public async virtual Task UpdateItemAsync(Guid id, string name, DataItemUpdateDto input)
         {
             var data = await DataRepository.GetAsync(id);
             var dataItem = data.FindItem(name);
@@ -163,7 +176,7 @@ namespace LINGYUN.Platform.Datas
         }
 
         [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
-        public virtual async Task CreateItemAsync(Guid id, DataItemCreateDto input)
+        public async virtual Task CreateItemAsync(Guid id, DataItemCreateDto input)
         {
             var data = await DataRepository.GetAsync(id);
             var dataItem = data.FindItem(input.Name);
@@ -186,7 +199,7 @@ namespace LINGYUN.Platform.Datas
         }
 
         [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
-        public virtual async Task DeleteItemAsync(Guid id, string name)
+        public async virtual Task DeleteItemAsync(Guid id, string name)
         {
             var data = await DataRepository.GetAsync(id);
             data.RemoveItem(name);

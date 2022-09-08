@@ -20,7 +20,7 @@ public class JobDistributedLockingProvider : IJobLockProvider, ISingletonDepende
         DistributedLock = distributedLock;
     }
 
-    public virtual async Task<bool> TryLockAsync(string jobKey, int lockSeconds)
+    public async virtual Task<bool> TryLockAsync(string jobKey, int lockSeconds)
     {
         var handle = await DistributedLock.TryAcquireAsync(jobKey);
         if (handle != null)
@@ -45,7 +45,7 @@ public class JobDistributedLockingProvider : IJobLockProvider, ISingletonDepende
         return false;
     }
 
-    public virtual async Task<bool> TryReleaseAsync(string jobKey)
+    public async virtual Task<bool> TryReleaseAsync(string jobKey)
     {
         if (LockCache.TryGetValue<IAbpDistributedLockHandle>(jobKey, out var handle))
         {

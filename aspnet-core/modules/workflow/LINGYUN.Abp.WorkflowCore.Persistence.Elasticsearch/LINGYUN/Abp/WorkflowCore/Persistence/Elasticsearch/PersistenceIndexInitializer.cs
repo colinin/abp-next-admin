@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             _logger = logger;
         }
 
-        public virtual async Task InitializeAsync()
+        public async virtual Task InitializeAsync()
         {
             var client = _clientFactory.Create();
             var dateTimeFormat = !_jsonOptions.DefaultDateTimeFormat.IsNullOrWhiteSpace()
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             await InitlizeScheduledCommandIndex(client, indexState, dateTimeFormat);
         }
 
-        protected virtual async Task InitlizeWorkflowInstanceIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeWorkflowInstanceIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("instances");
             var indexExists = await client.Indices.ExistsAsync(indexName);
@@ -78,7 +78,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        protected virtual async Task InitlizeEventIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeEventIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("events");
             var indexExists = await client.Indices.ExistsAsync(indexName);
@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        protected virtual async Task InitlizeEventSubscriptionIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeEventSubscriptionIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("subscriptions");
             var indexExists = await client.Indices.ExistsAsync(indexName);
@@ -113,7 +113,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        protected virtual async Task InitlizeExecutionErrorIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeExecutionErrorIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("executionerrors");
             var indexExists = await client.Indices.ExistsAsync(indexName);
@@ -130,7 +130,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence.Elasticsearch
             }
         }
 
-        protected virtual async Task InitlizeScheduledCommandIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
+        protected async virtual Task InitlizeScheduledCommandIndex(IElasticClient client, IIndexState indexState, string dateTimeFormat)
         {
             var indexName = _nameNormalizer.NormalizeIndex("scheduledcommands");
             var indexExists = await client.Indices.ExistsAsync(indexName);

@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Identity
 
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
-        public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+        public async virtual Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
         {
             var user = await UserManager.GetByIdAsync(id);
 
@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
-        public virtual async Task SetOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
+        public async virtual Task SetOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitUpdateDto input)
         {
             var user = await UserManager.GetByIdAsync(id);
 
@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
-        public virtual async Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
+        public async virtual Task RemoveOrganizationUnitsAsync(Guid id, Guid ouId)
         {
             await UserManager.RemoveFromOrganizationUnitAsync(id, ouId);
 
@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.Identity
 
         #region Claim
 
-        public virtual async Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
+        public async virtual Task<ListResultDto<IdentityClaimDto>> GetClaimsAsync(Guid id)
         {
             var user = await UserManager.GetByIdAsync(id);
 
@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageClaims)]
-        public virtual async Task AddClaimAsync(Guid id, IdentityUserClaimCreateDto input)
+        public async virtual Task AddClaimAsync(Guid id, IdentityUserClaimCreateDto input)
         {
             var user = await UserManager.GetByIdAsync(id);
             var claim = new Claim(input.ClaimType, input.ClaimValue);
@@ -83,7 +83,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageClaims)]
-        public virtual async Task UpdateClaimAsync(Guid id, IdentityUserClaimUpdateDto input)
+        public async virtual Task UpdateClaimAsync(Guid id, IdentityUserClaimUpdateDto input)
         {
             var user = await UserManager.GetByIdAsync(id);
             var oldClaim = new Claim(input.ClaimType, input.ClaimValue);
@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.ManageClaims)]
-        public virtual async Task DeleteClaimAsync(Guid id, IdentityUserClaimDeleteDto input)
+        public async virtual Task DeleteClaimAsync(Guid id, IdentityUserClaimDeleteDto input)
         {
             var user = await UserManager.GetByIdAsync(id);
             user.RemoveClaim(new Claim(input.ClaimType, input.ClaimValue));
@@ -131,7 +131,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
-        public virtual async Task ChangeTwoFactorEnabledAsync(Guid id, TwoFactorEnabledDto input)
+        public async virtual Task ChangeTwoFactorEnabledAsync(Guid id, TwoFactorEnabledDto input)
         {
             var user = await GetUserAsync(id);
 
@@ -141,7 +141,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
-        public virtual async Task LockAsync(Guid id, int seconds)
+        public async virtual Task LockAsync(Guid id, int seconds)
         {
             var user = await GetUserAsync(id);
             //if (!UserManager.SupportsUserLockout)
@@ -155,7 +155,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
-        public virtual async Task UnLockAsync(Guid id)
+        public async virtual Task UnLockAsync(Guid id)
         {
             var user = await GetUserAsync(id);
             (await UserManager.SetLockoutEndDateAsync(user, null)).CheckErrors();
@@ -163,7 +163,7 @@ namespace LINGYUN.Abp.Identity
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        protected virtual async Task<IdentityUser> GetUserAsync(Guid id)
+        protected async virtual Task<IdentityUser> GetUserAsync(Guid id)
         {
             await IdentityOptions.SetAsync();
             var user = await UserManager.GetByIdAsync(id);

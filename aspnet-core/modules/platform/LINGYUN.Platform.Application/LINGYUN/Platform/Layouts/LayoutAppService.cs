@@ -20,7 +20,7 @@ namespace LINGYUN.Platform.Layouts
         }
 
         [Authorize(PlatformPermissions.Layout.Create)]
-        public virtual async Task<LayoutDto> CreateAsync(LayoutCreateDto input)
+        public async virtual Task<LayoutDto> CreateAsync(LayoutCreateDto input)
         {
             var layout = await LayoutRepository.FindByNameAsync(input.Name);
             if (layout != null)
@@ -46,7 +46,7 @@ namespace LINGYUN.Platform.Layouts
         }
 
         [Authorize(PlatformPermissions.Layout.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var layout = await LayoutRepository.GetAsync(id);
 
@@ -59,14 +59,14 @@ namespace LINGYUN.Platform.Layouts
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task<LayoutDto> GetAsync(Guid id)
+        public async virtual Task<LayoutDto> GetAsync(Guid id)
         {
             var layout = await LayoutRepository.GetAsync(id);
 
             return ObjectMapper.Map<Layout, LayoutDto>(layout);
         }
 
-        public virtual async Task<ListResultDto<LayoutDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<LayoutDto>> GetAllListAsync()
         {
             var layouts = await LayoutRepository.GetListAsync();
 
@@ -74,7 +74,7 @@ namespace LINGYUN.Platform.Layouts
                 ObjectMapper.Map<List<Layout>, List<LayoutDto>>(layouts));
         }
 
-        public virtual async Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
+        public async virtual Task<PagedResultDto<LayoutDto>> GetListAsync(GetLayoutListInput input)
         {
             var count = await LayoutRepository.GetCountAsync(input.Framework, input.Filter);
 
@@ -88,7 +88,7 @@ namespace LINGYUN.Platform.Layouts
         }
 
         [Authorize(PlatformPermissions.Layout.Update)]
-        public virtual async Task<LayoutDto> UpdateAsync(Guid id, LayoutUpdateDto input)
+        public async virtual Task<LayoutDto> UpdateAsync(Guid id, LayoutUpdateDto input)
         {
             var layout = await LayoutRepository.GetAsync(id);
 

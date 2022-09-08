@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.SettingManagement
         }
 
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
-        public virtual async Task SetGlobalAsync(UpdateSettingsDto input)
+        public async virtual Task SetGlobalAsync(UpdateSettingsDto input)
         {
             if (CurrentTenant.IsAvailable)
             {
@@ -72,7 +72,7 @@ namespace LINGYUN.Abp.SettingManagement
         }
 
         [Authorize(AbpSettingManagementPermissions.Settings.Manager)]
-        public virtual async Task SetCurrentTenantAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentTenantAsync(UpdateSettingsDto input)
         {
             // 增加特性检查
             await CheckFeatureAsync();
@@ -96,18 +96,18 @@ namespace LINGYUN.Abp.SettingManagement
 
         //[Authorize]
         [AllowAnonymous]
-        public virtual async Task<SettingGroupResult> GetAllForCurrentTenantAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await GetAllForProviderAsync(TenantSettingValueProvider.ProviderName, CurrentTenant.GetId().ToString());
         }
 
         [AllowAnonymous]
-        public virtual async Task<SettingGroupResult> GetAllForGlobalAsync()
+        public async virtual Task<SettingGroupResult> GetAllForGlobalAsync()
         {
             return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
         }
 
-        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+        protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
             /*
              * 2020-11-19
@@ -425,7 +425,7 @@ namespace LINGYUN.Abp.SettingManagement
             return settingGroups;
         }
 
-        protected virtual async Task CheckFeatureAsync()
+        protected async virtual Task CheckFeatureAsync()
         {
             await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
         }

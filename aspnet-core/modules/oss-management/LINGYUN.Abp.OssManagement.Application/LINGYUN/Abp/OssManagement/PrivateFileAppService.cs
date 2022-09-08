@@ -93,7 +93,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize]
-        public virtual async Task<ListResultDto<MyFileShareDto>> GetShareListAsync()
+        public async virtual Task<ListResultDto<MyFileShareDto>> GetShareListAsync()
         {
             var cacheKey = MyFileShareCacheItem.CalculateCacheKey(CurrentUser.GetId());
             var cacheItem = await _myShareCache.GetAsync(cacheKey);
@@ -124,7 +124,7 @@ namespace LINGYUN.Abp.OssManagement
         }
 
         [Authorize]
-        public virtual async Task<FileShareDto> ShareAsync(FileShareInput input)
+        public async virtual Task<FileShareDto> ShareAsync(FileShareInput input)
         {
             var ossObjectRequest = new GetOssObjectRequest(
                 GetCurrentBucket(),

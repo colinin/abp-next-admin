@@ -19,13 +19,13 @@ namespace LINGYUN.Abp.WorkflowManagement.Engine
         }
 
         [Authorize(WorkflowManagementPermissions.Engine.Initialize)]
-        public virtual async Task InitializeAsync()
+        public async virtual Task InitializeAsync()
         {
             await _engineManager.InitializeAsync();
         }
 
         [Authorize(WorkflowManagementPermissions.Engine.Register)]
-        public virtual async Task RegisterAsync()
+        public async virtual Task RegisterAsync()
         {
             // 暂时没有解决多租户自动注册工作流,管理员可以通过api主动注册
             await _registryManager.RegisterAsync();

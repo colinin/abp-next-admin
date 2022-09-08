@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
         {
         }
 
-        public virtual async Task<List<UserSubscribe>> GetUserSubscribesAsync(
+        public async virtual Task<List<UserSubscribe>> GetUserSubscribesAsync(
             string notificationName, 
             IEnumerable<Guid> userIds = null,
             CancellationToken cancellationToken = default)
@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribes;
         }
 
-        public virtual async Task<UserSubscribe> GetUserSubscribeAsync(
+        public async virtual Task<UserSubscribe> GetUserSubscribeAsync(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribe;
         }
 
-        public virtual async Task<List<string>> GetUserSubscribesAsync(
+        public async virtual Task<List<string>> GetUserSubscribesAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribeNames;
         }
 
-        public virtual async Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(
+        public async virtual Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(
             string userName,
             CancellationToken cancellationToken = default)
         {
@@ -75,7 +75,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribeNames;
         }
 
-        public virtual async Task<List<Guid>> GetUserSubscribesAsync(
+        public async virtual Task<List<Guid>> GetUserSubscribesAsync(
             string notificationName,
             CancellationToken cancellationToken = default)
         {
@@ -88,14 +88,14 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return subscribeUsers;
         }
 
-        public virtual async Task InsertUserSubscriptionAsync(
+        public async virtual Task InsertUserSubscriptionAsync(
             IEnumerable<UserSubscribe> userSubscribes,
             CancellationToken cancellationToken = default)
         {
             await (await GetDbSetAsync()).AddRangeAsync(userSubscribes, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task DeleteUserSubscriptionAsync(
+        public async virtual Task DeleteUserSubscriptionAsync(
             string notificationName,
             CancellationToken cancellationToken = default)
         {
@@ -104,14 +104,14 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             (await GetDbSetAsync()).RemoveRange(userSubscribes);
         }
 
-        public virtual async Task DeleteUserSubscriptionAsync(
+        public async virtual Task DeleteUserSubscriptionAsync(
             IEnumerable<UserSubscribe> userSubscribes,
             CancellationToken cancellationToken = default)
         {
             await DeleteManyAsync(userSubscribes);
         }
 
-        public virtual async Task DeleteUserSubscriptionAsync(
+        public async virtual Task DeleteUserSubscriptionAsync(
             string notificationName, 
             IEnumerable<Guid> userIds,
             CancellationToken cancellationToken = default)
@@ -121,7 +121,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                 GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> UserSubscribeExistsAysnc(
+        public async virtual Task<bool> UserSubscribeExistsAysnc(
             string notificationName, 
             Guid userId,
             CancellationToken cancellationToken = default)
@@ -131,7 +131,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserSubscribe>> GetUserSubscribesAsync(
+        public async virtual Task<List<UserSubscribe>> GetUserSubscribesAsync(
             Guid userId, 
             string sorting = "Id", 
             int skipCount = 1,
@@ -149,7 +149,7 @@ namespace LINGYUN.Abp.MessageService.Subscriptions
             return userSubscribes;
         }
 
-        public virtual async Task<long> GetCountAsync(
+        public async virtual Task<long> GetCountAsync(
             Guid userId,
             CancellationToken cancellationToken = default)
         {

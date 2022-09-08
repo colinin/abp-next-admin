@@ -18,7 +18,7 @@ namespace LINGYUN.Platform.Datas
         {
         }
 
-        public virtual async Task<Data> FindByNameAsync(
+        public async virtual Task<Data> FindByNameAsync(
             string name, 
             bool includeDetails = true, 
             CancellationToken cancellationToken = default)
@@ -30,7 +30,7 @@ namespace LINGYUN.Platform.Datas
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Data>> GetChildrenAsync(
+        public async virtual Task<List<Data>> GetChildrenAsync(
             Guid? parentId, 
             bool includeDetails = false, 
             CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ namespace LINGYUN.Platform.Datas
                   .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             string filter = "", 
             CancellationToken cancellationToken = default)
         {
@@ -54,7 +54,7 @@ namespace LINGYUN.Platform.Datas
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Data>> GetPagedListAsync(
+        public async virtual Task<List<Data>> GetPagedListAsync(
             string filter = "", 
             string sotring = "Code", 
             bool includeDetails = false, 

@@ -31,17 +31,17 @@ namespace LINGYUN.Abp.Webhooks
             WebhookSubscriptionsStore = NullWebhookSubscriptionsStore.Instance;
         }
 
-        public virtual async Task<WebhookSubscriptionInfo> GetAsync(Guid id)
+        public async virtual Task<WebhookSubscriptionInfo> GetAsync(Guid id)
         {
             return await WebhookSubscriptionsStore.GetAsync(id);
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(Guid? tenantId)
+        public async virtual Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(Guid? tenantId)
         {
             return await WebhookSubscriptionsStore.GetAllSubscriptionsAsync(tenantId);
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsIfFeaturesGrantedAsync(Guid? tenantId, string webhookName)
+        public async virtual Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsIfFeaturesGrantedAsync(Guid? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {
@@ -51,12 +51,12 @@ namespace LINGYUN.Abp.Webhooks
             return (await WebhookSubscriptionsStore.GetAllSubscriptionsAsync(tenantId, webhookName)).ToList();
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(Guid?[] tenantIds)
+        public async virtual Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(Guid?[] tenantIds)
         {
             return (await WebhookSubscriptionsStore.GetAllSubscriptionsOfTenantsAsync(tenantIds)).ToList();
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(Guid?[] tenantIds, string webhookName)
+        public async virtual Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(Guid?[] tenantIds, string webhookName)
         {
             var featureGrantedTenants = new List<Guid?>();
             foreach (var tenantId in tenantIds)
@@ -70,7 +70,7 @@ namespace LINGYUN.Abp.Webhooks
             return (await WebhookSubscriptionsStore.GetAllSubscriptionsOfTenantsAsync(featureGrantedTenants.ToArray(), webhookName)).ToList();
         }
 
-        public virtual async Task<bool> IsSubscribedAsync(Guid? tenantId, string webhookName)
+        public async virtual Task<bool> IsSubscribedAsync(Guid? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {
@@ -80,7 +80,7 @@ namespace LINGYUN.Abp.Webhooks
             return await WebhookSubscriptionsStore.IsSubscribedAsync(tenantId, webhookName);
         }
         
-        public virtual async Task AddOrUpdateSubscriptionAsync(WebhookSubscriptionInfo webhookSubscription)
+        public async virtual Task AddOrUpdateSubscriptionAsync(WebhookSubscriptionInfo webhookSubscription)
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
@@ -101,7 +101,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        public virtual async Task ActivateWebhookSubscriptionAsync(Guid id, bool active)
+        public async virtual Task ActivateWebhookSubscriptionAsync(Guid id, bool active)
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
@@ -112,7 +112,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
         
-        public virtual async Task DeleteSubscriptionAsync(Guid id)
+        public async virtual Task DeleteSubscriptionAsync(Guid id)
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
@@ -122,7 +122,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
         
-        public virtual async Task AddWebhookAsync(WebhookSubscriptionInfo subscription, string webhookName)
+        public async virtual Task AddWebhookAsync(WebhookSubscriptionInfo subscription, string webhookName)
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
@@ -146,7 +146,7 @@ namespace LINGYUN.Abp.Webhooks
 
         #region PermissionCheck
 
-        protected virtual async Task CheckIfPermissionsGrantedAsync(WebhookSubscriptionInfo webhookSubscription)
+        protected async virtual Task CheckIfPermissionsGrantedAsync(WebhookSubscriptionInfo webhookSubscription)
         {
             if (webhookSubscription.Webhooks.IsNullOrEmpty())
             {
@@ -159,7 +159,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        protected virtual async Task CheckPermissionsAsync(Guid? tenantId, string webhookName)
+        protected async virtual Task CheckPermissionsAsync(Guid? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {

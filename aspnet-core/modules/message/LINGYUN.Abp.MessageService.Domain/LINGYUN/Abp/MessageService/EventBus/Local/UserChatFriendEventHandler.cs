@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
             _notificationSender = notificationSender;
         }
 
-        public virtual async Task HandleEventAsync(EntityCreatedEventData<UserChatFriend> eventData)
+        public async virtual Task HandleEventAsync(EntityCreatedEventData<UserChatFriend> eventData)
         {
             switch (eventData.Entity.Status)
             {
@@ -55,17 +55,17 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
             await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
         }
 
-        public virtual async Task HandleEventAsync(EntityDeletedEventData<UserChatFriend> eventData)
+        public async virtual Task HandleEventAsync(EntityDeletedEventData<UserChatFriend> eventData)
         {
             await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
         }
 
-        public virtual async Task HandleEventAsync(EntityUpdatedEventData<UserChatFriend> eventData)
+        public async virtual Task HandleEventAsync(EntityUpdatedEventData<UserChatFriend> eventData)
         {
             await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
         }
 
-        public virtual async Task HandleEventAsync(UserChatFriendEto eventData)
+        public async virtual Task HandleEventAsync(UserChatFriendEto eventData)
         {
             if (eventData.Status == IM.Contract.UserFriendStatus.Added)
             {
@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
             }
         }
 
-        protected virtual async Task SendFriendAddedMessageAsync(Guid userId, Guid friendId, Guid? tenantId = null)
+        protected async virtual Task SendFriendAddedMessageAsync(Guid userId, Guid friendId, Guid? tenantId = null)
         {
             // 发送添加好友的第一条消息
 
@@ -91,7 +91,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
             await _messageSender.SendMessageAsync(addNewFirendMessage);
         }
 
-        protected virtual async Task SendFriendValidationNotifierAsync(UserChatFriend userChatFriend)
+        protected async virtual Task SendFriendValidationNotifierAsync(UserChatFriend userChatFriend)
         {
             // 发送好友验证通知
             var userIdentifer = new UserIdentifier(userChatFriend.FrientId, userChatFriend.RemarkName);
@@ -123,7 +123,7 @@ namespace LINGYUN.Abp.MessageService.EventBus.Local
                     userChatFriend.TenantId);
         }
 
-        protected virtual async Task RemoveUserFriendCacheItemAsync(Guid userId)
+        protected async virtual Task RemoveUserFriendCacheItemAsync(Guid userId)
         {
             // 移除好友缓存
             await _cache.RemoveAsync(UserFriendCacheItem.CalculateCacheKey(userId.ToString()));

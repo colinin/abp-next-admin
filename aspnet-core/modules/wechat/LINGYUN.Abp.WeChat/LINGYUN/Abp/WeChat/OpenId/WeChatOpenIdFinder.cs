@@ -39,7 +39,7 @@ namespace LINGYUN.Abp.WeChat.OpenId
             Logger = NullLogger<WeChatOpenIdFinder>.Instance;
         }
 
-        public virtual async Task<WeChatOpenId> FindAsync(string appId)
+        public async virtual Task<WeChatOpenId> FindAsync(string appId)
         {
             if (!CurrentUser.IsAuthenticated)
             {
@@ -51,14 +51,14 @@ namespace LINGYUN.Abp.WeChat.OpenId
                 throw new AbpException("The wechat login session has expired. Use 'wx.login' result code to exchange the sessionKey");
         }
 
-        public virtual async Task<WeChatOpenId> FindAsync(string code, string appId, string appSecret)
+        public async virtual Task<WeChatOpenId> FindAsync(string code, string appId, string appSecret)
         {
             // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
             // 或者前端保存code,通过传递code来获取
             return (await GetCacheItemAsync(code, appId, appSecret)).WeChatOpenId;
         }
 
-        protected virtual async Task<WeChatOpenIdCacheItem> GetCacheItemAsync(string code, string appId, string appSecret)
+        protected async virtual Task<WeChatOpenIdCacheItem> GetCacheItemAsync(string code, string appId, string appSecret)
         {
             var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(appId, code);
 

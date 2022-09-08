@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.IM.Messages
             ServiceProvider = serviceProvider;
         }
 
-        public virtual async Task SendMessageAsync(ChatMessage chatMessage)
+        public async virtual Task SendMessageAsync(ChatMessage chatMessage)
         {
             try
             {

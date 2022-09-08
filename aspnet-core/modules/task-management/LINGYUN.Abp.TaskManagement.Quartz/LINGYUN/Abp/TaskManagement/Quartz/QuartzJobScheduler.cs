@@ -11,7 +11,7 @@ public class QuartzJobScheduler : IJobScheduler
         Scheduler = scheduler;
     }
 
-    public virtual async Task<bool> ExistsAsync(string group, string name)
+    public async virtual Task<bool> ExistsAsync(string group, string name)
     {
         throw new System.NotImplementedException();
     }

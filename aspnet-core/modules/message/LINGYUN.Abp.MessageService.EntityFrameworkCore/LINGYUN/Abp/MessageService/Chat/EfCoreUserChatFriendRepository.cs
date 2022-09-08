@@ -21,14 +21,14 @@ namespace LINGYUN.Abp.MessageService.Chat
         {
         }
 
-        public virtual async Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
+        public async virtual Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserFriend>> GetAllMembersAsync(
+        public async virtual Task<List<UserFriend>> GetAllMembersAsync(
             Guid userId,
             string sorting = nameof(UserChatFriend.RemarkName),
              CancellationToken cancellationToken = default)
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<UserFriend> GetMemberAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
+        public async virtual Task<UserFriend> GetMemberAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
             var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
@@ -95,7 +95,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserFriend>> GetMembersAsync(
+        public async virtual Task<List<UserFriend>> GetMembersAsync(
             Guid userId,
             string filter = "",
             string sorting = nameof(UserChatFriend.UserId),
@@ -144,7 +144,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<UserFriend>> GetLastContactMembersAsync(
+        public async virtual Task<List<UserFriend>> GetLastContactMembersAsync(
             Guid userId,
             int skipCount = 0,
             int maxResultCount = 10,
@@ -186,7 +186,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetMembersCountAsync(Guid userId, string filter = "", CancellationToken cancellationToken = default)
+        public async virtual Task<int> GetMembersCountAsync(Guid userId, string filter = "", CancellationToken cancellationToken = default)
         {
             var dbContext = await GetDbContextAsync();
             var userChatCardQuery = dbContext.Set<UserChatCard>()
@@ -206,7 +206,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> IsFriendAsync(
+        public async virtual Task<bool> IsFriendAsync(
             Guid userId,
             Guid frientId,
             CancellationToken cancellationToken = default)
@@ -216,7 +216,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                     GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> IsAddedAsync(Guid userId, Guid frientId, CancellationToken cancellationToken = default)
+        public async virtual Task<bool> IsAddedAsync(Guid userId, Guid frientId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .AnyAsync(ucf => ucf.UserId == userId && ucf.FrientId == frientId,

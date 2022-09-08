@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.Sms.Tencent
         }
 
         [RequiresFeature(TencentCloudFeatures.Sms.Enable)]
-        public virtual async Task SendAsync(SmsMessage smsMessage)
+        public async virtual Task SendAsync(SmsMessage smsMessage)
         {
             var appId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Sms.AppId);
 

@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
         {
         }
 
-        public virtual async Task<List<PersistedWorkflow>> GetListAsync(
+        public async virtual Task<List<PersistedWorkflow>> GetListAsync(
             WorkflowStatus? status,
             string type,
             DateTime? createdFrom,
@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.WorkflowCore.Persistence
                 .ToListAsync();
         }
 
-        public virtual async Task<List<PersistedWorkflow>> GetOlderListAsync(
+        public async virtual Task<List<PersistedWorkflow>> GetOlderListAsync(
             WorkflowStatus status,
             DateTime olderThan,
             bool includeDetails = false,

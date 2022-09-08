@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.IdentityClaimType.Create)]
-        public virtual async Task<IdentityClaimTypeDto> CreateAsync(IdentityClaimTypeCreateDto input)
+        public async virtual Task<IdentityClaimTypeDto> CreateAsync(IdentityClaimTypeCreateDto input)
         {
             if (await IdentityClaimTypeRepository.AnyAsync(input.Name))
             {
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.IdentityClaimType.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var identityClaimType = await IdentityClaimTypeRepository.FindAsync(id);
             if (identityClaimType == null)
@@ -58,14 +58,14 @@ namespace LINGYUN.Abp.Identity
             await IdentityClaimTypeRepository.DeleteAsync(identityClaimType);
         }
 
-        public virtual async Task<IdentityClaimTypeDto> GetAsync(Guid id)
+        public async virtual Task<IdentityClaimTypeDto> GetAsync(Guid id)
         {
             var identityClaimType = await IdentityClaimTypeRepository.FindAsync(id);
 
             return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
         }
 
-        public virtual async Task<ListResultDto<IdentityClaimTypeDto>> GetAllListAsync()
+        public async virtual Task<ListResultDto<IdentityClaimTypeDto>> GetAllListAsync()
         {
             var identityClaimTypes = await IdentityClaimTypeRepository
                 .GetListAsync();
@@ -74,7 +74,7 @@ namespace LINGYUN.Abp.Identity
                 ObjectMapper.Map<List<IdentityClaimType>, List<IdentityClaimTypeDto>>(identityClaimTypes));
         }
 
-        public virtual async Task<PagedResultDto<IdentityClaimTypeDto>> GetListAsync(IdentityClaimTypeGetByPagedDto input)
+        public async virtual Task<PagedResultDto<IdentityClaimTypeDto>> GetListAsync(IdentityClaimTypeGetByPagedDto input)
         {
             var identityClaimTypeCount = await IdentityClaimTypeRepository.GetCountAsync(input.Filter);
 
@@ -86,7 +86,7 @@ namespace LINGYUN.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.IdentityClaimType.Update)]
-        public virtual async Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
+        public async virtual Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
         {
             var identityClaimType = await IdentityClaimTypeRepository.GetAsync(id);
             CheckChangingClaimType(identityClaimType);

@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         }
 
         [Authorize(WorkflowManagementPermissions.WorkflowDef.Create)]
-        public virtual async Task<WorkflowDto> CreateAsync(WorkflowDefinitionCreateDto input)
+        public async virtual Task<WorkflowDto> CreateAsync(WorkflowDefinitionCreateDto input)
         {
             if (await _workflowRepository.CheckVersionAsync(input.Name, input.Version))
             {
@@ -120,7 +120,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
         }
 
         [Authorize(WorkflowManagementPermissions.WorkflowDef.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        public async virtual Task DeleteAsync(Guid id)
         {
             var workflowDef = await _workflowRepository.GetAsync(id);
             var stepDefNodes = await _stepNodeRepository.GetAllChildrenWithWorkflowAsync(workflowDef.Id);
@@ -133,7 +133,7 @@ namespace LINGYUN.Abp.WorkflowManagement.Workflows
             _workflowManager.UnRegister(workflowDef);
         }
 
-        public virtual async Task<WorkflowDto> GetAsync(Guid id)
+        public async virtual Task<WorkflowDto> GetAsync(Guid id)
         {
             var workflowDef = await _workflowRepository.GetAsync(id);
             var stepDefNodes = await _stepNodeRepository.GetAllChildrenWithWorkflowAsync(workflowDef.Id);

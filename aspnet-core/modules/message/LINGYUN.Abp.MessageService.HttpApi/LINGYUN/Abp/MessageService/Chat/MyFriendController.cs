@@ -20,40 +20,40 @@ namespace LINGYUN.Abp.MessageService.Chat
         }
 
         [HttpPost]
-        public virtual async Task CreateAsync(MyFriendCreateDto input)
+        public async virtual Task CreateAsync(MyFriendCreateDto input)
         {
             await MyFriendAppService.CreateAsync(input);
         }
 
         [HttpPost]
         [Route("add-request")]
-        public virtual async Task AddRequestAsync(MyFriendAddRequestDto input)
+        public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
         {
             await MyFriendAppService.AddRequestAsync(input);
         }
 
         [HttpDelete]
-        public virtual async Task DeleteAsync(MyFriendOperationDto input)
+        public async virtual Task DeleteAsync(MyFriendOperationDto input)
         {
             await MyFriendAppService.DeleteAsync(input);
         }
 
         [HttpGet]
         [Route("{friendId}")]
-        public virtual async Task<UserFriend> GetAsync(Guid friendId)
+        public async virtual Task<UserFriend> GetAsync(Guid friendId)
         {
             return await MyFriendAppService.GetAsync(friendId);
         }
 
         [HttpGet]
         [Route("all")]
-        public virtual async Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
+        public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
         {
             return await MyFriendAppService.GetAllListAsync(input);
         }
 
         [HttpGet]
-        public virtual async Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
+        public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
         {
             return await MyFriendAppService.GetListAsync(input);
         }

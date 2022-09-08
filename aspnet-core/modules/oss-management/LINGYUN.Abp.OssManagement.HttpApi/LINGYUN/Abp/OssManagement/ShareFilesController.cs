@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpGet]
         [Route("{url}")]
-        public virtual async Task<IActionResult> GetAsync(string url)
+        public async virtual Task<IActionResult> GetAsync(string url)
         {
             var ossObject = await _service.GetAsync(url);
 

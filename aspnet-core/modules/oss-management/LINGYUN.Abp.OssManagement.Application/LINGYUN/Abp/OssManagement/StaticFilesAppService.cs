@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.OssManagement
             AbpOssManagementFeatureNames.OssObject.DownloadLimit,
             AbpOssManagementFeatureNames.OssObject.DownloadInterval,
             LimitPolicy.Month)]
-        public virtual async Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input)
+        public async virtual Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input)
         {
             var ossObjectRequest = new GetOssObjectRequest(
                 HttpUtility.UrlDecode(input.Bucket), // 需要处理特殊字符

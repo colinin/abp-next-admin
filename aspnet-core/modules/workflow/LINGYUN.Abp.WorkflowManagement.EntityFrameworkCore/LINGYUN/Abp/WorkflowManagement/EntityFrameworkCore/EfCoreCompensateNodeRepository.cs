@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.WorkflowManagement.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<List<CompensateNode>> GetAllChildrenWithWorkflowAsync(Guid workflowId, CancellationToken cancellationToken = default)
+        public async virtual Task<List<CompensateNode>> GetAllChildrenWithWorkflowAsync(Guid workflowId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(x => x.WorkflowId.Equals(workflowId))

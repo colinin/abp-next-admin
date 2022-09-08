@@ -19,14 +19,14 @@ namespace LINGYUN.Abp.WorkflowManagement.Engine
 
         [HttpPost]
         [Route("initialize")]
-        public virtual async Task InitializeAsync()
+        public async virtual Task InitializeAsync()
         {
             await _service.InitializeAsync();
         }
 
         [HttpPost]
         [Route("register")]
-        public virtual async Task RegisterAsync()
+        public async virtual Task RegisterAsync()
         {
             await _service.RegisterAsync();
         }

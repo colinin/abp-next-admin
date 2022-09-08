@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.SettingManagement
             LocalizationResource = typeof(AbpSettingManagementResource);
         }
 
-        public virtual async Task SetCurrentUserAsync(UpdateSettingsDto input)
+        public async virtual Task SetCurrentUserAsync(UpdateSettingsDto input)
         {
             // 增加特性检查
             await CheckFeatureAsync();
@@ -62,12 +62,12 @@ namespace LINGYUN.Abp.SettingManagement
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public virtual async Task<SettingGroupResult> GetAllForCurrentUserAsync()
+        public async virtual Task<SettingGroupResult> GetAllForCurrentUserAsync()
         {
             return await GetAllForProviderAsync(UserSettingValueProvider.ProviderName, CurrentUser.GetId().ToString());
         }
 
-        protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+        protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
         {
             var settingGroups = new SettingGroupResult();
 
@@ -241,7 +241,7 @@ namespace LINGYUN.Abp.SettingManagement
             return settingGroups;
         }
 
-        protected virtual async Task CheckFeatureAsync()
+        protected async virtual Task CheckFeatureAsync()
         {
             await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
         }

@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.RulesManagement
         private IEntityRuleRepository _rruleRepository;
         protected IEntityRuleRepository RuleRepository => LazyGetRequiredService(ref _rruleRepository);
 
-        public virtual async Task<List<RuleGroup>> GetRuleGroupsAsync(Type entityType)
+        public async virtual Task<List<RuleGroup>> GetRuleGroupsAsync(Type entityType)
         {
             var entityFullTypeName = entityType.FullName;
             if (entityType.IsGenericType)
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.RulesManagement
             return ruleGroups;
         }
 
-        protected virtual async Task AddRuleAsync(RuleGroup ruleGroup, Guid ruleId)
+        protected async virtual Task AddRuleAsync(RuleGroup ruleGroup, Guid ruleId)
         {
             var entityRule = await RuleRepository.FindAsync(ruleId);
             if (entityRule == null)
@@ -83,7 +83,7 @@ namespace LINGYUN.Abp.RulesManagement
             }
         }
 
-        protected virtual async Task AddSubRuleAsync(Rule rule, Guid subRuleId)
+        protected async virtual Task AddSubRuleAsync(Rule rule, Guid subRuleId)
         {
             var entityRule = await RuleRepository.FindAsync(subRuleId);
             if (entityRule == null)
@@ -98,7 +98,7 @@ namespace LINGYUN.Abp.RulesManagement
             }
         }
 
-        protected virtual async Task AddToInjectRuleAsync(RuleGroup group, Guid ruleId)
+        protected async virtual Task AddToInjectRuleAsync(RuleGroup group, Guid ruleId)
         {
             var entityRule = await RuleRepository.FindAsync(ruleId);
             if (entityRule == null)
@@ -112,7 +112,7 @@ namespace LINGYUN.Abp.RulesManagement
             }
         }
 
-        protected virtual async Task AddToInjectRuleAsync(Rule rule, Guid ruleId)
+        protected async virtual Task AddToInjectRuleAsync(Rule rule, Guid ruleId)
         {
             var entityRule = await RuleRepository.FindAsync(ruleId);
             if (entityRule == null)

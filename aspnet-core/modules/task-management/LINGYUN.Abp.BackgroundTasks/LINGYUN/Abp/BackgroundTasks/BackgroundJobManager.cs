@@ -39,7 +39,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
         TasksOptions = taskOptions.Value;
     }
 
-    public virtual async Task<string> EnqueueAsync<TArgs>(
+    public async virtual Task<string> EnqueueAsync<TArgs>(
         TArgs args,
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null)

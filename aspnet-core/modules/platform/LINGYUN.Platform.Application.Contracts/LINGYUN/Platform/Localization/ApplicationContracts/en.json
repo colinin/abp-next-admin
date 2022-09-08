@@ -23,6 +23,7 @@
     "Permission:Menu": "Menu",
     "Permission:Create": "Create",
     "Permission:Update": "Update",
+    "Permission:Move": "Move",
     "Permission:Delete": "Delete",
     "Permission:ManageItems": "Manage Items",
     "Permission:ManageRoleMenus": "Manage Role Menus",

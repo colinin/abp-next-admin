@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine
             return new Engine(Logger, _options.Settings);
         }
 
-        protected virtual async Task ExecuteRulesAsync<T>(T input, WorkflowRules[] workflowRules, object[] @params = null)
+        protected async virtual Task ExecuteRulesAsync<T>(T input, WorkflowRules[] workflowRules, object[] @params = null)
         {
             // TODO: 性能缺陷 规则文件每一次调用都会重复编译
             _ruleEngine.AddOrUpdateWorkflow(workflowRules);

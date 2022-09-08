@@ -19,7 +19,7 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
-        public virtual async Task<Menu> GetLastMenuAsync(
+        public async virtual Task<Menu> GetLastMenuAsync(
             Guid? parentId = null,
             CancellationToken cancellationToken = default)
         {
@@ -29,7 +29,7 @@ namespace LINGYUN.Platform.Menus
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> UserHasInMenuAsync(
+        public async virtual Task<bool> UserHasInMenuAsync(
             Guid userId,
             string menuName,
             CancellationToken cancellationToken = default)
@@ -43,7 +43,7 @@ namespace LINGYUN.Platform.Menus
                           .AnyAsync(x => x.UserId == userId, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> RoleHasInMenuAsync(
+        public async virtual Task<bool> RoleHasInMenuAsync(
             string roleName,
             string menuName,
             CancellationToken cancellationToken = default)
@@ -57,7 +57,7 @@ namespace LINGYUN.Platform.Menus
                           .AnyAsync(x => x.RoleName == roleName, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<Menu> FindByNameAsync(
+        public async virtual Task<Menu> FindByNameAsync(
             string menuName,
             CancellationToken cancellationToken = default)
         {
@@ -66,7 +66,7 @@ namespace LINGYUN.Platform.Menus
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<Menu> FindMainAsync(
+        public async virtual Task<Menu> FindMainAsync(
             string framework = "",
             CancellationToken cancellationToken = default)
         {
@@ -75,7 +75,7 @@ namespace LINGYUN.Platform.Menus
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetRoleMenusAsync(
+        public async virtual Task<List<Menu>> GetRoleMenusAsync(
             string[] roles,
             string framework = "",
             CancellationToken cancellationToken = default)
@@ -95,7 +95,7 @@ namespace LINGYUN.Platform.Menus
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetUserMenusAsync(
+        public async virtual Task<List<Menu>> GetUserMenusAsync(
             Guid userId, 
             string[] roles,
             string framework = "",
@@ -132,7 +132,7 @@ namespace LINGYUN.Platform.Menus
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetChildrenAsync(
+        public async virtual Task<List<Menu>> GetChildrenAsync(
             Guid? parentId,
             CancellationToken cancellationToken = default
         )
@@ -142,7 +142,7 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetAllChildrenWithParentCodeAsync(
+        public async virtual Task<List<Menu>> GetAllChildrenWithParentCodeAsync(
             string code,
             Guid? parentId,
             CancellationToken cancellationToken = default
@@ -153,7 +153,7 @@ namespace LINGYUN.Platform.Menus
                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetAllAsync(
+        public async virtual Task<List<Menu>> GetAllAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
@@ -177,7 +177,7 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetCountAsync(
+        public async virtual Task<int> GetCountAsync(
             string filter = "",
             string framework = "",
             Guid? parentId = null,
@@ -195,7 +195,7 @@ namespace LINGYUN.Platform.Menus
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Menu>> GetListAsync(
+        public async virtual Task<List<Menu>> GetListAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
             bool reverse = false,
@@ -222,7 +222,7 @@ namespace LINGYUN.Platform.Menus
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task RemoveAllRolesAsync(
+        public async virtual Task RemoveAllRolesAsync(
             Menu menu,
             CancellationToken cancellationToken = default
         )
@@ -235,7 +235,7 @@ namespace LINGYUN.Platform.Menus
             dbContext.Set<RoleMenu>().RemoveRange(rolesQuery);
         }
 
-        public virtual async Task RemoveAllMembersAsync(
+        public async virtual Task RemoveAllMembersAsync(
             Menu menu,
             CancellationToken cancellationToken = default
         )

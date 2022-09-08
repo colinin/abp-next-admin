@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             CurrentTenant = currentTenant;
             OssClientFactory = ossClientFactory;
         }
-        public virtual async Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+        public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
         {
             var ossClient = await CreateClientAsync();
 
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             ossClient.DeleteObjects(aliyunRequest);
         }
 
-        public virtual async Task<OssContainer> CreateAsync(string name)
+        public async virtual Task<OssContainer> CreateAsync(string name)
         {
             var ossClient = await CreateClientAsync();
 
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                 });
         }
 
-        public virtual async Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+        public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
         {
             var ossClient = await CreateClientAsync();
 
@@ -125,7 +125,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             return ossObject;
         }
 
-        public virtual async Task DeleteAsync(string name)
+        public async virtual Task DeleteAsync(string name)
         {
             // 阿里云oss在控制台设置即可，无需改变
             var ossClient = await CreateClientAsync();
@@ -136,7 +136,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             }
         }
 
-        public virtual async Task DeleteObjectAsync(GetOssObjectRequest request)
+        public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
         {
             var ossClient = await CreateClientAsync();
 
@@ -160,14 +160,14 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             }
         }
 
-        public virtual async Task<bool> ExistsAsync(string name)
+        public async virtual Task<bool> ExistsAsync(string name)
         {
             var ossClient = await CreateClientAsync();
 
             return BucketExists(ossClient, name);
         }
 
-        public virtual async Task<OssContainer> GetAsync(string name)
+        public async virtual Task<OssContainer> GetAsync(string name)
         {
             var ossClient = await CreateClientAsync();
             if (!BucketExists(ossClient, name))
@@ -189,7 +189,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                 });
         }
 
-        public virtual async Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+        public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
         {
             var ossClient = await CreateClientAsync();
             if (!BucketExists(ossClient, request.Bucket))
@@ -234,7 +234,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             return ossObject;
         }
 
-        public virtual async Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+        public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
         {
             var ossClient = await CreateClientAsync();
 
@@ -266,7 +266,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
                        .ToList());
         }
 
-        public virtual async Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+        public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
         {
             
             var ossClient = await CreateClientAsync();
@@ -366,7 +366,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             return client.DoesObjectExist(bucketName, objectName);
         }
 
-        protected virtual async Task<IOss> CreateClientAsync()
+        protected async virtual Task<IOss> CreateClientAsync()
         {
             return await OssClientFactory.CreateAsync<AbpOssManagementContainer>();
         }
