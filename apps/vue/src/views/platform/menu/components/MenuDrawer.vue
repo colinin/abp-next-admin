@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref } from 'vue';
+  import { nextTick, ref, unref } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { TabForm, FormActionType } from '/@/components/Form';
+  import { TabForm, TabFormActionType } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { basicProps } from './props';
   import { Menu } from '/@/api/platform/model/menuModel';
@@ -39,7 +39,7 @@
   const { L } = useLocalization(['AppPlatform', 'AbpUi']);
   const menu = ref<Menu>({} as Menu);
   const framework = ref<string  | undefined>('');
-  const formElRef = ref<Nullable<FormActionType>>(null);
+  const formElRef = ref<Nullable<TabFormActionType>>(null);
   const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } =
     useMenuFormContext({
       menuModel: menu,
@@ -53,6 +53,8 @@
     nextTick(() => {
       setDrawerProps({ confirmLoading: false });
       fetchLayoutResource(dataVal.layoutId);
+      const formEl = unref(formElRef);
+      formEl?.changeTab(L('DisplayName:Basic'));
     });
   });
 

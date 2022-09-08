@@ -1,4 +1,4 @@
-import type { FieldMapToTime, FormSchema } from './types/form';
+import type { FieldMapToTime, FormSchema, TabFormSchema } from './types/form';
 import type { CSSProperties, PropType } from 'vue';
 import type { ColEx } from './types';
 import type { TableActionType } from '/@/components/Table';
@@ -120,7 +120,7 @@ export const tabProps = {
   compact: propTypes.bool,
   // 表单配置规则
   schemas: {
-    type: [Array] as PropType<FormSchema[]>,
+    type: [Array] as PropType<TabFormSchema[]>,
     default: () => [],
   },
   mergeDynamicData: {

@@ -6,16 +6,20 @@
     :model="formModel"
     @keypress.enter="handleEnterPress"
   >
-    <Row v-bind="{ ...getRow }">
-      <slot name="formHeader"></slot>
-      <Tabs v-model="activedTabKey" style="width: 100%">
-        <!-- fix bug: forceRender 必须强制渲染，否则form验证会失效 -->
-        <TabPane
-          v-for="tabSchema in getTabSchema"
-          :key="tabSchema.key"
-          :tab="tabSchema.key"
-          :forceRender="true"
-        >
+    <Tabs
+      v-model:activeKey="activedTabKey"
+      :style="tabsStyle.style"
+      :tabBarStyle="tabsStyle.tabBarStyle"
+    >
+      <!-- fix bug: forceRender 必须强制渲染，否则form验证会失效 -->
+      <TabPane
+        v-for="tabSchema in getTabSchema"
+        :key="tabSchema.key"
+        :tab="tabSchema.key"
+        :forceRender="true"
+      >
+        <Row v-bind="getRow">
+          <slot name="formHeader"></slot>
           <template v-for="schema in tabSchema.schemas" :key="schema.field">
             <FormItem
               :tableAction="tableAction"
@@ -27,19 +31,21 @@
               :setFormModel="setFormModel"
             >
               <template #[item]="data" v-for="item in Object.keys($slots)">
-                <slot :name="item" v-bind="data"></slot>
+                <slot :name="item" v-bind="data || {}"></slot>
               </template>
             </FormItem>
           </template>
-        </TabPane>
-      </Tabs>
+        </Row>
+      </TabPane>
+    </Tabs>
 
+    <Row v-bind="getRow">
       <FormAction v-bind="getFormActionBindProps" @toggle-advanced="handleToggleAdvanced">
         <template
           #[item]="data"
           v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']"
         >
-          <slot :name="item" v-bind="data"></slot>
+          <slot :name="item" v-bind="data || {}"></slot>
         </template>
       </FormAction>
       <slot name="formFooter"></slot>
@@ -48,8 +54,7 @@
 </template>
 
 <script lang="ts">
-  import dayjs from 'dayjs';
-  import type { FormActionType, TabFormProps, FormSchema, TabFormSchema } from './types/form';
+  import type { TabFormActionType, TabFormProps, TabFormSchema } from './types/form';
   import type { AdvanceState } from './types/hooks';
   import type { Ref } from 'vue';
 
@@ -70,11 +75,12 @@
   import { useFormEvents } from './hooks/useFormEvents';
   import { createFormContext } from './hooks/useFormContext';
   import { useAutoFocus } from './hooks/useAutoFocus';
+  import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useModalContext } from '/@/components/Modal';
+  import { useDebounceFn } from '@vueuse/core';
 
   import { tabProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { mergeWith } from 'lodash-es';
 
   export default defineComponent({
     name: 'TabForm',
@@ -87,10 +93,11 @@
       TabPane: Tabs.TabPane,
     },
     props: tabProps,
-    emits: ['advanced-change', 'reset', 'submit', 'register'],
+    emits: ['advanced-change', 'reset', 'submit', 'register', 'field-value-change'],
     setup(props, { emit, attrs }) {
       const formModel = reactive<Recordable>({});
       const modalFn = useModalContext();
+      const tabsStyle = useTabsStyle();
 
       const advanceState = reactive<AdvanceState>({
         isAdvanced: true,
@@ -104,17 +111,13 @@
       const activedTabKey = ref('');
       const propsRef = ref<Partial<TabFormProps>>({});
       const schemaRef = ref<Nullable<TabFormSchema[]>>(null);
-      const formElRef = ref<Nullable<FormActionType>>(null);
+      const formElRef = ref<Nullable<TabFormActionType>>(null);
 
       const { prefixCls } = useDesign('basic-form');
 
-      const getBindValue = computed(
-        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
-      );
-
       // Get the basic configuration of the form
       const getProps = computed((): TabFormProps => {
-        return mergeWith(props, unref(propsRef)) as TabFormProps;
+        return { ...props, ...unref(propsRef) } as TabFormProps;
       });
 
       const getFormClass = computed(() => {
@@ -135,6 +138,10 @@
         };
       });
 
+      const getBindValue = computed(
+        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
+      );
+
       const getSchema = computed((): TabFormSchema[] => {
         const schemas: TabFormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
         for (const schema of schemas) {
@@ -144,7 +151,7 @@
             if (!Array.isArray(defaultValue)) {
               schema.defaultValue = dateUtil(defaultValue);
             } else {
-              const def: dayjs.Dayjs[] = [];
+              const def: any[] = [];
               defaultValue.forEach((item) => {
                 def.push(dateUtil(item));
               });
@@ -153,15 +160,15 @@
           }
         }
         if (unref(getProps).showAdvancedButton) {
-          return schemas.filter((schema) => schema.component !== 'Divider') as TabFormSchema[];
+          return schemas.filter((schema) => schema.component !== 'Divider');
         } else {
-          return schemas as TabFormSchema[];
+          return schemas;
         }
       });
 
-      const getTabSchema = computed((): { key: string; schemas: FormSchema[] }[] => {
+      const getTabSchema = computed((): { key: string; schemas: TabFormSchema[] }[] => {
         // const schemas = unref(getSchema);
-        const tabSchemas: { key: string; schemas: FormSchema[] }[] = [];
+        const tabSchemas: { key: string; schemas: TabFormSchema[] }[] = [];
         const group = groupBy(getSchema.value, 'tab');
         Object.keys(group).forEach((key) => {
           tabSchemas.push({
@@ -192,7 +199,7 @@
         getSchema,
         getProps,
         isInitedDefault: isInitedDefaultRef,
-        formElRef: formElRef as Ref<FormActionType>,
+        formElRef: formElRef as Ref<TabFormActionType>,
       });
 
       const {
@@ -214,7 +221,7 @@
         formModel,
         getSchema,
         defaultValueRef,
-        formElRef: formElRef as Ref<FormActionType>,
+        formElRef: formElRef as Ref<TabFormActionType>,
         schemaRef: schemaRef as Ref<TabFormSchema[]>,
         handleFormValues,
       });
@@ -227,10 +234,12 @@
       watch(
         () => unref(getProps).model,
         () => {
-          const { model } = unref(getProps);
+          const { model, schemas } = unref(getProps);
+          if (schemas?.length) {
+            activedTabKey.value = schemas[0].tab;
+          }
           if (!model) return;
           setFieldsValue(model);
-          activedTabKey.value = '';
         },
         {
           immediate: true,
@@ -241,6 +250,9 @@
         () => unref(getProps).schemas,
         (schemas) => {
           resetSchema(schemas ?? []);
+          if (schemas?.length) {
+            activedTabKey.value = schemas[0].tab;
+          }
         },
       );
 
@@ -257,8 +269,17 @@
           if (schema?.length) {
             initDefault();
             isInitedDefaultRef.value = true;
+            activedTabKey.value = schema[0].tab;
           }
         },
+      );
+
+      watch(
+        () => formModel,
+        useDebounceFn(() => {
+          unref(getProps).submitOnChange && handleSubmit();
+        }, 300),
+        { deep: true },
       );
 
       async function setProps(formProps: Partial<TabFormProps>): Promise<void> {
@@ -267,6 +288,11 @@
 
       function setFormModel(key: string, value: any) {
         formModel[key] = value;
+        const { validateTrigger } = unref(getBindValue);
+        if (!validateTrigger || validateTrigger === 'change') {
+          validateFields([key]).catch((_) => {});
+        }
+        emit('field-value-change', key, value);
       }
 
       function handleEnterPress(e: KeyboardEvent) {
@@ -280,7 +306,11 @@
         }
       }
 
-      const formActionType: Partial<FormActionType> = {
+      function changeTab(tab: string) {
+        activedTabKey.value = tab;
+      }
+
+      const formActionType: Partial<TabFormActionType> = {
         getFieldsValue,
         setFieldsValue,
         resetFields,
@@ -294,6 +324,7 @@
         validate,
         submit: handleSubmit,
         scrollToField: scrollToField,
+        changeTab: changeTab,
       };
 
       onMounted(() => {
@@ -314,6 +345,7 @@
         formElRef,
         getSchema,
         getTabSchema,
+        tabsStyle,
         formActionType: formActionType as any,
         setFormModel,
         getFormClass,
@@ -325,3 +357,51 @@
     },
   });
 </script>
+
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-basic-form';
+
+  .@{prefix-cls} {
+    .ant-form-item {
+      &-label label::after {
+        margin: 0 6px 0 2px;
+      }
+
+      &-with-help {
+        margin-bottom: 0;
+      }
+
+      &:not(.ant-form-item-with-help) {
+        margin-bottom: 20px;
+      }
+
+      &.suffix-item {
+        .ant-form-item-children {
+          display: flex;
+        }
+
+        .ant-form-item-control {
+          margin-top: 4px;
+        }
+
+        .suffix {
+          display: inline-flex;
+          padding-left: 6px;
+          margin-top: 1px;
+          line-height: 1;
+          align-items: center;
+        }
+      }
+    }
+
+    .ant-form-explain {
+      font-size: 14px;
+    }
+
+    &--compact {
+      .ant-form-item {
+        margin-bottom: 8px !important;
+      }
+    }
+  }
+</style>

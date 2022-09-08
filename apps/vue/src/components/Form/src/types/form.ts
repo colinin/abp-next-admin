@@ -44,6 +44,10 @@ export interface FormActionType {
   scrollToField: (name: NamePath, options?: ScrollOptions) => Promise<void>;
 }
 
+export interface TabFormActionType extends FormActionType {
+  changeTab: (tab: string) => void;
+}
+
 export type RegisterFn = (formInstance: FormActionType) => void;
 
 export type UseFormReturnType = [RegisterFn, FormActionType];
@@ -127,6 +131,7 @@ export interface FormProps {
 
 export interface TabFormProps extends FormProps {
   tab: string;
+  schemas?: TabFormSchema[];
 }
 
 export interface FormSchema {

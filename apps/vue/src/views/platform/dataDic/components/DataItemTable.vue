@@ -28,7 +28,7 @@
       </template>
     </template>
   </BasicTable>
-  <DataItemModal @register="registerModal" @change="fetchItems" />
+  <DataItemModal @register="registerModal" @change="fetchItems(dataId)" />
 </template>
 
 <script lang="ts" setup>
@@ -49,6 +49,7 @@
     dataId: {
       type: String,
       retuired: true,
+      default: '',
     },
   });
 
