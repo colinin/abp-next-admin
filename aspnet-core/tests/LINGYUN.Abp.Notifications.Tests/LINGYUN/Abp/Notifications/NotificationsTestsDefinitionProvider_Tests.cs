@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.Notifications
         public async Task GetNotifications_Test()
         {
             var notifications = await NotificationDefinitionManager.GetNotificationsAsync();
-            notifications.Count.ShouldBe(6);
+            notifications.Count.ShouldBe(7);
         }
 
         [Fact]

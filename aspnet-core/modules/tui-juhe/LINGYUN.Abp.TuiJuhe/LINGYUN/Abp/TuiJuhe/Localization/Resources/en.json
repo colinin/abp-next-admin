@@ -1,0 +1,20 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:TuiJuhe": "TuiJuhe",
+    "Description:TuiJuhe": "TuiJuhe",
+    "Settings:Security.Token": "Token",
+    "Settings:Security.TokenDesc": "The user token, (https://tui.juhe.cn/setup) in the center of the personal page views.",
+    "Features:TuiJuhe": "TuiJuhe push service",
+    "Features:TuiJuheEnable": "Enable TuiJuhe",
+    "Features:TuiJuheEnableDesc": "Enable to enable the application to have TuiJuhe capabilities.",
+    "Features:Message": "TuiJuhe message push",
+    "Features:MessageEnable": "Enable TuiJuhe Message Push",
+    "Features:MessageEnableDesc": "Enable so that apps will have the ability to be pushed notification via TuiJuhe.",
+    "Features:Message.SendLimit": "Amount of TuiJuhe push",
+    "Features:Message.SendLimitDesc": "Set to limit the amount of TuiJuhe message push.",
+    "Features:Message.SendLimitInterval": "TuiJuhe message limit interval",
+    "Features:Message.SendLimitIntervalDesc": "Set the TuiJuhe message limit period (time scale: hours). Message sending frequency (request limit) : The rate does not exceed 50 times per unit hour.",
+    "Security": "Security"
+  }
+}

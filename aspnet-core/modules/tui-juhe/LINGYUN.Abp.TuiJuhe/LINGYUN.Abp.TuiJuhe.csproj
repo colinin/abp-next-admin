@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\TuiJuhe\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\TuiJuhe\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
+	</ItemGroup>
+
+</Project>
