@@ -13,8 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\TuiJuhe\SettingManagement\Localization\Resources\en.json" />
-	  <None Remove="LINGYUN\Abp\TuiJuhe\SettingManagement\Localization\Resources\zh-Hans.json" />
+	  <None Remove="LINGYUN\Abp\TuiJuhe\SettingManagement\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

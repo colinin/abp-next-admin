@@ -40,11 +40,13 @@ namespace LINGYUN.Abp.AuditLogging
             IGuidGenerator guidGenerator,
             Guid auditLogId,
             EntityChangeInfo entityChangeInfo,
-            Guid? tenantId = null)
+            Guid? tenantId = null,
+            Guid? entityTenantId = null)
         {
             Id = guidGenerator.Create();
             AuditLogId = auditLogId;
             TenantId = tenantId;
+            EntityTenantId = entityTenantId;
             ChangeTime = entityChangeInfo.ChangeTime;
             ChangeType = entityChangeInfo.ChangeType;
             EntityId = entityChangeInfo.EntityId;

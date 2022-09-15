@@ -47,13 +47,22 @@ namespace LINGYUN.Abp.AuditLogging
 
             var entityChanges = auditLogInfo
                                     .EntityChanges?
-                                    .Select(entityChangeInfo => new EntityChange(GuidGenerator, auditLogId, entityChangeInfo, tenantId: auditLogInfo.TenantId))
+                                    .Select(entityChangeInfo => new EntityChange(
+                                        GuidGenerator,
+                                        auditLogId,
+                                        entityChangeInfo, 
+                                        tenantId: auditLogInfo.TenantId,
+                                        entityTenantId: entityChangeInfo.EntityTenantId))
                                     .ToList()
                                 ?? new List<EntityChange>();
 
             var actions = auditLogInfo
                               .Actions?
-                              .Select(auditLogActionInfo => new AuditLogAction(GuidGenerator.Create(), auditLogId, auditLogActionInfo, tenantId: auditLogInfo.TenantId))
+                              .Select(auditLogActionInfo => new AuditLogAction(
+                                  GuidGenerator.Create(),
+                                  auditLogId, 
+                                  auditLogActionInfo, 
+                                  tenantId: auditLogInfo.TenantId))
                               .ToList()
                           ?? new List<AuditLogAction>();
 
