@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Tencent;
@@ -10,16 +9,13 @@ namespace LINGYUN.Abp.Tencent;
 public abstract class AbstractTencentCloudClientFactory<TClient>
 {
     protected IMemoryCache ClientCache { get; }
-    protected ICurrentTenant CurrentTenant { get; }
     protected ISettingProvider SettingProvider { get; }
 
     public AbstractTencentCloudClientFactory(
         IMemoryCache clientCache,
-        ICurrentTenant currentTenant,
         ISettingProvider settingProvider)
     {
         ClientCache = clientCache;
-        CurrentTenant = currentTenant;
         SettingProvider = settingProvider;
     }
 
@@ -35,12 +31,13 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey(CurrentTenant),
+            TencentCloudClientCacheItem.CalculateCacheKey("client"),
             async (_) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
                 var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
                 var endpoint = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.EndPoint);
+                var durationSecond = await SettingProvider.GetAsync(TencentCloudSettingNames.DurationSecond, 3600);
 
                 Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
                 Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
@@ -56,6 +53,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
                     SecretKey = secretKey,
                     // 连接区域
                     EndPoint = endpoint,
+                    DurationSecond = durationSecond,
                     HttpMethod = method,
                     WebProxy = webProxy,
                     Timeout = timeout,
@@ -67,16 +65,13 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
 public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
 {
     protected IMemoryCache ClientCache { get; }
-    protected ICurrentTenant CurrentTenant { get; }
     protected ISettingProvider SettingProvider { get; }
 
     public AbstractTencentCloudClientFactory(
         IMemoryCache clientCache,
-        ICurrentTenant currentTenant,
         ISettingProvider settingProvider)
     {
         ClientCache = clientCache;
-        CurrentTenant = currentTenant;
         SettingProvider = settingProvider;
     }
 
@@ -92,7 +87,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey(CurrentTenant),
+            TencentCloudClientCacheItem.CalculateCacheKey("client"),
             async (_) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
 
@@ -12,17 +11,14 @@ namespace LINGYUN.Abp.Tencent.QQ;
 public class AbpTencentQQOptionsManager : AbpDynamicOptionsManager<AbpTencentQQOptions>
 {
     protected IMemoryCache TencentCache { get; }
-    protected ICurrentTenant CurrentTenant { get; }
     protected ISettingProvider SettingProvider { get; }
     public AbpTencentQQOptionsManager(
         IMemoryCache tencentCache,
-        ICurrentTenant currentTenant,
         ISettingProvider settingProvider,
         IOptionsFactory<AbpTencentQQOptions> factory)
         : base(factory)
     {
         TencentCache = tencentCache;
-        CurrentTenant = currentTenant;
         SettingProvider = settingProvider;
     }
 
@@ -37,7 +33,7 @@ public class AbpTencentQQOptionsManager : AbpDynamicOptionsManager<AbpTencentQQO
 
     protected async virtual Task<AbpTencentQQCacheItem> GetCacheItemAsync()
     {
-        var cacheKey = AbpTencentQQCacheItem.CalculateCacheKey(CurrentTenant.Id);
+        var cacheKey = AbpTencentQQCacheItem.CalculateCacheKey();
 
         var cacheItem = await TencentCache.GetOrCreateAsync(
             cacheKey,

@@ -1,10 +1,8 @@
-﻿using Volo.Abp.MultiTenancy;
-
-namespace LINGYUN.Abp.Tencent;
+﻿namespace LINGYUN.Abp.Tencent;
 
 public class TencentCloudClientCacheItem
 {
-    public const string CacheKeyFormat = "pn:{0},n:tenant-cloud";
+    public const string CacheKeyFormat = "pn:tenant-cloud,n:{0}";
     public string SecretId { get; set; }
     public string SecretKey { get; set; }
     public string EndPoint { get; set; }
@@ -14,8 +12,8 @@ public class TencentCloudClientCacheItem
     public int Timeout { get; set; }
     public int DurationSecond { get; set; }
 
-    public static string CalculateCacheKey(ICurrentTenant currentTenant)
+    public static string CalculateCacheKey(string provider)
     {
-        return string.Format(CacheKeyFormat, currentTenant.IsAvailable ? currentTenant.GetId().ToString() : "global");
+        return string.Format(CacheKeyFormat, provider);
     }
 }

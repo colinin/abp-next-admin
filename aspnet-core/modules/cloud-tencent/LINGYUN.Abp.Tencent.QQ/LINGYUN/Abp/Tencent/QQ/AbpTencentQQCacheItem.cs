@@ -4,7 +4,7 @@ namespace LINGYUN.Abp.Tencent.QQ;
 
 public class AbpTencentQQCacheItem
 {
-    public const string CacheKeyFormat = "pn:{0},pk:{1}";
+    public const string CacheKeyFormat = "pn:tenant-cloud,n:qq";
     public string AppId { get; set; }
     public string AppKey { get; set; }
     public bool IsMobile { get; set; }
@@ -23,8 +23,8 @@ public class AbpTencentQQCacheItem
         IsMobile = isMobile;
     }
 
-    public static string CalculateCacheKey(Guid? tenantId = null)
+    public static string CalculateCacheKey()
     {
-        return string.Format(CacheKeyFormat, tenantId.HasValue ? tenantId.Value.ToString() : "global", "tenant-qq");
+        return CacheKeyFormat;
     }
 }

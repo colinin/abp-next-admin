@@ -18,11 +18,15 @@ public class TenantCacheItemInvalidator : ILocalEventHandler<EntityChangedEventD
 
     public async virtual Task HandleEventAsync(EntityChangedEventData<Tenant> eventData)
     {
-        // 需要考虑三种情形下的缓存键
-        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(null, eventData.Entity.Name), considerUow: true);
-        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, null), considerUow: true);
-        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, eventData.Entity.Name), considerUow: true);
-        // 同时移除租户版本缓存
-        await Cache.RemoveAsync(EditionCacheItem.CalculateCacheKey(eventData.Entity.Id), considerUow: true);
+        var keys = new string[]
+        {
+            TenantCacheItem.CalculateCacheKey(null, eventData.Entity.Name),
+            TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, null),
+            TenantCacheItem.CalculateCacheKey(eventData.Entity.Id, eventData.Entity.Name),
+
+            // 同时移除租户版本缓存
+            EditionCacheItem.CalculateCacheKey(eventData.Entity.Id)
+        };
+        await Cache.RemoveManyAsync(keys, considerUow: true);
     }
 }
