@@ -60,7 +60,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
                         DisplayName = notification.DisplayName.Localize(StringLocalizerFactory),
                         Description = notification.Description?.Localize(StringLocalizerFactory) ?? notification.Name,
                         Lifetime = notification.NotificationLifetime,
-                        Type = notification.NotificationType
+                        Type = notification.NotificationType,
+                        ContentType = notification.ContentType
                     };
 
                     notificationGroup.Notifications.Add(notificationChildren);

@@ -31,7 +31,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey("client"),
+            TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
             async (_) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
@@ -87,7 +87,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
         return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey("client"),
+            TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
             async (_) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);

@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.MessageService.Mapper
             {
                 Name = source.NotificationName,
                 Type = source.Type,
+                ContentType = source.ContentType,
                 Severity = source.Severity,
                 CreationTime = source.CreationTime,
                 TenantId = source.TenantId

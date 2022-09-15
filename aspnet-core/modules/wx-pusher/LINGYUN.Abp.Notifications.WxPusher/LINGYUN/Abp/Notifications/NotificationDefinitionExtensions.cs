@@ -37,7 +37,14 @@ public static class NotificationDefinitionExtensions
             return contentType;
         }
 
-        return defaultContentType;
+        return notification.ContentType switch
+        {
+            NotificationContentType.Text => MessageContentType.Text,
+            NotificationContentType.Html => MessageContentType.Html,
+            NotificationContentType.Markdown => MessageContentType.Markdown,
+            NotificationContentType.Json => MessageContentType.Text,
+            _ => defaultContentType,
+        };
     }
     /// <summary>
     /// 消息主题(Topic)

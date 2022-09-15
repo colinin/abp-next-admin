@@ -47,6 +47,10 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public NotificationType NotificationType { get; set; }
         /// <summary>
+        /// 通知内容类型
+        /// </summary>
+        public NotificationContentType ContentType { get; set; }
+        /// <summary>
         /// 通知提供者
         /// </summary>
         public List<string> Providers { get; }
@@ -66,6 +70,7 @@ namespace LINGYUN.Abp.Notifications
            ILocalizableString description = null,
            NotificationType notificationType = NotificationType.Application,
            NotificationLifetime lifetime = NotificationLifetime.Persistent,
+           NotificationContentType contentType = NotificationContentType.Text,
            bool allowSubscriptionToClients = false)
         {
             Name = name;
@@ -73,6 +78,7 @@ namespace LINGYUN.Abp.Notifications
             Description = description;
             NotificationLifetime = lifetime;
             NotificationType = notificationType;
+            ContentType = contentType;
             AllowSubscriptionToClients = allowSubscriptionToClients;
 
             Providers = new List<string>();

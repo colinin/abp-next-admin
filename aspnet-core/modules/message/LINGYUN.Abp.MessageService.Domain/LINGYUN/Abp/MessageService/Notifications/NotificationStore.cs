@@ -329,7 +329,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
                 {
                     CreationTime = _clock.Now,
                     Type = notification.Type,
-                    // TODO: 通知过期时间应该可以配置
+                    ContentType = notification.ContentType,
                     ExpirationTime = _clock.Now.Add(_options.ExpirationTime)
                 };
 

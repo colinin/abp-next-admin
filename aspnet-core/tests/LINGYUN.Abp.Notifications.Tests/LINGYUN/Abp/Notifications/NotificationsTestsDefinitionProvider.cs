@@ -16,6 +16,7 @@
 
             group.AddNotification(NotificationsTestsNames.Test3,
                 notificationType: NotificationType.User,
+                contentType: NotificationContentType.Markdown,
                 lifetime: NotificationLifetime.OnlyOne);
         }
     }

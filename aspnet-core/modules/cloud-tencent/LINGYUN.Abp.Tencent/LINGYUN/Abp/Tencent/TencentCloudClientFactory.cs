@@ -12,9 +12,8 @@ public class TencentCloudClientFactory<TClient> : AbstractTencentCloudClientFact
 {
     public TencentCloudClientFactory(
         IMemoryCache clientCache, 
-        ICurrentTenant currentTenant, 
         ISettingProvider settingProvider) 
-        : base(clientCache, currentTenant, settingProvider)
+        : base(clientCache, settingProvider)
     {
     }
 

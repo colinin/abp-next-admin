@@ -24,5 +24,9 @@ namespace LINGYUN.Abp.MessageService.Notifications
         /// 通知类型
         /// </summary>
         public NotificationType Type { get; set; }
+        /// <summary>
+        /// 通知内容类型
+        /// </summary>
+        public NotificationContentType ContentType { get; set; }
     }
 }

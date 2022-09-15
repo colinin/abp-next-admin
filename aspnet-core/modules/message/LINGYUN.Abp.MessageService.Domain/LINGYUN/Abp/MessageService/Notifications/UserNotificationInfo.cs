@@ -13,6 +13,7 @@ public class UserNotificationInfo
     public string NotificationTypeName { get; set; }
     public DateTime CreationTime { get; set; }
     public NotificationType Type { get; set; }
+    public NotificationContentType ContentType { get; set; }
     public NotificationSeverity Severity { get; set; }
     public NotificationReadState State { get; set; }
 }
