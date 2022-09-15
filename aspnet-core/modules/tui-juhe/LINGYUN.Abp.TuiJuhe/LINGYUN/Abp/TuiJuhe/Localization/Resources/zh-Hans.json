@@ -1,0 +1,20 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:TuiJuhe": "聚合云推",
+    "Description:TuiJuhe": "聚合云推(TuiJuhe)",
+    "Settings:Security.Token": "用户令牌",
+    "Settings:Security.TokenDesc": "用户令牌，在个人中心(https://tui.juhe.cn/setup)页面查看获取.",
+    "Features:TuiJuhe": "聚合云推服务",
+    "Features:TuiJuheEnable": "启用聚合云推",
+    "Features:TuiJuheEnableDesc": "启用以使应用拥有聚合云推的能力.",
+    "Features:Message": "聚合云推消息推送",
+    "Features:MessageEnable": "启用聚合云推消息推送",
+    "Features:MessageEnableDesc": "启用以使应用将拥有通过聚合云推推送到实时消息的能力.",
+    "Features:Message.SendLimit": "聚合云推推送量",
+    "Features:Message.SendLimitDesc": "设置以限制聚合云推推送量.",
+    "Features:Message.SendLimitInterval": "聚合云推消息限制周期",
+    "Features:Message.SendLimitIntervalDesc": "设置聚合云推消息限制周期(时间刻度: 时).消息发送频率（请求限制）: 单位小时内不超过50次率.",
+    "Security": "安全选项"
+  }
+}

@@ -23,7 +23,7 @@ public class WxPusherUserProvider : WxPusherRequestProvider, IWxPusherUserProvid
         CancellationToken cancellationToken = default)
     {
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
 
         var content = await client.DeleteUserAsync(
             token,
@@ -49,7 +49,7 @@ public class WxPusherUserProvider : WxPusherRequestProvider, IWxPusherUserProvid
         }
 
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
 
         var content = await client.GetUserListAsync(
             token,
@@ -72,7 +72,7 @@ public class WxPusherUserProvider : WxPusherRequestProvider, IWxPusherUserProvid
         CancellationToken cancellationToken = default)
     {
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
 
         var content = await client.RejectUserAsync(
             token,

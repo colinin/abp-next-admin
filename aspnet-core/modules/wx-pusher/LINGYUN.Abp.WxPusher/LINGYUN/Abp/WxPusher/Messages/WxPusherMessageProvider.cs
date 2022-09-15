@@ -13,7 +13,7 @@ public class WxPusherMessageProvider : WxPusherRequestProvider, IWxPusherMessage
         int messageId,
         CancellationToken cancellationToken = default)
     {
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
 
         var content = await client.QueryMessageAsync(
             messageId,

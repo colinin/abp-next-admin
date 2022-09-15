@@ -25,7 +25,7 @@ public class WxPusherQrCodeProvider : WxPusherRequestProvider, IWxPusherQrCodePr
         CancellationToken cancellationToken = default)
     {
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
         var request = new CreateQrcodeRequest(token, extra, validTime);
 
         var content = await client.CreateQrcodeAsync(
@@ -43,7 +43,7 @@ public class WxPusherQrCodeProvider : WxPusherRequestProvider, IWxPusherQrCodePr
     {
         Check.NotNullOrWhiteSpace(code, nameof(code));
 
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
 
         var content = await client.GetScanQrCodeUidAsync(
             code,

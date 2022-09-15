@@ -34,7 +34,7 @@ public class WxPusherMessageSender : WxPusherRequestProvider, IWxPusherMessageSe
         CancellationToken cancellationToken = default)
     {
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.GetPushPlusClient();
+        var client = HttpClientFactory.GetWxPusherClient();
         var sendMessage = new SendMessage(
             token,
             content,

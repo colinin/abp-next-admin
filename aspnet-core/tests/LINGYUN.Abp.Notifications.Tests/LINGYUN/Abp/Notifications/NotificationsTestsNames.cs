@@ -9,5 +9,7 @@
         public const string Test2 = GroupName + ".Test2";
 
         public const string Test3 = GroupName + ".Test3";
+
+        public const string Test4 = GroupName + ".Test4";
     }
 }

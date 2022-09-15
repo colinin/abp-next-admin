@@ -2,9 +2,9 @@
 
 internal static class IHttpClientFactoryExtensions
 {
-    public static HttpClient GetWxPusherClient(
+    public static HttpClient GetTuiJuheClient(
         this IHttpClientFactory httpClientFactory)
     {
-        return httpClientFactory.CreateClient("_Abp_WxPusher_Client");
+        return httpClientFactory.CreateClient("_Abp_TuiJuhe_Client");
     }
 }
