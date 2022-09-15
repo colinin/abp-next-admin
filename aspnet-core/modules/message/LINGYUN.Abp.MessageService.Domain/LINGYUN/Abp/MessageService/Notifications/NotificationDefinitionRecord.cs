@@ -59,6 +59,10 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// </summary>
     public virtual NotificationType NotificationType { get; set; }
     /// <summary>
+    /// 通知内容类型
+    /// </summary>
+    public virtual NotificationContentType ContentType { get; set; }
+    /// <summary>
     /// 通知提供者
     /// </summary>
     /// <remarks>
@@ -86,7 +90,8 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         string resourceName = null,
         string localization = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
-        NotificationType notificationType = NotificationType.Application)
+        NotificationType notificationType = NotificationType.Application,
+        NotificationContentType contentType = NotificationContentType.Text)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), NotificationDefinitionRecordConsts.MaxNameLength);
@@ -95,6 +100,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         Description = Check.Length(description, nameof(description), NotificationDefinitionRecordConsts.MaxDescriptionLength);
         NotificationLifetime = lifetime;
         NotificationType = notificationType;
+        ContentType = contentType;
 
         SetLocalization(resourceName, localization);
 

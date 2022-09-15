@@ -11,12 +11,14 @@ namespace LINGYUN.Abp.Notifications
         public DateTime CreationTime { get; set; }
         public NotificationLifetime Lifetime { get; set; }
         public NotificationType Type { get; set; }
+        public NotificationContentType ContentType { get; set; }
         public NotificationSeverity Severity { get; set; }
         public NotificationInfo()
         {
             Data = new NotificationData();
             Lifetime = NotificationLifetime.Persistent;
             Type = NotificationType.Application;
+            ContentType = NotificationContentType.Text;
             Severity = NotificationSeverity.Info;
 
             CreationTime = DateTime.Now;

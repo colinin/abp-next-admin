@@ -86,6 +86,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
                         new FixedLocalizableString(notification.Description),
                         notification.NotificationType,
                         notification.Lifetime,
+                        notification.ContentType,
                         notification.AllowSubscriptionToClients);
 
                     notificationDefine.Properties.AddIfNotContains(notification.Properties);
@@ -117,6 +118,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
                     new FixedLocalizableString(notification.Description),
                     notification.NotificationType,
                     notification.Lifetime,
+                    notification.ContentType,
                     notification.AllowSubscriptionToClients);
 
                 notificationDefinition.WithProviders(notification.Providers.ToArray());
@@ -288,6 +290,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
                     description,
                     record.NotificationLifetime,
                     record.NotificationType,
+                    record.ContentType,
                     providers,
                     record.AllowSubscriptionToClients);
                 recordCache.Properties.AddIfNotContains(record.ExtraProperties);

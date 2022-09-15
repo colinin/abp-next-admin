@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.PushPlus.Channel;
 using LINGYUN.Abp.PushPlus.Message;
-using System;
 
 namespace LINGYUN.Abp.Notifications;
 public static class NotificationDefinitionExtensions
@@ -17,7 +16,7 @@ public static class NotificationDefinitionExtensions
     /// <returns></returns>
     public static NotificationDefinition WithTemplate(
         this NotificationDefinition notification,
-        PushPlusMessageTemplate template = PushPlusMessageTemplate.Text)
+        PushPlusMessageTemplate template = PushPlusMessageTemplate.Html)
     {
         return notification.WithProperty(TemplateKey, template);
     }
@@ -29,7 +28,7 @@ public static class NotificationDefinitionExtensions
     /// <returns></returns>
     public static PushPlusMessageTemplate GetTemplateOrDefault(
         this NotificationDefinition notification,
-        PushPlusMessageTemplate defaultTemplate = PushPlusMessageTemplate.Text)
+        PushPlusMessageTemplate defaultTemplate = PushPlusMessageTemplate.Html)
     {
         if (notification.Properties.TryGetValue(TemplateKey, out var defineTemplate) == true &&
             defineTemplate is PushPlusMessageTemplate template)
@@ -37,7 +36,14 @@ public static class NotificationDefinitionExtensions
             return template;
         }
 
-        return defaultTemplate;
+        return notification.ContentType switch
+        {
+            NotificationContentType.Text => PushPlusMessageTemplate.Text,
+            NotificationContentType.Html => PushPlusMessageTemplate.Html,
+            NotificationContentType.Markdown => PushPlusMessageTemplate.Markdown,
+            NotificationContentType.Json => PushPlusMessageTemplate.Json,
+            _ => defaultTemplate,
+        };
     }
     /// <summary>
     /// 设定消息发送通道

@@ -57,7 +57,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      NotificationTypeName = n.NotificationTypeName,
                                      Severity = n.Severity,
                                      State = un.ReadStatus,
-                                     Type = n.Type
+                                     Type = n.Type,
+                                     ContentType = n.ContentType
                                  };
 
             return await notifilerQuery
@@ -98,7 +99,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      NotificationTypeName = n.NotificationTypeName,
                                      Severity = n.Severity,
                                      State = un.ReadStatus,
-                                     Type = n.Type
+                                     Type = n.Type,
+                                     ContentType = n.ContentType
                                  };
 
             return await notifilerQuery
@@ -166,7 +168,8 @@ namespace LINGYUN.Abp.MessageService.Notifications
                                      NotificationTypeName = n.NotificationTypeName,
                                      Severity = n.Severity,
                                      State = un.ReadStatus,
-                                     Type = n.Type
+                                     Type = n.Type,
+                                     ContentType = n.ContentType
                                  };
 
             return await notifilerQuery

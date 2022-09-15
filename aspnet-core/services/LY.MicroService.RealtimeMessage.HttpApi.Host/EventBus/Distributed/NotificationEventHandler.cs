@@ -194,6 +194,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     TenantId = tenantId,
                     Severity = eventData.Severity,
                     Type = notification.NotificationType,
+                    ContentType = notification.ContentType,
                     CreationTime = eventData.CreationTime,
                     Lifetime = notification.NotificationLifetime,
                 };
@@ -282,7 +283,8 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     Severity = eventData.Severity,
                     Lifetime = notification.NotificationLifetime,
                     TenantId = tenantId,
-                    Type = notification.NotificationType
+                    Type = notification.NotificationType,
+                    ContentType = notification.ContentType,
                 };
                 notificationInfo.SetId(eventData.Id);
 

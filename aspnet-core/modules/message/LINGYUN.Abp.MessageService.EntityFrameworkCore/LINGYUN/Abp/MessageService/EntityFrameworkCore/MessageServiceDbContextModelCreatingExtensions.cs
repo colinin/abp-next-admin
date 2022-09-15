@@ -2,6 +2,7 @@
 using LINGYUN.Abp.MessageService.Groups;
 using LINGYUN.Abp.MessageService.Notifications;
 using LINGYUN.Abp.MessageService.Subscriptions;
+using LINGYUN.Abp.Notifications;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Volo.Abp;
@@ -28,6 +29,9 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 b.Property(p => p.NotificationName).HasMaxLength(NotificationConsts.MaxNameLength).IsRequired();
                 b.Property(p => p.NotificationTypeName).HasMaxLength(NotificationConsts.MaxTypeNameLength).IsRequired();
                 //b.Property(p => p.NotificationData).HasMaxLength(NotificationConsts.MaxDataLength).IsRequired();
+
+                b.Property(p => p.ContentType)
+                 .HasDefaultValue(NotificationContentType.Text);
 
                 b.ConfigureByConvention();
 
@@ -228,6 +232,9 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxLocalizationLength);
                 b.Property(p => p.Providers)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
+
+                b.Property(p => p.ContentType)
+                 .HasDefaultValue(NotificationContentType.Text);
 
                 b.ConfigureByConvention();
             });

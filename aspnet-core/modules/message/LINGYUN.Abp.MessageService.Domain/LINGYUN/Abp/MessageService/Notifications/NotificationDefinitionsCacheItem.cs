@@ -38,6 +38,7 @@ public class NotificationDefinitionCacheItem
     public string Description { get; set; }
     public NotificationLifetime Lifetime { get; set; }
     public NotificationType NotificationType { get; set; }
+    public NotificationContentType ContentType { get; set; }
     public List<string> Providers { get; set; }
     public bool AllowSubscriptionToClients { get; set; }
     public Dictionary<string, object> Properties { get; set; }
@@ -54,6 +55,7 @@ public class NotificationDefinitionCacheItem
         string description = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
         NotificationType notificationType = NotificationType.Application,
+        NotificationContentType contentType = NotificationContentType.Text,
         List<string> providers = null,
         bool allowSubscriptionToClients  = false)
     {
@@ -63,6 +65,7 @@ public class NotificationDefinitionCacheItem
         Description = description;
         Lifetime = lifetime;
         NotificationType = notificationType;
+        ContentType = contentType;
         Providers = providers ?? new List<string>();
         AllowSubscriptionToClients = allowSubscriptionToClients;
 

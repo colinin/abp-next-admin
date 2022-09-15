@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Notifications
         }
 
         [Theory]
-        [InlineData(NotificationsTestsNames.Test1)]
+        [InlineData(NotificationsTestsNames.Test3)]
         public async Task Get_Test(string name)
         {
             var notification = await NotificationDefinitionManager.GetAsync(name);
@@ -46,7 +46,8 @@ namespace LINGYUN.Abp.Notifications
             notification.Description.ShouldBeNull();
             notification.AllowSubscriptionToClients.ShouldBeFalse();
             notification.NotificationLifetime.ShouldBe(NotificationLifetime.OnlyOne);
-            notification.NotificationType.ShouldBe(NotificationType.Application);
+            notification.NotificationType.ShouldBe(NotificationType.User);
+            notification.ContentType.ShouldBe(NotificationContentType.Markdown);
         }
     }
 }

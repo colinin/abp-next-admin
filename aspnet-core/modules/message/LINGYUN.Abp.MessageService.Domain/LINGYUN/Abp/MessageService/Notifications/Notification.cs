@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
         public virtual Guid? TenantId { get; protected set; }
         public virtual NotificationSeverity Severity { get; protected set; }
         public virtual NotificationType Type { get; set; }
+        public virtual NotificationContentType ContentType { get; set; }
         public virtual long NotificationId { get; protected set; }
         public virtual string NotificationName { get; protected set; }
         public virtual string NotificationTypeName { get; protected set; }
@@ -43,6 +44,7 @@ namespace LINGYUN.Abp.MessageService.Notifications
             NotificationName = name;
             NotificationTypeName = dataType;
             Type = NotificationType.Application;
+            ContentType = NotificationContentType.Text;
             TenantId = tenantId;
 
             SetData(data);

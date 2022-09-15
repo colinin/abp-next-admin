@@ -58,6 +58,7 @@ namespace LINGYUN.Abp.Notifications
            ILocalizableString description = null,
            NotificationType notificationType = NotificationType.Application,
            NotificationLifetime lifetime = NotificationLifetime.Persistent,
+           NotificationContentType contentType = NotificationContentType.Text,
            bool allowSubscriptionToClients = false)
         {
             var notification = new NotificationDefinition(
@@ -66,6 +67,7 @@ namespace LINGYUN.Abp.Notifications
                 description,
                 notificationType,
                 lifetime,
+                contentType,
                 allowSubscriptionToClients
             );
 
