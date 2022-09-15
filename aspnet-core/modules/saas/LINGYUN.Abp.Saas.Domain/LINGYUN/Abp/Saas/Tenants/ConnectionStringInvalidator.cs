@@ -1,7 +1,4 @@
 ﻿using LINGYUN.Abp.MultiTenancy;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -22,19 +19,17 @@ public class ConnectionStringInvalidator :
 
     public async virtual Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
     {
-        await Cache.RemoveAsync(
-                    TenantCacheItem.CalculateCacheKey(
-                        eventData.TenantId,
-                        eventData.TenantName),
-                    considerUow: true);
+        // 需要考虑三种情形下的缓存键
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(null, eventData.TenantName), considerUow: true);
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.TenantId, null), considerUow: true);
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.TenantId, eventData.TenantName), considerUow: true);
     }
 
     public async virtual Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
     {
-        await Cache.RemoveAsync(
-            TenantCacheItem.CalculateCacheKey(
-                eventData.TenantId,
-                eventData.TenantName),
-            considerUow: true);
+        // 需要考虑三种情形下的缓存键
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(null, eventData.TenantName), considerUow: true);
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.TenantId, null), considerUow: true);
+        await Cache.RemoveAsync(TenantCacheItem.CalculateCacheKey(eventData.TenantId, eventData.TenantName), considerUow: true);
     }
 }
