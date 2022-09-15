@@ -40,29 +40,37 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     {
         var client = _clientFactory.Create();
 
-        var resposne = await client.SearchAsync<EntityChange>(
-            dsl => dsl.Index(CreateIndex())
-                      .Query(query =>
-                            query.Bool(bo => 
-                                bo.Must(m => 
-                                    m.Nested(n =>
-                                        n.InnerHits()
-                                         .Path("EntityChanges")
-                                         .Query(nq =>
-                                            nq.Term(nqt =>
-                                                nqt.Field(GetField(nameof(EntityChange.Id))).Value(entityChangeId)))))))
-                      .Source(x => x.Excludes(f => f.Field("*")))
-                      .Sort(entity => entity.Field("EntityChanges.ChangeTime", SortOrder.Descending))
-                      .Size(1),
-            ct: cancellationToken);
+        var sortOrder = SortOrder.Descending;
 
-        if (resposne.Shards.Successful > 0)
+        var querys = BuildQueryDescriptor(entityChangeId: entityChangeId);
+
+        static SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
         {
-            var hits = resposne.Hits.FirstOrDefault();
-            if (hits.InnerHits.Count > 0)
-            {
-                return hits.InnerHits.First().Value.Documents<EntityChange>().FirstOrDefault();
-            }
+            selector.IncludeAll()
+                    .Excludes(field =>
+                        field.Field(f => f.Actions)
+                             .Field(f => f.Comments)
+                             .Field(f => f.Exceptions));
+
+            return selector;
+        }
+
+        var response = await client.SearchAsync<AuditLog>(dsl =>
+            dsl.Index(CreateIndex())
+               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+               .Source(SourceFilter)
+               .Sort(log => log.Field(GetField(nameof(EntityChange.ChangeTime)), sortOrder))
+               .From(0)
+               .Size(1),
+            cancellationToken);
+
+        var auditLog = response.Documents.FirstOrDefault();
+        if (auditLog != null)
+        {
+            return auditLog
+                .EntityChanges
+                .Select(e => e)
+                .FirstOrDefault();
         }
 
         return null;
@@ -77,40 +85,39 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         string entityTypeFullName = null,
         CancellationToken cancellationToken = default)
     {
-        await Task.CompletedTask;
-        return 0;
-        //var client = _clientFactory.Create();
+        var client = _clientFactory.Create();
 
-        //var querys = BuildQueryDescriptor(
-        //    auditLogId,
-        //    startTime,
-        //    endTime,
-        //    changeType,
-        //    entityId,
-        //    entityTypeFullName);
+        var querys = BuildQueryDescriptor(
+            auditLogId,
+            startTime,
+            endTime,
+            changeType,
+            entityId,
+            entityTypeFullName);
 
-        //Func<QueryContainerDescriptor<EntityChange>, QueryContainer> selector = q => q.MatchAll();
-        //if (querys.Count > 0)
-        //{
-        //    selector = q => q.Bool(b => b.Must(querys.ToArray()));
-        //}
+        SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
+        {
+            return selector
+                .Includes(field =>
+                    field.Field(f => f.UserName)
+                         .Field(f => f.EntityChanges))
+                .Excludes(field =>
+                    field.Field(f => f.Actions)
+                         .Field(f => f.Comments)
+                         .Field(f => f.Exceptions));
+        }
 
-        //var response = await client.CountAsync<EntityChange>(dsl =>
-        //    dsl.Index(CreateIndex())
-        //       .Query(q =>
-        //            q.Bool(b =>
-        //                b.Must(m =>
-        //                    m.Nested(n =>
-        //                        n.InnerHits(hit => hit.Source(s => s.ExcludeAll()))
-        //                         .Path("EntityChanges")
-        //                         .Query(selector)
-        //                   )
-        //                )
-        //            )
-        //       ),
-        //    ct: cancellationToken);
+        var response = await client.SearchAsync<AuditLog>(dsl =>
+            dsl.Index(CreateIndex())
+               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+               .Source(SourceFilter)
+               .From(0)
+               .Size(1000),
+            cancellationToken);
 
-        //return response.Count;
+        var auditLogs = response.Documents.ToList();
+
+        return auditLogs.Sum(log => log.EntityChanges.Count);
     }
 
     public async virtual Task<List<EntityChange>> GetListAsync(
@@ -126,72 +133,74 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        // TODO: 需要解决Nested格式数据返回方式
+        // TODO: 正确的索引可以避免性能损耗
 
-        //var client = _clientFactory.Create();
+        var result = new List<EntityChange>();
+        var client = _clientFactory.Create();
 
-        //var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-        //    ? SortOrder.Ascending : SortOrder.Descending;
-        //sorting = !sorting.IsNullOrWhiteSpace()
-        //    ? sorting.Split()[0]
-        //    : nameof(EntityChange.ChangeTime);
+        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
+                ? SortOrder.Ascending : SortOrder.Descending;
+        sorting = !sorting.IsNullOrWhiteSpace()
+                ? sorting.Split()[0]
+                : nameof(EntityChange.ChangeTime);
 
-        //var querys = BuildQueryDescriptor(
-        //    auditLogId,
-        //    startTime,
-        //    endTime,
-        //    changeType,
-        //    entityId,
-        //    entityTypeFullName);
+        var querys = BuildQueryDescriptor(
+            auditLogId,
+            startTime,
+            endTime,
+            changeType,
+            entityId,
+            entityTypeFullName);
 
-        //SourceFilterDescriptor<EntityChange> SourceFilter(SourceFilterDescriptor<EntityChange> selector)
-        //{
-        //    selector.Includes(GetEntityChangeSources());
-        //    if (!includeDetails)
-        //    {
-        //        selector.Excludes(field =>
-        //            field.Field("EntityChanges.PropertyChanges")
-        //                 .Field("EntityChanges.ExtraProperties"));
-        //    }
+        SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
+        {
+            selector
+                .Includes(field =>
+                    field.Field(f => f.UserName)
+                         .Field(f => f.EntityChanges));
+            if (includeDetails)
+            {
+                selector.Includes(field =>
+                    field.Field(f => f.Actions)
+                         .Field(f => f.Comments)
+                         .Field(f => f.Exceptions));
+            }
 
-        //    return selector;
-        //}
+            return selector;
+        }
 
-        //Func<QueryContainerDescriptor<EntityChange>, QueryContainer> selector = q => q.MatchAll();
-        //if (querys.Count > 0)
-        //{
-        //    selector = q => q.Bool(b => b.Must(querys.ToArray()));
-        //}
+        var response = await client.SearchAsync<AuditLog>(dsl =>
+            dsl.Index(CreateIndex())
+               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+               .Source(SourceFilter)
+               .Sort(log => log.Field(GetField(nameof(EntityChange.ChangeTime)), sortOrder))
+               .From(0)
+               .Size(1000), 
+            cancellationToken);
 
-        //var response = await client.SearchAsync<EntityChange>(dsl =>
-        //    dsl.Index(CreateIndex())
-        //       .Query(q =>
-        //            q.Bool(b =>
-        //                b.Must(m =>
-        //                    m.Nested(n =>
-        //                        n.InnerHits(hit => hit.Source(SourceFilter))
-        //                         .Path("EntityChanges")
-        //                         .Query(selector)
-        //                   )
-        //                )
-        //            )
-        //       )
-        //       .Source(x => x.Excludes(f => f.Field("*")))
-        //       .Sort(entity => entity.Field(GetField(sorting), sortOrder))
-        //       .From(skipCount)
-        //       .Size(maxResultCount),
-        //    cancellationToken);
+        var auditLogs = response.Documents.ToList();
+        if (auditLogs.Any())
+        {
+            var groupAuditLogs = auditLogs.GroupBy(log => log.UserName);
+            foreach (var group in groupAuditLogs)
+            {
+                var entityChangesList = group.Select(log => log.EntityChanges);
 
-        //if (response.Shards.Successful > 0)
-        //{
-        //    var hits = response.Hits.FirstOrDefault();
-        //    if (hits.InnerHits.Count > 0)
-        //    {
-        //        return hits.InnerHits.First().Value.Documents<EntityChange>().ToList();
-        //    }
-        //}
-        await Task.CompletedTask;
-        return new List<EntityChange>();
+                foreach (var entityChanges in entityChangesList)
+                {
+                    foreach (var entityChange in entityChanges)
+                    {
+                        result.Add(entityChange);
+                    }
+                }
+            }
+        }
+
+        // TODO: 临时在内存中分页
+        return result
+            .AsQueryable()
+            .PageBy(skipCount, maxResultCount)
+            .ToList();
     }
 
     public async virtual Task<EntityChangeWithUsername> GetWithUsernameAsync(
@@ -200,41 +209,43 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     {
         var client = _clientFactory.Create();
 
-        var response = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Index(CreateIndex())
-                      .Query(query =>
-                            query.Bool(bo =>
-                                bo.Must(m =>
-                                    m.Nested(n => 
-                                        n.InnerHits()
-                                         .Path("EntityChanges")
-                                         .Query(nq => 
-                                            nq.Bool(nb =>
-                                                nb.Must(nm =>
-                                                    nm.Term(nt =>
-                                                        nt.Field(GetField(nameof(EntityChange.Id))).Value(entityChangeId)))))))))
-                      .Source(selector => selector.Includes(field =>
-                            field.Field(f => f.UserName)))
-                      .Size(1),
-            ct: cancellationToken);
+        var sortOrder = SortOrder.Descending;
 
-        var auditLog = response.Documents.FirstOrDefault();
-        EntityChange entityChange = null;
+        var querys = BuildQueryDescriptor(entityChangeId: entityChangeId);
 
-        if (response.Shards.Successful > 0)
+        static SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
         {
-            var hits = response.Hits.FirstOrDefault();
-            if (hits.InnerHits.Count > 0)
-            {
-                entityChange = hits.InnerHits.First().Value.Documents<EntityChange>().FirstOrDefault();
-            }
+            selector.IncludeAll()
+                    .Excludes(field =>
+                        field.Field(f => f.Actions)
+                             .Field(f => f.Comments)
+                             .Field(f => f.Exceptions));
+
+            return selector;
         }
 
-        return new EntityChangeWithUsername()
+        var response = await client.SearchAsync<AuditLog>(dsl =>
+            dsl.Index(CreateIndex())
+               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+               .Source(SourceFilter)
+               .Sort(log => log.Field(GetField(nameof(EntityChange.ChangeTime)), sortOrder))
+               .From(0)
+               .Size(1),
+            cancellationToken);
+
+        var auditLog = response.Documents.FirstOrDefault();
+        if (auditLog != null)
         {
-            EntityChange = entityChange,
-            UserName = auditLog?.UserName
-        };
+            return auditLog.EntityChanges.Select(e => 
+                new EntityChangeWithUsername
+                {
+                    UserName = auditLog.UserName,
+                    EntityChange = e
+                })
+                .FirstOrDefault();
+        }
+
+        return null;
     }
 
     public async virtual Task<List<EntityChangeWithUsername>> GetWithUsernameAsync(
@@ -242,61 +253,69 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         string entityTypeFullName, 
         CancellationToken cancellationToken = default)
     {
+        var result = new List<EntityChangeWithUsername>();
         var client = _clientFactory.Create();
 
-        var response = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Index(CreateIndex())
-                      .Query(query =>
-                            query.Bool(bo =>
-                                bo.Must(m =>
-                                    m.Nested(n =>
-                                        n.InnerHits()
-                                         .Path("EntityChanges")
-                                         .Query(nq =>
-                                            nq.Bool(nb =>
-                                                nb.Must(nm =>
-                                                    nm.Term(nt =>
-                                                        nt.Field(GetField(nameof(EntityChange.EntityId))).Value(entityId)),
-                                                        nm =>
-                                                    nm.Term(nt =>
-                                                        nt.Field(GetField(nameof(EntityChange.EntityTypeFullName))).Value(entityTypeFullName))
-                                                    )
-                                                )
-                                            )
-                                         )
-                                    )
-                                )
-                            )
-                      .Source(selector => selector.Includes(field => 
-                            field.Field(f => f.UserName)))
-                      .Sort(entity => entity.Field(f => f.ExecutionTime, SortOrder.Descending)),
-            ct: cancellationToken);
+        var sortOrder = SortOrder.Descending;
 
-        if (response.Hits.Count > 0)
+        var querys = BuildQueryDescriptor(entityId: entityId, entityTypeFullName: entityTypeFullName);
+
+        static SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
         {
-            return response.Hits.
-                Select(hit => new EntityChangeWithUsername
-                {
-                    UserName = hit.Source.UserName,
-                    EntityChange = hit.InnerHits.Any() ? 
-                        hit.InnerHits.First().Value.Documents<EntityChange>().FirstOrDefault()
-                        : null
-                })
-                .ToList();
+            selector.IncludeAll()
+                    .Excludes(field =>
+                        field.Field(f => f.Actions)
+                             .Field(f => f.Comments)
+                             .Field(f => f.Exceptions));
+
+            return selector;
         }
 
-        return new List<EntityChangeWithUsername>();
+        var response = await client.SearchAsync<AuditLog>(dsl =>
+            dsl.Index(CreateIndex())
+               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
+               .Source(SourceFilter)
+               .Sort(log => log.Field(GetField(nameof(EntityChange.ChangeTime)), sortOrder))
+               .From(0)
+               .Size(100),
+            cancellationToken);
+
+        var auditLogs = response.Documents.ToList();
+        if (auditLogs.Any())
+        {
+            var groupAuditLogs = auditLogs.GroupBy(log => log.UserName);
+            foreach (var group in groupAuditLogs)
+            {
+                var entityChangesList = group.Select(log => log.EntityChanges);
+
+                foreach (var entityChanges in entityChangesList)
+                {
+                    foreach (var entityChange in entityChanges.Where(e => e.EntityId.Equals(entityId) && e.EntityTypeFullName.Equals(entityTypeFullName)))
+                    {
+                        result.Add(
+                            new EntityChangeWithUsername
+                            {
+                                UserName = group.Key,
+                                EntityChange = entityChange
+                            });
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
-    protected virtual List<Func<QueryContainerDescriptor<EntityChange>, QueryContainer>> BuildQueryDescriptor(
+    protected virtual List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>> BuildQueryDescriptor(
         Guid? auditLogId = null,
         DateTime? startTime = null,
         DateTime? endTime = null,
         EntityChangeType? changeType = null,
         string entityId = null,
-        string entityTypeFullName = null)
+        string entityTypeFullName = null,
+        Guid? entityChangeId = null)
     {
-        var querys = new List<Func<QueryContainerDescriptor<EntityChange>, QueryContainer>>();
+        var querys = new List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>>();
 
         if (auditLogId.HasValue)
         {
@@ -321,6 +340,10 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         if (!entityTypeFullName.IsNullOrWhiteSpace())
         {
             querys.Add(entity => entity.Wildcard(q => q.Field(GetField(nameof(EntityChange.EntityTypeFullName))).Value($"*{entityTypeFullName}*")));
+        }
+        if (entityChangeId.HasValue)
+        {
+            querys.Add(entity => entity.Term(q => q.Field(GetField(nameof(EntityChange.Id))).Value(entityChangeId)));
         }
 
         return querys;

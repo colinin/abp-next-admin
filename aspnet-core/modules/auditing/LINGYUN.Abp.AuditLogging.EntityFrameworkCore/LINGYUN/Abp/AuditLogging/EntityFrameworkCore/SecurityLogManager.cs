@@ -14,7 +14,7 @@ using Volo.Abp.Uow;
 namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
 {
     [Dependency(ReplaceServices = true)]
-    public class SecurityLogManager : ISecurityLogManager, ISingletonDependency
+    public class SecurityLogManager : ISecurityLogManager, ITransientDependency
     {
         public ILogger<SecurityLogManager> Logger { get; set; }
 

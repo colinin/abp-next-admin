@@ -11,13 +11,13 @@ namespace LINGYUN.Abp.TuiJuhe.SettingManagement
     [DependsOn(
         typeof(AbpTuiJuheModule),
         typeof(AbpAspNetCoreMvcModule))]
-    public class AbpWxPusherSettingManagementModule : AbpModule
+    public class AbpTuiJuheSettingManagementModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpWxPusherSettingManagementModule).Assembly);
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTuiJuheSettingManagementModule).Assembly);
             });
         }
 
@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.TuiJuhe.SettingManagement
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpWxPusherSettingManagementModule>();
+                options.FileSets.AddEmbedded<AbpTuiJuheSettingManagementModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
