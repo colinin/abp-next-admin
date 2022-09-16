@@ -1,5 +1,13 @@
 import { defAbpHttp } from '/@/utils/http/abp';
-import { AuditLog, GetAuditLogPagedRequest } from './model/auditLogModel';
+import {
+  AuditLog,
+  EntityChange,
+  EntityChangeWithUsername,
+  GetAuditLogPagedRequest,
+  EntityChangeGetByPagedRequest,
+  EntityChangeGetWithUsernameInput
+} from './model/auditLogModel';
+import { ListResultDto } from '../model/baseModel';
 
 enum Api {
   RemoteService = 'AbpAuditing',
@@ -38,3 +46,21 @@ export const getList = (input: GetAuditLogPagedRequest) => {
     },
   });
 };
+
+export const getEntityChanges = (input: EntityChangeGetByPagedRequest) => {
+  return defAbpHttp.pagedRequest<EntityChange>({
+    service: Api.RemoteService,
+    controller: 'EntityChanges',
+    action: 'GetListAsync',
+    params: {
+      input: input,
+    },
+  });
+}
+
+export const getEntityChangesWithUsername = (input: EntityChangeGetWithUsernameInput) => {
+  return defAbpHttp.get<ListResultDto<EntityChangeWithUsername>>({
+    url: '/api/auditing/entity-changes/with-username',
+    params: input,
+  });
+}
