@@ -25,6 +25,11 @@ export interface EntityChange {
   extraProperties?: { [key: string]: any };
 }
 
+export interface EntityChangeWithUsername {
+  entityChange: EntityChange;
+  userName?: string;
+}
+
 export interface Action {
   id: string;
   serviceName?: string;
@@ -73,4 +78,18 @@ export interface GetAuditLogPagedRequest extends PagedAndSortedResultRequestDto 
   minExecutionDuration?: number;
   hasException?: boolean;
   httpStatusCode?: number;
+}
+
+export interface EntityChangeGetByPagedRequest extends PagedAndSortedResultRequestDto {
+  auditLogId?: string;
+  startTime?: Date;
+  endTime?: Date;
+  changeType?: ChangeType;
+  entityId?: string;
+  entityTypeFullName?: string;
+}
+
+export interface EntityChangeGetWithUsernameInput {
+  entityId?: string;
+  entityTypeFullName?: string;
 }

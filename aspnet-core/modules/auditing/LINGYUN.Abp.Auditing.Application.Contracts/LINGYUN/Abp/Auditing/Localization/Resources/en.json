@@ -48,6 +48,7 @@
     "MethodName": "Method",
     "Parameters": "Parameters",
     "EntitiesChanged": "Entities changed",
+    "ChangeTime": "Change time",
     "ChangeType": "Change type",
     "EntityTypeFullName": "Entity type",
     "EntityId": "Entity id",

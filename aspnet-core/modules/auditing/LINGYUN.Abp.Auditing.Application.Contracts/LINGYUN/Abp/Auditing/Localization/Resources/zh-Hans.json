@@ -48,6 +48,7 @@
     "MethodName": "方法名称",
     "Parameters": "参数列表",
     "EntitiesChanged": "实体变更",
+    "ChangeTime": "变更时间",
     "ChangeType": "变更类型",
     "EntityTypeFullName": "实体类型",
     "EntityId": "实体标识",
