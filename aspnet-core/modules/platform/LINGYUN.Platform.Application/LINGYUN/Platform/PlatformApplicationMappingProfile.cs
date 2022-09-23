@@ -20,6 +20,7 @@ namespace LINGYUN.Platform
                 .ForMember(dto => dto.Startup, map => map.Ignore());
             CreateMap<Layout, LayoutDto>()
                 .ForMember(dto => dto.Meta, map => map.MapFrom(src => src.ExtraProperties));
+            CreateMap<UserFavoriteMenu, UserFavoriteMenuDto>();
         }
     }
 }

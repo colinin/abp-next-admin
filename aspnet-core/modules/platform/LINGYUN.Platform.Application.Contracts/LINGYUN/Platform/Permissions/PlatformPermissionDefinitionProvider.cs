@@ -37,6 +37,7 @@ namespace LINGYUN.Platform.Permissions
             menu.AddChild(PlatformPermissions.Menu.Delete, L("Permission:Delete"));
             menu.AddChild(PlatformPermissions.Menu.ManageRoles, L("Permission:ManageRoleMenus"));
             menu.AddChild(PlatformPermissions.Menu.ManageUsers, L("Permission:ManageUserMenus"));
+            menu.AddChild(PlatformPermissions.Menu.ManageUserFavorites, L("Permission:ManageUserFavoriteMenus"));
 
 
             // TODO: 2020-07-27 目前abp不支持对象存储管理（或者属于企业版?）需要创建一个 LINGYUN.Abp.BlobStoring 项目自行实现

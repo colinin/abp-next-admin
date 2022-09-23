@@ -45,6 +45,8 @@ namespace LINGYUN.Platform.Permissions
             public const string ManageRoles = Default + ".ManageRoles";
 
             public const string ManageUsers = Default + ".ManageUsers";
+
+            public const string ManageUserFavorites = Default + ".ManageUserFavorites";
         }
 
         // 如果abp后期提供对象存储的目录管理接口,则启用此权限

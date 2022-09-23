@@ -23,10 +23,18 @@ namespace LINGYUN.Platform.Menus
 
         Task SetUserStartupAsync(Guid id, UserMenuStartupInput input);
 
+        Task SetUserFavoriteMenusAsync(Guid userId, UserFavoriteMenuSetInput input);
+
         Task SetRoleMenusAsync(RoleMenuInput input);
 
         Task SetRoleStartupAsync(Guid id, RoleMenuStartupInput input);
 
         Task<ListResultDto<MenuDto>> GetCurrentUserMenuListAsync(GetMenuInput input);
+
+        Task SetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuSetInput input);
+
+        Task<ListResultDto<UserFavoriteMenuDto>> GetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuGetListInput input);
+
+        Task<ListResultDto<UserFavoriteMenuDto>> GetUserFavoriteMenuListAsync(Guid userId, UserFavoriteMenuGetListInput input);
     }
 }

@@ -3,7 +3,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Routes
 {
-    public class RouteEto : IMultiTenant
+    public abstract class RouteEto : IMultiTenant
     {
         public Guid? TenantId { get; set; }
         public Guid Id { get; set; }

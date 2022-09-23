@@ -23,6 +23,8 @@ export interface RequestOptions {
   ignoreCancelToken?: boolean;
   // Whether to send token in header
   withToken?: boolean;
+  // Whether to send Accept-Language in header
+  withAcceptLanguage?: boolean;
 }
 
 export interface Result<T = any> {

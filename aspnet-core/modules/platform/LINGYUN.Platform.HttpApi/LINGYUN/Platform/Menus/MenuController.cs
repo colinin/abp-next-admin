@@ -138,5 +138,33 @@ namespace LINGYUN.Platform.Menus
                 Framework = framework
             });
         }
+
+        [HttpPut]
+        [Route("favorites/by-user/{userId}")]
+        public async virtual Task SetUserFavoriteMenusAsync(Guid userId, UserFavoriteMenuSetInput input)
+        {
+            await MenuAppService.SetUserFavoriteMenusAsync(userId, input);
+        }
+
+        [HttpGet]
+        [Route("favorites/by-user/{userId}")]
+        public async virtual Task<ListResultDto<UserFavoriteMenuDto>> GetUserFavoriteMenuListAsync(Guid userId, UserFavoriteMenuGetListInput input)
+        {
+            return await MenuAppService.GetUserFavoriteMenuListAsync(userId, input);
+        }
+
+        [HttpPut]
+        [Route("favorites/by-current-user")]
+        public async virtual Task SetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuSetInput input)
+        {
+            await MenuAppService.SetCurrentUserFavoriteMenuListAsync(input);
+        }
+
+        [HttpGet]
+        [Route("favorites/by-current-user")]
+        public async virtual Task<ListResultDto<UserFavoriteMenuDto>> GetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuGetListInput input)
+        {
+            return await MenuAppService.GetCurrentUserFavoriteMenuListAsync(input);
+        }
     }
 }

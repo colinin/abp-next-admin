@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Platform.Datas;
+using LINGYUN.Platform.Layouts;
+using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.ObjectExtending;
 using LINGYUN.Platform.Routes;
 using LINGYUN.Platform.Versions;
@@ -42,11 +44,13 @@ namespace LINGYUN.Platform
 
             Configure<AbpDistributedEntityEventOptions>(options =>
             {
-                options.EtoMappings.Add<Route, RouteEto>(typeof(PlatformDomainModule));
+                options.EtoMappings.Add<Layout, LayoutEto>(typeof(PlatformDomainModule));
+
+                options.EtoMappings.Add<Menu, MenuEto>(typeof(PlatformDomainModule));
+                options.EtoMappings.Add<UserMenu, UserMenuEto>(typeof(PlatformDomainModule));
+                options.EtoMappings.Add<RoleMenu, RoleMenuEto>(typeof(PlatformDomainModule));
 
                 options.EtoMappings.Add<AppVersion, AppVersionEto>(typeof(PlatformDomainModule));
-
-                options.AutoEventSelectors.Add<AppVersion>();
             });
         }
         public override void PostConfigureServices(ServiceConfigurationContext context)

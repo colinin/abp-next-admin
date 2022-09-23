@@ -82,6 +82,34 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 x.HasIndex(i => new { i.UserId, i.MenuId });
             });
 
+            builder.Entity<UserFavoriteMenu>(x =>
+            {
+                x.ToTable(options.TablePrefix + "UserFavoriteMenus");
+
+                x.Property(p => p.Framework)
+                    .HasMaxLength(LayoutConsts.MaxFrameworkLength)
+                    .HasColumnName(nameof(Menu.Framework))
+                    .IsRequired();
+                x.Property(p => p.DisplayName)
+                    .HasMaxLength(RouteConsts.MaxDisplayNameLength)
+                    .HasColumnName(nameof(Route.DisplayName))
+                    .IsRequired();
+                x.Property(p => p.Name)
+                    .HasMaxLength(RouteConsts.MaxNameLength)
+                    .HasColumnName(nameof(Route.Name))
+                    .IsRequired();
+                x.Property(p => p.Path)
+                    .HasMaxLength(RouteConsts.MaxPathLength)
+                    .HasColumnName(nameof(Route.Path));
+                x.Property(p => p.Icon)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxIconLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.Icon));
+
+                x.ConfigureByConvention();
+
+                x.HasIndex(i => new { i.UserId, i.MenuId });
+            });
+
             builder.Entity<Data>(x =>
             {
                 x.ToTable(options.TablePrefix + "Datas");

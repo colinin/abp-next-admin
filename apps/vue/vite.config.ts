@@ -1,13 +1,31 @@
 import type { UserConfig, ConfigEnv } from 'vite';
 import pkg from './package.json';
 import dayjs from 'dayjs';
-import { loadEnv } from 'vite';
+import { loadEnv, ProxyOptions } from 'vite';
 import { resolve } from 'path';
 import { generateModifyVars } from './build/generate/generateModifyVars';
 import { createProxy } from './build/vite/proxy';
 import { wrapperEnv } from './build/utils';
 import { createVitePlugins } from './build/vite/plugin';
 import { OUTPUT_DIR } from './build/constant';
+
+/**
+ * 天气api代理
+ * production环境请在nginx配置
+ */
+function buildWeatherProxy(): Record<string, ProxyOptions> {
+  return {
+    '/wapi': {
+      target: 'http://www.nmc.cn',
+      changeOrigin: true,
+      rewrite: (path) => path.replace('/wapi', ''),
+      headers: {
+        host: 'www.nmc.cn',
+        referer: 'http://www.nmc.cn',
+      },
+    },
+  };
+}
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
@@ -58,7 +76,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       host: true,
       port: VITE_PORT,
       // Load proxy configuration from .env
-      proxy: createProxy(VITE_PROXY),
+      proxy: { ...createProxy(VITE_PROXY), ...buildWeatherProxy() },
     },
     esbuild: {
       pure: VITE_DROP_CONSOLE ? ['console.log', 'debugger'] : [],

@@ -27,6 +27,7 @@
     "Permission:Delete": "删除",
     "Permission:ManageItems": "管理项目",
     "Permission:ManageRoleMenus": "管理角色菜单",
-    "Permission:ManageUserMenus": "管理用户菜单"
+    "Permission:ManageUserMenus": "管理用户菜单",
+    "Permission:ManageUserFavoriteMenus": "管理用户收藏菜单"
   }
 }

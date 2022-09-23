@@ -8,6 +8,9 @@ namespace LINGYUN.Platform.Menus
 {
     public interface IMenuRepository : IBasicRepository<Menu, Guid>
     {
+        Task<List<Menu>> GetListAsync(
+            IEnumerable<Guid> idList,
+            CancellationToken cancellationToken = default);
         /// <summary>
         /// 获取最后一个菜单
         /// </summary>

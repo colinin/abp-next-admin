@@ -19,6 +19,15 @@ namespace LINGYUN.Platform.Menus
         {
         }
 
+        public async virtual Task<List<Menu>> GetListAsync(
+            IEnumerable<Guid> idList,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(x => idList.Contains(x.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async virtual Task<Menu> GetLastMenuAsync(
             Guid? parentId = null,
             CancellationToken cancellationToken = default)

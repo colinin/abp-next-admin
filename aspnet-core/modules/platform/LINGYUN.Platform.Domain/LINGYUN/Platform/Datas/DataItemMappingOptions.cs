@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Nodes;
 using Volo.Abp;
 
 namespace LINGYUN.Platform.Datas
@@ -24,14 +25,34 @@ namespace LINGYUN.Platform.Datas
                     return "";
                 }
 
-                if (value is JArray array)
+                if (value is Array array)
                 {
                     var joinString = string.Empty;
-                    foreach (var obj in array.Children())
+                    foreach (var obj in array)
                     {
                         joinString += obj.ToString() + ",";
                     }
-                    return joinString.EndsWith(",") ? joinString.Substring(0, joinString.Length - 1) : joinString;
+                    return joinString.EndsWith(",") ? joinString[..^1] : joinString;
+                }
+
+                if (value is JsonArray jsonArray)
+                {
+                    var joinString = string.Empty;
+                    foreach (var node in jsonArray)
+                    {
+                        joinString += node.ToString() + ",";
+                    }
+                    return joinString.EndsWith(",") ? joinString[..^1] : joinString;
+                }
+
+                if (value is JArray jArray)
+                {
+                    var joinString = string.Empty;
+                    foreach (var token in jArray.Children())
+                    {
+                        joinString += token.ToString() + ",";
+                    }
+                    return joinString.EndsWith(",") ? joinString[..^1] : joinString;
                 }
                 throw new BusinessException(PlatformErrorCodes.MetaFormatMissMatch);
             });

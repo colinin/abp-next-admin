@@ -17,10 +17,13 @@ namespace LINGYUN.Platform.Menus
     [Authorize]
     public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
     {
+        protected IStandardMenuConverter StandardMenuConverter => LazyServiceProvider.LazyGetRequiredService<IStandardMenuConverter>();
+
         protected DataItemMappingOptions DataItemMapping { get; }
         protected MenuManager MenuManager { get; }
         protected IMenuRepository MenuRepository { get; }
         protected IUserMenuRepository UserMenuRepository { get; }
+        protected IUserFavoriteMenuRepository UserFavoriteMenuRepository { get; }
         protected IRoleMenuRepository RoleMenuRepository { get; }
         protected IDataRepository DataRepository { get; }
         protected ILayoutRepository LayoutRepository { get; }
@@ -32,6 +35,7 @@ namespace LINGYUN.Platform.Menus
             ILayoutRepository layoutRepository,
             IUserMenuRepository userMenuRepository,
             IRoleMenuRepository roleMenuRepository,
+            IUserFavoriteMenuRepository userFavoriteMenuRepository,
             IOptions<DataItemMappingOptions> options)
         {
             MenuManager = menuManager;
@@ -40,6 +44,7 @@ namespace LINGYUN.Platform.Menus
             LayoutRepository = layoutRepository;
             UserMenuRepository = userMenuRepository;
             RoleMenuRepository = roleMenuRepository;
+            UserFavoriteMenuRepository = userFavoriteMenuRepository;
             DataItemMapping = options.Value;
         }
 
@@ -304,6 +309,74 @@ namespace LINGYUN.Platform.Menus
             }
 
             return new ListResultDto<MenuDto>(menuDtos);
+        }
+
+        [Authorize(PlatformPermissions.Menu.ManageUserFavorites)]
+        public async virtual Task SetUserFavoriteMenusAsync(Guid userId, UserFavoriteMenuSetInput input)
+        {
+            await SetUserFavoriteMenuListAsync(userId, input);
+        }
+
+        public async virtual Task SetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuSetInput input)
+        {
+            await SetUserFavoriteMenuListAsync(CurrentUser.GetId(), input);
+        }
+
+        [Authorize(PlatformPermissions.Menu.ManageUserFavorites)]
+        public async virtual Task<ListResultDto<UserFavoriteMenuDto>> GetUserFavoriteMenuListAsync(Guid userId, UserFavoriteMenuGetListInput input)
+        {
+            var userFacoriteMenus = await UserFavoriteMenuRepository.GetFavoriteMenusAsync(
+                userId, input.Framework);
+
+            return new ListResultDto<UserFavoriteMenuDto>(
+                ObjectMapper.Map<List<UserFavoriteMenu>, List<UserFavoriteMenuDto>>(userFacoriteMenus));
+        }
+
+        public async virtual Task<ListResultDto<UserFavoriteMenuDto>> GetCurrentUserFavoriteMenuListAsync(UserFavoriteMenuGetListInput input)
+        {
+            var userFacoriteMenus = await UserFavoriteMenuRepository.GetFavoriteMenusAsync(
+                CurrentUser.GetId(), input.Framework);
+
+            return new ListResultDto<UserFavoriteMenuDto>(
+                ObjectMapper.Map<List<UserFavoriteMenu>, List<UserFavoriteMenuDto>>(userFacoriteMenus));
+        }
+
+        protected async virtual Task SetUserFavoriteMenuListAsync(Guid userId, UserFavoriteMenuSetInput input)
+        {
+            var userFacoriteMenus = await UserFavoriteMenuRepository.GetFavoriteMenusAsync(
+                userId, input.Framework);
+
+            var wellDeleteMenus = userFacoriteMenus.Where(um => !input.MenuIds.Any(id => id == um.MenuId));
+            var wellInsertMenus = input.MenuIds.Where(id => !userFacoriteMenus.Any(um => um.MenuId == id));
+
+            if (wellInsertMenus.Any())
+            {
+                var insertMenus = new List<UserFavoriteMenu>();
+                var menus = await MenuRepository.GetListAsync(wellInsertMenus.Select(id => id));
+
+                foreach (var menu in menus)
+                {
+                    var standardMenu = StandardMenuConverter.Convert(menu);
+
+                    insertMenus.Add(
+                        new UserFavoriteMenu(
+                            GuidGenerator.Create(),
+                            menu.Id,
+                            userId,
+                            menu.Framework,
+                            standardMenu.Name,
+                            standardMenu.DisplayName,
+                            standardMenu.Path,
+                            standardMenu.Icon,
+                            CurrentTenant.Id));
+                }
+
+                await UserFavoriteMenuRepository.InsertManyAsync(insertMenus);
+            }
+
+            await UserFavoriteMenuRepository.DeleteManyAsync(wellDeleteMenus);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }
