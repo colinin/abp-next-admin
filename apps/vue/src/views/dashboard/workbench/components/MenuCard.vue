@@ -65,6 +65,7 @@
         {
           label: t('routes.dashboard.workbench.menus.deleteMenu'),
           icon: 'ant-design:delete-outlined',
+          disabled: menu.hasDefault,
           handler: () => {
             if (!menu.hasDefault) {
               createConfirm({
