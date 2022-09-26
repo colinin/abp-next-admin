@@ -82,6 +82,42 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 x.HasIndex(i => new { i.UserId, i.MenuId });
             });
 
+            builder.Entity<UserFavoriteMenu>(x =>
+            {
+                x.ToTable(options.TablePrefix + "UserFavoriteMenus");
+
+                x.Property(p => p.Framework)
+                    .HasMaxLength(LayoutConsts.MaxFrameworkLength)
+                    .HasColumnName(nameof(Menu.Framework))
+                    .IsRequired();
+                x.Property(p => p.DisplayName)
+                    .HasMaxLength(RouteConsts.MaxDisplayNameLength)
+                    .HasColumnName(nameof(Route.DisplayName))
+                    .IsRequired();
+                x.Property(p => p.Name)
+                    .HasMaxLength(RouteConsts.MaxNameLength)
+                    .HasColumnName(nameof(Route.Name))
+                    .IsRequired();
+                x.Property(p => p.Path)
+                    .HasMaxLength(RouteConsts.MaxPathLength)
+                    .HasColumnName(nameof(Route.Path))
+                    .IsRequired();
+
+                x.Property(p => p.Icon)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxIconLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.Icon));
+                x.Property(p => p.Color)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxColorLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.Color));
+                x.Property(p => p.AliasName)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxAliasNameLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.AliasName));
+
+                x.ConfigureByConvention();
+
+                x.HasIndex(i => new { i.UserId, i.MenuId });
+            });
+
             builder.Entity<Data>(x =>
             {
                 x.ToTable(options.TablePrefix + "Datas");

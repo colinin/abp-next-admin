@@ -37,24 +37,7 @@ namespace LINGYUN.Platform.Permissions
             menu.AddChild(PlatformPermissions.Menu.Delete, L("Permission:Delete"));
             menu.AddChild(PlatformPermissions.Menu.ManageRoles, L("Permission:ManageRoleMenus"));
             menu.AddChild(PlatformPermissions.Menu.ManageUsers, L("Permission:ManageUserMenus"));
-
-
-            // TODO: 2020-07-27 目前abp不支持对象存储管理（或者属于企业版?）需要创建一个 LINGYUN.Abp.BlobStoring 项目自行实现
-
-            //var fileSystem = platform.AddPermission(PlatformPermissions.FileSystem.Default, L("Permission:FileSystem"));
-            //fileSystem.AddChild(PlatformPermissions.FileSystem.Create, L("Permission:CreateFolder"));
-            //fileSystem.AddChild(PlatformPermissions.FileSystem.Delete, L("Permission:DeleteFolder"));
-            //fileSystem.AddChild(PlatformPermissions.FileSystem.Rename, L("Permission:RenameFolder"));
-            //fileSystem.AddChild(PlatformPermissions.FileSystem.Copy, L("Permission:CopyFolder"));
-            //fileSystem.AddChild(PlatformPermissions.FileSystem.Move, L("Permission:MoveFolder"));
-
-            //var fileManager = fileSystem.AddChild(PlatformPermissions.FileSystem.FileManager.Default, L("Permission:FileManager"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Create, L("Permission:AppendFile"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Update, L("Permission:UpdateFile"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Delete, L("Permission:DeleteFile"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Copy, L("Permission:CopyFile"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Move, L("Permission:MoveFile"));
-            //fileManager.AddChild(PlatformPermissions.FileSystem.FileManager.Download, L("Permission:DownloadFile"));
+            menu.AddChild(PlatformPermissions.Menu.ManageUserFavorites, L("Permission:ManageUserFavoriteMenus"));
         }
 
         private static LocalizableString L(string name)

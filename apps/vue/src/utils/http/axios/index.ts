@@ -123,6 +123,7 @@ const transform: AxiosTransform = {
    * @description: 请求拦截器处理
    */
   requestInterceptors: (config, options) => {
+    config.headers = config.headers ?? {};
     // 请求之前处理config
     const token = getToken();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
@@ -131,10 +132,10 @@ const transform: AxiosTransform = {
         ? `${options.authenticationScheme} ${token}`
         : token;
     }
-
-    config.headers = config.headers ?? {};
-    const localeStore = useLocaleStoreWithOut();
-    config.headers['Accept-Language'] = localeStore.getLocale;
+    if ((config as Recordable)?.requestOptions?.withAcceptLanguage !== false) {
+      const localeStore = useLocaleStoreWithOut();
+      config.headers['Accept-Language'] = localeStore.getLocale;
+    }
     return config;
   },
 
@@ -202,6 +203,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           ignoreCancelToken: true,
           // 是否携带token
           withToken: true,
+          // 是否携带 Accept-Language 标头
+          withAcceptLanguage: true,
           retryRequest: {
             isOpenRetry: true,
             count: 5,

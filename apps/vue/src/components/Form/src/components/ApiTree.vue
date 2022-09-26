@@ -1,12 +1,12 @@
 <template>
-  <a-tree v-bind="getAttrs" @change="handleChange">
+  <Tree v-bind="getAttrs" @change="handleChange">
     <template #[item]="data" v-for="item in Object.keys($slots)">
       <slot :name="item" v-bind="data || {}"></slot>
     </template>
     <template #suffixIcon v-if="loading">
       <LoadingOutlined spin />
     </template>
-  </a-tree>
+  </Tree>
 </template>
 
 <script lang="ts">
@@ -18,7 +18,7 @@
   import { LoadingOutlined } from '@ant-design/icons-vue';
   export default defineComponent({
     name: 'ApiTree',
-    components: { ATree: Tree, LoadingOutlined },
+    components: { Tree, LoadingOutlined },
     props: {
       api: { type: Function as PropType<(arg?: Recordable) => Promise<Recordable>> },
       params: { type: Object },

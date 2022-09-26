@@ -25,5 +25,13 @@
         /// 元数据格式不匹配
         /// </summary>
         public const string MetaFormatMissMatch = Namespace + ":03001";
+        /// <summary>
+        /// 用户重复收藏菜单
+        /// </summary>
+        public const string UserDuplicateFavoriteMenu = Namespace + ":04400";
+        /// <summary>
+        /// 用户收藏菜单未找到
+        /// </summary>
+        public const string UserFavoriteMenuNotFound = Namespace + ":04404";
     }
 }

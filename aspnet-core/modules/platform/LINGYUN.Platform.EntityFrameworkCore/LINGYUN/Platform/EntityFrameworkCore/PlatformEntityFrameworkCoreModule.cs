@@ -22,6 +22,7 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 options.AddRepository<Menu, EfCoreMenuRepository>();
                 options.AddRepository<UserMenu, EfCoreUserMenuRepository>();
                 options.AddRepository<RoleMenu, EfCoreRoleMenuRepository>();
+                options.AddRepository<UserFavoriteMenu, EfCoreUserFavoriteMenuRepository>();
                 options.AddRepository<Layout, EfCoreLayoutRepository>();
                 options.AddRepository<AppVersion, EfCoreVersionRepository>();
 

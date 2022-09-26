@@ -4,7 +4,7 @@
       <a-button type="link" size="small">更多</a-button>
     </template>
 
-    <CardGrid v-for="item in items" :key="item" class="!md:w-1/3 !w-full">
+    <CardGrid v-for="item in items" :key="item.group" class="!md:w-1/3 !w-full">
       <span class="flex">
         <Icon :icon="item.icon" :color="item.color" size="30" />
         <span class="text-lg ml-4">{{ item.title }}</span>

@@ -38,7 +38,7 @@ namespace LY.MicroService.PlatformManagement;
 public partial class PlatformManagementHttpApiHostModule
 {
     protected const string DefaultCorsPolicyName = "Default";
-
+    protected const string ApplicationName = "Platform";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -51,7 +51,7 @@ public partial class PlatformManagementHttpApiHostModule
 
     private void PreConfigureApp()
     {
-        AbpSerilogEnrichersConsts.ApplicationName = "Platform";
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
@@ -158,7 +158,7 @@ public partial class PlatformManagementHttpApiHostModule
     {
         Configure<AbpAuditingOptions>(options =>
         {
-            options.ApplicationName = "Platform";
+            options.ApplicationName = ApplicationName;
             // 是否启用实体变更记录
             var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
             if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
@@ -323,6 +323,11 @@ public partial class PlatformManagementHttpApiHostModule
                     }
                 };
             });
+
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {
