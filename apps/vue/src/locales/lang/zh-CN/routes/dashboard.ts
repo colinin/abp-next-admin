@@ -1,5 +1,5 @@
 export default {
-  dashboard: 'Dashboard',
+  dashboard: '仪表盘',
   about: '关于',
   workbench: {
     title: '工作台',
@@ -15,11 +15,15 @@ export default {
       }
     },
     menus: {
+      favoriteMenu: '常用',
       more: '更多',
       addMenu: '添加菜单',
       manager: '管理菜单',
       selectMenu: '选择菜单',
-      selectColor: '选择颜色'
+      selectColor: '选择颜色',
+      deleteMenu: '移除菜单',
+      defineAliasName: '自定义别名',
+      defineIcon: '自定义图标'
     }
   },
   analysis: '分析页',

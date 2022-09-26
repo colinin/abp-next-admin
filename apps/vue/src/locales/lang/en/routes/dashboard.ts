@@ -15,11 +15,15 @@ export default {
       }
     },
     menus: {
+      favoriteMenu: '常用',
       more: 'More',
       addMenu: 'Add new menu',
       manager: 'Manage menu',
       selectMenu: 'Select menu',
-      selectColor: 'Select color'
+      selectColor: 'Select color',
+      deleteMenu: 'Delete menu',
+      defineAliasName: 'Alias name',
+      defineIcon: 'Icon'
     }
   },
   analysis: 'Analysis',

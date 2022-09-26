@@ -3,7 +3,13 @@
     <template #headerContent> <WorkbenchHeader /> </template>
     <div class="lg:flex">
       <div class="lg:w-7/10 w-full !mr-4 enter-y">
-        <MenuCard class="enter-y" title="常用" :menus="usedMenus" />
+        <MenuCard
+          class="enter-y"
+          :title="t('routes.dashboard.workbench.menus.favoriteMenu')"
+          :menus="myFavoriteMenus"
+          @change="handleAddMyFavoriteMenu"
+          @delete="handleDeleteMyFavoriteMenu"
+        />
       </div>
       <div class="lg:w-3/10 w-full enter-y">
         <!-- <QuickNav :loading="loading" class="enter-y" /> -->
@@ -18,48 +24,61 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { Card } from 'ant-design-vue';
   import { PageWrapper } from '/@/components/Page';
+  import { Menu, useDefaultMenus } from './components/menuProps';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { createMyFavoriteMenu, delMyFavoriteMenu, getMyFavoriteMenuList } from '/@/api/platform/user-favorites-menu';
   import WorkbenchHeader from './components/WorkbenchHeader.vue';
   import MenuCard from './components/MenuCard.vue';
 
-  const usedMenus = reactive([
-     {
-      title: '首页',
-      icon: 'ion:home-outline',
-      color: '#1fdaca',
-     },
-     {
-      title: '仪表盘',
-      icon: 'ion:grid-outline',
-      color: '#bf0c2c',
-    },
-    {
-      title: '组件',
-      icon: 'ion:layers-outline',
-      color: '#e18525',
-    },
-    {
-      title: '系统管理',
-      icon: 'ion:settings-outline',
-      color: '#3fb27f',
-    },
-    {
-      title: '权限管理',
-      icon: 'ion:key-outline',
-      color: '#4daf1bc9',
-    },
-    {
-      title: '图表',
-      icon: 'ion:bar-chart-outline',
-      color: '#00d8ff',
-    },
-  ]);
+  const myFavoriteMenus = ref<Menu[]>(useDefaultMenus());
 
   const loading = ref(true);
+  const { t } = useI18n();
+  const { createMessage } = useMessage();
+  const { L } = useLocalization(['AbpUi']);
 
-  setTimeout(() => {
-    loading.value = false;
-  }, 1500);
+  onMounted(fetchMyFavoriteMenus);
+
+  function fetchMyFavoriteMenus() {
+    loading.value = true;
+    getMyFavoriteMenuList().then((res) => {
+      const defaultFavmenus = useDefaultMenus();
+      const defineFavmenus = res.items.map((menu) => {
+        return {
+          id: menu.id,
+          title: menu.aliasName ?? menu.displayName,
+          icon: menu.icon,
+          color: menu.color,
+          path: menu.path,
+          hasDefault: false,
+        };
+      });
+      myFavoriteMenus.value = defaultFavmenus.concat(defineFavmenus);
+    }).finally(() => {
+      loading.value = false;
+    });
+  }
+
+  function handleAddMyFavoriteMenu(menu) {
+    createMyFavoriteMenu({
+      framework: '',
+      menuId: menu.menuId,
+      icon: menu.icon,
+      color: menu.color,
+      aliasName: menu.aliasName,
+    }).then(() => {
+      createMessage.success(L('Successful'));
+    });
+  }
+
+  function handleDeleteMyFavoriteMenu(menu: Menu) {
+    delMyFavoriteMenu(menu.id).then(() => {
+      createMessage.success(L('SuccessfullyDeleted'));
+    });
+  }
 </script>

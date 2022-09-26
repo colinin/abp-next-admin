@@ -6,29 +6,34 @@
     :width="500"
     @ok="handleSubmit"
   >
-    <Form :model="formModel" ref="formElRef">
-      <Form.Item :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }" :label="t('routes.dashboard.workbench.menus.selectColor')" name="color">
+    <Form :model="formModel" ref="formElRef" :label-col="{ span: 6 }" :wrapper-col="{ span: 17 }">
+      <Form.Item :label="t('routes.dashboard.workbench.menus.selectMenu')" name="menuId">
+        <VTreeSelect
+          allowClear
+          treeIcon
+          :tree-data="menuTreeData"
+          :fieldNames="{
+            label: 'displayName',
+            value: 'id',
+          }"
+          v-model:value="formModel.menuId"
+          @select="handleMenuChange"
+        >
+          <template #title="item">
+            <VIcon v-if="item.meta?.icon" :icon="item.meta.icon" />
+            <span>{{ item.meta?.title ?? item.displayName }}</span>
+          </template>
+        </VTreeSelect>
+      </Form.Item>
+      <Form.Item :label="t('routes.dashboard.workbench.menus.selectColor')" name="color">
         <VColorPicker v-model:pureColor="formModel.color" format="hex" />
         <span>({{ formModel.color }})</span>
       </Form.Item>
-      <Form.Item :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }" :label="t('routes.dashboard.workbench.menus.selectMenu')" name="menus">
-        <VTree
-          checkable
-          checkStrictly
-          showIcon
-          :tree-data="menuTreeData"
-          :fieldNames="{
-            title: 'displayName',
-            key: 'id',
-          }"
-          v-model:checkedKeys="formModel.menus"
-          :selectedKeys="defaultCheckedKeys"
-          @check="handleMenuCheck"
-        >
-          <template #icon="{ dataRef }">
-            <VIcon v-if="dataRef.meta?.icon" :icon="dataRef.meta.icon" />
-          </template>
-        </VTree>
+      <Form.Item :label="t('routes.dashboard.workbench.menus.defineAliasName')" name="aliasName">
+        <VInput v-model:value="formModel.aliasName" autocomplete="off" />
+      </Form.Item>
+      <Form.Item :label="t('routes.dashboard.workbench.menus.defineIcon')" name="icon">
+        <IconPicker v-model:value="formModel.icon" />
       </Form.Item>
     </Form>
   </BasicModal>
@@ -37,37 +42,41 @@
 <script lang="ts" setup>
   import { reactive, ref, unref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { Form, Tree } from 'ant-design-vue';
+  import { Form, Input, TreeSelect } from 'ant-design-vue';
   import { ColorPicker } from "vue3-colorpicker";
   import { Icon } from '/@/components/Icon';
   import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { IconPicker } from '/@/components/Icon';
   import { getMenuList } from '/@/api/sys/menu';
   import { listToTree } from '/@/utils/helper/treeHelper';
 
-  const VTree = Tree;
+  const VTreeSelect = TreeSelect;
   const VColorPicker = ColorPicker;
   const VIcon = Icon;
+  const VInput = Input;
 
-  const emits = defineEmits(['change', 'change:keys', 'register']);
+  const emits = defineEmits(['change', 'register']);
   const { t } = useI18n();
   const formModel = reactive({
+    menuId: '',
+    icon: '',
     color: '#000000',
-    menus: [] as string[],
+    aliasName: '',
   });
   const formElRef = ref<any>(null);
   const menuTreeData = ref<any[]>([]);
   const radio = ref(false);
   const defaultCheckedKeys = ref<string[]>([]);
-  const checkedMenus = ref<any[]>([]);
   const [registerModal, { closeModal }] = useModalInner((props) => {
     init(props);
     fetchMyMenus();
   });
 
   function init(props) {
+    formModel.icon = '';
+    formModel.menuId = '';
+    formModel.aliasName = '';
     formModel.color = '#000000';
-    formModel.menus = [];
-    checkedMenus.value = [];
     radio.value = props.radio ?? false;
     defaultCheckedKeys.value = props.defaultCheckedKeys ?? [];
   }
@@ -79,21 +88,17 @@
     })
   }
 
+  function handleMenuChange(_, item) {
+    formModel.icon = item.meta?.icon;
+    formModel.aliasName = item.meta?.title ?? item.displayName;
+  }
+
   function handleSubmit() {
     const formEl = unref(formElRef);
     formEl?.validate().then(() => {
-      emits('change:keys', formModel.menus);
-      emits('change', checkedMenus.value);
+      emits('change', formModel);
       closeModal();
     });
-  }
-
-  function handleMenuCheck(checkedKeys, e) {
-    if (checkedKeys.checked.length > 1 && radio.value) {
-      const menu = checkedKeys.checked.pop();
-      formModel.menus = [menu!];
-    }
-    checkedMenus.value = e.checkedNodes;
   }
 </script>
 

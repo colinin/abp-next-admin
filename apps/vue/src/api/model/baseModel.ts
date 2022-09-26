@@ -51,6 +51,10 @@ export class CreationAuditedEntityDto implements IMayHaveCreator {
   creationTime!: Date;
 }
 
+export class EntityDto<TKey> {
+  id!: TKey;
+}
+
 /** 实体审计对象 */
 export class AuditedEntityDto implements CreationAuditedEntityDto, IModificationAuditedObject {
   lastModifierId: string | undefined;

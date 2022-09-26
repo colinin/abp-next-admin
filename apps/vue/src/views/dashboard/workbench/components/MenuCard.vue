@@ -1,10 +1,16 @@
 <template>
   <div>
     <Card :title="title" class="menu-card">
-      <template #extra>
+      <!-- <template #extra>
         <Button type="link" @click="handleManageMenu">{{ t('routes.dashboard.workbench.menus.more') }}</Button>
-      </template>
-      <CardGrid v-for="menu in menus" :key="menu.title" class="menu-card-grid">
+      </template> -->
+      <CardGrid
+        v-for="menu in menus"
+        :key="menu.title"
+        class="menu-card-grid"
+        @click="handleNavigationTo(menu)"
+        @contextmenu="(e) => handleContext(e, menu)"
+      >
         <span class="flex">
           <Icon :icon="menu.icon" :color="menu.color" :size="menu.size ?? 30" />
           <span class="text-lg ml-4">{{ menu.title }}</span>
@@ -22,24 +28,20 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Button, Card } from 'ant-design-vue';
+  import { Card } from 'ant-design-vue';
   import { Icon } from '/@/components/Icon';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { useGo } from '/@/hooks/web/usePage';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useContextMenu } from '/@/hooks/web/useContextMenu';
   import { useModal } from '/@/components/Modal';
+  import { Menu } from './menuProps';
   import MenuReference from './MenuReference.vue';
 
   const CardGrid = Card.Grid;
 
-  interface Menu {
-    title: string;
-    desc?: string;
-    icon?: string;
-    color?: string;
-    size?: number;
-  }
-
-  const emits = defineEmits(['change', 'register']);
-  const props = defineProps({
+  const emits = defineEmits(['change', 'delete', 'register']);
+  defineProps({
     title: {
       type: String,
       required: true,
@@ -50,20 +52,49 @@
     }
   });
 
+  const go = useGo();
   const { t } = useI18n();
+  const { createConfirm } = useMessage();
+  const [createContextMenu] = useContextMenu();
   const [registerReference, { openModal: openReferenceModal }] = useModal();
 
-  function handleManageMenu() {
-    openReferenceModal(true, { defaultCheckedKeys: props.menus });
+  function handleContext(e: MouseEvent, menu: Menu) {
+    createContextMenu({
+      event: e,
+      items: [
+        {
+          label: t('routes.dashboard.workbench.menus.deleteMenu'),
+          icon: 'ant-design:delete-outlined',
+          handler: () => {
+            if (!menu.hasDefault) {
+              createConfirm({
+                iconType: 'warning',
+                title: t('AbpUi.AreYouSure'),
+                content: t('AbpUi.ItemWillBeDeletedMessage'),
+                okCancel: true,
+                onOk: () => {
+                  emits('delete', menu);
+                },
+              });
+            }
+          },
+        },
+      ],
+    });
   }
 
   function handleAddNew() {
-    openReferenceModal(true, { radio: true });
+    openReferenceModal(true, {});
   }
 
-  function handleChange(menus) {
-    console.log(menus);
-    emits('change', menus);
+  function handleNavigationTo(menu: Menu) {
+    if (menu.path) {
+      go(menu.path);
+    }
+  }
+
+  function handleChange(menu) {
+    emits('change', menu);
   }
 </script>
 
