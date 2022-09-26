@@ -145,6 +145,8 @@ export interface FormSchema {
   label: string | VNode;
   // Auxiliary text
   subLabel?: string;
+  // extra
+  extra?: string;
   // Help text on the right side of the text
   helpMessage?:
     | string
@@ -219,6 +221,7 @@ export interface FormSchema {
 
 export interface TabFormSchema extends FormSchema {
   tab: string;
+  tabSlot?: string;
 }
 
 export interface HelpComponentProps {

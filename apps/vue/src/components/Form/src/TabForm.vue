@@ -21,7 +21,9 @@
         <Row v-bind="getRow">
           <slot name="formHeader"></slot>
           <template v-for="schema in tabSchema.schemas" :key="schema.field">
+            <slot v-if="schema.tabSlot" :name="schema.tabSlot"></slot>
             <FormItem
+              v-else
               :tableAction="tableAction"
               :formActionType="formActionType"
               :schema="schema"
