@@ -326,7 +326,7 @@ public partial class PlatformManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            // services.AddAlwaysAllowAuthorization();
+            services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

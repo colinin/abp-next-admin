@@ -41,4 +41,26 @@ public class EfCoreUserFavoriteMenuRepository :
             .OrderBy(x => x.CreationTime)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
+
+    public async virtual Task<bool> CheckExistsAsync(
+        string framework, 
+        Guid userId, 
+        Guid menuId, 
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AnyAsync(x =>
+                x.Framework == framework && x.UserId == userId && x.MenuId == menuId,
+                GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<UserFavoriteMenu> FindByUserMenuAsync(
+        Guid userId, 
+        Guid menuId, 
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(x => x.UserId == userId && x.MenuId == menuId)
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
 }

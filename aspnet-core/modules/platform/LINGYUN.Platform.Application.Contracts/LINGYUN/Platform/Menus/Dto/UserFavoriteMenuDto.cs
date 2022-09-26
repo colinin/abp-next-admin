@@ -9,6 +9,10 @@ public class UserFavoriteMenuDto : AuditedEntityDto<Guid>
 
     public Guid UserId { get; set; }
 
+    public string AliasName { get; set; }
+
+    public string Color { get; set; }
+
     public string Framework { get; set; }
 
     public string Name { get; set; }

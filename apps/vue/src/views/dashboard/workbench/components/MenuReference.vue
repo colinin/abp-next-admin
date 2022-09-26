@@ -7,10 +7,15 @@
     @ok="handleSubmit"
   >
     <Form :model="formModel" ref="formElRef">
+      <Form.Item :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }" :label="t('routes.dashboard.workbench.menus.selectColor')" name="color">
+        <VColorPicker v-model:pureColor="formModel.color" format="hex" />
+        <span>({{ formModel.color }})</span>
+      </Form.Item>
       <Form.Item :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }" :label="t('routes.dashboard.workbench.menus.selectMenu')" name="menus">
-        <ATree
+        <VTree
           checkable
           checkStrictly
+          showIcon
           :tree-data="menuTreeData"
           :fieldNames="{
             title: 'displayName',
@@ -18,7 +23,12 @@
           }"
           v-model:checkedKeys="formModel.menus"
           :selectedKeys="defaultCheckedKeys"
-          @check="handleMenuCheck" />
+          @check="handleMenuCheck"
+        >
+          <template #icon="{ dataRef }">
+            <VIcon v-if="dataRef.meta?.icon" :icon="dataRef.meta.icon" />
+          </template>
+        </VTree>
       </Form.Item>
     </Form>
   </BasicModal>
@@ -28,15 +38,20 @@
   import { reactive, ref, unref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Form, Tree } from 'ant-design-vue';
+  import { ColorPicker } from "vue3-colorpicker";
+  import { Icon } from '/@/components/Icon';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getMenuList } from '/@/api/sys/menu';
   import { listToTree } from '/@/utils/helper/treeHelper';
 
-  const ATree = Tree;
+  const VTree = Tree;
+  const VColorPicker = ColorPicker;
+  const VIcon = Icon;
 
   const emits = defineEmits(['change', 'change:keys', 'register']);
   const { t } = useI18n();
   const formModel = reactive({
+    color: '#000000',
     menus: [] as string[],
   });
   const formElRef = ref<any>(null);
@@ -50,6 +65,7 @@
   });
 
   function init(props) {
+    formModel.color = '#000000';
     formModel.menus = [];
     checkedMenus.value = [];
     radio.value = props.radio ?? false;
@@ -81,6 +97,6 @@
   }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="less">
+  @import 'vue3-colorpicker/style.css';
 </style>

@@ -100,10 +100,18 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                     .IsRequired();
                 x.Property(p => p.Path)
                     .HasMaxLength(RouteConsts.MaxPathLength)
-                    .HasColumnName(nameof(Route.Path));
+                    .HasColumnName(nameof(Route.Path))
+                    .IsRequired();
+
                 x.Property(p => p.Icon)
                     .HasMaxLength(UserFavoriteMenuConsts.MaxIconLength)
                     .HasColumnName(nameof(UserFavoriteMenu.Icon));
+                x.Property(p => p.Color)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxColorLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.Color));
+                x.Property(p => p.AliasName)
+                    .HasMaxLength(UserFavoriteMenuConsts.MaxAliasNameLength)
+                    .HasColumnName(nameof(UserFavoriteMenu.AliasName));
 
                 x.ConfigureByConvention();
 

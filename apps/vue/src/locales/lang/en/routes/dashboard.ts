@@ -18,7 +18,8 @@ export default {
       more: 'More',
       addMenu: 'Add new menu',
       manager: 'Manage menu',
-      selectMenu: '选择菜单'
+      selectMenu: 'Select menu',
+      selectColor: 'Select color'
     }
   },
   analysis: 'Analysis',

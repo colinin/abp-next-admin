@@ -6,7 +6,7 @@ import 'virtual:windi-utilities.css';
 import 'virtual:svg-icons-register';
 import App from './App.vue';
 import Antd from 'ant-design-vue';
-import VueCookies from 'vue-cookies'
+import VueCookies from 'vue-cookies';
 import { createApp } from 'vue';
 import { initAppConfigStore, initAbpConfigStore } from '/@/logics/initAppConfig';
 import { setupErrorHandle } from '/@/logics/error-handle';

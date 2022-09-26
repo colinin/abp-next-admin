@@ -75,6 +75,7 @@
     "vue-json-pretty": "^2.0.6",
     "vue-router": "^4.0.14",
     "vue-types": "^4.1.1",
+    "vue3-colorpicker": "^2.0.4",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
