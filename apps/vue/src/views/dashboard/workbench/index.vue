@@ -73,6 +73,7 @@
       aliasName: menu.aliasName,
     }).then(() => {
       createMessage.success(L('Successful'));
+      fetchMyFavoriteMenus();
     });
   }
 
