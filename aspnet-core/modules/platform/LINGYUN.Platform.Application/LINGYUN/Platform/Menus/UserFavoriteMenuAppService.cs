@@ -42,7 +42,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
             standardMenu.Name,
             standardMenu.DisplayName,
             standardMenu.Path,
-            standardMenu.Icon,
+            input.Icon ?? standardMenu.Icon,
             input.Color,
             input.AliasName,
             CurrentTenant.Id);
@@ -72,7 +72,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
             standardMenu.Name,
             standardMenu.DisplayName,
             standardMenu.Path,
-            standardMenu.Icon,
+            input.Icon ?? standardMenu.Icon,
             input.Color,
             input.AliasName,
             CurrentTenant.Id);
