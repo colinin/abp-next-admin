@@ -1,6 +1,6 @@
 <template>
   <a-input
-    disabled
+    :disabled="onlyDefineIcons"
     :style="{ width }"
     :placeholder="t('component.icon.placeholder')"
     :class="prefixCls"
@@ -109,6 +109,8 @@
     pageSize: propTypes.number.def(140),
     copy: propTypes.bool.def(false),
     mode: propTypes.oneOf<('svg' | 'iconify')[]>(['svg', 'iconify']).def('iconify'),
+    // 仅在datas中定义的图标
+    onlyDefineIcons: propTypes.bool.def(true),
   });
 
   const emit = defineEmits(['change', 'update:value']);
