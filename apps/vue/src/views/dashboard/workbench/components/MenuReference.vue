@@ -6,7 +6,13 @@
     :width="500"
     @ok="handleSubmit"
   >
-    <Form :model="formModel" ref="formElRef" :label-col="{ span: 6 }" :wrapper-col="{ span: 17 }">
+    <Form
+      ref="formElRef"
+      :model="formModel"
+      :rules="formRules"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 17 }"
+    >
       <Form.Item :label="t('routes.dashboard.workbench.menus.selectMenu')" name="menuId">
         <VTreeSelect
           allowClear
@@ -33,7 +39,7 @@
         <VInput v-model:value="formModel.aliasName" autocomplete="off" />
       </Form.Item>
       <Form.Item :label="t('routes.dashboard.workbench.menus.defineIcon')" name="icon">
-        <IconPicker v-model:value="formModel.icon" />
+        <IconPicker v-model:value="formModel.icon" :onlyDefineIcons="false" />
       </Form.Item>
     </Form>
   </BasicModal>
@@ -62,6 +68,11 @@
     icon: '',
     color: '#000000',
     aliasName: '',
+  });
+  const formRules = reactive({
+    menuId: {
+      required: true,
+    },
   });
   const formElRef = ref<any>(null);
   const menuTreeData = ref<any[]>([]);

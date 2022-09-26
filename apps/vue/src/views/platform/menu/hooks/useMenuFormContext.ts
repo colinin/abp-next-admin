@@ -83,6 +83,12 @@ export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuF
         case ValueType.Object:
           if (item.name === 'icon') {
             schema.component = 'IconPicker';
+            schema.componentProps = {
+              onlyDefineIcons: false,
+              style: {
+                width: '100%',
+              },
+            };
           } else {
             schema.component = 'Input';
             schema.componentProps = {
