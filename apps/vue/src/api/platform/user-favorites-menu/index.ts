@@ -18,9 +18,7 @@ export const create = (userId: string, input: UserFavoriteMenuCreateDto) => {
     params: {
       userId: userId,
     },
-    data: {
-      input: input,
-    },
+    data: input,
   });
 };
 
@@ -30,9 +28,7 @@ export const createMyFavoriteMenu = (input: UserFavoriteMenuCreateDto) => {
     service: remoteService.name,
     controller: remoteService.controller,
     action: 'CreateMyFavoriteMenuAsync',
-    data: {
-      input: input,
-    },
+    data: input,
   });
 };
 
@@ -45,9 +41,7 @@ export const del = (userId: string, menuId: string) => {
       userId: userId,
     },
     data: {
-      input: {
-        menuId: menuId,
-      },
+      menuId: menuId,
     },
   });
 };
@@ -58,9 +52,7 @@ export const delMyFavoriteMenu = (menuId: string) => {
     controller: remoteService.controller,
     action: 'DeleteMyFavoriteMenuAsync',
     data: {
-      input: {
-        menuId: menuId,
-      },
+      menuId: menuId,
     },
   });
 };
@@ -73,9 +65,7 @@ export const update = (userId: string, input: UserFavoriteMenuUpdateDto) => {
     params: {
       userId: userId,
     },
-    data: {
-      input: input,
-    },
+    data: input,
   });
 };
 
@@ -84,9 +74,7 @@ export const updateMyFavoriteMenu = (input: UserFavoriteMenuUpdateDto) => {
     service: remoteService.name,
     controller: remoteService.controller,
     action: 'UpdateMyFavoriteMenuAsync',
-    data: {
-      input: input,
-    },
+    data: input,
   });
 };
 
