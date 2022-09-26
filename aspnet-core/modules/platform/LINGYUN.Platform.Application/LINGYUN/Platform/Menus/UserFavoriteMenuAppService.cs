@@ -57,7 +57,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
     public async virtual Task<UserFavoriteMenuDto> CreateMyFavoriteMenuAsync(UserFavoriteMenuCreateDto input)
     {
         var userId = CurrentUser.GetId();
-        if (!await UserFavoriteMenuRepository.CheckExistsAsync(input.Framework, userId, input.MenuId))
+        if (await UserFavoriteMenuRepository.CheckExistsAsync(input.Framework, userId, input.MenuId))
         {
             throw new BusinessException(PlatformErrorCodes.UserDuplicateFavoriteMenu);
         }
