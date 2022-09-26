@@ -50,7 +50,7 @@
       const defaultFavmenus = useDefaultMenus();
       const defineFavmenus = res.items.map((menu) => {
         return {
-          id: menu.id,
+          id: menu.menuId,
           title: menu.aliasName ?? menu.displayName,
           icon: menu.icon,
           color: menu.color,
@@ -80,6 +80,7 @@
   function handleDeleteMyFavoriteMenu(menu: Menu) {
     delMyFavoriteMenu(menu.id).then(() => {
       createMessage.success(L('SuccessfullyDeleted'));
+      fetchMyFavoriteMenus();
     });
   }
 </script>

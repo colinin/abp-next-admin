@@ -39,9 +39,9 @@ export const del = (userId: string, menuId: string) => {
     action: 'DeleteAsync',
     params: {
       userId: userId,
-    },
-    data: {
-      menuId: menuId,
+      input: {
+        MenuId: menuId,
+      },
     },
   });
 };
@@ -51,8 +51,10 @@ export const delMyFavoriteMenu = (menuId: string) => {
     service: remoteService.name,
     controller: remoteService.controller,
     action: 'DeleteMyFavoriteMenuAsync',
-    data: {
-      menuId: menuId,
+    params: {
+      input: {
+        MenuId: menuId,
+      },
     },
   });
 };
