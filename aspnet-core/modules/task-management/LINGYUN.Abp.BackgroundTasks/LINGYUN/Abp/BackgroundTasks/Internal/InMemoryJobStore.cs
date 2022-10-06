@@ -19,6 +19,8 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
 
     public Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
         var jobs = _memoryJobStore
@@ -33,6 +35,8 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
 
     public Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var now = DateTime.Now;
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
@@ -49,14 +53,22 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public Task<JobInfo> FindAsync(string jobId)
+    public Task<JobInfo> FindAsync(
+        string jobId,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobId));
         return Task.FromResult(job);
     }
 
-    public Task StoreAsync(JobInfo jobInfo)
+    public Task StoreAsync(
+        JobInfo jobInfo,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobInfo.Id));
         if (job != null)
         {
@@ -74,9 +86,13 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.CompletedTask;
     }
 
-    public async Task RemoveAsync(string jobId)
+    public async Task RemoveAsync(
+        string jobId,
+        CancellationToken cancellationToken = default)
     {
-        var job = await FindAsync(jobId);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var job = await FindAsync(jobId, cancellationToken);
         if (job != null)
         {
             _memoryJobStore.Remove(job);
@@ -85,11 +101,15 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
 
     public Task StoreLogAsync(JobEventData eventData)
     {
+        eventData.CancellationToken.ThrowIfCancellationRequested();
+
         return Task.CompletedTask;
     }
 
     public Task CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var expiratime = DateTime.Now - jobExpiratime;
 
         var expriaJobs = _memoryJobStore

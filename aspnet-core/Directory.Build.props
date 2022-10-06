@@ -1,10 +1,10 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>5.3.4</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>5.3.5</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>6.0.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>6.0.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
-		<DistributedLockRedisPackageVersion>1.0.1</DistributedLockRedisPackageVersion>
-		<DotNetCoreCAPPackageVersion>6.0.1</DotNetCoreCAPPackageVersion>
+		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
+		<DotNetCoreCAPPackageVersion>6.2.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.8.2</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
@@ -14,20 +14,20 @@
 		<HangfireMSSQLStoragePackageVersion>1.7.29</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
 		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
-		<OpenTelemetryExporterZipkinPackageVersion>1.2.0-rc1</OpenTelemetryExporterZipkinPackageVersion>
+		<OpenTelemetryExporterZipkinPackageVersion>1.3.1</OpenTelemetryExporterZipkinPackageVersion>
 		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
 		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
 		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
 		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
-		<SerilogAspNetCorePackageVersion>4.1.0</SerilogAspNetCorePackageVersion>
+		<SerilogAspNetCorePackageVersion>5.0.0</SerilogAspNetCorePackageVersion>
 		<SerilogEnrichersEnvironmentPackageVersion>2.2.0</SerilogEnrichersEnvironmentPackageVersion>
 		<SerilogEnrichersAssemblyPackageVersion>2.0.0</SerilogEnrichersAssemblyPackageVersion>
 		<SerilogEnrichersProcessPackageVersion>2.0.1</SerilogEnrichersProcessPackageVersion>
 		<SerilogEnrichersThreadPackageVersion>3.1.0</SerilogEnrichersThreadPackageVersion>
 		<SerilogExtensionsLoggingPackageVersion>3.0.1</SerilogExtensionsLoggingPackageVersion>
-		<SerilogSettingsConfigurationPackageVersion>3.1.0</SerilogSettingsConfigurationPackageVersion>
+		<SerilogSettingsConfigurationPackageVersion>3.4.0</SerilogSettingsConfigurationPackageVersion>
 		<SerilogSinksConsolePackageVersion>4.0.0</SerilogSinksConsolePackageVersion>
 		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>

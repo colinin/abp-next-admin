@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
             ServiceProvider = serviceProvider;
         }
 
-        public Task AddAsync(IBackgroundWorker worker)
+        public Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
         {
             var timer = worker.GetType()
                 .GetProperty("Timer", BindingFlags.NonPublic | BindingFlags.Instance)?
@@ -46,7 +46,7 @@ namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
 
             RecurringJob.AddOrUpdate(
                 recurringJobId: worker.GetType().FullName,
-                methodCall: () => workerAdapter.ExecuteAsync(),
+                methodCall: () => workerAdapter.ExecuteAsync(cancellationToken),
                 cronExpression: CronGenerator.FormMilliseconds(period.Value));
 
             return Task.CompletedTask;

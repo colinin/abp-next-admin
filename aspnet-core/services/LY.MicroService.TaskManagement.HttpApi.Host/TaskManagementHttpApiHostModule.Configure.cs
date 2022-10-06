@@ -36,6 +36,7 @@ namespace LY.MicroService.TaskManagement;
 
 public partial class TaskManagementHttpApiHostModule
 {
+    protected const string ApplicationName = "TaskManagement";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -48,7 +49,7 @@ public partial class TaskManagementHttpApiHostModule
 
     private void PreConfigureApp()
     {
-        AbpSerilogEnrichersConsts.ApplicationName = "TaskManagement";
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
@@ -169,14 +170,13 @@ public partial class TaskManagementHttpApiHostModule
     {
         Configure<AbpAuditingOptions>(options =>
         {
-            options.ApplicationName = "TaskManagement";
+            options.ApplicationName = ApplicationName;
             // 是否启用实体变更记录
-            var entitiesChangedConfig = configuration.GetSection("App:TrackingEntitiesChanged");
-            if (entitiesChangedConfig.Exists() && entitiesChangedConfig.Get<bool>())
+            var allEntitiesSelectorIsEnabled = configuration["Auditing:AllEntitiesSelector"];
+            if (allEntitiesSelectorIsEnabled.IsNullOrWhiteSpace() ||
+                (bool.TryParse(allEntitiesSelectorIsEnabled, out var enabled) && enabled))
             {
-                options
-                .EntityHistorySelectors
-                .AddAllEntities();
+                options.EntityHistorySelectors.AddAllEntities();
             }
         });
     }
@@ -185,12 +185,7 @@ public partial class TaskManagementHttpApiHostModule
     {
         Configure<AbpDistributedCacheOptions>(options =>
         {
-            // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
-            options.KeyPrefix = "LINGYUN.Abp.Application";
-            // 滑动过期30天
-            options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30d);
-            // 绝对过期60天
-            options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60d);
+            configuration.GetSection("DistributedCache").Bind(options);
         });
 
         Configure<RedisCacheOptions>(options =>

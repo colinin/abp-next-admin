@@ -3,6 +3,8 @@ using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authentication.QQ;
+using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Http.Client.Wrapper;
@@ -10,8 +12,6 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
-using LINGYUN.Abp.IdentityServer.QQ;
-using LINGYUN.Abp.IdentityServer.WeChat;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -55,8 +55,8 @@ namespace LY.MicroService.IdentityServer;
     // typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityServerSmsValidatorModule),
-    typeof(AbpIdentityServerWeChatModule),
-    typeof(AbpIdentityServerQQModule),
+    typeof(AbpAuthenticationWeChatModule),
+    typeof(AbpAuthenticationQQModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),

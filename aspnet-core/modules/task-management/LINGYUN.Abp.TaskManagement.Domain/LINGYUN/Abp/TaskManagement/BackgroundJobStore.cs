@@ -40,24 +40,30 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    public async virtual Task<List<JobInfo>> GetWaitingListAsync(
+        int maxResultCount, 
+        CancellationToken cancellationToken = default)
     {
         var jobInfos = await JobInfoRepository.GetWaitingListAsync(maxResultCount, cancellationToken);
 
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<JobInfo> FindAsync(string jobId)
+    public async virtual Task<JobInfo> FindAsync(
+        string jobId,
+        CancellationToken cancellationToken = default)
     {
-        return await JobInfoRepository.FindJobAsync(jobId);
+        return await JobInfoRepository.FindJobAsync(jobId, cancellationToken: cancellationToken);
     }
 
-    public async virtual Task StoreAsync(JobInfo jobInfo)
+    public async virtual Task StoreAsync(
+        JobInfo jobInfo,
+        CancellationToken cancellationToken = default)
     {
         using var unitOfWork = UnitOfWorkManager.Begin();
         using (CurrentTenant.Change(jobInfo.TenantId))
         {
-            var backgroundJobInfo = await JobInfoRepository.FindAsync(jobInfo.Id);
+            var backgroundJobInfo = await JobInfoRepository.FindAsync(jobInfo.Id, cancellationToken: cancellationToken);
             if (backgroundJobInfo != null)
             {
                 backgroundJobInfo.SetNextRunTime(jobInfo.NextRunTime);
@@ -68,7 +74,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 backgroundJobInfo.TryCount = jobInfo.TryCount;
                 backgroundJobInfo.IsAbandoned = jobInfo.IsAbandoned;
 
-                await JobInfoRepository.UpdateAsync(backgroundJobInfo);
+                await JobInfoRepository.UpdateAsync(backgroundJobInfo, cancellationToken: cancellationToken);
             }
             else
             {
@@ -111,18 +117,20 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                         break;
                 }
 
-                await JobInfoRepository.InsertAsync(backgroundJobInfo);
+                await JobInfoRepository.InsertAsync(backgroundJobInfo, cancellationToken: cancellationToken);
             }
-            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 
-    public async virtual Task RemoveAsync(string jobId)
+    public async virtual Task RemoveAsync(
+        string jobId,
+        CancellationToken cancellationToken = default)
     {
         using var unitOfWork = UnitOfWorkManager.Begin();
-        await JobInfoRepository.DeleteAsync(jobId);
+        await JobInfoRepository.DeleteAsync(jobId, cancellationToken: cancellationToken);
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async virtual Task StoreLogAsync(JobEventData eventData)
@@ -144,9 +152,9 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                 eventData.Exception == null ? eventData.Result ?? "OK" : GetSourceException(eventData.Exception).Message,
                 eventData.Exception);
 
-            await JobLogRepository.InsertAsync(jogLog);
+            await JobLogRepository.InsertAsync(jogLog, cancellationToken: eventData.CancellationToken);
 
-            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(eventData.CancellationToken);
         }
     }
 

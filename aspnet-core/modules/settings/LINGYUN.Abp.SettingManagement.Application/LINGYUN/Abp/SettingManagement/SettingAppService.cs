@@ -416,6 +416,17 @@ namespace LINGYUN.Abp.SettingManagement
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Password, providerName, providerKey),
                     ValueType.String,
                     providerName);
+                // 一个占位符,用于展现发送测试邮件
+                smtpSetting.AddDetail(
+                    new SettingDefinition(
+                        name: "SendTestEmail",
+                        displayName: LocalizableString.Create<AbpSettingManagementResource>("DisplayName:Emailing.SendTestEmail"),
+                        description: LocalizableString.Create<AbpSettingManagementResource>("Description:Emailing.SendTestEmail")),
+                    StringLocalizerFactory,
+                    "",
+                    ValueType.String,
+                    providerName)
+                    .WithSlot("send-test-email");
             }
 
             settingGroups.AddGroup(emailSettingGroup);

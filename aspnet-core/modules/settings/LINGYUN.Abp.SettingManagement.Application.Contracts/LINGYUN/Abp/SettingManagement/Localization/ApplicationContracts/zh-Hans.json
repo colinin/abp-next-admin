@@ -37,6 +37,8 @@
     "Description:Emailing.Default": "邮件通知的默认配置",
     "DisplayName:Emailing.Smtp": "Smtp配置",
     "Description:Emailing.Smtp": "Smtp配置",
+    "DisplayName:Emailing.SendTestEmail": "发送测试邮件",
+    "Description:Emailing.SendTestEmail": "发送一封测试邮件用于测试邮件参数有效性.",
     "DisplayName:FileManagement": "文件管理",
     "Description:FileManagement": "文件管理",
     "DisplayName:FileManagement.FileSystem": "文件系统",

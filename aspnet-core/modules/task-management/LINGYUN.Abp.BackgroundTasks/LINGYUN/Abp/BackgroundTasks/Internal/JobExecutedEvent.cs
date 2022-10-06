@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -10,7 +11,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
     protected override async Task OnJobAfterExecutedAsync(JobEventContext context)
     {
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
-        var job = await store.FindAsync(context.EventData.Key);
+        var job = await store.FindAsync(context.EventData.Key, context.EventData.CancellationToken);
         if (job != null)
         {
             job.TriggerCount += 1;
@@ -65,7 +66,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Status = JobStatus.Stopped;
                     job.IsAbandoned = true;
                     job.NextRunTime = null;
-                    await RemoveJobAsync(context, job);
+                    await RemoveJobAsync(context, job, context.EventData.CancellationToken);
                 }
             }
             else
@@ -79,18 +80,18 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Status = JobStatus.Completed;
                     job.NextRunTime = null;
 
-                    await RemoveJobAsync(context, job);
+                    await RemoveJobAsync(context, job, context.EventData.CancellationToken);
                 }
             }
 
-            await store.StoreAsync(job);
+            await store.StoreAsync(job, context.EventData.CancellationToken);
         }
     }
 
-    private async Task RemoveJobAsync(JobEventContext context, JobInfo jobInfo)
+    private async Task RemoveJobAsync(JobEventContext context, JobInfo jobInfo, CancellationToken cancellationToken = default)
     {
         var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
-        await jobScheduler.RemoveAsync(jobInfo);
+        await jobScheduler.RemoveAsync(jobInfo, cancellationToken);
     }
 
     private string GetExceptionMessage(Exception exception)

@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InvalidGrant:GrantTypeInvalid": "不被允许的授权类型!",
+    "InvalidGrant:PhoneVerifyInvalid": "手机验证码无效或已过期!",
+    "InvalidGrant:PhoneOrTokenCodeNotFound": "手机号码或手机验证码未输入!",
+    "InvalidGrant:PhoneNumberNotRegister": "登录的手机号码未注册!"
+  }
+}

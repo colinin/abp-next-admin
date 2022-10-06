@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.IO;
@@ -25,7 +26,8 @@ public class Program
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     var configuration = config.Build();
-                    if (configuration.GetSection("AgileConfig").Exists())
+                    var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
+                    if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
                     {
                         config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
                     }

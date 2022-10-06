@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.IdentityServer.IdentityResources;
+﻿using LINGYUN.Abp.IdentityServer.IdentityResources;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

@@ -16,8 +16,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Client
 {
     [ExposeServices(
         typeof(MvcCachedApplicationConfigurationClient),
-        typeof(ICachedApplicationConfigurationClient),
-        typeof(IAsyncInitialize)
+        typeof(ICachedApplicationConfigurationClient)
         )]
     public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
@@ -39,11 +38,6 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Client
             HttpContextAccessor = httpContextAccessor;
             Cache = cache;
             Options = options.Value;
-        }
-
-        public async Task InitializeAsync()
-        {
-            await GetAsync();
         }
 
         public async Task<ApplicationConfigurationDto> GetAsync()
