@@ -67,7 +67,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 context.JobDetail.JobType,
                 context.JobDetail.Key.Group,
                 context.JobDetail.Key.Name,
-                context.MergedJobDataMap.ToImmutableDictionary())
+                context.MergedJobDataMap.ToImmutableDictionary(),
+                cancellationToken: cancellationToken)
             {
                 Result = context.Result?.ToString()
             };
@@ -111,7 +112,8 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
                 context.JobDetail.Key.Group,
                 context.JobDetail.Key.Name,
                 context.MergedJobDataMap.ToImmutableDictionary(),
-                jobException)
+                jobException,
+                cancellationToken)
             {
                 Status = JobStatus.Running
             };

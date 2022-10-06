@@ -1,0 +1,8 @@
+{
+  "version": "6.0.0-rc.1",
+  "name": "my-app-auth-server",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "6.0.0-rc.1"
+  }
+}

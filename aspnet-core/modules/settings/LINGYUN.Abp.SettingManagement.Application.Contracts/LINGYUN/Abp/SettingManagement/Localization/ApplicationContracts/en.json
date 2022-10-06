@@ -37,6 +37,8 @@
     "Description:Emailing.Default": "Default",
     "DisplayName:Emailing.Smtp": "Smtp",
     "Description:Emailing.Smtp": "Smtp",
+    "DisplayName:Emailing.SendTestEmail": "Sending a Test Email",
+    "Description:Emailing.SendTestEmail": "Send a test email to test the validity of the email parameters.",
     "DisplayName:FileManagement": "File Management",
     "Description:FileManagement": "File Management",
     "DisplayName:FileManagement.FileSystem": "File System",

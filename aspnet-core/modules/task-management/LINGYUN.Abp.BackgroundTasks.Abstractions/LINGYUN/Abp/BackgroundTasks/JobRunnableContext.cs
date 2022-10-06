@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -11,12 +12,14 @@ public class JobRunnableContext
     public object Result { get; private set; }
     private Func<object, object> GetCacheData { get; set; }
     private Action<object, object> SetCacheData { get; set; }
+    public CancellationToken CancellationToken { get; }
     public JobRunnableContext(
         Type jobType,
         IServiceProvider serviceProvider,
         IReadOnlyDictionary<string, object> jobData,
         Func<object, object> getCache = null,
-        Action<object, object> setCache = null)
+        Action<object, object> setCache = null,
+        CancellationToken cancellationToken = default)
     {
         JobType = jobType;
         ServiceProvider = serviceProvider;
@@ -24,6 +27,8 @@ public class JobRunnableContext
 
         GetCacheData = getCache;
         SetCacheData = setCache;
+
+        CancellationToken = cancellationToken;
     }
 
     public void SetResult(object result)

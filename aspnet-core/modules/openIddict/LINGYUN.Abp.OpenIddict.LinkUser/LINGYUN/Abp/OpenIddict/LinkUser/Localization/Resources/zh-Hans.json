@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InvalidAccessToken": "无效的访问令牌.",
+    "InvalidLinkUserId": "无效的链接用户标识.",
+    "InvalidLinkTenantId": "无效的链接租户标识.",
+    "TheTargetUserIsNotLinkedToYou": "目标用户没有与您链接."
+  }
+}

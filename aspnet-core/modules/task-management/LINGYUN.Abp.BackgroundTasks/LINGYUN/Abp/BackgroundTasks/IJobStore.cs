@@ -14,13 +14,19 @@ public interface IJobStore
     Task<List<JobInfo>> GetAllPeriodTasksAsync(
         CancellationToken cancellationToken = default);
 
-    Task<JobInfo> FindAsync(string jobId);
+    Task<JobInfo> FindAsync(
+        string jobId, 
+        CancellationToken cancellationToken = default);
 
-    Task StoreAsync(JobInfo jobInfo);
+    Task StoreAsync(
+        JobInfo jobInfo, 
+        CancellationToken cancellationToken = default);
 
     Task StoreLogAsync(JobEventData eventData);
 
-    Task RemoveAsync(string jobId);
+    Task RemoveAsync(
+        string jobId, 
+        CancellationToken cancellationToken = default);
 
     Task CleanupAsync(
         int maxResultCount,

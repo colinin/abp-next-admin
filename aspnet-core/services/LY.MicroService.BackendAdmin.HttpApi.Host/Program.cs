@@ -26,7 +26,9 @@ public class Program
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     var configuration = config.Build();
-                    if (configuration.GetSection("AgileConfig").Exists())
+
+                    var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
+                    if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
                     {
                         config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
                     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DynamicProxy;
@@ -86,7 +87,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
     public async Task ExecuteAsync(JobRunnableContext context)
     {
         var worker = (IBackgroundWorker)context.GetService(typeof(TWorker));
-        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider);
+        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider, context.CancellationToken);
 
         switch (worker)
         {

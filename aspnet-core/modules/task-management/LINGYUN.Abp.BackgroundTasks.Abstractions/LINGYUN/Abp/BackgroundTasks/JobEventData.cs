@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
@@ -65,13 +66,16 @@ public class JobEventData
     /// 下次运行时间
     /// </summary>
     public DateTime? NextRunTime { get; set; }
+
+    public CancellationToken CancellationToken { get; }
     public JobEventData(
         string key,
         Type type, 
         string group, 
         string name,
         IReadOnlyDictionary<string, object> args,
-        Exception exception = null)
+        Exception exception = null,
+        CancellationToken cancellationToken = default)
     {
         Key = key;
         Type = type;
@@ -79,5 +83,6 @@ public class JobEventData
         Name = name;
         Args = args;
         Exception = exception;
+        CancellationToken = cancellationToken;
     }
 }

@@ -37,6 +37,7 @@ namespace LY.MicroService.IdentityServer;
 
 public partial class IdentityServerModule
 {
+    protected const string ApplicationName = "Identity-Server-STS";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -49,7 +50,7 @@ public partial class IdentityServerModule
 
     private void PreConfigureApp()
     {
-        AbpSerilogEnrichersConsts.ApplicationName = "Identity-Server-STS";
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
@@ -136,12 +137,7 @@ public partial class IdentityServerModule
     {
         Configure<AbpDistributedCacheOptions>(options =>
         {
-            // 最好统一命名,不然某个缓存变动其他应用服务有例外发生
-            options.KeyPrefix = "LINGYUN.Abp.Application";
-            // 滑动过期30天
-            options.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromDays(30d);
-            // 绝对过期60天
-            options.GlobalCacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now.AddDays(60d);
+            configuration.GetSection("DistributedCache").Bind(options);
         });
 
         Configure<RedisCacheOptions>(options =>
@@ -199,7 +195,7 @@ public partial class IdentityServerModule
         Configure<AbpAuditingOptions>(options =>
         {
             // options.IsEnabledForGetRequests = true;
-            options.ApplicationName = "Identity-Server-STS";
+            options.ApplicationName = ApplicationName;
         });
     }
     private void ConfigureUrls(IConfiguration configuration)

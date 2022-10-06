@@ -33,7 +33,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         Options = options.Value;
     }
 
-    public async Task AddAsync(IBackgroundWorker worker)
+    public async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
     {
         var adapterType = typeof(BackgroundWorkerAdapter<>)
             .MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
@@ -51,10 +51,10 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         jobInfo.CreationTime = Clock.Now;
         jobInfo.TenantId = CurrentTenant.Id;
         // 存储状态
-        await JobStore.StoreAsync(jobInfo);
+        await JobStore.StoreAsync(jobInfo, cancellationToken);
 
         // 发布作业
-        await JobPublisher.PublishAsync(jobInfo);
+        await JobPublisher.PublishAsync(jobInfo, cancellationToken);
     }
 
     public Task StartAsync(CancellationToken cancellationToken = default)

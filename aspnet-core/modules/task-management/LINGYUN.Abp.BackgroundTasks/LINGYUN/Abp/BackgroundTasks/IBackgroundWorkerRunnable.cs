@@ -1,4 +1,5 @@
-﻿using Volo.Abp.BackgroundWorkers;
+﻿using System.Threading;
+using Volo.Abp.BackgroundWorkers;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 

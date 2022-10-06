@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "LY.MicroService.AuthServer": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://127.0.0.1:44385;https://127.0.0.1:44386"
+    }
+  }
+}

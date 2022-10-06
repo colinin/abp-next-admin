@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using DotNetCore.CAP.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,8 @@ namespace LINGYUN.Abp.EventBus.CAP
                 base.FindConsumersFromInterfaceTypes(provider).ToList();
             //handlers
             var handlers = AbpDistributedEventBusOptions.Handlers;
+            var logger = provider.GetRequiredService<ILogger<AbpCAPConsumerServiceSelector>>();
+            var consumerExecutorDescriptorComparer = new ConsumerExecutorDescriptorComparer(logger);
 
             foreach (var handler in handlers)
             {
@@ -73,7 +76,7 @@ namespace LINGYUN.Abp.EventBus.CAP
 
                         foreach (var consumerExecutorDescriptor in consumerExecutorDescriptors)
                         {
-                            if (executorDescriptorList.Any(x => new ConsumerExecutorDescriptorComparer().Equals(x, consumerExecutorDescriptor)))
+                            if (executorDescriptorList.Any(x => consumerExecutorDescriptorComparer.Equals(x, consumerExecutorDescriptor)))
                             {
                                 // 如果存在多个消费者,后续的消费者需要重新定义分组才能不被 CAP 框架过滤掉
                                 var groupAliaName = handler.IsGenericType

@@ -7,6 +7,10 @@
         /// </summary>
         public static string AuthenticationScheme { get; set; }= "WeChat";
         /// <summary>
+        /// 微信个人信息标识
+        /// </summary>
+        public static string ProfileKey { get; set; } = "wechat.profile";
+        /// <summary>
         /// 微信授权Token参数名称
         /// </summary>
         public static string TokenName  { get; set; }= "code";
