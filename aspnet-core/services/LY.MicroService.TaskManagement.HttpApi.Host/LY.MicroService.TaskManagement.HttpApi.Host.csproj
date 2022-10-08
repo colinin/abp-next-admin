@@ -77,4 +77,8 @@
 		<ProjectReference Include="..\..\modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Modules\" />
+	</ItemGroup>
+
 </Project>

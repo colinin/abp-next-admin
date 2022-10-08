@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Dynamic.Queryable;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
@@ -6,6 +7,7 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.TaskManagement;
 
 [DependsOn(typeof(TaskManagementApplicationContractsModule))]
+[DependsOn(typeof(AbpDynamicQueryableApplicationModule))]
 [DependsOn(typeof(TaskManagementDomainModule))]
 [DependsOn(typeof(AbpDddApplicationModule))]
 public class TaskManagementApplicationModule : AbpModule

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using LINGYUN.Abp.Dynamic.Queryable;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -10,7 +11,8 @@ public interface IBackgroundJobInfoAppService :
         string,
         BackgroundJobInfoGetListInput,
         BackgroundJobInfoCreateDto,
-        BackgroundJobInfoUpdateDto>
+        BackgroundJobInfoUpdateDto>,
+    IDynamicQueryableAppService<BackgroundJobInfoDto>
 {
     Task TriggerAsync(string id);
 

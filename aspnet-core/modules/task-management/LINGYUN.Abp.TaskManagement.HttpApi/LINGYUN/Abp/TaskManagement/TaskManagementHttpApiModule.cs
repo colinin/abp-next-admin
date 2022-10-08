@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Localization;
+using LINGYUN.Abp.Dynamic.Queryable;
 using LINGYUN.Abp.TaskManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Volo.Abp.Validation.Localization;
 namespace LINGYUN.Abp.TaskManagement;
 
 [DependsOn(typeof(TaskManagementApplicationContractsModule))]
+[DependsOn(typeof(AbpDynamicQueryableHttpApiModule))]
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
 public class TaskManagementHttpApiModule : AbpModule
 {

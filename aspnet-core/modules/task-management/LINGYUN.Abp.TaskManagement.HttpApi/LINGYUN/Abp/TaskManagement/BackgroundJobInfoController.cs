@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.TaskManagement.Permissions;
+﻿using LINGYUN.Abp.Dynamic.Queryable;
+using LINGYUN.Abp.TaskManagement.Localization;
+using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -11,14 +13,17 @@ namespace LINGYUN.Abp.TaskManagement;
 [Area(TaskManagementRemoteServiceConsts.ModuleName)]
 [Authorize(TaskManagementPermissions.BackgroundJobs.Default)]
 [Route($"api/{TaskManagementRemoteServiceConsts.ModuleName}/background-jobs")]
-public class BackgroundJobInfoController : TaskManagementController, IBackgroundJobInfoAppService
+public class BackgroundJobInfoController : DynamicQueryableControllerBase<BackgroundJobInfoDto>, IBackgroundJobInfoAppService
 {
     protected IBackgroundJobInfoAppService BackgroundJobInfoAppService { get; }
 
     public BackgroundJobInfoController(
         IBackgroundJobInfoAppService backgroundJobInfoAppService)
+        : base(backgroundJobInfoAppService)
     {
         BackgroundJobInfoAppService = backgroundJobInfoAppService;
+
+        LocalizationResource = typeof(TaskManagementResource);
     }
 
     [HttpPost]
