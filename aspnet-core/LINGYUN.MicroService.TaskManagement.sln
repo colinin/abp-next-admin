@@ -70,6 +70,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{DD51A1AE-830F-4909-A729-7EBC398B17AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exten-plugin", "exten-plugin", "{B38D2141-AC0F-4F4A-9315-4292E3856C15}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "modules\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{3EE8383C-6F25-4BCD-8852-B23D1C864324}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{B54F200C-D648-477B-BE39-B40A1D956F13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{DF963ABB-E713-49E9-A03C-DEB431E369DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +182,22 @@ Global
 		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD51A1AE-830F-4909-A729-7EBC398B17AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE8383C-6F25-4BCD-8852-B23D1C864324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE8383C-6F25-4BCD-8852-B23D1C864324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE8383C-6F25-4BCD-8852-B23D1C864324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE8383C-6F25-4BCD-8852-B23D1C864324}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54F200C-D648-477B-BE39-B40A1D956F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54F200C-D648-477B-BE39-B40A1D956F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54F200C-D648-477B-BE39-B40A1D956F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54F200C-D648-477B-BE39-B40A1D956F13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -201,6 +227,10 @@ Global
 		{2FA23894-E598-4896-A336-3E7C682699D9} = {FA5E30C9-05E3-4E35-AEDD-7DC5534E3A01}
 		{194DAB61-BC3C-4003-BFF0-C87763E7B8B0} = {FA5E30C9-05E3-4E35-AEDD-7DC5534E3A01}
 		{DD51A1AE-830F-4909-A729-7EBC398B17AD} = {18918B94-BB48-48F3-874D-B91B0252440A}
+		{3EE8383C-6F25-4BCD-8852-B23D1C864324} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
+		{B54F200C-D648-477B-BE39-B40A1D956F13} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
+		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
+		{DF963ABB-E713-49E9-A03C-DEB431E369DF} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

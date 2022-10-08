@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\configureawait.props" />
 	<Import Project="..\..\..\common.props" />
@@ -13,8 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />
-	  <ProjectReference Include="..\LINGYUN.Abp.TaskManagement.Application.Contracts\LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

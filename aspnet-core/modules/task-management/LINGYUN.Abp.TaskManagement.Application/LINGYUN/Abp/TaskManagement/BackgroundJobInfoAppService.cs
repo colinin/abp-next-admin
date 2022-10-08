@@ -1,9 +1,14 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.Dynamic.Queryable;
+using LINGYUN.Abp.TaskManagement.Localization;
 using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -12,7 +17,7 @@ using Volo.Abp.Data;
 namespace LINGYUN.Abp.TaskManagement;
 
 [Authorize(TaskManagementPermissions.BackgroundJobs.Default)]
-public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBackgroundJobInfoAppService
+public class BackgroundJobInfoAppService : DynamicQueryableAppService<BackgroundJobInfo, BackgroundJobInfoDto>, IBackgroundJobInfoAppService
 {
     protected AbpBackgroundTasksOptions Options { get; }
     protected BackgroundJobManager BackgroundJobManager { get; }
@@ -29,6 +34,9 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         JobDefinitionManager = jobDefinitionManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
         Options = options.Value;
+
+        LocalizationResource = typeof(TaskManagementResource);
+        ObjectMapperContext = typeof(TaskManagementApplicationModule);
     }
 
     public virtual Task<ListResultDto<BackgroundJobDefinitionDto>> GetDefinitionsAsync()
@@ -350,5 +358,25 @@ public class BackgroundJobInfoAppService : TaskManagementApplicationService, IBa
         {
             await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);
         }
+    }
+
+    protected async override Task<int> GetCountAsync(
+        Expression<Func<BackgroundJobInfo, bool>> condition)
+    {
+        var queryable = await BackgroundJobInfoRepository.GetQueryableAsync();
+
+        return await AsyncExecuter.CountAsync(queryable.Where(condition));
+    }
+
+    protected async override Task<List<BackgroundJobInfo>> GetListAsync(
+        Expression<Func<BackgroundJobInfo, bool>> condition, 
+        PagedAndSortedResultRequestDto pageRequest)
+    {
+        var queryable = await BackgroundJobInfoRepository.GetQueryableAsync();
+
+        return await AsyncExecuter.ToListAsync(
+            queryable.Where(condition)
+                .PageBy(pageRequest.SkipCount, pageRequest.MaxResultCount)
+                .OrderBy(pageRequest.Sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC"));
     }
 }

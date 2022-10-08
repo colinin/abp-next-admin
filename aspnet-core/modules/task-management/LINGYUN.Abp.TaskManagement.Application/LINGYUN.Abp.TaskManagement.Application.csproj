@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.TaskManagement.Application.Contracts\LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.TaskManagement.Domain\LINGYUN.Abp.TaskManagement.Domain.csproj" />
 	</ItemGroup>
