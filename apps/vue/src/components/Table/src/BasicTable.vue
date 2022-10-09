@@ -13,6 +13,16 @@
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
+      <template #advanceBefore>
+        <Button
+          v-if="getAdvancedSearchProps?.useAdvancedSearch"
+          type="link"
+          size="small"
+          @click="handleAdvanceSearch"
+        >
+          {{ t('component.table.advancedSearch.title') }}
+        </Button>
+      </template>
     </BasicForm>
 
     <Table
@@ -36,6 +46,7 @@
       <!--        <HeaderCell :column="column" />-->
       <!--      </template>-->
     </Table>
+    <AdvancedSearch @register="registerAdSearchModal" v-bind="getAdvancedSearchProps" @search="handleAdvanceSearchChange" />
   </div>
 </template>
 <script lang="ts">
@@ -46,11 +57,13 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect } from 'vue';
+  import { defineComponent, ref, reactive, computed, nextTick, unref, toRaw, inject, watchEffect } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
+  import { useModal } from '/@/components/Modal/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
+  import AdvancedSearch from './components/AdvancedSearch.vue';
   import { InnerHandlers } from './types/table';
 
   import { usePagination } from './hooks/usePagination';
@@ -68,6 +81,7 @@
   import { useTableFooter } from './hooks/useTableFooter';
   import { useTableForm } from './hooks/useTableForm';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useI18n } from '/@/hooks/web/useI18n';
 
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
@@ -79,6 +93,7 @@
       Table,
       BasicForm,
       HeaderCell,
+      AdvancedSearch,
     },
     props: basicProps,
     emits: [
@@ -100,6 +115,7 @@
       'columns-change',
     ],
     setup(props, { attrs, emit, slots, expose }) {
+      const { t } = useI18n();
       const tableElRef = ref(null);
       const tableData = ref<Recordable[]>([]);
 
@@ -109,6 +125,7 @@
 
       const { prefixCls } = useDesign('basic-table');
       const [registerForm, formActions] = useForm();
+      const [registerAdSearchModal, { openModal: openAdSearchModal }] = useModal();
 
       const getProps = computed(() => {
         return { ...props, ...unref(innerPropsRef) } as BasicTableProps;
@@ -232,7 +249,14 @@
         getDataSourceRef,
       );
 
-      const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } =
+      const {
+        getFormProps,
+        getAdvancedSearchProps,
+        replaceFormSlotKey,
+        getFormSlotKeys,
+        handleSearchInfoChange,
+        handleAdvanceSearchChange
+      } =
         useTableForm(getProps, slots, fetch, getLoading);
 
       const getBindValues = computed(() => {
@@ -333,13 +357,22 @@
         }
       }
 
+      function handleAdvanceSearch() {
+        nextTick(() => openAdSearchModal(true));
+      }
+
       return {
+        t,
         formRef,
         tableElRef,
         getBindValues,
         getLoading,
         registerForm,
         handleSearchInfoChange,
+        registerAdSearchModal,
+        getAdvancedSearchProps,
+        handleAdvanceSearch,
+        handleAdvanceSearchChange,
         getEmptyDataIsShowTable,
         handleTableChange,
         getRowClassName,

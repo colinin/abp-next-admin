@@ -239,16 +239,22 @@ export function useDataSource(
     return findRow(dataSourceRef.value);
   }
 
-  async function fetch(opt?: FetchParams) {
+  async function fetch(opt?: FetchParams, api?: (...arg: any) => Promise<any>, request?: any) {
+    const { api: apiFunc, useSearchForm } = unref(propsRef);
+    api = api || apiFunc;
+    if (!api || !isFunction(api)) return;
+    request = request || useSearchForm ? getFieldsValue() : {};
+    _fetch(opt, api, request);
+  }
+
+  async function _fetch(opt?: FetchParams, api?: (...arg: any) => Promise<any>, request?: any) {
     const {
-      api,
       searchInfo,
       defSort,
       fetchSetting,
       beforeFetch,
       beforeResponse,
       afterFetch,
-      useSearchForm,
       pagination,
     } = unref(propsRef);
     if (!api || !isFunction(api)) return;
@@ -274,7 +280,7 @@ export function useDataSource(
 
       let params: Recordable = merge(
         pageParams,
-        useSearchForm ? getFieldsValue() : {},
+        request,
         searchInfo,
         opt?.searchInfo ?? {},
         defSort,
@@ -308,7 +314,7 @@ export function useDataSource(
           setPagination({
             current: currentTotalPage,
           });
-          return await fetch(opt);
+          return await _fetch(opt, api, request);
         }
       }
 
