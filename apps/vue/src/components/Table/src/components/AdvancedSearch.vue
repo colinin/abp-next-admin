@@ -8,7 +8,8 @@
   >
     <Card :title="t('component.table.advancedSearch.conditions')">
       <template #extra>
-        <Button @click="handleAddField" type="primary">{{ t('component.table.advancedSearch.addCondition') }}</Button>
+        <Button @click="resetFields" danger>{{ t('component.table.advancedSearch.clearCondition') }}</Button>
+        <Button @click="handleAddField" type="primary" style="margin-left: 20px;">{{ t('component.table.advancedSearch.addCondition') }}</Button>
       </template>
       <Table
         size="small"
@@ -91,6 +92,10 @@
 
   const emits = defineEmits(['register', 'search']);
   const props = defineProps({
+    useAdvancedSearch: {
+      type: Boolean,
+      default: false,
+    },
     defineFieldApi: {
       type: Function as PropType<() => Promise<any>>
     },
@@ -207,7 +212,8 @@
   const [registerModal, { closeModal }] = useModalInner();
 
   function fetch() {
-    const { defineFieldApi, listField } = props;
+    const { useAdvancedSearch, defineFieldApi, listField } = props;
+    if (!useAdvancedSearch) return;
     if (!defineFieldApi || !isFunction(defineFieldApi)) return;
     setLoading(true);
     defineFieldApi().then((res) => {
@@ -260,9 +266,15 @@
     closeModal();
   }
 
+  function resetFields() {
+    formMdel.paramters = [];
+  }
+
   function setLoading(loading: boolean) {
     loadingRef.value = loading;
   }
+
+  defineExpose({ resetFields });
 </script>
 
 <style lang="less" scoped>

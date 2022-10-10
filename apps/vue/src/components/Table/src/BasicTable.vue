@@ -8,6 +8,7 @@
       :tableAction="tableAction"
       @register="registerForm"
       @submit="handleSearchInfoChange"
+      @reset="handleSearchInfoReset"
       @advanced-change="redoHeight"
     >
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
@@ -46,7 +47,12 @@
       <!--        <HeaderCell :column="column" />-->
       <!--      </template>-->
     </Table>
-    <AdvancedSearch @register="registerAdSearchModal" v-bind="getAdvancedSearchProps" @search="handleAdvanceSearchChange" />
+    <AdvancedSearch
+      ref="advancedSearchRef"
+      @register="registerAdSearchModal"
+      v-bind="getAdvancedSearchProps"
+      @search="handleAdvanceSearchChange"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -57,8 +63,8 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, reactive, computed, nextTick, unref, toRaw, inject, watchEffect } from 'vue';
-  import { Table } from 'ant-design-vue';
+  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect, nextTick } from 'vue';
+  import { Button, Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { useModal } from '/@/components/Modal/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
@@ -92,6 +98,7 @@
     components: {
       Table,
       BasicForm,
+      Button,
       HeaderCell,
       AdvancedSearch,
     },
@@ -121,6 +128,7 @@
 
       const wrapRef = ref(null);
       const formRef = ref(null);
+      const advancedSearchRef = ref<any>(null);
       const innerPropsRef = ref<Partial<BasicTableProps>>();
 
       const { prefixCls } = useDesign('basic-table');
@@ -257,7 +265,7 @@
         handleSearchInfoChange,
         handleAdvanceSearchChange
       } =
-        useTableForm(getProps, slots, fetch, getLoading);
+        useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
@@ -357,6 +365,11 @@
         }
       }
 
+      function handleSearchInfoReset() {
+        const advancedSearch = unref(advancedSearchRef);
+        advancedSearch?.resetFields();
+      }
+
       function handleAdvanceSearch() {
         nextTick(() => openAdSearchModal(true));
       }
@@ -365,14 +378,15 @@
         t,
         formRef,
         tableElRef,
+        advancedSearchRef,
         getBindValues,
         getLoading,
         registerForm,
         handleSearchInfoChange,
         registerAdSearchModal,
-        getAdvancedSearchProps,
-        handleAdvanceSearch,
         handleAdvanceSearchChange,
+        handleSearchInfoReset,
+        handleAdvanceSearch,
         getEmptyDataIsShowTable,
         handleTableChange,
         getRowClassName,
@@ -380,6 +394,7 @@
         tableAction,
         redoHeight,
         getFormProps: getFormProps as any,
+        getAdvancedSearchProps,
         replaceFormSlotKey,
         getFormSlotKeys,
         getWrapperClass,
