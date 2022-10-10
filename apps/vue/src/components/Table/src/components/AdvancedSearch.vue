@@ -264,6 +264,7 @@
       if (defineParam.javaScriptType === 'boolean') {
         record.value = false;
       }
+      emits('change', getSearchInput());
     }
   }
 
