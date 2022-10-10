@@ -202,9 +202,14 @@
   ]);
 
   const getAvailableParams = computed(() => {
+    // 如果每个字段只允许出现一次则取消注释
+    // const defineParams = unref(defineParamsRef);
+    // if (!defineParams.length) return[];
+    // return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
+
+    // 允许字段出现多次,用于区间查询
     const defineParams = unref(defineParamsRef);
-    if (!defineParams.length) return[];
-    return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
+    return defineParams;
   });
 
   onMounted(fetch);

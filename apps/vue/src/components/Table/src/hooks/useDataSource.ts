@@ -256,7 +256,6 @@ export function useDataSource(
     // 高级查询条件支持
     if (advancedSearchConfig?.useAdvancedSearch) {
       const searchInput = getFieldsValue();
-      console.log(searchInput);
       if (Reflect.has(searchInput, 'queryable') &&
           Array.isArray(searchInput.queryable?.paramters) &&
           searchInput.queryable.paramters.length > 0)
@@ -294,7 +293,6 @@ export function useDataSource(
         opt?.sortInfo ?? {},
         opt?.filterInfo ?? {},
       );
-      console.log(params);
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
