@@ -25,7 +25,7 @@ public static class ObjectQueryableExtensions
         {
             Expression exp = null;
             Type propertyType = null;
-            var leftParamter = Expression.PropertyOrField(typeExpression, paramter.Filed);
+            var leftParamter = Expression.PropertyOrField(typeExpression, paramter.Field);
             if (!string.IsNullOrWhiteSpace(paramter.Type))
             {
                 propertyType = Type.GetType(paramter.Type, true);

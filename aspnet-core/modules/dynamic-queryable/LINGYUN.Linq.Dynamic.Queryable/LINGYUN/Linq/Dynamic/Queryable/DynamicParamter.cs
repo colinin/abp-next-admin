@@ -2,7 +2,7 @@
 
 public class DynamicParamter
 {
-    public string Filed { get; set; }
+    public string Field { get; set; }
 
     public DynamicLogic Logic { get; set; } = DynamicLogic.And;
 
