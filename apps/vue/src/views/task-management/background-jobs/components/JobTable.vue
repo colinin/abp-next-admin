@@ -112,6 +112,8 @@
     deleteById,
     bulkStop,
     bulkStart,
+    getAvailableFields,
+    advancedSearch,
   } from '/@/api/task-management/backgroundJobInfo';
   import { JobStatus } from '/@/api/task-management/model/backgroundJobInfoModel';
   import { getDataColumns } from '../datas/TableData';
@@ -145,6 +147,11 @@
     immediate: true,
     clickToRowSelect: false,
     formConfig: getSearchFormSchemas(),
+    advancedSearchConfig: {
+      useAdvancedSearch: true,
+      defineFieldApi: getAvailableFields,
+      fetchApi: advancedSearch,
+    },
     rowSelection: {
       type: 'checkbox',
       onChange: handleSelectChange,

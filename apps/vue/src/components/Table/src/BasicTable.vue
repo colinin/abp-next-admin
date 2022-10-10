@@ -8,10 +8,21 @@
       :tableAction="tableAction"
       @register="registerForm"
       @submit="handleSearchInfoChange"
+      @reset="handleSearchInfoReset"
       @advanced-change="redoHeight"
     >
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
         <slot :name="item" v-bind="data || {}"></slot>
+      </template>
+      <template #advanceBefore>
+        <Button
+          v-if="getAdvancedSearchProps?.useAdvancedSearch"
+          type="link"
+          size="small"
+          @click="handleAdvanceSearch"
+        >
+          {{ t('component.table.advancedSearch.title') }}
+        </Button>
       </template>
     </BasicForm>
 
@@ -36,6 +47,12 @@
       <!--        <HeaderCell :column="column" />-->
       <!--      </template>-->
     </Table>
+    <AdvancedSearch
+      ref="advancedSearchRef"
+      @register="registerAdSearchModal"
+      v-bind="getAdvancedSearchProps"
+      @search="handleAdvanceSearchChange"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -46,11 +63,13 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect } from 'vue';
-  import { Table } from 'ant-design-vue';
+  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect, nextTick } from 'vue';
+  import { Button, Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
+  import { useModal } from '/@/components/Modal/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
+  import AdvancedSearch from './components/AdvancedSearch.vue';
   import { InnerHandlers } from './types/table';
 
   import { usePagination } from './hooks/usePagination';
@@ -68,6 +87,7 @@
   import { useTableFooter } from './hooks/useTableFooter';
   import { useTableForm } from './hooks/useTableForm';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useI18n } from '/@/hooks/web/useI18n';
 
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
@@ -78,7 +98,9 @@
     components: {
       Table,
       BasicForm,
+      Button,
       HeaderCell,
+      AdvancedSearch,
     },
     props: basicProps,
     emits: [
@@ -100,15 +122,18 @@
       'columns-change',
     ],
     setup(props, { attrs, emit, slots, expose }) {
+      const { t } = useI18n();
       const tableElRef = ref(null);
       const tableData = ref<Recordable[]>([]);
 
       const wrapRef = ref(null);
       const formRef = ref(null);
+      const advancedSearchRef = ref<any>(null);
       const innerPropsRef = ref<Partial<BasicTableProps>>();
 
       const { prefixCls } = useDesign('basic-table');
       const [registerForm, formActions] = useForm();
+      const [registerAdSearchModal, { openModal: openAdSearchModal }] = useModal();
 
       const getProps = computed(() => {
         return { ...props, ...unref(innerPropsRef) } as BasicTableProps;
@@ -232,8 +257,15 @@
         getDataSourceRef,
       );
 
-      const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } =
-        useTableForm(getProps, slots, fetch, getLoading);
+      const {
+        getFormProps,
+        getAdvancedSearchProps,
+        replaceFormSlotKey,
+        getFormSlotKeys,
+        handleSearchInfoChange,
+        handleAdvanceSearchChange
+      } =
+        useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
@@ -333,13 +365,28 @@
         }
       }
 
+      function handleSearchInfoReset() {
+        const advancedSearch = unref(advancedSearchRef);
+        advancedSearch?.resetFields();
+      }
+
+      function handleAdvanceSearch() {
+        nextTick(() => openAdSearchModal(true));
+      }
+
       return {
+        t,
         formRef,
         tableElRef,
+        advancedSearchRef,
         getBindValues,
         getLoading,
         registerForm,
         handleSearchInfoChange,
+        registerAdSearchModal,
+        handleAdvanceSearchChange,
+        handleSearchInfoReset,
+        handleAdvanceSearch,
         getEmptyDataIsShowTable,
         handleTableChange,
         getRowClassName,
@@ -347,6 +394,7 @@
         tableAction,
         redoHeight,
         getFormProps: getFormProps as any,
+        getAdvancedSearchProps,
         replaceFormSlotKey,
         getFormSlotKeys,
         getWrapperClass,

@@ -1,8 +1,8 @@
 import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
-import type { ColumnProps } from 'ant-design-vue/lib/table';
+import type { ColumnProps, TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
+import type { AdvanceSearchProps } from './advancedSearch';
 
 import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
@@ -185,6 +185,8 @@ export interface BasicTableProps<T = any> {
   useSearchForm?: boolean;
   // 表单配置
   formConfig?: Partial<FormProps>;
+   // 高级查询配置
+  advancedSearchConfig?: Partial<AdvanceSearchProps>;
   // 列配置
   columns: BasicColumn[];
   // 是否显示序号列

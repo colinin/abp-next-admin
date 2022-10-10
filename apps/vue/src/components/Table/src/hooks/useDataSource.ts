@@ -245,13 +245,24 @@ export function useDataSource(
       searchInfo,
       defSort,
       fetchSetting,
+      useSearchForm,
       beforeFetch,
       beforeResponse,
       afterFetch,
-      useSearchForm,
       pagination,
+      advancedSearchConfig,
     } = unref(propsRef);
-    if (!api || !isFunction(api)) return;
+    let fetchApi = api;
+    // 高级查询条件支持
+    if (advancedSearchConfig?.useAdvancedSearch) {
+      const searchInput = getFieldsValue();
+      console.log(searchInput);
+      if (Reflect.has(searchInput, 'queryable') &&
+          Array.isArray(searchInput.queryable?.paramters) &&
+          searchInput.queryable.paramters.length > 0)
+      fetchApi = advancedSearchConfig?.fetchApi;
+    }
+    if (!fetchApi || !isFunction(fetchApi)) return;
     try {
       setLoading(true);
       const { pageField, sizeField, listField, totalField } = Object.assign(
@@ -283,11 +294,12 @@ export function useDataSource(
         opt?.sortInfo ?? {},
         opt?.filterInfo ?? {},
       );
+      console.log(params);
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
 
-      let res = await api(params);
+      let res = await fetchApi(params);
 
       // 增加用户自定义的返回数据处理函数
       if (beforeResponse && isFunction(beforeResponse)) {
@@ -340,7 +352,7 @@ export function useDataSource(
     }
   }
 
-  function setTableData<T = Recordable>(values: T[]) {
+  function setTableData(values: any[]) {
     dataSourceRef.value = values;
   }
 

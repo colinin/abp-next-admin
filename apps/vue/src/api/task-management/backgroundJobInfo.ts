@@ -8,6 +8,7 @@ import {
 } from './model/backgroundJobInfoModel';
 import { format } from '/@/utils/strings';
 import { ListResultDto, PagedResultDto } from '../model/baseModel';
+import { DefineParamter, DynamicQueryable } from '/@/components/Table/src/types/advancedSearch';
 
 enum Api {
   GetById = '/api/task-management/background-jobs/{id}',
@@ -27,6 +28,8 @@ enum Api {
   BulkStop = '/api/task-management/background-jobs/bulk-stop',
   BulkDelete = '/api/task-management/background-jobs/bulk-delete',
   GetDefinitions = '/api/task-management/background-jobs/definitions',
+  GetAvailableFields = '/api/task-management/background-jobs/available-fields',
+  AdvancedSearch = '/api/task-management/background-jobs/search',
 }
 
 export const getById = (id: string) => {
@@ -41,6 +44,19 @@ export const getList = (input: BackgroundJobInfoGetListInput) => {
     params: input,
   });
 };
+
+export const getAvailableFields = () => {
+  return defAbpHttp.get<ListResultDto<DefineParamter>>({
+    url: Api.GetAvailableFields,
+  });
+}
+
+export const advancedSearch = (input: DynamicQueryable) => {
+  return defAbpHttp.post<PagedResultDto<BackgroundJobInfo>>({
+    url: Api.AdvancedSearch,
+    data: input,
+  });
+}
 
 export const getDefinitions = () => {
   return defAbpHttp.get<ListResultDto<BackgroundJobDefinition>>({

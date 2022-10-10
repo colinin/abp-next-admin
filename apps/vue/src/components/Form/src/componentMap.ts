@@ -33,8 +33,11 @@ import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
 import { Input as BInput } from '/@/components/Input';
+import { CodeEditorX } from '/@/components/CodeEditor';
 
 const componentMap = new Map<ComponentType, Component>();
+
+componentMap.set('CodeEditorX', CodeEditorX);
 
 componentMap.set('Input', BInput);
 componentMap.set('InputGroup', Input.Group);

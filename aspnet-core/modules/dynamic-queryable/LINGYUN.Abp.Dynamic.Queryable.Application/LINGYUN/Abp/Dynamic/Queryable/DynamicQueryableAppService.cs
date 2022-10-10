@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -36,7 +37,8 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
                 {
                     Name = propertyInfo.Name,
                     Type = propertyInfo.PropertyType.FullName,
-                    Description = localizedProp.Value ?? propertyInfo.Name
+                    Description = localizedProp.Value ?? propertyInfo.Name,
+                    JavaScriptType = ConvertToJavaScriptType(propertyInfo.PropertyType)
                 });
         }
 
@@ -70,5 +72,49 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
     protected virtual List<TEntityDto> MapToEntitiesDto(List<TEntity> entities)
     {
         return ObjectMapper.Map<List<TEntity>, List<TEntityDto>>(entities);
+    }
+
+    protected virtual string ConvertToJavaScriptType(Type propertyType)
+    {
+        if (propertyType.IsNullableType())
+        {
+            propertyType = propertyType.GetGenericArguments().FirstOrDefault();
+        }
+        var typeCode = Type.GetTypeCode(propertyType);
+        switch (typeCode)
+        {
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+            case TypeCode.Int64:
+            case TypeCode.UInt16:
+            case TypeCode.UInt32:
+            case TypeCode.UInt64:
+            case TypeCode.Single:
+            case TypeCode.Byte:
+            case TypeCode.Double:
+            case TypeCode.SByte:
+            case TypeCode.Decimal:
+                return "number";
+            case TypeCode.Boolean:
+                return "boolean";
+            case TypeCode.Char:
+            case TypeCode.String:
+                return "string";
+            case TypeCode.DateTime:
+                return "Date";
+            case TypeCode.Object:
+                if (propertyType.IsArray)
+                {
+                    return "array";
+                }
+                else
+                {
+                    return "object";
+                }
+            default:
+            case TypeCode.Empty:
+            case TypeCode.DBNull:
+                return "object";
+        }
     }
 }
