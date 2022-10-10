@@ -65,6 +65,10 @@ export function useTableForm(
 
   function handleAdvanceSearchChange(queryable: DynamicQueryable) {
     setFieldsValue({ queryable: queryable });
+  }
+
+  function handleAdvanceSearchInfoChange(queryable: DynamicQueryable) {
+    setFieldsValue({ queryable: queryable });
     setTimeout(() => {
       fetch({ page: 1 });
     }, 300);
@@ -77,5 +81,6 @@ export function useTableForm(
     getAdvancedSearchProps,
     handleSearchInfoChange,
     handleAdvanceSearchChange,
+    handleAdvanceSearchInfoChange,
   };
 }

@@ -51,7 +51,8 @@
       ref="advancedSearchRef"
       @register="registerAdSearchModal"
       v-bind="getAdvancedSearchProps"
-      @search="handleAdvanceSearchChange"
+      @change="handleAdvanceSearchChange"
+      @search="handleAdvanceSearchInfoChange"
     />
   </div>
 </template>
@@ -263,7 +264,8 @@
         replaceFormSlotKey,
         getFormSlotKeys,
         handleSearchInfoChange,
-        handleAdvanceSearchChange
+        handleAdvanceSearchChange,
+        handleAdvanceSearchInfoChange
       } =
         useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
 
@@ -385,6 +387,7 @@
         handleSearchInfoChange,
         registerAdSearchModal,
         handleAdvanceSearchChange,
+        handleAdvanceSearchInfoChange,
         handleSearchInfoReset,
         handleAdvanceSearch,
         getEmptyDataIsShowTable,

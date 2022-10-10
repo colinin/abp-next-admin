@@ -86,11 +86,11 @@
   import { CodeEditorX, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { DefineParamter, DynamicLogic, DynamicComparison, DynamicQueryable } from '../types/advancedSearch';
+  import { DefineParamter, DynamicLogic, DynamicComparison, DynamicQueryable, DynamicParamter } from '../types/advancedSearch';
   import { isFunction } from '/@/utils/is';
   import { get } from 'lodash-es';
 
-  const emits = defineEmits(['register', 'search']);
+  const emits = defineEmits(['register', 'search', 'change']);
   const props = defineProps({
     useAdvancedSearch: {
       type: Boolean,
@@ -234,19 +234,24 @@
     const availableParams = unref(getAvailableParams);
     if (availableParams.length > 0) {
       const bindParamter = availableParams[availableParams.length - 1];
-      formMdel.paramters.push({
+      const newParamter: DynamicParamter = {
         field: bindParamter.name,
         logic: DynamicLogic.And,
         comparison: DynamicComparison.Equal,
         javaScriptType: bindParamter.javaScriptType,
         value: undefined,
-      });
+      };
+      if (bindParamter.javaScriptType === 'boolean') {
+        newParamter.value = false;
+      }
+      formMdel.paramters.push(newParamter);
     }
   }
 
   function handleDelField(paramter) {
     const index = formMdel.paramters.findIndex(p => p.field === paramter.field);
     formMdel.paramters.splice(index, 1);
+    emits('change', getSearchInput());
   }
 
   function handleFieldChange(field, record) {
@@ -263,16 +268,21 @@
   }
 
   function handleSubmit() {
-    const searchInput = {
-      // 过滤未定义值
-      paramters: formMdel.paramters.filter(p => p.value !== undefined)
-    };
-    emits('search', searchInput);
+    emits('search', getSearchInput());
     closeModal();
   }
 
   function resetFields() {
     formMdel.paramters = [];
+    emits('change', getSearchInput());
+  }
+
+  function getSearchInput() {
+    const searchInput = {
+      // 过滤未定义值
+      paramters: formMdel.paramters.filter(p => p.value !== undefined)
+    };
+    return searchInput;
   }
 
   function setLoading(loading: boolean) {
