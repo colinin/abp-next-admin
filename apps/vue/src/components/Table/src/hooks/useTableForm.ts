@@ -64,11 +64,15 @@ export function useTableForm(
   }
 
   function handleAdvanceSearchChange(queryable: DynamicQueryable) {
+    if (queryable.paramters.length <= 0) {
+      setFieldsValue({ queryable: undefined });
+      return;
+    }
     setFieldsValue({ queryable: queryable });
   }
 
   function handleAdvanceSearchInfoChange(queryable: DynamicQueryable) {
-    setFieldsValue({ queryable: queryable });
+    handleAdvanceSearchChange(queryable);
     setTimeout(() => {
       fetch({ page: 1 });
     }, 300);
