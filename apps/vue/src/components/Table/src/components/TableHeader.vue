@@ -20,6 +20,9 @@
         />
       </div>
     </div>
+    <div v-if="showTableAlert" :class="`${prefixCls}__alert`">
+      <TableAlert :message="tableAlertMessage" @on-de-select="$emit('de-select')" />
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -29,12 +32,14 @@
   import { Divider } from 'ant-design-vue';
   import TableSettingComponent from './settings/index.vue';
   import TableTitle from './TableTitle.vue';
+  import TableAlert from './TableAlert.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
 
   export default defineComponent({
     name: 'BasicTableHeader',
     components: {
       Divider,
+      TableAlert,
       TableTitle,
       TableSetting: TableSettingComponent,
     },
@@ -52,8 +57,16 @@
         type: [String, Array] as PropType<string | string[]>,
         default: '',
       },
+      showTableAlert: {
+        type: Boolean,
+        default: false,
+      },
+      tableAlertMessage: {
+        type: String,
+        default: ''
+      },
     },
-    emits: ['columns-change'],
+    emits: ['columns-change', 'de-select'],
     setup(_, { emit }) {
       const { prefixCls } = useDesign('basic-table-header');
       function handleColumnChange(data: ColumnChangeParam[]) {

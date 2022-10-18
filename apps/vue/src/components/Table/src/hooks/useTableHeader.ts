@@ -9,6 +9,8 @@ export function useTableHeader(
   propsRef: ComputedRef<BasicTableProps>,
   slots: Slots,
   handlers: InnerHandlers,
+  useTableAlert?: ComputedRef<Boolean>,
+  tableAlertMessage?: ComputedRef<String>,
 ) {
   const getHeaderProps = computed((): Recordable => {
     const { title, showTableSetting, titleHelpMessage, tableSetting } = unref(propsRef);
@@ -28,7 +30,10 @@ export function useTableHeader(
                 titleHelpMessage,
                 showTableSetting,
                 tableSetting,
+                showTableAlert: unref(useTableAlert),
+                tableAlertMessage: unref(tableAlertMessage),
                 onColumnsChange: handlers.onColumnsChange,
+                onDeSelect: handlers.deSelect,
               } as Recordable,
               {
                 ...(slots.toolbar

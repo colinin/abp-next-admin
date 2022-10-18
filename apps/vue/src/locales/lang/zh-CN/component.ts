@@ -70,6 +70,8 @@ export default {
     settingFullScreen: '全屏',
     index: '序号',
     total: '共 {total} 条数据',
+    selectedRows: '已选择 {count} 项',
+    deSelected: '取消选择',
     advancedSearch: {
       title: '高级查询',
       conditions: '查询条件',

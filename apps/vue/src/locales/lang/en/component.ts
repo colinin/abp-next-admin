@@ -68,6 +68,8 @@ export default {
     settingFullScreen: 'Full Screen',
     index: 'Index',
     total: 'total of {total}',
+    selectedRows: 'The {count} item has been selected',
+    deSelected: 'De Select',
     advancedSearch: {
       title: 'Advanced Search',
       conditions: 'Condition',

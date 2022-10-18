@@ -187,6 +187,8 @@ export interface BasicTableProps<T = any> {
   formConfig?: Partial<FormProps>;
    // 高级查询配置
   advancedSearchConfig?: Partial<AdvanceSearchProps>;
+  // 使用已选择提示
+  useSelectedAlert?: boolean;
   // 列配置
   columns: BasicColumn[];
   // 是否显示序号列
@@ -480,4 +482,5 @@ export type ColumnChangeParam = {
 
 export interface InnerHandlers {
   onColumnsChange: (data: ColumnChangeParam[]) => void;
+  deSelect: () => void;
 }
