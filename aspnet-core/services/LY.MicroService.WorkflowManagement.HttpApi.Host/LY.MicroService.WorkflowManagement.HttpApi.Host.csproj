@@ -15,11 +15,9 @@
 		<PackageReference Include="Elsa.Activities.Http" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Activities.UserTask" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Activities.Temporal.Quartz" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Rebus.RabbitMq" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Elsa.Designer.Components.Web" Version="$(ElsaPackageVersion)" />
+		<PackageReference Include="Elsa.Webhooks.Api" Version="$(ElsaPackageVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -54,6 +52,7 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
 		<ProjectReference Include="..\..\modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />

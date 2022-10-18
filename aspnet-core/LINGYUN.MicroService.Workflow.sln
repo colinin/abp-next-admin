@@ -55,7 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa", "modules
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Server", "modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj", "{88AA0D46-597E-4969-8382-A3F8054B9409}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.EntityFramework.Core", "modules\elsa\LINGYUN.Abp.Elsa.EntityFramework.Core\LINGYUN.Abp.Elsa.EntityFramework.Core.csproj", "{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj", "{CAC0D3A2-8BFA-4A84-A7FA-550A3BB16288}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities.BlobStoring", "modules\elsa\LINGYUN.Abp.Elsa.Activities.BlobStoring\LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj", "{81CB5141-4FC5-413A-A516-CD65F40465C0}"
 EndProject
@@ -79,13 +79,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{CE1B9AD0-7CDA-4459-86A3-A3162C1095D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Activities.Webhooks", "modules\elsa\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj", "{2CA34976-4A80-485C-8572-6004829BB727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities.Webhooks", "modules\elsa\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj", "{2CA34976-4A80-485C-8572-6004829BB727}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Core", "modules\webhooks\LINGYUN.Abp.Webhooks.Core\LINGYUN.Abp.Webhooks.Core.csproj", "{44E4EBFA-6F25-4FD7-A4B3-536C3A42677C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks", "modules\webhooks\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj", "{6489B162-2B28-42B9-9AD4-EB5CCBB8AE85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.EventBus", "modules\webhooks\LINGYUN.Abp.Webhooks.EventBus\LINGYUN.Abp.Webhooks.EventBus.csproj", "{B6246B7A-4095-433A-B981-5D1E43CDF712}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj", "{4B20572A-10E7-4414-943A-974F275677B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,6 +231,10 @@ Global
 		{B6246B7A-4095-433A-B981-5D1E43CDF712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6246B7A-4095-433A-B981-5D1E43CDF712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6246B7A-4095-433A-B981-5D1E43CDF712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B20572A-10E7-4414-943A-974F275677B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B20572A-10E7-4414-943A-974F275677B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B20572A-10E7-4414-943A-974F275677B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B20572A-10E7-4414-943A-974F275677B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -271,6 +277,7 @@ Global
 		{44E4EBFA-6F25-4FD7-A4B3-536C3A42677C} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 		{6489B162-2B28-42B9-9AD4-EB5CCBB8AE85} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 		{B6246B7A-4095-433A-B981-5D1E43CDF712} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
+		{4B20572A-10E7-4414-943A-974F275677B4} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

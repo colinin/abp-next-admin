@@ -11,6 +11,7 @@ using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
@@ -65,6 +66,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpTextTemplatingScribanModule),
