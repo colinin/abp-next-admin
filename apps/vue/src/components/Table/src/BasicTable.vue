@@ -82,6 +82,7 @@
   import { useTableScrollTo } from './hooks/useScrollTo';
   import { useCustomRow } from './hooks/useCustomRow';
   import { useTableStyle } from './hooks/useTableStyle';
+  import { useTableAlert } from './hooks/useTableAlert';
   import { useTableHeader } from './hooks/useTableHeader';
   import { useTableExpand } from './hooks/useTableExpand';
   import { createTableContext } from './hooks/useTableContext';
@@ -247,9 +248,14 @@
           // support useTable
           unref(getProps).onColumnsChange?.(data);
         },
+        deSelect: () => {
+          clearSelectedRowKeys();
+        },
       };
 
-      const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
+      const { getAlertEnabled, getAlertMessage } = useTableAlert(getProps, getSelectRowKeys);
+
+      const { getHeaderProps } = useTableHeader(getProps, slots, handlers, getAlertEnabled, getAlertMessage);
 
       const { getFooterProps } = useTableFooter(
         getProps,

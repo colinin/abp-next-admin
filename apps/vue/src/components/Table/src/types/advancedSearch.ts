@@ -2,8 +2,15 @@
 export interface AdvanceSearchProps {
   /** 使用高级查询 */
   useAdvancedSearch?: boolean;
+  /** 允许字段重复搜索 */
+  allowDuplicateFieldSearch?: boolean;
   /** 字段列表api */
   defineFieldApi?: () => Promise<any>;
+  /**
+   * 自定义字段列表
+   * @remarks 从服务器返回字段列表后自定义过滤函数,返回字段列表
+   */
+  defineFieldReplace?: (response: any) => DefineParamter[];
   /**
    * 字段列表api返回结果字段
    * @remarks 从服务器返回字段列表在数据结构中的字段名,默认: items
