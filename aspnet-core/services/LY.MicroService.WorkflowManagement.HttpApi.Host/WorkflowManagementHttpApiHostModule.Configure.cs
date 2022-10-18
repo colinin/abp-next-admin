@@ -127,11 +127,8 @@ public partial class WorkflowManagementHttpApiHostModule
                 typeof(Elsa.Activities.UserTask.Startup),
                 typeof(Elsa.Activities.Temporal.Quartz.Startup),
                 typeof(Elsa.Activities.Email.Startup),
-                typeof(Elsa.Persistence.EntityFramework.MySql.Startup),
                 typeof(Elsa.Scripting.JavaScript.Startup),
                 typeof(Elsa.Activities.Webhooks.Startup),
-                typeof(Elsa.Webhooks.Persistence.EntityFramework.MySql.Startup),
-                typeof(Elsa.WorkflowSettings.Persistence.EntityFramework.MySql.Startup),
             };
 
         PreConfigure<ElsaOptionsBuilder>(elsa =>
@@ -153,6 +150,11 @@ public partial class WorkflowManagementHttpApiHostModule
         });
 
         services.AddNotificationHandlersFrom<WorkflowManagementHttpApiHostModule>();
+
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
+        {
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(Elsa.Webhooks.Api.Endpoints.List).Assembly);
+        });
     }
 
     private void ConfigureEndpoints()
@@ -377,6 +379,10 @@ public partial class WorkflowManagementHttpApiHostModule
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
             });
+
+        //services.AddElsaJwtBearerAuthentication(options =>
+        //{
+        //});
 
         if (isDevelopment)
         {
