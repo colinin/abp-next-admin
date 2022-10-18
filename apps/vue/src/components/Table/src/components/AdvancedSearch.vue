@@ -96,8 +96,15 @@
       type: Boolean,
       default: false,
     },
+    allowDuplicateFieldSearch: {
+      type: Boolean,
+      default: true,
+    },
     defineFieldApi: {
       type: Function as PropType<() => Promise<any>>
+    },
+    defineFieldReplace: {
+      type: Function as PropType<(response: any) => DefineParamter[]>,
     },
     listField: {
       type: String,
@@ -202,14 +209,15 @@
   ]);
 
   const getAvailableParams = computed(() => {
-    // 如果每个字段只允许出现一次则取消注释
-    // const defineParams = unref(defineParamsRef);
-    // if (!defineParams.length) return[];
-    // return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
-
-    // 允许字段出现多次,用于区间查询
+    const { allowDuplicateFieldSearch } = props;
+    if (allowDuplicateFieldSearch) {
+      // 允许字段出现多次, 直接返回原数据
+      return defineParamsRef.value;
+    }
+    // 每个字段只允许出现一次，已选择字段不再出现在可选列表
     const defineParams = unref(defineParamsRef);
-    return defineParams;
+    if (!defineParams.length) return[];
+    return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
   });
 
   onMounted(fetch);
@@ -217,13 +225,18 @@
   const [registerModal, { closeModal }] = useModalInner();
 
   function fetch() {
-    const { useAdvancedSearch, defineFieldApi, listField } = props;
+    const { useAdvancedSearch, defineFieldApi, defineFieldReplace, listField } = props;
     if (!useAdvancedSearch) return;
     if (!defineFieldApi || !isFunction(defineFieldApi)) return;
     setLoading(true);
     defineFieldApi().then((res) => {
-      const isArrayResult = Array.isArray(res);
-      const resultItems: DefineParamter[] = isArrayResult ? res : get(res, listField || 'items');
+      let resultItems: DefineParamter[] = [];
+      if (defineFieldReplace && isFunction(defineFieldReplace)) {
+        resultItems = defineFieldReplace(res);
+      } else {
+        const isArrayResult = Array.isArray(res);
+        resultItems = isArrayResult ? res : get(res, listField || 'items');
+      }
       defineParamsRef.value = resultItems;
     }).finally(() => {
       setLoading(false);
