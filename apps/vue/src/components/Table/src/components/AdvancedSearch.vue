@@ -22,8 +22,10 @@
           <template v-if="column.dataIndex==='field'">
             <Select
               style="width: 100%;"
+              show-search
               v-model:value="record.field"
               :options="getAvailableParams"
+              :filter-option="filterOption"
               :field-names="{ label: 'description', value: 'name' }"
               @change="(field) => handleFieldChange(field, record)"
             />
@@ -121,6 +123,7 @@
       dataIndex: 'field',
       key: 'field',
       title: t('component.table.advancedSearch.field'),
+      width: 240,
     },
     {
       dataIndex: 'comparison',
@@ -219,6 +222,10 @@
     if (!defineParams.length) return[];
     return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
   });
+
+  const filterOption = (input: string, option: any) => {
+    return option.description.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   onMounted(fetch);
 
