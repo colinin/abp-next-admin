@@ -75,6 +75,7 @@ export default {
       conditions: 'Condition',
       addCondition: 'Add Condition',
       delCondition: 'Del Condition',
+      clearCondition: 'Clear Condition',
       field: 'Field',
       logic: 'Logic',
       and: 'And',
