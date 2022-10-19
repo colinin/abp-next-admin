@@ -78,11 +78,11 @@
   import { useDataSource } from './hooks/useDataSource';
   import { useLoading } from './hooks/useLoading';
   import { useRowSelection } from './hooks/useRowSelection';
+  import { useTableAlert } from './hooks/useTableAlert';
   import { useTableScroll } from './hooks/useTableScroll';
   import { useTableScrollTo } from './hooks/useScrollTo';
   import { useCustomRow } from './hooks/useCustomRow';
   import { useTableStyle } from './hooks/useTableStyle';
-  import { useTableAlert } from './hooks/useTableAlert';
   import { useTableHeader } from './hooks/useTableHeader';
   import { useTableExpand } from './hooks/useTableExpand';
   import { createTableContext } from './hooks/useTableContext';
@@ -253,7 +253,7 @@
         },
       };
 
-      const { getAlertEnabled, getAlertMessage } = useTableAlert(getProps, getSelectRowKeys);
+      const { getAlertEnabled, getAlertMessage } = useTableAlert(getProps, getRowSelectionRef);
 
       const { getHeaderProps } = useTableHeader(getProps, slots, handlers, getAlertEnabled, getAlertMessage);
 
@@ -444,6 +444,10 @@
         background-color: @component-background;
         border-radius: 2px;
       }
+    }
+
+    .ant-alert {
+      margin-bottom: 16px;
     }
 
     .ant-tag {
