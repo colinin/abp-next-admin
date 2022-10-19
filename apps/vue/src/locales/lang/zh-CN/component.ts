@@ -77,6 +77,7 @@ export default {
       conditions: '查询条件',
       addCondition: '增加条件',
       delCondition: '删除条件',
+      clearCondition: '清空条件',
       field: '字段',
       logic: '连接条件',
       and: '且',
