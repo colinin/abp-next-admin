@@ -21,7 +21,7 @@
       </div>
     </div>
     <div v-if="showTableAlert" :class="`${prefixCls}__alert`">
-      <TableAlert :message="tableAlertMessage" @on-de-select="$emit('de-select')" />
+      <TableAlert :message="tableAlertMessage" @de-select="$emit('de-select')" />
     </div>
   </div>
 </template>
