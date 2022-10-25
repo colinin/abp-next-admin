@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
@@ -23,7 +24,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
     {
         var eventData = new WebhooksEventData(
             webhookName,
-            data,
+            JsonConvert.SerializeObject(data),
             sendExactSameData,
             headers);
 
@@ -39,7 +40,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
     {
         var eventData = new WebhooksEventData(
             webhookName,
-            data,
+            JsonConvert.SerializeObject(data),
             sendExactSameData,
             headers,
             new Guid?[] { tenantId });
@@ -56,7 +57,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
     {
         var eventData = new WebhooksEventData(
             webhookName,
-            data,
+            JsonConvert.SerializeObject(data),
             sendExactSameData,
             headers,
             tenantIds);
