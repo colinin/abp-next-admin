@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Webhooks;
 using LINGYUN.Abp.Webhooks.EventBus;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,7 @@ public class WebhooksEventHandler :
 
     protected async virtual Task PublishAsync(
         string webhookName,
-        object data,
+        string data,
         List<WebhookSubscriptionInfo> webhookSubscriptions,
         bool sendExactSameData = false,
         WebhookHeader headers = null)
@@ -100,12 +99,12 @@ public class WebhooksEventHandler :
     protected async virtual Task<WebhookEvent> SaveAndGetWebhookAsync(
         Guid? tenantId,
         string webhookName,
-        object data)
+        string data)
     {
         var webhookInfo = new WebhookEvent
         {
             WebhookName = webhookName,
-            Data = JsonConvert.SerializeObject(data),
+            Data = data,
             TenantId = tenantId
         };
 

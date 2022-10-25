@@ -11,7 +11,7 @@ public class WebhooksEventData
 
     public string WebhookName { get; set; }
 
-    public object Data { get; set; }
+    public string Data { get; set; }
 
     public bool SendExactSameData { get; set; }
 
@@ -25,7 +25,7 @@ public class WebhooksEventData
 
     public WebhooksEventData(
         string webhookName,
-        object data, 
+        string data, 
         bool sendExactSameData = false, 
         WebhookHeader headers = null,
         Guid?[] tenantIds = null)
