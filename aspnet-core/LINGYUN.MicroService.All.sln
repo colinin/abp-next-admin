@@ -500,6 +500,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.Sms"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.WeChat", "modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat\LINGYUN.Abp.OpenIddict.WeChat.csproj", "{427382F6-3153-47A2-BBC4-88F6EA116A8F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator.Tests", "tests\LINGYUN.Abp.IdGenerator.Tests\LINGYUN.Abp.IdGenerator.Tests.csproj", "{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1294,6 +1296,10 @@ Global
 		{427382F6-3153-47A2-BBC4-88F6EA116A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{427382F6-3153-47A2-BBC4-88F6EA116A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{427382F6-3153-47A2-BBC4-88F6EA116A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1539,6 +1545,7 @@ Global
 		{15EC4A03-D172-4984-B9CA-2C73929838DE} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{74C13BCC-A5A5-40FA-81E8-83DCCF760148} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{427382F6-3153-47A2-BBC4-88F6EA116A8F} = {83E698F6-F8CD-4604-AB80-01A203389501}
+		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

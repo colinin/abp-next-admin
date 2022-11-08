@@ -54,8 +54,8 @@ public partial class AuthServerModule
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
-            // 以开放端口区别
-            options.SnowflakeIdOptions.WorkerId = 44385;
+            // 以开放端口区别，应在0-31之间
+            options.SnowflakeIdOptions.WorkerId = 1;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
