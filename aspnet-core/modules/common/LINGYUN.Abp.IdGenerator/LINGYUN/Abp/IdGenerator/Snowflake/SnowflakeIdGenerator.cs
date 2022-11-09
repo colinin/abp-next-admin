@@ -42,7 +42,7 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
                 MaxDatacenterId = -1L ^ (-1L << options.DatacenterIdBits)
             };
 
-            if (idGenerator.WorkerId == 0 || (int)Math.Log10(options.WorkerId) + 1 > idGenerator.MaxWorkerId)
+            if (idGenerator.WorkerId <= 0 || options.WorkerId > idGenerator.MaxWorkerId)
             {
                 if (!int.TryParse(Environment.GetEnvironmentVariable("WORKERID", EnvironmentVariableTarget.Machine), out var workerId))
                 {
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.IdGenerator.Snowflake
                 idGenerator.WorkerId = workerId;
             }
 
-            if (idGenerator.DatacenterId == 0 || (int)Math.Log10(options.DatacenterId) + 1 > idGenerator.MaxDatacenterId)
+            if (idGenerator.DatacenterId <= 0 || options.DatacenterId > idGenerator.MaxDatacenterId)
             {
                 if (!int.TryParse(Environment.GetEnvironmentVariable("DATACENTERID", EnvironmentVariableTarget.Machine), out var datacenterId))
                 {
