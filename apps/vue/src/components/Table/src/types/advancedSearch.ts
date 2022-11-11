@@ -30,6 +30,8 @@ export interface DefineParamter {
   type: string;
   /** 数据类型(js) */
   javaScriptType: string;
+  /** 可用运算条件列表, 用于进一步约束字段可用比较符 */
+  availableComparator?: DynamicComparison[];
 }
 
 /** 连接条件 */

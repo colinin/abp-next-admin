@@ -34,7 +34,7 @@
             <Select
               style="width: 100%;"
               v-model:value="record.comparison"
-              :options="comparisonOptions"
+              :options="getAvailableComparisonOptions(record)"
             />
           </template>
           <template v-else-if="column.dataIndex==='value'">
@@ -229,6 +229,23 @@
     const defineParams = unref(defineParamsRef);
     if (!defineParams.length) return[];
     return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
+  });
+
+  const getAvailableComparisonOptions = computed(() => {
+    return (paramter: DynamicParamter) => {
+      const defineParams = unref(defineParamsRef);
+      const defineParam = defineParams.find(p => p.name === paramter.field);
+      if (!defineParam) {
+        return comparisonOptions;
+      }
+      const availableComparator = defineParam.availableComparator ?? [];
+      if (availableComparator.length === 0) {
+        return comparisonOptions;
+      }
+      // 过滤可用比较符
+      return comparisonOptions
+        .filter(c => availableComparator.includes(c.value));
+    }
   });
 
   const filterOption = (input: string, option: any) => {
