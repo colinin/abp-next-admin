@@ -30,6 +30,8 @@ export interface DefineParamter {
   type: string;
   /** 数据类型(js) */
   javaScriptType: string;
+  /** 可用运算条件列表, 用于进一步约束字段可用比较符 */
+  availableComparator?: DynamicComparison[];
 }
 
 /** 连接条件 */
@@ -65,7 +67,11 @@ export enum DynamicComparison {
   /** 包含 */
   Contains = 10,
   /** 不包含 */
-  NotContains = 11
+  NotContains = 11,
+  /** 空 */
+  Null = 12,
+  /** 非空 */
+  NotNull = 12,
 }
 
 /** 动态查询字段 */

@@ -374,9 +374,13 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
     {
         var queryable = await BackgroundJobInfoRepository.GetQueryableAsync();
 
+        var sorting = !pageRequest.Sorting.IsNullOrWhiteSpace()
+            ? pageRequest.Sorting
+            : $"{nameof(BackgroundJobInfo.CreationTime)} DESC";
+
         return await AsyncExecuter.ToListAsync(
             queryable.Where(condition)
                 .PageBy(pageRequest.SkipCount, pageRequest.MaxResultCount)
-                .OrderBy(pageRequest.Sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC"));
+                .OrderBy(sorting));
     }
 }

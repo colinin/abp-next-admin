@@ -96,6 +96,8 @@ export default {
       notEndsWith: '右不包含',
       contains: '包含',
       notContains: '不包含',
+      null: '空',
+      notNull: '非空',
     }
   },
   time: {

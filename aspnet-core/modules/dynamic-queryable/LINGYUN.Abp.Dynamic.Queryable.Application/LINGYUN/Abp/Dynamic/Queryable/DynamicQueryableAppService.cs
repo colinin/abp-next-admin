@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using LINGYUN.Linq.Dynamic.Queryable;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +33,15 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             // 字段本地化描述规则
             // 在本地化文件中定义 DisplayName:PropertyName
             var localizedProp = L[$"DisplayName:{propertyInfo.Name}"];
+            var propertyTypeMap = GetPropertyTypeMap(propertyInfo.PropertyType);
             dynamicParamters.Add(
                 new DynamicParamterDto
                 {
                     Name = propertyInfo.Name,
                     Type = propertyInfo.PropertyType.FullName,
                     Description = localizedProp.Value ?? propertyInfo.Name,
-                    JavaScriptType = ConvertToJavaScriptType(propertyInfo.PropertyType)
+                    JavaScriptType = propertyTypeMap.JavaScriptType,
+                    AvailableComparator = propertyTypeMap.AvailableComparator
                 });
         }
 
@@ -74,10 +77,13 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
         return ObjectMapper.Map<List<TEntity>, List<TEntityDto>>(entities);
     }
 
-    protected virtual string ConvertToJavaScriptType(Type propertyType)
+    protected virtual (string JavaScriptType, DynamicComparison[] AvailableComparator) GetPropertyTypeMap(Type propertyType)
     {
+        var isNullableType = false;
+        var availableComparator = new List<DynamicComparison>();
         if (propertyType.IsNullableType())
         {
+            isNullableType = true;
             propertyType = propertyType.GetGenericArguments().FirstOrDefault();
         }
         var typeCode = Type.GetTypeCode(propertyType);
@@ -94,27 +100,103 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             case TypeCode.Double:
             case TypeCode.SByte:
             case TypeCode.Decimal:
-                return "number";
+                // 数值类型只支持如下操作符
+                // 小于、小于等于、大于、大于等于、等于、不等于、空、非空
+                availableComparator.AddRange(new[]
+                {
+                    DynamicComparison.GreaterThan,
+                    DynamicComparison.GreaterThanOrEqual,
+                    DynamicComparison.LessThan,
+                    DynamicComparison.LessThanOrEqual,
+                    DynamicComparison.Equal,
+                    DynamicComparison.NotEqual,
+                });
+                if (isNullableType)
+                {
+                    availableComparator.AddRange(new []
+                    {
+                        DynamicComparison.Null,
+                        DynamicComparison.NotNull
+                    });
+                }
+                return ("number", availableComparator.ToArray());
             case TypeCode.Boolean:
-                return "boolean";
+                // 布尔类型只支持如下操作符
+                // 等于、不等于、空、非空
+                availableComparator.AddRange(new[]
+                {
+                    DynamicComparison.Equal,
+                    DynamicComparison.NotEqual,
+                });
+                if (isNullableType)
+                {
+                    availableComparator.AddRange(new[]
+                    {
+                        DynamicComparison.Null,
+                        DynamicComparison.NotNull
+                    });
+                }
+                return ("boolean", availableComparator.ToArray());
             case TypeCode.Char:
             case TypeCode.String:
-                return "string";
+                // 字符类型支持所有操作符
+                return ("string", availableComparator.ToArray());
             case TypeCode.DateTime:
-                return "Date";
+                // 时间类型只支持如下操作符
+                // 小于、小于等于、大于、大于等于、等于、不等于、空、非空
+                availableComparator.AddRange(new[]
+                {
+                    DynamicComparison.GreaterThan,
+                    DynamicComparison.GreaterThanOrEqual,
+                    DynamicComparison.LessThan,
+                    DynamicComparison.LessThanOrEqual,
+                    DynamicComparison.Equal,
+                    DynamicComparison.NotEqual,
+                });
+                if (isNullableType)
+                {
+                    availableComparator.AddRange(new[]
+                    {
+                        DynamicComparison.Null,
+                        DynamicComparison.NotNull
+                    });
+                }
+                return ("Date", availableComparator.ToArray());
+            default:
             case TypeCode.Object:
+            case TypeCode.Empty:
+            case TypeCode.DBNull:
+                if (isNullableType)
+                {
+                    availableComparator.AddRange(new[]
+                    {
+                        DynamicComparison.Null,
+                        DynamicComparison.NotNull
+                    });
+                }
                 if (propertyType.IsArray)
                 {
-                    return "array";
+                    // 数组类型只支持如下操作符
+                    // 包含、不包含、空、非空
+                    availableComparator.AddRange(new[]
+                    {
+                        DynamicComparison.Contains,
+                        DynamicComparison.NotContains,
+                    });
+
+                    return ("array", availableComparator.ToArray());
                 }
                 else
                 {
-                    return "object";
+                    // 未知对象类型只支持如下操作符
+                    // 等于、不等于、空、非空
+                    availableComparator.AddRange(new[]
+                   {
+                        DynamicComparison.Equal,
+                        DynamicComparison.NotEqual,
+                    });
+                    return ("object", availableComparator.ToArray());
                 }
-            default:
-            case TypeCode.Empty:
-            case TypeCode.DBNull:
-                return "object";
         }
     }
 }

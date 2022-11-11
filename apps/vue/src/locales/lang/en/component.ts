@@ -94,6 +94,8 @@ export default {
       notEndsWith: 'Not Ends With',
       contains: 'Contains',
       notContains: 'Not Contains',
+      null: 'Null',
+      notNull: 'Not Null',
     }
   },
   time: {

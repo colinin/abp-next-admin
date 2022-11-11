@@ -48,6 +48,14 @@ public enum DynamicComparison
     /// <summary>
     /// 不包含
     /// </summary>
-    NotContains = 11
+    NotContains = 11,
+    /// <summary>
+    /// 空值
+    /// </summary>
+    Null = 12,
+    /// <summary>
+    /// 非空
+    /// </summary>
+    NotNull = 13
 }
 

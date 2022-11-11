@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.EntityFrameworkCore.Tests
@@ -13,9 +14,22 @@ namespace LINGYUN.Abp.EntityFrameworkCore.Tests
         )]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {
+        //private string _testDbFile = "./abp-ef-test-db.db";
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddEntityFrameworkInMemoryDatabase();
+            //var connectionString = $"Data Source={_testDbFile}";
+
+            //var sqliteConnection = CreateDatabaseAndGetConnection(connectionString);
+
+            var memoryDbName = Guid.NewGuid().ToString();
+
+            var dbConetxt = CreateDatabaseAndGetDbContext(memoryDbName);
+
+            AsyncHelper.RunSync(async () =>
+                await new EfCoreTestEntityDataSeeder(dbConetxt).SeedAsync());
+
+            context.Services.AddSingleton(dbConetxt);
 
             var databaseName = Guid.NewGuid().ToString();
 
@@ -27,7 +41,7 @@ namespace LINGYUN.Abp.EntityFrameworkCore.Tests
                     abpDbContextConfigurationContext.DbContextOptions.EnableSensitiveDataLogging();
                     abpDbContextConfigurationContext.DbContextOptions.UseEFCoreLogger();
 
-                    abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
+                    abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(memoryDbName);
                 });
             });
 
@@ -35,6 +49,13 @@ namespace LINGYUN.Abp.EntityFrameworkCore.Tests
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
+        }
+
+        private EfCoreTestDbContext CreateDatabaseAndGetDbContext(string dbName)
+        {
+            return new EfCoreTestDbContext(
+                new DbContextOptionsBuilder<EfCoreTestDbContext>().UseInMemoryDatabase(dbName).Options
+            );
         }
     }
 }
