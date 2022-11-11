@@ -47,8 +47,8 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
-		<ProjectReference Include="..\..\modules\openiddict\LINGYUN.Abp.OpenIddict.Application\LINGYUN.Abp.OpenIddict.Application.csproj" />
-		<ProjectReference Include="..\..\modules\openiddict\LINGYUN.Abp.OpenIddict.HttpApi\LINGYUN.Abp.OpenIddict.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Application\LINGYUN.Abp.OpenIddict.Application.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.HttpApi\LINGYUN.Abp.OpenIddict.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />

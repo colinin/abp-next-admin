@@ -52,6 +52,19 @@ public class Program
             await app.RunAsync();
             return 0;
         }
+        catch (Exception ex)
+        {
+            var type = ex.GetType().Name;
+            if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+            {
+                throw;
+            }
+
+            Log.Fatal(ex, "Host terminated unexpectedly!");
+            Console.WriteLine("Host terminated unexpectedly!");
+            Console.WriteLine(ex.ToString());
+            return 1;
+        }
         finally
         {
             Log.CloseAndFlush();
