@@ -1,7 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>6.0.0</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>6.0.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
 		<DotNetCoreCAPPackageVersion>6.0.1</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>

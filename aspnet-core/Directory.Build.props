@@ -1,7 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>6.0.0</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>6.0.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>6.2.0</DotNetCoreCAPPackageVersion>
