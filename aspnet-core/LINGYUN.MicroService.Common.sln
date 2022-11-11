@@ -286,13 +286,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe.Setting
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dynamic-queryable", "dynamic-queryable", "{3975D028-3672-4D23-BF77-B7F4A445D44E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Linq.Dynamic.Queryable", "modules\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{5512A359-80E8-440C-B652-7C96F614DD9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "modules\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{5512A359-80E8-440C-B652-7C96F614DD9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{6A23EE81-0CA7-4CA7-859D-6ADB669DF0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{6A23EE81-0CA7-4CA7-859D-6ADB669DF0E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{EC7970DC-A656-46A7-9873-A730FE72B213}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{EC7970DC-A656-46A7-9873-A730FE72B213}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Linq.Dynamic.Queryable.Tests", "tests\LINGYUN.Linq.Dynamic.Queryable.Tests\LINGYUN.Linq.Dynamic.Queryable.Tests.csproj", "{E9AD81CA-D992-4F74-BD23-680CF98BE262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests\LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests.csproj", "{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -760,6 +764,14 @@ Global
 		{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9AD81CA-D992-4F74-BD23-680CF98BE262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9AD81CA-D992-4F74-BD23-680CF98BE262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9AD81CA-D992-4F74-BD23-680CF98BE262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9AD81CA-D992-4F74-BD23-680CF98BE262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -906,6 +918,8 @@ Global
 		{6A23EE81-0CA7-4CA7-859D-6ADB669DF0E1} = {3975D028-3672-4D23-BF77-B7F4A445D44E}
 		{EC7970DC-A656-46A7-9873-A730FE72B213} = {3975D028-3672-4D23-BF77-B7F4A445D44E}
 		{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94} = {3975D028-3672-4D23-BF77-B7F4A445D44E}
+		{E9AD81CA-D992-4F74-BD23-680CF98BE262} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
+		{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}

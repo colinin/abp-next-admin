@@ -209,6 +209,14 @@
       label: t('component.table.advancedSearch.notContains'),
       value: DynamicComparison.NotContains,
     },
+    {
+      label: t('component.table.advancedSearch.null'),
+      value: DynamicComparison.Null,
+    },
+    {
+      label: t('component.table.advancedSearch.notNull'),
+      value: DynamicComparison.NotNull,
+    },
   ]);
 
   const getAvailableParams = computed(() => {

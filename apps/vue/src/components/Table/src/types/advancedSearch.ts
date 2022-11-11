@@ -65,7 +65,11 @@ export enum DynamicComparison {
   /** 包含 */
   Contains = 10,
   /** 不包含 */
-  NotContains = 11
+  NotContains = 11,
+  /** 空 */
+  Null = 12,
+  /** 非空 */
+  NotNull = 12,
 }
 
 /** 动态查询字段 */
