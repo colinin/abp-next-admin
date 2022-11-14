@@ -86,20 +86,21 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             isNullableType = true;
             propertyType = propertyType.GetGenericArguments().FirstOrDefault();
         }
-        var typeCode = Type.GetTypeCode(propertyType);
-        switch (typeCode)
+        var typeFullName = propertyType.FullName.ToLower();
+
+        switch (typeFullName)
         {
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Single:
-            case TypeCode.Byte:
-            case TypeCode.Double:
-            case TypeCode.SByte:
-            case TypeCode.Decimal:
+            case "System.Int16":
+            case "System.Int32":
+            case "System.Int64":
+            case "System.UInt16":
+            case "System.UInt32":
+            case "System.UInt64":
+            case "System.Single":
+            case "System.Double":
+            case "System.Byte":
+            case "System.SByte":
+            case "System.Decimal":
                 // 数值类型只支持如下操作符
                 // 小于、小于等于、大于、大于等于、等于、不等于、空、非空
                 availableComparator.AddRange(new[]
@@ -113,15 +114,16 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
                 });
                 if (isNullableType)
                 {
-                    availableComparator.AddRange(new []
+                    availableComparator.AddRange(new[]
                     {
                         DynamicComparison.Null,
                         DynamicComparison.NotNull
                     });
                 }
                 return ("number", availableComparator.ToArray());
-            case TypeCode.Boolean:
-                // 布尔类型只支持如下操作符
+            case "System.Boolean":
+            case "System.Guid":
+                // 布尔、Guid类型只支持如下操作符
                 // 等于、不等于、空、非空
                 availableComparator.AddRange(new[]
                 {
@@ -137,11 +139,11 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
                     });
                 }
                 return ("boolean", availableComparator.ToArray());
-            case TypeCode.Char:
-            case TypeCode.String:
+            case "System.Char":
+            case "System.String":
                 // 字符类型支持所有操作符
                 return ("string", availableComparator.ToArray());
-            case TypeCode.DateTime:
+            case "System.DateTime":
                 // 时间类型只支持如下操作符
                 // 小于、小于等于、大于、大于等于、等于、不等于、空、非空
                 availableComparator.AddRange(new[]
@@ -163,9 +165,8 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
                 }
                 return ("Date", availableComparator.ToArray());
             default:
-            case TypeCode.Object:
-            case TypeCode.Empty:
-            case TypeCode.DBNull:
+            case "System.Object":
+            case "System.DBNull":
                 if (isNullableType)
                 {
                     availableComparator.AddRange(new[]
