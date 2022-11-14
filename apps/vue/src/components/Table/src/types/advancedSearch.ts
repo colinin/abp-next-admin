@@ -71,7 +71,7 @@ export enum DynamicComparison {
   /** 空 */
   Null = 12,
   /** 非空 */
-  NotNull = 12,
+  NotNull = 13,
 }
 
 /** 动态查询字段 */
