@@ -9,6 +9,7 @@ export interface Menu {
   size?: number;
   path?: string;
   hasDefault?: boolean;
+  click?: Function;
 }
 
 export function useDefaultMenus() {
