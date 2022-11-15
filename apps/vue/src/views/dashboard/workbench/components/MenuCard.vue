@@ -8,6 +8,7 @@
         v-for="menu in menus"
         :key="menu.title"
         class="menu-card-grid"
+        :style="{ float: menus.length >=  2 ? 'left' : 'right' }"
         @click="handleNavigationTo(menu)"
         @contextmenu="(e) => handleContext(e, menu)"
       >
@@ -103,6 +104,7 @@
   .menu-card-grid {
     margin: 10px;
     width: 30%;
+    text-align: 'center';
     cursor: pointer;
   }
 </style>
