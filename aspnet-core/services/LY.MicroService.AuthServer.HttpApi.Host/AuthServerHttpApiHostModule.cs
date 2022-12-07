@@ -117,8 +117,6 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         app.UseMapRequestLocalization();
         // 授权
         app.UseAuthorization();
-        // Cap Dashboard
-        app.UseCapDashboard();
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面

@@ -136,7 +136,6 @@ public partial class IdentityServerModule : AbpModule
         app.UseMapRequestLocalization();
         app.UseIdentityServer();
         app.UseAuthorization();
-        app.UseCapDashboard();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

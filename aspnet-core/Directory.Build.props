@@ -4,7 +4,7 @@
 		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
-		<DotNetCoreCAPPackageVersion>6.2.0</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>7.0.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.9.0</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
