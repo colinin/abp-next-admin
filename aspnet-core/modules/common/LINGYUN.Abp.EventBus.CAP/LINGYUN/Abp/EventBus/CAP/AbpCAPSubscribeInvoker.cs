@@ -148,7 +148,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                     if (filter != null)
                     {
                         var etContext = new ExecutingContext(context, executeParameters);
-                        filter.OnSubscribeExecuting(etContext);
+                        await filter.OnSubscribeExecutingAsync(etContext);
                         executeParameters = etContext.Arguments;
                     }
 
@@ -157,7 +157,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                     if (filter != null)
                     {
                         var edContext = new ExecutedContext(context, resultObj);
-                        filter.OnSubscribeExecuted(edContext);
+                        await filter.OnSubscribeExecutedAsync(edContext);
                         resultObj = edContext.Result;
                     }
                 }
@@ -166,7 +166,7 @@ namespace LINGYUN.Abp.EventBus.CAP
                     if (filter != null)
                     {
                         var exContext = new ExceptionContext(context, e);
-                        filter.OnSubscribeException(exContext);
+                        await filter.OnSubscribeExceptionAsync(exContext);
                         if (!exContext.ExceptionHandled)
                         {
                             throw exContext.Exception;

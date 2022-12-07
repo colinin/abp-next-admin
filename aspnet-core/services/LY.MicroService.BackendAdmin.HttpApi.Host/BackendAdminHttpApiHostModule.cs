@@ -150,8 +150,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         app.UseMultiTenancy();
         // 授权
         app.UseAuthorization();
-        // Cap Dashboard
-        app.UseCapDashboard();
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面

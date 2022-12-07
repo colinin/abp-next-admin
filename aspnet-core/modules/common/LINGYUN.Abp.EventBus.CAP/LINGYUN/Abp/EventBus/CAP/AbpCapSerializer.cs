@@ -24,7 +24,7 @@ namespace LINGYUN.Abp.EventBus.CAP
             _jsonSerializerOptions = options.Value;
         }
 
-        public Task<TransportMessage> SerializeAsync(Message message)
+        public ValueTask<TransportMessage> SerializeAsync(Message message)
         {
             if (message == null)
             {
@@ -33,26 +33,26 @@ namespace LINGYUN.Abp.EventBus.CAP
 
             if (message.Value == null)
             {
-                return Task.FromResult(new TransportMessage(message.Headers, null));
+                return ValueTask.FromResult(new TransportMessage(message.Headers, null));
             }
             var messageStr = _jsonSerializer.Serialize(message.Value);
             var jsonBytes = Encoding.UTF8.GetBytes(messageStr);
             // var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(message.Value, _jsonSerializerOptions.JsonSerializerOptions);
-            return Task.FromResult(new TransportMessage(message.Headers, jsonBytes));
+            return ValueTask.FromResult(new TransportMessage(message.Headers, jsonBytes));
         }
 
-        public Task<Message> DeserializeAsync(TransportMessage transportMessage, Type valueType)
+        public ValueTask<Message> DeserializeAsync(TransportMessage transportMessage, Type valueType)
         {
-            if (valueType == null || transportMessage.Body == null || transportMessage.Body.Length == 0)
+            if (valueType == null || ReadOnlyMemory<byte>.Empty.Equals(transportMessage.Body) || transportMessage.Body.Length == 0)
             {
-                return Task.FromResult(new Message(transportMessage.Headers, null));
+                return ValueTask.FromResult(new Message(transportMessage.Headers, null));
             }
 
-            var messageBytes = Encoding.UTF8.GetString(transportMessage.Body);
+            var messageBytes = Encoding.UTF8.GetString(transportMessage.Body.Span);
             var obj = _jsonSerializer.Deserialize(valueType, messageBytes);
             // var obj = JsonSerializer.Deserialize(transportMessage.Body, valueType, _jsonSerializerOptions.JsonSerializerOptions);
 
-            return Task.FromResult(new Message(transportMessage.Headers, obj));
+            return ValueTask.FromResult(new Message(transportMessage.Headers, obj));
         }
 
         public string Serialize(Message message)

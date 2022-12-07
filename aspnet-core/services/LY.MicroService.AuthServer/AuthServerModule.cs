@@ -132,7 +132,6 @@ public partial class AuthServerModule : AbpModule
         app.UseAbpOpenIddictValidation();
         app.UseMultiTenancy();
         app.UseAuthorization();
-        app.UseCapDashboard();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
