@@ -39,9 +39,16 @@ namespace LINGYUN.Abp.OssManagement
         [Route("{Bucket}/{Name}/{Process}")]
         [Route("{Bucket}/p/{Path}/{Name}")]
         [Route("{Bucket}/p/{Path}/{Name}/{Process}")]
+        [Route("t/{TenantId}/{Bucket}/{Name}")]
+        [Route("t/{TenantId}/{Bucket}/{Name}/{Process}")]
+        [Route("t/{TenantId}/{Bucket}/p/{Path}/{Name}")]
+        [Route("t/{TenantId}/{Bucket}/p/{Path}/{Name}/{Process}")]
         public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetStaticFileInput input)
         {
-            return await _staticFilesAppServic.GetAsync(input);
+            using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+            {
+                return await _staticFilesAppServic.GetAsync(input);
+            }
         }
     }
 }

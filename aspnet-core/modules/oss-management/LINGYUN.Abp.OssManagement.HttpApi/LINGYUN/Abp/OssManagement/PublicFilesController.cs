@@ -50,9 +50,16 @@ namespace LINGYUN.Abp.OssManagement
         [Route("{Name}/{Process}")]
         [Route("p/{Path}/{Name}")]
         [Route("p/{Path}/{Name}/{Process}")]
+        [Route("t/{TenantId}/{Name}")]
+        [Route("t/{TenantId}/{Name}/{Process}")]
+        [Route("t/{TenantId}/p/{Path}/{Name}")]
+        [Route("t/{TenantId}/p/{Path}/{Name}/{Process}")]
         public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
         {
-            return await _publicFileAppService.GetAsync(input);
+            using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+            {
+                return await _publicFileAppService.GetAsync(input);
+            }
         }
 
         [HttpDelete]
