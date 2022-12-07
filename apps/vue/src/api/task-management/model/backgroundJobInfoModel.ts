@@ -32,8 +32,8 @@ export enum JobPriority {
 export interface BackgroundJobParamter {
   name: string;
   required: boolean;
-  DisplayName: string;
-  Description?: string;
+  displayName: string;
+  description?: string;
 }
 
 export interface BackgroundJobDefinition {

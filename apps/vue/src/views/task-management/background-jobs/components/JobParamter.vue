@@ -10,7 +10,10 @@
         </Button>
       </template>
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'action'">
+        <template v-if="column.key === 'key'">
+          <span>{{ getJobArgKey(record.key) }}</span>
+        </template>
+        <template v-else-if="column.key === 'action'">
           <TableAction
             :stop-button-propagation="true"
             :actions="[
@@ -41,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, nextTick, onMounted } from 'vue';
+  import { computed, ref, unref, nextTick, onMounted } from 'vue';
   import { Button, Form, Select } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal } from '/@/components/Modal';
@@ -64,6 +67,7 @@
   });
   const emits = defineEmits(['args-reset']);
   const { L } = useLocalization(['TaskManagement', 'AbpUi']);
+  const crtJobDefinition = ref<BackgroundJobDefinition>();
   const jobDefinitions = ref<BackgroundJobDefinition[]>([]);
   const getJobDefinitionOptions = computed(() => {
     return jobDefinitions.value.map((job) => {
@@ -73,6 +77,19 @@
         paramters: job.paramters,
       };
     });
+  });
+  const getJobArgKey = computed(() => {
+    return (key: string) => {
+      const crtJobDef = unref(crtJobDefinition);
+      if (!crtJobDef) {
+        return key;
+      }
+      const findDef = crtJobDef.paramters.find((jobParam) => jobParam.name === key);
+      if (!findDef || !findDef.displayName) {
+        return key;
+      }
+      return `${key}(${findDef.displayName})`;
+    };
   });
   const [registerTable] = useTable({
     rowKey: 'key',
@@ -153,18 +170,22 @@
   onMounted(fetchDefinitionJobs);
 
   function fetchDefinitionJobs() {
+    crtJobDefinition.value = undefined;
     getDefinitions().then((res) => {
       jobDefinitions.value = res.items;
     });
   }
 
   function handleJobChange(key, job: BackgroundJobDefinition) {
+    crtJobDefinition.value = job;
     if (key) {
       const args: ExtraPropertyDictionary = {};
       job.paramters.forEach((p) => {
         args[p.name] = '';
       });
       emits('args-reset', args);
+    } else {
+      emits('args-reset', []);
     }
   }
 

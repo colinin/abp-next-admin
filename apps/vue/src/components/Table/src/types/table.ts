@@ -1,7 +1,8 @@
 import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { TableRowSelection as ITableRowSelection, ColumnProps } from 'ant-design-vue/lib/table/interface';
+import type { ColumnProps } from 'ant-design-vue/lib/table';
+import type { TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
 import type { AdvanceSearchProps } from './advancedSearch';
 
 import { ComponentType } from './componentType';
