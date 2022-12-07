@@ -223,7 +223,7 @@ export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuF
     const schemas = unref(getFormSchemas);
     const metaSchemas= schemas.filter((x) => x.tab === tabKey);
     metaSchemas.forEach((x) => {
-      formEl?.removeSchemaByFiled(x.field);
+      formEl?.removeSchemaByField(x.field);
       const index = schemas.findIndex((s) => s.field === x.field);
       if (index) {
         schemas.splice(index, 1);

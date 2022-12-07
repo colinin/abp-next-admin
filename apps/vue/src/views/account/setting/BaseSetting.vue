@@ -97,9 +97,9 @@
     });
   }
 
-  function updateAvatar(src: string) {
+  function updateAvatar({ source }) {
     const userinfo = userStore.getUserInfo;
-    userinfo.avatar = src;
+    userinfo.avatar = source;
     userStore.setUserInfo(userinfo);
   }
 

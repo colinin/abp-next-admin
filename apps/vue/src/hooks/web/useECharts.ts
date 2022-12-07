@@ -8,6 +8,7 @@ import { useEventListener } from '/@/hooks/event/useEventListener';
 import { useBreakpoint } from '/@/hooks/event/useBreakpoint';
 import echarts from '/@/utils/lib/echarts';
 import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
 
 export function useECharts(
   elRef: Ref<HTMLDivElement>,
@@ -18,6 +19,7 @@ export function useECharts(
   const getDarkMode = computed(() => {
     return theme === 'default' ? getSysDarkMode.value : theme;
   });
+  const { getCollapsed } = useMenuSetting();
   let chartInstance: echarts.ECharts | null = null;
   let resizeFn: Fn = resize;
   const cacheOptions = ref({}) as Ref<EChartsOption>;
@@ -98,6 +100,12 @@ export function useECharts(
       }
     },
   );
+
+  watch(getCollapsed, (_) => {
+    useTimeoutFn(() => {
+      resizeFn();
+    }, 300);
+  });
 
   tryOnUnmounted(() => {
     if (!chartInstance) return;

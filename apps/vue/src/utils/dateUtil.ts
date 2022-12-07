@@ -6,17 +6,12 @@ import dayjs from 'dayjs';
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 const DATE_FORMAT = 'YYYY-MM-DD';
 
-export function formatToDateTime(
-  date: string | Date | dayjs.Dayjs | undefined = undefined,
-  format = DATE_TIME_FORMAT,
-): string {
+export function formatToDateTime(date?: dayjs.ConfigType, format = DATE_TIME_FORMAT): string{
   return dayjs(date).format(format);
 }
 
-export function formatToDate(
-  date: string | Date | dayjs.Dayjs | undefined = undefined,
-  format = DATE_FORMAT,
-): string {
+export function formatToDate(date?: dayjs.ConfigType, format = DATE_FORMAT): string {
+  if (typeof date === 'number') date *= 1000;
   return dayjs(date).format(format);
 }
 
