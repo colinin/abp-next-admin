@@ -99,9 +99,6 @@
     // 启用批量删除功能, 防止误选
     clickToRowSelect: false,
     clearSelectOnPageChange: true,
-    tableSetting: {
-      redo: false,
-    },
     bordered: true,
     showIndexColumn: false,
     canResize: false,

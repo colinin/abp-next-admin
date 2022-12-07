@@ -40,12 +40,9 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDebounceFn } from '@vueuse/core';
   import { createBEM } from '/@/utils/bem';
-  import { ToolbarEnum } from './tree';
-
+  import { ToolbarEnum } from '../types/tree';
   const searchValue = ref('');
-
   const [bem] = createBEM('tree-header');
-
   const props = defineProps({
     helpMessage: {
       type: [String, Array] as PropType<string | string[]>,
@@ -81,10 +78,8 @@
     },
   } as const);
   const emit = defineEmits(['strictly-change', 'search']);
-
   const slots = useSlots();
   const { t } = useI18n();
-
   const getInputSearchCls = computed(() => {
     const titleExists = slots.headerTitle || props.title;
     return [
@@ -95,7 +90,6 @@
       },
     ];
   });
-
   const toolbarList = computed(() => {
     const { checkable } = props;
     const defaultToolbarList = [
@@ -106,7 +100,6 @@
         divider: checkable,
       },
     ];
-
     return checkable
       ? [
           { label: t('component.tree.selectAll'), value: ToolbarEnum.SELECT_ALL },
@@ -121,7 +114,6 @@
         ]
       : defaultToolbarList;
   });
-
   function handleMenuClick(e: { key: ToolbarEnum }) {
     const { key } = e;
     switch (key) {
@@ -145,20 +137,16 @@
         break;
     }
   }
-
   function emitChange(value?: string): void {
     emit('search', value);
   }
-
   const debounceEmitChange = useDebounceFn(emitChange, 200);
-
   watch(
     () => searchValue.value,
     (v) => {
       debounceEmitChange(v);
     },
   );
-
   watch(
     () => props.searchText,
     (v) => {

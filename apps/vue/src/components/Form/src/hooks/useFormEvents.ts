@@ -2,7 +2,15 @@ import type { ComputedRef, Ref } from 'vue';
 import type { FormProps, FormSchema, FormActionType } from '../types/form';
 import type { NamePath } from 'ant-design-vue/lib/form/interface';
 import { unref, toRaw, nextTick } from 'vue';
-import { isArray, isFunction, isObject, isString, isDef, isNullOrUnDef } from '/@/utils/is';
+import {
+  isArray,
+  isFunction,
+  isObject,
+  isString,
+  isDef,
+  isNullOrUnDef,
+  isEmpty,
+} from '/@/utils/is';
 import { deepMerge } from '/@/utils';
 import { dateItemType, handleInputNumberValue, defaultValueComponents } from '../helper';
 import { dateUtil } from '/@/utils/dateUtil';
@@ -94,7 +102,7 @@ export function useFormEvents({
       } else {
         nestKeyArray.forEach((nestKey: string) => {
           try {
-            const value = eval('values' + delimiter + nestKey);
+            const value = nestKey.split('.').reduce((out, item) => out[item], values);
             if (isDef(value)) {
               formModel[nestKey] = value;
               validKeys.push(nestKey);
@@ -114,7 +122,7 @@ export function useFormEvents({
   /**
    * @description: Delete based on field name
    */
-  async function removeSchemaByFiled(fields: string | string[]): Promise<void> {
+  async function removeSchemaByField(fields: string | string[]): Promise<void> {
     const schemaList: FormSchema[] = cloneDeep(unref(getSchema));
     if (!fields) {
       return;
@@ -125,7 +133,7 @@ export function useFormEvents({
       fieldList = [fields];
     }
     for (const field of fieldList) {
-      _removeSchemaByFiled(field, schemaList);
+      _removeSchemaByField(field, schemaList);
     }
     schemaRef.value = schemaList;
   }
@@ -133,7 +141,7 @@ export function useFormEvents({
   /**
    * @description: Delete based on field name
    */
-  function _removeSchemaByFiled(field: string, schemaList: FormSchema[]): void {
+  function _removeSchemaByField(field: string, schemaList: FormSchema[]): void {
     if (isString(field)) {
       const index = schemaList.findIndex((schema) => schema.field === field);
       if (index !== -1) {
@@ -239,7 +247,9 @@ export function useFormEvents({
         Reflect.has(item, 'field') &&
         item.field &&
         !isNullOrUnDef(item.defaultValue) &&
-        !(item.field in currentFieldsValue)
+        (!(item.field in currentFieldsValue) ||
+          isNullOrUnDef(currentFieldsValue[item.field]) ||
+          isEmpty(currentFieldsValue[item.field]))
       ) {
         obj[item.field] = item.defaultValue;
       }
@@ -308,7 +318,7 @@ export function useFormEvents({
     updateSchema,
     resetSchema,
     appendSchemaByField,
-    removeSchemaByFiled,
+    removeSchemaByField,
     resetFields,
     setFieldsValue,
     scrollToField,

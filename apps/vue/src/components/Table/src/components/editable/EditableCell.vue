@@ -121,7 +121,7 @@
         }
 
         const component = unref(getComponent);
-        if (!component.includes('Select')) {
+        if (!component.includes('Select') && !component.includes('Radio')) {
           return value;
         }
 
@@ -152,7 +152,7 @@
       });
 
       watchEffect(() => {
-        defaultValueRef.value = props.value;
+        //defaultValueRef.value = props.value;
         currentValueRef.value = props.value;
       });
 

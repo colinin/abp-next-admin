@@ -16,6 +16,7 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { useLocaleStoreWithOut } from '/@/store/modules/locale';
+import axios from 'axios';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -153,6 +154,11 @@ const transform: AxiosTransform = {
     // const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
+
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
     const resMessage = checkResponse(error.response);
     return Promise.reject(resMessage ?? error);
   },
