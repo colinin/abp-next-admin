@@ -134,7 +134,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
         app.UseAuthorization();
-        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
