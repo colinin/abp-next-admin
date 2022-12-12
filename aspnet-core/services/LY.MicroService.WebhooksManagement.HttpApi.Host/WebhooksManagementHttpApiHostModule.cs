@@ -130,7 +130,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();
         app.UseAuthorization();
-        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {

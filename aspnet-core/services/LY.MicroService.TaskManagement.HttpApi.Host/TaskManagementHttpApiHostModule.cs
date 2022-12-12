@@ -122,7 +122,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseMultiTenancy();
         app.UseAbpRequestLocalization();
         app.UseAuthorization();
-        app.UseCapDashboard();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
