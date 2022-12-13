@@ -14,11 +14,11 @@ namespace LINGYUN.Platform.ObjectExtending
             );
         }
 
-        public PlatfromModuleExtensionConfiguration ConfigureAppVersion(
+        public PlatfromModuleExtensionConfiguration ConfigurePackage(
             Action<EntityExtensionConfiguration> configureAction)
         {
             return this.ConfigureEntity(
-                PlatformModuleExtensionConsts.EntityNames.AppVersion,
+                PlatformModuleExtensionConsts.EntityNames.Package,
                 configureAction
             );
         }

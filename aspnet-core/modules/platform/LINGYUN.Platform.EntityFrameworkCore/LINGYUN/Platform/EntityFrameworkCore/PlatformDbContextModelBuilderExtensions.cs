@@ -2,8 +2,8 @@
 using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Routes;
-using LINGYUN.Platform.Versions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -174,61 +174,72 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 x.HasIndex(i => new { i.Name });
             });
 
-
-            builder.Entity<AppVersion>(x =>
+            builder.Entity<Package>(x =>
             {
-                x.ToTable(options.TablePrefix + "Version", options.Schema);
-
-                x.Property(p => p.Title)
-                    .IsRequired()
-                    .HasColumnName(nameof(AppVersion.Title))
-                    .HasMaxLength(AppVersionConsts.MaxTitleLength);
-                x.Property(p => p.Version)
-                    .IsRequired()
-                    .HasColumnName(nameof(AppVersion.Version))
-                    .HasMaxLength(AppVersionConsts.MaxVersionLength);
-
-                x.Property(p => p.Description)
-                    .HasColumnName(nameof(AppVersion.Description))
-                    .HasMaxLength(AppVersionConsts.MaxDescriptionLength);
-
-                x.ConfigureByConvention();
-
-                x.HasIndex(i => i.Version);
-
-                x.HasMany(p => p.Files)
-                    .WithOne(q => q.AppVersion)
-                    .HasPrincipalKey(pk => pk.Id)
-                    .HasForeignKey(fk => fk.AppVersionId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            builder.Entity<VersionFile>(x =>
-            {
-                x.ToTable(options.TablePrefix + "VersionFile", options.Schema);
+                x.ToTable(options.TablePrefix + "Packages", options.Schema);
 
                 x.Property(p => p.Name)
                     .IsRequired()
-                    .HasColumnName(nameof(VersionFile.Name))
-                    .HasMaxLength(VersionFileConsts.MaxNameLength);
-                x.Property(p => p.SHA256)
+                    .HasColumnName(nameof(Package.Name))
+                    .HasMaxLength(PackageConsts.MaxNameLength);
+                x.Property(p => p.Note)
                     .IsRequired()
-                    .HasColumnName(nameof(VersionFile.SHA256))
-                    .HasMaxLength(VersionFileConsts.MaxSHA256Length);
+                    .HasColumnName(nameof(Package.Note))
+                    .HasMaxLength(PackageConsts.MaxNoteLength);
                 x.Property(p => p.Version)
+                   .IsRequired()
+                   .HasColumnName(nameof(Package.Version))
+                   .HasMaxLength(PackageConsts.MaxVersionLength);
+
+                x.Property(p => p.Description)
+                    .HasColumnName(nameof(Package.Description))
+                    .HasMaxLength(PackageConsts.MaxDescriptionLength);
+                x.Property(p => p.Authors)
+                    .HasColumnName(nameof(Package.Authors))
+                    .HasMaxLength(PackageConsts.MaxAuthorsLength);
+
+                x.ConfigureByConvention();
+
+                x.HasIndex(i => new { i.Name, i.Version });
+
+                x.HasMany(p => p.Blobs)
+                    .WithOne(q => q.Package)
+                    .HasPrincipalKey(pk => pk.Id)
+                    .HasForeignKey(fk => fk.PackageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<PackageBlob>(x =>
+            {
+                x.ToTable(options.TablePrefix + "PackageBlobs", options.Schema);
+
+                x.Property(p => p.Name)
                     .IsRequired()
-                    .HasColumnName(nameof(VersionFile.Version))
-                    .HasMaxLength(VersionFileConsts.MaxVersionLength);
+                    .HasColumnName(nameof(PackageBlob.Name))
+                    .HasMaxLength(PackageBlobConsts.MaxNameLength);
 
-                x.Property(p => p.Path)
-                    .HasColumnName(nameof(VersionFile.Path))
-                    .HasMaxLength(VersionFileConsts.MaxPathLength);
+                x.Property(p => p.SHA256)
+                    .HasColumnName(nameof(PackageBlob.SHA256))
+                    .HasMaxLength(PackageBlobConsts.MaxSHA256Length);
+                x.Property(p => p.Url)
+                    .HasColumnName(nameof(PackageBlob.Url))
+                    .HasMaxLength(PackageBlobConsts.MaxUrlLength);
+                x.Property(p => p.Summary)
+                    .HasColumnName(nameof(PackageBlob.Summary))
+                    .HasMaxLength(PackageBlobConsts.MaxSummaryLength);
+                x.Property(p => p.Authors)
+                   .HasColumnName(nameof(PackageBlob.Authors))
+                   .HasMaxLength(PackageBlobConsts.MaxAuthorsLength);
+                x.Property(p => p.License)
+                    .HasColumnName(nameof(PackageBlob.License))
+                    .HasMaxLength(PackageBlobConsts.MaxLicenseLength);
+                x.Property(p => p.ContentType)
+                    .HasColumnName(nameof(PackageBlob.ContentType))
+                    .HasMaxLength(PackageBlobConsts.MaxContentTypeLength);
 
-                x.ConfigureAudited();
-                x.ConfigureMultiTenant();
+                x.ConfigureByConvention();
 
-                x.HasIndex(i => new { i.Path, i.Name, i.Version }).IsUnique();
-                
+                x.HasIndex(i => new { i.PackageId, i.Name });
             });
         }
 

@@ -1,6 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Platform:01403": "包 {Name} 版本 {Version} 不能降级!",
     "Platform:01404": "文件: {FileName}, 版本号: {FileVersion} 不存在!",
     "Platform:02001": "同级目录下存在相同的菜单: {Name}!",
     "Platform:02002": "在有其他子菜单的情况下,不允许删除菜单节点!",

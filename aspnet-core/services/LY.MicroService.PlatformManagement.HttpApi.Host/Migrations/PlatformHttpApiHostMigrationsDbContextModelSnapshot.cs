@@ -18,7 +18,7 @@ namespace LY.MicroService.PlatformManagement.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
@@ -563,11 +563,16 @@ namespace LY.MicroService.PlatformManagement.Migrations
                     b.ToTable("AppPlatformUserMenus", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Versions.AppVersion", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("Authors")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Authors");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -592,13 +597,16 @@ namespace LY.MicroService.PlatformManagement.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(2048)
-                        .HasColumnType("varchar(2048)")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("Description");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("ForceUpdate")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -617,40 +625,53 @@ namespace LY.MicroService.PlatformManagement.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlatformType")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)")
+                        .HasColumnName("Note");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")
                         .HasColumnName("TenantId");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("Title");
-
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("Version");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Version");
+                    b.HasIndex("Name", "Version");
 
-                    b.ToTable("AppPlatformVersion", (string)null);
+                    b.ToTable("AppPlatformPackages", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Versions.VersionFile", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Packages.PackageBlob", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AppVersionId")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Authors")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Authors");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("ContentType");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
@@ -663,16 +684,14 @@ namespace LY.MicroService.PlatformManagement.Migrations
                     b.Property<int>("DownloadCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("FileType")
-                        .HasColumnType("int");
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
 
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("LastModifierId");
+                    b.Property<string>("License")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)")
+                        .HasColumnName("License");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -680,38 +699,39 @@ namespace LY.MicroService.PlatformManagement.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("Name");
 
-                    b.Property<string>("Path")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("Path");
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("SHA256")
-                        .IsRequired()
-                        .HasMaxLength(65)
-                        .HasColumnType("varchar(65)")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
                         .HasColumnName("SHA256");
 
-                    b.Property<long>("Size")
+                    b.Property<long?>("Size")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Summary")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)")
+                        .HasColumnName("Summary");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")
                         .HasColumnName("TenantId");
 
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("Version");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)")
+                        .HasColumnName("Url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppVersionId");
+                    b.HasIndex("PackageId", "Name");
 
-                    b.HasIndex("Path", "Name", "Version")
-                        .IsUnique();
-
-                    b.ToTable("AppPlatformVersionFile", (string)null);
+                    b.ToTable("AppPlatformPackageBlobs", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
@@ -723,15 +743,15 @@ namespace LY.MicroService.PlatformManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Versions.VersionFile", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Packages.PackageBlob", b =>
                 {
-                    b.HasOne("LINGYUN.Platform.Versions.AppVersion", "AppVersion")
-                        .WithMany("Files")
-                        .HasForeignKey("AppVersionId")
+                    b.HasOne("LINGYUN.Platform.Packages.Package", "Package")
+                        .WithMany("Blobs")
+                        .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppVersion");
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
@@ -739,9 +759,9 @@ namespace LY.MicroService.PlatformManagement.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Versions.AppVersion", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
                 {
-                    b.Navigation("Files");
+                    b.Navigation("Blobs");
                 });
 #pragma warning restore 612, 618
         }

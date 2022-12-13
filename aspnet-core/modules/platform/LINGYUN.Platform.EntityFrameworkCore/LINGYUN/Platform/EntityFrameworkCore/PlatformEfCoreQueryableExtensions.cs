@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Packages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -39,6 +40,18 @@ namespace LINGYUN.Platform.EntityFrameworkCore
             return queryable
                 .AsSplitQuery()
                 .Include(x => x.Items);
+        }
+
+        public static IQueryable<Package> IncludeDetails(this IQueryable<Package> queryable, bool include = true)
+        {
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .AsSplitQuery()
+                .Include(x => x.Blobs);
         }
     }
 }

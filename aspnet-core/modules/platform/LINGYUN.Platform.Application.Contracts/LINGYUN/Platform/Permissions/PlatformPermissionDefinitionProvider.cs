@@ -10,15 +10,6 @@ namespace LINGYUN.Platform.Permissions
         {
             var platform = context.AddGroup(PlatformPermissions.GroupName, L("Permission:Platform"));
 
-            var appVersion = platform.AddPermission(PlatformPermissions.AppVersion.Default, L("Permission:AppVersion"));
-            appVersion.AddChild(PlatformPermissions.AppVersion.Create, L("Permission:CreateVersion"));
-            appVersion.AddChild(PlatformPermissions.AppVersion.Delete, L("Permission:DeleteVersion"));
-
-            var versionFile = appVersion.AddChild(PlatformPermissions.AppVersion.FileManager.Default, L("Permission:FileManager"));
-            versionFile.AddChild(PlatformPermissions.AppVersion.FileManager.Create, L("Permission:AppendFile"));
-            versionFile.AddChild(PlatformPermissions.AppVersion.FileManager.Delete, L("Permission:DeleteFile"));
-            versionFile.AddChild(PlatformPermissions.AppVersion.FileManager.Download, L("Permission:DownloadFile"));
-
             var dataDictionary = platform.AddPermission(PlatformPermissions.DataDictionary.Default, L("Permission:DataDictionary"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.Create, L("Permission:Create"));
             dataDictionary.AddChild(PlatformPermissions.DataDictionary.Update, L("Permission:Update"));
@@ -38,6 +29,12 @@ namespace LINGYUN.Platform.Permissions
             menu.AddChild(PlatformPermissions.Menu.ManageRoles, L("Permission:ManageRoleMenus"));
             menu.AddChild(PlatformPermissions.Menu.ManageUsers, L("Permission:ManageUserMenus"));
             menu.AddChild(PlatformPermissions.Menu.ManageUserFavorites, L("Permission:ManageUserFavoriteMenus"));
+
+            var package = platform.AddPermission(PlatformPermissions.Package.Default, L("Permission:Package"));
+            package.AddChild(PlatformPermissions.Package.Create, L("Permission:Create"));
+            package.AddChild(PlatformPermissions.Package.Update, L("Permission:Update"));
+            package.AddChild(PlatformPermissions.Package.Delete, L("Permission:Delete"));
+            package.AddChild(PlatformPermissions.Package.ManageBlobs, L("Permission:ManageBlobs"));
         }
 
         private static LocalizableString L(string name)

@@ -63,6 +63,9 @@ namespace LINGYUN.Abp.Cli.Commands
             commandBuilder.AppendFormat(" -n {0}", createArgs.SolutionName.ProjectName);
             commandBuilder.AppendFormat(" -o {0}", createArgs.OutputFolder);
             commandBuilder.AppendFormat(" --DatabaseManagement {0}", dbm);
+            commandBuilder.AppendFormat(" --AuthenticationScheme {0}", createArgs.AuthenticationScheme);
+
+            Logger.LogInformation("Execute command: " + commandBuilder.ToString());
 
             var cmdError = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), out bool isSuccessful);
             if (!isSuccessful)
@@ -71,7 +74,7 @@ namespace LINGYUN.Abp.Cli.Commands
                 return;
             }
 
-            Logger.LogInformation("Execute command: " + cmdError);
+            Logger.LogInformation("Executed command: " + cmdError);
 
             var projectFiles = new List<FindFile>();
 

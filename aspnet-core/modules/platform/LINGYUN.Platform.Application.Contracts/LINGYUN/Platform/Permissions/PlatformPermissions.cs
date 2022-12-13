@@ -85,24 +85,17 @@ namespace LINGYUN.Platform.Permissions
             }
         }
 
-        public class AppVersion
+        public class Package
         {
-            public const string Default = GroupName + ".AppVersion";
+            public const string Default = GroupName + ".Package";
 
             public const string Create = Default + ".Create";
 
             public const string Delete = Default + ".Delete";
 
-            public class FileManager
-            {
-                public const string Default = AppVersion.Default + ".FileManager";
+            public const string Update = Default + ".Update";
 
-                public const string Create = Default + ".Create";
-
-                public const string Delete = Default + ".Delete";
-
-                public const string Download = Default + ".Download";
-            }
+            public const string ManageBlobs = Default + ".ManageBlobs";
         }
 
         public static string[] GetAll()

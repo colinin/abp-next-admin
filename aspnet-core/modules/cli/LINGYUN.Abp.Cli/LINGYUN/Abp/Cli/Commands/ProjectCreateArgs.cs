@@ -9,6 +9,7 @@ namespace LINGYUN.Abp.Cli.Commands
         public string PackageName { get; }
         public string ApplicationPort { get; }
         public string DaprPort { get; }
+        public string AuthenticationScheme { get; }
         public ProjectCreateArgs(
             string packageName,
             SolutionName solutionName, 
@@ -26,7 +27,8 @@ namespace LINGYUN.Abp.Cli.Commands
             Dictionary<string, string> extraProperties = null, 
             string connectionString = null,
             string applicationPort = "5000",
-            string daprPort = "3500") 
+            string daprPort = "3500",
+            string authenticationScheme = "IdentityServer4") 
             : base(
                   solutionName, 
                   templateName, 
@@ -46,6 +48,7 @@ namespace LINGYUN.Abp.Cli.Commands
             PackageName = packageName;
             ApplicationPort = applicationPort;
             DaprPort = daprPort;
+            AuthenticationScheme = authenticationScheme;
         }
     }
 }

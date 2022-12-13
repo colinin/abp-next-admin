@@ -1,8 +1,7 @@
 ﻿using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
-using LINGYUN.Platform.Versions;
-using Microsoft.EntityFrameworkCore;
+using LINGYUN.Platform.Packages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -24,15 +23,9 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 options.AddRepository<RoleMenu, EfCoreRoleMenuRepository>();
                 options.AddRepository<UserFavoriteMenu, EfCoreUserFavoriteMenuRepository>();
                 options.AddRepository<Layout, EfCoreLayoutRepository>();
-                options.AddRepository<AppVersion, EfCoreVersionRepository>();
+                options.AddRepository<Package, EfCorePackageRepository>();
 
                 options.AddDefaultRepositories(includeAllEntities: true);
-
-                options.Entity<AppVersion>(appVersion =>
-                {
-                    appVersion.DefaultWithDetailsFunc = (x) =>
-                        x.Include(q => q.Files);
-                });
             });
         }
     }

@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Platform.Localization;
-using LINGYUN.Platform.Versions;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -9,36 +8,12 @@ namespace LINGYUN.Platform.Settings
     {
         public override void Define(ISettingDefinitionContext context)
         {
-            context.Add(CreateAppVersionSettings());
+            context.Add(CreateDefaultSettings());
         }
 
-        protected SettingDefinition[] CreateAppVersionSettings()
+        protected SettingDefinition[] CreateDefaultSettings()
         {
-            return new SettingDefinition[]
-            {
-                new SettingDefinition(
-                    name: PlatformSettingNames.AppVersion.VersionFileLimitLength, 
-                    defaultValue: AppVersionConsts.DefaultVersionFileLimitLength.ToString(),
-                    displayName: L("DisplayName:VersionFileLimitLength"), 
-                    description: L("Description:VersionFileLimitLength"), 
-                    isVisibleToClients: true)
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
-                new SettingDefinition(
-                    name: PlatformSettingNames.AppVersion.AllowVersionFileExtensions, 
-                    defaultValue: AppVersionConsts.DefaultAllowVersionFileExtensions,
-                    displayName: L("DisplayName:AllowVersionFileExtensions"), 
-                    description: L("Description:AllowVersionFileExtensions"), 
-                    isVisibleToClients: true)
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
-            };
+            return new SettingDefinition[0];
         }
 
         protected LocalizableString L(string name)

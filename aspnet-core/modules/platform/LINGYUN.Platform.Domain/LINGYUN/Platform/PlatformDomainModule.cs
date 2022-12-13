@@ -2,8 +2,8 @@
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.ObjectExtending;
+using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Routes;
-using LINGYUN.Platform.Versions;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
@@ -36,7 +36,7 @@ namespace LINGYUN.Platform
 
             Configure<AbpBlobStoringOptions>(options =>
             {
-                options.Containers.Configure<VersionContainer>(containerConfiguration =>
+                options.Containers.Configure<PackageContainer>(containerConfiguration =>
                 {
                     containerConfiguration.IsMultiTenant = true;
                 });
@@ -50,7 +50,7 @@ namespace LINGYUN.Platform
                 options.EtoMappings.Add<UserMenu, UserMenuEto>(typeof(PlatformDomainModule));
                 options.EtoMappings.Add<RoleMenu, RoleMenuEto>(typeof(PlatformDomainModule));
 
-                options.EtoMappings.Add<AppVersion, AppVersionEto>(typeof(PlatformDomainModule));
+                options.EtoMappings.Add<Package, PackageEto>(typeof(PlatformDomainModule));
             });
         }
         public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -62,8 +62,8 @@ namespace LINGYUN.Platform
             );
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 PlatformModuleExtensionConsts.ModuleName,
-                PlatformModuleExtensionConsts.EntityNames.AppVersion,
-                typeof(AppVersion)
+                PlatformModuleExtensionConsts.EntityNames.Package,
+                typeof(Package)
             );
         }
     }

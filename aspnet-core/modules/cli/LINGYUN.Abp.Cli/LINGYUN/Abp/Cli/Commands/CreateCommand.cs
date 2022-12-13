@@ -114,6 +114,12 @@ namespace LINGYUN.Abp.Cli.Commands
                 Logger.LogInformation("DBMS: " + databaseManagementSystem);
             }
 
+            var authenticationScheme = GetAuthenticationScheme(commandLineArgs);
+            if (!authenticationScheme.IsNullOrWhiteSpace())
+            {
+                Logger.LogInformation("Authentication Scheme: " + authenticationScheme);
+            }
+
             var randomPort = string.IsNullOrWhiteSpace(
                 commandLineArgs.Options.GetOrNull(CreateOptions.NoRandomPort.Short, CreateOptions.NoRandomPort.Long));
             var applicationPort = randomPort ? RandomHelper.GetRandom(5001, 65535).ToString() : "5000";
@@ -166,7 +172,8 @@ namespace LINGYUN.Abp.Cli.Commands
                 commandLineArgs.Options,
                 connectionString,
                 applicationPort,
-                daprPort
+                daprPort,
+                authenticationScheme
             );
 
             await CreateProjectService.CreateAsync(projectArgs);
@@ -197,6 +204,7 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
             sb.AppendLine("--dbms <database-management-system>         (your database management system)");
+            sb.AppendLine("--as <authentication-scheme>                (your identity authentication provider, optional: IdentityServer4、OpenIddict, default: IdentityServer4)");
             sb.AppendLine("--no-random-port                            (Use template's default ports)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
@@ -209,6 +217,7 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("  labp create Acme.BookStore -csf false");
             sb.AppendLine("  labp create Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
             sb.AppendLine("  labp create Acme.BookStore --dbms mysql");
+            sb.AppendLine("  labp create Acme.BookStore --as openiddict");
             sb.AppendLine("  labp create Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             // TODO: 文档
@@ -221,6 +230,14 @@ namespace LINGYUN.Abp.Cli.Commands
         {
             return commandLineArgs.Options.ContainsKey(NewCommand.Options.CreateSolutionFolder.Long)
                 || commandLineArgs.Options.ContainsKey(NewCommand.Options.CreateSolutionFolder.Short);
+        }
+
+        protected virtual string GetAuthenticationScheme(CommandLineArgs commandLineArgs)
+        {
+            var authScheme = commandLineArgs.Options.GetOrNull(
+                CreateOptions.AuthenticationScheme.Short,
+                CreateOptions.AuthenticationScheme.Long);
+            return string.IsNullOrWhiteSpace(authScheme) ? "IdentityServer4" : authScheme;
         }
 
         protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)

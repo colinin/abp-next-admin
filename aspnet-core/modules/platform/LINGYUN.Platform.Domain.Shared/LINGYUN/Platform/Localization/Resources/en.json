@@ -1,6 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Platform:01403": "Package {Name} Version {Version} cannot be degraded!",
     "Platform:01404": "File not found, name: {FileName}, version:{FileVersion}!",
     "Platform:02001": "The same menu exists in the sibling directory: {Name}!",
     "Platform:02002": "You are not allowed to delete menu nodes when there are other submenus!",
