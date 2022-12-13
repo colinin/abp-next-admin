@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenIddict.Abstractions;
+using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
@@ -30,6 +32,7 @@ public class LinkUserTokenController : AbpOpenIdDictControllerBase, ITokenExtens
     {
         LazyServiceProvider = context.HttpContext.RequestServices.GetRequiredService<IAbpLazyServiceProvider>();
 
+        // 用户需要传递身份令牌
         var accessTokenParam = context.Request.GetParameter("access_token");
         var accessToken = accessTokenParam.ToString();
         if (accessToken.IsNullOrWhiteSpace())
@@ -43,26 +46,47 @@ public class LinkUserTokenController : AbpOpenIdDictControllerBase, ITokenExtens
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        await foreach (var result in TokenManager.ValidateAsync(accessToken))
+        // 通过身份令牌得到用户信息
+        var transaction = await context.HttpContext.RequestServices.GetRequiredService<IOpenIddictServerFactory>().CreateTransactionAsync();
+        transaction.EndpointType = OpenIddictServerEndpointType.Userinfo;
+        transaction.Request = new OpenIddictRequest
         {
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
-            {
-                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
-                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = result.ErrorMessage
-            });
+            ClientId = context.Request.ClientId,
+            ClientSecret = context.Request.ClientSecret,
+            AccessToken = accessToken
+        };
 
-            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        var notification = new OpenIddictServerEvents.ProcessAuthenticationContext(transaction);
+        var dispatcher = context.HttpContext.RequestServices.GetRequiredService<IOpenIddictServerDispatcher>();
+        await dispatcher.DispatchAsync(notification);
+
+        if (notification.IsRejected)
+        {
+            return Forbid(
+                new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = notification.Error ?? OpenIddictConstants.Errors.InvalidRequest,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = notification.ErrorDescription,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorUri] = notification.ErrorUri
+                }),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var userId = await TokenManager.GetIdAsync(accessToken);
-        var user = await UserManager.FindByIdAsync(userId);
-        var principal = await SignInManager.CreateUserPrincipalAsync(user);
+        var principal = notification.Principal;
+        if (principal == null)
+        {
+            return Forbid(
+                new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = notification.Error ?? OpenIddictConstants.Errors.InvalidRequest,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = notification.ErrorDescription,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorUri] = notification.ErrorUri
+                }),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
 
-        principal.SetScopes(context.Request.GetScopes());
-        principal.SetResources(await GetResourcesAsync(context.Request.GetScopes()));
-
-        await SetClaimsDestinationsAsync(principal);
-
+        var userId = principal.FindUserId();
+        // 交换令牌
         using (CurrentPrincipalAccessor.Change(principal))
         {
             var linkUserIdParam = context.Request.GetParameter("LinkUserId");
@@ -96,7 +120,7 @@ public class LinkUserTokenController : AbpOpenIdDictControllerBase, ITokenExtens
             }
 
             var isLinked = await IdentityLinkUserManager.IsLinkedAsync(
-                new IdentityLinkUserInfo(user.Id, CurrentTenant.Id),
+                new IdentityLinkUserInfo(userId.Value, CurrentTenant.Id),
                 new IdentityLinkUserInfo(linkUserId, linkTenantId));
 
             if (isLinked)
