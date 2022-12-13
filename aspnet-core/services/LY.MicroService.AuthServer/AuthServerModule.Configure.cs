@@ -16,6 +16,7 @@ using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -121,6 +122,40 @@ public partial class AuthServerModule
                     builder.AddEncryptionCertificate(cer);
                 });
             }
+        }
+        else
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(builder =>
+            {
+                //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                using (var algorithm = RSA.Create(keySizeInBits: 2048))
+                {
+                    var subject = new X500DistinguishedName("CN=Fabrikam Encryption Certificate");
+                    var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                    request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, critical: true));
+                    var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                    builder.AddSigningCertificate(certificate);
+                }
+
+                using (var algorithm = RSA.Create(keySizeInBits: 2048))
+                {
+                    var subject = new X500DistinguishedName("CN=Fabrikam Signing Certificate");
+                    var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                    request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyEncipherment, critical: true));
+                    var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                    builder.AddEncryptionCertificate(certificate);
+                }
+
+                // 禁用https
+                builder.UseAspNetCore()
+                    .DisableTransportSecurityRequirement();
+            });
         }
     }
 
