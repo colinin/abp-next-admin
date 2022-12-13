@@ -352,6 +352,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A76A4741-AF91-44EF-A7B6-8E7AF4961146}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		common.props = common.props
+		configureawait.props = configureawait.props
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.SettingManagement", "modules\cloud-tencent\LINGYUN.Abp.Tencent.SettingManagement\LINGYUN.Abp.Tencent.SettingManagement.csproj", "{C7CF4193-6397-4450-AF42-3BACD7CF292E}"
@@ -502,12 +505,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.WeCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator.Tests", "tests\LINGYUN.Abp.IdGenerator.Tests\LINGYUN.Abp.IdGenerator.Tests.csproj", "{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{7D604751-3FA4-4826-A93B-BBC10D73C861}"
-	ProjectSection(SolutionItems) = preProject
-		common.props = common.props
-		configureawait.props = configureawait.props
-		Directory.Build.props = Directory.Build.props
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Official.Senparc", "modules\wechat\LINGYUN.Abp.WeChat.Official.Senparc\LINGYUN.Abp.WeChat.Official.Senparc.csproj", "{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1307,6 +1305,10 @@ Global
 		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1553,6 +1555,7 @@ Global
 		{74C13BCC-A5A5-40FA-81E8-83DCCF760148} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{427382F6-3153-47A2-BBC4-88F6EA116A8F} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{CA8D7141-9520-46AC-83FD-6E034AD6EBDD} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

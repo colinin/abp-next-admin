@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 
 namespace LINGYUN.Abp.Dapr.Client.ClientProxying
 {
@@ -20,6 +21,10 @@ namespace LINGYUN.Abp.Dapr.Client.ClientProxying
         /// 对响应进行处理,返回响应内容
         /// </summary>
         public Func<HttpResponseMessage, IAbpLazyServiceProvider, Task<string>> ProxyResponseContent { get; private set; }
+        /// <summary>
+        /// 格式化错误
+        /// </summary>
+        public Func<HttpResponseMessage, IAbpLazyServiceProvider, Task<RemoteServiceErrorInfo>> ProxyErrorFormat { get; private set; }
         public AbpDaprClientProxyOptions()
         {
             DaprClientProxies = new Dictionary<Type, DynamicDaprClientProxyConfig>();
@@ -37,6 +42,14 @@ namespace LINGYUN.Abp.Dapr.Client.ClientProxying
         public void OnResponse(Func<HttpResponseMessage, IAbpLazyServiceProvider, Task<string>> func)
         {
             ProxyResponseContent = func;
+        }
+        /// <summary>
+        /// 处理服务间调用错误消息
+        /// </summary>
+        /// <param name="func"></param>
+        public void OnError(Func<HttpResponseMessage, IAbpLazyServiceProvider, Task<RemoteServiceErrorInfo>> func)
+        {
+            ProxyErrorFormat = func;
         }
     }
 }

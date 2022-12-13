@@ -23,6 +23,7 @@ using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
+using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

@@ -58,6 +58,32 @@ namespace LINGYUN.Abp.Dapr.Client.Wrapper
 
                     return stringContent;
                 });
+                options.OnError(async (response, serviceProvider) =>
+                {
+                    if (response.Headers.Contains(AbpHttpWrapConsts.AbpWrapResult))
+                    {
+                        try
+                        {
+                            var jsonSerializer = serviceProvider.LazyGetRequiredService<IJsonSerializer>();
+                            var result = jsonSerializer.Deserialize<WrapResult>(
+                                await response.Content.ReadAsStringAsync());
+
+                            return new RemoteServiceErrorInfo(
+                                result.Message,
+                                result.Details,
+                                result.Code);
+                        }
+                        catch
+                        {
+                            return new RemoteServiceErrorInfo
+                            {
+                                Message = response.ReasonPhrase,
+                                Code = response.StatusCode.ToString()
+                            };
+                        }
+                    }
+                    return null;
+                });
             });
         }
     }

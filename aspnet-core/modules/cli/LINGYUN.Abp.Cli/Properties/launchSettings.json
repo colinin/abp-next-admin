@@ -1,7 +1,8 @@
 {
   "profiles": {
     "LINGYUN.Abp.Cli": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "help create"
     }
   }
 }

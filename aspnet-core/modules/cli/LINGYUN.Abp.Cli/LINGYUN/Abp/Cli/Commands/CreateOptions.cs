@@ -21,5 +21,11 @@
             public const string Short = "nrp";
             public const string Long = "no-random-port";
         }
+
+        public static class AuthenticationScheme
+        {
+            public const string Short = "as";
+            public const string Long = "auth-scheme";
+        }
     }
 }

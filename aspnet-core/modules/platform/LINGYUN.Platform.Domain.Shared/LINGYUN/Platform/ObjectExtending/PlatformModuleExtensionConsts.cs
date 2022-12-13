@@ -8,7 +8,7 @@
         {
             public const string Route = "Route";
 
-            public const string AppVersion = "AppVersion";
+            public const string Package = "Package";
         }
     }
 }

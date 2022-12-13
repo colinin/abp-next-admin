@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
-using LINGYUN.Platform.Routes;
-using LINGYUN.Platform.Versions;
+using LINGYUN.Platform.Packages;
 
 namespace LINGYUN.Platform
 {
@@ -16,8 +15,7 @@ namespace LINGYUN.Platform
             CreateMap<UserMenu, UserMenuEto>();
             CreateMap<RoleMenu, RoleMenuEto>();
 
-            CreateMap<AppVersion, AppVersionEto>()
-                .ForMember(eto => eto.FileCount, map => map.MapFrom(src => src.Files.Count));
+            CreateMap<Package, PackageEto>();
         }
     }
 }

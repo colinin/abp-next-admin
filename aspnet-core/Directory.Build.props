@@ -1,15 +1,15 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.8.0</DaprPackageVersion>
+		<VoloAbpPackageVersion>6.0.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>6.0.2</LINGYUNAbpPackageVersion>
+		<DaprPackageVersion>1.9.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.0.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.9.0</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<TencentCloudSDKPackageVersion>3.0.434</TencentCloudSDKPackageVersion>
-		<AgileConfigClientPackageVersion>1.2.1.5</AgileConfigClientPackageVersion>
+		<AgileConfigClientPackageVersion>1.6.9</AgileConfigClientPackageVersion>
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.7.29</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
@@ -19,7 +19,7 @@
 		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
 		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
 		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
-		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
+		<StackExchangeRedisPackageVersion>2.2.4</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
 		<SerilogAspNetCorePackageVersion>5.0.0</SerilogAspNetCorePackageVersion>
 		<SerilogEnrichersEnvironmentPackageVersion>2.2.0</SerilogEnrichersEnvironmentPackageVersion>

@@ -2,7 +2,7 @@
 using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
-using LINGYUN.Platform.Versions;
+using LINGYUN.Platform.Packages;
 
 namespace LINGYUN.Platform
 {
@@ -10,8 +10,8 @@ namespace LINGYUN.Platform
     {
         public PlatformApplicationMappingProfile()
         {
-            CreateMap<VersionFile, VersionFileDto>();
-            CreateMap<AppVersion, VersionDto>();
+            CreateMap<PackageBlob, PackageBlobDto>();
+            CreateMap<Package, PackageDto>();
 
             CreateMap<DataItem, DataItemDto>();
             CreateMap<Data, DataDto>();

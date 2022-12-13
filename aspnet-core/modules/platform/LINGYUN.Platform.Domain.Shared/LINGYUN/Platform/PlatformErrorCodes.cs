@@ -6,6 +6,10 @@
 
         public const string VersionFileNotFound = Namespace + ":01404";
         /// <summary>
+        /// 包版本不能降级
+        /// </summary>
+        public const string PackageVersionDegraded = Namespace + ":01403";
+        /// <summary>
         /// 同级菜单已经存在
         /// </summary>
         public const string DuplicateMenu = Namespace + ":02001";

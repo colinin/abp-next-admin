@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Content;
+using Volo.Abp.Http.Client;
+using Volo.Abp.Http;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.ClientProxying;
 
@@ -115,6 +117,17 @@ namespace LINGYUN.Abp.Dapr.Client.ClientProxying
 
             if (!response.IsSuccessStatusCode)
             {
+                if (DaprClientProxyOptions.Value.ProxyErrorFormat != null)
+                {
+                    var errorInfo = await DaprClientProxyOptions.Value.ProxyErrorFormat(response, LazyServiceProvider);
+                    if (errorInfo != null)
+                    {
+                        throw new AbpRemoteCallException(errorInfo)
+                        {
+                            HttpStatusCode = (int)response.StatusCode
+                        };
+                    }
+                }
                 await ThrowExceptionForResponseAsync(response);
             }
 
