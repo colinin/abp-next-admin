@@ -85,7 +85,7 @@ public partial class AuthServerModule
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("lingyun-abp-api-resource");
+                options.AddAudiences("lingyun-abp-application");
 
                 options.UseLocalServer();
 
