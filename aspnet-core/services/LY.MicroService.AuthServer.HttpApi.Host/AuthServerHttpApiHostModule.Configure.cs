@@ -313,7 +313,7 @@ public partial class AuthServerHttpApiHostModule
 
         if (isDevelopment)
         {
-            services.AddAlwaysAllowAuthorization();
+            // services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

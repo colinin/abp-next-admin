@@ -85,7 +85,7 @@ public partial class AuthServerModule
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("lingyun-abp-application");
+                options.AddAudiences("lingyun-abp-api-resource");
 
                 options.UseLocalServer();
 
@@ -270,15 +270,15 @@ public partial class AuthServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
-        services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+        //services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
-        services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = configuration["AuthServer:ApiName"];
-                });
+        //services.AddAuthentication()
+        //        .AddJwtBearer(options =>
+        //        {
+        //            options.Authority = configuration["AuthServer:Authority"];
+        //            options.RequireHttpsMetadata = false;
+        //            options.Audience = configuration["AuthServer:ApiName"];
+        //        });
 
         if (!isDevelopment)
         {
