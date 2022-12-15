@@ -23,7 +23,7 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from '../datas//ModalData';
-  import { getById, create, update } from '/@/api/saas/editions';
+  import { GetAsyncById, CreateAsyncByInput, UpdateAsyncByIdAndInput } from '/@/api/saas/edition';
 
   const emits = defineEmits(['change', 'register']);
   const { createMessage } = useMessage();
@@ -51,7 +51,7 @@
       });
       return;
     }
-    getById(editionId).then((edition) => {
+    GetAsyncById(editionId).then((edition) => {
       nextTick(() => {
         setFieldsValue(edition);
       });
@@ -61,7 +61,7 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      const api = input.id ? update(input.id, input) : create(input);
+      const api = input.id ? UpdateAsyncByIdAndInput(input.id, input) : CreateAsyncByInput(input);
       api.then((edition) => {
         createMessage.success(L('Successful'));
         emits('change', edition);

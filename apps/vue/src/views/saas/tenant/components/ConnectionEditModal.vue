@@ -14,7 +14,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { setConnectionString } from '/@/api/saas/tenant';
+  import { SetConnectionStringAsyncByIdAndInput } from '/@/api/saas/tenant';
   import { getConnectionFormSchemas } from '../datas//ModalData';
 
   const emits = defineEmits(['change', 'register']);
@@ -39,7 +39,7 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      setConnectionString(input.id, input).then(() => {
+      SetConnectionStringAsyncByIdAndInput(input.id, input).then(() => {
         createMessage.success(L('Successful'));
         closeModal();
         emits('change');

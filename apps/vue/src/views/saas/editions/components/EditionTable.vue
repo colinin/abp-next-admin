@@ -51,7 +51,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useFeatureModal } from '../hooks/useFeatureModal';
   import { FeatureModal } from '../../../feature';
-  import { deleteById, getList } from '../../../../api/saas/editions';
+  import { DeleteAsyncById, GetListAsyncByInput } from '/@/api/saas/edition';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas//ModalData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
@@ -66,7 +66,7 @@
     rowKey: 'id',
     title: L('Editions'),
     columns: getDataColumns(),
-    api: getList,
+    api: GetListAsyncByInput,
     beforeFetch: formatPagedRequest,
     pagination: true,
     striped: false,
@@ -100,7 +100,7 @@
       content: L('ItemWillBeDeletedMessageWithFormat', record.displayName),
       okCancel: true,
       onOk: () => {
-        return deleteById(record.id).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { getList as getTenants } from '/@/api/saas/tenant';
+import { GetListAsyncByInput as getTenants } from '/@/api/saas/tenant';
 import { getList as getSubscriptions } from '/@/api/webhooks/subscriptions';
 import { httpStatusOptions } from '../../typing';
 

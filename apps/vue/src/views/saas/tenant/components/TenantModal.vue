@@ -23,7 +23,7 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from '../datas//ModalData';
-  import { getById, create, update } from '/@/api/saas/tenant';
+  import { GetAsyncById, CreateAsyncByInput, UpdateAsyncByIdAndInput } from '/@/api/saas/tenant';
 
   const emits = defineEmits(['change', 'register']);
 
@@ -46,7 +46,7 @@
     title.value = L('Edit');
     resetFields();
     if (id) {
-      getById(id).then((res) => {
+      GetAsyncById(id).then((res) => {
         setFieldsValue(res);
         title.value = L('NewTenant');
       });
@@ -56,7 +56,7 @@
   function handleSubmit() {
     validate().then((input) => {
       loading.value = true;
-      const api = input.id ? update(input.id, input) : create(input);
+      const api = input.id ? UpdateAsyncByIdAndInput(input.id, input) : CreateAsyncByInput(input);
       api.then(() => {
         createMessage.success(L('Successful'));
         emits('change');

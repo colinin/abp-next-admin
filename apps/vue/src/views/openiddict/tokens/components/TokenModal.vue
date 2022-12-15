@@ -18,7 +18,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getModalFormSchemas } from '../datas/ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  import { getById } from '/@/api/openiddict/tokens';
+  import { GetAsyncById } from '/@/api/openiddict/open-iddict-token';
 
   const { L } = useLocalization('AbpOpenIddict');
   const [registerForm, { setFieldsValue, resetFields }] = useForm({
@@ -37,7 +37,7 @@
   });
 
   function fetchToken(id: string) {
-    getById(id).then((token) => {
+    GetAsyncById(id).then((token) => {
       setFieldsValue(token);
     });
   }

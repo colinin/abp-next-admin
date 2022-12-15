@@ -71,7 +71,7 @@
   import { CodeEditorX, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { Tenant } from '/@/api/saas/model/tenantModel';
-  import { getList as getTenants } from '/@/api/saas/tenant';
+  import { GetListAsyncByInput as getTenants } from '/@/api/saas/tenant';
   import { getById, create, update, getAllAvailableWebhooks } from '/@/api/webhooks/subscriptions';
   import {
     WebhookSubscription,
