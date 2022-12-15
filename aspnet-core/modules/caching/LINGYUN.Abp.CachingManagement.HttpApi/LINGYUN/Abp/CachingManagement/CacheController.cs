@@ -39,6 +39,14 @@ public class CacheController : AbpControllerBase, ICacheAppService
     }
 
     [HttpPut]
+    [Route("set")]
+    [Authorize(CachingManagementPermissionNames.Cache.ManageValue)]
+    public virtual Task SetAsync(CacheSetInput input)
+    {
+        return CacheAppService.SetAsync(input);
+    }
+
+    [HttpPut]
     [Route("refresh")]
     [Authorize(CachingManagementPermissionNames.Cache.Refresh)]
     public virtual Task RefreshAsync(CacheRefreshInput input)

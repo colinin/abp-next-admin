@@ -8,6 +8,7 @@ enum Api {
   SetCurrentTenantSettings = '/api/setting-management/settings/change-current-tenant',
   GetCurrentUserSettings = '/api/setting-management/settings/by-current-user',
   SetCurrentUserSettings = '/api/setting-management/settings/change-current-user',
+  SendTestEmail = '/api/setting-management/settings/send-test-email'
 }
 
 export const getGlobalSettings = () => {
@@ -48,3 +49,12 @@ export const setCurrentUserSettings = (payload: SettingsUpdate) => {
     url: Api.SetCurrentUserSettings,
   });
 };
+
+export const sendTestEmail = (emailAddress: string) => {
+  return defHttp.post({
+    data: {
+      emailAddress: emailAddress
+    },
+    url: Api.SendTestEmail,
+  });
+}

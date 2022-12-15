@@ -52,6 +52,24 @@ public class CacheAppService : ApplicationService, ICacheAppService
         return value;
     }
 
+    [Authorize(CachingManagementPermissionNames.Cache.ManageValue)]
+    public async virtual Task SetAsync(CacheSetInput input)
+    {
+        TimeSpan? absExpir = null;
+        TimeSpan? sldExpr = null;
+
+        if (input.AbsoluteExpiration.HasValue && input.AbsoluteExpiration.Value > Clock.Now)
+        {
+            absExpir = input.AbsoluteExpiration.Value - Clock.Now;
+        }
+        if (input.SlidingExpiration.HasValue && input.SlidingExpiration.Value > Clock.Now)
+        {
+            sldExpr = input.SlidingExpiration.Value - Clock.Now;
+        }
+
+        await CacheManager.SetAsync(input.Key, input.Value, absExpir, sldExpr);
+    }
+
     [Authorize(CachingManagementPermissionNames.Cache.Refresh)]
     public async virtual Task RefreshAsync(CacheRefreshInput input)
     {

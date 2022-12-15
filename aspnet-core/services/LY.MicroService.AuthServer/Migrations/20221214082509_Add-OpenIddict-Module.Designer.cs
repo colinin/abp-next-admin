@@ -12,15 +12,15 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.AuthServer.Migrations
 {
     [DbContext(typeof(AuthServerMigrationsDbContext))]
-    [Migration("20220806104408_Switch-IdentityServer-to-the-OpenIddict")]
-    partial class SwitchIdentityServertotheOpenIddict
+    [Migration("20221214082509_Add-OpenIddict-Module")]
+    partial class AddOpenIddictModule
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>

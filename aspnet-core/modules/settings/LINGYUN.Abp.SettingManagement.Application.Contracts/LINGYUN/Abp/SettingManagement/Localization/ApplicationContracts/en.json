@@ -43,6 +43,8 @@
     "Description:FileManagement": "File Management",
     "DisplayName:FileManagement.FileSystem": "File System",
     "Description:FileManagement.FileSystem": "File System",
-    "TenantCannotChangeGlobalSetting": "Tenant cannot change the global settings"
+    "TenantCannotChangeGlobalSetting": "Tenant cannot change the global settings",
+    "SendTestEmail:Subject": "This is a test email",
+    "SendTestEmail:Body": "<h3>If you have received this email, then your mail configuration is working normally.</h3><br /><h3>System mail Do not reply</h3>"
   }
 }

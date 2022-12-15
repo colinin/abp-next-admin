@@ -5,6 +5,7 @@
     "Permission:Caches": "管理缓存",
     "Permission:Refresh": "刷新",
     "Permission:Delete": "删除",
+    "Permission:ManageValue": "管理值",
     "Caches": "缓存列表",
     "CacheInfo": "缓存详情",
     "DisplayName:Marker": "标记",

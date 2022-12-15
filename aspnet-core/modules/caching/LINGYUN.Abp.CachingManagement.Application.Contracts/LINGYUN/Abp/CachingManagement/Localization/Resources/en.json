@@ -5,6 +5,7 @@
     "Permission:Caches": "Manager Cache",
     "Permission:Refresh": "Refresh",
     "Permission:Delete": "Delete",
+    "Permission:ManageValue": "Manage Value",
     "Caches": "Caches",
     "CacheInfo": "Cache Info",
     "DisplayName:Marker": "Marker",

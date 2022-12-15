@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -168,6 +170,25 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
             size,
             values,
             ttl);
+    }
+
+    public async virtual Task SetAsync(SetCacheRequest request, CancellationToken cancellationToken = default)
+    {
+        var cacheKey = request.Key;
+        if (!RedisCacheOptions.InstanceName.IsNullOrWhiteSpace() && cacheKey.StartsWith(RedisCacheOptions.InstanceName))
+        {
+            cacheKey = cacheKey.Substring(RedisCacheOptions.InstanceName.Length);
+        }
+
+        await RedisCache.SetAsync(
+            cacheKey,
+            Encoding.UTF8.GetBytes(request.Value),
+            new DistributedCacheEntryOptions
+            {
+                SlidingExpiration = request.SlidingExpiration,
+                AbsoluteExpirationRelativeToNow = request.AbsoluteExpiration,
+            },
+            cancellationToken);
     }
 
     public async virtual Task RefreshAsync(RefreshCacheRequest request, CancellationToken cancellationToken = default)

@@ -5,7 +5,6 @@ import {
   OpenIddictApplicationUpdateDto,
   OpenIddictApplicationGetListInput,
 } from './model';
-import { PagedResultDto } from '../../model/baseModel';
 
 const remoteServiceName = 'AbpOpenIddict';
 const controllerName = 'OpenIddictApplication';
@@ -22,24 +21,15 @@ export const getById = (id: string) => {
 };
 
 export const getList = (input: OpenIddictApplicationGetListInput) => {
-  return defAbpHttp.get<PagedResultDto<OpenIddictApplicationDto>>({
-    url: '/api/openiddict/applications',
-    params: input,
-  }, {
-    withToken: false
+  return defAbpHttp.pagedRequest<OpenIddictApplicationDto>({
+    service: remoteServiceName,
+    controller: controllerName,
+    action: 'GetListAsync',
+    params: {
+      input: input,
+    },
   });
 };
-
-// export const getList = (input: OpenIddictApplicationGetListInput) => {
-//   return defAbpHttp.pagedRequest<OpenIddictApplicationDto>({
-//     service: remoteServiceName,
-//     controller: controllerName,
-//     action: 'GetListAsync',
-//     params: {
-//       input: input,
-//     },
-//   });
-// };
 
 export const deleteById = (id: string) => {
   return defAbpHttp.request<void>({

@@ -10,6 +10,8 @@ public interface ICacheManager
 
     Task<CacheValueResponse> GetValueAsync(string key, CancellationToken cancellationToken = default);
 
+    Task SetAsync(SetCacheRequest request, CancellationToken cancellationToken = default);
+
     Task RefreshAsync(RefreshCacheRequest request, CancellationToken cancellationToken = default);
 
     Task RemoveAsync(string key, CancellationToken cancellationToken = default);
