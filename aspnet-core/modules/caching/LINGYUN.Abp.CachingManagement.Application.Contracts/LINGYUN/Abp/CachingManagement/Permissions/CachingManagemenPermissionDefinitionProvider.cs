@@ -11,6 +11,7 @@ public class CachingManagemenPermissionDefinitionProvider : PermissionDefinition
         var cachingManagerGroup = context.AddGroup(CachingManagementPermissionNames.GroupName, L("Permission:CachingManagement"));
 
         var cacheGroup = cachingManagerGroup.AddPermission(CachingManagementPermissionNames.Cache.Default, L("Permission:Caches"));
+        cacheGroup.AddChild(CachingManagementPermissionNames.Cache.ManageValue, L("Permission:ManageValue"));
         cacheGroup.AddChild(CachingManagementPermissionNames.Cache.Refresh, L("Permission:Refresh"));
         cacheGroup.AddChild(CachingManagementPermissionNames.Cache.Delete, L("Permission:Delete"));
     }

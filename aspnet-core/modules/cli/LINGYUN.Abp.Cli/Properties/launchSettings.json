@@ -2,7 +2,7 @@
   "profiles": {
     "LINGYUN.Abp.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "help create"
+      "commandLineArgs": "generate-proxy -t ts -u http://127.0.0.1:30045 -m webhooks-management -o D:\\Projects\\Development\\type-script"
     }
   }
 }

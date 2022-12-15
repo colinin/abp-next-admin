@@ -1,13 +1,16 @@
 using LINGYUN.Abp.Cli.ServiceProxying;
-using LINGYUN.Abp.Cli.ServiceProxying.CSharp;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Cli;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.DependencyInjection;
-
+using AbpCliServiceProxyOptions = Volo.Abp.Cli.ServiceProxying.AbpCliServiceProxyOptions;
+using IServiceProxyGenerator = Volo.Abp.Cli.ServiceProxying.IServiceProxyGenerator;
 using VoloGenerateProxyArgs = Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs;
 
 namespace LINGYUN.Abp.Cli.Commands;
@@ -18,22 +21,34 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
 
     protected string CommandName => Name;
 
+    protected AbpCliServiceProxyOptions ServiceProxyOptions { get; }
+
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     public GenerateProxyCommand(
+        IOptions<AbpCliServiceProxyOptions> serviceProxyOptions,
         IServiceScopeFactory serviceScopeFactory)
     {
         ServiceScopeFactory = serviceScopeFactory;
+        ServiceProxyOptions = serviceProxyOptions.Value;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        using (var scope = ServiceScopeFactory.CreateScope())
-        {
-            var serviceProxyGenerator = scope.ServiceProvider.GetRequiredService<CSharpServiceProxyGenerator>();
+        var generateType = commandLineArgs.Options.GetOrNull(Options.GenerateType.Short, Options.GenerateType.Long)?.ToUpper();
 
-            await serviceProxyGenerator.GenerateProxyAsync(BuildArgs(commandLineArgs));
+        if (!ServiceProxyOptions.Generators.ContainsKey(generateType))
+        {
+            throw new CliUsageException("Option Type value is invalid" +
+                Environment.NewLine +
+                GetUsageInfo());
         }
+
+        using var scope = ServiceScopeFactory.CreateScope();
+        var generatorType = ServiceProxyOptions.Generators[generateType];
+        var serviceProxyGenerator = scope.ServiceProvider.GetService(generatorType).As<IServiceProxyGenerator>();
+
+        await serviceProxyGenerator.GenerateProxyAsync(BuildArgs(commandLineArgs));
     }
 
     private VoloGenerateProxyArgs BuildArgs(CommandLineArgs commandLineArgs)
@@ -65,6 +80,11 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
         sb.AppendLine("-wd|--working-directory <directory-path>          Execution directory.");
         sb.AppendLine("-u|--url <url>                                    API definition URL from.");
+        sb.AppendLine("-t|--type <generate-type>                         The name of generate type (csharp, ts).");
+        sb.AppendLine("  csharp");
+        sb.AppendLine("    --folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
+        sb.AppendLine("  ts");
+        sb.AppendLine("    -o|--output <output-name>                         TypeScript file path or folder to place generated code in.");
         sb.AppendLine("-p|--provider <client-proxy-provider>             The client proxy provider(http, dapr).");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -75,6 +95,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  labp generate-proxy -p dapr");
         sb.AppendLine("  labp generate-proxy -m identity -o Pages/Identity/client-proxies.js -url https://localhost:44302/");
         sb.AppendLine("  labp generate-proxy --folder MyProxies/InnerFolder -url https://localhost:44302/");
+        sb.AppendLine("  labp generate-proxy -t ts -m identity -o api/identity -url https://localhost:44302/ ");
 
         return sb.ToString();
     }
@@ -86,6 +107,12 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
 
     public static class Options
     {
+        public static class GenerateType
+        {
+            public const string Short = "t";
+            public const string Long = "type";
+        }
+
         public static class Provider
         {
             public const string Short = "p";

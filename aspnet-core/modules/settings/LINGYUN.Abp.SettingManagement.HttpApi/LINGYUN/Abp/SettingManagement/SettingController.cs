@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -8,12 +9,16 @@ namespace LINGYUN.Abp.SettingManagement
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("settingManagement")]
     [Route("api/setting-management/settings")]
-    public class SettingController : AbpController, ISettingAppService
+    public class SettingController : AbpController, ISettingAppService, ISettingTestAppService
     {
         private readonly ISettingAppService _settingAppService;
-        public SettingController(ISettingAppService settingAppService)
+        private readonly ISettingTestAppService _settingTestAppService;
+        public SettingController(
+            ISettingAppService settingAppService, 
+            ISettingTestAppService settingTestAppService)
         {
             _settingAppService = settingAppService;
+            _settingTestAppService = settingTestAppService;
         }
 
         [HttpPut]
@@ -42,6 +47,14 @@ namespace LINGYUN.Abp.SettingManagement
         public async virtual Task<SettingGroupResult> GetAllForCurrentTenantAsync()
         {
             return await _settingAppService.GetAllForCurrentTenantAsync();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("send-test-email")]
+        public async virtual Task SendTestEmailAsync(SendTestEmailInput input)
+        {
+            await _settingTestAppService.SendTestEmailAsync(input);
         }
     }
 }

@@ -18,6 +18,19 @@ public static class ICacheManagerExtensions
             cancellationToken);
     }
 
+    public static Task SetAsync(
+        this ICacheManager cacheManager,
+        string key,
+        string value,
+        TimeSpan? absExpr = null,
+        TimeSpan? sldExpr = null,
+        CancellationToken cancellationToken = default)
+    {
+        return cacheManager.SetAsync(
+            new SetCacheRequest(key, value, absExpr, sldExpr),
+            cancellationToken);
+    }
+
     public static Task RefreshAsync(
         this ICacheManager cacheManager,
         string key,

@@ -22,7 +22,7 @@ using Volo.Abp.Users;
 namespace LINGYUN.Abp.SettingManagement
 {
     [Authorize(AbpSettingManagementPermissions.Settings.Default)]
-    public class SettingAppService : ApplicationService, ISettingAppService
+    public class SettingAppService : ApplicationService, ISettingAppService, ISettingTestAppService
     {
         protected AbpLocalizationOptions LocalizationOptions { get; }
 
@@ -31,6 +31,7 @@ namespace LINGYUN.Abp.SettingManagement
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
 
         protected IDistributedCache<SettingCacheItem> Cache { get; }
+
         public SettingAppService(
             IDistributedEventBus eventBus,
             ISettingManager settingManager,
@@ -439,6 +440,16 @@ namespace LINGYUN.Abp.SettingManagement
         protected async virtual Task CheckFeatureAsync()
         {
             await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
+        }
+
+        public async virtual Task SendTestEmailAsync(SendTestEmailInput input)
+        {
+            var emailSender = LazyServiceProvider.LazyGetRequiredService<IEmailSender>();
+
+            await emailSender.SendAsync(
+                input.EmailAddress,
+                L["SendTestEmail:Subject"],
+                L["SendTestEmail:Body"]);
         }
     }
 }
