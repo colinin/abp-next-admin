@@ -2,7 +2,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 import { usePasswordValidator } from '/@/hooks/security/usePasswordValidator';
 import { FormProps, FormSchema } from '/@/components/Form';
-import { getList as getEditions } from '/@/api/saas/editions';
+import { GetListAsyncByInput as getEditions } from '/@/api/saas/edition';
 
 const { L } = useLocalization('AbpSaas');
 const { ruleCreator } = useValidation();

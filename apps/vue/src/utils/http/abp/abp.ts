@@ -23,6 +23,7 @@ export class abpRequest {
     service: string;
     controller: string;
     action: string;
+    uniqueName?: string;
     data?: any;
     params?: any;
   }) {
@@ -33,6 +34,7 @@ export class abpRequest {
     service: string;
     controller: string;
     action: string;
+    uniqueName?: string;
     data?: any;
     params?: any;
   }) {
@@ -63,6 +65,7 @@ export class abpRequest {
     service: string;
     controller: string;
     action: string;
+    uniqueName?: string;
     data?: any;
     params?: any;
   }, requestOptions?: RequestOptions) {
@@ -75,7 +78,7 @@ export class abpRequest {
       const abpStore = useAbpStoreWithOut();
       const module = this.getModule(options.service, abpStore.apidefinition.modules);
       const controller = this.getController(options.controller, module.controllers);
-      const action = this.getAction(options.action, controller.actions);
+      const action = this.getAction(options.action, controller.actions, options.uniqueName);
       method = action.httpMethod;
 
       const apiVersion = this.getApiVersionInfo(action);
@@ -140,12 +143,18 @@ export class abpRequest {
     return controllers[controllerKeys[index]];
   }
 
-  private getAction(actionName: string, actions: { [key: string]: ActionApiDescriptionModel }) {
+  private getAction(actionName: string, actions: { [key: string]: ActionApiDescriptionModel }, uniqueName?: string) {
     const actionKeys = Object.keys(actions);
     const index = actionKeys.findIndex((key) => {
       const a = actions[key];
-      if (a.name.toLowerCase() === actionName.toLowerCase()) {
-        return a;
+      if (uniqueName) {
+        if (a.uniqueName.toLowerCase() === uniqueName.toLowerCase()) {
+          return a;
+        }
+      } else {
+        if (a.name.toLowerCase() === actionName.toLowerCase()) {
+          return a;
+        }
       }
     });
     if (index < 0) {

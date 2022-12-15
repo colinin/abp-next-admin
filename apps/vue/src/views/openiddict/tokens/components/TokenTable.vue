@@ -35,7 +35,7 @@
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getList, deleteById } from '/@/api/openiddict/tokens';
+  import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-token';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import TokenModal from './TokenModal.vue';
 
@@ -45,7 +45,7 @@
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
     title: L('Tokens'),
-    api: getList,
+    api: GetListAsyncByInput,
     columns: getDataColumns(),
     beforeFetch: formatPagedRequest,
     pagination: true,
@@ -74,7 +74,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return deleteById(record.id).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

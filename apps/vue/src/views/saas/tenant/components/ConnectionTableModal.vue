@@ -44,7 +44,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { getConnectionStringsColumns } from '../datas/TableData';
-  import { deleteConnectionString, getConnectionStrings } from '/@/api/saas/tenant';
+  import { DeleteConnectionStringAsyncByIdAndName, GetConnectionStringAsyncById } from '/@/api/saas/tenant';
   import ConnectionEditModal from './ConnectionEditModal.vue';
 
   defineEmits(['register']);
@@ -86,7 +86,7 @@
       content: L('TenantDeletionConfirmationMessage', [record.name]),
       okCancel: true,
       onOk: () => {
-        return deleteConnectionString(unref(tenantIdRef), record.name).then(() => {
+        return DeleteConnectionStringAsyncByIdAndName(unref(tenantIdRef), record.name).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           handleReloadTable();
         });
@@ -97,7 +97,7 @@
   function handleReloadTable() {
     const tenantId = unref(tenantIdRef);
     if (tenantId) {
-      getConnectionStrings(tenantId).then((res) => {
+      GetConnectionStringAsyncById(tenantId).then((res) => {
         connectionsRef.value = res.items;
       });
     }

@@ -268,6 +268,8 @@ public class TypeScriptProxyGenerator : ITypeScriptProxyGenerator, ITransientDep
             apiScriptBuilder.AppendLine("    controller: controllerName,");
             apiScriptBuilder.AppendFormat("    action: '{0}',", action.Value.Name);
             apiScriptBuilder.AppendLine("");
+            apiScriptBuilder.AppendFormat("    uniqueName: '{0}',", action.Value.UniqueName);
+            apiScriptBuilder.AppendLine("");
 
             if (DataInParamMethods.Contains(action.Value.HttpMethod))
             {
@@ -321,7 +323,6 @@ public class TypeScriptProxyGenerator : ITypeScriptProxyGenerator, ITransientDep
             apiScriptBuilder.AppendLine("  });");
 
             apiScriptBuilder.AppendLine("};");
-            apiScriptBuilder.AppendLine("");
         }
 
         return apiScriptBuilder.ToString();

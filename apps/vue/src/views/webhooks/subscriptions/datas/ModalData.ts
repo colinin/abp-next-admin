@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { getList } from '/@/api/saas/tenant';
+import { GetListAsyncByInput } from '/@/api/saas/tenant';
 import { getAllAvailableWebhooks } from '/@/api/webhooks/subscriptions';
 
 const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
@@ -32,7 +32,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         label: L('DisplayName:TenantId'),
         colProps: { span: 6 },
         componentProps: {
-          api: getList,
+          api: GetListAsyncByInput,
           params: {
             skipCount: 0,
             maxResultCount: 1000,

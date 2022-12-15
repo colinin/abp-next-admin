@@ -6,7 +6,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { TableActionType, useTable } from '/@/components/Table';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas//ModalData';
-import { deleteById, getList } from '/@/api/saas/tenant';
+import { DeleteAsyncById, GetListAsyncByInput } from '/@/api/saas/tenant';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 
 interface UseTenantTable {
@@ -20,7 +20,7 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
     rowKey: 'id',
     title: L('Tenants'),
     columns: getDataColumns(),
-    api: getList,
+    api: GetListAsyncByInput,
     beforeFetch: formatPagedRequest,
     pagination: true,
     striped: false,
@@ -46,7 +46,7 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
       content: L('ItemWillBeDeletedMessageWithFormat', [record.name]),
       okCancel: true,
       onOk: () => {
-        return deleteById(record.id).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           handleReload();
         });
