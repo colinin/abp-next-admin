@@ -14,7 +14,7 @@
       "launchBrowser": false,
       "applicationUrl": "http://127.0.0.1:30010",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
