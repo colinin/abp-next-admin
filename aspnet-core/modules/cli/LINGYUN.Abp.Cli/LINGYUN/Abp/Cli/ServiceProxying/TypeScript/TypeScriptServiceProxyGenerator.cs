@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,15 +18,18 @@ public class TypeScriptServiceProxyGenerator : ServiceProxyGeneratorBase<TypeScr
 {
     public const string Name = "TS";
 
-    private readonly ITypeScriptProxyGenerator _typeScriptProxyGenerator;
+    private readonly ITypeScriptModelGenerator _typeScriptModelGenerator;
+    private readonly TypeScriptServiceProxyOptions _typeScriptServiceProxyOptions;
 
     public TypeScriptServiceProxyGenerator(
         CliHttpClientFactory cliHttpClientFactory,
         IJsonSerializer jsonSerializer,
-        ITypeScriptProxyGenerator typeScriptProxyGenerator)
+        ITypeScriptModelGenerator typeScriptModelGenerator,
+        IOptions<TypeScriptServiceProxyOptions> typeScriptServiceProxyOptions)
         : base(cliHttpClientFactory, jsonSerializer)
     {
-        _typeScriptProxyGenerator = typeScriptProxyGenerator;
+        _typeScriptModelGenerator = typeScriptModelGenerator;
+        _typeScriptServiceProxyOptions = typeScriptServiceProxyOptions.Value;
     }
 
     public async override Task GenerateProxyAsync(Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs args)
@@ -41,8 +45,8 @@ public class TypeScriptServiceProxyGenerator : ServiceProxyGeneratorBase<TypeScr
             {
                 Logger.LogInformation($"  [{module.Value.RemoteServiceName}], Generating model script with controller: {controller.Value.ControllerName}.");
 
-                var modelScript = _typeScriptProxyGenerator
-                    .CreateModelScript(applicationApiDescriptionModel, controller.Value);
+                var modelScript = _typeScriptModelGenerator
+                    .CreateScript(applicationApiDescriptionModel, controller.Value);
 
                 Logger.LogInformation($"  [{module.Value.RemoteServiceName}], {controller.Value.ControllerName} model script generated.");
 
@@ -67,9 +71,17 @@ public class TypeScriptServiceProxyGenerator : ServiceProxyGeneratorBase<TypeScr
 
                 // api script
 
+                var apiScriptType = (args as GenerateProxyArgs).ApiScriptProxy;
+                if (!_typeScriptServiceProxyOptions.ScriptGenerators.ContainsKey(apiScriptType))
+                {
+                    throw new CliUsageException($"Option Api Script Type {apiScriptType} value is invalid.");
+                }
+                var httpApiScriptProxy = _typeScriptServiceProxyOptions.ScriptGenerators[apiScriptType];
+
+                Logger.LogInformation($"  [{module.Value.RemoteServiceName}], Generating api script with {apiScriptType}.");
                 Logger.LogInformation($"  [{module.Value.RemoteServiceName}], Generating api script with controller: {controller.Value.ControllerName}.");
 
-                var apiScript = _typeScriptProxyGenerator.CreateScript(
+                var apiScript = httpApiScriptProxy.CreateScript(
                     applicationApiDescriptionModel,
                     module.Value,
                     controller.Value);

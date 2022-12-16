@@ -7,6 +7,8 @@ public class GenerateProxyArgs : Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs
 {
     public string Provider { get; }
 
+    public string ApiScriptProxy { get; }
+
     public GenerateProxyArgs(
         [NotNull] string commandName,
         [NotNull] string workDirectory,
@@ -18,9 +20,11 @@ public class GenerateProxyArgs : Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs
         string source,
         string folder,
         string provider,
+        string apiScriptProxy,
         Dictionary<string, string> extraProperties = null)
         : base(commandName, workDirectory, module, url, output, target, apiName, source, folder, extraProperties)
     {
+        ApiScriptProxy = apiScriptProxy;
         Provider = provider;
     }
 }

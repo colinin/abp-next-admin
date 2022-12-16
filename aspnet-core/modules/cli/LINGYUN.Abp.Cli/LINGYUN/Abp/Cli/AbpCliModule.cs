@@ -29,6 +29,14 @@ namespace LINGYUN.Abp.Cli
                 options.Generators[TypeScriptServiceProxyGenerator.Name] = typeof(TypeScriptServiceProxyGenerator);
                 options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
             });
+
+            Configure<TypeScriptServiceProxyOptions>(options =>
+            {
+                options.ScriptGenerators[AxiosHttpApiScriptGenerator.Name] = new AxiosHttpApiScriptGenerator();
+                options.ScriptGenerators[VbenAxiosHttpApiScriptGenerator.Name] = new VbenAxiosHttpApiScriptGenerator();
+                options.ScriptGenerators[VbenDynamicHttpApiScriptGenerator.Name] = new VbenDynamicHttpApiScriptGenerator();
+                options.ScriptGenerators[UniAppAxiosHttpApiScriptGenerator.Name] = new UniAppAxiosHttpApiScriptGenerator(); 
+            });
         }
     }
 }
