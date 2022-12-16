@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Cli.ServiceProxying;
+using LINGYUN.Abp.Cli.ServiceProxying.TypeScript;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -54,6 +55,8 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
     private VoloGenerateProxyArgs BuildArgs(CommandLineArgs commandLineArgs)
     {
         var provider = commandLineArgs.Options.GetOrNull(Options.Provider.Short, Options.Provider.Long);
+        var apiScriptProxy = commandLineArgs.Options.GetOrNull(Options.ApiScriptProxy.Short, Options.ApiScriptProxy.Long) ??
+            VbenDynamicHttpApiScriptGenerator.Name;
         var url = commandLineArgs.Options.GetOrNull(Options.Url.Short, Options.Url.Long);
         var target = commandLineArgs.Options.GetOrNull(Options.Target.Long);
         var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ?? "app";
@@ -63,7 +66,19 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
 
-        return new GenerateProxyArgs(CommandName, workDirectory, module, url, output, target, apiName, source, folder, provider, commandLineArgs.Options);
+        return new GenerateProxyArgs(
+            CommandName,
+            workDirectory, 
+            module, 
+            url, 
+            output, 
+            target, 
+            apiName,
+            source, 
+            folder, 
+            provider,
+            apiScriptProxy,
+            commandLineArgs.Options);
     }
 
     public string GetUsageInfo()
@@ -84,6 +99,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  csharp");
         sb.AppendLine("    --folder <folder-name>                            (default: 'ClientProxies') Folder name to place generated CSharp code in.");
         sb.AppendLine("  ts");
+        sb.AppendLine("    -asp|--api-script-proxy <api-script-proxy>        The generated api proxy type(axios, vben-axios, vben-dynamic). default: vben-dynamic.");
         sb.AppendLine("    -o|--output <output-name>                         TypeScript file path or folder to place generated code in.");
         sb.AppendLine("-p|--provider <client-proxy-provider>             The client proxy provider(http, dapr).");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
@@ -95,7 +111,8 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  labp generate-proxy -p dapr");
         sb.AppendLine("  labp generate-proxy -m identity -o Pages/Identity/client-proxies.js -url https://localhost:44302/");
         sb.AppendLine("  labp generate-proxy --folder MyProxies/InnerFolder -url https://localhost:44302/");
-        sb.AppendLine("  labp generate-proxy -t ts -m identity -o api/identity -url https://localhost:44302/ ");
+        sb.AppendLine("  labp generate-proxy -t ts -m identity -o api/identity -url https://localhost:44302/");
+        sb.AppendLine("  labp generate-proxy -t ts -asp vben-dynamic -m identity -o api/identity -url https://localhost:44302/");
 
         return sb.ToString();
     }
@@ -117,6 +134,12 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "p";
             public const string Long = "provider";
+        }
+
+        public static class ApiScriptProxy
+        {
+            public const string Short = "asp";
+            public const string Long = "api-script-proxy";
         }
 
         public static class Module
