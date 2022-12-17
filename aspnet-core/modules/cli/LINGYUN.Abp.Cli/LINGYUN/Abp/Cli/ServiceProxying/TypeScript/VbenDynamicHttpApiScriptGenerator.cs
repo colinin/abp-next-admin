@@ -32,7 +32,7 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
 
                     if (!importModel.Contains(modelTypeName))
                     {
-                        importModel += modelTypeName + ", ";
+                        importModel += modelTypeName + ",";
                     }
                 }
             }
@@ -49,7 +49,7 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
                         .Replace(">", "");
                 }
 
-                returnType = ReplaceTypeSimple(returnType);
+                returnType = returnType.ReplaceTypeSimple();
                 returnType = returnType[(returnType.LastIndexOf('.') + 1)..];
                 if (!importModel.Contains(returnType))
                 {
@@ -86,6 +86,7 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
             }
 
             apiScriptBuilder.AppendLine(") => {");
+
 
             var apiRequestName = "request";
             var apiRetuanName = action.Value.ReturnValue.TypeSimple;
@@ -184,27 +185,5 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
         }
 
         return apiScriptBuilder.ToString();
-    }
-
-    protected virtual string ReplaceTypeSimple(string typeSimple)
-    {
-        typeSimple = typeSimple
-            .Replace("?", "")
-            .Replace("<System.String>", "<string>")
-            .Replace("<System.Guid>", "<string>")
-            .Replace("<System.Int32>", "<number>")
-            .Replace("<System.Int64>", "<number>")
-            .Replace("{string:string}", "Dictionary<string, string>")
-            .Replace("{number:string}", "Dictionary<number, string>")
-            .Replace("{string:number}", "Dictionary<string, number>")
-            .Replace("{string:object}", "Dictionary<string, any>");
-
-        if (typeSimple.StartsWith("[") && typeSimple.EndsWith("]"))
-        {
-            typeSimple = typeSimple.ReplaceFirst("[", "").RemovePostFix("]", "");
-            typeSimple = typeSimple.Replace(typeSimple, $"{typeSimple}[]");
-        }
-
-        return typeSimple;
     }
 }

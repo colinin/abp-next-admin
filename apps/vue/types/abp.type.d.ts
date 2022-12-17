@@ -74,7 +74,8 @@ declare interface FullAuditedEntityDto<TPrimaryKey> extends AuditedEntityDto<TPr
   deletionTime?: Date;
 }
 
-declare interface FullAuditedEntityWithUserDto<TUserDto> extends FullAuditedEntityDto<TPrimaryKey> {
+declare interface FullAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
+  extends FullAuditedEntityDto<TPrimaryKey> {
   creator: TUserDto;
   lastModifier: TUserDto;
   deleter: TUserDto;

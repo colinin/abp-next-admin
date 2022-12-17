@@ -32,7 +32,7 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
 
                     if (!importModel.Contains(modelTypeName))
                     {
-                        importModel += modelTypeName + ", ";
+                        importModel += modelTypeName + ",";
                     }
                 }
             }
@@ -49,7 +49,7 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
                         .Replace(">", "");
                 }
 
-                returnType = ReplaceTypeSimple(returnType);
+                returnType = returnType.ReplaceTypeSimple();
                 returnType = returnType[(returnType.LastIndexOf('.') + 1)..];
                 if (!importModel.Contains(returnType))
                 {
@@ -66,6 +66,7 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
         {
             var url = action.Value.Url;
             var isFormatUrl = false;
+            var formatUrlIndex = 0;
 
             apiScriptBuilder.AppendFormat("export const {0} = (", action.Value.UniqueName);
 
@@ -83,12 +84,35 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
                 }
 
                 // 需要格式化url
-                if (url.Contains('{') && url.Contains(paramter.Name))
+                var formatUrlPath = string.Concat("{", paramter.Name, "}");
+                if (url.Contains(formatUrlPath))
                 {
-                    var formatUrl = MiddleString(url, "{", "}");
-                    url = url.Replace(formatUrl, "");
-                    url = "'" + url + "'" + " + " + paramter.Name;
+                    formatUrlIndex = url.IndexOf(formatUrlPath) + formatUrlPath.Length;
+                    // 'api/platform/packages/{id}/blob/{Name}' => `api/platform/packages/${id}/blob/{input.name}`
+                    url = url.Replace(formatUrlPath, $"${formatUrlPath}");
                     isFormatUrl = true;
+                }
+
+                if (formatUrlIndex >= 0 && formatUrlIndex + formatUrlPath.Length <= url.Length)
+                {
+                    var formatUrl = url[(formatUrlIndex + formatUrlPath.Length)..].MiddleString("{", "}");
+                    if (!formatUrl.IsNullOrWhiteSpace())
+                    {
+                        if (appModel.Types.TryGetValue(paramter.Type, out var paramType))
+                        {
+                            var formatParamInUrl = paramType.Properties
+                                .FirstOrDefault(p => formatUrl.Contains(p.Name));
+
+                            if (formatParamInUrl != null)
+                            {
+                                // 'api/platform/packages/xxx/blob/{Name}' => `api/platform/packages/xxx/blob/${input.name}`
+                                url = url.Replace(
+                                    formatUrl,
+                                    string.Concat("${", paramter.Name, ".", formatParamInUrl.Name.ToCamelCase(), "}"));
+                                isFormatUrl = true;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -120,10 +144,15 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
                 apiRetuanName = apiRetuanName.ToLower();
             }
 
-            if (!url.StartsWith("'") && !url.EndsWith("'"))
+            if (isFormatUrl && !url.StartsWith("`") && !url.EndsWith("`"))
+            {
+                url = "`" + url + "`";
+            }
+            else
             {
                 url = "'" + url + "'";
             }
+
             apiScriptBuilder.AppendFormat("  return axios.request<{0}>(", apiRetuanName);
             apiScriptBuilder.AppendLine("{");
             apiScriptBuilder.AppendFormat("    method: '{0}',", action.Value.HttpMethod);
@@ -131,39 +160,36 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
             apiScriptBuilder.AppendFormat("    url: {0},", url);
             apiScriptBuilder.AppendLine("");
 
-            if (TypeScriptModelGenerator.DataInParamMethods.Contains(action.Value.HttpMethod))
+            var inPathParams = action.Value.Parameters
+                .Where(p => TypeScriptModelGenerator.DataInParamSources.Contains(p.BindingSourceId))
+                .DistinctBy(p => p.NameOnMethod);
+            var inBodyParams = action.Value.Parameters.Where(p => p.BindingSourceId == "Body");
+            var inFormParams = action.Value.Parameters
+                .Where(p => TypeScriptModelGenerator.DataInFormSources.Contains(p.BindingSourceId))
+                .DistinctBy(p => p.NameOnMethod);
+
+            if (!isFormatUrl && inPathParams.Any())
             {
-                if (!isFormatUrl && action.Value.ParametersOnMethod.Any())
+                if (inPathParams.Count() == 1)
                 {
-                    apiScriptBuilder.AppendLine("    params: {");
-
-                    foreach (var paramter in action.Value.ParametersOnMethod)
-                    {
-                        apiScriptBuilder.AppendFormat("      {0}: {1},", paramter.Name, paramter.Name);
-                        apiScriptBuilder.AppendLine("");
-                    }
-
-                    apiScriptBuilder.AppendLine("    },");
+                    apiScriptBuilder.AppendFormat("    params: {0},", inPathParams.First().NameOnMethod);
+                    apiScriptBuilder.AppendLine("");
                 }
-            }
-            else
-            {
-                var inPathParams = action.Value.Parameters.Where(p => p.BindingSourceId == "Path");
-                var inBodyParams = action.Value.Parameters.Where(p => p.BindingSourceId == "Body");
-
-                if (!isFormatUrl && inPathParams.Any())
+                else
                 {
                     apiScriptBuilder.AppendLine("    params: {");
                     foreach (var paramter in inPathParams)
                     {
-                        apiScriptBuilder.AppendFormat("      {0}: {1},", paramter.Name, paramter.Name);
+                        apiScriptBuilder.AppendFormat("      {0}: {1}.{2},", paramter.Name, paramter.NameOnMethod, paramter.Name);
                         apiScriptBuilder.AppendLine("");
                     }
                     apiScriptBuilder.AppendLine("    },");
                 }
+            }
 
-                if (inBodyParams.Any() &&
-                    inBodyParams.Count() == 1)
+            if (inBodyParams.Any())
+            {
+                if (inBodyParams.Count() == 1)
                 {
                     apiScriptBuilder.AppendFormat("    data: {0},", inBodyParams.First().NameOnMethod);
                     apiScriptBuilder.AppendLine("");
@@ -180,52 +206,31 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
                 }
             }
 
+            if (inFormParams.Any())
+            {
+                if (inFormParams.Count() == 1)
+                {
+                    apiScriptBuilder.AppendFormat("    data: {0},", inFormParams.First().NameOnMethod);
+                    apiScriptBuilder.AppendLine("");
+                }
+                else
+                {
+                    apiScriptBuilder.AppendLine("    data: {");
+                    foreach (var paramter in inFormParams)
+                    {
+                        apiScriptBuilder.AppendFormat("      {0}: {1}.{2},", paramter.Name, paramter.NameOnMethod, paramter.Name);
+                        apiScriptBuilder.AppendLine("");
+                    }
+                }
+                apiScriptBuilder.AppendLine("    headers: {");
+                apiScriptBuilder.AppendLine("      'Content-type': 'multipart/form-data'");
+                apiScriptBuilder.AppendLine("    },");
+            }
+
             apiScriptBuilder.AppendLine("  });");
             apiScriptBuilder.AppendLine("};");
         }
 
         return apiScriptBuilder.ToString();
-    }
-
-    protected virtual string ReplaceTypeSimple(string typeSimple)
-    {
-        typeSimple = typeSimple
-            .Replace("?", "")
-            .Replace("<System.String>", "<string>")
-            .Replace("<System.Guid>", "<string>")
-            .Replace("<System.Int32>", "<number>")
-            .Replace("<System.Int64>", "<number>")
-            .Replace("{string:string}", "Dictionary<string, string>")
-            .Replace("{number:string}", "Dictionary<number, string>")
-            .Replace("{string:number}", "Dictionary<string, number>")
-            .Replace("{string:object}", "Dictionary<string, any>");
-
-        if (typeSimple.StartsWith("[") && typeSimple.EndsWith("]"))
-        {
-            typeSimple = typeSimple.ReplaceFirst("[", "").RemovePostFix("]", "");
-            typeSimple = typeSimple.Replace(typeSimple, $"{typeSimple}[]");
-        }
-
-        return typeSimple;
-    }
-
-    public static string MiddleString(string sourse, string startstr, string endstr)
-    {
-        var result = string.Empty;
-        int startindex, endindex;
-        startindex = sourse.IndexOf(startstr);
-        if (startindex == -1)
-        {
-            return result;
-        }
-        var tmpstr = sourse.Substring(startindex + startstr.Length - 1);
-        endindex = tmpstr.IndexOf(endstr);
-        if (endindex == -1)
-        {
-            return result;
-        }
-        result = tmpstr.Remove(endindex + 1);
-
-        return result;
     }
 }
