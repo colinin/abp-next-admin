@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.ObjectExtending;
 
 namespace LINGYUN.Abp.Cli.ServiceProxying.TypeScript;
 public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDependency
 {
     internal readonly static string[] AbpBaseTypes = new string[]
     {
-        typeof(ExtensibleObject).FullName,
+        "Volo.Abp.Content.IRemoteStreamContent",
+        "Volo.Abp.Content.RemoteStreamContent",
         "Volo.Abp.Application.Dtos.AuditedEntityDto",
         "Volo.Abp.Application.Dtos.AuditedEntityWithUserDto",
         "Volo.Abp.Application.Dtos.CreationAuditedEntityDto",
@@ -33,11 +33,22 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
         "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
         "Volo.Abp.Application.Dtos.PagedResultDto",
         "Volo.Abp.Application.Dtos.PagedResultRequestDto",
+        "Volo.Abp.ObjectExtending.ExtensibleObject",
     };
     internal readonly static string[] DataInParamMethods = new string[]
     {
         "GET",
         "DELETE"
+    };
+    internal readonly static string[] DataInParamSources = new string[]
+    {
+        "Path",
+        "ModelBinding"
+    };
+    internal readonly static string[] DataInFormSources = new string[]
+    {
+        "Form",
+        "FormFile"
     };
 
     public ILogger<TypeScriptModelGenerator> Logger { protected get; set; }
@@ -59,7 +70,8 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
         {
             foreach (var paramter in action.Value.Parameters)
             {
-                if (appModel.Types.TryGetValue(paramter.Type, out var modelType))
+                if (!AbpBaseTypes.Contains(paramter.TypeSimple) &&
+                    appModel.Types.TryGetValue(paramter.Type, out var modelType))
                 {
                     var modelTypeName = paramter.Type[(paramter.Type.LastIndexOf('.') + 1)..];
 
@@ -125,7 +137,7 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
                     .Replace(">", "");
             }
 
-            returnType = ReplaceTypeSimple(returnType);
+            returnType = returnType.ReplaceTypeSimple();
 
             if (appModel.Types.TryGetValue(returnType, out var returnBaseType))
             {
@@ -190,7 +202,7 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
             if (!model.BaseType.IsNullOrWhiteSpace())
             {
                 var baseType = ReplaceAbpBaseType(model.BaseType);
-                baseType = ReplaceTypeSimple(baseType);
+                baseType = baseType.ReplaceTypeSimple();
 
                 modelBuilder.AppendFormat("extends {0} ", baseType[(baseType.LastIndexOf('.') + 1)..]);
             }
@@ -200,13 +212,13 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
             {
                 modelBuilder.AppendFormat("  {0}", model.Properties[index].Name.ToCamelCase());
                 var propCharacter = model.Properties[index].IsRequired ? ": " : "?: ";
-                var propTypeName = ReplaceTypeSimple(model.Properties[index].TypeSimple);
+                var propTypeName = model.Properties[index].TypeSimple.ReplaceTypeSimple();
                 if (propTypeName.LastIndexOf('.') >= 0)
                 {
                     propTypeName = propTypeName[(propTypeName.LastIndexOf('.') + 1)..];
                 }
                 
-                modelBuilder.AppendFormat("{0}{1};", propCharacter, ReplaceTypeSimple(propTypeName));
+                modelBuilder.AppendFormat("{0}{1};", propCharacter, propTypeName.ReplaceTypeSimple());
                 modelBuilder.AppendLine("");
             }
 
@@ -236,7 +248,7 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
     {
         var types = new List<string>();
 
-        var propertityType = ReplaceTypeSimple(model.TypeSimple);
+        var propertityType = model.TypeSimple.ReplaceTypeSimple();
 
         if (!AbpBaseTypes.Contains(propertityType) &&
             apiModel.Types.TryGetValue(propertityType, out var baseType))
@@ -247,28 +259,6 @@ public class TypeScriptModelGenerator : ITypeScriptModelGenerator, ITransientDep
         }
 
         return types;
-    }
-
-    protected virtual string ReplaceTypeSimple(string typeSimple)
-    {
-        typeSimple = typeSimple
-            .Replace("?", "")
-            .Replace("<System.String>", "<string>")
-            .Replace("<System.Guid>", "<string>")
-            .Replace("<System.Int32>", "<number>")
-            .Replace("<System.Int64>", "<number>")
-            .Replace("{string:string}", "Dictionary<string, string>")
-            .Replace("{number:string}", "Dictionary<number, string>")
-            .Replace("{string:number}", "Dictionary<string, number>")
-            .Replace("{string:object}", "Dictionary<string, any>");
-
-        if (typeSimple.StartsWith("[") && typeSimple.EndsWith("]"))
-        {
-            typeSimple = typeSimple.ReplaceFirst("[", "").RemovePostFix("]", "");
-            typeSimple = typeSimple.Replace(typeSimple, $"{typeSimple}[]");
-        }
-
-        return typeSimple;
     }
 
     protected virtual string ReplaceAbpBaseType(string typeSimple)

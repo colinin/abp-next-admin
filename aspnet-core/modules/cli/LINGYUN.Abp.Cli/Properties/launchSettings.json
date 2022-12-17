@@ -2,7 +2,7 @@
   "profiles": {
     "LINGYUN.Abp.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "generate-proxy -t ts -asp uni-app-axios -u http://127.0.0.1:30010 -m abp -o D:\\Projects\\Development\\type-script"
+      "commandLineArgs": "generate-proxy -t ts -asp uni-app-axios -u http://127.0.0.1:30025 -m Platform -o D:\\Projects\\Development\\type-script"
     }
   }
 }
