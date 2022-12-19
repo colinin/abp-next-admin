@@ -1,5 +1,3 @@
-import { ExtensibleAuditedEntity, IHasConcurrencyStamp, PagedAndSortedResultRequestDto } from "../../model/baseModel";
-
 export enum JobStatus {
   None = -1,
   Completed = 0,
@@ -43,7 +41,7 @@ export interface BackgroundJobDefinition {
   paramters: BackgroundJobParamter[];
 }
 
-export interface BackgroundJobInfo extends ExtensibleAuditedEntity<string>, IHasConcurrencyStamp {
+export interface BackgroundJobInfo extends ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp {
   isEnabled: boolean;
   name: string;
   group: string;

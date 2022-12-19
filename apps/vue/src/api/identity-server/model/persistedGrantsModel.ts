@@ -1,10 +1,4 @@
-import {
-  ExtensibleEntity,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '/@/api/model/baseModel';
-
-export interface PersistedGrant extends ExtensibleEntity<string> {
+export interface PersistedGrant extends ExtensibleEntityDto<string> {
   key: string;
   type: string;
   subjectId: string;
@@ -17,9 +11,9 @@ export interface PersistedGrant extends ExtensibleEntity<string> {
   data: string;
 }
 
-export class PersistedGrantPagedResult extends PagedResultDto<PersistedGrant> {}
+export interface PersistedGrantPagedResult extends PagedResultDto<PersistedGrant> {}
 
-export class GetPersistedGrantPagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
-  subjectId = '';
+export interface GetPersistedGrantPagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
+  subjectId?: string;
 }

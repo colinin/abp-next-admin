@@ -1,8 +1,3 @@
-import {
-  PagedAndSortedResultRequestDto,
-  ListResultDto,
-  PagedResultDto,
-} from '../../model/baseModel';
 import { Route } from './basicModel';
 
 export class Layout extends Route {
@@ -10,9 +5,9 @@ export class Layout extends Route {
   dataId!: string;
 }
 
-export class LayoutListResult extends ListResultDto<Layout> {}
+export interface LayoutListResult extends ListResultDto<Layout> {}
 
-export class LayoutPagedResult extends PagedResultDto<Layout> {}
+export interface LayoutPagedResult extends PagedResultDto<Layout> {}
 
 export class CreateOrUpdateLayout {
   name!: string;
@@ -29,8 +24,8 @@ export class CreateLayout extends CreateOrUpdateLayout {
 
 export class UpdateLayout extends CreateOrUpdateLayout {}
 
-export class GetLayoutPagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
-  reverse = false;
-  framework = '';
+export interface GetLayoutPagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
+  reverse?: boolean;
+  framework?: string;
 }

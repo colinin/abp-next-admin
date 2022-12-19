@@ -1,9 +1,4 @@
-import {
-  ExtensibleAuditedEntity,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-  SecretBase,
-} from '/@/api/model/baseModel';
+import { SecretBase } from '/@/api/model/baseModel';
 import { UserClaim, Property } from './basicModel';
 
 export interface ClientClaim extends UserClaim {
@@ -38,7 +33,7 @@ export type ClientSecret = SecretBase;
 
 export type ClientProperty = Property;
 
-export interface Client extends ExtensibleAuditedEntity<string> {
+export interface Client extends ExtensibleAuditedEntityDto<string> {
   clientId: string;
   clientName: string;
   description: string;
@@ -161,8 +156,8 @@ export interface ClientClone {
   CopyIdentityProviderRestriction: boolean;
 }
 
-export class ClientPagedResult extends PagedResultDto<Client> {}
+export interface ClientPagedResult extends PagedResultDto<Client> {}
 
-export class GetClientPagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetClientPagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

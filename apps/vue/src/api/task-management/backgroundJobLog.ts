@@ -4,7 +4,6 @@ import {
   BackgroundJobLogGetListInput,
 } from './model/backgroundJobLogModel';
 import { format } from '/@/utils/strings';
-import { PagedResultDto } from '../model/baseModel';
 
 enum Api {
   GetById = '/api/task-management/background-jobs/logs/{id}',

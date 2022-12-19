@@ -6,7 +6,6 @@ import {
   UpdateWebhookSubscription,
   WebhookSubscriptionGetListInput,
 } from './model/subscriptionsModel';
-import { ListResultDto, PagedResultDto } from '../model/baseModel';
 
 const remoteServiceName = 'WebhooksManagement';
 const controllerName = 'WebhookSubscription';

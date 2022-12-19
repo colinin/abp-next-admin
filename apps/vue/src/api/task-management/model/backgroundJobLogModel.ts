@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto } from '/@/api/model/baseModel';
-
 export interface BackgroundJobLog {
   id: number;
   jobName: string;

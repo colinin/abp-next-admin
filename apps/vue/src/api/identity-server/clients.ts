@@ -8,7 +8,6 @@ import {
   ClientPagedResult,
 } from './model/clientsModel';
 import { format } from '/@/utils/strings';
-import { ListResultDto } from '../model/baseModel';
 
 enum Api {
   Clone = '/api/identity-server/clients/{id}/clone',

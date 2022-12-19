@@ -101,9 +101,13 @@ declare interface PagedResultDto<T> extends ListResultDto<T> {
 
 declare interface ExtensiblePagedResultDto<T> extends PagedResultDto<T>, ExtensibleObject {}
 
-declare interface PagedAndSortedResultRequestDto extends PagedResultRequestDto {
+declare interface SortedResultRequest {
   sorting?: string;
 }
+
+declare interface PagedAndSortedResultRequestDto
+  extends PagedResultRequestDto,
+    SortedResultRequest {}
 
 declare interface ExtensiblePagedAndSortedResultRequestDto
   extends PagedAndSortedResultRequestDto,

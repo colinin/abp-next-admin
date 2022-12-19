@@ -1,9 +1,7 @@
-import { FullAuditedEntityDto, PagedAndSortedResultRequestDto } from '/@/api/model/baseModel';
-
 /** 租户查询过滤对象 */
-export class TenantGetByPaged extends PagedAndSortedResultRequestDto {
+export interface TenantGetByPaged extends PagedAndSortedResultRequestDto {
   /** 查询过滤字段 */
-  filter = '';
+  filter?: string;
 }
 
 /** 租户创建对象 */
@@ -21,11 +19,9 @@ export class TenantCreateOrEdit {
 }
 
 /** 租户对象 */
-export class TenantDto extends FullAuditedEntityDto {
-  /** 租户标识 */
-  id!: string;
+export interface TenantDto extends FullAuditedEntityDto<string> {
   /** 租户名称 */
-  name!: string;
+  name: string;
 }
 
 /** 租户连接字符串 */

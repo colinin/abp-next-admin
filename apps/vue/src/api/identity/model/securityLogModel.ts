@@ -1,6 +1,4 @@
-import { PagedAndSortedResultRequestDto } from '../../model/baseModel';
-
-export interface SecurityLog {
+export interface SecurityLog extends ExtensibleObject {
   id: string;
   applicationName?: string;
   identity?: string;
@@ -13,7 +11,6 @@ export interface SecurityLog {
   clientIpAddress?: string;
   browserInfo?: string;
   creationTime?: Date;
-  extraProperties?: { [key: string]: any };
 }
 
 export interface GetSecurityLogPagedRequest extends PagedAndSortedResultRequestDto {

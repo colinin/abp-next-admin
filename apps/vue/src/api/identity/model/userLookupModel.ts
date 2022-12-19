@@ -1,5 +1,3 @@
-import { ListResultDto, PagedAndSortedResultRequestDto } from '../../model/baseModel';
-
 export interface IUserData {
   id: string;
   tenantId?: string;

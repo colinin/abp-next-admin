@@ -1,9 +1,3 @@
-import {
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
-
 export interface UserSubscreNotification {
   name: string;
 }

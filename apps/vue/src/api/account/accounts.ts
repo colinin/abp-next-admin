@@ -1,7 +1,6 @@
 import { defAbpHttp } from '/@/utils/http/abp';
 import { Register, PhoneRegister, PhoneResetPassword } from './model/accountsModel';
 import { User } from '/@/api/identity/model/userModel';
-import { ListResultDto } from '../model/baseModel';
 import { format } from '/@/utils/strings';
 
 enum Api {

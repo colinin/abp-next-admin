@@ -1,46 +1,38 @@
-import {
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
 import { IdentityClaim } from './claimModel';
 
-export class RoleBase {
-  name!: string;
-  isDefault!: boolean;
-  isPublic!: boolean;
+export interface RoleBase {
+  name: string;
+  isDefault: boolean;
+  isPublic: boolean;
 }
 
-export class Role extends RoleBase {
-  id!: string;
-  isStatic!: boolean;
+export interface Role extends RoleBase {
+  id: string;
+  isStatic: boolean;
   concurrencyStamp?: string;
 }
 
-export class RoleListResult extends ListResultDto<Role> {}
+export interface RoleListResult extends ListResultDto<Role> {}
 
-export class RolePagedResult extends PagedResultDto<Role> {}
+export interface RolePagedResult extends PagedResultDto<Role> {}
 
-export class GetRolePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetRolePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }
 
-export class CreateRole extends RoleBase {
-  isDefault = false;
-  isPublic = true;
-  name = '';
+export interface CreateRole extends RoleBase {
 }
 
-export class UpdateRole extends RoleBase {
+export interface UpdateRole extends RoleBase {
   concurrencyStamp?: string;
 }
 
-export class ChangeRoleOrganizationUnitDto {
-  organizationUnitIds: string[] = [];
+export interface ChangeRoleOrganizationUnitDto {
+  organizationUnitIds: string[];
 }
 
-export class RoleClaim extends IdentityClaim {
-  id!: string;
+export interface RoleClaim extends IdentityClaim {
+  id: string;
 }
 
-export class RoleClaimListResult extends ListResultDto<RoleClaim> {}
+export interface RoleClaimListResult extends ListResultDto<RoleClaim> {}

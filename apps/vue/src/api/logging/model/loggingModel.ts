@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto, PagedResultDto } from '../../model/baseModel';
-
 export interface LogException {
   depth: number;
   class: string;
@@ -61,4 +59,4 @@ export interface GetLogPagedRequest extends PagedAndSortedResultRequestDto {
   hasException?: boolean;
 }
 
-export class LogPagedResult extends PagedResultDto<Log> {}
+export interface LogPagedResult extends PagedResultDto<Log> {}

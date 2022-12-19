@@ -7,7 +7,6 @@ import {
   BackgroundJobInfoGetListInput,
 } from './model/backgroundJobInfoModel';
 import { format } from '/@/utils/strings';
-import { ListResultDto, PagedResultDto } from '../model/baseModel';
 import { DefineParamter, DynamicQueryable } from '/@/components/Table/src/types/advancedSearch';
 
 enum Api {

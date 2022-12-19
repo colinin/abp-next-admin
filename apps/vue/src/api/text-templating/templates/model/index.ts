@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto } from "/@/api/model/baseModel";
-
 export interface TextTemplateDefinition {
   name: string;
   displayName: string;

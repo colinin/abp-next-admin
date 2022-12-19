@@ -1,11 +1,3 @@
-import {
-  ExtensibleEntity,
-  ExtensibleObject,
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
-
 export enum ValueType {
   String = 0,
   Int = 1,
@@ -13,51 +5,51 @@ export enum ValueType {
   DateTime = 3,
 }
 
-export class IdentityClaimType extends ExtensibleEntity<string> {
-  name!: string;
-  required!: boolean;
-  isStatic!: boolean;
+export interface IdentityClaimType extends ExtensibleEntityDto<string> {
+  name: string;
+  required: boolean;
+  isStatic: boolean;
   regex?: string;
   regexDescription?: string;
   description?: string;
-  valueType!: ValueType;
+  valueType: ValueType;
 }
 
-export class CreateOrUpdateIdentityClaimType extends ExtensibleObject {
-  required = false;
-  regex?: string = '';
-  regexDescription?: string = '';
-  description?: string = '';
+export interface CreateOrUpdateIdentityClaimType extends ExtensibleObject {
+  required: boolean;
+  regex?: string;
+  regexDescription?: string;
+  description?: string;
 }
 
-export class CreateIdentityClaimType extends CreateOrUpdateIdentityClaimType {
-  name!: string;
-  isStatic!: boolean;
-  valueType!: ValueType;
+export interface CreateIdentityClaimType extends CreateOrUpdateIdentityClaimType {
+  name: string;
+  isStatic: boolean;
+  valueType: ValueType;
 }
 
-export class UpdateIdentityClaimType extends CreateOrUpdateIdentityClaimType {}
+export interface UpdateIdentityClaimType extends CreateOrUpdateIdentityClaimType {}
 
-export class GetIdentityClaimTypePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetIdentityClaimTypePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }
 
-export class IdentityClaimTypeListResult extends ListResultDto<IdentityClaimType> {}
+export interface IdentityClaimTypeListResult extends ListResultDto<IdentityClaimType> {}
 
-export class IdentityClaimTypePagedResult extends PagedResultDto<IdentityClaimType> {}
+export interface IdentityClaimTypePagedResult extends PagedResultDto<IdentityClaimType> {}
 
-export class IdentityClaim {
-  claimType = '';
-  claimValue = '';
+export interface IdentityClaim {
+  claimType: string;
+  claimValue: string;
 }
 
-export class DeleteIdentityClaim {
-  claimType = '';
-  claimValue = '';
+export interface DeleteIdentityClaim {
+  claimType: string;
+  claimValue: string;
 }
 
-export class CreateIdentityClaim extends IdentityClaim {}
+export interface CreateIdentityClaim extends IdentityClaim {}
 
-export class UpdateIdentityClaim extends IdentityClaim {
-  newClaimValue!: string;
+export interface UpdateIdentityClaim extends IdentityClaim {
+  newClaimValue: string;
 }

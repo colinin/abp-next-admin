@@ -1,6 +1,4 @@
-import { AuditedEntityDto, EntityDto, IHasConcurrencyStamp } from '/@/api/model/baseModel';
-
-export interface UserFavoriteMenuDto extends AuditedEntityDto, EntityDto<string> {
+export interface UserFavoriteMenuDto extends AuditedEntityDto<string> {
   menuId: string;
   userId: string;
   aliasName?: string;

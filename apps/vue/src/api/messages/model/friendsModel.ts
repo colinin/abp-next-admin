@@ -1,8 +1,3 @@
-import {
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
 import { UserCard } from './baseModel';
 
 export interface UserFriend extends UserCard {
