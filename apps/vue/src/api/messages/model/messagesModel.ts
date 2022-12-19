@@ -1,12 +1,3 @@
-import {
-  ExtensibleObject,
-  ILimitedResultRequest,
-  ISortedResultRequest,
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
-
 export enum MessageType {
   Text = 0,
   Image = 10,
@@ -61,7 +52,7 @@ export interface LastChatMessage {
   source: MessageSourceTye;
 }
 
-export interface GetUserLastMessageRequest extends ILimitedResultRequest, ISortedResultRequest {
+export interface GetUserLastMessageRequest extends LimitedResultRequestDto, SortedResultRequest {
   state?: MessageState;
 }
 

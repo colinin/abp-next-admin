@@ -7,7 +7,6 @@ import {
   BackgroundJobActionGetDefinitionsInput
 } from './model/backgroundJobActionModel';
 import { format } from '/@/utils/strings';
-import { ListResultDto } from '../model/baseModel';
 
 enum Api {
   AddAction = '/api/task-management/background-jobs/actions/{jobId}',

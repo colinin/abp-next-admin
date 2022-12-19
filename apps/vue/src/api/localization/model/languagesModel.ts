@@ -1,12 +1,4 @@
-import {
-  AuditedEntityDto,
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '/@/api/model/baseModel';
-
-export interface Language extends AuditedEntityDto {
-  id: string;
+export interface Language extends AuditedEntityDto<string> {
   enable: boolean;
   cultureName: string;
   uiCultureName: string;
@@ -22,10 +14,10 @@ export interface LanguageCreateOrUpdate {
   flagIcon: string;
 }
 
-export class LanguageListResult extends ListResultDto<Language> {}
+export interface LanguageListResult extends ListResultDto<Language> {}
 
-export class LanguagePagedResult extends PagedResultDto<Language> {}
+export interface LanguagePagedResult extends PagedResultDto<Language> {}
 
-export class GetLanguagePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetLanguagePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

@@ -1,15 +1,10 @@
-import {
-  ExtensibleAuditedEntity,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '/@/api/model/baseModel';
 import { UserClaim, Property } from './basicModel';
 
 export type IdentityResourceClaim = UserClaim;
 
 export type IdentityResourceProperty = Property;
 
-export interface IdentityResource extends ExtensibleAuditedEntity<string> {
+export interface IdentityResource extends ExtensibleAuditedEntityDto<string> {
   name: string;
   displayName: string;
   description: string;
@@ -37,8 +32,8 @@ export type IdentityResourceCreate = IdentityResourceCreateOrUpdate;
 
 export type IdentityResourceUpdate = IdentityResourceCreateOrUpdate;
 
-export class IdentityResourcePagedResult extends PagedResultDto<IdentityResource> {}
+export interface IdentityResourcePagedResult extends PagedResultDto<IdentityResource> {}
 
-export class GetIdentityResourcePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetIdentityResourcePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

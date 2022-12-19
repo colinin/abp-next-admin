@@ -1,9 +1,4 @@
-import {
-  ExtensibleAuditedEntity,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-  SecretBase,
-} from '/@/api/model/baseModel';
+import { SecretBase } from '/@/api/model/baseModel';
 import { UserClaim, Property } from './basicModel';
 
 export type ApiResourceSecret = SecretBase;
@@ -25,7 +20,7 @@ export interface ApiResourceSecretCreateOrUpdate extends SecretBase {
   hashType: HashType;
 }
 
-export interface ApiResource extends ExtensibleAuditedEntity<string> {
+export interface ApiResource extends ExtensibleAuditedEntityDto<string> {
   name: string;
   displayName: string;
   description: string;
@@ -56,8 +51,8 @@ export interface ApiResourceCreate extends ApiResourceCreateOrUpdate {
 
 export type ApiResourceUpdate = ApiResourceCreateOrUpdate;
 
-export class ApiResourcePagedResult extends PagedResultDto<ApiResource> {}
+export interface ApiResourcePagedResult extends PagedResultDto<ApiResource> {}
 
-export class GetApiResourcePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetApiResourcePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

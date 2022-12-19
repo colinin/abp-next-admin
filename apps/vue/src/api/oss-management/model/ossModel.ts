@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto } from '../../model/baseModel';
-
 export enum FileType {
   Folder = 0,
   File = 1,
@@ -90,17 +88,17 @@ export interface MyFileShare {
   maxAccessCount: number;
 }
 
-export class GetOssContainerPagedRequest extends PagedAndSortedResultRequestDto {
-  prefix = '';
-  marker = '';
+export interface GetOssContainerPagedRequest extends PagedAndSortedResultRequestDto {
+  prefix?: string;
+  marker?: string;
 }
 
-export class GetOssObjectPagedRequest extends PagedAndSortedResultRequestDto {
-  bucket = '';
-  prefix = '';
-  delimiter = '';
-  marker = '';
-  encodingType = '';
+export interface GetOssObjectPagedRequest extends PagedAndSortedResultRequestDto {
+  bucket?: string;
+  prefix?: string;
+  delimiter?: string;
+  marker?: string;
+  encodingType?: string;
 }
 
 export interface GetOssObjectRequest {

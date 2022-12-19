@@ -5,6 +5,14 @@ declare interface LocalizableStringInfo {
 
 declare type ExtraPropertyDictionary = Dictionary<string, any>;
 
+declare interface IHasConcurrencyStamp {
+  concurrencyStamp: string;
+}
+
+declare interface IHasExtraProperties {
+  extraProperties: ExtraPropertyDictionary;
+}
+
 declare interface ISelectionStringValueItem {
   value: string;
   displayText: LocalizableStringInfo;

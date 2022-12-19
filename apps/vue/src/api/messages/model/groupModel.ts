@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto, PagedResultDto } from '../../model/baseModel';
-
 export interface Group {
   id: string;
   name: string;

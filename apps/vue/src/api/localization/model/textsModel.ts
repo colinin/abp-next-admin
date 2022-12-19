@@ -1,5 +1,3 @@
-import { ListResultDto } from '/@/api/model/baseModel';
-
 export interface Text {
   key: boolean;
   value: string;
@@ -23,7 +21,7 @@ export interface SetTextInput {
   resourceName: string;
 }
 
-export class TextListResult extends ListResultDto<TextDifference> {}
+export interface TextListResult extends ListResultDto<TextDifference> {}
 
 export interface GetTextByKey {
   key: boolean;

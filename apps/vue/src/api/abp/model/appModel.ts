@@ -1,4 +1,4 @@
-import { INameValue, Available } from '../../model/baseModel';
+import { Available } from '../../model/baseModel';
 
 /** 授权 */
 export class Auth {
@@ -119,9 +119,9 @@ export class Localization {
   /** 本地化资源集合 */
   values: { [key: string]: { [key: string]: string } } = {};
   /** 语言映射集合 */
-  languagesMap: { [key: string]: INameValue<string>[] } = {};
+  languagesMap: { [key: string]: NameValue<string>[] } = {};
   /** 语言文档映射集合 */
-  languageFilesMap: { [key: string]: INameValue<string>[] } = {};
+  languageFilesMap: { [key: string]: NameValue<string>[] } = {};
 }
 
 /** 多租户配置 */

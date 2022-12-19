@@ -2,7 +2,6 @@ import { defHttp } from '/@/utils/http/axios';
 import { OssObject } from './model/ossModel';
 import { format } from '/@/utils/strings';
 import { AxiosResponse } from 'axios';
-import { ListResultDto } from '../model/baseModel';
 
 enum Api {
   Upload = '/api/api/files/public/{path}/{name}',

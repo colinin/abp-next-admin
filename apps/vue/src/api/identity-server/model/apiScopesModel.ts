@@ -1,15 +1,10 @@
-import {
-  ExtensibleAuditedEntity,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '/@/api/model/baseModel';
 import { UserClaim, Property } from './basicModel';
 
 export type ApiScopeClaim = UserClaim;
 
 export type ApiScopeProperty = Property;
 
-export interface ApiScope extends ExtensibleAuditedEntity<string> {
+export interface ApiScope extends ExtensibleAuditedEntityDto<string> {
   enabled: boolean;
   name: string;
   displayName: string;
@@ -38,8 +33,8 @@ export interface ApiScopeCreate extends ApiScopeCreateOrUpdate {
 
 export type ApiScopeUpdate = ApiScopeCreateOrUpdate;
 
-export class ApiScopePagedResult extends PagedResultDto<ApiScope> {}
+export interface ApiScopePagedResult extends PagedResultDto<ApiScope> {}
 
-export class GetApiScopePagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetApiScopePagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }

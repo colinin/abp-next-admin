@@ -1,13 +1,10 @@
-import { CreationAuditedEntityDto, PagedAndSortedResultRequestDto } from '../../model/baseModel';
-
-export interface WebhookSubscription extends CreationAuditedEntityDto {
-  id: string;
+export interface WebhookSubscription extends CreationAuditedEntityDto<string> {
   tenantId?: string;
   webhookUri: string;
   secret: string;
   isActive: boolean;
   webhooks: string[];
-  headers: { [key: string]: string };
+  headers: Dictionary<string, string>;
 }
 
 export interface WebhookSubscriptionCreateOrUpdate {
@@ -15,7 +12,7 @@ export interface WebhookSubscriptionCreateOrUpdate {
   secret: string;
   isActive: boolean;
   webhooks: string[];
-  headers: { [key: string]: string };
+  headers: Dictionary<string, string>;
 }
 
 export type CreateWebhookSubscription = WebhookSubscriptionCreateOrUpdate;

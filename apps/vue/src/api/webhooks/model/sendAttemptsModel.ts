@@ -1,4 +1,3 @@
-import { PagedAndSortedResultRequestDto } from '../../model/baseModel';
 import { HttpStatusCode } from '/@/enums/httpEnum';
 
 export interface WebhookEvent {

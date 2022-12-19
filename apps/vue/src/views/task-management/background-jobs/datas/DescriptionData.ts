@@ -1,11 +1,32 @@
+import { createVNode } from 'vue';
+import { Tag, Checkbox } from 'ant-design-vue';
 import { DescItem } from "/@/components/Description";
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { JobStatusMap, JobTypeMap, JobPriorityMap } from './typing';
+import { JobStatusMap, JobStatusColor, JobTypeMap, JobPriorityMap, JobSourceMap } from './typing';
 
-const { L } = useLocalization('TaskManagement');
+const { L } = useLocalization(['TaskManagement']);
 
 export function getDescriptionSchemas() : DescItem[] {
   return [
+    {
+      label: L('DisplayName:Source'),
+      field: 'source',
+      render: (val) => {
+        return JobSourceMap[val];
+      },
+      span: 1.5,
+    },
+    {
+      label: L('DisplayName:IsEnabled'),
+      field: 'isEnabled',
+      render: (val) => createVNode(
+        Checkbox,
+        {
+          checked: val,
+          disabled: true,
+        }),
+      span: 1.5,
+    },
     {
       label: L('DisplayName:Group'),
       field: 'group',
@@ -41,21 +62,31 @@ export function getDescriptionSchemas() : DescItem[] {
       span: 2,
     },
     {
+      label: L('DisplayName:Cron'),
+      field: 'cron',
+      span: 1,
+    },
+    {
       label: L('DisplayName:LastRunTime'),
       field: 'lastRunTime',
-      span: 1.5,
+      span: 1,
     },
     {
       label: L('DisplayName:NextRunTime'),
       field: 'nextRunTime',
-      span: 1.5,
+      span: 1,
     },
     {
       label: L('DisplayName:Status'),
       field: 'status',
-      render: (val) => {
-        return JobStatusMap[val];
-      },
+      render: (val) => createVNode(
+        Tag,
+        {
+          color: JobStatusColor[val]
+        },
+        {
+          default: () => JobStatusMap[val]
+        }),
       span: 1,
     },
     {

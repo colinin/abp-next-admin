@@ -1,9 +1,3 @@
-import {
-  ISortedResultRequest,
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
 import { Route } from './basicModel';
 
 export class CreateOrUpdateMenu {
@@ -24,20 +18,20 @@ export class CreateMenu extends CreateOrUpdateMenu {
 
 export class UpdateMenu extends CreateOrUpdateMenu {}
 
-export class GetAllMenuRequest implements ISortedResultRequest {
-  filter = '';
-  sorting = '';
+export interface GetAllMenuRequest extends SortedResultRequest {
+  filter?: string;
+  sorting?: string;
   parentId?: string;
   layoutId?: string;
-  framework = '';
+  framework?: string;
 }
 
-export class GetMenuPagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
-  reverse = false;
+export interface GetMenuPagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
+  reverse?: boolean;
   layoutId?: string;
   parentId?: string;
-  framework = '';
+  framework?: string;
 }
 
 export class Menu extends Route {
@@ -51,9 +45,9 @@ export class Menu extends Route {
   children = new Array<Menu>();
 }
 
-export class MenuListResult extends ListResultDto<Menu> {}
+export interface MenuListResult extends ListResultDto<Menu> {}
 
-export class MenuPagedResult extends PagedResultDto<Menu> {}
+export interface MenuPagedResult extends PagedResultDto<Menu> {}
 
 export class RoleMenu {
   roleName!: string;

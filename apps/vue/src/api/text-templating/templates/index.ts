@@ -1,5 +1,4 @@
 import { defAbpHttp } from '/@/utils/http/abp';
-import { PagedResultDto } from '../../model/baseModel';
 import {
   TextTemplateDefinition,
   TextTemplateContent,

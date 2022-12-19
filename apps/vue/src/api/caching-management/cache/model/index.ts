@@ -7,7 +7,7 @@ export interface CacheValue {
   type: string;
   size: number;
   expiration?: Date;
-  values: {[key:string]: any};
+  values: Dictionary<string, any>;
 }
 
 export interface CacheRefreshRequest {

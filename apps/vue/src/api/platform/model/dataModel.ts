@@ -1,8 +1,3 @@
-import {
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-  ListResultDto,
-} from '../../model/baseModel';
 import { DataItem } from './dataItemModel';
 
 export interface Data {
@@ -25,13 +20,13 @@ export enum ValueType {
   Object = 6,
 }
 
-export class GetDataByPaged extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface GetDataByPaged extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }
 
-export class DataPagedResult extends PagedResultDto<Data> {}
+export interface DataPagedResult extends PagedResultDto<Data> {}
 
-export class DataListResult extends ListResultDto<Data> {}
+export interface DataListResult extends ListResultDto<Data> {}
 
 export class CreateOrUpdateData {
   name = '';

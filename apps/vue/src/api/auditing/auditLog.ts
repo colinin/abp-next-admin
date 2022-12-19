@@ -7,7 +7,6 @@ import {
   EntityChangeGetByPagedRequest,
   EntityChangeGetWithUsernameInput
 } from './model/auditLogModel';
-import { ListResultDto } from '../model/baseModel';
 
 enum Api {
   RemoteService = 'AbpAuditing',

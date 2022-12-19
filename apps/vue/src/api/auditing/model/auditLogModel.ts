@@ -1,5 +1,3 @@
-import { PagedAndSortedResultRequestDto } from '../../model/baseModel';
-
 export enum ChangeType {
   Created = 0,
   Updated = 1,
@@ -22,7 +20,7 @@ export interface EntityChange {
   entityId?: string;
   entityTypeFullName?: string;
   propertyChanges?: PropertyChange[];
-  extraProperties?: { [key: string]: any };
+  extraProperties?: ExtraPropertyDictionary;
 }
 
 export interface EntityChangeWithUsername {
@@ -37,7 +35,7 @@ export interface Action {
   parameters?: string;
   executionTime: Date;
   executionDuration?: number;
-  extraProperties?: { [key: string]: any };
+  extraProperties?: ExtraPropertyDictionary;
 }
 
 export interface AuditLog {
@@ -63,7 +61,7 @@ export interface AuditLog {
   httpStatusCode?: number;
   entityChanges?: EntityChange[];
   actions?: Action[];
-  extraProperties?: { [key: string]: any };
+  extraProperties?: ExtraPropertyDictionary;
 }
 
 export interface GetAuditLogPagedRequest extends PagedAndSortedResultRequestDto {

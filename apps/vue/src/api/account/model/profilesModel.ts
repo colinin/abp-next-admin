@@ -1,5 +1,3 @@
-import { ExtensibleObject, IHasConcurrencyStamp } from '../../model/baseModel';
-
 interface Profile extends ExtensibleObject, IHasConcurrencyStamp {
   userName: string;
   email: string;

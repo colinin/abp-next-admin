@@ -1,10 +1,3 @@
-import {
-  ExtensibleObject,
-  FullAuditedEntityDto,
-  ListResultDto,
-  PagedAndSortedResultRequestDto,
-  PagedResultDto,
-} from '../../model/baseModel';
 import { IdentityClaim } from './claimModel';
 
 /** 用户对象接口 */
@@ -35,74 +28,53 @@ export interface SetPassword {
 }
 
 /** 用户对象 */
-export class User extends FullAuditedEntityDto implements IUser {
-  /** 用户名 */
-  name = '';
-  /** 用户账户 */
-  userName = '';
-  /** 用户简称 */
-  surname = '';
-  /** 邮件地址 */
-  email = '';
-  /** 联系方式 */
-  phoneNumber = '';
-  /** 双因素验证 */
-  twoFactorEnabled = false;
-  /** 登录锁定 */
-  lockoutEnabled = false;
-  /** 用户标识 */
-  id = '';
+export interface User extends FullAuditedEntityDto<string>, IUser, IHasConcurrencyStamp {
   /** 租户标识 */
-  tenentId? = '';
+  tenentId?: string;
   /** 邮箱已验证 */
-  emailConfirmed = false;
+  emailConfirmed: boolean;
   /** 联系方式已验证 */
-  phoneNumberConfirmed = false;
+  phoneNumberConfirmed: boolean;
   /** 锁定截止时间 */
-  lockoutEnd?: Date = undefined;
-  /** 并发令牌 */
-  concurrencyStamp = '';
+  lockoutEnd?: Date;
   /** 已激活的用户 */
-  isActive = true;
+  isActive: boolean;
   /** 角色列表 */
-  roleNames: string[] = [];
+  roleNames: string[];
 }
 
-export class CreateOrUpdateUser extends ExtensibleObject {
-  /** 用户名 */
-  name = '';
-  /** 用户账户 */
-  userName = '';
-  /** 用户简称 */
-  surname = '';
-  /** 邮件地址 */
-  email = '';
-  /** 联系方式 */
-  phoneNumber = '';
-  /** 登录锁定 */
-  lockoutEnabled = false;
+export interface CreateOrUpdateUser extends ExtensibleObject {
+   /** 用户名 */
+   name: string;
+   /** 用户账户 */
+   userName: string;
+   /** 用户简称 */
+   surname?: string;
+   /** 邮件地址 */
+   email: string;
+   /** 联系方式 */
+   phoneNumber?: string;
+   /** 登录锁定 */
+   lockoutEnabled: boolean;
   /** 角色列表 */
-  roleNames: string[] | null = null;
+  roleNames?: string[];
   /** 密码 */
-  password: string | null = null;
+  password?: string;
 }
 
 /** 变更用户对象 */
-export class UpdateUser extends CreateOrUpdateUser {
-  /** 并发令牌 */
-  concurrencyStamp = '';
+export interface UpdateUser extends CreateOrUpdateUser {}
+
+export interface CreateUser extends CreateOrUpdateUser {}
+
+export interface GetUserPagedRequest extends PagedAndSortedResultRequestDto {
+  filter?: string;
 }
 
-export class CreateUser extends CreateOrUpdateUser {}
+export interface UserPagedResult extends PagedResultDto<User> {}
 
-export class GetUserPagedRequest extends PagedAndSortedResultRequestDto {
-  filter = '';
+export interface UserClaim extends IdentityClaim {
+  id: string;
 }
 
-export class UserPagedResult extends PagedResultDto<User> {}
-
-export class UserClaim extends IdentityClaim {
-  id!: string;
-}
-
-export class UserClaimListResult extends ListResultDto<UserClaim> {}
+export interface UserClaimListResult extends ListResultDto<UserClaim> {}
