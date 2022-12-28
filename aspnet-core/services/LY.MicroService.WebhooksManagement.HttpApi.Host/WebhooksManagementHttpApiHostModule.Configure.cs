@@ -135,7 +135,7 @@ public partial class WebhooksManagementHttpApiHostModule
         // 解决某些不支持类型的序列化
         Configure<AbpJsonOptions>(options =>
         {
-            options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+            // options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         });
         // 中文序列化的编码问题
         Configure<AbpSystemTextJsonSerializerOptions>(options =>

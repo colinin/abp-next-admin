@@ -24,9 +24,14 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
         var entityType = typeof(TEntity);
         var dynamicParamters = new List<DynamicParamterDto>();
 
+        var igonreFields = options
+            .IgnoreFields
+            .Union(GetUserDefineIgnoreFields())
+            .Distinct();
+
         var propertyInfos = entityType
             .GetProperties()
-            .Where(p => !options.IgnoreFields.Contains(p.Name));
+            .Where(p => !igonreFields.Contains(p.Name));
 
         foreach (var propertyInfo in propertyInfos)
         {
@@ -77,6 +82,11 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
         return ObjectMapper.Map<List<TEntity>, List<TEntityDto>>(entities);
     }
 
+    protected virtual string[] GetUserDefineIgnoreFields()
+    {
+        return new string[0];
+    }
+
     protected virtual (string JavaScriptType, DynamicComparison[] AvailableComparator) GetPropertyTypeMap(Type propertyType)
     {
         var isNullableType = false;
@@ -86,7 +96,7 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             isNullableType = true;
             propertyType = propertyType.GetGenericArguments().FirstOrDefault();
         }
-        var typeFullName = propertyType.FullName.ToLower();
+        var typeFullName = propertyType.FullName;
 
         switch (typeFullName)
         {

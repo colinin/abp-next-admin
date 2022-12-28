@@ -238,7 +238,8 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                     displayName: "系统日志",
                     url: "/sys/logs",
                     component: "/sys/logging/index",
-                    description: "系统日志"));
+                    description: "系统日志",
+                    multiTenancySides: MultiTenancySides.Host));
 
             manage.AddItem(
                 new ApplicationMenu(
