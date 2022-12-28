@@ -77,7 +77,7 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
             // 统一时间日期格式
             Configure<AbpJsonOptions>(options =>
             {
-                options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+                // options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
             });
             // 中文序列化的编码问题
             Configure<AbpSystemTextJsonSerializerOptions>(options =>
