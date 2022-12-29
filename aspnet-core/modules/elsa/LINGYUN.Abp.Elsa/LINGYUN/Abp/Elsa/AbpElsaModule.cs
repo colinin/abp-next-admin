@@ -1,6 +1,7 @@
 ﻿using Elsa;
 using Elsa.Services;
 using LINGYUN.Abp.Elsa.Localization;
+using LINGYUN.Abp.Elsa.Scripting.JavaScript;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -26,28 +27,28 @@ public class AbpElsaModule : AbpModule
     {
         var builder = context.Services.GetPreConfigureActions<ElsaOptionsBuilder>();
 
-        context.Services.AddElsa(options =>
-        {
-            options.AddCustomTenantAccessor<AbpTenantAccessor>();
-            options.AddConsoleActivities();
-            options.AddJavaScriptActivities();
-            options.UseJsonSerializer((provider) =>
+        context.Services
+            .AddElsa(options =>
             {
-                var jsonOptions = provider.GetRequiredService<IOptions<AbpNewtonsoftJsonSerializerOptions>>();
-                var jsonConverters = jsonOptions.Value.Converters
-                    .Select(c => (JsonConverter)provider.GetRequiredService(c))
-                    .ToList();
-                var jsonSettings = new JsonSerializerSettings();
-                jsonSettings.Converters.InsertRange(0, jsonConverters);
+                options.AddCustomTenantAccessor<AbpTenantAccessor>();
+                options.AddConsoleActivities();
+                options.AddJavaScriptActivities();
+                options.UseJsonSerializer((provider) =>
+                {
+                    var jsonOptions = provider.GetRequiredService<IOptions<AbpNewtonsoftJsonSerializerOptions>>();
+                    var jsonConverters = jsonOptions.Value.Converters
+                        .Select(c => (JsonConverter)provider.GetRequiredService(c))
+                        .ToList();
+                    var jsonSettings = new JsonSerializerSettings();
+                    jsonSettings.Converters.InsertRange(0, jsonConverters);
 
-                return JsonSerializer.Create(jsonSettings);
-            });
+                    return JsonSerializer.Create(jsonSettings);
+                });
 
-            builder.Configure(options);
-        });
-
-        context.Services.Replace<IIdGenerator, AbpElsaIdGenerator>(ServiceLifetime.Singleton);
-        context.Services.Replace<IWorkflowRunner, AbpWorkflowRunner>(ServiceLifetime.Scoped);
+                builder.Configure(options);
+            })
+            .AddNotificationHandlers(typeof(ConfigureJavaScriptEngine))
+            .Replace<IIdGenerator, AbpElsaIdGenerator>(ServiceLifetime.Singleton);
 
         Configure<AbpLocalizationOptions>(options =>
         {

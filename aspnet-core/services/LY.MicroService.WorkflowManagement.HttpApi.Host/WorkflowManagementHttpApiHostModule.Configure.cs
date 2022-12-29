@@ -159,14 +159,15 @@ public partial class WorkflowManagementHttpApiHostModule
 
     private void ConfigureEndpoints()
     {
-        Configure<AbpEndpointRouterOptions>(options =>
-        {
-            options.EndpointConfigureActions.Add(
-                (context) =>
-                {
-                    context.Endpoints.MapFallbackToPage("/_Host");
-                });
-        });
+        // 不需要
+        //Configure<AbpEndpointRouterOptions>(options =>
+        //{
+        //    options.EndpointConfigureActions.Add(
+        //        (context) =>
+        //        {
+        //            context.Endpoints.MapFallbackToPage("/_Host");
+        //        });
+        //});
     }
 
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)
