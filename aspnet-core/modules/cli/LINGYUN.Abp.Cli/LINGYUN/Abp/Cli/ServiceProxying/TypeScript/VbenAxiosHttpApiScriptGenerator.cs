@@ -65,7 +65,7 @@ public class VbenAxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransie
 
         foreach (var action in actionModel.Actions)
         {
-            var url = action.Value.Url;
+            var url = action.Value.Url.EnsureStartsWith('/');
             var isFormatUrl = false;
             var formatUrlIndex = 0;
 
