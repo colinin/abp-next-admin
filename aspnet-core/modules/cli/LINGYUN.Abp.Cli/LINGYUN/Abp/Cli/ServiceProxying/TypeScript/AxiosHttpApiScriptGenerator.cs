@@ -64,7 +64,7 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
 
         foreach (var action in actionModel.Actions)
         {
-            var url = action.Value.Url;
+            var url = action.Value.Url.EnsureStartsWith('/');
             var isFormatUrl = false;
             var formatUrlIndex = 0;
 

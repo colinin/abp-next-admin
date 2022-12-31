@@ -140,7 +140,13 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
                 var inPathParams = action.Value.Parameters.Where(p => p.BindingSourceId == "Path");
                 var inBodyParams = action.Value.Parameters.Where(p => p.BindingSourceId == "Body");
 
-                if (inPathParams.Any())
+                if (inPathParams.Any() &&
+                    inPathParams.Count() == 1)
+                {
+                    apiScriptBuilder.AppendFormat("    params: {0},", inPathParams.First().NameOnMethod);
+                    apiScriptBuilder.AppendLine("");
+                }
+                else
                 {
                     apiScriptBuilder.AppendLine("    params: {");
                     foreach (var paramter in inPathParams)
