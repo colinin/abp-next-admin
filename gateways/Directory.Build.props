@@ -1,6 +1,6 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.1</VoloAbpPackageVersion>
+		<VoloAbpPackageVersion>6.0.2</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
 		<DotNetCoreCAPPackageVersion>6.0.1</DotNetCoreCAPPackageVersion>
