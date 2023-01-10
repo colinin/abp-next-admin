@@ -67,8 +67,6 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
                         continue;
                     }
 
-                    var context = new LocalizationResourceInitializationContext(localizationResource, ServiceProvider);
-
                     if (await ResourceRepository.FindByNameAsync(localizationResource.ResourceName) == null)
                     {
                         await ResourceRepository.InsertAsync(
@@ -79,6 +77,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
                                 localizationResource.DefaultCultureName));
                     }
 
+                    var context = new LocalizationResourceInitializationContext(localizationResource, ServiceProvider);
                     foreach (var contributor in localizationResource.Contributors)
                     {
                         if (contributor.IsDynamic)
