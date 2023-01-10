@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.Localization.Xml
         private bool _subscribedForChanges;
         private readonly object _syncObj = new object();
 
-        public bool IsDynamic => throw new NotImplementedException();
+        public bool IsDynamic => false;
 
         protected XmlFileLocalizationResourceContributorBase(string filePath)
         {
