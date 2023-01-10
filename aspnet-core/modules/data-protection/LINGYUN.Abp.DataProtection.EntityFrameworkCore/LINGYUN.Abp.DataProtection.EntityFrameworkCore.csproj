@@ -4,8 +4,8 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<LangVersion>9.0</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
 		<RootNamespace />
 	</PropertyGroup>
 

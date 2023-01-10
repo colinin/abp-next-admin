@@ -11,9 +11,9 @@ public class AbpWebhooksEventBusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.UnsupportedTypes.TryAdd<WebhooksEventData>();
-        });
+        //Configure<AbpSystemTextJsonSerializerOptions>(options =>
+        //{
+        //    options.UnsupportedTypes.TryAdd<WebhooksEventData>();
+        //});
     }
 }

@@ -9,19 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\WeChat\Localization\Resources\en.json" />
-	  <None Remove="LINGYUN\Abp\WeChat\Localization\Resources\zh-Hans.json" />
+	  <None Remove="LINGYUN\Abp\WeChat\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\Localization\Resources\en.json" />
-	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\Localization\Resources\zh-Hans.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json.Newtonsoft" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 

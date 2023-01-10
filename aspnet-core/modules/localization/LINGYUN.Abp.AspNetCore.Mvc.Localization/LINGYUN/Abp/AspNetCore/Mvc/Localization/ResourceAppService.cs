@@ -5,22 +5,28 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
     [Authorize]
     public class ResourceAppService : ApplicationService, IResourceAppService
     {
+        private readonly IExternalLocalizationStore _externalLocalizationStore;
         private readonly AbpLocalizationOptions _localizationOptions;
 
         public ResourceAppService(
-            IOptions<AbpLocalizationOptions> localizationOptions)
+            IOptions<AbpLocalizationOptions> localizationOptions,
+            IExternalLocalizationStore externalLocalizationStore)
         {
             _localizationOptions = localizationOptions.Value;
+            _externalLocalizationStore = externalLocalizationStore;
         }
 
-        public virtual Task<ListResultDto<ResourceDto>> GetListAsync()
+        public virtual async Task<ListResultDto<ResourceDto>> GetListAsync()
         {
+            var externalResources = await _externalLocalizationStore.GetResourcesAsync();
+
             var resources = _localizationOptions
                 .Resources
                 .Select(x => new ResourceDto
@@ -29,10 +35,16 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                     DisplayName = x.Value.ResourceName,
                     Description = x.Value.ResourceName,
                 })
+                .Union(externalResources.Select(resource => new ResourceDto
+                {
+                    Name = resource.ResourceName,
+                    DisplayName = resource.ResourceName,
+                    Description = resource.ResourceName,
+                }))
                 .OrderBy(l => l.Name)
                 .DistinctBy(l => l.Name);
 
-            return Task.FromResult(new ListResultDto<ResourceDto>(resources.ToList()));
+            return new ListResultDto<ResourceDto>(resources.ToList());
         }
     }
 }

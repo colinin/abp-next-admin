@@ -37,8 +37,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         public async virtual Task InitializeAsync()
         {
             var client = _clientFactory.Create();
-            var dateTimeFormat = !_jsonOptions.DefaultDateTimeFormat.IsNullOrWhiteSpace()
-                ? $"{_jsonOptions.DefaultDateTimeFormat}||strict_date_optional_time||epoch_millis" 
+            var dateTimeFormat = !_jsonOptions.OutputDateTimeFormat.IsNullOrWhiteSpace()
+                ? $"{_jsonOptions.OutputDateTimeFormat}||strict_date_optional_time||epoch_millis" 
                 : "strict_date_optional_time||epoch_millis";
             var indexState = new IndexState
             {

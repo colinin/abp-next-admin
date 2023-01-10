@@ -253,8 +253,6 @@ public partial class PlatformManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

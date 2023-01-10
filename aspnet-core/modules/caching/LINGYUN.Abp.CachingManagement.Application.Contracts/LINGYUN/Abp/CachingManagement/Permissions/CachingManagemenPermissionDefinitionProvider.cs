@@ -8,7 +8,9 @@ public class CachingManagemenPermissionDefinitionProvider : PermissionDefinition
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var cachingManagerGroup = context.AddGroup(CachingManagementPermissionNames.GroupName, L("Permission:CachingManagement"));
+        var cachingManagerGroup = context.AddGroup(
+            CachingManagementPermissionNames.GroupName, 
+            L("Permission:CachingManagement"));
 
         var cacheGroup = cachingManagerGroup.AddPermission(CachingManagementPermissionNames.Cache.Default, L("Permission:Caches"));
         cacheGroup.AddChild(CachingManagementPermissionNames.Cache.ManageValue, L("Permission:ManageValue"));

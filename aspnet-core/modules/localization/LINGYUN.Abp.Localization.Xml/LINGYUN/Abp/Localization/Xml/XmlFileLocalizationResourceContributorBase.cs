@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Internal;
 using Volo.Abp.Localization;
@@ -17,6 +18,8 @@ namespace LINGYUN.Abp.Localization.Xml
         private Dictionary<string, ILocalizationDictionary> _dictionaries;
         private bool _subscribedForChanges;
         private readonly object _syncObj = new object();
+
+        public bool IsDynamic => throw new NotImplementedException();
 
         protected XmlFileLocalizationResourceContributorBase(string filePath)
         {
@@ -115,5 +118,17 @@ namespace LINGYUN.Abp.Localization.Xml
         }
 
         protected abstract IFileProvider BuildFileProvider(LocalizationResourceInitializationContext context);
+
+        public virtual Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+        {
+            Fill(cultureName, dictionary);
+
+            return Task.CompletedTask;
+        }
+
+        public virtual Task<IEnumerable<string>> GetSupportedCulturesAsync()
+        {
+            return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
+        }
     }
 }

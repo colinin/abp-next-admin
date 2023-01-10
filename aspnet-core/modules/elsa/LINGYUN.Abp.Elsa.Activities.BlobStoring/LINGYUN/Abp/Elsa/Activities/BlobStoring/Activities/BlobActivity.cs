@@ -1,12 +1,13 @@
-﻿using Elsa.Services;
+﻿using Elsa.Attributes;
 using Volo.Abp.BlobStoring;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
 
-public abstract class BlobActivity : Activity
+public abstract class BlobActivity : AbpActivity
 {
-    protected ICurrentTenant CurrentTenant;
+    [ActivityInput(Hint = "Path of the blob.")]
+    public string Path { get; set; }
+
     protected IBlobContainer<ElsaBlobContainer> BlobContainer;
 
     protected BlobActivity(IBlobContainer<ElsaBlobContainer> blobContainer)

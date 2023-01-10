@@ -263,8 +263,6 @@ public partial class IdentityServerHttpApiHostModule
             options.Resources
                    .Get<IdentityResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.Resources.AddDynamic(typeof(IdentityResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

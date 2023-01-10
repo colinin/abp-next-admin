@@ -13,15 +13,12 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
         Outcomes = new[] { OutcomeNames.True, OutcomeNames.False })]
 public class BlobExists : BlobActivity
 {
-    [ActivityInput(Hint = "Path of the oss.")]
-    public string? Path { get; set; }
-
     public BlobExists(IBlobContainer<ElsaBlobContainer> blobContainer)
         : base(blobContainer)
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         var exists = await BlobContainer.ExistsAsync(Path, context.CancellationToken);
         if (exists)

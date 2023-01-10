@@ -5,9 +5,11 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using Volo.Abp.Data;
 
 namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
+[ConnectionStringName("BackendAdminDbMigrator")]
 public class BackendAdminMigrationsDbContext : AbpDbContext<BackendAdminMigrationsDbContext>
 {
     public BackendAdminMigrationsDbContext(DbContextOptions<BackendAdminMigrationsDbContext> options)

@@ -1,18 +1,11 @@
-﻿using LINGYUN.Abp.ExceptionHandling.Localization;
-using Volo.Abp.Localization;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 
+using VoloAbpExceptionHandlingModule = Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+;
 namespace LINGYUN.Abp.ExceptionHandling
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(VoloAbpExceptionHandlingModule))]
     public class AbpExceptionHandlingModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources.Add<ExceptionHandlingResource>("en");
-            });
-        }
     }
 }

@@ -4,13 +4,13 @@ using LINGYUN.Abp.BackgroundTasks.ExceptionHandling.Templates;
 using LINGYUN.Abp.BackgroundTasks.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
@@ -64,14 +64,17 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
 
     protected IEmailSender EmailSender { get; }
     protected ITemplateRenderer TemplateRenderer { get; }
+    protected IJsonSerializer JsonSerializer { get; }
     public JobExecutedFailedProvider(
         IEmailSender emailSender,
-        ITemplateRenderer templateRenderer)
+        ITemplateRenderer templateRenderer,
+        IJsonSerializer jsonSerializer)
     {
         EmailSender = emailSender;
         TemplateRenderer = templateRenderer;
 
         Logger = NullLogger<JobExecutedFailedProvider>.Instance;
+        JsonSerializer = jsonSerializer;
     }
 
     public override async Task NotifyErrorAsync([NotNull] JobActionExecuteContext context)
@@ -113,7 +116,7 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
             {
                 try
                 {
-                    globalContext = JsonConvert.DeserializeObject<Dictionary<string, object>>(ctxStr);
+                    globalContext = JsonSerializer.Deserialize<Dictionary<string, object>>(ctxStr);
                 }
                 catch { }
             }

@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Localization.Dynamic;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
-    [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
+    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
     [ExposeServices(
-        typeof(ILocalizationStore),
+        typeof(IExternalLocalizationStore),
         typeof(LocalizationStore))]
-    public class LocalizationStore : ILocalizationStore
+    public class LocalizationStore : IExternalLocalizationStore
     {
         protected ILanguageRepository LanguageRepository { get; }
         protected ITextRepository TextRepository { get; }
@@ -31,6 +32,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             ResourceRepository = resourceRepository;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<List<LanguageInfo>> GetLanguageListAsync(
             CancellationToken cancellationToken = default)
         {
@@ -41,6 +43,7 @@ namespace LINGYUN.Abp.LocalizationManagement
                 .ToList();
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<Dictionary<string, ILocalizationDictionary>> GetLocalizationDictionaryAsync(
             string resourceName,
             CancellationToken cancellationToken = default)
@@ -78,6 +81,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             return dictionaries;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<Dictionary<string, Dictionary<string, ILocalizationDictionary>>> GetAllLocalizationDictionaryAsync(CancellationToken cancellationToken = default)
         {
             var result = new Dictionary<string, Dictionary<string, ILocalizationDictionary>>();
@@ -111,9 +115,43 @@ namespace LINGYUN.Abp.LocalizationManagement
             return result;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<bool> ResourceExistsAsync(string resourceName, CancellationToken cancellationToken = default)
         {
             return await ResourceRepository.ExistsAsync(resourceName, cancellationToken);
+        }
+
+        public LocalizationResourceBase GetResourceOrNull(string resourceName)
+        {
+            return GetResourceOrNullAsync(resourceName)
+                .ConfigureAwait(continueOnCapturedContext: false)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        public async virtual Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+        {
+            var resource = await ResourceRepository.FindByNameAsync(resourceName);
+            if (resource == null)
+            {
+                return null;
+            }
+
+            return new NonTypedLocalizationResource(resource.Name);
+        }
+
+        public async virtual Task<string[]> GetResourceNamesAsync()
+        {
+            var resources = await ResourceRepository.GetListAsync();
+
+            return resources.Select(r => r.Name).ToArray();
+        }
+
+        public async virtual Task<LocalizationResourceBase[]> GetResourcesAsync()
+        {
+            var resources = await ResourceRepository.GetListAsync();
+
+            return resources.Select(r => new NonTypedLocalizationResource(r.Name)).ToArray();
         }
     }
 }

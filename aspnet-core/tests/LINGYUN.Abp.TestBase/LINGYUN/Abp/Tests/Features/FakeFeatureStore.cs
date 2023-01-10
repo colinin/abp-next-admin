@@ -17,16 +17,16 @@ namespace LINGYUN.Abp.Tests.Features
             FeatureDefinitionManager = featureDefinitionManager;
         }
 
-        public Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var feature = FeatureDefinitionManager.Get(name);
+            var feature = await FeatureDefinitionManager.GetAsync(name);
 
             if (FakeFeatureOptions.FeatureMaps.TryGetValue(name, out var featureFunc))
             {
-                return Task.FromResult(featureFunc(feature));
+                return featureFunc(feature);
             }
 
-            return Task.FromResult(feature.DefaultValue);
+            return feature.DefaultValue;
         }
     }
 }

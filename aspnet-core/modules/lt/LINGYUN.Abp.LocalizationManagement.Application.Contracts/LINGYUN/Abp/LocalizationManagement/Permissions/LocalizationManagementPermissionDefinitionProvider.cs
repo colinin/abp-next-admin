@@ -10,8 +10,7 @@ namespace LINGYUN.Abp.LocalizationManagement.Permissions
         {
             var permissionGroup = context.AddGroup(
                 LocalizationManagementPermissions.GroupName,
-                L("Permissions:LocalizationManagement"),
-                Volo.Abp.MultiTenancy.MultiTenancySides.Host);
+                L("Permissions:LocalizationManagement"));
 
             var resourcePermission = permissionGroup.AddPermission(
                 LocalizationManagementPermissions.Resource.Default,

@@ -306,8 +306,6 @@ public partial class RealtimeMessageHttpApiHostModule
             options.Resources
                    .Get<MessageServiceResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

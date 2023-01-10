@@ -25,7 +25,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -260,8 +259,6 @@ public partial class AuthServerHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.Resources.AddDynamic(typeof(IdentityResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

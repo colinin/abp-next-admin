@@ -4,8 +4,6 @@ using LINGYUN.Abp.RealTime;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
-using Volo.Abp.Json;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating;
@@ -19,7 +17,6 @@ namespace LINGYUN.Abp.Notifications
         typeof(AbpBackgroundWorkersModule),
         typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpIdGeneratorModule),
-        typeof(AbpJsonModule),
         typeof(AbpLocalizationModule),
         typeof(AbpRealTimeModule),
         typeof(AbpEventBusModule),
@@ -38,11 +35,6 @@ namespace LINGYUN.Abp.Notifications
                 options.Resources
                     .Get<NotificationsResource>()
                     .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
-            });
-
-            Configure<AbpSystemTextJsonSerializerOptions>(options =>
-            {
-                options.UnsupportedTypes.Add<NotificationInfo>();
             });
         }
     }

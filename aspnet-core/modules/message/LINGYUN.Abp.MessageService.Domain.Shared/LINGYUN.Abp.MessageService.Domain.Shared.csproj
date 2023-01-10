@@ -9,13 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINGYUN\Abp\MessageService\Localization\Resources\en.json" />
-		<None Remove="LINGYUN\Abp\MessageService\Localization\Resources\zh-Hans.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINGYUN\Abp\MessageService\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\MessageService\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

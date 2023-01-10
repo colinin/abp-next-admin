@@ -1,11 +1,11 @@
 ﻿using Elsa;
 using Elsa.ActivityResults;
 using Elsa.Attributes;
-using Elsa.Services;
 using Elsa.Services.Models;
 using LINGYUN.Abp.IM.Messages;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Elsa.Activities.IM;
@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Elsa.Activities.IM;
     Category = "Message",
     Description = "Send an message.",
     Outcomes = new[] { OutcomeNames.Done })]
-public class SendMessage : Activity
+public class SendMessage : AbpActivity
 {
     private readonly IClock _clock;
     private readonly IMessageSender _messageSender;
@@ -50,10 +50,10 @@ public class SendMessage : Activity
     }
 
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         ChatMessage? chatMessage = null;
-        var tenantId = context.GetTenantId();
+        var currentTenant = context.GetService<ICurrentTenant>();
 
         if (!GroupId.IsNullOrWhiteSpace())
         {
@@ -66,7 +66,7 @@ public class SendMessage : Activity
                 false,
                 MessageType.Text,
                 MessageSourceType.User,
-                tenantId);
+                currentTenant.Id);
         }
         else if (To.HasValue)
         {
@@ -79,7 +79,7 @@ public class SendMessage : Activity
                false,
                MessageType.Text,
                MessageSourceType.User,
-               tenantId);
+               currentTenant.Id);
         }
 
         if (chatMessage != null)

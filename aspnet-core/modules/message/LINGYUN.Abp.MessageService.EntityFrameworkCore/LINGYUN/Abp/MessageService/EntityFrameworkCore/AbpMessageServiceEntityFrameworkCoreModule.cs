@@ -1,7 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Groups;
-using LINGYUN.Abp.MessageService.Notifications;
-using LINGYUN.Abp.MessageService.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -17,12 +15,7 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<MessageServiceDbContext>(options =>
             {
-                options.AddRepository<Notification, EfCoreNotificationRepository>();
-                options.AddRepository<NotificationDefinitionRecord, EfCoreNotificationDefinitionRecordRepository>();
-                options.AddRepository<NotificationDefinitionGroupRecord, EfCoreNotificationDefinitionGroupRecordRepository>();
-
-                options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
-                options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
+                options.AddDefaultRepositories<IMessageServiceDbContext>();
 
                 options.AddRepository<ChatGroup, EfCoreGroupRepository>();
                 options.AddRepository<UserChatGroup, EfCoreUserChatGroupRepository>();
@@ -30,8 +23,6 @@ namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
                 options.AddRepository<UserChatSetting, EfCoreUserChatSettingRepository>();
 
                 options.AddRepository<UserChatFriend, EfCoreUserChatFriendRepository>();
-
-                options.AddDefaultRepositories(includeAllEntities: true);
             });
         }
     }

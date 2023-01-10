@@ -4,18 +4,16 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\en.json" />
-	  <None Remove="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\zh-Hans.json" />
+	  <None Remove="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\en.json" />
-	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\zh-Hans.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\WeChat\SettingManagement\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

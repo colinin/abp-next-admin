@@ -269,8 +269,6 @@ public partial class BackendAdminHttpApiHostModule
                 .AddLanguagesMapOrUpdate(
                     "vben-admin-ui",
                     new NameValue("zh_CN", "zh-Hans"));
-
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

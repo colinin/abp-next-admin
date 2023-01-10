@@ -68,17 +68,19 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
         {
             var titleInfo = notification.Data.TryGetData("title").As<LocalizableStringInfo>();
             var titleResource = GetResource(titleInfo.ResourceName);
-            var title = LocalizerFactory.Create(titleResource.ResourceType)[titleInfo.Name, titleInfo.Values].Value;
+            var titleLocalizer = await LocalizerFactory.CreateByResourceNameAsync(titleResource.ResourceName);
+            var title = titleLocalizer[titleInfo.Name, titleInfo.Values].Value;
 
             var messageInfo = notification.Data.TryGetData("message").As<LocalizableStringInfo>();
             var messageResource = GetResource(messageInfo.ResourceName);
-            var message = LocalizerFactory.Create(messageResource.ResourceType)[messageInfo.Name, messageInfo.Values].Value;
+            var messageLocalizer = await LocalizerFactory.CreateByResourceNameAsync(messageResource.ResourceName);
+            var message = messageLocalizer[messageInfo.Name, messageInfo.Values].Value;
 
             await EmailSender.SendAsync(emailAddress, title, message);
         }
     }
 
-    private LocalizationResource GetResource(string resourceName)
+    private LocalizationResourceBase GetResource(string resourceName)
     {
         return LocalizationOptions.Resources.Values
             .First(x => x.ResourceName.Equals(resourceName));

@@ -1,11 +1,11 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.2</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>6.0.2</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>7.0.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.0.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.9.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.0.0</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.9.0</ElsaPackageVersion>
+		<ElsaPackageVersion>2.10.0-rc2</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<TencentCloudSDKPackageVersion>3.0.434</TencentCloudSDKPackageVersion>
@@ -13,6 +13,7 @@
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.7.29</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
+		<NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
 		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
 		<OpenTelemetryExporterZipkinPackageVersion>1.3.1</OpenTelemetryExporterZipkinPackageVersion>
 		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
@@ -32,7 +33,8 @@
 		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
 		<SwashbuckleAspNetCorePackageVersion>6.1.5</SwashbuckleAspNetCorePackageVersion>
-		<MicrosoftPackageVersion>6.0.*</MicrosoftPackageVersion>
+		<PollyPackageVersion>7.2.3</PollyPackageVersion>
+		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
 		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
 		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
 		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>

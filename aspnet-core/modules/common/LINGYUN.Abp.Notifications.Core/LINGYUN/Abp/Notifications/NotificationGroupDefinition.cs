@@ -32,6 +32,8 @@ namespace LINGYUN.Abp.Notifications
         public IReadOnlyList<NotificationDefinition> Notifications => _notifications.ToImmutableList();
         private readonly List<NotificationDefinition> _notifications;
 
+        public Dictionary<string, object> Properties { get; }
+
         public static NotificationGroupDefinition Create(
             string name,
             ILocalizableString displayName = null,
@@ -50,6 +52,8 @@ namespace LINGYUN.Abp.Notifications
             AllowSubscriptionToClients = allowSubscriptionToClients;
 
             _notifications = new List<NotificationDefinition>();
+
+            Properties = new Dictionary<string, object>();
         }
 
         public virtual NotificationDefinition AddNotification(

@@ -14,21 +14,21 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
         Outcomes = new[] { OutcomeNames.Done })]
 public class WriteBlob : BlobActivity
 {
-    [ActivityInput(Hint = "Path of the blob.")]
-    public string? Path { get; set; }
-
     [ActivityInput(Hint = "Blob exists whether overwrite")]
     public bool Overwrite { get; set; }
 
-    [ActivityInput(Hint = "The bytes to write.", SupportedSyntaxes = new[] { SyntaxNames.JavaScript }, DefaultSyntax = SyntaxNames.JavaScript)]
-    public byte[]? Bytes { get; set; }
+    [ActivityInput(
+        Hint = "The bytes to write.",
+        SupportedSyntaxes = new[] { SyntaxNames.JavaScript },
+        DefaultSyntax = SyntaxNames.JavaScript)]
+    public byte[] Bytes { get; set; }
 
     public WriteBlob(IBlobContainer<ElsaBlobContainer> blobContainer)
         : base(blobContainer)
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         await BlobContainer.SaveAsync(Path, Bytes, Overwrite, context.CancellationToken);
 

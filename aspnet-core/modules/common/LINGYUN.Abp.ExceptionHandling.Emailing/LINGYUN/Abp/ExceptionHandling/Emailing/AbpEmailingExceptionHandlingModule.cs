@@ -1,6 +1,6 @@
-﻿using LINGYUN.Abp.ExceptionHandling.Emailing.Localization;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Emailing;
+using Volo.Abp.ExceptionHandling.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -26,7 +26,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<ExceptionHandlingResource>("en")
+                    .Get<AbpExceptionHandlingResource>()
                     .AddVirtualJson("/LINGYUN/Abp/ExceptionHandling/Emailing/Localization/Resources");
             });
         }
