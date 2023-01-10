@@ -26,24 +26,6 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
     /// </remarks>
     public virtual string Description { get; set; }
     /// <summary>
-    /// 资源名称
-    /// </summary>
-    /// <remarks>
-    /// 如果不为空,作为参与本地化资源的名称
-    /// DisplayName = L["DisplayName:Localization"]
-    /// Description = L["Description:Localization"]
-    /// </remarks>
-    public virtual string ResourceName { get; protected set; }
-    /// <summary>
-    /// 本地化键值名称
-    /// </summary>
-    /// <remarks>
-    /// 如果不为空,作为参与本地化键值的名称
-    /// DisplayName = L["DisplayName:Localization"]
-    /// Description = L["Description:Localization"]
-    /// </remarks>
-    public virtual string Localization { get; protected set; }
-    /// <summary>
     /// 允许客户端订阅
     /// </summary>
     public virtual bool AllowSubscriptionToClients { get; set; }
@@ -60,31 +42,17 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
         Guid id,
         string name,
         string displayName = null,
-        string description = null,
-        string resourceName = null,
-        string localization = null)
+        string description = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), NotificationDefinitionGroupRecordConsts.MaxNameLength);
         DisplayName = Check.Length(displayName, nameof(displayName), NotificationDefinitionGroupRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), NotificationDefinitionGroupRecordConsts.MaxDescriptionLength);
 
-        SetLocalization(resourceName, localization);
-
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
 
         AllowSubscriptionToClients = true;
-    }
-    /// <summary>
-    /// 设置本地化资源
-    /// </summary>
-    /// <param name="resourceName"></param>
-    /// <param name="localization"></param>
-    public void SetLocalization(string resourceName, string localization)
-    {
-        ResourceName = Check.Length(resourceName, nameof(resourceName), NotificationDefinitionGroupRecordConsts.MaxResourceNameLength);
-        Localization = Check.Length(localization, nameof(localization), NotificationDefinitionGroupRecordConsts.MaxLocalizationLength);
     }
 
     public bool HasSameData(NotificationDefinitionGroupRecord otherRecord)

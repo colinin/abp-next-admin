@@ -513,7 +513,7 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                     b.ToTable("AppUserGroupCards", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Notifications.Notification", b =>
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.Notification", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -565,7 +565,7 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                     b.ToTable("AppNotifications", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Notifications.NotificationDefinitionGroupRecord", b =>
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionGroupRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -586,16 +586,8 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<string>("Localization")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("ResourceName")
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
@@ -604,7 +596,7 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                     b.ToTable("AppNotificationDefinitionGroups", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Notifications.NotificationDefinitionRecord", b =>
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -635,10 +627,6 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
-                    b.Property<string>("Localization")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -654,16 +642,12 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("ResourceName")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
-
                     b.HasKey("Id");
 
                     b.ToTable("AppNotificationDefinitions", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Notifications.UserNotification", b =>
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.UserNotification", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -690,7 +674,7 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator.Migrations
                     b.ToTable("AppUserNotifications", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.MessageService.Subscriptions.UserSubscribe", b =>
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.UserSubscribe", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

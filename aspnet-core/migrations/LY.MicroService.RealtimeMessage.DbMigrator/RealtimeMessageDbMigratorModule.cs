@@ -6,6 +6,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 
 namespace LY.MicroService.RealtimeMessage.DbMigrator;
 
@@ -14,6 +15,7 @@ namespace LY.MicroService.RealtimeMessage.DbMigrator;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpNotificationsEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAutofacModule)

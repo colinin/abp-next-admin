@@ -72,10 +72,6 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
                  .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDisplayNameLength);
                 b.Property(p => p.Description)
                  .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDescriptionLength);
-                b.Property(p => p.ResourceName)
-                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxResourceNameLength);
-                b.Property(p => p.Localization)
-                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxLocalizationLength);
 
                 b.ConfigureByConvention();
             });
@@ -95,10 +91,6 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxDisplayNameLength);
                 b.Property(p => p.Description)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxDescriptionLength);
-                b.Property(p => p.ResourceName)
-                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxResourceNameLength);
-                b.Property(p => p.Localization)
-                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxLocalizationLength);
                 b.Property(p => p.Providers)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
 

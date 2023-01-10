@@ -2,9 +2,11 @@
 
 public class AbpNotificationsManagementOptions
 {
-    public bool IsDynamicNotificationStoreEnabled { get; set; }
+    public bool SaveStaticNotificationsToDatabase { get; set; }
+    public bool IsDynamicNotificationsStoreEnabled { get; set; }
     public AbpNotificationsManagementOptions()
     {
-        IsDynamicNotificationStoreEnabled = true;
+        SaveStaticNotificationsToDatabase = true;
+        IsDynamicNotificationsStoreEnabled = true;
     }
 }

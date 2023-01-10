@@ -13,24 +13,18 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
     typeof(AbpNotificationsDomainSharedModule))]
 public class AbpNotificationsEntityFrameworkCoreModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpNotificationsDomainModule),
-        typeof(AbpEntityFrameworkCoreModule))]
-    public class AbpMessageServiceEntityFrameworkCoreModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddAbpDbContext<NotificationsDbContext>(options =>
         {
-            context.Services.AddAbpDbContext<NotificationsDbContext>(options =>
-            {
-                options.AddDefaultRepositories<INotificationsDbContext>();
+            options.AddDefaultRepositories<INotificationsDbContext>();
 
-                options.AddRepository<Notification, EfCoreNotificationRepository>();
-                options.AddRepository<NotificationDefinitionRecord, EfCoreNotificationDefinitionRecordRepository>();
-                options.AddRepository<NotificationDefinitionGroupRecord, EfCoreNotificationDefinitionGroupRecordRepository>();
+            options.AddRepository<Notification, EfCoreNotificationRepository>();
+            options.AddRepository<NotificationDefinitionRecord, EfCoreNotificationDefinitionRecordRepository>();
+            options.AddRepository<NotificationDefinitionGroupRecord, EfCoreNotificationDefinitionGroupRecordRepository>();
 
-                options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
-                options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
-            });
-        }
+            options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
+            options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
+        });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -18,6 +19,7 @@ public class RealtimeMessageMigrationsDbContext : AbpDbContext<RealtimeMessageMi
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.ConfigureNotifications();
         modelBuilder.ConfigureMessageService();
     }
 }

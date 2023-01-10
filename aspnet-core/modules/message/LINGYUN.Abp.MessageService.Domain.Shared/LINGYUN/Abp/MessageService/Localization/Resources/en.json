@@ -18,7 +18,6 @@
     "LINGYUN.Abp.Message:03404": "Sending the message failed: the user does not exist or is deactivated!",
     "LINGYUN.Abp.Message:03410": "Users refuse to add friends",
     "LINGYUN.Abp.Message:03411": "The other party is already your friend or has sent an authentication request. The operation cannot be repeated!",
-    "LINGYUN.Abp.Message:05404": "The notification template does not exist!",
     "Notifications:IM": "Instant Messaging",
     "Notifications:FriendValidation": "Friend verification notification",
     "Notifications:NewFriend": "New friend notification",

@@ -4,7 +4,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Notifications.HttpApi;
+namespace LINGYUN.Abp.Notifications;
 
 [DependsOn(
     typeof(AbpAspNetCoreMvcModule),

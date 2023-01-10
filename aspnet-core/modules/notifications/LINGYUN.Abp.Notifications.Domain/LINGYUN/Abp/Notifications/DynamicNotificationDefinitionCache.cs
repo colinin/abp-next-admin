@@ -1,8 +1,6 @@
-﻿using LINGYUN.Abp.Notifications;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -32,8 +30,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
 
     protected INotificationDefinitionGroupRecordRepository NotificationDefinitionGroupRecordRepository { get; }
     protected INotificationDefinitionRecordRepository NotificationDefinitionRecordRepository { get; }
-
-    protected AbpLocalizationOptions LocalizationOptions { get; }
+    protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
     static DynamicNotificationDefinitionCache()
@@ -48,8 +45,8 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
         IDistributedCache<NotificationDefinitionGroupsCacheItem> dynamicNotificationGroupL3Cache,
         IDistributedCache<NotificationDefinitionsCacheItem> dynamicNotificationsL3Cache, 
         INotificationDefinitionGroupRecordRepository notificationDefinitionGroupRecordRepository, 
-        INotificationDefinitionRecordRepository notificationDefinitionRecordRepository, 
-        IOptions<AbpLocalizationOptions> localizationOptions, 
+        INotificationDefinitionRecordRepository notificationDefinitionRecordRepository,
+        ILocalizableStringSerializer localizableStringSerializer,
         IStringLocalizerFactory stringLocalizerFactory)
     {
         DynamicNotificationL2Cache = dynamicNotificationL2Cache;
@@ -57,7 +54,7 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
         DynamicNotificationsL3Cache = dynamicNotificationsL3Cache;
         NotificationDefinitionGroupRecordRepository = notificationDefinitionGroupRecordRepository;
         NotificationDefinitionRecordRepository = notificationDefinitionRecordRepository;
-        LocalizationOptions = localizationOptions.Value;
+        LocalizableStringSerializer = localizableStringSerializer;
         StringLocalizerFactory = stringLocalizerFactory;
     }
 
@@ -74,7 +71,11 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
             foreach (var group in l2GroupCache.Groups)
             {
                 var groupGroup = NotificationGroupDefinition
-                    .Create(group.Name, new FixedLocalizableString(group.DisplayName), group.AllowSubscriptionToClients);
+                    .Create(
+                        group.Name,
+                        LocalizableStringSerializer.Deserialize(group.DisplayName),
+                        group.AllowSubscriptionToClients);
+
                 var notificationsInThisGroup = notifications.Notifications
                     .Where(p => p.GroupName == groupGroup.Name);
 
@@ -82,8 +83,8 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
                 {
                     var notificationDefine = groupGroup.AddNotification(
                         notification.Name,
-                        new FixedLocalizableString(notification.DisplayName),
-                        new FixedLocalizableString(notification.Description),
+                        LocalizableStringSerializer.Deserialize(notification.DisplayName),
+                        LocalizableStringSerializer.Deserialize(notification.Description),
                         notification.NotificationType,
                         notification.Lifetime,
                         notification.ContentType,
@@ -114,8 +115,8 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
             {
                 var notificationDefinition = new NotificationDefinition(
                     notification.Name,
-                    new FixedLocalizableString(notification.DisplayName),
-                    new FixedLocalizableString(notification.Description),
+                    LocalizableStringSerializer.Deserialize(notification.DisplayName),
+                    LocalizableStringSerializer.Deserialize(notification.Description),
                     notification.NotificationType,
                     notification.Lifetime,
                     notification.ContentType,
@@ -181,18 +182,19 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
             foreach (var record in records)
             {
                 var displayName = record.DisplayName;
-                var description = record.Description;
-
-                if (!record.ResourceName.IsNullOrWhiteSpace() && !record.Localization.IsNullOrWhiteSpace())
+                if (!displayName.IsNullOrWhiteSpace())
                 {
-                    var resource = GetResourceOrNull(record.ResourceName);
-                    if (resource != null)
-                    {
-                        var localizer = await StringLocalizerFactory.CreateByResourceNameAsync(resource.ResourceName);
+                    displayName = await LocalizableStringSerializer
+                        .Deserialize(displayName)
+                        .LocalizeAsync(StringLocalizerFactory);
+                }
 
-                        displayName = localizer[$"DisplayName:{record.Localization}"];
-                        description = localizer[$"Description:{record.Localization}"];
-                    }
+                var description = record.Description;
+                if (!description.IsNullOrWhiteSpace())
+                {
+                    description = await LocalizableStringSerializer
+                        .Deserialize(description)
+                        .LocalizeAsync(StringLocalizerFactory);
                 }
 
                 recordCaches.Add(new NotificationDefinitionGroupCacheItem(
@@ -263,24 +265,26 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
 
             foreach (var record in records)
             {
-                var displayName = record.Name;
-                var description = record.Name;
+                var displayName = record.DisplayName;
+                if (!displayName.IsNullOrWhiteSpace())
+                {
+                    displayName = await LocalizableStringSerializer
+                        .Deserialize(displayName)
+                        .LocalizeAsync(StringLocalizerFactory);
+                }
+
+                var description = record.Description;
+                if (!description.IsNullOrWhiteSpace())
+                {
+                    description = await LocalizableStringSerializer
+                        .Deserialize(description)
+                        .LocalizeAsync(StringLocalizerFactory);
+                }
+
                 var providers = new List<string>();
                 if (!record.Providers.IsNullOrWhiteSpace())
                 {
                     providers = record.Providers.Split(';').ToList();
-                }
-
-                if (record.ResourceName.IsNullOrWhiteSpace() && record.Localization.IsNullOrWhiteSpace())
-                {
-                    var resource = GetResourceOrNull(record.ResourceName);
-                    if (resource != null)
-                    {
-                        var localizer = await StringLocalizerFactory.CreateByResourceNameAsync(resource.ResourceName);
-
-                        displayName = localizer[$"DisplayName:{record.Localization}"];
-                        description = localizer[$"Description:{record.Localization}"];
-                    }
                 }
 
                 var recordCache = new NotificationDefinitionCacheItem(
@@ -318,11 +322,5 @@ public class DynamicNotificationDefinitionCache : IDynamicNotificationDefinition
         var records = await NotificationDefinitionRecordRepository.GetListAsync();
 
         return records;
-    }
-
-    protected virtual LocalizationResourceBase GetResourceOrNull(string resourceName)
-    {
-        return LocalizationOptions.Resources.Values
-            .FirstOrDefault(x => x.ResourceName.Equals(resourceName));
     }
 }

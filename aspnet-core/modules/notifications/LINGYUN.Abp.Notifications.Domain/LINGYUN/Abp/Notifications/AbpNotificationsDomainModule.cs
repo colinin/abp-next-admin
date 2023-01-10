@@ -29,7 +29,7 @@ public class AbpNotificationsDomainModule : AbpModule
     {
         if (context.Services.IsDataMigrationEnvironment())
         {
-            Configure<NotificationsManagementOptions>(options =>
+            Configure<AbpNotificationsManagementOptions>(options =>
             {
                 options.SaveStaticNotificationsToDatabase = false;
                 options.IsDynamicNotificationsStoreEnabled = false;
@@ -58,7 +58,7 @@ public class AbpNotificationsDomainModule : AbpModule
     {
         var options = context
             .ServiceProvider
-            .GetRequiredService<IOptions<NotificationsManagementOptions>>()
+            .GetRequiredService<IOptions<AbpNotificationsManagementOptions>>()
             .Value;
 
         if (!options.SaveStaticNotificationsToDatabase && !options.IsDynamicNotificationsStoreEnabled)
@@ -100,7 +100,7 @@ public class AbpNotificationsDomainModule : AbpModule
     }
 
     private async static Task SaveStaticNotificationsToDatabaseAsync(
-        NotificationsManagementOptions options,
+        AbpNotificationsManagementOptions options,
         IServiceScope scope,
         ICancellationTokenProvider cancellationTokenProvider)
     {
@@ -134,7 +134,7 @@ public class AbpNotificationsDomainModule : AbpModule
             }, cancellationTokenProvider.Token);
     }
 
-    private async static Task PreCacheDynamicNotificationsAsync(NotificationsManagementOptions options, IServiceScope scope)
+    private async static Task PreCacheDynamicNotificationsAsync(AbpNotificationsManagementOptions options, IServiceScope scope)
     {
         if (!options.IsDynamicNotificationsStoreEnabled)
         {

@@ -76,8 +76,6 @@ public class NotificationDefinitionSerializer : INotificationDefinitionSerialize
                 notificationGroup?.Name,
                 LocalizableStringSerializer.Serialize(notification.DisplayName),
                 LocalizableStringSerializer.Serialize(notification.Description),
-                null,
-                null,
                 notification.NotificationLifetime,
                 notification.NotificationType,
                 notification.ContentType

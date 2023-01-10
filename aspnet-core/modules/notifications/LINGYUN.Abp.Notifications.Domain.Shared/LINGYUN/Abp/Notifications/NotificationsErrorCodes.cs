@@ -30,6 +30,6 @@
         /// <summary>
         /// 通知模板不存在!
         /// </summary>
-        public const string NotificationTemplateNotFound = Namespace + ":05404";
+        public const string NotificationTemplateNotFound = Namespace + ":01404";
     }
 }

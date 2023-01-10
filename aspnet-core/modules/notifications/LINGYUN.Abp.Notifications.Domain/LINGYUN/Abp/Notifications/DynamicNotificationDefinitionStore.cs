@@ -22,7 +22,7 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
 
     public async virtual Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
     {
-        if (!_notificationsManagementOptions.IsDynamicNotificationStoreEnabled)
+        if (!_notificationsManagementOptions.IsDynamicNotificationsStoreEnabled)
         {
             return Array.Empty<NotificationGroupDefinition>();
         }
@@ -31,7 +31,7 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
 
     public async virtual Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
     {
-        if (!_notificationsManagementOptions.IsDynamicNotificationStoreEnabled)
+        if (!_notificationsManagementOptions.IsDynamicNotificationsStoreEnabled)
         {
             return Array.Empty<NotificationDefinition>();
         }
@@ -40,7 +40,7 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
 
     public async virtual Task<NotificationDefinition> GetOrNullAsync(string name)
     {
-        if (!_notificationsManagementOptions.IsDynamicNotificationStoreEnabled)
+        if (!_notificationsManagementOptions.IsDynamicNotificationsStoreEnabled)
         {
             return null;
         }

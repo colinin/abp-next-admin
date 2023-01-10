@@ -32,24 +32,6 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// </remarks>
     public virtual string Description { get; set; }
     /// <summary>
-    /// 资源名称
-    /// </summary>
-    /// <remarks>
-    /// 如果不为空,作为参与本地化资源的名称
-    /// DisplayName = L["DisplayName:Localization"]
-    /// Description = L["Description:Localization"]
-    /// </remarks>
-    public virtual string ResourceName { get; protected set; }
-    /// <summary>
-    /// 本地化键值名称
-    /// </summary>
-    /// <remarks>
-    /// 如果不为空,作为参与本地化键值的名称
-    /// DisplayName = L["DisplayName:Localization"]
-    /// Description = L["Description:Localization"]
-    /// </remarks>
-    public virtual string Localization { get; protected set; }
-    /// <summary>
     /// 存活类型
     /// </summary>
     public virtual NotificationLifetime NotificationLifetime { get; set; }
@@ -86,8 +68,6 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         string groupName,
         string displayName = null,
         string description = null,
-        string resourceName = null,
-        string localization = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
         NotificationType notificationType = NotificationType.Application,
         NotificationContentType contentType = NotificationContentType.Text)
@@ -101,22 +81,10 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         NotificationType = notificationType;
         ContentType = contentType;
 
-        SetLocalization(resourceName, localization);
-
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
 
         AllowSubscriptionToClients = true;
-    }
-    /// <summary>
-    /// 设置本地化资源
-    /// </summary>
-    /// <param name="resourceName"></param>
-    /// <param name="localization"></param>
-    public void SetLocalization(string resourceName, string localization)
-    {
-        ResourceName = Check.Length(resourceName, nameof(resourceName), NotificationDefinitionGroupRecordConsts.MaxResourceNameLength);
-        Localization = Check.Length(localization, nameof(localization), NotificationDefinitionGroupRecordConsts.MaxLocalizationLength);
     }
 
     public void UseProviders(params string[] providers)

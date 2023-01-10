@@ -99,9 +99,5 @@
         /// 你需要验证问题才能添加好友
         /// </summary>
         public const string YouNeedValidationQuestingByAddFriend = Namespace + ":03302";
-        /// <summary>
-        /// 通知模板不存在!
-        /// </summary>
-        public const string NotificationTemplateNotFound = Namespace + ":05404";
     }
 }
