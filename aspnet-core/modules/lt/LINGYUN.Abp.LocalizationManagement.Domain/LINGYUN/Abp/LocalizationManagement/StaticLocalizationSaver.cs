@@ -97,7 +97,6 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
                             fillTexts.Values.Select(x => x.Name));
 
                         var notExistsKeys = fillTexts.Values.Where(x => !existsKeys.Contains(x.Name));
-                        notExistsKeys = notExistsKeys.Where(x => !insertNewTexts.Any(t => t.Key == x.Name));
 
                         foreach (var notExistsKey in notExistsKeys)
                         {
