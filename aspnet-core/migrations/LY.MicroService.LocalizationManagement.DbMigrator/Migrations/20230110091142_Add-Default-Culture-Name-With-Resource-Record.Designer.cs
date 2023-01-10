@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.LocalizationManagement.DbMigrator.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.LocalizationManagement.DbMigrator.Migrations
 {
     [DbContext(typeof(LocalizationManagementMigrationsDbContext))]
-    partial class LocalizationManagementMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230110091142_Add-Default-Culture-Name-With-Resource-Record")]
+    partial class AddDefaultCultureNameWithResourceRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

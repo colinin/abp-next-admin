@@ -7,6 +7,12 @@ namespace LINGYUN.Abp.LocalizationManagement
 {
     public interface ITextRepository : IRepository<Text, int>
     {
+        Task<List<string>> GetExistsKeysAsync(
+            string resourceName,
+            string cultureName,
+            IEnumerable<string> keys,
+            CancellationToken cancellationToken = default);
+
         Task<Text> GetByCultureKeyAsync(
             string resourceName,
             string cultureName,

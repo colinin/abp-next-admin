@@ -258,7 +258,7 @@ public partial class LocalizationManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            // services.AddAlwaysAllowAuthorization();
+            services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

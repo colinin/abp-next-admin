@@ -65,6 +65,9 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
                 x.Property(p => p.Description)
                     .HasMaxLength(ResourceConsts.MaxDescriptionLength)
                     .HasColumnName(nameof(Resource.Description));
+                x.Property(p => p.DefaultCultureName)
+                    .HasMaxLength(ResourceConsts.MaxDefaultCultureNameLength)
+                    .HasColumnName(nameof(Resource.DefaultCultureName));
 
                 x.Property(p => p.Enable)
                     .HasDefaultValue(true);

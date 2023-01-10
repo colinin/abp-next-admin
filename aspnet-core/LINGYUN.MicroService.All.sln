@@ -521,7 +521,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{F2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime-message", "realtime-message", "{B1AC656F-8F4C-43D5-B5A0-CCF5F119EA44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.BackendAdmin.DbMigrator", "migrations\LY.MicroService.BackendAdmin.DbMigrator\LY.MicroService.BackendAdmin.DbMigrator.csproj", "{EA144C64-CE14-40DF-A876-5D302A4FC208}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.BackendAdmin.DbMigrator", "migrations\LY.MicroService.BackendAdmin.DbMigrator\LY.MicroService.BackendAdmin.DbMigrator.csproj", "{EA144C64-CE14-40DF-A876-5D302A4FC208}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.AuthServer.DbMigrator", "migrations\LY.MicroService.AuthServer.DbMigrator\LY.MicroService.AuthServer.DbMigrator.csproj", "{D25156E6-532F-4BCC-8EE0-8A3F1986E10E}"
 EndProject
@@ -535,17 +535,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "notifications", "notifications", "{1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Domain.Shared", "modules\notifications\LINGYUN.Abp.Notifications.Domain.Shared\LINGYUN.Abp.Notifications.Domain.Shared.csproj", "{4CF6F78C-22BE-46C4-BC9B-824E8FEEF719}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain.Shared", "modules\notifications\LINGYUN.Abp.Notifications.Domain.Shared\LINGYUN.Abp.Notifications.Domain.Shared.csproj", "{4CF6F78C-22BE-46C4-BC9B-824E8FEEF719}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Domain", "modules\notifications\LINGYUN.Abp.Notifications.Domain\LINGYUN.Abp.Notifications.Domain.csproj", "{CDD4CC0F-5493-40C2-B889-3670263888D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain", "modules\notifications\LINGYUN.Abp.Notifications.Domain\LINGYUN.Abp.Notifications.Domain.csproj", "{CDD4CC0F-5493-40C2-B889-3670263888D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.EntityFrameworkCore", "modules\notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj", "{F74AAE01-7B87-44CA-85ED-9A6307D51504}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.EntityFrameworkCore", "modules\notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj", "{F74AAE01-7B87-44CA-85ED-9A6307D51504}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Application.Contracts", "modules\notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj", "{E3F010C7-6C96-4EEA-B5FA-BF80515E195F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application.Contracts", "modules\notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj", "{E3F010C7-6C96-4EEA-B5FA-BF80515E195F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.Application", "modules\notifications\LINGYUN.Abp.Notifications.Application\LINGYUN.Abp.Notifications.Application.csproj", "{B153F98A-7DA9-4A12-A1D7-105BE9408FA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application", "modules\notifications\LINGYUN.Abp.Notifications.Application\LINGYUN.Abp.Notifications.Application.csproj", "{B153F98A-7DA9-4A12-A1D7-105BE9408FA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.HttpApi", "modules\notifications\LINGYUN.Abp.Notifications.HttpApi\LINGYUN.Abp.Notifications.HttpApi.csproj", "{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.HttpApi", "modules\notifications\LINGYUN.Abp.Notifications.HttpApi\LINGYUN.Abp.Notifications.HttpApi.csproj", "{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Localization.Persistence", "modules\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1397,6 +1399,10 @@ Global
 		{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1663,6 +1669,7 @@ Global
 		{E3F010C7-6C96-4EEA-B5FA-BF80515E195F} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
 		{B153F98A-7DA9-4A12-A1D7-105BE9408FA1} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
 		{EFC5C34F-81A1-4EFC-966F-50B646C54FA6} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF} = {90E88EAC-4291-4406-8D88-EFDF61B11292}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

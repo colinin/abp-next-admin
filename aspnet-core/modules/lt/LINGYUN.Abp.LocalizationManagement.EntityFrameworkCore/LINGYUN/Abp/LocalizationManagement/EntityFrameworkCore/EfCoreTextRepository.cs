@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,20 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
         public EfCoreTextRepository(
             IDbContextProvider<LocalizationDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public async virtual Task<List<string>> GetExistsKeysAsync(
+            string resourceName,
+            string cultureName,
+            IEnumerable<string> keys,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(x => x.ResourceName.Equals(resourceName) && x.CultureName.Equals(cultureName)
+                    && keys.Contains(x.Key))
+                .Select(x => x.Key)
+                .Distinct()
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async virtual Task<Text> GetByCultureKeyAsync(
