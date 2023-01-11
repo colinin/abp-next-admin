@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Collections;
 
 namespace LINGYUN.Abp.Webhooks;
@@ -24,6 +25,10 @@ public class AbpWebhooksOptions
 
     public ITypeList<IWebhookDefinitionProvider> DefinitionProviders { get; }
 
+    public HashSet<string> DeletedWebhooks { get; }
+
+    public HashSet<string> DeletedWebhookGroups { get; }
+
     public AbpWebhooksOptions()
     {
         TimeoutDuration = TimeSpan.FromSeconds(60);
@@ -31,5 +36,8 @@ public class AbpWebhooksOptions
         MaxConsecutiveFailCountBeforeDeactivateSubscription = MaxSendAttemptCount * 3;
 
         DefinitionProviders = new TypeList<IWebhookDefinitionProvider>();
+
+        DeletedWebhooks = new HashSet<string>();
+        DeletedWebhookGroups = new HashSet<string>();
     }
 }
