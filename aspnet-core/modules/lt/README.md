@@ -6,7 +6,7 @@
 
 ### 基础模块
 
-* [LINGYUN.Abp.Localization.Dynamic](../common/LINGYUN.Abp.Localization.Dynamic/LINGYUN.Abp.Localization.Dynamic)					本地化扩展模块,增加 DynamicLocalizationResourceContributor 通过 ILocalizationStore 接口获取动态的本地化资源信息  
+* [LINGYUN.Abp.Localization.Persistence](../localization/LINGYUN.Abp.Localization.Persistence)					本地化持久化模块,实现IStaticLocalizationSaver接口以将本地静态资源持久化到存储设施  
 * [LINGYUN.Abp.LocalizationManagement.Domain.Shared](./LINGYUN.Abp.LocalizationManagement.Domain.Shared)					领域层公共模块，定义了错误代码、本地化、模块设置  
 * [LINGYUN.Abp.LocalizationManagement.Domain](./LINGYUN.Abp.LocalizationManagement.Domain)								领域层模块，实现 ILocalizationStore 接口  
 * [LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore](./LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore)								数据访问层模块,集成EfCore  
