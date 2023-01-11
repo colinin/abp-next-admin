@@ -105,7 +105,6 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
             b.Property(x => x.Name).HasMaxLength(WebhookDefinitionRecordConsts.MaxNameLength).IsRequired();
             b.Property(x => x.DisplayName).HasMaxLength(WebhookDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
             b.Property(x => x.Description).HasMaxLength(WebhookDefinitionRecordConsts.MaxDescriptionLength);
-            b.Property(x => x.Providers).HasMaxLength(WebhookDefinitionRecordConsts.MaxProvidersLength);
             b.Property(x => x.RequiredFeatures).HasMaxLength(WebhookDefinitionRecordConsts.MaxRequiredFeaturesLength);
 
             b.HasIndex(x => new { x.Name }).IsUnique();

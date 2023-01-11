@@ -27,6 +27,11 @@ namespace LINGYUN.Abp.Webhooks
 
         public Dictionary<string, object> Properties { get; }
 
+        public object this[string name] {
+            get => Properties.GetOrDefault(name);
+            set => Properties[name] = value;
+        }
+
         public WebhookDefinition(string name, ILocalizableString displayName = null, ILocalizableString description = null)
         {
             if (name.IsNullOrWhiteSpace())

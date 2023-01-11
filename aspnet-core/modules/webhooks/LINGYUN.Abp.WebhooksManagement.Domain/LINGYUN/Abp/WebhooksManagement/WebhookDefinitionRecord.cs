@@ -21,8 +21,6 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
 
     public bool IsEnabled { get; set; }
 
-    public string Providers { get; set; }
-
     public string RequiredFeatures { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
@@ -40,7 +38,6 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         string displayName,
         string description = null,
         bool isEnabled = true,
-        string providers = null,
         string requiredFeatures = null)
         : base(id)
     {
@@ -48,8 +45,6 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), WebhookDefinitionRecordConsts.MaxNameLength);
         DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), WebhookDefinitionRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), WebhookDefinitionRecordConsts.MaxDescriptionLength);
-
-        Providers = Check.Length(providers, nameof(providers), WebhookDefinitionRecordConsts.MaxProvidersLength);
         RequiredFeatures = Check.Length(requiredFeatures, nameof(requiredFeatures), WebhookDefinitionRecordConsts.MaxRequiredFeaturesLength);
 
         IsEnabled = isEnabled;
@@ -81,11 +76,6 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         }
 
         if (IsEnabled != otherRecord.IsEnabled)
-        {
-            return false;
-        }
-
-        if (Providers != otherRecord.Providers)
         {
             return false;
         }
@@ -128,11 +118,6 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         if (IsEnabled != otherRecord.IsEnabled)
         {
             IsEnabled = otherRecord.IsEnabled;
-        }
-
-        if (Providers != otherRecord.Providers)
-        {
-            Providers = otherRecord.Providers;
         }
 
         if (RequiredFeatures != otherRecord.RequiredFeatures)
