@@ -17,6 +17,9 @@ public class WebhooksManagementEntityFrameworkCoreModule : AbpModule
             options.AddRepository<WebhookEventRecord, EfCoreWebhookEventRecordRepository>();
             options.AddRepository<WebhookSubscription, EfCoreWebhookSubscriptionRepository>();
 
+            options.AddRepository<WebhookGroupDefinitionRecord, EfCoreWebhookGroupDefinitionRecordRepository>();
+            options.AddRepository<WebhookDefinitionRecord, EfCoreWebhookDefinitionRecordRepository>();
+
             options.AddDefaultRepositories<IWebhooksManagementDbContext>();
         });
     }
