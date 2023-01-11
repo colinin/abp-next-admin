@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.BackgroundTasks;
-using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -302,8 +301,6 @@ public partial class WebhooksManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-            // 动态语言支持
-            options.Resources.AddDynamic();
         });
     }
 

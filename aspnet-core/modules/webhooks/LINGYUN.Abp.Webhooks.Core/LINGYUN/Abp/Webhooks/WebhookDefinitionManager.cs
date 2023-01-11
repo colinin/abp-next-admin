@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -14,54 +13,65 @@ namespace LINGYUN.Abp.Webhooks
 {
     internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonDependency
     {
-        protected IDictionary<string, WebhookGroupDefinition> WebhookGroupDefinitions => _lazyWebhookGroupDefinitions.Value;
-        private readonly Lazy<Dictionary<string, WebhookGroupDefinition>> _lazyWebhookGroupDefinitions;
-
-        protected IDictionary<string, WebhookDefinition> WebhookDefinitions => _lazyWebhookDefinitions.Value;
-        private readonly Lazy<Dictionary<string, WebhookDefinition>> _lazyWebhookDefinitions;
-
         private readonly IServiceProvider _serviceProvider;
-        private readonly AbpWebhooksOptions _options;
+        private readonly IStaticWebhookDefinitionStore _staticStore;
+        private readonly IDynamicWebhookDefinitionStore _dynamicStore;
 
         public WebhookDefinitionManager(
             IServiceProvider serviceProvider,
-            IOptions<AbpWebhooksOptions> options)
+            IStaticWebhookDefinitionStore staticStore,
+            IDynamicWebhookDefinitionStore dynamicStore)
         {
             _serviceProvider = serviceProvider;
-            _options = options.Value;
-
-            _lazyWebhookGroupDefinitions = new Lazy<Dictionary<string, WebhookGroupDefinition>>(CreateWebhookGroupDefinitions);
-            _lazyWebhookDefinitions = new Lazy<Dictionary<string, WebhookDefinition>>(CreateWebhookDefinitions);
+            _staticStore = staticStore;
+            _dynamicStore = dynamicStore;
         }
 
-        public WebhookDefinition GetOrNull(string name)
+        public async virtual Task<WebhookDefinition> GetOrNullAsync(string name)
         {
-            if (!WebhookDefinitions.ContainsKey(name))
+            Check.NotNull(name, nameof(name));
+
+            return await _staticStore.GetOrNullAsync(name) ??
+                   await _dynamicStore.GetOrNullAsync(name);
+        }
+
+        public async virtual Task<WebhookDefinition> GetAsync(string name)
+        {
+            var webhook = await GetOrNullAsync(name);
+            if (webhook == null)
             {
-                return null;
+                throw new AbpException("Undefined webhook: " + name);
             }
 
-            return WebhookDefinitions[name];
+            return webhook;
         }
 
-        public WebhookDefinition Get(string name)
+        public async virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync()
         {
-            if (!WebhookDefinitions.ContainsKey(name))
-            {
-                throw new KeyNotFoundException($"Webhook definitions does not contain a definition with the key \"{name}\".");
-            }
+            var staticWebhooks = await _staticStore.GetWebhooksAsync();
+            var staticWebhookNames = staticWebhooks
+                .Select(p => p.Name)
+                .ToImmutableHashSet();
 
-            return WebhookDefinitions[name];
+            var dynamicWebhooks = await _dynamicStore.GetWebhooksAsync();
+
+            return staticWebhooks
+                .Concat(dynamicWebhooks.Where(d => !staticWebhookNames.Contains(d.Name)))
+                .ToImmutableList();
         }
 
-        public IReadOnlyList<WebhookDefinition> GetAll()
+        public async virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
         {
-            return WebhookDefinitions.Values.ToImmutableList();
-        }
+            var staticGroups = await _staticStore.GetGroupsAsync();
+            var staticGroupNames = staticGroups
+                .Select(p => p.Name)
+                .ToImmutableHashSet();
 
-        public IReadOnlyList<WebhookGroupDefinition> GetGroups()
-        {
-            return WebhookGroupDefinitions.Values.ToImmutableList();
+            var dynamicGroups = await _dynamicStore.GetGroupsAsync();
+
+            return staticGroups
+                .Concat(dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name)))
+                .ToImmutableList();
         }
 
         public async Task<bool> IsAvailableAsync(Guid? tenantId, string name)
@@ -71,7 +81,7 @@ namespace LINGYUN.Abp.Webhooks
                 return true;
             }
 
-            var webhookDefinition = GetOrNull(name);
+            var webhookDefinition = await GetOrNullAsync(name);
 
             if (webhookDefinition == null)
             {
@@ -94,46 +104,6 @@ namespace LINGYUN.Abp.Webhooks
             }
 
             return true;
-        }
-
-        protected virtual Dictionary<string, WebhookDefinition> CreateWebhookDefinitions()
-        {
-            var definitions = new Dictionary<string, WebhookDefinition>();
-
-            foreach (var groupDefinition in WebhookGroupDefinitions.Values)
-            {
-                foreach (var webhook in groupDefinition.Webhooks)
-                {
-                    if (definitions.ContainsKey(webhook.Name))
-                    {
-                        throw new AbpException("Duplicate webhook name: " + webhook.Name);
-                    }
-
-                    definitions[webhook.Name] = webhook;
-                }
-            }
-
-            return definitions;
-        }
-
-        protected virtual Dictionary<string, WebhookGroupDefinition> CreateWebhookGroupDefinitions()
-        {
-            var definitions = new Dictionary<string, WebhookGroupDefinition>();
-
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var providers = _options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as WebhookDefinitionProvider)
-                    .ToList();
-
-                foreach (var provider in providers)
-                {
-                    provider.Define(new WebhookDefinitionContext(definitions));
-                }
-            }
-
-            return definitions;
         }
     }
 }

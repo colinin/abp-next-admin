@@ -11,8 +11,7 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
     {
         var group = context.AddGroup(
             WebhooksManagementPermissions.GroupName, 
-            L("Permission:WebhooksManagement"), 
-            MultiTenancySides.Host);
+            L("Permission:WebhooksManagement"));
 
         var subscription = group.AddPermission(
             WebhooksManagementPermissions.WebhookSubscription.Default,
