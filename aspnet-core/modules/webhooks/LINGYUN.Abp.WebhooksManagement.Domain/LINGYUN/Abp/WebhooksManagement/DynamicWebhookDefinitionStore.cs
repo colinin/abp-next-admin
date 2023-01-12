@@ -22,7 +22,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
     protected IDynamicWebhookDefinitionStoreCache StoreCache { get; }
     protected IDistributedCache DistributedCache { get; }
     protected IAbpDistributedLock DistributedLock { get; }
-    public WebhookManagementOptions WebhookManagementOptions { get; }
+    protected WebhookManagementOptions WebhookManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
     public DynamicWebhookDefinitionStore(
@@ -90,7 +90,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
     protected virtual async Task EnsureCacheIsUptoDateAsync()
     {
         if (StoreCache.LastCheckTime.HasValue &&
-            DateTime.Now.Subtract(StoreCache.LastCheckTime.Value).TotalSeconds < 30)
+            DateTime.Now.Subtract(StoreCache.LastCheckTime.Value) < WebhookManagementOptions.WebhooksCacheRefreshInterval)
         {
             /* We get the latest webhook with a small delay for optimization */
             return;
@@ -129,7 +129,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         }
 
         await using (var commonLockHandle = await DistributedLock
-                         .TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(2)))
+            .TryAcquireAsync(GetCommonDistributedLockKey(), WebhookManagementOptions.WebhooksCacheStampTimeOut))
         {
             if (commonLockHandle == null)
             {
@@ -152,7 +152,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
                 stampInDistributedCache,
                 new DistributedCacheEntryOptions
                 {
-                    SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                    SlidingExpiration = WebhookManagementOptions.WebhooksCacheStampExpiration
                 }
             );
         }
