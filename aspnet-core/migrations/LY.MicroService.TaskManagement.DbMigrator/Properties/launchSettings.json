@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "LY.MicroService.TaskManagement.DbMigrator": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

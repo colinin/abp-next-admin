@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Notifications\DynamicNotificationDefinitionStore.cs~RF299208b7.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />

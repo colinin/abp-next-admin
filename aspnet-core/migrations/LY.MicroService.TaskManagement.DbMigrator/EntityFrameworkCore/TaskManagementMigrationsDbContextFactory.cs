@@ -1,21 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
-namespace LY.MicroService.WorkflowManagement.EntityFrameworkCore;
+namespace LY.MicroService.TaskManagement.DbMigrator.EntityFrameworkCore;
 
-public class WorkflowManagementMigrationsDbContextFactory : IDesignTimeDbContextFactory<WorkflowManagementMigrationsDbContext>
+public class TaskManagementMigrationsDbContextFactory : IDesignTimeDbContextFactory<TaskManagementMigrationsDbContext>
 {
-    public WorkflowManagementMigrationsDbContext CreateDbContext(string[] args)
+    public TaskManagementMigrationsDbContext CreateDbContext(string[] args)
     {
         var configuration = BuildConfiguration();
-        var connectionString = configuration.GetConnectionString("WorkflowManagement");
+        var connectionString = configuration.GetConnectionString("Default");
 
-        var builder = new DbContextOptionsBuilder<WorkflowManagementMigrationsDbContext>()
+        var builder = new DbContextOptionsBuilder<TaskManagementMigrationsDbContext>()
             .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-        return new WorkflowManagementMigrationsDbContext(builder.Options);
+        return new TaskManagementMigrationsDbContext(builder!.Options);
     }
 
     private static IConfigurationRoot BuildConfiguration()
