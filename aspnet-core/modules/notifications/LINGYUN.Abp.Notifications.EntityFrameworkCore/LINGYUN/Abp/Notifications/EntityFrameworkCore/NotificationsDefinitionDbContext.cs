@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 
+[IgnoreMultiTenancy]
 [ConnectionStringName(AbpNotificationsDbProperties.ConnectionStringName)]
 public class NotificationsDefinitionDbContext : AbpDbContext<NotificationsDefinitionDbContext>, INotificationsDefinitionDbContext
 {
