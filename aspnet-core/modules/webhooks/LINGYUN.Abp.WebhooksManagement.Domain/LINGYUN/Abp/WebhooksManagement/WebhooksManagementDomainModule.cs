@@ -77,6 +77,16 @@ public class WebhooksManagementDomainModule : AbpModule
                 WebhooksManagementModuleExtensionConsts.EntityNames.WebhookSendAttempt,
                 typeof(WebhookSendRecord)
             );
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                WebhooksManagementModuleExtensionConsts.ModuleName,
+                WebhooksManagementModuleExtensionConsts.EntityNames.WebhookGroupDefinition,
+                typeof(WebhookGroupDefinitionRecord)
+            );
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                WebhooksManagementModuleExtensionConsts.ModuleName,
+                WebhooksManagementModuleExtensionConsts.EntityNames.WebhookDefinition,
+                typeof(WebhookDefinitionRecord)
+            );
         });
     }
 
