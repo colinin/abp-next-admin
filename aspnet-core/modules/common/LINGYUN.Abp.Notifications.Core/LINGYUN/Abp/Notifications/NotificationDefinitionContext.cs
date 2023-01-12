@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.Notifications
         public NotificationGroupDefinition AddGroup(
             [NotNull] string name, 
             ILocalizableString displayName = null,
+            ILocalizableString description = null,
             bool allowSubscriptionToClients = true)
         {
             Check.NotNull(name, nameof(name));
@@ -26,7 +27,7 @@ namespace LINGYUN.Abp.Notifications
                 throw new AbpException($"There is already an existing notification group with name: {name}");
             }
 
-            return Groups[name] = new NotificationGroupDefinition(name, displayName, allowSubscriptionToClients);
+            return Groups[name] = new NotificationGroupDefinition(name, displayName, description, allowSubscriptionToClients);
         }
 
         public NotificationGroupDefinition GetGroupOrNull(string name)
