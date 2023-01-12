@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -59,11 +60,26 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
                  .HasDatabaseName("IX_Tenant_User_Notification_Name")
                  .IsUnique();
             });
+        }
+
+        public static void ConfigureNotificationsDefinition(
+           this ModelBuilder builder,
+           Action<AbpNotificationsModelBuilderConfigurationOptions> optionsAction = null)
+        {
+            Check.NotNull(builder, nameof(builder));
+
+            if (!builder.IsHostOnlyDatabase())
+            {
+                return;
+            }
+
+            var options = new AbpNotificationsModelBuilderConfigurationOptions();
+
+            optionsAction?.Invoke(options);
 
             builder.Entity<NotificationDefinitionGroupRecord>(b =>
             {
                 b.ToTable(options.TablePrefix + "NotificationDefinitionGroups", options.Schema);
-
                 b.Property(p => p.Name)
                  .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
                  .IsRequired();
@@ -79,7 +95,6 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
             builder.Entity<NotificationDefinitionRecord>(b =>
             {
                 b.ToTable(options.TablePrefix + "NotificationDefinitions", options.Schema);
-
                 b.Property(p => p.Name)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxNameLength)
                  .IsRequired();

@@ -175,24 +175,36 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             var tenantDbSet = dbContext.Set<Tenant>()
                 .IncludeDetails(includeDetails);
 
-            var queryable = tenantDbSet
+            tenantDbSet = tenantDbSet
                .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter))
                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting);
 
-            var combinedResult = await queryable
-                .Join(
-                    editionDbSet,
-                    o => o.EditionId,
-                    i => i.Id,
-                    (tenant, edition) => new { tenant, edition })
-                .Skip(skipCount)
-                .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+            var combinedResult = await (from tenant in tenantDbSet
+                             join edition in editionDbSet on tenant.EditionId equals edition.Id
+                             into eg from e in eg.DefaultIfEmpty()
+                             select new
+                             {
+                                 Tenant = tenant,
+                                 Edition = e,
+                             })
+                             .Skip(skipCount)
+                             .Take(maxResultCount)
+                             .ToListAsync(GetCancellationToken(cancellationToken));
+
+            //var combinedResult = await tenantDbSet
+            //    .Join(
+            //        editionDbSet,
+            //        o => o.EditionId,
+            //        i => i.Id,
+            //        (tenant, edition) => new { tenant, edition })
+            //    .Skip(skipCount)
+            //    .Take(maxResultCount)
+            //    .ToListAsync(GetCancellationToken(cancellationToken));
 
             return combinedResult.Select(s =>
             {
-                s.tenant.Edition = s.edition;
-                return s.tenant;
+                s.Tenant.Edition = s.Edition;
+                return s.Tenant;
             }).ToList();
         }
 

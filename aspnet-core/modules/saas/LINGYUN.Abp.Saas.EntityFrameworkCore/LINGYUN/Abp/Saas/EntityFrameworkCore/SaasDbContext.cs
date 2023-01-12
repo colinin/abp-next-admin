@@ -24,6 +24,8 @@ public class SaasDbContext : AbpDbContext<SaasDbContext>, ISaasDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.SetMultiTenancySide(MultiTenancySides.Host);
+
         base.OnModelCreating(builder);
 
         builder.ConfigureSaas();

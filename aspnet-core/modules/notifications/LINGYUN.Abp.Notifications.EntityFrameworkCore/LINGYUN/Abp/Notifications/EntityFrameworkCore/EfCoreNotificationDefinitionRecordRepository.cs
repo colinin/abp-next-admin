@@ -6,12 +6,12 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 
 public class EfCoreNotificationDefinitionRecordRepository :
-    EfCoreRepository<INotificationsDbContext, NotificationDefinitionRecord, Guid>,
+    EfCoreRepository<INotificationsDefinitionDbContext, NotificationDefinitionRecord, Guid>,
     INotificationDefinitionRecordRepository,
     ITransientDependency
 {
     public EfCoreNotificationDefinitionRecordRepository(
-        IDbContextProvider<INotificationsDbContext> dbContextProvider)
+        IDbContextProvider<INotificationsDefinitionDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }

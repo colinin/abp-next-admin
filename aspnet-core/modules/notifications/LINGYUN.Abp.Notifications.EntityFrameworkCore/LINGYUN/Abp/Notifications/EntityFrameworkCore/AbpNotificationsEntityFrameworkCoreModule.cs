@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
@@ -20,11 +19,17 @@ public class AbpNotificationsEntityFrameworkCoreModule : AbpModule
             options.AddDefaultRepositories<INotificationsDbContext>();
 
             options.AddRepository<Notification, EfCoreNotificationRepository>();
-            options.AddRepository<NotificationDefinitionRecord, EfCoreNotificationDefinitionRecordRepository>();
-            options.AddRepository<NotificationDefinitionGroupRecord, EfCoreNotificationDefinitionGroupRecordRepository>();
 
             options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
             options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
+        });
+
+        context.Services.AddAbpDbContext<NotificationsDefinitionDbContext>(options =>
+        {
+            options.AddDefaultRepositories<INotificationsDefinitionDbContext>();
+
+            options.AddRepository<NotificationDefinitionRecord, EfCoreNotificationDefinitionRecordRepository>();
+            options.AddRepository<NotificationDefinitionGroupRecord, EfCoreNotificationDefinitionGroupRecordRepository>();
         });
     }
 }

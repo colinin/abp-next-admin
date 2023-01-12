@@ -20,6 +20,7 @@ public class RealtimeMessageMigrationsDbContext : AbpDbContext<RealtimeMessageMi
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ConfigureNotifications();
+        modelBuilder.ConfigureNotificationsDefinition();
         modelBuilder.ConfigureMessageService();
     }
 }
