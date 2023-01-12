@@ -383,7 +383,7 @@ public partial class WorkflowManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            services.AddAlwaysAllowAuthorization();
+            // services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

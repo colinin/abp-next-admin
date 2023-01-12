@@ -280,6 +280,11 @@ public partial class AuthServerModule
         //            options.Audience = configuration["AuthServer:ApiName"];
         //        });
 
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
+
         if (!isDevelopment)
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);

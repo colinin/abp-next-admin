@@ -316,7 +316,7 @@ public partial class WebhooksManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            services.AddAlwaysAllowAuthorization();
+            // services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)
