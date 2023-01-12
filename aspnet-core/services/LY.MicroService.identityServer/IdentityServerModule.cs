@@ -98,6 +98,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureLocalization();
         ConfigureAuditing();
         ConfigureDataSeeder();

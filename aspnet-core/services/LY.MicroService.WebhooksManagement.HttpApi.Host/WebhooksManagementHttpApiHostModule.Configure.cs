@@ -4,6 +4,8 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Webhooks;
+using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -25,6 +28,7 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -292,6 +296,26 @@ public partial class WebhooksManagementHttpApiHostModule
                 });
                 options.OperationFilter<TenantHeaderParamter>();
             });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureWebhooks(IServiceCollection services)
+    {
+        Configure<WebhooksManagementOptions>(options =>
+        {
+            // 宿主应用中启用动态webhook
+            options.IsDynamicWebhookStoreEnabled = true;
+        });
+
+        // 宿主应用中使用默认发布者
+        services.Replace(ServiceDescriptor.Transient<IWebhookPublisher, DefaultWebhookPublisher>());
     }
 
     private void ConfigureLocalization()

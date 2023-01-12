@@ -96,6 +96,8 @@ public partial class BackendAdminHttpApiHostModule
         {
             options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = AbpSaasPermissions.Editions.ManageFeatures;
             options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = AbpSaasPermissions.Tenants.ManageFeatures;
+
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 

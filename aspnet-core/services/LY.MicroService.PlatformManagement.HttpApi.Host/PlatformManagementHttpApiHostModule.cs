@@ -109,6 +109,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureJsonSerializer();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);

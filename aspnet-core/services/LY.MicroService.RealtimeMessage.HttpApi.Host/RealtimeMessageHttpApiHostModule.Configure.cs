@@ -3,6 +3,7 @@ using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.MessageService.Localization;
+using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
@@ -26,6 +27,7 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -126,6 +128,14 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
     private void ConfigureJsonSerializer()
     {
         // 统一时间日期格式
@@ -214,6 +224,15 @@ public partial class RealtimeMessageHttpApiHostModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<RealtimeMessageHttpApiHostModule>("LY.MicroService.RealtimeMessage");
+        });
+    }
+
+    private void ConfigureNotifications()
+    {
+        Configure<AbpNotificationsManagementOptions>(options =>
+        {
+            // 宿主项目启用动态通知
+            options.IsDynamicNotificationsStoreEnabled = true;
         });
     }
 

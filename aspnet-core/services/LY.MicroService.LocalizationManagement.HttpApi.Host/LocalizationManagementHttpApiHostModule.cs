@@ -23,6 +23,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -40,6 +41,7 @@ namespace LY.MicroService.LocalizationManagement
         typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreMySQLModule),
         typeof(AbpSaasEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpDataDbMigratorModule),
@@ -75,6 +77,7 @@ namespace LY.MicroService.LocalizationManagement
             ConfigureJsonSerializer();
             ConfigreExceptionHandling();
             ConfigureVirtualFileSystem();
+            ConfigureFeatureManagement();
             ConfigureCaching(configuration);
             ConfigureAuditing(configuration);
             ConfigureSwagger(context.Services);

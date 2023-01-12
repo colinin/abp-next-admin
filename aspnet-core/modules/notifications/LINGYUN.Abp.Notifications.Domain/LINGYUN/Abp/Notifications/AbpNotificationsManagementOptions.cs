@@ -4,7 +4,13 @@ namespace LINGYUN.Abp.Notifications;
 
 public class AbpNotificationsManagementOptions
 {
+    /// <summary>
+    /// Default: true.
+    /// </summary>
     public bool SaveStaticNotificationsToDatabase { get; set; }
+    /// <summary>
+    /// Default: false.
+    /// </summary>
     public bool IsDynamicNotificationsStoreEnabled { get; set; }
     /// <summary>
     /// 缓存刷新时间
@@ -24,7 +30,6 @@ public class AbpNotificationsManagementOptions
     public AbpNotificationsManagementOptions()
     {
         SaveStaticNotificationsToDatabase = true;
-        IsDynamicNotificationsStoreEnabled = true;
 
         NotificationsCacheRefreshInterval = TimeSpan.FromSeconds(30);
         NotificationsCacheStampTimeOut = TimeSpan.FromMinutes(2);

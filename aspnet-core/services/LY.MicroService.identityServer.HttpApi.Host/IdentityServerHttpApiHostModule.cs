@@ -84,6 +84,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureJsonSerializer();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigurePermissionManagement();
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);

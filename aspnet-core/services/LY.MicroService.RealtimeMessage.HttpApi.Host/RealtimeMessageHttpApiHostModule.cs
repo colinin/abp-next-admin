@@ -121,10 +121,12 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
 
         ConfigureDbContext();
         ConfigureLocalization();
+        ConfigureNotifications();
         ConfigureJsonSerializer();
         ConfigureBackgroundTasks();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);

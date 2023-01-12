@@ -49,7 +49,7 @@ public class WebhooksManagementDomainModule : AbpModule
 
         if (context.Services.IsDataMigrationEnvironment())
         {
-            Configure<WebhookManagementOptions>(options =>
+            Configure<WebhooksManagementOptions>(options =>
             {
                 options.SaveStaticWebhooksToDatabase = false;
                 options.IsDynamicWebhookStoreEnabled = false;
@@ -111,7 +111,7 @@ public class WebhooksManagementDomainModule : AbpModule
     {
         var options = context
             .ServiceProvider
-            .GetRequiredService<IOptions<WebhookManagementOptions>>()
+            .GetRequiredService<IOptions<WebhooksManagementOptions>>()
             .Value;
 
         if (!options.SaveStaticWebhooksToDatabase && !options.IsDynamicWebhookStoreEnabled)
@@ -153,7 +153,7 @@ public class WebhooksManagementDomainModule : AbpModule
     }
 
     private async static Task SaveStaticWebhooksToDatabaseAsync(
-        WebhookManagementOptions options,
+        WebhooksManagementOptions options,
         IServiceScope scope,
         ICancellationTokenProvider cancellationTokenProvider)
     {
@@ -187,7 +187,7 @@ public class WebhooksManagementDomainModule : AbpModule
             }, cancellationTokenProvider.Token);
     }
 
-    private async static Task PreCacheDynamicWebhooksAsync(WebhookManagementOptions options, IServiceScope scope)
+    private async static Task PreCacheDynamicWebhooksAsync(WebhooksManagementOptions options, IServiceScope scope)
     {
         if (!options.IsDynamicWebhookStoreEnabled)
         {

@@ -1,18 +1,20 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
+using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.Dapr.Client.Wrapper;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Webhooks.EventBus;
 using LINGYUN.Abp.Webhooks.Identity;
 using LINGYUN.Abp.Webhooks.Saas;
 using LINGYUN.Abp.WebhooksManagement;
@@ -35,11 +37,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
-using LINGYUN.Abp.Http.Client.Wrapper;
-using LINGYUN.Abp.Dapr.Client.Wrapper;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using LINGYUN.Abp.Webhooks;
-using LINGYUN.Abp.Webhooks.EventBus;
 
 namespace LY.MicroService.WebhooksManagement;
 
@@ -103,17 +100,16 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureWebhooks(context.Services);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-        // 分布式事件发布者不在这个项目使用, 强制替换
-        context.Services.Replace(ServiceDescriptor.Transient<IWebhookPublisher, DefaultWebhookPublisher>());
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

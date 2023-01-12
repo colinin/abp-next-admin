@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace LINGYUN.Abp.WebhooksManagement;
-public class WebhookManagementOptions
+public class WebhooksManagementOptions
 {
     /// <summary>
     /// Default: true.
@@ -26,9 +26,8 @@ public class WebhookManagementOptions
     /// default: 30 minutes
     /// </summary>
     public TimeSpan WebhooksCacheStampExpiration { get; set; }
-    public WebhookManagementOptions()
+    public WebhooksManagementOptions()
     {
-        IsDynamicWebhookStoreEnabled = true;
         SaveStaticWebhooksToDatabase = true;
 
         WebhooksCacheRefreshInterval = TimeSpan.FromSeconds(30);

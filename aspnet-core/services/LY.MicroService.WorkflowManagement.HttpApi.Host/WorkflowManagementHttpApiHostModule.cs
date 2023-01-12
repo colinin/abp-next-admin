@@ -112,7 +112,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         context.Services.AddRazorPages();

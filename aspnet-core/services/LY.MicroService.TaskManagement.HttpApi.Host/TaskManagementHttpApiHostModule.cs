@@ -100,6 +100,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);

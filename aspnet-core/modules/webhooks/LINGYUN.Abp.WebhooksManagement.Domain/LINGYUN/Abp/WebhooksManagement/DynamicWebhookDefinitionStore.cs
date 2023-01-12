@@ -22,7 +22,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
     protected IDynamicWebhookDefinitionStoreCache StoreCache { get; }
     protected IDistributedCache DistributedCache { get; }
     protected IAbpDistributedLock DistributedLock { get; }
-    protected WebhookManagementOptions WebhookManagementOptions { get; }
+    protected WebhooksManagementOptions WebhookManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
     
     public DynamicWebhookDefinitionStore(
@@ -32,7 +32,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         IDynamicWebhookDefinitionStoreCache storeCache,
         IDistributedCache distributedCache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<WebhookManagementOptions> webhookManagementOptions,
+        IOptions<WebhooksManagementOptions> webhookManagementOptions,
         IAbpDistributedLock distributedLock)
     {
         WebhookGroupRepository = webhookGroupRepository;
