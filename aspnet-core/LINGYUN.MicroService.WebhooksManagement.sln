@@ -35,9 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Identi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Saas", "modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj", "{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Webhooks.EventBus", "modules\webhooks\LINGYUN.Abp.Webhooks.EventBus\LINGYUN.Abp.Webhooks.EventBus.csproj", "{46C08EF3-4C81-411E-B5E4-AC3A5040DC67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.EventBus", "modules\webhooks\LINGYUN.Abp.Webhooks.EventBus\LINGYUN.Abp.Webhooks.EventBus.csproj", "{46C08EF3-4C81-411E-B5E4-AC3A5040DC67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Webhooks.Core", "modules\webhooks\LINGYUN.Abp.Webhooks.Core\LINGYUN.Abp.Webhooks.Core.csproj", "{BBF1C93D-EF73-4B00-919F-5E7F360BDB03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Core", "modules\webhooks\LINGYUN.Abp.Webhooks.Core\LINGYUN.Abp.Webhooks.Core.csproj", "{BBF1C93D-EF73-4B00-919F-5E7F360BDB03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{2868332B-7D4F-4B43-8FC3-BA5CACC36C7E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.DbMigrator", "migrations\LY.MicroService.WebhooksManagement.DbMigrator\LY.MicroService.WebhooksManagement.DbMigrator.csproj", "{3BC77471-D273-4C9C-8985-7FE450DA4686}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,10 @@ Global
 		{BBF1C93D-EF73-4B00-919F-5E7F360BDB03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBF1C93D-EF73-4B00-919F-5E7F360BDB03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBF1C93D-EF73-4B00-919F-5E7F360BDB03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BC77471-D273-4C9C-8985-7FE450DA4686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BC77471-D273-4C9C-8985-7FE450DA4686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BC77471-D273-4C9C-8985-7FE450DA4686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BC77471-D273-4C9C-8985-7FE450DA4686}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +133,7 @@ Global
 		{D7F2B64C-02F2-4097-80C1-DC41CE8FEE38} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 		{46C08EF3-4C81-411E-B5E4-AC3A5040DC67} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 		{BBF1C93D-EF73-4B00-919F-5E7F360BDB03} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+		{3BC77471-D273-4C9C-8985-7FE450DA4686} = {2868332B-7D4F-4B43-8FC3-BA5CACC36C7E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80ED12A5-C899-459F-A181-ADCC9D680DE5}

@@ -2,9 +2,11 @@
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
+[IgnoreMultiTenancy]
 public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
     [System.Text.Json.Serialization.JsonIgnore]

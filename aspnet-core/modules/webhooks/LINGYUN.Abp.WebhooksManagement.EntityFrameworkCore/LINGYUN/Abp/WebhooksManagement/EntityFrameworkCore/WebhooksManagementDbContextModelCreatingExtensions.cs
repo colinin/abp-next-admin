@@ -19,6 +19,11 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
         );
         optionsAction?.Invoke(options);
 
+        if (builder.IsTenantOnlyDatabase())
+        {
+            return;
+        }
+
         builder.Entity<WebhookEventRecord>(b =>
         {
             b.ToTable(options.TablePrefix + "Events", options.Schema);

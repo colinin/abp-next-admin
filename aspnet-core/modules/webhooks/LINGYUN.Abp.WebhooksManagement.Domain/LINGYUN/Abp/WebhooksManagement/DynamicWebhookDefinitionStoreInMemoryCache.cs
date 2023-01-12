@@ -46,7 +46,7 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         WebhookGroupDefinitions.Clear();
         WebhookDefinitions.Clear();
         
-        var context = new WebhookDefinitionContext(null);
+        var context = new WebhookDefinitionContext(WebhookGroupDefinitions);
         
         foreach (var webhookGroupRecord in webhookGroupRecords)
         {
