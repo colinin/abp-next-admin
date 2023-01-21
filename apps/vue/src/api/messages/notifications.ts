@@ -8,11 +8,11 @@ import {
 import { format } from '/@/utils/strings';
 
 enum Api {
-  GetById = '/api/my-notifilers/{id}',
-  GetList = '/api/my-notifilers',
-  GetAssignableNotifiers = '/api/notifilers/assignables',
-  Read = '/api/my-notifilers/{id}/read',
-  MarkReadState = '/api/my-notifilers/mark-read-state',
+  GetById = '/api/notifications/my-notifilers/{id}',
+  GetList = '/api/notifications/my-notifilers',
+  GetAssignableNotifiers = '/api/notifications/notifilers/assignables',
+  Read = '/api/notifications/my-notifilers/{id}/read',
+  MarkReadState = '/api/notifications/my-notifilers/mark-read-state',
 }
 
 export const markReadState = (
