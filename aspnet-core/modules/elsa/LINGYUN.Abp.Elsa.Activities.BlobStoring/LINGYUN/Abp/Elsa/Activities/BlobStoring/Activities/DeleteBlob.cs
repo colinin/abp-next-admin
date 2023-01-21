@@ -13,15 +13,12 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
         Outcomes = new[] { OutcomeNames.Done })]
 public class DeleteBlob : BlobActivity
 {
-    [ActivityInput(Hint = "Path of the blob to be deleted.")]
-    public string? Path { get; set; }
-
     public DeleteBlob(IBlobContainer<ElsaBlobContainer> blobContainer)
         : base(blobContainer)
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         await BlobContainer.DeleteAsync(Path, context.CancellationToken);
 

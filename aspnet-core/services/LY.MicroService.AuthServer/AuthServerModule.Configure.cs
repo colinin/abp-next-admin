@@ -24,6 +24,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -172,6 +173,14 @@ public partial class AuthServerModule
 
     }
 
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
     private void ConfigureJsonSerializer()
     {
         // 统一时间日期格式
@@ -279,6 +288,11 @@ public partial class AuthServerModule
         //            options.RequireHttpsMetadata = false;
         //            options.Audience = configuration["AuthServer:ApiName"];
         //        });
+
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {

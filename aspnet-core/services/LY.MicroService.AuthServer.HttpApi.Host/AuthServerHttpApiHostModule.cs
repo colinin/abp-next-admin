@@ -24,6 +24,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -47,6 +48,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
@@ -82,6 +84,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigureJsonSerializer();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigurePermissionManagement();
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);

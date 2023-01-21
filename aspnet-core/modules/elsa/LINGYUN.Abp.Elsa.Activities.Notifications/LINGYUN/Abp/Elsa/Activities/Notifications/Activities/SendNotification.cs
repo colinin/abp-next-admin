@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Elsa.Activities.Notifications;
 
@@ -18,7 +19,7 @@ namespace LINGYUN.Abp.Elsa.Activities.Notifications;
     Category = "Notification", 
     Description = "Send an notification.",
     Outcomes = new[] { OutcomeNames.Done })]
-public class SendNotification : Activity
+public class SendNotification : AbpActivity
 {
     private readonly INotificationSender _notificationSender;
 
@@ -53,9 +54,9 @@ public class SendNotification : Activity
     }
 
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
-        var tenantId = context.GetTenantId();
+        var currentTenant = context.GetService<ICurrentTenant>();
         switch (NotificationData)
         {
             case NotificationData data:
@@ -63,7 +64,7 @@ public class SendNotification : Activity
                     NotificationName,
                     data,
                     GetUserIdentifiers(),
-                    tenantId,
+                    currentTenant.Id,
                     Severity);
                 return Done();
             case NotificationTemplate template:
@@ -71,7 +72,7 @@ public class SendNotification : Activity
                     NotificationName,
                     template,
                     GetUserIdentifiers(),
-                    tenantId,
+                    currentTenant.Id,
                     Severity);
                 return Done();
         }

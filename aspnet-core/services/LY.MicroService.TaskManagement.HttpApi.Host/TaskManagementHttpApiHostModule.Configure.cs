@@ -23,6 +23,7 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -111,6 +112,14 @@ public partial class TaskManagementHttpApiHostModule
         {
             options.JobCleanEnabled = true;
             options.JobFetchEnabled = true;
+        });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
@@ -265,8 +274,6 @@ public partial class TaskManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-            // 动态语言支持
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -294,7 +301,7 @@ public partial class TaskManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            services.AddAlwaysAllowAuthorization();
+            // services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

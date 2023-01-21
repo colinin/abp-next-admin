@@ -15,8 +15,7 @@ namespace LINGYUN.Abp.OpenIddict.Permissions
                 openIddictGroup = context
                     .AddGroup(
                         name: AbpOpenIddictPermissions.GroupName,
-                        displayName: L("Permissions:OpenIddict"),
-                        multiTenancySide: MultiTenancySides.Host);
+                        displayName: L("Permissions:OpenIddict"));
             }
 
             var applications = openIddictGroup.AddPermission(

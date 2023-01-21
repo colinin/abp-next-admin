@@ -1320,7 +1320,7 @@
       "Key": "my-subscribes"
     },
     {
-      "DownstreamPathTemplate": "/api/notifilers/{everything}",
+      "DownstreamPathTemplate": "/api/notifications/notifilers/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1328,7 +1328,7 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/notifilers/{everything}",
+      "UpstreamPathTemplate": "/api/notifications/notifilers/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST"
@@ -1353,7 +1353,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/my-notifilers",
+      "DownstreamPathTemplate": "/api/notifications/my-notifilers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1361,7 +1361,7 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-notifilers",
+      "UpstreamPathTemplate": "/api/notifications/my-notifilers",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
@@ -1383,7 +1383,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/my-notifilers/{id}",
+      "DownstreamPathTemplate": "/api/notifications/my-notifilers/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1391,7 +1391,7 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-notifilers/{id}",
+      "UpstreamPathTemplate": "/api/notifications/my-notifilers/{id}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",

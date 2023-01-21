@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:Notification": "Notification",
+    "Permission:Delete": "Delete",
+    "LINGYUN.Abp.Notifications:01404": "The notification template does not exist!"
+  }
+}

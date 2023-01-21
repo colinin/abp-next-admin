@@ -96,6 +96,8 @@ public partial class BackendAdminHttpApiHostModule
         {
             options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = AbpSaasPermissions.Editions.ManageFeatures;
             options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = AbpSaasPermissions.Tenants.ManageFeatures;
+
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
@@ -269,8 +271,6 @@ public partial class BackendAdminHttpApiHostModule
                 .AddLanguagesMapOrUpdate(
                     "vben-admin-ui",
                     new NameValue("zh_CN", "zh-Hans"));
-
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

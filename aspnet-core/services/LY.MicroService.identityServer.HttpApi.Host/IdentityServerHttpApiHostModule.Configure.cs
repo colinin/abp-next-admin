@@ -23,6 +23,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
@@ -108,6 +109,14 @@ public partial class IdentityServerHttpApiHostModule
         Configure<AbpSystemTextJsonSerializerOptions>(options =>
         {
             options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+        });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
@@ -263,8 +272,6 @@ public partial class IdentityServerHttpApiHostModule
             options.Resources
                    .Get<IdentityResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.Resources.AddDynamic(typeof(IdentityResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -313,6 +320,11 @@ public partial class IdentityServerHttpApiHostModule
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
             });
+
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {

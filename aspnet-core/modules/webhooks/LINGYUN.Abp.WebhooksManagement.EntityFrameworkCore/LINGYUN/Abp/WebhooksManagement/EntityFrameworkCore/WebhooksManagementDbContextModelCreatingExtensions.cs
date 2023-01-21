@@ -19,6 +19,11 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
         );
         optionsAction?.Invoke(options);
 
+        if (builder.IsTenantOnlyDatabase())
+        {
+            return;
+        }
+
         builder.Entity<WebhookEventRecord>(b =>
         {
             b.ToTable(options.TablePrefix + "Events", options.Schema);
@@ -80,5 +85,39 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
         });
+
+        builder.Entity<WebhookGroupDefinitionRecord>(b =>
+        {
+            b.ToTable(options.TablePrefix + "WebhookGroups", options.Schema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name).HasMaxLength(WebhookGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.DisplayName).HasMaxLength(WebhookGroupDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+
+            b.HasIndex(x => new { x.Name }).IsUnique();
+
+            b.ApplyObjectExtensionMappings();
+        });
+
+        builder.Entity<WebhookDefinitionRecord>(b =>
+        {
+            b.ToTable(options.TablePrefix + "Webhooks", options.Schema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.GroupName).HasMaxLength(WebhookGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.Name).HasMaxLength(WebhookDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.DisplayName).HasMaxLength(WebhookDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+            b.Property(x => x.Description).HasMaxLength(WebhookDefinitionRecordConsts.MaxDescriptionLength);
+            b.Property(x => x.RequiredFeatures).HasMaxLength(WebhookDefinitionRecordConsts.MaxRequiredFeaturesLength);
+
+            b.HasIndex(x => new { x.Name }).IsUnique();
+            b.HasIndex(x => new { x.GroupName });
+
+            b.ApplyObjectExtensionMappings();
+        });
+
+        builder.TryConfigureObjectExtensions<WebhooksManagementDbContext>();
     }
 }

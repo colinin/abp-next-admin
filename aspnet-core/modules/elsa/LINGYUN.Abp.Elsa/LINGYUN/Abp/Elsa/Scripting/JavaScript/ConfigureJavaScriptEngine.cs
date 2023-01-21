@@ -129,7 +129,7 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
                 {
                     if (string.Equals(resourceName, resource.ResourceName, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        localizer = _localizerFactory.Create(resource.ResourceType);
+                        localizer = _localizerFactory.CreateByResourceNameOrNullAsync(resource.ResourceName).GetAwaiter().GetResult();
                         break;
                     }
                 }

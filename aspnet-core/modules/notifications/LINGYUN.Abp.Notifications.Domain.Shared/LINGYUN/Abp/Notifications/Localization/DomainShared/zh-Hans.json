@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:Notification": "通知管理",
+    "Permission:Delete": "删除",
+    "LINGYUN.Abp.Notifications:01404": "通知模板不存在!"
+  }
+}

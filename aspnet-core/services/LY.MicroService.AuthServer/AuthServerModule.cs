@@ -97,6 +97,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
         ConfigureLocalization();
         ConfigureDataSeeder();
         ConfigureUrls(configuration);

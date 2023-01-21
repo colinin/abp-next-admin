@@ -3,7 +3,7 @@ using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MessageService.Mapper;
 using LINGYUN.Abp.MessageService.ObjectExtending;
-using LINGYUN.Abp.Notifications.Localization;
+using LINGYUN.Abp.Notifications;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Localization;
@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.MessageService
     [DependsOn(
         typeof(AbpAutoMapperModule),
         typeof(AbpCachingModule),
+        typeof(AbpNotificationsModule),
         typeof(AbpMessageServiceDomainSharedModule))]
     public class AbpMessageServiceDomainModule : AbpModule
     {
@@ -29,7 +30,7 @@ namespace LINGYUN.Abp.MessageService
             {
                 options.Resources
                     .Get<MessageServiceResource>()
-                    .AddBaseTypes(typeof(NotificationsResource), typeof(AbpIMResource));
+                    .AddBaseTypes(typeof(AbpIMResource));
             });
         }
 

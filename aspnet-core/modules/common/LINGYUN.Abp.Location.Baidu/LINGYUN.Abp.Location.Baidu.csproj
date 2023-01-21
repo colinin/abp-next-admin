@@ -10,19 +10,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINGYUN\Abp\Location\Baidu\Localization\Resources\en.json" />
-		<None Remove="LINGYUN\Abp\Location\Baidu\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINGYUN\Abp\Location\Baidu\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\Location\Baidu\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINGYUN\Abp\Location\Baidu\Localization\Resources\zh-Hans.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Location\Baidu\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Json.Newtonsoft" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 

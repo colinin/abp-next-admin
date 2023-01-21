@@ -13,9 +13,6 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
         Outcomes = new[] { OutcomeNames.Done })]
 public class ReadBlob : BlobActivity
 {
-    [ActivityInput(Hint = "Path of the blob.")]
-    public string? Path { get; set; }
-
     [ActivityOutput]
     public byte[]? Output { get; set; }
 
@@ -24,7 +21,7 @@ public class ReadBlob : BlobActivity
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         Output = await BlobContainer.GetAllBytesAsync(Path, context.CancellationToken);
 

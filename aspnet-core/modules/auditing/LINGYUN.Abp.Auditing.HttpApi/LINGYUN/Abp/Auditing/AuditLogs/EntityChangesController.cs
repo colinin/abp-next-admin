@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LINGYUN.Abp.Auditing.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -11,6 +13,7 @@ namespace LINGYUN.Abp.Auditing.AuditLogs;
 [Area("auditing")]
 [ControllerName("entity-changes")]
 [Route("api/auditing/entity-changes")]
+[Authorize(AuditingPermissionNames.AuditLog.Default)]
 public class EntityChangesController : AbpControllerBase, IEntityChangesAppService
 {
     protected IEntityChangesAppService EntityChangeAppService { get; }

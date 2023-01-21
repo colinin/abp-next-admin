@@ -1,70 +1,75 @@
-﻿using LINGYUN.Abp.Localization.Dynamic;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
-    [Dependency(ServiceLifetime.Singleton, ReplaceServices = true)]
+    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
     [ExposeServices(
-        typeof(ILocalizationStore),
+        typeof(IExternalLocalizationStore),
         typeof(LocalizationStore))]
-    public class LocalizationStore : ILocalizationStore
+    public class LocalizationStore : IExternalLocalizationStore
     {
-        protected ILanguageRepository LanguageRepository { get; }
-        protected ITextRepository TextRepository { get; }
-        protected IResourceRepository ResourceRepository { get; }
+        protected IServiceProvider ServiceProvider { get; }
+        protected ILocalizationStoreCache LocalizationStoreCache { get; }
 
         public LocalizationStore(
-            ILanguageRepository languageRepository,
-            ITextRepository textRepository,
-            IResourceRepository resourceRepository)
+            IServiceProvider serviceProvider,
+            ILocalizationStoreCache localizationStoreCache)
         {
-            TextRepository = textRepository;
-            LanguageRepository = languageRepository;
-            ResourceRepository = resourceRepository;
+            ServiceProvider = serviceProvider;
+            LocalizationStoreCache = localizationStoreCache;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<List<LanguageInfo>> GetLanguageListAsync(
             CancellationToken cancellationToken = default)
         {
-            var languages = await LanguageRepository.GetActivedListAsync(cancellationToken);
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
 
-            return languages
-                .Select(x => new LanguageInfo(x.CultureName, x.UiCultureName, x.DisplayName, x.FlagIcon))
-                .ToList();
+            return LocalizationStoreCache.GetLanguages().ToList();
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<Dictionary<string, ILocalizationDictionary>> GetLocalizationDictionaryAsync(
             string resourceName,
             CancellationToken cancellationToken = default)
         {
-            // TODO: 引用缓存?
             var dictionaries = new Dictionary<string, ILocalizationDictionary>();
-            var resource = await ResourceRepository.FindByNameAsync(resourceName, cancellationToken);
-            if (resource == null || !resource.Enable)
+
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            var resource = LocalizationStoreCache.GetResourceOrNull(resourceName);
+            
+            if (resource == null)
             {
                 // 资源不存在或未启用返回空
                 return dictionaries;
             }
 
-            var texts = await TextRepository.GetListAsync(resourceName, null, cancellationToken);
+            var texts = LocalizationStoreCache.GetAllLocalizedStrings(CultureInfo.CurrentCulture.Name);
 
-            foreach (var textGroup in texts.GroupBy(x => x.CultureName))
+            foreach (var textGroup in texts)
             {
                 var cultureTextDictionaires = new Dictionary<string, LocalizedString>();
-                foreach (var text in textGroup)
+
+                foreach (var text in textGroup.Value)
                 {
                     // 本地化名称去重
                     if (!cultureTextDictionaires.ContainsKey(text.Key))
                     {
-                        cultureTextDictionaires[text.Key] = new LocalizedString(text.Key, text.Value.NormalizeLineEndings());
+                        cultureTextDictionaires[text.Key] = new LocalizedString(text.Key, text.Value.Value.NormalizeLineEndings());
                     }
                 }
 
@@ -78,30 +83,32 @@ namespace LINGYUN.Abp.LocalizationManagement
             return dictionaries;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<Dictionary<string, Dictionary<string, ILocalizationDictionary>>> GetAllLocalizationDictionaryAsync(CancellationToken cancellationToken = default)
         {
             var result = new Dictionary<string, Dictionary<string, ILocalizationDictionary>>();
-            var textList = await TextRepository.GetListAsync(resourceName: null, cancellationToken: cancellationToken);
 
-            foreach (var resourcesGroup in textList.GroupBy(x => x.ResourceName))
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            var textList = LocalizationStoreCache.GetAllLocalizedStrings(CultureInfo.CurrentCulture.Name);
+
+            foreach (var resourcesGroup in textList)
             {
                 var dictionaries = new Dictionary<string, ILocalizationDictionary>();
-                foreach (var textGroup in resourcesGroup.GroupBy(x => x.CultureName))
+                foreach (var text in resourcesGroup.Value)
                 {
                     var cultureTextDictionaires = new Dictionary<string, LocalizedString>();
-                    foreach (var text in textGroup)
+                    // 本地化名称去重
+                    if (!cultureTextDictionaires.ContainsKey(text.Key))
                     {
-                        // 本地化名称去重
-                        if (!cultureTextDictionaires.ContainsKey(text.Key))
-                        {
-                            cultureTextDictionaires[text.Key] = new LocalizedString(text.Key, text.Value.NormalizeLineEndings());
-                        }
+                        cultureTextDictionaires[text.Key] = new LocalizedString(text.Key, text.Value.Value.NormalizeLineEndings());
                     }
 
                     // 本地化语言去重
-                    if (!dictionaries.ContainsKey(textGroup.Key))
+                    if (!dictionaries.ContainsKey(text.Key))
                     {
-                        dictionaries[textGroup.Key] = new StaticLocalizationDictionary(textGroup.Key, cultureTextDictionaires);
+                        dictionaries[text.Key] = new StaticLocalizationDictionary(text.Key, cultureTextDictionaires);
                     }
                 }
 
@@ -111,9 +118,44 @@ namespace LINGYUN.Abp.LocalizationManagement
             return result;
         }
 
+        [Obsolete("The framework already supports dynamic languages and will be deprecated in the next release")]
         public async virtual Task<bool> ResourceExistsAsync(string resourceName, CancellationToken cancellationToken = default)
         {
-            return await ResourceRepository.ExistsAsync(resourceName, cancellationToken);
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            return LocalizationStoreCache.GetResourceOrNull(resourceName) != null;
+        }
+
+        public LocalizationResourceBase GetResourceOrNull(string resourceName)
+        {
+            return AsyncHelper.RunSync(async () => await GetResourceOrNullAsync(resourceName));
+        }
+
+        public async virtual Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+        {
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            return LocalizationStoreCache.GetResourceOrNull(resourceName);
+        }
+
+        public async virtual Task<string[]> GetResourceNamesAsync()
+        {
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            return LocalizationStoreCache.GetResources()
+                .Select(x => x.ResourceName)
+                .ToArray();
+        }
+
+        public async virtual Task<LocalizationResourceBase[]> GetResourcesAsync()
+        {
+            var context = new LocalizationStoreCacheInitializeContext(ServiceProvider);
+            await LocalizationStoreCache.InitializeAsync(context);
+
+            return LocalizationStoreCache.GetResources().ToArray();
         }
     }
 }

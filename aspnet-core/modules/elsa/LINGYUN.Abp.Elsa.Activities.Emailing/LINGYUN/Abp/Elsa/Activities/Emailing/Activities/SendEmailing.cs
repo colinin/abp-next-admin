@@ -25,7 +25,7 @@ namespace LINGYUN.Abp.Elsa.Activities.Emailing;
     Category = "Emailing", 
     Description = "Send an email message.",
     Outcomes = new[] { OutcomeNames.Done })]
-public class SendEmailing : Activity
+public class SendEmailing : AbpActivity
 {
     private readonly IEmailSender _emailSender;
     private readonly ITemplateRenderer _templateRenderer;
@@ -61,7 +61,7 @@ public class SendEmailing : Activity
         )]
     public object? Model { get; set; }
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
     {
         var to = To.JoinAsString(";");
         var content = Body;

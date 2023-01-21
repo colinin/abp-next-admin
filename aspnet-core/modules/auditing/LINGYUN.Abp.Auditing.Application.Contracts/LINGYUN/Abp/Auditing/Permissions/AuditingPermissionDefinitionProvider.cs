@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.AuditLogging.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Auditing.Permissions
 {
@@ -18,6 +19,11 @@ namespace LINGYUN.Abp.Auditing.Permissions
             auditLogPermission.AddChild(
                 name: AuditingPermissionNames.AuditLog.Delete,
                 displayName: L("Permissions:DeleteLog"));
+
+            var sysLogPermission = auditingGroup.AddPermission(
+                name: AuditingPermissionNames.SystemLog.Default,
+                displayName: L("Permissions:SystemLog"),
+                multiTenancySide: MultiTenancySides.Host);
 
             var securityLogPermission = auditingGroup.AddPermission(
                 name: AuditingPermissionNames.SecurityLog.Default,

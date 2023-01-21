@@ -14,5 +14,10 @@
             public const string Default = GroupName + ".SecurityLog";
             public const string Delete = Default + ".Delete";
         }
+
+        public class SystemLog
+        {
+            public const string Default = GroupName + ".SystemLog";
+        }
     }
 }

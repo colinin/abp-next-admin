@@ -2,7 +2,6 @@
   "culture": "zh-Hans",
   "texts": {
     "Permission:MessageService": "消息服务",
-    "Permission:Notification": "通知管理",
     "Permission:Delete": "删除",
     "Permission:Hangfire": "Hangfire",
     "Permission:Dashboard": "仪表板",

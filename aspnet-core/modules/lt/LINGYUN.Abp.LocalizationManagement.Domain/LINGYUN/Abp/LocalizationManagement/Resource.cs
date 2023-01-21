@@ -11,16 +11,19 @@ namespace LINGYUN.Abp.LocalizationManagement
         public virtual string Name { get; set; }
         public virtual string DisplayName { get; set; }
         public virtual string Description { get; set; }
+        public virtual string DefaultCultureName { get; set; }
         protected Resource() { }
         public Resource(
             [NotNull] string name,
             [CanBeNull] string displayName = null,
-            [CanBeNull] string description = null)
+            [CanBeNull] string description = null,
+            [CanBeNull] string defaultCultureName = null)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), ResourceConsts.MaxNameLength);
 
-            DisplayName = displayName ?? Name;
-            Description = description;
+            DisplayName = Check.Length(displayName ?? Name, nameof(displayName), ResourceConsts.MaxDisplayNameLength);;
+            Description = Check.Length(description, nameof(description), ResourceConsts.MaxDescriptionLength);
+            DefaultCultureName = Check.Length(defaultCultureName, nameof(defaultCultureName), ResourceConsts.MaxDefaultCultureNameLength);
 
             Enable = true;
         }

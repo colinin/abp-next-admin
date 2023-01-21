@@ -5,7 +5,7 @@
       {
         "service": "Backend-Admin",
         "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
-        "depPath": "/../aspnet-core/LocalNuget/net6.0/",
+        "depPath": "/../aspnet-core/LocalNuget/net7.0/",
         "dependencies": [
           "LINGYUN.Abp.Aliyun.SettingManagement.dll",
           "LINGYUN.Abp.Sms.Aliyun.dll",
@@ -32,7 +32,7 @@
       {
         "service": "Backend-Admin",
         "path": "/../aspnet-core/services/LY.MicroService.BackendAdmin.HttpApi.Host/Modules/",
-        "depPath": "/../aspnet-core/services/LY.MicroService.IdentityServer.HttpApi.Host/bin/Debug/net6.0",
+        "depPath": "/../aspnet-core/services/LY.MicroService.IdentityServer.HttpApi.Host/bin/Debug/net7.0",
         "dependencies": [
           "LINGYUN.Abp.Account.Application.Contracts.dll",
           "Volo.Abp.Account.Application.Contracts.dll",
@@ -43,7 +43,8 @@
           "Volo.Abp.Users.Domain.Shared.dll",
           "Volo.Abp.Users.Abstractions.dll",
           "LINGYUN.Abp.IdentityServer.Application.Contracts.dll",
-          "Volo.Abp.IdentityServer.Domain.Shared.dll"
+          "Volo.Abp.IdentityServer.Domain.Shared.dll",
+          "Volo.Abp.Json.Newtonsoft.dll"
         ]
       }
     ]
@@ -62,8 +63,11 @@
           "LINGYUN.Abp.WorkflowManagement.Application.Contracts.dll",
           "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll",
           "LINGYUN.Abp.BackgroundTasks.Abstractions.dll",
+          "LINGYUN.Linq.Dynamic.Queryable.dll",
+          "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.dll",
           "LINGYUN.Abp.TaskManagement.Application.Contracts.dll",
           "LINGYUN.Abp.TaskManagement.Domain.Shared.dll",
+          "LINGYUN.Abp.Notifications.Core.dll",
           "LINGYUN.Abp.Notifications.Common.dll",
           "LINGYUN.Abp.Notifications.dll"
         ]

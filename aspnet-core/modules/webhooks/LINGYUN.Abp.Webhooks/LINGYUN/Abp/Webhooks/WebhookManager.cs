@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Http;
 
 namespace LINGYUN.Abp.Webhooks
@@ -43,15 +44,8 @@ namespace LINGYUN.Abp.Webhooks
 
         public virtual void SignWebhookRequest(HttpRequestMessage request, string serializedBody, string secret)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (string.IsNullOrWhiteSpace(serializedBody))
-            {
-                throw new ArgumentNullException(nameof(serializedBody));
-            }
+            Check.NotNull(request, nameof(request));
+            Check.NotNullOrWhiteSpace(serializedBody, nameof(serializedBody));
 
             request.Content = new StringContent(serializedBody, Encoding.UTF8, MimeTypes.Application.Json);
 

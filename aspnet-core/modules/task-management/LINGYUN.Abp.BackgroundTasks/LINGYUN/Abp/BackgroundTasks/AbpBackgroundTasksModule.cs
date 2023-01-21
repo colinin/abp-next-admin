@@ -6,6 +6,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Guids;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -17,6 +18,7 @@ namespace LINGYUN.Abp.BackgroundTasks;
 [DependsOn(typeof(AbpBackgroundJobsAbstractionsModule))]
 [DependsOn(typeof(AbpBackgroundWorkersModule))]
 [DependsOn(typeof(AbpGuidsModule))]
+[DependsOn(typeof(AbpJsonModule))]
 public class AbpBackgroundTasksModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

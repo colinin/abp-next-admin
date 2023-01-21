@@ -1,10 +1,16 @@
-﻿using LINGYUN.Abp.Logging;
+﻿using LINGYUN.Abp.Auditing.Features;
+using LINGYUN.Abp.Auditing.Permissions;
+using LINGYUN.Abp.Logging;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.Auditing.Logging
 {
+    [Authorize(AuditingPermissionNames.SystemLog.Default)]
+    [RequiresFeature(AuditingFeatureNames.Logging.SystemLog)]
     public class LogAppService : AuditingApplicationServiceBase, ILogAppService
     {
         private readonly ILoggingManager _manager;

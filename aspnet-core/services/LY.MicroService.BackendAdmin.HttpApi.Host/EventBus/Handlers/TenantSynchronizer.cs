@@ -115,7 +115,7 @@ public class TenantSynchronizer :
                 Logger.LogInformation("Migrated the new tenant database with platform.");
 
                 Logger.LogInformation("Seeding the new tenant admin role permissions...");
-                var definitionPermissions = PermissionDefinitionManager.GetPermissions();
+                var definitionPermissions = await PermissionDefinitionManager.GetPermissionsAsync();
                 var grantPermissions = definitionPermissions
                     .Where(p => p.MultiTenancySide.HasFlag(MultiTenancySides.Tenant))
                     .Select(p => p.Name).ToArray();

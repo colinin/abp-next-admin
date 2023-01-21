@@ -72,7 +72,7 @@ public class LinkUserTokenController : AbpOpenIdDictControllerBase, ITokenExtens
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var principal = notification.Principal;
+        var principal = notification.AccessTokenPrincipal;
         if (principal == null)
         {
             return Forbid(

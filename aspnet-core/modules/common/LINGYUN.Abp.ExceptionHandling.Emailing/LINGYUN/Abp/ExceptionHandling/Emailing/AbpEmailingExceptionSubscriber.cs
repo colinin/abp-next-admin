@@ -1,11 +1,11 @@
-﻿using LINGYUN.Abp.ExceptionHandling.Emailing.Localization;
-using LINGYUN.Abp.ExceptionHandling.Emailing.Templates;
+﻿using LINGYUN.Abp.ExceptionHandling.Emailing.Templates;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Emailing;
+using Volo.Abp.ExceptionHandling.Localization;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.ExceptionHandling.Emailing
@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.ExceptionHandling.Emailing
             IServiceScopeFactory serviceScopeFactory, 
             IOptions<AbpExceptionHandlingOptions> options,
             IOptions<AbpEmailExceptionHandlingOptions> emailOptions,
-            IStringLocalizer<ExceptionHandlingResource> stringLocalizer) 
+            IStringLocalizer<AbpExceptionHandlingResource> stringLocalizer) 
             : base(serviceScopeFactory, options)
         {
             EmailSender = emailSender;

@@ -9,5 +9,7 @@ public static class WebhooksManagementModuleExtensionConsts
         public const string WebhookEvent = "WebhookEvent";
         public const string WebhookSendAttempt = "WebhookSendAttempt";
         public const string WebhookSubscription = "WebhookSubscription";
+        public const string WebhookGroupDefinition = "WebhookGroupDefinition";
+        public const string WebhookDefinition = "WebhookDefinition";
     }
 }

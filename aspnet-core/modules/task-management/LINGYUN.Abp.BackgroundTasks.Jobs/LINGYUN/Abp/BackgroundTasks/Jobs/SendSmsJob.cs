@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Json;
 using Volo.Abp.Sms;
 
 namespace LINGYUN.Abp.BackgroundTasks.Jobs;
@@ -36,7 +36,8 @@ public class SendSmsJob : IJobRunnable
 
             try
             {
-                properties = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+                var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
+                properties = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
             }
             catch { }
 

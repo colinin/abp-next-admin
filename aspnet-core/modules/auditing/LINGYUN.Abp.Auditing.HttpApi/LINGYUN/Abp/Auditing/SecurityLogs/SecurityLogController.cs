@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LINGYUN.Abp.Auditing.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -11,6 +13,7 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
     [Area("auditing")]
     [ControllerName("security-log")]
     [Route("api/auditing/security-log")]
+    [Authorize(AuditingPermissionNames.SecurityLog.Default)]
     public class SecurityLogController : AbpController, ISecurityLogAppService
     {
         protected ISecurityLogAppService SecurityLogAppService { get; }
@@ -22,6 +25,7 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(AuditingPermissionNames.SecurityLog.Delete)]
         public async virtual Task DeleteAsync(Guid id)
         {
             await SecurityLogAppService.DeleteAsync(id);

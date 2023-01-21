@@ -1,9 +1,11 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
+[IgnoreMultiTenancy]
 public class WebhookSubscription : CreationAuditedEntity<Guid>
 {
     public virtual Guid? TenantId { get; protected set; }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System;
-using Volo.Abp.Json;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Location.Tencent
 {
     [DependsOn(
         typeof(AbpLocationModule),
-        typeof(AbpJsonModule),
+        typeof(AbpJsonNewtonsoftModule),
         typeof(AbpThreadingModule))]
     public class AbpTencentLocationModule : AbpModule
     {

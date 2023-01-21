@@ -109,7 +109,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
 
     public async virtual Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync()
     {
-        var groups = WebhookDefinitionManager.GetGroups();
+        var groups = await WebhookDefinitionManager.GetGroupsAsync();
         var definitions = new List<WebhookAvailableGroupDto>();
 
         foreach (var groupDefinition in groups)

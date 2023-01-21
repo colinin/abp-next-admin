@@ -20,8 +20,7 @@ namespace LINGYUN.Abp.IdentityServer
                 identityServerGroup = context
                     .AddGroup(
                         name: AbpIdentityServerPermissions.GroupName,
-                        displayName: L("Permissions:IdentityServer"),
-                        multiTenancySide: MultiTenancySides.Host);
+                        displayName: L("Permissions:IdentityServer"));
             }
             // 客户端权限
             var clientPermissions = identityServerGroup.AddPermission(AbpIdentityServerPermissions.Clients.Default, L("Permissions:Clients"), MultiTenancySides.Host);

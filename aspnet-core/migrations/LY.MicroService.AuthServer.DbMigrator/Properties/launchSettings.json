@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "LY.MicroService.AuthServer.DbMigrator": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,19 +1,17 @@
-﻿using LINGYUN.Abp.Localization.Dynamic;
-using LINGYUN.Abp.LocalizationManagement.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Domain.Entities.Events.Distributed;
-using Microsoft.Extensions.DependencyInjection;
+using LINGYUN.Abp.Localization.Persistence;
+using LINGYUN.Abp.LocalizationManagement.Localization;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
     [DependsOn(
         typeof(AbpAutoMapperModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpLocalizationDynamicModule),
+        typeof(AbpLocalizationPersistenceModule),
         typeof(AbpLocalizationManagementDomainSharedModule))]
     public class AbpLocalizationManagementDomainModule : AbpModule
     {
@@ -21,16 +19,19 @@ namespace LINGYUN.Abp.LocalizationManagement
         {
             context.Services.AddAutoMapperObjectMapper<AbpLocalizationManagementDomainModule>();
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<LocalizationManagementResource>()
-                    .AddDynamic();
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<LocalizationManagementDomainMapperProfile>(validate: true);
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.GlobalContributors.Add<LocalizationManagementExternalContributor>();
+            });
+
+            Configure<AbpLocalizationPersistenceOptions>(options =>
+            {
+                options.AddPersistenceResource<LocalizationManagementResource>();
             });
 
             // 分布式事件

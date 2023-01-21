@@ -11,10 +11,8 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -348,8 +346,6 @@ public partial class WorkflowManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-            // 动态语言支持
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -387,7 +383,7 @@ public partial class WorkflowManagementHttpApiHostModule
 
         if (isDevelopment)
         {
-            services.AddAlwaysAllowAuthorization();
+            // services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

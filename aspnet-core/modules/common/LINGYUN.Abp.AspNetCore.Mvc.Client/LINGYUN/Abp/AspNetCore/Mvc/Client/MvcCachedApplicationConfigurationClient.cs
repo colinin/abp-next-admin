@@ -24,20 +24,20 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Client
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
         protected ICurrentUser CurrentUser { get; }
         protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
-        protected AbpAspNetCoreMvcClientCacheOptions Options { get; }
+        protected AbpAspNetCoreMvcClientCacheOptions MvcClientCacheOptions { get; }
 
         public MvcCachedApplicationConfigurationClient(
             IDistributedCache<ApplicationConfigurationDto> cache,
             IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
             ICurrentUser currentUser,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<AbpAspNetCoreMvcClientCacheOptions> options)
+            IOptions<AbpAspNetCoreMvcClientCacheOptions> mvcClientCacheOptions)
         {
             Proxy = proxy;
             CurrentUser = currentUser;
             HttpContextAccessor = httpContextAccessor;
             Cache = cache;
-            Options = options.Value;
+            MvcClientCacheOptions = mvcClientCacheOptions.Value;
         }
 
         public async Task<ApplicationConfigurationDto> GetAsync()
@@ -52,12 +52,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Client
 
             configuration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => await Proxy.Service.GetAsync(),
+                async () => await Proxy.Service.GetAsync(new ApplicationConfigurationRequestOptions()),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(CurrentUser.IsAuthenticated 
-                    ? Options.UserCacheExpirationSeconds 
-                    : Options.AnonymousCacheExpirationSeconds)
+                    ? MvcClientCacheOptions.UserCacheExpirationSeconds 
+                    : MvcClientCacheOptions.AnonymousCacheExpirationSeconds)
                 }
             );
 

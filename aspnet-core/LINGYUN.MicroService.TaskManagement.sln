@@ -80,6 +80,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{DF963ABB-E713-49E9-A03C-DEB431E369DF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{820A8FA4-17C4-44DF-8C31-9F211D00F790}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.DbMigrator", "migrations\LY.MicroService.TaskManagement.DbMigrator\LY.MicroService.TaskManagement.DbMigrator.csproj", "{52FD8F39-0AB6-4C51-A584-187C219AC8B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -198,6 +202,10 @@ Global
 		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF963ABB-E713-49E9-A03C-DEB431E369DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52FD8F39-0AB6-4C51-A584-187C219AC8B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52FD8F39-0AB6-4C51-A584-187C219AC8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52FD8F39-0AB6-4C51-A584-187C219AC8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52FD8F39-0AB6-4C51-A584-187C219AC8B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -231,6 +239,7 @@ Global
 		{B54F200C-D648-477B-BE39-B40A1D956F13} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
 		{FEC5FD25-9B26-4245-88D8-7621B26C7C3A} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
 		{DF963ABB-E713-49E9-A03C-DEB431E369DF} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
+		{52FD8F39-0AB6-4C51-A584-187C219AC8B5} = {820A8FA4-17C4-44DF-8C31-9F211D00F790}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

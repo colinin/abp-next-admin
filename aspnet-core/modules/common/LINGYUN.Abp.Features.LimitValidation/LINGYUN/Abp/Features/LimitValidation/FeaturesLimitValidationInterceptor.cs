@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
                 return;
             }
 
-           var limitFeature = GetRequiresLimitFeature(invocation.Method);
+           var limitFeature = await GetRequiresLimitFeature(invocation.Method);
 
             if (limitFeature == null)
             {
@@ -74,20 +74,20 @@ namespace LINGYUN.Abp.Features.LimitValidation
             await _limitFeatureChecker.ProcessAsync(context);
         }
 
-        protected virtual RequiresLimitFeatureAttribute GetRequiresLimitFeature(MethodInfo methodInfo)
+        protected async virtual Task<RequiresLimitFeatureAttribute> GetRequiresLimitFeature(MethodInfo methodInfo)
         {
             var limitFeature = methodInfo.GetCustomAttribute<RequiresLimitFeatureAttribute>(false);
             if (limitFeature != null)
             {
                 // 限制次数定义的不是范围参数,则不参与限制功能
-                var featureLimitDefinition = _featureDefinitionManager.GetOrNull(limitFeature.LimitFeature);
+                var featureLimitDefinition = await _featureDefinitionManager.GetOrNullAsync(limitFeature.LimitFeature);
                 if (featureLimitDefinition == null ||
                     !typeof(NumericValueValidator).IsAssignableFrom(featureLimitDefinition.ValueType.Validator.GetType()))
                 {
                     return null;
                 }
                 // 时长刻度定义的不是范围参数,则不参与限制功能
-                var featureIntervalDefinition = _featureDefinitionManager.GetOrNull(limitFeature.IntervalFeature);
+                var featureIntervalDefinition = await _featureDefinitionManager.GetOrNullAsync(limitFeature.IntervalFeature);
                 if (featureIntervalDefinition == null ||
                     !typeof(NumericValueValidator).IsAssignableFrom(featureIntervalDefinition.ValueType.Validator.GetType()))
                 {

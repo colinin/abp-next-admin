@@ -24,15 +24,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             _localizationOptions = localizationOptions.Value;
         }
 
-        public virtual Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input)
+        public async virtual Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input)
         {
-            var resource = _localizationOptions.Resources
-                .Where(l => l.Value.ResourceName.Equals(input.ResourceName))
-                .Select(l => l.Value)
-                .FirstOrDefault();
+            var resource = _localizationOptions.Resources.GetOrDefault(input.ResourceName);
 
             IEnumerable<LocalizedString> localizedStrings = new List<LocalizedString>();
-            var localizer = _localizerFactory.Create(resource.ResourceType);
+            var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
 
             using (CultureHelper.Use(input.CultureName))
             {
@@ -47,11 +44,11 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                     Value = localizer[input.Key]?.Value
                 };
 
-                return Task.FromResult(result);
+                return result;
             }
         }
 
-        public virtual Task<ListResultDto<TextDifferenceDto>> GetListAsync(GetTextsInput input)
+        public async virtual Task<ListResultDto<TextDifferenceDto>> GetListAsync(GetTextsInput input)
         {
             var result = new List<TextDifferenceDto>();
 
@@ -63,7 +60,8 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
                 foreach (var resource in filterResources)
                 {
-                    result.AddRange(GetTextDifferences(resource.Value, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
+                    result.AddRange(
+                        await GetTextDifferences(resource.Value, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
                 }
             }
             else
@@ -75,15 +73,16 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                     .FirstOrDefault();
                 if (resource != null)
                 {
-                    result.AddRange(GetTextDifferences(resource, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
+                    result.AddRange(
+                        await GetTextDifferences(resource, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
                 }
             }
 
-            return Task.FromResult(new ListResultDto<TextDifferenceDto>(result));
+            return new ListResultDto<TextDifferenceDto>(result);
         }
 
-        protected virtual IEnumerable<TextDifferenceDto> GetTextDifferences(
-            LocalizationResource resource,
+        protected async virtual Task<IEnumerable<TextDifferenceDto>> GetTextDifferences(
+            LocalizationResourceBase resource,
             string cultureName,
             string targetCultureName,
             string filter = null,
@@ -93,7 +92,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
             IEnumerable<LocalizedString> localizedStrings = new List<LocalizedString>();
             IEnumerable<LocalizedString> targetLocalizedStrings = new List<LocalizedString>();
-            var localizer = _localizerFactory.Create(resource.ResourceType);
+            var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
 
             using (CultureHelper.Use(cultureName))
             {

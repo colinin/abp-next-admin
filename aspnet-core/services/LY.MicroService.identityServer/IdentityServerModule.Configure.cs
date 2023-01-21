@@ -23,6 +23,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Json;
@@ -117,6 +118,14 @@ public partial class IdentityServerModule
         Configure<CustomIdentityResourceDataSeederOptions>(options =>
         {
             options.Resources.Add(new CustomIdentityResources.AvatarUrl());
+        });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
@@ -218,6 +227,11 @@ public partial class IdentityServerModule
                     options.RequireHttpsMetadata = false;
                     options.Audience = configuration["AuthServer:ApiName"];
                 });
+
+        if (isDevelopment)
+        {
+            // services.AddAlwaysAllowAuthorization();
+        }
 
         if (!isDevelopment)
         {

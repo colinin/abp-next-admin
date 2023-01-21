@@ -9,13 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINGYUN\Platform\Localization\ApplicationContracts\en.json" />
-		<None Remove="LINGYUN\Platform\Localization\ApplicationContracts\zh-Hans.json" />
+		<None Remove="LINGYUN\Platform\Localization\ApplicationContracts\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Platform\Localization\ApplicationContracts\en.json" />
-		<EmbeddedResource Include="LINGYUN\Platform\Localization\ApplicationContracts\zh-Hans.json" />
+		<EmbeddedResource Include="LINGYUN\Platform\Localization\ApplicationContracts\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

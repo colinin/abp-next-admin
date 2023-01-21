@@ -7,9 +7,9 @@ namespace LINGYUN.Abp.Webhooks
 {
     public class WebhookDefinitionContext : IWebhookDefinitionContext
     {
-        protected Dictionary<string, WebhookGroupDefinition> Groups { get; }
+        protected IDictionary<string, WebhookGroupDefinition> Groups { get; }
 
-        public WebhookDefinitionContext(Dictionary<string, WebhookGroupDefinition> webhooks)
+        public WebhookDefinitionContext(IDictionary<string, WebhookGroupDefinition> webhooks)
         {
             Groups = webhooks;
         }

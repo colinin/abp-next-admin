@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LINGYUN.Abp.Auditing.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -10,6 +12,7 @@ namespace LINGYUN.Abp.Auditing.Logging
     [Area("auditing")]
     [ControllerName("logging")]
     [Route("api/auditing/logging")]
+    [Authorize(AuditingPermissionNames.SystemLog.Default)]
     public class LogController : AbpController, ILogAppService
     {
         private readonly ILogAppService _service;

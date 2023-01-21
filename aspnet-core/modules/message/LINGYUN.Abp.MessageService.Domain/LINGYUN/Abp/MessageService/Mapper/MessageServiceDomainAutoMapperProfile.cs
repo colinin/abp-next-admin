@@ -3,10 +3,6 @@ using LINGYUN.Abp.IM.Groups;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Groups;
-using LINGYUN.Abp.MessageService.Notifications;
-using LINGYUN.Abp.MessageService.Subscriptions;
-using LINGYUN.Abp.Notifications;
-using System;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
@@ -17,48 +13,6 @@ namespace LINGYUN.Abp.MessageService.Mapper
     {
         public MessageServiceDomainAutoMapperProfile()
         {
-            CreateMap<Notification, NotificationInfo>()
-                .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId.ToString()))
-                .ForMember(dto => dto.Name, map => map.MapFrom(src => src.NotificationName))
-                .ForMember(dto => dto.Lifetime, map => map.Ignore())
-                .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
-                .ForMember(dto => dto.ContentType, map => map.MapFrom(src => src.ContentType))
-                .ForMember(dto => dto.Severity, map => map.MapFrom(src => src.Severity))
-                .ForMember(dto => dto.CreationTime, map => map.MapFrom(src => src.CreationTime))
-                .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
-                {
-                    var dataType = Type.GetType(src.NotificationTypeName);
-                    var data = Activator.CreateInstance(dataType);
-                    if (data is NotificationData notificationData)
-                    {
-                        notificationData.ExtraProperties = src.ExtraProperties;
-                        return notificationData;
-                    }
-                    return new NotificationData();
-                }));
-
-            CreateMap<UserNotificationInfo, NotificationInfo>()
-                .ForMember(dto => dto.Id, map => map.MapFrom(src => src.Id.ToString()))
-                .ForMember(dto => dto.Name, map => map.MapFrom(src => src.Name))
-                .ForMember(dto => dto.Lifetime, map => map.Ignore())
-                .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
-                .ForMember(dto => dto.ContentType, map => map.MapFrom(src => src.ContentType))
-                .ForMember(dto => dto.Severity, map => map.MapFrom(src => src.Severity))
-                .ForMember(dto => dto.CreationTime, map => map.MapFrom(src => src.CreationTime))
-                .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
-                {
-                    var dataType = Type.GetType(src.NotificationTypeName);
-                    var data = Activator.CreateInstance(dataType);
-                    if (data is NotificationData notificationData)
-                    {
-                        notificationData.ExtraProperties = src.ExtraProperties;
-                        return notificationData;
-                    }
-                    return new NotificationData();
-                }));
-
-            CreateMap<UserSubscribe, NotificationSubscriptionInfo>();
-
             CreateMessageMap<GroupMessage, ChatMessage>()
                 .ForMember(dto => dto.Content, map => map.MapFrom(src => src.Content))
                 .ForMember(dto => dto.GroupId, map => map.MapFrom(src => src.GroupId.ToString()))

@@ -18,7 +18,6 @@
     "LINGYUN.Abp.Message:03404": "发送消息失败: 用户不存在或已注销账号!",
     "LINGYUN.Abp.Message:03410": "用户拒绝添加好友",
     "LINGYUN.Abp.Message:03411": "对方已是您的好友或已发送验证请求,不能重复操作!",
-    "LINGYUN.Abp.Message:05404": "通知模板不存在!",
     "Notifications:IM": "即时通讯",
     "Notifications:FriendValidation": "好友验证通知",
     "Notifications:NewFriend": "新好友通知",

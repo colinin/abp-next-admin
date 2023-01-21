@@ -8,6 +8,7 @@ namespace LINGYUN.Abp.Notifications
         NotificationGroupDefinition AddGroup(
             [NotNull] string name, 
             ILocalizableString displayName = null,
+            ILocalizableString description = null,
             bool allowSubscriptionToClients = true);
 
         NotificationGroupDefinition GetGroupOrNull(string name);

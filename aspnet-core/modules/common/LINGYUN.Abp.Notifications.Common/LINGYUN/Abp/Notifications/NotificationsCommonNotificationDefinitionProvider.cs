@@ -12,7 +12,7 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
         var commonGroup = context.AddGroup(
                 NotificationsCommonNotificationNames.GroupName,
                 L("Notifications:Primitives"),
-                false);
+                allowSubscriptionToClients: false);
 
         commonGroup.AddNotification(
             name: NotificationsCommonNotificationNames.ExceptionHandling,
@@ -33,7 +33,7 @@ public class NotificationsCommonNotificationDefinitionProvider : NotificationDef
         var tenantsGroup = context.AddGroup(
                 TenantNotificationNames.GroupName,
                 L("Notifications:MultiTenancy"),
-                false);
+                allowSubscriptionToClients: false);
 
         tenantsGroup.AddNotification(
             TenantNotificationNames.NewTenantRegistered,

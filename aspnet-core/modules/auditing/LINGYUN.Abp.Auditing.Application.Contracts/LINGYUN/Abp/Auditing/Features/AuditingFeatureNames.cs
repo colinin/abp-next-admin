@@ -10,6 +10,8 @@
             public const string AuditLog = Default + ".AuditLog";
 
             public const string SecurityLog = Default + ".SecurityLog";
+
+            public const string SystemLog = Default + ".SystemLog";
         }
     }
 }

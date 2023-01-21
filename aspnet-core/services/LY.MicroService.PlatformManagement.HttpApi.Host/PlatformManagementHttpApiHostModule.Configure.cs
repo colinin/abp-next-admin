@@ -25,6 +25,7 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
@@ -85,6 +86,14 @@ public partial class PlatformManagementHttpApiHostModule
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseMySQL();
+        });
+    }
+
+    private void ConfigureFeatureManagement()
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
@@ -253,8 +262,6 @@ public partial class PlatformManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.Resources.AddDynamic();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

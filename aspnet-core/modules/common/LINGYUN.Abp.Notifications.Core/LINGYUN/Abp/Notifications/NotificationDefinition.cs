@@ -64,6 +64,11 @@ namespace LINGYUN.Abp.Notifications
         [NotNull]
         public Dictionary<string, object> Properties { get; }
 
+        public object this[string name] {
+            get => Properties.GetOrDefault(name);
+            set => Properties[name] = value;
+        }
+
         public NotificationDefinition(
            string name,
            ILocalizableString displayName = null,

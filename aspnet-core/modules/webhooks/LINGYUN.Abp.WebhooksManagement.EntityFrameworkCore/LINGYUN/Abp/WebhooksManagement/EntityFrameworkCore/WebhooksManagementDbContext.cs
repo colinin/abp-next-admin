@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 
+[IgnoreMultiTenancy]
 [ConnectionStringName(WebhooksManagementDbProperties.ConnectionStringName)]
 public class WebhooksManagementDbContext : AbpDbContext<WebhooksManagementDbContext>, IWebhooksManagementDbContext
 {

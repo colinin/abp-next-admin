@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Content;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 
@@ -21,10 +21,12 @@ public abstract class HttpRequestJobBase
     public const string PropertyCulture = "culture";
 
     protected ICurrentTenant CurrentTenant { get; set; }
+    protected IJsonSerializer JsonSerializer { get; set; }
 
     protected virtual void InitJob(JobRunnableContext context)
     {
         CurrentTenant = context.GetRequiredService<ICurrentTenant>();
+        JsonSerializer = context.GetRequiredService<IJsonSerializer>();
     }
 
     protected async virtual Task<T> RequestAsync<T>(
@@ -195,12 +197,12 @@ public abstract class HttpRequestJobBase
 
     protected virtual T Deserialize<T>(string value)
     {
-        return JsonConvert.DeserializeObject<T>(value);
+        return JsonSerializer.Deserialize<T>(value);
     }
 
     protected virtual string Serialize(object value)
     {
-        return JsonConvert.SerializeObject(value);
+        return JsonSerializer.Serialize(value);
     }
 
     protected virtual StringSegment RemoveQuotes(StringSegment input)

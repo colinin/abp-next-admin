@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

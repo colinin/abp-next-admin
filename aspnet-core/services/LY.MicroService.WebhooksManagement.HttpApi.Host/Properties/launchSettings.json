@@ -11,11 +11,11 @@
     "LY.MicroService.WebhooksManagement.HttpApi.Host": {
       "commandName": "Project",
       "launchBrowser": false,
+      "dotnetRunMessages": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://127.0.0.1:30045",
-      "dotnetRunMessages": "true"
+      "applicationUrl": "http://127.0.0.1:30045"
     }
   }
 }
