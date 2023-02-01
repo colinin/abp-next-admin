@@ -60,7 +60,7 @@ export function useFormEvents({
   /**
    * @description: Set form value
    */
-  async function setFieldsValue<T extends Recordable<any>>(values: T): Promise<void> {
+  async function setFieldsValue(values: any): Promise<void> {
     const fields = unref(getSchema)
       .map((item) => item.field)
       .filter(Boolean);
@@ -154,19 +154,23 @@ export function useFormEvents({
   /**
    * @description: Insert after a certain field, if not insert the last
    */
-  async function appendSchemaByField(schema: FormSchema, prefixField?: string, first = false) {
+  async function appendSchemaByField(
+    schema: FormSchema | FormSchema[],
+    prefixField?: string,
+    first = false,
+  ) {
     const schemaList: FormSchema[] = cloneDeep(unref(getSchema));
 
     const index = schemaList.findIndex((schema) => schema.field === prefixField);
-
+    const _schemaList = isObject(schema) ? [schema as FormSchema] : (schema as FormSchema[]);
     if (!prefixField || index === -1 || first) {
-      first ? schemaList.unshift(schema) : schemaList.push(schema);
+      first ? schemaList.unshift(..._schemaList) : schemaList.push(..._schemaList);
       schemaRef.value = schemaList;
       _setDefaultValue(schema);
       return;
     }
     if (index !== -1) {
-      schemaList.splice(index + 1, 0, schema);
+      schemaList.splice(index + 1, 0, ..._schemaList);
     }
     _setDefaultValue(schema);
 
