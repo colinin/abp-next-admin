@@ -56,6 +56,7 @@ import {
   Input as AInput,
   InputNumber as AInputNumber,
 } from 'ant-design-vue';
+import VXETable from 'vxe-table';
 
 const compList = [
   Affix,
@@ -157,5 +158,5 @@ export function registerGlobComp(app: App) {
     app.component(comp.name || comp.displayName, comp);
   });
 
-  app.use(Input).use(Button).use(Layout);
+  app.use(Input).use(Button).use(Layout).use(VXETable);
 }

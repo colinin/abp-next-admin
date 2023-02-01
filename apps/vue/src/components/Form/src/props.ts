@@ -23,7 +23,7 @@ export const basicProps = {
   compact: propTypes.bool,
   // 表单配置规则
   schemas: {
-    type: [Array] as PropType<FormSchema[]>,
+    type: Array as PropType<FormSchema[]>,
     default: () => [],
   },
   mergeDynamicData: {
@@ -120,7 +120,7 @@ export const tabProps = {
   compact: propTypes.bool,
   // 表单配置规则
   schemas: {
-    type: [Array] as PropType<TabFormSchema[]>,
+    type: Array as PropType<TabFormSchema[]>,
     default: () => [],
   },
   mergeDynamicData: {

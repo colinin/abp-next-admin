@@ -63,6 +63,7 @@
 
   import { basicProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { isFunction, isArray } from '/@/utils/is';
 
   export default defineComponent({
     name: 'BasicForm',
@@ -90,6 +91,7 @@
 
       // Get the basic configuration of the form
       const getProps = computed((): FormProps => {
+        // @ts-ignore
         return { ...props, ...unref(propsRef) } as FormProps;
       });
 
@@ -239,8 +241,11 @@
         propsRef.value = deepMerge(unref(propsRef) || {}, formProps);
       }
 
-      function setFormModel(key: string, value: any) {
+      function setFormModel(key: string, value: any, schema: FormSchema) {
         formModel[key] = value;
+        if (isFunction(schema.dynamicRules) || isArray(schema.rules)) {
+          return;
+        }
         const { validateTrigger } = unref(getBindValue);
         if (!validateTrigger || validateTrigger === 'change') {
           validateFields([key]).catch((_) => {});
