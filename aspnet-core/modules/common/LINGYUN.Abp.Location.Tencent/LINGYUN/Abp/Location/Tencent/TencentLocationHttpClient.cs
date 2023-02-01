@@ -1,9 +1,10 @@
-﻿using LINGYUN.Abp.Location.Tencent.Response;
+﻿using LINGYUN.Abp.Location.Tencent.Localization;
+using LINGYUN.Abp.Location.Tencent.Response;
 using LINGYUN.Abp.Location.Tencent.Utils;
-using LINGYUN.Abp.Location.Tencent.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.Location.Tencent
@@ -21,20 +21,17 @@ namespace LINGYUN.Abp.Location.Tencent
     public class TencentLocationHttpClient : ITransientDependency
     {
         protected TencentLocationOptions Options { get; }
-        protected IJsonSerializer JsonSerializer { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public TencentLocationHttpClient(
             IOptions<TencentLocationOptions> options,
-            IJsonSerializer jsonSerializer,
             IServiceProvider serviceProvider,
             IHttpClientFactory httpClientFactory,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             Options = options.Value;
-            JsonSerializer = jsonSerializer;
             ServiceProvider = serviceProvider;
             HttpClientFactory = httpClientFactory;
             CancellationTokenProvider = cancellationTokenProvider;
@@ -193,7 +190,7 @@ namespace LINGYUN.Abp.Location.Tencent
         {
             var requestUrl = BuildRequestUrl(url, path, paramters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-            var tencentLocationResponse = JsonSerializer.Deserialize<TResponse>(responseContent);
+            var tencentLocationResponse = JsonConvert.DeserializeObject<TResponse>(responseContent);
             if (!tencentLocationResponse.IsSuccessed)
             {
                 if (Options.VisableErrorToClient)

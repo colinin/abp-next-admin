@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -12,7 +11,6 @@ namespace LINGYUN.Abp.Location.Baidu
 {
     [DependsOn(
         typeof(AbpLocationModule),
-        typeof(AbpJsonNewtonsoftModule),
         typeof(AbpThreadingModule))]
     public class AbpBaiduLocationModule : AbpModule
     {
