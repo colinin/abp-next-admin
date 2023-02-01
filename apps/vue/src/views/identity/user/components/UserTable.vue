@@ -12,7 +12,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'userName'">
           <span>{{ record.userName }}</span>
-          <Tag v-if="!lockEnable(record)" style="margin-left: 5px" color="orange">{{ L('Lockout') }}</Tag>
+          <Tag v-if="lockEnable(record)" style="margin-left: 5px" color="orange">{{ L('Lockout') }}</Tag>
           <Tag v-if="!record.isActive" style="margin-left: 5px" color="red">{{ L('UnActived') }}</Tag>
         </template>
         <template v-if="column.key === 'phoneNumber'">

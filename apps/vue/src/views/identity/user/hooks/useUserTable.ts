@@ -36,18 +36,15 @@ export function useUserTable() {
   const lockEnable = computed(() => {
     return (record) => {
       // 未启用锁定不显示
-      if (!record.lockoutEnabled) {
-        return false;
-      }
-      if (record.lockoutEnd) {
-        // 锁定时间高于当前时间不显示
+      if (record.lockoutEnabled === true) {
         const lockTime = new Date(record.lockoutEnd);
-        const nowTime = new Date();
-        if (lockTime > nowTime) {
-          return false;
+        if (lockTime) {
+          // 锁定时间高于当前时间不显示
+          const nowTime = new Date();
+          return lockTime > nowTime;
         }
       }
-      return true;
+      return false;
     };
   });
 
