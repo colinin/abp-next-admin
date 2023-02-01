@@ -47,6 +47,11 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
             }
         }
 
+        if (jobType == null)
+        {
+            return null;
+        }
+
         // 改为 JobId作为名称
         var jobBuilder = JobBuilder.Create(jobType)
                 .WithIdentity(KeyBuilder.CreateJobKey(job))

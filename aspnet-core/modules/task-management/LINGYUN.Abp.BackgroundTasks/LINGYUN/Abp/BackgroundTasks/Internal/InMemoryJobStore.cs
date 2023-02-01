@@ -106,7 +106,7 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.CompletedTask;
     }
 
-    public Task CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
+    public Task<List<JobInfo>> CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -115,10 +115,11 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         var expriaJobs = _memoryJobStore
             .Where(x => x.Status == JobStatus.Completed &&
                 expiratime.CompareTo(x.LastRunTime ?? x.EndTime ?? x.CreationTime) <= 0)
-            .Take(maxResultCount);
+            .Take(maxResultCount)
+            .ToList();
 
         _memoryJobStore.RemoveAll(expriaJobs);
 
-        return Task.CompletedTask;
+        return Task.FromResult(expriaJobs);
     }
 }

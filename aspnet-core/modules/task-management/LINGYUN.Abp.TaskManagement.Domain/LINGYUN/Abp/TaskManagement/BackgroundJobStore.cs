@@ -158,7 +158,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         }
     }
 
-    public async virtual Task CleanupAsync(
+    public async virtual Task<List<JobInfo>> CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
@@ -169,9 +169,13 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
             jobExpiratime,
             cancellationToken);
 
+        var expiredJobs = ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobs);
+
         await JobInfoRepository.DeleteManyAsync(jobs, cancellationToken: cancellationToken);
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return expiredJobs;
     }
 
     protected virtual Exception GetSourceException(Exception exception)

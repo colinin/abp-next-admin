@@ -212,11 +212,12 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                         cultureName: eventData.Data.Culture,
                         globalContext: new Dictionary<string, object>
                         {
-                            { "$notification", notification.Name },
-                            { "$formUser", eventData.Data.FormUser },
-                            { "$notificationId", eventData.Id },
-                            { "$title", title.ToString() },
-                            { "$creationTime", eventData.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                            // 模板不支持 $ 字符, 改为普通关键字
+                            { NotificationKeywords.Name, notification.Name },
+                            { NotificationKeywords.FormUser, eventData.Data.FormUser },
+                            { NotificationKeywords.Id, eventData.Id },
+                            { NotificationKeywords.Title, title.ToString() },
+                            { NotificationKeywords.CreationTime, eventData.CreationTime.ToString(Options.DateTimeFormat) },
                         });
                 }
                 catch(Exception ex)

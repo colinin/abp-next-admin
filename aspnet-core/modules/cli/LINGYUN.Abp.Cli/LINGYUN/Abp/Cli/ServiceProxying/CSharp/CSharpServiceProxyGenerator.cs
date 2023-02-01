@@ -429,4 +429,9 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             throw new CliUsageException("Option folder should be a directory.");
         }
     }
+
+    protected override ServiceType? GetDefaultServiceType(VoloGenerateProxyArgs args)
+    {
+        return ServiceType.Application;
+    }
 }

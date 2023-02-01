@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -20,9 +21,18 @@ public class BackgroundCleaningJob : IJobRunnable
 
         using (currentTenant.Change(tenantId))
         {
-            await store.CleanupAsync(
+            var expiredJobs = await store.CleanupAsync(
                 options.MaxJobCleanCount,
-                options.JobExpiratime);
+                options.JobExpiratime,
+                context.CancellationToken);
+
+            var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
+
+            foreach (var expiredJob in expiredJobs)
+            {
+                // 从队列强制移除作业
+                await jobScheduler.RemoveAsync(expiredJob, context.CancellationToken);
+            }
         }
     }
 }

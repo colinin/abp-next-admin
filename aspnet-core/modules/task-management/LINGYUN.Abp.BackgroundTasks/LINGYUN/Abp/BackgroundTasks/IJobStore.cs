@@ -28,7 +28,7 @@ public interface IJobStore
         string jobId, 
         CancellationToken cancellationToken = default);
 
-    Task CleanupAsync(
+    Task<List<JobInfo>> CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default);

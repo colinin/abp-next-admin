@@ -18,7 +18,7 @@ public class BlobExists : BlobActivity
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         var exists = await BlobContainer.ExistsAsync(Path, context.CancellationToken);
         if (exists)

@@ -3,7 +3,6 @@ using Elsa.ActivityResults;
 using Elsa.Attributes;
 using Elsa.Design;
 using Elsa.Expressions;
-using Elsa.Services;
 using Elsa.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace LINGYUN.Abp.Elsa.Activities.Sms;
     Category = "Sms", 
     Description = "Send an sms message.",
     Outcomes = new[] { OutcomeNames.Done })]
-public class SendSms : Activity
+public class SendSms : AbpActivity
 {
     private readonly ISmsSender _smsSender;
 
@@ -44,7 +43,7 @@ public class SendSms : Activity
        )]
     public Dictionary<string, string> Properties { get; set; } = new();
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         var smsMessage = new SmsMessage(To.JoinAsString(";"), Message);
         foreach (var prop in Properties)

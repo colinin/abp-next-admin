@@ -21,7 +21,8 @@ public class BackgroundPollingJob : IJobRunnable
 
         using (currentTenant.Change(tenantId))
         {
-            var waitingJobs = await store.GetWaitingListAsync(options.MaxJobFetchCount);
+            var waitingJobs = await store.GetWaitingListAsync(
+                options.MaxJobFetchCount, context.CancellationToken);
 
             if (!waitingJobs.Any())
             {
@@ -32,7 +33,7 @@ public class BackgroundPollingJob : IJobRunnable
 
             foreach (var job in waitingJobs)
             {
-                await jobPublisher.PublishAsync(job);
+                await jobPublisher.PublishAsync(job, context.CancellationToken);
             }
         }
     }

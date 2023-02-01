@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.AspNetCore.Mvc.Client": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:52376;http://localhost:52377"
+    }
+  }
+}

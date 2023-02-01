@@ -21,7 +21,7 @@ public class ReadBlob : BlobActivity
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         Output = await BlobContainer.GetAllBytesAsync(Path, context.CancellationToken);
 

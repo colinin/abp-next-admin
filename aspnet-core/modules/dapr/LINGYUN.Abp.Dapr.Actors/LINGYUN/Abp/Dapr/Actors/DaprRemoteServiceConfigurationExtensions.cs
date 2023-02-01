@@ -32,7 +32,7 @@ public static class DaprRemoteServiceConfigurationExtensions
     {
         Check.NotNullOrEmpty(configuration, nameof(configuration));
 
-        configuration.TryGetValue("DaprTimeout", out var timeOutValue);
+        configuration.TryGetValue(RequestTimeOut, out var timeOutValue);
         if (!int.TryParse(timeOutValue ?? "30000", out var timeOut))
         {
             timeOut = 30000;

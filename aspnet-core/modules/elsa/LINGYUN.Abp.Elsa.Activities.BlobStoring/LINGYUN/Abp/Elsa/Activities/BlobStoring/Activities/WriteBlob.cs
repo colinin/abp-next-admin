@@ -28,7 +28,7 @@ public class WriteBlob : BlobActivity
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         await BlobContainer.SaveAsync(Path, Bytes, Overwrite, context.CancellationToken);
 

@@ -13,6 +13,7 @@ using Volo.Abp.DependencyInjection;
 using AbpCliServiceProxyOptions = Volo.Abp.Cli.ServiceProxying.AbpCliServiceProxyOptions;
 using IServiceProxyGenerator = Volo.Abp.Cli.ServiceProxying.IServiceProxyGenerator;
 using VoloGenerateProxyArgs = Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs;
+using ServiceType = Volo.Abp.Cli.ServiceProxying.ServiceType;
 
 namespace LINGYUN.Abp.Cli.Commands;
 
@@ -65,6 +66,20 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
+        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.ServiceType.Long);
+
+        ServiceType? serviceType = null;
+        if (!serviceTypeArg.IsNullOrWhiteSpace())
+        {
+            serviceType = serviceTypeArg.ToLower() == "application"
+                ? ServiceType.Application
+                : serviceTypeArg.ToLower() == "integration"
+                    ? ServiceType.Integration
+                    : null;
+        }
+
+        var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
+                               commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
 
         return new GenerateProxyArgs(
             CommandName,
@@ -78,6 +93,8 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
             folder, 
             provider,
             apiScriptProxy,
+            serviceType,
+            withoutContracts,
             commandLineArgs.Options);
     }
 
@@ -191,6 +208,18 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "wd";
             public const string Long = "working-directory";
+        }
+
+        public static class ServiceType
+        {
+            public const string Short = "st";
+            public const string Long = "service-type";
+        }
+
+        public static class WithoutContracts
+        {
+            public const string Short = "c";
+            public const string Long = "without-contracts";
         }
     }
 }

@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Polly" Version="$(PollyPackageVersion)" />
 	</ItemGroup>
 
 </Project>

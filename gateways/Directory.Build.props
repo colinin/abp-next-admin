@@ -1,9 +1,9 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>6.0.2</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>6.0.1</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>7.0.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.8.0</DaprPackageVersion>
-		<DotNetCoreCAPPackageVersion>6.0.1</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>7.0.2</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<AgileConfigClientPackageVersion>1.2.1.5</AgileConfigClientPackageVersion>

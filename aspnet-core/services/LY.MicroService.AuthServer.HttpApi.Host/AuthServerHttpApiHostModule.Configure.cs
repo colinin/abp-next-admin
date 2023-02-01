@@ -104,7 +104,7 @@ public partial class AuthServerHttpApiHostModule
         // 统一时间日期格式
         Configure<AbpJsonOptions>(options =>
         {
-            // options.DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+            options.OutputDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         });
         // 中文序列化的编码问题
         Configure<AbpSystemTextJsonSerializerOptions>(options =>
