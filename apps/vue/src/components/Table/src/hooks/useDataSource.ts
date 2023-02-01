@@ -206,7 +206,7 @@ export function useDataSource(
     });
   }
 
-  function insertTableDataRecord(record: Recordable | Recordable[], index: number): Recordable | undefined {
+  function insertTableDataRecord(record: Recordable | Recordable[], index: number): Recordable[] | undefined {
     // if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
     index = index ?? dataSourceRef.value?.length;
     const _record = isObject(record) ? [record as Recordable] : (record as Recordable[]);
