@@ -60,7 +60,7 @@ export function useFormEvents({
   /**
    * @description: Set form value
    */
-  async function setFieldsValue(values: Recordable): Promise<void> {
+  async function setFieldsValue<T extends Recordable<any>>(values: T): Promise<void> {
     const fields = unref(getSchema)
       .map((item) => item.field)
       .filter(Boolean);
