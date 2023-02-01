@@ -4,7 +4,6 @@ using LINGYUN.Abp.WxPusher.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Caching;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -13,7 +12,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.WxPusher;
 
 [DependsOn(
-    typeof(AbpJsonNewtonsoftModule),
     typeof(AbpSettingsModule),
     typeof(AbpCachingModule),
     typeof(AbpFeaturesLimitValidationModule))]

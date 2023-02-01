@@ -2,7 +2,6 @@
 using LINGYUN.Abp.PushPlus.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -11,7 +10,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.PushPlus;
 
 [DependsOn(
-    typeof(AbpJsonNewtonsoftModule),
     typeof(AbpSettingsModule),
     typeof(AbpCachingModule),
     typeof(AbpFeaturesLimitValidationModule))]

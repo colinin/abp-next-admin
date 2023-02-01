@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
-using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -14,7 +13,6 @@ namespace LINGYUN.Abp.WeChat
     [DependsOn(
         typeof(AbpCachingModule),
         typeof(AbpFeaturesModule),
-        typeof(AbpJsonNewtonsoftModule),
         typeof(AbpSettingsModule))]
     public class AbpWeChatModule : AbpModule
     {

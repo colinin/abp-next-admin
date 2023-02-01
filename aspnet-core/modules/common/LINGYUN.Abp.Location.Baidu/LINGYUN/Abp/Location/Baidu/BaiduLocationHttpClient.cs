@@ -1,9 +1,10 @@
-﻿using LINGYUN.Abp.Location.Baidu.Response;
+﻿using LINGYUN.Abp.Location.Baidu.Localization;
+using LINGYUN.Abp.Location.Baidu.Response;
 using LINGYUN.Abp.Location.Baidu.Utils;
-using LINGYUN.Abp.Location.Baidu.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.Location.Baidu
@@ -21,20 +21,17 @@ namespace LINGYUN.Abp.Location.Baidu
     public class BaiduLocationHttpClient : ITransientDependency
     {
         protected BaiduLocationOptions Options { get; }
-        protected IJsonSerializer JsonSerializer { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public BaiduLocationHttpClient(
             IOptions<BaiduLocationOptions> options,
-            IJsonSerializer jsonSerializer,
             IServiceProvider serviceProvider,
             IHttpClientFactory httpClientFactory,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             Options = options.Value;
-            JsonSerializer = jsonSerializer;
             ServiceProvider = serviceProvider;
             HttpClientFactory = httpClientFactory;
             CancellationTokenProvider = cancellationTokenProvider;
@@ -58,7 +55,7 @@ namespace LINGYUN.Abp.Location.Baidu
             }
             var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-            var baiduLocationResponse = JsonSerializer.Deserialize<BaiduIpGeocodeResponse>(responseContent);
+            var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduIpGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
@@ -111,7 +108,7 @@ namespace LINGYUN.Abp.Location.Baidu
             }
             var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-            var baiduLocationResponse = JsonSerializer.Deserialize<BaiduGeocodeResponse>(responseContent);
+            var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
@@ -163,7 +160,7 @@ namespace LINGYUN.Abp.Location.Baidu
             requestParamters["location"] = string.Format("{0}%2C{1}", lat, lng);
             var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-            var baiduLocationResponse = JsonSerializer.Deserialize<BaiduReGeocodeResponse>(responseContent);
+            var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduReGeocodeResponse>(responseContent);
             if (!baiduLocationResponse.IsSuccess())
             {
                 var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();

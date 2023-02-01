@@ -18,9 +18,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json.Newtonsoft" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 

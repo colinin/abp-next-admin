@@ -19,7 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json.Newtonsoft" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 
