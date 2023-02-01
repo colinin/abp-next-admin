@@ -38,7 +38,6 @@ public class NotificationAppService : ApplicationService, INotificationAppServic
             if (!group.AllowSubscriptionToClients)
             {
                 continue;
-
             }
             var notificationGroup = new NotificationGroupDto
             {
@@ -81,6 +80,11 @@ public class NotificationAppService : ApplicationService, INotificationAppServic
 
         foreach (var notification in notifications)
         {
+            if (!notification.AllowSubscriptionToClients)
+            {
+                continue;
+            }
+
             templates.Add(
                 new NotificationTemplateDto
                 {

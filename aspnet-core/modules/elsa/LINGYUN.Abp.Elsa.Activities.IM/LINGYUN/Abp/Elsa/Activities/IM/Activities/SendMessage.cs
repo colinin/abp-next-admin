@@ -5,7 +5,6 @@ using Elsa.Services.Models;
 using LINGYUN.Abp.IM.Messages;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Elsa.Activities.IM;
@@ -50,10 +49,9 @@ public class SendMessage : AbpActivity
     }
 
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         ChatMessage? chatMessage = null;
-        var currentTenant = context.GetService<ICurrentTenant>();
 
         if (!GroupId.IsNullOrWhiteSpace())
         {
@@ -66,7 +64,7 @@ public class SendMessage : AbpActivity
                 false,
                 MessageType.Text,
                 MessageSourceType.User,
-                currentTenant.Id);
+                TenantId);
         }
         else if (To.HasValue)
         {
@@ -79,7 +77,7 @@ public class SendMessage : AbpActivity
                false,
                MessageType.Text,
                MessageSourceType.User,
-               currentTenant.Id);
+               TenantId);
         }
 
         if (chatMessage != null)

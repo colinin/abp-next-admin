@@ -4,7 +4,6 @@ using Elsa.Attributes;
 using Elsa.Design;
 using Elsa.Expressions;
 using Elsa.Providers.WorkflowStorage;
-using Elsa.Services;
 using Elsa.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -61,7 +60,7 @@ public class SendEmailing : AbpActivity
         )]
     public object? Model { get; set; }
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         var to = To.JoinAsString(";");
         var content = Body;

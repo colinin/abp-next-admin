@@ -73,9 +73,22 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             {
                 // 成功一次重置重试次数
                 job.TryCount = 0;
+                var jobCompleted = false;
+
+                // 尝试达到上限则标记已完成
+                if (job.Status == JobStatus.FailedRetry &&
+                    job.TryCount >= job.MaxTryCount)
+                {
+                    jobCompleted = true;
+                }
 
                 // 所有任务达到上限则标记已完成
                 if (job.MaxCount > 0 && job.TriggerCount >= job.MaxCount)
+                {
+                    jobCompleted = true;
+                }
+
+                if (jobCompleted)
                 {
                     job.Status = JobStatus.Completed;
                     job.NextRunTime = null;

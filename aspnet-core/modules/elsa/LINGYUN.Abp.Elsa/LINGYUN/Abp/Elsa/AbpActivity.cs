@@ -18,7 +18,7 @@ public abstract class AbpActivity : Activity, IMultiTenantActivitySupport
         var currentTenant = context.GetService<ICurrentTenant>();
         using (currentTenant.Change(TenantId ?? context.GetTenantId() ?? currentTenant.Id))
         {
-            return OnActivitCanExecuteAsync(context);
+            return OnActivityCanExecuteAsync(context);
         }
     }
 
@@ -27,16 +27,16 @@ public abstract class AbpActivity : Activity, IMultiTenantActivitySupport
         var currentTenant = context.GetService<ICurrentTenant>();
         using (currentTenant.Change(TenantId ?? context.GetTenantId() ?? currentTenant.Id))
         {
-            return OnActivitExecuteAsync(context);
+            return OnActivityExecuteAsync(context);
         }
     }
 
-    protected virtual ValueTask<bool> OnActivitCanExecuteAsync(ActivityExecutionContext context)
+    protected virtual ValueTask<bool> OnActivityCanExecuteAsync(ActivityExecutionContext context)
     {
         return new ValueTask<bool>(OnCanExecute(context));
     }
 
-    protected virtual ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected virtual ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         return new ValueTask<IActivityExecutionResult>(OnExecute(context));
     }

@@ -80,11 +80,10 @@ public class EfCoreBackgroundJobInfoRepository :
         TimeSpan jobExpiratime,
         CancellationToken cancellationToken = default)
     {
-        var expiratime = Clock.Now - jobExpiratime;
+        var expiratime = Clock.Now.Subtract(jobExpiratime);
 
         return await (await GetDbSetAsync())
-            .Where(x => x.Status == JobStatus.Completed &&
-                DateTime.Compare(x.LastRunTime.Value, expiratime) <= 0)
+            .Where(x => x.Status == JobStatus.Completed && x.LastRunTime <= expiratime)
             .OrderBy(x => x.CreationTime)
             .Take(maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -122,7 +121,6 @@ public class EfCoreBackgroundJobInfoRepository :
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {
-        var now = Clock.Now;
         var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
 
         return await (await GetDbSetAsync())

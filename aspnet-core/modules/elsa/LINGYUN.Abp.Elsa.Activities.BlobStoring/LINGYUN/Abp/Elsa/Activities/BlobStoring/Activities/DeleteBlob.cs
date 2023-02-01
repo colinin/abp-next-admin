@@ -18,7 +18,7 @@ public class DeleteBlob : BlobActivity
     {
     }
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
         await BlobContainer.DeleteAsync(Path, context.CancellationToken);
 

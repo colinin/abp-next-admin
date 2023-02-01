@@ -2,14 +2,11 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Cli;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Modeling;
 using Volo.Abp.IO;
 using Volo.Abp.Json;
 
@@ -111,26 +108,8 @@ public class TypeScriptServiceProxyGenerator : ServiceProxyGeneratorBase<TypeScr
         Logger.LogInformation($"Generate type script proxy has completed.");
     }
 
-    protected async override Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs args)
+    protected override ServiceType? GetDefaultServiceType(Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs args)
     {
-        Check.NotNull(args.Url, nameof(args.Url));
-
-        var client = CliHttpClientFactory.CreateClient();
-
-        var url = CliUrls.GetApiDefinitionUrl(args.Url);
-        var apiDefinitionResult = await client.GetStringAsync(url + "?includeTypes=true");
-        var apiDefinition = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(apiDefinitionResult);
-
-        var moduleDefinition = apiDefinition.Modules.FirstOrDefault(x => string.Equals(x.Key, args.Module, StringComparison.CurrentCultureIgnoreCase)).Value;
-        if (moduleDefinition == null)
-        {
-            throw new CliUsageException($"Module name: {args.Module} is invalid");
-        }
-
-        var apiDescriptionModel = ApplicationApiDescriptionModel.Create();
-        apiDescriptionModel.AddModule(moduleDefinition);
-        apiDescriptionModel.Types = apiDefinition.Types;
-
-        return apiDescriptionModel;
+        return ServiceType.Application;
     }
 }

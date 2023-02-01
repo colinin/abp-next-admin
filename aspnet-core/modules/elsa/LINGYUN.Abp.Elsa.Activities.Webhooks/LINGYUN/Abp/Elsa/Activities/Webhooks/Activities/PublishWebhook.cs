@@ -4,7 +4,6 @@ using Elsa.Attributes;
 using Elsa.Design;
 using Elsa.Expressions;
 using Elsa.Providers.WorkflowStorage;
-using Elsa.Services;
 using Elsa.Services.Models;
 using LINGYUN.Abp.Webhooks;
 using System;
@@ -17,7 +16,7 @@ namespace LINGYUN.Abp.Elsa.Activities.Webhooks;
     Category = "PublishWebhook", 
     Description = "Sends webhooks to subscriptions.",
     Outcomes = new[] { OutcomeNames.Done })]
-public class PublishWebhook : Activity
+public class PublishWebhook : AbpActivity
 {
     private readonly IWebhookPublisher _webhookPublisher;
 
@@ -59,14 +58,12 @@ public class PublishWebhook : Activity
     }
 
 
-    protected async override ValueTask<IActivityExecutionResult> OnExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
-        var tenantId = context.GetTenantId();
-
         await _webhookPublisher.PublishAsync(
             WebhooName,
             WebhookData,
-            tenantId,
+            TenantId,
             SendExactSameData,
             new WebhookHeader
             {

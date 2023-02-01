@@ -4,14 +4,12 @@ using Elsa.Attributes;
 using Elsa.Design;
 using Elsa.Expressions;
 using Elsa.Providers.WorkflowStorage;
-using Elsa.Services;
 using Elsa.Services.Models;
 using LINGYUN.Abp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Elsa.Activities.Notifications;
 
@@ -54,9 +52,8 @@ public class SendNotification : AbpActivity
     }
 
 
-    protected async override ValueTask<IActivityExecutionResult> OnActivitExecuteAsync(ActivityExecutionContext context)
+    protected async override ValueTask<IActivityExecutionResult> OnActivityExecuteAsync(ActivityExecutionContext context)
     {
-        var currentTenant = context.GetService<ICurrentTenant>();
         switch (NotificationData)
         {
             case NotificationData data:
@@ -64,7 +61,7 @@ public class SendNotification : AbpActivity
                     NotificationName,
                     data,
                     GetUserIdentifiers(),
-                    currentTenant.Id,
+                    TenantId,
                     Severity);
                 return Done();
             case NotificationTemplate template:
@@ -72,7 +69,7 @@ public class SendNotification : AbpActivity
                     NotificationName,
                     template,
                     GetUserIdentifiers(),
-                    currentTenant.Id,
+                    TenantId,
                     Severity);
                 return Done();
         }
