@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { computed, ref } from 'vue';
 import { BasicTableProps } from './types';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import { basicProps } from './props';
 import { ignorePropKeys } from './const';
 import { basicEmits } from './emits';
