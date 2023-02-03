@@ -86,7 +86,12 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
             return;
         }
 
-        var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
+        var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(
+            args,
+            new ApplicationApiDescriptionModelRequestDto
+            {
+                IncludeTypes = true
+            });
 
         foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers))
         {
