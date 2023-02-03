@@ -68,11 +68,6 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            if (!builder.IsHostOnlyDatabase())
-            {
-                return;
-            }
-
             var options = new AbpNotificationsModelBuilderConfigurationOptions();
 
             optionsAction?.Invoke(options);
