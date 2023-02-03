@@ -66,7 +66,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
         var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
         var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
-        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.ServiceType.Long);
+        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.ServiceType.Short, Options.ServiceType.Long);
 
         ServiceType? serviceType = null;
         if (!serviceTypeArg.IsNullOrWhiteSpace())
