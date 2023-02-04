@@ -87,9 +87,11 @@ public class GenerateViewCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("Options:");
         sb.AppendLine("");
-        sb.AppendLine("-t<type>                             Generate ui script(vben-view、vben-model).");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
-
+        sb.AppendLine("-t|--type <type>                         The name of generate type (vben-view).");
+        sb.AppendLine("     vben-view");
+        sb.AppendLine("         -o|--output <output-name>                         js/vue file path or folder to place generated code in.");
+        sb.AppendLine("-u|--url <url>                                    API definition URL from.");
+        sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
