@@ -30,6 +30,7 @@ public class VbenViewScriptGenerator : IVbenViewScriptGenerator, ISingletonDepen
             "VbenModalView",
             new
             {
+                Key = "id",
                 Application = controllerModel.ControllerName,
                 ApiPath = $"/@/api/{moduleDefinition.RemoteServiceName.ToKebabCase()}/{controllerModel.ControllerName.ToKebabCase()}",
                 RemoteService = moduleDefinition.RemoteServiceName,
@@ -66,6 +67,7 @@ public class VbenViewScriptGenerator : IVbenViewScriptGenerator, ISingletonDepen
             "VbenTableView",
             new
             {
+                Key = "id",
                 PagedRequest = pagedResultAction != null,
                 UpdatePermission = updateAction != null && updateAction.AllowAnonymous != null && updateAction.AllowAnonymous != true,
                 UpdatePermissionName = $"{moduleDefinition.RemoteServiceName.ToKebabCase()}.{controllerModel.ControllerName.ToKebabCase()}.Update",
