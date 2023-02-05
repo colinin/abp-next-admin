@@ -178,13 +178,14 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
             var component = new ComponentModel
             {
                 Name = inputModelProp.JsonName ?? inputModelProp.Name.ToCamelCase(),
-                Component = "Input",
+                Component = GetComponentType(inputModelProp.Type),
                 DisplayName = "DisplayName:" + inputModelProp.Name.ToPascalCase(),
                 Required = inputModelProp.IsRequired,
                 ColProps = "" +
                 "{" +
                     $"span: {span}" +
                 "}",
+                HasDate = inputModelProp.Type.Contains("DateTime")
             };
 
             if (appModel.Types.TryGetValue(inputModelProp.Type, out var inputModelPropType) &&
@@ -194,7 +195,6 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
 
                 var optionsStr = Environment.NewLine;
 
-                var options = new object[inputModelPropType.EnumNames.Length];
                 for (var index = 0; index < inputModelPropType.EnumNames.Length; index++)
                 {
                     optionsStr += "" +
@@ -233,13 +233,14 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
             var component = new ComponentModel
             {
                 Name = inputModelProp.JsonName ?? inputModelProp.Name.ToCamelCase(),
-                Component = "Input",
+                Component = GetComponentType(inputModelProp.Type),
                 DisplayName = "DisplayName:" + inputModelProp.Name.ToPascalCase(),
                 Required = !inputModelProp.IsOptional,
                 ColProps = "" +
                 "{" +
                     $"span: {span}" +
                 "}",
+                HasDate = inputModelProp.Type.Contains("DateTime"),
             };
 
             if (appModel.Types.TryGetValue(inputModelProp.Type, out var inputModelPropType) &&
@@ -249,7 +250,6 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
 
                 var optionsStr = Environment.NewLine;
 
-                var options = new object[inputModelPropType.EnumNames.Length];
                 for (var index = 0; index < inputModelPropType.EnumNames.Length; index++)
                 {
                     optionsStr += "" +
@@ -321,14 +321,15 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
                         var component = new ComponentModel
                         {
                             Name = inputModelProp.JsonName ?? inputModelProp.Name.ToCamelCase(),
-                            Component = "Input",
+                            Component = GetComponentType(inputModelProp.Type),
                             DisplayName = "DisplayName:" + inputModelProp.Name.ToPascalCase(),
                             Required = inputModelProp.IsRequired,
                             ColProps = "" +
                             "{" +
                                 "span: 24" +
                             "}",
-                            ComponentProps = "{}"
+                            ComponentProps = "{}",
+                            HasDate = inputModelProp.Type.Contains("DateTime")
                         };
 
                         if (DisableInputModelFields.Contains(inputModelProp.Name, StringComparer.InvariantCultureIgnoreCase))
@@ -351,14 +352,15 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
                 var component = new ComponentModel
                 {
                     Name = modelProp.JsonName ?? modelProp.Name.ToCamelCase(),
-                    Component = "Input",
+                    Component = GetComponentType(modelProp.Type),
                     DisplayName = "DisplayName:" + modelProp.Name.ToPascalCase(),
                     Required = modelProp.IsRequired,
                     ColProps = "" +
                         "{" +
                             "span: 24" +
                         "}",
-                    ComponentProps = "{}"
+                    ComponentProps = "{}",
+                    HasDate = modelProp.Type.Contains("DateTime")
                 };
 
                 if (DisableInputModelFields.Contains(modelProp.Name, StringComparer.InvariantCultureIgnoreCase))
@@ -424,6 +426,40 @@ public class VbenModelScriptGenerator : IVbenModelScriptGenerator, ISingletonDep
 
     protected virtual bool IsAbpBaseType(string typeSimple) => TypeScriptModelGenerator.AbpBaseTypes.Any(typeSimple.StartsWith);
 
+    protected virtual string GetComponentType(string typeSimple)
+    {
+        if (typeSimple.Contains("DateTime"))
+        {
+            return "DatePicker";
+        }
+
+        if (typeSimple.Contains("Boolean"))
+        {
+            return "Checkbox";
+        }
+
+        if (typeSimple.Contains("Enum"))
+        {
+            return "Select";
+        }
+
+        if (typeSimple.Contains("Int") ||
+            typeSimple.Contains("Byte") ||
+            typeSimple.Contains("Single") ||
+            typeSimple.Contains("Double") ||
+            typeSimple.Contains("Decimal"))
+        {
+            return "InputNumber";
+        }
+
+        if (typeSimple.Contains("Object"))
+        {
+            return "CodeEditorX";
+        }
+
+        return "Input";
+    }
+
     protected virtual string GetAbpBaseType(string typeSimple) =>
         TypeScriptModelGenerator.AbpBaseTypes.FirstOrDefault(typeSimple.StartsWith);
 
@@ -476,4 +512,6 @@ public class ComponentModel
     public bool Sorter { get; set; } = true;
     public bool Resizable { get; set; } = true;
     public bool Required { get; set; } = false;
+
+    public bool HasDate { get; set; } = false;
 }

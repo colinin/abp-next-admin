@@ -31,7 +31,12 @@ public class TypeScriptServiceProxyGenerator : ServiceProxyGeneratorBase<TypeScr
 
     public async override Task GenerateProxyAsync(Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs args)
     {
-        var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(args);
+        var applicationApiDescriptionModel = await GetApplicationApiDescriptionModelAsync(
+            args,
+            new Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto
+            {
+                IncludeTypes = true
+            });
         var outputFolderRoot = args.Output;
 
         foreach (var module in applicationApiDescriptionModel.Modules)
