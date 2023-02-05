@@ -86,22 +86,35 @@ public class VbenViewScriptGenerator : IVbenViewScriptGenerator, ISingletonDepen
             .Select(action => action.Value)
             .FirstOrDefault();
 
+        // 高级查询
+        var getAvailableFieldsAction = controllerModel.Actions
+            .Where(action => action.Value.Name.Equals("GetAvailableFieldsAsync"))
+            .Select(action => action.Value)
+            .FirstOrDefault();
+        var advancedSearchAction = controllerModel.Actions
+            .Where(action => action.Value.Name.Equals("GetListAsyncByDynamicInput"))
+            .Select(action => action.Value)
+            .FirstOrDefault();
+
         var tableContent = await _templateRenderer.RenderAsync(
             "VbenTableView",
             new
             {
                 Key = "id",
                 PagedRequest = pagedResultAction != null,
+                HasAdvancedSearch = getAvailableFieldsAction != null && advancedSearchAction != null,
+                AvailableFieldsAction = getAvailableFieldsAction?.UniqueName ?? "GetAvailableFieldsAsync",
+                AdvancedSearchAction = advancedSearchAction?.UniqueName ?? "GetListAsyncByDynamicInput",
                 GetListAction = pagedResultAction?.UniqueName ?? "GetListAsyncByInput",
                 HasCreate = createAction != null,
-                CreatePermission = true,
+                CreatePermission = createAction != null && createAction.AllowAnonymous != true,
                 CreatePermissionName = $"{moduleDefinition.RemoteServiceName.ToPascalCase()}.{controllerModel.ControllerName.ToPascalCase()}.Create",
                 HasUpdate = updateAction != null,
-                UpdatePermission = true,
+                UpdatePermission = updateAction != null && updateAction.AllowAnonymous != true,
                 UpdatePermissionName = $"{moduleDefinition.RemoteServiceName.ToPascalCase()}.{controllerModel.ControllerName.ToPascalCase()}.Update",
                 HasDelete = deleteAction != null,
                 DeleteAction = deleteAction?.UniqueName ?? "DeleteAsyncById",
-                DeletePermission = true,
+                DeletePermission = deleteAction != null && deleteAction.AllowAnonymous != true,
                 DeletePermissionName = $"{moduleDefinition.RemoteServiceName.ToPascalCase()}.{controllerModel.ControllerName.ToPascalCase()}.Delete",
                 Application = controllerModel.ControllerName,
                 ModalName = $"{controllerModel.ControllerName.ToPascalCase()}Modal",
