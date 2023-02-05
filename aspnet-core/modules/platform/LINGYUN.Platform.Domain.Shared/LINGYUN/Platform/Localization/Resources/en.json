@@ -37,6 +37,10 @@
     "DisplayName:Basic": "Basic",
     "DisplayName:DataDictionary": "Data Dictionary",
     "DisplayName:RoleName": "Role Name",
+    "DisplayName:Note": "Note",
+    "DisplayName:Version": "Version",
+    "DisplayName:ForceUpdate": "Force Update",
+    "DisplayName:Authors": "Authors",
     "Layout:AddNew": "Add New",
     "Layout:Edit": "Edit",
     "Layout:EditByName": "Edit Layout - {0}",
@@ -60,6 +64,7 @@
     "DuplicateDataItem": "A data dictionary entry named {0} already exists!",
     "DataItemNotFound": "There is no data dictionary entry named {0}!",
     "UnableRemoveHasChildNode": "Current data dictionary exists child node, cannot delete!",
-    "DuplicateLayout": "A layout named {0} already exists!"
+    "DuplicateLayout": "A layout named {0} already exists!",
+    "Packages": "Packages"
   }
 }
