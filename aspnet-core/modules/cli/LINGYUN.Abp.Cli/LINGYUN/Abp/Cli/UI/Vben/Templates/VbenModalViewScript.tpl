@@ -43,8 +43,8 @@
   const [registerModal, { {{ if model.has_submit }}closeModal{{ end }} }] = useModalInner((data) => {
     nextTick(() => {
       resetFields();
-      fetchEntity(data.{{ model.key }}) {
-          fetchEntity(data.{{ model.key }});
+      if (data.{{ model.key }}) {
+        fetchEntity(data.{{ model.key }});
       }
     });
   });
