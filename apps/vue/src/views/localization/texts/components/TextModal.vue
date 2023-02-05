@@ -47,7 +47,7 @@
         resultField: 'items',
         labelField: 'uiCultureName',
         valueField: 'cultureName',
-        onSelect: (key) => {
+        onChange: (key) => {
           // 当文化变更时，检查键值是否有目标值
           const model = unref(modelRef);
           if (model?.key) {
