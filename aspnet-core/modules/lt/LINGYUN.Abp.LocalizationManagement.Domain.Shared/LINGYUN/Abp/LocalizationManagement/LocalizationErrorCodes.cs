@@ -10,7 +10,7 @@ public static class LocalizationErrorCodes
     {
         public const string Prefix = Namespace + ":001";
         /// <summary>
-        /// 名称已经存在
+        /// 语言 {CultureName} 已经存在
         /// </summary>
         public const string NameAlreadyExists = Prefix + "100";
         /// <summary>
@@ -26,7 +26,7 @@ public static class LocalizationErrorCodes
     {
         public const string Prefix = Namespace + ":002";
         /// <summary>
-        /// 名称已经存在
+        /// 资源 {Name} 已经存在
         /// </summary>
         public const string NameAlreadyExists = Prefix + "100";
         /// <summary>
