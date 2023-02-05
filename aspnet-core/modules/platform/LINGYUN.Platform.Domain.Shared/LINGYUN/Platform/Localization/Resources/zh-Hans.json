@@ -37,6 +37,10 @@
     "DisplayName:Basic": "基础信息",
     "DisplayName:DataDictionary": "数据字典",
     "DisplayName:RoleName": "角色名称",
+    "DisplayName:Note": "发版说明",
+    "DisplayName:Version": "版本",
+    "DisplayName:ForceUpdate": "强制更新",
+    "DisplayName:Authors": "作者",
     "Layout:AddNew": "添加新布局",
     "Layout:Edit": "编辑布局",
     "Layout:EditByName": "编辑布局 - {0}",
@@ -60,6 +64,7 @@
     "DuplicateDataItem": "已经存在名为 {0} 的数据字典项!",
     "DataItemNotFound": "不存在名为 {0} 的数据字典项!",
     "UnableRemoveHasChildNode": "当前数据字典存在子节点,无法删除!",
-    "DuplicateLayout": "已经存在名为 {0} 的布局!"
+    "DuplicateLayout": "已经存在名为 {0} 的布局!",
+    "Packages": "包列表"
   }
 }
