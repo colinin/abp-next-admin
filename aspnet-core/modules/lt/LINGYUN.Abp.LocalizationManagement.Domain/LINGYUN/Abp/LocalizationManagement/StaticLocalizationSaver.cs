@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Guids;
 using Volo.Abp.Localization;
 using Volo.Abp.Uow;
 
@@ -14,6 +15,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [Dependency(ReplaceServices = true)]
 public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDependency
 {
+    protected IGuidGenerator GuidGenerator { get; }
     protected ILanguageRepository LanguageRepository { get; }
     protected ITextRepository TextRepository { get; }
     protected IResourceRepository ResourceRepository { get; }
@@ -23,6 +25,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
     protected AbpLocalizationPersistenceOptions LocalizationPersistenceOptions { get; }
 
     public StaticLocalizationSaver(
+        IGuidGenerator guidGenerator,
         IServiceProvider serviceProvider,
         ILanguageRepository languageRepository, 
         ITextRepository textRepository, 
@@ -31,6 +34,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
         IOptions<AbpLocalizationOptions> localizationOptions, 
         IOptions<AbpLocalizationPersistenceOptions> localizationPersistenceOptions)
     {
+        GuidGenerator = guidGenerator;
         ServiceProvider = serviceProvider;
         LanguageRepository = languageRepository;
         TextRepository = textRepository;
@@ -51,6 +55,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
             {
                 await LanguageRepository.InsertAsync(
                     new Language(
+                        GuidGenerator.Create(),
                         language.CultureName, 
                         language.UiCultureName, 
                         language.DisplayName, 
@@ -71,6 +76,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
                     {
                         await ResourceRepository.InsertAsync(
                             new Resource(
+                                GuidGenerator.Create(),
                                 localizationResource.ResourceName,
                                 localizationResource.ResourceName,
                                 localizationResource.ResourceName,

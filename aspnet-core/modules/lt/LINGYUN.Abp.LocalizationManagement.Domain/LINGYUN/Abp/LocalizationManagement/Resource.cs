@@ -14,10 +14,12 @@ namespace LINGYUN.Abp.LocalizationManagement
         public virtual string DefaultCultureName { get; set; }
         protected Resource() { }
         public Resource(
+            Guid id,
             [NotNull] string name,
             [CanBeNull] string displayName = null,
             [CanBeNull] string description = null,
             [CanBeNull] string defaultCultureName = null)
+            : base(id)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), ResourceConsts.MaxNameLength);
 
@@ -26,6 +28,21 @@ namespace LINGYUN.Abp.LocalizationManagement
             DefaultCultureName = Check.Length(defaultCultureName, nameof(defaultCultureName), ResourceConsts.MaxDefaultCultureNameLength);
 
             Enable = true;
+        }
+
+        public virtual void SetDisplayName(string displayName)
+        {
+            DisplayName = Check.Length(displayName, nameof(displayName), ResourceConsts.MaxDisplayNameLength);
+        }
+
+        public virtual void SetDescription(string description)
+        {
+            Description = Check.Length(description, nameof(description), ResourceConsts.MaxDescriptionLength);
+        }
+
+        public virtual void SetDefaultCultureName(string defaultCultureName)
+        {
+            DefaultCultureName = Check.Length(defaultCultureName, nameof(defaultCultureName), ResourceConsts.MaxDefaultCultureNameLength);
         }
     }
 }
