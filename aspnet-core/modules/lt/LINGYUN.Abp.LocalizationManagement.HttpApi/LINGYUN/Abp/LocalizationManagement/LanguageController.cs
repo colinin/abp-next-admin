@@ -19,6 +19,13 @@ public class LanguageController : AbpControllerBase, ILanguageAppService
         _service = service;
     }
 
+    [HttpGet]
+    [Route("{name}")]
+    public virtual Task<LanguageDto> GetByNameAsync(string name)
+    {
+        return _service.GetByNameAsync(name);
+    }
+
     [HttpPost]
     [Authorize(LocalizationManagementPermissions.Language.Create)]
     public virtual Task<LanguageDto> CreateAsync(LanguageCreateDto input)

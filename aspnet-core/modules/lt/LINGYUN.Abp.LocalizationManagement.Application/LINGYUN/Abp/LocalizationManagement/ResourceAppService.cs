@@ -15,6 +15,13 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
         _repository = repository;
     }
 
+    public async virtual Task<ResourceDto> GetByNameAsync(string name)
+    {
+        var resource = await InternalGetByNameAsync(name);
+
+        return ObjectMapper.Map<Resource, ResourceDto>(resource);
+    }
+
     [Authorize(LocalizationManagementPermissions.Resource.Create)]
     public async virtual Task<ResourceDto> CreateAsync(ResourceCreateDto input)
     {
@@ -41,7 +48,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
     [Authorize(LocalizationManagementPermissions.Resource.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var resource = await GetByNameAsync(name);
+        var resource = await InternalGetByNameAsync(name);
 
         await _repository.DeleteAsync(resource);
 
@@ -51,7 +58,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
     [Authorize(LocalizationManagementPermissions.Resource.Update)]
     public async virtual Task<ResourceDto> UpdateAsync(string name, ResourceUpdateDto input)
     {
-        var resource = await GetByNameAsync(name);
+        var resource = await InternalGetByNameAsync(name);
 
         resource.SetDisplayName(input.DisplayName);
         resource.SetDescription(input.Description);
@@ -64,7 +71,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
     }
 
-    private async Task<Resource> GetByNameAsync(string name)
+    private async Task<Resource> InternalGetByNameAsync(string name)
     {
         var resource = await _repository.FindByNameAsync(name);
 

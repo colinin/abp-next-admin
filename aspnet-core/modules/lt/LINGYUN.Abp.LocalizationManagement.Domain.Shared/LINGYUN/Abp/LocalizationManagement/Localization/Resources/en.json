@@ -17,6 +17,8 @@
     "Filter": "Filter",
     "SaveAndNext": "Save & Next",
     "SearchFilter": "Search",
-    "Text:AddNew": "Add New Text"
+    "Text:AddNew": "New Text",
+    "Language:AddNew": "New Language",
+    "Resource:AddNew": "New Resource"
   }
 }

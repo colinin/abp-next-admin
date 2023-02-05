@@ -20,6 +20,13 @@ public class ResourceController : AbpControllerBase, IResourceAppService
         _service = service;
     }
 
+    [HttpGet]
+    [Route("{name}")]
+    public virtual Task<ResourceDto> GetByNameAsync(string name)
+    {
+        return _service.GetByNameAsync(name);
+    }
+
     [HttpPost]
     [Authorize(LocalizationManagementPermissions.Resource.Create)]
     public virtual Task<ResourceDto> CreateAsync(ResourceCreateDto input)

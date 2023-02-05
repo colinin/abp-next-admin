@@ -17,6 +17,7 @@
     "DisplayName:UiCultureName": "Ui Culture Name",
     "DisplayName:DisplayName": "Display Name",
     "DisplayName:FlagIcon": "Flag Icon",
-    "DisplayName:Description": "Description"
+    "DisplayName:Description": "Description",
+    "DisplayName:DefaultCultureName": "Default Culture"
   }
 }

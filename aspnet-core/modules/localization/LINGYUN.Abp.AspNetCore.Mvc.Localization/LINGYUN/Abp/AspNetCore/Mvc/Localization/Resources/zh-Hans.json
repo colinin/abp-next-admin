@@ -17,6 +17,7 @@
     "DisplayName:UiCultureName": "Ui文件名称",
     "DisplayName:DisplayName": "显示名称",
     "DisplayName:FlagIcon": "旗帜图标",
-    "DisplayName:Description": "描述"
+    "DisplayName:Description": "描述",
+    "DisplayName:DefaultCultureName": "默认文化"
   }
 }

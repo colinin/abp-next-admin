@@ -8,11 +8,16 @@ export interface Language extends AuditedEntityDto<string> {
 
 export interface LanguageCreateOrUpdate {
   enable: boolean;
-  cultureName: string;
-  uiCultureName: string;
   displayName: string;
   flagIcon: string;
 }
+
+export interface LanguageCreate extends LanguageCreateOrUpdate {
+  cultureName: string;
+  uiCultureName: string;
+}
+
+export interface LanguageUpdate extends LanguageCreateOrUpdate {}
 
 export interface LanguageListResult extends ListResultDto<Language> {}
 

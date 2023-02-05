@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.ObjectMapping;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
@@ -13,6 +14,13 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
     public LanguageAppService(ILanguageRepository repository)
     {
         _repository = repository;
+    }
+
+    public async virtual Task<LanguageDto> GetByNameAsync(string name)
+    {
+        var language = await InternalGetByNameAsync(name);
+
+        return ObjectMapper.Map<Language, LanguageDto>(language);
     }
 
     [Authorize(LocalizationManagementPermissions.Language.Create)]
@@ -41,7 +49,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
     [Authorize(LocalizationManagementPermissions.Language.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var language = await GetByNameAsync(name);
+        var language = await InternalGetByNameAsync(name);
 
         await _repository.DeleteAsync(language);
 
@@ -51,7 +59,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
     [Authorize(LocalizationManagementPermissions.Language.Update)]
     public async virtual Task<LanguageDto> UpdateAsync(string name, LanguageUpdateDto input)
     {
-        var language = await GetByNameAsync(name);
+        var language = await InternalGetByNameAsync(name);
 
         language.SetFlagIcon(input.FlagIcon);
         language.SetDisplayName(input.DisplayName);
@@ -63,7 +71,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
         return ObjectMapper.Map<Language, LanguageDto>(language);
     }
 
-    private async Task<Language> GetByNameAsync(string name)
+    private async Task<Language> InternalGetByNameAsync(string name)
     {
         var language = await _repository.FindByCultureNameAsync(name);
 

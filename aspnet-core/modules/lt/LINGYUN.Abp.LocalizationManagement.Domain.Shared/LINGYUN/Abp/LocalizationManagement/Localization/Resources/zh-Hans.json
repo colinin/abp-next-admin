@@ -17,6 +17,8 @@
     "Filter": "过滤字符",
     "SaveAndNext": "保存并下一步",
     "SearchFilter": "请输入过滤字符",
-    "Text:AddNew": "添加新文档"
+    "Text:AddNew": "添加新文档",
+    "Language:AddNew": "添加新语言",
+    "Resource:AddNew": "添加新资源"
   }
 }

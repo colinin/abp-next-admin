@@ -1,17 +1,57 @@
 <template>
   <div class="content">
-    <BasicTable @register="registerTable" />
+    <BasicTable @register="registerTable">
+      <template #toolbar>
+        <Button
+          v-auth="['LocalizationManagement.Resource.Create']"
+          type="primary"
+          @click="handleAddNew"
+        >
+          {{ L('Language:AddNew') }}
+        </Button>
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :stop-button-propagation="true"
+            :actions="[
+              {
+                auth: 'LocalizationManagement.Resource.Update',
+                label: L('Edit'),
+                icon: 'ant-design:edit-outlined',
+                onClick: handleEdit.bind(null, record),
+              },
+              {
+                auth: 'LocalizationManagement.Resource.Delete',
+                label: L('Delete'),
+                color: 'error',
+                icon: 'ant-design:delete-outlined',
+                onClick: handleDelete.bind(null, record),
+              },
+            ]"
+          />
+        </template>
+      </template>
+    </BasicTable>
+    <ResourceModal @register="registerModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { onMounted } from 'vue';
+  import { Button } from 'ant-design-vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { BasicTable, useTable } from '/@/components/Table';
-  import { getList } from '/@/api/localization/resources';
+  import { BasicTable, TableAction, useTable } from '/@/components/Table';
+  import { useModal } from '/@/components/Modal';
+  import { getList, GetAsyncByName, DeleteAsyncByName } from '/@/api/localization/resources';
+  import { Resource } from '/@/api/localization/model/resourcesModel';
   import { getDataColumns } from './TableData';
+  import ResourceModal from './ResourceModal.vue';
 
-  const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
+  const { createConfirm, createMessage } = useMessage();
+  const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
+  const [registerModal, { openModal }] = useModal();
   const [registerTable, { setTableData, getForm }] = useTable({
     rowKey: 'name',
     title: L('Resources'),
@@ -37,6 +77,11 @@
       ],
       submitFunc: fetchResources,
     },
+    actionColumn: {
+      width: 150,
+      title: L('Actions'),
+      dataIndex: 'action',
+    },
   });
   onMounted(fetchResources);
 
@@ -46,6 +91,30 @@
       return getList().then((res) => {
         setTableData(res.items);
       });
+    });
+  }
+
+  function handleAddNew() {
+    openModal(true, {});
+  }
+
+  function handleEdit(record: Resource) {
+    GetAsyncByName(record.name).then((dto) => {
+      openModal(true, dto);
+    })
+  }
+
+  function handleDelete(record: Resource) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessage'),
+      onOk: () => {
+        return DeleteAsyncByName(record.name).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          fetchResources();
+        });
+      },
     });
   }
 </script>
