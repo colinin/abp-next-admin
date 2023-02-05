@@ -1,4 +1,5 @@
 export interface Resource {
+  id: string;
   name: string;
   displayName: string;
   description: string;
@@ -6,10 +7,17 @@ export interface Resource {
 
 export interface ResourceCreateOrUpdate {
   enable: boolean;
-  name: string;
   displayName: string;
-  description: string;
+  description?: string;
+  defaultCultureName?: string;
 }
+
+export interface ResourceCreate extends ResourceCreateOrUpdate {
+  name: string;
+}
+
+export interface ResourceUpdate extends ResourceCreateOrUpdate {}
+
 
 export interface ResourceListResult extends ListResultDto<Resource> {}
 

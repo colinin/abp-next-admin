@@ -35,5 +35,15 @@ export function getDataColumns(): BasicColumn[] {
         return last.description?.localeCompare(next.description) ?? -1;
       },
     },
+    {
+      title: L('DisplayName:DefaultCultureName'),
+      dataIndex: 'defaultCultureName',
+      align: 'left',
+      width: 150,
+      resizable: true,
+      sorter: (last, next) => {
+        return last.defaultCultureName?.localeCompare(next.defaultCultureName) ?? -1;
+      },
+    },
   ];
 }

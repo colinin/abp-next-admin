@@ -2,8 +2,8 @@
   "profiles": {
     "LINGYUN.Abp.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "generate-view -t vben-view -m auditing -o D:\\Projects\\Development\\view-script -url http://127.0.0.1:30000/"
-      //"commandLineArgs": "generate-proxy -t ts -asp uni-app-axios -u http://127.0.0.1:30025 -m Platform -o D:\\Projects\\Development\\type-script"
+      "commandLineArgs": "generate-view -t vben-view -m task-management -o D:\\Projects\\Development\\view-script -url http://127.0.0.1:30000/"
+      // "commandLineArgs": "generate-proxy -t ts -asp vben-dynamic -u http://127.0.0.1:30000 -m task-management -o D:\\Projects\\Development\\type-script"
     }
   }
 }

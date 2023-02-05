@@ -13,7 +13,7 @@ public interface IDynamicQueryableAppService<TEntityDto>
     /// <summary>
     /// 根据动态条件查询数据
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="dynamicInput"></param>
     /// <returns></returns>
-    Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput input);
+    Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput dynamicInput);
 }

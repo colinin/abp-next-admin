@@ -3,7 +3,6 @@ using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.LocalizationManagement
 {
@@ -16,10 +15,12 @@ namespace LINGYUN.Abp.LocalizationManagement
         public virtual string FlagIcon { get; set; }
         protected Language() { }
         public Language(
+            Guid id,
             [NotNull] string cultureName,
             [NotNull] string uiCultureName,
             [NotNull] string displayName,
             string flagIcon = null)
+            : base(id)
         {
             CultureName = Check.NotNullOrWhiteSpace(cultureName, nameof(cultureName), LanguageConsts.MaxCultureNameLength);
             UiCultureName = Check.NotNullOrWhiteSpace(uiCultureName, nameof(uiCultureName), LanguageConsts.MaxUiCultureNameLength);
@@ -30,6 +31,16 @@ namespace LINGYUN.Abp.LocalizationManagement
                 : null;
 
             Enable = true;
+        }
+
+        public virtual void SetDisplayName(string displayName)
+        {
+            DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), LanguageConsts.MaxDisplayNameLength);
+        }
+
+        public virtual void SetFlagIcon(string flagIcon)
+        {
+            FlagIcon = Check.Length(flagIcon, nameof(flagIcon), LanguageConsts.MaxFlagIconLength);
         }
 
         public virtual void ChangeCulture(string cultureName, string uiCultureName = null, string displayName = null)

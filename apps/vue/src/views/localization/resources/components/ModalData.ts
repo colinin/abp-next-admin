@@ -55,5 +55,11 @@ export function getModalFormSchemas(): FormSchema[] {
       label: L('DisplayName:Description'),
       colProps: { span: 24 },
     },
+    {
+      field: 'description',
+      component: 'InputTextArea',
+      label: L('DisplayName:Description'),
+      colProps: { span: 24 },
+    },
   ];
 }

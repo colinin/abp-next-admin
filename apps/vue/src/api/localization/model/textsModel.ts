@@ -1,12 +1,12 @@
 export interface Text {
-  key: boolean;
+  key: string;
   value: string;
   cultureName: string;
   resourceName: string;
 }
 
 export interface TextDifference {
-  key: boolean;
+  key: string;
   value: string;
   cultureName: string;
   resourceName: string;
@@ -15,7 +15,7 @@ export interface TextDifference {
 }
 
 export interface SetTextInput {
-  key: boolean;
+  key: string;
   value: string;
   cultureName: string;
   resourceName: string;
@@ -24,7 +24,7 @@ export interface SetTextInput {
 export interface TextListResult extends ListResultDto<TextDifference> {}
 
 export interface GetTextByKey {
-  key: boolean;
+  key: string;
   cultureName: string;
   resourceName: string;
 }

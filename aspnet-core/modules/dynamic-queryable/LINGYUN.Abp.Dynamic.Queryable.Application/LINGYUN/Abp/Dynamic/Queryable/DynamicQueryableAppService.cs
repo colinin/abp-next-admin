@@ -56,16 +56,16 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
     /// <summary>
     /// 根据动态条件查询数据
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="dynamicInput"></param>
     /// <returns></returns>
-    public async virtual Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput input)
+    public async virtual Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput dynamicInput)
     {
         Expression<Func<TEntity, bool>> condition = (e) => true;
 
-        condition = condition.DynamicQuery(input.Queryable);
+        condition = condition.DynamicQuery(dynamicInput.Queryable);
 
         var totalCount = await GetCountAsync(condition);
-        var entities = await GetListAsync(condition, input);
+        var entities = await GetListAsync(condition, dynamicInput);
 
         return new PagedResultDto<TEntityDto>(totalCount,
             MapToEntitiesDto(entities));
