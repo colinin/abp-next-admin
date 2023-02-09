@@ -24,6 +24,7 @@ using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,6 +86,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(BackendAdminMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),

@@ -8,6 +8,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,6 +60,14 @@ public partial class WorkflowManagementHttpApiHostModule
     private void PreConfigureApp()
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
+
+        PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
+        {
+            // 以开放端口区别
+            options.SnowflakeIdOptions.WorkerId = 29;
+            options.SnowflakeIdOptions.WorkerIdBits = 5;
+            options.SnowflakeIdOptions.DatacenterId = 1;
+        });
     }
 
 

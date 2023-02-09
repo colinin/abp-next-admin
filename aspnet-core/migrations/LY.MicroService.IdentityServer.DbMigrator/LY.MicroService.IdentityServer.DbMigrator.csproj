@@ -45,11 +45,7 @@
 	  <ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.EntityFrameworkCore\LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
+		<ProjectReference Include="..\LY.MicroService.IdentityServer.EntityFrameworkCore\LY.MicroService.IdentityServer.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

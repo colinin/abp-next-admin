@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -19,6 +18,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,7 +67,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-    typeof(AbpCAPEventBusModule),
+    typeof(TaskManagementMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcModule),
@@ -75,6 +75,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpCAPEventBusModule),
     typeof(AbpAutofacModule)
     )]
 public partial class TaskManagementHttpApiHostModule : AbpModule

@@ -1,4 +1,4 @@
-﻿using LY.MicroService.IdentityServer.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

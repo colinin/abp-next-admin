@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.MultiTenancy;
-using LY.MicroService.PlatformManagement.EntityFrameworkCore;
+using LY.MicroService.Platform.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -51,12 +51,12 @@ public class TenantSynchronizer :
             {
                 Logger.LogInformation("Migrating the new tenant database with platform...");
                 // 迁移租户数据
-                await DbSchemaMigrator.MigrateAsync<PlatformManagementMigrationsDbContext>(
+                await DbSchemaMigrator.MigrateAsync<PlatformMigrationsDbContext>(
                     (connectionString, builder) =>
                     {
                         builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-                        return new PlatformManagementMigrationsDbContext(builder.Options);
+                        return new PlatformMigrationsDbContext(builder.Options);
                     });
                 Logger.LogInformation("Migrated the new tenant database  with platform.");
 

@@ -1,4 +1,4 @@
-﻿using LY.MicroService.RealtimeMessage.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

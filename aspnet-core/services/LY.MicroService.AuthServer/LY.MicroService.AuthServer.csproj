@@ -43,6 +43,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\migrations\LY.MicroService.AuthServer.EntityFrameworkCore\LY.MicroService.AuthServer.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\modules\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj" />
@@ -61,10 +62,6 @@
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat\LINGYUN.Abp.OpenIddict.WeChat.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

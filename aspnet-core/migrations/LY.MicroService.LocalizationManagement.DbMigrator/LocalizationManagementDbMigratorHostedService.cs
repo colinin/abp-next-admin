@@ -1,4 +1,4 @@
-﻿using LY.MicroService.LocalizationManagement.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -13,7 +13,7 @@ public class AbpIdGeneratorModuleTestModule : AbpModule
     {
         PreConfigure<SnowflakeIdOptions>(options =>
         {
-            options.WorkerId = 30010 - 30000;
+            options.WorkerId = 10;
             options.WorkerIdBits = 5;
             options.DatacenterId = 1;
         });

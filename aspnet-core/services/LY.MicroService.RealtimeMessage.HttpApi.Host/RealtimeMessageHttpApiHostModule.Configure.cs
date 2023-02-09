@@ -60,7 +60,7 @@ public partial class RealtimeMessageHttpApiHostModule
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
             // 以开放端口区别，应在0-31之间
-            options.SnowflakeIdOptions.WorkerId = 30020 - 30000;
+            options.SnowflakeIdOptions.WorkerId = 20;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });

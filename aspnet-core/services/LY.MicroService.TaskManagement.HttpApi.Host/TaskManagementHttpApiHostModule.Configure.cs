@@ -55,7 +55,7 @@ public partial class TaskManagementHttpApiHostModule
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
             // 以开放端口区别
-            options.SnowflakeIdOptions.WorkerId = 30040;
+            options.SnowflakeIdOptions.WorkerId = 27;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });

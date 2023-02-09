@@ -47,10 +47,7 @@
 	  <ProjectReference Include="..\..\modules\message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
+	  <ProjectReference Include="..\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>
