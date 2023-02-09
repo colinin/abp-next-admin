@@ -46,10 +46,7 @@
 	  <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
+	  <ProjectReference Include="..\LY.MicroService.TaskManagement.EntityFrameworkCore\LY.MicroService.TaskManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

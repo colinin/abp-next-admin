@@ -17,10 +17,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -43,9 +39,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
-	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\LY.MicroService.BackendAdmin.EntityFrameworkCore\LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

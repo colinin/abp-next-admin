@@ -60,7 +60,7 @@ public partial class WebhooksManagementHttpApiHostModule
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
         {
             // 以开放端口区别
-            options.SnowflakeIdOptions.WorkerId = 30045;
+            options.SnowflakeIdOptions.WorkerId = 28;
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });

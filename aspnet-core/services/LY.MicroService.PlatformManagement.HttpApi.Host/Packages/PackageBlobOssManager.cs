@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
-using Volo.Abp.Content;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 
@@ -21,15 +20,15 @@ namespace LY.MicroService.PlatformManagement.Packages;
     typeof(PackageBlobOssManager))]
 public class PackageBlobOssManager : PackageBlobManager, ITransientDependency
 {
-    protected IOssObjectAppService ObjectAppService { get; }
+    protected IOssContainerFactory OssContainerFactory { get; }
 
     public PackageBlobOssManager(
         IPackageBlobNormalizer blobNormalizer, 
         IBlobContainer<PackageContainer> packageContainer,
-        IOssObjectAppService objectAppService) 
+        IOssContainerFactory ossContainerFactory) 
         : base(blobNormalizer, packageContainer)
     {
-        ObjectAppService = objectAppService;
+        OssContainerFactory = ossContainerFactory;
     }
 
     public async override Task RemoveBlobAsync(
@@ -42,13 +41,9 @@ public class PackageBlobOssManager : PackageBlobManager, ITransientDependency
         var path = blobName.Replace(packageBlob.Name, "");
         path.RemovePostFix(Path.PathSeparator.ToString());
 
-        var input = new GetOssObjectInput
-        {
-            Bucket = bucket,
-            Path = path,
-            Object = packageBlob.Name
-        };
-        await ObjectAppService.DeleteAsync(input);
+        var oss = OssContainerFactory.Create();
+
+        await oss.DeleteObjectAsync(bucket, packageBlob.Name, path);
     }
 
     protected async override Task<Stream> DownloadFromBlobAsync(
@@ -61,14 +56,11 @@ public class PackageBlobOssManager : PackageBlobManager, ITransientDependency
         var path = blobName.Replace(packageBlob.Name, "");
         path.RemovePostFix(Path.PathSeparator.ToString());
 
-        var input = new GetOssObjectInput
-        {
-            Bucket = bucket,
-            Path = path,
-            Object = packageBlob.Name
-        };
-        var ossContent = await ObjectAppService.GetContentAsync(input);
-        return ossContent.GetStream();
+        var oss = OssContainerFactory.Create();
+
+        var ossObject = await oss.GetObjectAsync(bucket, packageBlob.Name, path);
+
+        return ossObject.Content;
     }
 
     public async override Task SaveBlobAsync(
@@ -82,16 +74,17 @@ public class PackageBlobOssManager : PackageBlobManager, ITransientDependency
         var bucket = BlobContainerNameAttribute.GetContainerName<PackageContainer>();
         var path = blobName.Replace(packageBlob.Name, "");
 
-        var input = new CreateOssObjectInput
+        var request = new CreateOssObjectRequest(
+                    bucket,
+                    packageBlob.Name,
+                    stream,
+                    path)
         {
-            Bucket = bucket,
-            Path = path,
-            FileName= packageBlob.Name,
-            Overwrite= overrideExisting,
-            File = new RemoteStreamContent(stream, packageBlob.Name, packageBlob.ContentType)
+            Overwrite = overrideExisting
         };
 
-        var ossObject = await ObjectAppService.CreateAsync(input);
+        var oss = OssContainerFactory.Create();
+        var ossObject = await oss.CreateObjectAsync(request);
 
         if (!ossObject.MD5.IsNullOrWhiteSpace())
         {

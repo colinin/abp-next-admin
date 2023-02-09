@@ -1,4 +1,4 @@
-﻿using LY.MicroService.WebhooksManagement.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

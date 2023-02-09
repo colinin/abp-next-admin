@@ -1,4 +1,4 @@
-﻿using LY.MicroService.AuthServer.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

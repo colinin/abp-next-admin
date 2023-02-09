@@ -19,6 +19,7 @@ using LINGYUN.Abp.Webhooks.Identity;
 using LINGYUN.Abp.Webhooks.Saas;
 using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
+using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +56,12 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(WebhooksManagementMigrationsEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
@@ -63,11 +70,6 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
-    typeof(AbpSaasEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpSwashbuckleModule),

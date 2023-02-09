@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\configureawait.props" />
+	<Import Project="..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>LY.MicroService.AuthServer.EntityFrameworkCore</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

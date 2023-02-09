@@ -1,4 +1,4 @@
-﻿using LY.MicroService.BackendAdmin.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

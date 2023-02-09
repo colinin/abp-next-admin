@@ -54,12 +54,12 @@ public class TenantSynchronizer : IDistributedEventHandler<CreateEventData>, ITr
         {
             Logger.LogInformation("Migrating the new tenant database with AuthServer...");
             // 迁移租户数据
-            await DbSchemaMigrator.MigrateAsync<IdentityServertMigrationsDbContext>(
+            await DbSchemaMigrator.MigrateAsync<IdentityServerMigrationsDbContext>(
                 (connectionString, builder) =>
                 {
                     builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
-                    return new IdentityServertMigrationsDbContext(builder.Options);
+                    return new IdentityServerMigrationsDbContext(builder.Options);
                 });
 
             Logger.LogInformation("Migrated the new tenant database with AuthServer.");

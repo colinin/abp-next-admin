@@ -47,10 +47,7 @@
 	  <ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
 	  <ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
+	  <ProjectReference Include="..\LY.MicroService.Platform.EntityFrameworkCore\LY.MicroService.Platform.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

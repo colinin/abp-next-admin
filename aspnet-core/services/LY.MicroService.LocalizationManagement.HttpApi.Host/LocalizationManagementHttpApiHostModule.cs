@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -13,6 +12,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,6 +44,7 @@ namespace LY.MicroService.LocalizationManagement
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(LocalizationManagementMigrationsEntityFrameworkCoreModule),
         typeof(AbpDataDbMigratorModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAuthorizationOrganizationUnitsModule),

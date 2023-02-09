@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -23,8 +22,8 @@ using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
-using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
+using LY.MicroService.Platform.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -70,6 +69,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(PlatformMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
