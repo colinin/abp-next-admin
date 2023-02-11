@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
     /// <summary>
     /// Oss容器的本地文件系统实现
     /// </summary>
-    internal class FileSystemOssContainer : IOssContainer
+    internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
     {
         protected ICurrentTenant CurrentTenant { get; }
         protected IHostEnvironment Environment { get; }
@@ -93,6 +93,39 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
                 });
 
             return Task.FromResult(container);
+        }
+
+        public virtual Task ExpireAsync(ExprieOssObjectRequest request)
+        {
+            var filePath = CalculateFilePath(request.Bucket);
+
+            DirectoryHelper.CreateIfNotExists(filePath);
+
+            // 目录也属于Oss对象,需要抽象的文件系统集合来存储
+            var fileSystems = Directory.GetFileSystemEntries(filePath)
+                .Select(ConvertFileSystem)
+                .Where(file => file.CreationTime <= request.ExpirationTime)
+                .OrderBy(file => file.CreationTime)
+                .Take(request.Batch)
+                .Select(file => file.FullName);
+
+            static FileSystemInfo ConvertFileSystem(string path)
+            {
+                if (File.Exists(path))
+                {
+                    return new FileInfo(path);
+                }
+
+                return new DirectoryInfo(path);
+            }
+
+            foreach (var fileSystem in fileSystems)
+            {
+                FileHelper.DeleteIfExists(fileSystem);
+                DirectoryHelper.DeleteIfExists(fileSystem, true);
+            }
+
+            return Task.CompletedTask;
         }
 
         public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
