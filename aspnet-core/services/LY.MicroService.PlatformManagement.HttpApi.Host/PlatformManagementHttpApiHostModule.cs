@@ -24,15 +24,19 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
 using LY.MicroService.Platform.EntityFrameworkCore;
+using LY.MicroService.PlatformManagement.BackgroundWorkers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
@@ -41,6 +45,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace LY.MicroService.PlatformManagement;
 
@@ -117,6 +122,22 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+    }
+
+    public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnPostApplicationInitializationAsync(context));
+    }
+
+    public async override Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpOssManagementOptions>>().Value;
+        if (options.IsCleanupEnabled)
+        {
+            await context.ServiceProvider
+                .GetRequiredService<IBackgroundWorkerManager>()
+                .AddAsync(context.ServiceProvider.GetRequiredService<OssObjectTempCleanupBackgroundWorker>());
+        }
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

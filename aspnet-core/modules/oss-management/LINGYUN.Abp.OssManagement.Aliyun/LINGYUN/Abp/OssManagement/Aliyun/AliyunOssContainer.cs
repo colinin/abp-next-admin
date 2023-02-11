@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
     /// <summary>
     /// Oss容器的阿里云实现
     /// </summary>
-    internal class AliyunOssContainer : IOssContainer
+    internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
     {
         protected ICurrentTenant CurrentTenant { get; }
         protected IOssClientFactory OssClientFactory { get; }
@@ -133,6 +133,34 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
             if (BucketExists(ossClient, name))
             {
                 ossClient.DeleteBucket(name);
+            }
+        }
+
+        public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
+        {
+            var ossClient = await CreateClientAsync();
+
+            if (BucketExists(ossClient, request.Bucket))
+            {
+                var listObjects = ossClient.ListObjects(
+                    new ListObjectsRequest(request.Bucket)
+                    {
+                        MaxKeys = request.Batch
+                    });
+
+                var removeKeys = new List<string>();
+                foreach (var ossObjectSummary in listObjects.ObjectSummaries)
+                {
+                    if (ossObjectSummary.LastModified <= request.ExpirationTime)
+                    {
+                        removeKeys.Add(ossObjectSummary.Key);
+                    }
+                }
+
+                foreach (var removeKey in removeKeys)
+                {
+                    ossClient.DeleteObject(listObjects.BucketName, removeKey);
+                }
             }
         }
 

@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.OssManagement.Tencent
     /// <summary>
     /// Oss容器的阿里云实现
     /// </summary>
-    internal class TencentOssContainer : IOssContainer
+    internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
     {
         protected IClock Clock { get; }
         protected ICurrentTenant CurrentTenant { get; }
@@ -155,6 +155,33 @@ namespace LINGYUN.Abp.OssManagement.Tencent
             {
                 var deleteBucketRequest = new DeleteBucketRequest(name);
                 ossClient.DeleteBucket(deleteBucketRequest);
+            }
+        }
+
+        public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
+        {
+            var ossClient = await CreateClientAsync();
+
+            if (BucketExists(ossClient, request.Bucket))
+            {
+                var getBucketRequest = new GetBucketRequest(request.Bucket);
+
+                var getBucketResult = ossClient.GetBucket(getBucketRequest);
+
+                var removeKeys = new List<string>();
+                foreach (var content in getBucketResult.listBucket.contentsList)
+                {
+                    if (DateTime.TryParse(content.lastModified, out var lastModified) && lastModified <= request.ExpirationTime)
+                    {
+                        removeKeys.Add(content.key);
+                    }
+                }
+
+                foreach (var removeKey in removeKeys)
+                {
+                    ossClient.DeleteObject(
+                        new DeleteObjectRequest(getBucketResult.listBucket.name, removeKey));
+                }
             }
         }
 

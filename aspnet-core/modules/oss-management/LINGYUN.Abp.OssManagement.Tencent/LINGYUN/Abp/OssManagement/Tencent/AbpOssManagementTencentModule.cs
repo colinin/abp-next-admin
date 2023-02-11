@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.BlobStoring.Tencent;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.OssManagement.Tencent
@@ -12,6 +13,12 @@ namespace LINGYUN.Abp.OssManagement.Tencent
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddTransient<IOssContainerFactory, TencentOssContainerFactory>();
+
+            context.Services.AddTransient<IOssObjectExpireor>(provider =>
+                provider
+                    .GetRequiredService<IOssContainerFactory>()
+                    .Create()
+                    .As<TencentOssContainer>());
         }
     }
 }

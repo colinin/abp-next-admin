@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp;
+using Volo.Abp.BackgroundWorkers;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -11,6 +13,31 @@ namespace LINGYUN.Abp.OssManagement
         /// 不允许被删除
         /// </summary>
         public List<string> StaticBuckets { get; }
+        /// <summary>
+        /// Default value: true.
+        /// If <see cref="AbpBackgroundWorkerOptions.IsEnabled"/> is false,
+        /// this property is ignored and the cleanup worker doesn't work for this application instance.
+        /// </summary>
+        public bool IsCleanupEnabled { get; set; }
+        /// <summary>
+        /// Default: 3,600,000 ms.
+        /// </summary>
+        public int CleanupPeriod { get; set; }
+        /// <summary>
+        /// 禁用缓存目录清除作业
+        /// default: false
+        /// </summary>
+        public bool DisableTempPruning { get; set; }
+        /// <summary>
+        /// 每批次清理数量
+        /// default: 100
+        /// </summary>
+        public int MaximumTempSize { get; set; }
+        /// <summary>
+        /// 最小缓存对象寿命
+        /// default: 30 minutes
+        /// </summary>
+        public TimeSpan MinimumTempLifeSpan { get; set; }
 
         public AbpOssManagementOptions()
         {
@@ -25,8 +52,16 @@ namespace LINGYUN.Abp.OssManagement
                 // 工作流
                 "workflow",
                 // 图标
-                "icons"
+                "icons",
+                // 缓存
+                "temp"
             };
+
+            IsCleanupEnabled = true;
+            CleanupPeriod = 3_600_000;
+            MaximumTempSize = 100;
+            DisableTempPruning = false;
+            MinimumTempLifeSpan = TimeSpan.FromMinutes(30);
         }
 
         public void AddStaticBucket(string bucket)

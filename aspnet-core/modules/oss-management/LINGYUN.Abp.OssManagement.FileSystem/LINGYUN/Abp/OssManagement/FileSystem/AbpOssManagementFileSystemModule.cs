@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Volo.Abp;
+using System;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Modularity;
 
@@ -14,6 +13,12 @@ namespace LINGYUN.Abp.OssManagement.FileSystem
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddTransient<IOssContainerFactory, FileSystemOssContainerFactory>();
+
+            context.Services.AddTransient<IOssObjectExpireor>(provider =>
+                provider
+                    .GetRequiredService<IOssContainerFactory>()
+                    .Create()
+                    .As<FileSystemOssContainer>());
         }
     }
 }
