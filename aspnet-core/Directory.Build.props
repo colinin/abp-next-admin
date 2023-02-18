@@ -1,6 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
 		<VoloAbpPackageVersion>7.0.1</VoloAbpPackageVersion>
+		<VoloAbpLeptonXThemePackageVersion>2.0.1</VoloAbpLeptonXThemePackageVersion>
 		<LINGYUNAbpPackageVersion>7.0.1</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.9.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>

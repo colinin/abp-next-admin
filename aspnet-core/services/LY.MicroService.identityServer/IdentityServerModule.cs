@@ -25,7 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -47,7 +47,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebIdentityServerModule),
     typeof(AbpAccountApplicationModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
@@ -104,6 +104,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureLocalization();
         ConfigureAuditing();
         ConfigureDataSeeder();
+        ConfigureMvcUiTheme();
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
