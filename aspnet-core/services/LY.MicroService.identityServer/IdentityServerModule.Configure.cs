@@ -20,6 +20,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
@@ -173,6 +175,20 @@ public partial class IdentityServerModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<IdentityServerModule>("LY.MicroService.IdentityServer");
+        });
+    }
+
+    private void ConfigureMvcUiTheme()
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            //options.StyleBundles.Configure(
+            //    LeptonXLiteThemeBundles.Styles.Global,
+            //    bundle =>
+            //    {
+            //        bundle.AddFiles("/global-styles.css");
+            //    }
+            //);
         });
     }
     private void ConfigureLocalization()
