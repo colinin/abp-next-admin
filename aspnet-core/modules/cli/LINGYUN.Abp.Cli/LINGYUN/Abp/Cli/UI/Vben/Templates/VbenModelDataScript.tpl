@@ -2,9 +2,10 @@
 import { FormProps, FormSchema } from '/@/components/Form';
 
 const { L } = useLocalization(['{{model.remote_service}}', 'AbpUi']);
-{{ if model.exists_search_models }}
+
 export function getSearchFormProps(): Partial<FormProps> {
   return {
+    {{~ if model.exists_search_models ~}}
     labelWidth: 100,
     schemas: [
       {{~ for searchModel in model.search_models ~}}
@@ -16,9 +17,10 @@ export function getSearchFormProps(): Partial<FormProps> {
       },
       {{~ end ~}}
     ],
+    {{~ end ~}}
   };
 }
-{{ end }}
+
 export function getModalFormSchemas(): FormSchema[] {
   return [
     {{~ for inputModel in model.input_models ~}}
