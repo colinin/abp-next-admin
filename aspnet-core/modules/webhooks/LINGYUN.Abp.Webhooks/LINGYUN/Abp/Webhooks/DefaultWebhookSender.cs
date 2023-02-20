@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace LINGYUN.Abp.Webhooks
     {
         public ILogger<DefaultWebhookSender> Logger { protected get; set; }
 
+        private readonly AbpWebhooksOptions _options;
         private readonly IWebhookManager _webhookManager;
         private readonly IHttpClientFactory _httpClientFactory;
         
@@ -22,8 +24,10 @@ namespace LINGYUN.Abp.Webhooks
 
         public DefaultWebhookSender(
             IWebhookManager webhookManager,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            IOptions<AbpWebhooksOptions> options)
         {
+            _options = options.Value;
             _webhookManager = webhookManager;
             _httpClientFactory = httpClientFactory;
 
@@ -110,6 +114,19 @@ namespace LINGYUN.Abp.Webhooks
 
         protected virtual void AddAdditionalHeaders(HttpRequestMessage request, WebhookSenderArgs webhookSenderArgs)
         {
+            foreach (var header in _options.DefaultHttpHeaders)
+            {
+                if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                {
+                    continue;
+                }
+
+                if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                {
+                    continue;
+                }
+            }
+
             foreach (var header in webhookSenderArgs.Headers)
             {
                 if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
@@ -144,7 +161,7 @@ namespace LINGYUN.Abp.Webhooks
                     res.Add(header.Key, header.Value.JoinAsString(";"));
                 }
             }
-           
+
             return res;
         }
     }

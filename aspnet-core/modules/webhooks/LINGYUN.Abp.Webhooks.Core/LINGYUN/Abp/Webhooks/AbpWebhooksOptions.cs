@@ -28,6 +28,10 @@ public class AbpWebhooksOptions
     public HashSet<string> DeletedWebhooks { get; }
 
     public HashSet<string> DeletedWebhookGroups { get; }
+    /// <summary>
+    /// 默认请求头
+    /// </summary>
+    public IDictionary<string, string> DefaultHttpHeaders { get; }
 
     public AbpWebhooksOptions()
     {
@@ -39,5 +43,24 @@ public class AbpWebhooksOptions
 
         DeletedWebhooks = new HashSet<string>();
         DeletedWebhookGroups = new HashSet<string>();
+
+        DefaultHttpHeaders = new Dictionary<string, string>
+        {
+            // 取消响应内容包装
+            { "_AbpDontWrapResult", "true" },
+            // TODO: 可能跨域影响
+            // { "X-Requested-With", "XMLHttpRequest" },
+            // 标识来源
+            { "X-Requested-From", "abp-webhooks" },
+        };
+    }
+
+    public void AddHeader(string key, string value)
+    {
+        if (value.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+        DefaultHttpHeaders[key] = value;
     }
 }
