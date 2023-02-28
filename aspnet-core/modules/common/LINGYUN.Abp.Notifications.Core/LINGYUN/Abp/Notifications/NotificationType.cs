@@ -16,6 +16,10 @@
         /// <summary>
         /// 用户（对应用户,受租户控制）
         /// </summary>
-        User = 20
+        User = 20,
+        /// <summary>
+        /// 服务端回调,用户不应进行处理
+        /// </summary>
+        ServiceCallback = 30,
     }
 }

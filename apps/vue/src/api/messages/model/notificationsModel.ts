@@ -7,6 +7,7 @@ export enum NotificationType {
   Application = 0,
   System = 10,
   User = 20,
+  ServiceCallback = 30,
 }
 
 export enum NotificationSeverity {

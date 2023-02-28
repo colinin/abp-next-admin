@@ -145,6 +145,7 @@
   const emits = defineEmits(['columns-change']);
 
   const { t } = useI18n();
+  const attrs = useAttrs();
   const table = useTableContext();
 
   const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
@@ -379,7 +380,6 @@
   }
 
   function getPopupContainer() {
-    const attrs = useAttrs();
     return isFunction(attrs.getPopupContainer)
       ? attrs.getPopupContainer()
       : getParentContainer();
