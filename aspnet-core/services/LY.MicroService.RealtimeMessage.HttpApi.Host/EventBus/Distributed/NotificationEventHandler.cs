@@ -68,6 +68,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         /// <summary>
+        /// Reference to <see cref="INotificationDataSerializer"/>.
+        /// </summary>
+        protected INotificationDataSerializer NotificationDataSerializer { get; }
+        /// <summary>
         /// Reference to <see cref="INotificationDefinitionManager"/>.
         /// </summary>
         protected INotificationDefinitionManager NotificationDefinitionManager { get; }
@@ -92,6 +96,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             IStringLocalizerFactory stringLocalizerFactory,
             IOptions<AbpNotificationsPublishOptions> options,
             INotificationStore notificationStore,
+            INotificationDataSerializer notificationDataSerializer,
             INotificationDefinitionManager notificationDefinitionManager,
             INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
@@ -104,6 +109,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             BackgroundJobManager = backgroundJobManager;
             StringLocalizerFactory = stringLocalizerFactory;
             NotificationStore = notificationStore;
+            NotificationDataSerializer = notificationDataSerializer;
             NotificationDefinitionManager = notificationDefinitionManager;
             NotificationSubscriptionManager = notificationSubscriptionManager;
             NotificationPublishProviderManager = notificationPublishProviderManager;
@@ -289,8 +295,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 };
                 notificationInfo.SetId(eventData.Id);
 
-                // TODO: 可以做成一个接口来序列化消息
-                notificationInfo.Data = NotificationDataConverter.Convert(notificationInfo.Data);
+                notificationInfo.Data = NotificationDataSerializer.Serialize(notificationInfo.Data);
 
                 // 获取用户订阅
                 var subscriptionUsers = await GerSubscriptionUsersAsync(

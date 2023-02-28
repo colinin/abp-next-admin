@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.RealTime.Localization;
 using System;
+using System.Globalization;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 
@@ -20,6 +21,10 @@ namespace LINGYUN.Abp.Notifications
         /// 用来标识是否需要本地化的信息
         /// </summary>
         public const string LocalizerKey = "L";
+        /// <summary>
+        /// 用于本地化文化
+        /// </summary>
+        public const string CultureKey = "C";
 
         public virtual string Type => GetType().FullName;
 
@@ -58,13 +63,15 @@ namespace LINGYUN.Abp.Notifications
             LocalizableStringInfo message,
             DateTime createTime,
             string formUser,
-            LocalizableStringInfo description = null)
+            LocalizableStringInfo description = null,
+            string culture = null)
         {
             TrySetData("title", title);
             TrySetData("message", message);
             TrySetData("formUser", formUser);
             TrySetData("createTime", createTime);
             TrySetData(LocalizerKey, true);
+            TrySetData(CultureKey, culture ?? "en");
             if (description != null)
             {
                 TrySetData("description", description);
@@ -155,9 +162,10 @@ namespace LINGYUN.Abp.Notifications
         public bool NeedLocalizer()
         {
             var localizer = TryGetData(LocalizerKey);
-            if (localizer != null && localizer is bool needLocalizer)
+            if (localizer != null && 
+                bool.TryParse(localizer.ToString(), out var isLocalizer))
             {
-                return needLocalizer;
+                return isLocalizer;
             }
             return false;
         }
