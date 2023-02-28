@@ -69,7 +69,7 @@ export function useMessages() {
 
   function onMessageReceived(message: ChatMessage) {
     // 处理需要本地化的系统消息
-    if (message.source === MessageSourceTye.System && message.extraProperties.L === true) {
+    if (message.source === MessageSourceTye.System && (message.extraProperties.L === true || message.extraProperties.L === 'true')) {
       message.content = t(
         message.extraProperties.content.ResourceName + '.' + message.extraProperties.content.Name,
         message.extraProperties.content.Values as Recordable,

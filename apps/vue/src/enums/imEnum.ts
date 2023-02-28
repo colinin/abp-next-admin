@@ -26,4 +26,6 @@ export enum NotifyEventEnum {
   NOTIFICATIONS_RECEVIED = 'notifications:recevied',
   /** 通知已读 */
   NOTIFICATIONS_READ = 'notifications:read',
+  /** 服务端回调 */
+  NOTIFICATIONS_SERVICE_CALLBACK = 'notifications:service_callback',
 }

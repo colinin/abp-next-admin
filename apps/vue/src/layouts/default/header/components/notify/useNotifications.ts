@@ -2,12 +2,13 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { notification } from 'ant-design-vue';
 import { getList } from '/@/api/messages/notifications';
 import {
+  NotificationType,
   NotificationInfo,
   NotificationSeverity,
   NotificationReadState,
 } from '/@/api/messages/model/notificationsModel';
 import { formatToDateTime } from '/@/utils/dateUtil';
-import { TabItem, ListItem } from './data';
+import { TabItem, ListItem as Notification } from './data';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { NotifyEventEnum } from '/@/enums/imEnum';
 import { useSignalR } from '/@/hooks/web/useSignalR';
@@ -49,7 +50,7 @@ export function useNotifications() {
     if (!data.extraProperties) {
       return;
     }
-    if (data.extraProperties.L === true) {
+    if (data.extraProperties.L === true || data.extraProperties.L === 'true') {
       // TODO: 后端统一序列化格式
       const { L } = useLocalization(
         [data.extraProperties.title.resourceName ?? data.extraProperties.title.ResourceName,
@@ -70,7 +71,7 @@ export function useNotifications() {
         );
       }
     }
-    const notifier: ListItem = {
+    const notifier: Notification = {
       id: notificationInfo.id,
       avatar: data.extraProperties.avatar,
       title: title,
@@ -79,51 +80,56 @@ export function useNotifications() {
       datetime: formatToDateTime(notificationInfo.creationTime, 'YYYY-MM-DD HH:mm:ss'),
       type: String(notificationInfo.type),
     };
-    switch (notificationInfo.severity) {
+
+    if (notifer && notificationInfo.type !== NotificationType.ServiceCallback) {
+      _notification(notifier, notificationInfo.severity);
+    }
+
+    if (notificationInfo.type === NotificationType.ServiceCallback) {
+      emitter.emit(NotifyEventEnum.NOTIFICATIONS_SERVICE_CALLBACK, notificationInfo);
+    } else {
+      emitter.emit(NotifyEventEnum.NOTIFICATIONS_RECEVIED, notificationInfo);
+      notifierRef.value.list.push(notifier);
+    }
+  }
+
+  
+  function _notification(notifier: Notification, severity: NotificationSeverity) {
+    switch (severity) {
       case NotificationSeverity.Error:
       case NotificationSeverity.Fatal:
         notifier.color = 'red';
         notifier.avatar = errorAvatar;
-        if (notifer) {
-          notification['error']({
-            message: notifier.title,
-            description: notifier.description,
-          });
-        }
+        notification['error']({
+          message: notifier.title,
+          description: notifier.description,
+        });
         break;
       case NotificationSeverity.Warn:
         notifier.color = 'gold';
         notifier.avatar = warningAvatar;
-        if (notifer) {
-          notification['warning']({
-            message: notifier.title,
-            description: notifier.description,
-          });
-        }
+        notification['warning']({
+          message: notifier.title,
+          description: notifier.description,
+        });
         break;
       case NotificationSeverity.Info:
         notifier.color = 'gold';
         notifier.avatar = infoAvatar;
-        if (notifer) {
-          notification['info']({
-            message: notifier.title,
-            description: notifier.description,
-          });
-        }
+        notification['info']({
+          message: notifier.title,
+          description: notifier.description,
+        });
         break;
       case NotificationSeverity.Success:
         notifier.color = 'green';
         notifier.avatar = successAvatar;
-        if (notifer) {
-          notification['success']({
-            message: notifier.title,
-            description: notifier.description,
-          });
-        }
+        notification['success']({
+          message: notifier.title,
+          description: notifier.description,
+        });
         break;
     }
-    emitter.emit(NotifyEventEnum.NOTIFICATIONS_RECEVIED, notificationInfo);
-    notifierRef.value.list.push(notifier);
   }
 
   function refreshNotifer(page = 1, pageSize = 10) {
@@ -145,7 +151,7 @@ export function useNotifications() {
     });
   }
 
-  function readNotifer(notifier: ListItem) {
+  function readNotifer(notifier: Notification) {
     signalR.invoke('change-state', notifier.id, NotificationReadState.Read).then(() => {
       notifierRef.value.list = [];
       refreshNotifer();
