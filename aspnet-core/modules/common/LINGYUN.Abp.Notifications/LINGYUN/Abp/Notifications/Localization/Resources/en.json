@@ -28,6 +28,10 @@
     "Notifications:SystemNotice": "System",
     "Notifications:SystemNoticeDesc": "System global notification push",
     "MarkSelectedAsRead": "Mark selected as read",
+    "NotificationType:Application": "Platform",
+    "NotificationType:System": "System",
+    "NotificationType:User": "User",
+    "NotificationType:ServiceCallback": "Service Callback",
     "MarkAs": "Mark as",
     "Read": "Read",
     "UnRead": "Un Read"

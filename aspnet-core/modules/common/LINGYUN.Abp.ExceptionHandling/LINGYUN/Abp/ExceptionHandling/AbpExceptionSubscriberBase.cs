@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 
 namespace LINGYUN.Abp.ExceptionHandling
@@ -13,30 +14,9 @@ namespace LINGYUN.Abp.ExceptionHandling
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpExceptionHandlingOptions Options { get; }
 
-        public IServiceProvider ServiceProvider { get; set; }
-        protected readonly object ServiceProviderLock = new object();
+        public IAbpLazyServiceProvider ServiceProvider { get; set; }
 
-        protected TService LazyGetRequiredService<TService>(ref TService reference)
-            => LazyGetRequiredService(typeof(TService), ref reference);
-
-        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
-        {
-            if (reference == null)
-            {
-                lock (ServiceProviderLock)
-                {
-                    if (reference == null)
-                    {
-                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
-                    }
-                }
-            }
-
-            return reference;
-        }
-
-        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
-        private ILoggerFactory _loggerFactory;
+        protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetService<ILoggerFactory>();
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);

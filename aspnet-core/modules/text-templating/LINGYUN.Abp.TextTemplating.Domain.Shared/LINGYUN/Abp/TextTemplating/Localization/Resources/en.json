@@ -2,18 +2,24 @@
   "culture": "en",
   "texts": {
     "Permission:TextTemplating": "Templating",
-    "Permission:TextTemplates": "Text Templates",
+    "Permission:TextTemplateContents": "Template Contents",
+    "Permission:TextTemplateDefinitions": "Template Definitions",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
-    "TextTemplates": "Text Templates",
     "DisplayName:Name": "Name",
     "DisplayName:Culture": "Culture",
     "DisplayName:Content": "Content",
     "DisplayName:DisplayName": "DisplayName",
     "DisplayName:IsInlineLocalized": "Is Inline Localized",
     "DisplayName:IsLayout": "Is Layout",
+    "DisplayName:Layout": "Layout",
     "DisplayName:DefaultCultureName": "Default Culture",
+    "DisplayName:RenderEngine": "Render Engine",
+    "DisplayName:IsStatic": "Static",
+    "TextTemplating:01100": "Text template {Name} already exists!",
+    "TextTemplating:01404": "No text template named {Name} found!",
+    "TextTemplates": "Text Templates",
     "Contents": "Contents",
     "Layout": "Layout",
     "LocalizationResource": "Localization Resource",
@@ -30,6 +36,9 @@
     "TemplateContentUpdated": "The template content has been updated",
     "TemplateContentRestoredToDefault": "The template content is restored to the default value.",
     "CustomizePerCulture": "Customize per culture",
-    "InlineContentDescription": "This template uses inline localization. You can use the <b>L<\/b> function to localize a text, like <b>{{L \"Hello\"}}<\/b>. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button. <br /> To get more information about syntax and other details, please check the <a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">Text Templates documentation<\/a>.."
+    "InlineContentDescription": "This template uses inline localization. You can use the <b>L<\/b> function to localize a text, like <b>{{L \"Hello\"}}<\/b>. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button. <br /> To get more information about syntax and other details, please check the <a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">Text Templates documentation<\/a>..",
+    "RestoreTemplateToDefault": "Revert to the default template",
+    "RestoreTemplateToDefaultMessage": "Are you sure? This is a built-in template. This operation restores the template to its default properties.",
+    "TemplateUpdated": "Template properties have been updated"
   }
 }

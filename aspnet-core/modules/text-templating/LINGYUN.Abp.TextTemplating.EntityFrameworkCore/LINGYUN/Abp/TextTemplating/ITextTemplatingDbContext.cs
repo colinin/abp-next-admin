@@ -10,4 +10,6 @@ namespace LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 public interface ITextTemplatingDbContext : IEfCoreDbContext
 {
     DbSet<TextTemplate> TextTemplates { get; }
+
+    DbSet<TextTemplateDefinition> TextTemplateDefinitions { get; }
 }

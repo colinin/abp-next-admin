@@ -23,15 +23,15 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { TextTemplateDefinition } from '/@/api/text-templating/templates/model';
-  import { getContent, restoreToDefault, update } from '/@/api/text-templating/templates';
+  import { TextTemplateDefinitionDto } from '/@/api/text-templating/definitions/model';
+  import { GetAsyncByInput, RestoreToDefaultAsyncByNameAndInput, UpdateAsyncByNameAndInput } from '/@/api/text-templating/contents';
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
   const abpStore = useAbpStoreWithOut();
   const { L } = useLocalization('AbpTextTemplating');
   const { createConfirm, createMessage } = useMessage();
   const { localization } = abpStore.getApplication;
-  const textTemplateRef = ref<TextTemplateDefinition>();
+  const textTemplateRef = ref<TextTemplateDefinitionDto>();
   const buttonEnabled = computed(() => {
     const textTemplate = unref(textTemplateRef);
     if (textTemplate && textTemplate.name) {
@@ -118,7 +118,7 @@
   });
 
   function fetchDefaultContent(name: string) {
-    getContent({
+    GetAsyncByInput({
       name: name,
       culture: localization.currentCulture.name,
     }).then((res) => {
@@ -130,7 +130,7 @@
   }
 
   function handleCultureChange(setField: string, selectedValue: string) {
-    getContent({
+    GetAsyncByInput({
       name: textTemplateRef.value!.name,
       culture: selectedValue,
     }).then((res) => {
@@ -150,8 +150,7 @@
         onOk: () => {
           return new Promise((resolve, reject) => {
             const textTemplate = unref(textTemplateRef);
-            restoreToDefault({
-              name: textTemplate!.name,
+            RestoreToDefaultAsyncByNameAndInput(textTemplate!.name, {
               culture: input.baseCultureName,
             }).then(() => {
               createMessage.success(L('TemplateContentRestoredToDefault'));
@@ -170,8 +169,7 @@
     validateFields(['targetCultureName', 'targetContent']).then((input) => {
       changeOkLoading(true);
       const textTemplate = unref(textTemplateRef);
-      update({
-        name: textTemplate!.name,
+      UpdateAsyncByNameAndInput(textTemplate!.name, {
         culture: input.targetCultureName,
         content: input.targetContent,
       }).then(() => {

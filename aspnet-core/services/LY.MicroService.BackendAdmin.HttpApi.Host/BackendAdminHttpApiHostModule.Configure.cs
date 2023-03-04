@@ -5,6 +5,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TextTemplating;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -87,6 +88,14 @@ public partial class BackendAdminHttpApiHostModule
         Configure<AbpDbContextOptions>(options =>
         {
             options.UseMySQL();
+        });
+    }
+
+    private void ConfigureTextTemplating()
+    {
+        Configure<AbpTextTemplatingCachingOptions>(options =>
+        {
+            options.IsDynamicTemplateDefinitionStoreEnabled = true;
         });
     }
 

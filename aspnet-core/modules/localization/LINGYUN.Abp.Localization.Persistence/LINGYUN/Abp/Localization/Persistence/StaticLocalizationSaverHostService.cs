@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,15 @@ public class StaticLocalizationSaverHostService : BackgroundService
     {
         if (_options.SaveStaticLocalizationsToPersistence)
         {
-            await _staticLocalizationSaver.SaveAsync();
+            try
+            {
+                await _staticLocalizationSaver.SaveAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignore
+                return;
+            }
         }
     }
 }

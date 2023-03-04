@@ -18,7 +18,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
@@ -224,6 +224,63 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasDatabaseName("IX_Tenant_Text_Template_Name");
 
                     b.ToTable("AbpTextTemplates", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplateDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("DefaultCultureName")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("DefaultCultureName");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)")
+                        .HasColumnName("DisplayName");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsInlineLocalized")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsLayout")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Layout")
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("Layout");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("RenderEngine")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("RenderEngine");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpTextTemplateDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>

@@ -12,13 +12,15 @@ public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobA
 {
     protected AbpNotificationsPublishOptions Options { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
-
+    protected INotificationDataSerializer NotificationDataSerializer { get; }
     public NotificationPublishJob(
         IOptions<AbpNotificationsPublishOptions> options,
-        IServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory,
+        INotificationDataSerializer notificationDataSerializer)
     {
         Options = options.Value;
         ServiceScopeFactory = serviceScopeFactory;
+        NotificationDataSerializer = notificationDataSerializer;
     }
 
     public override async Task ExecuteAsync(NotificationPublishJobArgs args)
@@ -30,7 +32,7 @@ public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobA
             {
                 var store = scope.ServiceProvider.GetRequiredService<INotificationStore>();
                 var notification = await store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
-                notification.Data = NotificationDataConverter.Convert(notification.Data);
+                notification.Data = NotificationDataSerializer.Serialize(notification.Data);
 
                 var notifacationDataMapping = Options.NotificationDataMappings
                         .GetMapItemOrDefault(notification.Name, publishProvider.Name);

@@ -22,11 +22,11 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
             if (CurrentTenant.IsAvailable)
             {
                 // 以租户为分组，将用户加入租户通讯组
-                await Groups.AddToGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString(), Context.ConnectionAborted);
+                await Groups.AddToGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
             }
             else
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "Global", Context.ConnectionAborted);
+                await Groups.AddToGroupAsync(Context.ConnectionId, "Global");
             }
         }
 
@@ -38,11 +38,11 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
             if (CurrentTenant.IsAvailable)
             {
                 // 以租户为分组，将移除租户通讯组
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString(), Context.ConnectionAborted);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
             }
             else
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Global", Context.ConnectionAborted);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Global");
             }
         }
 
@@ -76,8 +76,7 @@ namespace LINGYUN.Abp.Notifications.SignalR.Hubs
                     CurrentTenant.Id,
                     CurrentUser.GetId(), 
                     long.Parse(id), 
-                    readState,
-                    Context.ConnectionAborted);
+                    readState);
         }
     }
 }

@@ -28,6 +28,10 @@
     "Notifications:SystemNotice": "系统通知",
     "Notifications:SystemNoticeDesc": "系统全局消息推送",
     "MarkSelectedAsRead": "标记选中已读",
+    "NotificationType:Application": "平台",
+    "NotificationType:System": "系统",
+    "NotificationType:User": "用户",
+    "NotificationType:ServiceCallback": "服务回调",
     "MarkAs": "标记为",
     "Read": "已读",
     "UnRead": "未读"

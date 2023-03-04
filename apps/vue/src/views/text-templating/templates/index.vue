@@ -1,13 +1,13 @@
 <template>
-  <TemplateTable />
+  <TemplateDefinitionTable />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import TemplateTable from './components/TemplateTable.vue';
+  import TemplateDefinitionTable from './components/TemplateDefinitionTable.vue';
 
   export default defineComponent({
-    name: 'Templates',
-    components: { TemplateTable },
+    name: 'TemplateDefinitions',
+    components: { TemplateDefinitionTable },
   });
 </script>

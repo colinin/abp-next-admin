@@ -32,7 +32,7 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         NotificationDefinitions = new Dictionary<string, NotificationDefinition>();
     }
 
-    public Task FillAsync(
+    public virtual Task FillAsync(
         List<NotificationDefinitionGroupRecord> notificationGroupRecords,
         List<NotificationDefinitionRecord> notificationRecords)
     {
@@ -69,17 +69,17 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         return Task.CompletedTask;
     }
 
-    public NotificationDefinition GetNotificationOrNull(string name)
+    public virtual NotificationDefinition GetNotificationOrNull(string name)
     {
         return NotificationDefinitions.GetOrDefault(name);
     }
 
-    public IReadOnlyList<NotificationDefinition> GetNotifications()
+    public virtual IReadOnlyList<NotificationDefinition> GetNotifications()
     {
         return NotificationDefinitions.Values.ToList();
     }
 
-    public IReadOnlyList<NotificationGroupDefinition> GetGroups()
+    public virtual IReadOnlyList<NotificationGroupDefinition> GetGroups()
     {
         return NotificationGroupDefinitions.Values.ToList();
     }

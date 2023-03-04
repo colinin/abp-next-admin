@@ -120,6 +120,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureJsonSerializer();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureTextTemplating();
         ConfigureFeatureManagement();
         ConfigurePermissionManagement();
         ConfigureCaching(configuration);

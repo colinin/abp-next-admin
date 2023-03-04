@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.Identity.OrganizationUnits;
 
 public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
 {
-    // https://github.com/dotnet/aspnetcore/blob/v5.0.0/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L79
+    // https://github.com/dotnet/aspnetcore/blob/main/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L74
     private static string IdentityAuthenticationType => "Identity.Application";
 
     private readonly IIdentityUserRepository _identityUserRepository;
