@@ -1,8 +1,8 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>7.0.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>7.0.1</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.8.0</DaprPackageVersion>
+		<VoloAbpPackageVersion>7.0.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.0.2</LINGYUNAbpPackageVersion>
+		<DaprPackageVersion>1.10.0</DaprPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.0.2</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
@@ -23,7 +23,7 @@
 		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
 		<SwashbuckleAspNetCorePackageVersion>6.1.5</SwashbuckleAspNetCorePackageVersion>
-		<MicrosoftPackageVersion>6.0.*</MicrosoftPackageVersion>
+		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
 		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
 		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
 		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>

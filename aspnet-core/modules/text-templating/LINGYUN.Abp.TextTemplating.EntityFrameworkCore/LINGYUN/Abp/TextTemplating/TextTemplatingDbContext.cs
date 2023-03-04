@@ -11,6 +11,8 @@ public class TextTemplatingDbContext : AbpDbContext<TextTemplatingDbContext>, IT
 {
     public DbSet<TextTemplate> TextTemplates { get; set; }
 
+    public DbSet<TextTemplateDefinition> TextTemplateDefinitions { get; set; }
+
     public TextTemplatingDbContext(DbContextOptions<TextTemplatingDbContext> options)
         : base(options)
     {

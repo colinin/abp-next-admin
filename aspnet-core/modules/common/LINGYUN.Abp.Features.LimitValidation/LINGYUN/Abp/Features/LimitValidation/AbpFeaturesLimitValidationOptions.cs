@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Volo.Abp;
 
 namespace LINGYUN.Abp.Features.LimitValidation
@@ -36,12 +37,55 @@ namespace LINGYUN.Abp.Features.LimitValidation
 
         internal void MapDefaultEffectPolicys()
         {
-            MapEffectPolicy(LimitPolicy.Minute, (time) => { return (long)(DateTimeOffset.UtcNow.AddMinutes(time) - DateTimeOffset.UtcNow).TotalSeconds; });
-            MapEffectPolicy(LimitPolicy.Hours, (time) => { return (long)(DateTimeOffset.UtcNow.AddHours(time) - DateTimeOffset.UtcNow).TotalSeconds; });
-            MapEffectPolicy(LimitPolicy.Days, (time) => { return (long)(DateTimeOffset.UtcNow.AddDays(time) - DateTimeOffset.UtcNow).TotalSeconds; });
-            MapEffectPolicy(LimitPolicy.Weeks, (time) => { return (long)(DateTimeOffset.UtcNow.AddDays(time * 7) - DateTimeOffset.UtcNow).TotalSeconds; });
-            MapEffectPolicy(LimitPolicy.Month, (time) => { return (long)(DateTimeOffset.UtcNow.AddMonths(time) - DateTimeOffset.UtcNow).TotalSeconds; });
-            MapEffectPolicy(LimitPolicy.Years, (time) => { return (long)(DateTimeOffset.UtcNow.AddYears(time) - DateTimeOffset.UtcNow).TotalSeconds; });
+            MapEffectPolicy(LimitPolicy.Minute, (time) =>
+            {
+                var utcNow = DateTime.UtcNow;
+                return (long)(utcNow.AddMinutes(time) - utcNow).TotalSeconds;
+            });
+
+            MapEffectPolicy(LimitPolicy.Hours, (time) =>
+            {
+                var utcNow = DateTime.UtcNow;
+                return (long)(utcNow.AddHours(time) - utcNow).TotalSeconds;
+            });
+
+            MapEffectPolicy(LimitPolicy.Days, (time) =>
+            {
+                // 按天计算应取当天
+                return (long)(DateTime.UtcNow.Date.AddDays(time) - DateTime.UtcNow).TotalSeconds;
+            });
+
+            MapEffectPolicy(LimitPolicy.Weeks,(time) =>
+            {
+                // 按周计算应取当周
+                var utcNow = DateTime.UtcNow.Date;
+                var dayOfWeek = (int)utcNow.DayOfWeek - 1;
+                if (utcNow.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    dayOfWeek = 6;
+                }
+                var utcOnceDayOfWeek = utcNow.AddDays(-dayOfWeek);
+
+                return (long)(utcOnceDayOfWeek.AddDays(time) - DateTime.UtcNow).TotalSeconds;
+            });
+
+            MapEffectPolicy(LimitPolicy.Month, (time) =>
+            {
+                // 按月计算应取当月
+                var utcNow = DateTime.UtcNow;
+                var utcOnceDayOfMonth = new DateTime(utcNow.Year, utcNow.Month, 1, 1, 0, 0, 0);
+
+                return (long)(utcOnceDayOfMonth.AddMonths(time) - utcNow).TotalSeconds; 
+            });
+
+            MapEffectPolicy(LimitPolicy.Years, (time) => 
+            {
+                // 按年计算应取当年
+                var utcNow = DateTime.UtcNow;
+                var utcOnceDayOfYear = new DateTime(utcNow.Year, 1, 1, 1, 0, 0, 0);
+
+                return (long)(utcOnceDayOfYear.AddYears(time) - utcNow).TotalSeconds; 
+            });
         }
     }
 }

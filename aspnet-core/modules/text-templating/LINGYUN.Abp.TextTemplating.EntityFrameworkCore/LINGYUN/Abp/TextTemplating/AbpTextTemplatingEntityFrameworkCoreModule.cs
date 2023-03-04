@@ -14,6 +14,7 @@ public class AbpTextTemplatingEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<TextTemplatingDbContext>(options =>
         {
             options.AddRepository<TextTemplate, EfCoreTextTemplateRepository>();
+            options.AddRepository<TextTemplateDefinition, EfCoreTextTemplateDefinitionRepository>();
 
             options.AddDefaultRepositories<ITextTemplatingDbContext>();
         });

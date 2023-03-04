@@ -22,7 +22,11 @@ namespace LINGYUN.Abp.AuditLogging
 
         public Guid? ImpersonatorUserId { get; set; }
 
+        public string ImpersonatorUserName { get; set; }
+
         public Guid? ImpersonatorTenantId { get; set; }
+
+        public string ImpersonatorTenantName { get; set; }
 
         public DateTime ExecutionTime { get; set; }
 
@@ -79,7 +83,9 @@ namespace LINGYUN.Abp.AuditLogging
             string url,
             int? httpStatusCode,
             Guid? impersonatorUserId,
+            string impersonatorUserName,
             Guid? impersonatorTenantId,
+            string impersonatorTenantName,
             ExtraPropertyDictionary extraPropertyDictionary,
             List<EntityChange> entityChanges,
             List<AuditLogAction> actions,
@@ -103,7 +109,9 @@ namespace LINGYUN.Abp.AuditLogging
             Url = url;
             HttpStatusCode = httpStatusCode;
             ImpersonatorUserId = impersonatorUserId;
+            ImpersonatorUserName = impersonatorUserName;
             ImpersonatorTenantId = impersonatorTenantId;
+            ImpersonatorTenantName = impersonatorTenantName;
 
             ExtraProperties = extraPropertyDictionary;
             EntityChanges = entityChanges;

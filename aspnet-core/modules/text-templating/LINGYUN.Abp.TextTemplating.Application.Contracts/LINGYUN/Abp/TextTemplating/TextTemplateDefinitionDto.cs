@@ -1,6 +1,8 @@
-﻿namespace LINGYUN.Abp.TextTemplating;
+﻿using Volo.Abp.Domain.Entities;
 
-public class TextTemplateDefinitionDto
+namespace LINGYUN.Abp.TextTemplating;
+
+public class TextTemplateDefinitionDto : IHasConcurrencyStamp
 {
     public string Name { get; set; }
     public string DisplayName { get; set; }
@@ -8,4 +10,6 @@ public class TextTemplateDefinitionDto
     public bool IsInlineLocalized { get; set; }
     public bool IsLayout { get; set; }
     public string Layout { get; set; }
+    public bool IsStatic { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

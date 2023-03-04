@@ -7,12 +7,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.Uow;
@@ -126,23 +128,31 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 return;
             }
 
-            if (notification.NotificationType == NotificationType.System)
+            var culture = eventData.Data.Culture;
+            if (culture.IsNullOrWhiteSpace())
             {
-                using (CurrentTenant.Change(null))
+                culture = CultureInfo.CurrentCulture.Name;
+            }
+            using (CultureHelper.Use(culture, culture))
+            {
+                if (notification.NotificationType == NotificationType.System)
                 {
-                    await SendToTenantAsync(null, notification, eventData);
-
-                    var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
-
-                    foreach (var activeTenant in allActiveTenants)
+                    using (CurrentTenant.Change(null))
                     {
-                        await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                        await SendToTenantAsync(null, notification, eventData);
+
+                        var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                        foreach (var activeTenant in allActiveTenants)
+                        {
+                            await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                        }
                     }
                 }
-            }
-            else
-            {
-                await SendToTenantAsync(eventData.TenantId, notification, eventData);
+                else
+                {
+                    await SendToTenantAsync(eventData.TenantId, notification, eventData);
+                }
             }
         }
 
@@ -234,7 +244,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
                 var notificationData = new NotificationData();
                 notificationData.WriteStandardData(
-                    title: title,
+                    title: title.ToString(),
                     message: message,
                     createTime: eventData.CreationTime,
                     formUser: eventData.Data.FormUser);

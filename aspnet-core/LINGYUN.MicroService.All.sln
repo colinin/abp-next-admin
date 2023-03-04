@@ -562,11 +562,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.AuthServer.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.IdentityServer.EntityFrameworkCore", "migrations\LY.MicroService.IdentityServer.EntityFrameworkCore\LY.MicroService.IdentityServer.EntityFrameworkCore.csproj", "{F74D8A4E-737F-4144-94BF-9EE80AFC8E9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.LocalizationManagement.EntityFrameworkCore", "migrations\LY.MicroService.LocalizationManagement.EntityFrameworkCore\LY.MicroService.LocalizationManagement.EntityFrameworkCore.csproj", "{7DBC2821-22B2-497F-A594-18CF3EE79940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.LocalizationManagement.EntityFrameworkCore", "migrations\LY.MicroService.LocalizationManagement.EntityFrameworkCore\LY.MicroService.LocalizationManagement.EntityFrameworkCore.csproj", "{7DBC2821-22B2-497F-A594-18CF3EE79940}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Platform.EntityFrameworkCore", "migrations\LY.MicroService.Platform.EntityFrameworkCore\LY.MicroService.Platform.EntityFrameworkCore.csproj", "{B9421FC5-47EB-428D-92C6-F688D02ABE06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Platform.EntityFrameworkCore", "migrations\LY.MicroService.Platform.EntityFrameworkCore\LY.MicroService.Platform.EntityFrameworkCore.csproj", "{B9421FC5-47EB-428D-92C6-F688D02ABE06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.RealtimeMessage.EntityFrameworkCore", "migrations\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj", "{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMessage.EntityFrameworkCore", "migrations\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj", "{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{E2019836-1C67-47E4-B3AF-D62F4AFC7679}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Razor", "modules\text-templating\LINGYUN.Abp.TextTemplating.Razor\LINGYUN.Abp.TextTemplating.Razor.csproj", "{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1446,6 +1450,14 @@ Global
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1720,6 +1732,8 @@ Global
 		{7DBC2821-22B2-497F-A594-18CF3EE79940} = {B18CF0D3-3D01-4A64-A9C4-DC0C214BEE42}
 		{B9421FC5-47EB-428D-92C6-F688D02ABE06} = {F260FB5F-C6C7-4948-B638-E4D6986D07ED}
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9} = {B1AC656F-8F4C-43D5-B5A0-CCF5F119EA44}
+		{E2019836-1C67-47E4-B3AF-D62F4AFC7679} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
+		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

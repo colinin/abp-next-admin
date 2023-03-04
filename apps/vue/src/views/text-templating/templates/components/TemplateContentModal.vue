@@ -33,13 +33,13 @@
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { TextTemplateDefinition } from '/@/api/text-templating/templates/model';
-  import { getContent, restoreToDefault, update } from '/@/api/text-templating/templates';
+  import { TextTemplateDefinitionDto } from '/@/api/text-templating/definitions/model';
+  import { GetAsyncByInput, RestoreToDefaultAsyncByNameAndInput, UpdateAsyncByNameAndInput } from '/@/api/text-templating/contents';
   import TemplateContentCultureModal from './TemplateContentCultureModal.vue';
 
   const { L } = useLocalization('AbpTextTemplating');
   const { createConfirm, createMessage } = useMessage();
-  const textTemplateRef = ref<TextTemplateDefinition>();
+  const textTemplateRef = ref<TextTemplateDefinitionDto>();
   const buttonEnabled = computed(() => {
     const textTemplate = unref(textTemplateRef);
     if (textTemplate && textTemplate.name) {
@@ -85,7 +85,7 @@
   const [registerCultureModal, { openModal: openCultureModal }] = useModal();
 
   function fetchContent(name: string) {
-    getContent({
+    GetAsyncByInput({
       name: name,
     }).then((res) => {
       setFieldsValue(res);
@@ -104,7 +104,7 @@
       onOk: () => {
         return new Promise((resolve, reject) => {
           const textTemplate = unref(textTemplateRef);
-          restoreToDefault({ name: textTemplate!.name }).then(() => {
+          RestoreToDefaultAsyncByNameAndInput(textTemplate!.name, { }).then(() => {
             createMessage.success(L('TemplateContentRestoredToDefault'));
             fetchContent(textTemplate!.name);
             return resolve(textTemplate!.name);
@@ -120,8 +120,7 @@
     validate().then((input) => {
       changeOkLoading(true);
       const textTemplate = unref(textTemplateRef);
-      update({
-        name: textTemplate!.name,
+      UpdateAsyncByNameAndInput(textTemplate!.name, {
         content: input.content,
       }).then(() => {
         createMessage.success(L('TemplateContentUpdated'));

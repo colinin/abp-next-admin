@@ -1,32 +1,30 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { FormProps } from '/@/components/Form';
-import { NotificationReadState } from '/@/api/messages/model/notificationsModel';
+import { FormProps, FormSchema } from '/@/components/Form';
 
-const { L } = useLocalization(['AbpMessageService', 'AbpUi']);
+const { L } = useLocalization(['AbpTextTemplating', 'AbpUi']);
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       {
-        field: 'readState',
-        component: 'Select',
-        label: L('Notifications:State'),
-        colProps: { span: 8 },
-        defaultValue: NotificationReadState.UnRead,
-        componentProps: {
-          options: [
-            { label: L('Read'), value: NotificationReadState.Read, },
-            { label: L('UnRead'), value: NotificationReadState.UnRead, },
-          ],
-        },
-      },
-      {
         field: 'filter',
         component: 'Input',
         label: L('Search'),
-        colProps: { span: 16 },
+        colProps: { span: 24 },
       },
     ],
   };
+}
+
+export function getModalFormSchemas(): FormSchema[] {
+  return [
+    {
+      field: 'name',
+      component: 'Input',
+      label: L('DisplayName:Name'),
+      colProps: { span: 24 },
+      required: true,
+    },
+  ];
 }

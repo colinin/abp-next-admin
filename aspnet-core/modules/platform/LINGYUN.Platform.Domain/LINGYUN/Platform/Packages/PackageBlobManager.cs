@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Services;
@@ -56,7 +57,7 @@ public class PackageBlobManager : DomainService, IPackageBlobManager, ITransient
 
         stream.Seek(0, SeekOrigin.Begin);
         packageBlob.SHA256 = ComputeHash(stream);
-        packageBlob.SetUrl($"api/platform/packages/{packageBlob.PackageId}/blob/{packageBlob.Name}");
+        packageBlob.SetUrl($"api/platform/packages/{packageBlob.PackageId}/blob/{HttpUtility.HtmlEncode(packageBlob.Name)}");
     }
 
     protected async virtual Task<Stream> DownloadFromBlobAsync(

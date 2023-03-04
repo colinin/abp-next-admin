@@ -49,7 +49,12 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             {
                 await SendUserOnlineStateAsync();
             }
-            catch(Exception ex)
+            catch (OperationCanceledException)
+            {
+                // Ignore
+                return;
+            }
+            catch (Exception ex)
             {
                 Logger.LogWarning("An error occurred in the OnConnected method:{message}", ex.Message);
             }
@@ -62,6 +67,11 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             try
             {
                 await SendUserOnlineStateAsync(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignore
+                return;
             }
             catch (Exception ex)
             {
@@ -182,6 +192,11 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
             try
             {
                 await Processor?.ReadAsync(chatMessage);
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignore
+                return;
             }
             catch (Exception ex)
             {

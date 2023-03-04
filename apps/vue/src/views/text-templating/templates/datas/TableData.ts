@@ -1,17 +1,37 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 
-const { L } = useLocalization('AbpTextTemplating');
+const { L } = useLocalization(['AbpTextTemplating']);
 
 export function getDataColumns(): BasicColumn[] {
   return [
     {
       title: L('DisplayName:Name'),
+      dataIndex: 'name',
+      align: 'left',
+      width: 100,
+      sorter: true,
+      ellipsis: true,
+      defaultHidden: true,
+      resizable: true,
+    },
+    {
+      title: L('DisplayName:DisplayName'),
       dataIndex: 'displayName',
       align: 'left',
       width: 200,
       sorter: true,
       ellipsis: true,
+      resizable: true,
+    },
+    {
+      title: L('DisplayName:IsStatic'),
+      dataIndex: 'isStatic',
+      align: 'center',
+      width: 150,
+      sorter: true,
+      ellipsis: true,
+      resizable: true,
     },
     {
       title: L('DisplayName:IsInlineLocalized'),
@@ -20,6 +40,7 @@ export function getDataColumns(): BasicColumn[] {
       width: 150,
       sorter: true,
       ellipsis: true,
+      resizable: true,
     },
     {
       title: L('DisplayName:IsLayout'),
@@ -28,6 +49,7 @@ export function getDataColumns(): BasicColumn[] {
       width: 150,
       sorter: true,
       ellipsis: true,
+      resizable: true,
     },
     {
       title: L('Layout'),
@@ -36,6 +58,7 @@ export function getDataColumns(): BasicColumn[] {
       width: 200,
       sorter: true,
       ellipsis: true,
+      resizable: true,
     },
     {
       title: L('DisplayName:DefaultCultureName'),
@@ -44,6 +67,17 @@ export function getDataColumns(): BasicColumn[] {
       width: 200,
       sorter: true,
       ellipsis: true,
+      resizable: true,
+    },
+    {
+      title: L('DisplayName:RenderEngine'),
+      dataIndex: 'renderEngine',
+      align: 'left',
+      width: 150,
+      sorter: true,
+      ellipsis: true,
+      resizable: true,
+      defaultHidden: true,
     },
   ];
 }

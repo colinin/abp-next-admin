@@ -1,9 +1,9 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>7.0.1</VoloAbpPackageVersion>
+		<VoloAbpPackageVersion>7.0.2</VoloAbpPackageVersion>
 		<VoloAbpLeptonXThemePackageVersion>2.0.1</VoloAbpLeptonXThemePackageVersion>
-		<LINGYUNAbpPackageVersion>7.0.1</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.9.0</DaprPackageVersion>
+		<LINGYUNAbpPackageVersion>7.0.2</LINGYUNAbpPackageVersion>
+		<DaprPackageVersion>1.10.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.0.2</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.10.1</ElsaPackageVersion>
@@ -36,6 +36,7 @@
 		<SwashbuckleAspNetCorePackageVersion>6.1.5</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>7.2.3</PollyPackageVersion>
 		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>7.0.2</MicrosoftEntityFrameworkCorePackageVersion>
 		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
 		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
 		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>

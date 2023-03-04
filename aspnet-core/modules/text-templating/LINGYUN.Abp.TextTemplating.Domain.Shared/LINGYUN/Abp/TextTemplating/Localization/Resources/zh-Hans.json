@@ -2,18 +2,24 @@
   "culture": "zh-Hans",
   "texts": {
     "Permission:TextTemplating": "模板管理",
-    "Permission:TextTemplates": "文本模板",
+    "Permission:TextTemplateContents": "模板内容",
+    "Permission:TextTemplateDefinitions": "定义模板",
     "Permission:Create": "新增",
     "Permission:Edit": "修改",
     "Permission:Delete": "删除",
-    "TextTemplates": "文本模板",
     "DisplayName:Name": "名称",
     "DisplayName:Culture": "区域",
     "DisplayName:Content": "内容",
     "DisplayName:DisplayName": "显示名称",
     "DisplayName:IsInlineLocalized": "内联本地化",
     "DisplayName:IsLayout": "是否为布局页",
+    "DisplayName:Layout": "布局页",
     "DisplayName:DefaultCultureName": "默认文化名称",
+    "DisplayName:RenderEngine": "渲染引擎",
+    "DisplayName:IsStatic": "内置",
+    "TextTemplating:01100": "文本模板 {Name} 已经存在!",
+    "TextTemplating:01404": "没有找到名为 {Name} 的文本模板!",
+    "TextTemplates": "文本模板",
     "Contents": "内容",
     "Layout": "布局页",
     "LocalizationResource": "本地化资源",
@@ -30,6 +36,9 @@
     "TemplateContentUpdated": "模板内容已更新",
     "TemplateContentRestoredToDefault": "模板内容恢复为默认值.",
     "CustomizePerCulture": "根据文化定制",
-    "InlineContentDescription": "该模板使用内联本地化. 你可以使用<b>L</b>函数对文本进行本地化,例如 <b>{{L \"Hello\"}}</b>如果你仍想为区域性定义一个全新的模板,请使用\"根据文化定制\"按钮. <br />请检查<a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">文本模板文档</a>获取更多信息."
+    "InlineContentDescription": "该模板使用内联本地化. 你可以使用<b>L</b>函数对文本进行本地化,例如 <b>{{L \"Hello\"}}</b>如果你仍想为区域性定义一个全新的模板,请使用\"根据文化定制\"按钮. <br />请检查<a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">文本模板文档</a>获取更多信息.",
+    "RestoreTemplateToDefault": "还原到默认模板",
+    "RestoreTemplateToDefaultMessage": "你确定吗? 此模板为内置模板, 此操作将还原模板为默认属性.",
+    "TemplateUpdated": "模板属性已更新"
   }
 }

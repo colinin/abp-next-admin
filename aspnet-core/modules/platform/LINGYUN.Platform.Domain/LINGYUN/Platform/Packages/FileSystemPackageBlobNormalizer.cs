@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Web;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Platform.Packages;
@@ -15,6 +16,6 @@ public class FileSystemPackageBlobNormalizer : IPackageBlobNormalizer, ISingleto
         var pk = package.Name;
         var pv = package.Version;
 
-        return Path.Combine(pk, "v" + pv, "blobs", blob.Name);
+        return Path.Combine(pk, "v" + pv, "blobs", HttpUtility.HtmlDecode(blob.Name));
     }
 }

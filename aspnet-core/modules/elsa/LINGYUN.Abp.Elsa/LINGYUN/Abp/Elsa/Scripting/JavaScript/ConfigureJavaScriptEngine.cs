@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Features;
 using Volo.Abp.Guids;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -23,6 +24,7 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
     private readonly AbpLocalizationOptions _localizationOptions;
     private readonly IStringLocalizerFactory _localizerFactory;
     private readonly IGuidGenerator _guidGenerator;
+    private readonly IFeatureChecker _featureChecker;
     private readonly ISettingProvider _settingProvider;
     private readonly IPermissionChecker _permissionChecker;
 
@@ -32,6 +34,7 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
         IOptions<AbpLocalizationOptions> localizationOptions,
         IStringLocalizerFactory localizerFactory,
         IGuidGenerator guidGenerator,
+        IFeatureChecker featureChecker,
         ISettingProvider settingProvider,
         IPermissionChecker permissionChecker)
     {
@@ -40,6 +43,7 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
         _localizationOptions = localizationOptions.Value;
         _localizerFactory = localizerFactory;
         _guidGenerator = guidGenerator;
+        _featureChecker = featureChecker;
         _settingProvider = settingProvider;
         _permissionChecker = permissionChecker;
     }
@@ -49,8 +53,8 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
         var output = notification.Output;
 
         output.AppendLine("declare interface Clock {");
-        output.AppendLine("  now(): DateTime;");
-        output.AppendLine("  normalize(dateTime: DateTime): DateTime;");
+        output.AppendLine("  now(): Date;");
+        output.AppendLine("  normalize(dateTime: Date): Date;");
         output.AppendLine("}");
 
         output.AppendLine("declare interface CurrentTenant {");
@@ -72,6 +76,11 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
         output.AppendLine("  getBoolean(name: string): boolean;");
         output.AppendLine("}");
 
+        output.AppendLine("declare interface Feature {");
+        output.AppendLine("  get(name: string): any;");
+        output.AppendLine("  isEnabled(name: string): boolean;");
+        output.AppendLine("}");
+
         output.AppendLine("declare interface Auth {");
         output.AppendLine("  isGranted(name: string): boolean;");
         output.AppendLine("  isAnyGranted(names: string[]): boolean;");
@@ -84,6 +93,7 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
         output.AppendLine(" utils: Utils;");
         output.AppendLine(" localization: Localization;");
         output.AppendLine(" setting: Setting;");
+        output.AppendLine(" feature: Feature;");
         output.AppendLine(" auth: Auth;");
         output.AppendLine("}");
 
@@ -151,6 +161,13 @@ public class ConfigureJavaScriptEngine : INotificationHandler<EvaluatingJavaScri
             ["getBoolean"] = (Func<string, bool>)((name) => _settingProvider.GetAsync(name, false).GetAwaiter().GetResult())
         };
         abpFunctions["setting"] = settingModel;
+
+        var featureModel = new Dictionary<string, object?>
+        {
+            ["get"] = (Func<string, object?>)((name) => _featureChecker.GetOrNullAsync(name).GetAwaiter().GetResult()),
+            ["isEnabled"] = (Func<string, bool>)((name) => _featureChecker.IsEnabledAsync(name).GetAwaiter().GetResult()),
+        };
+        abpFunctions["feature"] = featureModel;
 
         var authModel = new Dictionary<string, object?>
         {

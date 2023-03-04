@@ -3,9 +3,16 @@
 public static class AbpTextTemplatingErrorCodes
 {
     public const string Namespace = "TextTemplating";
-
-    /// <summary>
-    /// 模板不存在!
-    /// </summary>
-    public const string TemplateNotFound = Namespace + ":01404";
+    public static class TextTemplateDefinition
+    {
+        private const string Prefix = Namespace + ":01";
+        /// <summary>
+        /// 模板 {Name} 已经存在
+        /// </summary>
+        public const string NameAlreadyExists = Prefix + "100";
+        /// <summary>
+        /// 模板 {Name} 不存在!
+        /// </summary>
+        public const string TemplateNotFound = Prefix + "404";
+    }
 }

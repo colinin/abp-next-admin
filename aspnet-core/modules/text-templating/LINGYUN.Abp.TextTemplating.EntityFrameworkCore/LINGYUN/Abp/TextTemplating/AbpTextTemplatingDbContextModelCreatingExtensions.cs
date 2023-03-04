@@ -39,6 +39,34 @@ public static class AbpTextTemplatingDbContextModelCreatingExtensions
             b.ApplyObjectExtensionMappings();
         });
 
+        builder.Entity<TextTemplateDefinition>(b =>
+        {
+            b.ToTable(AbpTextTemplatingDbProperties.DbTablePrefix + "TextTemplateDefinitions", AbpTextTemplatingDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.Property(t => t.Name)
+                .HasColumnName(nameof(TextTemplateDefinition.Name))
+                .HasMaxLength(TextTemplateDefinitionConsts.MaxNameLength)
+                .IsRequired();
+            b.Property(t => t.DisplayName)
+                .HasColumnName(nameof(TextTemplateDefinition.DisplayName))
+                .HasMaxLength(TextTemplateDefinitionConsts.MaxDisplayNameLength)
+                .IsRequired();
+
+            b.Property(t => t.Layout)
+                .HasColumnName(nameof(TextTemplateDefinition.Layout))
+                .HasMaxLength(TextTemplateDefinitionConsts.MaxLayoutLength);
+            b.Property(t => t.DefaultCultureName)
+                .HasColumnName(nameof(TextTemplateDefinition.DefaultCultureName))
+                .HasMaxLength(TextTemplateDefinitionConsts.MaxDefaultCultureNameLength);
+            b.Property(t => t.RenderEngine)
+               .HasColumnName(nameof(TextTemplateDefinition.RenderEngine))
+               .HasMaxLength(TextTemplateDefinitionConsts.MaxRenderEngineLength);
+
+            b.ApplyObjectExtensionMappings();
+        });
+
         builder.TryConfigureObjectExtensions<TextTemplatingDbContext>();
     }
 }

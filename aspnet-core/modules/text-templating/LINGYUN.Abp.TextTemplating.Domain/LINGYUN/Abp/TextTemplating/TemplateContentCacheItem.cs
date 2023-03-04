@@ -1,5 +1,8 @@
-﻿namespace LINGYUN.Abp.TextTemplating;
+﻿using System;
 
+namespace LINGYUN.Abp.TextTemplating;
+
+[Serializable]
 public class TemplateContentCacheItem
 {
     private const string CacheKeyFormat = "pn:template-content,n:{0},c:{1}";
