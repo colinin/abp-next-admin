@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.TaskManagement;
 
@@ -54,23 +55,23 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// <summary>
     /// 获取过滤后的任务数量
     /// </summary>
-    /// <param name="filter"></param>
+    /// <param name="specification">查询规约</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> GetCountAsync(
-        BackgroundJobInfoFilter filter,
+        ISpecification<BackgroundJobInfo> specification,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取过滤后的任务列表
     /// </summary>
-    /// <param name="filter"></param>
+    /// <param name="specification">查询规约</param>
     /// <param name="sorting"></param>
     /// <param name="maxResultCount"></param>
     /// <param name="skipCount"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetListAsync(
-        BackgroundJobInfoFilter filter,
+        ISpecification<BackgroundJobInfo> specification,
         string sorting = nameof(BackgroundJobInfo.Name),
         int maxResultCount = 10,
         int skipCount = 0,

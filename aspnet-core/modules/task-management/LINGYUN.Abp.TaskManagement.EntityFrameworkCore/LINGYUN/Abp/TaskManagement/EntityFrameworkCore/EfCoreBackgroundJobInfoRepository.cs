@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
@@ -43,35 +44,7 @@ public class EfCoreBackgroundJobInfoRepository :
     {
         return await (await GetDbSetAsync())
             .Where(x => x.Id.Equals(id))
-            .Select(x => new JobInfo
-            {
-                Id = x.Id,
-                TenantId = x.TenantId,
-                Name = x.Name,
-                NextRunTime = x.NextRunTime,
-                Args = x.Args,
-                IsAbandoned = x.IsAbandoned,
-                BeginTime = x.BeginTime,
-                EndTime = x.EndTime,
-                CreationTime = x.CreationTime,
-                Cron = x.Cron,
-                MaxCount = x.MaxCount,
-                MaxTryCount = x.MaxTryCount,
-                Description = x.Description,
-                Group = x.Group,
-                Interval = x.Interval,
-                JobType = x.JobType,
-                Status = x.Status,
-                Priority = x.Priority,
-                Source = x.Source,
-                LastRunTime = x.LastRunTime,
-                LockTimeOut = x.LockTimeOut,
-                Result = x.Result,
-                TriggerCount = x.TriggerCount,
-                TryCount = x.TryCount,
-                Type = x.Type,
-                NodeName = x.NodeName,
-            })
+            .Select(x => x.ToJobInfo())
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -92,26 +65,24 @@ public class EfCoreBackgroundJobInfoRepository :
     public async virtual Task<List<BackgroundJobInfo>> GetAllPeriodTasksAsync(
         CancellationToken cancellationToken = default)
     {
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
-
         return await (await GetDbSetAsync())
-            .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType == JobType.Period && status.Contains(x.Status))
-            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
+            .Where(new BackgroundJobInfoWaitingPeriodSpecification().ToExpression())
             .OrderByDescending(x => x.Priority)
             .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<int> GetCountAsync(BackgroundJobInfoFilter filter, CancellationToken cancellationToken = default)
+    public async virtual Task<int> GetCountAsync(ISpecification<BackgroundJobInfo> specification, CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter(await GetDbSetAsync(), filter)
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<List<BackgroundJobInfo>> GetListAsync(BackgroundJobInfoFilter filter, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
+    public async virtual Task<List<BackgroundJobInfo>> GetListAsync(ISpecification<BackgroundJobInfo> specification, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter(await GetDbSetAsync(), filter)
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .OrderBy(sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC")
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -121,40 +92,13 @@ public class EfCoreBackgroundJobInfoRepository :
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
-
         return await (await GetDbSetAsync())
-            .Where(x => x.IsEnabled && !x.IsAbandoned)
-            .Where(x => x.JobType != JobType.Period && status.Contains(x.Status))
-            .Where(x => (x.MaxCount == 0 || x.TriggerCount < x.MaxCount) || (x.MaxTryCount == 0 || x.TryCount < x.MaxTryCount))
+            .Where(new BackgroundJobInfoWaitingSpecification().ToExpression())
             .OrderByDescending(x => x.Priority)
             .ThenBy(x => x.TryCount)
             .ThenBy(x => x.NextRunTime)
             .Take(maxResultCount)
             .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    protected virtual IQueryable<BackgroundJobInfo> ApplyFilter(
-        IQueryable<BackgroundJobInfo> queryable,
-        BackgroundJobInfoFilter filter)
-    {
-        return queryable
-            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(filter.Type))
-            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(filter.Group))
-            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(filter.Name))
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter.Filter) ||
-                x.Group.Contains(filter.Filter) || x.Type.Contains(filter.Filter) || x.Description.Contains(filter.Filter))
-            .WhereIf(filter.JobType.HasValue, x => x.JobType == filter.JobType)
-            .WhereIf(filter.Status.HasValue, x => x.Status == filter.Status.Value)
-            .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority.Value)
-            .WhereIf(filter.Source.HasValue, x => x.Source == filter.Source.Value)
-            .WhereIf(filter.IsAbandoned.HasValue, x => x.IsAbandoned == filter.IsAbandoned.Value)
-            .WhereIf(filter.BeginLastRunTime.HasValue, x => filter.BeginLastRunTime.Value.CompareTo(x.LastRunTime) <= 0)
-            .WhereIf(filter.EndLastRunTime.HasValue, x => filter.EndLastRunTime.Value.CompareTo(x.LastRunTime) >= 0)
-            .WhereIf(filter.BeginTime.HasValue, x => x.BeginTime.CompareTo(x.BeginTime) >= 0)
-            .WhereIf(filter.EndTime.HasValue, x => filter.EndTime.Value.CompareTo(x.EndTime) >= 0)
-            .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime.Value) >= 0)
-            .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime.Value) <= 0);
     }
 }
