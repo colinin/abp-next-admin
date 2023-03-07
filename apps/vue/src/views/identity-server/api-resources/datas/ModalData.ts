@@ -64,6 +64,8 @@ export function getSecretFormSchemas(): FormSchema[] {
       label: L('Expiration'),
       colProps: { span: 24 },
       componentProps: {
+        format: 'YYYY-MM-DD',
+        valueFormat: 'YYYY-MM-DDT00:00:00',
         style: {
           width: '100%',
         },

@@ -52,6 +52,9 @@ const httpStatusCodeOptions = [
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['dateRange', ['startTime', 'endTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+    ],
     schemas: [
       {
         field: 'applicationName',
@@ -117,24 +120,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         colProps: { span: 6 },
       },
       {
-        field: 'startTime',
-        component: 'DatePicker',
+        field: 'dateRange',
+        component: 'RangePicker',
         label: L('StartTime'),
-        colProps: { span: 6 },
+        colProps: { span: 12 },
         componentProps: {
           style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endTime',
-        component: 'DatePicker',
-        label: L('EndTime'),
-        colProps: { span: 6 },
-        componentProps: {
-          style: {
-            width: '100%',
+            width: '100%'
           },
         },
       },

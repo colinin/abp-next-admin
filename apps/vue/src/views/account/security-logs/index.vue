@@ -34,7 +34,7 @@
                   <span>{{ securityLog.browserInfo }}</span>
                 </FormItem>
                 <FormItem labelAlign="left" :label="L('CreationTime')">
-                  <span>{{ securityLog.creationTime }}</span>
+                  <span>{{ formatToDateTime(securityLog.creationTime) }}</span>
                 </FormItem>
               </Form>
             </CardGrid>
@@ -66,6 +66,7 @@
   import { getList } from '/@/api/identity/securityLog';
   import { SecurityLog } from '/@/api/identity/model/securityLogModel';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
+  import { formatToDateTime } from '/@/utils/dateUtil';
 
   const CardGrid = Card.Grid;
   const FormItem = Form.Item;

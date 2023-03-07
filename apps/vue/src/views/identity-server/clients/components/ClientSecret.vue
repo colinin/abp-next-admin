@@ -22,7 +22,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
-  import { formatToDateTime } from '/@/utils/dateUtil';
+  import { formatToDate } from '/@/utils/dateUtil';
   import { Client } from '/@/api/identity-server/model/clientsModel';
   import { useSecret } from '../hooks/useSecret';
   import DynamicForm from './DynamicForm.vue';
@@ -73,6 +73,8 @@
       label: L('Expiration'),
       colProps: { span: 24 },
       componentProps: {
+        format: 'YYYY-MM-DD',
+        valueFormat: 'YYYY-MM-DDT00:00:00',
         style: {
           width: '100%',
         },
@@ -108,10 +110,7 @@
       width: '100',
       sorter: true,
       format: (text) => {
-        if (text) {
-          return formatToDateTime(text);
-        }
-        return '';
+        return text ? formatToDate(text) : '';
       },
     },
   ];

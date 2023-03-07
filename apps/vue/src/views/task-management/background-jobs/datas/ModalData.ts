@@ -8,6 +8,11 @@ const { L } = useLocalization(['TaskManagement', 'AbpUi']);
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['startTime', ['beginTime', 'endTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+      ['lastRunTime', ['beginLastRunTime', 'endLastRunTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+      ['creationTime', ['beginCreationTime', 'endCreationTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+    ],
     schemas: [
       {
         field: 'group',
@@ -71,21 +76,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'beginTime',
-        component: 'DatePicker',
+        field: 'startTime',
+        component: 'RangePicker',
         label: L('DisplayName:BeginTime'),
-        colProps: { span: 6 },
-        componentProps: {
-          style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endTime',
-        component: 'DatePicker',
-        label: L('DisplayName:EndTime'),
-        colProps: { span: 6 },
+        colProps: { span: 12 },
         componentProps: {
           style: {
             width: '100%',
@@ -108,21 +102,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'beginLastRunTime',
-        component: 'DatePicker',
+        field: 'lastRunTime',
+        component: 'RangePicker',
         label: L('DisplayName:BeginLastRunTime'),
-        colProps: { span: 9 },
-        componentProps: {
-          style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endLastRunTime',
-        component: 'DatePicker',
-        label: L('DisplayName:EndLastRunTime'),
-        colProps: { span: 9 },
+        colProps: { span: 18 },
         componentProps: {
           style: {
             width: '100%',
@@ -137,21 +120,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         renderComponentContent: L('DisplayName:IsAbandoned'),
       },
       {
-        field: 'beginCreationTime',
-        component: 'DatePicker',
+        field: 'creationTime',
+        component: 'RangePicker',
         label: L('DisplayName:BeginCreationTime'),
-        colProps: { span: 9 },
-        componentProps: {
-          style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endCreationTime',
-        component: 'DatePicker',
-        label: L('DisplayName:EndCreationTime'),
-        colProps: { span: 9 },
+        colProps: { span: 18 },
         componentProps: {
           style: {
             width: '100%',

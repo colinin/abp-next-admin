@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
-import { formatToDateTime } from '/@/utils/dateUtil';
+import { formatToDate } from '/@/utils/dateUtil';
 
 const { L } = useLocalization('AbpIdentityServer');
 
@@ -87,10 +87,7 @@ export function getSecretColumns(): BasicColumn[] {
       width: 180,
       sorter: true,
       format: (text) => {
-        if (text) {
-          return formatToDateTime(text);
-        }
-        return '';
+        return text ? formatToDate(text) : '';
       },
     },
   ];

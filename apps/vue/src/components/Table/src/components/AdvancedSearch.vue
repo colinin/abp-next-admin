@@ -41,7 +41,13 @@
             <Input v-if="record.javaScriptType==='string'" v-model:value="record.value" />
             <InputNumber v-else-if="record.javaScriptType==='number'" style="width: 100%;" v-model:value="record.value" />
             <Switch v-else-if="record.javaScriptType==='boolean'" v-model:checked="record.value" />
-            <DatePicker v-else-if="record.javaScriptType==='Date'" style="width: 100%;" v-model:value="record.value" />
+            <DatePicker
+              v-else-if="record.javaScriptType==='Date'"
+              style="width: 100%;"
+              v-model:value="record.value"
+              format="YYYY-MM-DD 00:00:00"
+              value-format="YYYY-MM-DDT00:00:00"
+            />
             <CodeEditorX
               v-else-if="['array', 'object'].includes(record.javaScriptType)"
               style="width: 100%; height: 300px"
@@ -72,6 +78,7 @@
 </template>
 
 <script lang="ts" setup>
+  import type { ColumnsType } from 'ant-design-vue/lib/table/interface';
   import { computed, ref, reactive, unref, onMounted } from 'vue';
   import { DeleteTwoTone } from '@ant-design/icons-vue';
   import {
@@ -118,7 +125,7 @@
     paramters: [],
   });
 
-  const columns = [
+  const columns = reactive<ColumnsType>([
     {
       dataIndex: 'field',
       key: 'field',
@@ -145,7 +152,7 @@
       dataIndex: 'actions',
       align: 'center',
     },
-  ];
+  ]);
 
   const defineParamsRef = ref<DefineParamter[]>([]);
 
