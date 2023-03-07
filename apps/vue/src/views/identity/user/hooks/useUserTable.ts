@@ -33,10 +33,9 @@ export function useUserTable() {
     },
   });
 
-  const lockEnable = computed(() => {
+  const lockEnd = computed(() => {
     return (record) => {
-      // 未启用锁定不显示
-      if (record.lockoutEnabled === true) {
+      if (record.lockoutEnd) {
         const lockTime = new Date(record.lockoutEnd);
         if (lockTime) {
           // 锁定时间高于当前时间不显示
@@ -68,6 +67,6 @@ export function useUserTable() {
     registerTable,
     reloadTable,
     handleDelete,
-    lockEnable,
+    lockEnd,
   };
 }

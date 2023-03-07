@@ -12,7 +12,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'userName'">
           <span>{{ record.userName }}</span>
-          <Tag v-if="lockEnable(record)" style="margin-left: 5px" color="orange">{{ L('Lockout') }}</Tag>
+          <Tag v-if="lockEnd(record)" style="margin-left: 5px" color="orange">{{ L('Lockout') }}</Tag>
           <Tag v-if="!record.isActive" style="margin-left: 5px" color="red">{{ L('UnActived') }}</Tag>
         </template>
         <template v-if="column.key === 'phoneNumber'">
@@ -50,13 +50,13 @@
               {
                 auth: 'AbpIdentity.Users.Update',
                 label: L('Lockout'),
-                ifShow: lockEnable(record),
+                ifShow: !lockEnd(record),
                 onClick: showLockModal.bind(null, record.id),
               },
               {
                 auth: 'AbpIdentity.Users.Update',
                 label: L('UnLock'),
-                ifShow: record.lockoutEnabled && !lockEnable(record),
+                ifShow: lockEnd(record),
                 onClick: handleUnlock.bind(null, record),
               },
               {
@@ -133,7 +133,7 @@
   const nullFormElRef = ref(null);
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
-  const { lockEnable, registerTable, reloadTable, handleDelete } = useUserTable();
+  const { lockEnd, registerTable, reloadTable, handleDelete } = useUserTable();
   const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit: emits });
   const { registerPasswordModal, showPasswordModal } = usePassword(nullFormElRef);
   const [registerClaimModal, { openModal: openClaimModal }] = useModal();
