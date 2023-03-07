@@ -142,9 +142,10 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
             Status = input.Status,
             Type = input.Type
         };
-        var totalCount = await BackgroundJobInfoRepository.GetCountAsync(filter);
+        var specification = new BackgroundJobInfoSpecification(filter);
+        var totalCount = await BackgroundJobInfoRepository.GetCountAsync(specification);
         var backgroundJobInfos = await BackgroundJobInfoRepository.GetListAsync(
-            filter, input.Sorting, input.MaxResultCount, input.SkipCount);
+            specification, input.Sorting, input.MaxResultCount, input.SkipCount);
 
         return new PagedResultDto<BackgroundJobInfoDto>(totalCount,
             ObjectMapper.Map<List<BackgroundJobInfo>, List<BackgroundJobInfoDto>>(backgroundJobInfos));
