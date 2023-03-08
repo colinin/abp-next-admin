@@ -231,6 +231,7 @@ public class VbenAxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransie
 
             apiScriptBuilder.AppendLine("  });");
             apiScriptBuilder.AppendLine("};");
+            apiScriptBuilder.AppendLine();
         }
 
         return apiScriptBuilder.ToString();

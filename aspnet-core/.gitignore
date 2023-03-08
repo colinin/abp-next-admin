@@ -2,7 +2,7 @@
 LocalNuget
 *.DotSettings.user
 **/*.csproj.user
-templates
 nupkg
 consoles
+templates
 *.configs.cache
