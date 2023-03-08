@@ -13,12 +13,15 @@
 		<PackageOutputPath>./nupkg</PackageOutputPath>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
+		<PackReadmeFile>README.md</PackReadmeFile>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 		<None Remove="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
 		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
+		<EmbeddedResource Include="README.md" />
 	</ItemGroup>
 
 	<ItemGroup>

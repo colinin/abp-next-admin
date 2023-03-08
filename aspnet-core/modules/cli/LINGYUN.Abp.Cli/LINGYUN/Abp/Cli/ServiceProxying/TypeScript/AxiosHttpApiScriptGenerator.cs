@@ -229,6 +229,7 @@ public class AxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITransientDe
 
             apiScriptBuilder.AppendLine("  });");
             apiScriptBuilder.AppendLine("};");
+            apiScriptBuilder.AppendLine();
         }
 
         return apiScriptBuilder.ToString();

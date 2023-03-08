@@ -218,6 +218,7 @@ public class UniAppAxiosHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
 
             apiScriptBuilder.AppendLine("  })");
             apiScriptBuilder.AppendLine("}");
+            apiScriptBuilder.AppendLine();
         }
 
         return apiScriptBuilder.ToString();

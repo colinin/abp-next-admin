@@ -188,6 +188,7 @@ public class VbenDynamicHttpApiScriptGenerator : IHttpApiScriptGenerator, ITrans
 
             apiScriptBuilder.AppendLine(");");
             apiScriptBuilder.AppendLine("};");
+            apiScriptBuilder.AppendLine();
         }
 
         return apiScriptBuilder.ToString();

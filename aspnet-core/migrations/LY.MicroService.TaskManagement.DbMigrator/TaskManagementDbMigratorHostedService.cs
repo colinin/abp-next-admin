@@ -1,4 +1,4 @@
-﻿using LY.MicroService.TaskManagement.DbMigrator.EntityFrameworkCore;
+﻿using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

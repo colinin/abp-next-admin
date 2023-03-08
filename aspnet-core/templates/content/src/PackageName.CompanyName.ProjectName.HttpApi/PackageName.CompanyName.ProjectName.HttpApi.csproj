@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Application.Contracts\PackageName.CompanyName.ProjectName.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

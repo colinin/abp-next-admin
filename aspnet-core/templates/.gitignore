@@ -1,0 +1,9 @@
+.vs
+LocalNuget
+*.DotSettings.user
+**/*.csproj.user
+nupkg
+consoles
+*.configs.cache
+*.nupkg
+*.nuspec
