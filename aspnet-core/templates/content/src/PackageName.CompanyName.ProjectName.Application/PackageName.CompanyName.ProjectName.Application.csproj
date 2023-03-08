@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application" Version="$(LINGYUNAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Application.Contracts\PackageName.CompanyName.ProjectName.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain\PackageName.CompanyName.ProjectName.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

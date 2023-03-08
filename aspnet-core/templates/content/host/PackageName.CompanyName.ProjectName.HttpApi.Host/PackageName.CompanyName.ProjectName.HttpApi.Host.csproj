@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>PackageName.CompanyName.ProjectName</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(MySQL)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(SqlServer)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.Oracle" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(Oracle)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.Oracle" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(OracleDevart)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.PostgreSql" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(PostgreSql)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="$(DotNetCoreCAPPackageVersion)" Condition="'$(Sqlite)'=='true'" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.EventBus.CAP" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.ExceptionHandling.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="$(OpenTelemetryExtensionsHostingPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryExporterZipkinPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryInstrumentationAspNetCorePackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryInstrumentationHttpPackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion)" />
+		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="$(SerilogEnrichersProcessPackageVersion)" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="$(SerilogEnrichersThreadPackageVersion)" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="$(SerilogSinksElasticsearchPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(VoloAbpPackageVersion)" Condition="'$(OpenIddict)'=='true'" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" Condition="'$(IdentityServer4)'=='true'" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.Application\PackageName.CompanyName.ProjectName.Application.csproj" />
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.HttpApi\PackageName.CompanyName.ProjectName.HttpApi.csproj" />
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
+	</ItemGroup>
+
+</Project>

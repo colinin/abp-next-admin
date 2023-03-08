@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Features:ProjectName": "ProjectName",
+    "Permission:ProjectName": "ProjectName",
+    "Permission:ManageSettings": "管理设置"
+  }
+}

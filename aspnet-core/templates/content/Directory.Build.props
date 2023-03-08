@@ -1,0 +1,33 @@
+<Project>
+	<PropertyGroup>
+		<AgileConfigClientPackageVersion>1.6.9</AgileConfigClientPackageVersion>
+		<VoloAbpPackageVersion>7.0.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.0.2</LINGYUNAbpPackageVersion>
+		<DotNetCoreCAPPackageVersion>7.0.3</DotNetCoreCAPPackageVersion>
+		<DaprPackageVersion>1.10.0</DaprPackageVersion>
+		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
+		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
+		<OpenTelemetryExporterZipkinPackageVersion>1.3.1</OpenTelemetryExporterZipkinPackageVersion>
+		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
+		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
+		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
+		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
+		<SerilogSinksAsyncPackageVersion>1.5.0</SerilogSinksAsyncPackageVersion>
+		<SerilogAspNetCorePackageVersion>5.0.0</SerilogAspNetCorePackageVersion>
+		<SerilogEnrichersEnvironmentPackageVersion>2.2.0</SerilogEnrichersEnvironmentPackageVersion>
+		<SerilogEnrichersAssemblyPackageVersion>2.0.0</SerilogEnrichersAssemblyPackageVersion>
+		<SerilogEnrichersProcessPackageVersion>2.0.1</SerilogEnrichersProcessPackageVersion>
+		<SerilogEnrichersThreadPackageVersion>3.1.0</SerilogEnrichersThreadPackageVersion>
+		<SerilogExtensionsLoggingPackageVersion>3.0.1</SerilogExtensionsLoggingPackageVersion>
+		<SerilogSettingsConfigurationPackageVersion>3.4.0</SerilogSettingsConfigurationPackageVersion>
+		<SerilogSinksConsolePackageVersion>4.0.0</SerilogSinksConsolePackageVersion>
+		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
+		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
+		<SwashbuckleAspNetCorePackageVersion>6.1.5</SwashbuckleAspNetCorePackageVersion>
+		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>7.0.2</MicrosoftEntityFrameworkCorePackageVersion>
+		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
+		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
+		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>
+	</PropertyGroup>
+</Project>
