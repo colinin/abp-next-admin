@@ -22,6 +22,14 @@
           @click="handleAddNew"
           >{{ L('BackgroundJobs:AddNew') }}</a-button
         >
+        <a-button
+          v-if="hasPermission('TaskManagement.BackgroundJobs.Delete')"
+          type="primary"
+          danger
+          :disabled="!isMultiSelected"
+          @click="handleDeleteMany"
+          >{{ L('Delete') }}</a-button
+        >
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isEnabled'">
@@ -91,15 +99,16 @@
         </template>
       </template>
     </BasicTable>
-    <JobModal @change="handleChange" @register="registerModal" />
+    <JobModal @change="reloadTable" @register="registerModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { Switch, Modal, Tag, Tooltip, message } from 'ant-design-vue';
+  import { Switch, Tag, Tooltip } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useGo } from '/@/hooks/web/usePage';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -112,6 +121,7 @@
     deleteById,
     bulkStop,
     bulkStart,
+    bulkDelete,
     getAvailableFields,
     advancedSearch,
   } from '/@/api/task-management/backgroundJobInfo';
@@ -128,10 +138,11 @@
   import JobModal from './JobModal.vue';
 
   const go = useGo();
+  const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['TaskManagement', 'AbpUi']);
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, getSelectRowKeys }] = useTable({
+  const [registerTable, { reload, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('BackgroundJobs'),
     columns: getDataColumns(),
@@ -171,10 +182,6 @@
     selectedRowKeys.value = keys;
   }
 
-  function handleChange() {
-    reload();
-  }
-
   function handleAddNew() {
     openModal(true, { id: null });
   }
@@ -189,49 +196,68 @@
 
   function handlePause(record) {
     pause(record.id).then(() => {
-      message.success(L('Successful'));
-      reload();
+      createMessage.success(L('Successful'));
+      reloadTable();
     });
   }
 
   function handleResume(record) {
     resume(record.id).then(() => {
-      message.success(L('Successful'));
-      reload();
+      createMessage.success(L('Successful'));
+      reloadTable();
     });
   }
 
   function handleTrigger(record) {
     trigger(record.id).then(() => {
-      message.success(L('Successful'));
-      reload();
+      createMessage.success(L('Successful'));
+      reloadTable();
     });
   }
 
   function handleStart() {
     const selectKeys = getSelectRowKeys();
     bulkStart(selectKeys).then(() => {
-      message.success(L('Successful'));
-      reload();
+      createMessage.success(L('Successful'));
+      reloadTable();
     });
   }
 
   function handleStop() {
     const selectKeys = getSelectRowKeys();
     bulkStop(selectKeys).then(() => {
-      message.success(L('Successful'));
-      reload();
+      createMessage.success(L('Successful'));
+      reloadTable();
     });
   }
 
-  function handleDelete(record) {
-    Modal.warning({
+  function handleDeleteMany() {
+    const selectKeys = getSelectRowKeys();
+    if (selectKeys.length <= 0) {
+      return;
+    }
+    createConfirm({
+      iconType: 'warning',
       title: L('AreYouSure'),
       content: L('MultipleSelectJobsWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        deleteById(record.id).then(() => {
-          reload();
+        return bulkDelete(selectKeys).then(() => {
+          reloadTable();
+        });
+      },
+    });
+  }
+
+  function handleDelete(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('MultipleSelectJobsWillBeDeletedMessage'),
+      okCancel: true,
+      onOk: () => {
+        return deleteById(record.id).then(() => {
+          reloadTable();
         });
       },
     });
@@ -239,5 +265,10 @@
 
   function handleCopy(record) {
     openModal(true, { id: record.id, copy: true });
+  }
+
+  function reloadTable() {
+    clearSelectedRowKeys();
+    reload();
   }
 </script>
