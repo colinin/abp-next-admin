@@ -43,7 +43,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.DbMigrator", "migrations\LY.MicroService.WebhooksManagement.DbMigrator\LY.MicroService.WebhooksManagement.DbMigrator.csproj", "{3BC77471-D273-4C9C-8985-7FE450DA4686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.WebhooksManagement.EntityFrameworkCore", "migrations\LY.MicroService.WebhooksManagement.EntityFrameworkCore\LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj", "{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.EntityFrameworkCore", "migrations\LY.MicroService.WebhooksManagement.EntityFrameworkCore\LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj", "{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "job", "job", "{C8BF949C-3370-4727-BA20-5AB13CF9AAD6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Abstractions", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj", "{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks", "modules\task-management\LINGYUN.Abp.BackgroundTasks\LINGYUN.Abp.BackgroundTasks.csproj", "{B01A8350-EFA3-4080-9CD6-0E991F99578E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +125,14 @@ Global
 		{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B01A8350-EFA3-4080-9CD6-0E991F99578E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01A8350-EFA3-4080-9CD6-0E991F99578E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01A8350-EFA3-4080-9CD6-0E991F99578E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01A8350-EFA3-4080-9CD6-0E991F99578E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +155,8 @@ Global
 		{BBF1C93D-EF73-4B00-919F-5E7F360BDB03} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 		{3BC77471-D273-4C9C-8985-7FE450DA4686} = {2868332B-7D4F-4B43-8FC3-BA5CACC36C7E}
 		{CC0BF1BE-A938-4BED-B5DD-AEA0235FF978} = {2868332B-7D4F-4B43-8FC3-BA5CACC36C7E}
+		{8BFCE8C7-D41A-4D9C-9567-4155B7AC79FE} = {C8BF949C-3370-4727-BA20-5AB13CF9AAD6}
+		{B01A8350-EFA3-4080-9CD6-0E991F99578E} = {C8BF949C-3370-4727-BA20-5AB13CF9AAD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80ED12A5-C899-459F-A181-ADCC9D680DE5}
