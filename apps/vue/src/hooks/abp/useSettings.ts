@@ -5,7 +5,7 @@ type SettingValue = NameValue<string>;
 /**
  * 设置接口
  */
-interface ISettingProvider {
+export interface ISettingProvider {
   /**
    * 查询 number 类型设定值
    * @param name 设置名称

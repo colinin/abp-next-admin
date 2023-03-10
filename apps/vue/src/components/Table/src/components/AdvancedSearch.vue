@@ -136,6 +136,7 @@
       dataIndex: 'comparison',
       key: 'comparison',
       title: t('component.table.advancedSearch.comparison'),
+      width: 120,
     },
     {
       dataIndex: 'value',
@@ -151,6 +152,7 @@
       title: t('table.action'),
       dataIndex: 'actions',
       align: 'center',
+      width: 120,
     },
   ]);
 
