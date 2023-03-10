@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun", "modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj", "{8AF8FD6B-634F-41FA-B421-A4ACFD159FE0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aliyun", "aliyun", "{7F18BCA5-35BD-41FB-8EFF-801B56E5E414}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "alibaba-cloud", "alibaba-cloud", "{7F18BCA5-35BD-41FB-8EFF-801B56E5E414}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "signalr", "signalr", "{E2E7A062-0ABB-41B4-8220-60228446D2C2}"
 EndProject
@@ -301,6 +301,25 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "modules\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{E097FAEC-5015-4159-BC00-A737483EFA80}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tencent-cloud", "tencent-cloud", "{C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{33CBF722-B166-4B68-9CB3-1293F5C78EF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{4CEFE059-B30E-4121-AA12-10EC72709758}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "modules\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.TTS", "modules\cloud-tencent\LINGYUN.Abp.Tencent.TTS\LINGYUN.Abp.Tencent.TTS.csproj", "{4059233C-C651-4DA2-A1BC-26196362062A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8DA7627-E691-400A-AE4D-0E151A6EA0F8}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+		configureawait.props = configureawait.props
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -784,6 +803,26 @@ Global
 		{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33CBF722-B166-4B68-9CB3-1293F5C78EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CBF722-B166-4B68-9CB3-1293F5C78EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CBF722-B166-4B68-9CB3-1293F5C78EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CBF722-B166-4B68-9CB3-1293F5C78EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CEFE059-B30E-4121-AA12-10EC72709758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEFE059-B30E-4121-AA12-10EC72709758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEFE059-B30E-4121-AA12-10EC72709758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEFE059-B30E-4121-AA12-10EC72709758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4059233C-C651-4DA2-A1BC-26196362062A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4059233C-C651-4DA2-A1BC-26196362062A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4059233C-C651-4DA2-A1BC-26196362062A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4059233C-C651-4DA2-A1BC-26196362062A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -934,6 +973,12 @@ Global
 		{1206B9FC-0177-4061-A06E-F82B2CC01ACE} = {E73A0F8B-2B4B-4CED-82A4-1EE5E0B89744}
 		{E097FAEC-5015-4159-BC00-A737483EFA80} = {E73A0F8B-2B4B-4CED-82A4-1EE5E0B89744}
 		{809C86E9-0C70-41E4-B26D-D9AFF34F03D0} = {E73A0F8B-2B4B-4CED-82A4-1EE5E0B89744}
+		{C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E} = {02EA4E78-5891-43BC-944F-3E52FEE032E4}
+		{B6A5E070-3A2A-4F53-8391-0CA0C60B7701} = {C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}
+		{33CBF722-B166-4B68-9CB3-1293F5C78EF5} = {C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}
+		{4CEFE059-B30E-4121-AA12-10EC72709758} = {C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}
+		{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418} = {C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}
+		{4059233C-C651-4DA2-A1BC-26196362062A} = {C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}

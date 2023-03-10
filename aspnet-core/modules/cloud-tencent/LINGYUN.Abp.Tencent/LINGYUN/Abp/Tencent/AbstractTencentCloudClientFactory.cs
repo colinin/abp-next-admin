@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Tencent.Settings;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Settings;
@@ -32,7 +33,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
     {
         return await ClientCache.GetOrCreateAsync(
             TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
-            async (_) =>
+            async (cache) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
                 var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
@@ -46,6 +47,8 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
                 var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
                 var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
                 var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
+
+                cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(durationSecond));
 
                 return new TencentCloudClientCacheItem
                 {
@@ -88,7 +91,7 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
     {
         return await ClientCache.GetOrCreateAsync(
             TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
-            async (_) =>
+            async (cache) =>
             {
                 var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
                 var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
@@ -102,6 +105,8 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
                 var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
                 var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
                 var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
+
+                cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(durationSecond));
 
                 return new TencentCloudClientCacheItem
                 {
