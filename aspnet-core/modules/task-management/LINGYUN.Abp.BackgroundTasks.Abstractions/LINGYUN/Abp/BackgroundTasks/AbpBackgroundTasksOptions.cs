@@ -20,6 +20,16 @@ public class AbpBackgroundTasksOptions
     /// </remarks>
     public ITypeList<IJobDefinitionProvider> DefinitionProviders { get; }
     /// <summary>
+    /// 作业发布预配置
+    /// </summary>
+    /// <remarks>
+    /// Tips: <br />
+    /// 仅作用于适用于 IBackgroundJobManager与IBackgroundWorker 适配器接口的作业预配置
+    /// <br />
+    /// <see cref="IJobRunnable"/> 标准实现的作业参数请通过接口直接管理
+    /// </remarks>
+    public IJobDispatcherSelectorList JobDispatcherSelectors { get; }
+    /// <summary>
     /// 启用清理任务
     /// </summary>
     /// <remarks>
@@ -93,5 +103,6 @@ public class AbpBackgroundTasksOptions
 
         JobMonitors = new TypeList<IJobEvent>();
         DefinitionProviders = new TypeList<IJobDefinitionProvider>();
+        JobDispatcherSelectors = new JobDispatcherSelectorList();
     }
 }

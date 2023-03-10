@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
@@ -80,6 +81,29 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
             NodeName = TasksOptions.NodeName,
             Type = typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName,
         };
+
+        if (TasksOptions.JobDispatcherSelectors.IsMatch(jobConfiguration.JobType))
+        {
+            var selector = TasksOptions
+                .JobDispatcherSelectors
+                .FirstOrDefault(x => x.Predicate(jobConfiguration.JobType));
+
+            jobInfo.Interval = selector.Interval;
+            jobInfo.LockTimeOut = selector.LockTimeOut;
+            jobInfo.Priority = selector.Priority;
+            jobInfo.TryCount = selector.TryCount;
+            jobInfo.MaxTryCount = selector.MaxTryCount;
+
+            if (!selector.NodeName.IsNullOrWhiteSpace())
+            {
+                jobInfo.NodeName = selector.NodeName;
+            }
+
+            if (!selector.Cron.IsNullOrWhiteSpace())
+            {
+                jobInfo.Cron = selector.Cron;
+            }
+        }
 
         // 存储状态
         await JobStore.StoreAsync(jobInfo);
