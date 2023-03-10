@@ -21,11 +21,7 @@ export function useTableAlert(
 
   const getAlertEnabled = computed(() => {
     const props = unref(propsRef);
-    if (!props.useSelectedAlert) {
-      return false;
-    }
-    
-    return unref(getSelectRowKeysCount) > 0;
+    return props.useSelectedAlert === true;
   });
 
   const getAlertMessage = computed(() => {

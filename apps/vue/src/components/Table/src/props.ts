@@ -12,6 +12,7 @@ import type {
 import type { FormProps } from '/@/components/Form';
 import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const';
 import { propTypes } from '/@/utils/propTypes';
+import { AdvanceSearchProps } from './types/advancedSearch';
 
 export const basicProps = {
   clickToRowSelect: { type: Boolean, default: true },
@@ -80,6 +81,13 @@ export const basicProps = {
   // 表单配置
   formConfig: {
     type: Object as PropType<Partial<FormProps>>,
+    default: null,
+  },
+  // 展示选择提示
+  useSelectedAlert: propTypes.bool,
+  // 使用高级搜索
+  advancedSearchConfig: {
+    type: Object as PropType<Partial<AdvanceSearchProps>>,
     default: null,
   },
   columns: {

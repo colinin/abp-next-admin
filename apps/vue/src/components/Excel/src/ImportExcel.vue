@@ -32,10 +32,11 @@
         default: 8,
       },
     },
-    emits: ['success', 'error'],
+    emits: ['success', 'error', 'cancel'],
     setup(props, { emit }) {
       const inputRef = ref<HTMLInputElement | null>(null);
       const loadingRef = ref<Boolean>(false);
+      const cancelRef = ref<Boolean>(true);
 
       /**
        * @description: 第一行作为头部
@@ -115,7 +116,7 @@
               resolve('');
             } catch (error) {
               reject(error);
-              emit('error');
+              emit('error', error);
             } finally {
               loadingRef.value = false;
             }
@@ -142,7 +143,18 @@
         const rawFile = files && files[0]; // only setting files[0]
         target.value = '';
         if (!rawFile) return;
+        cancelRef.value = false;
         upload(rawFile);
+      }
+
+      function handleFocusChange() {
+        const timeId = setInterval(() => {
+          if (cancelRef.value === true) {
+            emit('cancel');
+          }
+          clearInterval(timeId);
+          window.removeEventListener('focus', handleFocusChange);
+        }, 1000);
       }
 
       /**
@@ -150,7 +162,11 @@
        */
       function handleUpload() {
         const inputRefDom = unref(inputRef);
-        inputRefDom && inputRefDom.click();
+        if (inputRefDom) {
+          cancelRef.value = true;
+          inputRefDom.click();
+          window.addEventListener('focus', handleFocusChange);
+        }
       }
 
       return { handleUpload, handleInputClick, inputRef };
