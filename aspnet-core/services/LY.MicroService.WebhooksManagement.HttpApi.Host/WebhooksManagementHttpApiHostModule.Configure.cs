@@ -130,6 +130,11 @@ public partial class WebhooksManagementHttpApiHostModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
+            //options.JobDispatcherSelectors.AddNamespace(
+            //    "LINGYUN.Abp.Webhooks.BackgroundJobs",
+            //    job =>
+            //    {
+            //    });
         });
     }
 
