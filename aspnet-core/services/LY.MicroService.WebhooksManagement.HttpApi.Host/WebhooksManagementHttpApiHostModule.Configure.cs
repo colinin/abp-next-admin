@@ -5,6 +5,7 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Webhooks;
+using LINGYUN.Abp.Webhooks.BackgroundJobs;
 using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
@@ -130,10 +131,18 @@ public partial class WebhooksManagementHttpApiHostModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
+
+            options.JobDispatcherSelectors.AddJob<WebhookSenderJob>(
+                job =>
+                {
+                    // 让用户自行决定重试次数, 作业管理器限定只执行一次
+                    job.TryCount = 1;
+                });
             //options.JobDispatcherSelectors.AddNamespace(
             //    "LINGYUN.Abp.Webhooks.BackgroundJobs",
             //    job =>
             //    {
+            //        // more
             //    });
         });
     }
