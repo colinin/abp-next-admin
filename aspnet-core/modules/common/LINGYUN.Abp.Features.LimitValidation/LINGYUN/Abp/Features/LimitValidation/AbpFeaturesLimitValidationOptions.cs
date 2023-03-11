@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Volo.Abp;
 
 namespace LINGYUN.Abp.Features.LimitValidation
@@ -66,14 +65,14 @@ namespace LINGYUN.Abp.Features.LimitValidation
                 }
                 var utcOnceDayOfWeek = utcNow.AddDays(-dayOfWeek);
 
-                return (long)(utcOnceDayOfWeek.AddDays(time) - DateTime.UtcNow).TotalSeconds;
+                return (long)(utcOnceDayOfWeek.AddDays(time * 7) - DateTime.UtcNow).TotalSeconds;
             });
 
             MapEffectPolicy(LimitPolicy.Month, (time) =>
             {
                 // 按月计算应取当月
                 var utcNow = DateTime.UtcNow;
-                var utcOnceDayOfMonth = new DateTime(utcNow.Year, utcNow.Month, 1, 1, 0, 0, 0);
+                var utcOnceDayOfMonth = new DateTime(utcNow.Year, utcNow.Month, 1, 0, 0, 0, 0);
 
                 return (long)(utcOnceDayOfMonth.AddMonths(time) - utcNow).TotalSeconds; 
             });
@@ -82,7 +81,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
             {
                 // 按年计算应取当年
                 var utcNow = DateTime.UtcNow;
-                var utcOnceDayOfYear = new DateTime(utcNow.Year, 1, 1, 1, 0, 0, 0);
+                var utcOnceDayOfYear = new DateTime(utcNow.Year, 1, 1, 0, 0, 0, 0);
 
                 return (long)(utcOnceDayOfYear.AddYears(time) - utcNow).TotalSeconds; 
             });
