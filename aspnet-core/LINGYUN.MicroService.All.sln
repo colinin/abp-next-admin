@@ -553,6 +553,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{52E6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F3E04039-7BEE-46F8-B33B-FE13E977DCCA}"
 	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 	EndProjectSection
 EndProject
@@ -568,9 +569,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Platform.En
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMessage.EntityFrameworkCore", "migrations\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj", "{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{E2019836-1C67-47E4-B3AF-D62F4AFC7679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{E2019836-1C67-47E4-B3AF-D62F4AFC7679}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Razor", "modules\text-templating\LINGYUN.Abp.TextTemplating.Razor\LINGYUN.Abp.TextTemplating.Razor.csproj", "{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Razor", "modules\text-templating\LINGYUN.Abp.TextTemplating.Razor\LINGYUN.Abp.TextTemplating.Razor.csproj", "{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
