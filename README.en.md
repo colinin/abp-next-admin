@@ -6,6 +6,10 @@ English | [简体中文](./README.md)
 
 This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp framework background management interface
 
+## Build
+
+[![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)
+
 ## Quick Start
 
 ### 1、Install cli
@@ -292,3 +296,8 @@ Support modern browsers, not IE
 ## License
 
 [MIT License](./LICENSE)
+
+
+## Thanks
+
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)

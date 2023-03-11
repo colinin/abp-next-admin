@@ -7,6 +7,10 @@
 
 这是一个基于 [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) 的Abp框架后台管理界面
 
+## Build
+
+[![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)
+
 
 ## 快速搭建微服务启动项目
 
@@ -287,3 +291,7 @@ yarn test:unit
 ## License
 
 [MIT License](./LICENSE)
+
+## Thanks
+
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)
