@@ -2,7 +2,7 @@ name: "Tagged Release"
 
 on:
   push:
-    branches: [ rel-7.0.2 ]
+    branches: [ rel-7.0.3 ]
 
 jobs:
   tagged-release:
@@ -14,4 +14,4 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-        automatic_release_tag: "7.0.2"
+        automatic_release_tag: "7.0.3"
