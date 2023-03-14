@@ -22,9 +22,10 @@ public class GenerateProxyArgs : Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs
         string provider,
         string apiScriptProxy,
         Volo.Abp.Cli.ServiceProxying.ServiceType? serviceType,
+        string entryPoint,
         bool withoutContracts,
         Dictionary<string, string> extraProperties = null)
-        : base(commandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, withoutContracts, extraProperties)
+        : base(commandName, workDirectory, module, url, output, target, apiName, source, folder, serviceType, entryPoint, withoutContracts, extraProperties)
     {
         ApiScriptProxy = apiScriptProxy;
         Provider = provider;

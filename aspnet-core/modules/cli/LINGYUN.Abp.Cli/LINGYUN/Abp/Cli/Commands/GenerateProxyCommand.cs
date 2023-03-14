@@ -12,6 +12,7 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.DependencyInjection;
 using AbpCliServiceProxyOptions = Volo.Abp.Cli.ServiceProxying.AbpCliServiceProxyOptions;
 using IServiceProxyGenerator = Volo.Abp.Cli.ServiceProxying.IServiceProxyGenerator;
+using VoloProxyOptions = Volo.Abp.Cli.Commands.ProxyCommandBase<Volo.Abp.Cli.Commands.GenerateProxyCommand>.Options;
 using VoloGenerateProxyArgs = Volo.Abp.Cli.ServiceProxying.GenerateProxyArgs;
 using ServiceType = Volo.Abp.Cli.ServiceProxying.ServiceType;
 
@@ -58,15 +59,16 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         var provider = commandLineArgs.Options.GetOrNull(Options.Provider.Short, Options.Provider.Long);
         var apiScriptProxy = commandLineArgs.Options.GetOrNull(Options.ApiScriptProxy.Short, Options.ApiScriptProxy.Long) ??
             VbenDynamicHttpApiScriptGenerator.Name;
-        var url = commandLineArgs.Options.GetOrNull(Options.Url.Short, Options.Url.Long);
-        var target = commandLineArgs.Options.GetOrNull(Options.Target.Long);
-        var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ?? "app";
-        var output = commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long);
-        var apiName = commandLineArgs.Options.GetOrNull(Options.ApiName.Short, Options.ApiName.Long);
-        var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long);
-        var workDirectory = commandLineArgs.Options.GetOrNull(Options.WorkDirectory.Short, Options.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
-        var folder = commandLineArgs.Options.GetOrNull(Options.Folder.Long);
-        var serviceTypeArg = commandLineArgs.Options.GetOrNull(Options.ServiceType.Short, Options.ServiceType.Long);
+        var url = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Url.Short, VoloProxyOptions.Url.Long);
+        var target = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Target.Long);
+        var module = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Module.Short, VoloProxyOptions.Module.Long) ?? "app";
+        var output = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Output.Short, VoloProxyOptions.Output.Long);
+        var apiName = commandLineArgs.Options.GetOrNull(VoloProxyOptions.ApiName.Short, VoloProxyOptions.ApiName.Long);
+        var source = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Source.Short, VoloProxyOptions.Source.Long);
+        var workDirectory = commandLineArgs.Options.GetOrNull(VoloProxyOptions.WorkDirectory.Short, VoloProxyOptions.WorkDirectory.Long) ?? Directory.GetCurrentDirectory();
+        var folder = commandLineArgs.Options.GetOrNull(VoloProxyOptions.Folder.Long);
+        var serviceTypeArg = commandLineArgs.Options.GetOrNull(VoloProxyOptions.ServiceType.Short, VoloProxyOptions.ServiceType.Long);
+        var entryPoint = commandLineArgs.Options.GetOrNull(VoloProxyOptions.EntryPoint.Short, VoloProxyOptions.EntryPoint.Long);
 
         ServiceType? serviceType = null;
         if (!serviceTypeArg.IsNullOrWhiteSpace())
@@ -78,8 +80,8 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
                     : null;
         }
 
-        var withoutContracts = commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Short) ||
-                               commandLineArgs.Options.ContainsKey(Options.WithoutContracts.Long);
+        var withoutContracts = commandLineArgs.Options.ContainsKey(VoloProxyOptions.WithoutContracts.Short) ||
+                               commandLineArgs.Options.ContainsKey(VoloProxyOptions.WithoutContracts.Long);
 
         return new GenerateProxyArgs(
             CommandName,
@@ -94,6 +96,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
             provider,
             apiScriptProxy,
             serviceType,
+            entryPoint,
             withoutContracts,
             commandLineArgs.Options);
     }
@@ -157,69 +160,6 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "asp";
             public const string Long = "api-script-proxy";
-        }
-
-        public static class Module
-        {
-            public const string Short = "m";
-            public const string Long = "module";
-        }
-
-        public static class ApiName
-        {
-            public const string Short = "a";
-            public const string Long = "api-name";
-        }
-
-        public static class Source
-        {
-            public const string Short = "s";
-            public const string Long = "source";
-        }
-        public static class Output
-        {
-            public const string Short = "o";
-            public const string Long = "output";
-        }
-
-        public static class Target
-        {
-            public const string Long = "target";
-        }
-
-        public static class Prompt
-        {
-            public const string Short = "p";
-            public const string Long = "prompt";
-        }
-
-        public static class Folder
-        {
-            public const string Long = "folder";
-        }
-
-        public static class Url
-        {
-            public const string Short = "u";
-            public const string Long = "url";
-        }
-
-        public static class WorkDirectory
-        {
-            public const string Short = "wd";
-            public const string Long = "working-directory";
-        }
-
-        public static class ServiceType
-        {
-            public const string Short = "st";
-            public const string Long = "service-type";
-        }
-
-        public static class WithoutContracts
-        {
-            public const string Short = "c";
-            public const string Long = "without-contracts";
         }
     }
 }

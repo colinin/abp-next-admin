@@ -25,6 +25,8 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
 
     protected INotificationStore NotificationStore { get; }
 
+    protected INotificationDataSerializer NotificationDataSerializer { get; }
+
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
     protected INotificationDefinitionManager NotificationDefinitionManager { get; }
@@ -39,6 +41,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         IStringLocalizerFactory stringLocalizerFactory,
         IOptions<AbpNotificationsPublishOptions> options,
         INotificationStore notificationStore,
+        INotificationDataSerializer notificationDataSerializer,
         INotificationDefinitionManager notificationDefinitionManager,
         INotificationSubscriptionManager notificationSubscriptionManager,
         INotificationPublishProviderManager notificationPublishProviderManager)
@@ -48,6 +51,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         TemplateRenderer = templateRenderer;
         StringLocalizerFactory = stringLocalizerFactory;
         NotificationStore = notificationStore;
+        NotificationDataSerializer = notificationDataSerializer;
         NotificationDefinitionManager = notificationDefinitionManager;
         NotificationSubscriptionManager = notificationSubscriptionManager;
         NotificationPublishProviderManager = notificationPublishProviderManager;
@@ -81,7 +85,7 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         };
         notificationInfo.SetId(DateTimeOffset.Now.ToUnixTimeMilliseconds());
 
-        notificationInfo.Data = NotificationDataConverter.Convert(notificationInfo.Data);
+        notificationInfo.Data = NotificationDataSerializer.Serialize(notificationInfo.Data);
 
         Logger.LogDebug($"Persistent notification {notificationInfo.Name}");
 
