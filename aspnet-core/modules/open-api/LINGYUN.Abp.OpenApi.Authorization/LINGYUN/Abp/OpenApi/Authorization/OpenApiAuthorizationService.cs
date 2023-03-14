@@ -181,28 +181,32 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 options.SendStackTraceToClients = false;
             });
 
-            var exceptionWrapHandlerFactory = context.RequestServices.GetRequiredService<IExceptionWrapHandlerFactory>();
-            var exceptionWrapContext = new ExceptionWrapContext(
-                exception,
-                errorInfo,
-                context.RequestServices);
-            exceptionWrapHandlerFactory.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
-
             if (context.Request.CanAccept(MimeTypes.Application.Json) ||
                 context.Request.IsAjax())
             {
-                var wrapResult = new WrapResult(
+                var wrapOptions = context.RequestServices.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
+                if (wrapOptions.IsEnabled)
+                {
+                    var exceptionWrapHandlerFactory = context.RequestServices.GetRequiredService<IExceptionWrapHandlerFactory>();
+                    var exceptionWrapContext = new ExceptionWrapContext(
+                        exception,
+                        errorInfo,
+                        context.RequestServices);
+                    exceptionWrapHandlerFactory.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
+
+                    var wrapResult = new WrapResult(
                     exceptionWrapContext.ErrorInfo.Code,
                     exceptionWrapContext.ErrorInfo.Message,
                     exceptionWrapContext.ErrorInfo.Details);
 
-                var jsonSerializer = context.RequestServices.GetRequiredService<IJsonSerializer>();
+                    var jsonSerializer = context.RequestServices.GetRequiredService<IJsonSerializer>();
 
-                context.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    context.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
 
-                await context.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
-                return;
+                    await context.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
+                    return;
+                }
             }
 
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;

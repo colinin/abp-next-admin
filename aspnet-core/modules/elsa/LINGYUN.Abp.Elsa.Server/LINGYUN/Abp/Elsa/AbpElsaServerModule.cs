@@ -1,4 +1,8 @@
-﻿using Elsa.Server.Api;
+﻿using Elsa;
+using Elsa.Server.Api;
+using Elsa.Server.Api.Mapping;
+using Elsa.Server.Api.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -10,13 +14,35 @@ namespace LINGYUN.Abp.Elsa;
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpElsaServerModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var preElsaApiOptions = context.Services.GetPreConfigureActions<ElsaApiOptions>();
+        context.Services
+            .AddSingleton<ConnectionConverter>()
+            .AddSingleton<ActivityBlueprintConverter>()
+            .AddScoped<IWorkflowBlueprintMapper, WorkflowBlueprintMapper>()
+            .AddSingleton<IEndpointContentSerializerSettingsProvider, EndpointContentSerializerSettingsProvider>()
+            .AddAutoMapperProfile<AutoMapperProfile>()
+            .AddSignalR();
 
-        context.Services.AddElsaApiEndpoints(options =>
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            preElsaApiOptions.Configure(options);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(ElsaApiOptions).Assembly);
+        });
+
+        PreConfigure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ConventionalControllers.Create(
+                typeof(ElsaApiOptions).Assembly,
+                controller =>
+                {
+                    controller.ApiVersions.Add(ApiVersion.Default);
+                    //controller.ApiVersionConfigurer += (version =>
+                    //{
+                    //    version.ReportApiVersions = true;
+                    //    version.DefaultApiVersion = ApiVersion.Default;
+                    //    version.AssumeDefaultVersionWhenUnspecified = true;
+                    //});
+                });
         });
     }
 }

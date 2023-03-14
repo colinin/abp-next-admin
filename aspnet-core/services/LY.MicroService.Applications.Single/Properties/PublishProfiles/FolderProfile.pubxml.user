@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>F:\C Sharp\Open-Sources\abp-next-admin\aspnet-core\services\LY.MicroService.Applications.Single\bin\Release\net7.0\publish\</_PublishTargetUrl>
+    <History>True|2023-03-13T08:15:34.0614366Z;False|2023-03-13T16:09:47.4416329+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
