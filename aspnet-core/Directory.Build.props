@@ -33,7 +33,7 @@
 		<SerilogSinksConsolePackageVersion>4.0.0</SerilogSinksConsolePackageVersion>
 		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
-		<SwashbuckleAspNetCorePackageVersion>6.1.5</SwashbuckleAspNetCorePackageVersion>
+		<SwashbuckleAspNetCorePackageVersion>6.3.0</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>7.2.3</PollyPackageVersion>
 		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>7.0.2</MicrosoftEntityFrameworkCorePackageVersion>
