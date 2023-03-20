@@ -112,6 +112,7 @@ public partial class TaskManagementHttpApiHostModule
         {
             options.JobCleanEnabled = true;
             options.JobFetchEnabled = true;
+            options.JobCheckEnabled = true;
         });
     }
 
