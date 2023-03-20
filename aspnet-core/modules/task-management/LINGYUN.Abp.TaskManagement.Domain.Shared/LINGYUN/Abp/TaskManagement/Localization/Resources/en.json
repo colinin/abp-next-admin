@@ -57,6 +57,7 @@
     "DisplayName:None": "None",
     "DisplayName:Completed": "Completed",
     "DisplayName:Running": "Running",
+    "DisplayName:Queuing": "Queuing",
     "DisplayName:Paused": "Paused",
     "DisplayName:FailedRetry": "Failed Retry",
     "DisplayName:Stopped": "Stopped",

@@ -41,8 +41,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         componentProps: {
           options: [
             { label: JobStatusMap[JobStatus.None], value: JobStatus.None },
+            { label: JobStatusMap[JobStatus.Queuing], value: JobStatus.Queuing },
             { label: JobStatusMap[JobStatus.Running], value: JobStatus.Running },
             { label: JobStatusMap[JobStatus.Completed], value: JobStatus.Completed },
+            { label: JobStatusMap[JobStatus.FailedRetry], value: JobStatus.FailedRetry },
             { label: JobStatusMap[JobStatus.Paused], value: JobStatus.Paused },
             { label: JobStatusMap[JobStatus.Stopped], value: JobStatus.Stopped },
           ],

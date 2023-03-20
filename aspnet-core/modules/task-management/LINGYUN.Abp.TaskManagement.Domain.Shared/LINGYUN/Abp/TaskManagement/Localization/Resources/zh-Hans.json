@@ -57,6 +57,7 @@
     "DisplayName:None": "未定义",
     "DisplayName:Completed": "已完成",
     "DisplayName:Running": "运行中",
+    "DisplayName:Queuing": "队列中",
     "DisplayName:Paused": "已暂停",
     "DisplayName:FailedRetry": "失败重试",
     "DisplayName:Stopped": "已停止",

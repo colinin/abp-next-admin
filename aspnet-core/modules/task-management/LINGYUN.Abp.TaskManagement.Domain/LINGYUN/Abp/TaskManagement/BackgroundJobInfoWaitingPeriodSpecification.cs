@@ -8,7 +8,7 @@ public class BackgroundJobInfoWaitingPeriodSpecification : BackgroundJobInfoWait
 {
     public override Expression<Func<BackgroundJobInfo, bool>> ToExpression()
     {
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+        var status = new JobStatus[] { JobStatus.Queuing, JobStatus.FailedRetry };
 
         Expression<Func<BackgroundJobInfo, bool>> expression = _ => true;
         return expression

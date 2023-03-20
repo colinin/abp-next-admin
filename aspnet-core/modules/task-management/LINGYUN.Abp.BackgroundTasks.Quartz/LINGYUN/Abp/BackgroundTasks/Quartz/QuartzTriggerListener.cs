@@ -49,6 +49,7 @@ public class QuartzTriggerListener : TriggerListenerSupport, ISingletonDependenc
             // 传递令牌将清除本次锁, 那并无意义
             if (!await JobLockProvider.TryLockAsync(NormalizeKey(context, jobId), time))
             {
+                context.Put("JobLocked", time);
                 Logger.LogDebug("The exclusive job is already in use by another scheduler. Ignore this schedule.");
                 return true;
             }
