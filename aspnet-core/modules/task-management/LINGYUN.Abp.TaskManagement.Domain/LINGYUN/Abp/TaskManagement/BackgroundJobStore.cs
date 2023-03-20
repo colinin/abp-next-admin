@@ -40,6 +40,20 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
+    public async virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    {
+        var filter = new BackgroundJobInfoFilter
+        {
+            Status = JobStatus.Running
+        };
+        var specification = new BackgroundJobInfoSpecification(filter);
+
+        var jobInfos = await JobInfoRepository.GetListAsync(
+            specification, maxResultCount: maxResultCount, cancellationToken: cancellationToken);
+
+        return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
+    }
+
     public async virtual Task<List<JobInfo>> GetWaitingListAsync(
         int maxResultCount, 
         CancellationToken cancellationToken = default)

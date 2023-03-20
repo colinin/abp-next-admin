@@ -27,6 +27,7 @@ internal class DefaultBackgroundWorker : BackgroundService
     {
         await QueuePollingJob();
         await QueueCleaningJob();
+        await QueueCheckingJob();
     }
 
     private async Task QueuePollingJob()
@@ -46,6 +47,17 @@ internal class DefaultBackgroundWorker : BackgroundService
             await _jobPublisher.PublishAsync(cleaningJob);
         }
     }
+
+    private async Task QueueCheckingJob()
+    {
+        if (_options.JobCheckEnabled)
+        {
+            var checkingJob = BuildCheckingJobInfo();
+            await _jobPublisher.PublishAsync(checkingJob);
+        }
+    }
+
+
 
     private JobInfo BuildPollingJobInfo()
     {
@@ -87,6 +99,28 @@ internal class DefaultBackgroundWorker : BackgroundService
             Source = JobSource.System,
             NodeName = _options.NodeName,
             Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
+        };
+    }
+
+    private JobInfo BuildCheckingJobInfo()
+    {
+        return new JobInfo
+        {
+            Id = "Checking",
+            Name = nameof(BackgroundCheckingJob),
+            Group = "Checking",
+            Description = "Checking tasks to be executed",
+            Args = new Dictionary<string, object>(),
+            Status = JobStatus.Running,
+            BeginTime = DateTime.Now,
+            CreationTime = DateTime.Now,
+            Cron = _options.JobCheckCronExpression,
+            LockTimeOut = _options.JobCheckLockTimeOut,
+            JobType = JobType.Period,
+            Priority = JobPriority.High,
+            Source = JobSource.System,
+            NodeName = _options.NodeName,
+            Type = typeof(BackgroundCheckingJob).AssemblyQualifiedName,
         };
     }
 }

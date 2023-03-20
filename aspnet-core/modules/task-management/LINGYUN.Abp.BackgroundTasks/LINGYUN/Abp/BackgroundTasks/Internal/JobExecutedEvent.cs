@@ -10,6 +10,10 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
 {
     protected override async Task OnJobAfterExecutedAsync(JobEventContext context)
     {
+        if (context.EventData.Type.IsDefined(typeof(DisableJobStatusAttribute), true))
+        {
+            return;
+        }
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
         var job = await store.FindAsync(context.EventData.Key, context.EventData.CancellationToken);
         if (job != null)

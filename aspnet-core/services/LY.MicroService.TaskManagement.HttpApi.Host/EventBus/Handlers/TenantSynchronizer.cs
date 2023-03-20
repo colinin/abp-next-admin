@@ -60,6 +60,10 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
             var cleaningJob = BuildCleaningJobInfo(eventData.Entity.Id, eventData.Entity.Name);
             await JobScheduler.RemoveAsync(cleaningJob);
             await JobStore.RemoveAsync(cleaningJob.Id);
+
+            var checkingJob = BuildCheckingJobInfo(eventData.Entity.Id, eventData.Entity.Name);
+            await JobScheduler.RemoveAsync(checkingJob);
+            await JobStore.RemoveAsync(checkingJob.Id);
         }
 
         public async Task HandleEventAsync(CreateEventData eventData)
@@ -79,6 +83,10 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
             var cleaningJob = BuildCleaningJobInfo(eventData.Id, eventData.Name);
             await JobStore.StoreAsync(cleaningJob);
             await JobScheduler.QueueAsync(cleaningJob);
+
+            var checkingJob = BuildCheckingJobInfo(eventData.Id, eventData.Name);
+            await JobStore.StoreAsync(checkingJob);
+            await JobScheduler.QueueAsync(checkingJob);
         }
 
         private async Task MigrateAsync(CreateEventData eventData)
@@ -143,6 +151,28 @@ namespace LY.MicroService.TaskManagement.EventBus.Handlers
                 Source = JobSource.System,
                 TenantId = tenantId,
                 Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
+            };
+        }
+
+        private JobInfo BuildCheckingJobInfo(Guid tenantId, string tenantName)
+        {
+            return new JobInfo
+            {
+                Id = tenantId.ToString() + "_Checking",
+                Name = nameof(BackgroundCheckingJob),
+                Group = "Checking",
+                Description = "Checking tasks to be executed",
+                Args = new Dictionary<string, object>() { { nameof(JobInfo.TenantId), tenantId } },
+                Status = JobStatus.Running,
+                BeginTime = DateTime.Now,
+                CreationTime = DateTime.Now,
+                Cron = Options.JobCheckCronExpression,
+                LockTimeOut = Options.JobCheckLockTimeOut,
+                JobType = JobType.Period,
+                Priority = JobPriority.High,
+                Source = JobSource.System,
+                TenantId = tenantId,
+                Type = typeof(BackgroundCheckingJob).AssemblyQualifiedName,
             };
         }
     }

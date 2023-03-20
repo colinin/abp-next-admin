@@ -7,6 +7,10 @@ namespace LINGYUN.Abp.BackgroundTasks;
 
 public interface IJobStore
 {
+    Task<List<JobInfo>> GetRuningListAsync(
+        int maxResultCount,
+        CancellationToken cancellationToken = default);
+
     Task<List<JobInfo>> GetWaitingListAsync(
         int maxResultCount,
         CancellationToken cancellationToken = default);
