@@ -6,6 +6,7 @@ const { L } = useLocalization('TaskManagement');
 export const JobStatusMap = {
   [JobStatus.None]: L('DisplayName:None'),
   [JobStatus.Completed]: L('DisplayName:Completed'),
+  [JobStatus.Queuing]: L('DisplayName:Queuing'),
   [JobStatus.Running]: L('DisplayName:Running'),
   [JobStatus.FailedRetry]: L('DisplayName:FailedRetry'),
   [JobStatus.Paused]: L('DisplayName:Paused'),
@@ -14,6 +15,7 @@ export const JobStatusMap = {
 export const JobStatusColor = {
   [JobStatus.None]: '',
   [JobStatus.Completed]: '#339933',
+  [JobStatus.Queuing]: '#008B8B',
   [JobStatus.Running]: '#3399CC',
   [JobStatus.FailedRetry]: '#FF6600',
   [JobStatus.Paused]: '#CC6633',

@@ -85,6 +85,32 @@ public class AbpBackgroundTasksOptions
     /// 轮询任务也属于一个后台任务, 需要对每一次轮询加锁，防止重复任务入库
     /// </remarks>
     public int JobFetchLockTimeOut { get; set; }
+
+    /// <summary>
+    /// 启用检查任务
+    /// </summary>
+    /// <remarks>
+    /// 主节点启用
+    /// </remarks>
+    public bool JobCheckEnabled { get; set; }
+    /// <summary>
+    /// 每次检查任务批次大小
+    /// 默认: 100
+    /// </summary>
+    public int MaxJobCheckCount { get; set; }
+    /// <summary>
+    /// 检查任务批次Cron表达式
+    /// 默认: 每2小时执行一次（0 0 0/2 * * ? ）
+    /// </summary>
+    /// <remarks>
+    /// Cron表达式
+    /// </remarks>
+    public string JobCheckCronExpression { get; set; }
+    /// <summary>
+    /// 检查任务批次时锁定任务超时时长（秒）
+    /// 默认：120
+    /// </summary>
+    public int JobCheckLockTimeOut { get; set; }
     /// <summary>
     /// 指定运行节点
     /// </summary>
@@ -95,6 +121,11 @@ public class AbpBackgroundTasksOptions
         MaxJobFetchCount = 1000;
         JobFetchLockTimeOut = 120;
         JobFetchCronExpression = "0/30 * * * * ? ";
+
+        JobCheckEnabled = false;
+        MaxJobCheckCount = 100;
+        JobCheckLockTimeOut = 120;
+        JobCheckCronExpression = "0 0 0/2 * * ? ";
 
         JobCleanEnabled = false;
         MaxJobCleanCount = 1000;

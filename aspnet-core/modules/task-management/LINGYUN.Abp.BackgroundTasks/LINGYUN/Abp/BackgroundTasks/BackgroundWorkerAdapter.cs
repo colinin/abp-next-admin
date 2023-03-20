@@ -75,7 +75,6 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
             JobType = JobType.Persistent,
             Interval = period.Value / 1000,
             MaxCount = 0,
-            // TODO: 可配置
             MaxTryCount = 10,
             // 确保不会被轮询入队
             Status = JobStatus.None,

@@ -170,7 +170,7 @@ public class BackgroundJobManager : DomainService
 
     public async virtual Task ResumeAsync(BackgroundJobInfo jobInfo)
     {
-        jobInfo.SetStatus(JobStatus.Running);
+        jobInfo.SetStatus(JobStatus.Queuing);
         jobInfo.IsAbandoned = false;
         jobInfo.IsEnabled = true;
 
@@ -192,7 +192,7 @@ public class BackgroundJobManager : DomainService
     {
         foreach (var jobInfo in jobInfos)
         {
-            jobInfo.SetStatus(JobStatus.Running);
+            jobInfo.SetStatus(JobStatus.Queuing);
             jobInfo.IsAbandoned = false;
             jobInfo.IsEnabled = true;
         }

@@ -2,9 +2,9 @@
 
 namespace LINGYUN.Abp.BackgroundTasks;
 /// <summary>
-/// 禁用作业调度行为
+/// 禁用作业调度状态
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class DisableJobActionAttribute : Attribute
+public class DisableJobStatusAttribute : Attribute
 {
 }

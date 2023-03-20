@@ -42,4 +42,11 @@ public static class IJobExecutionContextExtensions
         }
         return false;
     }
+
+    public static bool TryGetCache(this IJobExecutionContext context, string key, out object value)
+    {
+        value = context.Get(key);
+
+        return value != null;
+    }
 }

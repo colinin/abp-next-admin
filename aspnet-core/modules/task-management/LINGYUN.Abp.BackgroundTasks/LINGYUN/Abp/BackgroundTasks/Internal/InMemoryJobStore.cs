@@ -11,17 +11,18 @@ namespace LINGYUN.Abp.BackgroundTasks.Internal;
 internal class InMemoryJobStore : IJobStore, ISingletonDependency
 {
     private readonly List<JobInfo> _memoryJobStore;
+    private readonly static object _jobSync = new();
 
     public InMemoryJobStore()
     {
         _memoryJobStore = new List<JobInfo>();
     }
 
-    public Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> GetAllPeriodTasksAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+        var status = new JobStatus[] { JobStatus.Queuing, JobStatus.FailedRetry };
 
         var jobs = _memoryJobStore
             .Where(x => !x.IsAbandoned)
@@ -33,12 +34,26 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var status = new JobStatus[] { JobStatus.Running };
+
+        var jobs = _memoryJobStore
+            .Where(x => status.Contains(x.Status))
+            .Take(maxResultCount)
+            .ToList();
+
+        return Task.FromResult(jobs);
+    }
+
+    public virtual Task<List<JobInfo>> GetWaitingListAsync(int maxResultCount, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var now = DateTime.Now;
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+        var status = new JobStatus[] { JobStatus.Queuing, JobStatus.FailedRetry };
 
         var jobs = _memoryJobStore
             .Where(x => !x.IsAbandoned)
@@ -63,62 +78,76 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(job);
     }
 
-    public Task StoreAsync(
+    public virtual Task StoreAsync(
         JobInfo jobInfo,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobInfo.Id));
-        if (job != null)
+        lock(_jobSync)
         {
-            job.NextRunTime = jobInfo.NextRunTime;
-            job.LastRunTime = jobInfo.LastRunTime;
-            job.Status = jobInfo.Status;
-            job.TriggerCount = jobInfo.TriggerCount;
-            job.TryCount = jobInfo.TryCount;
-            job.IsAbandoned = jobInfo.IsAbandoned;
+            var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobInfo.Id));
+            if (job != null)
+            {
+                job.NextRunTime = jobInfo.NextRunTime;
+                job.LastRunTime = jobInfo.LastRunTime;
+                job.Status = jobInfo.Status;
+                job.TriggerCount = jobInfo.TriggerCount;
+                job.TryCount = jobInfo.TryCount;
+                job.IsAbandoned = jobInfo.IsAbandoned;
+            }
+            else
+            {
+                _memoryJobStore.Add(jobInfo);
+            }
         }
-        else
-        {
-            _memoryJobStore.Add(jobInfo);
-        }
+
         return Task.CompletedTask;
     }
 
-    public async Task RemoveAsync(
+    public virtual Task RemoveAsync(
         string jobId,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var job = await FindAsync(jobId, cancellationToken);
-        if (job != null)
+        lock (_jobSync)
         {
-            _memoryJobStore.Remove(job);
+            var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobId));
+            if (job != null)
+            {
+                _memoryJobStore.Remove(job);
+            }
         }
+
+        return Task.CompletedTask;
     }
 
-    public Task StoreLogAsync(JobEventData eventData)
+    public virtual Task StoreLogAsync(JobEventData eventData)
     {
         eventData.CancellationToken.ThrowIfCancellationRequested();
 
         return Task.CompletedTask;
     }
 
-    public Task<List<JobInfo>> CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var expiratime = DateTime.Now - jobExpiratime;
+        var expriaJobs = new List<JobInfo>();
 
-        var expriaJobs = _memoryJobStore
-            .Where(x => x.Status == JobStatus.Completed &&
-                expiratime.CompareTo(x.LastRunTime ?? x.EndTime ?? x.CreationTime) <= 0)
-            .Take(maxResultCount)
-            .ToList();
+        lock (_jobSync)
+        {
+            var expiratime = DateTime.Now - jobExpiratime;
 
-        _memoryJobStore.RemoveAll(expriaJobs);
+            expriaJobs = _memoryJobStore
+                    .Where(x => x.Status == JobStatus.Completed &&
+                        expiratime.CompareTo(x.LastRunTime ?? x.EndTime ?? x.CreationTime) <= 0)
+                    .Take(maxResultCount)
+                    .ToList();
+
+            _memoryJobStore.RemoveAll(expriaJobs);
+        }
 
         return Task.FromResult(expriaJobs);
     }

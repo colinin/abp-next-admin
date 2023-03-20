@@ -11,6 +11,10 @@ public enum JobStatus
     /// </summary>
     Completed = 0,
     /// <summary>
+    /// 队列中
+    /// </summary>
+    Queuing = 5,
+    /// <summary>
     /// 运行中
     /// </summary>
     Running = 10,

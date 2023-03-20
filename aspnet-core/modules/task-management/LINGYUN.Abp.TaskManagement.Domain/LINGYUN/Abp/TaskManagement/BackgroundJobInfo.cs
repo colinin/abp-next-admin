@@ -141,7 +141,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         NodeName = Check.Length(nodeName, nameof(nodeName), BackgroundJobInfoConsts.MaxNodeNameLength);
         TenantId = tenantId;
 
-        Status = JobStatus.Running;
+        Status = JobStatus.Queuing;
 
         // TODO: 是否需要将参数挪到另一个实体? 
         // 任务参数的建议是尽量最小化, 仅存储关键信息

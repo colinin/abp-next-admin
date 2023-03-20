@@ -40,7 +40,11 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             jobName = !jobType.IsGenericType ? jobType.Name : jobType.GetGenericArguments()[0].Name;
         }
         
-        Logger.LogWarning($"The task {jobName} could not be performed...");
+        // 作业被锁定才记录warn事件
+        if (context.TryGetCache("JobLocked", out var time) && time != null && int.TryParse(time.ToString(), out var lockTime))
+        {
+            Logger.LogWarning($"The task {jobName} could not be performed, Because it is being scheduled by another job scheduler");
+        }
 
         return Task.FromResult(-1);
     }

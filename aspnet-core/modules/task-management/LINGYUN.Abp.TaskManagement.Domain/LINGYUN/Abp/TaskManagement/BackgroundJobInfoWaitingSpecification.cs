@@ -9,7 +9,7 @@ public class BackgroundJobInfoWaitingSpecification : Volo.Abp.Specifications.Spe
 {
     public override Expression<Func<BackgroundJobInfo, bool>> ToExpression()
     {
-        var status = new JobStatus[] { JobStatus.Running, JobStatus.FailedRetry };
+        var status = new JobStatus[] { JobStatus.Queuing, JobStatus.FailedRetry };
 
         Expression<Func<BackgroundJobInfo, bool>> expression = _ => true;
 

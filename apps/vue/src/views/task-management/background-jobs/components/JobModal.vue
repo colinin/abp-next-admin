@@ -54,14 +54,14 @@
             <DatePicker
               style="width: 100%"
               :value="getDate('beginTime')"
-              @change="(val) => dateChange('beginTime', val, 'YYYY-MM-DD 00:00:00')"
+              @change="(val) => dateChange('beginTime', val, 'YYYY-MM-DDT00:00:00')"
             />
           </FormItem>
           <FormItem name="endTime" :label="L('DisplayName:EndTime')">
             <DatePicker
               style="width: 100%"
               :value="getDate('endTime')"
-              @change="(val) => dateChange('endTime', val, 'YYYY-MM-DD 23:59:59')"
+              @change="(val) => dateChange('endTime', val, 'YYYY-MM-DDT23:59:59')"
             />
           </FormItem>
           <FormItem
