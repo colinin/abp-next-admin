@@ -30,17 +30,19 @@ public class IdempotentAttribute : Attribute
     /// <summary>
     /// 自定义的幂等key
     /// </summary>
-    public string? IdempotentKey { get; }
+    public string? IdempotentKey { get; set; }
     public IdempotentAttribute()
     {
 
     }
 
     public IdempotentAttribute(
+        string? iodempotentKey = null,
         int? timeout = null, 
         string? redirectUrl = null,
         string[]? keyMap = null)
     {
+        IdempotentKey = iodempotentKey;
         Timeout = timeout;
         KeyMap = keyMap;
         RedirectUrl = redirectUrl;

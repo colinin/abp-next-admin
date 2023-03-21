@@ -17,6 +17,7 @@ public class IdempotentInterceptor : AbpInterceptor, ITransientDependency
         _idempotentKeyNormalizer = idempotentKeyNormalizer;
     }
 
+    [IgnoreIdempotent]
     public async override Task InterceptAsync(IAbpMethodInvocation invocation)
     {
         var targetType = ProxyHelper.GetUnProxiedType(invocation.TargetObject);

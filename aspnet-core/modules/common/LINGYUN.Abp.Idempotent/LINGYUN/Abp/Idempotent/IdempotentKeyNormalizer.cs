@@ -18,6 +18,7 @@ public class IdempotentKeyNormalizer : IIdempotentKeyNormalizer, ITransientDepen
         _jsonSerializer = jsonSerializer;
     }
 
+    [IgnoreIdempotent]
     public virtual string NormalizeKey(IdempotentKeyNormalizerContext context)
     {
         var methodIdBuilder = new StringBuilder();

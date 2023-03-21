@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Idempotent;
 
 public class AbpIdempotentActionFilter : IAsyncActionFilter, ITransientDependency
 {
+    [IgnoreIdempotent]
     public async virtual Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         if (!ShouldCheckIdempotent(context))
