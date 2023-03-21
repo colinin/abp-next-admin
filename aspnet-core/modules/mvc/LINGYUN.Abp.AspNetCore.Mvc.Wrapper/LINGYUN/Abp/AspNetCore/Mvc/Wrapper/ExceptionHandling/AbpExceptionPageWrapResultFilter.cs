@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -62,6 +63,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
             }
             else
             {
+                var httpResponseWrapper = context.GetRequiredService<IHttpResponseWrapper>();
                 var statusCodFinder = context.GetRequiredService<IHttpExceptionStatusCodeFinder>();
                 var exceptionWrapHandler = context.GetRequiredService<IExceptionWrapHandlerFactory>();
                 var exceptionWrapContext = new ExceptionWrapContext(
@@ -75,8 +77,19 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling
                     exceptionWrapContext.ErrorInfo.Message,
                     exceptionWrapContext.ErrorInfo.Details));
 
-                context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-                context.HttpContext.Response.StatusCode = (int)wrapOptions.HttpStatusCode;
+                var wrapperHeaders = new Dictionary<string, string>()
+                {
+                    { AbpHttpWrapConsts.AbpWrapResult, "true" }
+                };
+                var responseWrapperContext = new HttpResponseWrapperContext(
+                    context.HttpContext,
+                    (int)wrapOptions.HttpStatusCode,
+                    wrapperHeaders);
+
+                httpResponseWrapper.Wrap(responseWrapperContext);
+
+                //context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+                //context.HttpContext.Response.StatusCode = (int)wrapOptions.HttpStatusCode;
             }
 
             context.Exception = null; //Handled!
