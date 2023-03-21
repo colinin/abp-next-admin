@@ -23,9 +23,15 @@ public class IdempotentChecker : IIdempotentChecker, ITransientDependency
         _idempotentDeniedHandler = idempotentDeniedHandler;
     }
 
+    [IgnoreIdempotent]
     public async virtual Task CheckAsync(IdempotentCheckContext context)
     {
         if (!_idempotentOptions.IsEnabled)
+        {
+            return;
+        }
+
+        if (context.Method.IsDefined(typeof(IgnoreIdempotentAttribute), true))
         {
             return;
         }

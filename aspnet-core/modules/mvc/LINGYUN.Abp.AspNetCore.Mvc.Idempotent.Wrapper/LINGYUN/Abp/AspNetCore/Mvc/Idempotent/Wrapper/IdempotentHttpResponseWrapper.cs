@@ -21,6 +21,7 @@ public class IdempotentHttpResponseWrapper : HttpResponseWrapper, ITransientDepe
         IdempotentOptions = idempotentOptions.Value;
     }
 
+    [IgnoreIdempotent]
     public override void Wrap(HttpResponseWrapperContext context)
     {
         if (context.HttpContext.Items.TryGetValue(nameof(IdempotentAttribute.RedirectUrl), out var redirectUrl) && redirectUrl != null)

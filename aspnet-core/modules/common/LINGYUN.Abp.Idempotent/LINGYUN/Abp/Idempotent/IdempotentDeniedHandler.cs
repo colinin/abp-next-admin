@@ -6,6 +6,7 @@ namespace LINGYUN.Abp.Idempotent;
 
 public class IdempotentDeniedHandler : IIdempotentDeniedHandler, ISingletonDependency
 {
+    [IgnoreIdempotent]
     public virtual void Denied(IdempotentDeniedContext context)
     {
         var exception = new IdempotentDeniedException(context.IdempotentKey, IdempotentErrorCodes.IdempotentDenied)
