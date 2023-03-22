@@ -96,6 +96,7 @@ using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -118,6 +119,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpCachingManagementApplicationModule),
     typeof(AbpCachingManagementHttpApiModule),
+    typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
@@ -140,6 +142,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsApplicationModule),
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
+    typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpOpenIddictApplicationModule),
     typeof(AbpOpenIddictHttpApiModule),
@@ -258,6 +261,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         PreConfigureApp();
         PreConfigureFeature();
         PreConfigureQuartz(configuration);
+        PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
@@ -271,6 +275,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureDbContext();
         ConfigureMvcUiTheme();
         ConfigureDataSeeder();
+        ConfigureAuthServer();
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
@@ -292,40 +297,49 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
+    //public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    //{
+    //    var app = context.GetApplicationBuilder();
+    //    var configuration = context.GetConfiguration();
 
-        app.UseCookiePolicy();
-        // 本地化
-        app.UseMapRequestLocalization();
-        // http调用链
-        app.UseCorrelationId();
-        // 虚拟文件系统
-        app.UseStaticFiles();
-        // 路由
-        app.UseRouting();
-        // 跨域
-        app.UseCors(DefaultCorsPolicyName);
-        // 认证
-        app.UseAuthentication();
-        // jwt
-        app.UseJwtTokenMiddleware();
-        // 多租户
-        app.UseMultiTenancy();
-        // 授权
-        app.UseAuthorization();
-        // Swagger
-        app.UseSwagger();
-        // Swagger可视化界面
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support App API");
-        });
-        // 审计日志
-        app.UseAuditing();
-        app.UseAbpSerilogEnrichers();
-        // 路由
-        app.UseConfiguredEndpoints();
-    }
+    //    app.UseCookiePolicy();
+    //    // 本地化
+    //    app.UseMapRequestLocalization();
+    //    // http调用链
+    //    app.UseCorrelationId();
+    //    // 虚拟文件系统
+    //    app.UseStaticFiles();
+    //    // 路由
+    //    app.UseRouting();
+    //    // 跨域
+    //    app.UseCors(DefaultCorsPolicyName);
+    //    // 认证
+    //    app.UseAuthentication();
+    //    if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+    //    {
+    //        app.UseAbpOpenIddictValidation();
+    //    }
+    //    else
+    //    {
+    //        // jwt
+    //        app.UseJwtTokenMiddleware();
+    //        app.UseIdentityServer();
+    //    }
+    //    // 多租户
+    //    app.UseMultiTenancy();
+    //    // 授权
+    //    app.UseAuthorization();
+    //    // Swagger
+    //    app.UseSwagger();
+    //    // Swagger可视化界面
+    //    app.UseSwaggerUI(options =>
+    //    {
+    //        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support App API");
+    //    });
+    //    // 审计日志
+    //    app.UseAuditing();
+    //    app.UseAbpSerilogEnrichers();
+    //    // 路由
+    //    app.UseConfiguredEndpoints();
+    //}
 }

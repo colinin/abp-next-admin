@@ -54,7 +54,6 @@
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
 		<ProjectReference Include="..\..\modules\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj" />

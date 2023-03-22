@@ -6,7 +6,7 @@ public partial class MicroServiceApplicationsSingleModule
 {
     private static void ConfigureSeedWorker(IServiceCollection services, bool isDevelopment = false)
     {
-        services.AddHostedService<DataSeederWorker>();
+        // services.AddHostedService<DataSeederWorker>();
 
         if (isDevelopment)
         {
