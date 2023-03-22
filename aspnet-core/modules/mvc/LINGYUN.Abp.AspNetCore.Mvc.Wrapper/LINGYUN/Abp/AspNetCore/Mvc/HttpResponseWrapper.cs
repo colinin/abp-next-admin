@@ -22,7 +22,10 @@ public class HttpResponseWrapper : IHttpResponseWrapper, ITransientDependency
         {
             foreach (var header in context.HttpHeaders)
             {
-                context.HttpContext.Response.Headers.Add(header.Key, header.Value);
+                if (!context.HttpContext.Response.Headers.ContainsKey(header.Key))
+                {
+                    context.HttpContext.Response.Headers.Add(header.Key, header.Value);
+                }
             }
         }
     }

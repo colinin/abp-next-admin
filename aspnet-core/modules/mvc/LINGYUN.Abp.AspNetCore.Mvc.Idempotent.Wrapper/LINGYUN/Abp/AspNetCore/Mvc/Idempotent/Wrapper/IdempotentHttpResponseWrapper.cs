@@ -26,7 +26,10 @@ public class IdempotentHttpResponseWrapper : HttpResponseWrapper, ITransientDepe
     {
         if (context.HttpContext.Items.TryGetValue(nameof(IdempotentAttribute.RedirectUrl), out var redirectUrl) && redirectUrl != null)
         {
-            context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+            if (!context.HttpContext.Response.Headers.ContainsKey(AbpHttpWrapConsts.AbpWrapResult))
+            {
+                context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+            }
             context.HttpContext.Response.Redirect(redirectUrl.ToString());
             return;
         }
