@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Server.AspNetCore;
 using Quartz;
 using StackExchange.Redis;
 using System.Security.Cryptography.X509Certificates;
@@ -40,6 +41,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
@@ -74,28 +76,75 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void PreConfigureAuthServer(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+        {
+            PreConfigure<OpenIddictBuilder>(builder =>
+            {
+                builder.AddValidation(options =>
+                {
+                    options.AddAudiences("lingyun-abp-application");
+
+                    options.UseLocalServer();
+
+                    options.UseAspNetCore();
+                });
+            });
+        }
+    }
+
+    private void ConfigureAuthServer()
+    {
+        Configure<OpenIddictServerAspNetCoreBuilder>(builder =>
+        {
+            builder.DisableTransportSecurityRequirement();
+        });
+
+        Configure<OpenIddictServerAspNetCoreOptions>(options =>
+        {
+            options.DisableTransportSecurityRequirement = true;
+        });
+    }
+
     private void PreConfigureCertificate(IConfiguration configuration, IWebHostEnvironment environment)
     {
         var cerConfig = configuration.GetSection("Certificates");
-        if (environment.IsProduction() &&
-            cerConfig.Exists())
+        if (environment.IsProduction() && cerConfig.Exists())
         {
             // 开发环境下存在证书配置
             // 且证书文件存在则使用自定义的证书文件来启动Ids服务器
             var cerPath = Path.Combine(environment.ContentRootPath, cerConfig["CerPath"]);
             if (File.Exists(cerPath))
             {
-                PreConfigure<AbpIdentityServerBuilderOptions>(options =>
-                {
-                    options.AddDeveloperSigningCredential = false;
-                });
+                var certificate = new X509Certificate2(cerPath, cerConfig["Password"]);
 
-                var cer = new X509Certificate2(cerPath, cerConfig["Password"]);
-
-                PreConfigure<IIdentityServerBuilder>(builder =>
+                if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
                 {
-                    builder.AddSigningCredential(cer);
-                });
+                    PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+                    {
+                        //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                        options.AddDevelopmentEncryptionAndSigningCertificate = false;
+                    });
+
+                    PreConfigure<OpenIddictServerBuilder>(builder =>
+                    {
+                        builder.AddSigningCertificate(certificate);
+                        builder.AddEncryptionCertificate(certificate);
+                    });
+                }
+                else
+                {
+                    PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+                    {
+                        options.AddDeveloperSigningCredential = false;
+                    });
+
+                    PreConfigure<IIdentityServerBuilder>(builder =>
+                    {
+                        builder.AddSigningCredential(certificate);
+                    });
+                }
             }
         }
     }
