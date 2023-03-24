@@ -43,6 +43,14 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         await RecordRepository.DeleteAsync(sendRecord);
     }
 
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Delete)]
+    public async virtual Task DeleteManyAsync(WebhookSendRecordDeleteManyInput input)
+    {
+        var sendRecords = await RecordRepository.GetListAsync(x => input.RecordIds.Contains(x.Id));
+
+        await RecordRepository.DeleteManyAsync(sendRecords);
+    }
+
     public async virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
     {
         var filter = new WebhookSendRecordFilter
@@ -91,6 +99,15 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
                 TryOnce = true,
                 SendExactSameData = sendRecord.SendExactSameData
             });
+        }
+    }
+
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Resend)]
+    public async virtual Task ResendManyAsync(WebhookSendRecordResendManyInput input)
+    {
+        foreach (var recordId in input.RecordIds)
+        {
+            await ResendAsync(recordId);
         }
     }
 }

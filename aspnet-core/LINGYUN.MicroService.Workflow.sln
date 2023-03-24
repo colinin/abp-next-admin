@@ -49,11 +49,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.EntityFram
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{035B86BF-DD63-4A78-B8CE-29994860C948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Tests", "tests\LINGYUN.Abp.Elsa.Tests\LINGYUN.Abp.Elsa.Tests.csproj", "{9F96F261-93F7-47C0-8F07-72CE39CE20A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Tests", "tests\LINGYUN.Abp.Elsa.Tests\LINGYUN.Abp.Elsa.Tests.csproj", "{9F96F261-93F7-47C0-8F07-72CE39CE20A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "tests\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj", "{8395DA41-AF40-4B0D-B36D-FA8A56E75AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Activities.Webhooks.Tests", "tests\LINGYUN.Abp.Elsa.Activities.Webhooks.Tests\LINGYUN.Abp.Elsa.Activities.Webhooks.Tests.csproj", "{B3C2AFCC-EE59-4CB4-AB62-B90D60335632}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Activities.Webhooks.Tests", "tests\LINGYUN.Abp.Elsa.Activities.Webhooks.Tests\LINGYUN.Abp.Elsa.Activities.Webhooks.Tests.csproj", "{B3C2AFCC-EE59-4CB4-AB62-B90D60335632}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{D2E33CD0-B6CA-49B7-930C-018257E78D99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "modules\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{00AB0A7E-578E-469C-B049-BCAA0233A9DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +155,14 @@ Global
 		{B3C2AFCC-EE59-4CB4-AB62-B90D60335632}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3C2AFCC-EE59-4CB4-AB62-B90D60335632}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3C2AFCC-EE59-4CB4-AB62-B90D60335632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +190,8 @@ Global
 		{9F96F261-93F7-47C0-8F07-72CE39CE20A3} = {035B86BF-DD63-4A78-B8CE-29994860C948}
 		{8395DA41-AF40-4B0D-B36D-FA8A56E75AED} = {035B86BF-DD63-4A78-B8CE-29994860C948}
 		{B3C2AFCC-EE59-4CB4-AB62-B90D60335632} = {035B86BF-DD63-4A78-B8CE-29994860C948}
+		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72} = {D2E33CD0-B6CA-49B7-930C-018257E78D99}
+		{00AB0A7E-578E-469C-B049-BCAA0233A9DD} = {D2E33CD0-B6CA-49B7-930C-018257E78D99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

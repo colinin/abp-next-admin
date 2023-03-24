@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
@@ -40,6 +41,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             input.TenantId ?? CurrentTenant.Id)
         {
             IsActive = input.IsActive,
+            Description = input.Description,
         };
 
         await SubscriptionRepository.InsertAsync(subscription);
@@ -53,6 +55,15 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
     public virtual Task DeleteAsync(Guid id)
     {
         return SubscriptionRepository.DeleteAsync(id);
+    }
+
+    [Authorize(WebhooksManagementPermissions.WebhookSubscription.Delete)]
+    public async virtual Task DeleteManyAsync(WebhookSubscriptionDeleteManyInput input)
+    {
+        var subscriptions = await SubscriptionRepository.GetListAsync(
+            x => input.RecordIds.Contains(x.Id));
+
+        await SubscriptionRepository.DeleteManyAsync(subscriptions);
     }
 
     public async virtual Task<WebhookSubscriptionDto> GetAsync(Guid id)
@@ -99,6 +110,12 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         subscription.SetHeaders(input.ToWebhookHeadersString());
         subscription.SetTenantId(input.TenantId);
         subscription.IsActive = input.IsActive;
+        if (!string.Equals(subscription.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+        {
+            subscription.Description = input.Description;
+        }
+
+        subscription.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
         await SubscriptionRepository.UpdateAsync(subscription);
 

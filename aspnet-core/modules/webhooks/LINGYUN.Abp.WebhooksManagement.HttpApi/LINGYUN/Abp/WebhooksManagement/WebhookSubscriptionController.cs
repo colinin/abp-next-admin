@@ -36,6 +36,14 @@ public class WebhookSubscriptionController : WebhooksManagementControllerBase, I
         return SubscriptionAppService.DeleteAsync(id);
     }
 
+    [HttpDelete]
+    [Route("delete-many")]
+    [Authorize(WebhooksManagementPermissions.WebhookSubscription.Delete)]
+    public virtual Task DeleteManyAsync([FromBody] WebhookSubscriptionDeleteManyInput input)
+    {
+        return SubscriptionAppService.DeleteManyAsync(input);
+    }
+
     [HttpGet]
     [Route("{id}")]
     public virtual Task<WebhookSubscriptionDto> GetAsync(Guid id)

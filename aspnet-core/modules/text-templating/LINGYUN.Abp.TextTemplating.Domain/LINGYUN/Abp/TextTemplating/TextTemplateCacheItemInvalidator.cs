@@ -14,9 +14,9 @@ public class TextTemplateCacheItemInvalidator :
 {
     protected ICurrentTenant CurrentTenant { get; }
 
-    protected IDistributedCache<TemplateContentCacheItem> Cache { get; }
+    protected IDistributedCache<TextTemplateContentCacheItem> Cache { get; }
 
-    public TextTemplateCacheItemInvalidator(IDistributedCache<TemplateContentCacheItem> cache, ICurrentTenant currentTenant)
+    public TextTemplateCacheItemInvalidator(IDistributedCache<TextTemplateContentCacheItem> cache, ICurrentTenant currentTenant)
     {
         Cache = cache;
         CurrentTenant = currentTenant;
@@ -47,6 +47,6 @@ public class TextTemplateCacheItemInvalidator :
 
     protected virtual string CalculateCacheKey(string name, string culture = null)
     {
-        return TemplateContentCacheItem.CalculateCacheKey(name, culture);
+        return TextTemplateContentCacheItem.CalculateCacheKey(name, culture);
     }
 }

@@ -21,6 +21,8 @@ public interface IDynamicWebhookDefinitionStoreCache
     WebhookDefinition GetWebhookOrNull(string name);
     
     IReadOnlyList<WebhookDefinition> GetWebhooks();
-    
+
+    WebhookGroupDefinition GetWebhookGroupOrNull(string name);
+
     IReadOnlyList<WebhookGroupDefinition> GetGroups();
 }

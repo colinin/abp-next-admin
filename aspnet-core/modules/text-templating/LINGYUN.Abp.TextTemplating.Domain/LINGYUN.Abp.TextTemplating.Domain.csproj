@@ -4,15 +4,12 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\TextTemplating\55rcuzt3.mzx~" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />

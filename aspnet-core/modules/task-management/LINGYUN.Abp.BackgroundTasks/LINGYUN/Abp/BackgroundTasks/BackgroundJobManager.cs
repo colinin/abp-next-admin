@@ -88,11 +88,11 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
                 .JobDispatcherSelectors
                 .FirstOrDefault(x => x.Predicate(jobConfiguration.JobType));
 
-            jobInfo.Interval = selector.Interval;
-            jobInfo.LockTimeOut = selector.LockTimeOut;
-            jobInfo.Priority = selector.Priority;
-            jobInfo.TryCount = selector.TryCount;
-            jobInfo.MaxTryCount = selector.MaxTryCount;
+            jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
+            jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;
+            jobInfo.Priority = selector.Priority ?? jobInfo.Priority;
+            jobInfo.TryCount = selector.MaxCount ?? jobInfo.MaxCount;
+            jobInfo.MaxTryCount = selector.MaxTryCount ?? jobInfo.MaxTryCount;
 
             if (!selector.NodeName.IsNullOrWhiteSpace())
             {

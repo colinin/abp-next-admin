@@ -126,8 +126,10 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureBackgroundTasks()
+    private void ConfigureBackgroundTasks(IServiceCollection services)
     {
+        var webhooksOptions = services.ExecutePreConfiguredActions<AbpWebhooksOptions>();
+
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
@@ -135,8 +137,9 @@ public partial class WebhooksManagementHttpApiHostModule
             options.JobDispatcherSelectors.AddJob<WebhookSenderJob>(
                 job =>
                 {
-                    // 让用户自行决定重试次数, 作业管理器限定只执行一次
-                    job.TryCount = 1;
+                    job.NodeName = ApplicationName;
+                    job.MaxCount = webhooksOptions.MaxSendAttemptCount;
+                    job.MaxTryCount = webhooksOptions.MaxSendAttemptCount;
                 });
             //options.JobDispatcherSelectors.AddNamespace(
             //    "LINGYUN.Abp.Webhooks.BackgroundJobs",

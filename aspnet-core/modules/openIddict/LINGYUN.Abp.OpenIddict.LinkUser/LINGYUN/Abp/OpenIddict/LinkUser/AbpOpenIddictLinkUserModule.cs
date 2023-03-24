@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.OpenIddict.LinkUser.Controllers;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
@@ -27,7 +26,7 @@ public class AbpOpenIddictLinkUserModule : AbpModule
         {
             options.Grants.TryAdd(
                 LinkUserTokenExtensionGrantConsts.GrantType,
-                new LinkUserTokenController());
+                new LinkUserTokenExtensionGrant());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

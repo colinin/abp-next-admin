@@ -7,10 +7,10 @@ export default {
     apiTimeoutMessage: 'The interface request timed out, please refresh the page and try again!',
     apiRequestFailed: 'The interface request failed, please try again later!',
     networkException: 'network anomaly',
-    networkExceptionMsg:
-      'Please check if your network connection is normal! The network is abnormal',
+    networkExceptionMsg: 'Please check if your network connection is normal! The network is abnormal',
+    getUserInfoErrorMessage: 'Failed to obtain user information. Please log in again!',
 
-    errMsg401: 'The user does not have permission (token, user name, password error)!',
+    errMsg401: 'The request interface requires authentication. You failed authentication or the session timed out. Please log in again!',
     errMsg403: 'The user is authorized, but access is forbidden!',
     errMsg404: 'Network request error, the resource was not found!',
     errMsg405: 'Network request error, request method not allowed!',

@@ -60,6 +60,25 @@ namespace LINGYUN.Abp.Webhooks
                 .ToImmutableList();
         }
 
+        public async virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return await _staticStore.GetGroupOrNullAsync(name) ??
+                   await _dynamicStore.GetGroupOrNullAsync(name);
+        }
+
+        public async virtual Task<WebhookGroupDefinition> GetGroupAsync(string name)
+        {
+            var webhookGroup = await GetGroupOrNullAsync(name);
+            if (webhookGroup == null)
+            {
+                throw new AbpException("Undefined webhook group: " + name);
+            }
+
+            return webhookGroup;
+        }
+
         public async virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
         {
             var staticGroups = await _staticStore.GetGroupsAsync();

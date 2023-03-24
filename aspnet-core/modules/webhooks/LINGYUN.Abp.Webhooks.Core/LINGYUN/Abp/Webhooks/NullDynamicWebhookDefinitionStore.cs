@@ -11,6 +11,8 @@ public class NullDynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore,
 {
     private readonly static Task<WebhookDefinition> CachedWebhookResult = Task.FromResult((WebhookDefinition)null);
 
+    private readonly static Task<WebhookGroupDefinition> CachedWebhookGroupResult = Task.FromResult((WebhookGroupDefinition)null);
+
     private readonly static Task<IReadOnlyList<WebhookDefinition>> CachedWebhooksResult =
         Task.FromResult((IReadOnlyList<WebhookDefinition>)Array.Empty<WebhookDefinition>().ToImmutableList());
 
@@ -30,5 +32,10 @@ public class NullDynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore,
     public Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
     {
         return CachedGroupsResult;
+    }
+
+    public Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        return CachedWebhookGroupResult;
     }
 }

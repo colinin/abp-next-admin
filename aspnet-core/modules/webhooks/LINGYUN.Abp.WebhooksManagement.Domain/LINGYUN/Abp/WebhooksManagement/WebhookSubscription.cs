@@ -1,12 +1,13 @@
 ﻿using System;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [IgnoreMultiTenancy]
-public class WebhookSubscription : CreationAuditedEntity<Guid>
+public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyStamp
 {
     public virtual Guid? TenantId { get; protected set; }
     public virtual string WebhookUri { get; protected set; }
@@ -14,6 +15,9 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>
     public virtual bool IsActive { get; set; }
     public virtual string Webhooks { get; protected set; }
     public virtual string Headers { get; protected set; }
+    public virtual string Description { get; set; }
+    public virtual string ConcurrencyStamp { get; set; }
+
     protected WebhookSubscription()
     {
     }

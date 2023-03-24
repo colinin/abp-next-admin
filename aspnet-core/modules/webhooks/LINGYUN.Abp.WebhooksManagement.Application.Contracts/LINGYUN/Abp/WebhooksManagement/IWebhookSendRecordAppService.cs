@@ -11,7 +11,11 @@ public interface IWebhookSendRecordAppService : IApplicationService
 
     Task DeleteAsync(Guid id);
 
+    Task DeleteManyAsync(WebhookSendRecordDeleteManyInput input);
+
     Task ResendAsync(Guid id);
+
+    Task ResendManyAsync(WebhookSendRecordResendManyInput input);
 
     Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input);
 }

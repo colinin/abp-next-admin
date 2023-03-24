@@ -54,6 +54,9 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
@@ -115,6 +118,9 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("EnableTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("longtext")

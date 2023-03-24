@@ -80,7 +80,7 @@ public class StaticWebhookDefinitionStore : IStaticWebhookDefinitionStore, ISing
         return definitions;
     }
 
-    public Task<WebhookDefinition> GetOrNullAsync(string name)
+    public virtual Task<WebhookDefinition> GetOrNullAsync(string name)
     {
         return Task.FromResult(WebhookDefinitions.GetOrDefault(name));
     }
@@ -92,10 +92,15 @@ public class StaticWebhookDefinitionStore : IStaticWebhookDefinitionStore, ISing
         );
     }
 
-    public Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
+    public virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
     {
         return Task.FromResult<IReadOnlyList<WebhookGroupDefinition>>(
             WebhookGroupDefinitions.Values.ToImmutableList()
         );
+    }
+
+    public virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        return Task.FromResult(WebhookGroupDefinitions.GetOrDefault(name));
     }
 }

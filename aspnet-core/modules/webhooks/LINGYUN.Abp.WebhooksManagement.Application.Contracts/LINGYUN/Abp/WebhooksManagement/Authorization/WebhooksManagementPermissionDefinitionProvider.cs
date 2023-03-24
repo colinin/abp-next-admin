@@ -13,6 +13,40 @@ public class WebhooksManagementPermissionDefinitionProvider : PermissionDefiniti
             WebhooksManagementPermissions.GroupName, 
             L("Permission:WebhooksManagement"));
 
+        var webhookGroupDefinition = group.AddPermission(
+            WebhooksManagementPermissions.WebhookGroupDefinition.Default,
+            L("Permission:WebhookGroupDefinitions"),
+            MultiTenancySides.Host);
+        webhookGroupDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookGroupDefinition.Create,
+            L("Permission:Create"),
+            MultiTenancySides.Host);
+        webhookGroupDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookGroupDefinition.Update,
+            L("Permission:Update"),
+            MultiTenancySides.Host);
+        webhookGroupDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookGroupDefinition.Delete,
+            L("Permission:Delete"),
+            MultiTenancySides.Host);
+
+        var webhookDefinition = group.AddPermission(
+            WebhooksManagementPermissions.WebhookDefinition.Default,
+            L("Permission:WebhookDefinitions"),
+            MultiTenancySides.Host);
+        webhookDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookDefinition.Create,
+            L("Permission:Create"),
+            MultiTenancySides.Host);
+        webhookDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookDefinition.Update,
+            L("Permission:Update"),
+            MultiTenancySides.Host);
+        webhookDefinition.AddChild(
+            WebhooksManagementPermissions.WebhookDefinition.Delete,
+            L("Permission:Delete"),
+            MultiTenancySides.Host);
+
         var subscription = group.AddPermission(
             WebhooksManagementPermissions.WebhookSubscription.Default,
             L("Permission:Subscriptions"),

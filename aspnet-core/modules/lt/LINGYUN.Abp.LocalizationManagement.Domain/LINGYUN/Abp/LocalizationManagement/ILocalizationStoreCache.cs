@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Localization;
 
@@ -7,6 +9,12 @@ namespace LINGYUN.Abp.LocalizationManagement;
 
 public interface ILocalizationStoreCache
 {
+    string CacheStamp { get; set; }
+
+    SemaphoreSlim SyncSemaphore { get; }
+
+    DateTime? LastCheckTime { get; set; }
+
     Task InitializeAsync(LocalizationStoreCacheInitializeContext context);
 
     LocalizationResourceBase GetResourceOrNull(string resourceName);

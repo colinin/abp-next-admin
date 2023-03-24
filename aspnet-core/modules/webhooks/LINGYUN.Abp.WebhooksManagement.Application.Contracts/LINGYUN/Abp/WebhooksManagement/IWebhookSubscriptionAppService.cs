@@ -13,5 +13,7 @@ public interface IWebhookSubscriptionAppService :
         WebhookSubscriptionCreateInput,
         WebhookSubscriptionUpdateInput>
 {
+    Task DeleteManyAsync(WebhookSubscriptionDeleteManyInput input);
+
     Task<ListResultDto<WebhookAvailableGroupDto>> GetAllAvailableWebhooksAsync();
 }

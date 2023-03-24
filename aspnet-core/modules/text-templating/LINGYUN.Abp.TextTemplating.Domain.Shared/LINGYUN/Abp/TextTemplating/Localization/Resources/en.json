@@ -20,6 +20,7 @@
     "TextTemplating:01100": "Text template {Name} already exists!",
     "TextTemplating:01404": "No text template named {Name} found!",
     "TextTemplates": "Text Templates",
+    "TextTemplates:AddNew": "New Template",
     "Contents": "Contents",
     "Layout": "Layout",
     "LocalizationResource": "Localization Resource",

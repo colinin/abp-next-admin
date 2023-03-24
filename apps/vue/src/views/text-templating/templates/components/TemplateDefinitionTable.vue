@@ -1,6 +1,14 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
+      <template #toolbar>
+        <Button
+          v-auth="['AbpTextTemplating.TextTemplateDefinitions.Create']"
+          type="primary"
+          @click="handleAddNew"
+          >{{ L('TextTemplates:AddNew') }}
+        </Button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isStatic'">
           <CheckOutlined v-if="record.isStatic" class="enable" />
@@ -16,12 +24,15 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <TableAction
-            v-auth="['AbpTextTemplating.TextTemplateDefinitions', 'AbpTextTemplating.TextTemplateDefinitions.Delete']"
+            v-auth="[
+              'AbpTextTemplating.TextTemplateDefinitions.Update',
+              'AbpTextTemplating.TextTemplateDefinitions.Delete',
+              'AbpTextTemplating.TextTemplateContents.Update']"
             :stop-button-propagation="true"
             :actions="[
               {
                 auth: 'AbpTextTemplating.TextTemplateDefinitions.Update',
-                label: L('Update'),
+                label: L('Edit'),
                 icon: 'ant-design:edit-outlined',
                 onClick: handleEdit.bind(null, record),
               },
@@ -35,7 +46,7 @@
             ]"
             :dropDownActions="[
               {
-                auth: 'AbpTextTemplating.TextTemplateContent.Update',
+                auth: 'AbpTextTemplating.TextTemplateContents.Update',
                 label: L('EditContents'),
                 icon: 'ant-design:edit-outlined',
                 onClick: handleEditContent.bind(null, record),
@@ -45,11 +56,13 @@
         </template>
       </template>
     </BasicTable>
-    <TemplateContentModal @register="registerModal" />
+    <TemplateContentModal @register="registerContentModal" />
+    <TemplateDefinitionModal @register="registerEditModal" @change="reload" />
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { Button } from 'ant-design-vue';
   import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -61,10 +74,12 @@
   import { TextTemplateDefinitionDto } from '/@/api/text-templating/definitions/model';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import TemplateContentModal from './TemplateContentModal.vue';
+  import TemplateDefinitionModal from './TemplateDefinitionModal.vue';
 
   const { L } = useLocalization(['AbpTextTemplating', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
-  const [registerModal, { openModal }] = useModal();
+  const [registerEditModal, { openModal: openEditModal }] = useModal();
+  const [registerContentModal, { openModal: openContentModal }] = useModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'name',
     title: L('TextTemplates'),
@@ -87,12 +102,16 @@
     },
   });
 
+  function handleAddNew() {
+    openEditModal(true, {});
+  }
+
   function handleEdit(record: TextTemplateDefinitionDto) {
-    console.log('This method is not implemented', record);
+    openEditModal(true, record);
   }
 
   function handleEditContent(record: TextTemplateDefinitionDto) {
-    openModal(true, record);
+    openContentModal(true, record);
   }
 
   function handleDelete(record: TextTemplateDefinitionDto) {

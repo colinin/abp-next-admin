@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -72,8 +73,10 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             IsInlineLocalized = templateDefinition.IsInlineLocalized,
             IsLayout = templateDefinition.IsLayout,
             Layout = layout,
+            LayoutName = templateDefinition.Layout,
             Name = templateDefinition.Name,
             DisplayName = formatDisplayName,
+            FormatedDisplayName = templateDefinition.DisplayName,
             IsStatic = templateDefinition.IsStatic,
             ConcurrencyStamp = templateDefinition.ConcurrencyStamp,
         };
@@ -104,8 +107,10 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             IsInlineLocalized = template.IsInlineLocalized,
             IsLayout = template.IsLayout,
             Layout = layout,
+            LayoutName = template.Layout,
             Name = template.Name,
             DisplayName = await template.DisplayName.LocalizeAsync(StringLocalizerFactory),
+            FormatedDisplayName = _localizableStringSerializer.Serialize(template.DisplayName),
         };
 
         var staticState = template.Properties.GetOrDefault(nameof(TextTemplateDefinition.IsStatic));
@@ -123,17 +128,23 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
 
         var templateDefinitions = await _store.GetAllAsync();
 
+        var templateDefinitionFilter = templateDefinitions.AsQueryable()
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
+                x.Name.Contains(input.Filter) ||
+                (!x.Layout.IsNullOrWhiteSpace() && x.Layout.Contains(input.Filter)))
+            .WhereIf(input.IsStatic.HasValue, x => input.IsStatic == IsStatic(x))
+            .WhereIf(input.IsLayout.HasValue, x => x.IsLayout == input.IsLayout);
+
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
             sorting = nameof(TextTemplateDefinition.Name);
         }
-        var filterTemplates = templateDefinitions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
-                x.Name.Contains(input.Filter) || x.Layout.Contains(input.Filter))
+
+        var filterTemplateCount = templateDefinitionFilter.Count();
+        var filterTemplates = templateDefinitionFilter
             .OrderBy(sorting)
-            .Skip(input.SkipCount)
-            .Take(input.MaxResultCount);
+            .PageBy(input.SkipCount, input.MaxResultCount);
 
         foreach (var templateDefinition in filterTemplates)
         {
@@ -153,8 +164,10 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
                 IsInlineLocalized = templateDefinition.IsInlineLocalized,
                 IsLayout = templateDefinition.IsLayout,
                 Layout = layout,
+                LayoutName = templateDefinition.Layout,
                 Name = templateDefinition.Name,
                 DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
+                FormatedDisplayName = _localizableStringSerializer.Serialize(templateDefinition.DisplayName),
             };
 
             var staticState = templateDefinition.Properties.GetOrDefault(nameof(TextTemplateDefinition.IsStatic));
@@ -166,7 +179,7 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             templates.Add(result);
         }
 
-        return new PagedResultDto<TextTemplateDefinitionDto>(templateDefinitions.Count, templates);
+        return new PagedResultDto<TextTemplateDefinitionDto>(filterTemplateCount, templates);
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplateDefinition.Update)]
@@ -228,8 +241,10 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             IsInlineLocalized = templateDefinitionRecord.IsInlineLocalized,
             IsLayout = templateDefinitionRecord.IsLayout,
             Layout = layout,
+            LayoutName = templateDefinitionRecord.Layout,
             Name = templateDefinitionRecord.Name,
             DisplayName = displayName,
+            FormatedDisplayName = templateDefinitionRecord.DisplayName,
             IsStatic = templateDefinitionRecord.IsStatic,
             ConcurrencyStamp = templateDefinitionRecord.ConcurrencyStamp,
         };
@@ -253,5 +268,15 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
         {
             templateDefinition.RenderEngine = input.RenderEngine;
         }
+    }
+
+    private bool IsStatic(TemplateDefinition definition)
+    {
+        if (definition.Properties.TryGetValue(nameof(TextTemplateDefinition.IsStatic), out var isStaticObj) &&
+            isStaticObj is bool isStatic)
+        {
+            return isStatic;
+        }
+        return false;
     }
 }

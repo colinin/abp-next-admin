@@ -24,9 +24,10 @@ namespace LINGYUN.Abp.LocalizationManagement;
     typeof(LocalizationStoreInMemoryCache))]
 public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingletonDependency
 {
-    private string _cacheStamp;
-    private DateTime? _lastCheckTime;
-    private readonly SemaphoreSlim _syncSemaphore;
+    public string CacheStamp { get; set; }
+    public DateTime? LastCheckTime { get; set; }
+
+    public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
 
     protected LocalizationResourceDictionary Resources { get; }
     protected LocalizationLanguageDictionary Languages { get; }
@@ -51,7 +52,6 @@ public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingleto
         _distributedCacheOptions = distributedCacheOptions.Value;
         _managementOptions = managementOptions.Value;
 
-        _syncSemaphore = new SemaphoreSlim(1, 1);
         Resources = new LocalizationResourceDictionary();
         Languages = new LocalizationLanguageDictionary();
         LocalizedStrings = new LocalizationDictionaryWithResource();
@@ -59,7 +59,7 @@ public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingleto
 
     public async virtual Task InitializeAsync(LocalizationStoreCacheInitializeContext context)
     {
-        using (await _syncSemaphore.LockAsync())
+        using (await SyncSemaphore.LockAsync())
         {
             await EnsureCacheIsUptoDateAsync(context);
         }
@@ -133,24 +133,24 @@ public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingleto
 
     protected async virtual Task EnsureCacheIsUptoDateAsync(LocalizationStoreCacheInitializeContext context)
     {
-        if (_lastCheckTime.HasValue &&
-            _clock.Now.Subtract(_lastCheckTime.Value).TotalSeconds < 30)
+        if (LastCheckTime.HasValue &&
+            _clock.Now.Subtract(LastCheckTime.Value).TotalSeconds < 30)
         {
             return;
         }
 
         var stampInDistributedCache = await GetOrSetStampInDistributedCache();
 
-        if (stampInDistributedCache == _cacheStamp)
+        if (stampInDistributedCache == CacheStamp)
         {
-            _lastCheckTime = _clock.Now;
+            LastCheckTime = _clock.Now;
             return;
         }
 
         await UpdateInMemoryStoreCache(context);
 
-        _cacheStamp = stampInDistributedCache;
-        _lastCheckTime = _clock.Now;
+        CacheStamp = stampInDistributedCache;
+        LastCheckTime = _clock.Now;
     }
 
     protected async virtual Task UpdateInMemoryStoreCache(LocalizationStoreCacheInitializeContext context)

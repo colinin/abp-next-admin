@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP;
+﻿using Autofac.Core;
+using DotNetCore.CAP;
 using Elsa;
 using Elsa.Options;
 using Elsa.Rebus.RabbitMq;
@@ -27,6 +28,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
@@ -164,7 +166,7 @@ public partial class WorkflowManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureEndpoints()
+    private void ConfigureEndpoints(IServiceCollection services)
     {
         // 不需要
         //Configure<AbpEndpointRouterOptions>(options =>
@@ -175,6 +177,18 @@ public partial class WorkflowManagementHttpApiHostModule
         //            context.Endpoints.MapFallbackToPage("/_Host");
         //        });
         //});
+        var preActions = services.GetPreConfigureActions<AbpAspNetCoreMvcOptions>();
+
+        services.AddAbpApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+
+            //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
+            //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
+
+            options.ConfigureAbp(preActions.Configure());
+        });
     }
 
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)

@@ -36,6 +36,15 @@ public class WebhookSendRecordController : WebhooksManagementControllerBase, IWe
         return SendRecordAppService.DeleteAsync(id);
     }
 
+    [HttpDelete]
+    [Route("delete-many")]
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Delete)]
+    public virtual Task DeleteManyAsync([FromBody] WebhookSendRecordDeleteManyInput input)
+    {
+        return SendRecordAppService.DeleteManyAsync(input);
+    }
+
+    
     [HttpGet]
     public virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
     {
@@ -48,5 +57,13 @@ public class WebhookSendRecordController : WebhooksManagementControllerBase, IWe
     public virtual Task ResendAsync(Guid id)
     {
         return SendRecordAppService.ResendAsync(id);
+    }
+
+    [HttpPost]
+    [Route("resend-many")]
+    [Authorize(WebhooksManagementPermissions.WebhooksSendAttempts.Resend)]
+    public virtual Task ResendManyAsync(WebhookSendRecordResendManyInput input)
+    {
+        return SendRecordAppService.ResendManyAsync(input);
     }
 }

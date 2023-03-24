@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
-public class Tenant : FullAuditedAggregateRoot<Guid>
+public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
     protected const string DefaultConnectionStringName = Volo.Abp.Data.ConnectionStrings.DefaultConnectionStringName;
 
@@ -22,7 +23,10 @@ public class Tenant : FullAuditedAggregateRoot<Guid>
     public virtual DateTime? DisableTime { get; protected set; }
 
     public virtual Guid? EditionId { get; set; }
+
     public virtual Edition Edition { get; set; }
+
+    public virtual int EntityVersion { get; protected set; }
 
     public virtual ICollection<TenantConnectionString> ConnectionStrings { get; protected set; }
 

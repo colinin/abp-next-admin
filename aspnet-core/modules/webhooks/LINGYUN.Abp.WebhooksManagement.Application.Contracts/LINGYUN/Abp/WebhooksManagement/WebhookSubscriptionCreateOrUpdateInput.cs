@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.WebhooksManagement;
@@ -10,9 +11,10 @@ public class WebhookSubscriptionCreateInput : WebhookSubscriptionCreateOrUpdateI
 
 }
 
-public class WebhookSubscriptionUpdateInput : WebhookSubscriptionCreateOrUpdateInput
+public class WebhookSubscriptionUpdateInput : WebhookSubscriptionCreateOrUpdateInput, IHasConcurrencyStamp
 {
-
+    [StringLength(40)]
+    public string ConcurrencyStamp { get; set; }
 }
 
 public abstract class WebhookSubscriptionCreateOrUpdateInput
@@ -23,6 +25,9 @@ public abstract class WebhookSubscriptionCreateOrUpdateInput
 
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxSecretLength))]
     public string Secret { get; set; }
+
+    [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxDescriptionLength))]
+    public string Description { get; set; }
 
     public bool IsActive { get; set; }
 

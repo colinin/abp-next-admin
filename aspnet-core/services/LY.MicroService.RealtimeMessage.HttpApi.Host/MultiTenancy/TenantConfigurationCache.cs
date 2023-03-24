@@ -21,6 +21,13 @@ public class TenantConfigurationCache : ITenantConfigurationCache, ITransientDep
         TenantCache = tenantCache;
     }
 
+    public async virtual Task RefreshAsync()
+    {
+        var cacheKey = GetCacheKey();
+
+        await TenantCache.RemoveAsync(cacheKey);
+    }
+
     public async virtual Task<List<TenantConfiguration>> GetTenantsAsync()
     {
         return (await GetForCacheItemAsync()).Tenants;
@@ -28,7 +35,7 @@ public class TenantConfigurationCache : ITenantConfigurationCache, ITransientDep
 
     protected async virtual Task<TenantConfigurationCacheItem> GetForCacheItemAsync()
     {
-        var cacheKey = "_Abp_Tenant_Configuration";
+        var cacheKey = GetCacheKey();
         var cacheItem = await TenantCache.GetAsync(cacheKey);
         if (cacheItem == null)
         {
@@ -46,5 +53,10 @@ public class TenantConfigurationCache : ITenantConfigurationCache, ITransientDep
         }
 
         return cacheItem;
+    }
+
+    protected virtual string GetCacheKey()
+    {
+        return "_Abp_Tenant_Configuration";
     }
 }

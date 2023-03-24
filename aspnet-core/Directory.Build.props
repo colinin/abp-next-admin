@@ -1,12 +1,12 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>7.0.3</VoloAbpPackageVersion>
+		<VoloAbpPackageVersion>7.1.0</VoloAbpPackageVersion>
 		<VoloAbpLeptonXThemePackageVersion>2.0.1</VoloAbpLeptonXThemePackageVersion>
-		<LINGYUNAbpPackageVersion>7.0.3</LINGYUNAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.1.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.10.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.1.0</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.10.1</ElsaPackageVersion>
+		<ElsaPackageVersion>2.11.0</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<TencentCloudSDKPackageVersion>3.0.712</TencentCloudSDKPackageVersion>
