@@ -84,6 +84,11 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         return WebhookDefinitions.Values.ToList();
     }
 
+    public WebhookGroupDefinition GetWebhookGroupOrNull(string name)
+    {
+        return WebhookGroupDefinitions.GetOrDefault(name);
+    }
+
     public IReadOnlyList<WebhookGroupDefinition> GetGroups()
     {
         return WebhookGroupDefinitions.Values.ToList();
@@ -110,5 +115,8 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         {
             webhook[property.Key] = property.Value;
         }
+
+        webhook.WithProperty(nameof(WebhookDefinitionRecord.IsEnabled), webhookRecord.IsEnabled);
+        webhook.WithProperty("IsStatic", false);
     }
 }

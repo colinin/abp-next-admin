@@ -30,7 +30,7 @@ public class AbpOpenIddictSmsModule : AbpModule
         {
             options.Grants.TryAdd(
                 SmsTokenExtensionGrantConsts.GrantType,
-                new SmsTokenController());
+                new SmsTokenExtensionGrant());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

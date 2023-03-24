@@ -31,7 +31,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             IEnumerable<LocalizedString> localizedStrings = new List<LocalizedString>();
             var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
 
-            using (CultureHelper.Use(input.CultureName))
+            using (CultureHelper.Use(input.CultureName, input.CultureName))
             {
                 localizedStrings = localizer.GetAllStrings(true)
                     .OrderBy(l => l.Name);
@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             IEnumerable<LocalizedString> targetLocalizedStrings = new List<LocalizedString>();
             var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
 
-            using (CultureHelper.Use(cultureName))
+            using (CultureHelper.Use(cultureName, cultureName))
             {
                 localizedStrings = localizer.GetAllStrings(true)
                     .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
@@ -107,7 +107,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             }
             else
             {
-                using (CultureHelper.Use(targetCultureName))
+                using (CultureHelper.Use(targetCultureName, targetCultureName))
                 {
                     targetLocalizedStrings = localizer.GetAllStrings(true)
                         .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))

@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.Identity.WeChat;
-using LINGYUN.Abp.OpenIddict.WeChat.Controllers;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,11 +35,11 @@ public class AbpOpenIddictWeChatModule : AbpModule
         {
             options.Grants.TryAdd(
                 WeChatTokenExtensionGrantConsts.OfficialGrantType,
-                new WeChatOfficialTokenController());
+                new WeChatOffcialTokenExtensionGrant());
 
             options.Grants.TryAdd(
                 WeChatTokenExtensionGrantConsts.MiniProgramGrantType,
-                new WeChatMiniProgramTokenController());
+                new WeChatMiniProgramTokenExtensionGrant());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

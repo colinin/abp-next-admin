@@ -116,6 +116,14 @@ public partial class RealtimeMessageHttpApiHostModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
+
+            options.JobDispatcherSelectors.AddJob<NotificationPublishJob>(
+                job =>
+                {
+                    job.Interval = 10;
+                    job.MaxTryCount = 10;
+                    job.NodeName = ApplicationName;
+                });
         });
     }
 

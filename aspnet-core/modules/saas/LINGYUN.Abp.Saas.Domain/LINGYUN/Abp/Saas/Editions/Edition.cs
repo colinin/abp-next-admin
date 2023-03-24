@@ -1,13 +1,16 @@
 ﻿using JetBrains.Annotations;
 using System;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace LINGYUN.Abp.Saas.Editions;
 
-public class Edition : FullAuditedAggregateRoot<Guid>
+public class Edition : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
     public virtual string DisplayName { get; protected set; }
+
+    public virtual int EntityVersion { get; protected set; }
 
     protected Edition()
     {

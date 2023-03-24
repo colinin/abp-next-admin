@@ -82,6 +82,9 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
             b.Property(p => p.Headers)
              .HasColumnName(nameof(WebhookSubscription.Headers))
              .HasMaxLength(WebhookSubscriptionConsts.MaxHeadersLength);
+            b.Property(p => p.Description)
+             .HasColumnName(nameof(WebhookSubscription.Description))
+             .HasMaxLength(WebhookSubscriptionConsts.MaxDescriptionLength);
 
             b.ConfigureByConvention();
         });

@@ -20,6 +20,7 @@
     "TextTemplating:01100": "文本模板 {Name} 已经存在!",
     "TextTemplating:01404": "没有找到名为 {Name} 的文本模板!",
     "TextTemplates": "文本模板",
+    "TextTemplates:AddNew": "新模板",
     "Contents": "内容",
     "Layout": "布局页",
     "LocalizationResource": "本地化资源",

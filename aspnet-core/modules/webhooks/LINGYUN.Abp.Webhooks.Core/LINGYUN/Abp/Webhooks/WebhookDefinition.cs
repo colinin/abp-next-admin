@@ -11,6 +11,11 @@ namespace LINGYUN.Abp.Webhooks
         /// </summary>
         public string Name { get; }
 
+        // <summary>
+        /// Group name of the webhook.
+        /// </summary>
+        public string GroupName { get; internal set; }
+
         /// <summary>
         /// Display name of the webhook.
         /// Optional.

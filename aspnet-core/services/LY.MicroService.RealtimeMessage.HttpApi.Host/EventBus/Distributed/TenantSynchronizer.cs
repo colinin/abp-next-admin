@@ -1,29 +1,35 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
-using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.MultiTenancy;
 using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.RealTime.Localization;
+using LINGYUN.Abp.Saas.Tenants;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
+using LY.MicroService.RealtimeMessage.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
 namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 {
-    public class TenantSynchronizer : IDistributedEventHandler<CreateEventData>, ITransientDependency
+    public class TenantSynchronizer : 
+        IDistributedEventHandler<CreateEventData>,
+        IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
+        IDistributedEventHandler<EntityUpdatedEto<TenantEto>>,
+        IDistributedEventHandler<EntityDeletedEto<TenantEto>>,
+        ITransientDependency
     {
         protected ILogger<TenantSynchronizer> Logger { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected IDbSchemaMigrator DbSchemaMigrator { get; }
         protected INotificationSender NotificationSender { get; }
+        protected ITenantConfigurationCache TenantConfigurationCache { get; }
         protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }
 
         public TenantSynchronizer(
@@ -31,6 +37,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             IDbSchemaMigrator dbSchemaMigrator,
             IUnitOfWorkManager unitOfWorkManager,
             INotificationSender notificationSender,
+            ITenantConfigurationCache tenantConfigurationCache,
             INotificationSubscriptionManager notificationSubscriptionManager,
             ILogger<TenantSynchronizer> logger)
         {
@@ -39,6 +46,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             CurrentTenant = currentTenant;
             DbSchemaMigrator = dbSchemaMigrator;
             UnitOfWorkManager = unitOfWorkManager;
+            TenantConfigurationCache = tenantConfigurationCache;
 
             NotificationSender = notificationSender;
             NotificationSubscriptionManager = notificationSubscriptionManager;
@@ -103,6 +111,21 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             {
                 Logger.LogWarning(ex, "Failed to send the tenant initialization notification.");
             }
+        }
+
+        public async virtual Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
+        {
+            await TenantConfigurationCache.RefreshAsync();
+        }
+
+        public async virtual Task HandleEventAsync(EntityUpdatedEto<TenantEto> eventData)
+        {
+            await TenantConfigurationCache.RefreshAsync();
+        }
+
+        public async virtual Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
+        {
+            await TenantConfigurationCache.RefreshAsync();
         }
     }
 }

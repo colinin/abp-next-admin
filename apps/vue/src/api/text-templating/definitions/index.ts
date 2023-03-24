@@ -15,7 +15,7 @@ export const CreateAsyncByInput = (input: TextTemplateDefinitionCreateDto) => {
     controller: controllerName,
     action: 'CreateAsync',
     uniqueName: 'CreateAsyncByInput',
-    params: input,
+    data: input,
   });
 };
 
@@ -49,7 +49,9 @@ export const GetListAsyncByInput = (input: TextTemplateDefinitionGetListInput) =
     controller: controllerName,
     action: 'GetListAsync',
     uniqueName: 'GetListAsyncByInput',
-    params: input,
+    params: {
+      input: input,
+    },
   });
 };
 

@@ -11,10 +11,10 @@ namespace LINGYUN.Abp.TextTemplating;
 public class TextTemplateContentContributor : ITemplateContentContributor, ITransientDependency
 {
     protected AbpTextTemplatingCachingOptions TemplatingCachingOptions { get; }
-    protected IDistributedCache<TemplateContentCacheItem> TextTemplateContentCache { get; }
+    protected IDistributedCache<TextTemplateContentCacheItem> TextTemplateContentCache { get; }
 
     public TextTemplateContentContributor(
-        IDistributedCache<TemplateContentCacheItem> textTemplateContentCache,
+        IDistributedCache<TextTemplateContentCacheItem> textTemplateContentCache,
         IOptions<AbpTextTemplatingCachingOptions> templatingCachingOptions)
     {
         TextTemplateContentCache = textTemplateContentCache;
@@ -23,7 +23,7 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
 
     public async virtual Task<string> GetOrNullAsync(TemplateContentContributorContext context)
     {
-        var cacheKey = TemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, context.Culture);
+        var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, context.Culture);
 
         var cacheItem = await TextTemplateContentCache.GetOrAddAsync(cacheKey,
             () => CreateTemplateContentCache(context),
@@ -32,12 +32,12 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
         return cacheItem?.Content;
     }
 
-    protected async virtual Task<TemplateContentCacheItem> CreateTemplateContentCache(TemplateContentContributorContext context)
+    protected async virtual Task<TextTemplateContentCacheItem> CreateTemplateContentCache(TemplateContentContributorContext context)
     {
         var repository = context.ServiceProvider.GetRequiredService<ITextTemplateRepository>();
         var template = await repository.FindByNameAsync(context.TemplateDefinition.Name, context.Culture);
 
-        return new TemplateContentCacheItem(
+        return new TextTemplateContentCacheItem(
             template?.Name,
             template?.Content,
             template?.Culture);

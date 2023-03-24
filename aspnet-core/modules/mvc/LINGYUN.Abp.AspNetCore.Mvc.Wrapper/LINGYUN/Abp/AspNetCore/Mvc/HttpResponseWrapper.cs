@@ -16,7 +16,6 @@ public class HttpResponseWrapper : IHttpResponseWrapper, ITransientDependency
 
     public virtual void Wrap(HttpResponseWrapperContext context)
     {
-        context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
         context.HttpContext.Response.StatusCode = context.HttpStatusCode;
         if (context.HttpHeaders != null)
         {
@@ -27,6 +26,10 @@ public class HttpResponseWrapper : IHttpResponseWrapper, ITransientDependency
                     context.HttpContext.Response.Headers.Add(header.Key, header.Value);
                 }
             }
+        }
+        if (!context.HttpContext.Response.Headers.ContainsKey(AbpHttpWrapConsts.AbpWrapResult))
+        {
+            context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
         }
     }
 }

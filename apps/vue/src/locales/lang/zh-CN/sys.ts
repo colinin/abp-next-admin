@@ -8,8 +8,9 @@ export default {
     apiRequestFailed: '请求出错，请稍候重试',
     networkException: '网络异常',
     networkExceptionMsg: '网络异常，请检查您的网络连接是否正常!',
+    getUserInfoErrorMessage: '获取用户信息失败, 请重新登录!',
 
-    errMsg401: '用户没有权限（令牌、用户名、密码错误）!',
+    errMsg401: '请求接口需要验证身份,您未通过认证或会话已超时, 请重新登录!',
     errMsg403: '用户得到授权，但是访问是被禁止的。!',
     errMsg404: '网络请求错误,未找到该资源!',
     errMsg405: '网络请求错误,请求方法未允许!',

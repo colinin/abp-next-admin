@@ -9,5 +9,7 @@ public interface IStaticWebhookDefinitionStore
 
     Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync();
 
+    Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name);
+
     Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync();
 }

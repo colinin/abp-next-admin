@@ -9,6 +9,11 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
 
 import { ErrorMessageMode } from '/#/axios';
+import { t } from '/@/hooks/web/useI18n';
+import { useMessage } from '/@/hooks/web/useMessage';
+import { useUserStoreWithOut } from '/@/store/modules/user';
+
+const { createErrorModal } = useMessage();
 
 enum Api {
   Login = '/connect/token',
@@ -87,6 +92,16 @@ export function getUserInfo() {
     {
       errorMessageMode: 'none',
       apiUrl: '/connect',
+    }).catch(() => {
+      const userStore = useUserStoreWithOut();
+      createErrorModal({
+        title: t('sys.api.errorTip'),
+        content: t('sys.api.getUserInfoErrorMessage'),
+        onOk: () => {
+          userStore.setToken(undefined);
+          userStore.logout(true);
+        }
+      });
     });
 }
 

@@ -56,7 +56,10 @@ public class WebhookGroupDefinition
             name,
             displayName,
             description
-        );
+        )
+        {
+            GroupName = Name
+        };
 
         _webhooks.Add(webhook);
 
@@ -71,6 +74,8 @@ public class WebhookGroupDefinition
             {
                 throw new AbpException($"There is already an existing webhook with name: {webhook.Name} in group {Name}");
             }
+
+            webhook.GroupName = Name;
         }
 
         _webhooks.AddRange(webhooks);

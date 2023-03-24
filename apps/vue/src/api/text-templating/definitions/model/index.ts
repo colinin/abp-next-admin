@@ -1,10 +1,12 @@
 export interface TextTemplateDefinitionDto {
   name: string;
   displayName: string;
+  formatedDisplayName?: string;
   defaultCultureName?: string;
   isInlineLocalized: boolean;
   isLayout: boolean;
-  layout: string;
+  layout?: string;
+  layoutName?: string;
   isStatic: boolean;
   renderEngine?: string;
 }

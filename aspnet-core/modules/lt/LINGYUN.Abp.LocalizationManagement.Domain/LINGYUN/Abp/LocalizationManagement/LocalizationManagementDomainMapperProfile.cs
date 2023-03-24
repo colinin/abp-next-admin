@@ -7,6 +7,8 @@ namespace LINGYUN.Abp.LocalizationManagement
         public LocalizationManagementDomainMapperProfile()
         {
             CreateMap<Text, TextEto>();
+            CreateMap<Resource, ResourceEto>();
+            CreateMap<Language, LanguageEto>();
         }
     }
 }

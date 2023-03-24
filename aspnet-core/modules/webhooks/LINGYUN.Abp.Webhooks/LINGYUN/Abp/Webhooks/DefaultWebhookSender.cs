@@ -116,30 +116,42 @@ namespace LINGYUN.Abp.Webhooks
         {
             foreach (var header in _options.DefaultHttpHeaders)
             {
-                if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                if (!request.Headers.Contains(header.Key))
                 {
-                    continue;
+                    if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
                 }
 
-                if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                if (!request.Content.Headers.Contains(header.Key))
                 {
-                    continue;
+                    if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
                 }
             }
 
             foreach (var header in webhookSenderArgs.Headers)
             {
-                if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                if (!request.Headers.Contains(header.Key))
                 {
-                    continue;
+                    if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
                 }
 
-                if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                if (!request.Content.Headers.Contains(header.Key))
                 {
-                    continue;
+                    if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
                 }
 
-                throw new Exception($"Invalid Header. SubscriptionId:{webhookSenderArgs.WebhookSubscriptionId},Header: {header.Key}:{header.Value}");
+                Logger.LogWarning($"Invalid Header. SubscriptionId:{webhookSenderArgs.WebhookSubscriptionId},Header: {header.Key}:{header.Value}");
             }
         }
 

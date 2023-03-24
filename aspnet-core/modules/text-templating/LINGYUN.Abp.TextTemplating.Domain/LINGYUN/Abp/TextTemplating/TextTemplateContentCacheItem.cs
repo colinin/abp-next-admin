@@ -3,19 +3,19 @@
 namespace LINGYUN.Abp.TextTemplating;
 
 [Serializable]
-public class TemplateContentCacheItem
+public class TextTemplateContentCacheItem
 {
     private const string CacheKeyFormat = "pn:template-content,n:{0},c:{1}";
 
     public string Name { get; set; }
     public string Culture { get; set; }
     public string Content { get; set; }
-    public TemplateContentCacheItem()
+    public TextTemplateContentCacheItem()
     {
 
     }
 
-    public TemplateContentCacheItem(
+    public TextTemplateContentCacheItem(
         string name,
         string content,
         string culture = null)

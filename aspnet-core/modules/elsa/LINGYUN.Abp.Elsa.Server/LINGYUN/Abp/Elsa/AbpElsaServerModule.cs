@@ -5,12 +5,14 @@ using Elsa.Server.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Elsa;
 
 [DependsOn(
     typeof(AbpElsaModule),
+    typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpElsaServerModule : AbpModule
 {
@@ -21,7 +23,7 @@ public class AbpElsaServerModule : AbpModule
             .AddSingleton<ActivityBlueprintConverter>()
             .AddScoped<IWorkflowBlueprintMapper, WorkflowBlueprintMapper>()
             .AddSingleton<IEndpointContentSerializerSettingsProvider, EndpointContentSerializerSettingsProvider>()
-            .AddAutoMapperProfile<AutoMapperProfile>()
+            .AddAutoMapperProfile<AbpElsaAutoMapperProfile>()
             .AddSignalR();
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -43,6 +45,16 @@ public class AbpElsaServerModule : AbpModule
                     //    version.AssumeDefaultVersionWhenUnspecified = true;
                     //});
                 });
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAutoMapperObjectMapper<ElsaApiOptions>();
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpElsaAutoMapperProfile>(validate: true);
         });
     }
 }

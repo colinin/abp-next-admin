@@ -45,7 +45,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         CacheOptions = cacheOptions.Value;
     }
 
-    public virtual async Task<WebhookDefinition> GetOrNullAsync(string name)
+    public async virtual Task<WebhookDefinition> GetOrNullAsync(string name)
     {
         if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
         {
@@ -59,7 +59,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         }
     }
 
-    public virtual async Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync()
+    public async virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync()
     {
         if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
         {
@@ -73,7 +73,21 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         }
     }
 
-    public virtual async Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
+    public async virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
+        {
+            return null;
+        }
+
+        using (await StoreCache.SyncSemaphore.LockAsync())
+        {
+            await EnsureCacheIsUptoDateAsync();
+            return StoreCache.GetWebhookGroupOrNull(name);
+        }
+    }
+
+    public async virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
     {
         if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
         {
@@ -87,7 +101,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         }
     }
 
-    protected virtual async Task EnsureCacheIsUptoDateAsync()
+    protected async virtual Task EnsureCacheIsUptoDateAsync()
     {
         if (StoreCache.LastCheckTime.HasValue &&
             DateTime.Now.Subtract(StoreCache.LastCheckTime.Value) < WebhookManagementOptions.WebhooksCacheRefreshInterval)
@@ -110,7 +124,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         StoreCache.LastCheckTime = DateTime.Now;
     }
 
-    protected virtual async Task UpdateInMemoryStoreCache()
+    protected async virtual Task UpdateInMemoryStoreCache()
     {
         var webhookGroupRecords = await WebhookGroupRepository.GetListAsync();
         var webhookRecords = await WebhookRepository.GetListAsync();
@@ -118,7 +132,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         await StoreCache.FillAsync(webhookGroupRecords, webhookRecords);
     }
 
-    protected virtual async Task<string> GetOrSetStampInDistributedCache()
+    protected async virtual Task<string> GetOrSetStampInDistributedCache()
     {
         var cacheKey = GetCommonStampCacheKey();
 

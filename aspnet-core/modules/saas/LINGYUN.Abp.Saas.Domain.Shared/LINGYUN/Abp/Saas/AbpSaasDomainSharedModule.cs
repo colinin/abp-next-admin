@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Saas.Localization;
+using Volo.Abp.Auditing;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -7,7 +8,9 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Saas;
 
-[DependsOn(typeof(AbpValidationModule))]
+[DependsOn(
+    typeof(AbpValidationModule),
+    typeof(AbpAuditingContractsModule))]
 public class AbpSaasDomainSharedModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

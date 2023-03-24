@@ -62,11 +62,11 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
                 .JobDispatcherSelectors
                 .FirstOrDefault(x => x.Predicate(workerType));
 
-            jobInfo.Interval = selector.Interval;
-            jobInfo.LockTimeOut = selector.LockTimeOut;
-            jobInfo.Priority = selector.Priority;
-            jobInfo.TryCount = selector.TryCount;
-            jobInfo.MaxTryCount = selector.MaxTryCount;
+            jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
+            jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;
+            jobInfo.Priority = selector.Priority ?? jobInfo.Priority;
+            jobInfo.TryCount = selector.MaxCount ?? jobInfo.MaxCount;
+            jobInfo.MaxTryCount = selector.MaxTryCount ?? jobInfo.MaxTryCount;
 
             if (!selector.NodeName.IsNullOrWhiteSpace())
             {

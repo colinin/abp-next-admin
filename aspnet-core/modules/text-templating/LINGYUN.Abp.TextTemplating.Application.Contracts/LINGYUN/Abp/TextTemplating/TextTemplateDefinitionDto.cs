@@ -10,6 +10,8 @@ public class TextTemplateDefinitionDto : IHasConcurrencyStamp
     public bool IsInlineLocalized { get; set; }
     public bool IsLayout { get; set; }
     public string Layout { get; set; }
+    public string LayoutName { get; set; }
     public bool IsStatic { get; set; }
     public string ConcurrencyStamp { get; set; }
+    public string FormatedDisplayName { get; set; }
 }

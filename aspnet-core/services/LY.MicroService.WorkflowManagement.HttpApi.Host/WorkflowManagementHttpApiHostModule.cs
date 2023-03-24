@@ -29,6 +29,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -78,6 +79,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule
@@ -99,7 +101,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
-        ConfigureEndpoints();
         ConfigureLocalization();
         ConfigureJsonSerializer();
         ConfigureBackgroundTasks();
@@ -109,6 +110,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureEndpoints(context.Services);
         ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);

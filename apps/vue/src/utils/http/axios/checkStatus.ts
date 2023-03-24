@@ -68,6 +68,8 @@ export function checkStatus(
       errMessage = t('sys.api.errMsg505');
       break;
     default:
+      errMessage = t('sys.api.apiRequestFailed');
+      break;
   }
 
   if (errMessage) {
@@ -80,16 +82,6 @@ export function checkStatus(
 }
 
 export function checkResponse(response: any): string | undefined {
-  if (!response?.data) {
-    // 都没捕获到则提示默认错误信息
-    const { t } = useI18n();
-    const message = t('sys.api.apiRequestFailed');
-    checkStatus(response.status, message);
-    return message;
-  }
-
-  let errorJson = response.data.error;
-
   // 会话超时
   if (response.status === 401) {
     const userStore = useUserStoreWithOut();
@@ -98,6 +90,14 @@ export function checkResponse(response: any): string | undefined {
     const { t } = useI18n();
     return t('sys.api.errMsg401');
   }
+  
+  if (!response?.data) {
+    // 都没捕获到则提示默认错误信息
+    checkStatus(response, '');
+    return undefined;
+  }
+
+  let errorJson = response.data.error;
 
   // abp框架抛出异常信息
   if (response.headers['_abperrorformat'] === 'true') {

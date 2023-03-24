@@ -224,7 +224,7 @@ public partial class AuthServerModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<AuthServerModule>("LY.MicroService.IdentityServer");
+            options.FileSets.AddEmbedded<AuthServerModule>("LY.MicroService.AuthServer");
         });
     }
     private void ConfigureLocalization()
