@@ -94,6 +94,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 

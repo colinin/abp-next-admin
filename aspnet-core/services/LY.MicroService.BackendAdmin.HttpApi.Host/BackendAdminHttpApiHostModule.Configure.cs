@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP;
+﻿using Autofac.Core;
+using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -6,6 +7,8 @@ using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
+using Medallion.Threading.Redis;
+using Medallion.Threading;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -181,6 +184,16 @@ public partial class BackendAdminHttpApiHostModule
         });
     }
 
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
+
     private void ConfigureVirtualFileSystem()
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -280,6 +293,8 @@ public partial class BackendAdminHttpApiHostModule
                 .AddLanguagesMapOrUpdate(
                     "vben-admin-ui",
                     new NameValue("zh_CN", "zh-Hans"));
+
+            options.UseAllPersistence();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

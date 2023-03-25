@@ -5,6 +5,7 @@ using Elsa.Options;
 using Elsa.Rebus.RabbitMq;
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.Elsa.Localization;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -369,6 +370,8 @@ public partial class WorkflowManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+            options.UsePersistence<ElsaResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

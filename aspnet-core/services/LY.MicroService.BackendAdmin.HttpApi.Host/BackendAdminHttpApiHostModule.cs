@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
@@ -10,11 +9,14 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
+using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
+using LINGYUN.Abp.PermissionManagement;
+using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -24,12 +26,12 @@ using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -37,13 +39,10 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -97,6 +96,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpAutofacModule)
     )]
 public partial class BackendAdminHttpApiHostModule : AbpModule
@@ -128,6 +128,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

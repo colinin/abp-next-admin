@@ -11,5 +11,10 @@ public class AbpLocalizationPersistenceModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHostedService<StaticLocalizationSaverHostService>();
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.GlobalContributors.Add<LocalizationPersistenceContributor>();
+        });
     }
 }

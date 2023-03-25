@@ -491,6 +491,8 @@ public partial class MicroServiceApplicationsSingleModule
                 .AddLanguagesMapOrUpdate(
                     "vben-admin-ui",
                     new NameValue("zh_CN", "zh-Hans"));
+
+            options.UseAllPersistence();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -553,7 +555,7 @@ public partial class MicroServiceApplicationsSingleModule
 
         if (isDevelopment)
         {
-            // services.AddAlwaysAllowAuthorization();
+            services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

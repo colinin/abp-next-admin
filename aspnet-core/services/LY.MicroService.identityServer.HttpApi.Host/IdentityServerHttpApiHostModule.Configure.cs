@@ -4,6 +4,8 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using Medallion.Threading.Redis;
+using Medallion.Threading;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -34,6 +36,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.IdentityServer.Localization;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -177,6 +180,15 @@ public partial class IdentityServerHttpApiHostModule
             options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
         });
     }
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
 
     private void ConfigureCaching(IConfiguration configuration)
     {
@@ -272,6 +284,10 @@ public partial class IdentityServerHttpApiHostModule
             options.Resources
                    .Get<IdentityResource>()
                    .AddVirtualJson("/Localization/Resources");
+
+            options.UsePersistences(
+                typeof(IdentityResource),
+                typeof(AbpIdentityServerResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

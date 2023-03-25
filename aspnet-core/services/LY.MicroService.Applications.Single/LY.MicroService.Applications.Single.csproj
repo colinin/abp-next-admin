@@ -103,6 +103,8 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
+		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.Application\LINGYUN.Abp.FeatureManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.HttpApi\LINGYUN.Abp.FeatureManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application\LINGYUN.Abp.IdentityServer.Application.csproj" />
@@ -160,7 +162,9 @@
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi\LINGYUN.Abp.OssManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj" />
+		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application\LINGYUN.Abp.PermissionManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits\LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.HttpApi\LINGYUN.Abp.PermissionManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application\LINGYUN.Platform.Application.csproj" />

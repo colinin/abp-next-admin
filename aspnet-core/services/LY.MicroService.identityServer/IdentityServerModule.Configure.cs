@@ -4,6 +4,8 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.IdentityServer.IdentityResources;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -144,6 +146,17 @@ public partial class IdentityServerModule
             options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
         });
     }
+
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
+
     private void ConfigureCaching(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
@@ -201,6 +214,8 @@ public partial class IdentityServerModule
             options.Resources
                 .Get<AccountResource>()
                 .AddVirtualJson("/Localization/Resources");
+
+            options.UsePersistence<AccountResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

@@ -5,6 +5,8 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.OpenIddict.Permissions;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -26,10 +28,12 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
@@ -178,6 +182,16 @@ public partial class AuthServerHttpApiHostModule
         });
     }
 
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
+
     private void ConfigureCaching(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
@@ -268,6 +282,10 @@ public partial class AuthServerHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+            options.UsePersistences(
+                typeof(IdentityResource),
+                typeof(AbpOpenIddictResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
