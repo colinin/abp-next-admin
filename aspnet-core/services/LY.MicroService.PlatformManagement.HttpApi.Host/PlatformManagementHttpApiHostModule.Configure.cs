@@ -4,6 +4,9 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Platform.Localization;
+using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -178,6 +181,16 @@ public partial class PlatformManagementHttpApiHostModule
         });
     }
 
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
+
     private void ConfigureCaching(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
@@ -262,6 +275,8 @@ public partial class PlatformManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+            options.UsePersistence<PlatformResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

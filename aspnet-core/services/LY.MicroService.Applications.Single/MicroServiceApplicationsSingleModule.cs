@@ -27,6 +27,8 @@ using LINGYUN.Abp.Elsa.EntityFrameworkCore;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.FeatureManagement;
+using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.Features.LimitValidation.Redis.Client;
 using LINGYUN.Abp.Http.Client.Wrapper;
@@ -56,6 +58,8 @@ using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
+using LINGYUN.Abp.PermissionManagement;
+using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -94,15 +98,12 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EventBus;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
@@ -179,7 +180,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(WebhooksManagementApplicationModule),
     typeof(WebhooksManagementHttpApiModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementDomainModule),
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -187,7 +187,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementDomainModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpPermissionManagementDomainIdentityModule),

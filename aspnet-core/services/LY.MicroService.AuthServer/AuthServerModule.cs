@@ -9,6 +9,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
@@ -60,6 +61,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAuthenticationQQModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -106,6 +108,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

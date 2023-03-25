@@ -7,6 +7,7 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Webhooks;
 using LINGYUN.Abp.Webhooks.BackgroundJobs;
 using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Abp.WebhooksManagement.Localization;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -342,6 +343,8 @@ public partial class WebhooksManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+            options.UsePersistence<WebhooksManagementResource>();
         });
     }
 

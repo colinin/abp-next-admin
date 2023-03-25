@@ -33,6 +33,13 @@
                 // 指定你的本地化资源类型, 此类型下定义的静态文档将被持久化到存储设施
                 options.AddPersistenceResource<YouProjectResource>();
             });
+
+            // 或者使用扩展方法持久化本地化资源类型
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                // 效果如上
+                options.UsePersistence<YouProjectResource>();
+            });
         }
     }
 

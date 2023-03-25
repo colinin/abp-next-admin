@@ -1,0 +1,16 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:PermissionManagement": "Permission Management",
+    "Permission:GroupDefinitions": "Group Definitions",
+    "Permission:PermissionDefinitions": "Permission Definitions",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "PermissionManagement:001100": "Permission group {Name} already exists!",
+    "PermissionManagement:001404": "Permission group named {Name} not found!",
+    "PermissionManagement:002100": "Permission {Name} already exists!",
+    "PermissionManagement:002101": "The group definition of permission {Name} could not be retrieved!",
+    "PermissionManagement:0021404": "Permission named {Name} not found!"
+  }
+}

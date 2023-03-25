@@ -13,6 +13,7 @@ using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -59,6 +60,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpAuthenticationQQModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -108,6 +110,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

@@ -7,6 +7,8 @@ using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
+using Medallion.Threading.Redis;
+using Medallion.Threading;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -36,6 +38,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using LINGYUN.Abp.Notifications.Localization;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -190,6 +193,16 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
+    private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
+    {
+        var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
+        if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
+            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+        }
+    }
+
     private void ConfigureCaching(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
@@ -333,6 +346,10 @@ public partial class RealtimeMessageHttpApiHostModule
             options.Resources
                    .Get<MessageServiceResource>()
                    .AddVirtualJson("/Localization/Resources");
+
+            options.UsePersistences(
+                typeof(MessageServiceResource),
+                typeof(NotificationsResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>

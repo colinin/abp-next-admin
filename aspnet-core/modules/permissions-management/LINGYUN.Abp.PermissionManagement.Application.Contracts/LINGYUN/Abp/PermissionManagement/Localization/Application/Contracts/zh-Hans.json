@@ -1,0 +1,16 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:PermissionManagement": "权限管理",
+    "Permission:GroupDefinitions": "分组定义",
+    "Permission:PermissionDefinitions": "权限定义",
+    "Permission:Create": "新增",
+    "Permission:Edit": "修改",
+    "Permission:Delete": "删除",
+    "PermissionManagement:001100": "权限分组 {Name} 已经存在!",
+    "PermissionManagement:001404": "没有找到名为 {Name} 的权限分组!",
+    "PermissionManagement:002100": "权限 {Name} 已经存在!",
+    "PermissionManagement:002101": "未能检索到权限 {Name} 所在分组定义!",
+    "PermissionManagement:0021404": "没有找到名为 {Name} 的权限定义!"
+  }
+}

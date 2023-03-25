@@ -287,7 +287,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Pe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{86ED8028-5533-4B5D-8594-C09929F2A553}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localization", "{C056C11F-EC74-4720-ACEA-D4C57DC4736F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization-management", "localization-management", "{C056C11F-EC74-4720-ACEA-D4C57DC4736F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{A09032AD-D895-4D83-8D3D-67FF3285F7A6}"
 EndProject
@@ -443,6 +443,22 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{5F0926F3-463D-445B-9746-0A037DC431F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.MicroService.Internal.ApiGateway", "..\gateways\internal\LINGYUN.MicroService.Internal.ApiGateway\src\LINGYUN.MicroService.Internal.ApiGateway\LINGYUN.MicroService.Internal.ApiGateway.csproj", "{21878B72-9801-41CE-88CD-7195714AE9BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "feature-management", "feature-management", "{97C36EF3-805E-4B93-9AF6-C1E22AA583B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "permissions-management", "permissions-management", "{99CB6AD9-92E8-4B9B-99E3-28404AA41655}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Application.Contracts", "modules\feature-management\LINGYUN.Abp.FeatureManagement.Application.Contracts\LINGYUN.Abp.FeatureManagement.Application.Contracts.csproj", "{2263600B-30CB-4188-925D-92F12F904163}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Application", "modules\feature-management\LINGYUN.Abp.FeatureManagement.Application\LINGYUN.Abp.FeatureManagement.Application.csproj", "{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.HttpApi", "modules\feature-management\LINGYUN.Abp.FeatureManagement.HttpApi\LINGYUN.Abp.FeatureManagement.HttpApi.csproj", "{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Application.Contracts", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application.Contracts\LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj", "{FAD86432-6A95-47DE-8E3A-FC2101753C52}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Application", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application\LINGYUN.Abp.PermissionManagement.Application.csproj", "{5F278E32-3A2A-4654-BD3C-B183301382FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.HttpApi", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.HttpApi\LINGYUN.Abp.PermissionManagement.HttpApi.csproj", "{1DB57C74-1C40-4414-B968-937C3C1C157E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1158,6 +1174,30 @@ Global
 		{21878B72-9801-41CE-88CD-7195714AE9BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21878B72-9801-41CE-88CD-7195714AE9BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21878B72-9801-41CE-88CD-7195714AE9BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2263600B-30CB-4188-925D-92F12F904163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2263600B-30CB-4188-925D-92F12F904163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2263600B-30CB-4188-925D-92F12F904163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2263600B-30CB-4188-925D-92F12F904163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD86432-6A95-47DE-8E3A-FC2101753C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD86432-6A95-47DE-8E3A-FC2101753C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD86432-6A95-47DE-8E3A-FC2101753C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD86432-6A95-47DE-8E3A-FC2101753C52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F278E32-3A2A-4654-BD3C-B183301382FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F278E32-3A2A-4654-BD3C-B183301382FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F278E32-3A2A-4654-BD3C-B183301382FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F278E32-3A2A-4654-BD3C-B183301382FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB57C74-1C40-4414-B968-937C3C1C157E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB57C74-1C40-4414-B968-937C3C1C157E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB57C74-1C40-4414-B968-937C3C1C157E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB57C74-1C40-4414-B968-937C3C1C157E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1375,6 +1415,14 @@ Global
 		{E2BA59EA-769B-4D5B-8032-CB9682D0D73A} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 		{5F0926F3-463D-445B-9746-0A037DC431F9} = {42F31C68-B8B2-4BE0-9AD0-A7DFA6092629}
 		{21878B72-9801-41CE-88CD-7195714AE9BA} = {B4247B78-34BC-4A3F-91A4-661F7DCD6E10}
+		{97C36EF3-805E-4B93-9AF6-C1E22AA583B1} = {0B58AA48-665A-443F-A6A8-751FB9629DAF}
+		{99CB6AD9-92E8-4B9B-99E3-28404AA41655} = {0B58AA48-665A-443F-A6A8-751FB9629DAF}
+		{2263600B-30CB-4188-925D-92F12F904163} = {97C36EF3-805E-4B93-9AF6-C1E22AA583B1}
+		{2ED0ED0F-15F6-4555-BC97-F5426FCC0C0E} = {97C36EF3-805E-4B93-9AF6-C1E22AA583B1}
+		{C1023A56-87CE-4227-8F0E-0F9DAA1E20B8} = {97C36EF3-805E-4B93-9AF6-C1E22AA583B1}
+		{FAD86432-6A95-47DE-8E3A-FC2101753C52} = {99CB6AD9-92E8-4B9B-99E3-28404AA41655}
+		{5F278E32-3A2A-4654-BD3C-B183301382FB} = {99CB6AD9-92E8-4B9B-99E3-28404AA41655}
+		{1DB57C74-1C40-4414-B968-937C3C1C157E} = {99CB6AD9-92E8-4B9B-99E3-28404AA41655}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

@@ -1,0 +1,16 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:FeatureManagement": "Feature Management",
+    "Permission:GroupDefinitions": "Group Definitions",
+    "Permission:FeatureDefinitions": "Permission Definitions",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "FeatureManagement:001100": "Feature group {Name} already exists!",
+    "FeatureManagement:001404": "Feature group named {Name} not found!",
+    "FeatureManagement:002100": "Feature {Name} already exists!",
+    "FeatureManagement:002101": "The group definition of feature {Name} could not be retrieved!",
+    "FeatureManagement:0021404": "Feature named {Name} not found!"
+  }
+}
