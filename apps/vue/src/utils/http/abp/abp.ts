@@ -8,7 +8,6 @@ import {
   ModuleApiDescriptionModel,
 } from '/@/api/abp/model/apiDefinition';
 import { ParameterBindingSources, UrlBuilder } from '/@/utils/helper/abpApiHelper';
-import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -26,7 +25,7 @@ export class abpRequest {
     uniqueName?: string;
     data?: any;
     params?: any;
-  }) {
+  }): Promise<PagedResultDto<TResult>> {
     return this.request<PagedResultDto<TResult>>(options);
   }
 
@@ -37,7 +36,7 @@ export class abpRequest {
     uniqueName?: string;
     data?: any;
     params?: any;
-  }) {
+  }): Promise<ListResultDto<TResult>>  {
     return this.request<ListResultDto<TResult>>(options);
   }
 

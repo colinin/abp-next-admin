@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using OpenIddict.Abstractions;
 using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -13,32 +14,35 @@ namespace LINGYUN.Abp.OpenIddict.Authorizations;
 [Authorize(AbpOpenIddictPermissions.Authorizations.Default)]
 public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBase, IOpenIddictAuthorizationAppService
 {
-    protected IRepository<OpenIddictAuthorization, Guid> Repository { get; }
+    private readonly IOpenIddictAuthorizationManager _authorizationManager;
+    private readonly IRepository<OpenIddictAuthorization, Guid> _authorizationRepository;
 
     public OpenIddictAuthorizationAppService(
-        IRepository<OpenIddictAuthorization, Guid> repository)
+        IOpenIddictAuthorizationManager authorizationManager,
+        IRepository<OpenIddictAuthorization, Guid> authorizationRepository)
     {
-        Repository = repository;
+        _authorizationManager = authorizationManager;
+        _authorizationRepository = authorizationRepository;
     }
 
     [Authorize(AbpOpenIddictPermissions.Authorizations.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        await Repository.DeleteAsync(id);
+        var authorization = await _authorizationRepository.GetAsync(id);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await _authorizationManager.DeleteAsync(authorization.ToModel());
     }
 
     public async virtual Task<OpenIddictAuthorizationDto> GetAsync(Guid id)
     {
-        var authorization = await Repository.GetAsync(id);
+        var authorization = await _authorizationRepository.GetAsync(id);
 
         return authorization.ToDto(JsonSerializer);
     }
 
     public async virtual Task<PagedResultDto<OpenIddictAuthorizationDto>> GetListAsync(OpenIddictAuthorizationGetListInput input)
     {
-        var queryable = await Repository.GetQueryableAsync();
+        var queryable = await _authorizationRepository.GetQueryableAsync();
         if (input.ClientId.HasValue)
         {
             queryable = queryable.Where(x => x.ApplicationId == input.ClientId);
@@ -69,8 +73,14 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
                 x.Status.Contains(input.Filter) || x.Type.Contains(input.Filter) ||
                 x.Scopes.Contains(input.Filter) || x.Properties.Contains(input.Filter));
         }
+
+        var sorting = input.Sorting;
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(OpenIddictAuthorization.CreationTime)} DESC";
+        }
         queryable = queryable
-            .OrderBy(input.Sorting ?? $"{nameof(OpenIddictAuthorization.CreationTime)} DESC")
+            .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
 
         var totalCount = await AsyncExecuter.CountAsync(queryable);

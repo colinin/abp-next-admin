@@ -38,9 +38,10 @@
 
   import { updateColorWeak } from '/@/logics/theme/updateColorWeak';
   import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
+  import { changeTheme } from '/@/logics/theme';
   import defaultSetting from '/@/settings/projectSetting';
 
-  import { changeTheme } from '/@/api/sys/theme';
+  import { changeTheme as changeThemeApi } from '/@/api/sys/theme';
   import { ThemeSetting } from '/@/api/sys/model/themeModel';
 
   export default defineComponent({
@@ -69,8 +70,8 @@
       function handleResetSetting() {
         try {
           appStore.setProjectConfig(defaultSetting);
-          const { colorWeak, grayMode } = defaultSetting;
-          // updateTheme(themeColor);
+          const { colorWeak, grayMode, themeColor } = defaultSetting;
+          changeTheme(themeColor);
           updateColorWeak(colorWeak);
           updateGrayMode(grayMode);
           createMessage.success(t('layout.setting.resetSuccess'));
@@ -96,7 +97,7 @@
         };
 
         syncLoading.value = true;
-        changeTheme(themeSetting)
+        changeThemeApi(themeSetting)
           .then(() => {
             createMessage.success(t('layout.setting.operatingTitle'));
           })

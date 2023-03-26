@@ -84,7 +84,7 @@ public partial class MicroServiceApplicationsSingleModule
             {
                 builder.AddValidation(options =>
                 {
-                    options.AddAudiences("lingyun-abp-application");
+                    //options.AddAudiences("lingyun-abp-application");
 
                     options.UseLocalServer();
 

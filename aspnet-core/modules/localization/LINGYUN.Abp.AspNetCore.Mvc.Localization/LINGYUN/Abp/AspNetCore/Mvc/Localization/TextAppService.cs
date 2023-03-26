@@ -28,14 +28,10 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
         {
             var resource = _localizationOptions.Resources.GetOrDefault(input.ResourceName);
 
-            IEnumerable<LocalizedString> localizedStrings = new List<LocalizedString>();
             var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
 
             using (CultureHelper.Use(input.CultureName, input.CultureName))
             {
-                localizedStrings = localizer.GetAllStrings(true)
-                    .OrderBy(l => l.Name);
-
                 var result = new TextDto
                 {
                     Key = input.Key,
@@ -96,7 +92,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 
             using (CultureHelper.Use(cultureName, cultureName))
             {
-                localizedStrings = localizer.GetAllStrings(true)
+                localizedStrings = (await localizer.GetAllStringsAsync(true))
                     .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
                     .OrderBy(l => l.Name);
             }
@@ -109,7 +105,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             {
                 using (CultureHelper.Use(targetCultureName, targetCultureName))
                 {
-                    targetLocalizedStrings = localizer.GetAllStrings(true)
+                    targetLocalizedStrings = (await localizer.GetAllStringsAsync(true))
                         .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
                         .OrderBy(l => l.Name);
                 }

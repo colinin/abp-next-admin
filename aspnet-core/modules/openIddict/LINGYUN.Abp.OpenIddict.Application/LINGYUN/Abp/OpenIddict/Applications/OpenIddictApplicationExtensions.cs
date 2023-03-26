@@ -15,7 +15,6 @@ internal static class OpenIddictApplicationExtensions
         Check.NotNull(dto, nameof(dto));
         Check.NotNull(entity, nameof(entity));
 
-        entity.ClientId = dto.ClientId;
         entity.ClientSecret = dto.ClientSecret;
         entity.ConsentType = dto.ConsentType;
         entity.DisplayName = dto.DisplayName;

@@ -23,7 +23,7 @@ export interface OpenIddictScopeDto extends ExtensibleAuditedEntityDto<string> {
   descriptions?: Dictionary<string, string>;
   displayName?: string;
   displayNames?: Dictionary<string, string>;
-  name?: string;
+  name: string;
   properties?: Dictionary<string, string>;
   resources?: string[];
 }

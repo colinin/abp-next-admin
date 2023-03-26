@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using OpenIddict.Abstractions;
 using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -13,31 +14,35 @@ namespace LINGYUN.Abp.OpenIddict.Tokens;
 [Authorize(AbpOpenIddictPermissions.Tokens.Default)]
 public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpenIddictTokenAppService
 {
-    protected IRepository<OpenIddictToken, Guid> Repository { get; }
+    private readonly IOpenIddictTokenManager _tokenManager;
+    private readonly IRepository<OpenIddictToken, Guid> _tokenRepository;
 
-    public OpenIddictTokenAppService(IRepository<OpenIddictToken, Guid> repository)
+    public OpenIddictTokenAppService(
+        IOpenIddictTokenManager tokenManager,
+        IRepository<OpenIddictToken, Guid> tokenRepository)
     {
-        Repository = repository;
+        _tokenManager = tokenManager;
+        _tokenRepository = tokenRepository;
     }
 
     [Authorize(AbpOpenIddictPermissions.Tokens.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        await Repository.DeleteAsync(id);
+        var token = await _tokenRepository.GetAsync(id);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await _tokenManager.DeleteAsync(token.ToModel());
     }
 
     public async virtual Task<OpenIddictTokenDto> GetAsync(Guid id)
     {
-        var scope = await Repository.GetAsync(id);
+        var token = await _tokenRepository.GetAsync(id);
 
-        return scope.ToDto();
+        return token.ToDto();
     }
 
     public async virtual Task<PagedResultDto<OpenIddictTokenDto>> GetListAsync(OpenIddictTokenGetListInput input)
     {
-        var queryable = await Repository.GetQueryableAsync();
+        var queryable = await _tokenRepository.GetQueryableAsync();
         if (input.ClientId.HasValue)
         {
             queryable = queryable.Where(x => x.ApplicationId == input.ClientId);
@@ -81,8 +86,15 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
                 x.Payload.Contains(input.Filter) || x.Properties.Contains(input.Filter) ||
                 x.ReferenceId.Contains(input.ReferenceId));
         }
+
+        var sorting = input.Sorting;
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(OpenIddictToken.CreationTime)} DESC";
+        }
+
         queryable = queryable
-            .OrderBy(input.Sorting ?? $"{nameof(OpenIddictToken.CreationTime)} DESC")
+            .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
 
         var totalCount = await AsyncExecuter.CountAsync(queryable);
