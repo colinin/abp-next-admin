@@ -8,10 +8,6 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 
 public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
 {
-    [Required]
-    [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ClientIdMaxLength))]
-    public string ClientId { get; set; }
-
     public string ClientSecret { get; set; }
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ConsentTypeMaxLength))]

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.OpenIddict.Applications;
 
 [Serializable]
-public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>
+public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string ClientId { get; set; }
     public string ClientSecret { get; set; }
@@ -23,4 +24,5 @@ public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>
     public string Type { get; set; }
     public string ClientUri { get; set; }
     public string LogoUri { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

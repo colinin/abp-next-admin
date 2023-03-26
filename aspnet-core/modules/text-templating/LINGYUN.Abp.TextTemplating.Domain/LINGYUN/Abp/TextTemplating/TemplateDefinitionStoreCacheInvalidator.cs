@@ -25,17 +25,20 @@ public class TemplateDefinitionStoreCacheInvalidator :
     private readonly IClock _clock;
     private readonly IDistributedCache _distributedCache;
     private readonly AbpDistributedCacheOptions _cacheOptions;
+    private readonly AbpTextTemplatingCachingOptions _templatingCachingOptions;
 
     public TemplateDefinitionStoreCacheInvalidator(
         IClock clock, 
         IDistributedCache distributedCache,
         ITemplateDefinitionStoreCache storeCache,
-        IOptions<AbpDistributedCacheOptions> cacheOptions)
+        IOptions<AbpDistributedCacheOptions> cacheOptions,
+        IOptions<AbpTextTemplatingCachingOptions> templatingCachingOptions)
     {
         _storeCache = storeCache;
         _clock = clock;
         _distributedCache = distributedCache;
         _cacheOptions = cacheOptions.Value;
+        _templatingCachingOptions = templatingCachingOptions.Value;
     }
 
     public async virtual Task HandleEventAsync(EntityChangedEventData<TextTemplateDefinition> eventData)
@@ -67,7 +70,7 @@ public class TemplateDefinitionStoreCacheInvalidator :
             await _distributedCache.RemoveAsync(cacheKey);
 
             _storeCache.CacheStamp = Guid.NewGuid().ToString();
-            _storeCache.LastCheckTime = _clock.Now.AddMinutes(-5);
+            _storeCache.LastCheckTime = _clock.Now.Subtract(_templatingCachingOptions.TemplateDefinitionsCacheRefreshInterval);
         }
     }
 

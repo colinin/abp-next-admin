@@ -175,14 +175,16 @@ public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingleto
             localizedStrings ??= new LocalizationDictionaryWithCulture();
             localizedStrings.Clear();
 
-            var currentCultureLocalizedStrings = new LocalizationDictionary();
-
-            foreach (var textRecord in textRecords.Where(x => x.ResourceName == resourceRecord.Name))
+            // 需要按照不同文化聚合
+            foreach (var textRecordByCulture in textRecords.Where(x => x.ResourceName == resourceRecord.Name).GroupBy(x => x.CultureName))
             {
-                currentCultureLocalizedStrings[textRecord.Key] = new LocalizedString(textRecord.Key, textRecord.Value);
+                var currentCultureLocalizedStrings = new LocalizationDictionary();
+                foreach (var textRecord in textRecordByCulture)
+                {
+                    currentCultureLocalizedStrings[textRecord.Key] = new LocalizedString(textRecord.Key, textRecord.Value);
+                }
+                localizedStrings[textRecordByCulture.Key] = currentCultureLocalizedStrings;
             }
-
-            localizedStrings[CultureInfo.CurrentCulture.Name] = currentCultureLocalizedStrings;
 
             LocalizedStrings[resourceRecord.Name] = localizedStrings;
         }

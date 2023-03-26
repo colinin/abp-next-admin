@@ -14,6 +14,7 @@ import { format } from '/@/utils/strings';
 import { AxiosResponse } from 'axios';
 import { isFunction } from '/@/utils/is';
 import { UploadFileParams } from '/#/axios';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 enum Api {
   CreateObject = '/api/oss-management/objects',
@@ -73,7 +74,7 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
   // 已完成大小
   let loadedSize = 0;
   // 返回包装的结果
-  return new Promise<AxiosResponse<void>>(async (resolve, reject) => {
+  return new Promise<AxiosResponse<any>>(async (resolve, reject) => {
     function onPregress(progress: number, res: AxiosResponse) {
       // 回调上传进度
       if (isFunction(event)) {
@@ -84,8 +85,20 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
       }
       if (progress === totalSize) {
         if (!res.data) {
+          let formatUrl = '/api/files/static/{bucket}/p/{path}/{name}';
+          const abpStore = useAbpStoreWithOut();
+          const { currentTenant } = abpStore.getApplication;
+          if (currentTenant.id) {
+            formatUrl = '/api/files/static/t/{tenantId}/{bucket}/p/{path}/{name}';
+          }
+          const path = encodeURIComponent(params.data?.path);
           res.data = {
-            url: format('/api/files/static/{bucket}/p/{path}/{name}', { bucket:  params.data?.bucket, path: params.data?.path, name: fileName }),
+            url: format(formatUrl, {
+              bucket:  params.data?.bucket,
+              tenantId: currentTenant.id,
+              path: path,
+              name: fileName,
+            }),
           };
         }
         resolve(res);

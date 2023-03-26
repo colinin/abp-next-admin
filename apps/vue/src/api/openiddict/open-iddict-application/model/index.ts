@@ -9,7 +9,7 @@ export interface OpenIddictApplicationUpdateDto extends OpenIddictApplicationCre
 }
 
 export interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<string> {
-  clientId?: string;
+  clientId: string;
   clientSecret?: string;
   consentType?: string;
   displayName?: string;

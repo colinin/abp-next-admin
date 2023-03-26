@@ -173,7 +173,7 @@ export const useUserStore = defineStore({
       const abpStore = useAbpStoreWithOut();
       let currentUser = abpStore.getApplication.currentUser;
       //  避免多次请求接口
-      if (userInfo.sub !== currentUser.id) {
+      if (userInfo?.sub !== currentUser.id) {
         await abpStore.initlizeAbpApplication();
         currentUser = abpStore.getApplication.currentUser;
       }
@@ -184,13 +184,13 @@ export const useUserStore = defineStore({
         username: currentUser.userName,
         roles: currentUser.roles,
         // 从 userinfo 端点获取
-        realName: userInfo.nickname,
-        phoneNumber: userInfo.phone_number,
-        phoneNumberConfirmed: userInfo.phone_number_verified === 'True',
-        email: userInfo.email,
-        emailConfirmed: userInfo.email_verified === 'True',
+        realName: userInfo?.nickname,
+        phoneNumber: userInfo?.phone_number,
+        phoneNumberConfirmed: userInfo?.phone_number_verified === 'True',
+        email: userInfo?.email,
+        emailConfirmed: userInfo?.email_verified === 'True',
       };
-      if (userInfo.avatarUrl) {
+      if (userInfo?.avatarUrl) {
         outgoingUserInfo.avatar = formatUrl(userInfo.avatarUrl);
       }
       this.setUserInfo(outgoingUserInfo);

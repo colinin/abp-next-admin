@@ -33,6 +33,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     grant_type: 'password',
     username: params.username,
     password: params.password,
+    scope: 'openid email address phone profile offline_access lingyun-abp-application',
     TwoFactorProvider: params.twoFactorProvider,
     TwoFactorCode: params.twoFactorCode,
   };
@@ -47,6 +48,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     {
       errorMessageMode: mode,
       apiUrl: '/connect',
+      withToken: false,
     },
   );
 }

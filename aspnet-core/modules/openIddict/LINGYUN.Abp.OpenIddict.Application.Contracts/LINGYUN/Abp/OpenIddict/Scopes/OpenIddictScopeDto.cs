@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.OpenIddict.Scopes;
 
 [Serializable]
-public class OpenIddictScopeDto : ExtensibleAuditedEntityDto<Guid>
+public class OpenIddictScopeDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
+    public string ConcurrencyStamp { get; set; }
+
     public string Description { get; set; }
 
     public Dictionary<string, string> Descriptions { get; set; } = new Dictionary<string, string>();

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.OpenIddict.Authorizations;
 
 [Serializable]
-public class OpenIddictAuthorizationDto : ExtensibleAuditedEntityDto<Guid>
+public class OpenIddictAuthorizationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
+    public string ConcurrencyStamp { get; set; }
     public Guid? ApplicationId { get; set; }
     public DateTime? CreationDate { get; set; }
     public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
