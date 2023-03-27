@@ -75,7 +75,6 @@ namespace LY.MicroService.LocalizationManagement
 
             ConfigureDbContext();
             ConfigureLocalization();
-            ConfigureJsonSerializer();
             ConfigreExceptionHandling();
             ConfigureVirtualFileSystem();
             ConfigureFeatureManagement();
@@ -83,6 +82,7 @@ namespace LY.MicroService.LocalizationManagement
             ConfigureAuditing(configuration);
             ConfigureSwagger(context.Services);
             ConfigureMultiTenancy(configuration);
+            ConfigureJsonSerializer(configuration);
             ConfigureCors(context.Services, configuration);
             ConfigureDistributedLocking(context.Services, configuration);
             ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

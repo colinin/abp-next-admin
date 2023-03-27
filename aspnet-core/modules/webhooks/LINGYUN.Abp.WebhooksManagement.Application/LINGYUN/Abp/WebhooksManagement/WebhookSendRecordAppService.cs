@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BackgroundJobs;
@@ -51,20 +52,35 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         await RecordRepository.DeleteManyAsync(sendRecords);
     }
 
+    private class WebhookSendRecordGetListSpecification : Volo.Abp.Specifications.Specification<WebhookSendRecord>
+    {
+        protected WebhookSendRecordGetListInput Filter { get; }
+
+        public WebhookSendRecordGetListSpecification(WebhookSendRecordGetListInput filter)
+        {
+            Filter = filter;
+        }
+
+        public override Expression<Func<WebhookSendRecord, bool>> ToExpression()
+        {
+            Expression<Func<WebhookSendRecord, bool>> expression = _ => true;
+
+            return expression
+                .AndIf(Filter.TenantId.HasValue, x => x.TenantId == Filter.TenantId)
+                .AndIf(Filter.WebhookEventId.HasValue, x => x.WebhookEventId == Filter.WebhookEventId)
+                .AndIf(Filter.SubscriptionId.HasValue, x => x.WebhookSubscriptionId == Filter.SubscriptionId)
+                .AndIf(Filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == Filter.ResponseStatusCode)
+                .AndIf(Filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(Filter.BeginCreationTime) >= 0)
+                .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(Filter.EndCreationTime) <= 0)
+                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Response.Contains(Filter.Filter));
+        }
+    }
+
     public async virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
     {
-        var filter = new WebhookSendRecordFilter
-        {
-            TenantId = input.TenantId,
-            SubscriptionId = input.SubscriptionId,
-            ResponseStatusCode = input.ResponseStatusCode,
-            BeginCreationTime = input.BeginCreationTime,
-            EndCreationTime = input.EndCreationTime,
-            WebhookEventId = input.WebhookEventId,
-            Filter = input.Filter
-        };
-        var totalCount = await RecordRepository.GetCountAsync(filter);
-        var sendRecords = await RecordRepository.GetListAsync(filter,
+        var specification = new WebhookSendRecordGetListSpecification(input);
+        var totalCount = await RecordRepository.GetCountAsync(specification);
+        var sendRecords = await RecordRepository.GetListAsync(specification,
             input.Sorting, input.MaxResultCount, input.SkipCount);
 
         return new PagedResultDto<WebhookSendRecordDto>(totalCount,

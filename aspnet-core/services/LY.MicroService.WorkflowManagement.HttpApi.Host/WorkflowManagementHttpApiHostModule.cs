@@ -102,7 +102,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
 
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -111,6 +110,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);

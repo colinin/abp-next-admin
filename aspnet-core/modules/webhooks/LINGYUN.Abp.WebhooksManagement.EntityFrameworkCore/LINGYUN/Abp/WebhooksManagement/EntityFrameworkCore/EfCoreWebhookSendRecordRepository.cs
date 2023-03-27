@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 
@@ -21,24 +22,31 @@ public class EfCoreWebhookSendRecordRepository :
     }
 
     public async virtual Task<int> GetCountAsync(
-        WebhookSendRecordFilter filter, 
+        ISpecification<WebhookSendRecord> specification, 
         CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter(await GetDbSetAsync(), filter)
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .CountAsync(GetCancellationToken(cancellationToken));
 
     }
 
     public async virtual Task<List<WebhookSendRecord>> GetListAsync(
-        WebhookSendRecordFilter filter, 
-        string sorting = "CreationTime", 
+        ISpecification<WebhookSendRecord> specification, 
+        string sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC", 
         int maxResultCount = 10, 
         int skipCount = 10,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter((await GetDbSetAsync()).IncludeDetails(includeDetails), filter)
-            .OrderBy(sorting ?? $"{nameof(WebhookSendRecord.CreationTime)} DESC")
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC";
+        }
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(specification.ToExpression())
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

@@ -117,7 +117,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
 
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTextTemplating();
@@ -127,6 +126,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

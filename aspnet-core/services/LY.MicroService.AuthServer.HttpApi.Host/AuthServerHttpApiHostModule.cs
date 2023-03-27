@@ -81,7 +81,6 @@ public partial class AuthServerHttpApiHostModule : AbpModule
 
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
@@ -91,6 +90,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

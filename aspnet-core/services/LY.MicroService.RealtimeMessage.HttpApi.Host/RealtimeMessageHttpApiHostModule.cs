@@ -124,7 +124,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
-        ConfigureJsonSerializer();
         ConfigureBackgroundTasks();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -133,6 +132,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

@@ -9,6 +9,9 @@ namespace LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 [ConnectionStringName(WebhooksManagementDbProperties.ConnectionStringName)]
 public class WebhooksManagementDbContext : AbpDbContext<WebhooksManagementDbContext>, IWebhooksManagementDbContext
 {
+    public DbSet<WebhookSendRecord> WebhookSendRecord { get; set; }
+    public DbSet<WebhookGroupDefinitionRecord> WebhookGroupDefinitionRecords { get; set; }
+    public DbSet<WebhookDefinitionRecord> WebhookDefinitionRecords { get; set; }
     public WebhooksManagementDbContext(
         DbContextOptions<WebhooksManagementDbContext> options) : base(options)
     {
