@@ -278,7 +278,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
-        ConfigureJsonSerializer();
         ConfigureTextTemplating();
         ConfigureBackgroundTasks();
         ConfigureFeatureManagement();
@@ -290,6 +289,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

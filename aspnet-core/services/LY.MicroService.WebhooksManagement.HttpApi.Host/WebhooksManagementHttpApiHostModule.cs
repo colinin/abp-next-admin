@@ -98,7 +98,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureWrapper();
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
@@ -107,6 +106,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureWebhooks(context.Services);
+        ConfigureJsonSerializer(configuration);
         ConfigureBackgroundTasks(context.Services);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);

@@ -97,7 +97,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
 
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -106,6 +105,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureJsonSerializer(configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

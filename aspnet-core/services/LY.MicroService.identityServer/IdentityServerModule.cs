@@ -98,7 +98,6 @@ public partial class IdentityServerModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDbContext();
-        ConfigureJsonSerializer();
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
@@ -109,6 +108,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureMvcUiTheme();
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

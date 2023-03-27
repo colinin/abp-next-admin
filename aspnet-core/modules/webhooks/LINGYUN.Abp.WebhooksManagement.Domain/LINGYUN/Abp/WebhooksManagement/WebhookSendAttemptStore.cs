@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -14,6 +15,24 @@ namespace LINGYUN.Abp.WebhooksManagement;
 
 public class WebhookSendAttemptStore : DomainService, IWebhookSendAttemptStore
 {
+    private class WebhookSendRecordSpecification : Volo.Abp.Specifications.Specification<WebhookSendRecord>
+    {
+        protected Guid SubscriptionId { get; }
+
+        public WebhookSendRecordSpecification(
+            Guid subscriptionId)
+        {
+            SubscriptionId = subscriptionId;
+        }
+
+        public override Expression<Func<WebhookSendRecord, bool>> ToExpression()
+        {
+            Expression<Func<WebhookSendRecord, bool>> expression = _ => true;
+
+            return expression.And(x => x.WebhookSubscriptionId == SubscriptionId);
+        }
+    }
+
     protected IObjectMapper<WebhooksManagementDomainModule> ObjectMapper => LazyServiceProvider.LazyGetRequiredService<IObjectMapper<WebhooksManagementDomainModule>>();
 
     protected IWebhookSendRecordRepository WebhookSendAttemptRepository { get; }
@@ -33,14 +52,11 @@ public class WebhookSendAttemptStore : DomainService, IWebhookSendAttemptStore
     {
         using (CurrentTenant.Change(tenantId))
         {
-            var filter = new WebhookSendRecordFilter
-            {
-                SubscriptionId = subscriptionId,
-            };
-            var totalCount = await WebhookSendAttemptRepository.GetCountAsync(filter);
+            var specification = new WebhookSendRecordSpecification(subscriptionId);
+            var totalCount = await WebhookSendAttemptRepository.GetCountAsync(specification);
 
             var list = await WebhookSendAttemptRepository.GetListAsync(
-                filter,
+                specification,
                 maxResultCount: maxResultCount,
                 skipCount: skipCount);
 

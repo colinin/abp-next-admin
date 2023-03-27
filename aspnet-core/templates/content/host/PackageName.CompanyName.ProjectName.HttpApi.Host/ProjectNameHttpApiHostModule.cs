@@ -81,13 +81,13 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 
         ConfigureWrapper();
         ConfigureLocalization();
-        ConfigureJsonSerializer();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureJsonSerializer(configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

@@ -106,14 +106,16 @@ public partial class ProjectNameHttpApiHostModule
         });
     }
 
-    private void ConfigureJsonSerializer()
+    private void ConfigureJsonSerializer(IConfiguration configuration)
     {
-        // 解决某些不支持类型的序列化
+        // 统一时间日期格式
         Configure<AbpJsonOptions>(options =>
         {
-            options.OutputDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-            options.InputDateTimeFormats.AddIfNotContains("yyyy-MM-dd HH:mm:ss");
-            options.InputDateTimeFormats.AddIfNotContains("yyyy-MM-ddTHH:mm:ss");
+            var jsonConfiguration = configuration.GetSection("Json");
+            if (jsonConfiguration.Exists())
+            {
+                jsonConfiguration.Bind(options);
+            }
         });
         // 中文序列化的编码问题
         Configure<AbpSystemTextJsonSerializerOptions>(options =>

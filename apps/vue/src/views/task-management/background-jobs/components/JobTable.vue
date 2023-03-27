@@ -72,7 +72,7 @@
               {
                 auth: 'TaskManagement.BackgroundJobs.Pause',
                 label: L('BackgroundJobs:Pause'),
-                ifShow: [JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
+                ifShow: [JobStatus.Queuing, JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
                 onClick: handlePause.bind(null, record),
               },
               {
@@ -84,7 +84,7 @@
               {
                 auth: 'TaskManagement.BackgroundJobs.Trigger',
                 label: L('BackgroundJobs:Trigger'),
-                ifShow: [JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(
+                ifShow: [JobStatus.Queuing, JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(
                   record.status,
                 ),
                 onClick: handleTrigger.bind(null, record),

@@ -111,7 +111,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
-        ConfigureJsonSerializer();
         ConfigreExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
@@ -119,6 +118,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
