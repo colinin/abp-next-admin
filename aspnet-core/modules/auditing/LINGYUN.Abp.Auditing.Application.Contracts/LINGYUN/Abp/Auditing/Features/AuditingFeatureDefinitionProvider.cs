@@ -33,6 +33,13 @@ namespace LINGYUN.Abp.Auditing.Features
                 description: L("Features:Description:SecurityLog"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator())
                 );
+            loggingFeature.CreateChild(
+                name: AuditingFeatureNames.Logging.SystemLog,
+                defaultValue: true.ToString(),
+                displayName: L("Features:DisplayName:SystemLog"),
+                description: L("Features:Description:SystemLog"),
+                valueType: new ToggleStringValueType(new BooleanValueValidator())
+                );
         }
 
         protected LocalizableString L(string name)
