@@ -10,6 +10,8 @@
     "Features:Description:AuditLog": "Whether to enable audit logging",
     "Features:DisplayName:SecurityLog": "Security log",
     "Features:Description:SecurityLog": "Whether to enable security logging",
+    "Features:DisplayName:SystemLog": "System log",
+    "Features:Description:SystemLog": "Whether to enable system logging",
     "SecurityLog": "Security log",
     "AuditLog": "Audit log",
     "Logging": "System Log",
