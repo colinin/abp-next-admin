@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Elsa.Server.Api" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 

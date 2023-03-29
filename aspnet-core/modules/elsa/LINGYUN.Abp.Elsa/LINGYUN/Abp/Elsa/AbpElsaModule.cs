@@ -1,8 +1,10 @@
 ﻿using Elsa;
+using Elsa.Mapping;
 using Elsa.Services;
 using LINGYUN.Abp.Elsa.Localization;
 using LINGYUN.Abp.Elsa.Scripting.JavaScript;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Features;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -13,6 +15,7 @@ using ElsaOptionsBuilder = Elsa.Options.ElsaOptionsBuilder;
 namespace LINGYUN.Abp.Elsa;
 
 [DependsOn(
+    typeof(AbpAutoMapperModule),
     typeof(AbpFeaturesModule),
     typeof(AbpThreadingModule),
     typeof(AbpJsonModule))]
@@ -48,6 +51,15 @@ public class AbpElsaModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources.Add<ElsaResource>();
+        });
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<NodaTimeProfile>(validate: false);
+            options.AddProfile<CloningProfile>(validate: false);
+            options.AddProfile<ExceptionProfile>(validate: false);
+
+            options.AddProfile<AbpElsaAutoMapperProfile>(validate: false);
         });
     }
 }
