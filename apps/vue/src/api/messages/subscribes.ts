@@ -3,9 +3,9 @@ import { UserSubscreNotificationListResult } from './model/subscribesModel';
 import { format } from '/@/utils/strings';
 
 enum Api {
-  GetAll = '/api/my-subscribes/all',
-  Subscribe = '/api/my-subscribes',
-  UnSubscribe = '/api/my-subscribes?name={name}',
+  GetAll = '/api/notifications/my-subscribes/all',
+  Subscribe = '/api/notifications/my-subscribes',
+  UnSubscribe = '/api/notifications/my-subscribes?name={name}',
 }
 
 export const getAll = () => {
