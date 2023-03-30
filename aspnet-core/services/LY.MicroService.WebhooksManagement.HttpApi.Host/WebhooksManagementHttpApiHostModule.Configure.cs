@@ -139,8 +139,12 @@ public partial class WebhooksManagementHttpApiHostModule
                 job =>
                 {
                     job.NodeName = ApplicationName;
+                    // 需要间隔时长控制
+                    job.Interval = 10;
                     job.MaxCount = webhooksOptions.MaxSendAttemptCount;
                     job.MaxTryCount = webhooksOptions.MaxSendAttemptCount;
+                    // 需要锁定作业
+                    job.LockTimeOut = webhooksOptions.TimeoutDuration.TotalSeconds.To<int>();
                 });
             //options.JobDispatcherSelectors.AddNamespace(
             //    "LINGYUN.Abp.Webhooks.BackgroundJobs",

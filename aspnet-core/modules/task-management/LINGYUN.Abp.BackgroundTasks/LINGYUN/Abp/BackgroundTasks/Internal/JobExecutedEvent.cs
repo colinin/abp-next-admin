@@ -34,7 +34,6 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             // 任务异常后可重试
             if (context.EventData.Exception != null)
             {
-                job.TryCount += 1;
                 job.IsAbandoned = false;
                 job.Result = GetExceptionMessage(context.EventData.Exception);
 
@@ -70,8 +69,10 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Status = JobStatus.Stopped;
                     job.IsAbandoned = true;
                     job.NextRunTime = null;
-                    await RemoveJobAsync(context, job, context.EventData.CancellationToken);
+                    await RemoveJobQueueAsync(context, job, context.EventData.CancellationToken);
                 }
+
+                job.TryCount += 1;
             }
             else
             {
@@ -97,7 +98,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
                     job.Status = JobStatus.Completed;
                     job.NextRunTime = null;
 
-                    await RemoveJobAsync(context, job, context.EventData.CancellationToken);
+                    await RemoveJobQueueAsync(context, job, context.EventData.CancellationToken);
                 }
             }
 
@@ -105,7 +106,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
         }
     }
 
-    private async Task RemoveJobAsync(JobEventContext context, JobInfo jobInfo, CancellationToken cancellationToken = default)
+    private async Task RemoveJobQueueAsync(JobEventContext context, JobInfo jobInfo, CancellationToken cancellationToken = default)
     {
         var jobScheduler = context.ServiceProvider.GetRequiredService<IJobScheduler>();
         await jobScheduler.RemoveAsync(jobInfo, cancellationToken);
