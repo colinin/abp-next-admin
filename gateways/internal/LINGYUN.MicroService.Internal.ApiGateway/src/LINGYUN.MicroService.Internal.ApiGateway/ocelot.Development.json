@@ -1215,7 +1215,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/my-subscribes",
+      "DownstreamPathTemplate": "/api/notifications/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1223,175 +1223,7 @@
           "Port": 30020
         }
       ],
-      "UpstreamPathTemplate": "/api/my-subscribes",
-      "UpstreamHttpMethod": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 100
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      },
-      "Priority": 99
-    },
-    {
-      "DownstreamPathTemplate": "/api/my-subscribes/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30020
-        }
-      ],
-      "UpstreamPathTemplate": "/api/my-subscribes/{everything}",
-      "UpstreamHttpMethod": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 100
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/my-subscribes/all",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30020
-        }
-      ],
-      "UpstreamPathTemplate": "/api/my-subscribes/all",
-      "UpstreamHttpMethod": [
-        "GET"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 100
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      },
-      "Priority": 99,
-      "Key": "my-subscribes"
-    },
-    {
-      "DownstreamPathTemplate": "/api/notifications/notifilers/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30020
-        }
-      ],
-      "UpstreamPathTemplate": "/api/notifications/notifilers/{everything}",
-      "UpstreamHttpMethod": [
-        "GET",
-        "POST"
-      ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 100
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/notifications/my-notifilers",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30020
-        }
-      ],
-      "UpstreamPathTemplate": "/api/notifications/my-notifilers",
-      "UpstreamHttpMethod": [ "GET" ],
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 100
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 10,
-        "DurationOfBreak": 1000,
-        "TimeoutValue": 10000
-      },
-      "HttpHandlerOptions": {
-        "UseTracing": true
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/notifications/my-notifilers/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "127.0.0.1",
-          "Port": 30020
-        }
-      ],
-      "UpstreamPathTemplate": "/api/notifications/my-notifilers/{id}",
+      "UpstreamPathTemplate": "/api/notifications/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
@@ -2056,14 +1888,6 @@
         "setting-current-user"
       ],
       "UpstreamPathTemplate": "/api/setting-management/settings/by-current-user",
-      "Aggregator": "AbpResponseMergeAggregator",
-      "Priority": 99
-    },
-    {
-      "RouteKeys": [
-        "my-subscribes"
-      ],
-      "UpstreamPathTemplate": "/api/my-subscribes/assignables-notifilers",
       "Aggregator": "AbpResponseMergeAggregator",
       "Priority": 99
     }
