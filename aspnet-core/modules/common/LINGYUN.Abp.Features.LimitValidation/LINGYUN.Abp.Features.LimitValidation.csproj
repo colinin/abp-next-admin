@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

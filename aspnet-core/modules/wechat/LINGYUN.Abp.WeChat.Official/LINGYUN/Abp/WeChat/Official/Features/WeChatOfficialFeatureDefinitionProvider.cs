@@ -12,18 +12,14 @@ namespace LINGYUN.Abp.WeChat.Official.Features
         {
             var group = context.GetGroupOrNull(WeChatFeatures.GroupName);
 
-            var official = group.AddFeature(
-                name: WeChatOfficialFeatures.GroupName,
-                displayName: L("Features:WeChat.Official"),
-                description: L("Features:WeChat.OfficialDesc"));
-
-            official.CreateChild(
+            var officialEnableFeature = group.AddFeature(
                 name: WeChatOfficialFeatures.Enable,
                 defaultValue: true.ToString(),
                 displayName: L("Features:WeChat.Official.Enable"),
                 description: L("Features:WeChat.Official.EnableDesc"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
-            official.CreateChild(
+
+            officialEnableFeature.CreateChild(
                 name: WeChatOfficialFeatures.EnableAuthorization,
                 defaultValue: true.ToString(),
                 displayName: L("Features:WeChat.Official.EnableAuthorization"),

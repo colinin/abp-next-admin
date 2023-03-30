@@ -12,40 +12,36 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
             name: PushPlusFeatureNames.GroupName,
             displayName: L("Features:PushPlus"));
 
-        group.AddFeature(
+       var pushPlusMessageEnableFeature = group.AddFeature(
             name: PushPlusFeatureNames.Message.Enable,
             defaultValue: "false",
             displayName: L("Features:MessageEnable"),
             description: L("Features:MessageEnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
-        CreateWeChatChannelFeature(group);
-        CreateWeWorkChannelFeature(group);
-        CreateWebhookChannelFeature(group);
-        CreateEmailChannelFeature(group);
-        CreateSmsChannelFeature(group);
+        CreateWeChatChannelFeature(pushPlusMessageEnableFeature);
+        CreateWeWorkChannelFeature(pushPlusMessageEnableFeature);
+        CreateWebhookChannelFeature(pushPlusMessageEnableFeature);
+        CreateEmailChannelFeature(pushPlusMessageEnableFeature);
+        CreateSmsChannelFeature(pushPlusMessageEnableFeature);
     }
 
     private static void CreateWeChatChannelFeature(
-        FeatureGroupDefinition group)
+        FeatureDefinition pushPlusMessageEnableFeature)
     {
-        var weChatChannel = group.AddFeature(
-            name: PushPlusFeatureNames.Channel.WeChat.GroupName,
-            displayName: L("Features:Channel.WeChat"),
-            description: L("Features:Channel.WeChat"));
-        weChatChannel.CreateChild(
+        var weChatChannelEnableFeature = pushPlusMessageEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeChat.Enable,
             defaultValue: "false",
             displayName: L("Features:Channel.WeChat.Enable"),
             description: L("Features:Channel.WeChat.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        weChatChannel.CreateChild(
+        weChatChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeChat.SendLimit,
             defaultValue: "200",
             displayName: L("Features:Channel.WeChat.SendLimit"),
             description: L("Features:Channel.WeChat.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000)));
-        weChatChannel.CreateChild(
+        weChatChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeChat.SendLimitInterval,
             defaultValue: "1",
             displayName: L("Features:Channel.WeChat.SendLimitInterval"),
@@ -54,25 +50,21 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 
     private static void CreateWeWorkChannelFeature(
-        FeatureGroupDefinition group)
+        FeatureDefinition pushPlusMessageEnableFeature)
     {
-        var weWorkChannel = group.AddFeature(
-            name: PushPlusFeatureNames.Channel.WeWork.GroupName,
-            displayName: L("Features:Channel.WeWork"),
-            description: L("Features:Channel.WeWork"));
-        weWorkChannel.CreateChild(
+        var weWorkChannelEnableFeature = pushPlusMessageEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeWork.Enable,
             defaultValue: "false",
             displayName: L("Features:Channel.WeWork.Enable"),
             description: L("Features:Channel.WeWork.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        weWorkChannel.CreateChild(
+        weWorkChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeWork.SendLimit,
             defaultValue: "200",
             displayName: L("Features:Channel.WeWork.SendLimit"),
             description: L("Features:Channel.WeWork.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 10000)));
-        weWorkChannel.CreateChild(
+        weWorkChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.WeWork.SendLimitInterval,
             defaultValue: "1",
             displayName: L("Features:Channel.WeWork.SendLimitInterval"),
@@ -81,25 +73,21 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 
     private static void CreateWebhookChannelFeature(
-        FeatureGroupDefinition group)
+        FeatureDefinition pushPlusMessageEnableFeature)
     {
-        var webhookChannel = group.AddFeature(
-            name: PushPlusFeatureNames.Channel.Webhook.GroupName,
-            displayName: L("Features:Channel.Webhook"),
-            description: L("Features:Channel.Webhook"));
-        webhookChannel.CreateChild(
+        var webhookChannelEnableFeatuer = pushPlusMessageEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Webhook.Enable,
             defaultValue: "false",
             displayName: L("Features:Channel.Webhook.Enable"),
             description: L("Features:Channel.Webhook.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        webhookChannel.CreateChild(
+        webhookChannelEnableFeatuer.CreateChild(
             name: PushPlusFeatureNames.Channel.Webhook.SendLimit,
             defaultValue: "200",
             displayName: L("Features:Channel.Webhook.SendLimit"),
             description: L("Features:Channel.Webhook.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 10000)));
-        webhookChannel.CreateChild(
+        webhookChannelEnableFeatuer.CreateChild(
             name: PushPlusFeatureNames.Channel.Webhook.SendLimitInterval,
             defaultValue: "1",
             displayName: L("Features:Channel.Webhook.SendLimitInterval"),
@@ -108,25 +96,21 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 
     private static void CreateEmailChannelFeature(
-        FeatureGroupDefinition group)
+        FeatureDefinition pushPlusMessageEnableFeature)
     {
-        var emailChannel = group.AddFeature(
-            name: PushPlusFeatureNames.Channel.Email.GroupName,
-            displayName: L("Features:Channel.Email"),
-            description: L("Features:Channel.Email"));
-        emailChannel.CreateChild(
+        var emailChannelEnableFeature = pushPlusMessageEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Email.Enable,
             defaultValue: "false",
             displayName: L("Features:Channel.Email.Enable"),
             description: L("Features:Channel.Email.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        emailChannel.CreateChild(
+        emailChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Email.SendLimit,
             defaultValue: "200",
             displayName: L("Features:Channel.Email.SendLimit"),
             description: L("Features:Channel.Email.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000)));
-        emailChannel.CreateChild(
+        emailChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Email.SendLimitInterval,
             defaultValue: "1",
             displayName: L("Features:Channel.Email.SendLimitInterval"),
@@ -135,25 +119,21 @@ public class PushPlusFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 
     private static void CreateSmsChannelFeature(
-        FeatureGroupDefinition group)
+        FeatureDefinition pushPlusMessageEnableFeature)
     {
-        var smsChannel = group.AddFeature(
-            name: PushPlusFeatureNames.Channel.Sms.GroupName,
-            displayName: L("Features:Channel.Sms"),
-            description: L("Features:Channel.Sms"));
-        smsChannel.CreateChild(
+        var smsChannelEnableFeature = pushPlusMessageEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Sms.Enable,
             defaultValue: "false",
             displayName: L("Features:Channel.Sms.Enable"),
             description: L("Features:Channel.Sms.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        smsChannel.CreateChild(
+        smsChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Sms.SendLimit,
             defaultValue: "200",
             displayName: L("Features:Channel.Sms.SendLimit"),
             description: L("Features:Channel.Sms.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000)));
-        smsChannel.CreateChild(
+        smsChannelEnableFeature.CreateChild(
             name: PushPlusFeatureNames.Channel.Sms.SendLimitInterval,
             defaultValue: "1",
             displayName: L("Features:Channel.Sms.SendLimitInterval"),

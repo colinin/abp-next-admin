@@ -80,7 +80,7 @@ public class YouProjectModule : AbpModule
     {
         Configure<AbpFeaturesLimitValidationOptions>(options =>
         {
-            options.MapEffectPolicy(LimitPolicy.Minute, (time) => return 60;); // 表示不管多少分钟(time),都只会限制60秒
+            options.MapEffectPolicy(LimitPolicy.Minute, (now, tick) => return 60;); // 表示不管多少分钟(time),都只会限制60秒
          });
     }
 }

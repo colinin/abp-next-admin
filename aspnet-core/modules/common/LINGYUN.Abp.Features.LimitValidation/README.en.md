@@ -80,7 +80,7 @@ public class YouProjectModule : AbpModule
     {
         Configure<AbpFeaturesLimitValidationOptions>(options =>
         {
-            options.MapEffectPolicy(LimitPolicy.Minute, (time) => return 60;); // Means that no matter how many minutes (time), only 60 seconds will be limited
+            options.MapEffectPolicy(LimitPolicy.Minute, (now, tick) => return 60;); // Means that no matter how many minutes (time), only 60 seconds will be limited
          });
     }
 }

@@ -11,6 +11,8 @@
         public class OssObject
         {
             public const string Default = GroupName + ".OssObject";
+
+            public const string Enable = Default + ".Enable";
             /// <summary>
             /// 下载文件功能
             /// </summary>

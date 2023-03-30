@@ -7,6 +7,8 @@
         {
             public const string Default = GroupName + ".Logging";
 
+            public const string Enable = Default + ".Enable";
+
             public const string AuditLog = Default + ".AuditLog";
 
             public const string SecurityLog = Default + ".SecurityLog";

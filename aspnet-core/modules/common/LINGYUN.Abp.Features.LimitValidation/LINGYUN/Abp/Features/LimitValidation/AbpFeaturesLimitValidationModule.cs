@@ -3,11 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Features.LimitValidation
 {
-    [DependsOn(typeof(AbpFeaturesModule))]
+    [DependsOn(
+        typeof(AbpTimingModule),
+        typeof(AbpFeaturesModule))]
     public class AbpFeaturesLimitValidationModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

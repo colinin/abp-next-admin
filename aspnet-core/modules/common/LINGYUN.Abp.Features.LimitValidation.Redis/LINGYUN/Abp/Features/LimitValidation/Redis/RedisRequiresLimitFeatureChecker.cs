@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Features.LimitValidation.Redis
@@ -26,6 +27,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
         private IDatabaseAsync _redis;
         private IServer _server;
 
+        private readonly IClock _clock;
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IRedisLimitFeatureNamingNormalizer _featureNamingNormalizer;
         private readonly AbpRedisRequiresLimitFeatureOptions _options;
@@ -34,6 +36,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
         private readonly SemaphoreSlim _connectionLock = new SemaphoreSlim(initialCount: 1, maxCount: 1);
 
         public RedisRequiresLimitFeatureChecker(
+            IClock clock,
             IVirtualFileProvider virtualFileProvider,
             IRedisLimitFeatureNamingNormalizer featureNamingNormalizer,
             IOptions<AbpRedisRequiresLimitFeatureOptions> optionsAccessor)
@@ -44,8 +47,9 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             }
 
             _options = optionsAccessor.Value;
-            _virtualFileProvider = virtualFileProvider;
-            _featureNamingNormalizer = featureNamingNormalizer;
+            _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            _virtualFileProvider = virtualFileProvider ?? throw new ArgumentNullException(nameof(virtualFileProvider));
+            _featureNamingNormalizer = featureNamingNormalizer ?? throw new ArgumentNullException(nameof(featureNamingNormalizer));
 
             _instance = _options.InstanceName ?? string.Empty;
 
@@ -81,7 +85,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             }
 
             var keys = new RedisKey[1] { NormalizeKey(context) };
-            var values = new RedisValue[] { context.GetEffectTicks() };
+            var values = new RedisValue[] { context.GetEffectTicks(_clock.Now) };
             var result = await _redis.ScriptEvaluateAsync(luaSha1, keys, values);
             if (result.Type == ResultType.Error)
             {
