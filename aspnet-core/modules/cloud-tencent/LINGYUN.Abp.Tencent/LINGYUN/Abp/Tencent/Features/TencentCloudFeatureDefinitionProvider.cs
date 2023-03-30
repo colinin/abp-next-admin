@@ -11,30 +11,20 @@ namespace LINGYUN.Abp.Tencent.Features
         {
             var group = context.AddGroup(TencentCloudFeatures.GroupName, L("Features:TencentCloud"));
 
-            var sms = group.AddFeature(
-                   name: TencentCloudFeatures.Sms.GroupName,
-                   displayName: L("Features:TencentSms"),
-                   description: L("Features:TencentSms"));
-
-            sms.CreateChild(
+            var smsEnableFeature = group.AddFeature(
                 name: TencentCloudFeatures.Sms.Enable,
                 defaultValue: true.ToString(),
                 displayName: L("Features:TencentSmsEnable"),
                 description: L("Features:TencentSmsEnable.Desc"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
-            var blobStoring = group.AddFeature(
-                   name: TencentCloudFeatures.BlobStoring.GroupName,
-                   displayName: L("Features:TencentBlobStoring"),
-                   description: L("Features:TencentBlobStoring"));
-
-            blobStoring.CreateChild(
+            var blobStoringEnableFeature = group.AddFeature(
                 name: TencentCloudFeatures.BlobStoring.Enable,
                 defaultValue: true.ToString(),
                 displayName: L("Features:TencentBlobStoringEnable"),
                 description: L("Features:TencentBlobStoringEnable.Desc"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
-            blobStoring.CreateChild(
+            blobStoringEnableFeature.CreateChild(
                 name: TencentCloudFeatures.BlobStoring.MaximumStreamSize,
                 defaultValue: "0",
                 displayName: L("Features:TencentBlobStoringMaximumStreamSize"),

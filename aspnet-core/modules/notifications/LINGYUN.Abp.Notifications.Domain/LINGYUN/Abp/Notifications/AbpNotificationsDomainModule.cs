@@ -29,6 +29,11 @@ public class AbpNotificationsDomainModule : AbpModule
                 options.IsDynamicNotificationsStoreEnabled = false;
             });
         }
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpNotificationsDomainAutoMapperProfile>(validate: true);
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.Features.LimitValidation
+﻿using System;
+
+namespace LINGYUN.Abp.Features.LimitValidation
 {
     public class RequiresLimitFeatureContext
     {
@@ -38,9 +40,9 @@
         /// 获取生效时间跨度,单位:s
         /// </summary>
         /// <returns></returns>
-        public long GetEffectTicks()
+        public long GetEffectTicks(DateTime now)
         {
-            return Options.EffectPolicys[Policy](Interval);
+            return Options.EffectPolicys[Policy](now, Interval);
         }
     }
 }

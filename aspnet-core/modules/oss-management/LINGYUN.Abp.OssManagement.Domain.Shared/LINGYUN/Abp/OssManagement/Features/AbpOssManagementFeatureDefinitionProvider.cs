@@ -20,45 +20,45 @@ namespace LINGYUN.Abp.OssManagement.Features
                 description: L("Features:Description:PublicAccess"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
-            var ossFeature = featureGroup.AddFeature(
-                name: AbpOssManagementFeatureNames.OssObject.Default,
+            var ossDefaultFeature = featureGroup.AddFeature(
+                name: AbpOssManagementFeatureNames.OssObject.Enable,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:OssObject"),
                 description: L("Features:Description:OssObject"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.DownloadFile, 
                 defaultValue: false.ToString(),
                 displayName: L("Features:DisplayName:DownloadFile"),
                 description: L("Features:Description:DownloadFile"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.DownloadLimit,
                 defaultValue: "1000",
                 displayName: L("Features:DisplayName:DownloadLimit"),
                 description: L("Features:Description:DownloadLimit"),
                 valueType: new FreeTextStringValueType(new NumericValueValidator(0, 100_0000))); // 上限100万次调用
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.DownloadInterval,
                 defaultValue: "1",
                 displayName: L("Features:DisplayName:DownloadInterval"),
                 description: L("Features:Description:DownloadInterval"),
                 valueType: new FreeTextStringValueType(new NumericValueValidator(1, 12))); // 上限12月
 
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.UploadFile,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:UploadFile"),
                 description: L("Features:Description:UploadFile"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.UploadLimit,
                 defaultValue: "1000",
                 displayName: L("Features:DisplayName:UploadLimit"),
                 description: L("Features:Description:UploadLimit"),
                 valueType: new FreeTextStringValueType(new NumericValueValidator(0, 100_0000))); // 上限100万次调用
-            ossFeature.CreateChild(
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.UploadInterval,
                 defaultValue: "1",
                 displayName: L("Features:DisplayName:UploadInterval"),

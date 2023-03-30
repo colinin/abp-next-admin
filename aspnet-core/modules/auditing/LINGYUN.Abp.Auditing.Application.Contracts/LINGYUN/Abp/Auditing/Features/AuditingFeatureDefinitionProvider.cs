@@ -13,27 +13,27 @@ namespace LINGYUN.Abp.Auditing.Features
                 name: AuditingFeatureNames.GroupName,
                 displayName: L("Features:Auditing"));
 
-            var loggingFeature = auditingGroup.AddFeature(
-                name: AuditingFeatureNames.Logging.Default,
+            var loggingEnableFeature = auditingGroup.AddFeature(
+                name: AuditingFeatureNames.Logging.Enable,
                 displayName: L("Features:Auditing"),
-                description: L("Features:Auditing")
+                description: L("Features:AuditingDesc")
                 );
 
-            loggingFeature.CreateChild(
+            loggingEnableFeature.CreateChild(
                 name: AuditingFeatureNames.Logging.AuditLog,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:AuditLog"),
                 description: L("Features:Description:AuditLog"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator())
                 );
-            loggingFeature.CreateChild(
+            loggingEnableFeature.CreateChild(
                 name: AuditingFeatureNames.Logging.SecurityLog,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:SecurityLog"),
                 description: L("Features:Description:SecurityLog"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator())
                 );
-            loggingFeature.CreateChild(
+            loggingEnableFeature.CreateChild(
                 name: AuditingFeatureNames.Logging.SystemLog,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:SystemLog"),
