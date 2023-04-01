@@ -21,10 +21,17 @@ namespace LINGYUN.Abp.OssManagement.Features
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
             var ossDefaultFeature = featureGroup.AddFeature(
-                name: AbpOssManagementFeatureNames.OssObject.Enable,
+                name: AbpOssManagementFeatureNames.OssObject.Default,
                 defaultValue: true.ToString(),
                 displayName: L("Features:DisplayName:OssObject"),
                 description: L("Features:Description:OssObject"),
+                valueType: new ToggleStringValueType(new BooleanValueValidator()));
+
+            ossDefaultFeature.CreateChild(
+                name: AbpOssManagementFeatureNames.OssObject.Enable,
+                defaultValue: false.ToString(),
+                displayName: L("Features:DisplayName:Enable"),
+                description: L("Features:Description:Enable"),
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
             ossDefaultFeature.CreateChild(
