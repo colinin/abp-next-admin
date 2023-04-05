@@ -1,0 +1,88 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+# define multiple services here
+services:
+- name: backend-admin-httpapi
+  project: aspnet-core\services\LY.MicroService.BackendAdmin.HttpApi.Host\LY.MicroService.BackendAdmin.HttpApi.Host.csproj # msbuild project path (relative to this file)
+  bindings:
+    - protocol: http
+      port: 30010
+  # executable: app.exe # path to an executable (relative to this file)
+  # args: --arg1=3 # arguments to pass to the process
+  # replicas: 5 # number of times to launch the application
+  # env: # array of environment variables
+  #  - name: key
+  #    value: value
+  # bindings: # optional array of bindings (ports, connection strings)
+    # - port: 8080 # number port of the binding
+#- name: auth-server
+#  project: aspnet-core\services\LY.MicroService.AuthServer\LY.MicroService.AuthServer.csproj
+#  bindings:
+#    - protocol: http
+#      port: 44385
+#- name: auth-server-httpapi
+#  project: aspnet-core\services\LY.MicroService.AuthServer.HttpApi.Host\LY.MicroService.AuthServer.HttpApi.Host.csproj
+#  bindings:
+#    - protocol: http
+#      port: 30015
+- name: identity-server
+  project: aspnet-core\services\LY.MicroService.IdentityServer\LY.MicroService.IdentityServer.csproj
+  bindings:
+    - protocol: http
+      port: 44385
+- name: identity-server-httpapi
+  project: aspnet-core\services\LY.MicroService.IdentityServer.HttpApi.Host\LY.MicroService.IdentityServer.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 30015
+- name: localization-management-httpApi
+  project: aspnet-core\services\LY.MicroService.LocalizationManagement.HttpApi.Host\LY.MicroService.LocalizationManagement.HttpApi.Host.csproj 
+  bindings:
+    - protocol: http
+      port: 30030  
+- name: platform-management-httpApi
+  project: aspnet-core\services\LY.MicroService.PlatformManagement.HttpApi.Host\LY.MicroService.PlatformManagement.HttpApi.Host.csproj    
+  bindings:
+    - protocol: http
+      port: 30025 
+- name: realtime-message-httpApi
+  project: aspnet-core\services\LY.MicroService.RealtimeMessage.HttpApi.Host\LY.MicroService.RealtimeMessage.HttpApi.Host.csproj  
+  bindings:
+  - protocol: http
+    port: 30020 
+- name: task-management-httpApi
+  project: aspnet-core\services\LY.MicroService.TaskManagement.HttpApi.Host\LY.MicroService.TaskManagement.HttpApi.Host.csproj  
+  bindings:
+  - protocol: http
+    port: 30040 
+- name: webhook-management-httpApi
+  project: aspnet-core\services\LY.MicroService.WebhooksManagement.HttpApi.Host\LY.MicroService.WebhooksManagement.HttpApi.Host.csproj  
+  bindings:
+  - protocol: http
+    port: 30045 
+- name: workflow-management-httpApi
+  project: aspnet-core\services\LY.MicroService.WorkflowManagement.HttpApi.Host\LY.MicroService.WorkflowManagement.HttpApi.Host.csproj  
+  bindings:
+  - protocol: http
+    port: 30035 
+    
+- name: gateway-internal
+  project: gateways\internal\LINGYUN.MicroService.Internal.ApiGateway\src\LINGYUN.MicroService.Internal.ApiGateway\LINGYUN.MicroService.Internal.ApiGateway.csproj 
+  bindings:
+    - protocol: http
+      port: 30000 
+#    - protocol: https
+#      port: 30443 
+- name: gateway-web
+  project: gateways\web\LY.MicroService.ApiGateway\LY.MicroService.ApiGateway.csproj 
+  bindings:
+  - protocol: http
+    port: 5000 
