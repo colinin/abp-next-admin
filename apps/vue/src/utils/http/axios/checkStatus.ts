@@ -12,7 +12,7 @@ const error = createMessage.error!;
 const stp = projectSetting.sessionTimeoutProcessing;
 
 export function checkStatus(
-  status: number,
+  response: any,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
 ): void {
@@ -20,7 +20,7 @@ export function checkStatus(
   const userStore = useUserStoreWithOut();
   let errMessage = '';
 
-  switch (status) {
+  switch (response.status) {
     case 400:
       errMessage = `${msg}`;
       break;

@@ -9,6 +9,9 @@ const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['creationTime', ['beginCreationTime', 'endCreationTime'],  ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT23:59:59']]
+    ],
     schemas: [
       {
         field: 'tenantId',
@@ -43,6 +46,18 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         }
       },
       {
+        field: 'state',
+        component: 'Select',
+        label: L('DisplayName:State'),
+        colProps: { span: 6 },
+        componentProps: {
+          options: [
+            { label: L('ResponseState:Successed'), value: true, },
+            { label: L('ResponseState:Failed'), value: false, },
+          ],
+        },
+      },
+      {
         field: 'responseStatusCode',
         component: 'Select',
         label: L('DisplayName:ResponseStatusCode'),
@@ -52,20 +67,9 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'beginCreationTime',
-        component: 'DatePicker',
+        field: 'creationTime',
+        component: 'RangePicker',
         label: L('DisplayName:BeginCreationTime'),
-        colProps: { span: 6 },
-        componentProps: {
-          style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endCreationTime',
-        component: 'DatePicker',
-        label: L('DisplayName:EndCreationTime'),
         colProps: { span: 6 },
         componentProps: {
           style: {

@@ -27,6 +27,9 @@
       <FormItem name="webhookUri" required :label="L('DisplayName:WebhookUri')">
         <Input v-model:value="modelRef.webhookUri" autocomplete="off" />
       </FormItem>
+      <FormItem name="description" :label="L('DisplayName:Description')">
+        <Textarea v-model:value="modelRef.description" :show-count="true" :auto-size="{ minRows: 3 }" />
+      </FormItem>
       <FormItem name="secret" :label="L('DisplayName:Secret')">
         <InputPassword v-model:value="modelRef.secret" autocomplete="off" />
       </FormItem>
@@ -56,7 +59,6 @@
       <FormItem name="headers" :label="L('DisplayName:Headers')">
         <CodeEditorX style="height: 300px" :mode="MODE.JSON" v-model="modelRef.headers" />
       </FormItem>
-      
     </Form>
   </BasicModal>
 </template>
@@ -66,11 +68,11 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useValidation } from '/@/hooks/abp/useValidation';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { Checkbox, Form, Select, Tooltip, Input, InputPassword } from 'ant-design-vue';
+  import { Checkbox, Form, Select, Tooltip, Input, InputPassword, Textarea } from 'ant-design-vue';
   import { isString } from '/@/utils/is';
   import { CodeEditorX, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { Tenant } from '/@/api/saas/model/tenantModel';
+  import { TenantDto } from '/@/api/saas/tenant/model';
   import { GetListAsyncByInput as getTenants } from '/@/api/saas/tenant';
   import { getById, create, update, getAllAvailableWebhooks } from '/@/api/webhooks/subscriptions';
   import {
@@ -83,11 +85,11 @@
   const SelectOption = Select.Option;
 
   const emit = defineEmits(['change', 'register']);
-  const { L } = useLocalization('WebhooksManagement');
+  const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const { ruleCreator } = useValidation();
   const { createMessage } = useMessage();
   const formElRef = ref<any>();
-  const tenantsRef = ref<Tenant[]>([]);
+  const tenantsRef = ref<TenantDto[]>([]);
   const webhooksGroupRef = ref<WebhookAvailableGroup[]>([]);
   const modelRef = ref<WebhookSubscription>(getDefaultModel());
   const [registerModal, { closeModal, changeOkLoading }] = useModalInner((model) => {

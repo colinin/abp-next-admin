@@ -55,6 +55,9 @@
     "DisplayName:Webhooks": "Webhooks",
     "DisplayName:Headers": "Headers",
     "DisplayName:RequestHeaders": "Request Headers",
-    "DisplayName:ResponseHeaders": "Response Headers"
+    "DisplayName:ResponseHeaders": "Response Headers",
+    "DisplayName:State": "State",
+    "ResponseState:Successed": "Successed",
+    "ResponseState:Failed": "Failed"
   }
 }

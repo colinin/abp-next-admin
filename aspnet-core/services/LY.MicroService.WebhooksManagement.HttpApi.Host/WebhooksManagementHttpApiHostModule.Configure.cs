@@ -145,6 +145,10 @@ public partial class WebhooksManagementHttpApiHostModule
                     job.MaxTryCount = webhooksOptions.MaxSendAttemptCount;
                     // 需要锁定作业
                     job.LockTimeOut = webhooksOptions.TimeoutDuration.TotalSeconds.To<int>();
+                    if (webhooksOptions.IsAutomaticSubscriptionDeactivationEnabled)
+                    {
+                        job.MaxCount = webhooksOptions.MaxConsecutiveFailCountBeforeDeactivateSubscription;
+                    }
                 });
             //options.JobDispatcherSelectors.AddNamespace(
             //    "LINGYUN.Abp.Webhooks.BackgroundJobs",

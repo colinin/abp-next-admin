@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.OssManagement.Permissions
 
             var ossobject = ossManagement
                 .AddPermission(AbpOssManagementPermissions.OssObject.Default, L("Permission:OssObject"))
-                .RequireFeatures(AbpOssManagementFeatureNames.OssObject.Default);
+                .RequireFeatures(AbpOssManagementFeatureNames.OssObject.Enable);
             ossobject
                 .AddChild(AbpOssManagementPermissions.OssObject.Create, L("Permission:Create"))
                 .RequireFeatures(AbpOssManagementFeatureNames.OssObject.UploadFile);

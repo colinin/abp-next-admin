@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
         {
             if (!limitFeatures.ContainsKey(context.LimitFeature))
             {
-                limitFeatures.Add(context.LimitFeature, new LimitFeature(1, DateTime.Now.AddSeconds(context.GetEffectTicks())));
+                limitFeatures.Add(context.LimitFeature, new LimitFeature(1, DateTime.Now.AddSeconds(context.GetEffectTicks(DateTime.Now))));
             }
             else
             {

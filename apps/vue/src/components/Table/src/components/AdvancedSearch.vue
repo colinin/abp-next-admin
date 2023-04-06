@@ -39,7 +39,17 @@
           </template>
           <template v-else-if="column.dataIndex==='value'">
             <Input v-if="record.javaScriptType==='string'" v-model:value="record.value" />
-            <InputNumber v-else-if="record.javaScriptType==='number'" style="width: 100%;" v-model:value="record.value" />
+            <Select
+              v-else-if="record.javaScriptType==='number' && record.options && record.options.length > 0"
+              style="width: 100%;"
+              v-model:value="record.value"
+              :options="getAvailableOptions"
+            />
+            <InputNumber
+              v-else-if="record.javaScriptType==='number'"
+              style="width: 100%;"
+              v-model:value="record.value"
+            />
             <Switch v-else-if="record.javaScriptType==='boolean'" v-model:checked="record.value" />
             <DatePicker
               v-else-if="record.javaScriptType==='Date'"
@@ -256,6 +266,18 @@
         .filter(c => availableComparator.includes(c.value));
     }
   });
+  const getAvailableOptions = computed(() => {
+    const availableParams = unref(getAvailableParams);
+    if (!availableParams.length) return[];
+    return availableParams
+      .map((item) => {
+        return {
+          label: item.description,
+          value: item.name,
+          children: [],
+        }
+      });
+  });
 
   const filterOption = (input: string, option: any) => {
     return option.description.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -315,6 +337,7 @@
       record.field = defineParam.name;
       record.javaScriptType = defineParam.javaScriptType;
       record.value = undefined;
+      record.options = defineParam.options ?? [];
       if (defineParam.javaScriptType === 'boolean') {
         record.value = false;
       }

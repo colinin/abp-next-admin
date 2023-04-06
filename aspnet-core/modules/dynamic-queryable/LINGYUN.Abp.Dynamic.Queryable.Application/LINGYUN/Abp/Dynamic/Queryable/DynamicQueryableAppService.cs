@@ -39,15 +39,41 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             // 在本地化文件中定义 DisplayName:PropertyName
             var localizedProp = L[$"DisplayName:{propertyInfo.Name}"];
             var propertyTypeMap = GetPropertyTypeMap(propertyInfo.PropertyType);
-            dynamicParamters.Add(
-                new DynamicParamterDto
+            var dynamicParamter = new DynamicParamterDto
+            {
+                Name = propertyInfo.Name,
+                Type = propertyInfo.PropertyType.FullName,
+                Description = localizedProp.Value ?? propertyInfo.Name,
+                JavaScriptType = propertyTypeMap.JavaScriptType,
+                AvailableComparator = propertyTypeMap.AvailableComparator
+            };
+
+            var propertyType = propertyInfo.PropertyType;
+            if (propertyType.IsNullableType())
+            {
+                propertyType = propertyType.GetGenericArguments().FirstOrDefault();
+            }
+
+            if (typeof(Enum).IsAssignableFrom(propertyType))
+            {
+                var enumNames = Enum.GetNames(propertyType);
+                var enumValues = Enum.GetValues(propertyType);
+                var paramterOptions = new ParamterOptionDto[enumNames.Length];
+                for (var index = 0; index < enumNames.Length; index++)
                 {
-                    Name = propertyInfo.Name,
-                    Type = propertyInfo.PropertyType.FullName,
-                    Description = localizedProp.Value ?? propertyInfo.Name,
-                    JavaScriptType = propertyTypeMap.JavaScriptType,
-                    AvailableComparator = propertyTypeMap.AvailableComparator
-                });
+                    var enumName = enumNames[index];
+                    var localizerEnumKey = $"{propertyInfo.Name}:{enumName}";
+                    var localizerEnumName = L[localizerEnumKey];
+                    paramterOptions[index] = new ParamterOptionDto
+                    {
+                        Key = localizerEnumName.ResourceNotFound ? enumName : localizerEnumName.Value,
+                        Value = enumValues.GetValue(index),
+                    };
+                }
+                dynamicParamter.Options = paramterOptions;
+            }
+
+            dynamicParamters.Add(dynamicParamter);
         }
 
         return Task.FromResult(new ListResultDto<DynamicParamterDto>(dynamicParamters));
@@ -96,6 +122,31 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             isNullableType = true;
             propertyType = propertyType.GetGenericArguments().FirstOrDefault();
         }
+
+        if (typeof(Enum).IsAssignableFrom(propertyType))
+        {
+            // 枚举类型只支持如下操作符
+            // 小于、小于等于、大于、大于等于、等于、不等于、空、非空
+            availableComparator.AddRange(new[]
+            {
+                DynamicComparison.GreaterThan,
+                DynamicComparison.GreaterThanOrEqual,
+                DynamicComparison.LessThan,
+                DynamicComparison.LessThanOrEqual,
+                DynamicComparison.Equal,
+                DynamicComparison.NotEqual,
+            });
+            if (isNullableType)
+            {
+                availableComparator.AddRange(new[]
+                {
+                        DynamicComparison.Null,
+                        DynamicComparison.NotNull
+                    });
+            }
+            return ("number", availableComparator.ToArray());
+        }
+
         var typeFullName = propertyType.FullName;
 
         switch (typeFullName)

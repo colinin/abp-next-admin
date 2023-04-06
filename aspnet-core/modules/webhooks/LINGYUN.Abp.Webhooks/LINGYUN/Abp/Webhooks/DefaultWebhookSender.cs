@@ -135,7 +135,14 @@ namespace LINGYUN.Abp.Webhooks
 
             foreach (var header in webhookSenderArgs.Headers)
             {
-                if (!request.Headers.Contains(header.Key))
+                if (request.Headers.Contains(header.Key) && request.Headers.Remove(header.Key))
+                {
+                    if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
+                }
+                else
                 {
                     if (request.Headers.TryAddWithoutValidation(header.Key, header.Value))
                     {
@@ -143,7 +150,14 @@ namespace LINGYUN.Abp.Webhooks
                     }
                 }
 
-                if (!request.Content.Headers.Contains(header.Key))
+                if (request.Content.Headers.Contains(header.Key) && request.Content.Headers.Remove(header.Key))
+                {
+                    if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                    {
+                        continue;
+                    }
+                }
+                else
                 {
                     if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
                     {

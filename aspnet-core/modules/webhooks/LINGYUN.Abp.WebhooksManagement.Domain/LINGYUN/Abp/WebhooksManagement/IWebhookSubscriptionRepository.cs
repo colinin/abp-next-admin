@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.WebhooksManagement;
 
@@ -15,11 +16,11 @@ public interface IWebhookSubscriptionRepository : IRepository<WebhookSubscriptio
         CancellationToken cancellationToken = default);
 
     Task<int> GetCountAsync(
-        WebhookSubscriptionFilter filter,
+        ISpecification<WebhookSubscription> specification,
         CancellationToken cancellationToken = default);
 
     Task<List<WebhookSubscription>> GetListAsync(
-        WebhookSubscriptionFilter filter,
+        ISpecification<WebhookSubscription> specification,
         string sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,

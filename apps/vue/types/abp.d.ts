@@ -6,7 +6,7 @@ declare interface LocalizableStringInfo {
 declare type ExtraPropertyDictionary = { [key: string]: any };
 
 declare interface IHasConcurrencyStamp {
-  concurrencyStamp: string;
+  concurrencyStamp?: string;
 }
 
 declare interface IHasExtraProperties {

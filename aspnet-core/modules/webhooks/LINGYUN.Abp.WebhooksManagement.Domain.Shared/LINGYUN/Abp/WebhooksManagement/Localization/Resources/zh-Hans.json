@@ -55,6 +55,9 @@
     "DisplayName:Webhooks": "事件列表",
     "DisplayName:Headers": "发送标头",
     "DisplayName:RequestHeaders": "请求标头",
-    "DisplayName:ResponseHeaders": "响应标头"
+    "DisplayName:ResponseHeaders": "响应标头",
+    "DisplayName:State": "状态",
+    "ResponseState:Successed": "成功",
+    "ResponseState:Failed": "失败"
   }
 }

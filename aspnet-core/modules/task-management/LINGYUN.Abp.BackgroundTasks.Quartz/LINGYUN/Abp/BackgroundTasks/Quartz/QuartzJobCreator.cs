@@ -136,7 +136,8 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
                 // Quartz约定. 重复间隔不能为0
                 // fix throw Quartz.SchedulerException: Repeat Interval cannot be zero.
                 var scheduleBuilder = SimpleScheduleBuilder.Create();
-                scheduleBuilder.WithRepeatCount(maxCount);
+                // TODO: 不能用Quartz自带的重试机制
+                // scheduleBuilder.WithRepeatCount(maxCount);
                 if (job.Interval > 0)
                 {
                     scheduleBuilder.WithIntervalInSeconds(job.Interval);

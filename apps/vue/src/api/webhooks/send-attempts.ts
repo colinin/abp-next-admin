@@ -26,6 +26,18 @@ export const deleteById = (id: string) => {
   });
 }
 
+export const deleteMany = (keys: string[]) => {
+  return defAbpHttp.request<void>({
+    service: remoteServiceName,
+    controller: controllerName,
+    action: 'DeleteManyAsync',
+    uniqueName: 'DeleteManyAsyncByInput',
+    data: {
+      recordIds: keys,
+    },
+  });
+}
+
 export const getList = (input: WebhookSendAttemptGetListInput) => {
   return defAbpHttp.request<PagedResultDto<WebhookSendAttempt>>({
     service: remoteServiceName,
@@ -44,6 +56,18 @@ export const resend = (id: string) => {
     action: 'ResendAsync',
     params: {
       id: id,
+    },
+  });
+}
+
+export const resendMany = (keys: string[]) => {
+  return defAbpHttp.request<void>({
+    service: remoteServiceName,
+    controller: controllerName,
+    action: 'ResendManyAsync',
+    uniqueName: 'ResendManyAsyncByInput',
+    data: {
+      recordIds: keys,
     },
   });
 }

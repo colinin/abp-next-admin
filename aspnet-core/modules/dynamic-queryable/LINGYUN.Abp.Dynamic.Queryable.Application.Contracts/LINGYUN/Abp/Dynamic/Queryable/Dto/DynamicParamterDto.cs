@@ -9,8 +9,10 @@ public class DynamicParamterDto
     public string Type { get; set; }
     public string JavaScriptType { get; set; }
     public DynamicComparison[] AvailableComparator { get; set; }
+    public ParamterOptionDto[] Options { get; set; }
     public DynamicParamterDto()
     {
         AvailableComparator = new DynamicComparison[0];
+        Options = new ParamterOptionDto[0];
     }
 }

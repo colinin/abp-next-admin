@@ -80,6 +80,9 @@
           <FormItem :label="L('DisplayName:WebhookUri')">
             <Input readonly :value="subscriptionRef.webhookUri" />
           </FormItem>
+          <FormItem :label="L('DisplayName:Description')">
+            <Textarea readonly :value="subscriptionRef.description" :show-count="true" :auto-size="{ minRows: 3 }" />
+          </FormItem>
           <FormItem :label="L('DisplayName:Secret')">
             <InputPassword readonly :value="subscriptionRef.secret" />
           </FormItem>
@@ -109,7 +112,7 @@
   import { ref, unref, computed, watch } from 'vue';
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { Checkbox, Form, Tabs, Tag, Input, InputPassword } from 'ant-design-vue';
+  import { Checkbox, Form, Tabs, Tag, Input, InputPassword, Textarea } from 'ant-design-vue';
   import { CodeEditorX, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { findTenantById } from '/@/api/multi-tenancy/tenants';
@@ -123,7 +126,7 @@
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
 
-  const { L } = useLocalization('WebhooksManagement');
+  const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const formElRef = ref<any>();
   const activeKey = ref('basic');
   const tenantName = ref('');

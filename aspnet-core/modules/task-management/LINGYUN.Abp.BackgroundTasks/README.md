@@ -3,12 +3,22 @@
 后台任务（队列）模块，Abp提供的后台作业与后台工作者不支持Cron表达式, 提供可管理的后台任务（队列）功能. 
 
 实现了**Volo.Abp.BackgroundJobs.IBackgroundJobManager**, 意味着您也能通过框架后台作业接口添加新作业.  
+实现了**Volo.Abp.BackgroundWorkers.IBackgroundWorkerManager**, 意味着您也能通过框架后台工作者接口添加新作业.  
 
 ## 任务类别  
 
 * JobType.Once:         一次性任务, 此类型只会被执行一次, 适用于邮件通知等场景  
 * JobType.Period:       周期性任务, 此类型任务会根据Cron表达式来决定运行方式, 适用于报表分析等场景  
 * JobType.Persistent:   持续性任务, 此类型任务按照给定重复次数、重复间隔运行, 适用于接口压测等场景  
+
+## 接口说明
+
+* [IJobPublisher](/LINGYUN/Abp/BackgroundTasks/IJobPublisher.cs): 作业发布接口, 将指定作业发布到当前节点  
+* [IJobDispatcher](/LINGYUN/Abp/BackgroundTasks/IJobDispatcher.cs): 作业调度接口, 将指定作业调度到指定节点  
+* [IJobScheduler](/LINGYUN/Abp/BackgroundTasks/IJobScheduler.cs): 调度器接口, 管理当前运行节点作业调度器  
+* [IJobLockProvider](/LINGYUN/Abp/BackgroundTasks/IJobLockProvider.cs): 作业锁定接口, 指定作业加锁, 防止重复运行, 锁定时长参见作业 **LockTimeOut**  
+* [IJobEventTrigger](/LINGYUN/Abp/BackgroundTasks/IJobEventTrigger.cs): 作业事件触发器接口, 作业运行前与运行后监听接口  
+* [IJobStore](/LINGYUN/Abp/BackgroundTasks/IJobStore.cs): 作业持久化接口  
 
 ## 配置使用
 

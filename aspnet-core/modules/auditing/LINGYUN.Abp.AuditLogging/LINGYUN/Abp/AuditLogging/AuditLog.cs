@@ -5,7 +5,6 @@ using Volo.Abp.Data;
 
 namespace LINGYUN.Abp.AuditLogging
 {
-    [DisableAuditing]
     public class AuditLog : IHasExtraProperties
     {
         public Guid Id { get; set; }

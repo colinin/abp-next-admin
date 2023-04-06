@@ -91,7 +91,7 @@ public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
             jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
             jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;
             jobInfo.Priority = selector.Priority ?? jobInfo.Priority;
-            jobInfo.TryCount = selector.MaxCount ?? jobInfo.MaxCount;
+            jobInfo.MaxCount = selector.MaxCount ?? jobInfo.MaxCount;
             jobInfo.MaxTryCount = selector.MaxTryCount ?? jobInfo.MaxTryCount;
 
             if (!selector.NodeName.IsNullOrWhiteSpace())

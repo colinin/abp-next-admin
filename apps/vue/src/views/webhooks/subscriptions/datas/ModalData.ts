@@ -25,6 +25,9 @@ function getAllAvailables(): Promise<any> {
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['creationTime', ['beginCreationTime', 'endCreationTime'],  ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT23:59:59']]
+    ],
     schemas: [
       {
         field: 'tenantId',
@@ -76,21 +79,10 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'beginCreationTime',
-        component: 'DatePicker',
-        label: L('DisplayName:BeginCreationTime'),
-        colProps: { span: 6 },
-        componentProps: {
-          style: {
-            width: '100%',
-          },
-        },
-      },
-      {
-        field: 'endCreationTime',
-        component: 'DatePicker',
-        label: L('DisplayName:EndCreationTime'),
-        colProps: { span: 6 },
+        field: 'creationTime',
+        component: 'RangePicker',
+        label: L('DisplayName:CreationTime'),
+        colProps: { span: 12 },
         componentProps: {
           style: {
             width: '100%',

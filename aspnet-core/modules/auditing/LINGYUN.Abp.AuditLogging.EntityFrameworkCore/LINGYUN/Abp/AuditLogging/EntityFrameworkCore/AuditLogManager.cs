@@ -139,8 +139,6 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
             }
         }
 
-        // 避免循环记录
-        [DisableAuditing]
         public async virtual Task<string> SaveAsync(
             AuditLogInfo auditInfo,
             CancellationToken cancellationToken = default(CancellationToken))

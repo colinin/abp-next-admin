@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 /// <summary>
-/// 作业调度接口
+/// 作业调度器接口
 /// </summary>
 public interface IJobScheduler
 {

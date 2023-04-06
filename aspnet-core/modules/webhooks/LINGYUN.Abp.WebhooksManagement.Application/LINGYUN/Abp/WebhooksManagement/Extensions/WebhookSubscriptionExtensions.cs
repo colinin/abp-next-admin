@@ -17,11 +17,13 @@ namespace LINGYUN.Abp.WebhooksManagement.Extensions
                 Webhooks = webhookSubscription.GetSubscribedWebhooks(),
                 Headers = webhookSubscription.GetWebhookHeaders(),
                 CreationTime = webhookSubscription.CreationTime,
-                CreatorId = webhookSubscription.CreatorId
+                CreatorId = webhookSubscription.CreatorId,
+                Description = webhookSubscription.Description,
+                ConcurrencyStamp = webhookSubscription.ConcurrencyStamp,
             };
         }
 
-        public static string ToSubscribedWebhooksString(this WebhookSubscriptionUpdateInput webhookSubscription)
+        public static string ToSubscribedWebhooksString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
         {
             if (webhookSubscription.Webhooks.Any())
             {
@@ -31,7 +33,7 @@ namespace LINGYUN.Abp.WebhooksManagement.Extensions
             return null;
         }
 
-        public static string ToWebhookHeadersString(this WebhookSubscriptionUpdateInput webhookSubscription)
+        public static string ToWebhookHeadersString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
         {
             if (webhookSubscription.Headers.Any())
             {

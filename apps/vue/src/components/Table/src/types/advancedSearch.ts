@@ -20,6 +20,14 @@ export interface AdvanceSearchProps {
   fetchApi?: (...arg: any) => Promise<any>,
 }
 
+/** 选项 */
+export interface ParamterOption {
+  /** 键名 */
+  key: string;
+  /** 键值 */
+  value: any;
+}
+
 /** 自定义字段 */
 export interface DefineParamter {
   /** 字段名称 */
@@ -32,6 +40,8 @@ export interface DefineParamter {
   javaScriptType: string;
   /** 可用运算条件列表, 用于进一步约束字段可用比较符 */
   availableComparator?: DynamicComparison[];
+  /** 选项 */
+  options: ParamterOption[];
 }
 
 /** 连接条件 */

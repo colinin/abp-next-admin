@@ -2,12 +2,21 @@
   <div class="content">
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button
+        <Button
           v-auth="['AbpWebhooks.Subscriptions.Create']"
           type="primary"
           @click="handleAddNew"
-          >{{ L('Subscriptions:AddNew') }}</a-button
         >
+          {{ L('Subscriptions:AddNew') }}
+        </Button>
+        <Button
+          v-if="deleteManyEnabled"
+          v-auth="['AbpWebhooks.Subscriptions.Delete']"
+          danger
+          @click="handleDeleteMany"
+        >
+          {{ L('Delete') }}
+        </Button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isActive'">
@@ -44,7 +53,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { Tag } from 'ant-design-vue';
+  import { computed } from 'vue';
+  import { Button, Tag } from 'ant-design-vue';
   import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -53,13 +63,13 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { deleteById, getList } from '/@/api/webhooks/subscriptions';
+  import { deleteById, deleteMany, getList } from '/@/api/webhooks/subscriptions';
   import SubscriptionModal from './SubscriptionModal.vue';
 
-  const { createConfirm } = useMessage();
+  const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload }] = useTable({
+  const [registerTable, { reload, setLoading, clearSelectedRowKeys, getSelectRowKeys }] = useTable({
     rowKey: 'id',
     title: L('Subscriptions'),
     columns: getDataColumns(),
@@ -80,6 +90,13 @@
       title: L('Actions'),
       dataIndex: 'action',
     },
+    rowSelection: {
+      type: 'checkbox',
+    },
+  });
+  const deleteManyEnabled = computed(() => {
+    const selectKeys = getSelectRowKeys();
+    return selectKeys.length > 0;
   });
 
   function handleAddNew() {
@@ -97,8 +114,33 @@
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
+        setLoading(true);
         return deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
           reload();
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
+  }
+
+  function handleDeleteMany() {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', { 0: L('SelectedItems') }),
+      okCancel: true,
+      onOk: () => {
+        const selectKeys = getSelectRowKeys();
+        setLoading(true);
+        return deleteMany(selectKeys).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
         });
       },
     });
