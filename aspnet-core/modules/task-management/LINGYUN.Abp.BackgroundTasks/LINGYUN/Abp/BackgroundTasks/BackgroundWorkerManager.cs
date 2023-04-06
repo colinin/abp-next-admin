@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
@@ -18,6 +19,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     protected IJobStore JobStore { get; }
     protected IJobPublisher JobPublisher { get; }
     protected ICurrentTenant CurrentTenant { get; }
+    protected IGuidGenerator GuidGenerator { get; }
     protected AbpBackgroundTasksOptions Options { get; }
     protected AbpBackgroundTasksOptions TasksOptions { get; }
 
@@ -26,6 +28,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         IJobStore jobStore,
         IJobPublisher jobPublisher,
         ICurrentTenant currentTenant,
+        IGuidGenerator guidGenerator,
         IOptions<AbpBackgroundTasksOptions> options,
         IOptions<AbpBackgroundTasksOptions> taskOptions)
     {
@@ -33,6 +36,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         JobStore = jobStore;
         JobPublisher = jobPublisher;
         CurrentTenant = currentTenant;
+        GuidGenerator = guidGenerator;
         Options = options.Value;
         TasksOptions = taskOptions.Value;
     }
@@ -50,6 +54,12 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
             return;
         }
 
+        // 如果通过远程接口发布作业, 可能会造成Group与Name重复
+        // 重新设定Name为唯一Id
+        var jobId = GuidGenerator.Create();
+        jobInfo.Id = jobId.ToString();
+        jobInfo.Name = jobId.ToString();
+
         jobInfo.NodeName = Options.NodeName;
         jobInfo.BeginTime = Clock.Now;
         jobInfo.CreationTime = Clock.Now;
@@ -65,7 +75,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
             jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
             jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;
             jobInfo.Priority = selector.Priority ?? jobInfo.Priority;
-            jobInfo.TryCount = selector.MaxCount ?? jobInfo.MaxCount;
+            jobInfo.MaxCount = selector.MaxCount ?? jobInfo.MaxCount;
             jobInfo.MaxTryCount = selector.MaxTryCount ?? jobInfo.MaxTryCount;
 
             if (!selector.NodeName.IsNullOrWhiteSpace())

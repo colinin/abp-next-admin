@@ -1,0 +1,55 @@
+import { defineStore } from 'pinia';
+import { store } from '/@/store';
+import { createLocalStorage } from '/@/utils/cache';
+import { SettingGroup } from '/@/api/settings/model/settingModel';
+
+const ls = createLocalStorage();
+const SETTING_ID = 'setting-management';
+type SettingValue = NameValue<string>;
+
+interface IState {
+  settingKey: string;
+  settings: SettingValue[];
+}
+
+export const useSettingManagementStore = defineStore({
+  id: SETTING_ID,
+  state: (): IState => ({
+    settingKey: 'unknown',
+    settings: [],
+  }),
+  getters: {
+    getSettings(state) {
+      return state.settings;
+    },
+  },
+  actions: {
+    initlize(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>) {
+      this.settingKey = settingKey;
+      if (this.settings.length === 0) {
+        ls.get(this.settingKey) || this.refreshSettings(api);
+      }
+    },
+    refreshSettings(api: (...args) => Promise<ListResultDto<SettingGroup>>) {
+      api().then((res) => {
+        const settings: SettingValue[] = [];
+        res.items.forEach((group) => {
+          group.settings.forEach((setting) => {
+            setting.details.forEach((detail) => {
+              settings.push({
+                name: detail.name,
+                value: detail.value ?? detail.defaultValue,
+              });
+            });
+          });
+        });
+        this.settings = settings;
+        ls.set(this.settingKey, settings);
+      });
+    },
+  },
+});
+
+export function useSettingManagementStoreWithOut() {
+  return useSettingManagementStore(store);
+}

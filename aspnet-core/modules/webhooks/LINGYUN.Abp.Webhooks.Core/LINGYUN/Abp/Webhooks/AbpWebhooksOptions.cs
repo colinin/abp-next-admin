@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Volo.Abp.Collections;
 
 namespace LINGYUN.Abp.Webhooks;
@@ -32,7 +33,10 @@ public class AbpWebhooksOptions
     /// 默认请求头
     /// </summary>
     public IDictionary<string, string> DefaultHttpHeaders { get; }
-
+    /// <summary>
+    /// 默认发送方标识
+    /// </summary>
+    public string DefaultAgentIdentifier { get; set; }
     public AbpWebhooksOptions()
     {
         TimeoutDuration = TimeSpan.FromSeconds(60);
@@ -53,6 +57,15 @@ public class AbpWebhooksOptions
             // 标识来源
             { "X-Requested-From", "abp-webhooks" },
         };
+
+        DefaultAgentIdentifier = "Abp Webhooks";
+
+        var assembly = typeof(AbpWebhooksOptions).Assembly;
+        var versionAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        if (versionAttr != null)
+        {
+            DefaultAgentIdentifier += " " + versionAttr.InformationalVersion;
+        }
     }
 
     public void AddHeader(string key, string value)

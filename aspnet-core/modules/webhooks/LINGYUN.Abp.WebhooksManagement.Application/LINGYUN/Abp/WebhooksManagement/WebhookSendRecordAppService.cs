@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BackgroundJobs;
@@ -50,30 +51,6 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         var sendRecords = await RecordRepository.GetListAsync(x => input.RecordIds.Contains(x.Id));
 
         await RecordRepository.DeleteManyAsync(sendRecords);
-    }
-
-    private class WebhookSendRecordGetListSpecification : Volo.Abp.Specifications.Specification<WebhookSendRecord>
-    {
-        protected WebhookSendRecordGetListInput Filter { get; }
-
-        public WebhookSendRecordGetListSpecification(WebhookSendRecordGetListInput filter)
-        {
-            Filter = filter;
-        }
-
-        public override Expression<Func<WebhookSendRecord, bool>> ToExpression()
-        {
-            Expression<Func<WebhookSendRecord, bool>> expression = _ => true;
-
-            return expression
-                .AndIf(Filter.TenantId.HasValue, x => x.TenantId == Filter.TenantId)
-                .AndIf(Filter.WebhookEventId.HasValue, x => x.WebhookEventId == Filter.WebhookEventId)
-                .AndIf(Filter.SubscriptionId.HasValue, x => x.WebhookSubscriptionId == Filter.SubscriptionId)
-                .AndIf(Filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == Filter.ResponseStatusCode)
-                .AndIf(Filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(Filter.BeginCreationTime) >= 0)
-                .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(Filter.EndCreationTime) <= 0)
-                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Response.Contains(Filter.Filter));
-        }
     }
 
     public async virtual Task<PagedResultDto<WebhookSendRecordDto>> GetListAsync(WebhookSendRecordGetListInput input)
@@ -124,6 +101,32 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         foreach (var recordId in input.RecordIds)
         {
             await ResendAsync(recordId);
+        }
+    }
+
+    private class WebhookSendRecordGetListSpecification : Volo.Abp.Specifications.Specification<WebhookSendRecord>
+    {
+        protected WebhookSendRecordGetListInput Filter { get; }
+
+        public WebhookSendRecordGetListSpecification(WebhookSendRecordGetListInput filter)
+        {
+            Filter = filter;
+        }
+
+        public override Expression<Func<WebhookSendRecord, bool>> ToExpression()
+        {
+            Expression<Func<WebhookSendRecord, bool>> expression = _ => true;
+
+            return expression
+                .AndIf(Filter.TenantId.HasValue, x => x.TenantId == Filter.TenantId)
+                .AndIf(Filter.State == true, x => x.ResponseStatusCode > HttpStatusCode.Continue && x.ResponseStatusCode < HttpStatusCode.BadRequest)
+                .AndIf(Filter.State == false, x => x.ResponseStatusCode >= HttpStatusCode.BadRequest && x.ResponseStatusCode <= HttpStatusCode.NetworkAuthenticationRequired)
+                .AndIf(Filter.WebhookEventId.HasValue, x => x.WebhookEventId == Filter.WebhookEventId)
+                .AndIf(Filter.SubscriptionId.HasValue, x => x.WebhookSubscriptionId == Filter.SubscriptionId)
+                .AndIf(Filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == Filter.ResponseStatusCode)
+                .AndIf(Filter.BeginCreationTime.HasValue, x => x.CreationTime >= Filter.BeginCreationTime)
+                .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime <= Filter.EndCreationTime)
+                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Response.Contains(Filter.Filter));
         }
     }
 }

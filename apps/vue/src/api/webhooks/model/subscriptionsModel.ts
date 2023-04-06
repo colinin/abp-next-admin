@@ -1,6 +1,7 @@
-export interface WebhookSubscription extends CreationAuditedEntityDto<string> {
+export interface WebhookSubscription extends CreationAuditedEntityDto<string>, IHasConcurrencyStamp {
   tenantId?: string;
   webhookUri: string;
+  description?: string;
   secret: string;
   isActive: boolean;
   webhooks: string[];
@@ -9,6 +10,7 @@ export interface WebhookSubscription extends CreationAuditedEntityDto<string> {
 
 export interface WebhookSubscriptionCreateOrUpdate {
   webhookUri: string;
+  description?: string;
   secret: string;
   isActive: boolean;
   webhooks: string[];
@@ -17,7 +19,7 @@ export interface WebhookSubscriptionCreateOrUpdate {
 
 export type CreateWebhookSubscription = WebhookSubscriptionCreateOrUpdate;
 
-export type UpdateWebhookSubscription = WebhookSubscriptionCreateOrUpdate;
+export interface UpdateWebhookSubscription extends WebhookSubscriptionCreateOrUpdate , IHasConcurrencyStamp {};
 
 export interface WebhookAvailable {
   name: string;

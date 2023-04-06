@@ -139,21 +139,22 @@ public class JobInfo
         }
 
         // 重试
-        if (Status == JobStatus.FailedRetry && MaxTryCount > 0)
-        {
-            maxCount = MaxTryCount - TryCount;
+        // TODO: 不能用Quartz自带的重试机制
+        //if (Status == JobStatus.FailedRetry && MaxTryCount > 0)
+        //{
+        //    maxCount = MaxTryCount - TryCount;
 
-            if (maxCount < 0)
-            {
-                maxCount = 0;
-            }
+        //    if (maxCount < 0)
+        //    {
+        //        maxCount = 0;
+        //    }
 
-            if (maxCount > 0)
-            {
-                // 触发重试时，失败间隔时间调整
-                Interval = 60;
-            }
-        }
+        //    if (maxCount > 0)
+        //    {
+        //        // 触发重试时，失败间隔时间调整
+        //        Interval = 60;
+        //    }
+        //}
 
         return maxCount;
     }

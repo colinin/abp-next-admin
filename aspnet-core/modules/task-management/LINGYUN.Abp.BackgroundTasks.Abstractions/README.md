@@ -5,6 +5,8 @@
 ## 特性参数  
 
 * DisableJobActionAttribute		标记此特性不处理作业触发后行为  
+* DisableJobStatusAttribute		标记此特性不处理作业状态  
+* DisableAuditingAttribute		标记此特性不记录作业日志  
 
 ## 配置使用
 

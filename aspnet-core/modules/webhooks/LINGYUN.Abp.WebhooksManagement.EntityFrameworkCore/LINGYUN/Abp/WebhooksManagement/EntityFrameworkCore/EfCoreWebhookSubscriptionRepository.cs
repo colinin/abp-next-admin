@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 
@@ -34,39 +35,25 @@ public class EfCoreWebhookSubscriptionRepository :
     }
 
     public async virtual Task<int> GetCountAsync(
-        WebhookSubscriptionFilter filter,
+        ISpecification<WebhookSubscription> specification,
         CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter(await GetDbSetAsync(), filter)
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<WebhookSubscription>> GetListAsync(
-        WebhookSubscriptionFilter filter,
+        ISpecification<WebhookSubscription> specification,
         string sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
-        return await ApplyFilter(await GetDbSetAsync(), filter)
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .OrderBy(sorting ?? $"{nameof(WebhookSubscription.CreationTime)} DESC")
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    protected virtual IQueryable<WebhookSubscription> ApplyFilter(
-        IQueryable<WebhookSubscription> queryable,
-        WebhookSubscriptionFilter filter)
-    {
-        return queryable
-            .WhereIf(filter.TenantId.HasValue, x => x.TenantId == filter.TenantId)
-            .WhereIf(filter.IsActive.HasValue, x => x.IsActive == filter.IsActive)
-            .WhereIf(!filter.WebhookUri.IsNullOrWhiteSpace(), x => x.WebhookUri == filter.WebhookUri)
-            .WhereIf(!filter.Secret.IsNullOrWhiteSpace(), x => x.Secret == filter.Secret)
-            .WhereIf(!filter.Webhooks.IsNullOrWhiteSpace(), x => x.Webhooks.Contains("\"" + filter.Webhooks + "\""))
-            .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime) >= 0)
-            .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime) <= 0)
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.WebhookUri.Contains(filter.Filter) || 
-                x.Secret.Contains(filter.Filter) || x.Webhooks.Contains(filter.Filter));
     }
 }

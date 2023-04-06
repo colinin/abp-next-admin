@@ -3,6 +3,25 @@
   "texts": {
     "JobAction:Failed": "Failed",
     "JobAction:Successed": "Successed",
-    "JobAction:Completed": "Completed"
+    "JobAction:Completed": "Completed",
+    "Status:None": "None",
+    "Status:Completed": "Completed",
+    "Status:Running": "Running",
+    "Status:Queuing": "Queuing",
+    "Status:Paused": "Paused",
+    "Status:FailedRetry": "Failed Retry",
+    "Status:Stopped": "Stopped",
+    "JobType:Once": "Once",
+    "JobType:Period": "Period",
+    "JobType:Persistent": "Persistent",
+    "Priority:Low": "Low",
+    "Priority:BelowNormal": "Below Normal",
+    "Priority:Normal": "Normal",
+    "Priority:AboveNormal": "Above Normal",
+    "Priority:High": "High",
+    "Source:None": "None",
+    "Source:Source": "Source",
+    "Source:User": "User",
+    "Source:System": "System"
   }
 }

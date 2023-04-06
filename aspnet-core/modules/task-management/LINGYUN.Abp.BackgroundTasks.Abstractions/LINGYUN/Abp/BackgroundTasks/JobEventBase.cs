@@ -22,7 +22,9 @@ public abstract class JobEventBase<TEvent> : IJobEvent
             var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
             using (currentTenant.Change(context.EventData.TenantId))
             {
+                Logger.LogInformation("Job {Group}-{Name} after event with {Event} has executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
                 await OnJobAfterExecutedAsync(context);
+                Logger.LogInformation("Job {Group}-{Name} after event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
             }
         }
         catch (Exception ex)
@@ -38,7 +40,9 @@ public abstract class JobEventBase<TEvent> : IJobEvent
             var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
             using (currentTenant.Change(context.EventData.TenantId))
             {
+                Logger.LogInformation("Job {Group}-{Name} before event with {Event} executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
                 await OnJobBeforeExecutedAsync(context);
+                Logger.LogInformation("Job {Group}-{Name} before event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
             }
         }
         catch (Exception ex)

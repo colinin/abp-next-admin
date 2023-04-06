@@ -1,6 +1,24 @@
 <template>
   <div class="content">
     <BasicTable @register="registerTable">
+      <template #toolbar>
+        <Button
+          v-if="isManyRecordSelected"
+          v-auth="['AbpWebhooks.SendAttempts.Resend']"
+          type="primary"
+          @click="handleResendMany"
+        >
+          {{ L('Resend') }}
+        </Button>
+        <Button
+          v-if="isManyRecordSelected"
+          v-auth="['AbpWebhooks.SendAttempts.Delete']"
+          danger
+          @click="handleDeleteMany"
+        >
+          {{ L('Delete') }}
+        </Button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'responseStatusCode'">
           <Tag :color="getHttpStatusColor(record.responseStatusCode)">{{
@@ -41,7 +59,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { Tag } from 'ant-design-vue';
+  import { computed } from 'vue';
+  import { Button, Tag } from 'ant-design-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useModal } from '/@/components/Modal';
@@ -50,13 +69,13 @@
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { httpStatusCodeMap, getHttpStatusColor } from '../../typing';
-  import { getList, deleteById, resend } from '/@/api/webhooks/send-attempts';
+  import { getList, deleteById, deleteMany, resend, resendMany } from '/@/api/webhooks/send-attempts';
   import SendAttemptModal from './SendAttemptModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, setLoading }] = useTable({
+  const [registerTable, { reload, setLoading, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('SendAttempts'),
     columns: getDataColumns(),
@@ -77,6 +96,13 @@
       title: L('Actions'),
       dataIndex: 'action',
     },
+    rowSelection: {
+      type: 'checkbox',
+    },
+  });
+  const isManyRecordSelected = computed(() => {
+    const selectedKeys = getSelectRowKeys();
+    return selectedKeys.length > 0;
   });
 
   function handleEdit(record) {
@@ -90,22 +116,74 @@
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
+        setLoading(true);
         return deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
           reload();
-          createMessage.success(L('Successful'));
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
+  }
+
+  function handleDeleteMany() {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', { 0: L('SelectedItems') }),
+      okCancel: true,
+      onOk: () => {
+        const selectKeys = getSelectRowKeys();
+        setLoading(true);
+        return deleteMany(selectKeys).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
         });
       },
     });
   }
 
   function handleResend(record) {
-    setLoading(true);
-    resend(record.id)
-      .then(() => {
-        createMessage.success(L('Successful'));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems')}),
+      okCancel: true,
+      onOk: () => {
+        setLoading(true);
+        return resend(record.id).then(() => {
+          createMessage.success(L('Successful'));
+          clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
+  }
+
+  function handleResendMany() {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems')}),
+      okCancel: true,
+      onOk: () => {
+        const selectKeys = getSelectRowKeys();
+        setLoading(true);
+        return resendMany(selectKeys).then(() => {
+          createMessage.success(L('Successful'));
+          clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
   }
 </script>

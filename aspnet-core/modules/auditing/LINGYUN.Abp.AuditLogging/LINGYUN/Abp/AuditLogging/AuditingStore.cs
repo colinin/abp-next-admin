@@ -15,8 +15,6 @@ namespace LINGYUN.Abp.AuditLogging
             _manager = manager;
         }
 
-        // 避免循环记录
-        [DisableAuditing]
         public async virtual Task SaveAsync(AuditLogInfo auditInfo)
         {
             await _manager.SaveAsync(auditInfo);

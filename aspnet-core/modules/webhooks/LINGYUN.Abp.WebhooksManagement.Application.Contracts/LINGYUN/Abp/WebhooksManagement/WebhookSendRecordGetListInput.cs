@@ -10,6 +10,8 @@ public class WebhookSendRecordGetListInput : PagedAndSortedResultRequestDto
 
     public Guid? TenantId { get; set; }
 
+    public bool? State { get; set; }
+
     public Guid? WebhookEventId { get; set; }
 
     public Guid? SubscriptionId { get; set; }

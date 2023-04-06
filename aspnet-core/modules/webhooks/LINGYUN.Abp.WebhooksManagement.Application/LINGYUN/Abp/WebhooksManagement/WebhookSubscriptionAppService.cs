@@ -2,10 +2,10 @@
 using LINGYUN.Abp.WebhooksManagement.Authorization;
 using LINGYUN.Abp.WebhooksManagement.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -35,8 +35,8 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         var subscription = new WebhookSubscription(
             GuidGenerator.Create(),
             input.WebhookUri,
-            JsonConvert.SerializeObject(input.Webhooks),
-            JsonConvert.SerializeObject(input.Headers),
+            input.ToWebhookHeadersString(),
+            input.ToWebhookHeadersString(),
             input.Secret,
             input.TenantId ?? CurrentTenant.Id)
         {
@@ -44,7 +44,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             Description = input.Description,
         };
 
-        await SubscriptionRepository.InsertAsync(subscription);
+        subscription = await SubscriptionRepository.InsertAsync(subscription);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -75,20 +75,10 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
 
     public async virtual Task<PagedResultDto<WebhookSubscriptionDto>> GetListAsync(WebhookSubscriptionGetListInput input)
     {
-        var filter = new WebhookSubscriptionFilter
-        {
-            Filter = input.Filter,
-            BeginCreationTime = input.BeginCreationTime,
-            EndCreationTime = input.EndCreationTime,
-            IsActive = input.IsActive,
-            Secret = input.Secret,
-            TenantId = input.TenantId,
-            Webhooks = input.Webhooks,
-            WebhookUri = input.WebhookUri
-        };
+        var specification = new WebhookSubscriptionGetListSpecification(input);
 
-        var totalCount = await SubscriptionRepository.GetCountAsync(filter);
-        var subscriptions = await SubscriptionRepository.GetListAsync(filter,
+        var totalCount = await SubscriptionRepository.GetCountAsync(specification);
+        var subscriptions = await SubscriptionRepository.GetListAsync(specification,
             input.Sorting, input.MaxResultCount, input.SkipCount);
 
         return new PagedResultDto<WebhookSubscriptionDto>(totalCount,
@@ -99,25 +89,23 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
     public async virtual Task<WebhookSubscriptionDto> UpdateAsync(Guid id, WebhookSubscriptionUpdateInput input)
     {
         var subscription = await SubscriptionRepository.GetAsync(id);
-        if (!string.Equals(subscription.WebhookUri, input.WebhookUri))
-        {
-            await CheckSubscribedAsync(input);
-        }
 
-        subscription.SetSecret(input.Secret);
-        subscription.SetWebhookUri(input.WebhookUri);
-        subscription.SetWebhooks(input.ToSubscribedWebhooksString());
-        subscription.SetHeaders(input.ToWebhookHeadersString());
-        subscription.SetTenantId(input.TenantId);
-        subscription.IsActive = input.IsActive;
-        if (!string.Equals(subscription.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+        UpdateByInput(subscription, input);
+
+        var inputWebhooks = input.ToSubscribedWebhooksString();
+        if (!string.Equals(subscription.Webhooks, inputWebhooks, StringComparison.InvariantCultureIgnoreCase))
         {
-            subscription.Description = input.Description;
+            subscription.SetWebhooks(inputWebhooks);
+        }
+        var inputHeaders = input.ToWebhookHeadersString();
+        if (!string.Equals(subscription.Headers, inputHeaders, StringComparison.InvariantCultureIgnoreCase))
+        {
+            subscription.SetHeaders(input.ToWebhookHeadersString());
         }
 
         subscription.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        await SubscriptionRepository.UpdateAsync(subscription);
+        subscription = await SubscriptionRepository.UpdateAsync(subscription);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -166,6 +154,53 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
                     .WithData(nameof(WebhookSubscription.WebhookUri), input.WebhookUri)
                     .WithData(nameof(WebhookSubscription.Webhooks), webhookName);
             }
+        }
+    }
+
+    protected virtual void UpdateByInput(WebhookSubscription subscription, WebhookSubscriptionCreateOrUpdateInput input)
+    {
+        if (!string.Equals(subscription.Secret, input.Secret, StringComparison.InvariantCultureIgnoreCase))
+        {
+            subscription.SetSecret(input.Secret);
+        }
+        if (!string.Equals(subscription.WebhookUri, input.WebhookUri, StringComparison.InvariantCultureIgnoreCase))
+        {
+            subscription.SetWebhookUri(input.WebhookUri);
+        }
+        if (!string.Equals(subscription.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+        {
+            subscription.Description = input.Description;
+        }
+        if (!Equals(subscription.TenantId, input.TenantId))
+        {
+            subscription.SetTenantId(input.TenantId);
+        }
+        subscription.IsActive = input.IsActive;
+    }
+
+    private class WebhookSubscriptionGetListSpecification : Volo.Abp.Specifications.Specification<WebhookSubscription>
+    {
+        protected WebhookSubscriptionGetListInput Filter { get; }
+
+        public WebhookSubscriptionGetListSpecification(WebhookSubscriptionGetListInput filter)
+        {
+            Filter = filter;
+        }
+
+        public override Expression<Func<WebhookSubscription, bool>> ToExpression()
+        {
+            Expression<Func<WebhookSubscription, bool>> expression = _ => true;
+
+            return expression
+                .AndIf(Filter.TenantId.HasValue, x => x.TenantId == Filter.TenantId)
+                .AndIf(Filter.IsActive.HasValue, x => x.IsActive == Filter.IsActive)
+                .AndIf(Filter.BeginCreationTime.HasValue, x => x.CreationTime >= Filter.BeginCreationTime)
+                .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime <= Filter.EndCreationTime)
+                .AndIf(!Filter.WebhookUri.IsNullOrWhiteSpace(), x => x.WebhookUri == Filter.WebhookUri)
+                .AndIf(!Filter.Secret.IsNullOrWhiteSpace(), x => x.Secret == Filter.Secret)
+                .AndIf(!Filter.Webhooks.IsNullOrWhiteSpace(), x => x.Webhooks.Contains("\"" + Filter.Webhooks + "\""))
+                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.WebhookUri.Contains(Filter.Filter) ||
+                    x.Secret.Contains(Filter.Filter) || x.Webhooks.Contains(Filter.Filter));
         }
     }
 }

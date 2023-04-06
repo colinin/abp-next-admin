@@ -36,6 +36,13 @@ export function getDataColumns(): BasicColumn[] {
       sorter: true,
     },
     {
+      title: L('DisplayName:Description'),
+      dataIndex: 'description',
+      align: 'left',
+      width: 200,
+      sorter: true,
+    },
+    {
       title: L('DisplayName:CreationTime'),
       dataIndex: 'creationTime',
       align: 'left',

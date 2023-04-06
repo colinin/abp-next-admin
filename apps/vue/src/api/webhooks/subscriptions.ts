@@ -53,6 +53,18 @@ export const deleteById = (id: string) => {
   });
 };
 
+export const deleteMany = (keys: string[]) => {
+  return defAbpHttp.request<void>({
+    service: remoteServiceName,
+    controller: controllerName,
+    action: 'DeleteManyAsync',
+    uniqueName: 'DeleteManyAsyncByInput',
+    data: {
+      recordIds: keys,
+    },
+  });
+};
+
 export const getList = (input: WebhookSubscriptionGetListInput) => {
   return defAbpHttp.request<PagedResultDto<WebhookSubscription>>({
     service: remoteServiceName,
