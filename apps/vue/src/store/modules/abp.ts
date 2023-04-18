@@ -6,24 +6,19 @@ import { createLocalStorage } from '/@/utils/cache';
 
 import { i18n } from '/@/locales/setupI18n';
 
-import { getApplicationConfiguration, getApiDefinition } from '/@/api/abp/abp';
-import {
-  ApplicationConfiguration,
-  Auth,
-  CurrentUser,
-  Localization,
-} from '/@/api/abp/model/appModel';
-import { ApplicationApiDescriptionModel } from '/@/api/abp/model/apiDefinition';
+import { GetAsyncByModel as getApiDefinition } from '/@/api/abp/api-definition';
+import { ApplicationApiDescriptionModel } from '/@/api/abp/api-definition/model';
+import { GetAsyncByOptions as getApplicationConfiguration } from '/@/api/abp/application-configuration';
 
 const ls = createLocalStorage();
-const defaultApp = new ApplicationConfiguration();
+const defaultApp = {};
 const defaultApi = new ApplicationApiDescriptionModel();
 
-const lsApplication = (ls.get(ABP_APP_KEY) || defaultApp) as ApplicationConfiguration;
+const lsApplication = (ls.get(ABP_APP_KEY) || defaultApp) as ApplicationConfigurationDto;
 const lsApiDefinition = (ls.get(ABP_API_KEY) || defaultApi) as ApplicationApiDescriptionModel;
 
 interface AbpState {
-  application: ApplicationConfiguration;
+  application: ApplicationConfigurationDto;
   apidefinition: ApplicationApiDescriptionModel;
 }
 
@@ -44,10 +39,10 @@ export const useAbpStore = defineStore({
   actions: {
     resetSession() {
       // 清除与用户相关的信息
-      this.application.auth = new Auth();
-      this.application.currentUser = new CurrentUser();
+      this.application.auth = {} as ApplicationAuthConfigurationDto;
+      this.application.currentUser = {} as CurrentUser;
     },
-    setApplication(application: ApplicationConfiguration) {
+    setApplication(application: ApplicationConfigurationDto) {
       this.application = application;
       ls.set(ABP_APP_KEY, application);
     },
@@ -55,7 +50,7 @@ export const useAbpStore = defineStore({
       this.apidefinition = apidefinition;
       ls.set(ABP_API_KEY, apidefinition);
     },
-    mergeLocaleMessage(localization: Localization) {
+    mergeLocaleMessage(localization: ApplicationLocalizationConfigurationDto) {
       if (localization.languagesMap['vben-admin-ui']) {
         const transferCulture = localization.languagesMap['vben-admin-ui'].filter(
           (x) => x.value === localization.currentCulture.cultureName,

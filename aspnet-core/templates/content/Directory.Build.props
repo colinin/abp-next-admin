@@ -1,8 +1,8 @@
 <Project>
 	<PropertyGroup>
 		<AgileConfigClientPackageVersion>1.6.9</AgileConfigClientPackageVersion>
-		<VoloAbpPackageVersion>7.0.3</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>7.0.3</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>7.1.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.1.1</LINGYUNAbpPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.1.0</DotNetCoreCAPPackageVersion>
 		<DaprPackageVersion>1.10.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>

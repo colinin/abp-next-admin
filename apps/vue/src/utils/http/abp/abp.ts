@@ -6,7 +6,7 @@ import {
   ApiVersionInfo,
   ControllerApiDescriptionModel,
   ModuleApiDescriptionModel,
-} from '/@/api/abp/model/apiDefinition';
+} from '/@/api/abp/api-definition/model';
 import { ParameterBindingSources, UrlBuilder } from '/@/utils/helper/abpApiHelper';
 
 import { useI18n } from '/@/hooks/web/useI18n';

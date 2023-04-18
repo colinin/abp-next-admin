@@ -11,17 +11,17 @@ namespace LINGYUN.Abp.Rules.RulesEngine
         /// 如果为 false,在上一个提供者解析规则之后立即执行规则  
         /// 默认：false
         /// </summary>
-        public bool MergingRuels { get; set; }
+        public bool MergingWorkflows { get; set; }
         /// <summary>
         /// 规则解析提供者
         /// </summary>
         [NotNull]
-        public List<IWorkflowRulesResolveContributor> WorkflowRulesResolvers { get; }
+        public List<IWorkflowsResolveContributor> WorkflowsResolvers { get; }
 
         public AbpRulesEngineResolveOptions()
         {
-            MergingRuels = false;
-            WorkflowRulesResolvers = new List<IWorkflowRulesResolveContributor>();
+            MergingWorkflows = false;
+            WorkflowsResolvers = new List<IWorkflowsResolveContributor>();
         }
     }
 }

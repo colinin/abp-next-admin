@@ -61,6 +61,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{00AB0A7E-578E-469C-B049-BCAA0233A9DD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "modules\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{90B326F6-99DF-4EEC-A480-26C27EE22237}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Notifications", "modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj", "{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{6399C2FB-B063-4BB3-B605-88CE5303198B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Notifications", "modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj", "{D2F6105D-D667-46DB-8CDA-89B4D3F69067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +171,22 @@ Global
 		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00AB0A7E-578E-469C-B049-BCAA0233A9DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B326F6-99DF-4EEC-A480-26C27EE22237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B326F6-99DF-4EEC-A480-26C27EE22237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B326F6-99DF-4EEC-A480-26C27EE22237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B326F6-99DF-4EEC-A480-26C27EE22237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6399C2FB-B063-4BB3-B605-88CE5303198B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6399C2FB-B063-4BB3-B605-88CE5303198B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6399C2FB-B063-4BB3-B605-88CE5303198B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6399C2FB-B063-4BB3-B605-88CE5303198B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +216,10 @@ Global
 		{B3C2AFCC-EE59-4CB4-AB62-B90D60335632} = {035B86BF-DD63-4A78-B8CE-29994860C948}
 		{A03A98B6-19E9-4CCA-9801-AEFCBAAF5B72} = {D2E33CD0-B6CA-49B7-930C-018257E78D99}
 		{00AB0A7E-578E-469C-B049-BCAA0233A9DD} = {D2E33CD0-B6CA-49B7-930C-018257E78D99}
+		{90B326F6-99DF-4EEC-A480-26C27EE22237} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
+		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
+		{6399C2FB-B063-4BB3-B605-88CE5303198B} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
+		{D2F6105D-D667-46DB-8CDA-89B4D3F69067} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

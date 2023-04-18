@@ -1,6 +1,6 @@
 ﻿using Elsa.Activities.Console;
-using Elsa.Activities.ControlFlow;
 using Elsa.Builders;
+using LINGYUN.Abp.Elsa.Notifications;
 
 namespace LINGYUN.Abp.Elsa.Activities.Webhooks.Tests;
 
@@ -9,6 +9,7 @@ public class PublishWebhookWorkflow : IWorkflow
     public void Build(IWorkflowBuilder builder)
     {
         builder
+            .WithCompletedNotification("Test-Notification")
             .WriteLine("This a simple workflow with publish webhook.")
             .PublishWebhook(
                 setup: activity => 

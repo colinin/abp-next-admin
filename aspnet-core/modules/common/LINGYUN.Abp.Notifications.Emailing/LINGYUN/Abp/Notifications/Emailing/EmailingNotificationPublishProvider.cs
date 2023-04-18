@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
-using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications.Emailing;
 
@@ -30,7 +29,6 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
 
     public EmailingNotificationPublishProvider(
         IEmailSender emailSender,
-        ITemplateRenderer templateRenderer,
         IStringLocalizerFactory localizerFactory,
         IIdentityUserRepository userRepository,
         IOptions<AbpLocalizationOptions> localizationOptions)
@@ -67,22 +65,14 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
         else
         {
             var titleInfo = notification.Data.TryGetData("title").As<LocalizableStringInfo>();
-            var titleResource = GetResource(titleInfo.ResourceName);
-            var titleLocalizer = await LocalizerFactory.CreateByResourceNameAsync(titleResource.ResourceName);
+            var titleLocalizer = await LocalizerFactory.CreateByResourceNameAsync(titleInfo.ResourceName);
             var title = titleLocalizer[titleInfo.Name, titleInfo.Values].Value;
 
             var messageInfo = notification.Data.TryGetData("message").As<LocalizableStringInfo>();
-            var messageResource = GetResource(messageInfo.ResourceName);
-            var messageLocalizer = await LocalizerFactory.CreateByResourceNameAsync(messageResource.ResourceName);
+            var messageLocalizer = await LocalizerFactory.CreateByResourceNameAsync(messageInfo.ResourceName);
             var message = messageLocalizer[messageInfo.Name, messageInfo.Values].Value;
 
             await EmailSender.SendAsync(emailAddress, title, message);
         }
-    }
-
-    private LocalizationResourceBase GetResource(string resourceName)
-    {
-        return LocalizationOptions.Resources.Values
-            .First(x => x.ResourceName.Equals(resourceName));
     }
 }

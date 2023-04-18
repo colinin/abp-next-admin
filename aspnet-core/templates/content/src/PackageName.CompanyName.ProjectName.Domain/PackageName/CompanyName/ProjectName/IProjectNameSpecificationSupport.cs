@@ -23,7 +23,7 @@ public interface IProjectNameSpecificationSupport<TEntity, TKey>
         ISpecification<TEntity> specification,
         CancellationToken cancellationToken = default);
     /// <summary>
-    /// 获取过滤后的实体列表
+    /// 获取过滤后的实体列表(分页)
     /// </summary>
     /// <param name="specification"></param>
     /// <param name="sorting"></param>
@@ -36,5 +36,18 @@ public interface IProjectNameSpecificationSupport<TEntity, TKey>
         string sorting = nameof(IEntity<TKey>.Id),
         int maxResultCount = 10,
         int skipCount = 0,
+        CancellationToken cancellationToken = default);
+    /// <summary>
+    /// 获取过滤后的实体列表
+    /// </summary>
+    /// <param name="specification"></param>
+    /// <param name="sorting"></param>
+    /// <param name="maxResultCount"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<TEntity>> GetListAsync(
+        ISpecification<TEntity> specification,
+        string sorting = nameof(IEntity<TKey>.Id),
+        int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 }

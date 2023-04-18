@@ -21,7 +21,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" Condition="'$(MySQL)'=='true'" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" Condition="'$(SqlServer)'=='true'" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(VoloAbpPackageVersion)" Condition="'$(Sqlite)'=='true'" />

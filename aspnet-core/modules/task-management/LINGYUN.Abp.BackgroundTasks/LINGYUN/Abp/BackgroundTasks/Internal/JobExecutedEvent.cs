@@ -34,6 +34,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
         // 任务异常后可重试
         if (context.EventData.Exception != null)
         {
+            job.TryCount += 1;
             job.IsAbandoned = false;
             job.Result = GetExceptionMessage(context.EventData.Exception);
 
@@ -66,7 +67,6 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             // 当未设置最大重试次数时不会标记停止
             if (job.MaxTryCount > 0 && job.TryCount >= job.MaxTryCount)
             {
-                job.TryCount += 1;
                 job.Status = JobStatus.Stopped;
                 job.IsAbandoned = true;
                 job.NextRunTime = null;
@@ -74,9 +74,12 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
             }
             else
             {
-                job.TryCount += 1;
-                // 失败的作业需要由当前节点来调度
-                await ScheduleJobAsync(context, job, context.EventData.CancellationToken);
+                // 周期性作业已经在队列中, 需要忽略
+                if (job.JobType != JobType.Period)
+                {
+                    // 失败的作业需要由当前节点来调度
+                    await ScheduleJobAsync(context, job, context.EventData.CancellationToken);
+                }
             }
         }
         else
