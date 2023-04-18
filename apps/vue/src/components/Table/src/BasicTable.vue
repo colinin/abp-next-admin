@@ -97,7 +97,7 @@
   import { warn } from '/@/utils/log';
 
   export default defineComponent({
-    name:'BasicTable',
+    name: 'BasicTable',
     components: {
       Table,
       BasicForm,
@@ -454,8 +454,10 @@
       margin-bottom: 16px;
     }
 
-    .ant-tag {
-      margin-right: 0;
+    .ant-table-cell {
+      .ant-tag {
+        margin-right: 0;
+      }
     }
 
     .ant-table-wrapper {

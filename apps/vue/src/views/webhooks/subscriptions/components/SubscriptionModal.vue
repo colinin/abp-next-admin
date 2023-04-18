@@ -57,7 +57,7 @@
         </Select>
       </FormItem>
       <FormItem name="headers" :label="L('DisplayName:Headers')">
-        <CodeEditorX style="height: 300px" :mode="MODE.JSON" v-model="modelRef.headers" />
+        <CodeEditor style="height: 300px" :mode="MODE.JSON" v-model:value="modelRef.headers" />
       </FormItem>
     </Form>
   </BasicModal>
@@ -70,7 +70,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Checkbox, Form, Select, Tooltip, Input, InputPassword, Textarea } from 'ant-design-vue';
   import { isString } from '/@/utils/is';
-  import { CodeEditorX, MODE } from '/@/components/CodeEditor';
+  import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { TenantDto } from '/@/api/saas/tenant/model';
   import { GetListAsyncByInput as getTenants } from '/@/api/saas/tenant';
@@ -133,6 +133,19 @@
       length: 128,
       type: 'string',
     }),
+    // headers: ruleCreator.defineValidator({
+    //   trigger: 'change',
+    //   validator: (_, value: any) => {
+    //     console.log(String(value));
+    //     if (!value) {
+    //       return Promise.resolve();
+    //     }
+    //     if (isJson(value)) {
+    //       return Promise.resolve();
+    //     }
+    //     return Promise.reject(L('InvalidHeaders'));
+    //   },
+    // }),
   });
 
   onMounted(() => {
@@ -169,11 +182,11 @@
   function handleSubmit() {
     const formEl = unref(formElRef);
     formEl?.validate().then(() => {
-      changeOkLoading(true);
       const model = unref(modelRef);
       if (isString(model.headers)) {
         model.headers = JSON.parse(model.headers);
       }
+      changeOkLoading(true);
       const api = isEditModal.value
         ? update(model.id, Object.assign(model))
         : create(Object.assign(model));

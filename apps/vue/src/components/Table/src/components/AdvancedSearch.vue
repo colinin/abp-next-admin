@@ -24,9 +24,8 @@
               style="width: 100%;"
               show-search
               v-model:value="record.field"
-              :options="getAvailableParams"
+              :options="getAvailableOptions"
               :filter-option="filterOption"
-              :field-names="{ label: 'description', value: 'name' }"
               @change="(field) => handleFieldChange(field, record)"
             />
           </template>
@@ -43,13 +42,13 @@
               v-else-if="record.javaScriptType==='number' && record.options && record.options.length > 0"
               style="width: 100%;"
               v-model:value="record.value"
-              :options="getAvailableOptions"
+              :options="record.options"
+              :field-names="{
+                label: 'key',
+                value: 'value'
+              }"
             />
-            <InputNumber
-              v-else-if="record.javaScriptType==='number'"
-              style="width: 100%;"
-              v-model:value="record.value"
-            />
+            <InputNumber v-else-if="record.javaScriptType==='number'" style="width: 100%;" v-model:value="record.value" />
             <Switch v-else-if="record.javaScriptType==='boolean'" v-model:checked="record.value" />
             <DatePicker
               v-else-if="record.javaScriptType==='Date'"
@@ -250,6 +249,19 @@
     return defineParams.filter(dp => !formMdel.paramters.some(fp => fp.field === dp.name));
   });
 
+  const getAvailableOptions = computed(() => {
+    const availableParams = unref(getAvailableParams);
+    if (!availableParams.length) return[];
+    return availableParams
+      .map((item) => {
+        return {
+          label: item.description,
+          value: item.name,
+          children: [],
+        }
+      });
+  });
+
   const getAvailableComparisonOptions = computed(() => {
     return (paramter: DynamicParamter) => {
       const defineParams = unref(defineParamsRef);
@@ -265,18 +277,6 @@
       return comparisonOptions
         .filter(c => availableComparator.includes(c.value));
     }
-  });
-  const getAvailableOptions = computed(() => {
-    const availableParams = unref(getAvailableParams);
-    if (!availableParams.length) return[];
-    return availableParams
-      .map((item) => {
-        return {
-          label: item.description,
-          value: item.name,
-          children: [],
-        }
-      });
   });
 
   const filterOption = (input: string, option: any) => {
@@ -300,6 +300,7 @@
         const isArrayResult = Array.isArray(res);
         resultItems = isArrayResult ? res : get(res, listField || 'items');
       }
+      console.log(resultItems);
       defineParamsRef.value = resultItems;
     }).finally(() => {
       setLoading(false);

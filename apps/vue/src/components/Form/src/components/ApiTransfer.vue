@@ -76,6 +76,9 @@
         if (Array.isArray(props.value)) {
           return props.value;
         }
+        if (Array.isArray(props.targetKeys)){
+          return props.targetKeys;
+        }
         return [];
       });
       function handleChange(keys: string[], direction: TransferDirection, moveKeys: string[]) {

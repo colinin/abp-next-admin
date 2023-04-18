@@ -11,7 +11,7 @@ export function useTableForm(
   slots: Slots,
   fetch: (opt?: FetchParams | undefined) => Promise<void>,
   getLoading: ComputedRef<boolean | undefined>,
-  setFieldsValue: <T>(values: T) => Promise<void>,
+  setFieldsValue: (values: Recordable) => Promise<void>,
 ) {
   const getFormProps = computed((): Partial<FormProps> => {
     const { formConfig, advancedSearchConfig } = unref(propsRef);
