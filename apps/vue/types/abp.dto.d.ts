@@ -118,3 +118,143 @@ declare interface PagedResultRequestDto extends LimitedResultRequestDto {
 }
 
 declare interface ExtensiblePagedResultRequestDto extends PagedResultRequestDto, ExtensibleObject {}
+
+declare interface ApplicationLocalizationResourceDto {
+  texts: Dictionary<string, string>;
+  baseResources: string[];
+}
+
+declare interface ApplicationLocalizationDto {
+  resources: Dictionary<string, ApplicationLocalizationResourceDto>;
+}
+
+declare interface ApplicationLocalizationConfigurationDto {
+  values: Dictionary<string, Dictionary<string, string>>;
+  resources: Dictionary<string, ApplicationLocalizationResourceDto>;
+  languages: LanguageInfo[];
+  currentCulture: CurrentCulture;
+  defaultResourceName: string;
+  languagesMap: Dictionary<string, NameValue[]>;
+  languageFilesMap: Dictionary<string, NameValue[]>;
+}
+
+declare interface ApplicationAuthConfigurationDto {
+  grantedPolicies: Dictionary<string, boolean>;
+}
+
+declare interface ApplicationSettingConfigurationDto {
+  values: Dictionary<string, string>;
+}
+
+declare interface ApplicationFeatureConfigurationDto {
+  values: Dictionary<string, string>;
+}
+
+declare interface ApplicationGlobalFeatureConfigurationDto {
+  enabledFeatures: string[];
+}
+
+declare interface TimingDto {
+  timeZone: TimeZone;
+}
+
+declare interface LocalizableStringDto {
+  name: string;
+  resource?: string;
+}
+
+declare interface ExtensionPropertyApiGetDto {
+  isAvailable: boolean;
+}
+
+declare interface ExtensionPropertyApiCreateDto {
+  isAvailable: boolean;
+}
+
+declare interface ExtensionPropertyApiUpdateDto {
+  isAvailable: boolean;
+}
+
+declare interface ExtensionPropertyUiTableDto {
+  isAvailable: boolean;
+}
+
+declare interface ExtensionPropertyUiFormDto {
+  isAvailable: boolean;
+}
+
+declare interface ExtensionPropertyUiLookupDto {
+  url: string;
+  resultListPropertyName: string;
+  displayPropertyName: string;
+  valuePropertyName: string;
+  filterParamName: string;
+}
+
+declare interface ExtensionPropertyApiDto {
+  onGet: ExtensionPropertyApiGetDto;
+  onCreate: ExtensionPropertyApiCreateDto;
+  onUpdate: ExtensionPropertyApiUpdateDto;
+}
+
+declare interface ExtensionPropertyUiDto {
+  onTable: ExtensionPropertyUiTableDto;
+  onCreateForm: ExtensionPropertyUiFormDto;
+  onEditForm: ExtensionPropertyUiFormDto;
+  lookup: ExtensionPropertyUiLookupDto;
+}
+
+declare interface ExtensionPropertyAttributeDto {
+  typeSimple: string;
+  config: Dictionary<string, any>;
+}
+
+declare interface ExtensionPropertyDto {
+  type: string;
+  typeSimple: string;
+  displayName?: LocalizableStringDto;
+  api: ExtensionPropertyApiDto;
+  ui: ExtensionPropertyUiDto;
+  attributes: ExtensionPropertyAttributeDto[];
+  configuration: Dictionary<string, any>;
+  defaultValue: any;
+}
+
+declare interface EntityExtensionDto {
+  properties: Dictionary<string, ExtensionPropertyDto>;
+  configuration: Dictionary<string, any>;
+}
+
+declare interface ModuleExtensionDto {
+  entities: Dictionary<string, EntityExtensionDto>;
+  configuration: Dictionary<string, any>;
+}
+
+declare interface ExtensionEnumFieldDto {
+  name: string;
+  value: any;
+}
+
+declare interface ExtensionEnumDto {
+  fields: ExtensionEnumFieldDto[];
+  localizationResource: string;
+}
+
+declare interface ObjectExtensionsDto {
+  modules: Dictionary<string, ModuleExtensionDto>;
+  enums: Dictionary<string, ExtensionEnumDto>;
+}
+
+declare interface ApplicationConfigurationDto extends IHasExtraProperties {
+  localization: ApplicationLocalizationConfigurationDto;
+  auth: ApplicationAuthConfigurationDto;
+  setting: ApplicationSettingConfigurationDto;
+  currentUser: CurrentUser;
+  features: ApplicationFeatureConfigurationDto;
+  globalFeatures: ApplicationGlobalFeatureConfigurationDto;
+  multiTenancy: MultiTenancyInfo;
+  currentTenant: CurrentTenant;
+  timing: Timing;
+  clock: Clock;
+  objectExtensions: ObjectExtensionsDto;
+}

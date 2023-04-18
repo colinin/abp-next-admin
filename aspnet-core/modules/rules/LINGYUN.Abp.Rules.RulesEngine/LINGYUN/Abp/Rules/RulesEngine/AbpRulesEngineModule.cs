@@ -1,8 +1,11 @@
 ﻿using LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical;
 using LINGYUN.Abp.Rules.RulesEngine.Persistent;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using RulesEngine.Interfaces;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Engine = RulesEngine.RulesEngine;
 
 namespace LINGYUN.Abp.Rules.RulesEngine
 {
@@ -22,8 +25,14 @@ namespace LINGYUN.Abp.Rules.RulesEngine
 
             Configure<AbpRulesEngineResolveOptions>(options =>
             {
-                options.WorkflowRulesResolvers.Add(new PersistentWorkflowRulesResolveContributor());
-                options.WorkflowRulesResolvers.Add(new PhysicalFileWorkflowRulesResolveContributor());
+                options.WorkflowsResolvers.Add(new PersistentWorkflowsResolveContributor());
+                options.WorkflowsResolvers.Add(new PhysicalFileWorkflowsResolveContributor());
+            });
+
+            context.Services.AddSingleton<IRulesEngine>((sp) =>
+            {
+                var options = sp.GetRequiredService<IOptions<AbpRulesEngineOptions>>().Value;
+                return new Engine(options.Settings);
             });
         }
     }

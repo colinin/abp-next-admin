@@ -1,5 +1,5 @@
 ﻿<template>
-  <div>
+  <div :class="getWrapperClass">
     <BasicTable @register="registerTable">
       <template #toolbar>
         {{~ if model.has_create ~}}
@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, useAttrs } from 'vue';
   {{~ if model.has_create ~}}
   import { Button } from 'ant-design-vue';
   {{~ end ~}}
@@ -60,6 +61,7 @@
   import { getSearchFormProps } from '../datas/ModalData';
   {{~ if model.has_create || model.has_update ~}}
   import { useModal } from '/@/components/Modal';
+  import { useDesign } from '/@/hooks/web/useDesign';
   {{~ end ~}}
   {{~ if model.has_delete ~}}
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -71,6 +73,17 @@
   {{~ end ~}}
   import {{model.modal_name}} from './{{model.modal_name}}.vue';
 
+  const attrs = useAttrs();
+  const { prefixCls } = useDesign('{{model.application}}');
+  const getWrapperClass = computed(() => {
+    return [
+      prefixCls,
+      attrs.class,
+      {
+        [`${prefixCls}-container`]: true,
+      },
+    ];
+  });
   const { L } = useLocalization(['{{model.remote_service}}', 'AbpUi']);
   {{~ if model.has_delete ~}}
   const { createConfirm, createMessage } = useMessage();
@@ -139,3 +152,11 @@
   }
   {{~ end ~}}
 </script>
+
+<style lang="less" scoped>
+    @prefix-cls: ~'@{namespace}-{{model.application}}';
+    .@{prefix-cls} {
+        max-width: 100%;
+        height: 100%;
+    }
+</style>

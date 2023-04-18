@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using Elsa;
+﻿using Elsa;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -12,6 +11,7 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+using LINGYUN.Abp.Elsa.Notifications;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
@@ -53,6 +53,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),
+    typeof(AbpElsaNotificationsModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),

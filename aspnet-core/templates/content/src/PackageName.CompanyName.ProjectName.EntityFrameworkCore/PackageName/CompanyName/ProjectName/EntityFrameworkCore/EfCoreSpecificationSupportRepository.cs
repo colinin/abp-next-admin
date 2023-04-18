@@ -49,6 +49,19 @@ public abstract class EfCoreSpecificationSupportRepository<TEntity, TKey> :
               .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public async virtual Task<List<TEntity>> GetListAsync(
+        ISpecification<TEntity> specification,
+        string sorting = nameof(IEntity<TKey>.Id),
+        int maxResultCount = 10,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+              .Where(specification.ToExpression())
+              .OrderBy(GetSortingOrDefault(sorting))
+              .Take(maxResultCount)
+              .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     protected virtual string GetSortingOrDefault(string sorting = nameof(IEntity<TKey>.Id))
     {
         if (sorting.IsNullOrWhiteSpace())

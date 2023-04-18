@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj" />
+    <ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>
 

@@ -20,6 +20,7 @@ declare module 'vue-router' {
     // icon on tab
     icon?: string;
     frameSrc?: string;
+    frameFormat?: string;
     // current page transition
     transitionName?: string;
     // Whether the route has been dynamically added
