@@ -46,6 +46,7 @@
       const oldValue = editor?.getValue();
       if (value !== oldValue) {
         editor?.setValue(value ? value : '');
+        setTimeout(refresh, 50);
       }
     },
     { flush: 'post' },
