@@ -109,25 +109,6 @@
     openModal(true, record);
   }
 
-  function handleDelete(record) {
-    createConfirm({
-      iconType: 'warning',
-      title: L('AreYouSure'),
-      content: L('ItemWillBeDeletedMessage'),
-      okCancel: true,
-      onOk: () => {
-        setLoading(true);
-        return deleteById(record.id).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
-      },
-    });
-  }
-
   function handleDeleteMany() {
     createConfirm({
       iconType: 'warning',
@@ -138,6 +119,25 @@
         const selectKeys = getSelectRowKeys();
         setLoading(true);
         return deleteMany(selectKeys).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
+  }
+
+  function handleDelete(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessage'),
+      okCancel: true,
+      onOk: () => {
+        setLoading(true);
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
           reload();

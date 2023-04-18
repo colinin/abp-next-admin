@@ -30,7 +30,7 @@
             <Input readonly :value="getDateTime(modelRef.creationTime)" />
           </FormItem>
           <FormItem :label="L('DisplayName:RequestHeaders')">
-            <CodeEditorX readonly :mode="MODE.JSON" v-model="modelRef.requestHeaders" />
+            <CodeEditor readonly :mode="MODE.JSON" :value="getJsonValue(modelRef.requestHeaders)" />
           </FormItem>
           <FormItem :label="L('DisplayName:ResponseStatusCode')">
             <Tag
@@ -40,10 +40,10 @@
             >
           </FormItem>
           <FormItem :label="L('DisplayName:ResponseHeaders')">
-            <CodeEditorX readonly :mode="MODE.JSON" v-model="modelRef.responseHeaders" />
+            <CodeEditor readonly :mode="MODE.JSON" :value="getJsonValue(modelRef.responseHeaders)" />
           </FormItem>
           <FormItem :label="L('DisplayName:Response')">
-            <CodeEditorX readonly v-model="modelRef.response" />
+            <CodeEditor readonly :value="getJsonValue(modelRef.response)" />
           </FormItem>
         </TabPane>
 
@@ -51,17 +51,17 @@
           <FormItem :label="L('DisplayName:TenantId')">
             <Input readonly :value="getTenant" />
           </FormItem>
-          <FormItem :label="L('DisplayName:WebhookEventId')">
+          <FormItem name="webhookEventId" :label="L('DisplayName:WebhookEventId')">
             <Input readonly :value="modelRef.webhookEventId" />
           </FormItem>
-          <FormItem :label="L('DisplayName:WebhookName')">
+          <FormItem :name="['webhookEvent', 'webhookName']" :label="L('DisplayName:WebhookName')">
             <Input readonly :value="modelRef.webhookEvent.webhookName" />
           </FormItem>
-          <FormItem :label="L('DisplayName:CreationTime')">
+          <FormItem :name="['webhookEvent', 'creationTime']" :label="L('DisplayName:CreationTime')">
             <Input readonly :value="getDateTime(modelRef.webhookEvent.creationTime)" />
           </FormItem>
-          <FormItem :label="L('DisplayName:Data')">
-            <CodeEditorX readonly :mode="MODE.JSON" v-model="modelRef.webhookEvent.data" />
+          <FormItem :name="['webhookEvent', 'data']" :label="L('DisplayName:Data')">
+            <CodeEditor readonly :mode="MODE.JSON" :value="modelRef.webhookEvent.data" />
           </FormItem>
         </TabPane>
 
@@ -100,7 +100,7 @@
             </template>
           </FormItem>
           <FormItem name="headers" :label="L('DisplayName:Headers')">
-            <CodeEditorX readonly :mode="MODE.JSON" v-model="subscriptionRef.headers" />
+            <CodeEditor readonly :mode="MODE.JSON" :value="getJsonValue(subscriptionRef.headers)" />
           </FormItem>
         </TabPane>
       </Tabs>
@@ -113,7 +113,7 @@
   import { useTabsStyle } from '/@/hooks/component/useStyles';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Form, Tabs, Tag, Input, InputPassword, Textarea } from 'ant-design-vue';
-  import { CodeEditorX, MODE } from '/@/components/CodeEditor';
+  import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { findTenantById } from '/@/api/multi-tenancy/tenants';
   import { getById } from '/@/api/webhooks/send-attempts';
@@ -122,6 +122,7 @@
   import { WebhookSubscription } from '/@/api/webhooks/model/subscriptionsModel';
   import { httpStatusCodeMap, getHttpStatusColor } from '../../typing';
   import { formatToDateTime } from '/@/utils/dateUtil';
+  import { isString } from '/@/utils/is';
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
@@ -131,10 +132,12 @@
   const activeKey = ref('basic');
   const tenantName = ref('');
   const tabsStyle = useTabsStyle();
-  const modelRef = ref<WebhookSendAttempt>(getDefaultModel());
-  const subscriptionRef = ref<WebhookSubscription>(getDefaultSubscription());
+  const modelRef = ref<WebhookSendAttempt>({} as WebhookSendAttempt);
+  const subscriptionRef = ref<WebhookSubscription>({} as WebhookSubscription);
   const [registerModal] = useModalInner((model) => {
     activeKey.value = 'basic';
+    modelRef.value = {} as WebhookSendAttempt;
+    subscriptionRef.value = {} as WebhookSubscription;
     fetchModel(model.id);
   });
   const getDateTime = computed(() => {
@@ -144,6 +147,13 @@
   });
   const getTenant = computed(() => {
     return tenantName.value ?? modelRef.value.tenantId;
+  });
+  const getJsonValue = computed(() => {
+    return (value?: Recordable | string) => {
+      if (!value) return '{}';
+      if (isString(value)) return value;
+      return JSON.stringify(value);
+    };
   });
 
   watch(
@@ -172,39 +182,5 @@
     getSubscription(id).then((res) => {
       subscriptionRef.value = res;
     });
-  }
-
-  function getDefaultModel(): WebhookSendAttempt {
-    return {
-      id: '',
-      webhookEventId: '',
-      webhookSubscriptionId: '',
-      webhookEvent: {
-        tenantId: undefined,
-        webhookName: '',
-        data: '{}',
-        creationTime: new Date(),
-      },
-      response: '',
-      responseStatusCode: undefined,
-      creationTime: new Date(),
-      lastModificationTime: undefined,
-      requestHeaders: {},
-      responseHeaders: {},
-      sendExactSameData: false,
-    };
-  }
-
-  function getDefaultSubscription(): WebhookSubscription {
-    return {
-      id: '',
-      webhooks: [],
-      webhookUri: '',
-      headers: {},
-      secret: '',
-      isActive: true,
-      creatorId: '',
-      creationTime: new Date(),
-    };
   }
 </script>

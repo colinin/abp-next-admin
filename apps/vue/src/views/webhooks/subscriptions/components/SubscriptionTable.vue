@@ -69,7 +69,7 @@
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, setLoading, clearSelectedRowKeys, getSelectRowKeys }] = useTable({
+  const [registerTable, { reload, setLoading, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('Subscriptions'),
     columns: getDataColumns(),
@@ -107,25 +107,6 @@
     openModal(true, record);
   }
 
-  function handleDelete(record) {
-    createConfirm({
-      iconType: 'warning',
-      title: L('AreYouSure'),
-      content: L('ItemWillBeDeletedMessage'),
-      okCancel: true,
-      onOk: () => {
-        setLoading(true);
-        return deleteById(record.id).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
-      },
-    });
-  }
-
   function handleDeleteMany() {
     createConfirm({
       iconType: 'warning',
@@ -138,6 +119,26 @@
         return deleteMany(selectKeys).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
+          reload();
+        }).finally(() => {
+          setLoading(false);
+        });
+      },
+    });
+  }
+
+  function handleDelete(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessage'),
+      okCancel: true,
+      onOk: () => {
+        setLoading(true);
+        return deleteById(record.id).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          clearSelectedRowKeys();
+          reload();
           reload();
         }).finally(() => {
           setLoading(false);

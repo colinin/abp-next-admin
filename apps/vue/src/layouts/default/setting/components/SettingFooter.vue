@@ -38,6 +38,7 @@
 
   import { updateColorWeak } from '/@/logics/theme/updateColorWeak';
   import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
+  import { updateSidebarBgColor } from '/@/logics/theme/updateBackground';
   import { changeTheme } from '/@/logics/theme';
   import defaultSetting from '/@/settings/projectSetting';
 
@@ -72,6 +73,7 @@
           appStore.setProjectConfig(defaultSetting);
           const { colorWeak, grayMode, themeColor } = defaultSetting;
           changeTheme(themeColor);
+          updateSidebarBgColor();
           updateColorWeak(colorWeak);
           updateGrayMode(grayMode);
           createMessage.success(t('layout.setting.resetSuccess'));
