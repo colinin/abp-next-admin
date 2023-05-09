@@ -27,7 +27,7 @@ public class AbpBackgroundTasksAbstractionsModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IJobDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

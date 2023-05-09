@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.UI.Navigation
         {
             var definitionProviders = new List<Type>();
 
-            services.OnRegistred(context =>
+            services.OnRegistered(context =>
             {
                 if (typeof(INavigationDefinitionProvider).IsAssignableFrom(context.ImplementationType))
                 {

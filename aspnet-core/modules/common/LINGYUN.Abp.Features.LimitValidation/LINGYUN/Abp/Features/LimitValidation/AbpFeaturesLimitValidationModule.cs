@@ -15,7 +15,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.OnRegistred(FeaturesLimitValidationInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.OnRegistered(FeaturesLimitValidationInterceptorRegistrar.RegisterIfNeeded);
 
             Configure<AbpFeaturesLimitValidationOptions>(options =>
             {

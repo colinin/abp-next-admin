@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.Dapr.Actors.AspNetCore
         {
             var actorRegistrations = new List<ActorRegistration>();
 
-            services.OnRegistred(context =>
+            services.OnRegistered(context =>
             {
                 if (typeof(IActor).IsAssignableFrom(context.ImplementationType) &&
                     !actorRegistrations.Contains(context.ImplementationType))

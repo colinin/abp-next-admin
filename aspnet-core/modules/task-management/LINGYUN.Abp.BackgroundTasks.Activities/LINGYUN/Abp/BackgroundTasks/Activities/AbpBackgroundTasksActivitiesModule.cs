@@ -41,7 +41,7 @@ public class AbpBackgroundTasksActivitiesModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IJobActionDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

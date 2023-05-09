@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Rules.NRules
         {
             var definitionRules = new List<Type>();
 
-            services.OnRegistred(context =>
+            services.OnRegistered(context =>
             {
                 if (typeof(RuleBase).IsAssignableFrom(context.ImplementationType))
                 {
