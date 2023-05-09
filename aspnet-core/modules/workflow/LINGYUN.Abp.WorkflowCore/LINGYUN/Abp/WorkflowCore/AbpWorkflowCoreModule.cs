@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.WorkflowCore
 
         private static void AutoAddDefinitionWorkflows(IServiceCollection services)
         {
-            services.OnRegistred(context =>
+            services.OnRegistered(context =>
             {
                 if (context.ImplementationType.IsWorkflow())
                 {

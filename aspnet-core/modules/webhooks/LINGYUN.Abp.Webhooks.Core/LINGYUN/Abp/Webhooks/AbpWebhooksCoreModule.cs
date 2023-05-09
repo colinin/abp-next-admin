@@ -18,7 +18,7 @@ public class AbpWebhooksCoreModule : AbpModule
     {
         var definitionProviders = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IWebhookDefinitionProvider).IsAssignableFrom(context.ImplementationType))
             {

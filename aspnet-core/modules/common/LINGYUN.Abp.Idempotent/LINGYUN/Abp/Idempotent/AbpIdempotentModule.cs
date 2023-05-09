@@ -17,7 +17,7 @@ public class AbpIdempotentModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.OnRegistred(IdempotentInterceptorRegistrar.RegisterIfNeeded);
+        context.Services.OnRegistered(IdempotentInterceptorRegistrar.RegisterIfNeeded);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
