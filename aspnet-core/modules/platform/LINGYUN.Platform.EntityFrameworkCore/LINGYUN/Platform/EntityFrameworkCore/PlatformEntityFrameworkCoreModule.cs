@@ -2,6 +2,7 @@
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
+using LINGYUN.Platform.Portal;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -24,6 +25,7 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 options.AddRepository<UserFavoriteMenu, EfCoreUserFavoriteMenuRepository>();
                 options.AddRepository<Layout, EfCoreLayoutRepository>();
                 options.AddRepository<Package, EfCorePackageRepository>();
+                options.AddRepository<Enterprise, EfCoreEnterpriseRepository>();
 
                 options.AddDefaultRepositories(includeAllEntities: true);
             });

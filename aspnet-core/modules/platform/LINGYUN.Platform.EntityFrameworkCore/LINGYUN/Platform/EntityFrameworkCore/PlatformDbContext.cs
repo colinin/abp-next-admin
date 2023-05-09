@@ -2,6 +2,7 @@
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
+using LINGYUN.Platform.Portal;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace LINGYUN.Platform.EntityFrameworkCore
         public DbSet<DataItem> DataItems { get; set; }
         public DbSet<Package> Packages { get; set; }
         public DbSet<PackageBlob> PackageBlobs { get; set; }
+        public DbSet<Enterprise> Enterprises { get; set; }
         public PlatformDbContext(DbContextOptions<PlatformDbContext> options)
             : base(options)
         {

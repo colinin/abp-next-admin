@@ -112,7 +112,7 @@ public class AbpElsaWorkflowNotificationHandler :
             await notificationSender.SendNofiterAsync(
                 notificationName,
                 notificationTemplate,
-                tenantId: currentTenant.Id ?? workflowInstance.GetTenantId(),
+                tenantId: executionContext.GetNotificationTenantId() ?? currentTenant.Id ?? workflowInstance.GetTenantId(),
                 severity: severity);
         }
         catch (Exception ex)
