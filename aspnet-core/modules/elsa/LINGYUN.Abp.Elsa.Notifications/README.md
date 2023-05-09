@@ -59,6 +59,8 @@
                 {
                     // 可传递自定义参数, 将作为瞬时变量写入到发布的通知数据中
                     context.WithNotificationData("demo", "demo");
+                    // 自定义用于发布通知的租户标识
+                    context.WithNotificationTenantId(Guid.NewGuid());
                 })
                 .WriteLine("Start a workflow.")
                 .WriteLine("Workflow finished.");

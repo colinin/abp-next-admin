@@ -3,12 +3,14 @@ using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
+using LINGYUN.Platform.Portal;
 using LINGYUN.Platform.Routes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace LINGYUN.Platform.EntityFrameworkCore
 {
@@ -240,6 +242,40 @@ namespace LINGYUN.Platform.EntityFrameworkCore
                 x.ConfigureByConvention();
 
                 x.HasIndex(i => new { i.PackageId, i.Name });
+            });
+
+            builder.Entity<Enterprise>(x =>
+            {
+                x.ToTable(options.TablePrefix + "Enterprises", options.Schema);
+
+                x.Property(p => p.Name)
+                    .IsRequired()
+                    .HasColumnName(nameof(Enterprise.Name))
+                    .HasMaxLength(EnterpriseConsts.MaxNameLength);
+
+                x.Property(p => p.EnglishName)
+                    .HasColumnName(nameof(Enterprise.EnglishName))
+                    .HasMaxLength(EnterpriseConsts.MaxEnglishNameLength);
+                x.Property(p => p.Address)
+                    .HasColumnName(nameof(Enterprise.Address))
+                    .HasMaxLength(EnterpriseConsts.MaxAddressLength);
+                x.Property(p => p.Logo)
+                    .HasColumnName(nameof(Enterprise.Logo))
+                    .HasMaxLength(EnterpriseConsts.MaxLogoLength);
+                x.Property(p => p.LegalMan)
+                    .HasColumnName(nameof(Enterprise.LegalMan))
+                    .HasMaxLength(EnterpriseConsts.MaxLegalManLength);
+                x.Property(p => p.TaxCode)
+                   .HasColumnName(nameof(Enterprise.TaxCode))
+                   .HasMaxLength(EnterpriseConsts.MaxTaxCodeLength);
+                x.Property(p => p.OrganizationCode)
+                    .HasColumnName(nameof(Enterprise.OrganizationCode))
+                    .HasMaxLength(EnterpriseConsts.MaxOrganizationCodeLength);
+                x.Property(p => p.RegistrationCode)
+                    .HasColumnName(nameof(Enterprise.RegistrationCode))
+                    .HasMaxLength(EnterpriseConsts.MaxRegistrationCodeLength);
+
+                x.ConfigureByConvention();
             });
         }
 

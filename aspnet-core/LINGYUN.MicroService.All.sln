@@ -591,17 +591,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rules-management", "rules-m
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rules-engine", "rules-engine", "{F7103498-8B5B-4698-AACE-9E949F732E77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.Domain.Shared", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Domain.Shared\LINGYUN.Abp.RulesEngineManagement.Domain.Shared.csproj", "{2EAA690B-1395-4952-95A0-A52F929028C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.Domain.Shared", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Domain.Shared\LINGYUN.Abp.RulesEngineManagement.Domain.Shared.csproj", "{2EAA690B-1395-4952-95A0-A52F929028C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.Domain", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Domain\LINGYUN.Abp.RulesEngineManagement.Domain.csproj", "{722FE012-8F23-4558-9E8F-A37C02902058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.Domain", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Domain\LINGYUN.Abp.RulesEngineManagement.Domain.csproj", "{722FE012-8F23-4558-9E8F-A37C02902058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.Application.Contracts", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Application.Contracts\LINGYUN.Abp.RulesEngineManagement.Application.Contracts.csproj", "{79D3C6D6-6433-471D-B354-477E07CB08EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.Application.Contracts", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Application.Contracts\LINGYUN.Abp.RulesEngineManagement.Application.Contracts.csproj", "{79D3C6D6-6433-471D-B354-477E07CB08EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.Application", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Application\LINGYUN.Abp.RulesEngineManagement.Application.csproj", "{5A3B9F4D-E6CC-410F-B307-0E69CCA213F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.Application", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Application\LINGYUN.Abp.RulesEngineManagement.Application.csproj", "{5A3B9F4D-E6CC-410F-B307-0E69CCA213F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore\LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore.csproj", "{4CDCD854-6E06-4076-AE94-53C1C1D7F6FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore\LINGYUN.Abp.RulesEngineManagement.EntityFrameworkCore.csproj", "{4CDCD854-6E06-4076-AE94-53C1C1D7F6FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.RulesEngineManagement.HttpApi", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.HttpApi\LINGYUN.Abp.RulesEngineManagement.HttpApi.csproj", "{97062425-3379-4F8D-BFA2-D445C56C0801}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RulesEngineManagement.HttpApi", "modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.HttpApi\LINGYUN.Abp.RulesEngineManagement.HttpApi.csproj", "{97062425-3379-4F8D-BFA2-D445C56C0801}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.Portal", "modules\identityServer\LINGYUN.Abp.IdentityServer.Portal\LINGYUN.Abp.IdentityServer.Portal.csproj", "{5B20BA13-40FF-4743-AEEE-2E3F887F50C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OpenIddict.Portal", "modules\openIddict\LINGYUN.Abp.OpenIddict.Portal\LINGYUN.Abp.OpenIddict.Portal.csproj", "{03EC70B8-912C-4FBE-94DD-6327F4F23021}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1537,6 +1541,14 @@ Global
 		{97062425-3379-4F8D-BFA2-D445C56C0801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97062425-3379-4F8D-BFA2-D445C56C0801}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97062425-3379-4F8D-BFA2-D445C56C0801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03EC70B8-912C-4FBE-94DD-6327F4F23021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03EC70B8-912C-4FBE-94DD-6327F4F23021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03EC70B8-912C-4FBE-94DD-6327F4F23021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03EC70B8-912C-4FBE-94DD-6327F4F23021}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1828,6 +1840,8 @@ Global
 		{5A3B9F4D-E6CC-410F-B307-0E69CCA213F5} = {F7103498-8B5B-4698-AACE-9E949F732E77}
 		{4CDCD854-6E06-4076-AE94-53C1C1D7F6FA} = {F7103498-8B5B-4698-AACE-9E949F732E77}
 		{97062425-3379-4F8D-BFA2-D445C56C0801} = {F7103498-8B5B-4698-AACE-9E949F732E77}
+		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
+		{03EC70B8-912C-4FBE-94DD-6327F4F23021} = {83E698F6-F8CD-4604-AB80-01A203389501}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
