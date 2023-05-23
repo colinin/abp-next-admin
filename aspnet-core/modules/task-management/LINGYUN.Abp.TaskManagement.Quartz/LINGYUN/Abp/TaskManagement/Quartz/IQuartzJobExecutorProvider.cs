@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using Quartz;
 
 namespace LINGYUN.Abp.TaskManagement.Quartz;
 

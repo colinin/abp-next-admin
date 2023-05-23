@@ -35,7 +35,8 @@ public class HangfireJobScheduler : IJobScheduler, ISingletonDependency
     {
         var monitor = JobStorage.GetMonitoringApi();
 
-        monitor.JobDetails(job.);
+        monitor.JobDetails(job.Id);
+        return true;
     }
 
     public Task PauseAsync(JobInfo job)
@@ -45,7 +46,7 @@ public class HangfireJobScheduler : IJobScheduler, ISingletonDependency
 
     public virtual Task<bool> QueueAsync(JobInfo job)
     {
-        var jobType = Options.JobProviders.GetOrDefault(job.Type) ?? Type.GetType(job.Type, false);
+        var jobType = Options.Provider.GetOrDefault(job.Type) ?? Type.GetType(job.Type, false);
         if (jobType == null)
         {
             Logger.LogWarning($"The task: {job.Group} - {job.Name}: {job.Type} is not registered and cannot create an instance of the performer type.");

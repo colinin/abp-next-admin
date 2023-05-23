@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Text;
