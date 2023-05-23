@@ -67,7 +67,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{6399C2FB-B063-4BB3-B605-88CE5303198B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.Notifications", "modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj", "{D2F6105D-D667-46DB-8CDA-89B4D3F69067}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Notifications", "modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj", "{D2F6105D-D667-46DB-8CDA-89B4D3F69067}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.OssManagement", "modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj", "{CE550720-FA77-4FF3-B5F0-A2B7A1781E61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -187,6 +189,10 @@ Global
 		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F6105D-D667-46DB-8CDA-89B4D3F69067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE550720-FA77-4FF3-B5F0-A2B7A1781E61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE550720-FA77-4FF3-B5F0-A2B7A1781E61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE550720-FA77-4FF3-B5F0-A2B7A1781E61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE550720-FA77-4FF3-B5F0-A2B7A1781E61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,6 +226,7 @@ Global
 		{96EBCB1F-DB7B-40BA-B59E-82FC1AE13EA0} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 		{6399C2FB-B063-4BB3-B605-88CE5303198B} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 		{D2F6105D-D667-46DB-8CDA-89B4D3F69067} = {F1CCBEC7-ACAB-4DC5-909E-D8CC2E1B7EEC}
+		{CE550720-FA77-4FF3-B5F0-A2B7A1781E61} = {6DA78E72-BA55-4ECF-97DB-6258174D3E2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB7A5DE-DA12-44DC-BC9B-0F6CA524346F}

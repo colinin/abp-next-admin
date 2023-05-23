@@ -44,7 +44,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
-	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\LY.MicroService.WebhooksManagement.EntityFrameworkCore\LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
