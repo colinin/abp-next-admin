@@ -1,9 +1,9 @@
 . "./build-aspnetcore-common.ps1"
 
 # Build all solutions
-foreach ($service in $serviceArray) {    
-    Set-Location $service.Path
-    dotnet ef database update
+foreach ($migration in $migrationArray) {    
+    Set-Location $migration.Path
+    dotnet run
 }
 
 Set-Location $rootFolder
