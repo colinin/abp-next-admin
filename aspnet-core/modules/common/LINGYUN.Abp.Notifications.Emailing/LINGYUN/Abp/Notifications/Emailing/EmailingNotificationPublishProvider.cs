@@ -66,11 +66,31 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
         {
             var titleInfo = notification.Data.TryGetData("title").As<LocalizableStringInfo>();
             var titleLocalizer = await LocalizerFactory.CreateByResourceNameAsync(titleInfo.ResourceName);
-            var title = titleLocalizer[titleInfo.Name, titleInfo.Values].Value;
+            var title = titleLocalizer[titleInfo.Name].Value;
+            if (titleInfo.Values != null)
+            {
+                foreach (var formatTitle in titleInfo.Values)
+                {
+                    if (formatTitle.Key != null && formatTitle.Value != null)
+                    {
+                        title = title.Replace($"{{{formatTitle.Key}}}", formatTitle.Value.ToString());
+                    }
+                }
+            }
 
             var messageInfo = notification.Data.TryGetData("message").As<LocalizableStringInfo>();
             var messageLocalizer = await LocalizerFactory.CreateByResourceNameAsync(messageInfo.ResourceName);
-            var message = messageLocalizer[messageInfo.Name, messageInfo.Values].Value;
+            var message = messageLocalizer[messageInfo.Name].Value;
+            if (messageInfo.Values != null)
+            {
+                foreach (var formatMessage in messageInfo.Values)
+                {
+                    if (formatMessage.Key != null && formatMessage.Value != null)
+                    {
+                        message = message.Replace($"{{{formatMessage.Key}}}", formatMessage.Value.ToString());
+                    }
+                }
+            }
 
             await EmailSender.SendAsync(emailAddress, title, message);
         }

@@ -65,7 +65,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
                 return Page();
             }
 
-            return RedirectToPage("./ConfirmEmailConfirmation", new
+            return RedirectToPage("EmailConfirmConfirmation", new
             {
                 returnUrl = ReturnUrl,
                 returnUrlHash = ReturnUrlHash

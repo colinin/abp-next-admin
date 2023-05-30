@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Account;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -249,8 +250,8 @@ public partial class IdentityServerModule
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
 
-            options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
-            options.Applications["MVC"].Urls["EmailConfirm"] = "Account/EmailConfirm";
+            options.Applications["MVC"].Urls[AccountUrlNames.EmailVerifyLogin] = "Account/VerifyCode";
+            options.Applications["MVC"].Urls[AccountUrlNames.EmailConfirm] = "Account/EmailConfirm";
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

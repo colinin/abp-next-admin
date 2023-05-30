@@ -31,7 +31,7 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
     {
         var workflowRecord = await WorkflowRepository.FindByNameAsync(workflowName, cancellationToken);
 
-        var workflow = await ConvertToWorkflow(workflowRecord);
+        var workflow = await MapToWorkflow(workflowRecord);
 
         return workflow;
     }
@@ -48,7 +48,7 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
 
                 foreach (var workflowRecord in workflowRecords)
                 {
-                    var workflow = await ConvertToWorkflow(workflowRecord);
+                    var workflow = await MapToWorkflow(workflowRecord);
                     workflows.Add(workflow);
                 }
 
@@ -60,7 +60,7 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
         return workflows;
     }
 
-    protected async virtual Task<Workflow> ConvertToWorkflow(WorkflowRecord workflowRecord)
+    protected async virtual Task<Workflow> MapToWorkflow(WorkflowRecord workflowRecord)
     {
         var workflow = new Workflow
         {
