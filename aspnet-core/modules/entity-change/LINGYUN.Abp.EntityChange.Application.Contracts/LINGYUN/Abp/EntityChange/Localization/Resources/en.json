@@ -1,0 +1,12 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:EntityId": "Entity Id",
+    "DisplayName:EntityChangeId": "Version",
+    "DisplayName:Entities": "Entities",
+    "DisplayName:AuditLogId": "Auditlog Id",
+    "DisplayName:StartTime": "Start Time",
+    "DisplayName:EndTime": "End Time",
+    "DisplayName:ChangeType": "Change Type"
+  }
+}
