@@ -75,4 +75,9 @@
   .v-form-render-item {
     overflow: hidden;
   }
+
+  .grid-row {
+    width: 100%;
+    padding: 10px;
+  }
 </style>
