@@ -26,6 +26,10 @@
           <SettingOutlined class="icon" style="color:#15BC83;" />
           <span>触发器</span>
         </div>
+        <div @click="addHttpEndPointNode">
+          <GlobalOutlined class="icon" style="color:#2f65c3;" />
+          <span>HttpEndPoint</span>
+        </div>
       </div>
     </template>
     <Button type="primary" size="small" shape="circle">
@@ -47,6 +51,7 @@
     ClockCircleOutlined,
     SettingOutlined,
     PlusOutlined,
+    GlobalOutlined,
   } from '@ant-design/icons-vue';
   //import { useFlowStoreWithOut } from '/@/store/modules/flow';
 
@@ -80,6 +85,10 @@
 
   function addTriggerNode() {
     emits('insertNode', "TRIGGER");
+  }
+
+  function addHttpEndPointNode() {
+    emits('insertNode', "HTTPENDPOINT");
   }
 </script>
 

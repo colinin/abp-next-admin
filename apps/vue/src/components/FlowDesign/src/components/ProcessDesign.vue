@@ -12,12 +12,13 @@
           <MinusOutlined />
         </template>
       </Button>
-     <!-- <Button @click="validate">校验流程</Button> -->
+     <Button @click="validate">校验流程</Button>
     </div>
     <div class="design" :style="'transform: scale('+ state.scale / 100 +');'">
       <ProcessTree ref="processTreeRef" @selectedNode="nodeSelected"/>
     </div>
     <Drawer
+      :width="500"
       :title="selectedNode.name"
       :visible="state.showConfig"
       destroy-on-close
@@ -34,6 +35,7 @@
         </Input>
       </div>
       <div class="node-config-content">
+        <NodeConfig />
       </div>
     </Drawer>
   </Layout>
@@ -45,6 +47,7 @@
   import { PlusOutlined, MinusOutlined } from '@ant-design/icons-vue';
   import { useFlowStoreWithOut } from '/@/store/modules/flow';
   import ProcessTree from './process/ProcessTree.vue';
+  import NodeConfig from './config/NodeConfig.vue'
 
   const flowStore = useFlowStoreWithOut();
   const state = reactive({
@@ -102,6 +105,10 @@
     console.log('配置节点', node)
     state.showConfig = true
   }
+
+  defineExpose({
+    validate,
+  });
 </script>
 
 <style lang="less" scoped>
@@ -135,7 +142,7 @@
     padding: 0 20px 20px;
   }
 
-  :deep(.el-drawer__body){
+  :deep(.ant-drawer-body){
     overflow-y: auto;
   }
 </style>
