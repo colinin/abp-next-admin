@@ -47,10 +47,6 @@
         return '发起人自己';
       case "SELF_SELECT":
         return config.selfSelect.multiple ? '发起人自选多人':'发起人自选一人';
-      case "LEADER_TOP":
-        return '多级主管依次审批';
-      case "LEADER":
-        return config.leader.level > 1 ? '发起人的第 ' + config.leader.level + ' 级主管' : '发起人的直接主管';
       case "FORM_USER":
         if (!config.formUser || config.formUser === '') {
           return '表单内联系人（未选择）';
@@ -64,7 +60,9 @@
         }
       case "ROLE":
         if (config.role.length > 0) {
-          return String(config.role).replaceAll(',', '、');
+          let texts: string[] = [];
+          config.role.forEach(org => texts.push(org.name));
+          return String(texts).replaceAll(',', '、');
         } else {
           return '指定角色（未设置）';
         }

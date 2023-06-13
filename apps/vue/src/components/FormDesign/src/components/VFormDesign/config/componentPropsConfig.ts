@@ -19,6 +19,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
     includes: [
       'Input',
       'Select',
+      'ApiSelect',
       'InputTextArea',
       'InputNumber',
       'DatePicker',
@@ -27,6 +28,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
       'TimePicker',
       'Cascader',
       'TreeSelect',
+      'ApiTreeSelect',
       'Switch',
       'AutoComplete',
       'Slider',
@@ -38,6 +40,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
     includes: [
       'Input',
       'Select',
+      'ApiSelect',
       'InputTextArea',
       'InputNumber',
       'DatePicker',
@@ -46,6 +49,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
       'TimePicker',
       'Cascader',
       'TreeSelect',
+      'ApiTreeSelect',
       'AutoComplete',
     ],
   },
@@ -53,7 +57,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
   {
     name: 'showSearch',
     label: '可搜索',
-    includes: ['Select', 'TreeSelect', 'Cascader', 'Transfer'],
+    includes: ['Select', 'ApiSelect', 'TreeSelect', 'ApiTreeSelect', 'Cascader', 'Transfer'],
   },
   {
     name: 'showTime',
@@ -73,7 +77,7 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
   {
     name: 'multiple',
     label: '多选',
-    includes: ['Select', 'TreeSelect', 'Upload'],
+    includes: ['Select', 'ApiSelect', 'TreeSelect', 'ApiTreeSelect', 'Upload'],
   },
   {
     name: 'directory',
@@ -88,19 +92,19 @@ export const baseComponentControlAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
   {
     name: 'bordered',
     label: '是否有边框',
-    includes: ['Select', 'Input'],
+    includes: ['Select', 'ApiSelect', 'Input'],
   },
   {
     name: 'defaultActiveFirstOption',
     label: '高亮第一个选项',
     component: 'Checkbox',
-    includes: ['Select', 'AutoComplete'],
+    includes: ['Select', 'ApiSelect', 'AutoComplete'],
   },
   {
     name: 'dropdownMatchSelectWidth',
     label: '下拉菜单和选择器同宽',
     component: 'Checkbox',
-    includes: ['Select', 'TreeSelect', 'AutoComplete'],
+    includes: ['Select', 'ApiSelect', 'TreeSelect', 'ApiTreeSelect', 'AutoComplete'],
   },
 ];
 
@@ -142,10 +146,12 @@ export const baseComponentCommonAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
       'Input',
       'InputTextArea',
       'Select',
+      'ApiSelect', 
       'DatePicker',
       'MonthPicker',
       'TimePicker',
       'TreeSelect',
+      'ApiTreeSelect', 
       'Cascader',
     ],
   },
@@ -177,7 +183,7 @@ export const baseComponentCommonAttrs: Omit<IBaseFormAttrs, 'tag'>[] = [
         },
       ],
     },
-    includes: ['Select', 'AutoComplete'],
+    includes: ['Select', 'ApiSelect', 'AutoComplete'],
   },
 ];
 

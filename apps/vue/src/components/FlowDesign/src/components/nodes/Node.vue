@@ -16,8 +16,11 @@
           <RightOutlined class="i" />
         </div>
         <div class="node-error" v-if="showError">
-          <Tooltip effect="dark" :content="errorInfo" placement="top">
+          <Tooltip placement="right">
             <WarningOutlined />
+            <template #title>
+              <span>{{ errorInfo }}</span>
+            </template>
           </Tooltip>
         </div>
       </div>

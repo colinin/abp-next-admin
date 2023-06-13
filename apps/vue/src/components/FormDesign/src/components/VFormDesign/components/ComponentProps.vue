@@ -56,9 +56,11 @@
           v-if="
             [
               'Select',
+              'ApiSelect',
               'CheckboxGroup',
               'RadioGroup',
               'TreeSelect',
+              'ApiTreeSelect',
               'Cascader',
               'AutoComplete',
             ].includes(formConfig.currentItem.component)

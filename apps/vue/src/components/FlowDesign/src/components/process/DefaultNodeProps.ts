@@ -107,6 +107,32 @@ export const DELAY_PROPS = {
   dateTime: "" //如果当天没有超过设置的此时间点，就延时到这个指定的时间，到了就直接跳过不延时
 }
 
-export default {
-  APPROVAL_PROPS, CC_PROPS, DELAY_PROPS, CONDITION_PROPS, ROOT_PROPS, TRIGGER_PROPS
+//HTTP EndPoint默认属性
+export const HTTPENDPOINT_PROPS = {
+  path: '',
+  methods: [],
+  readCotntent: false,
+  targetType: '',
+  schema: '',
+  authorize: false,
+  policy: '',
 }
+
+export default {
+  APPROVAL_PROPS,
+  CC_PROPS,
+  DELAY_PROPS,
+  CONDITION_PROPS,
+  ROOT_PROPS,
+  TRIGGER_PROPS,
+  HTTPENDPOINT_PROPS,
+}
+
+export const PrimaryNodes = [
+  'ROOT',
+  'APPROVAL',
+  'CC',
+  'DELAY',
+  'TRIGGER',
+  'HTTPENDPOINT'
+];
