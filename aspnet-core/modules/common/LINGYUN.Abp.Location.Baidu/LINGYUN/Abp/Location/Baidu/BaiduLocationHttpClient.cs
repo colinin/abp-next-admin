@@ -49,7 +49,6 @@ namespace LINGYUN.Abp.Location.Baidu
             var baiduMapPath = "/location/ip";
             if (Options.CaculateAKSN)
             {
-                // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
                 var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
                 requestParamters.Add("sn", sn);
             }
@@ -102,7 +101,6 @@ namespace LINGYUN.Abp.Location.Baidu
             var baiduMapPath = "/geocoding/v3";
             if (Options.CaculateAKSN)
             {
-                // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
                 var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
                 requestParamters.Add("sn", sn);
             }
@@ -153,11 +151,10 @@ namespace LINGYUN.Abp.Location.Baidu
             var baiduMapPath = "/reverse_geocoding/v3";
             if (Options.CaculateAKSN)
             {
-                // TODO: 百度的文档不明不白,sn的算法在遇到特殊字符会验证失败,有待完善
                 var sn = BaiduAKSNCaculater.CaculateAKSN(Options.AccessSecret, baiduMapPath, requestParamters);
                 requestParamters.Add("sn", sn);
             }
-            requestParamters["location"] = string.Format("{0}%2C{1}", lat, lng);
+
             var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
             var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
             var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduReGeocodeResponse>(responseContent);
@@ -246,7 +243,7 @@ namespace LINGYUN.Abp.Location.Baidu
             requestUrlBuilder.Append(path).Append("?");
             foreach (var paramter in paramters)
             {
-                requestUrlBuilder.AppendFormat("{0}={1}", paramter.Key, paramter.Value);
+                requestUrlBuilder.AppendFormat("{0}={1}", Uri.EscapeDataString(paramter.Key), Uri.EscapeDataString(paramter.Value));
                 requestUrlBuilder.Append("&");
             }
             requestUrlBuilder.Remove(requestUrlBuilder.Length - 1, 1);
