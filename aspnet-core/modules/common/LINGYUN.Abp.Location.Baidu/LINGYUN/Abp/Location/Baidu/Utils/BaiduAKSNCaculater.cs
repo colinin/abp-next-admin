@@ -22,40 +22,22 @@ namespace LINGYUN.Abp.Location.Baidu.Utils
             }
         }
 
-        private static string UrlEncode(string str)
-        {
-            str = System.Web.HttpUtility.UrlEncode(str);
-            byte[] buf = Encoding.ASCII.GetBytes(str);//等同于Encoding.ASCII.GetBytes(str)
-            for (int i = 0; i < buf.Length; i++)
-                if (buf[i] == '%')
-                {
-                    if (buf[i + 1] >= 'a') buf[i + 1] -= 32;
-                    if (buf[i + 2] >= 'a') buf[i + 2] -= 32;
-                    i += 2;
-                }
-            return Encoding.ASCII.GetString(buf);//同上，等同于Encoding.ASCII.GetString(buf)
-        }
-
         private static string HttpBuildQuery(IDictionary<string, string> querystring_arrays)
         {
-
-            StringBuilder sb = new StringBuilder();
+            List<string> list = new List<string>(querystring_arrays.Count);
             foreach (var item in querystring_arrays)
             {
-                sb.Append(UrlEncode(item.Key));
-                sb.Append("=");
-                sb.Append(UrlEncode(item.Value));
-                sb.Append("&");
+                list.Add($"{Uri.EscapeDataString(item.Key)}={Uri.EscapeDataString(item.Value)}");
             }
-            sb.Remove(sb.Length - 1, 1);
-            return sb.ToString();
+
+            return string.Join("&", list);
         }
 
         public static string CaculateAKSN(string sk, string url, IDictionary<string, string> querystring_arrays)
         {
             var queryString = HttpBuildQuery(querystring_arrays);
 
-            var str = UrlEncode(url + "?" + queryString + sk);
+            var str = Uri.EscapeDataString(url + "?" + queryString + sk);
 
             return MD5(str);
         }
