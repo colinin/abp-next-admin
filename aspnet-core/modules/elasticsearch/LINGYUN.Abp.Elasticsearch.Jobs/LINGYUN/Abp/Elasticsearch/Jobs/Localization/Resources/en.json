@@ -1,0 +1,10 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "IndicesCleanupJob": "Expired index cleanup job",
+    "Indices:IndexPrefix": "Index prefix",
+    "Indices:TimeZone": "Timezone",
+    "Indices:TimeZoneDesc": "Time zone for calculating the time difference, default Utc, optional (Utc, Local).",
+    "Indices:ExpirationTime": "Expiration time(seconds)"
+  }
+}

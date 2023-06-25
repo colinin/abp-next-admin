@@ -84,7 +84,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.DbMigrator", "migrations\LY.MicroService.TaskManagement.DbMigrator\LY.MicroService.TaskManagement.DbMigrator.csproj", "{52FD8F39-0AB6-4C51-A584-187C219AC8B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.TaskManagement.EntityFrameworkCore", "migrations\LY.MicroService.TaskManagement.EntityFrameworkCore\LY.MicroService.TaskManagement.EntityFrameworkCore.csproj", "{58F51875-6D2C-4A65-9DD3-8BC004B39B72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.EntityFrameworkCore", "migrations\LY.MicroService.TaskManagement.EntityFrameworkCore\LY.MicroService.TaskManagement.EntityFrameworkCore.csproj", "{58F51875-6D2C-4A65-9DD3-8BC004B39B72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{DC7ACD8B-044B-435D-94C5-06C75A8BD026}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{167CE485-72D3-4E95-80B1-00430CBB8888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elasticsearch.Jobs", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch.Jobs\LINGYUN.Abp.Elasticsearch.Jobs.csproj", "{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -212,6 +218,14 @@ Global
 		{58F51875-6D2C-4A65-9DD3-8BC004B39B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58F51875-6D2C-4A65-9DD3-8BC004B39B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58F51875-6D2C-4A65-9DD3-8BC004B39B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167CE485-72D3-4E95-80B1-00430CBB8888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167CE485-72D3-4E95-80B1-00430CBB8888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167CE485-72D3-4E95-80B1-00430CBB8888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167CE485-72D3-4E95-80B1-00430CBB8888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +261,8 @@ Global
 		{DF963ABB-E713-49E9-A03C-DEB431E369DF} = {B38D2141-AC0F-4F4A-9315-4292E3856C15}
 		{52FD8F39-0AB6-4C51-A584-187C219AC8B5} = {820A8FA4-17C4-44DF-8C31-9F211D00F790}
 		{58F51875-6D2C-4A65-9DD3-8BC004B39B72} = {820A8FA4-17C4-44DF-8C31-9F211D00F790}
+		{167CE485-72D3-4E95-80B1-00430CBB8888} = {DC7ACD8B-044B-435D-94C5-06C75A8BD026}
+		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB} = {A9536BD2-2573-44CA-B033-DC16B7E345E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}
