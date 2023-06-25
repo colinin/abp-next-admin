@@ -1,0 +1,10 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "IndicesCleanupJob": "过期索引清理作业",
+    "Indices:IndexPrefix": "索引前缀",
+    "Indices:TimeZone": "时区",
+    "Indices:TimeZoneDesc": "计算时差的时区, 默认Utc, 可选(Utc、Local)",
+    "Indices:ExpirationTime": "过期时间(秒)"
+  }
+}
