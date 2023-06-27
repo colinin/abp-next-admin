@@ -12,12 +12,12 @@ if '%3' equ '' goto run
 exit
 
 :publish
-dotnet publish -c Release -o .\services\Publish\%2 --no-cache --no-restore
-copy Dockerfile .\services\Publish\%2\Dockerfile
+dotnet publish -c Release -o .\..\..\services\Publish\%2 --no-cache --no-restore
+copy Dockerfile .\..\..\services\Publish\%2\Dockerfile
 exit
 
 :run
-dotnet run 
+dotnet run
 exit
 
 :restore
