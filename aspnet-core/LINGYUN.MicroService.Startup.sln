@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{18C61233-DAE0-4285-AD1F-0928E752FB30}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{18C61233-DAE0-4285-AD1F-0928E752FB30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity-server", "identity-server", "{099F0FD1-645D-4029-8149-46523AD34933}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity-server-api", "identity-server-api", "{BA506EAD-E2DD-4EEA-B993-2AB90F32B8E4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver4-admin", "identityserver4-admin", "{BA506EAD-E2DD-4EEA-B993-2AB90F32B8E4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{A3275CEC-C5CB-4F22-875A-8270B5F4D698}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "messages", "messages", "{A3275CEC-C5CB-4F22-875A-8270B5F4D698}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{1D445339-DB00-4A4D-B7C1-6F112A46CFF6}"
 EndProject
@@ -34,6 +34,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagement.HttpApi.Host", "services\LY.MicroService.TaskManagement.HttpApi.Host\LY.MicroService.TaskManagement.HttpApi.Host.csproj", "{EDE83705-EFEA-46DC-A8EE-68A5D8159B84}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WorkflowManagement.HttpApi.Host", "services\LY.MicroService.WorkflowManagement.HttpApi.Host\LY.MicroService.WorkflowManagement.HttpApi.Host.csproj", "{48F376EC-B951-4123-AF33-54217AD00B96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webhooks", "webhooks", "{CA71CFF9-7A21-4635-ADC1-465A04866D1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.HttpApi.Host", "services\LY.MicroService.WebhooksManagement.HttpApi.Host\LY.MicroService.WebhooksManagement.HttpApi.Host.csproj", "{A8E561C8-C204-4730-BDDD-A5686707690C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,10 @@ Global
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8E561C8-C204-4730-BDDD-A5686707690C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8E561C8-C204-4730-BDDD-A5686707690C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8E561C8-C204-4730-BDDD-A5686707690C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8E561C8-C204-4730-BDDD-A5686707690C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +94,7 @@ Global
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB} = {099F0FD1-645D-4029-8149-46523AD34933}
 		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84} = {3F453010-BA07-471D-87E5-B12346ED81EF}
 		{48F376EC-B951-4123-AF33-54217AD00B96} = {E47CDAF7-1046-4886-A0CB-ADF9650F8318}
+		{A8E561C8-C204-4730-BDDD-A5686707690C} = {CA71CFF9-7A21-4635-ADC1-465A04866D1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3905D9F-6EF7-4BFD-80B3-E0DD6AA82228}

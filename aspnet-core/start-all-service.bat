@@ -8,5 +8,7 @@ start .\start-http-api-host.bat LY.MicroService.PlatformManagement.HttpApi.Host 
 start .\start-http-api-host.bat LY.MicroService.RealtimeMessage.HttpApi.Host messages --run
 start .\start-http-api-host.bat LY.MicroService.TaskManagement.HttpApi.Host task-management --run
 start .\start-http-api-host.bat LY.MicroService.BackendAdmin.HttpApi.Host admin --run
+start .\start-http-api-host.bat LY.MicroService.WorkflowManagement.HttpApi.Host workflow --run
+start .\start-http-api-host.bat LY.MicroService.WebhooksManagement.HttpApi.Host webhooks --run
 ping -n 10 127.1 >nul
 start .\start-internal-gateway.bat --run
