@@ -639,7 +639,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.Application", "modules\entity-change\LINGYUN.Abp.EntityChange.Application\LINGYUN.Abp.EntityChange.Application.csproj", "{AC41F335-E240-47E0-B409-AFAD1400E626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.EntityChange.HttpApi", "modules\entity-change\LINGYUN.Abp.EntityChange.HttpApi\LINGYUN.Abp.EntityChange.HttpApi.csproj", "{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.HttpApi", "modules\entity-change\LINGYUN.Abp.EntityChange.HttpApi\LINGYUN.Abp.EntityChange.HttpApi.csproj", "{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{59627844-A66A-46AC-B882-E8F302D0EC24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Cli", "modules\cli\LINGYUN.Abp.Cli\LINGYUN.Abp.Cli.csproj", "{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1643,6 +1647,10 @@ Global
 		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1953,6 +1961,8 @@ Global
 		{7779D9BD-5928-49A2-965F-537967004238} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
 		{AC41F335-E240-47E0-B409-AFAD1400E626} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
 		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
+		{59627844-A66A-46AC-B882-E8F302D0EC24} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2} = {59627844-A66A-46AC-B882-E8F302D0EC24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
