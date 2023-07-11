@@ -90,6 +90,8 @@ public class GenerateViewCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("-t|--type <type>                         The name of generate type (vben-view).");
         sb.AppendLine("     vben-view");
         sb.AppendLine("         -o|--output <output-name>                         js/vue file path or folder to place generated code in.");
+        sb.AppendLine("     flutter-view");
+        sb.AppendLine("         -o|--output <output-name>                         flutter file path or folder to place generated code in.");
         sb.AppendLine("-u|--url <url>                                    API definition URL from.");
         sb.AppendLine("-m|--module <module-name>                         (default: 'app') The name of the backend module you wish to generate proxies for.");
         sb.AppendLine("");
@@ -97,6 +99,7 @@ public class GenerateViewCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
 
         sb.AppendLine("  labp generate-proxy -t vben-view -m identity -o api/identity -url https://localhost:44302/");
+        sb.AppendLine("  labp generate-proxy -t flutter-view -m identity -o api/identity -url https://localhost:44302/");
 
         return sb.ToString();
     }

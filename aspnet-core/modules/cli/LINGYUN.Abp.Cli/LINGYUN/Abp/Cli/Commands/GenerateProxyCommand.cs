@@ -121,6 +121,10 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  ts");
         sb.AppendLine("    -asp|--api-script-proxy <api-script-proxy>        The generated api proxy type(axios, vben-axios, vben-dynamic). default: vben-dynamic.");
         sb.AppendLine("    -o|--output <output-name>                         TypeScript file path or folder to place generated code in.");
+        sb.AppendLine("  flutter");
+        sb.AppendLine("    -asp|--api-script-proxy <api-script-proxy>        The generated api proxy type(dio, rest-service). default: rest-service.");
+        sb.AppendLine("    -o|--output <output-name>                         Flutter script file path or folder to place generated code in.");
+
         sb.AppendLine("-p|--provider <client-proxy-provider>             The client proxy provider(http, dapr).");
         sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -133,6 +137,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  labp generate-proxy --folder MyProxies/InnerFolder -url https://localhost:44302/");
         sb.AppendLine("  labp generate-proxy -t ts -m identity -o api/identity -url https://localhost:44302/");
         sb.AppendLine("  labp generate-proxy -t ts -asp vben-dynamic -m identity -o api/identity -url https://localhost:44302/");
+        sb.AppendLine("  labp generate-proxy -t flutter -asp rest-service -m identity -o api/identity -url https://localhost:44302/");
 
         return sb.ToString();
     }
