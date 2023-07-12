@@ -55,6 +55,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                 var filterResources = _localizationOptions.Resources
                     .Select(r => r.Value)
                     .Union(await _externalLocalizationStore.GetResourcesAsync())
+                    .DistinctBy(r => r.ResourceName)
                     .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
                     .OrderBy(r => r.ResourceName);
 
@@ -69,6 +70,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
                 var resource = _localizationOptions.Resources
                     .Select(r => r.Value)
                     .Union(await _externalLocalizationStore.GetResourcesAsync())
+                    .DistinctBy(r => r.ResourceName)
                     .Where(l => l.ResourceName.Equals(input.ResourceName))
                     .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
                     .FirstOrDefault();
