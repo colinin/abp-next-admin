@@ -3,7 +3,7 @@
 		<VoloAbpPackageVersion>7.2.2</VoloAbpPackageVersion>
 		<VoloAbpLeptonXThemePackageVersion>2.0.1</VoloAbpLeptonXThemePackageVersion>
 		<LINGYUNAbpPackageVersion>7.2.2</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.10.0</DaprPackageVersion>
+		<DaprPackageVersion>1.11.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.1.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.11.0</ElsaPackageVersion>
