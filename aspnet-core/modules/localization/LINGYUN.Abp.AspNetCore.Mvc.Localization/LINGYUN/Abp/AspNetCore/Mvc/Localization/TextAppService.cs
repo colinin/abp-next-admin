@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
@@ -16,19 +17,20 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
     {
         private readonly AbpLocalizationOptions _localizationOptions;
         private readonly IStringLocalizerFactory _localizerFactory;
+        private readonly IExternalLocalizationStore _externalLocalizationStore;
         public TextAppService(
             IStringLocalizerFactory stringLocalizerFactory,
+            IExternalLocalizationStore externalLocalizationStore,
             IOptions<AbpLocalizationOptions> localizationOptions)
         {
             _localizerFactory = stringLocalizerFactory;
+            _externalLocalizationStore = externalLocalizationStore;
             _localizationOptions = localizationOptions.Value;
         }
 
         public async virtual Task<TextDto> GetByCultureKeyAsync(GetTextByKeyInput input)
         {
-            var resource = _localizationOptions.Resources.GetOrDefault(input.ResourceName);
-
-            var localizer = await _localizerFactory.CreateByResourceNameAsync(resource.ResourceName);
+            var localizer = await _localizerFactory.CreateByResourceNameAsync(input.ResourceName);
 
             using (CultureHelper.Use(input.CultureName, input.CultureName))
             {
@@ -51,21 +53,24 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             if (input.ResourceName.IsNullOrWhiteSpace())
             {
                 var filterResources = _localizationOptions.Resources
-                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter))
-                    .OrderBy(r => r.Value.ResourceName);
+                    .Select(r => r.Value)
+                    .Union(await _externalLocalizationStore.GetResourcesAsync())
+                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
+                    .OrderBy(r => r.ResourceName);
 
                 foreach (var resource in filterResources)
                 {
                     result.AddRange(
-                        await GetTextDifferences(resource.Value, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
+                        await GetTextDifferences(resource, input.CultureName, input.TargetCultureName, input.Filter, input.OnlyNull));
                 }
             }
             else
             {
                 var resource = _localizationOptions.Resources
-                    .Where(l => l.Value.ResourceName.Equals(input.ResourceName))
-                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter))
-                    .Select(l => l.Value)
+                    .Select(r => r.Value)
+                    .Union(await _externalLocalizationStore.GetResourcesAsync())
+                    .Where(l => l.ResourceName.Equals(input.ResourceName))
+                    .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
                     .FirstOrDefault();
                 if (resource != null)
                 {
