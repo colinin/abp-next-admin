@@ -25,7 +25,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
     [Authorize(LocalizationManagementPermissions.Resource.Create)]
     public async virtual Task<ResourceDto> CreateAsync(ResourceCreateDto input)
     {
-        if (_repository.FindByNameAsync(input.Name) != null)
+        if (await _repository.FindByNameAsync(input.Name) != null)
         {
             throw new BusinessException(LocalizationErrorCodes.Resource.NameAlreadyExists)
                 .WithData(nameof(Resource.Name), input.Name);
