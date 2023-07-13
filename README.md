@@ -148,7 +148,7 @@ yarn install
 ### 更改配置文件
 
 
-修改开发环境用于代理的服务器地址,以下提供了三个分别为IdentityServer、SignalT、ApiService地址
+修改开发环境用于代理的服务器地址,以下提供了三个分别为IdentityServer、SignalR、ApiService地址
 如果自己变更了端口，需要改成自己的地址
 
 ```bash
