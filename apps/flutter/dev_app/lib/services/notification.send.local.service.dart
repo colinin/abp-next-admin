@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:core/config/index.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' hide Notification;
 
@@ -11,11 +12,12 @@ class FlutterLocalNotificationsSendService extends NotificationSendService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final Subject<Notification> _notifications$ = BehaviorSubject<Notification>();
   final Subject<String?> _selectedNotifications$ = BehaviorSubject<String?>();
+  final EnvConfig _env = Environment.current;
 
   Future<void> initAsync() async {
     const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/logo');
-    const initializationSettingsLinux = LinuxInitializationSettings(
-      defaultActionName: 'Open notification',
+    var initializationSettingsLinux = LinuxInitializationSettings(
+      defaultActionName: _env.notifications?.linux?.defaultActionName ?? 'Open notification',
     );
     var initializationSettingsDarwin  = DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) {
@@ -46,17 +48,28 @@ class FlutterLocalNotificationsSendService extends NotificationSendService {
   @override
   Future<void> send(String title, [String? body, String? payload]) async {
     nid.value += 1;
-    const androidDetails = AndroidNotificationDetails(
-      'abp-flutter', 
-      'abp-flutter');
-    const details = NotificationDetails(
-      android: androidDetails,
-    );
+    
     await _flutterLocalNotificationsPlugin.show(
-      nid.value,
-      title,
-      body,
-      details,
-      payload: payload);
+      nid.value, title, body, _buildDetails(), payload: payload);
+  }
+
+  NotificationDetails _buildDetails() {
+    var androidDetails = AndroidNotificationDetails(
+      _env.notifications?.android?.channelId ?? 'abp-flutter', 
+      _env.notifications?.android?.channelName ?? 'abp-flutter',
+      channelDescription: _env.notifications?.android?.channelDescription);
+    
+    const darwinDetails = DarwinNotificationDetails();
+
+    const linuxDetails = LinuxNotificationDetails();
+
+    var details = NotificationDetails(
+      android: androidDetails,
+      iOS: darwinDetails,
+      macOS: darwinDetails,
+      linux: linuxDetails,
+    );
+
+    return details;
   }
 }

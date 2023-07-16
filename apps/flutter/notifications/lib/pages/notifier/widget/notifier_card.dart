@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide Notification;
 
-import '../state.dart';
+import '../../../models/index.dart';
 
 class NotifierCard extends StatelessWidget {
   const NotifierCard({

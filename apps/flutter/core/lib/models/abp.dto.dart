@@ -2,18 +2,22 @@ class LocalizableStringInfo {
   LocalizableStringInfo({
     required this.resourceName,
     required this.name,
+    this.values,
   });
   String resourceName;
   String name;
+  Map<String, dynamic>? values;
 
   factory LocalizableStringInfo.fromJson(Map<String, dynamic> json) => 
     LocalizableStringInfo(
       resourceName: json['resourceName'] as String,
       name: json['name'] as String,
+      values: json['values'] as Map<String, dynamic>?,
     );
   Map<String, dynamic> toJson() => <String, dynamic>{
       'resourceName': resourceName,
       'name': name,
+      'values': values,
     };
 }
 

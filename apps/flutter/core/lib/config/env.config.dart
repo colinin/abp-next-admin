@@ -15,6 +15,7 @@ class EnvConfig {
     this.staticFilesUrl,
     this.tenantKey = '__tenant',
     this.defaultLanguage = 'en',
+    this.notifications,
   });
   String clientId;
   String? clientSecret;
@@ -24,8 +25,54 @@ class EnvConfig {
   String? staticFilesUrl;
   String? tenantKey;
   String? defaultLanguage;
+  NotificationConfig? notifications;
 
   factory EnvConfig.fromJson(Map<String, dynamic> json) => _$EnvConfigFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
+class NotificationConfig {
+  NotificationConfig({
+    this.android,
+    this.darwin,
+    this.linux,
+  });
+  AndroidNotification? android;
+  DarwinNotification? darwin;
+  LinuxNotification? linux;
+
+  factory NotificationConfig.fromJson(Map<String, dynamic> json) => _$NotificationConfigFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
+class LinuxNotification {
+  LinuxNotification({
+    required this.defaultActionName,
+  });
+  String defaultActionName;
+
+  factory LinuxNotification.fromJson(Map<String, dynamic> json) => _$LinuxNotificationFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
+class AndroidNotification {
+  AndroidNotification({
+    required this.channelId,
+    required this.channelName,
+    this.channelDescription,
+  });
+  String channelId;
+  String channelName;
+  String? channelDescription;
+
+  factory AndroidNotification.fromJson(Map<String, dynamic> json) => _$AndroidNotificationFromJson(json);
+}
+
+@JsonSerializable(createToJson: false)
+class DarwinNotification {
+  DarwinNotification();
+
+  factory DarwinNotification.fromJson(Map<String, dynamic> json) => _$DarwinNotificationFromJson(json);
 }
 
 enum Env {
@@ -53,7 +100,7 @@ class Environment {
       fromJson: EnvConfig.fromJson,
     );
 
-    Environment.current = envlib.Environment.instance().config;
+    Environment.current = envlib.Environment<EnvConfig>.instance().config;
   }
 
   static late EnvConfig current;

@@ -12,5 +12,6 @@ class NotificationsModule extends Module {
   void configureServices() {
     inject<NotificationsModule>(this);
     lazyInject(() => NotificationService(), fenix: true);
+    lazyInject(() => NotificationStateService(), fenix: true);
   }
 }

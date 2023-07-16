@@ -1,4 +1,5 @@
 import 'package:core/utils/string.extensions.dart';
+import 'package:get/get.dart';
 
 import '../proxy/volo/abp/asp-net-core/mvc/index.dart';
 
@@ -64,4 +65,16 @@ class LocalizedText {
   String? resourceName;
   String? key;
   String? localized;
+}
+
+extension AbpTranslationsExtensions on String {
+  String trFormat([Map<String, String> params = const {}]) {
+    var trans = tr;
+    if (params.isNotEmpty) {
+      params.forEach((key, value) {
+        trans = trans.replaceAll('{$key}', value);
+      });
+    }
+    return trans;
+  }
 }

@@ -6,5 +6,15 @@
     "uploadFilesUrl": "",
     "staticFilesUrl": "",
     "tenantKey": "__tenant",
-    "defaultLanguage": "en"
+    "defaultLanguage": "en",
+    "notifications": {
+        "android": {
+            "channelId": "abp-flutter",
+            "channelName": "abp-flutter",
+            "channelDescription": "适用于Android端的通知通道定义"
+        },
+        "linux": {
+            "defaultActionName": "Open notification"
+        }
+    }
 }
