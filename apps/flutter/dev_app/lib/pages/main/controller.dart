@@ -1,52 +1,65 @@
+import 'package:core/services/notification.send.service.dart';
 import 'package:get/get.dart';
 import 'package:core/config/index.dart';
-import 'package:core/services/config.state.service.dart';
 import 'package:core/services/session.service.dart';
 import 'package:core/services/signalr.service.dart';
 import 'package:core/services/subscription.service.dart';
 import 'package:core/tokens/index.dart';
 import 'package:core/utils/index.dart';
-import 'package:notifications/models/notification.dart';
+import 'package:notifications/models/index.dart';
 
 class MainController extends GetxController {
   final RxInt _pageIndex = RxInt(0);
   int get currentIndex => _pageIndex.value;
 
-  SessionService get sessionService => Get.find();
-  ConfigStateService get configStateService => Get.find();
-  SubscriptionService get subscriptionService => Get.find(tag: NotificationTokens.consumer);
-  SignalrService get signalrService => Get.find(tag: NotificationTokens.producer);
+  SessionService get _sessionService => Get.find();
+  SubscriptionService get _subscriptionService => Get.find(tag: NotificationTokens.consumer);
+  SignalrService get _signalrService => Get.find(tag: NotificationTokens.producer);
+  NotificationSendService get _notificationSendService => Get.find();
 
   @override
   void onInit() async {
     super.onInit();
-    subscriptionService.addOne(signalrService.onClose(logger.debug));
-    subscriptionService.addOne(signalrService.onReconnected(logger.debug));
-    subscriptionService.addOne(signalrService.onReconnecting(logger.debug));
-    subscriptionService.subscribe(
-      signalrService.subscribe(NotificationTokens.receiver),
-      (message) {
-        var notification = NotificationInfo.fromJson(message.data.first as dynamic);
-        logger.debug(notification);
+    _subscriptionService.addOne(_signalrService.onClose(logger.debug));
+    _subscriptionService.addOne(_signalrService.onReconnected(logger.debug));
+    _subscriptionService.addOne(_signalrService.onReconnecting(logger.debug));
+    // 在SignalR Hub之上再次订阅，用于全局通知启用按钮来管理
+    _subscriptionService.subscribe(
+      // 订阅SignalR Hub
+      _signalrService.subscribe(NotificationTokens.receiver),
+      (message) async {
+        for (var data in message.data) {
+          if (data == null) continue;
+          // 解析通知数据
+          var notification = NotificationInfo.fromJson(data as dynamic);
+          // 格式化为移动端可识别通知数据
+          var payload = NotificationPaylod.fromData(notification.data);
+          // 发布本地通知
+          await _notificationSendService.send(
+            payload.title,
+            payload.body,
+            payload.payload,
+          );
+        }
       },
     );
-    sessionService.getToken$()
+    _sessionService.getToken$()
       .listen((token) async {
         if (token == null) {
-          await signalrService.stop();
+          await _signalrService.stop();
         } else {
-          await signalrService.start();
+          await _signalrService.start();
         }
       });
-    if (sessionService.currentLanguage.isNullOrWhiteSpace()) {
-      sessionService.setLanguage(Environment.current.defaultLanguage ?? 'en');
+    if (_sessionService.currentLanguage.isNullOrWhiteSpace()) {
+      _sessionService.setLanguage(Environment.current.defaultLanguage ?? 'en');
     }
   }
 
   @override
   void onClose() {
-    subscriptionService.closeAll()
-      .whenComplete(() => signalrService.stop());
+    _subscriptionService.closeAll()
+      .whenComplete(() => _signalrService.stop());
     super.onClose();
   }
 
