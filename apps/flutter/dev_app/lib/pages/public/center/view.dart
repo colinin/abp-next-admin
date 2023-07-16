@@ -1,3 +1,4 @@
+import 'package:core/services/notification.send.service.dart';
 import 'package:dev_app/pages/center/route.name.dart';
 import 'package:account/pages/route.name.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,10 @@ class CenterPage extends GetView<CenterController> {
             //controller.redirectToRoute('/center/feedback');
           },
           onSettings: () => controller.redirectToRoute(CenterRoutes.settings),
-          onInfo: () => controller.redirectToRoute(CenterRoutes.info),
+          onInfo: () async {
+            var service = Get.find<NotificationSendService>();
+            await service.send('测试通知', '测试内容', '测试载体');
+          },
         )),
       ],
     );

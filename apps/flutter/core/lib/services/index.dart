@@ -1,6 +1,7 @@
 export 'auth.service.dart';
 export 'config.state.service.dart';
 export 'localization.service.dart';
+export 'notification.send.service.dart';
 export 'rest.service.dart';
 export 'storage.service.dart';
 export 'session.service.dart';

@@ -1,3 +1,4 @@
+import 'package:core/config/index.dart';
 import 'package:core/services/session.service.dart';
 import 'package:core/utils/string.extensions.dart';
 import 'package:dio/dio.dart';
@@ -11,7 +12,7 @@ class AppendHeaderInterceptor extends Interceptor {
     }
     var tenant = SessionService.to.tenant;
     if (tenant != null && tenant.isAvailable == true) {
-      options.headers['__tenant'] = tenant.id;
+      options.headers[Environment.current.tenantKey ?? '__tenant'] = tenant.id;
     }
     return handler.next(options);
   }
