@@ -1,0 +1,10 @@
+{
+    "baseUrl": "http://127.0.0.1:30000",
+    "clientId": "abp-flutter",
+    "clientSecret": "1q2w3e*",
+    "authority": "http://127.0.0.1:30000",
+    "uploadFilesUrl": "",
+    "staticFilesUrl": "",
+    "tenantKey": "__tenant",
+    "defaultLanguage": "en"
+}
