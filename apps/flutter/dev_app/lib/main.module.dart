@@ -1,4 +1,5 @@
 import 'package:dev_app/pages/index.dart';
+import 'package:dev_app/services/index.dart';
 import 'package:dev_app/utils/loading.dart';
 import 'package:account/index.dart';
 import 'package:components/index.dart';
@@ -39,6 +40,18 @@ class MainModule extends Module {
   ];
 
   @override
+  Future<void> configureServicesAsync() async {
+    
+    await injectAsync<NotificationSendService>(() async {
+      var service = FlutterLocalNotificationsSendService();
+      await service.initAsync();
+      return service;
+    }, permanent: true);
+
+    await super.configureServicesAsync();
+  }
+
+  @override
   void configureServices() {
     inject<MainModule>(this);
 
@@ -46,7 +59,7 @@ class MainModule extends Module {
       tag: NotificationTokens.producer,
       permanent: true);
 
-    lazyInject(() {
+    lazyInject<RestService>(() {
       var dio = Dio(BaseOptions(
         baseUrl: Environment.current.baseUrl,
       ));

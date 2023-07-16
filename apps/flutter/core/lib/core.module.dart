@@ -1,14 +1,13 @@
 import 'package:core/dependency/injector.dart';
 import 'package:core/modularity/module.dart';
 import 'package:core/services/index.dart';
-import 'package:get/get.dart';
 import 'proxy/index.dart';
 
 class CoreModule extends Module {
 
   @override
   Future<void> configureServicesAsync() async {
-    await Get.putAsync<StorageService>(() async {
+    await injectAsync<StorageService>(() async {
       if (await GetxStorageService.init()) {
         return GetxStorageService();
       }
