@@ -2,10 +2,12 @@ import 'package:core/dependency/index.dart';
 import 'package:core/utils/theme.utils.dart';
 import 'package:core/utils/logging.dart';
 import 'package:dev_app/main.module.dart';
+import 'package:dev_app/pages/index.dart';
+import 'package:dev_app/pages/public/route.name.dart';
 import 'package:dev_app/utils/localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Future main() async {
@@ -25,8 +27,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeUtils.lightTheme,
       darkTheme: ThemeUtils.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: '/',
+      initialRoute: PublicRoutes.main,
       getPages: module.getRoutes(),
+      unknownRoute: PublicRoute.notFound,
       debugShowMaterialGrid: false,
       enableLog: true,
       builder: EasyLoading.init(),
