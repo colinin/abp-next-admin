@@ -1,4 +1,4 @@
-import 'package:core/config/index.dart';
+import 'package:core/services/environment.service.dart';
 import 'package:core/services/session.service.dart';
 import 'package:core/utils/string.extensions.dart';
 import 'package:dio/dio.dart';
@@ -6,13 +6,13 @@ import 'package:dio/dio.dart';
 class AppendHeaderInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    var language = SessionService.to.currentLanguage;
-    if (!language.isNullOrWhiteSpace()) {
-      options.headers['Accept-Language'] = language;
+    var session = SessionService.to.state;
+    if (!session.language.isNullOrWhiteSpace()) {
+      options.headers['Accept-Language'] = session.language;
     }
-    var tenant = SessionService.to.tenant;
-    if (tenant != null && tenant.isAvailable == true) {
-      options.headers[Environment.current.tenantKey ?? '__tenant'] = tenant.id;
+    if (session.tenant != null && session.tenant!.isAvailable == true) {
+      var environment = EnvironmentService.to.getEnvironment();
+      options.headers[environment.tenant.tenantKey ?? '__tenant'] = session.tenant!.id;
     }
     return handler.next(options);
   }

@@ -5,7 +5,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'session.g.dart';
 
-/// 企业平台认证请求承载体
 @JsonSerializable()
 class Session extends CloneObject<Session> {
   Session({

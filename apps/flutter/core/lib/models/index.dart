@@ -1,7 +1,9 @@
 export 'abp.dto.dart';
+export 'abp.entity.dart';
 export 'abp.error.dart';
 export 'auth.dart';
 export 'common.dart';
+export 'environment.dart';
 export 'oauth.dart';
 export 'session.dart';
 export 'theme.dart';

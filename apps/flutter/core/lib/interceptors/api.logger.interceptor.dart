@@ -16,7 +16,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    logger.debug('网络请求错误', err, err.stackTrace);
+    logger.error('网络请求错误', err, err.stackTrace);
     return handler.next(err);
   }
 }

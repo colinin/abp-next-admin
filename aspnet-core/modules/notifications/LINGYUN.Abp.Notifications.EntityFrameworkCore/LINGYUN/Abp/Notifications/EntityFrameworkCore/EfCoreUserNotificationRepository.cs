@@ -176,7 +176,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                                  Severity = n.Severity,
                                  State = un.ReadStatus,
                                  Type = n.Type,
-                                 ContentType = n.ContentType
+                                 ContentType = n.ContentType,
                              };
 
         return await notifilerQuery

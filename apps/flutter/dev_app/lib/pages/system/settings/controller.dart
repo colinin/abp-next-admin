@@ -1,4 +1,5 @@
 import 'package:core/services/index.dart';
+import 'package:core/dependency/index.dart';
 import 'package:core/utils/string.extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,8 +7,8 @@ import 'package:get/get.dart';
 import 'state.dart';
 
 class SystemSettingsController extends GetxController {
-  SessionService get sessionService => Get.find();
-  ConfigStateService get configStateService => Get.find();
+  SessionService get sessionService => injector.get();
+  ConfigStateService get configStateService => injector.get();
 
   final Rx<SettingsState> _state = Rx<SettingsState>(SettingsState(
     languages: [],
@@ -33,9 +34,8 @@ class SystemSettingsController extends GetxController {
   }
 
   void _initLanguages() {
-    var localization = configStateService.getLocalization();
     _state.update((val) {
-      val?.languages = localization?.languages;
+      val?.languages = configStateService.getSupportedLocales();
     });
   }
 

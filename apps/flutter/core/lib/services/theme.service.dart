@@ -17,8 +17,10 @@ class ThemeState {
 }
 
 class ThemeService extends ServiceBase {
+  ThemeService(super._injector);
   static const String themeKey = '_abp_theme_';
-  StorageService get storageService => find();
+
+  StorageService get _storageService => resolve<StorageService>();
   
   final InternalStore<ThemeState> _store = InternalStore<ThemeState>(state: ThemeState(Brightness.light, ThemeUtils.lightColorScheme));
 
@@ -55,13 +57,13 @@ class ThemeService extends ServiceBase {
           case Brightness.dark:
             ThemeUtils.currentTheme = ThemeUtils.darkTheme;
             ThemeUtils.currentColor = ThemeUtils.darkColorScheme;
-            storageService.setItem(themeKey, 'dark');
+            _storageService.setItem(themeKey, 'dark');
             Get.changeThemeMode(ThemeMode.dark);
             return;
           case Brightness.light:
             ThemeUtils.currentTheme = ThemeUtils.lightTheme;
             ThemeUtils.currentColor = ThemeUtils.lightColorScheme;
-            storageService.setItem(themeKey, 'light');
+            _storageService.setItem(themeKey, 'light');
             Get.changeThemeMode(ThemeMode.light);
             return;
         }

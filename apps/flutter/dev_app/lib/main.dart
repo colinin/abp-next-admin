@@ -1,8 +1,9 @@
+import 'package:core/dependency/index.dart';
+import 'package:core/utils/theme.utils.dart';
+import 'package:core/utils/logging.dart';
 import 'package:dev_app/main.module.dart';
 import 'package:dev_app/utils/localization.dart';
-import 'package:core/utils/theme.utils.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:core/utils/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MainModule module = Get.find();
+    MainModule module = injector.get();
     return GetMaterialApp(
       theme: ThemeUtils.lightTheme,
       darkTheme: ThemeUtils.darkTheme,
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowMaterialGrid: false,
       enableLog: true,
       builder: EasyLoading.init(),
-      translations: AbpTranslations(Get.find()),
+      translations: AbpTranslations(injector.get()),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -42,7 +43,11 @@ class MyApp extends StatelessWidget {
           logger.info(text);
         }
       },
-      //supportedLocales: AbpLocalizations.supportedLocales,
+      supportedLocales: const [
+        Locale('zh', 'Hans'),
+        Locale('zh', 'CN'),
+        Locale('en', 'US'),
+      ],
     );
   }
 }

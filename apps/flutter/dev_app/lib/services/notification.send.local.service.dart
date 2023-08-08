@@ -1,23 +1,25 @@
 import 'dart:async';
-import 'package:core/config/index.dart';
+import 'package:core/index.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' hide Notification;
 
 import 'package:core/models/notifications.dart';
-import 'package:core/services/notification.send.service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FlutterLocalNotificationsSendService extends NotificationSendService {
+  FlutterLocalNotificationsSendService(super._injector);
   final RxInt nid = 0.obs;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final Subject<Notification> _notifications$ = BehaviorSubject<Notification>();
   final Subject<String?> _selectedNotifications$ = BehaviorSubject<String?>();
-  final EnvConfig _env = Environment.current;
+
+  EnvironmentService get _environmentService => resolve<EnvironmentService>();
 
   Future<void> initAsync() async {
+    var environment = _environmentService.getEnvironment();
     const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/logo');
     var initializationSettingsLinux = LinuxInitializationSettings(
-      defaultActionName: _env.notifications?.linux?.defaultActionName ?? 'Open notification',
+      defaultActionName: environment.notifications?.linux?.defaultActionName ?? 'Open notification',
     );
     var initializationSettingsDarwin  = DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) {
@@ -54,10 +56,11 @@ class FlutterLocalNotificationsSendService extends NotificationSendService {
   }
 
   NotificationDetails _buildDetails() {
+    var environment = _environmentService.getEnvironment();
     var androidDetails = AndroidNotificationDetails(
-      _env.notifications?.android?.channelId ?? 'abp-flutter', 
-      _env.notifications?.android?.channelName ?? 'abp-flutter',
-      channelDescription: _env.notifications?.android?.channelDescription);
+      environment.notifications?.android?.channelId ?? 'abp-flutter', 
+      environment.notifications?.android?.channelName ?? 'abp-flutter',
+      channelDescription: environment.notifications?.android?.channelDescription);
     
     const darwinDetails = DarwinNotificationDetails();
 

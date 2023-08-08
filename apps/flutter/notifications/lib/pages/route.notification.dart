@@ -10,5 +10,10 @@ class NotificationRoute {
       page: () => const NotifierManagePage(),
       binding: NotifierManageBinding(),
     ),
+    GetPage(
+      name: NotificationRoutes.notifies,
+      page: () => const NotificationsPage(),
+      binding: NotificationsBinding(),
+    ),
   ];
 }

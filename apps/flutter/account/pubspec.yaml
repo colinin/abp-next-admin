@@ -15,8 +15,8 @@ dependencies:
     path: '../core'
   components:
     path: '../components'
-  dio:
-  get:
+  dio: ^5.2.0+1
+  get: ^4.6.5
   json_annotation: ^4.8.1
 
 dev_dependencies:

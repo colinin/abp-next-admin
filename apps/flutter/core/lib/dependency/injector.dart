@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import 'injector.builder.dart';
+
+final Injector injector = Injector.instance;
+
 class Injector {
   factory Injector() => _getInstance ??= const Injector._();
 
@@ -16,30 +20,32 @@ class Injector {
     {
       String? tag,
       bool permanent = false,
-      InstanceBuilderCallback<T>? builder,
-    }) => Get.put(dependency, tag: tag, permanent: permanent, builder: builder);
+      InjectorBuilderFactory<T>? builder,
+    }) => Get.put(dependency, tag: tag, permanent: permanent, builder: () {
+      return builder != null ? builder(get()) : dependency;
+    });
 
   void create<T>(
-    InstanceBuilderCallback<T> builder,
+    InjectorBuilderFactory<T> builder,
     {
       String? tag,
       bool permanent = true,
     }
-  ) => Get.create(builder, tag: tag, permanent: permanent);
+  ) => Get.create(() => builder(get()), tag: tag, permanent: permanent);
 
   void lazyInject<T>(
-    InstanceBuilderCallback<T> builder,
+    InjectorBuilderFactory<T> builder,
     {
       String? tag,
       bool fenix = false,
-    }) => Get.lazyPut(builder, tag: tag, fenix: fenix);
+    }) => Get.lazyPut(() => builder(get()), tag: tag, fenix: fenix);
 
   Future<T> injectAsync<T>(
-    AsyncInstanceBuilderCallback<T> builder,
+    AsyncInjectorBuilderFactory<T> builder,
     {
       String? tag, 
       bool permanent = false,
-    }) => Get.putAsync(builder, tag: tag, permanent: permanent);
+    }) => Get.putAsync(() => builder(get()), tag: tag, permanent: permanent);
 
   bool isInjected({String? tag}) => Get.isRegistered(tag: tag);
 }

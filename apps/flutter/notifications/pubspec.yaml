@@ -15,8 +15,10 @@ dependencies:
     path: '../core'
   components:
     path: '../components'
-  get:
+  get: ^4.6.5
+  rxdart: ^0.27.7
   json_annotation: ^4.8.1
+  markdown_widget: ^2.2.0
 
 dev_dependencies:
   flutter_test:

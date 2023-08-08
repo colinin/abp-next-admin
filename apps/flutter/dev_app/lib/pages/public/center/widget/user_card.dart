@@ -1,20 +1,16 @@
 import 'package:components/index.dart';
 import 'package:flutter/material.dart';
 
+import '../state.dart';
+
 class UserCard extends StatelessWidget {
   const UserCard({
     super.key,
-    required this.userName,
-    required this.phoneNumber,
-    this.avatarUrl,
-    this.takeToken,
+    required this.state,
     this.onTap,
   });
 
-  final String userName;
-  final String phoneNumber;
-  final String? avatarUrl;
-  final String? takeToken;
+  final CenterState state;
   final VoidCallback? onTap;
   
   @override
@@ -29,9 +25,9 @@ class UserCard extends StatelessWidget {
               margin: const EdgeInsets.only(left: 10),
               width: 50,
               child: Avatar(
-                url: avatarUrl,
-                hintText: userName,
-                takeToken: takeToken,
+                url: state.profile?.avatarUrl,
+                hintText: state.userName,
+                takeToken: state.token?.accessToken,
               ),
             ),
             Container(
@@ -40,12 +36,12 @@ class UserCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(userName,
+                  Text(state.userName,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Opacity(
                     opacity: 0.6,
-                    child: Text(phoneNumber,
+                    child: Text(state.phoneNumber,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),

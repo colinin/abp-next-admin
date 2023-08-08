@@ -166,3 +166,35 @@ Map<String, dynamic> _$UserSubscreNotificationDtoToJson(
     <String, dynamic>{
       'name': instance.name,
     };
+
+UserNotificationDto _$UserNotificationDtoFromJson(Map<String, dynamic> json) =>
+    UserNotificationDto(
+      name: json['name'] as String,
+      id: json['id'] as String,
+      data: NotificationData.fromJson(json['data'] as Map<String, dynamic>),
+      creationTime: DateTime.parse(json['creationTime'] as String),
+      type: $enumDecode(_$NotificationTypeEnumMap, json['type']),
+      severity: $enumDecode(_$NotificationSeverityEnumMap, json['severity']),
+      state: $enumDecode(_$NotificationReadStateEnumMap, json['state']),
+      contentType: json['contentType'] == null
+          ? null
+          : $enumDecode(_$NotificationContentTypeEnumMap, json['contentType']),
+    );
+
+Map<String, dynamic> _$UserNotificationDtoToJson(
+        UserNotificationDto instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'id': instance.id,
+      'data': instance.data,
+      'creationTime': instance.creationTime.toIso8601String(),
+      'type': _$NotificationTypeEnumMap[instance.type]!,
+      'severity': _$NotificationSeverityEnumMap[instance.severity]!,
+      'state': _$NotificationReadStateEnumMap[instance.state]!,
+      'contentType': _$NotificationContentTypeEnumMap[instance.contentType],
+    };
+
+const _$NotificationReadStateEnumMap = {
+  NotificationReadState.read: 0,
+  NotificationReadState.unRead: 1,
+};
