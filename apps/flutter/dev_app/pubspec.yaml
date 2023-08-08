@@ -49,6 +49,7 @@ dependencies:
   platforms:
     path: '../platform'
     
+  bruno: ^3.3.0
   dio: ^5.2.0+1
   flutter_easyloading: ^3.0.5
   flutter_picker: ^2.1.0

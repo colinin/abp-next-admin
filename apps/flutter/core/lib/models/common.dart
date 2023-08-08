@@ -42,3 +42,26 @@ class SignalrMessage {
   String method;
   List<Object?> data;
 }
+
+class Menu {
+  Menu({
+    required this.path,
+    required this.name,
+    required this.displayName,
+    this.id = 0,
+    this.level = 0,
+    this.description,
+    this.redirect,
+    this.meta,
+    this.children,
+  });
+  String path;
+  String name;
+  String displayName;
+  String? description;
+  String? redirect;
+  int level;
+  int id;
+  Map<String, dynamic>? meta;
+  List<Menu>? children;
+}

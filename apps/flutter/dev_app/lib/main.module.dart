@@ -1,5 +1,6 @@
 import 'package:components/index.dart';
 import 'package:dev_app/pages/index.dart';
+import 'package:dev_app/pages/public/route.name.dart';
 import 'package:dev_app/services/index.dart';
 import 'package:dev_app/utils/initial.utils.dart';
 import 'package:dev_app/utils/loading.dart';
@@ -30,7 +31,7 @@ class MainModule extends Module {
   @override
   List<GetPage> get routes => [
     GetPage(
-      name: '/',
+      name: PublicRoutes.main,
       page: () => const MainPage(),
       bindings: [
         MainBinding(),
