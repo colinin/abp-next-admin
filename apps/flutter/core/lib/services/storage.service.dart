@@ -1,8 +1,9 @@
-import 'package:get/get.dart';
+import 'package:core/dependency/index.dart';
 import 'package:get_storage/get_storage.dart';
 import 'service.base.dart';
 
 class GetxStorageService extends StorageService {
+  GetxStorageService(super._injector);
   static late GetStorage _storage;
   static Future<bool> init([String container = 'GetStorage']) async {
     try {
@@ -43,9 +44,10 @@ class GetxStorageService extends StorageService {
 }
 
 class StorageService extends ServiceBase {
+  StorageService(super._injector);
   static final Map<String, String> _storage = {};
 
-  static StorageService get to => Get.find();
+  static StorageService get to => injector.get();
 
   static T? initStorage<T>(String key, T? Function(String) formater) {
     return to.getFormat(key, formater);

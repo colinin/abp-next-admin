@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'package:core/proxy/volo/abp/localization/models.dart';
 import 'package:core/utils/string.extensions.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'environment.service.dart';
 import 'service.base.dart';
 import 'package:core/utils/internal.store.dart';
 import 'package:core/proxy/volo/abp/asp-net-core/mvc/application-configurations/index.dart';
 
 
 class ConfigStateService extends ServiceBase {
-  AbpApplicationConfigurationService get abpConfigService => find();
-  AbpApplicationLocalizationService get abpApplicationLocalizationService => find();
+  ConfigStateService(super._injector);
+
+  EnvironmentService get _environmentService => resolve<EnvironmentService>();  
+  AbpApplicationConfigurationService get _abpConfigService => resolve<AbpApplicationConfigurationService>();
+  AbpApplicationLocalizationService get _abpApplicationLocalizationService => resolve<AbpApplicationLocalizationService>();
+  
   final bool? includeLocalizationResources = false;
 
   final InternalStore<ApplicationConfigurationDto> _store = InternalStore<ApplicationConfigurationDto>(state: ApplicationConfigurationDto());
@@ -31,13 +37,16 @@ class ConfigStateService extends ServiceBase {
     _updateSubject
       .switchMap((_) => Stream.fromFuture(getAbpConfig()))
       .switchMap((appState) => Stream.fromFuture(getLocalizationAndCombineWithAppState(appState)))
-      .listen((appState) => _store.set(appState));
+      .listen(_store.set);
   }
 
   Future<ApplicationConfigurationDto> getLocalizationAndCombineWithAppState(ApplicationConfigurationDto appState) {
     if (appState.localization?.currentCulture?.cultureName?.isNullOrWhiteSpace() == true) {
       throw Exception('culture name should defined');
     }
+    var environment = _environmentService.getEnvironment();
+    if (environment.localization.useLocalResources == true) return Future.value(appState);
+    
     return getlocalizationResource(appState.localization!.currentCulture!.cultureName!)
       .then((localization) {
         var abpConfig = appState.cloneWith((state) {
@@ -53,13 +62,13 @@ class ConfigStateService extends ServiceBase {
   }
 
   Future<ApplicationLocalizationDto> getlocalizationResource(String cultureName) {
-    return abpApplicationLocalizationService.get(ApplicationLocalizationRequestDto(
+    return _abpApplicationLocalizationService.get(ApplicationLocalizationRequestDto(
       cultureName: cultureName,
       onlyDynamics: false));
   }
 
   Future<ApplicationConfigurationDto> getAbpConfig() {
-    return abpConfigService.get(ApplicationConfigurationRequestOptions(
+    return _abpConfigService.get(ApplicationConfigurationRequestOptions(
       includeLocalizationResources: includeLocalizationResources
     ));
   }
@@ -127,5 +136,13 @@ class ConfigStateService extends ServiceBase {
 
   bool getGlobalFeatureIsEnabled(String key) {
     return _isGlobalFeatureEnabled(key, _store.state.globalFeatures!);
+  }
+
+  List<LanguageInfo>? getSupportedLocales() {
+    var environment = _environmentService.getEnvironment();
+    if (environment.localization.useLocalResources == true) {
+      return _environmentService.getSupportedLocales();
+    }
+    return _store.state.localization?.languages;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:core/models/abp.dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'notification.g.dart';
@@ -46,6 +47,14 @@ enum NotificationSeverity {
   error,
   @JsonValue(40)
   fatal;
+}
+
+@JsonEnum()
+enum NotificationReadState {
+  @JsonValue(0)
+  read,
+  @JsonValue(1)
+  unRead
 }
 
 @JsonSerializable()
@@ -178,4 +187,51 @@ class UserSubscreNotificationDto {
 class SetSubscriptionDto {
   SetSubscriptionDto(this.name);
   String name;
+}
+
+@JsonSerializable()
+class UserNotificationDto {
+  UserNotificationDto({
+    required this.name,
+    required this.id,
+    required this.data,
+    required this.creationTime,
+    required this.type,
+    required this.severity,
+    required this.state,
+    required this.contentType,
+  });
+  String name;
+  String id;
+  NotificationData data;
+  DateTime creationTime;
+  NotificationType type;
+  NotificationSeverity severity;
+  NotificationReadState state;
+  NotificationContentType? contentType;
+
+  factory UserNotificationDto.fromJson(Map<String, dynamic> json) => _$UserNotificationDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$UserNotificationDtoToJson(this);
+}
+
+class UserNotificationGetByPagedDto extends PagedAndSortedResultRequestDto {
+  UserNotificationGetByPagedDto({
+    super.sorting,
+    super.skipCount,
+    super.maxResultCount,
+    this.filter,
+    this.readState,
+  });
+  String? filter;
+  NotificationReadState? readState;
+
+  @override
+  Map<String, dynamic> toJson() =>
+    <String, dynamic> {
+      'sorting': sorting,
+      'skipCount': skipCount,
+      'maxResultCount': maxResultCount,
+      'filter': filter,
+      'readState': readState,
+    };
 }

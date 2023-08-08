@@ -221,6 +221,7 @@ class Token {
   Token({
     required this.accessToken,
     this.expiresIn,
+    this.expiration,
     this.tokenType,
     this.refreshToken,
     this.scope,
@@ -231,6 +232,9 @@ class Token {
   /// 过期时间
   @JsonKey(name: 'expires_in')
   int? expiresIn;
+  /// 过期时间
+  @JsonKey(name: 'expiration')
+  DateTime? expiration;
   /// 令牌类型
   @JsonKey(name: 'token_type')
   String? tokenType;
@@ -282,4 +286,34 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);
   Map<String, dynamic> toJson() => _$UserProfileToJson(this);
+}
+
+class PortalLoginProvider {
+  PortalLoginProvider({
+    required this.id,
+    required this.name,
+    this.logo,
+  });
+  String id;
+  String name;
+  String? logo;
+
+  factory PortalLoginProvider.fromJson(Map<String, dynamic> json) => 
+    PortalLoginProvider(
+      id: json['Id'] as String,
+      name: json['Name'] as String,
+      logo: json['Logo'] as String?,
+    );
+    
+  Map<String, dynamic> toJson() => 
+    <String, dynamic>{
+      'Id': id,
+      'Name': name,
+      'Logo': logo,
+    };
+}
+
+class PortalLoginException implements Exception {
+  PortalLoginException(this.providers);
+  List<PortalLoginProvider> providers;
 }

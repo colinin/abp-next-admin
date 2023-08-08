@@ -8,12 +8,14 @@ class ActionCard extends StatelessWidget {
     this.onHelp,
     this.onFeedback,
     this.onSettings,
+    this.onMessages,
     this.onInfo,
   });
 
   final VoidCallback? onHelp;
   final VoidCallback? onFeedback;
   final VoidCallback? onSettings;
+  final VoidCallback? onMessages;
   final VoidCallback? onInfo;
   
   @override
@@ -32,6 +34,12 @@ class ActionCard extends StatelessWidget {
             prefixIcon: Icons.feedback,
             prefixIconColor: Colors.orange,
             onTap: onFeedback,
+          ),
+          _actionButton(
+            title: 'Center:Messages'.tr,
+            prefixIcon: Icons.message,
+            prefixIconColor: Colors.cyan,
+            onTap: onMessages,
           ),
           _actionButton(
             title: 'Center:Settings'.tr,

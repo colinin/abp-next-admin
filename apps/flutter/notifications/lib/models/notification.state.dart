@@ -61,10 +61,12 @@ class Notification {
     required this.lifetime,
     required this.type,
     required this.contentType,
+    this.loading = false,
   });
   String name;
   String groupName;
   String displayName;
+  bool loading;
   bool isSubscribed;
   String? description;
   NotificationLifetime lifetime;

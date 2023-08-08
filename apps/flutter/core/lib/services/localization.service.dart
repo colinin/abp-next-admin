@@ -1,3 +1,4 @@
+import 'package:core/dependency/injector.dart';
 import 'package:core/models/common.dart';
 import 'package:core/services/index.dart';
 import 'package:core/utils/localization.utils.dart';
@@ -10,14 +11,16 @@ import 'package:rxdart_ext/rxdart_ext.dart';
 import '../proxy/volo/abp/asp-net-core/mvc/index.dart';
 import 'service.base.dart';
 
-class LocalizationService extends ServiceBase {
-  StorageService get storageService => find();
-  SessionService get sessionService => find();
-  ConfigStateService get configStateService => find();
-  
-  String? get currentLang => sessionService.currentLanguage;
+class LocalizationService extends ServiceBase implements TranslationService {
+  LocalizationService(super._injector);
 
-  static LocalizationService get to => Get.find();
+  SessionService get _sessionService => resolve<SessionService>();
+  ConfigStateService get _configStateService => resolve<ConfigStateService>();
+  EnvironmentService get _environmentService => resolve<EnvironmentService>();
+  
+  String? get currentLang => _sessionService.currentLanguage;
+
+  static LocalizationService get to => Injector.instance.get<LocalizationService>();
 
   final Subject<Localization> _localization$ = BehaviorSubject<Localization>();
   final BehaviorSubject<Map<String, Map<String, String>>> _localizations$ = BehaviorSubject<Map<String, Map<String, String>>>.seeded({});
@@ -32,8 +35,8 @@ class LocalizationService extends ServiceBase {
   void _initLocalizationValues() {
     // var legacyResources$ = configStateService.sliceConfig((config) => config.localization?.values);
     // var remoteLocalizations$ = configStateService.sliceConfig((config) => config.localization?.resources);
-    var currentLanguage$ = sessionService.getLanguage$();
-    var localizations$ = configStateService.getLocalization$();
+    var currentLanguage$ = _sessionService.getLanguage$();
+    var localizations$ = _configStateService.getLocalization$();
 
     // 本地化
     Rx.combineLatest2(currentLanguage$, localizations$, (currentLang, localizations) {
@@ -55,6 +58,10 @@ class LocalizationService extends ServiceBase {
       .listen((localization) => _localization$.add(localization));
 
     _localization$
+      .where((localization) {
+        var environment = _environmentService.getEnvironment();
+        return environment.localization.useLocalResources == false;
+      })
       .listen((localization) async { 
         Map<String, Map<String, String>> localizations = {};
         Map<String, String> cultureMap = {};
@@ -67,33 +74,31 @@ class LocalizationService extends ServiceBase {
         
         Get.clearTranslations();
         Get.addTranslations(localizations);
-
         await Get.updateLocale(Locale.fromSubtags(languageCode: localization.culture));
-
         _localizations$.add(localizations);
       });
   }
 
   void _listenToSetLanguage() {
-    var lanuage$ = sessionService.onLanguageChange$();
-    var localization$ = configStateService.getLocalization$();
+    var lanuage$ = _sessionService.onLanguageChange$();
+    var localization$ = _configStateService.getLocalization$();
 
     Rx.combineLatest2(lanuage$, localization$, (lang, localization) {
       if (localization?.currentCulture?.cultureName == null) return null;
       if (lang == localization?.currentCulture?.cultureName) return null;
       return lang;
     }).whereNotNull()
-      .listen((_) => configStateService.refreshAppState());
+      .listen((_) => _configStateService.refreshAppState());
   }
 
   Stream<String> localize(String resourceName, String key, {String? defaultValue}) {
-    return configStateService.getLocalization$()
+    return _configStateService.getLocalization$()
       .map((localization) => LocalizationUtils.createLocalizer(localization))
       .map((localize) => localize(resourceName, key, defaultValue ?? key));
   }
 
   String localizeSync(String resourceName, String key, {String? defaultValue}) {
-    var localization = configStateService.getLocalization();
+    var localization = _configStateService.getLocalization();
     return LocalizationUtils.createLocalizer(localization)(resourceName, key, defaultValue ?? key);
   }
 
@@ -102,7 +107,7 @@ class LocalizationService extends ServiceBase {
     List<String> keys,
     String defaultValue,
   ) {
-    return configStateService.getLocalization$()
+    return _configStateService.getLocalization$()
       .map((localization) => LocalizationUtils.createLocalizerWithFallback(localization!))
       .map((localizeWithFallback) => localizeWithFallback(resourceNames, keys, defaultValue),
     );
@@ -113,10 +118,11 @@ class LocalizationService extends ServiceBase {
     List<String> keys,
     String defaultValue,
   ) {
-    var localization = configStateService.getLocalization();
+    var localization = _configStateService.getLocalization();
     return LocalizationUtils.createLocalizerWithFallback(localization!)(resourceNames, keys, defaultValue);
   }
 
+  @override
   Map<String, Map<String, String>> getResources() {
     return _localizations$.value;
   }

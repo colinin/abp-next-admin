@@ -1,5 +1,6 @@
 import 'package:core/models/wrapper.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' show Trans;
 
 class WrapperResultInterceptor extends Interceptor {
   @override
@@ -10,7 +11,7 @@ class WrapperResultInterceptor extends Interceptor {
           requestOptions: response.requestOptions,
           response: response,
           type: DioExceptionType.badResponse,
-          message: '请求出错, 请稍后再试!'));
+          message: 'Prompt:ApiRequestFailed'.tr));
           return;
       }
       var result = Wrapper.fromJson(response.data!);

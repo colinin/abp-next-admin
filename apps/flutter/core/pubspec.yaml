@@ -12,17 +12,16 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dio:
+  dio: ^5.2.0+1
 
-  get:
-  get_storage:
-  rxdart:
-  rxdart_ext:
-  logger:
-  logging:
-  signalr_netcore: ^1.3.4
+  get: ^4.6.5
+  get_storage: ^2.1.1
+  rxdart: ^0.27.7
+  rxdart_ext: ^0.2.9
+  logger: ^1.4.0
+  logging: ^1.2.0 
   json_annotation: ^4.8.1
-  flutter_app_environment: ^1.0.1
+  date_format: ^2.0.7
 
 dev_dependencies:
   flutter_test:

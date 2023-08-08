@@ -1,18 +1,26 @@
+import 'package:core/dependency/injector.dart';
 import 'package:core/services/rest.service.dart';
-import 'package:get/get.dart';
 
 import 'models.dart';
 
 class AbpTenantService {
-  RestService get _restService => Get.find();
+  AbpTenantService(Injector injector):
+    _restService = injector.get<RestService>();
+  final RestService _restService;
 
   Future<FindTenantResultDto> findTenantById(String id) {
-    return _restService.get('/api/abp/multi-tenancy/tenants/by-id/$id')
-    .then((res) => FindTenantResultDto.fromJson(res.data));
+    return _restService.request(
+      method: HttpMethod.GET,
+      url: '/api/abp/multi-tenancy/tenants/by-id/$id',
+      transformer: (res) => FindTenantResultDto.fromJson(res.data),
+    );
   }
 
   Future<FindTenantResultDto> findTenantByName(String name) {
-    return _restService.get('/api/abp/multi-tenancy/tenants/by-name/$name')
-    .then((res) => FindTenantResultDto.fromJson(res.data));
+    return _restService.request(
+      method: HttpMethod.GET,
+      url: '/api/abp/multi-tenancy/tenants/by-name/$name',
+      transformer: (res) => FindTenantResultDto.fromJson(res.data),
+    );
   }
 }

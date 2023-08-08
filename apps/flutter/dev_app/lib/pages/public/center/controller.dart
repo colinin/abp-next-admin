@@ -1,11 +1,15 @@
+import 'package:account/pages/route.name.dart';
 import 'package:core/models/auth.dart';
+import 'package:core/dependency/index.dart';
 import 'package:core/services/session.service.dart';
+import 'package:dev_app/pages/center/route.name.dart';
 import 'package:get/get.dart';
+import 'package:notifications/pages/route.name.dart';
 
 import 'state.dart';
 
 class CenterController extends GetxController {
-  SessionService get sessionService => Get.find();
+  SessionService get sessionService => injector.get();
 
   final Rx<CenterState> _state = Rx<CenterState>(CenterState(isAuthenticated: false));
   CenterState get state => _state.value;
@@ -18,26 +22,45 @@ class CenterController extends GetxController {
   void onInit() {
     super.onInit();
     sessionService.getProfile$()
-      .listen((event) {
+      .listen((profile) {
         _state.update((val) {
-          val?.profile = event;
+          val?.profile = profile;
           val?.isAuthenticated = sessionService.isAuthenticated;
         });
       });
     sessionService.getToken$()
-      .listen((event) {
+      .listen((token) {
         _state.update((val) {
-          val?.token = event;
+          val?.token = token;
         });
       });
   }
 
-  String get userName {
-    return !isAuthenticated ? 'Label:Anonymous'.tr : profile!.userName;
+  void onClickProfile() {
+    if (!state.isAuthenticated) {
+      return redirectToRoute(AccountRoutes.login);
+    }
+    redirectToRoute(AccountRoutes.profile);
   }
 
-  String get phoneNumber {
-    return !isAuthenticated ? '' : profile!.phoneNumber ?? 'Label:PhoneNumberNotBound'.tr;
+  void onClickFeedback() {
+
+  }
+
+  void onClickHelp() {
+
+  }
+
+  void onClickInfo() {
+
+  }
+
+  void onClickMessage() {
+    redirectToRoute(NotificationRoutes.notifies);
+  }
+
+  void onSettings() {
+    redirectToRoute(CenterRoutes.settings);
   }
 
   void redirectToRoute(String route) {

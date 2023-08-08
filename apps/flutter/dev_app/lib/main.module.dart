@@ -1,25 +1,30 @@
+import 'package:components/index.dart';
 import 'package:dev_app/pages/index.dart';
 import 'package:dev_app/services/index.dart';
+import 'package:dev_app/utils/initial.utils.dart';
 import 'package:dev_app/utils/loading.dart';
 import 'package:account/index.dart';
-import 'package:components/index.dart';
 import 'package:core/modularity/index.dart';
 import 'package:core/index.dart';
 import 'package:dio/dio.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:notifications/notifications.module.dart';
+import 'package:notifications/index.dart';
+import 'package:oauth/index.dart';
+import 'package:platforms/index.dart';
 
+import 'handlers/error.handler.dart';
 import 'interceptors/index.dart';
 
 class MainModule extends Module {
   @override
   List<Module> get dependencies => [
-    CoreModule(),
+    ComponentsModule(),
+    OAuthModule(),
     AccountModule(),
     NotificationsModule(),
+    PlatformModule(),
   ];
 
   @override
@@ -40,107 +45,59 @@ class MainModule extends Module {
   ];
 
   @override
-  Future<void> configureServicesAsync() async {
-    
-    await injectAsync<NotificationSendService>(() async {
-      var service = FlutterLocalNotificationsSendService();
-      await service.initAsync();
-      return service;
-    }, permanent: true);
-
-    await super.configureServicesAsync();
-  }
-
-  @override
   void configureServices() {
     inject<MainModule>(this);
+    inject<ApplicationInitialService>(FlutterApplicationInitialService());
 
-    inject(SignalrService('${Environment.current.baseUrl}/signalr-hubs/notifications'),
-      tag: NotificationTokens.producer,
-      permanent: true);
+    lazyInject((injector) => ErrorHandler(injector));
+    lazyInject<SignalrService>((injector) {
+      var environmentService = get<EnvironmentService>();
+      var environment = environmentService.getEnvironment();
 
-    lazyInject<RestService>(() {
-      var dio = Dio(BaseOptions(
-        baseUrl: Environment.current.baseUrl,
-      ));
+      if (environment.notifications?.serverUrl.isNullOrWhiteSpace() == true) {
+        return NullSignalrService();
+      }
+
+      return AspNetCoreSignalrService(environment.notifications!.serverUrl!);
+    }, tag: NotificationTokens.producer);
+    lazyInject<RestService>((injector) {
+      var environmentService = injector.get<EnvironmentService>();
+      var dio = Dio();
       dio.interceptors.add(LoggerInterceptor());
-      dio.interceptors.add(OAuthApiInterceptor());
+      dio.interceptors.add(ApiAuthorizationInterceptor());
       dio.interceptors.add(AppendHeaderInterceptor());
-      dio.interceptors.add(AbpWrapperRemoteServiceErrorInterceptor());
+      //dio.interceptors.add(AbpWrapperRemoteServiceErrorInterceptor());
       dio.interceptors.add(WrapperResultInterceptor());
-      dio.interceptors.add(ExceptionInterceptor());
+      dio.interceptors.add(ExceptionInterceptor(get()));
 
-      return RestService(dio: dio);
+      return RestService(dio, environmentService);
+    });
+    lazyInject<TranslationService>((ioc) {
+      var environmentService = get<EnvironmentService>();
+      var environment = environmentService.getEnvironment();
+      // 使用资源文件中的本地化文档
+      if (environment.localization.useLocalResources == true) {
+        return TranslationResService(ioc);
+      }
+      // 使用本地化服务提供的本地化支持
+      return ioc.get<LocalizationService>();
     }, fenix: true);
-    
-    lazyInject<AuthService>(() => OAuthService(
-      clientId: Environment.current.clientId,
-      clientSecret: Environment.current.clientSecret
-    ), fenix: true);
   }
 
   @override
   Future<Map<ModuleKey, List<GetPage>>> initAsync() async {
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    await Environment.initAsync();
     Loading();
 
+    inject(injector, permanent: true);
     var moduleRoutes = await super.initAsync();
 
-    initComponent();
-    initThemeData();
+    await InitialUtils.initialState(get<Injector>());
+
+    InitialUtils.initComponent(get<Injector>());
+    //InitialUtils.initThemeData();
 
     return moduleRoutes;
-  }
-
-  void initComponent() {
-    if (!Environment.current.staticFilesUrl.isNullOrWhiteSpace()) {
-      AvatarConfig.baseUrl = Environment.current.staticFilesUrl!;
-    } else {
-      AvatarConfig.baseUrl = '${Environment.current.baseUrl}/api/files/static/users/p/';
-    }
-  }
-
-  void initThemeData() {
-    ThemeUtils.lightTheme = FlexThemeData.light(
-      scheme: FlexScheme.amber,
-      surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      blendLevel: 7,
-      subThemesData: const FlexSubThemesData(
-        blendOnLevel: 10,
-        blendOnColors: false,
-        useTextTheme: true,
-        useM2StyleDividerInM3: true,
-        thinBorderWidth: 0.5,
-        thickBorderWidth: 0.5,
-        defaultRadius: 0.0,
-        cardRadius: 6.0,
-      ),
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      useMaterial3: true,
-      swapLegacyOnMaterial3: true,
-      // To use the Playground font, add GoogleFonts package and uncomment
-      // fontFamily: GoogleFonts.notoSans().fontFamily,
-    );
-    ThemeUtils.darkTheme = FlexThemeData.dark(
-      scheme: FlexScheme.amber,
-      surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-      blendLevel: 13,
-      subThemesData: const FlexSubThemesData(
-        blendOnLevel: 20,
-        useTextTheme: true,
-        useM2StyleDividerInM3: true,
-        thinBorderWidth: 0.5,
-        thickBorderWidth: 0.5,
-        defaultRadius: 0.0,
-        cardRadius: 6.0,
-      ),
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      useMaterial3: true,
-      swapLegacyOnMaterial3: true,
-      // To use the Playground font, add GoogleFonts package and uncomment
-      // fontFamily: GoogleFonts.notoSans().fontFamily,
-    );
   }
 }

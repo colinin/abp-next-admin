@@ -1,6 +1,13 @@
 # This is a generated file; do not edit or check into version control.
-path_provider=%UserProfile%\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider-2.0.15\\
-path_provider_android=%UserProfile%\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_android-2.0.27\\
-path_provider_foundation=%UserProfile%\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_foundation-2.2.4\\
-path_provider_linux=%UserProfile%\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_linux-2.1.11\\
-path_provider_windows=%UserProfile%\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_windows-2.1.7\\
+path_provider=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider-2.0.15\\
+path_provider_android=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_android-2.0.27\\
+path_provider_foundation=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_foundation-2.2.4\\
+path_provider_linux=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_linux-2.1.11\\
+path_provider_windows=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\path_provider_windows-2.1.7\\
+url_launcher=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher-6.1.12\\
+url_launcher_android=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_android-6.0.36\\
+url_launcher_ios=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_ios-6.1.4\\
+url_launcher_linux=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_linux-3.0.5\\
+url_launcher_macos=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_macos-3.0.6\\
+url_launcher_web=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_web-2.0.18\\
+url_launcher_windows=C:\\Users\\eddlevol\\AppData\\Local\\Pub\\Cache\\hosted\\pub.flutter-io.cn\\url_launcher_windows-3.0.7\\

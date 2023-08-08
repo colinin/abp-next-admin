@@ -44,11 +44,11 @@ class NotifierCard extends StatelessWidget {
         title: Text(item.displayName),
         subtitle: Text(item.description ?? ''),
         value: item.isSubscribed,
-        onChanged: (checked) {
+        onChanged: item.loading == false ? (checked) {
           if (onChange != null) {
             onChange!(item, checked);
           }
-        },
+        } : null,
       ));
     }
     return children;

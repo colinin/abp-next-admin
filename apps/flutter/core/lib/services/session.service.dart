@@ -8,20 +8,23 @@ import 'package:core/utils/string.extensions.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'auth.service.dart';
+import '../dependency/injector.dart';
+import 'environment.service.dart';
 import 'storage.service.dart';
 import 'config.state.service.dart';
 import 'service.base.dart';
 
 class SessionService extends ServiceBase {
+  SessionService(super._injector);
+
   static const String sessionKey = '_abp_session_';
   final InternalStore<Session> _store = InternalStore<Session>(state: _initState());
 
-  static SessionService get to => Get.find();
+  static SessionService get to => Injector.instance.get();
 
-  AuthService get _authService => find();
-  StorageService get _storageService => find();
-  ConfigStateService get _configStateService => find();
+  StorageService get _storageService => resolve<StorageService>();
+  ConfigStateService get _configStateService => resolve<ConfigStateService>();
+  EnvironmentService get _environmentService => resolve<EnvironmentService>();
 
   bool get isAuthenticated {
     if (_store.state.profile == null || _store.state.token == null) {
@@ -30,6 +33,10 @@ class SessionService extends ServiceBase {
     
     return !_store.state.profile!.id.isNullOrWhiteSpace() &&
       !_store.state.token!.accessToken.isNullOrWhiteSpace();
+  }
+
+  Session get state {
+    return _store.state;
   }
 
   CurrentTenantDto? get tenant{
@@ -61,13 +68,10 @@ class SessionService extends ServiceBase {
 
   void _initUpdateStream() {
     var token$ = _store.sliceState((state) => state.token);
-    token$.doOnData((_) => _configStateService.refreshAppState())
-      .whereNotNull()
-      .switchMap((_) => Stream.fromFuture(_authService.getProfile()))
-      .listen((profile) {
-        var abpConfig = _configStateService.getAll();
+    token$
+      .switchMap((_) => _configStateService.refreshAppState())
+      .listen((abpConfig) {
         _store.patch((state) {
-          state.profile = profile;
           state.tenant = abpConfig.currentTenant;
         });
       });
@@ -99,13 +103,23 @@ class SessionService extends ServiceBase {
     _store.patch((state) => state.language = language);
   }
 
-  void refreshProfile() {
+  void setProfile(UserProfile? profile) {
+    if (profile != null && !profile.avatarUrl.isNullOrWhiteSpace()) {
+      if (!GetUtils.isURL(profile.avatarUrl!)) {
+        var environment = _environmentService.getEnvironment();
+        var avatarServerPath = environment.remoteServices.getApiUrl('avatar');
+        if (!profile.avatarUrl!.startsWith(avatarServerPath)) {
+          profile.avatarUrl = '$avatarServerPath${profile.avatarUrl}${'?access_token=${token?.accessToken}'}';
+        }
+      }
+    }
+    
     _store.patch((state) {
       state.profile = profile;
     });
   }
 
-  void refreshToken(Token? token) {
+  void setToken(Token? token) {
     _store.patch((state) {
       state.token = token;
     });

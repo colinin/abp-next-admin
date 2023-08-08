@@ -1,4 +1,5 @@
 import 'package:dev_app/pages/center/settings/state.dart';
+import 'package:core/dependency/index.dart';
 import 'package:core/services/session.service.dart';
 import 'package:core/services/theme.service.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,8 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:get/get.dart';
 
 class CenterSettingsController extends GetxController {
-  SessionService get sessionService => Get.find();
-  ThemeService get themeService => Get.find();
+  SessionService get sessionService => injector.get();
+  ThemeService get themeService => injector.get();
 
   final Rx<CenterState> _state = Rx<CenterState>(CenterState(false));
   CenterState get state => _state.value;
@@ -55,8 +56,8 @@ class CenterSettingsController extends GetxController {
       ),
       selecteds: [themeModeIndex],
       title: Text('Label:Theme'.tr),
-      cancelText: 'Lable:Cancel'.tr,
-      confirmText: 'Lable:Confirm'.tr,
+      cancelText: 'Label:Cancel'.tr,
+      confirmText: 'Label:Confirm'.tr,
       height: 210,
       itemExtent: 40,
       selectedTextStyle: const TextStyle(color: Colors.blue),

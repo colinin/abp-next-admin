@@ -1,5 +1,4 @@
 export './abstracts/index.dart';
-export './config/index.dart';
 export './dependency/index.dart';
 export './interceptors/index.dart';
 export './middlewares/index.dart';

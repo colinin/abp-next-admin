@@ -1,4 +1,4 @@
-import 'package:account/models/auth.dart';
+import 'package:core/models/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginState {

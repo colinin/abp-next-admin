@@ -128,6 +128,9 @@ Map<String, dynamic> _$RefreshTokenRequestToJson(
 Token _$TokenFromJson(Map<String, dynamic> json) => Token(
       accessToken: json['access_token'] as String,
       expiresIn: json['expires_in'] as int?,
+      expiration: json['expiration'] == null
+        ? null
+        : DateTime.tryParse(json['expiration'] as String),
       tokenType: json['token_type'] as String?,
       refreshToken: json['refresh_token'] as String?,
       scope: json['scope'] as String?,
@@ -136,6 +139,7 @@ Token _$TokenFromJson(Map<String, dynamic> json) => Token(
 Map<String, dynamic> _$TokenToJson(Token instance) => <String, dynamic>{
       'access_token': instance.accessToken,
       'expires_in': instance.expiresIn,
+      'expiration': instance.expiration?.toString(),
       'token_type': instance.tokenType,
       'refresh_token': instance.refreshToken,
       'scope': instance.scope,

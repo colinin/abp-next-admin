@@ -1,25 +1,30 @@
+import 'package:core/dependency/index.dart';
+import 'package:core/abstracts/signalr.service.dart';
+import 'package:core/services/environment.service.dart';
 import 'package:core/services/notification.send.service.dart';
+import 'package:dev_app/handlers/index.dart';
 import 'package:get/get.dart';
-import 'package:core/config/index.dart';
 import 'package:core/services/session.service.dart';
-import 'package:core/services/signalr.service.dart';
 import 'package:core/services/subscription.service.dart';
-import 'package:core/tokens/index.dart';
 import 'package:core/utils/index.dart';
 import 'package:notifications/models/index.dart';
+import 'package:notifications/tokens/index.dart';
 
 class MainController extends GetxController {
   final RxInt _pageIndex = RxInt(0);
   int get currentIndex => _pageIndex.value;
 
-  SessionService get _sessionService => Get.find();
-  SubscriptionService get _subscriptionService => Get.find(tag: NotificationTokens.consumer);
-  SignalrService get _signalrService => Get.find(tag: NotificationTokens.producer);
-  NotificationSendService get _notificationSendService => Get.find();
+  SessionService get _sessionService => injector.get();
+  SubscriptionService get _subscriptionService => injector.get(tag: NotificationTokens.consumer);
+  SignalrService get _signalrService => injector.get(tag: NotificationTokens.producer);
+  NotificationSendService get _notificationSendService => injector.get();
+  EnvironmentService get _environmentService => injector.get();
+  ErrorHandler get _errorHandler => injector.get();
 
   @override
   void onInit() async {
     super.onInit();
+    _subscriptionService.addOne(_errorHandler.listenToRestError());
     _subscriptionService.addOne(_signalrService.onClose(logger.debug));
     _subscriptionService.addOne(_signalrService.onReconnected(logger.debug));
     _subscriptionService.addOne(_signalrService.onReconnecting(logger.debug));
@@ -27,13 +32,13 @@ class MainController extends GetxController {
     _subscriptionService.subscribe(
       // 订阅SignalR Hub
       _signalrService.subscribe(NotificationTokens.receiver),
-      (message) async {
+      next: (message) async {
         for (var data in message.data) {
           if (data == null) continue;
           // 解析通知数据
           var notification = NotificationInfo.fromJson(data as dynamic);
           // 格式化为移动端可识别通知数据
-          var payload = NotificationPaylod.fromData(notification.data);
+          var payload = NotificationPaylod.fromNotification(notification);
           // 发布本地通知
           await _notificationSendService.send(
             payload.title,
@@ -52,7 +57,8 @@ class MainController extends GetxController {
         }
       });
     if (_sessionService.currentLanguage.isNullOrWhiteSpace()) {
-      _sessionService.setLanguage(Environment.current.defaultLanguage ?? 'en');
+      var environment = _environmentService.getEnvironment();
+      _sessionService.setLanguage(environment.localization.defaultLanguage ?? 'en');
     }
   }
 
