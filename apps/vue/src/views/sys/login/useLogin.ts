@@ -13,6 +13,7 @@ export enum LoginStateEnum {
   WECHAT,
   SSO,
   TwoFactor,
+  Portal,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);

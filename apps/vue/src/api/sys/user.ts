@@ -25,14 +25,15 @@ enum Api {
 /**
  * @description: user login api
  */
-export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal', isPortalLogin: boolean = false) {
   const setting = useGlobSetting();
   const tokenParams = {
     client_id: setting.clientId,
     client_secret: setting.clientSecret,
-    grant_type: 'password',
+    grant_type: isPortalLogin ? 'portal' : 'password',
     username: params.username,
     password: params.password,
+    enterpriseId: params.enterpriseId,
     scope: 'openid email address phone profile offline_access lingyun-abp-application',
     TwoFactorProvider: params.twoFactorProvider,
     TwoFactorCode: params.twoFactorCode,

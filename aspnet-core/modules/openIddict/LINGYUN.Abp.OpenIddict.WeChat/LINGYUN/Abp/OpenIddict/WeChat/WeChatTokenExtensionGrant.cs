@@ -213,9 +213,9 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
 
     protected async virtual Task SetClaimsDestinationsAsync(ExtensionGrantContext context, ClaimsPrincipal principal)
     {
-        var claimDestinationsManager = GetRequiredService<AbpOpenIddictClaimDestinationsManager>(context);
+        var openIddictClaimsPrincipalManager = GetRequiredService<AbpOpenIddictClaimsPrincipalManager>(context);
 
-        await claimDestinationsManager.SetAsync(principal);
+        await openIddictClaimsPrincipalManager.HandleAsync(context.Request, principal);
     }
 
     protected async virtual Task<IEnumerable<string>> GetResourcesAsync(ExtensionGrantContext context)
