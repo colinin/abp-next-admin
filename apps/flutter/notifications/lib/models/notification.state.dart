@@ -14,6 +14,7 @@ class NotificationState {
   });
   bool isEnabled;
   List<NotificationGroup> groups;
+  
 
   NotificationGroup? findGroup(String name) {
     return groups.firstWhereOrNull((item) => item.name == name);

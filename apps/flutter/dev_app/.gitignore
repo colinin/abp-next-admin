@@ -45,3 +45,7 @@ app.*.map.json
 
 # Environment config
 /res/config/development.json
+
+# Ignored translations
+/res/translations/merge-en.json
+/res/translations/merge-zh-Hans.json

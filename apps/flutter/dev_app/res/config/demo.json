@@ -13,6 +13,20 @@
     "localization": {
         "useLocalResources": true,
         "defaultLanguage": "zh-Hans",
+        "translationFiles": {
+            "zh-Hans": [
+                "zh-Hans.json"
+            ],
+            "zh_CN": [
+                "zh-Hans.json"
+            ],
+            "en": [
+                "en.json"
+            ],
+            "en_US": [
+                "en.json"
+            ]
+        },
         "supportedLocales": [
             {
                 "cultureName": "en",

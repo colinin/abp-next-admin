@@ -21,11 +21,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: _renderNavigations(widget.menus),
-      ),
-    );
+    return _renderNavigations(widget.menus);
   }
 
   Widget _renderNavigations(List<Menu> menus) {
@@ -59,7 +55,8 @@ class _NavigationState extends State<Navigation> {
             return SizedBox(
               height: 30,
               child: ListTile(
-                title: Text(menu.displayName.padLeft(menu.level * 4)),
+                title: Text(
+                  (menu.meta?['displayName']?.toString().tr ?? menu.displayName).padLeft(menu.level * 4)),
               ),
             );
           },
@@ -81,7 +78,7 @@ class _NavigationState extends State<Navigation> {
           height: 30,
           margin: const EdgeInsets.only(top: 10),
           child: Text(
-            menu.displayName.padLeft(menu.level * 8),
+            (menu.meta?['displayName']?.toString().tr ?? menu.displayName).padLeft(menu.level * 8),
           ),
         ),
       ),

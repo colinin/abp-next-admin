@@ -1,13 +1,13 @@
 import 'package:core/dependency/index.dart';
 import 'package:core/abstracts/signalr.service.dart';
 import 'package:core/services/environment.service.dart';
-import 'package:core/services/notification.send.service.dart';
 import 'package:dev_app/handlers/index.dart';
 import 'package:get/get.dart';
 import 'package:core/services/session.service.dart';
 import 'package:core/services/subscription.service.dart';
 import 'package:core/utils/index.dart';
 import 'package:notifications/models/index.dart';
+import 'package:notifications/services/notification.state.service.dart';
 import 'package:notifications/tokens/index.dart';
 
 class MainController extends GetxController {
@@ -17,7 +17,7 @@ class MainController extends GetxController {
   SessionService get _sessionService => injector.get();
   SubscriptionService get _subscriptionService => injector.get(tag: NotificationTokens.consumer);
   SignalrService get _signalrService => injector.get(tag: NotificationTokens.producer);
-  NotificationSendService get _notificationSendService => injector.get();
+  NotificationStateService get _notificationStateService => injector.get();
   EnvironmentService get _environmentService => injector.get();
   ErrorHandler get _errorHandler => injector.get();
 
@@ -37,14 +37,7 @@ class MainController extends GetxController {
           if (data == null) continue;
           // 解析通知数据
           var notification = NotificationInfo.fromJson(data as dynamic);
-          // 格式化为移动端可识别通知数据
-          var payload = NotificationPaylod.fromNotification(notification);
-          // 发布本地通知
-          await _notificationSendService.send(
-            payload.title,
-            payload.body,
-            payload.payload,
-          );
+          _notificationStateService.addNotification(notification);
         }
       },
     );
