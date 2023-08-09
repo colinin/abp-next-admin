@@ -99,16 +99,18 @@ export const useUserStore = defineStore({
     async login(
       params: LoginParams & {
         goHome?: boolean;
+        isPortalLogin?: boolean;
         mode?: ErrorMessageMode;
+        loginCallback?: () => Promise<void>;
       },
     ): Promise<GetUserInfoModel | null> {
       try {
-        const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
+        const { goHome = true, mode, isPortalLogin, loginCallback, ...loginParams } = params;
+        const data = await loginApi(loginParams, mode, isPortalLogin);
         const { access_token } = data;
         this.setSso(false);
         this.setToken(access_token);
-        return this.afterLoginAction(goHome);
+        return this.afterLoginAction(goHome, loginCallback);
       } catch (error) {
         return Promise.reject(error);
       }
@@ -118,15 +120,16 @@ export const useUserStore = defineStore({
       params: LoginByPhoneParams & {
         goHome?: boolean;
         mode?: ErrorMessageMode;
+        loginCallback?: () => Promise<void>;
       },
     ): Promise<GetUserInfoModel | null> {
       try {
-        const { goHome = true, mode, ...loginParams } = params;
+        const { goHome = true, mode, loginCallback, ...loginParams } = params;
         const data = await loginPhoneApi(loginParams, mode);
         const { access_token } = data;
         this.setSso(false);
         this.setToken(access_token);
-        return this.afterLoginAction(goHome);
+        return this.afterLoginAction(goHome, loginCallback);
       } catch (error) {
         return Promise.reject(error);
       }
@@ -138,10 +141,10 @@ export const useUserStore = defineStore({
       return this.afterLoginAction(true);
     },
 
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+    async afterLoginAction(goHome?: boolean, loginCallback?: () => Promise<void>): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       // get user info
-      await this.getUserInfoAction();
+      await this.getUserInfoAction(loginCallback);
 
       try {
         const appStore = useAppStoreWithOut();
@@ -167,15 +170,20 @@ export const useUserStore = defineStore({
       }
       return this.userInfo;
     },
-    async getUserInfoAction(): Promise<GetUserInfoModel> {
+    async getUserInfoAction(loginCallback?: () => Promise<void>): Promise<GetUserInfoModel> {
       const userInfo = await getUserInfo();
 
       const abpStore = useAbpStoreWithOut();
+
       let currentUser = abpStore.getApplication.currentUser;
       //  避免多次请求接口
       if (userInfo?.sub !== currentUser.id) {
         await abpStore.initlizeAbpApplication();
         currentUser = abpStore.getApplication.currentUser;
+      }
+
+      if (loginCallback) {
+        await loginCallback();
       }
 
       const outgoingUserInfo: { [key: string]: any } = {

@@ -59,6 +59,7 @@
       key: './',
       path: '',
       name: './',
+      isLeaf: false,
       children: [],
     },
   ]);
@@ -66,8 +67,18 @@
     () => props.bucket,
     (bucket) => {
       if (bucket) {
+        expandedKeys.value = [];
+        selectedKeys.value = [];
         fetchFolders(bucket).then((fs) => {
-          folders.value[0].children = fs;
+          var foldersRoot: Folder[] = [{
+            title: L('Objects:Root'),
+            key: './',
+            path: '',
+            name: './',
+            isLeaf: false,
+            children: fs,
+          }];
+          folders.value = foldersRoot;
         });
       }
     },
@@ -77,10 +88,10 @@
   )
   const fetchChildren: TreeProps['loadData'] = treeNode => {
     return new Promise((resolve) => {
-      if (treeNode.dataRef!.children!.length > 0) {
-        resolve();
-        return;
-      }
+      // if (treeNode.dataRef!.children!.length > 0) {
+      //   resolve();
+      //   return;
+      // }
       let path = '';
       if (treeNode.dataRef?.path) {
         path = path + treeNode.dataRef?.path;
@@ -119,6 +130,7 @@
               title: item.name,
               path: item.path,
               children: [],
+              isLeaf: false,
             };
           });
         return resolve(fs);

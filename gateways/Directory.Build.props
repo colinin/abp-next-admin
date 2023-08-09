@@ -1,14 +1,14 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>7.2.2</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>7.2.2</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.10.0</DaprPackageVersion>
-		<DotNetCoreCAPPackageVersion>7.1.0</DotNetCoreCAPPackageVersion>
+		<VoloAbpPackageVersion>7.3.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>7.3.2</LINGYUNAbpPackageVersion>
+		<DaprPackageVersion>1.11.0</DaprPackageVersion>
+		<DotNetCoreCAPPackageVersion>7.2.0</DotNetCoreCAPPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
 		<AgileConfigClientPackageVersion>1.2.1.5</AgileConfigClientPackageVersion>
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
-		<HangfireMSSQLStoragePackageVersion>1.7.27</HangfireMSSQLStoragePackageVersion>
+		<HangfireMSSQLStoragePackageVersion>1.8.2</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>

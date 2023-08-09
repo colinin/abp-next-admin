@@ -6,6 +6,7 @@ export interface LoginParams {
   password: string;
   twoFactorProvider?: string;
   twoFactorCode?: string;
+  enterpriseId?: string;
 }
 
 export interface LoginByPhoneParams {
@@ -30,6 +31,12 @@ export interface LoginResultModel {
   token_type: string;
   /** 刷新令牌 */
   refresh_token: string;
+}
+
+export interface PortalLoginModel {
+  id: string;
+  name: string;
+  logo?: string;
 }
 
 /**

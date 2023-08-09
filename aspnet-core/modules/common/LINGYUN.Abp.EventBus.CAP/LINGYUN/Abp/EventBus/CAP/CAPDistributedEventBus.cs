@@ -12,6 +12,7 @@ using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
@@ -77,6 +78,7 @@ namespace LINGYUN.Abp.EventBus.CAP
         /// <param name="clock"></param>
         /// <param name="customDistributedEventSubscriber"></param>
         /// <param name="eventHandlerInvoker"></param>
+        /// <param name="localEventBus"></param>
         public CAPDistributedEventBus(IServiceScopeFactory serviceScopeFactory,
             IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             ICapPublisher capPublisher,
@@ -89,7 +91,8 @@ namespace LINGYUN.Abp.EventBus.CAP
             IClock clock,
             ICancellationTokenProvider cancellationTokenProvider,
             ICustomDistributedEventSubscriber customDistributedEventSubscriber,
-            IEventHandlerInvoker eventHandlerInvoker) 
+            IEventHandlerInvoker eventHandlerInvoker,
+            ILocalEventBus localEventBus) 
             : base(
                   serviceScopeFactory, 
                   currentTenant,
@@ -97,7 +100,8 @@ namespace LINGYUN.Abp.EventBus.CAP
                   distributedEventBusOptions,
                   guidGenerator,
                   clock,
-                  eventHandlerInvoker)
+                  eventHandlerInvoker,
+                  localEventBus)
         {
             CapPublisher = capPublisher;
             CurrentUser = currentUser;

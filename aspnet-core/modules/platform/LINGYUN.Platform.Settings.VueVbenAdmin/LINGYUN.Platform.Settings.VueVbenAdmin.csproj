@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

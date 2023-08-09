@@ -2,12 +2,15 @@
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Platform
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(
+        typeof(AbpLocalizationModule),
+        typeof(AbpMultiTenancyAbstractionsModule))]
     public class PlatformDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

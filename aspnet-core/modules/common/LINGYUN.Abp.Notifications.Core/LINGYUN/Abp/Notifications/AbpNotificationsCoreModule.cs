@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Volo.Abp.EventBus.Abstractions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications;
@@ -14,7 +15,8 @@ namespace LINGYUN.Abp.Notifications;
     typeof(AbpTextTemplatingCoreModule),
     typeof(AbpRealTimeModule),
     typeof(AbpLocalizationModule),
-    typeof(AbpEventBusAbstractionsModule))]
+    typeof(AbpEventBusAbstractionsModule),
+    typeof(AbpMultiTenancyAbstractionsModule))]
 public class AbpNotificationsCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

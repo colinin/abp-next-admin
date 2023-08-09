@@ -66,12 +66,14 @@ export default {
   login: {
     backSignIn: 'Back sign in',
     mobileSignInFormTitle: 'Mobile sign in',
+    portalSignInFormTitle: 'Portal sign in',
     qrSignInFormTitle: 'Qr code sign in',
     signInFormTitle: 'Sign in',
     signUpFormTitle: 'Sign up',
     forgetFormTitle: 'Reset password',
     twoFactorFormTitle: 'Two factor',
 
+    loginToPortalTitle: 'Login To Portal',
     signInTitle: 'Backstage management system',
     signInDesc: 'Enter your personal details and get started!',
     policy: 'I agree to the xxx Privacy Policy',
