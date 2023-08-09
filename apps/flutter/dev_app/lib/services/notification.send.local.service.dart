@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:core/index.dart';
 import 'package:get/get.dart';
+import 'package:notifications/services/notification.state.service.dart';
 import 'package:rxdart/rxdart.dart' hide Notification;
 
 import 'package:core/models/notifications.dart';
@@ -14,6 +15,22 @@ class FlutterLocalNotificationsSendService extends NotificationSendService {
   final Subject<String?> _selectedNotifications$ = BehaviorSubject<String?>();
 
   EnvironmentService get _environmentService => resolve<EnvironmentService>();
+  NotificationStateService get _notificationStateService => resolve<NotificationStateService>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _notificationStateService
+      .getNotifications$()
+      .listen((payload) async {
+        // 发布本地通知
+        await send(
+          payload.title,
+          payload.body,
+          payload.payload,
+        );
+      });
+  }
 
   Future<void> initAsync() async {
     var environment = _environmentService.getEnvironment();

@@ -13,8 +13,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
   List<Widget>? buildActions(BuildContext context) {
     Widget button = IconButton(
       onPressed: () {
-        query = "";
-        showSuggestions(context);
+        close(context, "error");
       },
       icon: const Icon(Icons.clear),
     );
@@ -24,15 +23,17 @@ class SearchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, "error");
-      },
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-    );
+    // return IconButton(
+    //   onPressed: () {
+    //     query = "";
+    //     showSuggestions(context);
+    //   },
+    //   icon: AnimatedIcon(
+    //     icon: AnimatedIcons.menu_arrow,
+    //     progress: transitionAnimation,
+    //   ),
+    // );
+    return null;
   }
 
   @override

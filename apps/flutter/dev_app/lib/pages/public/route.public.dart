@@ -4,7 +4,13 @@ import 'index.dart';
 import 'route.name.dart';
 
 class PublicRoute {
+  static GetPage notFound = GetPage(
+    name: PublicRoutes.notFound,
+    page: () => const PageNotFound(),
+  );
+
   static List<GetPage> routes = [
+    notFound,
     GetPage(
       name: PublicRoutes.home,
       page: () => const HomePage(),

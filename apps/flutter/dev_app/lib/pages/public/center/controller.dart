@@ -44,15 +44,15 @@ class CenterController extends GetxController {
   }
 
   void onClickFeedback() {
-
+    redirectToRoute('/feedback');
   }
 
   void onClickHelp() {
-
+    redirectToRoute('/help');
   }
 
   void onClickInfo() {
-
+    redirectToRoute('/info');
   }
 
   void onClickMessage() {

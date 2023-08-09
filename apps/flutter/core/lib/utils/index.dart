@@ -1,3 +1,4 @@
+export 'color.utils.dart';
 export 'environment.utils.dart';
 export 'internal.store.dart';
 export 'localization.utils.dart';
