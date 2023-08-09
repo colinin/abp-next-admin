@@ -33,7 +33,7 @@ class MenuStateService extends ServiceBase {
 
   Future<void> refreshState() async {
     var environment = _environmentService.getEnvironment();
-    var framework = environment.application.framework ?? 'flutter';
+    var framework = environment.application.framework ?? 'abp-flutter';
     var result = await _menuService.getCurrentUserMenuList(framework);
     _state.patch((state) => state.menus = result.items);
   }

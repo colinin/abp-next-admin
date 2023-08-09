@@ -102,6 +102,11 @@ LocalizationConfig _$LocalizationConfigFromJson(Map<String, dynamic> json) =>
       supportedLocales: json['supportedLocales'] != null
         ? (json['supportedLocales'] as List<dynamic>).map((e) => LanguageInfo.fromJson(e)).toList()
         : null,
+      translationFiles: json['translationFiles'] != null
+        ? (json['translationFiles'] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, (value as List<dynamic>)
+            .map((e) => e as String).toList()))
+        : null,
     );
 
 Map<String, dynamic> _$LocalizationConfigToJson(LocalizationConfig instance) =>
@@ -109,6 +114,7 @@ Map<String, dynamic> _$LocalizationConfigToJson(LocalizationConfig instance) =>
       'defaultLanguage': instance.defaultLanguage,
       'useLocalResources': instance.useLocalResources,
       'supportedLocales': instance.supportedLocales,
+      'translationFiles': instance.translationFiles,
     };
 
 RemoteService _$RemoteServiceFromJson(Map<String, dynamic> json) =>

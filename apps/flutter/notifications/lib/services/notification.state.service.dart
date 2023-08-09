@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:notifications/models/common.dart';
 import 'package:rxdart/rxdart.dart' hide Notification;
 import 'package:notifications/models/notification.dart';
 import 'package:core/services/session.service.dart';
@@ -20,6 +21,8 @@ class NotificationStateService extends ServiceBase {
   NotificationService get _notificationService => resolve<NotificationService>();
   SignalrService get _signalrService => resolve<SignalrService>(tag: NotificationTokens.producer);
 
+  final BehaviorSubject<NotificationPaylod> _notifications = BehaviorSubject<NotificationPaylod>();
+
   final InternalStore<NotificationState> _store = InternalStore<NotificationState>(
     state: _initState()
   );
@@ -39,6 +42,10 @@ class NotificationStateService extends ServiceBase {
 
   Stream<NotificationState> getNotificationState$() {
     return _store.sliceUpdate((state) => state);
+  }
+
+  Stream<NotificationPaylod> getNotifications$() {
+    return _notifications;
   }
 
   NotificationGroup? findGroup(String name) {
@@ -73,6 +80,10 @@ class NotificationStateService extends ServiceBase {
     var configState = StorageService.initStorage(configKey,
       (value) => NotificationState.fromJson(jsonDecode(value)));
     return configState ?? NotificationState(isEnabled: true, groups: []);
+  }
+
+  void addNotification(NotificationInfo notification) {
+    _notifications.add(NotificationPaylod.fromNotification(notification));
   }
 
   Future<List<NotificationGroup>> getGroupAndCombineWithNotification(List<NotificationGroupDto> groupItems) {

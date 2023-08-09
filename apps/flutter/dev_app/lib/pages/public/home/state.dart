@@ -1,4 +1,5 @@
 import 'package:core/models/common.dart';
+import 'package:notifications/models/common.dart';
 import 'package:platforms/modes/menu.dto.dart';
 
 class HomeState {
@@ -6,10 +7,12 @@ class HomeState {
     this.activedMenu,
     this.menus = const [],
     this.favoriteMenus = const [],
+    this.notifications = const [],
   });
   String? activedMenu;
   List<MenuDto> menus;
   List<UserFavoriteMenuDto> favoriteMenus;
+  List<NotificationPaylod> notifications;
 
   List<Menu> getMenus() => _buildTreeRecursive(menus, null, 0);
 

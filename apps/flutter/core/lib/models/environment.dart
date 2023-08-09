@@ -177,10 +177,12 @@ class LocalizationConfig {
     this.defaultLanguage,
     this.useLocalResources = true,
     this.supportedLocales = const [],
+    this.translationFiles = const {},
   });
   String? defaultLanguage;
   bool? useLocalResources;
   List<LanguageInfo>? supportedLocales;
+  Map<String, List<String>>? translationFiles;
 
   factory LocalizationConfig.fromJson(Map<String, dynamic> json) => _$LocalizationConfigFromJson(json);
   Map<String, dynamic> toJson() => _$LocalizationConfigToJson(this);
