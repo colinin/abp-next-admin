@@ -36,7 +36,7 @@
 		<SwashbuckleAspNetCorePackageVersion>6.3.0</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>7.2.3</PollyPackageVersion>
 		<MicrosoftPackageVersion>7.0.*</MicrosoftPackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>7.0.2.0</MicrosoftEntityFrameworkCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>7.0.2</MicrosoftEntityFrameworkCorePackageVersion>
 		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
 		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
 		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>
