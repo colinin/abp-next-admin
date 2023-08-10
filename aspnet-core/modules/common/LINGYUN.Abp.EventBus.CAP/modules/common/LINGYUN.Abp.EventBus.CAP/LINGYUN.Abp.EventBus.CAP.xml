@@ -219,7 +219,7 @@
             取消令牌
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Json.IJsonSerializer,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber,Volo.Abp.EventBus.IEventHandlerInvoker)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Json.IJsonSerializer,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber,Volo.Abp.EventBus.IEventHandlerInvoker,Volo.Abp.EventBus.Local.ILocalEventBus)">
             <summary>
             constructor
             </summary>
@@ -236,6 +236,7 @@
             <param name="clock"></param>
             <param name="customDistributedEventSubscriber"></param>
             <param name="eventHandlerInvoker"></param>
+            <param name="localEventBus"></param>
         </member>
         <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Subscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
             <summary>
