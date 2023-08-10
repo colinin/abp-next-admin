@@ -1,7 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
 		<VoloAbpPackageVersion>7.3.2</VoloAbpPackageVersion>
-		<VoloAbpLeptonXThemePackageVersion>2.0.1</VoloAbpLeptonXThemePackageVersion>
+		<VoloAbpLeptonXThemePackageVersion>2.3.2</VoloAbpLeptonXThemePackageVersion>
 		<LINGYUNAbpPackageVersion>7.3.2</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.11.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
@@ -40,5 +40,10 @@
 		<XunitTestPackageVersion>2.4.1</XunitTestPackageVersion>
 		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
 		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>
-	</PropertyGroup>
+		<MicrosoftNETTestSdkPackageVersion>17.3.2</MicrosoftNETTestSdkPackageVersion>
+		<XunitPackageVersion>2.5.0</XunitPackageVersion>
+		<CoverletCollectorPackageVersion>3.0.2</CoverletCollectorPackageVersion>
+		<NSubstitutePackageVersion>4.2.1</NSubstitutePackageVersion>
+		<ShouldlyPackageVersion>3.0.2</ShouldlyPackageVersion>
+</PropertyGroup>
 </Project>
