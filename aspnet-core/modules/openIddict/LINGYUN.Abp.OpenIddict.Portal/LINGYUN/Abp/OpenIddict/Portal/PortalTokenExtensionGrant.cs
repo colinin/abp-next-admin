@@ -38,7 +38,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
     protected SignInManager<IdentityUser> SignInManager => LazyServiceProvider.LazyGetRequiredService<SignInManager<IdentityUser>>();
     protected IdentityUserManager UserManager => LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
-    protected AbpOpenIddictClaimDestinationsManager OpenIddictClaimDestinationsManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimDestinationsManager>();
+    protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
     protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
     protected IServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IServiceScopeFactory>();
@@ -269,7 +269,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         principal.SetScopes(context.Request.GetScopes());
         principal.SetResources(await GetResourcesAsync(context.Request.GetScopes()));
 
-        await SetClaimsDestinationsAsync(principal);
+        await SetClaimsDestinationsAsync(context, principal);
 
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext
@@ -314,9 +314,9 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         return resources;
     }
 
-    protected virtual async Task SetClaimsDestinationsAsync(ClaimsPrincipal principal)
+    protected virtual async Task SetClaimsDestinationsAsync(ExtensionGrantContext context, ClaimsPrincipal principal)
     {
-        await OpenIddictClaimDestinationsManager.SetAsync(principal);
+        await OpenIddictClaimsPrincipalManager.HandleAsync(context.Request, principal);
     }
 
     public virtual ForbidResult Forbid(AuthenticationProperties properties, params string[] authenticationSchemes)
