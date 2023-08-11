@@ -21,6 +21,7 @@
     "DisplayName:Code": "编号",
     "DisplayName:IsPublic": "是否公用的",
     "DisplayName:DisplayName": "显示名称",
+    "DisplayName:UIFramework": "UI框架",
     "DisplayName:Description": "说明",
     "DisplayName:AllowBeNull": "允许空值",
     "DisplayName:DefaultValue": "默认值",
