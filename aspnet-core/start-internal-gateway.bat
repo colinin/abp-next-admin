@@ -2,6 +2,8 @@
 cls
 chcp 65001
 
+title internal-apigateway
+
 echo. 启动内部网关
 
 cd ..\gateways\internal\LINGYUN.MicroService.Internal.ApiGateway\src\LINGYUN.MicroService.Internal.ApiGateway\
