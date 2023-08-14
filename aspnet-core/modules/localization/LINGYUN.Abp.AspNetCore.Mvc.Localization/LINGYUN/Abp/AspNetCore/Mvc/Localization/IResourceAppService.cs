@@ -6,6 +6,6 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
     public interface IResourceAppService : IApplicationService
     {
-        Task<ListResultDto<ResourceDto>> GetListAsync(GetWithFilter filter);
+        Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input);
     }
 }

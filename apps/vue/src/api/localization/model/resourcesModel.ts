@@ -27,6 +27,6 @@ export interface GetResourcePagedRequest extends PagedAndSortedResultRequestDto 
   filter?: string;
 }
 
-export interface GetWithFilter {
+export interface GetResourceWithFilter {
   filter?: string;
 }

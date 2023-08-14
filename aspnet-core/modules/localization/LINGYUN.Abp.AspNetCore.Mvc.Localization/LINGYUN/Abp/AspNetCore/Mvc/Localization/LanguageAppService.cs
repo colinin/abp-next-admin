@@ -1,9 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
+using Volo.Abp;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.External;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
@@ -16,9 +24,12 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             _languageProvider = languageProvider;
         }
 
-        public async virtual Task<ListResultDto<LanguageDto>> GetListAsync()
+        public async virtual Task<ListResultDto<LanguageDto>> GetListAsync(GetLanguageWithFilterDto input)
         {
-            var languages = await _languageProvider.GetLanguagesAsync();
+            var languages = (await _languageProvider.GetLanguagesAsync())
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.CultureName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0
+                         || x.UiCultureName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0
+                         || x.DisplayName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0);
 
             return new ListResultDto<LanguageDto>(
                 languages.Select(l => new LanguageDto

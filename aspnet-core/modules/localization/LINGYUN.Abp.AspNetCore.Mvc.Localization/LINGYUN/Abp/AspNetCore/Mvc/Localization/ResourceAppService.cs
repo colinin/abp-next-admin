@@ -29,14 +29,14 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             _externalLocalizationStore = externalLocalizationStore;
         }
 
-        public virtual async Task<ListResultDto<ResourceDto>> GetListAsync(GetWithFilter input)
+        public virtual async Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input)
         {
             var externalResources = (await _externalLocalizationStore.GetResourcesAsync())
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter));
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0);
 
             var resources = _localizationOptions
                 .Resources
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter))
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0)
                 .Select(x => new ResourceDto
                 {
                     Name = x.Value.ResourceName,

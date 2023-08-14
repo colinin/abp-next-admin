@@ -1,6 +1,6 @@
 ﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
 {
-    public class GetWithFilter
+    public class GetResourceWithFilterDto
     {
         public string Filter { get; set; }  
     }

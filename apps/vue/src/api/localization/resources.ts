@@ -1,17 +1,17 @@
 import { defAbpHttp } from '/@/utils/http/abp';
-import { ResourceListResult, Resource, ResourceCreate, ResourceUpdate, GetWithFilter } from './model/resourcesModel';
-import { format } from '/@/utils/strings';
+import { ResourceListResult, Resource, ResourceCreate, ResourceUpdate, GetResourceWithFilter } from './model/resourcesModel';
 
 const remoteServiceName = 'LocalizationManagement';
 const controllerName = 'Resource';
 
 enum Api {
-  GetList = '/api/abp/localization/resources?filter={filter}',
+  GetList = '/api/abp/localization/resources',
 }
 
-export const getList = (input: GetWithFilter) => {
+export const getList = (input: GetResourceWithFilter) => {
   return defAbpHttp.get<ResourceListResult>({
-    url: format(Api.GetList, input),
+    url: Api.GetList,
+    params: input,
   });
 };
 

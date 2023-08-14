@@ -49,10 +49,7 @@
   import { getDataColumns } from './TableData';
   import { reactive } from 'vue';
   import ResourceModal from './ResourceModal.vue';
-
-  const state = reactive({
-    filter: 'noti'
-  });
+ 
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
@@ -77,7 +74,7 @@
           component: 'Input',
           label: L('Search'),
           colProps: { span: 24 },
-          defaultValue: '',
+          defaultValue: ''
         },
       ],
       submitFunc: fetchResources,
@@ -92,8 +89,8 @@
 
   function fetchResources() {
     const form = getForm();
-    return form.validate().then(() => {
-      return getList({filter: state.filter}).then((res) => {
+    return form.validate().then((input) => {
+      return getList(input).then((res) => {
         setTableData(res.items);
       });
     });
