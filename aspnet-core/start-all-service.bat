@@ -16,8 +16,6 @@ start .\start-http-api-host.bat LY.MicroService.TaskManagement.HttpApi.Host task
 ping -n %stime% 127.1 >nul
 start .\start-http-api-host.bat LY.MicroService.WebhooksManagement.HttpApi.Host webhooks-management--run
 ping -n %stime% 127.1 >nul
-start .\start-http-api-host.bat LY.MicroService.RealtimeMessage.HttpApi.Host realtime-message --run
-ping -n %stime% 127.1 >nul
 start .\start-http-api-host.bat LY.MicroService.WorkflowManagement.HttpApi.Host workflow-management --run
 ping -n %stime% 127.1 >nul
 start .\start-http-api-host.bat LY.MicroService.BackendAdmin.HttpApi.Host admin --run

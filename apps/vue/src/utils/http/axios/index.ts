@@ -136,6 +136,9 @@ const transform: AxiosTransform = {
     if ((config as Recordable)?.requestOptions?.withAcceptLanguage !== false) {
       const localeStore = useLocaleStoreWithOut();
       config.headers['Accept-Language'] = localeStore.getLocale;
+      if (config.headers['Accept-Language'] == 'zh_CN') {
+        config.headers['Accept-Language'] = 'zh-Hans';
+      }
     }
     return config;
   },
