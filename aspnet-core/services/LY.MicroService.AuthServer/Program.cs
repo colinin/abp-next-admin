@@ -18,8 +18,9 @@ public class Program
     {
         try
         {
+            Console.Title = "IdentityServer";
             Log.Information("Starting IdentityServer.");
-
+ 
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()

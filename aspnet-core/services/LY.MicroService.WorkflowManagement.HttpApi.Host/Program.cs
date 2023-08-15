@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "WorkflowManagement.HttpApi.Host";
             Log.Information("Starting WorkflowManagement.HttpApi.Host.");
 
             var builder = WebApplication.CreateBuilder(args);

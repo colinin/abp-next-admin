@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.TuiJuhe;
 
@@ -9,22 +9,22 @@ public class TuiJuheResult<TParam, TResult>
     /// <summary>
     /// 状态码
     /// </summary>
-    [JsonProperty("code")]
+    [JsonPropertyName("code")]
     public int Code { get; set; }
     /// <summary>
     /// 错误消息
     /// </summary>
-    [JsonProperty("reason")]
+    [JsonPropertyName("reason")]
     public string Reason { get; set; }
     /// <summary>
     /// 响应数据
     /// </summary>
-    [JsonProperty("result")]
+    [JsonPropertyName("result")]
     public TResult Result { get; set; }
     /// <summary>
     /// 响应参数
     /// </summary>
-    [JsonProperty("params")]
+    [JsonPropertyName("params")]
     public TParam Params { get; set; }
 
     [JsonIgnore]

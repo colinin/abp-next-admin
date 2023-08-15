@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "LocalizationManagement.HttpApi.Host";
             Log.Information("Starting LocalizationManagement.HttpApi.Host.");
 
             var builder = WebApplication.CreateBuilder(args);
