@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -164,10 +165,11 @@ public partial class PlatformManagementHttpApiHostModule
         });
 
         Configure<Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions>(options =>
-        {
-            // 是否发送错误详情
-            options.SendExceptionsDetailsToClients = false;
-        });
+            {
+                // 是否发送错误详情
+                options.SendExceptionsDetailsToClients = true;
+                options.SendStackTraceToClients = true;
+            });
     }
 
     private void ConfigureAuditing(IConfiguration configuration)

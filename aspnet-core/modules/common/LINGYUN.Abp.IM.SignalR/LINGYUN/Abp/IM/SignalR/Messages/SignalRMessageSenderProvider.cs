@@ -19,14 +19,17 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
         private readonly AbpIMSignalROptions _options;
 
         private readonly IHubContext<MessagesHub> _hubContext;
+        private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
         public SignalRMessageSenderProvider(
            IHubContext<MessagesHub> hubContext,
            IAbpLazyServiceProvider serviceProvider,
-           IOptions<AbpIMSignalROptions> options)
+           IOptions<AbpIMSignalROptions> options,
+           IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
             : base(serviceProvider)
         {
             _options = options.Value;
+            _exceptionHandlingOptions = exceptionHandlingOptions.Value;
             _hubContext = hubContext;
         }
 
@@ -99,8 +102,8 @@ namespace LINGYUN.Abp.IM.SignalR.Messages
                 {
                     var errorInfo = errorInfoConverter.Convert(ex, options =>
                     {
-                        options.SendExceptionsDetailsToClients = false;
-                        options.SendStackTraceToClients = false;
+                        options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                        options.SendStackTraceToClients = _exceptionHandlingOptions.SendStackTraceToClients;
                     });
                     if (!chatMessage.GroupId.IsNullOrWhiteSpace())
                     {
