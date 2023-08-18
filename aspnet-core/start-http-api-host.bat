@@ -25,7 +25,7 @@ dotnet run
 exit
 
 :watchrun
-dotnet watch run 
+dotnet watch run --no-restore
 exit
 
 :restore
