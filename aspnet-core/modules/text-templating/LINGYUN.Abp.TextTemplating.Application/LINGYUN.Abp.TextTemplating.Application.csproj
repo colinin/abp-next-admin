@@ -9,10 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\TextTemplating\TextTemplateDefinitionAppService.cs~RF1f4f741d.TMP" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
