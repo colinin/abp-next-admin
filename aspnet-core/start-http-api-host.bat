@@ -8,6 +8,7 @@ title %2-host
 cd .\services\%1
 
 if '%3' equ '--publish' goto publish
+if '%3' equ '--watchrun' goto watchrun
 if '%3' equ '--run' goto run
 if '%3' equ '--restore' goto restore
 if '%3' equ '--ef-u' goto efu
@@ -21,6 +22,10 @@ exit
 
 :run
 dotnet run 
+exit
+
+:watchrun
+dotnet watch run --no-restore
 exit
 
 :restore

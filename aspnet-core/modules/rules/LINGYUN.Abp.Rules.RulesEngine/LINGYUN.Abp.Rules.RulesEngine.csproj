@@ -9,10 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\Rules\RulesEngine\IWorkflowsResolver.cs~RF3e2c1c6.TMP" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="RulesEngine" Version="4.0.0" />
 		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="$(MicrosoftPackageVersion)" />

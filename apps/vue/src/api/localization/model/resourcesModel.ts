@@ -26,3 +26,7 @@ export interface ResourcePagedResult extends PagedResultDto<Resource> {}
 export interface GetResourcePagedRequest extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
+
+export interface GetResourceWithFilter {
+  filter?: string;
+}

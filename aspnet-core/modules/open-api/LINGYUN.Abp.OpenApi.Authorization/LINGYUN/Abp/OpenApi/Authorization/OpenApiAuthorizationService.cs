@@ -26,17 +26,20 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private readonly AbpOpenApiOptions _openApiOptions;
         private readonly ICurrentClient _currentClient;
         private readonly IWebClientInfoProvider _clientInfoProvider;
+        private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
         public OpenApiAuthorizationService(
             IAppKeyStore appKeyStore,
             ICurrentClient currentClient,
             IWebClientInfoProvider clientInfoProvider,
-            IOptionsMonitor<AbpOpenApiOptions> options)
+            IOptionsMonitor<AbpOpenApiOptions> options,
+            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
         {
             _appKeyStore = appKeyStore;
             _currentClient = currentClient;
             _clientInfoProvider = clientInfoProvider;
             _openApiOptions = options.CurrentValue;
+            _exceptionHandlingOptions = exceptionHandlingOptions.Value;
         }
 
         public async virtual Task<bool> AuthorizeAsync(HttpContext httpContext)
@@ -177,8 +180,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             var errorInfoConverter = context.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var errorInfo = errorInfoConverter.Convert(exception, options =>
             {
-                options.SendExceptionsDetailsToClients = false;
-                options.SendStackTraceToClients = false;
+                options.SendExceptionsDetailsToClients = _exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                options.SendStackTraceToClients = _exceptionHandlingOptions.SendStackTraceToClients;
             });
 
             if (context.Request.CanAccept(MimeTypes.Application.Json) ||

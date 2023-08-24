@@ -1,6 +1,6 @@
 [
   {
-    "tag": "net6.0",
+    "tag": "net7.0",
     "dependencies": [
       {
         "service": "Backend-Admin",
@@ -26,7 +26,10 @@
           "LINGYUN.Platform.Domain.Shared.dll",
           "LINGYUN.Abp.Tencent.dll",
           "LINGYUN.Abp.Tencent.QQ.dll",
-          "LINGYUN.Abp.Tencent.SettingManagement.dll"
+          "LINGYUN.Abp.Tencent.SettingManagement.dll",
+          "LINGYUN.Abp.WxPusher.SettingManagement.dll",
+          "LINGYUN.Abp.PushPlus.SettingManagement.dll",
+          "LINGYUN.Abp.TuiJuhe.SettingManagement.dll"
         ]
       },
       {
@@ -43,8 +46,7 @@
           "Volo.Abp.Users.Domain.Shared.dll",
           "Volo.Abp.Users.Abstractions.dll",
           "LINGYUN.Abp.IdentityServer.Application.Contracts.dll",
-          "Volo.Abp.IdentityServer.Domain.Shared.dll",
-          "Volo.Abp.Json.Newtonsoft.dll"
+          "Volo.Abp.IdentityServer.Domain.Shared.dll"
         ]
       }
     ]
@@ -60,8 +62,6 @@
           "LINGYUN.Abp.Account.Templates.dll",
           "LINGYUN.Abp.Features.LimitValidation.dll",
           "LINGYUN.Abp.Features.LimitValidation.Redis.dll",
-          "LINGYUN.Abp.WorkflowManagement.Application.Contracts.dll",
-          "LINGYUN.Abp.WorkflowManagement.Domain.Shared.dll",
           "LINGYUN.Abp.BackgroundTasks.Abstractions.dll",
           "LINGYUN.Linq.Dynamic.Queryable.dll",
           "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.dll",
@@ -69,7 +69,10 @@
           "LINGYUN.Abp.TaskManagement.Domain.Shared.dll",
           "LINGYUN.Abp.Notifications.Core.dll",
           "LINGYUN.Abp.Notifications.Common.dll",
-          "LINGYUN.Abp.Notifications.dll"
+          "LINGYUN.Abp.Notifications.dll",
+          "LINGYUN.Abp.PushPlus.dll",
+          "LINGYUN.Abp.WxPusher.dll",
+          "LINGYUN.Abp.TuiJuhe.dll"
         ]
       }
     ]

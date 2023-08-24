@@ -18,8 +18,8 @@ public class Program
     {
         try
         {
+            Console.Title = "RealtimeMessage.HttpApi.Host";
             Log.Information("Starting RealtimeMessage.HttpApi.Host.");
-
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()

@@ -41,6 +41,9 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
 
         protected IUserGroupStore UserGroupStore => LazyServiceProvider.LazyGetRequiredService<IUserGroupStore>();
 
+        protected AbpExceptionHandlingOptions ExceptionHandlingOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+
+
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
@@ -167,8 +170,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 {
                     var errorInfo = ErrorInfoConverter.Convert(ex, options =>
                     {
-                        options.SendExceptionsDetailsToClients = false;
-                        options.SendStackTraceToClients = false;
+                        options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
+                        options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
                     });
 
                     await SendMessageAsync(
@@ -230,8 +233,8 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs
                 {
                     var errorInfo = ErrorInfoConverter.Convert(ex, options =>
                     {
-                        options.SendExceptionsDetailsToClients = false;
-                        options.SendStackTraceToClients = false;
+                        options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
+                        options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
                     });
                     if (!chatMessage.GroupId.IsNullOrWhiteSpace())
                     {

@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
+using Volo.Abp;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -23,12 +29,14 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
             _externalLocalizationStore = externalLocalizationStore;
         }
 
-        public virtual async Task<ListResultDto<ResourceDto>> GetListAsync()
+        public virtual async Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input)
         {
-            var externalResources = await _externalLocalizationStore.GetResourcesAsync();
+            var externalResources = (await _externalLocalizationStore.GetResourcesAsync())
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0);
 
             var resources = _localizationOptions
                 .Resources
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0)
                 .Select(x => new ResourceDto
                 {
                     Name = x.Value.ResourceName,

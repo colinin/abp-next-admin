@@ -1,10 +1,9 @@
 @echo off
-cls
 chcp 65001
 
 title %2
 
-@echo %2 migration running
+@echo %2 migrating
 
 cd .\migrations\%1
 
@@ -15,14 +14,18 @@ if '%3' equ '' goto run
 exit
 
 :run
-dotnet run 
-pause
-exit
+dotnet run
+goto end
 
 :restore
 dotnet restore
-exit
+goto end
 
 :efu
 dotnet ef databse update
-exit
+goto end
+
+:end
+cd ..\..\
+@echo %2 migrated
+@echo --------

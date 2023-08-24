@@ -47,7 +47,9 @@
   import { getList, GetAsyncByName, DeleteAsyncByName } from '/@/api/localization/resources';
   import { Resource } from '/@/api/localization/model/resourcesModel';
   import { getDataColumns } from './TableData';
+  import { reactive } from 'vue';
   import ResourceModal from './ResourceModal.vue';
+ 
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
@@ -72,7 +74,7 @@
           component: 'Input',
           label: L('Search'),
           colProps: { span: 24 },
-          defaultValue: '',
+          defaultValue: ''
         },
       ],
       submitFunc: fetchResources,
@@ -87,8 +89,8 @@
 
   function fetchResources() {
     const form = getForm();
-    return form.validate().then(() => {
-      return getList().then((res) => {
+    return form.validate().then((input) => {
+      return getList(input).then((res) => {
         setTableData(res.items);
       });
     });

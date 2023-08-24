@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "TaskManagement.HttpApi.Host";
             Log.Information("Starting TaskManagement.HttpApi.Host.");
 
             var builder = WebApplication.CreateBuilder(args);

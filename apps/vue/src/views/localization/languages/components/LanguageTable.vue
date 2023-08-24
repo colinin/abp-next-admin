@@ -89,8 +89,8 @@
 
   function fetchLanguages() {
     const form = getForm();
-    return form.validate().then(() => {
-      return getList().then((res) => {
+    return form.validate().then((input) => {
+      return getList(input).then((res) => {
         setTableData(res.items);
       });
     });

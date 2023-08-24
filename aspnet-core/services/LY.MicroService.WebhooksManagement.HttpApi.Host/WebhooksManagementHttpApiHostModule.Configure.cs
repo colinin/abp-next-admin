@@ -2,6 +2,7 @@
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Webhooks;
@@ -357,6 +358,19 @@ public partial class WebhooksManagementHttpApiHostModule
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
 
             options.UsePersistence<WebhooksManagementResource>();
+        });
+
+
+        Configure<AbpLocalizationCultureMapOptions>(options =>
+        {
+            var zhHansCultureMapInfo = new CultureMapInfo
+            {
+                TargetCulture = "zh-Hans",
+                SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+            };
+
+            options.CulturesMaps.Add(zhHansCultureMapInfo);
+            options.UiCulturesMaps.Add(zhHansCultureMapInfo);
         });
     }
 

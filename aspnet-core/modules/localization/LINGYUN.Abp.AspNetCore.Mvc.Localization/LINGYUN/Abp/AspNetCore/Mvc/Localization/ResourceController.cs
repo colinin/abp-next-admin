@@ -19,9 +19,9 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
         }
 
         [HttpGet]
-        public virtual Task<ListResultDto<ResourceDto>> GetListAsync()
+        public virtual Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input)
         {
-            return _service.GetListAsync();
+            return _service.GetListAsync(input);
         }
     }
 }

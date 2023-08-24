@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "PlatformManagement.HttpApi.Host";
             Log.Information("Starting PlatformManagement.HttpApi.Host.");
 
             var builder = WebApplication.CreateBuilder(args);

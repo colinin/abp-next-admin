@@ -2,7 +2,7 @@
 using LINGYUN.Abp.TuiJuhe.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
-using Volo.Abp.Json.Newtonsoft;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -11,7 +11,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.TuiJuhe;
 
 [DependsOn(
-    typeof(AbpJsonNewtonsoftModule),
+    typeof(AbpJsonSystemTextJsonModule),
     typeof(AbpSettingsModule),
     typeof(AbpCachingModule),
     typeof(AbpFeaturesLimitValidationModule))]
