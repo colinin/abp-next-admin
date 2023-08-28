@@ -22,16 +22,16 @@
 		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
 		<QuartzNETPackageVersion>3.3.3</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.2.4</StackExchangeRedisPackageVersion>
-		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
-		<SerilogAspNetCorePackageVersion>5.0.0</SerilogAspNetCorePackageVersion>
+		<SerilogPackageVersion>2.12.0</SerilogPackageVersion>
+		<SerilogAspNetCorePackageVersion>7.0.0</SerilogAspNetCorePackageVersion>
 		<SerilogEnrichersEnvironmentPackageVersion>2.2.0</SerilogEnrichersEnvironmentPackageVersion>
 		<SerilogEnrichersAssemblyPackageVersion>2.0.0</SerilogEnrichersAssemblyPackageVersion>
-		<SerilogEnrichersProcessPackageVersion>2.0.1</SerilogEnrichersProcessPackageVersion>
+		<SerilogEnrichersProcessPackageVersion>2.0.2</SerilogEnrichersProcessPackageVersion>
 		<SerilogEnrichersThreadPackageVersion>3.1.0</SerilogEnrichersThreadPackageVersion>
 		<SerilogExtensionsLoggingPackageVersion>3.0.1</SerilogExtensionsLoggingPackageVersion>
-		<SerilogSettingsConfigurationPackageVersion>3.4.0</SerilogSettingsConfigurationPackageVersion>
+		<SerilogSettingsConfigurationPackageVersion>7.0.1</SerilogSettingsConfigurationPackageVersion>
 		<SerilogSinksConsolePackageVersion>4.0.0</SerilogSinksConsolePackageVersion>
-		<SerilogSinksElasticsearchPackageVersion>8.4.1</SerilogSinksElasticsearchPackageVersion>
+		<SerilogSinksElasticsearchPackageVersion>9.0.3</SerilogSinksElasticsearchPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
 		<SwashbuckleAspNetCorePackageVersion>6.3.0</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>7.2.3</PollyPackageVersion>

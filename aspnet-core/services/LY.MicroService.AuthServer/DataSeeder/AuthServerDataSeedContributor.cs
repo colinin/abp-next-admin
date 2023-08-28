@@ -130,6 +130,8 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = "InternalServiceClient",
+                ClientSecret = "1q2w3e*",
+                Type = OpenIddictConstants.ClientTypes.Confidential,
                 ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                 DisplayName = "Internal Service Client",
                 PostLogoutRedirectUris = {},

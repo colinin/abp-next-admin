@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Delete": "Delete",
+    "DisplayName:Enable": "Enable",
     "DisplayName:CreationTime": "Creation Time",
     "DisplayName:LastModificationTime": "Modification Time",
     "DisplayName:SaveAndNext": "Save & Next",
