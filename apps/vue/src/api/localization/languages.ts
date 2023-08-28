@@ -19,8 +19,8 @@ export const GetAsyncByName = (name: string) => {
   return defAbpHttp.request<Language>({
     service: remoteServiceName,
     controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncByName',
+    action: 'GetByNameAsync',
+    uniqueName: 'GetByNameAsyncByName',
     params: {
       name: name,
     },

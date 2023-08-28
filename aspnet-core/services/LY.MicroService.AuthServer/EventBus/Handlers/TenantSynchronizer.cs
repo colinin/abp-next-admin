@@ -90,10 +90,12 @@ public class TenantSynchronizer : IDistributedEventHandler<CreateEventData>, ITr
         await PermissionDataSeeder.SeedAsync(
             RolePermissionValueProvider.ProviderName,
             defaultRole.Name,
-            new string[] {
-                    IdentityPermissions.UserLookup.Default,
-                    IdentityPermissions.Users.Default
-            });
+            new string[]
+            {
+                IdentityPermissions.UserLookup.Default,
+                IdentityPermissions.Users.Default
+            },
+            tenantId: tenantId);
     }
 
     private async Task SeedTenantAdminAsync(CreateEventData eventData)
