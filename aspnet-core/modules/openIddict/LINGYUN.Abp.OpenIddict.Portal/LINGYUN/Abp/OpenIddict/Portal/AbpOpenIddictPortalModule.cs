@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Platform;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.ExtensionGrantTypes;
@@ -8,6 +9,7 @@ namespace LINGYUN.Abp.OpenIddict.Portal;
 
 [DependsOn(
     typeof(AbpOpenIddictAspNetCoreModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(PlatformDomainModule))]
 public class AbpOpenIddictPortalModule : AbpModule
 {

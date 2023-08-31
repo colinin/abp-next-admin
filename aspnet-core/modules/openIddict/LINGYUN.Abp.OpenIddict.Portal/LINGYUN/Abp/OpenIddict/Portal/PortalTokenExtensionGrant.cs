@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Platform.Portal;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,6 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IOptions<AbpAspNetCoreMultiTenancyOptions> MultiTenancyOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
-
     public async virtual Task<IActionResult> HandleAsync(ExtensionGrantContext context)
     {
         LazyServiceProvider = context.HttpContext.RequestServices.GetRequiredService<IAbpLazyServiceProvider>();
@@ -83,6 +83,10 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
         using (CurrentTenant.Change(tenantId))
         {
+            AbpMultiTenancyCookieHelper.SetTenantCookie(
+                context.HttpContext,
+                tenantId,
+                MultiTenancyOptions.Value.TenantKey);
             return await HandlePasswordAsync(context);
         }
     }
@@ -280,14 +284,6 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
                 ClientId = context.Request.ClientId
             }
         );
-
-        if (user.TenantId.HasValue)
-        {
-            AbpMultiTenancyCookieHelper.SetTenantCookie(
-                context.HttpContext,
-                user.TenantId,
-                MultiTenancyOptions.Value.TenantKey);
-        }
 
         return new Microsoft.AspNetCore.Mvc.SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, principal);
     }

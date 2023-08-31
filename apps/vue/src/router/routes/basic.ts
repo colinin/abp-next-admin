@@ -108,6 +108,16 @@ export const ACCOUNT_CENTER_ROUTE: AppRouteRecordRaw = {
         ignoreAuth: true,
       },
     },
+    {
+      path: 'email-confirm',
+      name: 'email-confirm',
+      component: () => import('/@/views/account/email-confirm/index.vue'),
+      meta: {
+        title: t('routes.basic.accountEmailConfirm'),
+        hideMenu: true,
+        ignoreAuth: true,
+      },
+    },
   ],
 };
 

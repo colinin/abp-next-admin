@@ -36,6 +36,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using LINGYUN.Abp.Account;
 
 namespace LY.MicroService.AuthServer;
 
@@ -289,11 +290,15 @@ public partial class AuthServerModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
-
-            options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
-            options.Applications["MVC"].Urls["EmailConfirm"] = "Account/EmailConfirm";
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

@@ -3,5 +3,6 @@ export default {
   errorLogList: 'Error Log',
   accountSetting: 'Account Setting',
   accountCenter: 'Account Center',
-  accountSecurityLogs: 'Security Logs'
+  accountSecurityLogs: 'Security Logs',
+  accountEmailConfirm: 'Email Confirm'
 };

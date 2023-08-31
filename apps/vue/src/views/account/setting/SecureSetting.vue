@@ -15,7 +15,7 @@
                   :loading="item.loading"
                   @change="handleChange(item, $event)"
                 />
-                <Button v-else-if="item.extra" class="extra" type="link" :loading="item.loading" :disbled="!item.enabled" @click="toggleCommand(item)">
+                <Button v-else-if="item.extra && item.enabled !== false" class="extra" type="link" :loading="item.loading" @click="toggleCommand(item)">
                   {{ item.extra }}
                 </Button>
               </template>
