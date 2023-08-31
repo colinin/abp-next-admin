@@ -11,6 +11,7 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Account
 {
@@ -138,7 +139,7 @@ namespace LINGYUN.Abp.Account
         {
             await IdentityOptions.SetAsync();
 
-            var user = await UserManager.GetByIdAsync(input.UserId);
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
             (await UserManager.ConfirmEmailAsync(user, input.ConfirmToken)).CheckErrors();
 

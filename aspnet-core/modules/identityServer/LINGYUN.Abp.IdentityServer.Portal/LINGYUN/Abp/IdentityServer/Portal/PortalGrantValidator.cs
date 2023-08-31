@@ -5,6 +5,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using LINGYUN.Platform.Portal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.MultiTenancy;
@@ -40,6 +42,9 @@ public class PortalGrantValidator : IExtensionGrantValidator
     private readonly ICurrentTenant _currentTenant;
     private readonly IEnterpriseRepository _enterpriseRepository;
 
+    private readonly AbpAspNetCoreMultiTenancyOptions _multiTenancyOptions;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
     public PortalGrantValidator(
         ILogger<PortalGrantValidator> logger, 
         IOptions<IdentityServerOptions> options, 
@@ -48,7 +53,9 @@ public class PortalGrantValidator : IExtensionGrantValidator
         IdentitySecurityLogManager identitySecurityLogManager, 
         UserManager<IdentityUser> userManager, 
         ICurrentTenant currentTenant, 
-        IEnterpriseRepository enterpriseRepository)
+        IEnterpriseRepository enterpriseRepository,
+        IOptions<AbpAspNetCoreMultiTenancyOptions> multiTenancyOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _logger = logger;
         _options = options.Value;
@@ -58,6 +65,8 @@ public class PortalGrantValidator : IExtensionGrantValidator
         _userManager = userManager;
         _currentTenant = currentTenant;
         _enterpriseRepository = enterpriseRepository;
+        _multiTenancyOptions = multiTenancyOptions.Value;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [UnitOfWork]
@@ -101,6 +110,14 @@ public class PortalGrantValidator : IExtensionGrantValidator
 
         using (_currentTenant.Change(tenantId))
         {
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                AbpMultiTenancyCookieHelper.SetTenantCookie(
+                    _httpContextAccessor.HttpContext,
+                    tenantId,
+                    _multiTenancyOptions.TenantKey);
+            }
+
             var validatedRequest = new ValidatedTokenRequest
             {
                 Raw = parameters ?? throw new ArgumentNullException(nameof(parameters)),

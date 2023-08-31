@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Platform;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Localization;
@@ -10,6 +11,7 @@ namespace LINGYUN.Abp.IdentityServer.Portal;
 
 [DependsOn(
     typeof(AbpIdentityServerDomainModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(PlatformDomainModule))]
 public class AbpIdentityServerPortalModule : AbpModule
 {
