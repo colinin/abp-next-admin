@@ -11,4 +11,4 @@ EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 
-ENTRYPOINT ["dotnet", "LY.MicroService.IdentityServer.HttpApi.Host.dll"]
+ENTRYPOINT ["dotnet", "LY.MicroService.identityServer.HttpApi.Host.dll"]
