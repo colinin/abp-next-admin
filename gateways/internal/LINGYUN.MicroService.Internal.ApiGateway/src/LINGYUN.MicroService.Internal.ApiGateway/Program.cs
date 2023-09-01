@@ -22,24 +22,26 @@ public class Program
             Log.Information("Starting Internal ApiGateway.");
 
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Host.AddAppSettingsSecretsJson()
-                .UseAutofac()
-                .ConfigureAppConfiguration((context, config) =>
-                {
-                    //// 加入 ocelot配置文件
-                    //config.AddJsonFile(
-                    //$"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json",
-                    //optional: true,
-                    //reloadOnChange: true);
+               .UseAutofac()
+               .ConfigureAppConfiguration((context, config) =>
+               {
+                   //// 加入 ocelot配置文件
+                   //config.AddJsonFile(
+                   //$"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json",
+                   //optional: true,
+                   //reloadOnChange: true);
 
-                    config.AddAutoOcelotConfig("OcelotConfig", builder.Environment);
+                   config.AddAutoOcelotConfig("OcelotConfig", builder.Environment);
 
-                    var configuration = config.Build();
-                    if (configuration.GetSection("AgileConfig").Exists())
-                    {
-                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
-                    }
-                })
+                   var configuration = config.Build();
+                   var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
+                   if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+                   {
+                       config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                   }
+               })
                 .UseSerilog((context, provider, config) =>
                 {
                     config.ReadFrom.Configuration(context.Configuration);

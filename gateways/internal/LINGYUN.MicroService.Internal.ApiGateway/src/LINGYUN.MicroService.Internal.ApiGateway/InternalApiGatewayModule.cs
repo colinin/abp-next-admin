@@ -1,9 +1,11 @@
 ﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Ocelot.Configuration.File;
 using Ocelot.Configuration.Repository;
 using Ocelot.Middleware;
@@ -34,6 +36,9 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            var showPii = configuration.GetValue<bool>("App:ShowPii");
+            IdentityModelEventSource.ShowPII = showPii;
 
             ConfigureLocalization();
             ConfigureJsonSerializer();

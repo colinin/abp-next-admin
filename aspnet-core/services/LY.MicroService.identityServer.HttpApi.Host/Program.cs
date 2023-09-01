@@ -21,7 +21,6 @@ public class Program
         {
             Console.Title = "IdentityServer.HttpApi.Host";
             Log.Information("Starting IdentityServer.HttpApi.Host.");
-            IdentityModelEventSource.ShowPII = true;
 
 
             var builder = WebApplication.CreateBuilder(args);
