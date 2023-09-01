@@ -219,6 +219,7 @@ services:
       - AuthServer__ApiName=lingyun-abp-application
 
   webhook-api:
+    environment:
       - App__TrackingEntitiesChanged=true
       - ConnectionStrings__Default=Server=127.0.0.1;Database=Platform-v70;User Id=root;Password=123456,
       - ConnectionStrings__WebhooksManagement=Server=127.0.0.1;Database=Platform-v70;User Id=root;Password=123456,
@@ -246,6 +247,7 @@ services:
       - AuthServer__ApiName=lingyun-abp-application
 
   workflow-api:
+    environment:
       - App__TrackingEntitiesChanged=true
       - ConnectionStrings__Default=Server=127.0.0.1;Database=Workflow;User Id=root;Password=123456,
       - ConnectionStrings__Workflow=Server=127.0.0.1;Database=Workflow;User Id=root;Password=123456,
