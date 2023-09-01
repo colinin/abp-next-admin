@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -247,11 +248,15 @@ public partial class IdentityServerModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
-
-            options.Applications["MVC"].Urls[AccountUrlNames.EmailVerifyLogin] = "Account/VerifyCode";
-            options.Applications["MVC"].Urls[AccountUrlNames.EmailConfirm] = "Account/EmailConfirm";
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

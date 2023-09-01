@@ -33,3 +33,8 @@ export interface SendEmailConfirmCode {
   returnUrl?: string;
   returnUrlHash?: string;
 }
+
+export interface ConfirmEmailInput {
+  userId?: string;
+  confirmToken: string;
+}

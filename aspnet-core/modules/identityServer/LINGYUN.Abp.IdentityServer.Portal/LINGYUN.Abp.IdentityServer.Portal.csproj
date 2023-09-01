@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -46,7 +46,6 @@ namespace LY.MicroService.IdentityServer.Pages.Account
                 await MyProfileAppService.ConfirmEmailAsync(
                     new ConfirmEmailInput
                     {
-                        UserId = UserId,
                         ConfirmToken = ConfirmToken,
                     });
             }
