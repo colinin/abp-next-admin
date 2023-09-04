@@ -3,15 +3,15 @@ version: '3.4'
 services:
   agile-config:
     image: kklldog/agile_config:latest
+    container_name: agile-config
     environment:
       - adminConsole=true
       - db:provider=mysql
-      - db:conn=Server=127.0.0.1;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+      - db:conn=Server=host.docker.internal;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
     ports:
       - "5000:5000"
     volumes:
       - /etc/localtime:/etc/localtime
-    restart: always
 
   sts-server:
     environment:
