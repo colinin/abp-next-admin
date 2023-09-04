@@ -3,7 +3,7 @@ version: '3.4'
 services:
   admin-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30010:80"
@@ -12,7 +12,7 @@ services:
 
   sts-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30015:80"
@@ -21,7 +21,7 @@ services:
 
   localization-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30030:80"
@@ -30,7 +30,7 @@ services:
 
   platform-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30025:80"
@@ -39,7 +39,7 @@ services:
 
   messages-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30020:80"
@@ -48,7 +48,7 @@ services:
 
   task-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30040:80"
@@ -57,7 +57,7 @@ services:
 
   webhook-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30045:80"
@@ -66,7 +66,7 @@ services:
 
   workflow-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30050:80"
@@ -75,7 +75,7 @@ services:
 
   sts-server:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "44385:80"
@@ -84,7 +84,7 @@ services:
 
   internal-apigateway:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30000:80"

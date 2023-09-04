@@ -1,15 +1,29 @@
 version: '3.4'
 
 services:
+  agile-config:
+    image: kklldog/agile_config:latest
+    environment:
+      - adminConsole=true
+      - db:provider=mysql
+      - db:conn=Server=127.0.0.1;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+    ports:
+      - "5000:5000"
+    volumes:
+      - /etc/localtime:/etc/localtime
+    restart: always
+
   sts-server:
     environment:
       - AgileConfig__IsEnabled=true
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.AuthServer
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=AuthServer
       - AgileConfig__tag=AuthServer
+    depends_on:
+      - agile-config
 
   sts-api:
     environment:
@@ -17,9 +31,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.IdentityServer.Admin
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=IdentityServer.Admin
       - AgileConfig__tag=IdentityServer.Admin
+    depends_on:
+      - agile-config
 
   admin-api:
     environment:
@@ -27,9 +43,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Backend.Admin
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=BackendAdmin
       - AgileConfig__tag=BackendAdmin
+    depends_on:
+      - agile-config
 
   localization-api:
     environment:
@@ -37,9 +55,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Localization
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Localization
       - AgileConfig__tag=Localization
+    depends_on:
+      - agile-config
 
   platform-api:
     environment:
@@ -47,9 +67,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Platform
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Platform
       - AgileConfig__tag=Platform
+    depends_on:
+      - agile-config
 
   messages-api:
     environment:
@@ -57,9 +79,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Message
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Message
       - AgileConfig__tag=Message
+    depends_on:
+      - agile-config
 
   task-api:
     environment:
@@ -67,9 +91,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Task
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Task
       - AgileConfig__tag=Task
+    depends_on:
+      - agile-config
 
   webhook-api:
     environment:
@@ -77,9 +103,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Webhooks
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Webhooks
       - AgileConfig__tag=Webhooks
+    depends_on:
+      - agile-config
 
   workflow-api:
     environment:
@@ -87,9 +115,11 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Abp.Workflow
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=Workflow
       - AgileConfig__tag=Workflow
+    depends_on:
+      - agile-config
 
   internal-apigateway:
     environment:
@@ -97,6 +127,8 @@ services:
       - AgileConfig__env=DEV
       - AgileConfig__appId=LINGYUN.Internal.ApiGateway
       - AgileConfig__secret=1q2w3E*
-      - AgileConfig__nodes=http://docker.gzbit.cn:5000
+      - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=ApiGateway
       - AgileConfig__tag=ApiGateway
+    depends_on:
+      - agile-config

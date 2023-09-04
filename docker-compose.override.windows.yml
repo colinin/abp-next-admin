@@ -5,8 +5,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/identityserver
     volumes:
-      - D:\Project\Abp\logs\ids-sts:/app/Logs
-      - D:\Project\Abp\data\ids-sts\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\ids-sts:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\ids-sts\Modules:/app/Modules
     networks:
       - framework
 
@@ -14,8 +14,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes:
-      - D:\Project\Abp\logs\ids-admin:/app/Logs
-      - D:\Project\Abp\data\ids-admin\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\ids-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\ids-admin\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -25,8 +25,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes:
-      - D:\Project\Abp\logs\backend-admin:/app/Logs
-      - D:\Project\Abp\data\backend-admin\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\backend-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\backend-admin\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -36,8 +36,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/localization
     volumes:
-      - D:\Project\Abp\logs\localization:/app/Logs
-      - D:\Project\Abp\data\localization\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\localization:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\localization\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -47,9 +47,9 @@ services:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes:
-      - D:\Project\Abp\logs\platform:/app/Logs
-      - D:\Project\Abp\data\platform\Modules:/app/Modules
-      - D:\Project\Abp\data\platform:/app/file-blob-storing
+      - D:\Projects\Development\Abp\Application\logs\platform:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\platform\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\data\platform:/app/file-blob-storing
     depends_on:
       - sts-server
     networks:
@@ -59,8 +59,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes:
-      - D:\Project\Abp\logs\messages:/app/Logs
-      - D:\Project\Abp\data\messages\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\messages:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\messages\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -70,8 +70,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/task-management
     volumes:
-      - D:\Project\Abp\logs\task-management:/app/Logs
-      - D:\Project\Abp\data\task-management\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\task-management:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\task-management\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -81,8 +81,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/webhooks
     volumes:
-      - D:\Project\Abp\logs\webhooks:/app/Logs
-      - D:\Project\Abp\data\webhooks\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\webhooks:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\webhooks\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -92,8 +92,8 @@ services:
     build:
       context: ./aspnet-core/services/Publish/workflow
     volumes:
-      - D:\Project\Abp\logs\workflow:/app/Logs
-      - D:\Project\Abp\data\workflow\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\workflow:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\workflow\Modules:/app/Modules
     depends_on:
       - sts-server
     networks:
@@ -103,12 +103,15 @@ services:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway
     volumes:
-      - D:\Project\Abp\logs\internal-apigateway:/app/Logs
-      - D:\Project\Abp\data\internal-apigateway\Modules:/app/Modules
+      - D:\Projects\Development\Abp\Application\logs\internal-apigateway:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\internal-apigateway\Modules:/app/Modules
     networks:
       - framework
+      
+volumes:
+  dbdata:
 
 networks:
   framework:
-    name: nt
+    name: linyun-abp
     external: true

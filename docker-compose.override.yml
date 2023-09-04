@@ -110,5 +110,5 @@ services:
 
 networks:
   framework:
-    external:
-      name: ly_app_net
+    name: linyun-abp
+    external: true
