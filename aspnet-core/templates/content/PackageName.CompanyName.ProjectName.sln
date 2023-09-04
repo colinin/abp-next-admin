@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solutio
 		common.props = common.props
 		configureawait.props = configureawait.props
 		Directory.Build.props = Directory.Build.props
+		..\..\NuGet.Config = ..\..\NuGet.Config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{4786387C-C1C5-46F8-806F-EBC54DB0A4FA}"

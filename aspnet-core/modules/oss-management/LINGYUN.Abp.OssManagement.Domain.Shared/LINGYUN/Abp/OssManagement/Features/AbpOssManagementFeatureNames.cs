@@ -4,7 +4,7 @@
     {
         public const string GroupName = "AbpOssManagement";
         /// <summary>
-        /// 是否运行未经授权的用户访问公共目录
+        /// 是否允许未经授权的用户访问公共目录
         /// </summary>
         public const string PublicAccess = GroupName + ".PublicAccess";
 

@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta14" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="$(SixLaborsImageSharpDrawingPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
