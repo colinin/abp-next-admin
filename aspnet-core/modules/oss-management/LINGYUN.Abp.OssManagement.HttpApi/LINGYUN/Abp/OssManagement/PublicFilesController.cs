@@ -56,7 +56,7 @@ namespace LINGYUN.Abp.OssManagement
         [Route("t/{TenantId}/p/{Path}/{Name}/{Process}")]
         public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
         {
-            using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+            using (CurrentTenant.Change(input.GetTenantId(CurrentTenant)))
             {
                 return await _publicFileAppService.GetAsync(input);
             }

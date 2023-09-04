@@ -32,6 +32,7 @@
 		<SerilogSettingsConfigurationPackageVersion>7.0.1</SerilogSettingsConfigurationPackageVersion>
 		<SerilogSinksConsolePackageVersion>4.0.0</SerilogSinksConsolePackageVersion>
 		<SerilogSinksElasticsearchPackageVersion>9.0.3</SerilogSinksElasticsearchPackageVersion>
+		<SixLaborsImageSharpDrawingPackageVersion>1.0.0</SixLaborsImageSharpDrawingPackageVersion>
 		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
 		<SwashbuckleAspNetCorePackageVersion>6.3.0</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>7.2.3</PollyPackageVersion>

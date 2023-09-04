@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.OssManagement
 {
-    public class GetPublicFileInput
+    public class GetPublicFileInput : GetFileMultiTenancyInput
     {
         [Required]
         public string Name { get; set; }
@@ -11,9 +10,5 @@ namespace LINGYUN.Abp.OssManagement
         public string Path { get; set; }
 
         public string Process { get; set; }
-        /// <summary>
-        /// 解决通过路由传递租户标识时,abp写入cookies
-        /// </summary>
-        public Guid? TenantId { get; set; }
     }
 }
