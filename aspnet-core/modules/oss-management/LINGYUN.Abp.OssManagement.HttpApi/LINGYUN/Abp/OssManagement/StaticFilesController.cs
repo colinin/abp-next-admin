@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.OssManagement
         [Route("t/{TenantId}/{Bucket}/p/{Path}/{Name}/{Process}")]
         public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetStaticFileInput input)
         {
-            using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+            using (CurrentTenant.Change(input.GetTenantId(CurrentTenant)))
             {
                 return await _staticFilesAppServic.GetAsync(input);
             }
