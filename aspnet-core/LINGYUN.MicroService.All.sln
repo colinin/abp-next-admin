@@ -645,9 +645,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{59627844-A66
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Cli", "modules\cli\LINGYUN.Abp.Cli\LINGYUN.Abp.Cli.csproj", "{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging\LINGYUN.Abp.OssManagement.FileSystem.Imaging.csproj", "{6C8489F4-68B5-4CBC-8463-010C71C23245}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging\LINGYUN.Abp.OssManagement.FileSystem.Imaging.csproj", "{6C8489F4-68B5-4CBC-8463-010C71C23245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp.csproj", "{5177C729-7666-4A6C-9D54-D7E5DEF0E857}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp.csproj", "{5177C729-7666-4A6C-9D54-D7E5DEF0E857}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
