@@ -7,6 +7,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30010:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   sts-api:
     environment:
@@ -14,6 +16,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30015:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   localization-api:
     environment:
@@ -21,6 +25,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30030:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   platform-api:
     environment:
@@ -28,6 +34,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30025:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   messages-api:
     environment:
@@ -35,6 +43,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30020:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   task-api:
     environment:
@@ -42,6 +52,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30040:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   webhook-api:
     environment:
@@ -49,6 +61,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30045:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   workflow-api:
     environment:
@@ -56,6 +70,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30050:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   sts-server:
     environment:
@@ -63,6 +79,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "44385:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   internal-apigateway:
     environment:
@@ -70,3 +88,5 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "30000:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

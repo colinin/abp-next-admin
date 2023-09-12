@@ -23,8 +23,10 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -89,6 +91,10 @@ public partial class IdentityServerModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        var showPii = configuration.GetValue<bool>("App:ShowPii");
+        IdentityModelEventSource.ShowPII = showPii;
+
 
         PreConfigureApp();
         PreConfigureFeature();

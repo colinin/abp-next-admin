@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 using System.IO;
@@ -20,6 +21,7 @@ public class Program
         {
             Console.Title = "IdentityServer.HttpApi.Host";
             Log.Information("Starting IdentityServer.HttpApi.Host.");
+
 
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()

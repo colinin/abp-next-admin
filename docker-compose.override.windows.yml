@@ -1,79 +1,117 @@
 version: '3.4'
 
 services:
-  identity-server-sts:
+  sts-server:
     build:
       context: ./aspnet-core/services/Publish/identityserver
     volumes:
       - D:\Projects\Development\Abp\Application\logs\ids-sts:/app/Logs
-    restart: always
+      - D:\Projects\Development\Abp\Application\data\ids-sts\Modules:/app/Modules
+    networks:
+      - framework
 
-  identity-server-admin:
+  sts-api:
     build:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes:
       - D:\Projects\Development\Abp\Application\logs\ids-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\ids-admin\Modules:/app/Modules
     depends_on:
-      - identity-server-sts
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
-  admin-service:
+  admin-api:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes:
       - D:\Projects\Development\Abp\Application\logs\backend-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\backend-admin\Modules:/app/Modules
     depends_on:
-      - identity-server-sts
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
-  localization-service:
+  localization-api:
     build:
       context: ./aspnet-core/services/Publish/localization
     volumes:
       - D:\Projects\Development\Abp\Application\logs\localization:/app/Logs
-    restart: always
+      - D:\Projects\Development\Abp\Application\data\localization\Modules:/app/Modules
+    depends_on:
+      - sts-server
+    networks:
+      - framework
 
-  platform-service:
+  platform-api:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes:
       - D:\Projects\Development\Abp\Application\logs\platform:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\platform\Modules:/app/Modules
       - D:\Projects\Development\Abp\Application\data\platform:/app/file-blob-storing
     depends_on:
-      - identity-server-sts
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
-  messages-service:
+  messages-api:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes:
       - D:\Projects\Development\Abp\Application\logs\messages:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\messages\Modules:/app/Modules
     depends_on:
-      - identity-server-sts
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
-  apigateway-admin-service:
+  task-api:
     build:
-      context: ./aspnet-core/services/Publish/apigateway-admin
+      context: ./aspnet-core/services/Publish/task-management
     volumes:
-      - D:\Projects\Development\Abp\Application\logs\apigateway-admin:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\task-management:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\task-management\Modules:/app/Modules
     depends_on:
-      - identity-server-sts
-      - admin-service
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
-  apigateway-host-service:
+  webhook-api:
     build:
-      context: ./aspnet-core/services/Publish/apigateway-host
+      context: ./aspnet-core/services/Publish/webhooks
     volumes:
-      - D:\Projects\Development\Abp\Application\logs\apigateway-host:/app/Logs
+      - D:\Projects\Development\Abp\Application\logs\webhooks:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\webhooks\Modules:/app/Modules
     depends_on:
-      - identity-server-sts
-      - apigateway-admin-service
-    restart: always
+      - sts-server
+    networks:
+      - framework
 
+  workflow-api:
+    build:
+      context: ./aspnet-core/services/Publish/workflow
+    volumes:
+      - D:\Projects\Development\Abp\Application\logs\workflow:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\workflow\Modules:/app/Modules
+    depends_on:
+      - sts-server
+    networks:
+      - framework
+
+  internal-apigateway:
+    build:
+      context: ./aspnet-core/services/Publish/internal-apigateway
+    volumes:
+      - D:\Projects\Development\Abp\Application\logs\internal-apigateway:/app/Logs
+      - D:\Projects\Development\Abp\Application\data\internal-apigateway\Modules:/app/Modules
+    networks:
+      - framework
+      
 volumes:
   dbdata:
 
 networks:
-  linyun-abp:
+  framework:
+    name: linyun-abp
+    external: true
