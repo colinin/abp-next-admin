@@ -180,8 +180,15 @@ public partial class IdentityServerHttpApiHostModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
         });
     }
     private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)

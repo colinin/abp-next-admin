@@ -1,3 +1,5 @@
+import { NotificationContentType } from "/@/api/messages/model/notificationsModel";
+
 export interface ListItem {
   id: string;
   avatar: string;
@@ -12,6 +14,7 @@ export interface ListItem {
   clickClose?: boolean;
   extra?: string;
   color?: string;
+  contentType?: NotificationContentType;
 }
 
 export interface TabItem {
