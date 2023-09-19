@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Platform.Portal;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +23,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.ExtensionGrantTypes;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
+using static Volo.Abp.OpenIddict.Controllers.TokenController;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -34,7 +34,6 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
     protected IAbpLazyServiceProvider LazyServiceProvider { get; set; }
     protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
-    protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
     protected IEnterpriseRepository EnterpriseRepository => LazyServiceProvider.LazyGetRequiredService<IEnterpriseRepository>();
     protected SignInManager<IdentityUser> SignInManager => LazyServiceProvider.LazyGetRequiredService<SignInManager<IdentityUser>>();
     protected IdentityUserManager UserManager => LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
@@ -47,12 +46,12 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IOptions<AbpAspNetCoreMultiTenancyOptions> MultiTenancyOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+
+    [UnitOfWork]
     public async virtual Task<IActionResult> HandleAsync(ExtensionGrantContext context)
     {
         LazyServiceProvider = context.HttpContext.RequestServices.GetRequiredService<IAbpLazyServiceProvider>();
 
-        using var scope = ServiceScopeFactory.CreateScope();
-        using var unitOfWork = UnitOfWorkManager.Begin();
         var enterprise = context.Request.GetParameter("EnterpriseId")?.ToString();
 
         Guid? tenantId = null;
@@ -91,8 +90,9 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         }
     }
 
-    protected virtual async Task<IActionResult> HandlePasswordAsync(ExtensionGrantContext context)
+    protected async virtual Task<IActionResult> HandlePasswordAsync(ExtensionGrantContext context)
     {
+        using var scope = ServiceScopeFactory.CreateScope();
         await ReplaceEmailToUsernameOfInputIfNeeds(context.Request);
 
         IdentityUser user = null;
@@ -101,7 +101,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         {
             foreach (var externalLoginProviderInfo in AbpIdentityOptions.Value.ExternalLoginProviders.Values)
             {
-                var externalLoginProvider = (IExternalLoginProvider)context.HttpContext.RequestServices
+                var externalLoginProvider = (IExternalLoginProvider)scope.ServiceProvider
                     .GetRequiredService(externalLoginProviderInfo.Type);
 
                 if (await externalLoginProvider.TryAuthenticateAsync(context.Request.Username, context.Request.Password))
@@ -148,6 +148,14 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         var result = await SignInManager.CheckPasswordSignInAsync(user, context.Request.Password, true);
         if (!result.Succeeded)
         {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = context.Request.Username,
+                ClientId = context.Request.ClientId
+            });
+
             string errorDescription;
             if (result.IsLockedOut)
             {
@@ -157,6 +165,17 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
             else if (result.IsNotAllowed)
             {
                 Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.Request.Username);
+
+                if (user.ShouldChangePasswordOnNextLogin)
+                {
+                    return await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Request.Password);
+                }
+
+                if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                {
+                    return await HandlePeriodicallyChangePasswordAsync(context, user, context.Request.Password);
+                }
+
                 errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
             }
             else
@@ -178,14 +197,6 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         {
             return await HandleTwoFactorLoginAsync(context, user);
         }
-
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-        {
-            Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-            Action = result.ToIdentitySecurityLogAction(),
-            UserName = context.Request.Username,
-            ClientId = context.Request.ClientId
-        });
 
         return await SetSuccessResultAsync(context, user);
     }
@@ -258,6 +269,96 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
                 {
                     ["userId"] = user.Id.ToString("N"),
                     ["twoFactorToken"] = twoFactorToken
+                });
+
+            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+    }
+
+    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword)
+    {
+        return await HandleChangePasswordAsync(context, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
+    }
+
+    protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword)
+    {
+        return await HandleChangePasswordAsync(context, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
+    }
+
+    protected virtual async Task<IActionResult> HandleChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    {
+        var changePasswordToken = context.Request.GetParameter("ChangePasswordToken")?.ToString();
+        var newPassword = context.Request.GetParameter("NewPassword")?.ToString();
+        if (!changePasswordToken.IsNullOrWhiteSpace() && !currentPassword.IsNullOrWhiteSpace() && !newPassword.IsNullOrWhiteSpace())
+        {
+            if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
+            {
+                var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (changePasswordResult.Succeeded)
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                    {
+                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                        Action = IdentitySecurityLogActionConsts.ChangePassword,
+                        UserName = context.Request.Username,
+                        ClientId = context.Request.ClientId
+                    });
+
+                    if (changePasswordType == ChangePasswordType.ShouldChangePasswordOnNextLogin)
+                    {
+                        user.SetShouldChangePasswordOnNextLogin(false);
+                    }
+
+                    await UserManager.UpdateAsync(user);
+                    return await SetSuccessResultAsync(context, user);
+                }
+                else
+                {
+                    Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", context.Request.Username, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+
+                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", ")
+                    });
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+            }
+            else
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.Request.Username);
+
+                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid authenticator code!"
+                });
+
+                return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            }
+        }
+        else
+        {
+            Logger.LogInformation($"Authentication failed for username: {{{context.Request.Username}}}, reason: {{{changePasswordType.ToString()}}}");
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                Action = OpenIddictSecurityLogActionConsts.LoginNotAllowed,
+                UserName = context.Request.Username,
+                ClientId = context.Request.ClientId
+            });
+
+            var properties = new AuthenticationProperties(
+                items: new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordType.ToString()
+                },
+                parameters: new Dictionary<string, object>
+                {
+                    ["userId"] = user.Id.ToString("N"),
+                    ["changePasswordToken"] = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())
                 });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
