@@ -53,6 +53,7 @@ dependencies:
   dio: ^5.2.0+1
   flutter_easyloading: ^3.0.5
   flutter_picker: ^2.1.0
+  flutter_logs: ^2.1.11
   get: ^4.6.5
   get_storage: ^2.1.1
   rxdart: ^0.27.7

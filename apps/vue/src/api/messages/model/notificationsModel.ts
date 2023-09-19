@@ -10,6 +10,13 @@ export enum NotificationType {
   ServiceCallback = 30,
 }
 
+export enum NotificationContentType {
+  Text = 0,
+  Html = 1,
+  Markdown = 2,
+  Json = 3,
+}
+
 export enum NotificationSeverity {
   Success = 0,
   Info = 10,
@@ -37,6 +44,7 @@ export interface NotificationInfo {
   lifetime: NotificationLifetime;
   type: NotificationType;
   severity: NotificationSeverity;
+  contentType: NotificationContentType;
 }
 
 export interface NotificationGroup {

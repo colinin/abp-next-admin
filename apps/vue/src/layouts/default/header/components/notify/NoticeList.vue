@@ -34,13 +34,15 @@
             <div>
               <div class="description" v-if="item.description">
                 <a-typography-paragraph
+                  @click="handleContentClick(item)"
                   style="width: 100%; margin-bottom: 0 !important"
+                  :style="{ cursor: isContentClickable ? 'pointer' : '' }"
                   :ellipsis="
                     $props.descRows && $props.descRows > 0
                       ? { rows: $props.descRows, tooltip: !!item.description }
                       : false
                   "
-                  :content="item.description"
+                  :content="getContent(item)"
                 />
               </div>
               <div class="datetime">
@@ -61,6 +63,7 @@
   import { ListItem } from './data';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { List, Avatar, Tag, Typography } from 'ant-design-vue';
+  import { NotificationContentType } from "/@/api/messages/model/notificationsModel";
   import { isNumber } from '/@/utils/is';
   export default defineComponent({
     components: {
@@ -95,6 +98,9 @@
       onTitleClick: {
         type: Function as PropType<(Recordable) => void>,
       },
+      onContentClick: {
+        type: Function as PropType<(Recordable) => void>,
+      },
     },
     emits: ['update:currentPage'],
     setup(props, { emit }) {
@@ -103,8 +109,21 @@
       const getData = computed(() => {
         const { pageSize, list } = props;
         if (pageSize === false) return [];
-        let size = isNumber(pageSize) ? pageSize : 5;
+        let size = isNumber(pageSize) ? pageSize : 10;
         return list.slice(size * (unref(current) - 1), size * unref(current));
+      });
+      const getContent = computed(() => {
+        return (item: ListItem) => {
+          switch (item.contentType) {
+            default:
+            case NotificationContentType.Text:
+              return item.description;
+            case NotificationContentType.Html:
+            case NotificationContentType.Json:
+            case NotificationContentType.Markdown:
+              return item.title;
+          }
+        };
       });
       watch(
         () => props.currentPage,
@@ -113,12 +132,15 @@
         },
       );
       const isTitleClickable = computed(() => !!props.onTitleClick);
+      const isContentClickable = computed(() => !!props.onContentClick);
       const getPagination = computed(() => {
         const { list, pageSize } = props;
-        if (pageSize > 0 && list && list.length > pageSize) {
+        if (pageSize === false) return false;
+        const size = isNumber(pageSize) ? pageSize : 5;
+        if (size > 0 && list && list.length > size) {
           return {
             total: list.length,
-            pageSize,
+            pageSize: size,
             //size: 'small',
             current: unref(current),
             onChange(page) {
@@ -135,7 +157,20 @@
         props.onTitleClick && props.onTitleClick(item);
       }
 
-      return { prefixCls, getPagination, getData, handleTitleClick, isTitleClickable };
+      function handleContentClick(item: ListItem) {
+        props.onContentClick && props.onContentClick(item);
+      }
+
+      return {
+        prefixCls,
+        getPagination,
+        getData,
+        getContent,
+        handleTitleClick,
+        isTitleClickable,
+        handleContentClick,
+        isContentClickable,
+      };
     },
   });
 </script>

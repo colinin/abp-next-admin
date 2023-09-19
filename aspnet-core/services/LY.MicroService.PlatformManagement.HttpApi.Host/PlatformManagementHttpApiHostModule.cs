@@ -155,6 +155,9 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
+        // IDS与JWT不匹配可能造成鉴权错误
+        // TODO: abp在某个更新版本建议移除此中间价
+        app.UseAbpClaimsMap();
         // jwt
         app.UseJwtTokenMiddleware();
         // 多租户
