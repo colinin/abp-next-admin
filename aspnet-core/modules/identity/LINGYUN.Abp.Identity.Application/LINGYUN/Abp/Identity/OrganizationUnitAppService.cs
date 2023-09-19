@@ -102,9 +102,12 @@ namespace LINGYUN.Abp.Identity
 
         public async virtual Task<PagedResultDto<OrganizationUnitDto>> GetListAsync(OrganizationUnitGetByPagedDto input)
         {
-            var origanizationUnitCount = await OrganizationUnitRepository.GetCountAsync();
+            var specification = new OrganizationUnitGetListSpecification(input);
+
+            var origanizationUnitCount = await OrganizationUnitRepository.GetCountAsync(specification);
+
             var origanizationUnits = await OrganizationUnitRepository
-                .GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, false);
+                .GetListAsync(specification, input.Sorting, input.MaxResultCount, input.SkipCount, false);
 
             return new PagedResultDto<OrganizationUnitDto>(origanizationUnitCount,
                 ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(origanizationUnits));
