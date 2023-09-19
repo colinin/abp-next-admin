@@ -14,6 +14,18 @@
 
 ## 快速搭建微服务启动项目
 
+### 0、设置hosts文件
+windows下，修改 C:\Windows\System32\drivers\etc\hosts 文件；
+linux下，修改 /etc/hosts；
+增加如下配置：
+```
+	127.0.0.1 host.docker.internal
+```
+linux下，修改完hosts后需要重启网络，在shell中执行：
+```shell
+	/etc/init.d/network restart
+```
+
 ### 1、安装dotnet工具
 
 ```shell
