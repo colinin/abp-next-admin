@@ -314,6 +314,18 @@ namespace LINGYUN.Abp.SettingManagement
                 await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.RequireNonAlphanumeric, providerName, providerKey),
                 ValueType.Boolean,
                 providerName);
+            passwordSetting.AddDetail(
+                SettingDefinitionManager.Get(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword, providerName, providerKey),
+                ValueType.Boolean,
+                providerName);
+            passwordSetting.AddDetail(
+                SettingDefinitionManager.Get(IdentitySettingNames.Password.PasswordChangePeriodDays),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.PasswordChangePeriodDays, providerName, providerKey),
+                ValueType.Number,
+                providerName);
 
             #endregion
 
