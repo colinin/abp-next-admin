@@ -165,11 +165,11 @@ public partial class PlatformManagementHttpApiHostModule
         });
 
         Configure<Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions>(options =>
-            {
-                // 是否发送错误详情
-                options.SendExceptionsDetailsToClients = true;
-                options.SendStackTraceToClients = true;
-            });
+        {
+            // 是否发送错误详情
+            options.SendExceptionsDetailsToClients = false;
+            options.SendStackTraceToClients = false;
+        });
     }
 
     private void ConfigureAuditing(IConfiguration configuration)

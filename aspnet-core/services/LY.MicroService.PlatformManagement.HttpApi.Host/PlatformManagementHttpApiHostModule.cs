@@ -19,6 +19,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
+using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -69,6 +70,8 @@ namespace LY.MicroService.PlatformManagement;
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
     typeof(PlatformEntityFrameworkCoreModule),
+    typeof(AbpWeChatWorkApplicationModule),
+    typeof(AbpWeChatWorkHttpApiModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),

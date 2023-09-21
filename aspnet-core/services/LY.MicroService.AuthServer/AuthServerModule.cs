@@ -14,6 +14,7 @@ using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
+using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -61,6 +62,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictLinkUserModule),
     typeof(AbpOpenIddictPortalModule),
+    typeof(AbpOpenIddictWeChatWorkModule),
     typeof(AbpAuthenticationQQModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),

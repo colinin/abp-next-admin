@@ -58,8 +58,10 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.EntityFrameworkCore\LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.LinkUser\LINGYUN.Abp.IdentityServer.LinkUser.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Portal\LINGYUN.Abp.IdentityServer.Portal.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj" />
+		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat.Work\LINGYUN.Abp.IdentityServer.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />

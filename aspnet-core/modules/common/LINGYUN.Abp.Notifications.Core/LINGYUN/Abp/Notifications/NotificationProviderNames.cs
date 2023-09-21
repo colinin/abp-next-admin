@@ -21,4 +21,8 @@ public static class NotificationProviderNames
     /// 微信小程序模板通知
     /// </summary>
     public const string WechatMiniProgram = "WeChat.MiniProgram";
+    /// <summary>
+    /// 企业微信应用消息
+    /// </summary>
+    public const string WechatWork = "WeChat.Work";
 }

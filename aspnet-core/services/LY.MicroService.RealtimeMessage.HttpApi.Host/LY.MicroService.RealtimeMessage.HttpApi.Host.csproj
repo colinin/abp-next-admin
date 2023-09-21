@@ -51,6 +51,7 @@
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj" />
@@ -80,8 +81,10 @@
 		<ProjectReference Include="..\..\modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
 		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj" />
+		<ProjectReference Include="..\..\modules\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\modules\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
 		<ProjectReference Include="..\..\modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj" />
+		<ProjectReference Include="..\..\modules\wechat\LINGYUN.Abp.Notifications.WeChat.Work\LINGYUN.Abp.Notifications.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj" />
 	</ItemGroup>
 

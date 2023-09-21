@@ -9,9 +9,11 @@ using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
+using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.WeChat;
+using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -26,6 +28,7 @@ using LINGYUN.Abp.Notifications.PushPlus;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.Notifications.WxPusher;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -66,6 +69,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsApplicationModule),
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpIdentityWeChatModule),
+    typeof(AbpIdentityWeChatWorkModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
@@ -93,9 +97,11 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWxPusherModule),
     typeof(AbpNotificationsPushPlusModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
+    typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
     typeof(AbpTextTemplatingScribanModule),
     typeof(AbpCAPEventBusModule),
+    typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
