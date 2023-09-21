@@ -653,8 +653,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Tests", "tests\LINGYUN.Abp.WeChat.Work.Tests\LINGYUN.Abp.WeChat.Work.Tests.csproj", "{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.AspNetCore", "modules\wechat\LINGYUN.Abp.WeChat.Work.AspNetCore\LINGYUN.Abp.WeChat.Work.AspNetCore.csproj", "{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Application.Contracts", "modules\wechat\LINGYUN.Abp.WeChat.Work.Application.Contracts\LINGYUN.Abp.WeChat.Work.Application.Contracts.csproj", "{B4C8056F-7325-4DB1-9F09-A6F37B052192}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Application", "modules\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj", "{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}"
@@ -663,11 +661,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Htt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChat.Work", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat.Work\LINGYUN.Abp.IdentityServer.WeChat.Work.csproj", "{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OpenIddict.WeChat.Work", "modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat.Work\LINGYUN.Abp.OpenIddict.WeChat.Work.csproj", "{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.WeChat.Work", "modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat.Work\LINGYUN.Abp.OpenIddict.WeChat.Work.csproj", "{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Notifications.WeChat.Work", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.Work\LINGYUN.Abp.Notifications.WeChat.Work.csproj", "{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.Work", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.Work\LINGYUN.Abp.Notifications.WeChat.Work.csproj", "{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Identity.WeChat.Work", "modules\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj", "{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat.Work", "modules\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj", "{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1691,10 +1689,6 @@ Global
 		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -2039,7 +2033,6 @@ Global
 		{5177C729-7666-4A6C-9D54-D7E5DEF0E857} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
-		{0C7B2C1B-CB57-4A89-B73F-ECB579FFBC81} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{B4C8056F-7325-4DB1-9F09-A6F37B052192} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
