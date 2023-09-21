@@ -12,7 +12,9 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
+using LINGYUN.Abp.IdentityServer.LinkUser;
 using LINGYUN.Abp.IdentityServer.Portal;
+using LINGYUN.Abp.IdentityServer.WeChat.Work;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -61,7 +63,9 @@ namespace LY.MicroService.IdentityServer;
     // typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityServerSmsValidatorModule),
+    typeof(AbpIdentityServerLinkUserModule),
     typeof(AbpIdentityServerPortalModule),
+    typeof(AbpIdentityServerWeChatWorkModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpAuthenticationQQModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),

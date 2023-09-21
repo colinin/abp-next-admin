@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "InvalidGrant:GrantTypeInvalid": "The authorization type that is not allowed!",
+    "InvalidGrant:AgentIdOrCodeNotFound": "Enterprise identity(AgentId) not found or user cancelled login!",
+    "InvalidGrant:UserIdNotRegister": "Enterprise users are not registered!"
+  }
+}
