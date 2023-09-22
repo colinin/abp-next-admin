@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LINGYUN.Abp.WeChat.Work.Settings;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
@@ -25,13 +27,17 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
     {
         var state = _encryptionService.Encrypt($"agentid={agentid}&redirectUri={redirectUri}&responseType={responseType}&scope={scope}&random={Guid.NewGuid():D}").ToMd5();
 
-        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(agentid, HttpUtility.UrlEncode(redirectUri), state, responseType, scope);
+        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(agentid, HttpUtility.UrlEncode(redirectUri, Encoding.UTF8), state, responseType, scope);
     }
 
-    public async virtual Task<string> GenerateOAuth2LoginAsync(string appid, string redirectUri, string loginType = "ServiceApp", string agentid = "")
+    public async virtual Task<string> GenerateOAuth2LoginAsync(string redirectUri, string loginType = "ServiceApp", string agentid = "")
     {
         var state = _encryptionService.Encrypt($"agentid={agentid}&redirectUri={redirectUri}&loginType={loginType}&agentid={agentid}&random={Guid.NewGuid():D}").ToMd5();
 
-        return await _authorizeGenerator.GenerateOAuth2LoginAsync(agentid, HttpUtility.UrlEncode(redirectUri), state, loginType, agentid);
+        var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
+
+        Check.NotNullOrEmpty(corpId, nameof(corpId));
+
+        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, HttpUtility.UrlEncode(redirectUri, Encoding.UTF8), state, loginType, agentid);
     }
 }

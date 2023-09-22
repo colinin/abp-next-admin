@@ -11,7 +11,6 @@ public interface IWeChatWorkAuthorizeAppService : IApplicationService
         string scope = "snsapi_base");
 
     Task<string> GenerateOAuth2LoginAsync(
-        string appid,
         string redirectUri,
         string loginType = "ServiceApp",
         string agentid = "");
