@@ -2,13 +2,15 @@
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 
 namespace LINGYUN.Abp.WeChat.Work.Authorize;
 
-[Controller]
-[RemoteService(Name = AbpWeChatWorkRemoteServiceConsts.RemoteServiceName)]
-[Area(AbpWeChatWorkRemoteServiceConsts.ModuleName)]
+[DisableAuditing]
+[RemoteService(false)]
+[ApiExplorerSettings(IgnoreApi = true)]
 [Route("api/wechat/work/authorize")]
+[Area(AbpWeChatWorkRemoteServiceConsts.ModuleName)]
 public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAuthorizeAppService
 {
     private readonly IWeChatWorkAuthorizeAppService _service;
@@ -32,11 +34,10 @@ public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAutho
     [HttpGet]
     [Route("oauth2/login")]
     public virtual Task<string> GenerateOAuth2LoginAsync(
-        [FromQuery] string appid,
         [FromQuery(Name = "redirect_uri")] string redirectUri,
         [FromQuery(Name = "login_type")] string loginType = "ServiceApp",
         [FromQuery(Name = "agent_id")] string agentid = "")
     {
-        return _service.GenerateOAuth2LoginAsync(agentid, redirectUri, loginType, agentid);
+        return _service.GenerateOAuth2LoginAsync(redirectUri, loginType, agentid);
     }
 }
