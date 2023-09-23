@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.WeChat.Work.Security;
+﻿using LINGYUN.Abp.WeChat.Work.Security.Models;
+
+namespace LINGYUN.Abp.WeChat.Work.Security;
 /// <summary>
 /// 企业微信加解密接口
 /// </summary>

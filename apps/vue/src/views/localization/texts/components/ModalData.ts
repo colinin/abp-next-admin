@@ -17,7 +17,7 @@ export function getSearchFormSchemas(submitFunc?: () => Promise<void>): Partial<
         colProps: { span: 6 },
         required: true,
         componentProps: {
-          api: () => getLanguages(),
+          api: getLanguages,
           resultField: 'items',
           labelField: 'displayName',
           valueField: 'cultureName',
@@ -30,7 +30,7 @@ export function getSearchFormSchemas(submitFunc?: () => Promise<void>): Partial<
         colProps: { span: 6 },
         required: true,
         componentProps: {
-          api: () => getLanguages(),
+          api: getLanguages,
           resultField: 'items',
           labelField: 'displayName',
           valueField: 'cultureName',
@@ -42,7 +42,7 @@ export function getSearchFormSchemas(submitFunc?: () => Promise<void>): Partial<
         label: L('DisplayName:ResourceName'),
         colProps: { span: 6 },
         componentProps: {
-          api: () => getResources(),
+          api: getResources,
           resultField: 'items',
           labelField: 'displayName',
           valueField: 'name',

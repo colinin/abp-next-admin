@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WeChat.Work.Message;
 /// <summary>
 /// 企业微信消息
 /// </summary>
-public abstract class WeChatWorkMessage
+public abstract class WeChatWorkMessage : WeChatWorkRequest
 {
     /// <summary>
     /// 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。
@@ -48,8 +48,8 @@ public abstract class WeChatWorkMessage
     protected WeChatWorkMessage(
         string agentId,
         string msgType,
-        string toUser = "", 
-        string toParty = "", 
+        string toUser = "",
+        string toParty = "",
         string toTag = "")
     {
         AgentId = agentId;
@@ -57,10 +57,5 @@ public abstract class WeChatWorkMessage
         ToUser = toUser;
         ToParty = toParty;
         ToTag = toTag;
-    }
-
-    public virtual string SerializeToJson()
-    {
-        return JsonConvert.SerializeObject(this);
     }
 }

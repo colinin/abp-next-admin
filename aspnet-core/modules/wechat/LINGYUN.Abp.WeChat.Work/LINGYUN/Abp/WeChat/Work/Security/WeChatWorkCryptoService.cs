@@ -1,7 +1,9 @@
-﻿using LINGYUN.Abp.WeChat.Work.Utils;
+﻿using LINGYUN.Abp.WeChat.Work.Security.Models;
+using LINGYUN.Abp.WeChat.Work.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.WeChat.Work.Security;
+
 public class WeChatWorkCryptoService : IWeChatWorkCryptoService, ISingletonDependency
 {
     public string Decrypt(WeChatWorkCryptoDecryptData data)

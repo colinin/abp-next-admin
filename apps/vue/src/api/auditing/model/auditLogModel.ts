@@ -91,3 +91,8 @@ export interface EntityChangeGetWithUsernameInput {
   entityId?: string;
   entityTypeFullName?: string;
 }
+
+export interface RestoreEntityInput {
+  entityId: string;
+  entityChangeId?: string;
+}

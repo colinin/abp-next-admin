@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.WeChat.Work.Token;
-using Newtonsoft.Json;
+﻿using LINGYUN.Abp.WeChat.Work.Media.Models;
+using LINGYUN.Abp.WeChat.Work.Token;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -36,8 +36,7 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
             cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var errorResponse = JsonConvert.DeserializeObject<WeChatWorkResponse>(responseContent);
+            var errorResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
             errorResponse.ThrowIfNotSuccess();
         }
 
@@ -89,8 +88,7 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
             media);
 
         using var response = await client.UploadMediaAsync(type, request, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var mediaRespose = JsonConvert.DeserializeObject<WeChatWorkMediaResponse>(responseContent);
+        var mediaRespose = await response.DeserializeObjectAsync<WeChatWorkMediaResponse>();
         mediaRespose.ThrowIfNotSuccess();
 
         return mediaRespose;
@@ -108,8 +106,7 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
             image);
 
         using var response = await client.UploadImageAsync(request, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var mediaRespose = JsonConvert.DeserializeObject<WeChatWorkImageResponse>(responseContent);
+        var mediaRespose = await response.DeserializeObjectAsync<WeChatWorkImageResponse>();
         mediaRespose.ThrowIfNotSuccess();
 
         return mediaRespose;
