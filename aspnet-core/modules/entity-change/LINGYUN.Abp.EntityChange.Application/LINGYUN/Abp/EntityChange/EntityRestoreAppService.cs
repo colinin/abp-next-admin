@@ -92,10 +92,6 @@ public abstract class EntityRestoreAppService<TEntity, TKey> : EntityChangeAppSe
                         }
 
                         var currentValue = propertyChange.OriginalValue;
-                        if (input.EntityChangeId.HasValue)
-                        {
-                            currentValue = propertyChange.NewValue;
-                        }
                         if (currentValue.IsNullOrWhiteSpace() || string.Equals("null", currentValue, StringComparison.InvariantCultureIgnoreCase))
                         {
                             if (isNullableType)

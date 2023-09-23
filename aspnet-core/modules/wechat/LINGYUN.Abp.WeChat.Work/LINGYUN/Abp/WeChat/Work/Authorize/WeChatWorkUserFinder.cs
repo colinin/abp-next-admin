@@ -1,14 +1,17 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Authorize.Models;
 using LINGYUN.Abp.WeChat.Work.Authorize.Request;
 using LINGYUN.Abp.WeChat.Work.Authorize.Response;
+using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Token;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.WeChat.Work.Authorize;
+
+[RequiresFeature(WeChatWorkFeatureNames.Enable)]
 public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
 {
     protected IHttpClientFactory HttpClientFactory { get; }
@@ -31,8 +34,7 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.GetUserInfoAsync(token.AccessToken, code, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var userInfoResponse = JsonConvert.DeserializeObject<WeChatWorkUserInfoResponse>(responseContent);
+        var userInfoResponse = await response.DeserializeObjectAsync<WeChatWorkUserInfoResponse>();
 
         return userInfoResponse.ToUserInfo();
     }
@@ -47,8 +49,7 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
 
         var request = new WeChatWorkUserDetailRequest(userTicket);
         using var response = await client.GetUserDetailAsync(token.AccessToken, request, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var userDetailResponse = JsonConvert.DeserializeObject<WeChatWorkUserDetailResponse>(responseContent);
+        var userDetailResponse = await response.DeserializeObjectAsync<WeChatWorkUserDetailResponse>();
 
         return userDetailResponse.ToUserDetail();
     }

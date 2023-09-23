@@ -1,9 +1,10 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.WeChat.Work.Features;
+using LINGYUN.Abp.WeChat.Work.Message.Request;
+using LINGYUN.Abp.WeChat.Work.Message.Response;
 using LINGYUN.Abp.WeChat.Work.Token;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,22 +33,47 @@ public class WeChatWorkMessageSender : IWeChatWorkMessageSender, ISingletonDepen
 
     [RequiresFeature(WeChatWorkFeatureNames.Message.Enable)]
     [RequiresLimitFeature(
-        WeChatWorkFeatureNames.Message.SendLimit,
-        WeChatWorkFeatureNames.Message.SendLimitInterval,
+        WeChatWorkFeatureNames.Message.Limit,
+        WeChatWorkFeatureNames.Message.LimitInterval,
         LimitPolicy.Days)]
     public async virtual Task<WeChatWorkMessageResponse> SendAsync(WeChatWorkMessage message, CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(message.AgentId, cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
-        var request = new WeChatWorkMessageRequest(
+        var request = new WeChatWorkMessageRequest<WeChatWorkMessage>(
             token.AccessToken,
             message);
 
         using var response = await client.SendMessageAsync(request, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync();
+        var messageResponse = await response.DeserializeObjectAsync<WeChatWorkMessageResponse>();
 
-        var messageResponse = JsonConvert.DeserializeObject<WeChatWorkMessageResponse>(responseContent);
+        if (!messageResponse.IsSuccessed)
+        {
+            Logger.LogWarning("Send wechat work message failed");
+            Logger.LogWarning($"Error code: {messageResponse.ErrorCode}, message: {messageResponse.ErrorMessage}");
+        }
+
+        return messageResponse;
+    }
+
+    [RequiresFeature(WeChatWorkFeatureNames.AppChat.Message.Enable)]
+    [RequiresLimitFeature(
+        WeChatWorkFeatureNames.AppChat.Message.Limit,
+        WeChatWorkFeatureNames.AppChat.Message.LimitInterval,
+        LimitPolicy.Minute)]
+    public async virtual Task<WeChatWorkResponse> SendAsync(WeChatWorkAppChatMessage message, CancellationToken cancellationToken = default)
+    {
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(message.AgentId, cancellationToken);
+        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+
+        var request = new WeChatWorkMessageRequest<WeChatWorkAppChatMessage>(
+            token.AccessToken,
+            message);
+
+        using var response = await client.SendMessageAsync(request, cancellationToken);
+        var messageResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
+
         if (!messageResponse.IsSuccessed)
         {
             Logger.LogWarning("Send wechat work message failed");

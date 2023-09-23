@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.OssManagement;
@@ -13,6 +14,10 @@ public abstract class GetFileMultiTenancyInput
     {
         if (!TenantId.IsNullOrWhiteSpace())
         {
+            if ("g".Equals(TenantId, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
             if ("global".Equals(TenantId, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;

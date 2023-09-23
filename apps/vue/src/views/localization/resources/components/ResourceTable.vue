@@ -7,7 +7,7 @@
           type="primary"
           @click="handleAddNew"
         >
-          {{ L('Language:AddNew') }}
+          {{ L('Resource:AddNew') }}
         </Button>
       </template>
       <template #bodyCell="{ column, record }">
@@ -47,7 +47,6 @@
   import { getList, GetAsyncByName, DeleteAsyncByName } from '/@/api/localization/resources';
   import { Resource } from '/@/api/localization/model/resourcesModel';
   import { getDataColumns } from './TableData';
-  import { reactive } from 'vue';
   import ResourceModal from './ResourceModal.vue';
  
 

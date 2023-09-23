@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using LINGYUN.Abp.WeChat.Work.Media.Models;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Content;
 

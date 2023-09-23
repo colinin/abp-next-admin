@@ -1,5 +1,6 @@
-﻿using Castle.Core.Configuration;
-using LINGYUN.Abp.Tests;
+﻿using LINGYUN.Abp.Tests;
+using LINGYUN.Abp.Tests.Features;
+using LINGYUN.Abp.WeChat.Work.Features;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,21 @@ public class AbpWeChatWorkTestModule : AbpModule
             var redisConfig = ConfigurationOptions.Parse(options.Configuration);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
+        });
+        Configure<FakeFeatureOptions>(options =>
+        {
+            options.Map(WeChatWorkFeatureNames.Enable, (feature) =>
+            {
+                return true.ToString();
+            });
+            options.Map(WeChatWorkFeatureNames.Message.Enable, (feature) =>
+            {
+                return true.ToString();
+            });
+            options.Map(WeChatWorkFeatureNames.AppChat.Message.Enable, (feature) =>
+            {
+                return true.ToString();
+            });
         });
     }
 }

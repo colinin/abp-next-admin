@@ -1,8 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Settings;
 using System;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Security.Encryption;
@@ -27,7 +25,7 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
     {
         var state = _encryptionService.Encrypt($"agentid={agentid}&redirectUri={redirectUri}&responseType={responseType}&scope={scope}&random={Guid.NewGuid():D}").ToMd5();
 
-        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(agentid, HttpUtility.UrlEncode(redirectUri, Encoding.UTF8), state, responseType, scope);
+        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(agentid, redirectUri, state, responseType, scope);
     }
 
     public async virtual Task<string> GenerateOAuth2LoginAsync(string redirectUri, string loginType = "ServiceApp", string agentid = "")
@@ -38,6 +36,6 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
 
         Check.NotNullOrEmpty(corpId, nameof(corpId));
 
-        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, HttpUtility.UrlEncode(redirectUri, Encoding.UTF8), state, loginType, agentid);
+        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, redirectUri, state, loginType, agentid);
     }
 }

@@ -43,7 +43,7 @@
       colProps: { span: 24 },
       required: true,
       componentProps: {
-        api: () => getLanguages(),
+        api: getLanguages,
         resultField: 'items',
         labelField: 'uiCultureName',
         valueField: 'cultureName',
@@ -80,7 +80,7 @@
       colProps: { span: 24 },
       required: true,
       componentProps: {
-        api: () => getResources(),
+        api: getResources,
         resultField: 'items',
         labelField: 'displayName',
         valueField: 'name',

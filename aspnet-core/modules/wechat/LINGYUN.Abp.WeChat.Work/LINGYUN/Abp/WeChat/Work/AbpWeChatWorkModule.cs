@@ -3,6 +3,7 @@ using LINGYUN.Abp.WeChat.Work.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Caching;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -13,6 +14,7 @@ namespace LINGYUN.Abp.WeChat.Work;
 
 [DependsOn(
     typeof(AbpCachingModule),
+    typeof(AbpExceptionHandlingModule),
     typeof(AbpFeaturesLimitValidationModule),
     typeof(AbpSettingsModule))]
 public class AbpWeChatWorkModule : AbpModule

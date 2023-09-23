@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.WeChat.Work.Settings;
+﻿using LINGYUN.Abp.WeChat.Work.Features;
+using LINGYUN.Abp.WeChat.Work.Settings;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -6,9 +7,12 @@ using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.WeChat.Work.Authorize;
+
+[RequiresFeature(WeChatWorkFeatureNames.Enable)]
 public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISingletonDependency
 {
     protected ISettingProvider SettingProvider { get; }

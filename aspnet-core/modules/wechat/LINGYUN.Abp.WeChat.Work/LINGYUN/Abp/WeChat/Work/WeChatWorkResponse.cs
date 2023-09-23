@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work;
 /// <summary>
 /// 企业微信请求响应
 /// </summary>
+[Serializable]
 public class WeChatWorkResponse
 {
     /// <summary>

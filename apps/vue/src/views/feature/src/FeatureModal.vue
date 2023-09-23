@@ -9,7 +9,7 @@
     @ok="handleSubmit"
     @cancel="onGroupChange(0)"
   >
-    <Form ref="formRel" :model="featureGroup" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+    <Form ref="formRel" :model="featureGroup">
       <Tabs tabPosition="left" v-model:activeKey="featureGroupKey" @change="onGroupChange">
         <TabPane v-for="(group, gi) in featureGroup.groups" :key="gi" :tab="group.displayName">
           <div v-for="(feature, fi) in group.features" :key="feature.name">

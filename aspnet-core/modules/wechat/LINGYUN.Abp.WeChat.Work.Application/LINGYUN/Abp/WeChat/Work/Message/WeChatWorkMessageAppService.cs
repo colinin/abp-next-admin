@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Security;
+using LINGYUN.Abp.WeChat.Work.Security.Models;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
