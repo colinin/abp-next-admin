@@ -12,7 +12,7 @@ public abstract class GetFileMultiTenancyInput
 
     public virtual Guid? GetTenantId(ICurrentTenant currentTenant)
     {
-        if (TenantId.IsNullOrWhiteSpace())
+        if (!TenantId.IsNullOrWhiteSpace())
         {
             if ("g".Equals(TenantId, StringComparison.InvariantCultureIgnoreCase))
             {
