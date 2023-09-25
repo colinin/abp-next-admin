@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Tokens;
 
 namespace LINGYUN.Abp.OpenIddict.Tokens;
@@ -16,21 +17,24 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
 {
     private readonly IOpenIddictTokenManager _tokenManager;
     private readonly IRepository<OpenIddictToken, Guid> _tokenRepository;
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
 
     public OpenIddictTokenAppService(
         IOpenIddictTokenManager tokenManager,
-        IRepository<OpenIddictToken, Guid> tokenRepository)
+        IRepository<OpenIddictToken, Guid> tokenRepository,
+        AbpOpenIddictIdentifierConverter identifierConverter)
     {
         _tokenManager = tokenManager;
         _tokenRepository = tokenRepository;
+        _identifierConverter = identifierConverter;
     }
 
     [Authorize(AbpOpenIddictPermissions.Tokens.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var token = await _tokenRepository.GetAsync(id);
+        var token = await _tokenManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _tokenManager.DeleteAsync(token.ToModel());
+        await _tokenManager.DeleteAsync(token);
     }
 
     public async virtual Task<OpenIddictTokenDto> GetAsync(Guid id)

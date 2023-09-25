@@ -15,7 +15,6 @@ internal static class OpenIddictApplicationExtensions
         Check.NotNull(dto, nameof(dto));
         Check.NotNull(entity, nameof(entity));
 
-        entity.ClientSecret = dto.ClientSecret;
         entity.ConsentType = dto.ConsentType;
         entity.DisplayName = dto.DisplayName;
         entity.DisplayNames = jsonSerializer.Serialize(dto.DisplayNames);
@@ -97,7 +96,6 @@ internal static class OpenIddictApplicationExtensions
         {
             Id = entity.Id,
             ClientId = entity.ClientId,
-            ClientSecret = entity.ClientSecret,
             ConsentType = entity.ConsentType,
             DisplayName = entity.DisplayName,
             CreationTime = entity.CreationTime,

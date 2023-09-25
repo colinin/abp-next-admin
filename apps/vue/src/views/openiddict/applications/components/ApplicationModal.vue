@@ -22,7 +22,10 @@
             <Input :disabled="state.isEdit" v-model:value="state.application.clientId" />
           </FormItem>
           <FormItem name="type" :label="L('DisplayName:Type')">
-            <Input v-model:value="state.application.type" />
+            <Select :disabled="state.isEdit" default-value="public" :options="clientTypes" v-model:value="state.application.type" />
+          </FormItem>
+          <FormItem v-if="getShowSecret" name="clientSecret" :label="L('DisplayName:ClientSecret')">
+            <Input v-model:value="state.application.clientSecret" />
           </FormItem>
           <FormItem name="clientUri" :label="L('DisplayName:ClientUri')">
             <Input v-model:value="state.application.clientUri" />
@@ -36,7 +39,7 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
           >
-            <Select :options="consentTypes" v-model:value="state.application.consentType" />
+            <Select :options="consentTypes" default-value="explicit" v-model:value="state.application.consentType" />
           </FormItem>
         </TabPane>
         <!-- DisplayName -->
@@ -157,7 +160,7 @@
   const MenuItem = Menu.Item;
 
   const emits = defineEmits(['register', 'change']);
-  const { L } = useLocalization(['AbpOpenIddict']);
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const { ruleCreator } = useValidation();
   const { createMessage, createConfirm } = useMessage();
   const componentsRef = shallowRef({
@@ -173,6 +176,19 @@
     formRules: {
       clientId: ruleCreator.fieldRequired({
         name: 'ClientId',
+        prefix: 'DisplayName',
+        resourceName: 'AbpOpenIddict',
+        trigger: 'blur',
+      }),
+      clientSecret: ruleCreator.fieldRequired({
+        name: 'ClientSecret',
+        prefix: 'DisplayName',
+        resourceName: 'AbpOpenIddict',
+        trigger: 'blur',
+      }),
+      displayName: ruleCreator.fieldRequired({
+        name: 'DisplayName',
+        prefix: 'DisplayName',
         resourceName: 'AbpOpenIddict',
         trigger: 'blur',
       }),
@@ -191,6 +207,10 @@
       deep: true,
     },
   );
+  const clientTypes = reactive([
+    { label: 'public', value: 'public' },
+    { label: 'confidential', value: 'confidential' },
+  ]);
   const consentTypes = reactive([
     { label: 'explicit', value: 'explicit' },
     { label: 'external', value: 'external' },
@@ -205,6 +225,9 @@
     { label: 'revocation', value: 'revocation' },
     { label: 'introspection', value: 'introspection' },
   ]);
+  const getShowSecret = computed(() => {
+    return !state.isEdit && state.application.type === 'confidential';
+  });
   const grantTypes = computed(() => {
     if (!state.openIdConfiguration) return[];
     const types = state.openIdConfiguration.grant_types_supported;
@@ -293,9 +316,7 @@
       return;
     }
     const index = state.application.postLogoutRedirectUris.findIndex(logoutUri => logoutUri === uri);
-    if (!index) {
-      state.application.postLogoutRedirectUris.splice(index);
-    }
+    index && state.application.postLogoutRedirectUris.splice(index);
   }
 
   function handleNewRedirectUri(uri: string) {
@@ -311,9 +332,7 @@
       return;
     }
     const index = state.application.redirectUris.findIndex(redirectUri => redirectUri === uri);
-    if (!index) {
-      state.application.redirectUris.splice(index);
-    }
+    index && state.application.redirectUris.splice(index);
   }
 
   function handleNewDisplayName(record) {
@@ -370,7 +389,6 @@
   }
 
   function handleBeforeClose(): Promise<boolean> {
-    console.log(state);
     return new Promise((resolve) => {
       if (!state.entityChanged) {
         return resolve(true);

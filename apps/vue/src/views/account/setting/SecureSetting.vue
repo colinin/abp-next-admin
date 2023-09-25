@@ -78,7 +78,7 @@
       case 'email':
         sendEmailConfirmLink({
           email: item.description,
-          appName: 'STS',
+          appName: 'VueVbenAdmin',
           returnUrl: window.location.href,
         }).finally(() => {
           item.loading = false;

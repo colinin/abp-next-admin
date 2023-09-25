@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using OpenIddict.Abstractions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,14 +15,16 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase, IOpenIddictApplicationAppService
 {
     private readonly IAbpApplicationManager _applicationManager;
-
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
     private readonly IOpenIddictApplicationRepository _applicationRepository;
 
     public OpenIddictApplicationAppService(
         IAbpApplicationManager applicationManager,
+        AbpOpenIddictIdentifierConverter identifierConverter,
         IOpenIddictApplicationRepository applicationRepository)
     {
         _applicationManager = applicationManager;
+        _identifierConverter = identifierConverter;
         _applicationRepository = applicationRepository;
     }
 
@@ -46,7 +47,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     [Authorize(AbpOpenIddictPermissions.Applications.Create)]
     public async virtual Task<OpenIddictApplicationDto> CreateAsync(OpenIddictApplicationCreateDto input)
     {
-        if (await _applicationRepository.FindByClientIdAsync(input.ClientId) != null)
+        if (await _applicationManager.FindByClientIdAsync(input.ClientId) != null)
         {
             throw new BusinessException(OpenIddictApplicationErrorCodes.Applications.ClientIdExisted)
                 .WithData(nameof(OpenIddictApplication.ClientId), input.ClientId);
@@ -59,9 +60,9 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
 
         application = input.ToEntity(application, JsonSerializer);
 
-        application = await _applicationRepository.InsertAsync(application);
+        await _applicationManager.CreateAsync(application.ToModel(), input.ClientSecret);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        application = await _applicationRepository.FindByClientIdAsync(input.ClientId);
 
         return application.ToDto(JsonSerializer);
     }
@@ -82,11 +83,16 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
 
         application = input.ToEntity(application, JsonSerializer);
 
-        var cache = LazyServiceProvider.LazyGetRequiredService<IOpenIddictApplicationCache<OpenIddictApplicationModel>>();
+        if (input.ClientSecret.IsNullOrWhiteSpace())
+        {
+            await _applicationManager.UpdateAsync(application.ToModel());
+        }
+        else
+        {
+            await _applicationManager.UpdateAsync(application.ToModel(), input.ClientSecret);
+        }
 
-        await cache.RemoveAsync(application.ToModel(), GetCancellationToken());
-
-        await _applicationRepository.UpdateAsync(application);
+        application = await _applicationRepository.FindAsync(id);
 
         return application.ToDto(JsonSerializer);
     }
@@ -94,8 +100,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     [Authorize(AbpOpenIddictPermissions.Applications.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var application = await _applicationRepository.GetAsync(id);
-
-        await _applicationManager.DeleteAsync(application.ToModel());
+        var application = await _applicationManager.FindByIdAsync(_identifierConverter.ToString(id));
+        await _applicationManager.DeleteAsync(application);
     }
 }

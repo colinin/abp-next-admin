@@ -11,6 +11,7 @@
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
             public const string ManagePermissions = Default + ".ManagePermissions";
+            public const string ManageSecret = Default + ".ManageSecret";
         }
 
         public static class Authorizations

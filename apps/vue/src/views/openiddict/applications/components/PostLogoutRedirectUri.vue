@@ -38,7 +38,6 @@
       component: 'Input',
       label: 'Uri',
       colProps: { span: 24 },
-      required: true,
     },
   ];
   const columns: BasicColumn[] = [
