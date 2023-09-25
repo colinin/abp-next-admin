@@ -29,10 +29,17 @@ export function getDataColumns(): BasicColumn[] {
       sorter: true,
     },
     {
+      title: L('ClientId'),
+      dataIndex: 'clientId',
+      align: 'left',
+      width: 100,
+      sorter: true,
+    },
+    {
       title: L('ClientIpAddress'),
       dataIndex: 'clientIpAddress',
       align: 'left',
-      width: 120,
+      width: 140,
       sorter: true,
     },
     {
@@ -57,6 +64,13 @@ export function getDataColumns(): BasicColumn[] {
       dataIndex: 'applicationName',
       align: 'left',
       width: 100,
+      sorter: true,
+    },
+    {
+      title: L('CorrelationId'),
+      dataIndex: 'correlationId',
+      align: 'left',
+      width: 160,
       sorter: true,
     },
     {

@@ -71,6 +71,8 @@ export interface GetAuditLogPagedRequest extends PagedAndSortedResultRequestDto 
   url?: string;
   userName?: string;
   correlationId?: string;
+  clientId?: string;
+  clientIpAddress?: string;
   applicationName?: string;
   maxExecutionDuration?: number;
   minExecutionDuration?: number;
