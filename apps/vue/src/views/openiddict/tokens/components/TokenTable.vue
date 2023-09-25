@@ -7,13 +7,13 @@
             :stop-button-propagation="true"
             :actions="[
               {
-                //auth: 'AbpOpenIddict.Tokens.Update',
+                auth: 'AbpOpenIddict.Tokens',
                 label: L('Edit'),
                 icon: 'ant-design:edit-outlined',
                 onClick: handleEdit.bind(null, record),
               },
               {
-                //auth: 'AbpOpenIddict.Tokens.Delete',
+                auth: 'AbpOpenIddict.Tokens.Delete',
                 label: L('Delete'),
                 color: 'error',
                 icon: 'ant-design:delete-outlined',
@@ -39,7 +39,7 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import TokenModal from './TokenModal.vue';
 
-  const { L } = useLocalization('AbpOpenIddict');
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload }] = useTable({

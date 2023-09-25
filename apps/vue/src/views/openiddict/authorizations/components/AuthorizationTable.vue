@@ -7,13 +7,13 @@
             :stop-button-propagation="true"
             :actions="[
               {
-                //auth: 'AbpOpenIddict.Authorizations.Update',
+                auth: 'AbpOpenIddict.Authorizations',
                 label: L('Edit'),
                 icon: 'ant-design:edit-outlined',
                 onClick: handleEdit.bind(null, record),
               },
               {
-                //auth: 'AbpOpenIddict.Authorizations.Delete',
+                auth: 'AbpOpenIddict.Authorizations.Delete',
                 label: L('Delete'),
                 color: 'error',
                 icon: 'ant-design:delete-outlined',
@@ -39,7 +39,7 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import AuthorizationModal from './AuthorizationModal.vue';
 
-  const { L } = useLocalization('AbpOpenIddict');
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
   const [registerTable, { reload }] = useTable({
@@ -74,7 +74,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncById(record.key).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

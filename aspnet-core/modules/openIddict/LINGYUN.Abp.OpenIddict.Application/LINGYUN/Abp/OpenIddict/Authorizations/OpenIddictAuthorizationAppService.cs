@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Authorizations;
 
 namespace LINGYUN.Abp.OpenIddict.Authorizations;
@@ -15,22 +16,25 @@ namespace LINGYUN.Abp.OpenIddict.Authorizations;
 public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBase, IOpenIddictAuthorizationAppService
 {
     private readonly IOpenIddictAuthorizationManager _authorizationManager;
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
     private readonly IRepository<OpenIddictAuthorization, Guid> _authorizationRepository;
 
     public OpenIddictAuthorizationAppService(
         IOpenIddictAuthorizationManager authorizationManager,
+        AbpOpenIddictIdentifierConverter identifierConverter,
         IRepository<OpenIddictAuthorization, Guid> authorizationRepository)
     {
         _authorizationManager = authorizationManager;
+        _identifierConverter = identifierConverter;
         _authorizationRepository = authorizationRepository;
     }
 
     [Authorize(AbpOpenIddictPermissions.Authorizations.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var authorization = await _authorizationRepository.GetAsync(id);
+        var authorization = await _authorizationManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _authorizationManager.DeleteAsync(authorization.ToModel());
+        await _authorizationManager.DeleteAsync(authorization);
     }
 
     public async virtual Task<OpenIddictAuthorizationDto> GetAsync(Guid id)

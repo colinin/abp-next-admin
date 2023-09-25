@@ -35,7 +35,11 @@
           title: scope,
         }
       });
-      supportScopes.push(...resources);
+      resources.forEach((resource) => {
+        if (!supportScopes.find((scope) => scope.key === resource.key)) {
+          supportScopes.push(resource);
+        }
+      });
       return supportScopes;
     }
     return resources;

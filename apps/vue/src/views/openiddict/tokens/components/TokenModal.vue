@@ -18,9 +18,12 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getModalFormSchemas } from '../datas/ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  import { GetAsyncById } from '/@/api/openiddict/open-iddict-token';
+  import { OpenIddictTokenDto } from '/@/api/openiddict/open-iddict-token/model';
+  import { GetAsyncById as getToken } from '/@/api/openiddict/open-iddict-token';
+  import { GetAsyncById as getApplication } from '/@/api/openiddict/open-iddict-application';
+  import { GetAsyncById as getAuthorization } from '/@/api/openiddict/open-iddict-authorization';
 
-  const { L } = useLocalization('AbpOpenIddict');
+  const { L } = useLocalization(['AbpOpenIddict']);
   const [registerForm, { setFieldsValue, resetFields }] = useForm({
     layout: 'vertical',
     showActionButtonGroup: false,
@@ -37,8 +40,26 @@
   });
 
   function fetchToken(id: string) {
-    GetAsyncById(id).then((token) => {
-      setFieldsValue(token);
+    getToken(id).then((dto) => {
+      setFieldsValue(dto);
+      fetchApplication(dto);
+      fetchAuthorization(dto);
+    });
+  }
+
+  function fetchApplication(token: OpenIddictTokenDto) {
+    token.applicationId && getApplication(token.applicationId).then((dto) => {
+      setFieldsValue({
+        applicationId: `${dto.clientId}(${token.applicationId})`,
+      });
+    });
+  }
+
+  function fetchAuthorization(token: OpenIddictTokenDto) {
+    token.authorizationId && getAuthorization(token.authorizationId).then((dto) => {
+      setFieldsValue({
+        authorizationId: `${dto.subject}(${token.authorizationId})`,
+      });
     });
   }
 </script>

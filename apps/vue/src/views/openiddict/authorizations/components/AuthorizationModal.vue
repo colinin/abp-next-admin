@@ -7,20 +7,31 @@
     :width="800"
     :height="500"
   >
-    <BasicForm @register="registerForm" />
+    <BasicForm @register="registerForm">
+      <template #scopes="{ model, field }">
+        <Select mode="tags" :value="model[field]" :disabled="true">
+          <Option v-for="scope in model[field]" :key="scope" :title="scope" :value="scope" />
+        </Select>
+      </template>
+    </BasicForm>
   </BasicModal>
 </template>
 
 <script lang="ts" setup>
   import { nextTick } from 'vue';
+  import { Select } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getModalFormSchemas } from '../datas/ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  import { GetAsyncById } from '/@/api/openiddict/open-iddict-authorization';
+  import { OpenIddictAuthorizationDto } from '/@/api/openiddict/open-iddict-authorization/model';
+  import { GetAsyncById as getAuthorization } from '/@/api/openiddict/open-iddict-authorization';
+  import { GetAsyncById as getApplication } from '/@/api/openiddict/open-iddict-application';
 
-  const { L } = useLocalization('AbpOpenIddict');
+  const Option = Select.Option;
+
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const [registerForm, { setFieldsValue, resetFields }] = useForm({
     layout: 'vertical',
     showActionButtonGroup: false,
@@ -32,13 +43,22 @@
   const [registerModal] = useModalInner((data) => {
     nextTick(() => {
       resetFields();
-      fetchToken(data.id);
+      fetchAuth(data.id);
     });
   });
 
-  function fetchToken(id: string) {
-    GetAsyncById(id).then((token) => {
-      setFieldsValue(token);
+  function fetchAuth(id: string) {
+    getAuthorization(id).then((dto) => {
+      setFieldsValue(dto);
+      fetchApplication(dto);
+    });
+  }
+
+  function fetchApplication(auth: OpenIddictAuthorizationDto) {
+    auth.applicationId && getApplication(auth.applicationId).then((dto) => {
+      setFieldsValue({
+        applicationId: `${dto.clientId}(${auth.applicationId})`,
+      });
     });
   }
 </script>

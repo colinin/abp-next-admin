@@ -2,7 +2,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { GetListAsyncByInput as getApplications } from '/@/api/openiddict/open-iddict-application';
 
-const { L } = useLocalization(['AbpOpenIddict']);
+const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
 
 export function getSearchFormProps(): Partial<FormProps> {
   return {
@@ -104,33 +104,6 @@ export function getModalFormSchemas(): FormSchema[] {
       },
     },
     {
-      field: 'expirationDate',
-      component: 'Input',
-      label: L('DisplayName:ExpirationDate'),
-      colProps: { span: 24 },
-      componentProps: {
-        readonly: true,
-      },
-    },
-    {
-      field: 'redemptionDate',
-      component: 'Input',
-      label: L('DisplayName:RedemptionDate'),
-      colProps: { span: 24 },
-      componentProps: {
-        readonly: true,
-      },
-    },
-    {
-      field: 'referenceId',
-      component: 'Input',
-      label: L('DisplayName:ReferenceId'),
-      colProps: { span: 24 },
-      componentProps: {
-        readonly: true,
-      },
-    },
-    {
       field: 'status',
       component: 'Input',
       label: L('DisplayName:Status'),
@@ -140,15 +113,19 @@ export function getModalFormSchemas(): FormSchema[] {
       },
     },
     {
-      field: 'payload',
-      component: 'InputTextArea',
-      label: L('DisplayName:Payload'),
+      field: 'scopes',
+      component: 'Select',
+      label: L('DisplayName:Scopes'),
+      colProps: { span: 24 },
+      slot: 'scopes',
+    },
+    {
+      field: 'properties',
+      component: 'CodeEditorX',
+      label: L('DisplayName:Properties'),
       colProps: { span: 24 },
       componentProps: {
         readonly: true,
-        autoSize: {
-          minRows: 5,
-        },
       },
     },
   ];

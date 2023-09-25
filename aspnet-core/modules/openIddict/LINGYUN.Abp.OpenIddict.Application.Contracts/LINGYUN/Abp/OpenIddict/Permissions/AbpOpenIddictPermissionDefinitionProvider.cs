@@ -38,6 +38,10 @@ namespace LINGYUN.Abp.OpenIddict.Permissions
                 AbpOpenIddictPermissions.Applications.ManagePermissions, 
                 L("Permissions:ManagePermissions"), 
                 MultiTenancySides.Host);
+            applications.AddChild(
+                AbpOpenIddictPermissions.Applications.ManageSecret,
+                L("Permissions:ManageSecret"),
+                MultiTenancySides.Host);
 
             var authorizations = openIddictGroup.AddPermission(
                 AbpOpenIddictPermissions.Authorizations.Default,

@@ -2,7 +2,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { L } = useLocalization('AbpOpenIddict');
+const { L } = useLocalization(['AbpOpenIddict']);
 
 export function getDataColumns(): BasicColumn[] {
   return [

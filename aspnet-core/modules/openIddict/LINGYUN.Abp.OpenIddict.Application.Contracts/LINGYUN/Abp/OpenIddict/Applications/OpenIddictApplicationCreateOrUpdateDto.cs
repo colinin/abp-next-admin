@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.Validation;
@@ -8,6 +8,7 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 
 public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
 {
+    [DisableAuditing]
     public string ClientSecret { get; set; }
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ConsentTypeMaxLength))]

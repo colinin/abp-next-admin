@@ -41,7 +41,7 @@
     },
   });
 
-  const { L } = useLocalization(['AbpOpenIddict']);
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const title = ref('');
   const [registerForm, { validate, resetFields }] = useForm({
     labelWidth: 120,
