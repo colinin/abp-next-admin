@@ -303,7 +303,6 @@
         const isArrayResult = Array.isArray(res);
         resultItems = isArrayResult ? res : get(res, listField || 'items');
       }
-      console.log(resultItems);
       defineParamsRef.value = resultItems;
     }).finally(() => {
       setLoading(false);
