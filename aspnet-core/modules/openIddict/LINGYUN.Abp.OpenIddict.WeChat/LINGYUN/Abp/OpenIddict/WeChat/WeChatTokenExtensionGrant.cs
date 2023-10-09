@@ -132,9 +132,6 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        // 登录之后需要更新安全令牌
-        (await userManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
-
         return await SetSuccessResultAsync(context, currentUser, wechatOpenId, logger);
     }
 

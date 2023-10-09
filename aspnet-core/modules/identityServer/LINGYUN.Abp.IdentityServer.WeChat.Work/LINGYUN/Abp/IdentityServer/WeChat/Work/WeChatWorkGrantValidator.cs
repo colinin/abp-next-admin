@@ -123,9 +123,6 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId, null));
 
-            // 登录之后需要更新安全令牌
-            (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
-
             await SetSuccessResultAsync(context, currentUser);
         }
         catch (AbpWeChatWorkException wwe)

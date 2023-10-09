@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.WeChat.Work.Settings
                     WeChatWorkSettingNames.Connection.CorpId,
                     displayName: L("DisplayName:WeChatWork.Connection.CorpId"),
                     description: L("Description:WeChatWork.Connection.CorpId"),
-                    isEncrypted: false)
+                    isEncrypted: true)
                 .WithProviders(
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,

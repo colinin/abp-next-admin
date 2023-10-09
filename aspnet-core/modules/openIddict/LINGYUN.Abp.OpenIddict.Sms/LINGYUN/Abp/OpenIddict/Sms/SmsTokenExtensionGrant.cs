@@ -116,8 +116,6 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        (await userManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
-
         return await SetSuccessResultAsync(context, currentUser, logger);
     }
 

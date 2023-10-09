@@ -3,6 +3,7 @@ using LINGYUN.Abp.WeChat.Localization;
 using LINGYUN.Abp.WeChat.MiniProgram.Settings;
 using LINGYUN.Abp.WeChat.Official.Settings;
 using LINGYUN.Abp.WeChat.Settings;
+using LINGYUN.Abp.WeChat.Work.Settings;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
@@ -126,6 +127,32 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
             }
 
             settingGroups.AddGroup(wechatSettingGroup);
+
+            if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Work))
+            {
+                #region 企业微信
+                var wechatWorkSettingGroup = new SettingGroupDto(L["DisplayName:WeChatWork"], L["Description:WeChatWork"]);
+
+                var workLoginSetting = wechatWorkSettingGroup.AddSetting(L["UserLogin"], L["UserLogin"]);
+                workLoginSetting.AddDetail(
+                    SettingDefinitionManager.Get(WeChatWorkSettingNames.EnabledQuickLogin),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.EnabledQuickLogin, providerName, providerKey),
+                    ValueType.Boolean,
+                    providerName);
+
+                var workConnectionSetting = wechatWorkSettingGroup.AddSetting(L["DisplayName:Connection"], L["Description:Connection"]);
+
+                workConnectionSetting.AddDetail(
+                    SettingDefinitionManager.Get(WeChatWorkSettingNames.Connection.CorpId),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+
+                settingGroups.AddGroup(wechatWorkSettingGroup);
+                #endregion
+            }
 
             return settingGroups;
         }
