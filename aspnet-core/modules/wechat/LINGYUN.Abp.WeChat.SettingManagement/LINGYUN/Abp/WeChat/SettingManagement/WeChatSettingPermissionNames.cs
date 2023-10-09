@@ -6,5 +6,6 @@
 
         public const string Official = GroupName + ".Official";
         public const string MiniProgram = GroupName + ".MiniProgram";
+        public const string Work = GroupName + ".Work";
     }
 }

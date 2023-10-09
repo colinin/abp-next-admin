@@ -16,6 +16,11 @@ namespace LINGYUN.Abp.Notifications
         /// </summary>
         public string UserName { get; set; }
 
+        public UserIdentifier()
+        {
+
+        }
+
         public UserIdentifier(Guid userId, string userName)
         {
             UserId = userId;

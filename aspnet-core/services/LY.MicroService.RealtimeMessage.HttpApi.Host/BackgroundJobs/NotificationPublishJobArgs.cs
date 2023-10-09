@@ -10,6 +10,10 @@ public class NotificationPublishJobArgs
     public long NotificationId { get; set; }
     public string ProviderType { get; set; }
     public List<UserIdentifier> UserIdentifiers { get; set; }
+    public NotificationPublishJobArgs()
+    {
+        UserIdentifiers = new List<UserIdentifier>();
+    }
     public NotificationPublishJobArgs(long id, string providerType, List<UserIdentifier> userIdentifiers, Guid? tenantId = null)
     {
         NotificationId = id;

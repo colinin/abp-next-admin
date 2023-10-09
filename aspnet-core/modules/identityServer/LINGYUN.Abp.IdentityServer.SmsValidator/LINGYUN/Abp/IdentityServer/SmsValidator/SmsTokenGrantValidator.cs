@@ -114,9 +114,6 @@ namespace LINGYUN.Abp.IdentityServer.SmsValidator
 
             await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, phoneNumber, null));
 
-            // 登录之后需要更新安全令牌
-            (await UserManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
-
             await SetSuccessResultAsync(context, currentUser);
         }
 
