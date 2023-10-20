@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj" />
+		<ProjectReference Include="..\..\framework\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
 	</ItemGroup>
 

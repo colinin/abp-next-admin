@@ -1,8 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿namespace LINGYUN.Abp.TextTemplating;
 
-namespace LINGYUN.Abp.TextTemplating;
-
-public class TextTemplateDefinitionGetListInput : PagedAndSortedResultRequestDto
+public class TextTemplateDefinitionGetListInput
 {
     public string Filter { get; set; }
     public bool? IsStatic { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using LINGYUN.Abp.OssManagement.Features;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace LINGYUN.Abp.OssManagement
 
         public async virtual Task<GetFileShareDto> GetAsync(string url)
         {
+            if (!await FeatureChecker.IsEnabledAsync(AbpOssManagementFeatureNames.OssObject.AllowSharedFile))
+            {
+                return new GetFileShareDto(url);
+            }
             var cacheKey = FileShareCacheItem.CalculateCacheKey(url);
             var cacheItem = await _shareCache.GetAsync(cacheKey);
             if (cacheItem == null)

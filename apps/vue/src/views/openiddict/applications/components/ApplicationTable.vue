@@ -33,10 +33,15 @@
               {
                 auth: 'AbpOpenIddict.Applications.ManagePermissions',
                 label: L('ManagePermissions'),
-                onClick: handlePermission.bind(null, record),
+                onClick: handleManagePermissions.bind(null, record),
               },
               {
-                //auth: 'AbpOpenIddict.Applications.ManageSecret',
+                auth: 'AbpOpenIddict.Applications.ManageFeatures',
+                label: L('ManageFeatures'),
+                onClick: handleManageFeatures.bind(null, record),
+              },
+              {
+                auth: 'AbpOpenIddict.Applications.ManageSecret',
                 label: L('GenerateSecret'),
                 ifShow: getShowSecret(record),
                 onClick: handleGenerateSecret.bind(null, record),
@@ -49,6 +54,7 @@
     <ApplicationModal @register="registerModal" @change="reload" />
     <ApplicationSecretModal @register="registerSecretModal" @change="reload" />
     <PermissionModal @register="registerPermissionModal" />
+    <FeatureModal @register="registerFeatureModal" />
   </div>
 </template>
 
@@ -58,6 +64,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from '../datas/TableData';
   import { useModal } from '/@/components/Modal';
+  import { FeatureModal } from '/@/components/Abp';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-application';
@@ -70,6 +77,7 @@
   const { createConfirm, createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
   const [registerSecretModal, { openModal: openSecretModal }] = useModal();
+  const [registerFeatureModal, { openModal: openFeatureModal }] = useModal();
   const [registerPermissionModal, { openModal: openPermissionModal }] = useModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
@@ -120,12 +128,20 @@
     openSecretModal(true, record);
   }
 
-  function handlePermission(record) {
+  function handleManagePermissions(record) {
     const props = {
       providerName: 'C',
       providerKey: record.clientId,
     };
     openPermissionModal(true, props, true);
+  }
+
+  function handleManageFeatures(record) {
+    const props = {
+      providerName: 'C',
+      providerKey: record.clientId,
+    };
+    openFeatureModal(true, props, true);
   }
 
   function handleDelete(record) {

@@ -1,10 +1,11 @@
 import { computed } from 'vue';
 import { merge } from 'lodash-es';
-import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { format } from '/@/utils/strings';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 interface IStringLocalizer {
   L(key: string, args?: Recordable | any[] | undefined): string;
+  Lr(resource: string, key: string, args?: Recordable | any[] | undefined): string;
 }
 
 export function useLocalization(resourceNames?: string | string[]) {
@@ -29,6 +30,16 @@ export function useLocalization(resourceNames?: string | string[]) {
 
     return resource;
   });
+  const getResourceByName = computed(() => {
+    return (resource: string): Dictionary<string, string> => {
+      const abpStore = useAbpStoreWithOut();
+      const { values } = abpStore.getApplication.localization;
+      if (Reflect.has(values, resource)) {
+        return values[resource];
+      }
+      return {};
+    };
+  });
 
   function L(key: string, args?: Recordable | any[] | undefined) {
     if (!key) return '';
@@ -37,9 +48,18 @@ export function useLocalization(resourceNames?: string | string[]) {
     return format(getResource.value[key], args ?? []);
   }
 
+  function Lr(resource: string, key: string, args?: Recordable | any[] | undefined) {
+    if (!key) return '';
+    const findResource = getResourceByName.value(resource);
+    if (!findResource) return key;
+    if (!Reflect.has(findResource, key)) return key;
+    return format(findResource[key], args ?? []);
+  }
+
   const localizer: IStringLocalizer = {
     L: L,
+    Lr: Lr,
   };
 
-  return { L, localizer };
+  return { L, Lr, localizer };
 }

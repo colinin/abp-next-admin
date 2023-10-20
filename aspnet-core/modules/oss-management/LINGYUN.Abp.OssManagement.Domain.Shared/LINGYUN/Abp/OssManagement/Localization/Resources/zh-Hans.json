@@ -39,6 +39,8 @@
     "Features:Description:PublicAccess": "是否允许未经授权的用户访问公共目录",
     "Features:DisplayName:OssObject": "Oss管理",
     "Features:Description:OssObject": "管理对象存储",
+    "Features:DisplayName:AllowSharedFile": "分享文件",
+    "Features:Description:AllowSharedFile": "是否允许用户分享文件",
     "Features:DisplayName:DownloadFile": "下载文件",
     "Features:Description:DownloadFile": "是否允许用户下载文件",
     "Features:DisplayName:DownloadLimit": "限制下载文件次数",

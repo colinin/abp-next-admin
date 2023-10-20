@@ -391,6 +391,8 @@
   function handleBeforeClose(): Promise<boolean> {
     return new Promise((resolve) => {
       if (!state.entityChanged) {
+        const form = unref(formRef);
+        form?.resetFields();
         return resolve(true);
       }
       createConfirm({
@@ -398,6 +400,8 @@
         title: L('AreYouSure'),
         content: L('AreYouSureYouWantToCancelEditingWarningMessage'),
         onOk: () => {
+          const form = unref(formRef);
+          form?.resetFields();
           resolve(true);
         },
         onCancel: () => {

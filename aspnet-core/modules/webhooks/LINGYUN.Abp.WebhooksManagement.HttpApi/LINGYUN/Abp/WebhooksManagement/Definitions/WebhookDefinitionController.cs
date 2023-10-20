@@ -44,7 +44,7 @@ public class WebhookDefinitionController : WebhooksManagementControllerBase, IWe
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<WebhookDefinitionDto>> GetListAsync(WebhookDefinitionGetListInput input)
+    public virtual Task<ListResultDto<WebhookDefinitionDto>> GetListAsync(WebhookDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

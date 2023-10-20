@@ -1,26 +1,38 @@
 ﻿using Elsa;
 using Elsa.Options;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.ExceptionHandling;
+using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Idempotent;
+using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.OpenIddict.Permissions;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
+using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Abp.Wrapper;
 using LY.MicroService.Applications.Single.IdentityResources;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Quartz;
 using StackExchange.Redis;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -44,8 +56,12 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Quartz;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.TextTemplating;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.VirtualFileSystem;
+using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -63,7 +79,17 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreConfigureForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -74,36 +100,33 @@ public partial class MicroServiceApplicationsSingleModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureAuthServer(IConfiguration configuration)
     {
-        if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+        PreConfigure<OpenIddictBuilder>(builder =>
         {
-            PreConfigure<OpenIddictBuilder>(builder =>
+            builder.AddValidation(options =>
             {
-                builder.AddValidation(options =>
-                {
-                    //options.AddAudiences("lingyun-abp-application");
+                //options.AddAudiences("lingyun-abp-application");
 
-                    options.UseLocalServer();
+                options.UseLocalServer();
 
-                    options.UseAspNetCore();
-                });
+                options.UseAspNetCore();
             });
-        }
+        });
     }
 
-    private void ConfigureAuthServer()
+    private void PreConfigureIdentity()
     {
-        Configure<OpenIddictServerAspNetCoreBuilder>(builder =>
+        PreConfigure<IdentityBuilder>(builder =>
         {
-            builder.DisableTransportSecurityRequirement();
-        });
-
-        Configure<OpenIddictServerAspNetCoreOptions>(options =>
-        {
-            options.DisableTransportSecurityRequirement = true;
+            builder.AddDefaultTokenProviders();
         });
     }
 
@@ -216,6 +239,31 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void ConfigureAuthServer(IConfiguration configuration)
+    {
+        Configure<OpenIddictServerAspNetCoreBuilder>(builder =>
+        {
+            builder.DisableTransportSecurityRequirement();
+        });
+
+        Configure<OpenIddictServerAspNetCoreOptions>(options =>
+        {
+            options.DisableTransportSecurityRequirement = true;
+        });
+
+        Configure<OpenIddictServerOptions>(options =>
+        {
+            var lifetime = configuration.GetSection("OpenIddict:Lifetime");
+            options.AuthorizationCodeLifetime = lifetime.GetValue("AuthorizationCode", options.AuthorizationCodeLifetime);
+            options.AccessTokenLifetime = lifetime.GetValue("AccessToken", options.AccessTokenLifetime);
+            options.DeviceCodeLifetime = lifetime.GetValue("DeviceCode", options.DeviceCodeLifetime);
+            options.IdentityTokenLifetime = lifetime.GetValue("IdentityToken", options.IdentityTokenLifetime);
+            options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
+            options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
+            options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
+        });
+    }
+
     private void ConfigureEndpoints(IServiceCollection services)
     {
         // 不需要
@@ -293,32 +341,78 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureTextTemplating()
+    private void ConfigureTextTemplating(IConfiguration configuration)
     {
-        Configure<AbpTextTemplatingCachingOptions>(options =>
+        if (configuration.GetValue<bool>("TextTemplating:IsDynamicStoreEnabled"))
         {
-            options.IsDynamicTemplateDefinitionStoreEnabled = true;
-        });
+            Configure<AbpTextTemplatingCachingOptions>(options =>
+            {
+                options.IsDynamicTemplateDefinitionStoreEnabled = true;
+            });
+        }
     }
 
-    private void ConfigureFeatureManagement()
+    private void ConfigureFeatureManagement(IConfiguration configuration)
     {
+        if (configuration.GetValue<bool>("FeatureManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.IsDynamicFeatureStoreEnabled = true;
+            });
+        }
         Configure<FeatureManagementOptions>(options =>
         {
             options.ProviderPolicies[EditionFeatureValueProvider.ProviderName] = AbpSaasPermissions.Editions.ManageFeatures;
             options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = AbpSaasPermissions.Tenants.ManageFeatures;
-
-            options.IsDynamicFeatureStoreEnabled = true;
         });
     }
 
-    private void ConfigurePermissionManagement()
+    private void ConfigureSettingManagement(IConfiguration configuration)
     {
+        if (configuration.GetValue<bool>("SettingManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<SettingManagementOptions>(options =>
+            {
+                options.IsDynamicSettingStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigureWebhooksManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("WebhooksManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<WebhooksManagementOptions>(options =>
+            {
+                options.IsDynamicWebhookStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigurePermissionManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("PermissionManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<PermissionManagementOptions>(options =>
+            {
+                options.IsDynamicPermissionStoreEnabled = true;
+            });
+        }
         Configure<PermissionManagementOptions>(options =>
         {
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "AbpIdentityServer.Clients.ManagePermissions";
+            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions; 
+            
+            //if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+            //{
+            //    options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions;
+            //}
+            //else
+            //{
+            //    options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpIdentityServerPermissions.Clients.ManagePermissions;
+            //}
         });
     }
 
@@ -330,6 +424,23 @@ public partial class MicroServiceApplicationsSingleModule
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
         }
+    }
+
+    private void ConfigureVirtualFileSystem()
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<MicroServiceApplicationsSingleModule>("LY.MicroService.Applications.Single");
+        });
+    }
+
+    private void ConfigureIdempotent()
+    {
+        Configure<AbpIdempotentOptions>(options =>
+        {
+            options.IsEnabled = true;
+            options.DefaultTimeout = 0;
+        });
     }
 
     private void ConfigureDbContext()
@@ -345,6 +456,35 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<CustomIdentityResourceDataSeederOptions>(options =>
         {
             options.Resources.Add(new CustomIdentityResources.AvatarUrl());
+        });
+    }
+
+    private void ConfigureExceptionHandling()
+    {
+        // 自定义需要处理的异常
+        Configure<AbpExceptionHandlingOptions>(options =>
+        {
+            //  加入需要处理的异常类型
+            options.Handlers.Add<Volo.Abp.Data.AbpDbConcurrencyException>();
+            options.Handlers.Add<AbpInitializationException>();
+            options.Handlers.Add<OutOfMemoryException>();
+            options.Handlers.Add<System.Data.Common.DbException>();
+            options.Handlers.Add<Microsoft.EntityFrameworkCore.DbUpdateException>();
+            options.Handlers.Add<System.Data.DBConcurrencyException>();
+        });
+        // 自定义需要发送邮件通知的异常类型
+        Configure<AbpEmailExceptionHandlingOptions>(options =>
+        {
+            // 是否发送堆栈信息
+            options.SendStackTrace = true;
+            // 未指定异常接收者的默认接收邮件
+            // 指定自己的邮件地址
+        });
+
+        Configure<VoloAbpExceptionHandlingOptions>(options =>
+        {
+            options.SendStackTraceToClients = false;
+            options.SendExceptionsDetailsToClients = false;
         });
     }
 
@@ -512,6 +652,15 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void ConfigureWrapper()
+    {
+        Configure<AbpWrapperOptions>(options =>
+        {
+            options.IsEnabled = true;
+            options.IgnoreNamespaces.Add("Elsa");
+        });
+    }
+
     private void ConfigureAuditing()
     {
         Configure<AbpAuditingOptions>(options =>
@@ -525,11 +674,15 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
-
-            options.Applications["MVC"].Urls["EmailVerifyLogin"] = "Account/VerifyCode";
-            options.Applications["MVC"].Urls["EmailConfirm"] = "Account/EmailConfirm";
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
         });
     }
 
@@ -556,7 +709,7 @@ public partial class MicroServiceApplicationsSingleModule
                         }
                     };
                 });
-
+        services.AddAlwaysAllowAuthorization();
         if (isDevelopment)
         {
             services.AddAlwaysAllowAuthorization();

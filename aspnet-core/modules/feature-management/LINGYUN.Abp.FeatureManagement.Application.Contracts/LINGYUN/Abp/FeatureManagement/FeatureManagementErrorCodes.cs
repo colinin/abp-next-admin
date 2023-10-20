@@ -7,6 +7,8 @@ public static class FeatureManagementErrorCodes
     {
         private const string Prefix = Namespace + ":001";
 
+        public const string StaticGroupNotAllowedChanged = Prefix + "010";
+
         public const string AlreayNameExists = Prefix + "100";
 
         public const string NameNotFount = Prefix + "404";
@@ -15,6 +17,8 @@ public static class FeatureManagementErrorCodes
     public static class Definition
     {
         private const string Prefix = Namespace + ":002";
+
+        public const string StaticFeatureNotAllowedChanged = Prefix + "010";
 
         public const string AlreayNameExists = Prefix + "100";
 

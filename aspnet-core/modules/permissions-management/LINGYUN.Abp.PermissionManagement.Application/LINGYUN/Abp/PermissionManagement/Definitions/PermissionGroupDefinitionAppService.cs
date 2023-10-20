@@ -174,43 +174,35 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         return groupDefinitionRecord;
     }
 
-    protected async virtual Task<PermissionGroupDefinitionDto> GroupDefinitionRecordToDto(PermissionGroupDefinitionRecord groupDefinitionRecord)
+    protected virtual Task<PermissionGroupDefinitionDto> GroupDefinitionRecordToDto(PermissionGroupDefinitionRecord groupDefinitionRecord)
     {
         var groupDto = new PermissionGroupDefinitionDto
         {
             Name = groupDefinitionRecord.Name,
-            FormatedDisplayName = groupDefinitionRecord.DisplayName,
+            DisplayName = groupDefinitionRecord.DisplayName,
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(groupDefinitionRecord.DisplayName);
-        groupDto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
 
         foreach (var property in groupDefinitionRecord.ExtraProperties)
         {
             groupDto.SetProperty(property.Key, property.Value);
         }
 
-        return groupDto;
+        return Task.FromResult(groupDto);
     }
 
-    protected async virtual Task<PermissionGroupDefinitionDto> GroupDefinitionToDto(PermissionGroupDefinition groupDefinition)
+    protected virtual Task<PermissionGroupDefinitionDto> GroupDefinitionToDto(PermissionGroupDefinition groupDefinition)
     {
         var groupDto = new PermissionGroupDefinitionDto
         {
-            Name = groupDefinition.Name
+            Name = groupDefinition.Name,
+            DisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName),
         };
-
-        if (groupDefinition.DisplayName != null)
-        {
-            groupDto.DisplayName = await groupDefinition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            groupDto.FormatedDisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName);
-        }
 
         foreach (var property in groupDefinition.Properties)
         {
             groupDto.SetProperty(property.Key, property.Value);
         }
 
-        return groupDto;
+        return Task.FromResult(groupDto);
     }
 }

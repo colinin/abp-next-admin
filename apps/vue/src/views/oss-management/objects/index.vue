@@ -7,7 +7,7 @@
 
   import OssManagePage from './components/OssManagePage.vue';
   export default defineComponent({
-    name: 'Oss',
+    name: 'Objects',
     components: {
       OssManagePage,
     },

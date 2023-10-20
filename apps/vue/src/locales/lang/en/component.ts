@@ -150,10 +150,91 @@ export default {
     reUploadFailed: 'Re-upload failed files',
   },
   verify: {
-    error: 'verification failed！',
-    time: 'The verification is successful and it takes {time} seconds！',
+    error: 'verification failed!',
+    time: 'The verification is successful and it takes {time} seconds!',
     redoTip: 'Click the picture to refresh',
     dragText: 'Hold down the slider and drag',
     successText: 'Verified',
   },
+  localizable_input: {
+    placeholder: 'Select localized resources',
+    resources: {
+      fiexed: {
+        group: 'Define',
+        label: 'Fiexed',
+        placeholder: 'Please enter custom content',
+      },
+      localization: {
+        group: 'Localization',
+        placeholder: 'Please select a name',
+      }
+    }
+  },
+  extra_property_dictionary: {
+    title: 'Extra properties',
+    key: 'Key',
+    value: 'Value',
+    actions: {
+      title: 'Actions',
+      create: 'Add',
+      update: 'Edit',
+      delete: 'Delete',
+      clean: 'Clean',
+    },
+    validator: {
+      duplicateKey: 'A key of the same name has been added',
+    },
+  },
+  value_type_nput: {
+    type: {
+      name: 'Type',
+      FREE_TEXT: {
+        name: 'Free Text',
+      },
+      TOGGLE: {
+        name: 'Toggle',
+      },
+      SELECTION: {
+        name: 'Selection',
+        displayText: 'Display Text',
+        displayTextNotBeEmpty: 'Display text cannot be empty',
+        value: 'value',
+        duplicateKeyOrValue: 'The name or value of the selection is not allowed to be repeated',
+        itemsNotBeEmpty: 'Selectable items cannot be empty',
+        itemsNotFound: 'The selection is not included in the optional list',
+        actions: {
+          title: 'Actions',
+          create: 'Add',
+          update: 'Edit',
+          delete: 'Delete',
+          clean: 'Clean',
+        },
+        modal: {
+          title: 'Selection',
+        },
+      },
+    },
+    validator: {
+      name: 'Validator',
+      isInvalidValue: 'The value failed to pass {0}; check the validator options.',
+      NULL: {
+        name: 'None',
+      },
+      BOOLEAN: {
+        name: 'Boolean',
+      },
+      NUMERIC: {
+        name: 'Numeric',
+        minValue: 'Min Value',
+        maxValue: 'Max Value',
+      },
+      STRING: {
+        name: 'String',
+        allowNull: 'Allow Null',
+        minLength: 'Min Length',
+        maxLength: 'Max Length',
+        regularExpression: 'Regular Expression',
+      },
+    },
+  }
 };

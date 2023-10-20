@@ -272,7 +272,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             .WithData(nameof(PermissionDefinitionRecord.Name), definition.Name);
     }
 
-    protected async virtual Task<PermissionDefinitionDto> DefinitionRecordToDto(PermissionDefinitionRecord definitionRecord)
+    protected virtual Task<PermissionDefinitionDto> DefinitionRecordToDto(PermissionDefinitionRecord definitionRecord)
     {
         var dto = new PermissionDefinitionDto
         {
@@ -280,24 +280,21 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             GroupName = definitionRecord.GroupName,
             ParentName = definitionRecord.ParentName,
             IsEnabled = definitionRecord.IsEnabled,
-            FormatedDisplayName = definitionRecord.DisplayName,
+            DisplayName = definitionRecord.DisplayName,
             Providers = definitionRecord.Providers.Split(',').ToList(),
             StateCheckers = definitionRecord.StateCheckers.Split(',').ToList(),
             MultiTenancySide = definitionRecord.MultiTenancySide,
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(definitionRecord.DisplayName);
-        dto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
 
         foreach (var property in definitionRecord.ExtraProperties)
         {
             dto.SetProperty(property.Key, property.Value);
         }
 
-        return dto;
+        return Task.FromResult(dto);
     }
 
-    protected async virtual Task<PermissionDefinitionDto> DefinitionToDto(PermissionGroupDefinition groupDefinition, PermissionDefinition definition)
+    protected virtual Task<PermissionDefinitionDto> DefinitionToDto(PermissionGroupDefinition groupDefinition, PermissionDefinition definition)
     {
         var dto = new PermissionDefinitionDto
         {
@@ -307,6 +304,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             IsEnabled = definition.IsEnabled,
             Providers = definition.Providers,
             MultiTenancySide = definition.MultiTenancySide,
+            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
         };
 
         if (definition.StateCheckers.Any())
@@ -315,17 +313,11 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             dto.StateCheckers = stateCheckers.Split(',').ToList();
         }
 
-        if (definition.DisplayName != null)
-        {
-            dto.DisplayName = await definition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            dto.FormatedDisplayName = _localizableStringSerializer.Serialize(definition.DisplayName);
-        }
-
         foreach (var property in definition.Properties)
         {
             dto.SetProperty(property.Key, property.Value);
         }
 
-        return dto;
+        return Task.FromResult(dto);
     }
 }

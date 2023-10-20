@@ -15,8 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
-	  <ProjectReference Include="..\..\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj" />
+	  <ProjectReference Include="..\..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Saas.Domain.Shared\LINGYUN.Abp.Saas.Domain.Shared.csproj" />
 	</ItemGroup>
 

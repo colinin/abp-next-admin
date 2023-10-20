@@ -47,7 +47,7 @@ public class FeatureDefinitionController : FeatureManagementControllerBase, IFea
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<FeatureDefinitionDto>> GetListAsync(FeatureDefinitionGetListInput input)
+    public virtual Task<ListResultDto<FeatureDefinitionDto>> GetListAsync(FeatureDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

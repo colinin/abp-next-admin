@@ -8,7 +8,5 @@ public class PermissionGroupDefinitionDto : IHasExtraProperties
 
     public string DisplayName { get; set; }
 
-    public string FormatedDisplayName { get; set; }
-
     public ExtraPropertyDictionary ExtraProperties { get; set; }
 }

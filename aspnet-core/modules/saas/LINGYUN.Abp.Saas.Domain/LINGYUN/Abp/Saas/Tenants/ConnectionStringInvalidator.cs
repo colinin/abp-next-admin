@@ -1,13 +1,13 @@
-﻿using LINGYUN.Abp.MultiTenancy;
+﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 public class ConnectionStringInvalidator :
-    IDistributedEventHandler<ConnectionStringCreatedEventData>,
-    IDistributedEventHandler<ConnectionStringDeletedEventData>,
+    IDistributedEventHandler<TenantConnectionStringUpdatedEto>,
     ITransientDependency
 {
     protected IDistributedCache<TenantCacheItem> Cache { get; }
@@ -17,26 +17,18 @@ public class ConnectionStringInvalidator :
         Cache = cache;
     }
 
-    public async virtual Task HandleEventAsync(ConnectionStringCreatedEventData eventData)
+    public async virtual Task HandleEventAsync(TenantConnectionStringUpdatedEto eventData)
     {
-        // 需要考虑三种情形下的缓存键
-        var keys = new string[]
-        {
-            TenantCacheItem.CalculateCacheKey(null, eventData.TenantName),
-            TenantCacheItem.CalculateCacheKey(eventData.TenantId, null),
-            TenantCacheItem.CalculateCacheKey(eventData.TenantId, eventData.TenantName),
-        };
-        await Cache.RemoveManyAsync(keys, considerUow: true);
+        await RemoveTenantCache(eventData.Id, eventData.Name);
     }
 
-    public async virtual Task HandleEventAsync(ConnectionStringDeletedEventData eventData)
+    protected async virtual Task RemoveTenantCache(Guid tenantId, string tenantName = null)
     {
-        // 需要考虑三种情形下的缓存键
         var keys = new string[]
         {
-            TenantCacheItem.CalculateCacheKey(null, eventData.TenantName),
-            TenantCacheItem.CalculateCacheKey(eventData.TenantId, null),
-            TenantCacheItem.CalculateCacheKey(eventData.TenantId, eventData.TenantName),
+            TenantCacheItem.CalculateCacheKey(null, tenantName),
+            TenantCacheItem.CalculateCacheKey(tenantId, null),
+            TenantCacheItem.CalculateCacheKey(tenantId, tenantName),
         };
         await Cache.RemoveManyAsync(keys, considerUow: true);
     }

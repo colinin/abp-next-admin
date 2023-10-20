@@ -47,6 +47,7 @@ var app = builder.Build();
 
 await app.InitializeApplicationAsync();
 
+app.UseForwardedHeaders();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -59,16 +60,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
-
-if (builder.Configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
-{
-    app.UseAbpOpenIddictValidation();
-}
-else
-{
-    app.UseJwtTokenMiddleware();
-    app.UseIdentityServer();
-}
+app.UseAbpClaimsMap();
+app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseAuthorization();
 app.UseSwagger();

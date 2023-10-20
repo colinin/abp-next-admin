@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+</Project>

@@ -58,12 +58,12 @@ export function getSearchFormSchemas(submitFunc?: () => Promise<void>): Partial<
             {
               key: L('DisplayName:Any'),
               label: L('DisplayName:Any'),
-              value: 0,
+              value: false,
             },
             {
               key: L('DisplayName:OnlyNull'),
               label: L('DisplayName:OnlyNull'),
-              value: 1,
+              value: true,
             },
           ],
         },

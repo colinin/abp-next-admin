@@ -116,10 +116,10 @@
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { findTenantById } from '/@/api/multi-tenancy/tenants';
-  import { getById } from '/@/api/webhooks/send-attempts';
-  import { getById as getSubscription } from '/@/api/webhooks/subscriptions';
-  import { WebhookSendAttempt } from '/@/api/webhooks/model/sendAttemptsModel';
-  import { WebhookSubscription } from '/@/api/webhooks/model/subscriptionsModel';
+  import { GetAsyncById } from '/@/api/webhooks/send-attempts';
+  import { GetAsyncById as getSubscription } from '/@/api/webhooks/subscriptions';
+  import { WebhookSendAttempt } from '/@/api/webhooks/send-attempts/model';
+  import { WebhookSubscription } from '/@/api/webhooks/subscriptions/model';
   import { httpStatusCodeMap, getHttpStatusColor } from '../../typing';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { isString } from '/@/utils/is';
@@ -172,7 +172,7 @@
   function fetchModel(id: string) {
     const formEl = unref(formElRef);
     formEl?.resetFields();
-    getById(id).then((res) => {
+    GetAsyncById(id).then((res) => {
       modelRef.value = res;
       fetchSubscription(res.webhookSubscriptionId);
     });

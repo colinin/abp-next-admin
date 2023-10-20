@@ -12,8 +12,6 @@ public class PermissionDefinitionDto : IHasExtraProperties
 
     public string DisplayName { get; set; }
 
-    public string FormatedDisplayName { get; set; }
-
     public string GroupName { get; set; }
 
     public bool IsEnabled { get; set; }

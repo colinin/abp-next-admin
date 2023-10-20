@@ -1,15 +1,14 @@
-﻿using LINGYUN.Abp.MultiTenancy;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.ObjectExtending;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Data;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
@@ -82,21 +81,40 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
             tenant.SetDefaultConnectionString(input.DefaultConnectionString);
         }
 
+        if (input.ConnectionStrings.Any())
+        {
+            foreach (var connectionString in input.ConnectionStrings)
+            {
+                tenant.SetConnectionString(connectionString.Key, connectionString.Value);
+            }
+        }
+
         await TenantRepository.InsertAsync(tenant);
 
         CurrentUnitOfWork.OnCompleted(async () =>
         {
-            var createEventData = new CreateEventData
+            var eto = new TenantCreatedEto
             {
                 Id = tenant.Id,
                 Name = tenant.Name,
-                AdminUserId = GuidGenerator.Create(),
-                AdminEmailAddress = input.AdminEmailAddress,
-                AdminPassword = input.AdminPassword
+                Properties =
+                {
+                    { "AdminUserId", GuidGenerator.Create().ToString() },
+                    { "AdminEmail", input.AdminEmailAddress },
+                    { "AdminPassword", input.AdminPassword }
+                }
             };
-            // 因为项目各自独立，租户增加时添加管理用户必须通过事件总线
-            // 而 TenantEto 对象没有包含所需的用户名密码，需要独立发布事件
-            await EventBus.PublishAsync(createEventData);
+
+            //var createEventData = new CreateEventData
+            //{
+            //    Id = tenant.Id,
+            //    Name = tenant.Name,
+            //    AdminUserId = GuidGenerator.Create(),
+            //    AdminEmailAddress = input.AdminEmailAddress,
+            //    AdminPassword = input.AdminPassword
+            //};
+            ///
+            await EventBus.PublishAsync(eto);
         });
 
         await CurrentUnitOfWork.SaveChangesAsync();
@@ -167,20 +185,23 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
     {
         var tenant = await TenantRepository.GetAsync(id);
-        if (tenant.FindConnectionString(input.Name) == null)
-        {
-            CurrentUnitOfWork.OnCompleted(async () =>
-            {
-                var eventData = new ConnectionStringCreatedEventData
-                {
-                    TenantId = tenant.Id,
-                    TenantName = tenant.Name,
-                    Name = input.Name
-                };
 
-                await EventBus.PublishAsync(eventData);
-            });
-        }
+        var oldConnectionString = tenant.FindConnectionString(input.Name);
+
+        CurrentUnitOfWork.OnCompleted(async () =>
+        {
+            var eto = new TenantConnectionStringUpdatedEto
+            {
+                Id = tenant.Id,
+                Name = tenant.Name,
+                NewValue = input.Value,
+                ConnectionStringName = input.Name,
+                OldValue = oldConnectionString,
+            };
+
+            await EventBus.PublishAsync(eto);
+        });
+
         tenant.SetConnectionString(input.Name, input.Value);
 
         await TenantRepository.UpdateAsync(tenant);
@@ -199,18 +220,21 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     {
         var tenant = await TenantRepository.GetAsync(id);
 
+        var oldConnectionString = tenant.FindConnectionString(name);
+
         tenant.RemoveConnectionString(name);
 
         CurrentUnitOfWork.OnCompleted(async () =>
         {
-            var eventData = new ConnectionStringDeletedEventData
+            var eto = new TenantConnectionStringUpdatedEto
             {
-                TenantId = tenant.Id,
-                TenantName = tenant.Name,
-                Name = name
+                Id = tenant.Id,
+                Name = tenant.Name,
+                ConnectionStringName = name,
+                OldValue = oldConnectionString,
             };
 
-            await EventBus.PublishAsync(eventData);
+            await EventBus.PublishAsync(eto);
         });
 
         await TenantRepository.UpdateAsync(tenant);

@@ -37,6 +37,10 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 using LINGYUN.Abp.Account;
+using Microsoft.IdentityModel.Logging;
+using TencentCloud.Emr.V20190103.Models;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace LY.MicroService.AuthServer;
 
@@ -53,7 +57,17 @@ public partial class AuthServerModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -64,6 +78,11 @@ public partial class AuthServerModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)

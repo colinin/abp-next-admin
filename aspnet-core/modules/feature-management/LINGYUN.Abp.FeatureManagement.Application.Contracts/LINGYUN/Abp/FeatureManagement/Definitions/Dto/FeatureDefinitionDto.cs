@@ -13,17 +13,15 @@ public class FeatureDefinitionDto : IHasExtraProperties
 
     public string DisplayName { get; set; }
 
-    public string FormatedDisplayName { get; set; }
-
     public string Description { get; set; }
-
-    public string FormatedDescription { get; set; }
 
     public string DefaultValue { get; set; }
 
     public bool IsVisibleToClients { get; set; }
 
     public bool IsAvailableToHost { get; set; }
+
+    public bool IsStatic { get; set; }
 
     public List<string> AllowedProviders { get; set; } = new List<string>();
 

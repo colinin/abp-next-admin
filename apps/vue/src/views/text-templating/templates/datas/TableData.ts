@@ -70,6 +70,16 @@ export function getDataColumns(): BasicColumn[] {
       resizable: true,
     },
     {
+      title: L('DisplayName:LocalizationResourceName'),
+      dataIndex: 'localizationResourceName',
+      align: 'left',
+      width: 150,
+      sorter: true,
+      ellipsis: true,
+      resizable: true,
+      defaultHidden: true,
+    },
+    {
       title: L('DisplayName:RenderEngine'),
       dataIndex: 'renderEngine',
       align: 'left',

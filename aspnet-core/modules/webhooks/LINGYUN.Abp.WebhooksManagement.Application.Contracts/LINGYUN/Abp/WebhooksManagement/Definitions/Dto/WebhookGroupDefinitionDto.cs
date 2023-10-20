@@ -8,8 +8,6 @@ public class WebhookGroupDefinitionDto : IHasExtraProperties
 
     public string DisplayName { get; set; }
 
-    public string FormatedDisplayName { get; set; }
-
     public bool IsStatic { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();

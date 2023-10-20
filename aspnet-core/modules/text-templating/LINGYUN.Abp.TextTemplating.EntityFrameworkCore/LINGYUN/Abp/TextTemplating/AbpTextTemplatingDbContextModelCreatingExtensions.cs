@@ -63,6 +63,9 @@ public static class AbpTextTemplatingDbContextModelCreatingExtensions
             b.Property(t => t.RenderEngine)
                .HasColumnName(nameof(TextTemplateDefinition.RenderEngine))
                .HasMaxLength(TextTemplateDefinitionConsts.MaxRenderEngineLength);
+            b.Property(t => t.LocalizationResourceName)
+               .HasColumnName(nameof(TextTemplateDefinition.LocalizationResourceName))
+               .HasMaxLength(TextTemplateDefinitionConsts.MaxLocalizationResourceNameLength);
 
             b.ApplyObjectExtensionMappings();
         });

@@ -43,7 +43,7 @@
   const { L } = useLocalization(['LocalizationManagement', 'AbpUi']);
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { setTableData, setPagination, getForm }] = useTable({
+  const [registerTable, { setLoading, setTableData, setPagination, getForm }] = useTable({
     rowKey: 'key',
     title: L('Texts'),
     columns: getDataColumns(),
@@ -70,9 +70,12 @@
     const form = getForm();
     return form.validate().then((input) => {
       const request = cloneDeep(input);
-      request.onlyNull = input.onlyNull === 1;
+      setLoading(true);
+      setTableData([]);
       return getList(request).then((res) => {
         return setTableData(res.items);
+      }).finally(() => {
+        setLoading(false);
       });
     })
   }

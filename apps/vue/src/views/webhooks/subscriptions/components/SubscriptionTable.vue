@@ -63,7 +63,7 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { deleteById, deleteMany, getList } from '/@/api/webhooks/subscriptions';
+  import { DeleteAsyncById, DeleteManyAsyncByInput, GetListAsyncByInput } from '/@/api/webhooks/subscriptions';
   import SubscriptionModal from './SubscriptionModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
@@ -73,7 +73,7 @@
     rowKey: 'id',
     title: L('Subscriptions'),
     columns: getDataColumns(),
-    api: getList,
+    api: GetListAsyncByInput,
     beforeFetch: formatPagedRequest,
     pagination: true,
     striped: false,
@@ -116,7 +116,9 @@
       onOk: () => {
         const selectKeys = getSelectRowKeys();
         setLoading(true);
-        return deleteMany(selectKeys).then(() => {
+        return DeleteManyAsyncByInput({
+          recordIds: selectKeys,
+        }).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
           reload();
@@ -135,7 +137,7 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return deleteById(record.id).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
           reload();

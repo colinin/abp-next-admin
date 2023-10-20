@@ -39,6 +39,8 @@
     "Features:Description:PublicAccess": "Whether to allow unauthorized users to access public directories",
     "Features:DisplayName:OssObject": "Oss Objects",
     "Features:Description:OssObject": "Managing Object Storage",
+    "Features:DisplayName:AllowSharedFile": "Sharing files",
+    "Features:Description:AllowSharedFile": "Whether users should be allowed to share files",
     "Features:DisplayName:DownloadFile": "Download file",
     "Features:Description:DownloadFile": "Whether to allow users to download files",
     "Features:DisplayName:DownloadLimit": "Limit Of Downloads",

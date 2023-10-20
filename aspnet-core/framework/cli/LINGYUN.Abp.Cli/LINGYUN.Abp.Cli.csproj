@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<Version>7.3.2</Version>
+		<Copyright>colin</Copyright>
+		<Description>Use LINGYUN.MicroService.Templates command line</Description>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>labp</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
+		<PackReadmeFile>README.md</PackReadmeFile>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Remove="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
+		<None Remove="LINGYUN\Abp\Cli\UI\Flutter\GetX\Templates\*.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Flutter\GetX\Templates\*.tpl" />
+		<EmbeddedResource Include="README.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="NETStandard.Library" Version="2.0.3" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingPackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksConsolePackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Cli.Core" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+</Project>

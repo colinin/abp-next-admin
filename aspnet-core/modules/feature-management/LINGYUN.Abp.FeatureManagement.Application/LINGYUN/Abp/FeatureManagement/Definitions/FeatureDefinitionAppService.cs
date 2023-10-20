@@ -1,8 +1,8 @@
 ﻿using LINGYUN.Abp.FeatureManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -19,20 +19,28 @@ namespace LINGYUN.Abp.FeatureManagement.Definitions;
 [Authorize(FeatureManagementPermissionNames.Definition.Default)]
 public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFeatureDefinitionAppService
 {
+    private readonly StringValueTypeSerializer _stringValueTypeSerializer;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IFeatureDefinitionManager _featureDefinitionManager;
-
+    private readonly IStaticFeatureDefinitionStore _staticFeatureDefinitionStore;
+    private readonly IDynamicFeatureDefinitionStore _dynamicFeatureDefinitionStore;
     private readonly IFeatureDefinitionRecordRepository _definitionRepository;
     private readonly IRepository<FeatureDefinitionRecord, Guid> _definitionBasicRepository;
 
     public FeatureDefinitionAppService(
+        StringValueTypeSerializer stringValueTypeSerializer,
         ILocalizableStringSerializer localizableStringSerializer,
         IFeatureDefinitionManager featureDefinitionManager,
+        IStaticFeatureDefinitionStore featureDefinitionStore,
+        IDynamicFeatureDefinitionStore dynamicFeatureDefinitionStore,
         IFeatureDefinitionRecordRepository definitionRepository, 
         IRepository<FeatureDefinitionRecord, Guid> definitionBasicRepository)
     {
+        _stringValueTypeSerializer = stringValueTypeSerializer;
         _localizableStringSerializer = localizableStringSerializer;
         _featureDefinitionManager = featureDefinitionManager;
+        _staticFeatureDefinitionStore = featureDefinitionStore;
+        _dynamicFeatureDefinitionStore = dynamicFeatureDefinitionStore;
         _definitionRepository = definitionRepository;
         _definitionBasicRepository = definitionBasicRepository;
     }
@@ -65,106 +73,85 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
             input.IsAvailableToHost,
             valueType: input.ValueType);
 
-        if (input.AllowedProviders.Any())
-        {
-            definitionRecord.AllowedProviders = input.AllowedProviders.JoinAsString(",");
-        }
-
-        foreach (var property in input.ExtraProperties)
-        {
-            definitionRecord.SetProperty(property.Key, property.Value);
-        }
+        UpdateByInput(definitionRecord, input);
 
         await _definitionRepository.InsertAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await DefinitionRecordToDto(definitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(definitionRecord);
     }
 
     [Authorize(FeatureManagementPermissionNames.Definition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var definitionRecord = await FindByNameAsync(name);
+        var definitionRecord = await FindRecordByNameAsync(name);
 
-        if (definitionRecord == null)
+        if (definitionRecord != null)
         {
-            return;
-        }
+            await _definitionRepository.DeleteAsync(definitionRecord);
 
-        await _definitionRepository.DeleteAsync(definitionRecord);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<FeatureDefinitionDto> GetAsync(string name)
     {
-        var definition = await _featureDefinitionManager.GetOrNullAsync(name);
-        if (definition == null)
+        var definition = await _staticFeatureDefinitionStore.GetOrNullAsync(name);
+        if (definition != null)
         {
-            throw new BusinessException(FeatureManagementErrorCodes.Definition.NameNotFount)
-                .WithData(nameof(FeatureDefinitionRecord.Name), name);
+            return DefinitionToDto(await GetGroupDefinition(definition), definition, true);
         }
-
-        var groupDefinition = await GetGroupDefinition(definition);
-
-        var dto = await DefinitionToDto(groupDefinition, definition);
-
-        return dto;
+        definition = await _dynamicFeatureDefinitionStore.GetOrNullAsync(name);
+        return DefinitionToDto(await GetGroupDefinition(definition), definition);
     }
 
-    public async virtual Task<PagedResultDto<FeatureDefinitionDto>> GetListAsync(FeatureDefinitionGetListInput input)
+    public async virtual Task<ListResultDto<FeatureDefinitionDto>> GetListAsync(FeatureDefinitionGetListInput input)
     {
-        var permissions = new List<FeatureDefinitionDto>();
+        var featureDtoList = new List<FeatureDefinitionDto>();
 
-        IReadOnlyList<FeatureDefinition> definitionPermissions;
+        var staticFreatures = new List<FeatureDefinition>();
 
-        if (!input.GroupName.IsNullOrWhiteSpace())
+        var staticGroups = await _staticFeatureDefinitionStore.GetGroupsAsync();
+        var staticGroupNames = staticGroups
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        foreach (var group in staticGroups.WhereIf(!input.GroupName.IsNullOrWhiteSpace(), x => x.Name == input.GroupName))
         {
-            var group = await _featureDefinitionManager.GetGroupOrNullAsync(input.GroupName);
-            if (group == null)
-            {
-                return new PagedResultDto<FeatureDefinitionDto>(0, permissions);
-            }
-
-            definitionPermissions = group.GetFeaturesWithChildren();
+            var features = group.GetFeaturesWithChildren();
+            staticFreatures.AddRange(features);
+            featureDtoList.AddRange(features.Select(f => DefinitionToDto(group, f, true)));
         }
-        else
+        var staticFeatureNames = staticFreatures
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        var dynamicGroups = await _dynamicFeatureDefinitionStore.GetGroupsAsync();
+        foreach (var group in dynamicGroups
+            .Where(d => !staticGroupNames.Contains(d.Name))
+            .WhereIf(!input.GroupName.IsNullOrWhiteSpace(), x => x.Name == input.GroupName))
         {
-            definitionPermissions = await _featureDefinitionManager.GetAllAsync();
-        }
-
-        var definitionFilter = definitionPermissions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) ||
-                (x.Parent != null && x.Parent.Name.Contains(input.Filter)));
-
-        var sorting = input.Sorting;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = nameof(FeatureDefinitionRecord.Name);
-        }
-
-        var filterDefinitionCount = definitionFilter.Count();
-        var filterDefinitions = definitionFilter
-            .OrderBy(sorting)
-            .PageBy(input.SkipCount, input.MaxResultCount);
-
-        foreach (var definition in filterDefinitions)
-        {
-            var groupDefinition = await GetGroupDefinition(definition);
-            var Dto = await DefinitionToDto(groupDefinition, definition);
-
-            permissions.Add(Dto);
+            var features = group.GetFeaturesWithChildren();
+            featureDtoList.AddRange(features
+                .Where(d => !staticFeatureNames.Contains(d.Name))
+                .Select(f => DefinitionToDto(group, f)));
         }
 
-        return new PagedResultDto<FeatureDefinitionDto>(filterDefinitionCount, permissions);
+        return new ListResultDto<FeatureDefinitionDto>(featureDtoList
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
+            .ToList());
     }
 
     [Authorize(FeatureManagementPermissionNames.Definition.Update)]
     public async virtual Task<FeatureDefinitionDto> UpdateAsync(string name, FeatureDefinitionUpdateDto input)
     {
+        if (await _staticFeatureDefinitionStore.GetOrNullAsync(name) != null)
+        {
+            throw new BusinessException(FeatureManagementErrorCodes.Definition.StaticFeatureNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var definition = await _featureDefinitionManager.GetAsync(name);
-        var definitionRecord = await FindByNameAsync(name);
+        var definitionRecord = await FindRecordByNameAsync(name);
 
         if (definitionRecord == null)
         {
@@ -180,66 +167,62 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
                 input.IsVisibleToClients,
                 input.IsAvailableToHost,
                 valueType: input.ValueType);
-
-            if (input.AllowedProviders.Any())
-            {
-                definitionRecord.AllowedProviders = input.AllowedProviders.JoinAsString(",");
-            }
-
-            foreach (var property in input.ExtraProperties)
-            {
-                definitionRecord.SetProperty(property.Key, property.Value);
-            }
+            UpdateByInput(definitionRecord, input);
 
             definitionRecord = await _definitionBasicRepository.InsertAsync(definitionRecord);
         }
         else
         {
-            definitionRecord.ExtraProperties.Clear();
-            foreach (var property in input.ExtraProperties)
-            {
-                definitionRecord.SetProperty(property.Key, property.Value);
-            }
-
-            if (input.AllowedProviders.Any())
-            {
-                definitionRecord.AllowedProviders = input.AllowedProviders.JoinAsString(",");
-            }
-
-            if (!string.Equals(definitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                definitionRecord.DisplayName = input.DisplayName;
-            }
-
-            if (!string.Equals(definitionRecord.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
-            {
-                definitionRecord.Description = input.Description;
-            }
-
-            if (!string.Equals(definitionRecord.DefaultValue, input.DefaultValue, StringComparison.InvariantCultureIgnoreCase))
-            {
-                definitionRecord.DefaultValue = input.DefaultValue;
-            }
-
-            if (!string.Equals(definitionRecord.ValueType, input.ValueType, StringComparison.InvariantCultureIgnoreCase))
-            {
-                definitionRecord.ValueType = input.ValueType;
-            }
-
-            definitionRecord.IsAvailableToHost = input.IsAvailableToHost;
-            definitionRecord.IsVisibleToClients = input.IsVisibleToClients;
-
+            UpdateByInput(definitionRecord, input);
             definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await DefinitionRecordToDto(definitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(definitionRecord);
     }
 
-    protected async virtual Task<FeatureDefinitionRecord> FindByNameAsync(string name)
+    protected virtual void UpdateByInput(FeatureDefinitionRecord record, FeatureDefinitionCreateOrUpdateDto input)
+    {
+        record.IsVisibleToClients = input.IsVisibleToClients;
+        record.IsAvailableToHost = input.IsAvailableToHost;
+        if (!string.Equals(record.ParentName, input.ParentName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.ParentName = input.ParentName;
+        }
+        if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.DisplayName = input.DisplayName;
+        }
+        if (!string.Equals(record.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.Description = input.Description;
+        }
+        if (!string.Equals(record.DefaultValue, input.DefaultValue, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.DefaultValue = input.DefaultValue;
+        }
+        if (!string.Equals(record.ValueType, input.ValueType, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.ValueType = input.ValueType;
+        }
+        string allowedProviders = null;
+        if (!input.AllowedProviders.IsNullOrEmpty())
+        {
+            allowedProviders = input.AllowedProviders.JoinAsString(",");
+        }
+        if (!string.Equals(record.AllowedProviders, allowedProviders, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.AllowedProviders = allowedProviders;
+        }
+        record.ExtraProperties.Clear();
+        foreach (var property in input.ExtraProperties)
+        {
+            record.SetProperty(property.Key, property.Value);
+        }
+    }
+
+    protected async virtual Task<FeatureDefinitionRecord> FindRecordByNameAsync(string name)
     {
         var DefinitionFilter = await _definitionBasicRepository.GetQueryableAsync();
 
@@ -265,7 +248,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
             .WithData(nameof(FeatureDefinitionRecord.Name), definition.Name);
     }
 
-    protected async virtual Task<FeatureDefinitionDto> DefinitionRecordToDto(FeatureDefinitionRecord definitionRecord)
+    protected virtual FeatureDefinitionDto DefinitionRecordToDto(FeatureDefinitionRecord definitionRecord)
     {
         var dto = new FeatureDefinitionDto
         {
@@ -276,19 +259,11 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
             IsVisibleToClients = definitionRecord.IsVisibleToClients,
             DefaultValue = definitionRecord.DefaultValue,
             ValueType = definitionRecord.ValueType,
-            AllowedProviders = definitionRecord.AllowedProviders.Split(',').ToList(),
-            FormatedDescription = definitionRecord.Description,
-            FormatedDisplayName = definitionRecord.DisplayName,
+            AllowedProviders = definitionRecord.AllowedProviders?.Split(',').ToList(),
+            Description = definitionRecord.Description,
+            DisplayName = definitionRecord.DisplayName,
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(definitionRecord.DisplayName);
-        dto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
-
-        if (!definitionRecord.Description.IsNullOrWhiteSpace())
-        {
-            var description = _localizableStringSerializer.Deserialize(definitionRecord.Description);
-            dto.Description = await description.LocalizeAsync(StringLocalizerFactory);
-        }
 
         foreach (var property in definitionRecord.ExtraProperties)
         {
@@ -298,10 +273,11 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         return dto;
     }
 
-    protected async virtual Task<FeatureDefinitionDto> DefinitionToDto(FeatureGroupDefinition groupDefinition, FeatureDefinition definition)
+    protected virtual FeatureDefinitionDto DefinitionToDto(FeatureGroupDefinition groupDefinition, FeatureDefinition definition, bool isStatic = false)
     {
         var dto = new FeatureDefinitionDto
         {
+            IsStatic = isStatic,
             Name = definition.Name,
             GroupName = groupDefinition.Name,
             ParentName = definition.Parent?.Name,
@@ -310,18 +286,18 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
             IsAvailableToHost = definition.IsAvailableToHost,
             IsVisibleToClients = definition.IsVisibleToClients,
             ValueType = definition.ValueType.Name,
+            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
 
-        if (definition.DisplayName != null)
+        if (definition.ValueType != null)
         {
-            dto.DisplayName = await definition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            dto.FormatedDisplayName = _localizableStringSerializer.Serialize(definition.DisplayName);
+            dto.ValueType = _stringValueTypeSerializer.Serialize(definition.ValueType);
         }
 
         if (definition.Description != null)
         {
-            dto.Description = await definition.Description.LocalizeAsync(StringLocalizerFactory);
-            dto.FormatedDescription = _localizableStringSerializer.Serialize(definition.Description);
+            dto.Description = _localizableStringSerializer.Serialize(definition.Description);
         }
 
         foreach (var property in definition.Properties)

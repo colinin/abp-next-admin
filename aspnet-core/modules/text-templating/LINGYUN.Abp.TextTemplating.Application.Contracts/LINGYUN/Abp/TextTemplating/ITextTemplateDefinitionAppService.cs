@@ -14,5 +14,5 @@ public interface ITextTemplateDefinitionAppService : IApplicationService
 
     Task DeleteAsync(string name);
 
-    Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input);
+    Task<ListResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input);
 }

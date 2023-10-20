@@ -1,5 +1,5 @@
 import { computed, onMounted } from 'vue';
-import { SettingGroup } from '/@/api/settings/model/settingModel';
+import { SettingGroup } from '/@/api/settings-management/settings/model';
 import { useSettingManagementStoreWithOut } from '/@/store/modules/settings';
 import { useSettings as useAbpSettings, ISettingProvider } from '/@/hooks/abp/useSettings';
 

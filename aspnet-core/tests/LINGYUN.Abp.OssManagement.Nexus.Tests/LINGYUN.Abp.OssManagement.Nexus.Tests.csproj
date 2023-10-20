@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\nexus\LINGYUN.Abp.OssManagement.Nexus\LINGYUN.Abp.OssManagement.Nexus.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Nexus\LINGYUN.Abp.OssManagement.Nexus.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BlobStoring.Nexus.Tests\LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />
 	</ItemGroup>
 

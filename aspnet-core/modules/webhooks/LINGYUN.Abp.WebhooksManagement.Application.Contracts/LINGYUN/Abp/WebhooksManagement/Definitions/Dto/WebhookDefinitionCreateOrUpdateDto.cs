@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Data;
 using Volo.Abp.Validation;
 
@@ -15,8 +16,7 @@ public abstract class WebhookDefinitionCreateOrUpdateDto : IHasExtraProperties
 
     public bool IsEnabled { get; set; }
 
-    [DynamicStringLength(typeof(WebhookDefinitionRecordConsts), nameof(WebhookDefinitionRecordConsts.MaxRequiredFeaturesLength))]
-    public string RequiredFeatures { get; set; }
+    public List<string> RequiredFeatures { get; set; } = new List<string>();
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

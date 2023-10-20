@@ -36,7 +36,7 @@ public class RealtimeMessageDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<RealtimeMessageDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

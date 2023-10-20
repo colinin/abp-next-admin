@@ -17,8 +17,9 @@
     "DisplayName:DefaultCultureName": "默认文化名称",
     "DisplayName:RenderEngine": "渲染引擎",
     "DisplayName:IsStatic": "内置",
-    "TextTemplating:01100": "文本模板 {Name} 已经存在!",
-    "TextTemplating:01404": "没有找到名为 {Name} 的文本模板!",
+    "TextTemplating:001010": "静态模板 {Name} 不允许变更!",
+    "TextTemplating:001100": "文本模板 {Name} 已经存在!",
+    "TextTemplating:001404": "没有找到名为 {Name} 的文本模板!",
     "TextTemplates": "文本模板",
     "TextTemplates:AddNew": "新模板",
     "Contents": "内容",
@@ -40,6 +41,8 @@
     "InlineContentDescription": "该模板使用内联本地化. 你可以使用<b>L</b>函数对文本进行本地化,例如 <b>{{L \"Hello\"}}</b>如果你仍想为区域性定义一个全新的模板,请使用\"根据文化定制\"按钮. <br />请检查<a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">文本模板文档</a>获取更多信息.",
     "RestoreTemplateToDefault": "还原到默认模板",
     "RestoreTemplateToDefaultMessage": "你确定吗? 此模板为内置模板, 此操作将还原模板为默认属性.",
-    "TemplateUpdated": "模板属性已更新"
+    "TemplateUpdated": "模板属性已更新",
+    "BasicInfo": "基本",
+    "Properties": "属性"
   }
 }

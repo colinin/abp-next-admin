@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { createLocalStorage } from '/@/utils/cache';
-import { SettingGroup } from '/@/api/settings/model/settingModel';
+import { SettingGroup } from '/@/api/settings-management/settings/model';
 
 const ls = createLocalStorage();
 const SETTING_ID = 'setting-management';

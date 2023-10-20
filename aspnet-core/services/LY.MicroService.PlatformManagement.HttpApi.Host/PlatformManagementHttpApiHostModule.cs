@@ -28,11 +28,9 @@ using LY.MicroService.Platform.EntityFrameworkCore;
 using LY.MicroService.PlatformManagement.BackgroundWorkers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -102,12 +100,9 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-
-        PreConfigureApp();
+        PreForwardedHeaders();
         PreConfigureFeature();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
     }
 
@@ -154,6 +149,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        app.UseForwardedHeaders();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统

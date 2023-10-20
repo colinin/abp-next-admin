@@ -1,20 +1,35 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.SettingManagement.Localization;
+using Volo.Abp.VirtualFileSystem;
+using VoloAbpSettingManagementApplicationContractsModule = Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule;
 
-namespace LINGYUN.Abp.SettingManagement
+namespace LINGYUN.Abp.SettingManagement;
+
+[DependsOn(
+    typeof(AbpSettingManagementDomainModule),
+    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(VoloAbpSettingManagementApplicationContractsModule),
+    typeof(AbpDddApplicationModule)
+    )]
+public class AbpSettingManagementApplicationModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpSettingManagementDomainModule),
-        typeof(AbpSettingManagementApplicationContractsModule),
-        typeof(AbpDddApplicationModule)
-        )]
-    public class AbpSettingManagementApplicationModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddScoped<ISettingTestAppService, SettingAppService>();
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            context.Services.AddScoped<ISettingTestAppService, SettingAppService>();
-        }
+            options.FileSets.AddEmbedded<AbpSettingManagementApplicationModule>();
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources.Get<AbpSettingManagementResource>()
+                .AddVirtualJson("/LINGYUN/Abp/SettingManagement/Localization/Resources");
+        });
     }
 }
