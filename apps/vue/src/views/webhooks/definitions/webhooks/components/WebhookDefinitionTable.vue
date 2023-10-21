@@ -16,44 +16,50 @@
         </Button>
       </template>
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'groupName'">
-          <span>{{ getGroupDisplayName(record.groupName) }}</span>
+        <template v-if="column.key === 'displayName'">
+          <span>{{ getGroupDisplayName(record.displayName) }}</span>
         </template>
-        <template v-else-if="column.key === 'displayName'">
-          <span>{{ getDisplayName(record.displayName) }}</span>
-        </template>
-        <template v-else-if="column.key === 'description'">
-          <span>{{ getDisplayName(record.description) }}</span>
-        </template>
-        <template v-else-if="column.key === 'isEnabled'">
-          <CheckOutlined v-if="record.isEnabled" class="enable" />
-          <CloseOutlined v-else class="disable" />
-        </template>
-        <template v-else-if="column.key === 'isStatic'">
-          <CheckOutlined v-if="record.isStatic" class="enable" />
-          <CloseOutlined v-else class="disable" />
-        </template>
-        <template v-else-if="column.key === 'action'">
-          <TableAction
-            :stop-button-propagation="true"
-            :actions="[
-              {
-                auth: 'AbpWebhooks.Definitions.Update',
-                label: L('Edit'),
-                icon: 'ant-design:edit-outlined',
-                onClick: handleEdit.bind(null, record),
-              },
-              {
-                auth: 'AbpWebhooks.Definitions.Delete',
-                label: L('Delete'),
-                color: 'error',
-                icon: 'ant-design:delete-outlined',
-                ifShow: !record.isStatic,
-                onClick: handleDelete.bind(null, record),
-              },
-            ]"
-          />
-        </template>
+      </template>
+      <template #expandedRowRender="{ record }">
+        <BasicTable @register="registerSubTable" :data-source="record.webhooks">
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'displayName'">
+              <span>{{ getDisplayName(record.displayName) }}</span>
+            </template>
+            <template v-else-if="column.key === 'description'">
+              <span>{{ getDisplayName(record.description) }}</span>
+            </template>
+            <template v-else-if="column.key === 'isEnabled'">
+              <CheckOutlined v-if="record.isEnabled" class="enable" />
+              <CloseOutlined v-else class="disable" />
+            </template>
+            <template v-else-if="column.key === 'isStatic'">
+              <CheckOutlined v-if="record.isStatic" class="enable" />
+              <CloseOutlined v-else class="disable" />
+            </template>
+            <template v-else-if="column.key === 'action'">
+              <TableAction
+                :stop-button-propagation="true"
+                :actions="[
+                  {
+                    auth: 'AbpWebhooks.Definitions.Update',
+                    label: L('Edit'),
+                    icon: 'ant-design:edit-outlined',
+                    onClick: handleEdit.bind(null, record),
+                  },
+                  {
+                    auth: 'AbpWebhooks.Definitions.Delete',
+                    label: L('Delete'),
+                    color: 'error',
+                    icon: 'ant-design:delete-outlined',
+                    ifShow: !record.isStatic,
+                    onClick: handleDelete.bind(null, record),
+                  },
+                ]"
+              />
+            </template>
+          </template>
+        </BasicTable>
       </template>
     </BasicTable>
     <WebhookDefinitionModal @register="registerModal" @change="fetch" />
@@ -73,10 +79,18 @@
   import { GetListAsyncByInput as getGroupDefinitions } from '/@/api/webhooks/definitions/groups';
   import { WebhookGroupDefinitionDto } from '/@/api/webhooks/definitions/groups/model';
   import { GetListAsyncByInput, DeleteAsyncByName } from '/@/api/webhooks/definitions/webhooks';
+  import { WebhookDefinitionDto } from '/@/api/webhooks/definitions/webhooks/model';
   import { getSearchFormSchemas } from '../datas/ModalData';
+  import { groupBy } from '/@/utils/array';
+  import { sorter } from '/@/utils/table';
   import WebhookDefinitionModal from './WebhookDefinitionModal.vue';
 
   const FormItem = Form.Item;
+  interface WebhookGroup {
+    name: string;
+    displayName: string;
+    webhooks: WebhookDefinitionDto[];
+  }
   interface State {
     groups: WebhookGroupDefinitionDto[],
   }
@@ -88,7 +102,16 @@
   const [registerTable, { setLoading, getForm, setTableData }] = useTable({
     rowKey: 'name',
     title: L('WebhookDefinitions'),
-    columns: getDataColumns(),
+    columns: [
+      {
+        title: L('DisplayName:DisplayName'),
+        dataIndex: 'displayName',
+        align: 'left',
+        width: 180,
+        resizable: true,
+        sorter: (a, b) => sorter(a, b, 'displayName'),
+      },
+    ],
     pagination: true,
     striped: false,
     useSearchForm: true,
@@ -105,8 +128,18 @@
     bordered: true,
     canResize: true,
     immediate: false,
+  });
+  const [registerSubTable] = useTable({
+    rowKey: 'name',
+    columns: getDataColumns(),
+    pagination: false,
+    striped: false,
+    useSearchForm: false,
+    showIndexColumn: true,
+    immediate: false,
+    scroll: { x: 2000, y: 900 },
     actionColumn: {
-      width: 120,
+      width: 150,
       title: L('Actions'),
       dataIndex: 'action',
     },
@@ -151,7 +184,18 @@
       setTableData([]);
       var input = form.getFieldsValue();
       GetListAsyncByInput(input).then((res) => {
-        setTableData(res.items);
+        const webhookGroup = groupBy(res.items, 'groupName');
+        const webhookGroupData: WebhookGroup[] = [];
+        Object.keys(webhookGroup).forEach((gk) => {
+          const groupData: WebhookGroup = {
+            name: gk,
+            displayName: gk,
+            webhooks: [],
+          };
+          groupData.webhooks.push(...webhookGroup[gk]);
+          webhookGroupData.push(groupData);
+        });
+        setTableData(webhookGroupData);
       }).finally(() => {
         setLoading(false);
       });

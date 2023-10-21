@@ -17,6 +17,13 @@
     >
       <Tabs v-model:active-key="state.activeTab">
         <TabPane key="basic" :tab="L('BasicInfo')">
+          <FormItem name="isEnabled" :label="L('DisplayName:IsEnabled')">
+            <Checkbox
+              :disabled="!state.allowedChange"
+              v-model:checked="state.entity.isEnabled"
+            >{{ L('DisplayName:IsEnabled') }}
+            </Checkbox>
+          </FormItem>
           <FormItem name="groupName" :label="L('DisplayName:GroupName')">
             <Select
               :disabled="!state.allowedChange"
@@ -24,13 +31,6 @@
               v-model:value="state.entity.groupName"
               :options="getGroupOptions"
             />
-          </FormItem>
-          <FormItem name="isEnabled" :label="L('DisplayName:IsEnabled')">
-            <Checkbox
-              :disabled="!state.allowedChange"
-              v-model:checked="state.entity.isEnabled"
-            >{{ L('DisplayName:IsEnabled') }}
-            </Checkbox>
           </FormItem>
           <FormItem name="name" :label="L('DisplayName:Name')">
             <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />

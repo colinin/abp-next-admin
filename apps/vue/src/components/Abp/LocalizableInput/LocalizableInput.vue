@@ -2,7 +2,7 @@
   <div style="width: 100%">
     <ItemReset>
       <InputGroup>
-        <Row :gutter="4" style="margin-top: 10px;">
+        <Row :gutter="4">
           <Col :span="8">
             <Select
               :class="`${prefixCls}__resource`"
@@ -11,7 +11,7 @@
               :placeholder="t('component.localizable_input.placeholder')"
               v-model:value="state.resourceName"
               :options="getResources"
-              @change="handleResourceChange"
+              @change="(value) => handleResourceChange(value?.toString(), true)"
             />
           </Col>
           <Col :span="16">
@@ -107,6 +107,7 @@
       const info = deserialize(value);
       if (state.resourceName !== info.resourceName) {
         state.resourceName = isNullOrWhiteSpace(info.resourceName) ? undefined : info.resourceName;
+        handleResourceChange(state.resourceName, false);
       }
       if (state.displayName !== info.name) {
         state.displayName = isNullOrWhiteSpace(info.name) ? undefined : info.name;
@@ -117,7 +118,7 @@
     }
   );
 
-  function handleResourceChange(value?: string) {
+  function handleResourceChange(value?: string, triggerChanged?: boolean) {
     state.displayNames = [];
     if (value && resources[value]) {
       state.displayNames = Object.keys(resources[value]).map((key) => {
@@ -128,7 +129,9 @@
       }); 
     }
     state.displayName = undefined;
-    triggerDisplayNameChange(state.displayName);
+    if (triggerChanged === true) {
+      triggerDisplayNameChange(state.displayName);
+    }
   }
 
   function handleDisplayNameChange(value?: string) {

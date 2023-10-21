@@ -15,14 +15,6 @@ export function getDataColumns(): BasicColumn[] {
       sorter: (a, b) => sorter(a, b, 'isEnabled'),
     },
     {
-      title: L('DisplayName:GroupName'),
-      dataIndex: 'groupName',
-      align: 'left',
-      width: 150,
-      resizable: true,
-      sorter: (a, b) => sorter(a, b, 'groupName'),
-    },
-    {
       title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',

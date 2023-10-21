@@ -8,7 +8,7 @@ export function getSearchFormSchemas():FormSchema[] {
     {
       field: 'groupName',
       component: 'ApiSelect',
-      label: L('DisplayName:Providers'),
+      label: L('DisplayName:GroupName'),
       colProps: { span: 6 },
       slot: 'groupName',
     },
