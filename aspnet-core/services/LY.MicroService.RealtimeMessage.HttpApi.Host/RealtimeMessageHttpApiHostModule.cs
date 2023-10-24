@@ -24,7 +24,6 @@ using LINGYUN.Abp.Notifications.Common;
 using LINGYUN.Abp.Notifications.Emailing;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Jobs;
-using LINGYUN.Abp.Notifications.PushPlus;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
@@ -35,14 +34,11 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
-using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -54,6 +50,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TextTemplating.Scriban;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -95,7 +92,6 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsEmailingModule),
     typeof(AbpNotificationsSignalRModule),
     typeof(AbpNotificationsWxPusherModule),
-    typeof(AbpNotificationsPushPlusModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
@@ -117,12 +113,9 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureSignalR(configuration);
@@ -154,6 +147,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
+        app.UseForwardedHeaders();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统

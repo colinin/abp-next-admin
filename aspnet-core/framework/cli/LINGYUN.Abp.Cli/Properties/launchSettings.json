@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.Cli": {
+      "commandName": "Project",
+      //"commandLineArgs": "generate-view -t vben-view -m auditing -o D:\\Projects\\Development\\view-script -url http://127.0.0.1:30000/"
+      "commandLineArgs": "generate-proxy -t flutter -asp rest-service -u http://127.0.0.1:30000 -m notifications -o D:\\Projects\\Development\\flutter-script -skip-cli-version-check"
+    }
+  }
+}

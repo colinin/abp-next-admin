@@ -18,6 +18,7 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             L("Notifications:JobExecuteSucceededDesc"),
             notificationType: NotificationType.Application,
             lifetime: NotificationLifetime.Persistent,
+            contentType: NotificationContentType.Markdown,
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,
@@ -28,6 +29,7 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             L("Notifications:JobExecuteFailedDesc"),
             notificationType: NotificationType.Application,
             lifetime: NotificationLifetime.Persistent,
+            contentType: NotificationContentType.Markdown,
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,
@@ -38,6 +40,7 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             L("Notifications:JobExecuteCompletedDesc"),
             notificationType: NotificationType.Application,
             lifetime: NotificationLifetime.Persistent,
+            contentType: NotificationContentType.Markdown,
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,

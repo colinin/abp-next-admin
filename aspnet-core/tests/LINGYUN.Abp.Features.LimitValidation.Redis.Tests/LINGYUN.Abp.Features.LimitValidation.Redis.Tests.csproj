@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj" />
+    <ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Features.LimitValidation.Tests\LINGYUN.Abp.Features.LimitValidation.Tests.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>

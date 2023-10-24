@@ -1,8 +1,8 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>7.3.3</VoloAbpPackageVersion>
-		<VoloAbpLeptonXThemePackageVersion>2.3.2</VoloAbpLeptonXThemePackageVersion>
-		<LINGYUNAbpPackageVersion>7.3.3</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>7.4.0</VoloAbpPackageVersion>
+		<VoloAbpLeptonXThemePackageVersion>2.4.0</VoloAbpLeptonXThemePackageVersion>
+		<LINGYUNAbpPackageVersion>7.4.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.11.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
 		<DotNetCoreCAPPackageVersion>7.2.0</DotNetCoreCAPPackageVersion>

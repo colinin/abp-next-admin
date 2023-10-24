@@ -14,6 +14,10 @@
 
             public const string Enable = Default + ".Enable";
             /// <summary>
+            /// 允许用户分享文件
+            /// </summary>
+            public const string AllowSharedFile = Default + ".AllowSharedFile";
+            /// <summary>
             /// 下载文件功能
             /// </summary>
             public const string DownloadFile = Default + ".DownloadFile";

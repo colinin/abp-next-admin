@@ -26,14 +26,11 @@ using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
-using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
@@ -98,7 +95,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpAutofacModule)
     )]
 public partial class BackendAdminHttpApiHostModule : AbpModule
@@ -107,11 +103,8 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-        PreConfigureApp();
         PreConfigureFeature();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
     }
 

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj" />
+    <ProjectReference Include="..\..\framework\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Dapr.Tests\LINGYUN.Abp.Dapr.Tests.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>

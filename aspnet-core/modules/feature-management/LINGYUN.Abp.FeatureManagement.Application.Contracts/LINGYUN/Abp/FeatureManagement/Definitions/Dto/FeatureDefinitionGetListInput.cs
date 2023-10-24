@@ -1,7 +1,5 @@
-﻿using Volo.Abp.Application.Dtos;
-
-namespace LINGYUN.Abp.FeatureManagement.Definitions;
-public class FeatureDefinitionGetListInput : PagedAndSortedResultRequestDto
+﻿namespace LINGYUN.Abp.FeatureManagement.Definitions;
+public class FeatureDefinitionGetListInput
 {
     public string Filter { get; set; }
 

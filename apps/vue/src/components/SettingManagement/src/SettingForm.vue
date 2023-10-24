@@ -115,7 +115,7 @@
   } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { formatToDate } from '/@/utils/dateUtil';
-  import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
+  import { SettingGroup, SettingsUpdate } from '/@/api/settings-management/settings/model';
 
   const CollapsePanel = Collapse.Panel;
   const FormItem = Form.Item;

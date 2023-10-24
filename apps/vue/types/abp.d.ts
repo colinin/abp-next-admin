@@ -111,3 +111,47 @@ declare interface CurrentUser {
   phoneNumberVerified: boolean;
   roles: string[];
 }
+
+type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> = Recordable<
+  TState,
+  boolean
+>;
+
+declare interface SimpleStateCheckerContext<TState extends IHasSimpleStateCheckers<TState>> {
+  state: TState;
+}
+
+declare interface SimpleBatchStateCheckerContext<TState extends IHasSimpleStateCheckers<TState>> {
+  states: TState[];
+}
+
+declare interface IHasSimpleStateCheckers<TState extends IHasSimpleStateCheckers<TState>> {
+  stateCheckers: ISimpleStateChecker<TState>[];
+}
+
+declare interface ISimpleStateChecker<TState extends IHasSimpleStateCheckers<TState>> {
+  isEnabled(context: SimpleStateCheckerContext<TState>): boolean;
+  serialize(): string | undefined;
+}
+
+declare interface ISimpleBatchStateChecker<TState extends IHasSimpleStateCheckers<TState>>
+  extends ISimpleStateChecker<TState> {
+  isEnabled(context: SimpleBatchStateCheckerContext<TState>): SimpleStateCheckerResult<TState>;
+}
+
+declare interface ISimpleStateCheckerSerializer {
+  serialize<TState extends IHasSimpleStateCheckers<TState>>(
+    checker: ISimpleStateChecker<TState>,
+  ): string | undefined;
+  serializeArray<TState extends IHasSimpleStateCheckers<TState>>(
+    stateCheckers: ISimpleStateChecker<TState>[],
+  ): string | undefined;
+  deserialize<TState extends IHasSimpleStateCheckers<TState>>(
+    jsonObject: any,
+    state: TState,
+  ): ISimpleStateChecker<TState> | undefined;
+  deserializeArray<TState extends IHasSimpleStateCheckers<TState>>(
+    value: string,
+    state: TState,
+  ): ISimpleStateChecker<TState>[];
+}

@@ -74,11 +74,16 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { TenantDto } from '/@/api/saas/tenant/model';
   import { GetListAsyncByInput as getTenants } from '/@/api/saas/tenant';
-  import { getById, create, update, getAllAvailableWebhooks } from '/@/api/webhooks/subscriptions';
+  import {
+    GetAsyncById,
+    CreateAsyncByInput,
+    UpdateAsyncByIdAndInput,
+    GetAllAvailableWebhooksAsync
+  } from '/@/api/webhooks/subscriptions';
   import {
     WebhookSubscription,
     WebhookAvailableGroup,
-  } from '/@/api/webhooks/model/subscriptionsModel';
+  } from '/@/api/webhooks/subscriptions/model';
 
   const FormItem = Form.Item;
   const SelectGroup = Select.OptGroup;
@@ -154,7 +159,7 @@
   });
 
   function fetchAvailableWebhooks() {
-    getAllAvailableWebhooks().then((res) => {
+    GetAllAvailableWebhooksAsync().then((res) => {
       webhooksGroupRef.value = res.items;
     });
   }
@@ -174,7 +179,7 @@
       modelRef.value = getDefaultModel();
       return;
     }
-    getById(id).then((res) => {
+    GetAsyncById(id).then((res) => {
       modelRef.value = res;
     });
   }
@@ -188,8 +193,8 @@
       }
       changeOkLoading(true);
       const api = isEditModal.value
-        ? update(model.id, Object.assign(model))
-        : create(Object.assign(model));
+        ? UpdateAsyncByIdAndInput(model.id, Object.assign(model))
+        : CreateAsyncByInput(Object.assign(model));
       api
         .then(() => {
           createMessage.success(L('Successful'));

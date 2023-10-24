@@ -7,51 +7,51 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{02EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{086BE5BE-8594-4DA7-8819-935FEF76DABD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM", "modules\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj", "{5A87E9DD-3340-44DC-9564-4D8832A0228E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM", "modules\realtime-message\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj", "{5A87E9DD-3340-44DC-9564-4D8832A0228E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "modules\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{E9BE3C65-2AB2-4CE8-8EB9-5C91B329ADB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{E9BE3C65-2AB2-4CE8-8EB9-5C91B329ADB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json", "modules\common\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json.csproj", "{E9AEC9D6-1FE7-4B00-BAC5-2C3D4B63CCA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json", "framework\common\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json\LINGYUN.Abp.AspNetCore.SignalR.Protocol.Json.csproj", "{E9AEC9D6-1FE7-4B00-BAC5-2C3D4B63CCA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.SignalR.JwtToken", "modules\common\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj", "{304D06E6-41EC-4DCB-AEAE-DBEEC75F9ADC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.SignalR.JwtToken", "framework\common\LINGYUN.Abp.AspNetCore.SignalR\LINGYUN.Abp.AspNetCore.SignalR.JwtToken.csproj", "{304D06E6-41EC-4DCB-AEAE-DBEEC75F9ADC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundJobs.Hangfire", "modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj", "{492710E6-EEF5-4390-A474-8FB2412ECBE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundJobs.Hangfire", "framework\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj", "{492710E6-EEF5-4390-A474-8FB2412ECBE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "modules\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{CCF1EB86-29BD-4531-BB27-C9111CC67570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "framework\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{CCF1EB86-29BD-4531-BB27-C9111CC67570}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{7947D559-4288-486B-8FB3-D957CC7EDD32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{7947D559-4288-486B-8FB3-D957CC7EDD32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "modules\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{A4195E41-3919-4C3E-8768-7F277B583D16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "framework\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{A4195E41-3919-4C3E-8768-7F277B583D16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing", "modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj", "{60083380-062C-4914-9E4E-5AE6637CCC3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing", "framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj", "{60083380-062C-4914-9E4E-5AE6637CCC3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Notifications", "modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj", "{9C6E9EE2-5C83-4D96-A7B7-32798FEF2845}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Notifications", "modules\realtime-notifications\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj", "{9C6E9EE2-5C83-4D96-A7B7-32798FEF2845}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "modules\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{34C1E979-65B9-46F5-B7BA-60F227EBA093}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "framework\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{34C1E979-65B9-46F5-B7BA-60F227EBA093}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{80A56461-0ACC-4069-B571-87DCA064B2EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "framework\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{80A56461-0ACC-4069-B571-87DCA064B2EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{568D2C50-1C31-4C31-89A2-C608FA93C6FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "framework\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{568D2C50-1C31-4C31-89A2-C608FA93C6FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.SqlServer", "modules\common\LINGYUN.Abp.Hangfire.Storage.SqlServer\LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj", "{12451B83-18DE-4E93-B98C-509477D53D5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.SqlServer", "framework\common\LINGYUN.Abp.Hangfire.Storage.SqlServer\LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj", "{12451B83-18DE-4E93-B98C-509477D53D5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location", "modules\common\LINGYUN.Abp.Location\LINGYUN.Abp.Location.csproj", "{AAD0B6A7-847A-4537-A300-50E37F4B70CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location", "framework\common\LINGYUN.Abp.Location\LINGYUN.Abp.Location.csproj", "{AAD0B6A7-847A-4537-A300-50E37F4B70CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu", "modules\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj", "{5B5C2372-2EAB-4559-BBCB-0C1C9A7158DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu", "framework\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj", "{5B5C2372-2EAB-4559-BBCB-0C1C9A7158DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent", "modules\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj", "{2A0C5EF1-CB21-4656-8C32-B5673F6B82D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent", "framework\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj", "{2A0C5EF1-CB21-4656-8C32-B5673F6B82D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{3021DD8B-EA8F-4A88-BC2C-1BBEDC6255FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\realtime-notifications\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{3021DD8B-EA8F-4A88-BC2C-1BBEDC6255FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.SignalR", "modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj", "{B31CEE79-45F6-4BB9-9EEB-08843C324B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.SignalR", "modules\realtime-notifications\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj", "{B31CEE79-45F6-4BB9-9EEB-08843C324B37}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wechat", "wechat", "{22C61434-D29A-4376-AD56-F5089F3E617A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat", "modules\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{865D5508-63CD-4D44-9F5B-AE5CD4A43D08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat", "framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{865D5508-63CD-4D44-9F5B-AE5CD4A43D08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "modules\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{ECAA4B82-A240-4747-888C-FACD8634D389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{ECAA4B82-A240-4747-888C-FACD8634D389}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun", "modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj", "{8AF8FD6B-634F-41FA-B421-A4ACFD159FE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun", "framework\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj", "{8AF8FD6B-634F-41FA-B421-A4ACFD159FE0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "alibaba-cloud", "alibaba-cloud", "{7F18BCA5-35BD-41FB-8EFF-801B56E5E414}"
 EndProject
@@ -63,27 +63,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{B9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "features", "features", "{0D2D7A10-CBA5-4798-BFC7-EB05D1E6B94C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client", "modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{3B455AA7-B165-4EA0-8870-DB8DA5C76FC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client", "framework\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{3B455AA7-B165-4EA0-8870-DB8DA5C76FC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Client", "modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{99F8F254-A76E-43BB-8048-CC17EE1C8527}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Client", "framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{99F8F254-A76E-43BB-8048-CC17EE1C8527}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tenants", "tenants", "{38E21687-5F19-42C9-9D11-4B1D2EF64EDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy", "modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj", "{F2DAA5EB-5508-4D99-AE64-A10C025712BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{15FC0C39-A604-491F-91F6-BD44167FC5F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{15FC0C39-A604-491F-91F6-BD44167FC5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProgram", "framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{9E59B1DB-E0D5-485D-BDA0-B6C31E1358A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{9E59B1DB-E0D5-485D-BDA0-B6C31E1358A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official", "framework\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{16942653-B746-4917-B3BF-464C99F8832F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official", "modules\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{16942653-B746-4917-B3BF-464C99F8832F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.SettingManagement", "framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj", "{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.SettingManagement", "modules\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj", "{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Core", "framework\common\LINGYUN.Abp.Core\LINGYUN.Abp.Core.csproj", "{A7A28D6C-6EDB-4615-8899-7DE1D435B750}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{D119C919-230B-4614-9A06-98586635DBFC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Core", "modules\common\LINGYUN.Abp.Core\LINGYUN.Abp.Core.csproj", "{A7A28D6C-6EDB-4615-8899-7DE1D435B750}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{17A8455F-D413-4664-AEFA-1ECAE9ED4B19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "framework\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{17A8455F-D413-4664-AEFA-1ECAE9ED4B19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B86C21A4-73B7-471E-B73A-B4B905EC9435}"
 EndProject
@@ -93,7 +89,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Ali
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "console", "console", "{8D2AD50B-DD4B-48A2-88EC-0E8E8236D883}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Encryption.Console", "modules\console\LINGYUN.Abp.Encryption.Console\LINGYUN.Abp.Encryption.Console.csproj", "{8FB74B18-CA5C-4DC3-8DFA-600133A05712}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Encryption.Console", "framework\console\LINGYUN.Abp.Encryption.Console\LINGYUN.Abp.Encryption.Console.csproj", "{8FB74B18-CA5C-4DC3-8DFA-600133A05712}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.Tests", "tests\LINGYUN.Abp.Aliyun.Tests\LINGYUN.Abp.Aliyun.Tests.csproj", "{3DBF0975-B09D-49CA-9AF8-69175EDB9D52}"
 EndProject
@@ -103,32 +99,32 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent.Tests", "tests\LINGYUN.Abp.Location.Tencent.Tests\LINGYUN.Abp.Location.Tencent.Tests.csproj", "{1B494EA1-28CF-4A61-B0BE-70BBA425C316}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Client", "modules\common\LINGYUN.Abp.AspNetCore.Mvc.Client\LINGYUN.Abp.AspNetCore.Mvc.Client.csproj", "{7F767ACF-754A-4EBC-8936-3C1402B6EF82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Client", "framework\common\LINGYUN.Abp.AspNetCore.Mvc.Client\LINGYUN.Abp.AspNetCore.Mvc.Client.csproj", "{7F767ACF-754A-4EBC-8936-3C1402B6EF82}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localization", "{E73A0F8B-2B4B-4CED-82A4-1EE5E0B89744}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml", "modules\localization\LINGYUN.Abp.Localization.Xml\LINGYUN.Abp.Localization.Xml.csproj", "{8CC72F4E-F134-4A43-9037-5D4D1F29B68A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml", "framework\localization\LINGYUN.Abp.Localization.Xml\LINGYUN.Abp.Localization.Xml.csproj", "{8CC72F4E-F134-4A43-9037-5D4D1F29B68A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml.Tests", "tests\LINGYUN.Abp.Localization.Xml.Tests\LINGYUN.Abp.Localization.Xml.Tests.csproj", "{94FEA59E-3B6D-41A0-9E44-BA5D6477244F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{7FDFB22F-1BFF-4E05-9427-78B7A8461D50}"
 	ProjectSection(SolutionItems) = preProject
-		modules\dapr\README.md = modules\dapr\README.md
+		framework\dapr\README.md = framework\dapr\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "modules\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj", "{C72E0407-06FE-4CAA-86E5-30FF216A7B82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "framework\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj", "{C72E0407-06FE-4CAA-86E5-30FF216A7B82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{E74FF671-6E5E-430C-9211-ED910634DDBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "framework\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{E74FF671-6E5E-430C-9211-ED910634DDBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "modules\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{879791A3-BD69-42E4-A3BC-9878EFAADDD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "framework\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{879791A3-BD69-42E4-A3BC-9878EFAADDD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rules", "rules", "{C8891F1A-E6E5-448A-B527-EBFA44D20808}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules", "modules\rules\LINGYUN.Abp.Rules\LINGYUN.Abp.Rules.csproj", "{5133D83C-9B23-491C-8780-3F9BBDBD0351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules", "framework\rules\LINGYUN.Abp.Rules\LINGYUN.Abp.Rules.csproj", "{5133D83C-9B23-491C-8780-3F9BBDBD0351}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.NRules", "modules\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj", "{B8E5026B-188F-422F-A1EA-502C4A394585}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.NRules", "framework\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj", "{B8E5026B-188F-422F-A1EA-502C4A394585}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine", "modules\rules\LINGYUN.Abp.Rules.RulesEngine\LINGYUN.Abp.Rules.RulesEngine.csproj", "{E861BE01-689D-4637-A5DC-E78E234F83FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine", "framework\rules\LINGYUN.Abp.Rules.RulesEngine\LINGYUN.Abp.Rules.RulesEngine.csproj", "{E861BE01-689D-4637-A5DC-E78E234F83FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine.Tests", "tests\LINGYUN.Abp.Rules.RulesEngine.Tests\LINGYUN.Abp.Rules.RulesEngine.Tests.csproj", "{CF253F0A-3A45-40EE-875F-0E57C8968C48}"
 EndProject
@@ -142,51 +138,51 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.AspNetCore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.Tests", "tests\LINGYUN.Abp.Dapr.Actors.Tests\LINGYUN.Abp.Dapr.Actors.Tests.csproj", "{CF30221B-CA7A-42CD-B91A-B7224AB2F38B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{191BB108-546E-4E70-978E-D6A8149C319C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{191BB108-546E-4E70-978E-D6A8149C319C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM.SignalR", "modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj", "{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM.SignalR", "modules\realtime-message\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj", "{DEB98AD7-9630-4F32-89E6-C1A118D1D18C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "modules\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{00F1D30E-A6F6-464F-A80B-D423CFAA79A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{358A4FB1-F5DF-433C-9DA7-D27401155AD7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{2584D823-53A7-4184-8295-719A41E5B440}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "framework\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{2584D823-53A7-4184-8295-719A41E5B440}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{6271EBC0-78F2-4E4F-A646-BBD15BCB0F84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "modules\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{C1A91534-E84F-4A98-9A78-135988030646}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{C1A91534-E84F-4A98-9A78-135988030646}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{0CC508D7-480C-4409-842A-A6C10E11ACFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{0CC508D7-480C-4409-842A-A6C10E11ACFD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch.Tests", "tests\LINGYUN.Abp.AuditLogging.Elasticsearch.Tests\LINGYUN.Abp.AuditLogging.Elasticsearch.Tests.csproj", "{F8330A1E-6CC3-4E90-8B5C-DCD8FA00CF5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{23F4260D-87C1-4AA6-A302-0A8A76D53BA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging", "modules\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{CE7E525F-8628-4076-8A2E-B615B944D140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging", "framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{CE7E525F-8628-4076-8A2E-B615B944D140}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "modules\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{CD556F2A-A96B-43A2-8BB3-6C0EBA27EB02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "framework\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{CD556F2A-A96B-43A2-8BB3-6C0EBA27EB02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{CCB4AE25-7059-4CA0-A3AB-CBB863A3F672}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{CCB4AE25-7059-4CA0-A3AB-CBB863A3F672}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{3993A315-B250-4C5D-98C7-90FD06841B66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{3993A315-B250-4C5D-98C7-90FD06841B66}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data-protection", "data-protection", "{A0910407-CE69-4DC8-9721-F4324C22EEA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection", "modules\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj", "{519BF5DA-30E4-40CF-829A-93F526E2AED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection", "framework\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj", "{519BF5DA-30E4-40CF-829A-93F526E2AED8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "modules\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{E16CCB14-E629-48E6-9603-53BBFF185318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "framework\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{E16CCB14-E629-48E6-9603-53BBFF185318}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.Tests", "tests\LINGYUN.Abp.DataProtection.Tests\LINGYUN.Abp.DataProtection.Tests.csproj", "{FBE7D8CB-1D99-4342-A953-B9AB46E0B14D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{2F556889-006C-4A9C-8CA3-E31200C06FC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "modules\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{73C9A7E7-846D-49E2-B223-E705D6C48BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "framework\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{73C9A7E7-846D-49E2-B223-E705D6C48BE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "modules\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{328B0863-23BE-43FD-98DD-FF0C92D5BEF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{328B0863-23BE-43FD-98DD-FF0C92D5BEF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mvc", "mvc", "{F55B987D-1DFF-4EB0-9949-8A7136A7B689}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Wrapper", "modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj", "{D72748AF-2CC8-4B5B-9710-ECDE5D812D7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Wrapper", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj", "{D72748AF-2CC8-4B5B-9710-ECDE5D812D7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Tests", "tests\LINGYUN.Abp.AspNetCore.Tests\LINGYUN.Abp.AspNetCore.Tests.csproj", "{BD4165DB-F8A4-4715-A05A-CC08F6A18D67}"
 EndProject
@@ -196,31 +192,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "open-api", "open-api", "{8C688427-DD35-4F0B-86DA-6F536D3852D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi", "modules\open-api\LINGYUN.Abp.OpenApi\LINGYUN.Abp.OpenApi.csproj", "{2C8A6B4C-D6B2-44FE-9EF5-EC7480D2A6B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi", "framework\open-api\LINGYUN.Abp.OpenApi\LINGYUN.Abp.OpenApi.csproj", "{2C8A6B4C-D6B2-44FE-9EF5-EC7480D2A6B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Authorization", "modules\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj", "{3CE350AF-5574-46EC-8120-8542350AED20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Authorization", "framework\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj", "{3CE350AF-5574-46EC-8120-8542350AED20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApi.Sdk", "modules\open-api\OpenApi.Sdk\OpenApi.Sdk.csproj", "{108192F3-3780-423F-9871-A1BBE323413E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApi.Sdk", "framework\open-api\OpenApi.Sdk\OpenApi.Sdk.csproj", "{108192F3-3780-423F-9871-A1BBE323413E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Tests", "tests\LINGYUN.Abp.OpenApi.Tests\LINGYUN.Abp.OpenApi.Tests.csproj", "{6C75799E-4B46-434D-BE1B-4AD71DF49686}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{FE372F22-80A2-4859-9330-949C27CA94ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Cli", "modules\cli\LINGYUN.Abp.Cli\LINGYUN.Abp.Cli.csproj", "{33007EF7-BC1D-4B32-ACDA-6B9117200FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Cli", "framework\cli\LINGYUN.Abp.Cli\LINGYUN.Abp.Cli.csproj", "{33007EF7-BC1D-4B32-ACDA-6B9117200FAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client.Wrapper", "modules\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj", "{B9592989-9F76-413C-8612-96E8C0CFA041}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client.Wrapper", "framework\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj", "{B9592989-9F76-413C-8612-96E8C0CFA041}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "settings", "settings", "{F7878090-7FD6-4A2E-8D61-CAA0997880D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{7EDBCC52-3089-49F6-A56A-650850C9797E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{7EDBCC52-3089-49F6-A56A-650850C9797E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hangfire", "hangfire", "{3A0784A6-AFBF-406F-B79E-9505EB100445}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Dashboard", "modules\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj", "{FF518E10-C9AB-440C-8E8D-9CFF67A926AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Dashboard", "framework\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj", "{FF518E10-C9AB-440C-8E8D-9CFF67A926AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj", "{49E0B90B-8635-43D0-B0AB-9D484CAE68B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper", "framework\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj", "{49E0B90B-8635-43D0-B0AB-9D484CAE68B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Editions", "modules\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj", "{3FF4CEA0-1555-4D62-AA81-B3B599253F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Editions", "framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj", "{3FF4CEA0-1555-4D62-AA81-B3B599253F8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webhooks", "webhooks", "{BD97C98B-0B4B-443D-AB29-145A344F46D3}"
 EndProject
@@ -228,37 +224,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebHooks", "mod
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authorization", "authorization", "{3971AD93-BF97-4E05-972D-CB5EB9F6CB88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authorization.OrganizationUnits", "modules\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj", "{D9339CBB-45B9-4701-B2AC-2A75FF20D77B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authorization.OrganizationUnits", "framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj", "{D9339CBB-45B9-4701-B2AC-2A75FF20D77B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.OrganizaztionUnits", "modules\authorization\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj", "{474AA48F-65F9-436B-A0B1-1E95BD16CA8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.OrganizaztionUnits", "modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj", "{474AA48F-65F9-436B-A0B1-1E95BD16CA8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DistributedLocking.Dapr", "modules\dapr\LINGYUN.Abp.DistributedLocking.Dapr\LINGYUN.Abp.DistributedLocking.Dapr.csproj", "{C71F6273-BCDE-4A63-A0CF-EAFD1D924DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DistributedLocking.Dapr", "framework\dapr\LINGYUN.Abp.DistributedLocking.Dapr\LINGYUN.Abp.DistributedLocking.Dapr.csproj", "{C71F6273-BCDE-4A63-A0CF-EAFD1D924DA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pushplus", "pushplus", "{0F5A2591-CE08-4184-A5F3-89F6FB3B2B10}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus", "modules\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj", "{5515C7CA-B512-4E36-A202-49A0158A0E74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus", "framework\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj", "{5515C7CA-B512-4E36-A202-49A0158A0E74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "modules\pushplus\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{EBA67EAD-4958-46E3-9E0C-8186394D083F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "framework\pushplus\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{EBA67EAD-4958-46E3-9E0C-8186394D083F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\common\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{25891EE2-3166-420F-8408-E458030C4643}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{25891EE2-3166-420F-8408-E458030C4643}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{F051C960-AA61-4283-A088-611C0B96C953}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{F051C960-AA61-4283-A088-611C0B96C953}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.Tests", "tests\LINGYUN.Abp.PushPlus.Tests\LINGYUN.Abp.PushPlus.Tests.csproj", "{1435711B-D796-42AB-B567-0BB23F02EE08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wx-pusher", "wx-pusher", "{7862CE70-76EF-4228-A703-C2E2A9704D14}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher", "modules\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{1A072FF5-1A7E-4F78-B145-1AB873AEB8FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher", "framework\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{1A072FF5-1A7E-4F78-B145-1AB873AEB8FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.Tests", "tests\LINGYUN.Abp.WxPusher.Tests\LINGYUN.Abp.WxPusher.Tests.csproj", "{88412E3D-21C8-4FF1-8EB3-84CB74094336}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{F65A8835-C50F-43B0-B54C-196A92E9539F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WxPusher", "framework\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{30FA01ED-921A-4E7D-9E83-6719538FB866}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{30FA01ED-921A-4E7D-9E83-6719538FB866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.SettingManagement", "framework\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj", "{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.SettingManagement", "modules\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj", "{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.SettingManagement", "modules\pushplus\LINGYUN.Abp.PushPlus.SettingManagement\LINGYUN.Abp.PushPlus.SettingManagement.csproj", "{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.SettingManagement", "framework\pushplus\LINGYUN.Abp.PushPlus.SettingManagement\LINGYUN.Abp.PushPlus.SettingManagement.csproj", "{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher.Tests", "tests\LINGYUN.Abp.Notifications.WxPusher.Tests\LINGYUN.Abp.Notifications.WxPusher.Tests.csproj", "{C2801414-550F-4A25-AD8D-68AC508211DC}"
 EndProject
@@ -266,53 +260,51 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests", "tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests\LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj", "{B78E53AC-6BB8-402D-90CF-BEF1BD9558EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{AA039B4E-CE12-43AC-8340-3D52463E971E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{AA039B4E-CE12-43AC-8340-3D52463E971E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Http.Client.Wrapper", "modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj", "{2C5C57FB-70F5-4C20-92FC-39ACD260CEE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Http.Client.Wrapper", "framework\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj", "{2C5C57FB-70F5-4C20-92FC-39ACD260CEE3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tui-juhe", "tui-juhe", "{A1C75C3E-67D1-4BCE-89BF-44A735909BD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe", "modules\tui-juhe\LINGYUN.Abp.TuiJuhe\LINGYUN.Abp.TuiJuhe.csproj", "{60143C9C-E539-498A-9DBE-B95E6A8301A5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.TuiJuhe", "modules\tui-juhe\LINGYUN.Abp.Notifications.TuiJuhe\LINGYUN.Abp.Notifications.TuiJuhe.csproj", "{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe", "framework\tui-juhe\LINGYUN.Abp.TuiJuhe\LINGYUN.Abp.TuiJuhe.csproj", "{60143C9C-E539-498A-9DBE-B95E6A8301A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.TuiJuhe.Tests", "tests\LINGYUN.Abp.Notifications.TuiJuhe.Tests\LINGYUN.Abp.Notifications.TuiJuhe.Tests.csproj", "{641DF0BA-0E79-441D-B328-FDA288A35CDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe.Tests", "tests\LINGYUN.Abp.TuiJuhe.Tests\LINGYUN.Abp.TuiJuhe.Tests.csproj", "{2020EA8D-F276-498D-92D1-94D1E25F8E1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe.SettingManagement", "modules\tui-juhe\LINGYUN.Abp.TuiJuhe.SettingManagement\LINGYUN.Abp.TuiJuhe.SettingManagement.csproj", "{2A3DF8B2-4760-41C4-9337-44FEE29B17CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TuiJuhe.SettingManagement", "framework\tui-juhe\LINGYUN.Abp.TuiJuhe.SettingManagement\LINGYUN.Abp.TuiJuhe.SettingManagement.csproj", "{2A3DF8B2-4760-41C4-9337-44FEE29B17CD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dynamic-queryable", "dynamic-queryable", "{3975D028-3672-4D23-BF77-B7F4A445D44E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "modules\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{5512A359-80E8-440C-B652-7C96F614DD9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{5512A359-80E8-440C-B652-7C96F614DD9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{6A23EE81-0CA7-4CA7-859D-6ADB669DF0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{6A23EE81-0CA7-4CA7-859D-6ADB669DF0E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{EC7970DC-A656-46A7-9873-A730FE72B213}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{EC7970DC-A656-46A7-9873-A730FE72B213}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{F515E8FA-449F-4D54-98A7-0F7DF1AA3C94}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable.Tests", "tests\LINGYUN.Linq.Dynamic.Queryable.Tests\LINGYUN.Linq.Dynamic.Queryable.Tests.csproj", "{E9AD81CA-D992-4F74-BD23-680CF98BE262}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests\LINGYUN.Abp.DynamicQueryable.EntityFrameworkCore.Tests.csproj", "{2E29FBF7-CECB-4DF9-9E02-5AFB704DDD10}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{1206B9FC-0177-4061-A06E-F82B2CC01ACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{1206B9FC-0177-4061-A06E-F82B2CC01ACE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "modules\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{E097FAEC-5015-4159-BC00-A737483EFA80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "framework\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{E097FAEC-5015-4159-BC00-A737483EFA80}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{809C86E9-0C70-41E4-B26D-D9AFF34F03D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tencent-cloud", "tencent-cloud", "{C12EEBC0-0407-4AEF-81C4-EDF5E22BB00E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{B6A5E070-3A2A-4F53-8391-0CA0C60B7701}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{33CBF722-B166-4B68-9CB3-1293F5C78EF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "framework\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{33CBF722-B166-4B68-9CB3-1293F5C78EF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{4CEFE059-B30E-4121-AA12-10EC72709758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "framework\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{4CEFE059-B30E-4121-AA12-10EC72709758}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "modules\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "framework\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{C9EC8CCF-5CA7-4332-B7B7-FF9B094FA418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.TTS", "modules\cloud-tencent\LINGYUN.Abp.Tencent.TTS\LINGYUN.Abp.Tencent.TTS.csproj", "{4059233C-C651-4DA2-A1BC-26196362062A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.TTS", "framework\cloud-tencent\LINGYUN.Abp.Tencent.TTS\LINGYUN.Abp.Tencent.TTS.csproj", "{4059233C-C651-4DA2-A1BC-26196362062A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8DA7627-E691-400A-AE4D-0E151A6EA0F8}"
 	ProjectSection(SolutionItems) = preProject
@@ -321,11 +313,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AspNetCore.Mvc.Idempotent", "modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Idempotent\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.csproj", "{347413DD-1B30-46B5-87A0-828A11FAA87D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Idempotent", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Idempotent\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.csproj", "{347413DD-1B30-46B5-87A0-828A11FAA87D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Idempotent", "modules\common\LINGYUN.Abp.Idempotent\LINGYUN.Abp.Idempotent.csproj", "{13FCEB03-E300-4CE2-A789-78D9F41C903E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Idempotent", "framework\common\LINGYUN.Abp.Idempotent\LINGYUN.Abp.Idempotent.csproj", "{13FCEB03-E300-4CE2-A789-78D9F41C903E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper", "modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper.csproj", "{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper.csproj", "{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.TuiJuhe", "modules\realtime-notifications\LINGYUN.Abp.Notifications.TuiJuhe\LINGYUN.Abp.Notifications.TuiJuhe.csproj", "{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\realtime-notifications\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{7433B116-806E-4500-8FF8-6143C4140BFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\realtime-notifications\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{2C01C5C9-F762-4455-AD66-810BEFEE67B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -429,10 +427,6 @@ Global
 		{99F8F254-A76E-43BB-8048-CC17EE1C8527}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99F8F254-A76E-43BB-8048-CC17EE1C8527}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99F8F254-A76E-43BB-8048-CC17EE1C8527}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2DAA5EB-5508-4D99-AE64-A10C025712BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2DAA5EB-5508-4D99-AE64-A10C025712BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2DAA5EB-5508-4D99-AE64-A10C025712BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2DAA5EB-5508-4D99-AE64-A10C025712BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15FC0C39-A604-491F-91F6-BD44167FC5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15FC0C39-A604-491F-91F6-BD44167FC5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15FC0C39-A604-491F-91F6-BD44167FC5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -449,10 +443,6 @@ Global
 		{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D119C919-230B-4614-9A06-98586635DBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D119C919-230B-4614-9A06-98586635DBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D119C919-230B-4614-9A06-98586635DBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D119C919-230B-4614-9A06-98586635DBFC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A7A28D6C-6EDB-4615-8899-7DE1D435B750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7A28D6C-6EDB-4615-8899-7DE1D435B750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A28D6C-6EDB-4615-8899-7DE1D435B750}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -717,10 +707,6 @@ Global
 		{88412E3D-21C8-4FF1-8EB3-84CB74094336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88412E3D-21C8-4FF1-8EB3-84CB74094336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88412E3D-21C8-4FF1-8EB3-84CB74094336}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F65A8835-C50F-43B0-B54C-196A92E9539F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F65A8835-C50F-43B0-B54C-196A92E9539F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F65A8835-C50F-43B0-B54C-196A92E9539F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F65A8835-C50F-43B0-B54C-196A92E9539F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30FA01ED-921A-4E7D-9E83-6719538FB866}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -757,10 +743,6 @@ Global
 		{60143C9C-E539-498A-9DBE-B95E6A8301A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60143C9C-E539-498A-9DBE-B95E6A8301A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60143C9C-E539-498A-9DBE-B95E6A8301A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{641DF0BA-0E79-441D-B328-FDA288A35CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{641DF0BA-0E79-441D-B328-FDA288A35CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{641DF0BA-0E79-441D-B328-FDA288A35CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -841,6 +823,18 @@ Global
 		{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7433B116-806E-4500-8FF8-6143C4140BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7433B116-806E-4500-8FF8-6143C4140BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7433B116-806E-4500-8FF8-6143C4140BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7433B116-806E-4500-8FF8-6143C4140BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C01C5C9-F762-4455-AD66-810BEFEE67B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C01C5C9-F762-4455-AD66-810BEFEE67B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C01C5C9-F762-4455-AD66-810BEFEE67B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C01C5C9-F762-4455-AD66-810BEFEE67B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -878,12 +872,10 @@ Global
 		{3B455AA7-B165-4EA0-8870-DB8DA5C76FC5} = {0D2D7A10-CBA5-4798-BFC7-EB05D1E6B94C}
 		{99F8F254-A76E-43BB-8048-CC17EE1C8527} = {0D2D7A10-CBA5-4798-BFC7-EB05D1E6B94C}
 		{38E21687-5F19-42C9-9D11-4B1D2EF64EDB} = {02EA4E78-5891-43BC-944F-3E52FEE032E4}
-		{F2DAA5EB-5508-4D99-AE64-A10C025712BC} = {38E21687-5F19-42C9-9D11-4B1D2EF64EDB}
 		{15FC0C39-A604-491F-91F6-BD44167FC5F6} = {B91F26C5-B148-4094-B5F1-71E5F945DBED}
 		{9E59B1DB-E0D5-485D-BDA0-B6C31E1358A8} = {22C61434-D29A-4376-AD56-F5089F3E617A}
 		{16942653-B746-4917-B3BF-464C99F8832F} = {22C61434-D29A-4376-AD56-F5089F3E617A}
 		{D0717513-2CEE-4AD5-A1DA-A08EA5DE6DD6} = {22C61434-D29A-4376-AD56-F5089F3E617A}
-		{D119C919-230B-4614-9A06-98586635DBFC} = {22C61434-D29A-4376-AD56-F5089F3E617A}
 		{A7A28D6C-6EDB-4615-8899-7DE1D435B750} = {086BE5BE-8594-4DA7-8819-935FEF76DABD}
 		{17A8455F-D413-4664-AEFA-1ECAE9ED4B19} = {7F18BCA5-35BD-41FB-8EFF-801B56E5E414}
 		{3BAA3D38-96C2-4C4C-B790-AE2997BFDE25} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
@@ -966,7 +958,6 @@ Global
 		{7862CE70-76EF-4228-A703-C2E2A9704D14} = {02EA4E78-5891-43BC-944F-3E52FEE032E4}
 		{1A072FF5-1A7E-4F78-B145-1AB873AEB8FF} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
 		{88412E3D-21C8-4FF1-8EB3-84CB74094336} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
-		{F65A8835-C50F-43B0-B54C-196A92E9539F} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
 		{30FA01ED-921A-4E7D-9E83-6719538FB866} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
 		{E6FDAD7B-4A7F-4CEB-9891-F8FC4E556C36} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
 		{4CBB4A0C-6D23-44DD-BAF4-49D69ED35839} = {0F5A2591-CE08-4184-A5F3-89F6FB3B2B10}
@@ -977,7 +968,6 @@ Global
 		{2C5C57FB-70F5-4C20-92FC-39ACD260CEE3} = {086BE5BE-8594-4DA7-8819-935FEF76DABD}
 		{A1C75C3E-67D1-4BCE-89BF-44A735909BD5} = {02EA4E78-5891-43BC-944F-3E52FEE032E4}
 		{60143C9C-E539-498A-9DBE-B95E6A8301A5} = {A1C75C3E-67D1-4BCE-89BF-44A735909BD5}
-		{C55D9BA0-4AFD-4D18-958B-B53FD3F2FF4F} = {A1C75C3E-67D1-4BCE-89BF-44A735909BD5}
 		{641DF0BA-0E79-441D-B328-FDA288A35CDE} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{2020EA8D-F276-498D-92D1-94D1E25F8E1A} = {B86C21A4-73B7-471E-B73A-B4B905EC9435}
 		{2A3DF8B2-4760-41C4-9337-44FEE29B17CD} = {A1C75C3E-67D1-4BCE-89BF-44A735909BD5}
@@ -1000,6 +990,9 @@ Global
 		{347413DD-1B30-46B5-87A0-828A11FAA87D} = {F55B987D-1DFF-4EB0-9949-8A7136A7B689}
 		{13FCEB03-E300-4CE2-A789-78D9F41C903E} = {086BE5BE-8594-4DA7-8819-935FEF76DABD}
 		{8B15AAB5-18BB-4A2E-86F1-4A2F04C9FAFF} = {F55B987D-1DFF-4EB0-9949-8A7136A7B689}
+		{57FCECAF-11F0-46C8-A74B-55C7AE76E8FE} = {A1C75C3E-67D1-4BCE-89BF-44A735909BD5}
+		{7433B116-806E-4500-8FF8-6143C4140BFD} = {7862CE70-76EF-4228-A703-C2E2A9704D14}
+		{2C01C5C9-F762-4455-AD66-810BEFEE67B5} = {22C61434-D29A-4376-AD56-F5089F3E617A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C707C6-02C0-411A-AD3B-2D0E13787CB8}

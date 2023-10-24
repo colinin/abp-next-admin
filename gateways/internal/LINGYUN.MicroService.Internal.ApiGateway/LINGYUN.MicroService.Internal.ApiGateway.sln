@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\Directory.Build.props = ..\..\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{80E45092-1181-456D-B88C-7DDCB7F16368}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{80E45092-1181-456D-B88C-7DDCB7F16368}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{F05E560E-0126-4949-9092-B1490A4E1199}"
 EndProject
@@ -24,21 +24,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localizatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{66DE14AB-D2B5-438E-AB6B-0B0674BEEBA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "..\..\..\aspnet-core\modules\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{15A60DC9-B5F5-4F72-A97D-BECE5722907F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "..\..\..\aspnet-core\framework\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{15A60DC9-B5F5-4F72-A97D-BECE5722907F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "..\..\..\aspnet-core\modules\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{84F2D49C-4994-4E8E-B3BC-6C8DD34CEEE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "..\..\..\aspnet-core\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{84F2D49C-4994-4E8E-B3BC-6C8DD34CEEE8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "..\..\..\aspnet-core\modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{90F6E585-768C-42F1-B5B7-78716A2C515D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "..\..\..\aspnet-core\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{90F6E585-768C-42F1-B5B7-78716A2C515D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "..\..\..\aspnet-core\modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{782A9F27-BE5D-422F-B475-DAC6E9A0C160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "..\..\..\aspnet-core\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{782A9F27-BE5D-422F-B475-DAC6E9A0C160}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "..\..\..\aspnet-core\modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{177BB8EB-7BBB-46D0-B7EC-01E176F7CEAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{177BB8EB-7BBB-46D0-B7EC-01E176F7CEAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "..\..\..\aspnet-core\modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{13EDA39A-A859-447A-A6A6-056181B66EDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{13EDA39A-A859-447A-A6A6-056181B66EDC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{EE01F3C2-14D1-4089-8C02-00C8083D9795}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator", "..\..\..\aspnet-core\modules\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{30A639F6-08C2-4250-A79E-9D766600F7F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator", "..\..\..\aspnet-core\framework\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{30A639F6-08C2-4250-A79E-9D766600F7F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

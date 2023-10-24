@@ -2,7 +2,6 @@
 using LINGYUN.Abp.OssManagement.Features;
 using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
@@ -25,7 +24,6 @@ namespace LINGYUN.Abp.OssManagement
         public override async Task DeleteAsync(GetPublicFileInput input)
         {
             await CheckPublicAccessAsync();
-            await CheckPolicyAsync(AbpOssManagementPermissions.OssObject.Delete);
 
             await base.DeleteAsync(input);
         }

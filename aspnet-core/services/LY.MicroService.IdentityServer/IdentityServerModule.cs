@@ -1,5 +1,4 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Account;
+﻿using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -25,10 +24,8 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -96,12 +93,9 @@ public partial class IdentityServerModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
@@ -134,6 +128,7 @@ public partial class IdentityServerModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

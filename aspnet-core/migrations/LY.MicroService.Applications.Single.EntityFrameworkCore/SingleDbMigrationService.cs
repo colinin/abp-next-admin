@@ -1,221 +1,101 @@
-﻿using LINGYUN.Abp.Data.DbMigrator;
-using LINGYUN.Abp.Saas.Tenants;
+﻿using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Migrations;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
 
-public class SingleDbMigrationService : ITransientDependency
+public class SingleDbMigrationService : EfCoreRuntimeDatabaseMigratorBase<SingleMigrationsDbContext>, ITransientDependency
 {
-    public ILogger<SingleDbMigrationService> Logger { get; set; }
-
-    private readonly IDataSeeder _dataSeeder;
-    private readonly IDbSchemaMigrator _dbSchemaMigrator;
-    private readonly ITenantRepository _tenantRepository;
-    private readonly ICurrentTenant _currentTenant;
-
+    protected IDataSeeder DataSeeder { get; }
+    protected ITenantRepository TenantRepository { get; }
     public SingleDbMigrationService(
+        IUnitOfWorkManager unitOfWorkManager,
+        IServiceProvider serviceProvider, 
+        ICurrentTenant currentTenant, 
+        IAbpDistributedLock abpDistributedLock, 
+        IDistributedEventBus distributedEventBus, 
+        ILoggerFactory loggerFactory,
         IDataSeeder dataSeeder,
-        IDbSchemaMigrator dbSchemaMigrator,
-        ITenantRepository tenantRepository,
-        ICurrentTenant currentTenant)
+        ITenantRepository tenantRepository) 
+        : base("SingleDbMigrator", unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
-        _dataSeeder = dataSeeder;
-        _dbSchemaMigrator = dbSchemaMigrator;
-        _tenantRepository = tenantRepository;
-        _currentTenant = currentTenant;
-
-        Logger = NullLogger<SingleDbMigrationService>.Instance;
+        DataSeeder = dataSeeder;
+        TenantRepository = tenantRepository;
     }
-
-    public async Task MigrateAsync()
+    protected async override Task LockAndApplyDatabaseMigrationsAsync()
     {
-        var initialMigrationAdded = AddInitialMigrationIfNotExist();
+        await base.LockAndApplyDatabaseMigrationsAsync();
 
-        if (initialMigrationAdded)
+        var tenants = await TenantRepository.GetListAsync();
+        foreach (var tenant in tenants.Where(x => x.IsActive))
         {
-            return;
-        }
+            Logger.LogInformation($"Trying to acquire the distributed lock for database migration: {DatabaseName} with tenant: {tenant.Name}.");
 
-        Logger.LogInformation("Started database migrations...");
+            var schemaMigrated = false;
 
-        await MigrateDatabaseSchemaAsync();
-        await SeedDataAsync();
-
-        Logger.LogInformation($"Successfully completed host database migrations.");
-
-        var tenants = await _tenantRepository.GetListAsync(includeDetails: true);
-
-        var migratedDatabaseSchemas = new HashSet<string>();
-        foreach (var tenant in tenants)
-        {
-            using (_currentTenant.Change(tenant.Id))
+            await using (var handle = await DistributedLock.TryAcquireAsync("DatabaseMigration_" + DatabaseName + "_Tenant" + tenant.Id.ToString()))
             {
-                if (tenant.ConnectionStrings.Any())
+                if (handle is null)
                 {
-                    var tenantConnectionStrings = tenant.ConnectionStrings
-                        .Select(x => x.Value)
-                        .ToList();
-
-                    if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
-                    {
-                        await MigrateDatabaseSchemaAsync(tenant);
-
-                        migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
-                    }
+                    Logger.LogInformation($"Distributed lock could not be acquired for database migration: {DatabaseName} with tenant: {tenant.Name}. Operation cancelled.");
+                    return;
                 }
 
-                await SeedDataAsync(tenant);
+                Logger.LogInformation($"Distributed lock is acquired for database migration: {DatabaseName} with tenant: {tenant.Name}...");
+
+                using (CurrentTenant.Change(tenant.Id))
+                {
+                    // Create database tables if needed
+                    using var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: false);
+                    var dbContext = await ServiceProvider
+                        .GetRequiredService<IDbContextProvider<SingleMigrationsDbContext>>()
+                        .GetDbContextAsync();
+
+                    var pendingMigrations = await dbContext
+                        .Database
+                        .GetPendingMigrationsAsync();
+
+                    if (pendingMigrations.Any())
+                    {
+                        await dbContext.Database.MigrateAsync();
+                        schemaMigrated = true;
+                    }
+
+                    await uow.CompleteAsync();
+
+                    await SeedAsync();
+
+                    if (schemaMigrated || AlwaysSeedTenantDatabases)
+                    {
+                        await DistributedEventBus.PublishAsync(
+                            new AppliedDatabaseMigrationsEto
+                            {
+                                DatabaseName = DatabaseName,
+                                TenantId = tenant.Id
+                            }
+                        );
+                    }
+                }
             }
 
-            Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
-        }
-
-        Logger.LogInformation("Successfully completed all database migrations.");
-        Logger.LogInformation("You can safely end this process...");
-    }
-
-    private async Task MigrateDatabaseSchemaAsync(Tenant tenant = null)
-    {
-        Logger.LogInformation($"Migrating schema for {(tenant == null ? "host" : tenant.Name + " tenant")} database...");
-        // 迁移租户数据
-        await _dbSchemaMigrator.MigrateAsync<SingleMigrationsDbContext>(
-            (connectionString, builder) =>
-            {
-                builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-
-                return new SingleMigrationsDbContext(builder.Options);
-            });
-    }
-
-    private async Task SeedDataAsync(Tenant tenant = null)
-    {
-        Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
-
-        await _dataSeeder.SeedAsync(tenant?.Id);
-    }
-
-    private bool AddInitialMigrationIfNotExist()
-    {
-        try
-        {
-            if (!DbMigrationsProjectExists())
-            {
-                return false;
-            }
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-        try
-        {
-            if (!MigrationsFolderExists())
-            {
-                AddInitialMigration();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.LogWarning("Couldn't determinate if any migrations exist : " + e.Message);
-            return false;
+            Logger.LogInformation($"Distributed lock has been released for database migration: {DatabaseName} with tenant: {tenant.Name}...");
         }
     }
 
-    private bool DbMigrationsProjectExists()
+    protected async override Task SeedAsync()
     {
-        return Directory.Exists(GetEntityFrameworkCoreProjectFolderPath());
-    }
-
-    private bool MigrationsFolderExists()
-    {
-        var dbMigrationsProjectFolder = GetEntityFrameworkCoreProjectFolderPath();
-
-        return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "Migrations"));
-    }
-
-    private void AddInitialMigration()
-    {
-        Logger.LogInformation("Creating initial migration...");
-
-        string argumentPrefix;
-        string fileName;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            argumentPrefix = "-c";
-            fileName = "/bin/bash";
-        }
-        else
-        {
-            argumentPrefix = "/C";
-            fileName = "cmd.exe";
-        }
-
-        var procStartInfo = new ProcessStartInfo(fileName,
-            $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetEntityFrameworkCoreProjectFolderPath()}\" --nolayers\""
-        );
-
-        try
-        {
-            Process.Start(procStartInfo);
-        }
-        catch (Exception)
-        {
-            throw new Exception("Couldn't run ABP CLI...");
-        }
-    }
-
-    private string GetEntityFrameworkCoreProjectFolderPath()
-    {
-        var slnDirectoryPath = GetSolutionDirectoryPath();
-
-        if (slnDirectoryPath == null)
-        {
-            throw new Exception("Solution folder not found!");
-        }
-
-        return Path.Combine(slnDirectoryPath, "LY.MicroService.RealtimeMessage.DbMigrator");
-    }
-
-    private string GetSolutionDirectoryPath()
-    {
-        var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-
-        while (Directory.GetParent(currentDirectory.FullName) != null)
-        {
-            currentDirectory = Directory.GetParent(currentDirectory.FullName);
-
-            if (Directory.GetFiles(currentDirectory!.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
-            {
-                return currentDirectory.FullName;
-            }
-
-            // parent host
-            currentDirectory = Directory.GetParent(currentDirectory.FullName);
-            if (Directory.GetFiles(currentDirectory!.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
-            {
-                return currentDirectory.FullName;
-            }
-        }
-
-        return null;
+        await DataSeeder.SeedAsync(CurrentTenant.Id);
     }
 }

@@ -115,8 +115,5 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         {
             webhook[property.Key] = property.Value;
         }
-
-        webhook.WithProperty(nameof(WebhookDefinitionRecord.IsEnabled), webhookRecord.IsEnabled);
-        webhook.WithProperty("IsStatic", false);
     }
 }

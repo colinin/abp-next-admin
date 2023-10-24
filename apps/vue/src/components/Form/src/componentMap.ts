@@ -34,6 +34,10 @@ import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
 import { Input as BInput } from '/@/components/Input';
 import { CodeEditorX } from '/@/components/CodeEditor';
+import {
+  ExtraPropertyDictionary,
+  LocalizableInput
+} from '/@/components/Abp';
 
 const componentMap = new Map<ComponentType, Component>();
 const customComponentMap = new Map<ComponentType, Component>();
@@ -75,6 +79,9 @@ componentMap.set('RangePicker', DatePicker.RangePicker);
 componentMap.set('WeekPicker', DatePicker.WeekPicker);
 componentMap.set('TimePicker', TimePicker);
 componentMap.set('Divider', Divider);
+
+componentMap.set('ExtraPropertyDictionary', ExtraPropertyDictionary);
+componentMap.set('LocalizableInput', LocalizableInput);
 
 customComponentMap.forEach((v, k) => {
   componentMap.set(k, v);

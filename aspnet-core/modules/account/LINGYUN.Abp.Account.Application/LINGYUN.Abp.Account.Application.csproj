@@ -1,28 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\configureawait.props" />
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
-    <PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
-    <ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
-    <ProjectReference Include="..\..\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LINGYUN\Abp\Account\Emailing\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
+		<ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
+		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj" />
+	</ItemGroup>
 
 </Project>

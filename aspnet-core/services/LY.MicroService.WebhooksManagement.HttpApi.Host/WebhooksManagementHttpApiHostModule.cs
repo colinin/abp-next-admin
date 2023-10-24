@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -22,10 +23,8 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -78,6 +77,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpDaprClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WebhooksManagementHttpApiHostModule : AbpModule
@@ -86,12 +86,9 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
     }
@@ -125,11 +122,15 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
+        // IDS与JWT不匹配可能造成鉴权错误
+        // TODO: abp在某个更新版本建议移除此中间价
+        app.UseAbpClaimsMap();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();

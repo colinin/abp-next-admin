@@ -23,10 +23,8 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -90,13 +88,10 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
-
-
-        PreConfigureApp();
+        
         PreConfigureFeature();
+        PreConfigureForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureElsa(context.Services, configuration);
@@ -131,6 +126,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
@@ -139,6 +135,9 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseElsaFeatures();
         app.UseAuthentication();
+        // IDS与JWT不匹配可能造成鉴权错误
+        // TODO: abp在某个更新版本建议移除此中间价
+        app.UseAbpClaimsMap();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
         app.UseAuthorization();
@@ -150,7 +149,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
             options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("WorkflowManagement");
+            options.OAuthScopes(configuration["AuthServer:Scopes"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

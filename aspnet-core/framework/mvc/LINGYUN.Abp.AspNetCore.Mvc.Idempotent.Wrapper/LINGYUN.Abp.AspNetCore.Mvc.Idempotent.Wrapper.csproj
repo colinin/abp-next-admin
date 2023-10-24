@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\common\LINGYUN.Abp.AspNetCore.Wrapper\LINGYUN.Abp.AspNetCore.Wrapper.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.AspNetCore.Mvc.Idempotent\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.csproj" />
+	</ItemGroup>
+
+</Project>

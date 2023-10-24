@@ -22,7 +22,7 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
     {
         var builder = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../LY.MicroService.Applications.Single.DbMigrator/"))
-            .AddJsonFile("appsettings.json", optional: false);
+            .AddJsonFile("appsettings.Production.json", optional: false);
 
         return builder.Build();
     }

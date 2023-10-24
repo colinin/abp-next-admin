@@ -52,33 +52,33 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extend-jobs", "extend-jobs", "{A9536BD2-2573-44CA-B033-DC16B7E345E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\common\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{17D7ED0F-E789-4637-9B06-57DF693C6E1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\task-management\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{17D7ED0F-E789-4637-9B06-57DF693C6E1E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Notifications", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj", "{1978B64C-B2F5-4F68-9E5C-B45F948E7155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{18918B94-BB48-48F3-874D-B91B0252440A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "modules\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{23620224-93A1-4A88-93B7-23D37929FCF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{23620224-93A1-4A88-93B7-23D37929FCF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{09F7171C-6DA1-4466-AB4A-DC92E93368EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\realtime-notifications\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{09F7171C-6DA1-4466-AB4A-DC92E93368EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FA5E30C9-05E3-4E35-AEDD-7DC5534E3A01}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "modules\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{2FA23894-E598-4896-A336-3E7C682699D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "framework\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{2FA23894-E598-4896-A336-3E7C682699D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "modules\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "framework\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{194DAB61-BC3C-4003-BFF0-C87763E7B8B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{DD51A1AE-830F-4909-A729-7EBC398B17AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{DD51A1AE-830F-4909-A729-7EBC398B17AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exten-plugin", "exten-plugin", "{B38D2141-AC0F-4F4A-9315-4292E3856C15}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "modules\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{3EE8383C-6F25-4BCD-8852-B23D1C864324}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{3EE8383C-6F25-4BCD-8852-B23D1C864324}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{B54F200C-D648-477B-BE39-B40A1D956F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{B54F200C-D648-477B-BE39-B40A1D956F13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{FEC5FD25-9B26-4245-88D8-7621B26C7C3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "modules\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{DF963ABB-E713-49E9-A03C-DEB431E369DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{DF963ABB-E713-49E9-A03C-DEB431E369DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{820A8FA4-17C4-44DF-8C31-9F211D00F790}"
 EndProject
@@ -88,9 +88,51 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagem
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{DC7ACD8B-044B-435D-94C5-06C75A8BD026}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{167CE485-72D3-4E95-80B1-00430CBB8888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "framework\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{167CE485-72D3-4E95-80B1-00430CBB8888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elasticsearch.Jobs", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch.Jobs\LINGYUN.Abp.Elasticsearch.Jobs.csproj", "{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch.Jobs", "modules\task-management\LINGYUN.Abp.Elasticsearch.Jobs\LINGYUN.Abp.Elasticsearch.Jobs.csproj", "{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{5A41C31A-B966-418B-B446-5BA1D7E61A62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{6A82AEB7-A048-420A-ACFB-94DC52ADADDC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{8EB3C845-BF73-446D-8C5D-FE855CFF2A90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{8729BEEB-CABF-4B3B-8228-8AEE2E760796}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authorization.OrganizationUnits", "framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj", "{AC15003C-473B-4049-B268-DE02ECD58097}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{AC99FAF5-6321-447A-BB13-41CAAEA3E459}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "framework\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing", "framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj", "{F72E1F2E-0064-4159-9327-884D7CB83D48}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{0979BDAB-B4D3-48DD-88EC-64AED972B8FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Http.Client.Wrapper", "framework\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj", "{83FCF202-0625-46BB-96CD-4D9D684508FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{6BAABDAC-C172-419D-A75D-E7823C86E871}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{988BDB8E-FD0D-457B-8B45-CFFD70CCB203}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{97271BF5-D965-4EE1-A2DD-58ADD35B529D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Wrapper", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj", "{CA5D2340-00EF-4248-A288-A9244A1C6A61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "framework\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{09B08612-D167-486E-9EFC-ABD12BD1A33E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain.Shared", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain.Shared\LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj", "{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain\LINGYUN.Abp.LocalizationManagement.Domain.csproj", "{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj", "{6E030005-EEA7-480E-9E68-4FC74CFCAF42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Editions", "framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj", "{B3E81983-629A-4380-B4C2-50E247916F5E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{088064DD-D141-4E9A-B185-E332920A323A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -226,6 +268,86 @@ Global
 		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A82AEB7-A048-420A-ACFB-94DC52ADADDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A82AEB7-A048-420A-ACFB-94DC52ADADDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A82AEB7-A048-420A-ACFB-94DC52ADADDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A82AEB7-A048-420A-ACFB-94DC52ADADDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB3C845-BF73-446D-8C5D-FE855CFF2A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB3C845-BF73-446D-8C5D-FE855CFF2A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB3C845-BF73-446D-8C5D-FE855CFF2A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB3C845-BF73-446D-8C5D-FE855CFF2A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8729BEEB-CABF-4B3B-8228-8AEE2E760796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8729BEEB-CABF-4B3B-8228-8AEE2E760796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8729BEEB-CABF-4B3B-8228-8AEE2E760796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8729BEEB-CABF-4B3B-8228-8AEE2E760796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC15003C-473B-4049-B268-DE02ECD58097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC15003C-473B-4049-B268-DE02ECD58097}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC15003C-473B-4049-B268-DE02ECD58097}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC15003C-473B-4049-B268-DE02ECD58097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC99FAF5-6321-447A-BB13-41CAAEA3E459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC99FAF5-6321-447A-BB13-41CAAEA3E459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC99FAF5-6321-447A-BB13-41CAAEA3E459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC99FAF5-6321-447A-BB13-41CAAEA3E459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F72E1F2E-0064-4159-9327-884D7CB83D48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F72E1F2E-0064-4159-9327-884D7CB83D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F72E1F2E-0064-4159-9327-884D7CB83D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F72E1F2E-0064-4159-9327-884D7CB83D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0979BDAB-B4D3-48DD-88EC-64AED972B8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0979BDAB-B4D3-48DD-88EC-64AED972B8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0979BDAB-B4D3-48DD-88EC-64AED972B8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0979BDAB-B4D3-48DD-88EC-64AED972B8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83FCF202-0625-46BB-96CD-4D9D684508FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83FCF202-0625-46BB-96CD-4D9D684508FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83FCF202-0625-46BB-96CD-4D9D684508FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83FCF202-0625-46BB-96CD-4D9D684508FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BAABDAC-C172-419D-A75D-E7823C86E871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BAABDAC-C172-419D-A75D-E7823C86E871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BAABDAC-C172-419D-A75D-E7823C86E871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BAABDAC-C172-419D-A75D-E7823C86E871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{988BDB8E-FD0D-457B-8B45-CFFD70CCB203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{988BDB8E-FD0D-457B-8B45-CFFD70CCB203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{988BDB8E-FD0D-457B-8B45-CFFD70CCB203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{988BDB8E-FD0D-457B-8B45-CFFD70CCB203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97271BF5-D965-4EE1-A2DD-58ADD35B529D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97271BF5-D965-4EE1-A2DD-58ADD35B529D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97271BF5-D965-4EE1-A2DD-58ADD35B529D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97271BF5-D965-4EE1-A2DD-58ADD35B529D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5D2340-00EF-4248-A288-A9244A1C6A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5D2340-00EF-4248-A288-A9244A1C6A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5D2340-00EF-4248-A288-A9244A1C6A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5D2340-00EF-4248-A288-A9244A1C6A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B08612-D167-486E-9EFC-ABD12BD1A33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B08612-D167-486E-9EFC-ABD12BD1A33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B08612-D167-486E-9EFC-ABD12BD1A33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B08612-D167-486E-9EFC-ABD12BD1A33E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E030005-EEA7-480E-9E68-4FC74CFCAF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E030005-EEA7-480E-9E68-4FC74CFCAF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E030005-EEA7-480E-9E68-4FC74CFCAF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E030005-EEA7-480E-9E68-4FC74CFCAF42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3E81983-629A-4380-B4C2-50E247916F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3E81983-629A-4380-B4C2-50E247916F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3E81983-629A-4380-B4C2-50E247916F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3E81983-629A-4380-B4C2-50E247916F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{088064DD-D141-4E9A-B185-E332920A323A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088064DD-D141-4E9A-B185-E332920A323A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088064DD-D141-4E9A-B185-E332920A323A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088064DD-D141-4E9A-B185-E332920A323A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -263,6 +385,26 @@ Global
 		{58F51875-6D2C-4A65-9DD3-8BC004B39B72} = {820A8FA4-17C4-44DF-8C31-9F211D00F790}
 		{167CE485-72D3-4E95-80B1-00430CBB8888} = {DC7ACD8B-044B-435D-94C5-06C75A8BD026}
 		{798FEFB4-B65F-4B6C-A36D-611DD71A48AB} = {A9536BD2-2573-44CA-B033-DC16B7E345E5}
+		{6A82AEB7-A048-420A-ACFB-94DC52ADADDC} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{8EB3C845-BF73-446D-8C5D-FE855CFF2A90} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{8729BEEB-CABF-4B3B-8228-8AEE2E760796} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{AC15003C-473B-4049-B268-DE02ECD58097} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{AC99FAF5-6321-447A-BB13-41CAAEA3E459} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{3FDE2E70-EA02-4296-BA1A-ADABA5054DD1} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{F72E1F2E-0064-4159-9327-884D7CB83D48} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{0979BDAB-B4D3-48DD-88EC-64AED972B8FC} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{83FCF202-0625-46BB-96CD-4D9D684508FC} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{6BAABDAC-C172-419D-A75D-E7823C86E871} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{988BDB8E-FD0D-457B-8B45-CFFD70CCB203} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{CD88BE12-F08D-40AB-9D13-63D6DC5B9DAE} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{97271BF5-D965-4EE1-A2DD-58ADD35B529D} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{CA5D2340-00EF-4248-A288-A9244A1C6A61} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{09B08612-D167-486E-9EFC-ABD12BD1A33E} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{DC42B5FE-C5EA-49A7-A92A-3F19D82009E3} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{469D4CA9-D6C8-4A47-8795-31D5AA81B4AD} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{6E030005-EEA7-480E-9E68-4FC74CFCAF42} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{B3E81983-629A-4380-B4C2-50E247916F5E} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{088064DD-D141-4E9A-B185-E332920A323A} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

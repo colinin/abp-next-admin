@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation.Localization;
 using VoloAbpFeatureManagementHttpApiModule = Volo.Abp.FeatureManagement.AbpFeatureManagementHttpApiModule;
 
 namespace LINGYUN.Abp.FeatureManagement.HttpApi;
@@ -23,6 +25,15 @@ public class AbpFeatureManagementHttpApiModule : AbpModule
             options.AddAssemblyResource(
                 typeof(AbpFeatureManagementResource),
                 typeof(AbpFeatureManagementApplicationContractsModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources.Get<AbpFeatureManagementResource>()
+                .AddBaseTypes(typeof(AbpValidationResource));
         });
     }
 }

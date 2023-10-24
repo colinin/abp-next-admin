@@ -14,5 +14,5 @@ public interface IFeatureGroupDefinitionAppService : IApplicationService
 
     Task<FeatureGroupDefinitionDto> UpdateAsync(string name, FeatureGroupDefinitionUpdateDto input);
 
-    Task<PagedResultDto<FeatureGroupDefinitionDto>> GetListAsync(FeatureGroupDefinitionGetListInput input);
+    Task<ListResultDto<FeatureGroupDefinitionDto>> GetListAsync(FeatureGroupDefinitionGetListInput input);
 }

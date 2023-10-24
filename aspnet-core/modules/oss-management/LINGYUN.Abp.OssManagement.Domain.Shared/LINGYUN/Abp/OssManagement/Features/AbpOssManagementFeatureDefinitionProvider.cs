@@ -28,6 +28,12 @@ namespace LINGYUN.Abp.OssManagement.Features
                 valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
             ossDefaultFeature.CreateChild(
+                name: AbpOssManagementFeatureNames.OssObject.AllowSharedFile, 
+                defaultValue: false.ToString(),
+                displayName: L("Features:DisplayName:AllowSharedFile"),
+                description: L("Features:Description:AllowSharedFile"),
+                valueType: new ToggleStringValueType(new BooleanValueValidator()));
+            ossDefaultFeature.CreateChild(
                 name: AbpOssManagementFeatureNames.OssObject.DownloadFile, 
                 defaultValue: false.ToString(),
                 displayName: L("Features:DisplayName:DownloadFile"),

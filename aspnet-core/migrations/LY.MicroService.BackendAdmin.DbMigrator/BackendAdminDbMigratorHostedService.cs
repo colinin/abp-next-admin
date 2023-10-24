@@ -36,7 +36,7 @@ public class BackendAdminDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<BackendAdminDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

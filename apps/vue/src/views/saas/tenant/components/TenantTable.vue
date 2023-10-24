@@ -65,11 +65,11 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
+  import { FeatureModal } from '/@/components/Abp';
   import { BasicTable, TableAction, TableActionType } from '/@/components/Table';
   import { useTenantTable } from '../hooks/useTenantTable';
   import { useTenantModal } from '../hooks/useTenantModal';
   import { useFeatureModal } from '../hooks/useFeatureModal';
-  import { FeatureModal } from '../../../feature';
   import TenantModal from './TenantModal.vue';
   import ConnectionTableModal from './ConnectionTableModal.vue';
 

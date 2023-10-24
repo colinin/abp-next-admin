@@ -31,6 +31,9 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using LINGYUN.Abp.LocalizationManagement.Localization;
+using Microsoft.IdentityModel.Logging;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace LY.MicroService.LocalizationManagement;
 
@@ -48,7 +51,17 @@ public partial class LocalizationManagementHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -59,6 +72,11 @@ public partial class LocalizationManagementHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)

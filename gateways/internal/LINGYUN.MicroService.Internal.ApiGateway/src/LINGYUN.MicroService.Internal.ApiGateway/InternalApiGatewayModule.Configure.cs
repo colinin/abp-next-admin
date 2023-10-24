@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.MicroService.Internal.ApiGateway.Localization;
-using LINGYUN.MicroService.Internal.ApiGateway.Ocelot.Configuration.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -11,8 +10,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using Ocelot.Multiplexer;
 using Ocelot.Provider.Polly;
@@ -33,10 +32,24 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
     {
         protected const string DefaultCorsPolicyName = "Default";
 
-        private void PreConfigureApp()
+        private void PreConfigureApp(IConfiguration configuration)
         {
             AbpSerilogEnrichersConsts.ApplicationName = "Internal-ApiGateWay";
+            if (configuration.GetValue<bool>("App:ShowPii"))
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
         }
+
+        //private void PreForwardedHeaders()
+        //{
+        //    PreConfigure<AbpForwardedHeadersOptions>(options =>
+        //    {
+        //        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        //        options.KnownNetworks.Clear();
+        //        options.KnownProxies.Clear();
+        //    });
+        //}
 
         private void ConfigureApiGateway(IConfiguration configuration)
         {

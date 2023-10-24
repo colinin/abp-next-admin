@@ -36,7 +36,7 @@ public class AuthServerDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<AuthServerDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

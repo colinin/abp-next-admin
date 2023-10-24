@@ -6,12 +6,13 @@ type FeatureValue = NameValue<string>;
 /**
  * 特性检查接口
  */
-interface IFeatureChecker {
+export interface IFeatureChecker {
   /**
    * 是否启用特性
-   * @param name 特性名称
+   * @param featureNames 特性名称
+   * @param requiresAll 是否全部符合
    */
-  isEnabled(name: string): boolean;
+  isEnabled(featureNames: string | string[], requiresAll?: boolean): boolean;
   /**
    * 获取特性值
    * @param name 特性名称
@@ -37,13 +38,34 @@ export function useFeatures() {
     return getFeatures.value.find((feature) => name === feature.name);
   }
 
+  function _isEnabled(name: string): boolean {
+    var setting = get(name);
+    return setting?.value.toLowerCase() === 'true';
+  }
+
   const featureChecker: IFeatureChecker = {
     getOrEmpty(name: string) {
       return get(name)?.value ?? '';
     },
-    isEnabled(name: string) {
-      var setting = get(name);
-      return setting?.value.toLowerCase() === 'true';
+    
+    isEnabled(featureNames: string | string[], requiresAll?: boolean) {
+      if (Array.isArray(featureNames)) {
+        if (featureNames.length === 0) return true;
+        if (requiresAll === undefined || requiresAll === true) {
+          for (let index = 0; index < featureNames.length; index++) {
+            if (!_isEnabled(featureNames[index])) return false;
+          }
+          return true;
+        }
+  
+        for (let index = 0; index < featureNames.length; index++) {
+          if (_isEnabled(featureNames[index])) return true;
+        }
+      } else {
+        return _isEnabled(featureNames);
+      }
+
+      return false;
     },
   };
 

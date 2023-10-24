@@ -18,11 +18,12 @@ public abstract class PermissionDefinitionCreateOrUpdateDto : IHasExtraPropertie
 
     public bool IsEnabled { get; set; }
 
-    public MultiTenancySides? MultiTenancySide { get; set; }
+    public MultiTenancySides MultiTenancySide { get; set; } = MultiTenancySides.Both;
 
     public List<string> Providers { get; set; } = new List<string>();
 
-    public List<string> StateCheckers { get; set; } = new List<string>();
+    [DynamicStringLength(typeof(PermissionDefinitionRecordConsts), nameof(PermissionDefinitionRecordConsts.MaxStateCheckersLength))]
+    public string StateCheckers { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

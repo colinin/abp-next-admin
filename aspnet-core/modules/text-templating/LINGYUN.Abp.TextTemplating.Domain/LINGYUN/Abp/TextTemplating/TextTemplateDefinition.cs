@@ -12,6 +12,7 @@ public class TextTemplateDefinition : AggregateRoot<Guid>, IHasExtraProperties
     public virtual string Layout { get; set; }
     public virtual bool IsInlineLocalized { get; set; }
     public virtual string DefaultCultureName { get; set; }
+    public virtual string LocalizationResourceName { get; set; }
     public virtual string RenderEngine { get; set; }
     public virtual bool IsStatic { get; set; }
     protected TextTemplateDefinition()
@@ -27,6 +28,7 @@ public class TextTemplateDefinition : AggregateRoot<Guid>, IHasExtraProperties
         string layout = null,
         bool isInlineLocalized = false, 
         string defaultCultureName = null, 
+        string localizationResourceName = null,
         string renderEngine = null)
         : base(id)
     {
@@ -36,6 +38,7 @@ public class TextTemplateDefinition : AggregateRoot<Guid>, IHasExtraProperties
         Layout = Check.Length(layout, nameof(layout), TextTemplateDefinitionConsts.MaxLayoutLength);
         IsInlineLocalized = isInlineLocalized;
         DefaultCultureName = Check.Length(defaultCultureName, nameof(defaultCultureName), TextTemplateDefinitionConsts.MaxDefaultCultureNameLength);
+        LocalizationResourceName = Check.Length(localizationResourceName, nameof(localizationResourceName), TextTemplateDefinitionConsts.MaxLocalizationResourceNameLength);
         RenderEngine = Check.Length(renderEngine, nameof(renderEngine), TextTemplateDefinitionConsts.MaxRenderEngineLength);
     }
 }

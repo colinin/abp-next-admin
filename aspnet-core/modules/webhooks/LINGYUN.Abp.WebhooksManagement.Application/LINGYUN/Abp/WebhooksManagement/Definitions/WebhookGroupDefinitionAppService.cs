@@ -3,6 +3,7 @@ using LINGYUN.Abp.WebhooksManagement.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -18,17 +19,22 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 {
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IWebhookDefinitionManager _webhookDefinitionManager;
-
+    private readonly IStaticWebhookDefinitionStore _staticWebhookDefinitionStore;
+    private readonly IDynamicWebhookDefinitionStore _dynamicWebhookDefinitionStore;
     private readonly IWebhookGroupDefinitionRecordRepository _webhookGroupDefinitionRecordRepository;
 
     public WebhookGroupDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer,
         IWebhookDefinitionManager webhookDefinitionManager,
-        IWebhookGroupDefinitionRecordRepository webhookGroupDefinitionRecordRepository)
+        IWebhookGroupDefinitionRecordRepository webhookGroupDefinitionRecordRepository,
+        IStaticWebhookDefinitionStore staticWebhookDefinitionStore,
+        IDynamicWebhookDefinitionStore dynamicWebhookDefinitionStore)
     {
         _localizableStringSerializer = localizableStringSerializer;
         _webhookDefinitionManager = webhookDefinitionManager;
         _webhookGroupDefinitionRecordRepository = webhookGroupDefinitionRecordRepository;
+        _staticWebhookDefinitionStore = staticWebhookDefinitionStore;
+        _dynamicWebhookDefinitionStore = dynamicWebhookDefinitionStore;
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Create)]
@@ -40,7 +46,14 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
                 .WithData(nameof(WebhookGroupDefinitionRecord.Name), input.Name);
         }
 
-        var webhookGroupDefinitionRecord = new WebhookGroupDefinitionRecord(
+        var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(input.Name);
+        if (webhookGroupDefinitionRecord != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.AlreayNameExists)
+                .WithData(nameof(WebhookGroupDefinitionRecord.Name), input.Name);
+        }
+
+        webhookGroupDefinitionRecord = new WebhookGroupDefinitionRecord(
             GuidGenerator.Create(),
             input.Name,
             input.DisplayName);
@@ -54,66 +67,60 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await WebhookGroupDefinitionRecordToDto(webhookGroupDefinitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(webhookGroupDefinitionRecord);
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Delete)]
     public async virtual Task DeleteAysnc(string name)
     {
         var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
-        if (webhookGroupDefinitionRecord == null)
+        if (webhookGroupDefinitionRecord != null)
         {
-            return;
-        }
+            await _webhookGroupDefinitionRecordRepository.DeleteAsync(webhookGroupDefinitionRecord);
 
-        await _webhookGroupDefinitionRecordRepository.DeleteAsync(webhookGroupDefinitionRecord);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<WebhookGroupDefinitionDto> GetAsync(string name)
     {
-        var webhookGroupDefinition = await _webhookDefinitionManager.GetGroupAsync(name);
-
-        var dto = await WebhookGroupDefinitionToDto(webhookGroupDefinition);
-
-        return dto;
+        var webhookGroupDefinition = await _staticWebhookDefinitionStore.GetGroupOrNullAsync(name);
+        if (webhookGroupDefinition != null)
+        {
+            return DefinitionToDto(webhookGroupDefinition, true);
+        }
+        webhookGroupDefinition = await _dynamicWebhookDefinitionStore.GetGroupOrNullAsync(name);
+        return DefinitionToDto(webhookGroupDefinition);
     }
 
-    public async virtual Task<PagedResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input)
+    public async virtual Task<ListResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input)
     {
-        var webhookGroups = new List<WebhookGroupDefinitionDto>();
+        var groupDtoList = new List<WebhookGroupDefinitionDto>();
+        var staticGroups = await _staticWebhookDefinitionStore.GetGroupsAsync();
+        var staticGroupNames = staticGroups
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        groupDtoList.AddRange(staticGroups.Select(d => DefinitionToDto(d, true)));
 
-        var webhookGroupDefinitions = await _webhookDefinitionManager.GetGroupsAsync();
+        var dynamicGroups = await _dynamicWebhookDefinitionStore.GetGroupsAsync();
+        groupDtoList.AddRange(dynamicGroups
+            .Where(d => !staticGroupNames.Contains(d.Name))
+            .Select(d => DefinitionToDto(d)));
 
-        var webhookGroupDefinitionFilter = webhookGroupDefinitions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter));
-
-        var sorting = input.Sorting;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = nameof(WebhookGroupDefinitionRecord.Name);
-        }
-
-        var filterGroupDefinitionCount = webhookGroupDefinitionFilter.Count();
-        var filterGroupDefinitions = webhookGroupDefinitionFilter
-            .OrderBy(sorting)
-            .PageBy(input.SkipCount, input.MaxResultCount);
-
-        foreach (var webhookDefinition in filterGroupDefinitions)
-        {
-            var webhookGroupDto = await WebhookGroupDefinitionToDto(webhookDefinition);
-
-            webhookGroups.Add(webhookGroupDto);
-        }
-
-        return new PagedResultDto<WebhookGroupDefinitionDto>(filterGroupDefinitionCount, webhookGroups);
+        return new ListResultDto<WebhookGroupDefinitionDto>(groupDtoList
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
+            .ToList());
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Update)]
     public async virtual Task<WebhookGroupDefinitionDto> UpdateAsync(string name, WebhookGroupDefinitionUpdateDto input)
     {
-        var webhookGroupDefinition = await _webhookDefinitionManager.GetGroupAsync(name);
+        if (await _staticWebhookDefinitionStore.GetOrNullAsync(name) != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
 
         if (webhookGroupDefinitionRecord == null)
@@ -148,28 +155,17 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await WebhookGroupDefinitionRecordToDto(webhookGroupDefinitionRecord);
-
-        if (webhookGroupDefinition.Properties.TryGetValue("IsStatic", out var isStaticObj) &&
-            isStaticObj is bool isStatic)
-        {
-            dto.IsStatic = isStatic;
-        }
-
-        return dto;
+        return DefinitionRecordToDto(webhookGroupDefinitionRecord);
     }
 
-    protected async virtual Task<WebhookGroupDefinitionDto> WebhookGroupDefinitionRecordToDto(WebhookGroupDefinitionRecord webhookGroupDefinitionRecord)
+    protected virtual WebhookGroupDefinitionDto DefinitionRecordToDto(WebhookGroupDefinitionRecord webhookGroupDefinitionRecord)
     {
         var webhookGroupDto = new WebhookGroupDefinitionDto
         {
             Name = webhookGroupDefinitionRecord.Name,
-            FormatedDisplayName = webhookGroupDefinitionRecord.DisplayName,
+            DisplayName = webhookGroupDefinitionRecord.DisplayName,
             IsStatic = false,
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(webhookGroupDefinitionRecord.DisplayName);
-        webhookGroupDto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
 
         foreach (var property in webhookGroupDefinitionRecord.ExtraProperties)
         {
@@ -179,31 +175,16 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
         return webhookGroupDto;
     }
 
-    protected async virtual Task<WebhookGroupDefinitionDto> WebhookGroupDefinitionToDto(WebhookGroupDefinition webhookGroupDefinition)
+    protected virtual WebhookGroupDefinitionDto DefinitionToDto(WebhookGroupDefinition webhookGroupDefinition, bool isStatic = false)
     {
         var webhookGroupDto = new WebhookGroupDefinitionDto
         {
-            Name = webhookGroupDefinition.Name
+            Name = webhookGroupDefinition.Name,
+            IsStatic = isStatic,
+            DisplayName = _localizableStringSerializer.Serialize(webhookGroupDefinition.DisplayName),
         };
 
-        if (webhookGroupDefinition.DisplayName != null)
-        {
-            webhookGroupDto.DisplayName = await webhookGroupDefinition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            webhookGroupDto.FormatedDisplayName = _localizableStringSerializer.Serialize(webhookGroupDefinition.DisplayName);
-        }
-
-        if (webhookGroupDefinition.Properties.TryGetValue("IsStatic", out var isStaticObj) &&
-            isStaticObj is bool isStatic)
-        {
-            webhookGroupDto.IsStatic = isStatic;
-        }
-
-        var ignoreFiledNames = new string[]
-        {
-            "IsStatic"
-        };
-
-        foreach (var property in webhookGroupDefinition.Properties.Where(x => !ignoreFiledNames.Contains(x.Key)))
+        foreach (var property in webhookGroupDefinition.Properties)
         {
             webhookGroupDto.SetProperty(property.Key, property.Value);
         }

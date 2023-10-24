@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj" />
+    <ProjectReference Include="..\..\framework\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>
 

@@ -6,8 +6,8 @@
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
   import { SettingForm } from '/@/components/SettingManagement';
-  import { SettingGroup } from '/@/api/settings/model/settingModel';
-  import { getCurrentUserSettings, setCurrentUserSettings } from '/@/api/settings/settings';
+  import { SettingGroup } from '/@/api/settings-management/settings/model';
+  import { getCurrentUserSettings, setCurrentUserSettings } from '/@/api/settings-management/settings';
 
   interface ISettingForm {
     providerName: string;

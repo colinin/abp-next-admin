@@ -46,7 +46,7 @@
         </template>
       </template>
     </BasicTable>
-    <OssUploadModal @register="registerUploadModal" />
+    <OssUploadModal @register="registerUploadModal" @file:uploaded="handleUploaded" />
     <OssPreviewModal @register="registerPreviewModal" />
   </div>
 </template>
@@ -65,6 +65,7 @@
   import OssUploadModal from './OssUploadModal.vue';
   import OssPreviewModal from './OssPreviewModal.vue';
 
+  const emits = defineEmits(['file:delete', 'file:upload', 'folder:delete', 'oss:delete']);
   const props = defineProps({
     bucket: {
       type: String,
@@ -158,21 +159,29 @@
     });
   }
 
+  function handleUploaded(bucket: string, path: string, name: string) {
+    reload();
+    emits('file:upload', bucket, path, name);
+  }
+
   function handleBulkDelete() {
     createConfirm({
       iconType: 'warning',
       title: L('AreYouSure'),
       content: L('Objects:WillBeBulkDeletedMessage'),
       okCancel: true,
-      onOk: () => {
-        return bulkDeleteObject({
-          bucket: props.bucket,
-          path: props.path,
-          objects: getSelectRowKeys(),
-        }).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          reload();
+      onOk: async () => {
+        const bucket = props.bucket;
+        const path = props.path;
+        const objects = getSelectRowKeys();
+        await bulkDeleteObject({
+          bucket: bucket,
+          path: path,
+          objects: objects,
         });
+        createMessage.success(L('SuccessfullyDeleted'));
+        await reload();
+        emits('oss:delete', bucket, path, objects);
       },
     });
   }
@@ -190,15 +199,18 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       okCancel: true,
-      onOk: () => {
-        return deleteObject({
-          bucket: props.bucket,
-          path: props.path,
-          object: record.name,
-        }).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          reload();
+      onOk: async () => {
+        const bucket = props.bucket;
+        const path = props.path;
+        const object = record.name;
+        await deleteObject({
+          bucket: bucket,
+          path: path,
+          object: object,
         });
+        createMessage.success(L('SuccessfullyDeleted'));
+        await reload();
+        emits(record.isFolder ? 'folder:delete' : 'file:delete', bucket, path, object);
       },
     });
   }
@@ -212,4 +224,7 @@
     link.click();
   }
 
+  defineExpose({
+    refresh: reload,
+  });
 </script>

@@ -16,19 +16,19 @@
             />
           </template>
           <template #description>
-            <FolderTree :bucket="currentBucket" @select="handlePathChange" />
+            <FolderTree ref="folderTreeRef" :bucket="currentBucket" @select="handlePathChange" @folder:created="handlePathCreated" />
           </template>
         </CardMeta>
       </CardGrid>
       <CardGrid style="width: 75%;">
-        <FileList :bucket="currentBucket" :path="currentPath" />
+        <FileList ref="fileListRef" :bucket="currentBucket" :path="currentPath" @folder:delete="handlePathDeleted" />
       </CardGrid>
     </Card>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, unref, onMounted } from 'vue';
   import { Card, Select } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getContainers } from '/@/api/oss-management/oss';
@@ -40,6 +40,8 @@
   const CardMeta = Card.Meta;
 
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
+  const fileListRef = ref<any>();
+  const folderTreeRef = ref<any>();
   const currentPath = ref('');
   const currentBucket = ref('');
   const bucketList = ref<OssContainer[]>([]);
@@ -58,11 +60,24 @@
     });
   }
 
-  function handleBucketChange(bucket) {
+  function handleBucketChange(bucket: string) {
     currentBucket.value = bucket;
   }
 
-  function handlePathChange(path) {
+  function handlePathChange(path: string) {
     currentPath.value = path;
+  }
+
+  function handlePathCreated() {
+    const fileList = unref(fileListRef);
+    fileList?.refresh();
+  }
+
+  function handlePathDeleted(_bucket: string, path: string) {
+    console.log(_bucket);
+    console.log(path);
+    console.log(name);
+    const folderTree = unref(folderTreeRef);
+    folderTree?.refresh(path);
   }
 </script>

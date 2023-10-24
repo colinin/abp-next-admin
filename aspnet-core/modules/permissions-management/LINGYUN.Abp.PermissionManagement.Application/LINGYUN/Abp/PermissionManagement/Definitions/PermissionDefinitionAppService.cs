@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
@@ -13,6 +16,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.PermissionManagement.Definitions;
 
@@ -22,19 +26,24 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     private readonly ISimpleStateCheckerSerializer _simpleStateCheckerSerializer;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-
+    private readonly IStaticPermissionDefinitionStore _staticPermissionDefinitionStore;
+    private readonly IDynamicPermissionDefinitionStore _dynamicPermissionDefinitionStore;
     private readonly IPermissionDefinitionRecordRepository _definitionRepository;
     private readonly IRepository<PermissionDefinitionRecord, Guid> _definitionBasicRepository;
 
     public PermissionDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer, 
         IPermissionDefinitionManager permissionDefinitionManager,
+        IStaticPermissionDefinitionStore staticPermissionDefinitionStore,
+        IDynamicPermissionDefinitionStore dynamicPermissionDefinitionStore,
         ISimpleStateCheckerSerializer simpleStateCheckerSerializer,
         IPermissionDefinitionRecordRepository definitionRepository, 
         IRepository<PermissionDefinitionRecord, Guid> definitionBasicRepository)
     {
         _localizableStringSerializer = localizableStringSerializer;
         _permissionDefinitionManager = permissionDefinitionManager;
+        _staticPermissionDefinitionStore = staticPermissionDefinitionStore;
+        _dynamicPermissionDefinitionStore = dynamicPermissionDefinitionStore;
         _simpleStateCheckerSerializer = simpleStateCheckerSerializer;
         _definitionRepository = definitionRepository;
         _definitionBasicRepository = definitionBasicRepository;
@@ -64,33 +73,13 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             input.DisplayName,
             input.IsEnabled);
 
-        if (input.MultiTenancySide.HasValue)
-        {
-            definitionRecord.MultiTenancySide = input.MultiTenancySide.Value;
-        }
+        await UpdateByInput(definitionRecord, input);
 
-        if (input.Providers.Any())
-        {
-            definitionRecord.Providers = input.Providers.JoinAsString(",");
-        }
-
-        if (input.StateCheckers.Any())
-        {
-            definitionRecord.StateCheckers = input.StateCheckers.JoinAsString(",");
-        }
-
-        foreach (var property in input.ExtraProperties)
-        {
-            definitionRecord.SetProperty(property.Key, property.Value);
-        }
-
-        await _definitionRepository.InsertAsync(definitionRecord);
+        definitionRecord = await _definitionRepository.InsertAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await DefinitionRecordToDto(definitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(definitionRecord);
     }
 
     [Authorize(PermissionManagementPermissionNames.Definition.Delete)]
@@ -98,80 +87,69 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     {
         var definitionRecord = await FindByNameAsync(name);
 
-        if (definitionRecord == null)
+        if (definitionRecord != null)
         {
-            return;
-        }
+            await _definitionRepository.DeleteAsync(definitionRecord);
 
-        await _definitionRepository.DeleteAsync(definitionRecord);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<PermissionDefinitionDto> GetAsync(string name)
     {
-        var definition = await _permissionDefinitionManager.GetOrNullAsync(name);
-        if (definition == null)
+        var definition = await _staticPermissionDefinitionStore.GetOrNullAsync(name);
+        if (definition != null)
         {
-            throw new BusinessException(PermissionManagementErrorCodes.Definition.NameNotFount)
-                .WithData(nameof(PermissionDefinitionRecord.Name), name);
+            return DefinitionToDto(await GetGroupDefinition(definition), definition, true);
         }
-
-        var groupDefinition = await GetGroupDefinition(definition);
-
-        var dto = await DefinitionToDto(groupDefinition, definition);
-
-        return dto;
+        definition = await _dynamicPermissionDefinitionStore.GetOrNullAsync(name);
+        return DefinitionToDto(await GetGroupDefinition(definition), definition);
     }
 
-    public async virtual Task<PagedResultDto<PermissionDefinitionDto>> GetListAsync(PermissionDefinitionGetListInput input)
+    public async virtual Task<ListResultDto<PermissionDefinitionDto>> GetListAsync(PermissionDefinitionGetListInput input)
     {
-        var permissions = new List<PermissionDefinitionDto>();
+        var permissionDtoList = new List<PermissionDefinitionDto>();
 
-        IReadOnlyList<PermissionDefinition> definitionPermissions;
+        var staticPermissions = new List<PermissionDefinition>();
 
-        if (!input.GroupName.IsNullOrWhiteSpace())
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        var staticGroupNames = staticGroups
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        foreach (var group in staticGroups.WhereIf(!input.GroupName.IsNullOrWhiteSpace(), x => x.Name == input.GroupName))
         {
-            var group = await _permissionDefinitionManager.GetGroupOrNullAsync(input.GroupName);
-            if (group == null)
-            {
-                return new PagedResultDto<PermissionDefinitionDto>(0, permissions);
-            }
-
-            definitionPermissions = group.GetPermissionsWithChildren();
+            var permissions = group.GetPermissionsWithChildren();
+            staticPermissions.AddRange(permissions);
+            permissionDtoList.AddRange(permissions.Select(f => DefinitionToDto(group, f, true)));
         }
-        else
+        var staticPermissionNames = staticPermissions
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        var dynamicGroups = await _dynamicPermissionDefinitionStore.GetGroupsAsync();
+        foreach (var group in dynamicGroups
+            .Where(d => !staticGroupNames.Contains(d.Name))
+            .WhereIf(!input.GroupName.IsNullOrWhiteSpace(), x => x.Name == input.GroupName))
         {
-            definitionPermissions = await _permissionDefinitionManager.GetPermissionsAsync();
-        }
-
-        var definitionFilter = definitionPermissions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) ||
-                (x.Parent != null && x.Parent.Name.Contains(input.Filter)));
-
-        var sorting = input.Sorting;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = nameof(PermissionDefinitionRecord.Name);
-        }
-
-        var filterDefinitionCount = definitionFilter.Count();
-        var filterDefinitions = definitionFilter
-            .OrderBy(sorting)
-            .PageBy(input.SkipCount, input.MaxResultCount);
-
-        foreach (var definition in filterDefinitions)
-        {
-            var groupDefinition = await GetGroupDefinition(definition);
-            var Dto = await DefinitionToDto(groupDefinition, definition);
-
-            permissions.Add(Dto);
+            var permissions = group.GetPermissionsWithChildren();
+            permissionDtoList.AddRange(permissions
+                .Where(d => !staticPermissionNames.Contains(d.Name))
+                .Select(f => DefinitionToDto(group, f)));
         }
 
-        return new PagedResultDto<PermissionDefinitionDto>(filterDefinitionCount, permissions);
+        return new ListResultDto<PermissionDefinitionDto>(permissionDtoList
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
+            .ToList());
     }
 
     [Authorize(PermissionManagementPermissionNames.Definition.Update)]
     public async virtual Task<PermissionDefinitionDto> UpdateAsync(string name, PermissionDefinitionUpdateDto input)
     {
+        if (await _staticPermissionDefinitionStore.GetOrNullAsync(name) != null)
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.Definition.StaticPermissionNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var definition = await _permissionDefinitionManager.GetOrNullAsync(name);
         var definitionRecord = await FindByNameAsync(name);
 
@@ -186,64 +164,71 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
                 input.DisplayName,
                 input.IsEnabled);
 
-            if (input.MultiTenancySide.HasValue)
-            {
-                definitionRecord.MultiTenancySide = input.MultiTenancySide.Value;
-            }
-
-            if (input.Providers.Any())
-            {
-                definitionRecord.Providers = input.Providers.JoinAsString(",");
-            }
-
-            if (input.StateCheckers.Any())
-            {
-                definitionRecord.StateCheckers = input.StateCheckers.JoinAsString(",");
-            }
-
-            foreach (var property in input.ExtraProperties)
-            {
-                definitionRecord.SetProperty(property.Key, property.Value);
-            }
+            await UpdateByInput(definitionRecord, input);
 
             definitionRecord = await _definitionBasicRepository.InsertAsync(definitionRecord);
         }
         else
         {
-            definitionRecord.ExtraProperties.Clear();
-            foreach (var property in input.ExtraProperties)
-            {
-                definitionRecord.SetProperty(property.Key, property.Value);
-            }
-
-            if (input.MultiTenancySide.HasValue)
-            {
-                definitionRecord.MultiTenancySide = input.MultiTenancySide.Value;
-            }
-
-            if (input.Providers.Any())
-            {
-                definitionRecord.Providers = input.Providers.JoinAsString(",");
-            }
-
-            if (input.StateCheckers.Any())
-            {
-                definitionRecord.StateCheckers = input.StateCheckers.JoinAsString(",");
-            }
-
-            if (!string.Equals(definitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                definitionRecord.DisplayName = input.DisplayName;
-            }
+            await UpdateByInput(definitionRecord, input);
 
             definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await DefinitionRecordToDto(definitionRecord);
+        return DefinitionRecordToDto(definitionRecord);
+    }
 
-        return dto;
+    protected async virtual Task UpdateByInput(PermissionDefinitionRecord record, PermissionDefinitionCreateOrUpdateDto input)
+    {
+        record.IsEnabled = input.IsEnabled;
+        record.MultiTenancySide = input.MultiTenancySide;
+        if (!string.Equals(record.ParentName, input.ParentName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.ParentName = input.ParentName;
+        }
+        if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.DisplayName = input.DisplayName;
+        }
+        string providers = null;
+        if (!input.Providers.IsNullOrEmpty())
+        {
+            providers = input.Providers.JoinAsString(",");
+        }
+        if (!string.Equals(record.Providers, providers, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.Providers = providers;
+        }
+        
+        record.ExtraProperties.Clear();
+        foreach (var property in input.ExtraProperties)
+        {
+            record.SetProperty(property.Key, property.Value);
+        }
+
+        try
+        {
+            if (!string.Equals(record.StateCheckers, input.StateCheckers, StringComparison.InvariantCultureIgnoreCase))
+            {
+                // 校验格式
+                var permissionDefinition = await _staticPermissionDefinitionStore.GetOrNullAsync(PermissionManagementPermissionNames.Definition.Default);
+                var _ = _simpleStateCheckerSerializer.DeserializeArray(input.StateCheckers, permissionDefinition);
+
+                record.StateCheckers = input.StateCheckers;
+            }
+        }
+        catch
+        {
+            throw new AbpValidationException(
+                new List<ValidationResult>
+                {
+                    new ValidationResult(
+                        L["The field {0} is invalid", L["DisplayName:StateCheckers"]],
+                        new string[1] { nameof(input.StateCheckers) })
+                });
+        }
     }
 
     protected async virtual Task<PermissionDefinitionRecord> FindByNameAsync(string name)
@@ -272,22 +257,21 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             .WithData(nameof(PermissionDefinitionRecord.Name), definition.Name);
     }
 
-    protected async virtual Task<PermissionDefinitionDto> DefinitionRecordToDto(PermissionDefinitionRecord definitionRecord)
+    protected virtual PermissionDefinitionDto DefinitionRecordToDto(PermissionDefinitionRecord definitionRecord)
     {
         var dto = new PermissionDefinitionDto
         {
+            IsStatic = false,
             Name = definitionRecord.Name,
             GroupName = definitionRecord.GroupName,
             ParentName = definitionRecord.ParentName,
             IsEnabled = definitionRecord.IsEnabled,
-            FormatedDisplayName = definitionRecord.DisplayName,
-            Providers = definitionRecord.Providers.Split(',').ToList(),
-            StateCheckers = definitionRecord.StateCheckers.Split(',').ToList(),
+            DisplayName = definitionRecord.DisplayName,
+            Providers = definitionRecord.Providers?.Split(',').ToList(),
+            StateCheckers = definitionRecord.StateCheckers,
             MultiTenancySide = definitionRecord.MultiTenancySide,
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(definitionRecord.DisplayName);
-        dto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
 
         foreach (var property in definitionRecord.ExtraProperties)
         {
@@ -297,28 +281,24 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         return dto;
     }
 
-    protected async virtual Task<PermissionDefinitionDto> DefinitionToDto(PermissionGroupDefinition groupDefinition, PermissionDefinition definition)
+    protected virtual PermissionDefinitionDto DefinitionToDto(PermissionGroupDefinition groupDefinition, PermissionDefinition definition, bool isStatic = false)
     {
         var dto = new PermissionDefinitionDto
         {
+            IsStatic = isStatic,
             Name = definition.Name,
             GroupName = groupDefinition.Name,
             ParentName = definition.Parent?.Name,
             IsEnabled = definition.IsEnabled,
             Providers = definition.Providers,
             MultiTenancySide = definition.MultiTenancySide,
+            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
 
         if (definition.StateCheckers.Any())
         {
-            var stateCheckers = _simpleStateCheckerSerializer.Serialize(definition.StateCheckers);
-            dto.StateCheckers = stateCheckers.Split(',').ToList();
-        }
-
-        if (definition.DisplayName != null)
-        {
-            dto.DisplayName = await definition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            dto.FormatedDisplayName = _localizableStringSerializer.Serialize(definition.DisplayName);
+            dto.StateCheckers = _simpleStateCheckerSerializer.Serialize(definition.StateCheckers);
         }
 
         foreach (var property in definition.Properties)

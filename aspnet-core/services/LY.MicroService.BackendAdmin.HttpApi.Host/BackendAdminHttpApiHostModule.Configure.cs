@@ -38,6 +38,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.IdentityModel.Logging;
 
 namespace LY.MicroService.BackendAdmin;
 
@@ -55,7 +56,7 @@ public partial class BackendAdminHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -66,6 +67,11 @@ public partial class BackendAdminHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)

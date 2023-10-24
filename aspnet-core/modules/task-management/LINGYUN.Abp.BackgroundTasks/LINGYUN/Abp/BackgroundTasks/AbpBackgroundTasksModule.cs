@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Volo.Abp.Auditing;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -23,10 +24,15 @@ public class AbpBackgroundTasksModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.AddTransient(typeof(BackgroundJobAdapter<>));
         context.Services.AddSingleton(typeof(BackgroundWorkerAdapter<>));
 
-        context.Services.AddHostedService<DefaultBackgroundWorker>();
+        if (!context.Services.IsDataMigrationEnvironment())
+        {
+            context.Services.AddHostedService<DefaultBackgroundWorker>();
+        }
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {

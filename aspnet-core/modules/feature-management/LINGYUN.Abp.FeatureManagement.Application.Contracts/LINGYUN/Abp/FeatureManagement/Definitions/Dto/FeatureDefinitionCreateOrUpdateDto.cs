@@ -27,6 +27,7 @@ public abstract class FeatureDefinitionCreateOrUpdateDto : IHasExtraProperties
 
     public List<string> AllowedProviders { get; set; } = new List<string>();
 
+    [Required]
     [DynamicStringLength(typeof(FeatureDefinitionRecordConsts), nameof(FeatureDefinitionRecordConsts.MaxValueTypeLength))]
     public string ValueType { get; set; }
 

@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\tui-juhe\LINGYUN.Abp.Notifications.TuiJuhe\LINGYUN.Abp.Notifications.TuiJuhe.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.TuiJuhe\LINGYUN.Abp.Notifications.TuiJuhe.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.TuiJuhe.Tests\LINGYUN.Abp.TuiJuhe.Tests.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Notifications.Tests\LINGYUN.Abp.Notifications.Tests.csproj" />

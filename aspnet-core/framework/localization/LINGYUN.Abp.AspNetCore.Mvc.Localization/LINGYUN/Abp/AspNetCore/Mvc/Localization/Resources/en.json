@@ -1,0 +1,23 @@
+{
+  "culture": "en",
+  "texts": {
+    "Languages": "Languages",
+    "Resources": "Resources",
+    "Texts": "Texts",
+    "DisplayName:Key": "Key",
+    "DisplayName:Value": "Value",
+    "DisplayName:Name": "Name",
+    "DisplayName:CultureName": "Culture Name",
+    "DisplayName:ResourceName": "Resource Name",
+    "DisplayName:TargetCultureName": "Target Culture",
+    "DisplayName:TargetValue": "Target Value",
+    "DisplayName:Any": "Any",
+    "DisplayName:OnlyNull": "Only Null",
+    "DisplayName:Filter": "Filter",
+    "DisplayName:UiCultureName": "Ui Culture Name",
+    "DisplayName:DisplayName": "Display Name",
+    "DisplayName:FlagIcon": "Flag Icon",
+    "DisplayName:Description": "Description",
+    "DisplayName:DefaultCultureName": "Default Culture"
+  }
+}

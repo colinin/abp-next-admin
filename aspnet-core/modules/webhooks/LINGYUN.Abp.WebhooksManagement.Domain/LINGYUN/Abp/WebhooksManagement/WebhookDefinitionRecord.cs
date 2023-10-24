@@ -9,10 +9,6 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [IgnoreMultiTenancy]
 public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    [System.Text.Json.Serialization.JsonIgnore]
-    [Newtonsoft.Json.JsonIgnore]
-    public override Guid Id { get; protected set; }
-
     public string GroupName { get; set; }
 
     public string Name { get; set; }
