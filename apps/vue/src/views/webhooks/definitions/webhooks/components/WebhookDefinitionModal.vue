@@ -48,7 +48,7 @@
               :tree-checkable="true"
               :tree-check-strictly="true"
               :tree-data="state.availableFeatures"
-              :value="state.entity.requiredFeatures"
+              :value="getRequiredFeatures"
               :field-names="{
                 label: 'displayName',
                 value: 'name',
@@ -80,6 +80,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import { GetListAsyncByInput as getAvailableFeatures } from '/@/api/feature-management/definitions/features';
+  import { FeatureDefinitionDto } from '/@/api/feature-management/definitions/features/model';
   import {
     GetAsyncByName,
     CreateAsyncByInput,
@@ -94,6 +95,7 @@
   import { GetListAsyncByInput as getGroupDefinitions } from '/@/api/webhooks/definitions/groups';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { groupBy } from '/@/utils/array';
+  import { isNullOrUnDef } from '/@/utils/is';
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
@@ -110,6 +112,7 @@
     entityChanged: boolean,
     entityEditFlag: boolean,
     defaultGroup?: string,
+    features: FeatureDefinitionDto[];
     availableFeatures: FeatureTreeData[],
     availableGroups: WebhookGroupDefinitionDto[],
   }
@@ -132,6 +135,7 @@
     entityEditFlag: false,
     availableFeatures: [],
     availableGroups: [],
+    features: [],
     entityRules: {
       groupName: ruleCreator.fieldRequired({
         name: 'GroupName',
@@ -165,6 +169,17 @@
         },
       }),
     },
+  });
+  const getRequiredFeatures = computed(() => {
+    if (isNullOrUnDef(state.entity.requiredFeatures)) return [];
+    return state.features
+      .filter((feature) => state.entity.requiredFeatures.includes(feature.name))
+      .map((feature) => {
+        return {
+          label: feature.displayName,
+          value: feature.name,
+        };
+      });
   });
   const getGroupOptions = computed(() => {
     return state.availableGroups.map((group) => {
@@ -236,23 +251,16 @@
 
   function fetchFeatures() {
     getAvailableFeatures({}).then((res) => {
-      const featureGroup = groupBy(res.items, 'groupName');
+      state.features = res.items;
+      formatDisplayName(state.features);
+      const featureGroup = groupBy(cloneDeep(res.items), 'groupName');
       const featureGroupTree: FeatureTreeData[] = [];
       Object.keys(featureGroup).forEach((gk) => {
-        const treeData: FeatureTreeData = {
-          name: gk,
-          displayName: gk,
-          children: [],
-        };
         const featureTree = listToTree(featureGroup[gk], {
           id: 'name',
           pid: 'parentName',
         });
-        formatDisplayName(featureTree);
-        featureTree.forEach((tk) => {
-          treeData.children.push(tk);
-        });
-        featureGroupTree.push(treeData);
+        featureGroupTree.push(...featureTree);
       });
       state.availableFeatures = featureGroupTree;
     });

@@ -44,8 +44,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
     [Authorize(SettingManagementPermissions.Definition.Create)]
     public async virtual Task<SettingDefinitionDto> CreateAsync(SettingDefinitionCreateDto input)
     {
-        var settingDefinition = await _settingDefinitionManager.GetOrNullAsync(input.Name);
-        if (settingDefinition != null)
+        if (await _staticSettingDefinitionStore.GetOrNullAsync(input.Name) != null)
         {
             throw new BusinessException(SettingManagementErrorCodes.Definition.DuplicateName)
                 .WithData("Name", input.Name);

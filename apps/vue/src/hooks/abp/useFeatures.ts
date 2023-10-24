@@ -6,7 +6,7 @@ type FeatureValue = NameValue<string>;
 /**
  * 特性检查接口
  */
-interface IFeatureChecker {
+export interface IFeatureChecker {
   /**
    * 是否启用特性
    * @param featureNames 特性名称
@@ -51,7 +51,7 @@ export function useFeatures() {
     isEnabled(featureNames: string | string[], requiresAll?: boolean) {
       if (Array.isArray(featureNames)) {
         if (featureNames.length === 0) return true;
-        if (!requiresAll || requiresAll === true) {
+        if (requiresAll === undefined || requiresAll === true) {
           for (let index = 0; index < featureNames.length; index++) {
             if (!_isEnabled(featureNames[index])) return false;
           }

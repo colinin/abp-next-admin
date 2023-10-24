@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.FeatureManagement.Definitions;
 
@@ -48,7 +50,13 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
     [Authorize(FeatureManagementPermissionNames.Definition.Create)]
     public async virtual Task<FeatureDefinitionDto> CreateAsync(FeatureDefinitionCreateDto input)
     {
-        if (await _featureDefinitionManager.GetOrNullAsync(input.Name) != null)
+        if (await _staticFeatureDefinitionStore.GetOrNullAsync(input.Name) != null)
+        {
+            throw new BusinessException(FeatureManagementErrorCodes.Definition.AlreayNameExists)
+                .WithData(nameof(FeatureDefinitionRecord.Name), input.Name);
+        }
+
+        if (await _definitionRepository.FindByNameAsync(input.Name) != null)
         {
             throw new BusinessException(FeatureManagementErrorCodes.Definition.AlreayNameExists)
                 .WithData(nameof(FeatureDefinitionRecord.Name), input.Name);
@@ -202,10 +210,6 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         {
             record.DefaultValue = input.DefaultValue;
         }
-        if (!string.Equals(record.ValueType, input.ValueType, StringComparison.InvariantCultureIgnoreCase))
-        {
-            record.ValueType = input.ValueType;
-        }
         string allowedProviders = null;
         if (!input.AllowedProviders.IsNullOrEmpty())
         {
@@ -219,6 +223,24 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         foreach (var property in input.ExtraProperties)
         {
             record.SetProperty(property.Key, property.Value);
+        }
+        try
+        {
+            if (!string.Equals(record.ValueType, input.ValueType, StringComparison.InvariantCultureIgnoreCase))
+            {
+                var _ = _stringValueTypeSerializer.Deserialize(input.ValueType);
+                record.ValueType = input.ValueType;
+            }
+        }
+        catch
+        {
+            throw new AbpValidationException(
+                new List<ValidationResult>
+                {
+                    new ValidationResult(
+                        L["The field {0} is invalid", L["DisplayName:ValueType"]],
+                        new string[1] { nameof(input.ValueType) })
+                });
         }
     }
 

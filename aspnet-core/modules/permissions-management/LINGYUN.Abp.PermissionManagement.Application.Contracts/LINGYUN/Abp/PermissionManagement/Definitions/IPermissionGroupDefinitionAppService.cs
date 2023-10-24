@@ -14,5 +14,5 @@ public interface IPermissionGroupDefinitionAppService : IApplicationService
 
     Task<PermissionGroupDefinitionDto> UpdateAsync(string name, PermissionGroupDefinitionUpdateDto input);
 
-    Task<PagedResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input);
+    Task<ListResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input);
 }

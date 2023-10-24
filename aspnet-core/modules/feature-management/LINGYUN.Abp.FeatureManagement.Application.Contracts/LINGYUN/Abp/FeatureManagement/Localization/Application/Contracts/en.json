@@ -20,6 +20,7 @@
     "DisplayName:ParentName": "Parent",
     "DisplayName:Description": "Description",
     "DisplayName:DefaultValue": "Default Value",
+    "DisplayName:ValueType": "Value Validator Type",
     "DisplayName:IsVisibleToClients": "Visible To Clients",
     "Description:IsVisibleToClients": "Can clients see this feature and it's value.",
     "DisplayName:IsAvailableToHost": "Available To Host",

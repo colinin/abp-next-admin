@@ -17,7 +17,7 @@
             </Row>
             <Row>
               <Col :span="11">
-                <Select :value="state.valueType.name" @change="handleValueTypeChange">
+                <Select :disabled="props.disabled" :value="state.valueType.name" @change="handleValueTypeChange">
                   <Option value="FreeTextStringValueType">{{ t('component.value_type_nput.type.FREE_TEXT.name') }}</Option>
                   <Option value="ToggleStringValueType">{{ t('component.value_type_nput.type.TOGGLE.name') }}</Option>
                   <Option value="SelectionStringValueType">{{ t('component.value_type_nput.type.SELECTION.name') }}</Option>
@@ -27,7 +27,7 @@
                 <div style="width: 100%"></div>
               </Col>
               <Col :span="11">
-                <Select :value="state.valueType.validator.name" @change="handleValidatorChange">
+                <Select :disabled="props.disabled" :value="state.valueType.validator.name" @change="handleValidatorChange">
                   <Option value="NULL">{{ t('component.value_type_nput.validator.NULL.name') }}</Option>
                   <Option value="BOOLEAN" :disabled="state.valueType.name !== 'ToggleStringValueType'">
                     {{ t('component.value_type_nput.validator.BOOLEAN.name') }}
@@ -62,6 +62,7 @@
                   <Row>
                     <Col :span="11">
                       <InputNumber
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:value="(state.valueType.validator as NumericValueValidator).minValue"
                       />
@@ -71,6 +72,7 @@
                     </Col>
                     <Col :span="11">
                       <InputNumber
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:value="(state.valueType.validator as NumericValueValidator).maxValue"
                       />
@@ -81,6 +83,7 @@
                   <Row style="margin-top: 10px;">
                     <Col :span="24">
                       <Checkbox
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:checked="(state.valueType.validator as StringValueValidator).allowNull"
                     >
@@ -96,6 +99,7 @@
                   <Row>
                     <Col :span="24">
                       <Input
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:value="(state.valueType.validator as StringValueValidator).regularExpression"
                       />
@@ -115,6 +119,7 @@
                   <Row>
                     <Col :span="11">
                       <InputNumber
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:value="(state.valueType.validator as StringValueValidator).minLength"
                       />
@@ -124,6 +129,7 @@
                     </Col>
                     <Col :span="11">
                       <InputNumber
+                        :disabled="props.disabled"
                         style="width: 100%"
                         v-model:value="(state.valueType.validator as StringValueValidator).maxLength"
                       />
@@ -148,7 +154,7 @@
                       </Col>
                     </Row>
                   </template>
-                  <Table :columns="tableColumns" :data-source="(state.valueType as SelectionStringValueType).itemSource.items"> 
+                  <Table :columns="getTableColumns" :data-source="(state.valueType as SelectionStringValueType).itemSource.items"> 
                     <template #bodyCell="{ column, record }">
                       <template v-if="column.key === 'displayText'">
                         <span>{{ getDisplayName(record.displayText) }}</span>
@@ -188,10 +194,10 @@
         :wrapper-col="{ span: 18}"
       >
         <FormItem name="displayText" required :label="t('component.value_type_nput.type.SELECTION.displayText')">
-          <LocalizableInput :disabled="state.selection.form.editFlag" v-model:value="state.selection.form.model.displayText" />
+          <LocalizableInput :disabled="props.disabled || state.selection.form.editFlag" v-model:value="state.selection.form.model.displayText" />
         </FormItem>
         <FormItem name="value" required :label="t('component.value_type_nput.type.SELECTION.value')">
-          <Input v-model:value="state.selection.form.model.value" />
+          <Input :disabled="props.disabled" v-model:value="state.selection.form.model.value" />
         </FormItem>
       </Form>
     </Modal>
@@ -201,7 +207,7 @@
 <script setup lang="ts">
   import type { ColumnsType } from 'ant-design-vue/lib/table';
   import type { RuleObject } from 'ant-design-vue/lib/form';
-  import { reactive, ref, unref, watch } from 'vue';
+  import { computed, reactive, ref, unref, watch } from 'vue';
   import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
   import {
     Button,
@@ -317,7 +323,8 @@
       },
     },
   });
-  const tableColumns = reactive<ColumnsType>([{
+  const getTableColumns = computed(() => {
+    const columns: ColumnsType = [{
       title: t('component.value_type_nput.type.SELECTION.displayText'),
       dataIndex: 'displayText',
       key: 'displayText',
@@ -332,16 +339,18 @@
       align: 'left',
       fixed: 'left',
       width: 200,
-    },
-    {
+    }];
+    return columns.concat(props.disabled
+      ? []
+      : [{
       width: 180,
       title: t('component.value_type_nput.type.SELECTION.actions.title'),
       align: 'center',
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
-    }
-  ]);
+    }]);
+  });
   watch(
     () => props.value,
     (value) => {

@@ -5,7 +5,7 @@
       <Button v-if="props.allowDelete" danger @click="handleClean">{{ t('component.extra_property_dictionary.actions.clean') }}</Button>
     </div>
     <Card :title="t('component.extra_property_dictionary.title')">
-      <Table v-bind="state.table"> 
+      <Table sticky rowKey="key" :columns="getTableColumns" :data-source="state.table.dataSource" :scroll="{ x: 1500 }"> 
         <template v-if="!props.disabled" #bodyCell="{ column, record }">
           <template v-if="column.key === 'action'">
             <div :class="`${prefixCls}__action`">
@@ -47,11 +47,11 @@
 </template>
 
 <script lang="ts" setup>
-  import type { TableProps } from 'ant-design-vue';
   import type { RuleObject } from 'ant-design-vue/lib/form';
+  import type { ColumnsType } from 'ant-design-vue/lib/table/interface';
   import { cloneDeep } from 'lodash-es';
+  import { computed, reactive, ref, unref, watch } from 'vue';
   import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-  import { nextTick, reactive, ref, unref, watch } from 'vue';
   import { Button, Card, Divider, Form, Input, Table, Modal } from 'ant-design-vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -59,9 +59,12 @@
 
   const FormItem = Form.Item;
 
+  interface DataSource {
+    key: string;
+    value: string;
+  }
   interface State {
     editFlag: boolean,
-    table: TableProps,
     modal: {
       title?: string,
       visible?: boolean,
@@ -74,6 +77,9 @@
     form: {
       model: any,
       rules?: Dictionary<string, RuleObject>,
+    },
+    table: {
+      dataSource: DataSource[],
     },
   }
 
@@ -90,6 +96,32 @@
   const { prefixCls } = useDesign('extra-property-dictionary');
   const { t } = useI18n();
   const formRef = ref<any>();
+  const getTableColumns = computed(() => {
+    const columns: ColumnsType = [{
+      title: t('component.extra_property_dictionary.key'),
+      dataIndex: 'key',
+      align: 'left',
+      fixed: 'left',
+      width: 180,
+    },
+    {
+      title: t('component.extra_property_dictionary.value'),
+      dataIndex: 'value',
+      align: 'left',
+      fixed: 'left',
+      width: 'auto',
+    }];
+    return columns.concat(props.disabled
+      ? []
+      : [{
+        width: 220,
+        title: t('component.extra_property_dictionary.actions.title'),
+        align: 'center',
+        dataIndex: 'action',
+        key: 'action',
+        fixed: 'right',
+    }]);
+  });
   const state = reactive<State>({
     editFlag: false,
     modal: {
@@ -114,29 +146,8 @@
       },
     },
     table: {
-      sticky: true,
-      rowKey: "key",
-      columns: [
-        {
-          title: t('component.extra_property_dictionary.key'),
-          dataIndex: 'key',
-          align: 'left',
-          fixed: 'left',
-          width: 180,
-        },
-        {
-          title: t('component.extra_property_dictionary.value'),
-          dataIndex: 'value',
-          align: 'left',
-          fixed: 'left',
-          width: 'auto',
-        }
-      ],
       dataSource: [],
-      scroll: {
-        x: 1500,
-      },
-    }
+    },
   });
   watch(
     () => props.value,
@@ -156,33 +167,6 @@
       immediate: true,
     }
   );
-  watch(
-    () => [props.allowEdit, props.allowDelete],
-    ([allowEdit, allowDelete]) => {
-      if (allowEdit || allowDelete) {
-        nextTick(() => {
-          state.table.columns!.push({
-            width: 220,
-            title: t('component.extra_property_dictionary.actions.title'),
-            align: 'center',
-            dataIndex: 'action',
-            key: 'action',
-            fixed: 'right',
-          });
-        });
-      } else {
-        nextTick(() => {
-          const columns = state.table.columns ?? [];
-          const findIndex = columns.findIndex(x => x.key === 'action');
-          columns.splice(findIndex, 1);
-          state.table.columns = columns;
-        });
-      }
-    },
-    {
-      immediate: true,
-    }
-  )
 
   function handleAddNew() {
     state.form.model = {};

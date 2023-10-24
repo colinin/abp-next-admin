@@ -239,5 +239,41 @@ export default {
         regularExpression: '正则表达式',
       },
     },
+  },
+  simple_state_checking: {
+    title: '状态检查',
+    actions: {
+      create: '新增',
+      update: '编辑',
+      delete: '删除',
+      clean: '清除'
+    },
+    table: {
+      name: '名称',
+      properties: '属性',
+      actions: '操作',
+    },
+    form: {
+      name: '状态检查器',
+    },
+    requireAuthenticated: {
+      title: '需要用户认证',
+    },
+    requireFeatures: {
+      title: '检查所需功能',
+      requiresAll: '要求所有',
+      requiresAllDesc: '如果勾选,则需要启用所有选择的功能.',
+      featureNames: '需要的功能',
+    },
+    requireGlobalFeatures: {
+      title: '检查全局功能',
+      featureNames: '需要的全局功能',
+    },
+    requirePermissions: {
+      title: '检查所需权限',
+      requiresAll: '要求所有',
+      requiresAllDesc: '如果勾选,则需要拥有所有选择的权限.',
+      permissions: '需要的权限',
+    },
   }
 };

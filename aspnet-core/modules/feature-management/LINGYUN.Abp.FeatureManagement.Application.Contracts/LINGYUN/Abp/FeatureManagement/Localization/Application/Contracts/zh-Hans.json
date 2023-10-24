@@ -20,6 +20,7 @@
     "DisplayName:ParentName": "所属功能",
     "DisplayName:Description": "描述",
     "DisplayName:DefaultValue": "默认值",
+    "DisplayName:ValueType": "值验证类型",
     "DisplayName:IsVisibleToClients": "对客户端可见",
     "Description:IsVisibleToClients": "客户端是否可以看到这个功能.",
     "DisplayName:IsAvailableToHost": "宿主可用功能",

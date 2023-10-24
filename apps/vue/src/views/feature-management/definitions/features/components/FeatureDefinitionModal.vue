@@ -224,7 +224,7 @@
         },
       }),
       defaultValue: ruleCreator.defineValidator({
-        trigger: 'blur',
+        trigger: 'change',
         validator(_rule, value) {
           const valueType = unref(valueTypeRef);
           if (valueType) {

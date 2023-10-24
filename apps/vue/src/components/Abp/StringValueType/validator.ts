@@ -26,7 +26,7 @@ export class BooleanValueValidator implements ValueValidator {
     this.properties = {};
   }
   isValid(value?: any): boolean {
-    if (value === undefined) return true;
+    if (isNullOrUnDef(value)) return true;
     if (isBoolean(value)) return true;
     const bolString = String(value).toLowerCase();
     if (bolString === 'true' || bolString === 'false') return true;
@@ -58,7 +58,7 @@ export class NumericValueValidator implements ValueValidator {
   }
 
   isValid(value?: any): boolean {
-    if (!value) return true;
+    if (isNullOrUnDef(value)) return true;
     if (isNumber(value)) return this._isValidInternal(value);
     const numString = String(value);
     if (!isNullOrUnDef(numString)) {
@@ -115,15 +115,9 @@ export class StringValueValidator implements ValueValidator {
   }
 
   isValid(value?: any): boolean {
-    console.log(value);
-    console.log(this.allowNull);
     if (!this.allowNull && isNullOrUnDef(value)) return false;
     const valueString = String(value);
-    console.log(valueString);
     if (!this.allowNull && isNullOrWhiteSpace(valueString.trim())) return false;
-    console.log(valueString.length);
-    console.log(this.maxLength);
-    console.log(this.maxLength);
     if (this.minLength && this.minLength > 0 && valueString.length < this.minLength) return false;
     if (this.maxLength && this.maxLength > 0 && valueString.length > this.maxLength) return false;
     if (!isNullOrWhiteSpace(this.regularExpression)) {

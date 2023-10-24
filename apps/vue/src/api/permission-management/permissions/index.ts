@@ -1,21 +1,16 @@
 import { defAbpHttp } from '/@/utils/http/abp';
-import { PermissionProvider, PermissionResult, UpdatePermissions } from './model/permissionModel';
-
-enum Api {
-  Get = '/api/permission-management/permissions',
-  Update = '/api/permission-management/permissions',
-}
+import { PermissionProvider, PermissionResult, UpdatePermissions } from './model';
 
 export const get = (provider: PermissionProvider) => {
   return defAbpHttp.get<PermissionResult>({
-    url: Api.Get,
+    url: '/api/permission-management/permissions',
     params: provider,
   });
 };
 
 export const update = (provider: PermissionProvider, input: UpdatePermissions) => {
   return defAbpHttp.put<void>({
-    url: Api.Update,
+    url: '/api/permission-management/permissions',
     data: input,
     params: provider,
   });

@@ -47,7 +47,7 @@ public class PermissionGroupDefinitionController : PermissionManagementControlle
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input)
+    public virtual Task<ListResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

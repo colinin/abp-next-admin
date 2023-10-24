@@ -1,4 +1,4 @@
-import { IPermission } from '../../model/baseModel';
+import { IPermission } from '/@/api/model/baseModel';
 
 export class PermissionProvider {
   providerName!: string;

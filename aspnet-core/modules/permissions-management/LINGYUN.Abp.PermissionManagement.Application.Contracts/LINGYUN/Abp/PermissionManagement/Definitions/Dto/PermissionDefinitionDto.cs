@@ -16,11 +16,13 @@ public class PermissionDefinitionDto : IHasExtraProperties
 
     public bool IsEnabled { get; set; }
 
-    public MultiTenancySides? MultiTenancySide { get; set; }
+    public bool IsStatic { get; set; }
+
+    public MultiTenancySides MultiTenancySide { get; set; }
 
     public List<string> Providers { get; set; } = new List<string>();
 
-    public List<string> StateCheckers { get; set; } = new List<string>();
+    public string StateCheckers { get; set; }
 
-    public ExtraPropertyDictionary ExtraProperties { get; set; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

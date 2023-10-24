@@ -236,5 +236,41 @@ export default {
         regularExpression: 'Regular Expression',
       },
     },
+  },
+  simple_state_checking: {
+    title: 'State checking',
+    actions: {
+      create: 'Add',
+      update: 'Edit',
+      delete: 'Delete',
+      clean: 'Clean',
+    },
+    table: {
+      name: 'Name',
+      properties: 'Properties',
+      actions: 'Actions',
+    },
+    form: {
+      name: 'State checking',
+    },
+    requireAuthenticated: {
+      title: 'Require Authenticated',
+    },
+    requireFeatures: {
+      title: 'Require Features',
+      requiresAll: 'Requires All',
+      requiresAllDesc: 'If checked, all selected features need to be enabled.',
+      featureNames: 'Required features',
+    },
+    requireGlobalFeatures: {
+      title: 'Require Global Features',
+      featureNames: 'Required Global Features',
+    },
+    requirePermissions: {
+      title: 'Require Permissions',
+      requiresAll: 'Requires All',
+      requiresAllDesc: 'If checked, you need to have all the selected permissions.',
+      permissions: 'Required Permissions',
+    },
   }
 };
