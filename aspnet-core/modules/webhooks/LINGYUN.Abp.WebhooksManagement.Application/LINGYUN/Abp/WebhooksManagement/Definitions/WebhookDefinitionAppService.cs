@@ -38,6 +38,12 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
     [Authorize(WebhooksManagementPermissions.WebhookDefinition.Create)]
     public async virtual Task<WebhookDefinitionDto> CreateAsync(WebhookDefinitionCreateDto input)
     {
+        if (await _staticWebhookDefinitionStore.GetGroupOrNullAsync(input.GroupName) != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.StaticGroupNotAllowedChanged)
+                .WithData(nameof(WebhookDefinitionRecord.Name), input.GroupName);
+        }
+
         if (await _webhookDefinitionManager.GetOrNullAsync(input.Name) != null)
         {
             throw new BusinessException(WebhooksManagementErrorCodes.WebhookDefinition.AlreayNameExists)

@@ -182,12 +182,14 @@
       });
   });
   const getGroupOptions = computed(() => {
-    return state.availableGroups.map((group) => {
-      const info = deserialize(group.displayName);
-      return {
-        label: Lr(info.resourceName, info.name),
-        value: group.name,
-      };
+    return state.availableGroups
+      .filter((group) => !group.isStatic)
+      .map((group) => {
+        const info = deserialize(group.displayName);
+        return {
+          label: Lr(info.resourceName, info.name),
+          value: group.name,
+        };
     });
   });
   watch(
@@ -220,7 +222,7 @@
     state.entityEditFlag = false;
     if (!name) {
       state.entity = {
-        isInherited: true,
+        isEnabled: true,
         groupName: state.defaultGroup,
         requiredFeatures: [],
       };

@@ -236,12 +236,14 @@
     },
   });
   const getGroupOptions = computed(() => {
-    return state.availableGroups.map((group) => {
-      const info = deserialize(group.displayName);
-      return {
-        label: Lr(info.resourceName, info.name),
-        value: group.name,
-      };
+    return state.availableGroups
+      .filter((group) => !group.isStatic)
+      .map((group) => {
+        const info = deserialize(group.displayName);
+        return {
+          label: Lr(info.resourceName, info.name),
+          value: group.name,
+        };
     });
   });
   watch(
@@ -295,7 +297,7 @@
     GetListAsyncByInput({
       groupName: groupName,
     }).then((res) => {
-      const featureGroup = groupBy(res.items, 'groupName');
+      const featureGroup = groupBy(res.items.filter((def) => !def.isStatic), 'groupName');
       const featureTreeData: FeatureTreeData[] = [];
       Object.keys(featureGroup).forEach((gk) => {
         const featureTree = listToTree(featureGroup[gk], {

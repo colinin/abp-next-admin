@@ -35,6 +35,7 @@
             ]"
             :dropDownActions="[
               {
+                ifShow: !record.isStatic,
                 auth: 'AbpWebhooks.Definitions.Create',
                 label: L('Webhooks:AddNew'),
                 icon: 'ant-design:edit-outlined',

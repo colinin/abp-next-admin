@@ -50,6 +50,13 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
     [Authorize(FeatureManagementPermissionNames.Definition.Create)]
     public async virtual Task<FeatureDefinitionDto> CreateAsync(FeatureDefinitionCreateDto input)
     {
+        var staticGroups = await _staticFeatureDefinitionStore.GetGroupsAsync();
+        if (staticGroups.Any(g => g.Name == input.GroupName))
+        {
+            throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+                .WithData(nameof(FeatureDefinitionRecord.Name), input.GroupName);
+        }
+
         if (await _staticFeatureDefinitionStore.GetOrNullAsync(input.Name) != null)
         {
             throw new BusinessException(FeatureManagementErrorCodes.Definition.AlreayNameExists)
