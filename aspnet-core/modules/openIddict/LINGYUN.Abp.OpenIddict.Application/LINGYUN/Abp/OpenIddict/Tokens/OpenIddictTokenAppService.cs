@@ -57,15 +57,15 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
         }
         if (input.EndCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.CreationTime <= input.EndCreationTime);
         }
         if (input.BeginExpirationDate.HasValue)
         {
-            queryable = queryable.Where(x => x.ExpirationDate >= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.ExpirationDate >= input.BeginExpirationDate);
         }
         if (input.EndExpirationDate.HasValue)
         {
-            queryable = queryable.Where(x => x.ExpirationDate <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.ExpirationDate <= input.EndExpirationDate);
         }
         if (!input.Status.IsNullOrWhiteSpace())
         {
@@ -91,6 +91,8 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
                 x.ReferenceId.Contains(input.ReferenceId));
         }
 
+        var totalCount = await AsyncExecuter.CountAsync(queryable);
+
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
@@ -100,8 +102,6 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
         queryable = queryable
             .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
-
-        var totalCount = await AsyncExecuter.CountAsync(queryable);
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictTokenDto>(totalCount,
