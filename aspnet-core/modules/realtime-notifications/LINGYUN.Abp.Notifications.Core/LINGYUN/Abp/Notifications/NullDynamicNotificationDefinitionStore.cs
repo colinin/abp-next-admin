@@ -10,6 +10,7 @@ namespace LINGYUN.Abp.Notifications;
 public class NullDynamicNotificationDefinitionStore : IDynamicNotificationDefinitionStore, ISingletonDependency
 {
     private readonly static Task<NotificationDefinition> CachedNotificationResult = Task.FromResult((NotificationDefinition)null);
+    private readonly static Task<NotificationGroupDefinition> CachedNotificationGroupResult = Task.FromResult((NotificationGroupDefinition)null);
 
     private readonly static Task<IReadOnlyList<NotificationDefinition>> CachedNotificationsResult =
         Task.FromResult((IReadOnlyList<NotificationDefinition>)Array.Empty<NotificationDefinition>().ToImmutableList());
@@ -25,6 +26,11 @@ public class NullDynamicNotificationDefinitionStore : IDynamicNotificationDefini
     public Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
     {
         return CachedNotificationsResult;
+    }
+
+    public Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        return CachedNotificationGroupResult;
     }
 
     public Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications;
 
@@ -18,15 +19,18 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
     protected IDictionary<string, NotificationGroupDefinition> NotificationGroupDefinitions { get; }
     protected IDictionary<string, NotificationDefinition> NotificationDefinitions { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
+    protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
 
     public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
 
     public DateTime? LastCheckTime { get; set; }
 
     public DynamicNotificationDefinitionInMemoryCache(
-        ILocalizableStringSerializer localizableStringSerializer)
+        ILocalizableStringSerializer localizableStringSerializer,
+        ITemplateDefinitionManager templateDefinitionManager)
     {
         LocalizableStringSerializer = localizableStringSerializer;
+        TemplateDefinitionManager = templateDefinitionManager;
 
         NotificationGroupDefinitions = new Dictionary<string, NotificationGroupDefinition>();
         NotificationDefinitions = new Dictionary<string, NotificationDefinition>();
@@ -43,10 +47,15 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
 
         foreach (var notificationGroupRecord in notificationGroupRecords)
         {
+            ILocalizableString description = null;
+            if (!notificationGroupRecord.Description.IsNullOrWhiteSpace())
+            {
+                description = LocalizableStringSerializer.Deserialize(notificationGroupRecord.Description);
+            }
             var notificationGroup = context.AddGroup(
                 notificationGroupRecord.Name,
                 LocalizableStringSerializer.Deserialize(notificationGroupRecord.DisplayName),
-                LocalizableStringSerializer.Deserialize(notificationGroupRecord.Description),
+                description,
                 notificationGroupRecord.AllowSubscriptionToClients
             );
 
@@ -79,19 +88,30 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         return NotificationDefinitions.Values.ToList();
     }
 
+    public virtual NotificationGroupDefinition GetNotificationGroupOrNull(string name)
+    {
+        return NotificationGroupDefinitions.GetOrDefault(name);
+    }
+
     public virtual IReadOnlyList<NotificationGroupDefinition> GetGroups()
     {
         return NotificationGroupDefinitions.Values.ToList();
     }
 
-    private void AddNotification(
+    private async void AddNotification(
         NotificationGroupDefinition notificationGroup,
         NotificationDefinitionRecord notificationRecord)
     {
+        ILocalizableString description = null;
+        if (!notificationRecord.Description.IsNullOrWhiteSpace())
+        {
+            description = LocalizableStringSerializer.Deserialize(notificationRecord.Description);
+        }
+
         var notification = notificationGroup.AddNotification(
             notificationRecord.Name,
             LocalizableStringSerializer.Deserialize(notificationRecord.DisplayName),
-            LocalizableStringSerializer.Deserialize(notificationRecord.Description),
+            description,
             notificationRecord.NotificationType,
             notificationRecord.NotificationLifetime,
             notificationRecord.ContentType,
@@ -102,7 +122,13 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
 
         if (!notificationRecord.Providers.IsNullOrWhiteSpace())
         {
-            notification.Providers.AddRange(notificationRecord.Providers.Split(',', ';'));
+            notification.Providers.AddRange(notificationRecord.Providers.Split(','));
+        }
+
+        if (!notificationRecord.Template.IsNullOrWhiteSpace())
+        {
+            var templateDefinition = await TemplateDefinitionManager.GetOrNullAsync(notificationRecord.Template);
+            notification.WithTemplate(templateDefinition);
         }
 
         foreach (var property in notificationRecord.ExtraProperties)

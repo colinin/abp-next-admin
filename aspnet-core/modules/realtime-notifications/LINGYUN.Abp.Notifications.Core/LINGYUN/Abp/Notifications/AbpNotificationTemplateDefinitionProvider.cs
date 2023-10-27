@@ -4,22 +4,25 @@ using Volo.Abp.TextTemplating;
 namespace LINGYUN.Abp.Notifications;
 public class AbpNotificationTemplateDefinitionProvider : TemplateDefinitionProvider
 {
-    private readonly INotificationDefinitionManager _notificationDefinitionManager;
+    private readonly IStaticNotificationDefinitionStore _staticNotificationDefinitionStore;
 
     public AbpNotificationTemplateDefinitionProvider(
-        INotificationDefinitionManager notificationDefinitionManager)
+        IStaticNotificationDefinitionStore staticNotificationDefinitionStore)
     {
-        _notificationDefinitionManager = notificationDefinitionManager;
+        _staticNotificationDefinitionStore = staticNotificationDefinitionStore;
     }
 
     public override void Define(ITemplateDefinitionContext context)
     {
-        var notifications = _notificationDefinitionManager
+        var notifications = _staticNotificationDefinitionStore
             .GetNotificationsAsync().GetAwaiter().GetResult();
 
         foreach (var notification in notifications.Where(n => n.Template != null))
         {
-            context.Add(notification.Template);
+            if (context.GetOrNull(notification.Template.Name) == null)
+            {
+                context.Add(notification.Template);
+            }
         }
     }
 }

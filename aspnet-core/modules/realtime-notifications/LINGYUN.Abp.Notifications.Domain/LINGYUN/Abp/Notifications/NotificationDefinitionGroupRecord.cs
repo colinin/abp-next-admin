@@ -67,6 +67,16 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
             return false;
         }
 
+        if (Description != otherRecord.Description)
+        {
+            return false;
+        }
+
+        if (AllowSubscriptionToClients != otherRecord.AllowSubscriptionToClients)
+        {
+            return false;
+        }
+
         if (!this.HasSameExtraProperties(otherRecord))
         {
             return false;
@@ -85,6 +95,16 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
         if (DisplayName != otherRecord.DisplayName)
         {
             DisplayName = otherRecord.DisplayName;
+        }
+
+        if (Description != otherRecord.Description)
+        {
+            Description = otherRecord.Description;
+        }
+
+        if (AllowSubscriptionToClients != otherRecord.AllowSubscriptionToClients)
+        {
+            AllowSubscriptionToClients = otherRecord.AllowSubscriptionToClients;
         }
 
         if (!this.HasSameExtraProperties(otherRecord))

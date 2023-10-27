@@ -9,5 +9,7 @@ public interface IStaticNotificationDefinitionStore
 
     Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync();
 
+    Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name);
+
     Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync();
 }

@@ -23,22 +23,30 @@ public class NotificationController : AbpController, INotificationAppService
     }
 
     [HttpPost]
-    public async virtual Task SendAsync(NotificationSendDto input)
+    [Route("send")]
+    public virtual Task SendAsync(NotificationSendDto input)
     {
-        await NotificationAppService.SendAsync(input);
+        return NotificationAppService.SendAsync(input);
+    }
+
+    [HttpPost]
+    [Route("send/template")]
+    public virtual Task SendAsync(NotificationTemplateSendDto input)
+    {
+        return NotificationAppService.SendAsync(input);
     }
 
     [HttpGet]
     [Route("assignables")]
-    public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
+    public virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
     {
-        return await NotificationAppService.GetAssignableNotifiersAsync();
+        return NotificationAppService.GetAssignableNotifiersAsync();
     }
 
     [HttpGet]
     [Route("assignable-templates")]
-    public async virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
+    public virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
     {
-        return await NotificationAppService.GetAssignableTemplatesAsync();
+        return NotificationAppService.GetAssignableTemplatesAsync();
     }
 }

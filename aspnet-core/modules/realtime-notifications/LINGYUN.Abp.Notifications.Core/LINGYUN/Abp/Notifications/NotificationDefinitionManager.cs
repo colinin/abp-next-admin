@@ -53,7 +53,15 @@ namespace LINGYUN.Abp.Notifications
                 .ToImmutableList();
         }
 
-        public async Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
+        public async virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return await _staticStore.GetGroupOrNullAsync(name) ??
+                   await _dynamicStore.GetGroupOrNullAsync(name);
+        }
+
+        public async virtual Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
         {
             var staticGroups = await _staticStore.GetGroupsAsync();
             var staticGroupNames = staticGroups

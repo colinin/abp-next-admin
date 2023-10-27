@@ -314,6 +314,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureSettingManagement(configuration);
         ConfigureWebhooksManagement(configuration);
         ConfigurePermissionManagement(configuration);
+        ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

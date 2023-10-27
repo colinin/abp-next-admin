@@ -8,6 +8,7 @@ using LINGYUN.Abp.Idempotent;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OpenIddict.Permissions;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -414,6 +415,17 @@ public partial class MicroServiceApplicationsSingleModule
             //    options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpIdentityServerPermissions.Clients.ManagePermissions;
             //}
         });
+    }
+
+    private void ConfigureNotificationManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("NotificationsManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<AbpNotificationsManagementOptions>(options =>
+            {
+                options.IsDynamicNotificationsStoreEnabled = true;
+            });
+        }
     }
 
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)

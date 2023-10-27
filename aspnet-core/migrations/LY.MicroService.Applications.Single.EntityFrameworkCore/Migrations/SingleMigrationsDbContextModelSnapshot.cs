@@ -797,6 +797,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("Template")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("AppNotificationDefinitions", (string)null);
