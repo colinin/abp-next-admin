@@ -201,6 +201,9 @@ export const useUserStore = defineStore({
       if (userInfo?.avatarUrl) {
         outgoingUserInfo.avatar = formatUrl(userInfo.avatarUrl);
       }
+      if (userInfo?.picture) {
+        outgoingUserInfo.avatar = formatUrl(userInfo.picture);
+      }
       this.setUserInfo(outgoingUserInfo);
 
       return outgoingUserInfo;

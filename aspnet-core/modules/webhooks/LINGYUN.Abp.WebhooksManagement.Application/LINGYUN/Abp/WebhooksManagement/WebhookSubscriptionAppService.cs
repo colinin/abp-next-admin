@@ -35,7 +35,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         var subscription = new WebhookSubscription(
             GuidGenerator.Create(),
             input.WebhookUri,
-            input.ToWebhookHeadersString(),
+            input.ToSubscribedWebhooksString(),
             input.ToWebhookHeadersString(),
             input.Secret,
             input.TenantId ?? CurrentTenant.Id)
@@ -100,7 +100,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         var inputHeaders = input.ToWebhookHeadersString();
         if (!string.Equals(subscription.Headers, inputHeaders, StringComparison.InvariantCultureIgnoreCase))
         {
-            subscription.SetHeaders(input.ToWebhookHeadersString());
+            subscription.SetHeaders(inputHeaders);
         }
 
         subscription.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);

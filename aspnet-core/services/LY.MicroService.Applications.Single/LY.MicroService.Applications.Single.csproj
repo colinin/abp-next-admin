@@ -145,6 +145,7 @@
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain\LINGYUN.Abp.LocalizationManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.HttpApi\LINGYUN.Abp.LocalizationManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore\LINGYUN.Abp.OpenIddict.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />

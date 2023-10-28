@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.Identity.OrganizationUnits;
 public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
 {
     // https://github.com/dotnet/aspnetcore/blob/main/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L74
-    private static string IdentityAuthenticationType => "Identity.Application";
+    // private static string IdentityAuthenticationType => "Identity.Application";
 
     private readonly IIdentityUserRepository _identityUserRepository;
     private readonly IIdentityRoleRepository _identityRoleRepository;
@@ -26,8 +26,15 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
 
     public async virtual Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
-        var claimsIdentity = context.ClaimsPrincipal.Identities.First(x => x.AuthenticationType == IdentityAuthenticationType);
-
+        var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        if (claimsIdentity == null)
+        {
+            return;
+        }
+        if (claimsIdentity.FindAll(x => x.Type == AbpOrganizationUnitClaimTypes.OrganizationUnit).Any())
+        {
+            return;
+        }
         var userId = claimsIdentity.FindUserId();
         if (!userId.HasValue)
         {
@@ -38,7 +45,11 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
 
         foreach (var userOu in userOus)
         {
-            claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOu.Id.ToString()));
+            var userOuId = userOu.Id.ToString();
+            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOuId))
+            {
+                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOuId));
+            }
         }
 
         var userRoles = claimsIdentity
@@ -49,7 +60,11 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
         var roleOus = await _identityRoleRepository.GetOrganizationUnitsAsync(userRoles);
         foreach (var roleOu in roleOus)
         {
-            claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOu.Id.ToString()));
+            var roleOuId = roleOu.Id.ToString();
+            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOuId))
+            {
+                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOuId));
+            }
         }
 
         context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
