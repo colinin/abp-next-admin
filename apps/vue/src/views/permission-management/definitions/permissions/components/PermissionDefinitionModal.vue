@@ -188,12 +188,14 @@
     },
   });
   const getGroupOptions = computed(() => {
-    return state.availableGroups.map((group) => {
-      const info = deserialize(group.displayName);
-      return {
-        label: Lr(info.resourceName, info.name),
-        value: group.name,
-      };
+    return state.availableGroups
+      .filter((group) => !group.isStatic)
+      .map((group) => {
+        const info = deserialize(group.displayName);
+        return {
+          label: Lr(info.resourceName, info.name),
+          value: group.name,
+        };
     });
   });
   watch(
@@ -249,7 +251,7 @@
     GetListAsyncByInput({
       groupName: groupName,
     }).then((res) => {
-      const permissionGroup = groupBy(res.items, 'groupName');
+      const permissionGroup = groupBy(res.items.filter((def) => !def.isStatic), 'groupName');
       const permissionTreeData: PermissionTreeData[] = [];
       Object.keys(permissionGroup).forEach((gk) => {
         const permissionTree = listToTree(permissionGroup[gk], {

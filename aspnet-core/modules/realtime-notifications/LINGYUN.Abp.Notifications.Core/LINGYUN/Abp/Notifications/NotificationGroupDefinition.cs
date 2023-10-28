@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Localization;
 
@@ -56,7 +57,7 @@ namespace LINGYUN.Abp.Notifications
         {
             Name = name;
             DisplayName = displayName ?? new FixedLocalizableString(Name);
-            Description = description ?? DisplayName;
+            Description = description;
             AllowSubscriptionToClients = allowSubscriptionToClients;
 
             _notifications = new List<NotificationDefinition>();
@@ -86,6 +87,13 @@ namespace LINGYUN.Abp.Notifications
             _notifications.Add(notification);
 
             return notification;
+        }
+
+        public NotificationDefinition GetNotificationOrNull([NotNull] string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return _notifications.FirstOrDefault(x => x.Name == name);
         }
     }
 }

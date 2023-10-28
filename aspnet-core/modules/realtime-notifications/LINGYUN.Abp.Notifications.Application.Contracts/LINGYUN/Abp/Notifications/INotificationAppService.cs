@@ -10,4 +10,6 @@ public interface INotificationAppService
     Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync();
 
     Task SendAsync(NotificationSendDto input);
+
+    Task SendAsync(NotificationTemplateSendDto input);
 }

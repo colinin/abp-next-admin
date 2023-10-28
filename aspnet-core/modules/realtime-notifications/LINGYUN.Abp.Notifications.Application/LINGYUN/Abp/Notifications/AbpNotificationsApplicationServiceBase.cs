@@ -1,14 +1,13 @@
 ﻿using LINGYUN.Abp.Notifications.Localization;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.Notifications
+namespace LINGYUN.Abp.Notifications;
+
+public abstract class AbpNotificationsApplicationServiceBase : ApplicationService
 {
-    public abstract class AbpMessageServiceApplicationServiceBase : ApplicationService
+    protected AbpNotificationsApplicationServiceBase()
     {
-        protected AbpMessageServiceApplicationServiceBase()
-        {
-            LocalizationResource = typeof(NotificationsResource);
-            ObjectMapperContext = typeof(AbpNotificationsApplicationModule);
-        }
+        LocalizationResource = typeof(NotificationsResource);
+        ObjectMapperContext = typeof(AbpNotificationsApplicationModule);
     }
 }

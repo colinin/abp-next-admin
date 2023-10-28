@@ -134,6 +134,13 @@ namespace LINGYUN.Abp.Notifications
             return this;
         }
 
+        public virtual NotificationDefinition WithTemplate(TemplateDefinition template)
+        {
+            Template = template;
+
+            return this;
+        }
+
         public virtual NotificationDefinition WithProperty(string key, object value)
         {
             Properties[key] = value;

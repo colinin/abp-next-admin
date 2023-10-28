@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Notifications;
 
 [Authorize]
-public class MySubscriptionAppService : ApplicationService, IMySubscriptionAppService
+public class MySubscriptionAppService : AbpNotificationsApplicationServiceBase, IMySubscriptionAppService
 {
     protected IUserSubscribeRepository UserSubscribeRepository { get; }
     protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }

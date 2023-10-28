@@ -35,6 +35,7 @@
             ]"
             :dropDownActions="[
               {
+                ifShow: !record.isStatic,
                 auth: 'FeatureManagement.Definitions.Create',
                 label: L('FeatureDefinitions:AddNew'),
                 icon: 'ant-design:edit-outlined',

@@ -57,7 +57,7 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         }
         if (input.EndCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.CreationTime <= input.EndCreationTime);
         }
         if (!input.Status.IsNullOrWhiteSpace())
         {
@@ -78,6 +78,8 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
                 x.Scopes.Contains(input.Filter) || x.Properties.Contains(input.Filter));
         }
 
+        var totalCount = await AsyncExecuter.CountAsync(queryable);
+
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
@@ -86,8 +88,6 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         queryable = queryable
             .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
-
-        var totalCount = await AsyncExecuter.CountAsync(queryable);
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictAuthorizationDto>(totalCount,

@@ -35,6 +35,7 @@
             ]"
             :dropDownActions="[
               {
+                ifShow: !record.isStatic,
                 auth: 'PermissionManagement.Definitions.Create',
                 label: L('PermissionDefinitions:AddNew'),
                 icon: 'ant-design:edit-outlined',

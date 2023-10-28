@@ -21,5 +21,7 @@ public interface IDynamicNotificationDefinitionStoreCache
 
     IReadOnlyList<NotificationDefinition> GetNotifications();
 
+    NotificationGroupDefinition GetNotificationGroupOrNull(string name);
+
     IReadOnlyList<NotificationGroupDefinition> GetGroups();
 }

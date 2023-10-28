@@ -13,6 +13,8 @@ namespace LINGYUN.Abp.Notifications
 
         Task<NotificationDefinition> GetOrNullAsync(string name);
 
+        Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name);
+
         Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync();
     }
 }

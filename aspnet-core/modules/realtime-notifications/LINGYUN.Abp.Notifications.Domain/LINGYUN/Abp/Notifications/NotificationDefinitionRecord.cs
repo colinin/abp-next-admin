@@ -32,6 +32,10 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// </remarks>
     public virtual string Description { get; set; }
     /// <summary>
+    /// 通知模板
+    /// </summary>
+    public virtual string Template { get; set; }
+    /// <summary>
     /// 存活类型
     /// </summary>
     public virtual NotificationLifetime NotificationLifetime { get; set; }
@@ -68,6 +72,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         string groupName,
         string displayName = null,
         string description = null,
+        string template = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
         NotificationType notificationType = NotificationType.Application,
         NotificationContentType contentType = NotificationContentType.Text)
@@ -77,6 +82,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), NotificationDefinitionGroupRecordConsts.MaxNameLength);
         DisplayName = Check.Length(displayName, nameof(displayName), NotificationDefinitionRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), NotificationDefinitionRecordConsts.MaxDescriptionLength);
+        Template = Check.Length(template, nameof(template), NotificationDefinitionRecordConsts.MaxTemplateLength);
         NotificationLifetime = lifetime;
         NotificationType = notificationType;
         ContentType = contentType;
@@ -121,7 +127,37 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
             return false;
         }
 
+        if (Description != otherRecord.Description)
+        {
+            return false;
+        }
+
         if (Providers != otherRecord.Providers)
+        {
+            return false;
+        }
+
+        if (Template != otherRecord.Template)
+        {
+            return false;
+        }
+
+        if (ContentType != otherRecord.ContentType)
+        {
+            return false;
+        }
+
+        if (NotificationLifetime != otherRecord.NotificationLifetime)
+        {
+            return false;
+        }
+
+        if (NotificationType != otherRecord.NotificationType)
+        {
+            return false;
+        }
+
+        if (AllowSubscriptionToClients != otherRecord.AllowSubscriptionToClients)
         {
             return false;
         }
@@ -151,9 +187,39 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
             DisplayName = otherRecord.DisplayName;
         }
 
+        if (Description != otherRecord.Description)
+        {
+            Description = otherRecord.Description;
+        }
+
         if (Providers != otherRecord.Providers)
         {
             Providers = otherRecord.Providers;
+        }
+
+        if (Template != otherRecord.Template)
+        {
+            Template = otherRecord.Template;
+        }
+
+        if (ContentType != otherRecord.ContentType)
+        {
+            ContentType = otherRecord.ContentType;
+        }
+
+        if (NotificationLifetime != otherRecord.NotificationLifetime)
+        {
+            NotificationLifetime = otherRecord.NotificationLifetime;
+        }
+
+        if (NotificationType != otherRecord.NotificationType)
+        {
+            NotificationType = otherRecord.NotificationType;
+        }
+
+        if (AllowSubscriptionToClients != otherRecord.AllowSubscriptionToClients)
+        {
+            AllowSubscriptionToClients = otherRecord.AllowSubscriptionToClients;
         }
 
         if (!this.HasSameExtraProperties(otherRecord))

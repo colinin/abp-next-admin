@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.Notifications;
 
 [Authorize]
-public class NotificationAppService : ApplicationService, INotificationAppService
+public class NotificationAppService : AbpNotificationsApplicationServiceBase, INotificationAppService
 {
     protected ITemplateContentProvider TemplateContentProvider { get; }
     protected INotificationSender NotificationSender { get; }
@@ -100,52 +97,33 @@ public class NotificationAppService : ApplicationService, INotificationAppServic
 
     public async virtual Task SendAsync(NotificationSendDto input)
     {
-        var notification = await GetNotificationDefinition(input.Name);
+        var notificationData = new NotificationData();
+        notificationData.ExtraProperties.AddIfNotContains(input.Data);
 
-        UserIdentifier user = null;
-        if (input.ToUserId.HasValue)
-        {
-            user = new UserIdentifier(input.ToUserId.Value, input.ToUserName);
-        }
+        await NotificationSender
+            .SendNofiterAsync(
+                name: input.Name,
+                data: notificationData,
+                users: input.ToUsers,
+                tenantId: CurrentTenant.Id,
+                severity: input.Severity);
+    }
 
-        if (!input.TemplateName.IsNullOrWhiteSpace())
-        {
-            if (notification.Template == null)
-            {
-                throw new BusinessException(
-                    NotificationsErrorCodes.NotificationTemplateNotFound,
-                    $"The notification template {input.TemplateName} does not exist!")
-                    .WithData("Name", input.TemplateName);
-            }
-            var notificationTemplate = new NotificationTemplate(
-                notification.Name,
+    public async virtual Task SendAsync(NotificationTemplateSendDto input)
+    {
+        var notificationTemplate = new NotificationTemplate(
+                input.Name,
                 culture: input.Culture ?? CultureInfo.CurrentCulture.Name,
                 formUser: CurrentUser.Name ?? CurrentUser.UserName,
                 data: input.Data);
 
-            await NotificationSender
-                .SendNofiterAsync(
-                    name: input.Name,
-                    template: notificationTemplate,
-                    user: user,
-                    tenantId: CurrentTenant.Id,
-                    severity: input.Severity);
-        }
-        else
-        {
-            var notificationData = new NotificationData();
-            notificationData.ExtraProperties.AddIfNotContains(input.Data);
-
-            notificationData = NotificationData.ToStandardData(notificationData);
-
-            await NotificationSender
-                .SendNofiterAsync(
-                    name: input.Name,
-                    data: notificationData,
-                    user: user,
-                    tenantId: CurrentTenant.Id,
-                    severity: input.Severity);
-        }
+        await NotificationSender
+            .SendNofiterAsync(
+                name: input.Name,
+                template: notificationTemplate,
+                users: input.ToUsers,
+                tenantId: CurrentTenant.Id,
+                severity: input.Severity);
     }
 
     protected async virtual Task<NotificationDefinition> GetNotificationDefinition(string name)

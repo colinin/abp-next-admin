@@ -57,6 +57,12 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             throw new BusinessException(PermissionManagementErrorCodes.Definition.AlreayNameExists)
                 .WithData(nameof(PermissionDefinitionRecord.Name), input.Name);
         }
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        if (staticGroups.Any(g => g.Name == input.GroupName))
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+                .WithData(nameof(PermissionDefinitionRecord.Name), input.GroupName);
+        }
 
         var groupDefinition = await _permissionDefinitionManager.GetGroupOrNullAsync(input.GroupName);
         if (groupDefinition == null)

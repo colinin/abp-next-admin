@@ -80,7 +80,7 @@ public class StaticNotificationDefinitionStore : IStaticNotificationDefinitionSt
         return context.Groups;
     }
 
-    public Task<NotificationDefinition> GetOrNullAsync(string name)
+    public virtual Task<NotificationDefinition> GetOrNullAsync(string name)
     {
         return Task.FromResult(NotificationDefinitions.GetOrDefault(name));
     }
@@ -92,7 +92,12 @@ public class StaticNotificationDefinitionStore : IStaticNotificationDefinitionSt
         );
     }
 
-    public Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
+    public virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        return Task.FromResult(NotificationGroupDefinitions.GetOrDefault(name));
+    }
+
+    public virtual Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
     {
         return Task.FromResult<IReadOnlyList<NotificationGroupDefinition>>(
             NotificationGroupDefinitions.Values.ToImmutableList()

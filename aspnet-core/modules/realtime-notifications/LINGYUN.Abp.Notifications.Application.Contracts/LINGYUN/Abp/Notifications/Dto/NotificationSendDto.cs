@@ -1,35 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace LINGYUN.Abp.Notifications
+namespace LINGYUN.Abp.Notifications;
+
+public class NotificationSendDto
 {
-    public class NotificationSendDto
-    {
-        [Required]
-        [StringLength(NotificationConsts.MaxNameLength)]
-        [DisplayName("Notifications:Name")]
-        public string Name { get; set; }
+    [Required]
+    [StringLength(NotificationConsts.MaxNameLength)]
+    [DisplayName("Notifications:Name")]
+    public string Name { get; set; }
 
-        [StringLength(NotificationConsts.MaxNameLength)]
-        [DisplayName("Notifications:TemplateName")]
-        public string TemplateName { get; set; }
+    [DisplayName("Notifications:Data")]
+    public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
-        [DisplayName("Notifications:Data")]
-        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+    [DisplayName("Notifications:Culture")]
+    public string Culture { get; set; }
 
-        [DisplayName("Notifications:Culture")]
-        public string Culture { get; set; }
+    [DisplayName("Notifications:ToUserId")]
+    public List<UserIdentifier> ToUsers { get; set; } = new List<UserIdentifier>();
 
-        [DisplayName("Notifications:ToUserId")]
-        public Guid? ToUserId { get; set; }
-
-        [StringLength(128)]
-        [DisplayName("Notifications:ToUserName")]
-        public string ToUserName { get; set; }
-
-        [DisplayName("Notifications:Severity")]
-        public NotificationSeverity Severity { get; set; } = NotificationSeverity.Info;
-    }
+    [DisplayName("Notifications:Severity")]
+    public NotificationSeverity Severity { get; set; } = NotificationSeverity.Info;
 }

@@ -72,6 +72,20 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
         }
     }
 
+    public async virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    {
+        if (!NotificationManagementOptions.IsDynamicNotificationsStoreEnabled)
+        {
+            return null;
+        }
+
+        using (await StoreCache.SyncSemaphore.LockAsync())
+        {
+            await EnsureCacheIsUptoDateAsync();
+            return StoreCache.GetNotificationGroupOrNull(name);
+        }
+    }
+
     public async virtual Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
     {
         if (!NotificationManagementOptions.IsDynamicNotificationsStoreEnabled)

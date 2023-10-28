@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Notifications;
 
 [Authorize]
-public class MyNotificationAppService : ApplicationService, IMyNotificationAppService
+public class MyNotificationAppService : AbpNotificationsApplicationServiceBase, IMyNotificationAppService
 {
     protected INotificationSender NotificationSender { get; }
 
