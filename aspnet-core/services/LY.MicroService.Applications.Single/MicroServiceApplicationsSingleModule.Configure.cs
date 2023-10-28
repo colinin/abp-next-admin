@@ -670,6 +670,7 @@ public partial class MicroServiceApplicationsSingleModule
         {
             options.IsEnabled = true;
             options.IgnoreNamespaces.Add("Elsa");
+            options.IgnoreNamespaces.Add("LINGYUN.Abp.OssManagement");
         });
     }
 

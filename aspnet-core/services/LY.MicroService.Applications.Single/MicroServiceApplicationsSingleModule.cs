@@ -54,6 +54,7 @@ using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.OpenIddict;
+using LINGYUN.Abp.OpenIddict.AspNetCore;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
@@ -107,7 +108,6 @@ using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
@@ -151,7 +151,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
     typeof(AbpOpenIddictAspNetCoreModule),
-    typeof(AbpOpenIddictDomainModule),
     typeof(AbpOpenIddictApplicationModule),
     typeof(AbpOpenIddictHttpApiModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
