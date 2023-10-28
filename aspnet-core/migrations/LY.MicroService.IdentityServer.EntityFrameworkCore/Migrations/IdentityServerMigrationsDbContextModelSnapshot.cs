@@ -18,7 +18,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
@@ -29,6 +29,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -38,6 +39,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(256)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -102,6 +104,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -110,6 +113,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -202,6 +206,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -214,6 +219,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -263,6 +269,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -299,6 +306,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -583,6 +591,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -613,6 +622,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -685,6 +695,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -717,6 +728,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -826,6 +838,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -861,6 +874,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -992,6 +1006,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1029,6 +1044,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -1268,6 +1284,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1299,6 +1316,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -1340,6 +1358,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1363,6 +1382,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -1401,6 +1421,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -1436,6 +1457,7 @@ namespace LY.MicroService.IdentityServer.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
