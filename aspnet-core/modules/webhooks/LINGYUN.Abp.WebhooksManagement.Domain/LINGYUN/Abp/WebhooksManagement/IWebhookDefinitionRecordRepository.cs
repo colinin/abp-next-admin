@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -10,4 +11,6 @@ public interface IWebhookDefinitionRecordRepository : IBasicRepository<WebhookDe
     Task<WebhookDefinitionRecord> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
+
+    Task<List<WebhookDefinitionRecord>> GetAvailableListAsync(CancellationToken cancellationToken = default);
 }

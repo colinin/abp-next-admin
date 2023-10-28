@@ -127,7 +127,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
     protected async virtual Task UpdateInMemoryStoreCache()
     {
         var webhookGroupRecords = await WebhookGroupRepository.GetListAsync();
-        var webhookRecords = await WebhookRepository.GetListAsync();
+        var webhookRecords = await WebhookRepository.GetAvailableListAsync();
 
         await StoreCache.FillAsync(webhookGroupRecords, webhookRecords);
     }
