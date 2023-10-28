@@ -798,7 +798,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Template")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
                     b.HasKey("Id");
 

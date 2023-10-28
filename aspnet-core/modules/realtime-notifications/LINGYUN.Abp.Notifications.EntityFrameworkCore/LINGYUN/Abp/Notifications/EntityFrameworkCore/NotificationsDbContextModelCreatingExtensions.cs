@@ -103,6 +103,8 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxDescriptionLength);
                 b.Property(p => p.Providers)
                  .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
+                b.Property(p => p.Template)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxTemplateLength);
 
                 b.Property(p => p.ContentType)
                  .HasDefaultValue(NotificationContentType.Text);
