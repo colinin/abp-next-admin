@@ -14,6 +14,10 @@ Publish
 LocalNuget
 pnpm-lock.yaml
 
+# .NET
+*.pubxml
+*.user
+
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 /tests/**/coverage/
