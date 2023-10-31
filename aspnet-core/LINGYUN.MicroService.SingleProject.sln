@@ -494,7 +494,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Wrapper", "framework\common\LINGYUN.Abp.AspNetCore.Wrapper\LINGYUN.Abp.AspNetCore.Wrapper.csproj", "{FDBA1B4A-CC5D-4710-AB8C-FA5A91B91BDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OpenIddict.AspNetCore", "modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore\LINGYUN.Abp.OpenIddict.AspNetCore.csproj", "{6026DAE3-F2AD-4F6B-99EF-EEAAA5873861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.AspNetCore", "modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore\LINGYUN.Abp.OpenIddict.AspNetCore.csproj", "{6026DAE3-F2AD-4F6B-99EF-EEAAA5873861}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

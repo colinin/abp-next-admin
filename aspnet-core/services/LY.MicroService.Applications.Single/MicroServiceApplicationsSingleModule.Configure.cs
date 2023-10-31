@@ -722,7 +722,7 @@ public partial class MicroServiceApplicationsSingleModule
                         }
                     };
                 });
-        services.AddAlwaysAllowAuthorization();
+
         if (isDevelopment)
         {
             services.AddAlwaysAllowAuthorization();

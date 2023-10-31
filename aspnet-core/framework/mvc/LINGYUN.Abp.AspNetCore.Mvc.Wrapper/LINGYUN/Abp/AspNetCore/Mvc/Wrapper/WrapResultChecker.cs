@@ -20,6 +20,16 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
             Options = optionsMonitor.CurrentValue;
         }
 
+        public virtual bool WrapOnAction(ActionDescriptor actionDescriptor)
+        {
+            if (!Options.IsEnabled)
+            {
+                return false;
+            }
+
+            return CheckForActionDescriptor(actionDescriptor);
+        }
+
         public bool WrapOnException(ExceptionContext context)
         {
             if (!CheckForBase(context))
@@ -32,6 +42,11 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
 
         public bool WrapOnException(PageHandlerExecutedContext context)
         {
+            if (!CheckForBase(context))
+            {
+                return false;
+            }
+
             return CheckForException(context.Exception);
         }
 
@@ -40,7 +55,6 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
             return CheckForBase(context);
         }
 
-
         protected virtual bool CheckForBase(FilterContext context)
         {
             if (!Options.IsEnabled)
@@ -48,49 +62,56 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
                 return false;
             }
 
+            // 用户传递不包装
             if (context.HttpContext.Request.Headers.ContainsKey(AbpHttpWrapConsts.AbpDontWrapResult))
             {
                 return false;
             }
 
-            if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
+            // 用户传递需要包装
+            if (context.HttpContext.Request.Headers.ContainsKey(AbpHttpWrapConsts.AbpWrapResult))
             {
-                if (!context.ActionDescriptor.HasObjectResult())
+                return true;
+            }
+
+            if (!CheckForUrl(context))
+            {
+                return false;
+            }
+
+            return CheckForActionDescriptor(context.ActionDescriptor);
+        }
+
+        protected virtual bool CheckForActionDescriptor(ActionDescriptor descriptor)
+        {
+            if (descriptor is ControllerActionDescriptor controllerActionDescriptor)
+            {
+                if (!descriptor.HasObjectResult())
                 {
                     return false;
                 }
 
-                //if (!context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
-                //{
-                //    return false;
-                //}
-
-                if (!CheckForUrl(context))
+                if (!CheckForNamespace(controllerActionDescriptor))
                 {
                     return false;
                 }
 
-                if (!CheckForNamespace(descriptor))
+                if (!CheckForController(controllerActionDescriptor))
                 {
                     return false;
                 }
 
-                if (!CheckForController(descriptor))
+                if (!CheckForInterfaces(controllerActionDescriptor))
                 {
                     return false;
                 }
 
-                if (!CheckForInterfaces(descriptor))
+                if (!CheckForMethod(controllerActionDescriptor))
                 {
                     return false;
                 }
 
-                if (!CheckForMethod(descriptor))
-                {
-                    return false;
-                }
-
-                if (!CheckForReturnType(descriptor))
+                if (!CheckForReturnType(controllerActionDescriptor))
                 {
                     return false;
                 }
