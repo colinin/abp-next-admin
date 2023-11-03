@@ -27,7 +27,7 @@ export const useSettingManagementStore = defineStore({
     initlize(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>) {
       this.settingKey = settingKey;
       this.settings = ls.get(this.settingKey);
-      if (this.settings.length === 0) {
+      if (!this.settings || this.settings.length === 0) {
         this.refreshSettings(api);
       }
     },
