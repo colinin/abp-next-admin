@@ -1,5 +1,4 @@
 import { useI18n } from './useI18n';
-import { IHasExtraProperties } from '/@/api/model/baseModel';
 
 export function useExtraPropTranslation() {
   const { t } = useI18n();
