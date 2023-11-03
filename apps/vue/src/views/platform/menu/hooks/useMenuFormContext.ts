@@ -127,10 +127,10 @@ export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuF
           onChange(val) {
             fetchLayoutResource(val);
           },
-          onOptionsChange() {
-            const menu = unref(menuModel);
-            fetchLayoutResource(menu.layoutId);
-          },
+          // onOptionsChange() {
+          //   const menu = unref(menuModel);
+          //   fetchLayoutResource(menu.layoutId);
+          // },
         },
       },
       {
@@ -252,7 +252,10 @@ export function useMenuFormContext({ menuModel, formElRef, framework }: UseMenuF
         schemas.push(x);
         formEl?.appendSchemaByField(x, '');
       });
-      formEl?.setFieldsValue(unref(menuModel));
+      formEl?.setFieldsValue({
+        ...unref(menuModel),
+        layoutId: layoutId,
+      });
     }
   }
 
