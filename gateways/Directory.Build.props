@@ -10,6 +10,7 @@
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.8.2</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
+		<OcelotProviderPollyPackageVersion>20.0.0</OcelotProviderPollyPackageVersion>
 		<StackExchangeRedisPackageVersion>2.0.593</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>2.10.0</SerilogPackageVersion>
 		<SerilogAspNetCorePackageVersion>4.1.0</SerilogAspNetCorePackageVersion>

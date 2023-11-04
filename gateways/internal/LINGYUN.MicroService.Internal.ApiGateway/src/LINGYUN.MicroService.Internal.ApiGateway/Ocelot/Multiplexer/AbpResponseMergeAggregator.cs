@@ -93,7 +93,7 @@ namespace Ocelot.Multiplexer
                 }
                 catch (System.Exception ex)
                 {
-                    Logger.LogError(content);
+                    Logger.LogError(ex, "An error occurred in the aggregate route request result.");
                     return new DownstreamResponse(
                         null,
                         HttpStatusCode.InternalServerError,
