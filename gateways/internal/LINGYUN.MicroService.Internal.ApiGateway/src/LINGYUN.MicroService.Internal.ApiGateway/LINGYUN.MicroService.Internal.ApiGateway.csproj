@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ocelot.Provider.Polly" Version="16.0.1" />
+		<PackageReference Include="Ocelot.Provider.Polly" Version="$(OcelotProviderPollyPackageVersion)" />
 		<PackageReference Include="AgileConfig.Client" Version="$(AgileConfigClientPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />

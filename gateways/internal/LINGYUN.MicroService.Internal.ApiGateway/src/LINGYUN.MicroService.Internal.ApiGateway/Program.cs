@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ocelot.DependencyInjection;
 using Serilog;
 using System;
 using System.IO;
@@ -27,20 +25,13 @@ public class Program
                .UseAutofac()
                .ConfigureAppConfiguration((context, config) =>
                {
-                   //// 加入 ocelot配置文件
-                   //config.AddJsonFile(
-                   //$"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json",
-                   //optional: true,
-                   //reloadOnChange: true);
-
-                   config.AddAutoOcelotConfig("OcelotConfig", builder.Environment);
-
                    var configuration = config.Build();
                    var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
                    if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
                    {
                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
                    }
+
                })
                 .UseSerilog((context, provider, config) =>
                 {
