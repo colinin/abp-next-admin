@@ -138,13 +138,17 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
                 var scheduleBuilder = SimpleScheduleBuilder.Create();
                 // TODO: 不能用Quartz自带的重试机制
                 // scheduleBuilder.WithRepeatCount(maxCount);
+                if (job.JobType == JobType.Persistent)
+                {
+                    scheduleBuilder.WithRepeatCount(maxCount);
+                }
                 if (job.Interval > 0)
                 {
                     scheduleBuilder.WithIntervalInSeconds(job.Interval);
                 }
                 else
                 {
-                    scheduleBuilder.WithIntervalInSeconds(1);
+                    scheduleBuilder.WithIntervalInSeconds(300);
                 }
 
                 triggerBuilder.WithSchedule(scheduleBuilder);
