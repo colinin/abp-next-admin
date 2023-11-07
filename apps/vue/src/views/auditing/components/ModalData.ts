@@ -5,6 +5,7 @@ const { L } = useLocalization(['AbpAuditLogging']);
 
 const httpMethodOptions = [
   { value: 'GET', label: 'GET' },
+  { value: 'PUT', label: 'PUT' },
   { value: 'POST', label: 'POST' },
   { value: 'PATCH', label: 'PATCH' },
   { value: 'DELETE', label: 'DELETE' },
