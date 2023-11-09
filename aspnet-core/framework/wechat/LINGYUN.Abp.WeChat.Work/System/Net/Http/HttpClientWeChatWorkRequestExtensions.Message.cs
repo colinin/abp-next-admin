@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Work.Message;
+﻿using LINGYUN.Abp.WeChat.Work.Messages;
 using LINGYUN.Abp.WeChat.Work.Message.Request;
 using System.Text;
 using System.Threading;

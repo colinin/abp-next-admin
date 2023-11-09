@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LINGYUN.Abp.WeChat.Common;
+using Newtonsoft.Json;
 using System;
 
 namespace LINGYUN.Abp.WeChat.OpenId

@@ -1,0 +1,16 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "WeChat:-40001": "签名验证错误",
+    "WeChat:-40002": "xml/json解析失败",
+    "WeChat:-40003": "sha加密生成签名失败",
+    "WeChat:-40004": "AESKey 非法",
+    "WeChat:-40005": "AppId 校验错误",
+    "WeChat:-40006": "AES 加密失败",
+    "WeChat:-40007": "AES 解密失败",
+    "WeChat:-40008": "解密后得到的buffer非法",
+    "WeChat:-40009": "base64加密失败",
+    "WeChat:-40010": "base64解密失败",
+    "WeChat:-40011": "生成xml/json失败"
+  }
+}

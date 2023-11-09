@@ -23,4 +23,8 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Common\LINGYUN.Abp.WeChat.Common.csproj" />
+	</ItemGroup>
+
 </Project>

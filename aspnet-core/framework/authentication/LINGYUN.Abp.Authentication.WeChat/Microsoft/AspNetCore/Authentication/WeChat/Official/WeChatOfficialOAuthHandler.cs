@@ -2,7 +2,6 @@
 using LINGYUN.Abp.WeChat.Official;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -16,7 +15,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Volo.Abp.Caching;
 
 namespace Microsoft.AspNetCore.Authentication.WeChat.Official
 {
@@ -25,10 +23,8 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
     /// </summary>
     public class WeChatOfficialOAuthHandler : OAuthHandler<WeChatOfficialOAuthOptions>
     {
-        protected IDistributedCache<WeChatOfficialStateCacheItem> Cache { get; }
         protected AbpWeChatOfficialOptionsFactory WeChatOfficialOptionsFactory { get; }
         public WeChatOfficialOAuthHandler(
-            IDistributedCache<WeChatOfficialStateCacheItem> cache,
             IOptionsMonitor<WeChatOfficialOAuthOptions> options,
             AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory,
             ILoggerFactory logger, 
@@ -36,7 +32,6 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             ISystemClock clock) 
             : base(options, logger, encoder, clock)
         {
-            Cache = cache;
             WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
 
@@ -50,8 +45,85 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
 
             await base.InitializeHandlerAsync();
         }
+        /// <summary>
+        ///  第一步：构建用户授权地址
+        /// </summary> 
+        protected override string BuildChallengeUrl(AuthenticationProperties properties, string redirectUri)
+        {
+            var isWeChatBrewserRequest = IsWeChatBrowser();
 
-        protected override async Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity, AuthenticationProperties properties, OAuthTokenResponse tokens)
+            var scope = isWeChatBrewserRequest
+                ? AbpAuthenticationWeChatConsts.UserInfoScope
+                : AbpAuthenticationWeChatConsts.LoginScope;
+
+            var endPoint = isWeChatBrewserRequest
+                ? Options.AuthorizationEndpoint
+                : AbpAuthenticationWeChatConsts.QrConnectEndpoint;
+
+            redirectUri += $"?protected={Options.StateDataFormat.Protect(properties)}";
+
+            var parameters = new Dictionary<string, string>
+            {
+                { "appid", Options.ClientId },
+                { "redirect_uri", redirectUri },
+                { "response_type", "code" },
+                { "scope", scope },
+                { "state", Guid.NewGuid().ToString("N") },
+            };
+
+            return $"{QueryHelpers.AddQueryString(endPoint, parameters)}#wechat_redirect";
+        }
+
+        /// <summary>
+        /// 第二步：code换取access_token
+        /// </summary> 
+        protected async override Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthCodeExchangeContext context)
+        {
+            var parameters = new Dictionary<string, string>()
+            {
+                { "appid", Options.ClientId },
+                { "secret", Options.ClientSecret },
+                { "code", context.Code },
+                { "grant_type", "authorization_code" },
+            };
+
+            var address = QueryHelpers.AddQueryString(Options.TokenEndpoint, parameters);
+
+            var response = await Backchannel.GetAsync(address);
+            if (!response.IsSuccessStatusCode)
+            {
+                Logger.LogError("An error occurred while retrieving an access token: the remote server " +
+                                "returned a {Status} response with the following payload: {Headers} {Body}.",
+                                /* Status: */ response.StatusCode,
+                                /* Headers: */ response.Headers.ToString(),
+                                /* Body: */ await response.Content.ReadAsStringAsync());
+
+                return OAuthTokenResponse.Failed(new Exception("An error occurred while retrieving an access token."));
+            }
+
+            var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            if (!string.IsNullOrEmpty(payload.GetRootString("errcode")))
+            {
+                Logger.LogError("An error occurred while retrieving an access token: the remote server " +
+                                "returned a {Status} response with the following payload: {Headers} {Body}.",
+                                /* Status: */ response.StatusCode,
+                                /* Headers: */ response.Headers.ToString(),
+                                /* Body: */ await response.Content.ReadAsStringAsync());
+
+                return OAuthTokenResponse.Failed(new Exception("An error occurred while retrieving an access token."));
+            }
+            return OAuthTokenResponse.Success(payload);
+        }
+
+        /// <summary>
+        /// 第三步：构建用户票据
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="properties"></param>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
+        /// <exception cref="HttpRequestException"></exception>
+        protected async override Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity, AuthenticationProperties properties, OAuthTokenResponse tokens)
         {
             var address = QueryHelpers.AddQueryString(Options.UserInformationEndpoint, new Dictionary<string, string>
             {
@@ -88,116 +160,22 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
 
             await Events.CreatingTicket(context);
 
-            // TODO: 此处通过唯一的 CorrelationId, 将 properties生成的State缓存删除
-            var state = Request.Query["state"];
-
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToString().ToMd5(), null);
-            await Cache.RemoveAsync(stateCacheKey, token: Context.RequestAborted);
-
             return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
         }
 
-        /// <summary>
-        /// code换取access_token
-        /// </summary> 
-        protected override async Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthCodeExchangeContext context)
+        public override Task<bool> HandleRequestAsync()
         {
-            var address = QueryHelpers.AddQueryString(Options.TokenEndpoint, new Dictionary<string, string>()
-            {
-                ["appid"] = Options.ClientId,
-                ["secret"] = Options.ClientSecret,
-                ["code"] = context.Code,
-                ["grant_type"] = "authorization_code"
-            });
-
-            var response = await Backchannel.GetAsync(address);
-            if (!response.IsSuccessStatusCode)
-            {
-                Logger.LogError("An error occurred while retrieving an access token: the remote server " +
-                                "returned a {Status} response with the following payload: {Headers} {Body}.",
-                                /* Status: */ response.StatusCode,
-                                /* Headers: */ response.Headers.ToString(),
-                                /* Body: */ await response.Content.ReadAsStringAsync());
-
-                return OAuthTokenResponse.Failed(new Exception("An error occurred while retrieving an access token."));
-            }
-
-            var payload = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            if (!string.IsNullOrEmpty(payload.GetRootString("errcode")))
-            {
-                Logger.LogError("An error occurred while retrieving an access token: the remote server " +
-                                "returned a {Status} response with the following payload: {Headers} {Body}.",
-                                /* Status: */ response.StatusCode,
-                                /* Headers: */ response.Headers.ToString(),
-                                /* Body: */ await response.Content.ReadAsStringAsync());
-
-                return OAuthTokenResponse.Failed(new Exception("An error occurred while retrieving an access token."));
-            }
-            return OAuthTokenResponse.Success(payload);
+            return base.HandleRequestAsync();
         }
 
-        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
-        {
-            await base.HandleChallengeAsync(properties);
-
-            // TODO: 此处已经生成唯一的 CorrelationId, 可以借此将 properties生成State之后再进行缓存
-            // 注: 默认的State对于微信来说太长(微信只支持128位长度的State),因此巧妙的利用CorrelationId的MD5值来替代State
-            // MD5转换防止直接通过CorrelationId干些别的事情...
-            var state = properties.Items[".xsrf"];
-
-            var stateToken = Options.StateDataFormat.Protect(properties);
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToMd5(), null);
-
-            await Cache
-                .SetAsync(
-                    stateCacheKey, 
-                    new WeChatOfficialStateCacheItem(stateToken),
-                    new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpiration = Clock.UtcNow.AddMinutes(2) // TODO: 设定2分钟过期?
-                    }, 
-                    token: Context.RequestAborted);
-        }
-        /// <summary>
-        ///  构建用户授权地址
-        /// </summary> 
-        protected override string BuildChallengeUrl(AuthenticationProperties properties, string redirectUri)
-        {
-            var state = properties.Items[".xsrf"];
-
-            var isWeChatBrewserRequest = IsWeChatBrowser();
-
-            var scope = isWeChatBrewserRequest
-                ? AbpAuthenticationWeChatConsts.UserInfoScope
-                : FormatScope();
-
-            var endPoint = isWeChatBrewserRequest
-                ? Options.AuthorizationEndpoint
-                : AbpAuthenticationWeChatConsts.QrConnectEndpoint;
-
-            var challengeUrl = QueryHelpers.AddQueryString(endPoint, new Dictionary<string, string>
-            {
-                ["appid"] = Options.ClientId,
-                ["redirect_uri"] = redirectUri,
-                ["response_type"] = "code"
-            });
-
-            challengeUrl += $"&scope={scope}&state={state.ToMd5()}";
-
-            return challengeUrl;
-        }
-
-        protected override async Task<HandleRequestResult> HandleRemoteAuthenticateAsync()
+        protected async override Task<HandleRequestResult> HandleRemoteAuthenticateAsync()
         {
             var query = Request.Query;
 
             // TODO: 此处借用唯一的 CorrelationId, 将 properties生成的State缓存取出,进行解密
-            var state = query["state"];
+            var state = query["protected"];
 
-            var stateCacheKey = WeChatOfficialStateCacheItem.CalculateCacheKey(state.ToString().ToMd5(), null);
-            var stateCacheItem = await Cache.GetAsync(stateCacheKey, token: Context.RequestAborted);
-
-            var properties = Options.StateDataFormat.Unprotect(stateCacheItem.State);
+            var properties = Options.StateDataFormat.Unprotect(state);
 
             if (properties == null)
             {

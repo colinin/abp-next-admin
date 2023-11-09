@@ -20,7 +20,7 @@ public static class AbpAuthenticationWeChatConsts
     /// <summary>
     /// 回调地址
     /// </summary>
-    public static string CallbackPath { get; set; } = "/signin-callback";
+    public static string CallbackPath { get; set; } = "/signin-wechat";
 
     /// <summary>
     /// 微信客户端外的网页登录

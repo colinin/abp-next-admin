@@ -3,6 +3,13 @@
     public class AbpWeChatOfficialOptions
     {
         /// <summary>
+        /// 是否沙盒测试
+        /// </summary>
+        /// <remarks>
+        /// Tips: 当使用测试号时，消息为明文传输，调试时需要启用
+        /// </remarks>
+        public bool IsSandBox { get; set; }
+        /// <summary>
         /// 公众号服务器消息Url
         /// </summary>
         public string Url { get; set; }
