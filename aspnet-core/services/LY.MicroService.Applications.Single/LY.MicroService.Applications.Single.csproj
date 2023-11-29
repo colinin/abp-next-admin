@@ -92,6 +92,8 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.Application\LINGYUN.Abp.WeChat.Official.Application.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.HttpApi\LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />

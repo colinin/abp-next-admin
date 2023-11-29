@@ -6,6 +6,7 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
     {
         private const string Prefix = WeChatSettingNames.Prefix + ".Official";
 
+        public static string IsSandBox = Prefix + "." + nameof(AbpWeChatOfficialOptions.IsSandBox);
         public static string AppId = Prefix + "." + nameof(AbpWeChatOfficialOptions.AppId);
         public static string AppSecret = Prefix + "." + nameof(AbpWeChatOfficialOptions.AppSecret);
         public static string Url = Prefix + "." + nameof(AbpWeChatOfficialOptions.Url);

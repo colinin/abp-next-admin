@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Volo.Abp;
+﻿using LINGYUN.Abp.WeChat.Common;
+using Newtonsoft.Json;
 
 namespace LINGYUN.Abp.WeChat.Token
 {

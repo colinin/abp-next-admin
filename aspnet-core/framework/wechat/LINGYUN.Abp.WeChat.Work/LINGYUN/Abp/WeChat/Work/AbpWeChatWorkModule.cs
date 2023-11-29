@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
+using LINGYUN.Abp.WeChat.Common.Localization;
+using LINGYUN.Abp.WeChat.Work.Common;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,7 +18,8 @@ namespace LINGYUN.Abp.WeChat.Work;
     typeof(AbpCachingModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpFeaturesLimitValidationModule),
-    typeof(AbpSettingsModule))]
+    typeof(AbpSettingsModule),
+    typeof(AbpWeChatWorkCommonModule))]
 public class AbpWeChatWorkModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -33,6 +36,7 @@ public class AbpWeChatWorkModule : AbpModule
         {
             options.Resources
                 .Add<WeChatWorkResource>("zh-Hans")
+                .AddBaseTypes(typeof(WeChatCommonResource))
                 .AddVirtualJson("/LINGYUN/Abp/WeChat/Work/Localization/Resources");
         });
 

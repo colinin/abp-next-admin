@@ -1,6 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.MiniProgram.Features;
+﻿using LINGYUN.Abp.WeChat.Common.Security.Claims;
+using LINGYUN.Abp.WeChat.MiniProgram.Features;
 using LINGYUN.Abp.WeChat.MiniProgram.Messages;
-using LINGYUN.Abp.WeChat.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -44,7 +44,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
             return true;
         }
 
-        protected override async Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
+        protected async override Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
         {
             // step1 默认微信openid绑定的就是username,
             // 如果不是,需要自行处理openid获取逻辑
@@ -80,7 +80,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
             Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
             // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
-            string openId = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
+            var openId = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
 
             if (openId.IsNullOrWhiteSpace())
             {
@@ -110,7 +110,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
 
         protected string GetOrDefault(NotificationData data, string key, string defaultValue)
         {
-            if (data.ExtraProperties.TryGetValue(key, out object value))
+            if (data.ExtraProperties.TryGetValue(key, out var value))
             {
                 // 取得了数据就删除对应键值
                 // data.Properties.Remove(key);

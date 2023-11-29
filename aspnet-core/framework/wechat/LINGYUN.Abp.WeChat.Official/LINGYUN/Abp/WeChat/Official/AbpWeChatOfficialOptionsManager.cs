@@ -17,14 +17,16 @@ namespace LINGYUN.Abp.WeChat.Official
             SettingProvider = settingProvider;
         }
 
-        protected override async Task OverrideOptionsAsync(string name, AbpWeChatOfficialOptions options)
+        protected async override Task OverrideOptionsAsync(string name, AbpWeChatOfficialOptions options)
         {
+            var isSandBox = await SettingProvider.IsTrueAsync(WeChatOfficialSettingNames.IsSandBox);
             var appId = await SettingProvider.GetOrNullAsync(WeChatOfficialSettingNames.AppId);
             var appSecret = await SettingProvider.GetOrNullAsync(WeChatOfficialSettingNames.AppSecret);
             var url = await SettingProvider.GetOrNullAsync(WeChatOfficialSettingNames.Url);
             var token = await SettingProvider.GetOrNullAsync(WeChatOfficialSettingNames.Token);
             var aesKey = await SettingProvider.GetOrNullAsync(WeChatOfficialSettingNames.EncodingAESKey);
 
+            options.IsSandBox = isSandBox;
             options.AppId = appId ?? options.AppId;
             options.AppSecret = appSecret ?? options.AppSecret;
             options.Url = url ?? options.Url;

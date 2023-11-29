@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WeChat.Official.Application.Contracts\LINGYUN.Abp.WeChat.Official.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

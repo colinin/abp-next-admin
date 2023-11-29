@@ -14,14 +14,16 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
 {
     [Dependency(ReplaceServices = true)]
     public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDependency
     {
-        private static readonly Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
+        private readonly static Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
 
+        private readonly IClock _clock;
         private readonly IObjectMapper _objectMapper;
         private readonly ICurrentTenant _currentTenant;
         private readonly AbpLoggingSerilogElasticsearchOptions _options;
@@ -30,11 +32,13 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         public ILogger<SerilogElasticsearchLoggingManager> Logger { protected get; set; }
 
         public SerilogElasticsearchLoggingManager(
+            IClock clock,
             IObjectMapper objectMapper,
             ICurrentTenant currentTenant,
             IOptions<AbpLoggingSerilogElasticsearchOptions> options,
             IElasticsearchClientFactory clientFactory)
         {
+            _clock = clock;
             _objectMapper = objectMapper;
             _currentTenant = currentTenant;
             _clientFactory = clientFactory;
@@ -281,11 +285,11 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             }
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(startTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(endTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
             }
             if (level.HasValue)
             {

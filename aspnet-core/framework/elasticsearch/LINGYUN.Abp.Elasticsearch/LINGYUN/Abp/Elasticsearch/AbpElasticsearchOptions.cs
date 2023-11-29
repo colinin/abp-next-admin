@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.Elasticsearch
                 configuration.DefaultFieldNameInferrer((name) => name);
             }
 
-            if (UserName.IsNullOrWhiteSpace())
+            if (!UserName.IsNullOrWhiteSpace())
             {
                 configuration.BasicAuthentication(UserName, Password);
             }

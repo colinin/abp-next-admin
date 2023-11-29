@@ -337,8 +337,9 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
-            options.JobCleanEnabled = true;
-            options.JobFetchEnabled = true;
+            options.JobCleanEnabled = false;
+            options.JobFetchEnabled = false;
+            options.JobCheckEnabled = false;
         });
     }
 
@@ -671,6 +672,7 @@ public partial class MicroServiceApplicationsSingleModule
             options.IsEnabled = true;
             options.IgnoreNamespaces.Add("Elsa");
             options.IgnoreNamespaces.Add("LINGYUN.Abp.OssManagement");
+            options.IgnoreNamespaces.Add("LINGYUN.Abp.WeChat");
         });
     }
 

@@ -60,6 +60,12 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
 
                 var officialSetting = wechatSettingGroup.AddSetting(L["DisplayName:WeChat.Official"], L["Description:WeChat.Official"]);
                 officialSetting.AddDetail(
+                    await SettingDefinitionManager.GetAsync(WeChatOfficialSettingNames.IsSandBox),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.IsSandBox, providerName, providerKey),
+                    ValueType.Boolean,
+                    providerName);
+                officialSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(WeChatOfficialSettingNames.AppId),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(WeChatOfficialSettingNames.AppId, providerName, providerKey),

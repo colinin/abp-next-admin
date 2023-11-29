@@ -240,6 +240,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpWeChatMiniProgramModule),
     typeof(AbpWeChatOfficialModule),
+    typeof(AbpWeChatOfficialApplicationModule),
+    typeof(AbpWeChatOfficialHttpApiModule),
     typeof(AbpWeChatWorkModule),
     typeof(AbpWeChatWorkApplicationModule),
     typeof(AbpWeChatWorkHttpApiModule),

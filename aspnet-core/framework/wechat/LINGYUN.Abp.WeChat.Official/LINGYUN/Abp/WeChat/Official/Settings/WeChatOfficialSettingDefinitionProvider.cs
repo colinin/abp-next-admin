@@ -10,6 +10,18 @@ namespace LINGYUN.Abp.WeChat.Official.Settings
         {
             context.Add(
                 new SettingDefinition(
+                    WeChatOfficialSettingNames.IsSandBox,
+                    "false",
+                    L("DisplayName:WeChat.Official.IsSandBox"),
+                    L("Description:WeChat.Official.IsSandBox"),
+                    isVisibleToClients: false,
+                    isEncrypted: false)
+                .WithProviders(
+                    DefaultValueSettingValueProvider.ProviderName,
+                    ConfigurationSettingValueProvider.ProviderName,
+                    GlobalSettingValueProvider.ProviderName,
+                    TenantSettingValueProvider.ProviderName),
+                new SettingDefinition(
                     WeChatOfficialSettingNames.AppId, "",
                     L("DisplayName:WeChat.Official.AppId"),
                     L("Description:WeChat.Official.AppId"),

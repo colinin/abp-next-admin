@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
@@ -22,16 +23,19 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         private readonly IIndexNameNormalizer _indexNameNormalizer;
         private readonly IElasticsearchClientFactory _clientFactory;
         private readonly IAuditLogInfoToAuditLogConverter _converter;
+        private readonly IClock _clock;
 
         public ILogger<ElasticsearchAuditLogManager> Logger { protected get; set; }
 
         public ElasticsearchAuditLogManager(
+            IClock clock,
             IIndexNameNormalizer indexNameNormalizer,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
             IElasticsearchClientFactory clientFactory,
             IOptions<AbpAuditingOptions> auditingOptions,
             IAuditLogInfoToAuditLogConverter converter)
         {
+            _clock = clock;
             _converter = converter;
             _clientFactory = clientFactory;
             _auditingOptions = auditingOptions.Value;
@@ -249,11 +253,11 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).GreaterThanOrEquals(startTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).LessThanOrEquals(endTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
             }
             if (!httpMethod.IsNullOrWhiteSpace())
             {

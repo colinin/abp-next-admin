@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 
@@ -19,14 +20,17 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IClock _clock;
 
     public ILogger<ElasticsearchEntityChangeStore> Logger { protected get; set; }
 
     public ElasticsearchEntityChangeStore(
+        IClock clock,
         IIndexNameNormalizer indexNameNormalizer,
         IElasticsearchClientFactory clientFactory,
         IOptions<AbpElasticsearchOptions> elasticsearchOptions)
     {
+        _clock = clock;
         _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
         _elasticsearchOptions = elasticsearchOptions.Value;
@@ -323,11 +327,11 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         }
         if (startTime.HasValue)
         {
-            querys.Add(entity => entity.DateRange(q => q.Field(GetField(nameof(EntityChange.ChangeTime))).GreaterThanOrEquals(startTime)));
+            querys.Add(entity => entity.DateRange(q => q.Field(GetField(nameof(EntityChange.ChangeTime))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
         }
         if (endTime.HasValue)
         {
-            querys.Add(entity => entity.DateRange(q => q.Field(GetField(nameof(EntityChange.ChangeTime))).LessThanOrEquals(endTime)));
+            querys.Add(entity => entity.DateRange(q => q.Field(GetField(nameof(EntityChange.ChangeTime))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
         }
         if (changeType.HasValue)
         {
