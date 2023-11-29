@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
-using LINGYUN.Abp.WeChat.Common;
 using LINGYUN.Abp.WeChat.Common.Localization;
+using LINGYUN.Abp.WeChat.Work.Common;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.WeChat.Work;
     typeof(AbpExceptionHandlingModule),
     typeof(AbpFeaturesLimitValidationModule),
     typeof(AbpSettingsModule),
-    typeof(AbpWeChatCommonModule))]
+    typeof(AbpWeChatWorkCommonModule))]
 public class AbpWeChatWorkModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.Authentication.WeChat;
-using LINGYUN.Abp.WeChat.Security.Claims;
+using LINGYUN.Abp.WeChat.Common.Security.Claims;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;

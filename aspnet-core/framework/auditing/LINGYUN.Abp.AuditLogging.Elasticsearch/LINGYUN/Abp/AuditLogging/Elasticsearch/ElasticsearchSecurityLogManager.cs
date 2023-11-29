@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.SecurityLog;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
@@ -22,16 +23,19 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
         private readonly IIndexNameNormalizer _indexNameNormalizer;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IElasticsearchClientFactory _clientFactory;
+        private readonly IClock _clock;
 
         public ILogger<ElasticsearchSecurityLogManager> Logger { protected get; set; }
 
         public ElasticsearchSecurityLogManager(
+            IClock clock,
             IGuidGenerator guidGenerator,
             IIndexNameNormalizer indexNameNormalizer,
             IOptions<AbpSecurityLogOptions> securityLogOptions,
             IOptions<AbpElasticsearchOptions> elasticsearchOptions,
             IElasticsearchClientFactory clientFactory)
         {
+            _clock = clock;
             _guidGenerator = guidGenerator;
             _clientFactory = clientFactory;
             _indexNameNormalizer = indexNameNormalizer;
@@ -192,11 +196,11 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 
             if (startTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).GreaterThanOrEquals(startTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
             }
             if (endTime.HasValue)
             {
-                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).LessThanOrEquals(endTime)));
+                querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
             }
             if (!applicationName.IsNullOrWhiteSpace())
             {

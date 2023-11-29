@@ -1,8 +1,8 @@
 ﻿using LINGYUN.Abp.RealTime.Localization;
 using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.WeChat.Work.Authorize;
-using LINGYUN.Abp.WeChat.Work.Message;
-using LINGYUN.Abp.WeChat.Work.Message.Models;
+using LINGYUN.Abp.WeChat.Work.Messages;
+using LINGYUN.Abp.WeChat.Work.Messages.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;

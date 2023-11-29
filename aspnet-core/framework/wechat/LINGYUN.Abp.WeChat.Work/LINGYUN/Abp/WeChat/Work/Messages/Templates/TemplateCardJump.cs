@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Message.Templates;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Templates;
 /// <summary>
 /// 跳转指引样式
 /// </summary>

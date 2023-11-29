@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Message.Models;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 企业微信文件消息
 /// </summary>

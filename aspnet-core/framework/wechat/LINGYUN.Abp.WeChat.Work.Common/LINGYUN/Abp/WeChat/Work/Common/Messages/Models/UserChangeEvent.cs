@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages.Models;
 /// <summary>
@@ -144,5 +143,5 @@ public abstract class UserChangeEvent : WeChatWorkEventMessage
     /// 上游共享的应用不返回该字段
     /// </summary>
     [XmlArray("ExtAttr")]
-    public List<MemberExtendAttribute> Extend { get; set; }
+    public MemberExtendAttribute ExtendAttribute { get; set; }
 }

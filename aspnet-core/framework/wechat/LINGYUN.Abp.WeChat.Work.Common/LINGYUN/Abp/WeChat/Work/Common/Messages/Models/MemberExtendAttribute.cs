@@ -1,29 +1,47 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages.Models;
+
 [XmlRoot("Item")]
 public class MemberExtendAttribute
 {
     /// <summary>
-    /// 扩展属性类型: 0-本文 1-网页
+    /// 扩展属性
     /// </summary>
-    [XmlElement("Type")]
-    public byte Type {  get; set; }
-    /// <summary>
-    /// 扩展属性类型: 0-本文 1-网页
-    /// </summary>
-    public MemberExtend Extend { get; set; }
+    [XmlElement("Item")]
+    public List<MemberExtend> Items { get;set; }
 }
 
-public abstract class MemberExtend
+public class MemberExtend
 {
+    /// <summary>
+    /// 扩展属性类型: 0-文本 1-网页
+    /// </summary>
+    [XmlElement("Type")]
+    public byte Type { get; set; }
+    /// <summary>
+    /// 扩展属性名称
+    /// </summary>
+    [XmlElement("Name")]
+    public string Name { get; set; }
+    /// <summary>
+    /// 文本属性内容
+    /// </summary>
+    [XmlElement("Text", IsNullable = true)]
+    public MemberTextExtend Text { get; set; }
+    /// <summary>
+    /// Web属性内容
+    /// </summary>
+    [XmlElement("Web", IsNullable = true)]
+    public MemberWebExtend Web { get; set; }
 }
 
 /// <summary>
 /// 文本属性类型，扩展属性类型为0时填写
 /// </summary>
 [XmlRoot("Text")]
-public class MemberTextExtend : MemberExtend
+public class MemberTextExtend 
 {
     /// <summary>
     /// 文本属性内容
@@ -35,7 +53,7 @@ public class MemberTextExtend : MemberExtend
 /// 网页类型属性，扩展属性类型为1时填写
 /// </summary>
 [XmlRoot("Web")]
-public class MemberWebExtend : MemberExtend
+public class MemberWebExtend
 {
     /// <summary>
     /// 网页的展示标题

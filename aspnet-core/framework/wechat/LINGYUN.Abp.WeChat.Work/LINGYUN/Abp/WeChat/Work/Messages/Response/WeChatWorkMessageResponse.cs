@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Message.Response;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Response;
 /// <summary>
 /// 企业微信发送消息响应
 /// </summary>

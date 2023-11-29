@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WeChat;
+using LINGYUN.Abp.WeChat.Common;
+using LINGYUN.Abp.WeChat.Common.Security.Claims;
 using LINGYUN.Abp.WeChat.OpenId;
-using LINGYUN.Abp.WeChat.Security.Claims;
 using LINGYUN.Abp.WeChat.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;

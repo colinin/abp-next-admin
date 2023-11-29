@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.WeChat.Work.Message.Request;
+﻿namespace LINGYUN.Abp.WeChat.Work.Messages.Request;
 public class WeChatWorkMessageRequest<TMessage>
 {
     public string AccessToken { get; set; }

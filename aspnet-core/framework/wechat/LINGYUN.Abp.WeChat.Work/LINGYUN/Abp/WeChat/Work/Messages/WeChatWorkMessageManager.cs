@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Work.Message.Request;
+﻿using LINGYUN.Abp.WeChat.Work.Messages.Request;
 using LINGYUN.Abp.WeChat.Work.Token;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

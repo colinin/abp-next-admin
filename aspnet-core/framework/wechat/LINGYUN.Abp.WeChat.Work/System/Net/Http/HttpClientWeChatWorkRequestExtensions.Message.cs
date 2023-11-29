@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Messages;
-using LINGYUN.Abp.WeChat.Work.Message.Request;
+using LINGYUN.Abp.WeChat.Work.Messages.Request;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Message.Request;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Request;
 /// <summary>
 /// 撤回消息请求载体
 /// </summary>

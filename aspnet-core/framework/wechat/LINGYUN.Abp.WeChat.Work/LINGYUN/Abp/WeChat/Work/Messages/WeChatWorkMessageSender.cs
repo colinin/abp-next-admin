@@ -1,7 +1,7 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.WeChat.Work.Features;
-using LINGYUN.Abp.WeChat.Work.Message.Request;
-using LINGYUN.Abp.WeChat.Work.Message.Response;
+using LINGYUN.Abp.WeChat.Work.Messages.Request;
+using LINGYUN.Abp.WeChat.Work.Messages.Response;
 using LINGYUN.Abp.WeChat.Work.Token;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
