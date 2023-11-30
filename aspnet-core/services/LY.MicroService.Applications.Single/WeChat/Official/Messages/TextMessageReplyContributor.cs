@@ -1,10 +1,8 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Official.Messages.Models;
 using LINGYUN.Abp.WeChat.Official.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.WeChat.Official.Messages.Handlers;
+namespace LY.MicroService.Applications.Single.WeChat.Official.Messages;
 /// <summary>
 /// 文本消息客服回复
 /// </summary>
@@ -15,9 +13,9 @@ public class TextMessageReplyContributor : IMessageHandleContributor<TextMessage
         var messageSender = context.ServiceProvider.GetRequiredService<IServiceCenterMessageSender>();
 
         await messageSender.SendAsync(
-            new Services.Models.TextMessageModel(
+            new LINGYUN.Abp.WeChat.Official.Services.Models.TextMessageModel(
                 context.Message.FromUserName,
-                new Services.Models.TextMessage(
+                new LINGYUN.Abp.WeChat.Official.Services.Models.TextMessage(
                     context.Message.Content)));
     }
 }

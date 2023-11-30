@@ -9,7 +9,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
     labelWidth: 100,
     alwaysShowLines: 3,
     fieldMapToTime: [
-      ['dateRange', ['startTime', 'endTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+      ['timeStamp', ['startTime', 'endTime'], ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD HH:mm:ss']],
     ],
     schemas: [
       {
@@ -51,11 +51,12 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
-        field: 'dateRange',
+        field: 'timeStamp',
         component: 'RangePicker',
-        label: L('StartTime'),
-        colProps: { span: 6 },
+        label: L('TimeStamp'),
+        colProps: { span: 8 },
         componentProps: {
+          showTime: true,
           style: {
             width: '100%',
           },
@@ -71,7 +72,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         field: 'requestPath',
         component: 'Input',
         label: L('RequestPath'),
-        colProps: { span: 12 },
+        colProps: { span: 10 },
       },
       {
         field: 'hasException',

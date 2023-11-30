@@ -52,15 +52,6 @@ namespace LINGYUN.Abp.WeChat.Official
                 options.MessageResolvers.AddIfNotContains(new WeChatOfficialMessageResolveContributor());
             });
 
-            Configure<AbpWeChatMessageHandleOptions>(options =>
-            {
-                // 回复文本消息
-                options.MapMessage<TextMessage, TextMessageReplyContributor>();
-
-                // 处理关注事件
-                options.MapEvent<UserSubscribeEvent, UserSubscribeEventContributor>();
-            });
-
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpWeChatOfficialModule>();
