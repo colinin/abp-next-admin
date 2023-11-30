@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Serilog.Events;
 using Serilog.Formatting.Elasticsearch;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
         public DateTime TimeStamp { get; set; }
 
         [Nest.PropertyName(ElasticsearchJsonFormatter.LevelPropertyName)]
-        public LogLevel Level { get; set; }
+        public LogEventLevel Level { get; set; }
 
         [Nest.PropertyName(ElasticsearchJsonFormatter.RenderedMessagePropertyName)]
         public string Message { get; set; }
