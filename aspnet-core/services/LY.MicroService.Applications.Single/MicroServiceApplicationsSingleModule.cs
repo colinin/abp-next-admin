@@ -289,6 +289,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureWeChat();
         ConfigureWrapper();
         ConfigureAuditing();
         ConfigureDbContext();

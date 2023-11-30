@@ -95,6 +95,7 @@
           createMessage.success(L('Successful'));
         }).finally(() => {
           item.loading = false;
+          item.switch!.checked = false;
         });
         break;
     }

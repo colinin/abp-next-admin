@@ -15,8 +15,10 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.Wrapper;
 using LY.MicroService.Applications.Single.IdentityResources;
+using LY.MicroService.Applications.Single.WeChat.Official.Messages;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -762,6 +764,25 @@ public partial class MicroServiceApplicationsSingleModule
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
+        });
+    }
+
+    private void ConfigureWeChat()
+    {
+        Configure<AbpWeChatMessageHandleOptions>(options =>
+        {
+            // 回复文本消息
+            options.MapMessage<
+                LINGYUN.Abp.WeChat.Official.Messages.Models.TextMessage,
+                LY.MicroService.Applications.Single.WeChat.Official.Messages.TextMessageReplyContributor>();
+            // 处理关注事件
+            options.MapEvent<
+                LINGYUN.Abp.WeChat.Official.Messages.Models.UserSubscribeEvent,
+                LY.MicroService.Applications.Single.WeChat.Official.Messages.UserSubscribeEventContributor>();
+
+            options.MapMessage<
+                LINGYUN.Abp.WeChat.Work.Common.Messages.Models.TextMessage,
+                LY.MicroService.Applications.Single.WeChat.Work.Messages.TextMessageReplyContributor>();
         });
     }
 }

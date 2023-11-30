@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
+using LINGYUN.Abp.Identity;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Identity;
 
 namespace Microsoft.AspNetCore.Identity
 {
@@ -27,8 +27,8 @@ namespace Microsoft.AspNetCore.Identity
                     //var error = new IdentityError();
                     //return IdentityResult.Failed(error);
 
-                    throw new LINGYUN.Abp.Identity.IdentityException(
-                        IdentityErrorCodes.CanNotChangeTwoFactor,
+                    throw new IdentityException(
+                        IdentityErrorCodes.ChangeTwoFactorWithMFANotBound,
                         details: phoneNumberConfirmed ? "phone number not confirmed" : "email address not confirmed");
                 }
             }

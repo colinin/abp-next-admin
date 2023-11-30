@@ -3,6 +3,7 @@ using LINGYUN.Abp.WeChat.Common.Crypto.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Volo.Abp.DependencyInjection;
@@ -45,8 +46,7 @@ public class MessageResolver : IMessageResolver, ITransientDependency
                </xml>
              */
             var xmlDocument = XDocument.Parse(messageData.Data);
-            var encryptData = xmlDocument.Root.Element("Encrypt")?.Value;
-            if (!encryptData.IsNullOrWhiteSpace())
+            if (!xmlDocument.Elements("Encrypt").Any())
             {
                 /* 加密数据格式
                  * <xml>
@@ -55,7 +55,7 @@ public class MessageResolver : IMessageResolver, ITransientDependency
                    </xml>
                  */
                 var cryptoDecryptData = new WeChatCryptoDecryptData(
-                    encryptData,
+                    messageData.Data,
                     messageData.AppId,
                     messageData.Token,
                     messageData.EncodingAESKey,

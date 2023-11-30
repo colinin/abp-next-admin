@@ -7,11 +7,11 @@ namespace LINGYUN.Abp.WeChat.Official.Messages;
 /// <summary>
 /// 微信公众号消息处理器
 /// </summary>
-public class WeChatOfficialMessageResolveContributor : MessageResolveContributorBase
+public class WeChatOfficialMessageResolveContributor : WeChatOfficialMessageResolveContributorBase
 {
     public override string Name => "WeChat.Official.Message";
 
-    public override Task ResolveAsync(IMessageResolveContext context)
+    protected override Task ResolveWeChatMessageAsync(IMessageResolveContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpWeChatOfficialMessageResolveOptions>>().Value;
         var messageType = context.GetMessageData("MsgType");
