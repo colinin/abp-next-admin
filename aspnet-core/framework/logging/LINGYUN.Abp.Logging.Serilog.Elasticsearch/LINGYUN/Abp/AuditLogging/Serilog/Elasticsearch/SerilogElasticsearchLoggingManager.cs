@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Nest;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -293,7 +294,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
             }
             if (level.HasValue)
             {
-                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(level.ToString())));
+                querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(GetLogEventLevel(level.Value).ToString())));
             }
             if (!machineName.IsNullOrWhiteSpace())
             {
@@ -378,6 +379,19 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch
                 return IndexFormatRegex.Replace(_options.IndexFormat, @"$1*$2");
             }
             return string.Format(_options.IndexFormat, offset.Value).ToLowerInvariant();
+        }
+
+        protected virtual LogEventLevel GetLogEventLevel(Microsoft.Extensions.Logging.LogLevel logLevel)
+        {
+            return logLevel switch
+            {
+                Microsoft.Extensions.Logging.LogLevel.None or Microsoft.Extensions.Logging.LogLevel.Critical => LogEventLevel.Fatal,
+                Microsoft.Extensions.Logging.LogLevel.Error => LogEventLevel.Error,
+                Microsoft.Extensions.Logging.LogLevel.Warning => LogEventLevel.Warning,
+                Microsoft.Extensions.Logging.LogLevel.Information => LogEventLevel.Information,
+                Microsoft.Extensions.Logging.LogLevel.Debug => LogEventLevel.Debug,
+                _ => LogEventLevel.Verbose,
+            };
         }
 
         private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
