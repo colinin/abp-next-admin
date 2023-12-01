@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.WeChat.Work.Message.Models;
+﻿using LINGYUN.Abp.WeChat.Work.Messages;
+using LINGYUN.Abp.WeChat.Work.Messages.Models;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Message;

@@ -1,5 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.Work.Message.Models;
-using LINGYUN.Abp.WeChat.Work.Message.Templates;
+﻿using LINGYUN.Abp.WeChat.Work.Messages;
+using LINGYUN.Abp.WeChat.Work.Messages.Models;
+using LINGYUN.Abp.WeChat.Work.Messages.Templates;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
