@@ -690,6 +690,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task-management", "task-man
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Abstractions", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj", "{109BF321-1BC6-4031-A59B-7B5375EBA8C5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Common", "framework\wechat\LINGYUN.Abp.WeChat.Common\LINGYUN.Abp.WeChat.Common.csproj", "{08A78A69-913B-4C5E-BCE0-739585F82D1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1752,6 +1754,10 @@ Global
 		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2085,6 +2091,7 @@ Global
 		{6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{77ED7922-BF30-4436-8A85-78F812583913} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{109BF321-1BC6-4031-A59B-7B5375EBA8C5} = {77ED7922-BF30-4436-8A85-78F812583913}
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
