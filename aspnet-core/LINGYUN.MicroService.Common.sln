@@ -234,7 +234,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pushplus", "pushplus", "{0F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus", "framework\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj", "{5515C7CA-B512-4E36-A202-49A0158A0E74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "framework\pushplus\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{EBA67EAD-4958-46E3-9E0C-8186394D083F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "modules\realtime-notifications\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{EBA67EAD-4958-46E3-9E0C-8186394D083F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{25891EE2-3166-420F-8408-E458030C4643}"
 EndProject
