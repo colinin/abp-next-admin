@@ -150,7 +150,10 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
     {
-        sorting ??= $"{nameof(Notification.CreationTime)} DESC";
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(Notification.CreationTime)} DESC";
+        }
         var dbContext = await GetDbContextAsync();
         //var userNotifilerQuery = dbContext.Set<UserNotification>()
         //    .Where(x => x.UserId == userId)

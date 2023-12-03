@@ -121,11 +121,16 @@ namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore
             string filter = null,
             string sorting = nameof(TextDifference.Key))
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(TextDifference.Key);
+            }
+
             var textQuery = (await GetDbSetAsync())
                 .Where(x => x.CultureName.Equals(cultureName))
                 .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Key.Contains(filter))
-                .OrderBy(sorting ?? nameof(TextDifference.Key));
+                .OrderBy(sorting);
 
             var targetTextQuery = (await GetDbSetAsync())
                 .Where(x => x.CultureName.Equals(targetCultureName))

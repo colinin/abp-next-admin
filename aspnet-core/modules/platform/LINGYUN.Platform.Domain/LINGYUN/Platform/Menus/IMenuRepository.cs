@@ -95,7 +95,6 @@ namespace LINGYUN.Platform.Menus
         Task<List<Menu>> GetListAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
-            bool reverse = false,
             string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
@@ -106,7 +105,6 @@ namespace LINGYUN.Platform.Menus
         Task<List<Menu>> GetAllAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
-            bool reverse = false,
             string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,

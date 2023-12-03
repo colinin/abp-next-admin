@@ -75,9 +75,13 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
         string filter = null,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = nameof(Edition.DisplayName);
+        }
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
-            .OrderBy(sorting.IsNullOrEmpty() ? nameof(Edition.DisplayName) : sorting)
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

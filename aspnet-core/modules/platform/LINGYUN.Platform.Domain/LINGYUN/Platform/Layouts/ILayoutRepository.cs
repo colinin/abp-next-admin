@@ -29,7 +29,6 @@ namespace LINGYUN.Platform.Layouts
             string framework = "",
             string filter = "",
             string sorting = nameof(Layout.Name),
-            bool reverse = false,
             bool includeDetails = false,
             int skipCount = 0,
             int maxResultCount = 10,

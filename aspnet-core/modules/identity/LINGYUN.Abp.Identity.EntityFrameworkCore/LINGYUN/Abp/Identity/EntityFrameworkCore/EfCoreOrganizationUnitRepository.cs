@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -36,6 +37,10 @@ public class EfCoreOrganizationUnitRepository : Volo.Abp.Identity.EntityFramewor
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = nameof(OrganizationUnit.Code);
+        }
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .Where(specification.ToExpression())

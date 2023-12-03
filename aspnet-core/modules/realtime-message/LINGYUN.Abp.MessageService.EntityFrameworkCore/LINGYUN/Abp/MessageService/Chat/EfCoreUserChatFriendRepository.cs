@@ -33,6 +33,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             string sorting = nameof(UserChatFriend.RemarkName),
              CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(UserChatFriend.RemarkName);
+            }
             var dbContext = await GetDbContextAsync();
             var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
                                   join ucc in dbContext.Set<UserChatCard>()
@@ -60,7 +64,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                   };
 
             return await userFriendQuery
-                .OrderBy(sorting ?? nameof(UserChatFriend.RemarkName))
+                .OrderBy(sorting)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -103,6 +107,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(UserChatFriend.UserId);
+            }
             var dbContext = await GetDbContextAsync();
             // 过滤用户资料
             var userChatCardQuery = dbContext.Set<UserChatCard>()
@@ -139,7 +147,7 @@ namespace LINGYUN.Abp.MessageService.Chat
                                   };
 
             return await userFriendQuery
-                .OrderBy(sorting ?? nameof(UserChatFriend.UserId))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

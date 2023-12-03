@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+﻿using LINGYUN.Abp.MessageService.Chat;
+using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,10 +39,14 @@ namespace LINGYUN.Abp.MessageService.Groups
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(ChatGroup.Name);
+            }
             return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Name.Contains(filter) || x.Tag.Contains(filter))
-                .OrderBy(sorting ?? nameof(ChatGroup.Name))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

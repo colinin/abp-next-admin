@@ -86,7 +86,7 @@ namespace LINGYUN.Platform.Menus
         public async virtual Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
         {
             var menus = await MenuRepository.GetAllAsync(
-                input.Filter, input.Sorting, input.Reverse,
+                input.Filter, input.Sorting,
                 input.Framework, input.ParentId, input.LayoutId);
 
             return new ListResultDto<MenuDto>(
@@ -99,7 +99,7 @@ namespace LINGYUN.Platform.Menus
             var count = await MenuRepository.GetCountAsync(input.Filter, input.Framework, input.ParentId, input.LayoutId);
 
             var menus = await MenuRepository.GetListAsync(
-                input.Filter, input.Sorting, input.Reverse,
+                input.Filter, input.Sorting,
                 input.Framework, input.ParentId, input.LayoutId,
                 input.SkipCount, input.MaxResultCount);
 

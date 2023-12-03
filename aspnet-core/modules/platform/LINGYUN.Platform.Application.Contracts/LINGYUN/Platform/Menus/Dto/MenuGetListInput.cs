@@ -12,8 +12,6 @@ namespace LINGYUN.Platform.Menus
 
         public string Filter { get; set; }
 
-        public bool Reverse { get; set; }
-
         public Guid? ParentId { get; set; }
 
         public Guid? LayoutId { get; set; }

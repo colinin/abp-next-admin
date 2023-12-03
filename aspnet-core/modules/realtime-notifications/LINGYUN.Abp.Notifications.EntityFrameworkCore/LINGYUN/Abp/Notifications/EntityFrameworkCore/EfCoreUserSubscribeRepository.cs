@@ -137,10 +137,14 @@ public class EfCoreUserSubscribeRepository : EfCoreRepository<INotificationsDbCo
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = nameof(UserSubscribe.Id);
+        }
         var userSubscribes = await (await GetDbSetAsync())
              .Distinct()
              .Where(x => x.UserId.Equals(userId))
-             .OrderBy(sorting ?? nameof(UserSubscribe.Id))
+             .OrderBy(sorting)
              .Page(skipCount, maxResultCount)
              .AsNoTracking()
              .ToListAsync(GetCancellationToken(cancellationToken));

@@ -36,11 +36,14 @@ namespace LINGYUN.Abp.IdentityServer.Grants
 
         public async virtual Task<List<PersistedGrant>> GetListAsync(string subjectId = null, string filter = null, string sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(PersistedGrant.CreationTime);
+            }
             return await (await GetDbSetAsync())
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                     x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))
-                .OrderBy(sorting ?? nameof(PersistedGrant.CreationTime))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellation));
         }

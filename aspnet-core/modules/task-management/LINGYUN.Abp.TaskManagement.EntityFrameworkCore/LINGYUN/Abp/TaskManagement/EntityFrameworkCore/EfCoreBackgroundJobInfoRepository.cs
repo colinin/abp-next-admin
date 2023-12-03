@@ -81,9 +81,13 @@ public class EfCoreBackgroundJobInfoRepository :
 
     public async virtual Task<List<BackgroundJobInfo>> GetListAsync(ISpecification<BackgroundJobInfo> specification, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(BackgroundJobInfo.CreationTime)} DESC";
+        }
         return await (await GetDbSetAsync())
             .Where(specification.ToExpression())
-            .OrderBy(sorting ?? $"{nameof(BackgroundJobInfo.CreationTime)} DESC")
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

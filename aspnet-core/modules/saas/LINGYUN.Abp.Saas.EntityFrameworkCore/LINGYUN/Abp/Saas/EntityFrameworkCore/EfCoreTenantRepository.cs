@@ -168,6 +168,10 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = nameof(Tenant.Name);
+        }
         if (includeDetails)
         {
             var dbContext = await GetDbContextAsync();
@@ -177,7 +181,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
 
             tenantDbSet = tenantDbSet
                .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter))
-               .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting);
+               .OrderBy(sorting);
 
             var combinedResult = await (from tenant in tenantDbSet
                              join edition in editionDbSet on tenant.EditionId equals edition.Id
@@ -210,7 +214,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
 
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter))
-            .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

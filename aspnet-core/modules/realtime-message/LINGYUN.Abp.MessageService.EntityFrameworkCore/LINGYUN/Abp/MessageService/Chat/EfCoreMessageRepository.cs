@@ -49,13 +49,17 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(GroupMessage.MessageId);
+            }
             var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId))
                 .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
                 .WhereIf(type.HasValue, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
-                .OrderBy(sorting ?? nameof(GroupMessage.MessageId))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -89,12 +93,16 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(GroupMessage.MessageId);
+            }
             var groupMessages = await (await GetDbContextAsync()).Set<GroupMessage>()
                 .Distinct()
                 .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
                 .WhereIf(type != null, x => x.Type.Equals(type))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
-                .OrderBy(sorting ?? nameof(GroupMessage.MessageId))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -162,7 +170,10 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= $"{nameof(LastChatMessage.SendTime)} DESC";
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = $"{nameof(LastChatMessage.SendTime)} DESC";
+            }
             var dbContext = await GetDbContextAsync();
 
             #region SQL 原型
@@ -439,13 +450,17 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(UserMessage.MessageId);
+            }
             var userMessages = await (await GetDbContextAsync()).Set<UserMessage>()
                 .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                              x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
                 .WhereIf(type.HasValue, x => x.Type.Equals(type))
                 .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
-                .OrderBy(sorting ?? nameof(UserMessage.MessageId))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
