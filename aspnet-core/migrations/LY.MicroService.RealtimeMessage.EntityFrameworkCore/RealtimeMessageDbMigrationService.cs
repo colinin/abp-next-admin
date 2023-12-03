@@ -51,7 +51,7 @@ public class RealtimeMessageDbMigrationService : EfCoreRuntimeDbMigratorBase<Rea
 
     protected async override Task SeedAsync()
     {
-        Logger.LogInformation($"Executing {(CurrentTenant.IsAvailable ? "host" : CurrentTenant.Name ?? CurrentTenant.GetId().ToString())} database seed...");
+        Logger.LogInformation($"Executing {(!CurrentTenant.IsAvailable ? "host" : CurrentTenant.Name ?? CurrentTenant.GetId().ToString())} database seed...");
 
         await DataSeeder.SeedAsync(CurrentTenant.Id);
     }
