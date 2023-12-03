@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LINGYUN.Platform.Datas
 {
@@ -56,13 +57,16 @@ namespace LINGYUN.Platform.Datas
 
         public async virtual Task<List<Data>> GetPagedListAsync(
             string filter = "", 
-            string sotring = "Code", 
+            string sorting = "Code", 
             bool includeDetails = false, 
             int skipCount = 0,
             int maxResultCount = 10, 
             CancellationToken cancellationToken = default)
         {
-            sotring ??= nameof(Data.Code);
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(Data.Code);
+            }
 
             var dbSet = await GetDbSetAsync();
             return await dbSet
@@ -70,7 +74,7 @@ namespace LINGYUN.Platform.Datas
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                       x.Code.Contains(filter) || x.Description.Contains(filter) ||
                       x.DisplayName.Contains(filter) || x.Name.Contains(filter))
-                .OrderBy(sotring)
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

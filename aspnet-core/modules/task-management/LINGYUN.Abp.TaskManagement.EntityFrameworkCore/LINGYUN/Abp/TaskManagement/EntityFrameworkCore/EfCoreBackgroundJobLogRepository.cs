@@ -46,6 +46,10 @@ public class EfCoreBackgroundJobLogRepository :
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(BackgroundJobLog.RunTime)}";
+        }
         return await (await GetDbSetAsync())
             .WhereIf(!jobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(jobId))
             .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(filter.Type))
@@ -56,7 +60,7 @@ public class EfCoreBackgroundJobLogRepository :
             .WhereIf(filter.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
             .WhereIf(filter.BeginRunTime.HasValue, x => x.RunTime.CompareTo(filter.BeginRunTime.Value) >= 0)
             .WhereIf(filter.EndRunTime.HasValue, x => x.RunTime.CompareTo(filter.EndRunTime.Value) <= 0)
-            .OrderBy(sorting ?? $"{nameof(BackgroundJobLog.RunTime)} DESC")
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

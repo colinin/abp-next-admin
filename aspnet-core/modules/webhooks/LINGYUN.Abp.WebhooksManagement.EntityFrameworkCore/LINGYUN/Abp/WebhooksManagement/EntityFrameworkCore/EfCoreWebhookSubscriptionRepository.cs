@@ -50,9 +50,13 @@ public class EfCoreWebhookSubscriptionRepository :
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC";
+        }
         return await (await GetDbSetAsync())
             .Where(specification.ToExpression())
-            .OrderBy(sorting ?? $"{nameof(WebhookSubscription.CreationTime)} DESC")
+            .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

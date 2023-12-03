@@ -8,8 +8,6 @@ namespace LINGYUN.Platform.Layouts
     {
         public string Filter { get; set; }
 
-        public bool Reverse { get; set; }
-
         [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
         public string Framework { get; set; }
     }

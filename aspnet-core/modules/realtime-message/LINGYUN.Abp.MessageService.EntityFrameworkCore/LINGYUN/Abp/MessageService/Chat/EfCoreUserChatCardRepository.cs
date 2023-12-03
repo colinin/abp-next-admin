@@ -69,12 +69,16 @@ namespace LINGYUN.Abp.MessageService.Chat
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(UserChatCard.UserId);
+            }
             return await (await GetDbSetAsync())
                   .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName))
                   .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge.Value)
                   .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge.Value)
                   .WhereIf(sex.HasValue, ucc => ucc.Sex == sex)
-                  .OrderBy(sorting ?? nameof(UserChatCard.UserId))
+                  .OrderBy(sorting)
                   .PageBy(skipCount, maxResultCount)
                   .Select(ucc => ucc.ToUserCard())
                   .ToListAsync(GetCancellationToken(cancellationToken));

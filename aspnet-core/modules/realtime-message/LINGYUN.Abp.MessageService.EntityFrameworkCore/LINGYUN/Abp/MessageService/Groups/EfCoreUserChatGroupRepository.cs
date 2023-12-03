@@ -64,6 +64,10 @@ namespace LINGYUN.Abp.MessageService.Groups
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(UserChatCard.UserId);
+            }
             var dbContext = await GetDbContextAsync();
             var cardQuery = from gp in dbContext.Set<ChatGroup>()
                             join ucg in dbContext.Set<UserChatGroup>()
@@ -91,7 +95,7 @@ namespace LINGYUN.Abp.MessageService.Groups
                             };
 
             return await cardQuery
-                .OrderBy(sorting ?? nameof(UserChatCard.UserId))
+                .OrderBy(sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

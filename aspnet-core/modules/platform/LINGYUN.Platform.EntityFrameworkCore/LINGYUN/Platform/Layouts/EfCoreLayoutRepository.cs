@@ -46,14 +46,15 @@ namespace LINGYUN.Platform.Layouts
             string framework = "",
             string filter = "",
             string sorting = nameof(Layout.Name),
-            bool reverse = false,
             bool includeDetails = false, 
             int skipCount = 0, 
             int maxResultCount = 10,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(Layout.Name);
-            sorting = reverse ? sorting + " DESC" : sorting;
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(Layout.Name);
+            }
 
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
