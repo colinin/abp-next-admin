@@ -183,7 +183,7 @@ namespace LINGYUN.Platform.Menus
                         menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
                         menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
                         menu.Redirect.Contains(filter))
-                .rting)
+                .OrderBy(sorting)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
