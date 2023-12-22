@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
 
         protected virtual bool DrawGraphics(byte[] fileBytes, string[] args, out Stream content)
         {
-            using var image = Image.Load(fileBytes, out var format);
+            using var image = Image.Load(fileBytes);
 
             // 大小
             var width = args.GetInt32Prarm("w_");
@@ -61,8 +61,7 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
             // TODO: 其他处理参数及现有的优化
 
             var imageStream = new MemoryStream();
-            var encoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(format);
-            image.Save(imageStream, encoder);
+            image.Save(imageStream, image.Metadata.DecodedImageFormat);
             imageStream.Seek(0, SeekOrigin.Begin);
 
             content = imageStream;

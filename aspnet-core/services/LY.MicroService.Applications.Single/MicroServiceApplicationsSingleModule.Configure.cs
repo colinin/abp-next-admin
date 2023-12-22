@@ -196,7 +196,7 @@ public partial class MicroServiceApplicationsSingleModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }

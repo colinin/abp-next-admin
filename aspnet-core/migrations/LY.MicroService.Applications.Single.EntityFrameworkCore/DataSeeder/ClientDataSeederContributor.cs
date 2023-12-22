@@ -119,6 +119,7 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                 {
                     ClientId = vueClientId,
                     ClientSecret = "1q2w3e*",
+                    ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
                     ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                     DisplayName = "Abp Vue Admin Client",
                     PostLogoutRedirectUris =
@@ -182,8 +183,9 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                 {
                     ClientId = internalServiceClientId,
                     ClientSecret = "1q2w3e*",
-                    Type = OpenIddictConstants.ClientTypes.Confidential,
+                    ClientType = OpenIddictConstants.ClientTypes.Confidential,
                     ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
+                    ApplicationType = OpenIddictConstants.ApplicationTypes.Native,
                     DisplayName = "Abp Vue Admin Client",
                     Permissions =
                     {

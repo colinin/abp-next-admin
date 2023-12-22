@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LY.MicroService.IdentityServer.Pages.Account
@@ -24,9 +25,10 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             IOptions<AbpAccountOptions> accountOptions,
             IOptions<IdentityOptions> identityOptions,
             IIdentityServerInteractionService interaction,
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             IClientStore clientStore,
             IEventService identityServerEvents)
-            : base(schemeProvider, accountOptions, interaction, clientStore, identityServerEvents, identityOptions)
+            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, interaction, clientStore, identityServerEvents)
         {
 
         }

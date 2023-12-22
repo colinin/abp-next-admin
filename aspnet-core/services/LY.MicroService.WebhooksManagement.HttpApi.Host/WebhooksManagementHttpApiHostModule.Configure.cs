@@ -125,7 +125,7 @@ public partial class WebhooksManagementHttpApiHostModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }

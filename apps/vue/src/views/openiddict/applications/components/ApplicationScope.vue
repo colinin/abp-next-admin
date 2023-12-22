@@ -1,5 +1,9 @@
 <template>
-  <PermissionForm :resources="getSupportScopes" :targetResources="targetResources" @change="handleChange" />
+  <PermissionForm
+    :resources="getSupportScopes"
+    :targetResources="targetResources"
+    @change="handleChange"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -14,7 +18,7 @@
     },
     supportScopes: {
       type: [Array] as PropType<string[]>,
-    }
+    },
   });
 
   const resourcesRef = ref<{ key: string; title: string }[]>([]);
@@ -29,11 +33,11 @@
   const getSupportScopes = computed(() => {
     const resources = unref(resourcesRef);
     if (props.supportScopes) {
-      const supportScopes = props.supportScopes.map(scope => {
+      const supportScopes = props.supportScopes.map((scope) => {
         return {
           key: scope,
           title: scope,
-        }
+        };
       });
       resources.forEach((resource) => {
         if (!supportScopes.find((scope) => scope.key === resource.key)) {
@@ -65,7 +69,7 @@
         emits('delete', moveKeys);
         break;
       case 'right':
-       emits('create', moveKeys);
+        emits('create', moveKeys);
         break;
     }
   }

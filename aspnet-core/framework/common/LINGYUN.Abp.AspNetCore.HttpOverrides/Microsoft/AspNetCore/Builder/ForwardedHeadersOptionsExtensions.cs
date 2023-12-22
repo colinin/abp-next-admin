@@ -1,8 +1,8 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
-using Microsoft.AspNetCore.HttpOverrides;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 namespace Microsoft.AspNetCore.Builder
 {

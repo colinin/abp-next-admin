@@ -2,11 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <Button
-          v-auth="['AbpOpenIddict.Applications.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpOpenIddict.Applications.Create']" type="primary" @click="handleAddNew">
           {{ L('Applications:AddNew') }}
         </Button>
       </template>
@@ -112,7 +108,7 @@
   });
   const getShowSecret = computed(() => {
     return (record) => {
-      return record.type === 'confidential';
+      return record.clientType === 'confidential';
     };
   });
 

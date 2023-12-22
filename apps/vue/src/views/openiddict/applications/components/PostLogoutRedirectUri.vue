@@ -26,7 +26,7 @@
   const { L } = useLocalization(['AbpOpenIddict']);
   const dataSource = computed(() => {
     if (!props.uris) return [];
-    return props.uris.map(uri => {
+    return props.uris.map((uri) => {
       return {
         uri: uri,
       };

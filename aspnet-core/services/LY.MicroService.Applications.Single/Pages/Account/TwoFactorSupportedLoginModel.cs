@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
@@ -22,8 +23,9 @@ namespace LY.MicroService.Applications.Single.Pages.Account
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions,
             IOptions<IdentityOptions> identityOptions,
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             AbpOpenIddictRequestHelper openIddictRequestHelper)
-            : base(schemeProvider, accountOptions, identityOptions, openIddictRequestHelper)
+            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, openIddictRequestHelper)
         {
 
         }

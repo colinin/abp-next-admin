@@ -129,7 +129,7 @@ public partial class WorkflowManagementHttpApiHostModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }

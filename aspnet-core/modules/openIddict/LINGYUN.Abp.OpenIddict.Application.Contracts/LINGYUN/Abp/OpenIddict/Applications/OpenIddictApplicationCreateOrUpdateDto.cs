@@ -11,6 +11,9 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
     [DisableAuditing]
     public string ClientSecret { get; set; }
 
+    [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ClientTypeMaxLength))]
+    public string ClientType { get; set; }
+
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ConsentTypeMaxLength))]
     public string ConsentType { get; set; }
 
@@ -31,8 +34,8 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
 
     public List<string> Requirements { get; set; } = new List<string>();
 
-    [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.TypeMaxLength))]
-    public string Type { get; set; }
+    [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ApplicationTypeMaxLength))]
+    public string ApplicationType { get; set; }
 
     public string ClientUri { get; set; }
 

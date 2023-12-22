@@ -61,6 +61,7 @@ app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
 app.UseAbpClaimsMap();
+app.UseDynamicClaims();
 app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseAuthorization();

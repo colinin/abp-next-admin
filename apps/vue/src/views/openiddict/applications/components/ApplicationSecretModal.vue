@@ -1,9 +1,5 @@
 <template>
-  <BasicModal
-    :title="L('ManageSecret')"
-    @register="registerModal"
-    @ok="handleSubmit"
-  >
+  <BasicModal :title="L('ManageSecret')" @register="registerModal" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -18,7 +14,7 @@
   import { OpenIddictApplicationUpdateDto } from '/@/api/openiddict/open-iddict-application/model';
 
   const state = reactive<{
-    application: Recordable
+    application: Recordable;
   }>({
     application: {},
   });
@@ -45,23 +41,21 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      UpdateAsyncByIdAndInput(
-        state.application.id,
-        {
-          ...state.application as OpenIddictApplicationUpdateDto,
-          clientSecret: input.clientSecret
-        }).then((dto) => {
+      UpdateAsyncByIdAndInput(state.application.id, {
+        ...(state.application as OpenIddictApplicationUpdateDto),
+        clientSecret: input.clientSecret,
+      })
+        .then((dto) => {
           createMessage.success(L('Successful'));
           resetFields();
           emits('change', dto);
           closeModal();
-        }).finally(() => {
+        })
+        .finally(() => {
           changeOkLoading(false);
         });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
