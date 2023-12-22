@@ -21,8 +21,9 @@ internal static class OpenIddictApplicationExtensions
         entity.PostLogoutRedirectUris = jsonSerializer.Serialize(dto.PostLogoutRedirectUris);
         entity.Properties = jsonSerializer.Serialize(dto.Properties);
         entity.RedirectUris = jsonSerializer.Serialize(dto.RedirectUris);
-        entity.Type = dto.Type;
+        entity.ApplicationType = dto.ApplicationType;
         entity.ClientUri = dto.ClientUri;
+        entity.ClientType = dto.ClientType;
         entity.LogoUri = dto.LogoUri;
 
         var requirements = new List<string>();
@@ -96,6 +97,7 @@ internal static class OpenIddictApplicationExtensions
         {
             Id = entity.Id,
             ClientId = entity.ClientId,
+            ClientType = entity.ClientType,
             ConsentType = entity.ConsentType,
             DisplayName = entity.DisplayName,
             CreationTime = entity.CreationTime,
@@ -106,9 +108,12 @@ internal static class OpenIddictApplicationExtensions
             PostLogoutRedirectUris = jsonSerializer.DeserializeToList<string>(entity.PostLogoutRedirectUris),
             Properties = jsonSerializer.DeserializeToDictionary<string, string>(entity.Properties),
             RedirectUris = jsonSerializer.DeserializeToList<string>(entity.RedirectUris),
-            Type = entity.Type,
+            ApplicationType = entity.ApplicationType,
             ClientUri = entity.ClientUri,
-            LogoUri = entity.LogoUri
+            LogoUri = entity.LogoUri,
+            Settings = entity.Settings,
+            JsonWebKeySet = entity.JsonWebKeySet,
+            ConcurrencyStamp = entity.ConcurrencyStamp,
         };
 
         var requirements = jsonSerializer.DeserializeToList<string>(entity.Requirements);

@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Account.Web</AssemblyName>
 		<PackageId>LINGYUN.Abp.Account.Web</PackageId>
 		<IsPackable>true</IsPackable>

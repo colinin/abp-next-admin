@@ -2,15 +2,15 @@ export interface OpenIddictApplicationGetListInput extends PagedAndSortedResultR
   filter?: string;
 }
 
-export interface OpenIddictApplicationCreateDto extends OpenIddictApplicationCreateOrUpdateDto {
-}
+export type OpenIddictApplicationCreateDto = OpenIddictApplicationCreateOrUpdateDto;
 
-export interface OpenIddictApplicationUpdateDto extends OpenIddictApplicationCreateOrUpdateDto {
-}
+export type OpenIddictApplicationUpdateDto = OpenIddictApplicationCreateOrUpdateDto;
 
 export interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<string> {
   clientId: string;
   clientSecret?: string;
+  clientType?: string;
+  applicationType?: string;
   consentType?: string;
   displayName?: string;
   displayNames?: Dictionary<string, string>;
@@ -22,7 +22,6 @@ export interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<str
   properties?: Dictionary<string, string>;
   redirectUris?: string[];
   requirements?: string[];
-  type?: string;
   clientUri?: string;
   logoUri?: string;
 }
@@ -30,6 +29,8 @@ export interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<str
 export interface OpenIddictApplicationCreateOrUpdateDto extends ExtensibleObject {
   clientId: string;
   clientSecret?: string;
+  clientType?: string;
+  applicationType?: string;
   consentType?: string;
   displayName?: string;
   displayNames?: Dictionary<string, string>;
@@ -41,8 +42,6 @@ export interface OpenIddictApplicationCreateOrUpdateDto extends ExtensibleObject
   properties?: Dictionary<string, string>;
   redirectUris?: string[];
   requirements?: string[];
-  type?: string;
   clientUri?: string;
   logoUri?: string;
 }
-

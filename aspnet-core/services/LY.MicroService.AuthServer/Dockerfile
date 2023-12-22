@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 LABEL maintainer="colin.in@foxmail.com"
 WORKDIR /app
 

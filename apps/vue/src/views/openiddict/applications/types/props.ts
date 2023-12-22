@@ -9,7 +9,7 @@ export interface EndPointComponent {
 
 export interface ApplicationState {
   activeTab: string;
-  formRules?: Dictionary<string, Rule>,
+  formRules?: Dictionary<string, Rule>;
   application: OpenIddictApplicationDto;
   endPoint: EndPointComponent;
   openIdConfiguration?: OpenIdConfiguration;
