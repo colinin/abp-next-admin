@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.RealTime.Localization;
+using Markdig;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -59,6 +60,11 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
         {
             var title = notification.Data.TryGetData("title").ToString();
             var message = notification.Data.TryGetData("message").ToString();
+            // markdown进行处理
+            if (notification.ContentType == NotificationContentType.Markdown)
+            {
+                message = Markdown.ToHtml(message);
+            }
 
             await EmailSender.SendAsync(emailAddress, title, message);
         }
@@ -90,6 +96,12 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
                         message = message.Replace($"{{{formatMessage.Key}}}", formatMessage.Value.ToString());
                     }
                 }
+            }
+
+            // markdown进行处理
+            if (notification.ContentType == NotificationContentType.Markdown)
+            {
+                message = Markdown.ToHtml(message);
             }
 
             await EmailSender.SendAsync(emailAddress, title, message);
