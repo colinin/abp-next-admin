@@ -36,6 +36,7 @@
 		<SixLaborsImageSharpDrawingPackageVersion>2.0.1</SixLaborsImageSharpDrawingPackageVersion>
 		<SwashbuckleAspNetCorePackageVersion>6.5.0</SwashbuckleAspNetCorePackageVersion>
 		<PollyPackageVersion>8.2.0</PollyPackageVersion>
+		<MarkdigPackageVersion>0.34.0</MarkdigPackageVersion>
 		<MicrosoftPackageVersion>8.0.*</MicrosoftPackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
 		<XunitPackageVersion>2.6.1</XunitPackageVersion>

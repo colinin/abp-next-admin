@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Markdig" Version="$(MarkdigPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
