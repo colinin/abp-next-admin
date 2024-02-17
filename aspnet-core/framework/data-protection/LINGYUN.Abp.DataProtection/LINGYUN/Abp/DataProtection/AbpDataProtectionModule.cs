@@ -1,11 +1,10 @@
-﻿using Volo.Abp.Modularity;
-using Volo.Abp.Threading;
+﻿using Volo.Abp.Domain;
+using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.DataProtection
+namespace LINGYUN.Abp.DataProtection;
+
+[DependsOn(
+    typeof(AbpDddDomainModule))]
+public class AbpDataProtectionModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpThreadingModule))]
-    public class AbpDataProtectionModule : AbpModule
-    {
-    }
 }
