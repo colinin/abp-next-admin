@@ -21,6 +21,18 @@ export function format(formatted: string, args: object | any[]) {
   return formatted;
 }
 /**
+ * 字符串转驼峰格式
+ * @param str 字符串
+ * @returns 字符串的驼峰表示法
+ * @example toCamelCase('hello-world')  =>  helloWorld
+ * @example toCamelCase('my_variable_name')  =>  myVariableName
+ */
+export function toCamelCase(str: string) {
+  return str.replace(/[-_\s](\w)/g, function (_, c) {
+      return c ? c.toUpperCase() : '';
+  });
+}
+/**
  *
  * @param str 字符串是否为空或空格
  * @returns
