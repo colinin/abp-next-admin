@@ -161,6 +161,13 @@ const transform: AxiosTransform = {
     if (axios.isCancel(error)) {
       return Promise.reject(error);
     }
+    
+    if (error.code && ['ECONNABORTED', 'ETIMEDOUT'].includes(error.code)) {
+      const { t } = useI18n();
+      const timeout = t('sys.api.apiTimeoutMessage');
+      createMessage.error(timeout);
+      return Promise.reject(timeout);
+    }
 
     const resMessage = checkResponse(error.response);
     return Promise.reject(resMessage ?? error);
