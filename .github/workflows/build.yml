@@ -8,7 +8,7 @@ on:
         - "**.csproj"
 
 env:
-  DOTNET_VERSION: "8.0.100"
+  DOTNET_VERSION: "8.0.200"
 
 jobs:
   build:

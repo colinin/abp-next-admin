@@ -5,10 +5,10 @@ on:
     branches: [ rel-8.0.3 ]
 
 env:
-  DOTNET_VERSION: "8.0.100"
+  DOTNET_VERSION: "8.0.200"
 
 jobs:
-  checkout:
+  publish:
     name: "Checkout"
     runs-on: "ubuntu-latest"
     steps:
@@ -17,11 +17,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-
-  pack:
-    name: "Pack"
-    runs-on: "ubuntu-latest"
-    steps:
     - name: Install NuGet
       uses: nuget/setup-nuget@v1
       with:
@@ -30,11 +25,7 @@ jobs:
       run: .\build-aspnetcore-publish-sln.ps1 -f
       working-directory: .\build
       shell: powershell
-
-  publish:
-    name: "Pack"
-    runs-on: "ubuntu-latest"
-    steps:
     - name: Publish Package
       run:
         dotnet nuget push ./aspnet-core/Publish/nupkgs/LINGYUN.*.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+ 
