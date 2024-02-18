@@ -2,8 +2,8 @@
 
 # Build all solutions
 foreach ($solution in $solutionArray) {  
-    $packPath = $rootFolder + "/../aspnet-core/Publish/nupkgs"
-    dotnet pack -c Release -o $packPath --include-source --include-symbols $solution.File --no-cache
+    #dotnet pack -c Release --include-source --include-symbols $solution.File --no-cache
+    dotnet build -c Release $solution.File --no-cache
 }
 
 Set-Location $rootFolder

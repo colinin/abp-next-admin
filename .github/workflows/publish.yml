@@ -20,15 +20,11 @@ jobs:
       uses: nuget/setup-nuget@v1
       with:
         nuget-version: '5.x'
-    - name: Build All
-      run: .\build-aspnetcore-build-sln.ps1 -f
-      working-directory: .\build
-      shell: powershell
     - name: Pack All Packages
       run: .\build-aspnetcore-publish-sln.ps1 -f
       working-directory: .\build
       shell: powershell
     - name: Publish Packages
       run:
-        dotnet nuget push ./aspnet-core/Publish/nupkgs/LINGYUN.*.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push ./aspnet-core/LocalNuget/LINGYUN.*.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
  
