@@ -26,5 +26,5 @@ jobs:
       shell: powershell
     - name: Publish Packages
       run:
-        dotnet nuget push ./aspnet-core/LocalNuget/LINGYUN.*.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
+        dotnet nuget push ./aspnet-core/LocalNuget/*.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
  
