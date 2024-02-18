@@ -2,8 +2,8 @@
 {
     public class SubscribeConsts
     {
-        public const int MaxNotificationNameLength = 100;
+        public static int MaxNotificationNameLength { get; set; } = NotificationConsts.MaxNameLength;
 
-        public const int MaxUserNameLength = 128;
+        public static int MaxUserNameLength { get; set; } = 128;
     }
 }

@@ -4,7 +4,7 @@
     {
         public const int MaxCateGoryLength = 50;
 
-        public const int MaxNameLength = 100;
+        public const int MaxNameLength = 255;
 
         public const int MaxDataLength = 1024 * 1024;
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -12,8 +11,7 @@ using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-[Dependency(ReplaceServices = true)]
-public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
+public class BackgroundWorkerManager : IBackgroundWorkerManager
 {
     protected IClock Clock { get; }
     protected IJobStore JobStore { get; }
@@ -21,7 +19,6 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     protected ICurrentTenant CurrentTenant { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected AbpBackgroundTasksOptions Options { get; }
-    protected AbpBackgroundTasksOptions TasksOptions { get; }
 
     public BackgroundWorkerManager(
         IClock clock,
@@ -29,8 +26,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         IJobPublisher jobPublisher,
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
-        IOptions<AbpBackgroundTasksOptions> options,
-        IOptions<AbpBackgroundTasksOptions> taskOptions)
+        IOptions<AbpBackgroundTasksOptions> options)
     {
         Clock = clock;
         JobStore = jobStore;
@@ -38,7 +34,6 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         CurrentTenant = currentTenant;
         GuidGenerator = guidGenerator;
         Options = options.Value;
-        TasksOptions = taskOptions.Value;
     }
 
     public async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
@@ -66,9 +61,9 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         jobInfo.TenantId = CurrentTenant.Id;
 
         var workerType = ProxyHelper.GetUnProxiedType(worker);
-        if (workerType != null && TasksOptions.JobDispatcherSelectors.IsMatch(workerType))
+        if (workerType != null && Options.JobDispatcherSelectors.IsMatch(workerType))
         {
-            var selector = TasksOptions
+            var selector = Options
                 .JobDispatcherSelectors
                 .FirstOrDefault(x => x.Predicate(workerType));
 

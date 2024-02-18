@@ -31,7 +31,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj" />
-		<ProjectReference Include="..\..\framework\open-api\OpenApi.Sdk\OpenApi.Sdk.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.AspNetCore.Tests\LINGYUN.Abp.AspNetCore.Tests.csproj" />
 	</ItemGroup>
 

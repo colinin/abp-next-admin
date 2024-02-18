@@ -110,7 +110,7 @@ public class AbpExceptionHandlingWrapperMiddleware : IMiddleware, ITransientDepe
 
             httpContext.Response.Clear();
             httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
-            httpContext.Response.Headers.Add("Content-Type", "application/json");
+            httpContext.Response.Headers.Append("Content-Type", "application/json");
 
             var wrapResult = new WrapResult(
                 exceptionWrapContext.ErrorInfo.Code,

@@ -18,7 +18,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
@@ -574,8 +574,8 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DefaultValue")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
@@ -605,8 +605,8 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(128)");
 
                     b.Property<string>("Providers")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
 
                     b.HasKey("Id");
 

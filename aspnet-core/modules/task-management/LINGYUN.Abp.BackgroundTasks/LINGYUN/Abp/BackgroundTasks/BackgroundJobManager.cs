@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
@@ -12,8 +11,7 @@ using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-[Dependency(ReplaceServices = true)]
-public class BackgroundJobManager : IBackgroundJobManager, ITransientDependency
+public class BackgroundJobManager : IBackgroundJobManager
 {
     protected IClock Clock { get; }
     protected IJobStore JobStore { get; }

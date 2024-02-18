@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.BackgroundTasks.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Collections.Generic;
 using Volo.Abp.Auditing;
 using Volo.Abp.BackgroundJobs;
@@ -31,6 +32,8 @@ public class AbpBackgroundTasksModule : AbpModule
 
         if (!context.Services.IsDataMigrationEnvironment())
         {
+            context.Services.Replace(ServiceDescriptor.Transient(typeof(IBackgroundJobManager), typeof(BackgroundJobManager)));
+            context.Services.Replace(ServiceDescriptor.Transient(typeof(IBackgroundWorkerManager), typeof(BackgroundWorkerManager)));
             context.Services.AddHostedService<DefaultBackgroundWorker>();
         }
 

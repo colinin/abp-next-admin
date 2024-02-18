@@ -91,7 +91,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
             if (!await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
                 !await settingProvider.IsTrueAsync(WeChatSettingNames.EnabledQuickLogin))
             {
-                logger.LogWarning("Invalid grant type: wechat openid not register", wechatOpenId.OpenId);
+                logger.LogWarning("Invalid grant type: wechat openid {openid} not register", wechatOpenId.OpenId);
 
                 var properties = new AuthenticationProperties(new Dictionary<string, string>
                 {

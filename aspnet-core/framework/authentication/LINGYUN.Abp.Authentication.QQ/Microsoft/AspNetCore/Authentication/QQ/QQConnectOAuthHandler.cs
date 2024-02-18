@@ -24,9 +24,8 @@ namespace Microsoft.AspNetCore.Authentication.QQ
             IOptionsMonitor<QQConnectOAuthOptions> options,
             AbpTencentQQOptionsFactory tencentQQOptionsFactory,
             ILoggerFactory logger, 
-            UrlEncoder encoder, 
-            ISystemClock clock) 
-            : base(options, logger, encoder, clock)
+            UrlEncoder encoder) 
+            : base(options, logger, encoder)
         {
             TencentQQOptionsFactory = tencentQQOptionsFactory;
         }
@@ -39,6 +38,7 @@ namespace Microsoft.AspNetCore.Authentication.QQ
             Options.ClientId = options.AppId;
             Options.ClientSecret = options.AppKey;
             Options.IsMobile = options.IsMobile;
+            Options.TimeProvider ??= TimeProvider.System;
 
             await base.InitializeHandlerAsync();
         }

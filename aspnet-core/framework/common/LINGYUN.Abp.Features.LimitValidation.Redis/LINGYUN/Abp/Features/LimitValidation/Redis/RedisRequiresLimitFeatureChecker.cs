@@ -87,7 +87,7 @@ namespace LINGYUN.Abp.Features.LimitValidation.Redis
             var keys = new RedisKey[1] { NormalizeKey(context) };
             var values = new RedisValue[] { context.GetEffectTicks(_clock.Now) };
             var result = await _redis.ScriptEvaluateAsync(luaSha1, keys, values);
-            if (result.Type == ResultType.Error)
+            if (result.Resp2Type == ResultType.Error)
             {
                 throw new AbpException($"Script evaluate error: {result}");
             }

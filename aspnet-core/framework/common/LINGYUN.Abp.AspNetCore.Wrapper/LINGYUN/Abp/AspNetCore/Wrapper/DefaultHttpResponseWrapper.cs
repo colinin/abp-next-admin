@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Wrapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -22,13 +23,13 @@ public class DefaultHttpResponseWrapper : IHttpResponseWrapper, ITransientDepend
             {
                 if (!context.HttpContext.Response.Headers.ContainsKey(header.Key))
                 {
-                    context.HttpContext.Response.Headers.Add(header.Key, header.Value);
+                    context.HttpContext.Response.Headers.Append(header.Key, header.Value);
                 }
             }
         }
         if (!context.HttpContext.Response.Headers.ContainsKey(AbpHttpWrapConsts.AbpWrapResult))
         {
-            context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+            context.HttpContext.Response.Headers.Append(AbpHttpWrapConsts.AbpWrapResult, "true");
         }
     }
 }

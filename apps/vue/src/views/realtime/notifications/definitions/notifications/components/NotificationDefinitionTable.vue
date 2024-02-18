@@ -247,6 +247,7 @@
           groupData.notifications.push(...definitionGroup[gk]);
           definitionGroupData.push(groupData);
         });
+        console.log(definitionGroupData);
         setTableData(definitionGroupData);
       }).finally(() => {
         setLoading(false);
