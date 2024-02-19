@@ -45,12 +45,15 @@ namespace LINGYUN.Abp.SettingManagement
             {
                 DefaultValue = setting.DefaultValue,
                 IsEncrypted = setting.IsEncrypted,
-                Description = setting.Description.Localize(factory),
                 DisplayName = setting.DisplayName.Localize(factory),
                 Name = setting.Name,
                 Value = value,
                 ValueType = type
             };
+            if (setting.Description != null)
+            {
+                detail.Description = setting.Description.Localize(factory);
+            }
             detail.Providers.AddRange(setting.Providers);
             Details.Add(detail);
 

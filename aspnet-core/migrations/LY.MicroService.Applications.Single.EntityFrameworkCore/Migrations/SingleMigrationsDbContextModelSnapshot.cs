@@ -695,8 +695,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("NotificationTypeName")
                         .IsRequired()
@@ -743,8 +743,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -779,13 +779,13 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("NotificationLifetime")
                         .HasColumnType("int");
@@ -845,8 +845,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")
@@ -4843,8 +4843,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DefaultValue")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
@@ -4874,8 +4874,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(128)");
 
                     b.Property<string>("Providers")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
 
                     b.HasKey("Id");
 

@@ -28,9 +28,8 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             IOptionsMonitor<WeChatOfficialOAuthOptions> options,
             AbpWeChatOfficialOptionsFactory weChatOfficialOptionsFactory,
             ILoggerFactory logger, 
-            UrlEncoder encoder, 
-            ISystemClock clock) 
-            : base(options, logger, encoder, clock)
+            UrlEncoder encoder) 
+            : base(options, logger, encoder)
         {
             WeChatOfficialOptionsFactory = weChatOfficialOptionsFactory;
         }
@@ -42,6 +41,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
             // 用配置项重写
             Options.ClientId = weChatOfficialOptions.AppId;
             Options.ClientSecret = weChatOfficialOptions.AppSecret;
+            Options.TimeProvider ??= TimeProvider.System;
 
             await base.InitializeHandlerAsync();
         }
@@ -276,7 +276,7 @@ namespace Microsoft.AspNetCore.Authentication.WeChat.Official
                     {
                         // https://www.w3.org/TR/xmlschema-2/#dateTime
                         // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
-                        var expiresAt = Clock.UtcNow + TimeSpan.FromSeconds(value);
+                        var expiresAt = Options.TimeProvider.GetUtcNow() + TimeSpan.FromSeconds(value);
                         authTokens.Add(new AuthenticationToken
                         {
                             Name = "expires_at",

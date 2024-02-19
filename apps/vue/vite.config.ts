@@ -53,6 +53,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     base: VITE_PUBLIC_PATH,
     root,
     resolve: {
+      dedupe: ['vue'],
       alias: [
         {
           find: 'vue-i18n',

@@ -206,8 +206,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
                     context.Response.Clear();
                     context.Response.StatusCode = (int)HttpStatusCode.OK;
-                    context.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-                    context.Response.Headers.Add("Content-Type", "application/json");
+                    context.Response.Headers.Append(AbpHttpWrapConsts.AbpWrapResult, "true");
+                    context.Response.Headers.Append("Content-Type", "application/json");
 
                     await context.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
                     return;

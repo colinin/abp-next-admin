@@ -96,7 +96,7 @@ namespace LINGYUN.Platform.Menus
         [Route("by-user/{userId}/{framework}")]
         public async virtual Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, string framework)
         {
-            var userRoles = await UserRoleFinder.GetRolesAsync(userId);
+            var userRoles = await UserRoleFinder.GetRoleNamesAsync(userId);
 
             var getMenuByUser = new MenuGetByUserInput
             {

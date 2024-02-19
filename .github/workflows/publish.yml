@@ -1,0 +1,31 @@
+name: "Publish"
+
+on:
+  push:
+    branches: [ rel-8.0.3 ]
+env:
+  DOTNET_VERSION: "8.0.200"
+
+jobs:
+  publish:
+    name: "Publish"
+    runs-on: "windows-latest"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Install NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: '5.x'
+    - name: Pack All Packages
+      run: .\build-aspnetcore-publish-sln.ps1 -f
+      working-directory: .\build
+      shell: powershell
+    - name: Publish Packages
+      run:
+        dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
+      working-directory: .\aspnet-core\LocalNuget
+ 

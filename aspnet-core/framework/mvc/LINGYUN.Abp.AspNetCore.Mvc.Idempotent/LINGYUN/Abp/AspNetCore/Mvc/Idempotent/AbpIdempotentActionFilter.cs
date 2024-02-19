@@ -104,10 +104,10 @@ public class AbpIdempotentActionFilter : IAsyncActionFilter, ITransientDependenc
             StatusCode = context.IdempotentOptions.HttpStatusCode,
         };
 
-        context.ExecutingContext.HttpContext.Response.Headers.Add(
+        context.ExecutingContext.HttpContext.Response.Headers.Append(
             context.IdempotentOptions.IdempotentTokenName,
             context.GrantResult.IdempotentKey);
-        context.ExecutingContext.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-        context.ExecutingContext.HttpContext.Response.Headers.Add("Content-Type", "application/json");
+        context.ExecutingContext.HttpContext.Response.Headers.Append(AbpHttpConsts.AbpErrorFormat, "true");
+        context.ExecutingContext.HttpContext.Response.Headers.Append("Content-Type", "application/json");
     }
 }

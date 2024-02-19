@@ -9,7 +9,7 @@ import { isFunction } from '/@/utils/is';
 export function useTableForm(
   propsRef: ComputedRef<BasicTableProps>,
   slots: Slots,
-  fetch: (opt?: FetchParams | undefined) => Promise<void>,
+  fetch: (opt?: FetchParams | undefined) => Promise<Recordable<any>[] | undefined | void>,
   getLoading: ComputedRef<boolean | undefined>,
   setFieldsValue: (values: Recordable) => Promise<void>,
 ) {
